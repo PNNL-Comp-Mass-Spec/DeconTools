@@ -1,0 +1,13 @@
+11/2/2009 12:44:00 PM	DeconTools.Backend.dll version = v1.0.3593.22219
+11/2/2009 12:44:00 PM	ParameterFile = imfParameterFile2.xml
+11/2/2009 12:44:00 PM	DeconEngine version = v1.0.3573.24666
+11/2/2009 12:44:00 PM	RapidEngine version = v1.0.3165.35432
+11/2/2009 12:44:00 PM	UIMFLibrary version = v1.0.3484.29834
+11/2/2009 12:44:00 PM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.RapidDeconvolutor
+11/2/2009 12:44:00 PM	Started file processing
+11/2/2009 12:44:00 PM	Finished file processing
+11/2/2009 12:44:00 PM	_scans file written
+11/2/2009 12:44:00 PM	Started writing out _isos results
+11/2/2009 12:44:00 PM	Finished writing out _isos results
+11/2/2009 12:44:00 PM	total processing time = 00:00:00.0156250
+11/2/2009 12:44:00 PM	total features = 5

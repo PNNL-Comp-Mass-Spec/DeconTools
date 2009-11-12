@@ -1,0 +1,265 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using NUnit.Framework;
+using DeconTools.Backend;
+using DeconTools.Backend.Runs;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.Core;
+using System.ComponentModel;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+
+namespace DeconTools.UnitTesting
+{
+    [TestFixture]
+    public class OldSchoolProcRunnerTests
+    {
+        string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000.uimf";
+        string uimfFilepath2 = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
+        string uimfFile3 = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
+        
+        string imfMSScanTextfile = "..\\..\\Testfiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1_SCAN233_raw_data.txt";
+        string imfFilepath = "..\\..\\TestFiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
+        string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";        
+        
+        string uimfParameterFile1 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTest1File.xml";
+        string uimfParameterFile2 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile2.xml";
+        string uimfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile3.xml";
+        string uimfParameterHorn1 = "..\\..\\TestFiles\\uimfParameterFileHorn1.xml";
+        string uimfParameterHorn2 = "..\\..\\TestFiles\\uimfParameterFileHorn2.xml";
+
+
+        public string parameterFile4 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile4.xml";
+        public string xcaliburParameterFile1 = "..\\..\\TestFiles\\xcaliburParameterFile1.xml";
+        public string xcaliburParameterFile2 = "..\\..\\TestFiles\\Copy of xcaliburParameterFile1.xml";
+        public string imfParameterFile1 = "..\\..\\TestFiles\\imfParameterFile1.xml";
+        public string imfParameterFile2 = "..\\..\\TestFiles\\imfParameterFile2.xml";
+        private string imfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile5_IMFTesting.xml";
+        private string imfParameterFileHorn1 = "..\\..\\TestFiles\\imfParameterFile_horn1.xml";
+
+        string replaceRapidScoreParamFile1 = "..\\..\\TestFiles\\replaceRAPIDScoreParameterFile1.xml";
+
+        string mzxmlFilepath = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000-7000.mzXML";
+        string mzxmlParameterFile1 = "..\\..\\TestFiles\\mxzml_parameterFile1.xml";
+
+       
+        [Test]
+        public void loadParametersTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath, Globals.MSFileType.PNNL_UIMF, uimfParameterFile1);
+
+            Assert.AreEqual(3,runner.Project.Parameters.NumFramesSummed);
+            Assert.AreEqual(1,runner.Project.Parameters.NumScansSummed);
+            Assert.AreEqual(true, runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.UseRAPIDDeconvolution);
+            
+
+        }
+
+        [Test]
+        public void checkRunsAndTasksTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath, Globals.MSFileType.PNNL_UIMF, uimfParameterFile1);
+            Assert.AreEqual(6, runner.Project.TaskCollection.TaskList.Count);
+            Assert.IsInstanceOfType(typeof(UIMFRun), runner.Project.RunCollection[0]);
+            Assert.IsInstanceOfType(typeof(RapidDeconvolutor), runner.Project.TaskCollection.TaskList[2]);
+            Assert.IsInstanceOfType(typeof(UIMF_MSGenerator), runner.Project.TaskCollection.TaskList[0]);
+
+        }
+
+        [Test]
+        public void ExecuteRunnerOnUIMFDataTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile2);
+            runner.Execute();
+
+            
+
+            Assert.AreEqual(267, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
+            Assert.AreEqual(28.453796799999999d, (decimal)((UIMFIsosResult)runner.Project.RunCollection[0].ResultCollection.ResultList[100]).ScanSet.DriftTime);
+
+            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
+
+            Assert.AreEqual(4916859, runner.Project.RunCollection[0].ResultCollection.ScanResultList[0].TICValue);
+
+          
+        }
+
+        [Test]
+        public void ExecuteRunnerOnUIMFDataTest2()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile3, Globals.MSFileType.PNNL_UIMF, uimfParameterFile2);
+            runner.Execute();
+
+
+
+            Assert.AreEqual(43, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
+            Assert.AreEqual(28.453796799999999d, (decimal)((UIMFIsosResult)runner.Project.RunCollection[0].ResultCollection.ResultList[20]).ScanSet.DriftTime);
+
+            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
+
+            Assert.AreEqual(4916859, runner.Project.RunCollection[0].ResultCollection.ScanResultList[0].TICValue);
+
+
+        }
+
+        [Test]
+        public void ExecuteRunnerOnUIMFDataWithHornDeconTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
+            runner.Execute();
+
+            //Assert.AreEqual(265, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+            //Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
+
+            //Assert.AreEqual(4916859, runner.Project.RunCollection[0].ResultCollection.ScanResultList[0].TICValue);
+
+
+        }
+
+        [Test]
+        public void ExecuteRunnerOnXCaliburDataTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile1);
+            
+            
+            runner.Execute();
+
+            //Assert.AreEqual(12607, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+
+        }
+
+        [Test]
+        public void ExecuteRunnerOnIMFFileTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(imfFilepath, Globals.MSFileType.PNNL_IMS, imfParameterFile1);
+            Assert.AreEqual(5, runner.Project.Parameters.NumScansSummed);
+            Assert.AreEqual(false, runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.UseScanRange);
+            runner.Execute();
+
+            Assert.AreEqual(3972, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+
+        }
+
+
+        [Test]
+        public void ExecuteRunnerOnIMFFileTest2()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(imfFilepath, Globals.MSFileType.PNNL_IMS, imfParameterFile2);
+            Assert.AreEqual(5, runner.Project.Parameters.NumScansSummed);
+            Assert.AreEqual(true, runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.UseScanRange);
+            runner.Execute();
+
+            Assert.AreEqual(5, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+
+        }
+
+        [Test]
+        public void ExecuteRunnerAndSerializeResultsOnUIMF()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile3);
+            runner.IsosResultThreshold = 100;
+            runner.Execute();
+        }
+
+
+        [Test]
+        public void ExecuteRunnerAndSerializeResultsOnUIMF2()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+            
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile3, bw);
+            runner.IsosResultThreshold = 100;
+            runner.Execute();
+        }
+
+
+
+        [Test]
+        public void getAssemblyInfo()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(typeof(Task));
+            Console.WriteLine(assembly.ToString());
+        }
+
+
+        [Test]
+        public void ExecuteRunnerAndWithPeakExporterTest1()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, parameterFile4, bw);
+            runner.IsosResultThreshold = 100000;
+            runner.Execute();
+        }
+
+
+        [Test]
+        public void ExecuteRunnerAndWithPeakExporterTest2()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(imfFilepath, Globals.MSFileType.PNNL_IMS, imfParameterFile3, bw);
+            runner.IsosResultThreshold = 100000;
+            runner.Execute();
+        }
+
+        [Test]
+        public void ExecuteRunner_withReplaceRapidScoresTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, replaceRapidScoreParamFile1);
+            runner.Execute();
+
+        }
+
+
+        [Test]
+        public void ExecuteRunner_exportOriginalIntensityDataTest1()    //
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
+            runner.ExporterType = Globals.ExporterType.TYPICAL;
+            runner.Execute();
+        }
+
+
+        [Test]
+        public void ExecuteRunner_exportOriginalIntensityDataTest2_usingDeserializer()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn2);
+            runner.ExporterType = Globals.ExporterType.TYPICAL;
+            runner.IsosResultThreshold = 100;
+            runner.Execute();
+        }
+
+
+        [Test]
+        public void ExecuteRunner_horn_xcaliburTest()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile2);
+            runner.Execute();
+
+        }
+
+        [Test]
+        public void ExecuteRunner_mzXML_horn_Test1()
+        {
+            BackgroundWorker bw=new BackgroundWorker();
+            bw.WorkerReportsProgress=true;
+            bw.WorkerSupportsCancellation=true;
+
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(mzxmlFilepath, Globals.MSFileType.MZXML_Rawdata, mzxmlParameterFile1,bw);
+            runner.Execute();
+        }
+
+
+
+
+    }
+}

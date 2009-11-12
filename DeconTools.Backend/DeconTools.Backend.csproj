@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.Backend</RootNamespace>
+    <AssemblyName>DeconTools.Backend</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeconEngine, Version=1.0.3165.35432, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngine.dll</HintPath>
+      <Aliases>RapidEngine</Aliases>
+    </Reference>
+    <Reference Include="DeconEngineV2, Version=1.0.3484.30921, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\FrameSet.cs" />
+    <Compile Include="Core\FrameSetCollection.cs" />
+    <Compile Include="Core\IsosResult.cs" />
+    <Compile Include="Core\IsotopicProfile.cs" />
+    <Compile Include="Core\MSPeak.cs" />
+    <Compile Include="Core\OldDecon2LSParameters.cs" />
+    <Compile Include="Core\OldDeconFormatResult.cs" />
+    <Compile Include="Core\Project.cs" />
+    <Compile Include="Core\ProjectController.cs" />
+    <Compile Include="Core\ProjectFacade.cs" />
+    <Compile Include="Core\ProjectParameters.cs" />
+    <Compile Include="Core\Rapid.cs" />
+    <Compile Include="Core\ResultCollection.cs" />
+    <Compile Include="Core\RunMergingProjectController.cs" />
+    <Compile Include="Core\ScanResult.cs" />
+    <Compile Include="Core\ScanResultCollection.cs" />
+    <Compile Include="Core\ScanSet.cs" />
+    <Compile Include="Core\ScanSetCollection.cs" />
+    <Compile Include="Core\StandardIsosResult.cs" />
+    <Compile Include="Core\StandardScanResult.cs" />
+    <Compile Include="Core\TaskCollection.cs" />
+    <Compile Include="Core\TaskController.cs" />
+    <Compile Include="Core\UIMFIsosResult.cs" />
+    <Compile Include="Core\UIMFLibraryAdapter.cs" />
+    <Compile Include="Data\BasicIsosExporter.cs" />
+    <Compile Include="Data\BasicScansExporter.cs" />
+    <Compile Include="Data\DeconResultCombiner.cs" />
+    <Compile Include="Data\Exporter.cs" />
+    <Compile Include="Data\IMFIsosExporter.cs" />
+    <Compile Include="Data\Importer.cs" />
+    <Compile Include="Data\IsosExporter.cs" />
+    <Compile Include="Data\IsosExporterFactory.cs" />
+    <Compile Include="Data\IsosImporter.cs" />
+    <Compile Include="Data\IsosResultDeSerializer.cs" />
+    <Compile Include="Data\RunFactory.cs" />
+    <Compile Include="Data\ScanResultFactory.cs" />
+    <Compile Include="Data\ScansExporter.cs" />
+    <Compile Include="Data\ScansExporterFactory.cs" />
+    <Compile Include="Data\TaskControllerFactory.cs" />
+    <Compile Include="Data\UIMFIsosExporter.cs" />
+    <Compile Include="Data\UIMFIsosOrigIntensitiesExporter.cs" />
+    <Compile Include="Data\UIMFReader.cs" />
+    <Compile Include="Data\UIMFScanSet.cs" />
+    <Compile Include="Data\UIMFScansExporter.cs" />
+    <Compile Include="Data\UIMF_SQLiteIsosExporter.cs" />
+    <Compile Include="DTO\IsosResultComparer.cs" />
+    <Compile Include="DTO\IsosResultStats.cs" />
+    <Compile Include="DTO\IsosResultUtilities.cs" />
+    <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
+    <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
+    <Compile Include="Data\N14N15IsosResult.cs" />
+    <Compile Include="OldSchoolProcRunner.cs" />
+    <Compile Include="Parameters\Class1.cs" />
+    <Compile Include="Parameters\GenericMSParameters.cs" />
+    <Compile Include="ProcessingTasks\BasicTaskController.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\IDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\SimpleDecon.cs" />
+    <Compile Include="ProcessingTasks\DeconvolutorFactory.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\AreaFitter.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\DeconToolsFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\IFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\BasicIsosMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\BasicScansMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\IIsosMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\I_TIC_Extractor.cs" />
+    <Compile Include="ProcessingTasks\MSGeneratorFactory.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\I_MSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\XYDataMSGenerator.cs" />
+    <Compile Include="ProcessingTasks\N14N15Analyzers\I_N14N15Analyzer.cs" />
+    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\Class1.cs" />
+    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TomN14N15Analyzer.cs" />
+    <Compile Include="ProcessingTasks\OriginalIntensitiesExtractor.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\IPeakDetector.cs" />
+    <Compile Include="Core\Task.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\DeconEngine_MSParameters.cs" />
+    <Compile Include="ProcessingTasks\PeakListExporters\IPeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\PeakListExporters\PeakListTextExporter.cs" />
+    <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
+    <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
+    <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />
+    <Compile Include="ProcessingTasks\TaskCleaner.cs" />
+    <Compile Include="ProcessingTasks\UIMFDriftTimeExtractor.cs" />
+    <Compile Include="ProcessingTasks\UIMF_TaskController.cs" />
+    <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\BasicZeroFiller.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\IZeroFiller.cs" />
+    <Compile Include="Runs\BrukerRun.cs" />
+    <Compile Include="Runs\ConcreteXYDataRun.cs" />
+    <Compile Include="Runs\DeconToolsRun.cs" />
+    <Compile Include="Runs\ICR2LSRun.cs" />
+    <Compile Include="Runs\MSScanFromTextFileRun.cs" />
+    <Compile Include="Runs\MZXMLRun.cs" />
+    <Compile Include="Runs\UIMFRun.cs" />
+    <Compile Include="Runs\XCaliburRun.cs" />
+    <Compile Include="FileLoader.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Runs\IMFRun.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\MSParameters.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\IMF_MSGenerator.cs" />
+    <Compile Include="Parameters\ParameterLoader.cs" />
+    <Compile Include="Parameters\Parameters.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Run.cs" />
+    <Compile Include="Data\XYData.cs" />
+    <Compile Include="Runs\XYDataRun.cs" />
+    <Compile Include="ScanResult2.cs" />
+    <Compile Include="Core\UIMFScanResult.cs" />
+    <Compile Include="Utilities\AssemblyInfoRetriever.cs" />
+    <Compile Include="Utilities\Converters\FileTypeConverter.cs" />
+    <Compile Include="Utilities\DesignByContract.cs" />
+    <Compile Include="Utilities\FrameSetCollectionCreator.cs" />
+    <Compile Include="Utilities\IsosResultSerializer.cs" />
+    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TemplateMatch.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\TomIsotopicPattern.cs" />
+    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TomMZPeak.cs" />
+    <Compile Include="Utilities\Logger.cs" />
+    <Compile Include="Utilities\Logger_Importer.cs" />
+    <Compile Include="Utilities\MathUtils.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDist.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistCollection.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistCollectionCreator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistributionCreator.cs" />
+    <Compile Include="Utilities\MolecularFormula.cs" />
+    <Compile Include="Utilities\PeakUtilities.cs" />
+    <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
+    <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="ResultAndExporterClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="IMSCOMP.dll" />
+    <Content Include="sqlite3.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

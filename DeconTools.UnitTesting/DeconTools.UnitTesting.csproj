@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C41F8FF3-CF73-4F01-A57E-6717E61F32F9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.UnitTesting</RootNamespace>
+    <AssemblyName>DeconTools.UnitTesting</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeconEngine, Version=1.0.3165.35432, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DeconConsole_Tests\DeconConsoleTests.cs" />
+    <Compile Include="DMSDeconToolsWrapperTests.cs" />
+    <Compile Include="DTO_Tests\IsoResultComparerTests.cs" />
+    <Compile Include="DTO_Tests\IsosResultUtilitiesTests.cs" />
+    <Compile Include="DTO_Tests\OriginalIntensitiesExtractorTests.cs" />
+    <Compile Include="ExporterTests\BasicIsosExporterTests.cs" />
+    <Compile Include="ExporterTests\BasicScansExporterTests.cs" />
+    <Compile Include="ExporterTests\UIMF_IsosExporterTests.cs" />
+    <Compile Include="ExporterTests\UIMF_ScansExporterTests.cs" />
+    <Compile Include="FrameSetCollectionCreatorTests.cs" />
+    <Compile Include="OldSchoolProcRunnerTests.cs" />
+    <Compile Include="ParameterFileTests.cs" />
+    <Compile Include="ProcessingTasksTests\BasicTaskControllerTests.cs" />
+    <Compile Include="ProcessingTasksTests\DeconToolsSavitzkyGolaySmootherTests.cs" />
+    <Compile Include="ProcessingTasksTests\DeconToolsZeroFillerTests.cs" />
+    <Compile Include="ProcessingTasksTests\FitScoreCalculatorTests.cs" />
+    <Compile Include="ProcessingTasksTests\FitterTests.cs" />
+    <Compile Include="ProcessingTasksTests\GenericMSGeneratorTests.cs" />
+    <Compile Include="ProcessingTasksTests\IsosMergerExporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\MultiDeconvolutorTests.cs" />
+    <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TomN14N15AnalyzerTests.cs" />
+    <Compile Include="ProcessingTasksTests\PeakListExporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\ScanResultUpdaterTests.cs" />
+    <Compile Include="ProcessingTasksTests\SimpleDeconTests.cs" />
+    <Compile Include="ProcessingTasksTests\UIMF_MSGeneratorTests.cs" />
+    <Compile Include="ProcessingTasksTests\UIMF_TaskControllerTests.cs" />
+    <Compile Include="ProcessingTasksTests\UIMF_TICExtractorTests.cs" />
+    <Compile Include="ProjectControllerTests\RunMergingProjectControllerTests.cs" />
+    <Compile Include="QualityControlTests\IMFQualityTests.cs" />
+    <Compile Include="QualityControlTests\MZXMLQualityTests.cs" />
+    <Compile Include="QualityControlTests\UIMFQualityTests.cs" />
+    <Compile Include="ResultSerializationTests.cs" />
+    <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
+    <Compile Include="Run_relatedTests\ICR2LSRun_Tests.cs" />
+    <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
+    <Compile Include="ProcessingTasksTests\MSDeconvoluterTests.cs" />
+    <Compile Include="ProcessingTasksTests\MSPeakFinderTests.cs" />
+    <Compile Include="ProcessingTasksTests\PeakDetectionTests.cs" />
+    <Compile Include="ProcessingTasksTests\RapidDeconvolutorTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
+    <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
+    <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
+    <Compile Include="ScanSetCollectionCreatorTests.cs" />
+    <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
+    <Compile Include="SpeedTests\Class1.cs" />
+    <Compile Include="SpeedTests\UIMFSpeedTests.cs" />
+    <Compile Include="SpeedTests\XCaliburSpeedTests.cs" />
+    <Compile Include="TestUtilities.cs" />
+    <Compile Include="UtilitiesTests\Logger_ImporterTests.cs" />
+    <Compile Include="UtilitiesTests\MathUtilsTests.cs" />
+    <Compile Include="UtilitiesTests\MercuryDistributionTests\MercuryDistributionCreatorTests.cs" />
+    <Compile Include="UtilitiesTests\TomIsotopicDistributionTests\TomIsotopicDistributionTests.cs" />
+    <Compile Include="UtilitiesTests\UtilitiesTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DMSDeconToolsV2\DMSDeconToolsV2.csproj">
+      <Project>{23B9BC46-F89D-41C1-896F-609A67C89F38}</Project>
+      <Name>DMSDeconToolsV2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

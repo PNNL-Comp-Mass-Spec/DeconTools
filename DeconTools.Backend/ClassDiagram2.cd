@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.TaskController" Collapsed="true">
+    <Position X="4.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAYAAQACAAAAAAAAAQAAAAAAAAAAAAI=</HashCode>
+      <FileName>Core\TaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.FrameSet" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAASAAAAAggQAAAIAAAAAAAA=</HashCode>
+      <FileName>Core\FrameSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.FrameSetCollection" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>Core\FrameSetCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IsotopicProfile" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AiAAAAAAAhBSAAiCYACJADAAIAgAAAAAAAgBkAAgIBA=</HashCode>
+      <FileName>Core\IsotopicProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.MSPeak" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAIQAoACAAKAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\MSPeak.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.OldDeconFormatResult" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAGAAAABAJBAAECYQCBAIABCADAARAgYCAQAAEgAAAA=</HashCode>
+      <FileName>Core\OldDeconFormatResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Project">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAACBAIAAAACAAAAAABCAAQAAIAAAACAAAA=</HashCode>
+      <FileName>Core\Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ResultCollection" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAIAgAAiAAAIIAAAKAAAAAAAAAAIAGAAAAFAAAAAAI=</HashCode>
+      <FileName>Core\ResultCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Run" Collapsed="true">
+    <Position X="4" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwEAQAFBAAAIQAAAAAAAAA4YAAAKAAEAgxEBEIAYEAA=</HashCode>
+      <FileName>Core\Run.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanResult" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAQAAAAJAAAAAAAAAAAAQCAAAEAAAAAAAAA=</HashCode>
+      <FileName>Core\ScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanResultCollection" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\ScanResultCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanSet" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAQAAwAAQAAAAAAAAIAAQAAAAAUggAABMABAABAEA=</HashCode>
+      <FileName>Core\ScanSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanSetCollection">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAA=</HashCode>
+      <FileName>Core\ScanSetCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.StandardScanResult" Collapsed="true">
+    <Position X="6.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAwAAAAJAAAIAQAAIAAAQCAAAEAABAAAAEA=</HashCode>
+      <FileName>Core\StandardScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Task" Collapsed="true">
+    <Position X="8" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.TaskCollection" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\TaskCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ScanResult2">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ScanResult2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.UIMFScanResult">
+    <Position X="8" Y="3" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAwAAgAJAAAIAQAAIAABQiAAAUKABAAAAEA=</HashCode>
+      <FileName>Core\UIMFScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.StandardIsosResult" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAI=</HashCode>
+      <FileName>Core\StandardIsosResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.BasicTaskController" Collapsed="true">
+    <Position X="3.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\BasicTaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMF_TaskController" Collapsed="true">
+    <Position X="6" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>ProcessingTasks\UIMF_TaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.MSScanFromTextFileRun" Collapsed="true">
+    <Position X="8.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAQAAAAAAABAACgAAKAAAAAAAQAAgAAAAAAAAA=</HashCode>
+      <FileName>Runs\MSScanFromTextFileRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.DeconToolsRun" Collapsed="true">
+    <Position X="4" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Runs\DeconToolsRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.XCaliburRun" Collapsed="true">
+    <Position X="2" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAgkAEBAAAAA=</HashCode>
+      <FileName>Runs\XCaliburRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.UIMFRun" Collapsed="true">
+    <Position X="4" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hQACAEQMgAAABAAAgAAJAAIwAAAAABBEAo0AEBEAgAA=</HashCode>
+      <FileName>Runs\UIMFRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.IMFRun" Collapsed="true">
+    <Position X="6" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAggAEBAAAAA=</HashCode>
+      <FileName>Runs\IMFRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IDeconvolutor" Collapsed="true">
+    <Position X="9.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\IDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.HornDeconvolutor" Collapsed="true">
+    <Position X="7.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUHAAINVSYSICFEIgIIALQGCAA0KIMYCAKCPBsFEFQQ=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.RapidDeconvolutor" Collapsed="true">
+    <Position X="9.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAgIAGAAAAIEABACABkACAABAACAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.Deconvoluters.SimpleDecon" Collapsed="true">
+    <Position X="11" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAQAAAAEAAEEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\SimpleDecon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.I_MSGenerator" Collapsed="true">
+    <Position X="2" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQIAAAACAAgAAAAIAAAACAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\I_MSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMF_MSGenerator" Collapsed="true">
+    <Position X="0.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgIAAAAgAAAAAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.MSGenerators.GenericMSGenerator" Collapsed="true">
+    <Position X="3" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\GenericMSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IPeakDetector" Collapsed="true">
+    <Position X="5.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAgAIAAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\IPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector" Collapsed="true">
+    <Position X="5.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CABAAAkIEAAAAAAACBAQAAAKAAAAABgABAAIAgAYAAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.Smoothers.ISmoother" Collapsed="true">
+    <Position X="13" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Smoothers\ISmoother.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother" Collapsed="true">
+    <Position X="13" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAACABAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.I_TIC_Extractor" Collapsed="true">
+    <Position X="15" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\I_TIC_Extractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMF_TICExtractor" Collapsed="true">
+    <Position X="15" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\UIMF_TICExtractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMFDriftTimeExtractor" Collapsed="true">
+    <Position X="17.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\UIMFDriftTimeExtractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.ScanResultUpdater" Collapsed="true">
+    <Position X="19.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\ScanResultUpdater.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.SingleMSScanRun" Collapsed="true">
+    <Position X="8.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAIAAAAAAAAAAAAQAAAAAAAAAAAAEBAAAAA=</HashCode>
+      <FileName>Runs\XYDataRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

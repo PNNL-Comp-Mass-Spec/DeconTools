@@ -1,0 +1,13 @@
+11/11/2009 12:16:45 PM	DeconTools.Backend.dll version = v1.0.3602.17005
+11/11/2009 12:16:45 PM	ParameterFile = uimfParameterFileHorn1.xml
+11/11/2009 12:16:45 PM	DeconEngine version = v1.0.3594.22992
+11/11/2009 12:16:45 PM	RapidEngine version = v1.0.3165.35432
+11/11/2009 12:16:45 PM	UIMFLibrary version = v1.0.3484.29834
+11/11/2009 12:16:45 PM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.HornDeconvolutor
+11/11/2009 12:16:45 PM	Started file processing
+11/11/2009 12:16:58 PM	Finished file processing
+11/11/2009 12:16:58 PM	_scans file written
+11/11/2009 12:16:58 PM	Started writing out _isos results
+11/11/2009 12:16:58 PM	Finished writing out _isos results
+11/11/2009 12:16:58 PM	total processing time = 00:00:12.7031250
+11/11/2009 12:16:58 PM	total features = 488

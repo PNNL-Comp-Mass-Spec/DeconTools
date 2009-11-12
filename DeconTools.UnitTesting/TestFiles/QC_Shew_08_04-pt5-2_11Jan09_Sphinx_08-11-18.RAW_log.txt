@@ -1,0 +1,13 @@
+11/6/2009 4:03:56 PM	DeconTools.Backend.dll version = v1.0.3596.15324
+11/6/2009 4:03:56 PM	ParameterFile = Copy of xcaliburParameterFile1.xml
+11/6/2009 4:03:56 PM	DeconEngine version = v1.0.3535.22659
+11/6/2009 4:03:56 PM	RapidEngine version = v1.0.3165.35432
+11/6/2009 4:03:56 PM	UIMFLibrary version = v1.0.3484.29834
+11/6/2009 4:03:56 PM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.HornDeconvolutor
+11/6/2009 4:03:56 PM	Started file processing
+11/6/2009 4:04:08 PM	Finished file processing
+11/6/2009 4:04:08 PM	_scans file written
+11/6/2009 4:04:08 PM	Started writing out _isos results
+11/6/2009 4:04:08 PM	Finished writing out _isos results
+11/6/2009 4:04:08 PM	total processing time = 00:00:11.4062500
+11/6/2009 4:04:08 PM	total features = 1322

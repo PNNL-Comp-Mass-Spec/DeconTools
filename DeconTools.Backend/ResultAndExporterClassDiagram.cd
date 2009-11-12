@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.UIMFIsosResult" Collapsed="true">
+    <Position X="3.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAgAQAAAAAAAAAAAAAAAAIAAAAiAAAAIAAAAAAAI=</HashCode>
+      <FileName>Core\UIMFIsosResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanResult" Collapsed="true">
+    <Position X="6.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAQAAAAJAAAAAAAAAAAAQCAAAEAAAAAAAAA=</HashCode>
+      <FileName>Core\ScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IsosResult" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAI=</HashCode>
+      <FileName>Core\IsosResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.StandardIsosResult" Collapsed="true">
+    <Position X="1.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAI=</HashCode>
+      <FileName>Core\StandardIsosResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.UIMFScanResult" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAwAAgAJAAAIAQAAIAABQiAAAUKABAAAAEA=</HashCode>
+      <FileName>Core\UIMFScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.StandardScanResult" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAwAAAAJAAAIAQAAIAAAQCAAAEAABAAAAEA=</HashCode>
+      <FileName>Core\StandardScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Run" Collapsed="true">
+    <Position X="1.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwEAQAFJAAAIQAAAAAAACA4YAAAiAAEAgwEBEIAYEAA=</HashCode>
+      <FileName>Core\Run.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ResultCollection" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ResultCollection" Collapsed="true">
+    <Position X="4.25" Y="1" Width="1.5" />
+    <AssociationLine Name="scanResultList" Type="DeconTools.Backend.Core.ScanResult" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.125" Y="1.509" />
+        <Point X="5.125" Y="1.895" />
+        <Point X="5.128" Y="1.895" />
+        <Point X="5.128" Y="2.679" />
+        <Point X="6.25" Y="2.679" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIAIAgAAiAAAIIAAAKAAAAAAAAAAIAGEAAAFAAAAAAI=</HashCode>
+      <FileName>Core\ResultCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="scanResultList" />
+      <Property Name="ResultList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.IsosExporter" Collapsed="true">
+    <Position X="2.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\IsosExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.Exporter&lt;T&gt;" Collapsed="true">
+    <Position X="4.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAABAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Exporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.ScansExporter" Collapsed="true">
+    <Position X="6.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\ScansExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.UIMFIsosExporter" Collapsed="true">
+    <Position X="3" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAABAAAAAAAAQABAAAAAAAAAAQAEAAAAAAAAA=</HashCode>
+      <FileName>Data\UIMFIsosExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.BasicIsosExporter" Collapsed="true">
+    <Position X="1" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAABAAAAAAAAAABAAAAAAAAAAQAEAAAAAAAAA=</HashCode>
+      <FileName>Data\BasicIsosExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.UIMFScansExporter" Collapsed="true">
+    <Position X="7.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAABAAAAAAAAAAQAEAAAAAAAAA=</HashCode>
+      <FileName>Data\UIMFScansExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Data.BasicScansExporter" Collapsed="true">
+    <Position X="5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAABAAAAAAAAAAQAEAAAAAAAAA=</HashCode>
+      <FileName>Data\BasicScansExporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

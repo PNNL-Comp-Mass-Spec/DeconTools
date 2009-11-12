@@ -1,0 +1,13 @@
+SCC = This is a Source Code Control file
+
+[DeconTools.csproj]
+SCC_Aux_Path = "\\floyd\vss\"
+SCC_Project_Name = "$/d3m419/DeconTools.net/DeconTools.net/DeconTools.net", RSBBAAAA
+
+[Decon2LS.csproj]
+SCC_Aux_Path = "\\floyd\vss\"
+SCC_Project_Name = "$/d3m419/Decon2LS/Decon2LS/Decon2LS", MXACAAAA
+
+[DeconEngine.vcproj]
+SCC_Aux_Path = "\\floyd\VSS\"
+SCC_Project_Name = "$/d3m419/Decon2LS/Decon2LS", FJKBAAAA

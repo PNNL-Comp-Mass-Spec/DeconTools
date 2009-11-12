@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools</RootNamespace>
+    <AssemblyName>DeconTools</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeconEngineV2, Version=1.0.3434.30786, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="DataProcessingConfiguration\DataProcessingConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\DataProcessingConfigurationForm.Designer.cs">
+      <DependentUpon>DataProcessingConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\HornDeconvolutorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\HornDeconvolutorConfig.Designer.cs">
+      <DependentUpon>HornDeconvolutorConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\MSGeneratorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\MSGeneratorConfig.Designer.cs">
+      <DependentUpon>MSGeneratorConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\PeakDetectorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessingConfiguration\PeakDetectorConfig.Designer.cs">
+      <DependentUpon>PeakDetectorConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataProcessingConfiguration\DataProcessingConfigurationForm.resx">
+      <DependentUpon>DataProcessingConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessingConfiguration\HornDeconvolutorConfig.resx">
+      <DependentUpon>HornDeconvolutorConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessingConfiguration\MSGeneratorConfig.resx">
+      <DependentUpon>MSGeneratorConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessingConfiguration\PeakDetectorConfig.resx">
+      <DependentUpon>PeakDetectorConfig.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

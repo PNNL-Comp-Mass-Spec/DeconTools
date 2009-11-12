@@ -1,0 +1,4 @@
+frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_front,frame_pressure_back
+1200,-1,1,20112,671.358288775988,tic,4097,266,4,4.016
+1201,-1,1,34837,671.361274420402,tic,3712,498,4,4.009
+1202,-1,1,38717,671.3629246769,tic,3547,724,4,4.012
