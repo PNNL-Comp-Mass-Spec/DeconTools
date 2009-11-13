@@ -35,7 +35,7 @@ namespace DeconTools.Backend
         public Project Project
         {
             get { return project; }
-            
+
         }
 
 
@@ -97,7 +97,7 @@ namespace DeconTools.Backend
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
             Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
             Logger.Instance.AddEntry("UIMFLibrary version = " + UIMFLibraryAdapter.getLibraryVersion(), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
-  
+
 
             if (run is UIMFRun)     // not pretty...  
             {
@@ -115,10 +115,10 @@ namespace DeconTools.Backend
             catch (Exception ex)
             {
 
-                Logger.Instance.AddEntry("ERROR: " +ex.Message, Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
+                Logger.Instance.AddEntry("ERROR: " + ex.Message, Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
                 throw ex;
             }
- 
+
 
 
             //Create Tasks and add to task collection...
@@ -147,7 +147,15 @@ namespace DeconTools.Backend
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
                 StreamWriter sw = new StreamWriter(getPeakListTextfilename(run));
-                Task peakListTextExporter = new PeakListTextExporter(sw);
+                Task peakListTextExporter;
+                if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS == true)
+                {
+                    peakListTextExporter = new PeakListTextExporter(sw, new int[] { 1, 2 });
+                }
+                else
+                {
+                    peakListTextExporter = new PeakListTextExporter(sw);
+                }
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
 
@@ -155,7 +163,7 @@ namespace DeconTools.Backend
             DeconvolutorFactory deconFactory = new DeconvolutorFactory();
             Task deconvolutor = deconFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
             Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
-            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(),Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(), Logger.Instance.OutputFilename);
 
 
 

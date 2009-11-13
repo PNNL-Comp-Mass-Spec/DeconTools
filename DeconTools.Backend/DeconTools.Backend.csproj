@@ -100,7 +100,6 @@
     <Compile Include="Data\UIMFReader.cs" />
     <Compile Include="Data\UIMFScanSet.cs" />
     <Compile Include="Data\UIMFScansExporter.cs" />
-    <Compile Include="Data\UIMF_SQLiteIsosExporter.cs" />
     <Compile Include="DTO\IsosResultComparer.cs" />
     <Compile Include="DTO\IsosResultStats.cs" />
     <Compile Include="DTO\IsosResultUtilities.cs" />

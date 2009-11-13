@@ -48,10 +48,6 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.3518.21316, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DeconTools.Backend\bin\Release\DeconTools.Backend.dll</HintPath>
-    </Reference>
     <Reference Include="GWSFileUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\GWSFileUtilities.dll</HintPath>
@@ -120,6 +116,10 @@
     <ProjectReference Include="..\DeconConsole\DeconConsole.csproj">
       <Project>{3F630119-F9F7-4FF3-8748-11DAED656472}</Project>
       <Name>DeconConsole</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

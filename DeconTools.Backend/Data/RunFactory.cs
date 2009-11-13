@@ -27,7 +27,10 @@ namespace DeconTools.Backend.Data
             match = Regex.Match(fileName.ToLower(), ".*acqu$");
             if (match.Success)
             {
-                return new BrukerRun(fileName);
+                //extract folder name;   the raw data reader (DeconEngine) reads in the folder name
+                string folderName = match.Value.Substring(0,match.Value.IndexOf(@"\Acqu", StringComparison.OrdinalIgnoreCase));
+
+                return new BrukerRun(folderName);
             }
 
 

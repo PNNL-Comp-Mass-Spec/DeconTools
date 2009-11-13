@@ -167,6 +167,56 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         }
 
+
+        [Test]
+        public void xcaliburFileMSMSDataTest1()
+        {
+            //exploring how only MSMS data is processed...
+
+            Project.Reset();
+
+            Run run = new XCaliburRun(xcaliburTestfile, 6000, 6004);    //only MS/MS data here
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1);
+            sscc.Create();
+
+            Project project = Project.getInstance();
+            project.RunCollection.Add(run);
+
+            Task msGen = new GenericMSGenerator();
+
+            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+            detectorParams.PeakBackgroundRatio = 1.3;
+            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
+            detectorParams.SignalToNoiseThreshold = 2;
+            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+
+            DeconToolsV2.HornTransform.clsHornTransformParameters hornparams = new DeconToolsV2.HornTransform.clsHornTransformParameters();
+            hornparams.PeptideMinBackgroundRatio = 2;
+            Task hornDecon = new HornDeconvolutor(hornparams);
+
+            project.TaskCollection.TaskList.Add(msGen);
+            project.TaskCollection.TaskList.Add(peakDetector);
+            project.TaskCollection.TaskList.Add(hornDecon);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            TaskController controller = new BasicTaskController(project.TaskCollection);
+            controller.Execute(project.RunCollection);
+            sw.Stop();
+
+            Assert.AreEqual(1, Project.getInstance().RunCollection.Count);
+            Assert.AreEqual(3, project.TaskCollection.TaskList.Count);
+
+//            Assert.AreEqual(21, project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(233, project.RunCollection[0].ResultCollection.ResultList.Count);
+
+            Console.WriteLine("Time required (ms) = " + sw.ElapsedMilliseconds);
+            Console.WriteLine("Scans analyzed = " + project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
+            Console.WriteLine("Features found = " + project.RunCollection[0].ResultCollection.ResultList.Count);
+
+        }
+
+
         [Test]
         public void multiIMFFileRAPIDDTest1()
         {

@@ -211,6 +211,21 @@ namespace DeconTools.UnitTesting
             runner.Execute();
         }
 
+
+        [Test]
+        public void ExecuteRunnerAndWithPeakExporter_ExportMSMSTest1()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, parameterFile4, bw);
+            runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS = true;
+            runner.IsosResultThreshold = 100000;
+            runner.Execute();
+        }
+
+
         [Test]
         public void ExecuteRunner_withReplaceRapidScoresTest1()
         {

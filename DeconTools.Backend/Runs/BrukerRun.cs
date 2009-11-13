@@ -18,14 +18,14 @@ namespace DeconTools.Backend.Runs
             this.MSFileType = Globals.MSFileType.Bruker;
         }
 
-        public BrukerRun(string filename)
+        public BrukerRun(string folderName)
             : this()
         {
-            this.Filename = filename;
+            this.Filename = folderName;
             try
             {
-
-                this.rawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.BRUKER);
+                this.rawData = new DeconToolsV2.Readers.clsRawData();
+                this.rawData.LoadFile(folderName, DeconToolsV2.Readers.FileType.BRUKER);
             }
             catch (Exception ex)
             {

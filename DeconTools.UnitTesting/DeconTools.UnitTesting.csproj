@@ -38,7 +38,7 @@
     </Reference>
     <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -96,6 +96,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
     <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
+    <Compile Include="Run_relatedTests\RunFactoryTests.cs" />
     <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
     <Compile Include="ScanSetCollectionCreatorTests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />

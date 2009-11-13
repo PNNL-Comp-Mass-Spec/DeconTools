@@ -6,13 +6,15 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend;
 using System.Diagnostics;
+using DeconTools.Backend.Data;
 
 namespace DeconTools.UnitTesting.Run_relatedTests
 {
     [TestFixture]
     public class BrukerRun_tests
     {
-        string brukerTestFile1 = @"H:\N14N15Data\RSPH_Aonly_26_run1_20Oct07_Andromeda_07-09-02\Acqu";
+        string brukerTestFile1 = @"H:\N14N15Data\RSPH_Aonly_26_run1_20Oct07_Andromeda_07-09-02";
+        string brukerTestFile2 = @"H:\N14N15Data\RSPH_Aonly_23_run1_25Oct07_Andromeda_07-09-02\0.ser"; 
 
         [Test]
         public void GetSpectrumTest1()
@@ -45,6 +47,32 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
         [Test]
+        public void OpenTwoBrukerFilesTest1()
+        {
+            Run run1 = new BrukerRun(brukerTestFile1);
+            run1.GetMassSpectrum(new ScanSet(1005), 0, 500000);
+            //run1.GetMSLevel(1005);
+
+
+            Run run2 = new BrukerRun(brukerTestFile2);
+            //run2.GetMSLevel(1005);
+
+            run2.GetMassSpectrum(new ScanSet(1005), 0, 500000);
+
+        }
+
+        [Test]
+        public void runFactoryTest1()
+        {
+       
+
+        }
+
+
+
+
+
+        [Test]
         public void GetSpectrumTest2()
         {
             Run run = new BrukerRun(brukerTestFile1);
@@ -67,9 +95,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(24330, run.XYData.Xvalues.Length);
             Assert.AreEqual(24330, run.XYData.Yvalues.Length);
             //Assert.AreEqual(579.808837890625,run.XYData.Xvalues[85910]);  //TODO:  there seems to be discrepancy - 5th decimal -  between this and the result from the Decon2LS.UI.  Possibly a FT-MS preprocessing difference?
-            Assert.AreEqual(26474.986328125, run.XYData.Yvalues[85910]);
-
-
+     
             Assert.AreEqual(1, run.GetMSLevel(1005));
         }
 
@@ -102,7 +128,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             sw.Start();
             for (int i = 0; i < numScansToGet; i++)
             {
-                run.GetMassSpectrum(new ScanSet(1005), 500, 600);   //
+                run.GetMassSpectrum(new ScanSet(1005), 500, 600);   //  some filtering is involved... therefore time is added. 
             }
             sw.Stop();
 
