@@ -9,11 +9,10 @@ using MSDBLibrary;
 
 namespace DeconTools.Backend.Data
 {
-    class UIMFSQLiteScansExporter : ScansExporter
+    public class UIMFSQLiteScansExporter : ScansExporter
     {
         private string fileName;
         private DBWriter dw = new DBWriter();
-        private IMS_Frames fp = new IMS_Frames();
 
         public UIMFSQLiteScansExporter(string fileName)
         {
@@ -35,10 +34,14 @@ namespace DeconTools.Backend.Data
                 throw;
             }
 
+            IMS_Frames fp;
+
             foreach (ScanResult result in results.ScanResultList)
             {
                 Check.Require(result is UIMFScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
                 UIMFScanResult uimfResult = (UIMFScanResult)result;
+
+                fp = new IMS_Frames();
                 fp.frame_num = (ushort)uimfResult.Frameset.PrimaryFrame;
                 fp.frame_time = (float)uimfResult.ScanTime;
                 fp.type = (ushort)uimfResult.SpectrumType;

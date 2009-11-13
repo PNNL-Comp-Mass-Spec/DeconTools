@@ -9,11 +9,10 @@ using MSDBLibrary;
 
 namespace DeconTools.Backend.Data
 {
-    class UIMFSQLiteIsosExporter : IsosExporter
+    public class UIMFSQLiteIsosExporter : IsosExporter
     {
         private string fileName;
-        private DBWriter dw = new DBWriter();
-        private MS_Features fp = new MS_Features();
+        private DBWriter sqlWriter = new DBWriter();
         public UIMFSQLiteIsosExporter(string fileName)
         {
             this.fileName = fileName;
@@ -27,7 +26,7 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                dw.OpenMSDB(fileName);
+                sqlWriter.OpenMSDB(fileName);
 
             }
             catch (Exception)
@@ -37,7 +36,7 @@ namespace DeconTools.Backend.Data
 
             exportSQLiteUIMFIsosResults(results);
 
-            dw.CloseMSDB(fileName);
+            sqlWriter.CloseMSDB(fileName);
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
@@ -46,7 +45,7 @@ namespace DeconTools.Backend.Data
 
             try
             {
-                dw.OpenMSDB(fileName);
+                sqlWriter.OpenMSDB(fileName);
 
             }
             catch (Exception ex)
@@ -64,7 +63,7 @@ namespace DeconTools.Backend.Data
 
             } while (results != null);
 
-            dw.CloseMSDB(fileName);
+            sqlWriter.CloseMSDB(fileName);
             deserializer.Close();
 
 
@@ -93,9 +92,12 @@ namespace DeconTools.Backend.Data
         {
             if (results == null) return;
 
+            MS_Features fp;
             foreach (IsosResult result in results.ResultList)
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
+                fp = new MS_Features();
+
                 UIMFIsosResult uimfResult = (UIMFIsosResult)result;
                 fp.frame_num = (ushort)uimfResult.FrameSet.PrimaryFrame;
                 fp.ims_scan_num = (ushort)getScanNumber(uimfResult.ScanSet.PrimaryScanNumber);
@@ -113,7 +115,7 @@ namespace DeconTools.Backend.Data
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
                 fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
                 fp.ims_drift_time = (float)uimfResult.DriftTime;
-                dw.InsertMSFeatures(fp);
+                sqlWriter.InsertMSFeatures(fp);
             }
         }
 

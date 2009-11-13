@@ -63,6 +63,7 @@
     <Compile Include="ExporterTests\BasicScansExporterTests.cs" />
     <Compile Include="ExporterTests\UIMF_IsosExporterTests.cs" />
     <Compile Include="ExporterTests\UIMF_ScansExporterTests.cs" />
+    <Compile Include="ExporterTests\UIMF_SQLiteIsosExporterTests.cs" />
     <Compile Include="FrameSetCollectionCreatorTests.cs" />
     <Compile Include="OldSchoolProcRunnerTests.cs" />
     <Compile Include="ParameterFileTests.cs" />
