@@ -7,6 +7,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Utilities;
+using System.IO;
 
 namespace DeconTools.UnitTesting.ExporterTests
 {
@@ -15,8 +16,8 @@ namespace DeconTools.UnitTesting.ExporterTests
     {
 
         string inputUIMFFile1 = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
-        string outputFile1 = "..\\..\\TestFiles\\UIMF_SQLiteIsosExporterTestOutput1.sqlite"; 
-        
+        string outputFile1 = "..\\..\\TestFiles\\UIMF_SQLiteIsosExporterTestOutput1.sqlite";
+
 
         [Test]
         public void test1()
@@ -40,7 +41,7 @@ namespace DeconTools.UnitTesting.ExporterTests
             project.RunCollection.Add(uimfrun);
 
             Task msGen = new UIMF_MSGenerator(200, 2000);
-            
+
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
             detectorParams.PeakBackgroundRatio = 3;
@@ -50,7 +51,7 @@ namespace DeconTools.UnitTesting.ExporterTests
             Task peakDetector = new DeconToolsPeakDetector(detectorParams);
 
             Task decon = new HornDeconvolutor();
-            
+
 
 
             Task driftTimeExtractor = new UIMFDriftTimeExtractor();
@@ -66,6 +67,12 @@ namespace DeconTools.UnitTesting.ExporterTests
             controller.Execute(project.RunCollection);
 
             Assert.AreEqual(252, project.RunCollection[0].ResultCollection.ResultList.Count);
+
+
+            if (File.Exists(outputFile1))
+            {
+                File.Delete(outputFile1);
+            }
 
             UIMFSQLiteIsosExporter isosExporter = new UIMFSQLiteIsosExporter(outputFile1);
             isosExporter.Export(project.RunCollection[0].ResultCollection);

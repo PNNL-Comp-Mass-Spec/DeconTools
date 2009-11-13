@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Data
     public class UIMFSQLiteIsosExporter : IsosExporter
     {
         private string fileName;
-        private DBWriter sqlWriter = new DBWriter();
+        private DBWriter sqliteWriter = new DBWriter();
         public UIMFSQLiteIsosExporter(string fileName)
         {
             this.fileName = fileName;
@@ -26,7 +26,8 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                sqlWriter.OpenMSDB(fileName);
+                sqliteWriter.OpenMSDB(fileName);
+                sqliteWriter.CreateTables();
 
             }
             catch (Exception)
@@ -36,7 +37,7 @@ namespace DeconTools.Backend.Data
 
             exportSQLiteUIMFIsosResults(results);
 
-            sqlWriter.CloseMSDB(fileName);
+            sqliteWriter.CloseMSDB(fileName);
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
@@ -45,7 +46,7 @@ namespace DeconTools.Backend.Data
 
             try
             {
-                sqlWriter.OpenMSDB(fileName);
+                sqliteWriter.OpenMSDB(fileName);
 
             }
             catch (Exception ex)
@@ -63,7 +64,7 @@ namespace DeconTools.Backend.Data
 
             } while (results != null);
 
-            sqlWriter.CloseMSDB(fileName);
+            sqliteWriter.CloseMSDB(fileName);
             deserializer.Close();
 
 
@@ -115,7 +116,8 @@ namespace DeconTools.Backend.Data
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
                 fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
                 fp.ims_drift_time = (float)uimfResult.DriftTime;
-                sqlWriter.InsertMSFeatures(fp);
+                sqliteWriter.InsertMSFeatures(fp);
+
             }
         }
 

@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Data
     public class UIMFSQLiteScansExporter : ScansExporter
     {
         private string fileName;
-        private DBWriter dw = new DBWriter();
+        private DBWriter sqliteWriter = new DBWriter();
 
         public UIMFSQLiteScansExporter(string fileName)
         {
@@ -26,7 +26,8 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                dw.OpenMSDB(fileName);
+                sqliteWriter.OpenMSDB(fileName);
+                sqliteWriter.CreateTables();
 
             }
             catch (Exception)
@@ -52,9 +53,9 @@ namespace DeconTools.Backend.Data
                 fp.num_deisotoped = (uint)uimfResult.NumIsotopicProfiles;
                 fp.frame_pressure_front = (float)uimfResult.FramePressureFront;
                 fp.frame_pressure_back = (float)uimfResult.FramePressureBack;
-                dw.InsertIMSFrames(fp);
+                sqliteWriter.InsertIMSFrames(fp);
             }
-            dw.CloseMSDB(fileName);
+            sqliteWriter.CloseMSDB(fileName);
         }
     }
 }
