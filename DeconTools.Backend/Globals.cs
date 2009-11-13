@@ -68,7 +68,8 @@ namespace DeconTools.Backend
         public enum ExporterType
         {
             TYPICAL,
-            ANOOP_OrigIntensityExporter
+            ANOOP_OrigIntensityExporter,
+            SQLite
         }
 
 

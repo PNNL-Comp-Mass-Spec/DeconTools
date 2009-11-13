@@ -53,6 +53,9 @@ namespace DeconTools.Backend.Data
                         case Globals.ExporterType.ANOOP_OrigIntensityExporter:
                             isosExporter = new UIMFIsosOrigIntensitiesExporter(outputFileName);
                             break;
+                        case Globals.ExporterType.SQLite:
+                            isosExporter = new UIMFSQLiteIsosExporter(outputFileName);
+                            break;
                         default:
                             isosExporter = new UIMFIsosExporter(outputFileName);
                             break;

@@ -6,6 +6,7 @@ namespace DeconTools.Backend.Data
 {
     public class ScansExporterFactory
     {
+        DeconTools.Backend.Globals.ExporterType exporterType;
 
         public ScansExporter CreateScansExporter(Globals.MSFileType fileType, string outputFileName)
         {
@@ -43,7 +44,22 @@ namespace DeconTools.Backend.Data
                     scansExporter = new BasicScansExporter(outputFileName);
                     break;
                 case Globals.MSFileType.PNNL_UIMF:
-                    scansExporter = new UIMFScansExporter(outputFileName);
+
+                    switch (exporterType)
+                    {
+                        case Globals.ExporterType.TYPICAL:
+                            scansExporter = new UIMFScansExporter(outputFileName);
+                            break;
+                        case Globals.ExporterType.ANOOP_OrigIntensityExporter:
+                            scansExporter = new UIMFScansExporter(outputFileName);
+                            break;
+                        case Globals.ExporterType.SQLite:
+                            scansExporter = new UIMFSQLiteScansExporter(outputFileName);
+                            break;
+                        default:
+                            scansExporter = new UIMFScansExporter(outputFileName);
+                            break;
+                    }
                     break;
                 case Globals.MSFileType.SUNEXTREL:
                     scansExporter = new BasicScansExporter(outputFileName);
