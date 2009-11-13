@@ -150,7 +150,7 @@ namespace DeconTools.Backend
                 Task peakListTextExporter;
                 if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS == true)
                 {
-                    peakListTextExporter = new PeakListTextExporter(sw, new int[] { 1, 2 });
+                    peakListTextExporter = new PeakListTextExporter(sw, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });     //support for up to MS^10
                 }
                 else
                 {
