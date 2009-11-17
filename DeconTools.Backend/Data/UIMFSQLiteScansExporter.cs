@@ -26,9 +26,8 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                sqliteWriter.OpenMSDB(fileName);
-                sqliteWriter.CreateTables();
-
+                sqliteWriter.CreateNewDB(fileName);
+                
             }
             catch (Exception)
             {
@@ -55,7 +54,7 @@ namespace DeconTools.Backend.Data
                 fp.frame_pressure_back = (float)uimfResult.FramePressureBack;
                 sqliteWriter.InsertIMSFrames(fp);
             }
-            sqliteWriter.CloseMSDB(fileName);
+            sqliteWriter.CloseDB(fileName);
         }
     }
 }
