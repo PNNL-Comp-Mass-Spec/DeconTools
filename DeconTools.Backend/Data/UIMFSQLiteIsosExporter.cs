@@ -26,9 +26,8 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                sqliteWriter.OpenMSDB(fileName);
-                sqliteWriter.CreateTables();
-
+                sqliteWriter.CreateNewDB(fileName);
+                
             }
             catch (Exception)
             {
@@ -37,7 +36,7 @@ namespace DeconTools.Backend.Data
 
             exportSQLiteUIMFIsosResults(results);
 
-            sqliteWriter.CloseMSDB(fileName);
+            sqliteWriter.CloseDB(fileName);
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
@@ -46,7 +45,7 @@ namespace DeconTools.Backend.Data
 
             try
             {
-                sqliteWriter.OpenMSDB(fileName);
+                sqliteWriter.CreateNewDB(fileName);
 
             }
             catch (Exception ex)
@@ -64,7 +63,7 @@ namespace DeconTools.Backend.Data
 
             } while (results != null);
 
-            sqliteWriter.CloseMSDB(fileName);
+            sqliteWriter.CloseDB(fileName);
             deserializer.Close();
 
 
