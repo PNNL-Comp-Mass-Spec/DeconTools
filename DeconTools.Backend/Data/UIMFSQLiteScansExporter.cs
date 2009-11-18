@@ -35,7 +35,12 @@ namespace DeconTools.Backend.Data
                 throw;
             }
 
+            //Insert records to IMS_Frames table
+            //Insert records in bulk mood, 500 records each time
+            //this is significantly faster than inserting one record at a time
+            //500 records are the maximum number sqlite3 can handle
             ArrayList records = new ArrayList();
+            int count = 0;
             foreach (ScanResult result in results.ScanResultList)
             {
                 Check.Require(result is UIMFScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
@@ -53,7 +58,15 @@ namespace DeconTools.Backend.Data
                 fp.frame_pressure_front = (float)uimfResult.FramePressureFront;
                 fp.frame_pressure_back = (float)uimfResult.FramePressureBack;
                 records.Add(fp);
+                count++;
+                if (count == 500)
+                {
+                    sqliteWriter.InsertIMSFrames(records);
+                    count = 0;
+                    records = new ArrayList();
+                }
             }
+            //Insert the rest of the records to IMS_Frames table
             sqliteWriter.InsertIMSFrames(records);
             sqliteWriter.CloseDB(fileName);
         }
