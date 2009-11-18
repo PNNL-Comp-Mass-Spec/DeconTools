@@ -115,8 +115,8 @@ namespace DeconTools.UnitTesting.SpeedTests
                 sw.Reset();
                 sw.Start();
                 DeconToolsV2.HornTransform.clsHornTransformParameters hornParams = new DeconToolsV2.HornTransform.clsHornTransformParameters();
-                Task rapid = new HornDeconvolutor(hornParams);
-                rapid.Execute(results);
+                Task decon = new HornDeconvolutor(hornParams);
+                decon.Execute(results);
                 timeresult.deconTime = sw.ElapsedMilliseconds;
 
                 sw.Reset();

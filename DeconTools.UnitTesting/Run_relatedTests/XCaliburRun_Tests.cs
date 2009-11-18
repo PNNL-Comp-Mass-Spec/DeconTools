@@ -87,7 +87,7 @@ namespace DeconTools.UnitTesting
 
             double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
 
-            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);
+            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);    //11.61 msec
 
 
         }
@@ -109,7 +109,7 @@ namespace DeconTools.UnitTesting
 
             double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
 
-            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);
+            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);    //13.51 msec
 
 
         }
@@ -166,6 +166,7 @@ namespace DeconTools.UnitTesting
             {
                 int msLevel = ((XCaliburRun)(run)).RawData.GetMSLevel(scanset.PrimaryScanNumber);
                 run.GetMassSpectrum(scanset, 0, 2000);
+                
             }
 
             

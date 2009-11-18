@@ -38,7 +38,7 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3484.30921, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
