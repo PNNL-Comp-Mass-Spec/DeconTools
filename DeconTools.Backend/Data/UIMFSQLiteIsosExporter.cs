@@ -95,7 +95,12 @@ namespace DeconTools.Backend.Data
         {
             if (results == null) return;
 
+            //Insert records to MS_Features table
+            //Insert records in bulk mood, 500 records each time
+            //this is significantly faster than inserting one record at a time
+            //500 records are the maximum number sqlite3 can handle
             ArrayList records = new ArrayList();
+            int count = 0;
             foreach (IsosResult result in results.ResultList)
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
@@ -118,7 +123,15 @@ namespace DeconTools.Backend.Data
                 fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
                 fp.ims_drift_time = (float)uimfResult.DriftTime;
                 records.Add(fp);
+                count++;
+                if (count == 500)
+                {
+                    sqliteWriter.InsertMSFeatures(records);
+                    count = 0;
+                    records = new ArrayList();
+                }
             }
+            //Insert the rest of the records to MS_Features table
             sqliteWriter.InsertMSFeatures(records);
         }
 
