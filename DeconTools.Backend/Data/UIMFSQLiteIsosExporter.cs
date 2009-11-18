@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data;
+using System.Runtime.InteropServices;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -92,13 +95,12 @@ namespace DeconTools.Backend.Data
         {
             if (results == null) return;
 
-            MS_Features fp;
+            ArrayList records = new ArrayList();
             foreach (IsosResult result in results.ResultList)
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
-                fp = new MS_Features();
-
                 UIMFIsosResult uimfResult = (UIMFIsosResult)result;
+                MS_Features fp = new MS_Features();
                 fp.frame_num = (ushort)uimfResult.FrameSet.PrimaryFrame;
                 fp.ims_scan_num = (ushort)getScanNumber(uimfResult.ScanSet.PrimaryScanNumber);
                 fp.charge = (byte)uimfResult.IsotopicProfile.ChargeState;
@@ -115,9 +117,9 @@ namespace DeconTools.Backend.Data
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
                 fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
                 fp.ims_drift_time = (float)uimfResult.DriftTime;
-                sqliteWriter.InsertMSFeatures(fp);
-
+                records.Add(fp);
             }
+            sqliteWriter.InsertMSFeatures(records);
         }
 
         protected override int getScanNumber(int scan_num)

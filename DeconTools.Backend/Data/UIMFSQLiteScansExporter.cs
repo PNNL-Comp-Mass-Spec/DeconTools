@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,14 +35,13 @@ namespace DeconTools.Backend.Data
                 throw;
             }
 
-            IMS_Frames fp;
-
+            ArrayList records = new ArrayList();
             foreach (ScanResult result in results.ScanResultList)
             {
                 Check.Require(result is UIMFScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
                 UIMFScanResult uimfResult = (UIMFScanResult)result;
 
-                fp = new IMS_Frames();
+                IMS_Frames fp = new IMS_Frames();
                 fp.frame_num = (ushort)uimfResult.Frameset.PrimaryFrame;
                 fp.frame_time = (float)uimfResult.ScanTime;
                 fp.type = (ushort)uimfResult.SpectrumType;
@@ -52,8 +52,9 @@ namespace DeconTools.Backend.Data
                 fp.num_deisotoped = (uint)uimfResult.NumIsotopicProfiles;
                 fp.frame_pressure_front = (float)uimfResult.FramePressureFront;
                 fp.frame_pressure_back = (float)uimfResult.FramePressureBack;
-                sqliteWriter.InsertIMSFrames(fp);
+                records.Add(fp);
             }
+            sqliteWriter.InsertIMSFrames(records);
             sqliteWriter.CloseDB(fileName);
         }
     }
