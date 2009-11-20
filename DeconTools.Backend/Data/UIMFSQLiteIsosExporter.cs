@@ -121,7 +121,7 @@ namespace DeconTools.Backend.Data
                 fp.mono_plus2_abundance = (uint)uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance();
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
                 fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
-                fp.ims_drift_time = (float)uimfResult.DriftTime;
+                fp.ims_drift_time = (float)uimfResult.ScanSet.DriftTime;
                 records.Add(fp);
                 count++;
                 if (count == 500)

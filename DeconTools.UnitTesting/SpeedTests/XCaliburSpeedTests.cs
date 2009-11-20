@@ -131,6 +131,20 @@ namespace DeconTools.UnitTesting.SpeedTests
             reportTimingEachScan(timingResults);
 
 
+            /*
+             * results on Gord's computer...  2009_11_18. 
+                scanNum	msgen	peakDet	decon	updater
+                6005	85	72	3013	3
+                6012	13	6	2661	0
+                6019	13	9	2908	0
+                6026	12	11	2560	0
+                6033	14	9	2778	0
+                6040	13	6	2558	0
+                6047	12	8	2753	0
+
+                Avg:	23.1	17.3	2747.3	0.4
+            */
+
         }
 
         private void reportTimingEachScan(List<timingResult> timingResults)

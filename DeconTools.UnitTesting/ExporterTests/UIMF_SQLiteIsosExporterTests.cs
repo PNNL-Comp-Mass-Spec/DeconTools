@@ -8,6 +8,7 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Utilities;
 using System.IO;
+using System.Diagnostics;
 
 namespace DeconTools.UnitTesting.ExporterTests
 {
@@ -74,8 +75,16 @@ namespace DeconTools.UnitTesting.ExporterTests
                 File.Delete(outputFile1);
             }
 
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             UIMFSQLiteIsosExporter isosExporter = new UIMFSQLiteIsosExporter(outputFile1);
             isosExporter.Export(project.RunCollection[0].ResultCollection);
+
+            sw.Stop();
+            Console.Write("\n\n----------- Time taken for UIMFSQLiteIsosExporter (milliseconds) = \t" + sw.ElapsedMilliseconds);
+
+
         }
 
 
