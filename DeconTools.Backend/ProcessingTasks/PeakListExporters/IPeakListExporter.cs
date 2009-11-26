@@ -10,34 +10,33 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
     public abstract class IPeakListExporter : Task
     {
 
-        private StreamWriter outputStream;
+        public abstract int TriggerToWriteValue { get; set; }
+        public abstract int[] MSLevelsToExport { get; set; }
 
-        public StreamWriter OutputStream
-        {
-            get { return outputStream; }
-            set { outputStream = value; }
-        }
+        public abstract void WriteOutPeaks(ResultCollection resultList);
 
-        public abstract void WriteToStream(ResultCollection resultList); 
+
 
         public override void Execute(ResultCollection resultList)
         {
-            WriteToStream(resultList);
+            if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0) return;
+
+            // check if peak results exceeds Trigger value or is the last Scan 
+            int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+            bool isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
+
+
+            if (resultList.MSPeakResultList.Count >= TriggerToWriteValue || isLastScan)
+            {
+                WriteOutPeaks(resultList);
+                resultList.MSPeakResultList.Clear();
+            }
         }
 
-        public override void Cleanup()
-        {
-            try
-            {
-                outputStream.Close();
-            }
-            catch (Exception)
-            {
-                
-            }
 
-            outputStream = null;
-        }
+
+
+
 
     }
 }

@@ -55,6 +55,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
@@ -112,6 +113,7 @@
     <Compile Include="DTO\IsosResultComparer.cs" />
     <Compile Include="DTO\IsosResultStats.cs" />
     <Compile Include="DTO\IsosResultUtilities.cs" />
+    <Compile Include="DTO\MSPeakResult.cs" />
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
     <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
@@ -145,7 +147,11 @@
     <Compile Include="Core\Task.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\DeconEngine_MSParameters.cs" />
     <Compile Include="ProcessingTasks\PeakListExporters\IPeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\PeakListExporters\MSPeakTable.cs" />
     <Compile Include="ProcessingTasks\PeakListExporters\PeakListTextExporter.cs" />
+    <Compile Include="ProcessingTasks\PeakListExporters\SqlitePeakListExporter.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
     <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
     <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />

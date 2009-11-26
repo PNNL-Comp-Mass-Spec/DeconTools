@@ -187,6 +187,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
             resultList.Run.CurrentScanSet.BackgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
             resultList.Run.MSPeakList = ConvertDeconEnginePeakList(peaklist);
+
+            resultList.FillMSPeakResults();
+
             resultList.Run.CurrentScanSet.NumPeaks = resultList.Run.MSPeakList.Count;    //used in ScanResult
             resultList.Run.CurrentScanSet.BasePeak = getBasePeak(resultList.Run.MSPeakList);     //Used in ScanResult
 

@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
+using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
 {
@@ -16,15 +17,27 @@ namespace DeconTools.Backend.Core
             this.run = run;
             this.resultList = new List<IsosResult>();
             this.scanResultList = new List<ScanResult>();
+            this.MSPeakResultList = new List<MSPeakResult>();
             this.currentScanIsosResultBin = new List<IsosResult>();
             this.logMessageList = new List<string>();
         }
+
+
+
+        private List<MSPeakResult> mSPeakResultList;
+        public List<MSPeakResult> MSPeakResultList
+        {
+            get { return mSPeakResultList; }
+            set { mSPeakResultList = value; }
+        }
+
+
 
         private List<IsosResult> currentScanIsosResultBin;
         public List<IsosResult> CurrentScanIsosResultBin
         {
             get { return currentScanIsosResultBin; }
-            set { currentScanIsosResultBin=value;}
+            set { currentScanIsosResultBin = value; }
         }
 
 
@@ -83,7 +96,7 @@ namespace DeconTools.Backend.Core
             IsosResult result;
             if (this.Run is UIMFRun)
             {
-                UIMFRun uimfRun=(UIMFRun)run;
+                UIMFRun uimfRun = (UIMFRun)run;
                 result = new UIMFIsosResult(this.Run, uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
             }
             else
@@ -107,16 +120,16 @@ namespace DeconTools.Backend.Core
             logMessageList.Add(logMessage);
         }
 
-       
+
         internal static List<IsosResult> getIsosResultsForCurrentScanSet(ResultCollection results)
         {
             Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
 
-            
+
 
             var queryList = from n in results.ResultList
-                              where n.ScanSet == results.Run.CurrentScanSet
-                              select n;
+                            where n.ScanSet == results.Run.CurrentScanSet
+                            select n;
 
 
             return queryList.ToList();
@@ -130,21 +143,48 @@ namespace DeconTools.Backend.Core
             foreach (ScanResult scanResult in this.ScanResultList)
             {
                 totIsotopicProfiles += scanResult.NumIsotopicProfiles;
-                
+
             }
             return totIsotopicProfiles;
         }
 
         public void AddIsosResult(IsosResult addedResult)
         {
-            this.CurrentScanIsosResultBin.Add(addedResult);     
+            this.CurrentScanIsosResultBin.Add(addedResult);
         }
 
         public void ClearAllResults()
         {
             this.CurrentScanIsosResultBin.Clear();
+            this.MSPeakResultList.Clear();
             this.ResultList.Clear();
             this.ScanResultList.Clear();
+        }
+
+
+        public int PeakCounter { get; set; }
+
+        public void FillMSPeakResults()
+        {
+            if (this.Run is UIMFRun)
+            {
+                foreach (MSPeak peak in this.Run.MSPeakList)
+                {
+                    PeakCounter++;
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter,((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    this.MSPeakResultList.Add(peakResult);
+                }
+            }
+            else
+            {
+                foreach (MSPeak peak in this.Run.MSPeakList)
+                {
+                    PeakCounter++;
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    this.MSPeakResultList.Add(peakResult);
+                }
+            }
+
         }
     }
 }
