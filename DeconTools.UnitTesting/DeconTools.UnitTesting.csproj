@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C41F8FF3-CF73-4F01-A57E-6717E61F32F9}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -49,6 +49,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
@@ -107,6 +108,8 @@
     <Compile Include="SpeedTests\Class1.cs" />
     <Compile Include="SpeedTests\UIMFSpeedTests.cs" />
     <Compile Include="SpeedTests\XCaliburSpeedTests.cs" />
+    <Compile Include="SqliteUtils\MSPeakTableTests.cs" />
+    <Compile Include="SqliteUtils\SqliteUtilsTests.cs" />
     <Compile Include="TestUtilities.cs" />
     <Compile Include="UtilitiesTests\Logger_ImporterTests.cs" />
     <Compile Include="UtilitiesTests\MathUtilsTests.cs" />
@@ -118,6 +121,10 @@
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.SQLiteUtils\DeconTools.SqliteUtils.csproj">
+      <Project>{4FC69E00-D021-4281-8362-1AE10793F552}</Project>
+      <Name>DeconTools.SqliteUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\DMSDeconToolsV2\DMSDeconToolsV2.csproj">
       <Project>{23B9BC46-F89D-41C1-896F-609A67C89F38}</Project>
