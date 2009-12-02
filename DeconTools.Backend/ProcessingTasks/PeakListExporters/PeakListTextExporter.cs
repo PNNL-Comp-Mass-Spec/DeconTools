@@ -6,6 +6,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using System.IO;
 using DeconTools.Utilities;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
@@ -13,28 +14,32 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
     {
         private char delimiter;
         private ResultCollection results;
+        private StreamWriter sw;
+
 
         #region Constructors
-        public PeakListTextExporter(StreamWriter sw)
-            : this(sw, new int[] { 1 })      // default allowed MSLevels = 1  
+        public PeakListTextExporter(string fileName)
+            : this(fileName, 100000)      // default allowed MSLevels = 1  
         {
         }
 
-        public PeakListTextExporter(StreamWriter sw, int[] msLevelsToWrite)
-            : this(sw, msLevelsToWrite, 100000)
+  
+        public PeakListTextExporter(string fileName, int triggerValue)
         {
-        }
+            try
+            {
+                sw = new StreamWriter(fileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
+            }
 
-        public PeakListTextExporter(StreamWriter sw, int[] msLevelsToWrite, int triggerValue)
-        {
-            this.OutputStream = sw;
-            this.mSLevelsToExport = msLevelsToWrite;
             this.TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
             this.delimiter = '\t';
-
             sw.Write(getHeaderLine());
         }
-
 
         #endregion
 
@@ -74,7 +79,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             try
             {
-                this.OutputStream.Write(peakdata);
+                sw.Write(peakdata);
             }
             catch (Exception ex)
             {
@@ -124,20 +129,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             if (needToFlushResults)
             {
                 WriteOutPeaks(results);
-                results.MSPeakResultList.Clear();
+                
             }
+            CloseOutputFile();
 
 
-            try
-            {
-                outputStream.Close();
-            }
-            catch (Exception)
-            {
-
-            }
-
-            outputStream = null;
         }
 
         private void FlushOutUnwrittenResults(ResultCollection results)
@@ -189,5 +185,19 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             return sb.ToString();
         }
         #endregion
+
+        protected override void CloseOutputFile()
+        {
+            if (sw == null) return;
+            try
+            {
+                sw.Flush();
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.AddEntry("IsosResultExporter failed to close the output file properly. Details: " + ex.Message, Logger.Instance.OutputFilename);
+            }
+        }
     }
 }

@@ -148,8 +148,14 @@ namespace DeconTools.Backend.Core
             return totIsotopicProfiles;
         }
 
+        public int MSFeatureCounter { get; set; }
+        
+
+        //This is the primary way to add an IsosResult
         public void AddIsosResult(IsosResult addedResult)
         {
+            MSFeatureCounter++;
+            addedResult.MSFeatureID = MSFeatureCounter;
             this.CurrentScanIsosResultBin.Add(addedResult);
         }
 

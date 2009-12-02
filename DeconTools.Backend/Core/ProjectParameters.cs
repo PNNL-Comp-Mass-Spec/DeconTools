@@ -10,7 +10,7 @@ namespace DeconTools.Backend.Core
         public ProjectParameters()
         {
             this.oldDecon2LSParameters = new OldDecon2LSParameters();
-            this.ExporterType = Globals.ExporterType.TYPICAL;
+            this.ExporterType = Globals.ExporterType.TEXT;
             this.numFramesSummed = 1;
             this.numScansSummed = 1;
         }

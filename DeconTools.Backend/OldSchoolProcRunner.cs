@@ -75,7 +75,7 @@ namespace DeconTools.Backend
             this.project = Project.getInstance();
             Project.getInstance().LoadOldDecon2LSParameters(this.paramFilename);
             this.IsosResultThreshold = 100000;       // results will be serialized if count is greater than this number
-            this.exporterType = Globals.ExporterType.TYPICAL;
+            this.exporterType = Globals.ExporterType.TEXT;
 
             RunFactory runfactory = new RunFactory();
 
@@ -146,16 +146,7 @@ namespace DeconTools.Backend
 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
-                StreamWriter sw = new StreamWriter(getPeakListTextfilename(run));
-                Task peakListTextExporter;
-                if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS == true)
-                {
-                    peakListTextExporter = new PeakListTextExporter(sw, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });     //support for up to MS^10
-                }
-                else
-                {
-                    peakListTextExporter = new PeakListTextExporter(sw);
-                }
+                Task peakListTextExporter = new PeakListTextExporter(getPeakListTextfilename(run));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
 

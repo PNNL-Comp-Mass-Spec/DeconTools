@@ -7,6 +7,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public class MSPeakTable :Table
     {
+        private string name;
+        private List<Field> fieldList;
+
+        
         #region Constructors
         public MSPeakTable(string tableName)
         {
@@ -14,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             this.FieldList = new List<Field>();
             this.FieldList.Add(new Field("peak_id", "INTEGER Primary key"));
             this.FieldList.Add(new Field("scan_num", "INTEGER"));
-            this.FieldList.Add(new Field("mz", "DOUBLE"));
+            this.FieldList.Add(new Field("mz", "FLOAT"));
             this.FieldList.Add(new Field("intensity", "FLOAT"));
             this.FieldList.Add(new Field("fwhm", "FLOAT"));
            
@@ -25,7 +29,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
         #region Properties
-        private List<Field> fieldList;
         public override List<Field> FieldList
         {
             get
@@ -38,7 +41,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             }
         }
 
-        private string name;
         public override string Name
         {
             get

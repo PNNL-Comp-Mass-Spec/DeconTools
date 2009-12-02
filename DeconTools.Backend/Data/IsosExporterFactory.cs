@@ -47,11 +47,8 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.PNNL_UIMF:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TYPICAL:
+                        case Globals.ExporterType.TEXT:
                             isosExporter = new UIMFIsosExporter(outputFileName);
-                            break;
-                        case Globals.ExporterType.ANOOP_OrigIntensityExporter:
-                            isosExporter = new UIMFIsosOrigIntensitiesExporter(outputFileName);
                             break;
                         case Globals.ExporterType.SQLite:
                             isosExporter = new UIMFSQLiteIsosExporter(outputFileName);

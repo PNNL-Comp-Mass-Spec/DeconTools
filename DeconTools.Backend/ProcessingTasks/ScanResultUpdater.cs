@@ -25,6 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (scanresult != null)
             {
                 resultList.ScanResultList.Add(scanresult);
+                //Console.WriteLine("ScanResult isotopic profiles = \t" + scanresult.NumIsotopicProfiles);
             }
 
         }

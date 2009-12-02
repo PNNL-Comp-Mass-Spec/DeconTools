@@ -109,7 +109,7 @@ namespace DeconTools.Backend.Data
                 fp.frame_num = (ushort)uimfResult.FrameSet.PrimaryFrame;
                 fp.ims_scan_num = (ushort)getScanNumber(uimfResult.ScanSet.PrimaryScanNumber);
                 fp.charge = (byte)uimfResult.IsotopicProfile.ChargeState;
-                fp.abundance = (ushort)uimfResult.IsotopicProfile.GetAbundance();
+                fp.abundance = (uint)uimfResult.IsotopicProfile.GetAbundance();
                 fp.mz = uimfResult.IsotopicProfile.GetMZ();
                 fp.fit = (float)uimfResult.IsotopicProfile.GetScore();
                 fp.average_mw = uimfResult.IsotopicProfile.AverageMass;

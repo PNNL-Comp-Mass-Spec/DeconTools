@@ -150,6 +150,24 @@
     <Compile Include="ProcessingTasks\PeakListExporters\MSPeakTable.cs" />
     <Compile Include="ProcessingTasks\PeakListExporters\PeakListTextExporter.cs" />
     <Compile Include="ProcessingTasks\PeakListExporters\SqlitePeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IIsosResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\IScanResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_TextFileExporter.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
@@ -208,6 +226,7 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
+    <None Include="Exporters_classDiagram.cd" />
     <None Include="ResultAndExporterClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>

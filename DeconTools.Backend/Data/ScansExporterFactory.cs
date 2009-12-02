@@ -47,10 +47,7 @@ namespace DeconTools.Backend.Data
 
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TYPICAL:
-                            scansExporter = new UIMFScansExporter(outputFileName);
-                            break;
-                        case Globals.ExporterType.ANOOP_OrigIntensityExporter:
+                        case Globals.ExporterType.TEXT:
                             scansExporter = new UIMFScansExporter(outputFileName);
                             break;
                         case Globals.ExporterType.SQLite:

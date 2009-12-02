@@ -32,12 +32,13 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         private DeconTools.Backend.Globals.PeakFitType peakFitType;
-
         public DeconTools.Backend.Globals.PeakFitType PeakFitType
         {
             get { return peakFitType; }
             set { peakFitType = value; }
         }
+
+
 
         private bool isDataThresholded;
 
@@ -45,6 +46,13 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             get { return isDataThresholded; }
             set { isDataThresholded = value; }
+        }
+
+        private bool storePeakData;
+        public bool StorePeakData
+        {
+            get { return storePeakData; }
+            set { storePeakData = value; }
         }
 
         DeconToolsV2.Peaks.clsPeakProcessorParameters deconEngineParameters;
@@ -68,8 +76,9 @@ namespace DeconTools.Backend.ProcessingTasks
         private void setDefaults()
         {
             this.peakFitType = Globals.PeakFitType.QUADRATIC;
-            this.peakBackgroundRatio = 0.5;
-            this.sigNoiseThreshold = 3;
+            this.peakBackgroundRatio = 1.3;
+            this.sigNoiseThreshold = 2;
+            this.StorePeakData = false;
             
         }
 
@@ -89,6 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks
             this.DeconEngineParameters.SignalToNoiseThreshold = this.sigNoiseThreshold;
             this.DeconEngineParameters.PeakFitType = getDeconPeakFitType(this.peakFitType);
             this.DeconEngineParameters.ThresholdedData = this.isDataThresholded;
+            this.DeconEngineParameters.WritePeaksToTextFile = this.StorePeakData;
 
         }
 
@@ -116,6 +126,7 @@ namespace DeconTools.Backend.ProcessingTasks
             this.peakBackgroundRatio = parameters.PeakBackgroundRatio;
             this.peakFitType = getPeakFitType(parameters.PeakFitType);
             this.sigNoiseThreshold = parameters.SignalToNoiseThreshold;
+            this.StorePeakData = parameters.WritePeaksToTextFile;
 
         }
 
@@ -186,9 +197,12 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             resultList.Run.CurrentScanSet.BackgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
-            resultList.Run.MSPeakList = ConvertDeconEnginePeakList(peaklist);
+            resultList.Run.MSPeakList = ConvertDeconEnginePeakList(peaklist);    // peak data is stored here on a per scan basis (cleared after each task execution)
 
-            resultList.FillMSPeakResults();
+            if (this.StorePeakData)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
+            {
+                resultList.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
+            }
 
             resultList.Run.CurrentScanSet.NumPeaks = resultList.Run.MSPeakList.Count;    //used in ScanResult
             resultList.Run.CurrentScanSet.BasePeak = getBasePeak(resultList.Run.MSPeakList);     //Used in ScanResult

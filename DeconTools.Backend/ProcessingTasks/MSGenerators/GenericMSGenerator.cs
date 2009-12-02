@@ -4,6 +4,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Utilities;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
@@ -31,6 +32,8 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         /// <param name="resultList"></param>
         public override void GenerateMS(DeconTools.Backend.Core.ResultCollection resultList)
         {
+            Check.Require(resultList.Run != null, "MS_Generator failed;  'Run' has not yet been defined");
+            Check.Require(!(resultList.Run is UIMFRun), "MS Generator failed; You tried to use the 'Generic_MS_Generator.' Try using the 'UIMF_MSGenerator' instead");
             Check.Assert(resultList.Run.CurrentScanSet!=null,"MS Generator failed; Reason: run.CurrentScanSet is null");
             
             resultList.Run.MSParameters.MinMZ = this.MinMZ;    

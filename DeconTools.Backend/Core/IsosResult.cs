@@ -7,6 +7,7 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public abstract class IsosResult
     {
+        public int MSFeatureID { get; set; }
 
         public abstract Run Run
         {

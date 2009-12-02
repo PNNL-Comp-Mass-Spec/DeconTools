@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
-using System.IO;
 using DeconTools.Backend.Runs;
 
-namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
+namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public abstract class IPeakListExporter : Task
+    public abstract class IIsosResultExporter : Task
     {
+        #region Constructors
+        #endregion
 
-        public abstract int TriggerToWriteValue { get; set; }
-        public abstract int[] MSLevelsToExport { get; set; }
+        #region Properties
+        public abstract int TriggerToExport { get; set; }
+        #endregion
 
-        public abstract void WriteOutPeaks(ResultCollection resultList);
-        protected abstract void CloseOutputFile();
+        #region Public Methods
 
-
+        public abstract void ExportIsosResults(ResultCollection resultList);
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0) return;
+            if (resultList.ResultList == null || resultList.ResultList.Count == 0) return;
 
-            // check if peak results exceeds Trigger value or is the last Scan 
+            // check if results exceed Trigger value or is the last Scan 
             bool isLastScan;
             if (resultList.Run is UIMFRun)
             {
@@ -40,11 +41,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
 
-            //Write out results if exceeds trigger value or is last scan
-            if (resultList.MSPeakResultList.Count >= TriggerToWriteValue || isLastScan)
+
+
+            if (resultList.ResultList.Count >= TriggerToExport || isLastScan)
             {
-                WriteOutPeaks(resultList);
-                resultList.MSPeakResultList.Clear();
+                ExportIsosResults(resultList);
+                resultList.ResultList.Clear();
 
                 if (isLastScan)
                 {
@@ -52,12 +54,18 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
 
             }
+
         }
 
+        protected virtual void CloseOutputFile()
+        {
+            //do nothing here. 
+        }
 
+        #endregion
 
-
-
+        #region Private Methods
+        #endregion
 
     }
 }

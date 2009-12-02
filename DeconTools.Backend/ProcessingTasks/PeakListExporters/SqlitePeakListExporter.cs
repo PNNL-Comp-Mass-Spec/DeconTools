@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Data.SQLite;
 using DeconTools.Utilities.SqliteUtils;
 using DeconTools.Backend.Utilities;
+using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
@@ -28,6 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public SqlitePeakListExporter(string sqliteFilename, int triggerValue)
         {
+            if (File.Exists(sqliteFilename)) File.Delete(sqliteFilename);
 
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
 
@@ -35,8 +37,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             cnn.ConnectionString = "Data Source=" + sqliteFilename;
 
             createIndexOnMZ = false;
-
-
             try
             {
 
@@ -121,7 +121,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     {
                         peakIDParam.Value = resultList.MSPeakResultList[n].PeakID;
                         scanIDParam.Value = resultList.MSPeakResultList[n].Scan_num;
-                        mzParam.Value = resultList.MSPeakResultList[n].MSPeak.MZ;
+                        mzParam.Value = resultList.MSPeakResultList[n].MSPeak.MZ.ToString("#.#####");
                         intensParam.Value = resultList.MSPeakResultList[n].MSPeak.Intensity;
                         fwhmParam.Value = resultList.MSPeakResultList[n].MSPeak.FWHM;
 
@@ -191,6 +191,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public override void Cleanup()
         {
+   
+
+            base.Cleanup();
+        }
+
+
+
+        protected override void CloseOutputFile()
+        {
             if (cnn != null)
             {
 
@@ -210,10 +219,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
             }
 
-
-            base.Cleanup();
         }
-
-
     }
 }
