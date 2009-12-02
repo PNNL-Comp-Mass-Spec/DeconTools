@@ -239,7 +239,7 @@ namespace DeconTools.UnitTesting
         public void ExecuteRunner_exportOriginalIntensityDataTest1()    //
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
-            runner.ExporterType = Globals.ExporterType.TYPICAL;
+            runner.ExporterType = Globals.ExporterType.TEXT;
             runner.Execute();
         }
 
@@ -248,7 +248,7 @@ namespace DeconTools.UnitTesting
         public void ExecuteRunner_exportOriginalIntensityDataTest2_usingDeserializer()
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn2);
-            runner.ExporterType = Globals.ExporterType.TYPICAL;
+            runner.ExporterType = Globals.ExporterType.TEXT;
             runner.IsosResultThreshold = 100;
             runner.Execute();
         }

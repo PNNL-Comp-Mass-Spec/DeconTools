@@ -80,7 +80,9 @@
     <Compile Include="ProcessingTasksTests\IsosMergerExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\MultiDeconvolutorTests.cs" />
     <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TomN14N15AnalyzerTests.cs" />
-    <Compile Include="ProcessingTasksTests\PeakListExporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\ResultExporterTests\PeakListExporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\ResultExporterTests\IsosResultExporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\ResultExporterTests\ScanResultExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ScanResultUpdaterTests.cs" />
     <Compile Include="ProcessingTasksTests\SimpleDeconTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_MSGeneratorTests.cs" />
