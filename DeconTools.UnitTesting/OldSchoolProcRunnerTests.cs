@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting
 
         public string parameterFile4 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile4.xml";
         public string xcaliburParameterFile1 = "..\\..\\TestFiles\\xcaliburParameterFile1.xml";
-        public string xcaliburParameterFile2 = "..\\..\\TestFiles\\Copy of xcaliburParameterFile1.xml";
+        public string xcaliburParameterFile3 = "..\\..\\TestFiles\\xcaliburParameterFile3.xml";
         public string imfParameterFile1 = "..\\..\\TestFiles\\imfParameterFile1.xml";
         public string imfParameterFile2 = "..\\..\\TestFiles\\imfParameterFile2.xml";
         private string imfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile5_IMFTesting.xml";
@@ -257,7 +257,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void ExecuteRunner_horn_xcaliburTest()
         {
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile2);
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile3);
             runner.Execute();
 
         }

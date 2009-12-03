@@ -183,7 +183,15 @@ namespace DeconTools.Backend
             Task scanResultUpdater = new ScanResultUpdater();
             Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
+            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(fileType, this.exporterType, setIsosOutputFileName(exporterType));
+            Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
+
+            Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, this.exporterType, setScansOutputFileName(exporterType));
+            Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
+
+
         }
+
 
 
 
@@ -219,44 +227,45 @@ namespace DeconTools.Backend
 
             Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
 
-            ScansExporterFactory scansExporterFactory = new ScansExporterFactory();
-            ScansExporter scansExporter = scansExporterFactory.CreateScansExporter(fileType, setScansOutputFileName());
-            scansExporter.Export(Project.getInstance().RunCollection[0].ResultCollection);
-            Logger.Instance.AddEntry("_scans file written", Logger.Instance.OutputFilename);
+            #region Decommissioned - delete after 6 months (June 2010)
+            //Dec.2/09:  Decommissioned the following scansExporter. New scansExporter is now a Task (see above)
+            //ScansExporterFactory scansExporterFactory = new ScansExporterFactory();
+            //ScansExporter scansExporter = scansExporterFactory.CreateScansExporter(fileType, setScansOutputFileName());
+            //scansExporter.Export(Project.getInstance().RunCollection[0].ResultCollection);
+            //Logger.Instance.AddEntry("_scans file written", Logger.Instance.OutputFilename);
 
+            //IsosExporterFactory isosExporterFactory = new IsosExporterFactory();
+            //IsosExporter isosExporter = isosExporterFactory.CreateIsosExporter(fileType, this.exporterType, setIsosOutputFileName());
 
-            IsosExporterFactory isosExporterFactory = new IsosExporterFactory();
-            IsosExporter isosExporter = isosExporterFactory.CreateIsosExporter(fileType, this.exporterType, setIsosOutputFileName());
+            //Logger.Instance.AddEntry("Started writing out _isos results", Logger.Instance.OutputFilename);
 
-            Logger.Instance.AddEntry("Started writing out _isos results", Logger.Instance.OutputFilename);
+            //if (Project.getInstance().RunCollection[0].AreRunResultsSerialized)
+            //{
+            //    bool deleteBinaryFileAfterUse = true;
+            //    try
+            //    {
+            //        isosExporter.Export(Project.getInstance().RunCollection[0].Filename + "_tmp.bin", deleteBinaryFileAfterUse);
+            //        Logger.Instance.AddEntry("Finished writing out _isos results", Logger.Instance.OutputFilename);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger.Instance.AddEntry("Error when writing _isos or when deleting temporary binary file. Details: " + ex.Message);
+            //    }
+            //}
+            //else
+            //{
+            //    try
+            //    {
+            //        isosExporter.Export(Project.getInstance().RunCollection[0].ResultCollection);
+            //        Logger.Instance.AddEntry("Finished writing out _isos results", Logger.Instance.OutputFilename);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger.Instance.AddEntry("Error when writing _isos file. Details: " + ex.Message);
+            //    }
+            //}
 
-            if (Project.getInstance().RunCollection[0].AreRunResultsSerialized)
-            {
-                bool deleteBinaryFileAfterUse = true;
-                try
-                {
-                    isosExporter.Export(Project.getInstance().RunCollection[0].Filename + "_tmp.bin", deleteBinaryFileAfterUse);
-                    Logger.Instance.AddEntry("Finished writing out _isos results", Logger.Instance.OutputFilename);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.AddEntry("Error when writing _isos or when deleting temporary binary file. Details: " + ex.Message);
-                }
-            }
-            else
-            {
-                try
-                {
-                    isosExporter.Export(Project.getInstance().RunCollection[0].ResultCollection);
-                    Logger.Instance.AddEntry("Finished writing out _isos results", Logger.Instance.OutputFilename);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.AddEntry("Error when writing _isos file. Details: " + ex.Message);
-                }
-            }
-
-
+            #endregion
 
             Logger.Instance.AddEntry("total processing time = " + Logger.Instance.GetTimeDifference("Started file processing", "Finished file processing"));
 
@@ -280,6 +289,47 @@ namespace DeconTools.Backend
             string baseFilename = Path.GetFileNameWithoutExtension(run.Filename);
             return filepath + Path.DirectorySeparatorChar + baseFilename + "_peaks.txt";
         }
+
+
+        private string setScansOutputFileName(Globals.ExporterType exporterType)
+        {
+            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+
+            switch (exporterType)
+            {
+                case Globals.ExporterType.TEXT:
+                    return baseFileName += "_scans.csv";
+                    break;
+                case Globals.ExporterType.SQLite:
+                    return baseFileName += "_scans.sqlite";
+                    break;
+                default:
+                    return baseFileName += "_scans.csv";
+                    break;
+            }
+        }
+
+        private string setIsosOutputFileName(Globals.ExporterType exporterType)
+        {
+            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+
+            switch (exporterType)
+            {
+                case Globals.ExporterType.TEXT:
+                    return baseFileName += "_isos.csv";
+                    break;
+                case Globals.ExporterType.SQLite:
+                    return baseFileName += "_isos.sqlite";
+                    break;
+                default:
+                    return baseFileName += "_isos.csv";
+                    break;
+            }
+
+
+        }
+
+
 
         private string setScansOutputFileName()
         {

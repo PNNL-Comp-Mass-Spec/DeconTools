@@ -16,7 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         public abstract void ExportScanResults(ResultCollection resultList);
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.ResultList == null || resultList.ResultList.Count == 0) return;
+            if (resultList.ScanResultList == null || resultList.ScanResultList.Count == 0) return;
 
             // check if results exceed Trigger value or is the last Scan 
             bool isLastScan;

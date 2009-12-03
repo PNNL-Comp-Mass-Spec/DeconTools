@@ -251,7 +251,7 @@ namespace DeconToolsAutoProcessV1
                     for (int i = 0; i < inputFileList.Length; i++)
                     {
                         OldSchoolProcRunner runner = new OldSchoolProcRunner(inputFileList[i], this.msFileType, this.parameterFileName, bw);
-                        runner.IsosResultThreshold = 10000;
+                        runner.IsosResultThreshold = 25000;
                         runner.Execute();
                     }
                 }

@@ -33,15 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         }
         #endregion
 
- 
-        #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
-
-
-
+   
         protected override string buildScansResultOutput(ScanResult result)
         {
             StringBuilder sb = new StringBuilder();

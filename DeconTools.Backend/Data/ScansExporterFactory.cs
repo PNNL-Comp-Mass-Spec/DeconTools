@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters;
 
 namespace DeconTools.Backend.Data
 {
@@ -8,61 +10,40 @@ namespace DeconTools.Backend.Data
     {
         DeconTools.Backend.Globals.ExporterType exporterType;
 
-        public ScansExporter CreateScansExporter(Globals.MSFileType fileType, string outputFileName)
+        public Task CreateScansExporter(Globals.MSFileType fileType, Globals.ExporterType exporterType, string outputFileName)
         {
-            ScansExporter scansExporter;
+            Task scansExporter;
             switch (fileType)
             {
-                case Globals.MSFileType.Undefined:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Agilent_TOF:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Ascii:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Bruker:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Bruker_Ascii:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Finnigan:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.ICR2LS_Rawdata:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.Micromass_Rawdata:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.MZXML_Rawdata:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
-                case Globals.MSFileType.PNNL_IMS:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
                 case Globals.MSFileType.PNNL_UIMF:
 
                     switch (exporterType)
                     {
                         case Globals.ExporterType.TEXT:
-                            scansExporter = new UIMFScansExporter(outputFileName);
+                            scansExporter = new UIMFScanResult_TextFileExporter(outputFileName);
                             break;
                         case Globals.ExporterType.SQLite:
-                            scansExporter = new UIMFSQLiteScansExporter(outputFileName);
+                            scansExporter = new UIMFScanResult_SqliteExporter(outputFileName);
                             break;
                         default:
-                            scansExporter = new UIMFScansExporter(outputFileName);
+                            scansExporter = new UIMFScanResult_TextFileExporter(outputFileName);
                             break;
                     }
                     break;
-                case Globals.MSFileType.SUNEXTREL:
-                    scansExporter = new BasicScansExporter(outputFileName);
-                    break;
                 default:
-                    scansExporter = new BasicScansExporter(outputFileName);
+                    switch (exporterType)
+                    {
+                        case Globals.ExporterType.TEXT:
+                            scansExporter = new BasicScanResult_TextFileExporter(outputFileName);
+                            break;
+                        case Globals.ExporterType.SQLite:
+                            scansExporter = new BasicScanResult_SqliteExporter(outputFileName);
+                            break;
+                        default:
+                            scansExporter = new BasicScanResult_TextFileExporter(outputFileName);
+                            break;
+                    }
+                    
                     break;
             }
             return scansExporter;

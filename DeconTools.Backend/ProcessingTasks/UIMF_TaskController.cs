@@ -67,35 +67,36 @@ namespace DeconTools.Backend.ProcessingTasks
                             reportProgress(frameset, scanset, run);
 
                         }
-                        
+                        //Dec 2, 2009:  [gord].  Following code is decommissioned...  I rebuilt the exporters with triggers. No need for binary file output. 
                         //If numberOfResultsExceedsLimit, serialize
-                        if (run.ResultCollection.ResultList.Count > this.IsosResultThresholdNum)
-                        {
-                            if (serializer == null)
-                            {
-                                string binaryOutputFilename = getOutputFileName(run);
+                        //if (run.ResultCollection.ResultList.Count > this.IsosResultThresholdNum)
+                        //{
+                        //    if (serializer == null)
+                        //    {
+                        //        string binaryOutputFilename = getOutputFileName(run);
 
-                                bool deletePreviousBinaryFile = true;
-                                serializer = new IsosResultSerializer(binaryOutputFilename, System.IO.FileMode.Append, deletePreviousBinaryFile);
+                        //        bool deletePreviousBinaryFile = true;
+                        //        serializer = new IsosResultSerializer(binaryOutputFilename, System.IO.FileMode.Append, deletePreviousBinaryFile);
 
-                            }
-                            serializer.Serialize(run.ResultCollection);
+                        //    }
+                        //    serializer.Serialize(run.ResultCollection);
 
-                            run.ResultCollection.ResultList.Clear();
-                            run.AreRunResultsSerialized = true;   //Indicate if serialized; this flag will be used when exporting data
+                        //    run.ResultCollection.ResultList.Clear();
+                        //    run.AreRunResultsSerialized = true;   //Indicate if serialized; this flag will be used when exporting data
 
-                        }
+                        //}
 
 
                     }
                 }
-
+                
+                //See above... this has been decommissioned. 
                 //Next take care of the last chunk of results that didn't exceed the threshold
-                if (run.AreRunResultsSerialized)
-                {
-                    serializer.Serialize(run.ResultCollection);
-                    serializer.Close();
-                }
+                //if (run.AreRunResultsSerialized)
+                //{
+                //    serializer.Serialize(run.ResultCollection);
+                //    serializer.Close();
+                //}
                 
             }
         }

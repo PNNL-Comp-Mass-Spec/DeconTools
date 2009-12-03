@@ -154,6 +154,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResult_SqliteTable.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IIsosResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IMFIsosResult_TextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultSqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResultSqliteExporter.cs" />
