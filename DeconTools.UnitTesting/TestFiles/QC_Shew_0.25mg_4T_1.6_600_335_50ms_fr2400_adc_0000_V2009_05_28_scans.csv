@@ -1,2 +1,2 @@
-frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_front,frame_pressure_back
-1200,-1,1,20112,671.3285,4916859,4159,488,4,4.016
+scan_num,scan_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_front,frame_pressure_back
+1200,-1,1,20112,671.3285,4916859,4159,267,4,4.016

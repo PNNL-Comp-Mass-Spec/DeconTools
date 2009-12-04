@@ -15,16 +15,17 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private char delimiter;
         private ResultCollection results;
         private StreamWriter sw;
+        private Globals.MSFileType fileType;
 
 
         #region Constructors
-        public PeakListTextExporter(string fileName)
-            : this(fileName, 100000)      // default allowed MSLevels = 1  
+        public PeakListTextExporter(string fileName, Globals.MSFileType fileType)
+            : this(fileName, fileType, 100000)      // default allowed MSLevels = 1  
         {
         }
 
   
-        public PeakListTextExporter(string fileName, int triggerValue)
+        public PeakListTextExporter(string fileName,Globals.MSFileType fileType, int triggerValue)
         {
             try
             {
@@ -38,8 +39,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             this.TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
             this.delimiter = '\t';
+            this.fileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
             sw.Write(getHeaderLine());
         }
+
+     
 
         #endregion
 
@@ -108,8 +112,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
                 sb.Append(resultList.MSPeakResultList[i].Scan_num);
                 sb.Append(delimiter);
-                sb.Append(i + 1);      //output is 1-based, not zero-based. 
-                sb.Append(delimiter);
                 sb.Append(resultList.MSPeakResultList[i].MSPeak.MZ.ToString("0.#####"));
                 sb.Append(delimiter);
                 sb.Append(resultList.MSPeakResultList[i].MSPeak.Intensity);
@@ -122,16 +124,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             return sb.ToString();
         }
-
+        
         public override void Cleanup()
         {
-            bool needToFlushResults = (results.MSPeakResultList != null && results.MSPeakResultList.Count > 0);
-            if (needToFlushResults)
-            {
-                WriteOutPeaks(results);
-                
-            }
-            CloseOutputFile();
+            base.Cleanup();
 
 
         }
@@ -144,34 +140,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         #region Private Methods
 
-        private string buildPeakString(List<MSPeak> peakList, ScanSet scanSet)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < peakList.Count; i++)
-            {
-                sb.Append(scanSet.PrimaryScanNumber);
-                sb.Append(delimiter);
-                sb.Append(i + 1);      //output is 1-based, not zero-based. 
-                sb.Append(delimiter);
-                sb.Append(peakList[i].MZ.ToString("0.#####"));
-                sb.Append(delimiter);
-                sb.Append(peakList[i].Intensity);
-                sb.Append(delimiter);
-                sb.Append(peakList[i].FWHM.ToString("0.####"));
-                sb.Append(delimiter);
-                sb.Append(peakList[i].SN.ToString("0.##"));
-                sb.Append("\n");
-            }
-
-            return sb.ToString();
-
-        }
         private string getHeaderLine()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("peak_index");
             sb.Append(delimiter);
+            if (this.fileType == Globals.MSFileType.PNNL_UIMF)
+            {
+                sb.Append("frame_num");
+                sb.Append(delimiter);
+            }
             sb.Append("scan_num");
             sb.Append(delimiter);
             sb.Append("mz");

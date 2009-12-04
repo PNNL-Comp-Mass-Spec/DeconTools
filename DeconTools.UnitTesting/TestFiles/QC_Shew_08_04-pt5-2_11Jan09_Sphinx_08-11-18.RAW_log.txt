@@ -1,10 +1,10 @@
-12/2/2009 4:47:26 PM	DeconTools.Backend.dll version = v1.0.3623.30221
-12/2/2009 4:47:26 PM	ParameterFile = xcaliburParameterFile3.xml
-12/2/2009 4:47:26 PM	DeconEngine version = v1.0.3535.22659
-12/2/2009 4:47:26 PM	RapidEngine version = v1.0.3165.35432
-12/2/2009 4:47:26 PM	UIMFLibrary version = v1.0.3484.29834
-12/2/2009 4:47:26 PM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.HornDeconvolutor
-12/2/2009 4:47:26 PM	Started file processing
-12/2/2009 4:47:37 PM	Finished file processing
-12/2/2009 4:47:37 PM	total processing time = 00:00:11.4529784
-12/2/2009 4:47:37 PM	total features = 563
+12/3/2009 11:51:49 AM	DeconTools.Backend.dll version = v1.0.3624.21089
+12/3/2009 11:51:49 AM	ParameterFile = xcaliburParameterFile1.xml
+12/3/2009 11:51:49 AM	DeconEngine version = v1.0.3535.22659
+12/3/2009 11:51:49 AM	RapidEngine version = v1.0.3165.35432
+12/3/2009 11:51:49 AM	UIMFLibrary version = v1.0.3484.29834
+12/3/2009 11:51:49 AM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.RapidDeconvolutor
+12/3/2009 11:51:49 AM	Started file processing
+12/3/2009 11:51:57 AM	Finished file processing
+12/3/2009 11:51:57 AM	total processing time = 00:00:07.4061552
+12/3/2009 11:51:57 AM	total features = 12762

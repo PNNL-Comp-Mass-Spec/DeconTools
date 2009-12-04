@@ -305,7 +305,7 @@ namespace DeconTools.Backend.Runs
 
             double avgTOFLength = Convert.ToDouble(datareader.GetFrameParameters(frameNum, "AverageTOFLength"));
 
-            double driftTime = avgTOFLength * scanNum / 1e6;     // convert microsec to sec?
+            double driftTime = avgTOFLength * (scanNum+1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
             return driftTime;
 
 

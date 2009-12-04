@@ -71,18 +71,7 @@ namespace DeconTools.UnitTesting
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile2);
             runner.Execute();
-
-            
-
-            Assert.AreEqual(267, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
-            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
-            Assert.AreEqual(28.453796799999999d, (decimal)((UIMFIsosResult)runner.Project.RunCollection[0].ResultCollection.ResultList[100]).ScanSet.DriftTime);
-
-            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
-
-            Assert.AreEqual(4916859, runner.Project.RunCollection[0].ResultCollection.ScanResultList[0].TICValue);
-
-          
+       
         }
 
         [Test]
@@ -90,18 +79,6 @@ namespace DeconTools.UnitTesting
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile3, Globals.MSFileType.PNNL_UIMF, uimfParameterFile2);
             runner.Execute();
-
-
-
-            Assert.AreEqual(43, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
-            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
-            Assert.AreEqual(28.453796799999999d, (decimal)((UIMFIsosResult)runner.Project.RunCollection[0].ResultCollection.ResultList[20]).ScanSet.DriftTime);
-
-            Assert.AreEqual(1, runner.Project.RunCollection[0].ResultCollection.ScanResultList.Count);
-
-            Assert.AreEqual(4916859, runner.Project.RunCollection[0].ResultCollection.ScanResultList[0].TICValue);
-
-
         }
 
         [Test]
@@ -172,7 +149,7 @@ namespace DeconTools.UnitTesting
             bw.WorkerSupportsCancellation = true;
             
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile3, bw);
-            runner.IsosResultThreshold = 100;
+            runner.IsosResultThreshold = 1000000;
             runner.Execute();
         }
 
@@ -221,7 +198,7 @@ namespace DeconTools.UnitTesting
 
             OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, parameterFile4, bw);
             runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS = true;
-            runner.IsosResultThreshold = 100000;
+            runner.IsosResultThreshold = 1000;
             runner.Execute();
         }
 
@@ -234,25 +211,7 @@ namespace DeconTools.UnitTesting
 
         }
 
-
-        [Test]
-        public void ExecuteRunner_exportOriginalIntensityDataTest1()    //
-        {
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
-            runner.ExporterType = Globals.ExporterType.TEXT;
-            runner.Execute();
-        }
-
-
-        [Test]
-        public void ExecuteRunner_exportOriginalIntensityDataTest2_usingDeserializer()
-        {
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn2);
-            runner.ExporterType = Globals.ExporterType.TEXT;
-            runner.IsosResultThreshold = 100;
-            runner.Execute();
-        }
-
+      
 
         [Test]
         public void ExecuteRunner_horn_xcaliburTest()
@@ -273,6 +232,15 @@ namespace DeconTools.UnitTesting
             runner.Execute();
         }
 
+        //Dec 2, 2009:  Deserializer not used anymore.  Test is decommissioned...
+        //[Test]
+        //public void ExecuteRunner_exportOriginalIntensityDataTest2_usingDeserializer()
+        //{
+        //    OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn2);
+        //    runner.ExporterType = Globals.ExporterType.TEXT;
+        //    runner.IsosResultThreshold = 100;
+        //    runner.Execute();
+        //}
 
 
 

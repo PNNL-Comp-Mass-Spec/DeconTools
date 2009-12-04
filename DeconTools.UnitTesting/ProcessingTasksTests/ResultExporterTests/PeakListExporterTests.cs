@@ -88,7 +88,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakDetector = new DeconToolsPeakDetector();
             ((DeconToolsPeakDetector)peakDetector).StorePeakData = true;
 
-            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(outputFilename, 1000000);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
+            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(outputFilename,run.MSFileType, 1000000);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
 
             foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
             {
@@ -105,12 +105,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             exporter.Cleanup();
             Assert.AreEqual(true, File.Exists(outputFilename));
-
             FileInfo fi = new FileInfo(outputFilename);
-            Assert.AreEqual(174337, fi.Length);
-            Console.Write(fi.Length);
-
-
+            Assert.AreEqual(155004, fi.Length);
         }
 
     }

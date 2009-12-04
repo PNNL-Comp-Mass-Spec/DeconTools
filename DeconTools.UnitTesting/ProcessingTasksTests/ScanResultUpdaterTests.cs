@@ -91,7 +91,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakDetector = new DeconToolsPeakDetector();
             Task rapid = new RapidDeconvolutor();
             Task scanResultUpdater = new ScanResultUpdater();
-            Task peakListExporter = new PeakListTextExporter(peakListoutputPath);
+            Task peakListExporter = new PeakListTextExporter(peakListoutputPath,run.MSFileType);
 
 
             foreach (FrameSet frameset in run.FrameSetCollection.FrameSetList)

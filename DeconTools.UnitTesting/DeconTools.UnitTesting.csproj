@@ -124,10 +124,6 @@
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DeconTools.SQLiteUtils\DeconTools.SqliteUtils.csproj">
-      <Project>{4FC69E00-D021-4281-8362-1AE10793F552}</Project>
-      <Name>DeconTools.SqliteUtils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DMSDeconToolsV2\DMSDeconToolsV2.csproj">
       <Project>{23B9BC46-F89D-41C1-896F-609A67C89F38}</Project>
       <Name>DMSDeconToolsV2</Name>

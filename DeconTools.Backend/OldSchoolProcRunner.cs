@@ -146,7 +146,7 @@ namespace DeconTools.Backend
 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
-                Task peakListTextExporter = new PeakListTextExporter(getPeakListTextfilename(run));
+                Task peakListTextExporter = new PeakListTextExporter(getPeakListTextfilename(run),run.MSFileType);
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
 
