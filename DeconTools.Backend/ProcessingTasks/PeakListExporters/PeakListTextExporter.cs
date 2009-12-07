@@ -19,17 +19,17 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
 
         #region Constructors
-        public PeakListTextExporter(string fileName, Globals.MSFileType fileType)
-            : this(fileName, fileType, 100000)      // default allowed MSLevels = 1  
+        public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
+            : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1  
         {
         }
 
-  
-        public PeakListTextExporter(string fileName,Globals.MSFileType fileType, int triggerValue)
+
+        public PeakListTextExporter(Globals.MSFileType fileType, int triggerValue, string outputFileName)
         {
             try
             {
-                sw = new StreamWriter(fileName);
+                sw = new StreamWriter(outputFileName);
             }
             catch (Exception ex)
             {
