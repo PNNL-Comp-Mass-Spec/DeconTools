@@ -17,11 +17,11 @@ namespace DeconTools.UnitTesting
         string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000.uimf";
         string uimfFilepath2 = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
         string uimfFile3 = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
-        
+
         string imfMSScanTextfile = "..\\..\\Testfiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1_SCAN233_raw_data.txt";
         string imfFilepath = "..\\..\\TestFiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
-        string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";        
-        
+        string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+
         string uimfParameterFile1 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTest1File.xml";
         string uimfParameterFile2 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile2.xml";
         string uimfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile3.xml";
@@ -32,26 +32,28 @@ namespace DeconTools.UnitTesting
         public string parameterFile4 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile4.xml";
         public string xcaliburParameterFile1 = "..\\..\\TestFiles\\xcaliburParameterFile1.xml";
         public string xcaliburParameterFile3 = "..\\..\\TestFiles\\xcaliburParameterFile3.xml";
+        private string xcaliburParameterFile4_exporttoSqlite = "..\\..\\TestFiles\\xcaliburParameterFile4_exportToSqlite.xml";
+
         public string imfParameterFile1 = "..\\..\\TestFiles\\imfParameterFile1.xml";
         public string imfParameterFile2 = "..\\..\\TestFiles\\imfParameterFile2.xml";
         private string imfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile5_IMFTesting.xml";
         private string imfParameterFileHorn1 = "..\\..\\TestFiles\\imfParameterFile_horn1.xml";
-
+        
         string replaceRapidScoreParamFile1 = "..\\..\\TestFiles\\replaceRAPIDScoreParameterFile1.xml";
 
         string mzxmlFilepath = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000-7000.mzXML";
         string mzxmlParameterFile1 = "..\\..\\TestFiles\\mxzml_parameterFile1.xml";
 
-       
+
         [Test]
         public void loadParametersTest1()
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath, Globals.MSFileType.PNNL_UIMF, uimfParameterFile1);
 
-            Assert.AreEqual(3,runner.Project.Parameters.NumFramesSummed);
-            Assert.AreEqual(1,runner.Project.Parameters.NumScansSummed);
+            Assert.AreEqual(3, runner.Project.Parameters.NumFramesSummed);
+            Assert.AreEqual(1, runner.Project.Parameters.NumScansSummed);
             Assert.AreEqual(true, runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.UseRAPIDDeconvolution);
-            
+
 
         }
 
@@ -71,7 +73,7 @@ namespace DeconTools.UnitTesting
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile2);
             runner.Execute();
-       
+
         }
 
         [Test]
@@ -99,8 +101,6 @@ namespace DeconTools.UnitTesting
         public void ExecuteRunnerOnXCaliburDataTest1()
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile1);
-            
-            
             runner.Execute();
 
             //Assert.AreEqual(12607, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
@@ -147,7 +147,7 @@ namespace DeconTools.UnitTesting
             BackgroundWorker bw = new BackgroundWorker();
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
-            
+
             OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterFile3, bw);
             runner.IsosResultThreshold = 1000000;
             runner.Execute();
@@ -211,24 +211,32 @@ namespace DeconTools.UnitTesting
 
         }
 
-      
+
 
         [Test]
         public void ExecuteRunner_horn_xcaliburTest()
         {
             OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile3);
             runner.Execute();
-
         }
+
+        [Test]
+        public void ExecuteRunner_horn_exportToSqlite()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcaliburParameterFile4_exporttoSqlite);
+            runner.Execute();
+        }
+
+
 
         [Test]
         public void ExecuteRunner_mzXML_horn_Test1()
         {
-            BackgroundWorker bw=new BackgroundWorker();
-            bw.WorkerReportsProgress=true;
-            bw.WorkerSupportsCancellation=true;
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
 
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(mzxmlFilepath, Globals.MSFileType.MZXML_Rawdata, mzxmlParameterFile1,bw);
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(mzxmlFilepath, Globals.MSFileType.MZXML_Rawdata, mzxmlParameterFile1, bw);
             runner.Execute();
         }
 

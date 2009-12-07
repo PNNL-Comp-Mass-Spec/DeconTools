@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Task peakDetector = new DeconToolsPeakDetector();
             Task decon = new HornDeconvolutor();
             Task sqliteExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters.BasicIsosResultSqliteExporter(testFile, 1000000);
-            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.SqlitePeakListExporter(peakExporter1, 100000);
+            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListSQLiteExporter(100000, peakExporter1);
 
             Stopwatch sw;
 
@@ -92,7 +92,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Task peakDetector = new DeconToolsPeakDetector();
             Task decon = new HornDeconvolutor();
             Task isosExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters.BasicIsosResultTextFileExporter(testFile);
-            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.SqlitePeakListExporter(peakExporter1, 100000);
+            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListSQLiteExporter(100000, peakExporter1);
 
             Stopwatch sw;
 

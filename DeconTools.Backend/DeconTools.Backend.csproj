@@ -38,9 +38,9 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3625.20702, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -95,13 +95,14 @@
     <Compile Include="Data\IMFIsosExporter.cs" />
     <Compile Include="Data\Importer.cs" />
     <Compile Include="Data\IsosExporter.cs" />
-    <Compile Include="Data\IsosExporterFactory.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
     <Compile Include="Data\RunFactory.cs" />
     <Compile Include="Data\ScanResultFactory.cs" />
     <Compile Include="Data\ScansExporter.cs" />
-    <Compile Include="Data\ScansExporterFactory.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListExporterFactory.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScansExporterFactory.cs" />
     <Compile Include="Data\TaskControllerFactory.cs" />
     <Compile Include="Data\UIMFIsosExporter.cs" />
     <Compile Include="Data\UIMFIsosOrigIntensitiesExporter.cs" />
@@ -146,10 +147,10 @@
     <Compile Include="ProcessingTasks\PeakDetectors\IPeakDetector.cs" />
     <Compile Include="Core\Task.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\DeconEngine_MSParameters.cs" />
-    <Compile Include="ProcessingTasks\PeakListExporters\IPeakListExporter.cs" />
-    <Compile Include="ProcessingTasks\PeakListExporters\MSPeakTable.cs" />
-    <Compile Include="ProcessingTasks\PeakListExporters\PeakListTextExporter.cs" />
-    <Compile Include="ProcessingTasks\PeakListExporters\SqlitePeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\IPeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\MSPeakTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListTextExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListSqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultSqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResult_SqliteTable.cs" />

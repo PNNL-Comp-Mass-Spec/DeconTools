@@ -40,7 +40,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Task decon = new RapidDeconvolutor();
             Task sqliteScanResultExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters.BasicScanResult_SqliteExporter(xcalibur_sqlite_ScanResultOutputFile1);
 
-            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.SqlitePeakListExporter(peakExporter1, 100000);
+            Task peakExporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListSQLiteExporter(100000, peakExporter1);
             Task scanResultUpdater = new ScanResultUpdater();
 
             Stopwatch sw;

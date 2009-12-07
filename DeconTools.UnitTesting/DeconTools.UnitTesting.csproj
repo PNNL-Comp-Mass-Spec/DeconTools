@@ -36,9 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3625.20702, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,6 +77,7 @@
     <Compile Include="ProcessingTasksTests\FitScoreCalculatorTests.cs" />
     <Compile Include="ProcessingTasksTests\FitterTests.cs" />
     <Compile Include="ProcessingTasksTests\GenericMSGeneratorTests.cs" />
+    <Compile Include="ProcessingTasksTests\HornDeconvolutorTests.cs" />
     <Compile Include="ProcessingTasksTests\IsosMergerExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\MultiDeconvolutorTests.cs" />
     <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TomN14N15AnalyzerTests.cs" />

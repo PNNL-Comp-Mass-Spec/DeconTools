@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakDetector = new DeconToolsPeakDetector();
             ((DeconToolsPeakDetector)peakDetector).StorePeakData = true;
 
-            Task exporter = new SqlitePeakListExporter(sqliteOutfileName, 1000000);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
+            Task exporter = new PeakListSQLiteExporter(1000000, sqliteOutfileName);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
 
             foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
             {
@@ -88,7 +88,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakDetector = new DeconToolsPeakDetector();
             ((DeconToolsPeakDetector)peakDetector).StorePeakData = true;
 
-            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(outputFilename,run.MSFileType, 1000000);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
+            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(run.MSFileType, 1000000, outputFilename);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
 
             foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
             {

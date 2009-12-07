@@ -75,7 +75,7 @@ namespace DeconTools.Backend
             this.project = Project.getInstance();
             Project.getInstance().LoadOldDecon2LSParameters(this.paramFilename);
             this.IsosResultThreshold = 100000;       // results will be serialized if count is greater than this number
-            this.exporterType = Globals.ExporterType.TEXT;
+            this.exporterType = getExporterTypeFromOldParameters(Project.getInstance().Parameters.OldDecon2LSParameters);
 
             RunFactory runfactory = new RunFactory();
 
@@ -146,10 +146,10 @@ namespace DeconTools.Backend
 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
-                Task peakListTextExporter = new PeakListTextExporter(getPeakListTextfilename(run),run.MSFileType);
+                DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory peakexporterFactory = new DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory();
+                Task peakListTextExporter = peakexporterFactory.Create(this.exporterType, this.fileType, 50000, getPeakListFileName(this.exporterType));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
-
 
             DeconvolutorFactory deconFactory = new DeconvolutorFactory();
             Task deconvolutor = deconFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
@@ -179,21 +179,15 @@ namespace DeconTools.Backend
                 Project.getInstance().TaskCollection.TaskList.Add(originalIntensitiesExtractor);
             }
 
-
             Task scanResultUpdater = new ScanResultUpdater();
             Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
-            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(fileType, this.exporterType, setIsosOutputFileName(exporterType));
+            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(fileType, this.ExporterType, setIsosOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
 
-            Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, this.exporterType, setScansOutputFileName(exporterType));
+            Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, this.ExporterType, setScansOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
-
-
         }
-
-
-
 
         public OldSchoolProcRunner(string inputDataFilename, DeconTools.Backend.Globals.MSFileType fileType, string paramFileName, BackgroundWorker backgroundWorker)
             : this(inputDataFilename, fileType, paramFileName)
@@ -288,6 +282,40 @@ namespace DeconTools.Backend
             string filepath = Path.GetDirectoryName(run.Filename);
             string baseFilename = Path.GetFileNameWithoutExtension(run.Filename);
             return filepath + Path.DirectorySeparatorChar + baseFilename + "_peaks.txt";
+        }
+        private string getPeakListFileName(Globals.ExporterType exporterType)
+        {
+            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+            switch (exporterType)
+            {
+                case Globals.ExporterType.TEXT:
+                    return baseFileName += "_peaks.txt";
+                    break;
+                case Globals.ExporterType.SQLite:
+                    return baseFileName += "_peaks.sqlite";
+                    break;
+                default:
+                    return baseFileName += "_peaks.txt";
+                    break;
+            }
+
+
+        }
+
+        private Globals.ExporterType getExporterTypeFromOldParameters(OldDecon2LSParameters oldDecon2LSParameters)
+        {
+            switch (oldDecon2LSParameters.HornTransformParameters.ExportFileType)
+            {
+                case DeconToolsV2.HornTransform.enmExportFileType.SQLITE:
+                    return Globals.ExporterType.SQLite;
+                    break;
+                case DeconToolsV2.HornTransform.enmExportFileType.TEXT:
+                    return Globals.ExporterType.TEXT;
+                    break;
+                default:
+                    return Globals.ExporterType.TEXT;
+                    break;
+            }
         }
 
 
