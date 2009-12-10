@@ -94,10 +94,28 @@ namespace DeconTools.Backend.Runs
             {
                 this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
             }
-            else
+            else    // need to sum spectra
             {
-                throw new Exception("Summing isn't supported for Bruker data... yet");
-                // this.rawData.GetSummedSpectra(scanSet.getLowestScanNumber(), scanSet.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
+                //assume:  each scan has exactly same x values
+                
+                //get first spectrum
+                this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+
+                //
+                double[] summedYvals = new double[xvals.Length];
+                yvals.CopyTo(summedYvals, 0);
+
+                for (int i = 1; i < scanSet.IndexValues.Count; i++)
+                {
+                    this.rawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals);
+
+                    for (int n = 0; n < xvals.Length; n++)
+                    {
+                        summedYvals[n] += yvals[n];
+                    }
+                }
+
+                yvals = summedYvals;
             }
             this.xyData.SetXYValues(ref xvals, ref yvals);
 

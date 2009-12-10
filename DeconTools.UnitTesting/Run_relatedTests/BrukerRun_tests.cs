@@ -13,15 +13,17 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class BrukerRun_tests
     {
-        string brukerTestFile1 = @"H:\N14N15Data\RSPH_Aonly_26_run1_20Oct07_Andromeda_07-09-02";
-        string brukerTestFile2 = @"H:\N14N15Data\RSPH_Aonly_23_run1_25Oct07_Andromeda_07-09-02\0.ser"; 
+        string brukerTestFile1 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02";
+
 
         [Test]
         public void GetSpectrumTest1()
         {
+            string testFile = brukerTestFile1;
+            int testScan = 2501;
 
-            Run run = new BrukerRun(brukerTestFile1);
-            run.GetMassSpectrum(new ScanSet(1005), 200, 2000);
+            Run run = new BrukerRun(testFile);
+            run.GetMassSpectrum(new ScanSet(testScan), 200, 2000);
 
             int numscans = run.GetNumMSScans();
             Assert.AreEqual(4276, numscans);
@@ -36,30 +38,71 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             //    sb.Append(Environment.NewLine);
             //}
             //Console.Write(sb.ToString());
+            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
+            Console.WriteLine(sb.ToString());
 
             Assert.AreEqual(211063, run.XYData.Xvalues.Length);
             Assert.AreEqual(211063, run.XYData.Yvalues.Length);
             //Assert.AreEqual(579.808837890625,run.XYData.Xvalues[85910]);  //TODO:  there seems to be discrepancy - 5th decimal -  between this and the result from the Decon2LS.UI.  Possibly a FT-MS preprocessing difference?
-            Assert.AreEqual(26474.986328125, run.XYData.Yvalues[85910]);
+            Assert.AreEqual(61576.37109375d, run.XYData.Yvalues[85910]);
 
-
-            Assert.AreEqual(1, run.GetMSLevel(1005));
+           
+            Assert.AreEqual(1, run.GetMSLevel(testScan));
         }
 
-        [Test]
-        public void OpenTwoBrukerFilesTest1()
+
+        public void GetSummedSpectrumTest1()
         {
-            Run run1 = new BrukerRun(brukerTestFile1);
-            run1.GetMassSpectrum(new ScanSet(1005), 0, 500000);
-            //run1.GetMSLevel(1005);
+            string testFile = brukerTestFile1;
+            int testScan = 2500;
 
+            Run run = new BrukerRun(testFile);
 
-            Run run2 = new BrukerRun(brukerTestFile2);
-            //run2.GetMSLevel(1005);
+            ScanSet scan2499 = new ScanSet(2499);
+            run.GetMassSpectrum(scan2499, 200, 2000);
+            double scan2499testVal = run.XYData.Yvalues[85910];
+            Assert.AreEqual(19073.291015625d, scan2499testVal);
+            
+            ScanSet scan2500 = new ScanSet(2500);
+            run.GetMassSpectrum(scan2500, 200, 2000);
+            double scan2500testVal = run.XYData.Yvalues[85910];
+            Assert.AreEqual(61576.37109375d, scan2500testVal);
 
-            run2.GetMassSpectrum(new ScanSet(1005), 0, 500000);
+            ScanSet scan2501 = new ScanSet(2501);
+            run.GetMassSpectrum(scan2501, 200, 2000);
+            double scan2501testVal = run.XYData.Yvalues[85910];
+            Assert.AreEqual(12558.935546875d, scan2501testVal);
 
+            double summedVal = scan2499testVal + scan2500testVal + scan2501testVal;
+
+            ScanSet summedScanSet1 = new ScanSet(testScan, new int[] { 2499, 2500, 2501 });
+
+            run.GetMassSpectrum(summedScanSet1, 200, 2000);
+            Assert.AreEqual(211063, run.XYData.Xvalues.Length);
+            Assert.AreEqual(211063, run.XYData.Yvalues.Length);
+            Assert.AreEqual(summedVal, run.XYData.Yvalues[85910]);
+
+            StringBuilder sb = new StringBuilder();
+            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
+            Console.WriteLine(sb.ToString());
         }
+
+        
+        
+        //[Test]
+        //public void OpenTwoBrukerFilesTest1()
+        //{
+        //    Run run1 = new BrukerRun(brukerTestFile1);
+        //    run1.GetMassSpectrum(new ScanSet(1005), 0, 500000);
+        //    //run1.GetMSLevel(1005);
+
+
+        //    Run run2 = new BrukerRun(brukerTestFile2);
+        //    //run2.GetMSLevel(1005);
+
+        //    run2.GetMassSpectrum(new ScanSet(1005), 0, 500000);
+
+        //}
 
         [Test]
         public void runFactoryTest1()
@@ -135,6 +178,27 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
             Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);   //141 ms
         }
+
+
+        [Test]
+        public void GetSpectrumSpeedTest_summedSpectra_Test1()
+        {
+            Run run = new BrukerRun(brukerTestFile1);
+            int numScansToGet = 20;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < numScansToGet; i++)
+            {
+                run.GetMassSpectrum(new ScanSet(1005,1003,1007), 0, 50000);   //  sum five scans
+            }
+            sw.Stop();
+
+            double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
+            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);   //141 ms
+        }
+
+
 
         [Test]
         public void GetNumMSScansTest()
