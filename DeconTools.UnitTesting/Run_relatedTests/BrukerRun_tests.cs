@@ -195,7 +195,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             sw.Stop();
 
             double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
-            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);   //141 ms
+            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);   //970 ms / summed scan
         }
 
 

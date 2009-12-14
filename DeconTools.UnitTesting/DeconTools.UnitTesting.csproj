@@ -71,6 +71,7 @@
     <Compile Include="FrameSetCollectionCreatorTests.cs" />
     <Compile Include="OldSchoolProcRunnerTests.cs" />
     <Compile Include="ParameterFileTests.cs" />
+    <Compile Include="PeakDataImportersTests.cs" />
     <Compile Include="ProcessingTasksTests\BasicTaskControllerTests.cs" />
     <Compile Include="ProcessingTasksTests\DeconToolsSavitzkyGolaySmootherTests.cs" />
     <Compile Include="ProcessingTasksTests\DeconToolsZeroFillerTests.cs" />

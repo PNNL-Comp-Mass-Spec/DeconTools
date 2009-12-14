@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void getUIMFFileTest1()
         {
 
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
 
 
@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void GetNumberOfFramesTest()
         {
             UIMFRun test = new UIMFRun();
-            
+
 
 
             UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
@@ -72,7 +72,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
-        
+
         /// <summary>
         /// we fixed the error here... should be able to delete this test later. 
         /// </summary>
@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             Assert.AreEqual(0, numWeirdZeroMZPoints);
 
-            
+
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSummedMSTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
             ScanSet scanset = new ScanSet(500025, 500000, 500050);
 
@@ -172,7 +172,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSummedFramesMSTest2()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
             for (int i = 1200; i < (600 * 2400 / 4); i = i + 600)
             {
@@ -185,7 +185,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getOneFrameOneScanTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
             for (int i = 200; i < 301; i++)
             {
@@ -204,7 +204,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
-            uimfRun.GetMassSpectrum(new ScanSet(300,1,599), new FrameSet(1200,1199,1201), 100, 2000);
+            uimfRun.GetMassSpectrum(new ScanSet(300, 1, 599), new FrameSet(1200, 1199, 1201), 100, 2000);
             Console.WriteLine(uimfRun.XYData.Xvalues.Length);
 
             StringBuilder sb = new StringBuilder();
@@ -242,7 +242,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
 
             StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < numFrames; i=i+200)
+            for (int i = 1; i < numFrames; i = i + 200)
             {
                 sb.Append(Convert.ToDouble(datareader.GetFrameParameters(i, "PressureFront")));
                 sb.Append("\t");
@@ -251,7 +251,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             }
 
 
-         
+
 
             Console.WriteLine(sb.ToString());
         }
@@ -260,7 +260,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getDriftTimesTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
 
 
             int startScan = 0;
@@ -279,7 +279,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             }
 
             //Console.WriteLine(sb.ToString());
-
         }
 
         [Test]
@@ -303,6 +302,17 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
         [Test]
+        public void getDriftTimeForScanZero()
+        {
+            //UIMF scan numbers are 0-based.  But first scan should have a drifttime above 0. 
+
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+
+            double driftTime = uimfRun.GetDriftTime(1300, 0);
+            Assert.Greater((decimal)driftTime, 0);
+        }
+
+        [Test]
         public void GetMSLevelTest1()
         {
             Run run = new UIMFRun(uimfFilepath);
@@ -315,14 +325,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void GetNumBinsTest1()
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
-            int numBins= uimfRun.GetNumBins();
+            int numBins = uimfRun.GetNumBins();
             Assert.AreEqual(92000, numBins);
         }
-
-
-
-
-
 
     }
 }

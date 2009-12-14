@@ -88,9 +88,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2, Version=1.0.3535.22659, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3625.30679, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="PJLControls, Version=1.1.3597.24984, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>

@@ -74,9 +74,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         protected override string buildHeaderLine()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("scan_num");
+            sb.Append("frame_num");
             sb.Append(Delimiter);
-            sb.Append("scan_time");
+            sb.Append("frame_time");
             sb.Append(Delimiter);
             sb.Append("type");
             sb.Append(Delimiter);

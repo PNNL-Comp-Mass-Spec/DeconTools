@@ -55,7 +55,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
@@ -94,7 +96,10 @@
     <Compile Include="Data\Exporter.cs" />
     <Compile Include="Data\IMFIsosExporter.cs" />
     <Compile Include="Data\Importer.cs" />
+    <Compile Include="Data\IPeakImporter.cs" />
     <Compile Include="Data\IsosExporter.cs" />
+    <Compile Include="Data\PeakImporterFromSQLite.cs" />
+    <Compile Include="Data\PeakImporterFromText.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />

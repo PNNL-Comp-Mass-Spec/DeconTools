@@ -8,6 +8,10 @@ namespace DeconTools.Backend.DTO
 {
     public class MSPeakResult
     {
+        public MSPeakResult()
+        {
+
+        }
         public MSPeakResult(int peakID, int scanNum, MSPeak peak)
         {
             this.PeakID = peakID;
