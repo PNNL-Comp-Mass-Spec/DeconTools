@@ -8,12 +8,12 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public class ScanSet
     {
+
+        #region Constructors
         public ScanSet()
         {
 
         }
-
-
         public ScanSet(int primaryScanNum)
         {
             this.primaryScanNumber = primaryScanNum;
@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Core
         public ScanSet(int primaryScanNum, int[] indexArray)
         {
             this.IndexValues = new List<int>();
-
+            this.PrimaryScanNumber = primaryScanNum;
             foreach (int indexItem in indexArray)
             {
                 this.IndexValues.Add(indexItem);
@@ -47,6 +47,8 @@ namespace DeconTools.Backend.Core
         }
 
 
+        #endregion
+  
         private int numPeaks;
 
         public int NumPeaks
@@ -79,7 +81,7 @@ namespace DeconTools.Backend.Core
             set { tICValue = value; }
         }
 
-
+        public float NETValue { get; set; }
 
         private List<int> indexValues;
 

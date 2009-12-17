@@ -109,7 +109,7 @@ namespace DeconTools.Backend
 
             try
             {
-                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, Project.getInstance().Parameters.NumScansSummed, 1);
+                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, Project.getInstance().Parameters.NumScansSummed, 1,Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
                 scanSetCollectionCreator.Create();
             }
             catch (Exception ex)

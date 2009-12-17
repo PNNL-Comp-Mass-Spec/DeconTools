@@ -24,6 +24,10 @@ namespace DeconTools.Backend.Data
         public PeakImporterFromText(string filename, BackgroundWorker bw)
         {
             if (!File.Exists(filename)) throw new System.IO.IOException("PeakImporter failed. File doesn't exist.");
+
+            FileInfo fi = new FileInfo(filename);
+            numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
+
             this.filename = filename;
             this.delimiter = '\t';
             this.backgroundWorker = bw;
@@ -59,6 +63,27 @@ namespace DeconTools.Backend.Data
                 }
 
 
+            }
+        }
+        protected override void reportProgress(int progressCounter)
+        {
+            if (numRecords == 0) return;
+            if (progressCounter % 10000 == 0)
+            {
+
+                int percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
+
+                if (this.backgroundWorker != null)
+                {
+                    backgroundWorker.ReportProgress(percentProgress);
+                }
+                else
+                {
+                    if (progressCounter % 50000 == 0) Console.WriteLine("Peak importer progress (%) = " + percentProgress);
+
+                }
+
+                return;
             }
         }
 

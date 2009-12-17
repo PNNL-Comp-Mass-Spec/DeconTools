@@ -30,7 +30,6 @@ namespace DeconTools.Backend.Core
         }
 
         private string filename;
-
         public string Filename
         {
             get { return filename; }
@@ -38,7 +37,6 @@ namespace DeconTools.Backend.Core
         }
 
         private Globals.MSFileType mSFileType;
-
         public Globals.MSFileType MSFileType
         {
             get { return mSFileType; }
@@ -46,7 +44,6 @@ namespace DeconTools.Backend.Core
         }
 
         private MSParameters msParameters;
-
         public MSParameters MSParameters            //this probably should move to a 'Project' level since each run doesn't need to have individual parameters, i think
         {
             get { return msParameters; }
@@ -54,14 +51,13 @@ namespace DeconTools.Backend.Core
         }
 
         private int minScan;
-
         public int MinScan
         {
             get { return minScan; }
             set { minScan = value; }
         }
-        private int maxScan;
 
+        private int maxScan;
         public int MaxScan
         {
             get { return maxScan; }
@@ -69,7 +65,6 @@ namespace DeconTools.Backend.Core
         }
 
         private bool areRunResultsSerialized;   //this is a flag to indicate whether or not Run's results were written to disk
-
         public bool AreRunResultsSerialized
         {
             get { return areRunResultsSerialized; }
@@ -112,6 +107,13 @@ namespace DeconTools.Backend.Core
             set { isDataThresholded = value; }
         }
 
+        private Dictionary<int, double> scanToNETAlignmentData;
+        public Dictionary<int, double> ScanToNETAlignmentData
+        {
+            get { return scanToNETAlignmentData; }
+            set { scanToNETAlignmentData = value; }
+        }
+
 
 
 
@@ -139,6 +141,8 @@ namespace DeconTools.Backend.Core
 
             return (float)summedIntensities;
         }
+
+        public MassTag CurrentMassTag { get; set; }
 
         public virtual void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
@@ -186,7 +190,7 @@ namespace DeconTools.Backend.Core
                     }
 
 
-                    
+
                 }
 
             }
@@ -244,6 +248,71 @@ namespace DeconTools.Backend.Core
         public virtual int GetCurrentScanOrFrame()
         {
             return this.CurrentScanSet.PrimaryScanNumber;
+        }
+
+        public virtual void UpdateNETAlignment()
+        {
+
+
+            foreach (ScanSet scan in ScanSetCollection.ScanSetList)
+            {
+                if (this.ScanToNETAlignmentData.ContainsKey(scan.PrimaryScanNumber))
+                {
+                    scan.NETValue = (float)this.ScanToNETAlignmentData[scan.PrimaryScanNumber];
+                }
+                else
+                {
+                    scan.NETValue = calculateNET(scan.PrimaryScanNumber);
+                }
+
+            }
+        }
+
+        private float calculateNET(int scanNum)
+        {
+            if (scanNum < 2) return 0;
+            int maxScan = this.GetNumMSScans();
+            
+          
+            double lowerNET = 0;
+            double upperNET = 1;
+            int lowerScan = 1;
+            int upperScan = maxScan;
+
+
+            bool found = false;
+            int currentScan=scanNum;
+
+            while (!found && currentScan>0)
+            {
+                currentScan--;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    lowerScan = currentScan;
+                    lowerNET = this.ScanToNETAlignmentData[lowerScan];
+                    found = true;
+                }
+            }
+
+            found=false;
+            currentScan=scanNum;
+            while (!found && currentScan < maxScan)
+            {
+                currentScan++;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    upperScan = currentScan;
+                    upperNET = this.ScanToNETAlignmentData[upperScan];
+                    found = true;
+                }
+
+            }
+
+            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            double yintercept = (upperNET - slope * upperScan);
+
+            return (float)(scanNum * slope + yintercept);
+          
         }
     }
 }
