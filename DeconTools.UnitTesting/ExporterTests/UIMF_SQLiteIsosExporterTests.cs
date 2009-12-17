@@ -34,7 +34,7 @@ namespace DeconTools.UnitTesting.ExporterTests
             FrameSetCollectionCreator framesetCreator = new FrameSetCollectionCreator(uimfrun, startFrame, stopFrame, numFramesSummed, 1);
             framesetCreator.Create();
 
-            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(uimfrun, 230, 240, numScansSummed, 1);
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(uimfrun, 230, 240, numScansSummed, 1, false);
             scansetCreator.Create();
 
             Project project = Project.getInstance();

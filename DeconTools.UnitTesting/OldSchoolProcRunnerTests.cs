@@ -30,6 +30,8 @@ namespace DeconTools.UnitTesting
 
 
         public string parameterFile4 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile4.xml";
+        public string parameterFile5 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile5_processMSMS.xml";
+
         public string xcaliburParameterFile1 = "..\\..\\TestFiles\\xcaliburParameterFile1.xml";
         public string xcaliburParameterFile3 = "..\\..\\TestFiles\\xcaliburParameterFile3.xml";
         private string xcaliburParameterFile4_exporttoSqlite = "..\\..\\TestFiles\\xcaliburParameterFile4_exportToSqlite.xml";
@@ -196,8 +198,7 @@ namespace DeconTools.UnitTesting
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
 
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, parameterFile4, bw);
-            runner.Project.Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS = true;
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, parameterFile5);
             runner.IsosResultThreshold = 1000;
             runner.Execute();
         }

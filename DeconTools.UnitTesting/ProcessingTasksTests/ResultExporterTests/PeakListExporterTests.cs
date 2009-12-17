@@ -20,6 +20,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     {
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
         private string outputFilename = "..\\..\\TestFiles\\PeakListExporterOutputTest1.txt";
+        private string outputFilename2 = "..\\..\\TestFiles\\PeakListExporterOutputTest2.txt";
+
         private string sqliteOutfileName = "..\\..\\TestFiles\\PeakListExporterOutputTest2.sqlite";
 
         [Test]
@@ -42,7 +44,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1);
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1,false);
             scansetCreator.Create();
 
             Task msgen = new GenericMSGenerator();
@@ -68,7 +70,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(true, File.Exists(sqliteOutfileName));
 
             FileInfo fi = new FileInfo(sqliteOutfileName);
-            Assert.AreEqual(137216, fi.Length);
+            Assert.AreEqual(81920, fi.Length);
             Console.Write(fi.Length);
 
 
@@ -81,7 +83,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1);
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1,false);
             scansetCreator.Create();
 
             Task msgen = new GenericMSGenerator();
@@ -106,8 +108,40 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             exporter.Cleanup();
             Assert.AreEqual(true, File.Exists(outputFilename));
             FileInfo fi = new FileInfo(outputFilename);
-            Assert.AreEqual(155004, fi.Length);
+            Assert.AreEqual(93194, fi.Length);
         }
 
+        [Test]
+        public void exportToTextFileTest2()
+        {
+            if (File.Exists(outputFilename)) File.Delete(outputFilename2);
+
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 7000, 1, 1, false);
+            scansetCreator.Create();
+
+            Task msgen = new GenericMSGenerator();
+            Task peakDetector = new DeconToolsPeakDetector();
+            ((DeconToolsPeakDetector)peakDetector).StorePeakData = true;
+
+            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(run.MSFileType, 1000000, outputFilename2);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
+
+            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                exporter.Execute(run.ResultCollection);
+                sw.Stop();
+                if (sw.ElapsedMilliseconds > 5) Console.WriteLine("PeakListExporter execution time = " + sw.ElapsedMilliseconds);
+            }
+
+            exporter.Cleanup();
+            Assert.AreEqual(true, File.Exists(outputFilename2));
+        }
     }
 }

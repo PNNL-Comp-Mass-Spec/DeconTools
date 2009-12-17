@@ -33,12 +33,72 @@ namespace DeconTools.UnitTesting
         {
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 1000, 2000, 3, 1);
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 6000, 7000, 3, 1,false);
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            creator.Create();
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+
+            Assert.AreEqual(145, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(new int[] { 5998, 6005, 6012 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());
+        }
+
+        [Test]
+        public void basicCreatorTestWithAlternateConstructor_MSMSIncludedTest1()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 6000, 7000, 3, 1, true);
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            creator.Create();
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+
+            //Assert.AreEqual(1001, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(new int[] { 5999, 6000, 6001 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());
+        }
+
+
+
+        [Test]
+        public void basicCreatorTestWithAlternateConstructorTest2()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 6000, 7000, 1, 1, false);
             creator.Create();
 
-            Assert.AreEqual(1001, run.ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(new int[] { 999, 1000, 1001 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());
+            Assert.AreEqual(145, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(new int[] { 6005 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());     //first scan is 6005, a MS-level scan
         }
+
+        [Test]
+        public void basicCreatorTestWithAlternateConstructorTest3()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 1, 19000, 1, 1, true);    //Get all MS and MS/MS scans
+            creator.Create();
+
+            Assert.AreEqual(18505, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(new int[] { 1 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());
+        }
+
+
+        [Test]
+        public void basicCreatorTestWithAlternateConstructorTest4()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 1, 19000, 1, 1, false);     //get all MS-Level scans
+            creator.Create();
+
+            Assert.AreEqual(2695, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(new int[] { 1 }, run.ScanSetCollection.ScanSetList[0].IndexValues.ToArray());
+        }
+
 
         [Test]
         public void incrementTest1()
@@ -46,7 +106,7 @@ namespace DeconTools.UnitTesting
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 1000, 2000, 3, 3);
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 1000, 2000, 3, 3,false);
             creator.Create();
 
             Assert.AreEqual(334, run.ScanSetCollection.ScanSetList.Count);
@@ -73,7 +133,7 @@ namespace DeconTools.UnitTesting
         {
             Run run = new UIMFRun(uimfFilepath);
 
-            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 700, 800, 3, 1);
+            ScanSetCollectionCreator creator = new ScanSetCollectionCreator(run, 700, 800, 3, 1,false);
             creator.Create();
         }
 

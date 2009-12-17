@@ -81,7 +81,9 @@
     <Compile Include="ProcessingTasksTests\HornDeconvolutorTests.cs" />
     <Compile Include="ProcessingTasksTests\IsosMergerExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\MultiDeconvolutorTests.cs" />
+    <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TargetedN14N15AnalyzerTests.cs" />
     <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TomN14N15AnalyzerTests.cs" />
+    <Compile Include="ProcessingTasksTests\PeakChromatogramGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\PeakListExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\IsosResultExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\ScanResultExporterTests.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="SqliteUtils\MSPeakTableTests.cs" />
     <Compile Include="SqliteUtils\SqliteUtilsTests.cs" />
     <Compile Include="TestUtilities.cs" />
+    <Compile Include="UMC_Tests.cs" />
     <Compile Include="UtilitiesTests\Logger_ImporterTests.cs" />
     <Compile Include="UtilitiesTests\MathUtilsTests.cs" />
     <Compile Include="UtilitiesTests\MercuryDistributionTests\MercuryDistributionCreatorTests.cs" />

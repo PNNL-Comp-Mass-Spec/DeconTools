@@ -106,5 +106,44 @@ namespace DeconTools.UnitTesting
             return run.ResultCollection.ResultList;
 
         }
+
+        public static void DisplayPeaks(ResultCollection resultCollection)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("--------- Peaks found in Run " + resultCollection.Run.Filename + "-----------------\n");
+            foreach (MSPeak peak in resultCollection.Run.MSPeakList)
+            {
+                sb.Append(peak.MZ);
+                sb.Append("\t");
+                sb.Append(peak.Intensity);
+                sb.Append("\t");
+                sb.Append(peak.FWHM);
+                sb.Append("\t");
+                sb.Append(peak.SN);
+                sb.Append(Environment.NewLine);
+            }
+            sb.Append("--------------------------- end ---------------------------------------\n");
+
+            Console.Write(sb.ToString());
+        }
+
+        public static void DisplayXYValues(ResultCollection resultCollection)
+        {
+            double[] xvals = resultCollection.Run.XYData.Xvalues;
+            double[] yvals = resultCollection.Run.XYData.Yvalues;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("--------- XYData found in Run " + resultCollection.Run.Filename + "-----------------\n");
+            for (int i = 0; i < xvals.Length; i++)
+            {
+                sb.Append(xvals[i]);
+                sb.Append("\t");
+                sb.Append(yvals[i]);
+                sb.Append("\n");
+            }
+            sb.Append("--------------------------- end ---------------------------------------\n");
+
+            Console.Write(sb.ToString());
+        }
     }
 }

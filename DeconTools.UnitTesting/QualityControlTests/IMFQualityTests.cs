@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting.QualityControlTests
 
             ResultCollection results = new ResultCollection(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 231, 233, numScansSummed, 1);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 231, 233, numScansSummed, 1, false);
             sscc.Create();
 
             ParameterLoader loader = new ParameterLoader();

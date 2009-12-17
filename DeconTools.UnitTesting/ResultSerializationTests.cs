@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting
             const int RESULTTHRESHOLD = 10000000;
             if (File.Exists(serializedResultFilename1)) File.Delete(serializedResultFilename1);
 
-            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1);
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1, false);
             scansetCreator.Create();
 
             Task msgen = new GenericMSGenerator();

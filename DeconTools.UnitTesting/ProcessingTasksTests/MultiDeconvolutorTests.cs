@@ -33,7 +33,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ResultCollection results = new ResultCollection(run);
             TaskCollection taskCollection = new TaskCollection();
 
-            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1);
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1, false);
             scansetCreator.Create();
 
 

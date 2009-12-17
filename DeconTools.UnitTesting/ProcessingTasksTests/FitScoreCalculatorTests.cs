@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             int numScansSummed = 1;
 
-            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, numScansSummed, 1);
+            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, numScansSummed, 1, false);
             scanSetCreator.Create();
 
             Task msgen = new GenericMSGenerator();

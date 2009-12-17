@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting.ExporterTests
             FrameSetCollectionCreator framesetCreator = new FrameSetCollectionCreator(run, ((UIMFRun)run).MinFrame, ((UIMFRun)run).MaxFrame, 1, 1);
             framesetCreator.Create();
 
-            ScanSetCollectionCreator scanSetcreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1);
+            ScanSetCollectionCreator scanSetcreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 1, 1, false);
             scanSetcreator.Create();
 
             Task msGen = new UIMF_MSGenerator(200, 2000);

@@ -159,6 +159,9 @@ namespace DMSDeconToolsV2
 
             try
             {
+                Console.WriteLine("test");
+                Console.WriteLine(FileTypeConverter.ConvertDeconEngineFileType(fileType));
+                
                 this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,
                     FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile, backgroundWorker);
                 this.oldschoolprocRunner.IsosResultThreshold = 10000;

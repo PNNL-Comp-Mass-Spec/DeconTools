@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting.QualityControlTests
 
             int numScansSummed = 1;
 
-            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(xcalRun, xcalRun.MinScan, xcalRun.MaxScan, numScansSummed, 1);
+            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(xcalRun, xcalRun.MinScan, xcalRun.MaxScan, numScansSummed, 1,false);
             scanSetCreator.Create();
 
             scanSetCreator = new ScanSetCollectionCreator(mzxmlRun, mzxmlRun.MinScan, mzxmlRun.MaxScan, numScansSummed, 1);

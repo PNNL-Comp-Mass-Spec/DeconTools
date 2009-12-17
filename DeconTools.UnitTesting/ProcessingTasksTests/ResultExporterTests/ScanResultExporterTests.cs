@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Run run = new XCaliburRun(xcaliburFile1);
             runcoll.Add(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6100, 1, 1);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6100, 1, 1, false);
             sscc.Create();
 
             Task msgen = new GenericMSGenerator();

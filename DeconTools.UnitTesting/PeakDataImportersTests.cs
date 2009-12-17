@@ -69,14 +69,19 @@ namespace DeconTools.UnitTesting
             List<MSPeakResult> peakList = new List<MSPeakResult>();
 
             PeakImporterFromSQLite importer = new PeakImporterFromSQLite(testFile);
-            importer.ImportPeaks(peakList);
-
-            Assert.AreEqual(4852790, peakList.Count);
             Stopwatch sw = new Stopwatch();
+            sw.Start();
+            importer.ImportPeaks(peakList);
+            sw.Stop();
+            Console.WriteLine("Import time = " + sw.ElapsedMilliseconds);
+            sw.Reset();
+            Assert.AreEqual(4852790, peakList.Count);
             sw.Start();
             List<MSPeakResult>testList= peakList.Where(p => p.MSPeak.MZ > 700.01 && p.MSPeak.MZ < 700.03).ToList();
             sw.Stop();
+
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
+            sw.Reset();
             sw.Start();
             List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.MZ > 891.01 && p.MSPeak.MZ < 891.03).ToList();
             sw.Stop();
@@ -94,14 +99,18 @@ namespace DeconTools.UnitTesting
             List<MSPeakResult> peakList = new List<MSPeakResult>();
 
             PeakImporterFromText importer = new PeakImporterFromText(testFile);
-            importer.ImportPeaks(peakList);
-
-            Assert.AreEqual(4852790, peakList.Count);
             Stopwatch sw = new Stopwatch();
+            sw.Start();
+            importer.ImportPeaks(peakList);
+            sw.Stop();
+            Console.WriteLine("Import time = " + sw.ElapsedMilliseconds);
+            sw.Reset();
+            Assert.AreEqual(4852790, peakList.Count);
             sw.Start();
             List<MSPeakResult> testList = peakList.Where(p => p.MSPeak.MZ > 700.01 && p.MSPeak.MZ < 700.03).ToList();
             sw.Stop();
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
+            sw.Reset();
             sw.Start();
             List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.MZ > 891.01 && p.MSPeak.MZ < 891.03).ToList();
             sw.Stop();
