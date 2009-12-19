@@ -30,8 +30,10 @@ namespace DeconTools.UnitTesting.UtilitiesTests
             MercuryDistributionCreator distcreator = new MercuryDistributionCreator();
             distcreator.CreateDistribution(monoMass, chargestate, resolution);
 
+            
             Assert.AreEqual(3778, distcreator.Data.Xvalues.Length);
             Assert.AreEqual("C103H151N28O31S1", distcreator.MolecularFormula.ToFormulaString());
+            //MolecularFormula.Phosphorus.
 
             StringBuilder sb=new StringBuilder();
             TestUtilities.GetXYValuesToStringBuilder(sb, distcreator.Data.Xvalues, distcreator.Data.Yvalues);

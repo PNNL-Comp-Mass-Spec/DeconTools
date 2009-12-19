@@ -145,5 +145,30 @@ namespace DeconTools.UnitTesting
 
             Console.Write(sb.ToString());
         }
+
+     
+        public static void DisplayIsotopicProfileData(IsotopicProfile profile)
+        {
+            StringBuilder sb = new StringBuilder();
+            int counter = 0;
+
+            foreach (MSPeak peak in profile.Peaklist)
+            {
+                sb.Append(counter);
+                sb.Append("\t");
+                sb.Append(peak.MZ);
+                sb.Append("\t");
+                sb.Append(peak.Intensity);
+                sb.Append("\t");
+                sb.Append(peak.FWHM);
+                sb.Append("\t");
+                sb.Append(peak.SN);
+                sb.Append("\n");
+
+                counter++;
+            }
+
+            Console.Write(sb.ToString());
+        }
     }
 }

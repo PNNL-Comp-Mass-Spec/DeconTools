@@ -36,9 +36,9 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             Check.Require(File.Exists(targetUMCFileName), "ChromAligner failed. The UMC file from which alignment data is extracted does not exist.");
 
             UMCCollection umcs = new UMCCollection();
+
             UMCFileImporter importer = new UMCFileImporter(targetUMCFileName, '\t');
             importer.Import(umcs);
-
 
             run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
             run.UpdateNETAlignment();

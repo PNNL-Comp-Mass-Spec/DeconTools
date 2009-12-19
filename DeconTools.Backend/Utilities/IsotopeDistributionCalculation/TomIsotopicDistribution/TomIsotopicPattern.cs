@@ -8,8 +8,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 {
     public class TomIsotopicPattern
     {
-     
-        
+
+
         public static double fNPerThLow = 0.0090f; // lower and upper limits of how many 
         public static double fNPerThHigh = 0.0180f; // nitrogen atoms are in most peptides
 
@@ -49,8 +49,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         static double[] afNna = { fNn14a, fNn15a };
         static double[] afOa = { fO16a, fO18a };  // ignore below 0.1%
         static double[] afSa = { fS32a, fS34a };  // ignore below 1%
-        public static double[][] aafIsos = { afHa, afCa, afNa, afOa, afSa };
-        public static double[][] aafN15Isos = { afHa, afCa, afNna, afOa, afSa };
+        //public static double[][] aafIsos = { afHa, afCa, afNa, afOa, afSa };
+        //public static double[][] aafN15Isos = { afHa, afCa, afNna, afOa, afSa };
+        public static double[][] aafIsos = { afCa, afHa, afNa, afOa, afSa };       //[Gord]  - I adjusted the order
+        public static double[][] aafN15Isos = { afCa, afHa, afNna, afOa, afSa };
         static double[] afHm = { fH1m, fH2m };
         static double[] afCm = { fC12m, fC13m };
         static double[] afNm = { fN14m, fN15m };
@@ -159,7 +161,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             IsotopicProfile isoCluster = new IsotopicProfile();
 
             for (j1 = 0; j1 < afIonIntensity.Length && j1 <= maxOffset; j1++)
-                isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)afIonIntensity[j1], 0.0f,0.0f));
+                isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)afIonIntensity[j1], 0.0f, 0.0f));
             return isoCluster;
         }
 

@@ -6,6 +6,7 @@ using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDis
 using DeconTools.Backend.Core;
 using System.Diagnostics;
 using DeconTools.Backend.Utilities;
+using ProteinCalc;
 
 namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
 {
@@ -56,6 +57,22 @@ namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
             Console.Write(sb.ToString());
 
         }
+
+        public void test2()
+        {
+
+            Peptide testPeptide = new Peptide("TTPSIIAYTDDETIVGQPAKR");
+            IsotopicProfile cluster = TomIsotopicPattern.GetIsotopePattern(testPeptide.GetEmpiricalFormulaIntArray(), TomIsotopicPattern.aafIsos);
+          
+            TestUtilities.DisplayIsotopicProfileData(cluster);
+
+
+
+
+
+
+        }
+
 
 
     }

@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ProteinCalc\ProteinCalc\bin\Release\ProteinCalc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
