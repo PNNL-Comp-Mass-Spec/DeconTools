@@ -5,18 +5,17 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTag
+    public abstract class IMassTagResult : IsosResult
     {
         #region Constructors
         #endregion
 
         #region Properties
-        public double MonoIsotopicMass { get; set; }
-        public double MZ { get; set; }
-        public short ChargeState { get; set; }
-        public float NETVal { get; set; }
-        public int ID { get; set; }
+        public abstract List<ChromPeak> ChromPeaks { get; set; }
 
+        public abstract MassTag MassTag { get; set; }
+
+        public abstract XYData ChromValues { get; set; }
         #endregion
 
         #region Public Methods
@@ -24,5 +23,6 @@ namespace DeconTools.Backend.Core
 
         #region Private Methods
         #endregion
+
     }
 }

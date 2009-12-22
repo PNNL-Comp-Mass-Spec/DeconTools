@@ -8,6 +8,7 @@ namespace DeconTools.Backend.Core
     public abstract class IsosResult
     {
         public int MSFeatureID { get; set; }
+        public List<ResultFlag> Flags = new List<ResultFlag>();
 
         public abstract Run Run
         {
@@ -27,6 +28,8 @@ namespace DeconTools.Backend.Core
             get;
             set;
         }
+
+        
 
     }
 }

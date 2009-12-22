@@ -5,18 +5,15 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTag
+    public abstract class IPeak
     {
         #region Constructors
         #endregion
 
         #region Properties
-        public double MonoIsotopicMass { get; set; }
-        public double MZ { get; set; }
-        public short ChargeState { get; set; }
-        public float NETVal { get; set; }
-        public int ID { get; set; }
-
+        public abstract double XValue { get; set; }
+        public abstract float Height { get; set; }
+        public abstract float Width { get; set; }
         #endregion
 
         #region Public Methods

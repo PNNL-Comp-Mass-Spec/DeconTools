@@ -49,13 +49,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
             List<MSPeakResult> filteredPeakList = resultList.MSPeakResultList.Where(p => p.MSPeak.MZ >= lowerMZ && p.MSPeak.MZ <= upperMZ).ToList();
 
-            N14N15_TResult result = new N14N15_TResult();
+            IMassTagResult result = new N14N15_TResult();        // TODO: fix this later.  Need to use a factory to create the IMassTagResult. 
             result.MassTag = resultList.Run.CurrentMassTag;
             result.ChromValues = getPeakChromValues(filteredPeakList);
             resultList.Run.XYData.Xvalues = result.ChromValues.Xvalues;   // peak detectors or smoothers might use this
             resultList.Run.XYData.Yvalues = result.ChromValues.Yvalues;
 
-            resultList.ResultList.Add(result);
+            resultList.MassTagResultList.Add(resultList.Run.CurrentMassTag, result);
 
         }
 

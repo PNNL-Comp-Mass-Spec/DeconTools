@@ -5,17 +5,26 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTag
+    public class ResultFlag
     {
         #region Constructors
+        public ResultFlag()
+        {
+
+        }
+
+        public ResultFlag(string description)
+        {
+            this.Description = description;
+
+        }
+
         #endregion
 
         #region Properties
-        public double MonoIsotopicMass { get; set; }
-        public double MZ { get; set; }
-        public short ChargeState { get; set; }
-        public float NETVal { get; set; }
-        public int ID { get; set; }
+
+        public string Description { get; set; }
+
 
         #endregion
 

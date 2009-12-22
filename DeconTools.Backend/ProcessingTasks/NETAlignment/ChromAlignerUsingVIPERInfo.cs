@@ -27,7 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             Check.Require(run != null, "'Run' has not be defined");
             Check.Require(run.Filename != null &&
                 run.Filename.Length > 0, "MS data file ('run') has not been initialized");
-            Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ChromAligner failed. ScanSets have not been defined.");
+            //Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ChromAligner failed. ScanSets have not been defined.");
 
             string baseFileName = run.Filename.Substring(0, run.Filename.LastIndexOf('.'));
 

@@ -162,6 +162,7 @@ namespace DeconConsole
             }
             Console.WriteLine();
             Console.WriteLine();
+            Console.WriteLine("Hit <enter> to continue");
             Console.ReadLine();
             
 
@@ -195,6 +196,10 @@ namespace DeconConsole
             Console.WriteLine("\tPNNL_IMS");
             Console.WriteLine("\tPNNL_UIMF");
             Console.WriteLine("\tSUNEXTREL");
+            Console.WriteLine();
+            Console.WriteLine(); 
+            Console.WriteLine("Hit <enter> to continue");
+
             Console.ReadLine();
 
 

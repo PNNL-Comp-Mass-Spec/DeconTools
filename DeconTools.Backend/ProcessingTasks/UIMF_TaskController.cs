@@ -116,6 +116,7 @@ namespace DeconTools.Backend.ProcessingTasks
             UserState userstate = new UserState(run, scanset, frameset);
             int framenum = uimfRun.FrameSetCollection.FrameSetList.IndexOf(frameset);
             double percentDone = (double)(framenum + 1) / (double)(uimfRun.FrameSetCollection.FrameSetList.Count) * 100;
+            userstate.PercentDone = (float)percentDone;
 
             if (System.DateTime.Now.Subtract(Logger.Instance.TimeOfLastUpdate).TotalMinutes > DEFAULT_TIME_BETWEEN_LOGENTRIES)
             {

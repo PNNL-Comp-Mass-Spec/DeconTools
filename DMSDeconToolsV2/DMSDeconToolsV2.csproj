@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>

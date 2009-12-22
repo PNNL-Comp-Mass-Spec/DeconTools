@@ -5,13 +5,12 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class N14N15_TResult : IMassTagResult
+    public class MassTagResult:IMassTagResult
     {
         #region Constructors
         #endregion
 
         #region Properties
-
         private Run run;
         public override Run Run
         {
@@ -41,26 +40,12 @@ namespace DeconTools.Backend.Core
         }
         public override MassTag MassTag { get; set; }
         public override XYData ChromValues { get; set; }
-
-        private IsotopicProfile n15IsotopicProfile;
-        public IsotopicProfile N15IsotopicProfile
-        {
-            get { return n15IsotopicProfile; }
-            set { n15IsotopicProfile = value; }
-        }
-
-
-
-
         #endregion
 
         #region Public Methods
-
         #endregion
 
         #region Private Methods
         #endregion
-
-
     }
 }

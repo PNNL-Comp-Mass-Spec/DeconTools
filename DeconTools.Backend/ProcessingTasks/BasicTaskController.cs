@@ -65,6 +65,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             int scannum = run.ScanSetCollection.ScanSetList.IndexOf(scanset) + 1;
             float percentDone = (float)(scannum) / (float)(run.ScanSetCollection.ScanSetList.Count) * 100;
+            userstate.PercentDone = percentDone;
 
             if (System.DateTime.Now.Subtract(Logger.Instance.TimeOfLastUpdate).TotalMinutes > DEFAULT_TIME_BETWEEN_LOGENTRIES)
             {

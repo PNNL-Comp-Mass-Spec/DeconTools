@@ -94,17 +94,20 @@ namespace DMSDeconToolsV2
                 if (areRequirementsMet)
                 {
                     state = DeconState.RUNNING_DECON;
-                
 
-                    bw = new BackgroundWorker();
+                    this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile);
+                    this.oldschoolprocRunner.IsosResultThreshold = 50000;
+                    this.oldschoolprocRunner.Execute();
 
-                    bw.WorkerReportsProgress = true;
-                    bw.WorkerSupportsCancellation = true;
+                    //bw = new BackgroundWorker();
 
-                    bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-                    bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-                    bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-                    bw.RunWorkerAsync();
+                    //bw.WorkerReportsProgress = true;
+                    //bw.WorkerSupportsCancellation = true;
+
+                    //bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+                    //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+                    //bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+                    //bw.RunWorkerAsync();
 
 
                 }
@@ -161,10 +164,10 @@ namespace DMSDeconToolsV2
             {
                 Console.WriteLine("test");
                 Console.WriteLine(FileTypeConverter.ConvertDeconEngineFileType(fileType));
-                
+
                 this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,
                     FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile, backgroundWorker);
-                this.oldschoolprocRunner.IsosResultThreshold = 10000;
+                this.oldschoolprocRunner.IsosResultThreshold = 50000;
                 this.oldschoolprocRunner.Execute();
             }
             catch (Exception ex)

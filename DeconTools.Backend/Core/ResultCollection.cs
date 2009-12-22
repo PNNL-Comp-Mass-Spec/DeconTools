@@ -16,10 +16,18 @@ namespace DeconTools.Backend.Core
         {
             this.run = run;
             this.resultList = new List<IsosResult>();
+            this.massTagResultList = new Dictionary<MassTag, IMassTagResult>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
             this.currentScanIsosResultBin = new List<IsosResult>();
             this.logMessageList = new List<string>();
+        }
+
+        private Dictionary<MassTag, IMassTagResult> massTagResultList;
+        public Dictionary<MassTag, IMassTagResult> MassTagResultList
+        {
+            get { return massTagResultList; }
+            set { massTagResultList = value; }
         }
 
 

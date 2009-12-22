@@ -245,6 +245,21 @@ namespace DeconTools.Backend.Core
         //}
 
 
+        public virtual float GetNETValueForScan(int scanNum)
+        {
+            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
+            if (this.ScanToNETAlignmentData.ContainsKey(scanNum))
+            {
+                return (float)this.ScanToNETAlignmentData[scanNum];
+            }
+            else
+            {
+                return calculateNET(scanNum);
+            }
+
+        }
+
+
         public virtual int GetCurrentScanOrFrame()
         {
             return this.CurrentScanSet.PrimaryScanNumber;

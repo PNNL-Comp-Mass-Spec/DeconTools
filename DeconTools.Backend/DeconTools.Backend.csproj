@@ -73,9 +73,12 @@
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\FrameSet.cs" />
     <Compile Include="Core\FrameSetCollection.cs" />
+    <Compile Include="Core\IPeak.cs" />
     <Compile Include="Core\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />
     <Compile Include="Core\MassTag.cs" />
+    <Compile Include="Core\IMassTagResult.cs" />
+    <Compile Include="Core\MassTagResult.cs" />
     <Compile Include="Core\MSPeak.cs" />
     <Compile Include="Core\N14N15_TResult.cs" />
     <Compile Include="Core\OldDecon2LSParameters.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="Core\ProjectParameters.cs" />
     <Compile Include="Core\Rapid.cs" />
     <Compile Include="Core\ResultCollection.cs" />
+    <Compile Include="Core\ResultFlag.cs" />
     <Compile Include="Core\RunMergingProjectController.cs" />
     <Compile Include="Core\ScanResult.cs" />
     <Compile Include="Core\ScanResultCollection.cs" />
@@ -110,6 +114,7 @@
     <Compile Include="Data\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\PeakImporterFromText.cs" />
     <Compile Include="Data\UMCFileImporter.cs" />
+    <Compile Include="ProcessingTasks\ChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
     <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />

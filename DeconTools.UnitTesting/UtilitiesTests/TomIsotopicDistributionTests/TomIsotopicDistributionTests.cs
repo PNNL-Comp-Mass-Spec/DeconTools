@@ -66,11 +66,6 @@ namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
           
             TestUtilities.DisplayIsotopicProfileData(cluster);
 
-
-
-
-
-
         }
 
 
