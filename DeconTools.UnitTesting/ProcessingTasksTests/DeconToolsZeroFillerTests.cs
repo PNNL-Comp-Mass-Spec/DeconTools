@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(resultcollection);
 
-            Assert.AreEqual(82, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(82, resultcollection.Run.PeakList.Count);
 
             Task zeroFiller = new DeconToolsZeroFiller(3);
             zeroFiller.Execute(resultcollection);
@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             peakdetector.Execute(resultcollection);
 
             //need to verify if this is working properly
-            Assert.AreEqual(81, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(81, resultcollection.Run.PeakList.Count);
         }
 
 
@@ -79,7 +79,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(results);
 
-            Assert.AreEqual(21, results.Run.MSPeakList.Count);
+            Assert.AreEqual(21, results.Run.PeakList.Count);
             //Assert.AreEqual(1382, results.Run.XYData.Xvalues.Length);
 
             StringBuilder sb = new StringBuilder();
@@ -97,7 +97,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Console.Write(sb.ToString());
 
             peakdetector.Execute(results);
-            Assert.AreEqual(21, results.Run.MSPeakList.Count);
+            Assert.AreEqual(21, results.Run.PeakList.Count);
             Assert.AreEqual(3732, results.Run.XYData.Xvalues.Length);
 
 
@@ -178,7 +178,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 sb.Append("\t");
                 sb.Append(results.Run.XYData.Xvalues.Length);
                 sb.Append("\t");
-                sb.Append(results.Run.MSPeakList.Count);
+                sb.Append(results.Run.PeakList.Count);
                 sb.Append("\n");
             }
 
@@ -230,13 +230,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 sb.Append("\t");
 
                 peakdetector.Execute(results);
-                sb.Append(results.Run.MSPeakList.Count);
+                sb.Append(results.Run.PeakList.Count);
                 sb.Append("\t");
 
                 zerofiller.Execute(results);
                 peakdetector.Execute(results);
 
-                sb.Append(results.Run.MSPeakList.Count);
+                sb.Append(results.Run.PeakList.Count);
 
                 sb.Append("\n");
 

@@ -73,6 +73,9 @@
     <Compile Include="ExporterTests\UIMF_ScansExporterTests.cs" />
     <Compile Include="ExporterTests\UIMF_SQLiteIsosExporterTests.cs" />
     <Compile Include="FrameSetCollectionCreatorTests.cs" />
+    <Compile Include="ImporterTests\MassTagFromDBImporterTests.cs" />
+    <Compile Include="ImporterTests\MassTagListImporterTests.cs" />
+    <Compile Include="MassTagRelatedTests.cs" />
     <Compile Include="OldSchoolProcRunnerTests.cs" />
     <Compile Include="ParameterFileTests.cs" />
     <Compile Include="PeakDataImportersTests.cs" />
@@ -93,6 +96,8 @@
     <Compile Include="ProcessingTasksTests\ResultExporterTests\ScanResultExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ScanResultUpdaterTests.cs" />
     <Compile Include="ProcessingTasksTests\SimpleDeconTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\BasicTMassTagAnalyzerTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\TheorFeatureGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_MSGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_TaskControllerTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_TICExtractorTests.cs" />

@@ -85,7 +85,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             {
                 sb.Append(counter);
                 sb.Append("\t");
-                sb.Append(result.IsotopicProfile.getMonoPeak().MZ.ToString("0.000"));
+                sb.Append(result.IsotopicProfile.getMonoPeak().XValue.ToString("0.000"));
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append("\t");

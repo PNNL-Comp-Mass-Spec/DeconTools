@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 sb.Append("\t");
                 sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append("\t"); 
-                sb.Append(uimfResult.IsotopicProfile.Peaklist[0].MZ);
+                sb.Append(uimfResult.IsotopicProfile.Peaklist[0].XValue);
                 sb.Append("\t"); 
                 sb.Append(uimfResult.IsotopicProfile.GetAbundance());
                 sb.Append("\t");

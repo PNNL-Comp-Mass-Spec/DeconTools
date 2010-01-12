@@ -110,10 +110,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
 
             run.CurrentMassTag = massTag;
 
-            Task peakChromGen = new PeakChromatogramGenerator(10);
+            Task peakChromGen = new PeakChromatogramGenerator(20);
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(2, 2, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector();
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.1);
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
 
 
@@ -121,11 +125,19 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
             peakChromGen.Execute(run.ResultCollection);
             smoother.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
+            chromPeakSel.Execute(run.ResultCollection);
 
-            
 
+            Console.WriteLine("Now generating MS....");
+            msgen.Execute(run.ResultCollection);
+            Console.WriteLine("----------- RESULTS ----------------------\n");
             TestUtilities.DisplayPeaks(run.ResultCollection);
-            TestUtilities.DisplayXYValues(run.ResultCollection);
+
+
+            IMassTagResult massTagResult= run.ResultCollection.MassTagResultList[massTag];
+            massTagResult.DisplayToConsole();
+            Assert.AreEqual(5512, massTagResult.ScanSet.PrimaryScanNumber);
+
 
         }
     }

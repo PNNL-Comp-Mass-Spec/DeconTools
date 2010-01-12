@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Assert.AreEqual(2, results.ScanResultList.Count);
             Assert.AreEqual(1, results.ScanResultList[0].SpectrumType);
-            Assert.AreEqual(481.274105402604, (decimal)results.ScanResultList[0].BasePeak.MZ);
+            Assert.AreEqual(481.274105402604, (decimal)results.ScanResultList[0].BasePeak.XValue);
             Assert.AreEqual(353, results.ScanResultList[0].NumIsotopicProfiles);
 
             Assert.AreEqual(2052, results.ScanResultList[0].NumPeaks);
@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Assert.AreEqual(3, results.ScanResultList.Count);
             Assert.AreEqual(1, results.ScanResultList[0].SpectrumType);
-            Assert.AreEqual(670.990710325132, (decimal)results.ScanResultList[0].BasePeak.MZ);
+            Assert.AreEqual(670.990710325132, (decimal)results.ScanResultList[0].BasePeak.XValue);
             Assert.AreEqual(183, results.ScanResultList[0].NumIsotopicProfiles);
 
             Assert.AreEqual(7097, results.ScanResultList[0].NumPeaks);

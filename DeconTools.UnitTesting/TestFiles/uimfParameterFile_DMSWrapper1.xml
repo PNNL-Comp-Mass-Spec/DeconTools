@@ -50,13 +50,13 @@
 	<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
 	<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
 	<RightFitStringencyFactor>1</RightFitStringencyFactor>
-	<UseRAPIDDeconvolution>True</UseRAPIDDeconvolution>
+	<UseRAPIDDeconvolution>False</UseRAPIDDeconvolution>
 		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
 		</HornTransformParameters>
 	<Miscellaneous>
 		<UseScanRange>True</UseScanRange>
 		<MinScan>800</MinScan>
-		<MaxScan>850</MaxScan>
+		<MaxScan>801</MaxScan>
 		<UseMZRange>False</UseMZRange>
 		<MinMZ>400</MinMZ>
 		<MaxMZ>2000</MaxMZ>

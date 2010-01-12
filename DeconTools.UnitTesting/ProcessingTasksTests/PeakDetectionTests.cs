@@ -42,20 +42,20 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(resultcollection);
 
-            Assert.AreEqual(82, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(82, resultcollection.Run.PeakList.Count);
             Assert.AreEqual(167.243318707619, Convert.ToDecimal(resultcollection.Run.CurrentScanSet.BackgroundIntensity));
 
             detectorParams.PeakBackgroundRatio = 2;
             peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(resultcollection);
-            Assert.AreEqual(154, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(154, resultcollection.Run.PeakList.Count);
             Assert.AreEqual(167.243318707619, Convert.ToDecimal(resultcollection.Run.CurrentScanSet.BackgroundIntensity));
 
             detectorParams.PeakBackgroundRatio = 2;
             detectorParams.SignalToNoiseThreshold = 1;
             peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(resultcollection);
-            Assert.AreEqual(156, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(156, resultcollection.Run.PeakList.Count);
             Assert.AreEqual(167.243318707619, Convert.ToDecimal(resultcollection.Run.CurrentScanSet.BackgroundIntensity));
 
             detectorParams.PeakBackgroundRatio = 3;
@@ -67,7 +67,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task scanresultUpdater = new ScanResultUpdater();
             scanresultUpdater.Execute(resultcollection);
 
-            Assert.AreEqual(82, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(82, resultcollection.Run.PeakList.Count);
             Assert.AreEqual(1, resultcollection.ScanResultList.Count);
             Assert.AreEqual(82, resultcollection.ScanResultList[0].NumPeaks);
             Assert.AreEqual(167.243318707619, Convert.ToDecimal(resultcollection.Run.CurrentScanSet.BackgroundIntensity));
@@ -124,7 +124,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ((DeconToolsPeakDetector)(peakDetector)).SigNoiseThreshold = 2;
             peakDetector.Execute(results);
 
-            Assert.AreEqual(562, results.Run.MSPeakList.Count);
+            Assert.AreEqual(562, results.Run.PeakList.Count);
 
             run.IsDataThresholded = true;      //fyi... by default, xcalibur runs are set to be true
 
@@ -134,7 +134,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ((DeconToolsPeakDetector)(peakDetector)).SigNoiseThreshold = 2;
             peakDetector.Execute(results);
 
-            Assert.AreEqual(570, results.Run.MSPeakList.Count);
+            Assert.AreEqual(570, results.Run.PeakList.Count);
 
 
         }

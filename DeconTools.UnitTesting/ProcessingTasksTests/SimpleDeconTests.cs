@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task simpleDecon = new SimpleDecon(0.0005);
             simpleDecon.Execute(results);
 
-            Console.WriteLine(results.Run.MSPeakList.Count);
+            Console.WriteLine(results.Run.PeakList.Count);
             Console.WriteLine(results.ResultList.Count);
 
 
@@ -85,9 +85,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             {
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append("\t");
-                sb.Append(result.IsotopicProfile.Peaklist[0].MZ);
+                sb.Append(result.IsotopicProfile.Peaklist[0].XValue);
                 sb.Append("\t");
-                sb.Append(result.IsotopicProfile.Peaklist[0].Intensity);
+                sb.Append(result.IsotopicProfile.Peaklist[0].Height);
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.Peaklist[0].SN);
                 sb.Append("\t");

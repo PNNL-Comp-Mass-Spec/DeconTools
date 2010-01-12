@@ -56,18 +56,18 @@ namespace DeconTools.UnitTesting
                 Console.Write("idx" + "\t" + "mz" + "\t" + "intensity" + "\t" + "SN" + "\t" + "FWHM" + "\n");
                 foreach (MSPeak peak in profile.Peaklist)
                 {
-                    Console.Write(peakcounter + "\t" + peak.MZ + "\t" + peak.Intensity + "\t" + peak.SN + "\t" + peak.FWHM + "\n");
+                    Console.Write(peakcounter + "\t" + peak.XValue + "\t" + peak.Height + "\t" + peak.SN + "\t" + peak.Width + "\n");
                     peakcounter++;
                 }
                 counter++;
             }
 
             Assert.AreEqual(12, resultcollection.ResultList.Count);
-            Assert.AreEqual(682.346929789284, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].MZ));
-            Assert.AreEqual(682.683202478548, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].MZ));
-            Assert.AreEqual(10780, resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].Intensity);
+            Assert.AreEqual(682.346929789284, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].XValue));
+            Assert.AreEqual(682.683202478548, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].XValue));
+            Assert.AreEqual(10780, resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].Height);
             Assert.AreEqual(2695, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].SN));
-            Assert.AreEqual(0.08720002, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].FWHM));
+            Assert.AreEqual(0.08720002, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[1].Width));
 
             Assert.AreEqual(5, resultcollection.ResultList[4].IsotopicProfile.GetNumOfIsotopesInProfile());
             Assert.AreEqual(2488.71170791031, Convert.ToDecimal(resultcollection.ResultList[4].IsotopicProfile.AverageMass));

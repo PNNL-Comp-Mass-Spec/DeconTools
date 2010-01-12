@@ -66,16 +66,16 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 Console.Write("idx" + "\t" + "mz" + "\t" + "intensity" + "\t" + "SN" + "\t" + "FWHM" + "\n");
                 foreach (MSPeak peak in profile.Peaklist)
                 {
-                    Console.Write(peakcounter + "\t" + peak.MZ + "\t" + peak.Intensity + "\t" + peak.SN + "\t" + peak.FWHM + "\n");
+                    Console.Write(peakcounter + "\t" + peak.XValue + "\t" + peak.Height + "\t" + peak.SN + "\t" + peak.Width + "\n");
                     peakcounter++;
                 }
                 counter++;
             }
 
             Assert.AreEqual(9, resultcollection.ResultList.Count);
-            Assert.AreEqual(582.820684517665, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].MZ));
-            Assert.AreEqual(2984.0, resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].Intensity);
-            Assert.AreEqual(0.05905123, (decimal)resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].FWHM);
+            Assert.AreEqual(582.820684517665, Convert.ToDecimal(resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].XValue));
+            Assert.AreEqual(2984.0, resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].Height);
+            Assert.AreEqual(0.05905123, (decimal)resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].Width);
             Assert.AreEqual(157.0526, (decimal)resultcollection.ResultList[0].IsotopicProfile.Peaklist[0].SN);
 
 
@@ -120,9 +120,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             rapid.Execute(results);
 
             Assert.AreEqual(9, results.ResultList.Count);
-            Assert.AreEqual(582.820684517665, Convert.ToDecimal(results.ResultList[0].IsotopicProfile.Peaklist[0].MZ));
-            Assert.AreEqual(2984.0, results.ResultList[0].IsotopicProfile.Peaklist[0].Intensity);
-            Assert.AreEqual(0.05905123, (decimal)results.ResultList[0].IsotopicProfile.Peaklist[0].FWHM);
+            Assert.AreEqual(582.820684517665, Convert.ToDecimal(results.ResultList[0].IsotopicProfile.Peaklist[0].XValue));
+            Assert.AreEqual(2984.0, results.ResultList[0].IsotopicProfile.Peaklist[0].Height);
+            Assert.AreEqual(0.05905123, (decimal)results.ResultList[0].IsotopicProfile.Peaklist[0].Width);
             Assert.AreEqual(157.0526, (decimal)results.ResultList[0].IsotopicProfile.Peaklist[0].SN);
 
 
@@ -242,9 +242,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(9, results.ScanResultList[1].NumIsotopicProfiles);
             Assert.AreEqual(9, results.ScanResultList[2].NumIsotopicProfiles);
 
-            Assert.AreEqual(830.045752112968, (Decimal)results.ScanResultList[0].BasePeak.MZ);
-            Assert.AreEqual(10438, results.ScanResultList[0].BasePeak.Intensity);
-            Assert.AreEqual(0.09454554, (Decimal)results.ScanResultList[0].BasePeak.FWHM);
+            Assert.AreEqual(830.045752112968, (Decimal)results.ScanResultList[0].BasePeak.XValue);
+            Assert.AreEqual(10438, results.ScanResultList[0].BasePeak.Height);
+            Assert.AreEqual(0.09454554, (Decimal)results.ScanResultList[0].BasePeak.Width);
             Assert.AreEqual(434.9167, (Decimal)results.ScanResultList[0].BasePeak.SN);
 
 
@@ -294,15 +294,15 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 for (int i = 0; i < rc.ResultList.Count; i++)
                 {
                     IsosResult result = rc.ResultList[i];
-                    if (result.IsotopicProfile.Peaklist[0].MZ > 629 && result.IsotopicProfile.Peaklist[0].MZ < 631)
+                    if (result.IsotopicProfile.Peaklist[0].XValue > 629 && result.IsotopicProfile.Peaklist[0].XValue < 631)
                     {
                         sb.Append(n.ToString("0.00"));
                         sb.Append("\t");
-                        sb.Append(result.IsotopicProfile.Peaklist[0].MZ.ToString("0.00"));
+                        sb.Append(result.IsotopicProfile.Peaklist[0].XValue.ToString("0.00"));
                         sb.Append("\t");
                         sb.Append(result.IsotopicProfile.Score.ToString("0.00"));
                         sb.Append("\t");
-                        sb.Append(result.Run.MSPeakList.Count);
+                        sb.Append(result.Run.PeakList.Count);
                         sb.Append("\t");
                         sb.Append(result.Run.XYData.Xvalues.Length);
 
@@ -351,15 +351,15 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             for (int i = 0; i < rc.ResultList.Count; i++)
             {
                 IsosResult result = rc.ResultList[i];
-                if (result.IsotopicProfile.Peaklist[0].MZ > 0 && result.IsotopicProfile.Peaklist[0].MZ < 10000)
+                if (result.IsotopicProfile.Peaklist[0].XValue > 0 && result.IsotopicProfile.Peaklist[0].XValue < 10000)
                 {
-                   sb.Append(result.IsotopicProfile.Peaklist[0].MZ.ToString("0.00"));
+                   sb.Append(result.IsotopicProfile.Peaklist[0].XValue.ToString("0.00"));
                     sb.Append("\t");
                     sb.Append(result.IsotopicProfile.Score.ToString("0.00"));
                     sb.Append("\t");
                     sb.Append(result.IsotopicProfile.Peaklist[0].SN.ToString("0.0"));
                     sb.Append("\t");
-                    sb.Append(result.Run.MSPeakList.Count);
+                    sb.Append(result.Run.PeakList.Count);
                     sb.Append("\t");
                     sb.Append(result.Run.XYData.Xvalues.Length);
 

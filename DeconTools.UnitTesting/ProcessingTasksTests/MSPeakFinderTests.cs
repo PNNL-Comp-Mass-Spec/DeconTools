@@ -37,24 +37,26 @@ namespace DeconTools.UnitTesting
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < resultcollection.Run.MSPeakList.Count; i++)
+            for (int i = 0; i < resultcollection.Run.PeakList.Count; i++)
             {
+                MSPeak mspeak=(MSPeak)resultcollection.Run.PeakList[i];
 
-                sb.Append(resultcollection.Run.MSPeakList[i].MZ);
+
+                sb.Append(resultcollection.Run.PeakList[i].XValue);
                 sb.Append("\t");
-                sb.Append(resultcollection.Run.MSPeakList[i].Intensity);
+                sb.Append(resultcollection.Run.PeakList[i].Height);
                 sb.Append("\t");
-                sb.Append(resultcollection.Run.MSPeakList[i].SN);
+                sb.Append(mspeak.SN);
                 sb.Append("\t");
-                sb.Append(resultcollection.Run.MSPeakList[i].FWHM);
+                sb.Append(resultcollection.Run.PeakList[i].Width);
                 sb.Append("\t");
                 sb.Append(Environment.NewLine);
             }
             Console.Write(sb.ToString());
 
-            Assert.AreEqual(2438, resultcollection.Run.MSPeakList.Count);
-            Assert.AreEqual(547.316411323136, Convert.ToDecimal(resultcollection.Run.MSPeakList[982].MZ));
-            Assert.AreEqual(100385, resultcollection.Run.MSPeakList[982].Intensity);
+            Assert.AreEqual(2438, resultcollection.Run.PeakList.Count);
+            Assert.AreEqual(547.316411323136, Convert.ToDecimal(resultcollection.Run.PeakList[982].XValue));
+            Assert.AreEqual(100385, resultcollection.Run.PeakList[982].Height);
 
 
 

@@ -36,14 +36,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
             peakdetector.Execute(resultcollection);
 
-            Assert.AreEqual(82, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(82, resultcollection.Run.PeakList.Count);
 
             Task smoother = new DeconToolsSavitzkyGolaySmoother(3, 3, 2);
             smoother.Execute(resultcollection);
 
             peakdetector.Execute(resultcollection);
 
-            Assert.AreEqual(67, resultcollection.Run.MSPeakList.Count);
+            Assert.AreEqual(67, resultcollection.Run.PeakList.Count);
         }
 
 

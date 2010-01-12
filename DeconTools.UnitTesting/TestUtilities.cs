@@ -45,8 +45,8 @@ namespace DeconTools.UnitTesting
                     resultList1[i].IsotopicProfile.GetNumOfIsotopesInProfile() == resultList2[i].IsotopicProfile.GetNumOfIsotopesInProfile() &&
                     //resultList1[i].IsotopicProfile.GetSignalToNoise() == resultList2[i].IsotopicProfile.GetSignalToNoise() &&
                     //resultList1[i].IsotopicProfile.GetFWHM() == resultList2[i].IsotopicProfile.GetFWHM() &&
-                    resultList1[i].IsotopicProfile.getMonoPeak().MZ == resultList2[i].IsotopicProfile.getMonoPeak().MZ &&
-                    resultList1[i].IsotopicProfile.getMonoPeak().Intensity == resultList2[i].IsotopicProfile.getMonoPeak().Intensity);
+                    resultList1[i].IsotopicProfile.getMonoPeak().XValue == resultList2[i].IsotopicProfile.getMonoPeak().XValue &&
+                    resultList1[i].IsotopicProfile.getMonoPeak().Height == resultList2[i].IsotopicProfile.getMonoPeak().Height);
 
                 if (!resultIsTheSame)   //result is different
                 {
@@ -68,11 +68,11 @@ namespace DeconTools.UnitTesting
             {
                 sb.Append(counter);
                 sb.Append("\t"); 
-                sb.Append(peak.MZ);
+                sb.Append(peak.XValue);
                 sb.Append("\t");
-                sb.Append(peak.Intensity);
+                sb.Append(peak.Height);
                 sb.Append("\t");
-                sb.Append(peak.FWHM);
+                sb.Append(peak.Width);
                 sb.Append("\t");
                 sb.Append(peak.SN);
                 sb.Append("\n");
@@ -111,15 +111,15 @@ namespace DeconTools.UnitTesting
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("--------- Peaks found in Run " + resultCollection.Run.Filename + "-----------------\n");
-            foreach (MSPeak peak in resultCollection.Run.MSPeakList)
+            
+            foreach (IPeak peak in resultCollection.Run.PeakList)
             {
-                sb.Append(peak.MZ);
+                sb.Append(peak.XValue);
                 sb.Append("\t");
-                sb.Append(peak.Intensity);
+                sb.Append(peak.Height);
                 sb.Append("\t");
-                sb.Append(peak.FWHM);
+                sb.Append(peak.Width);
                 sb.Append("\t");
-                sb.Append(peak.SN);
                 sb.Append(Environment.NewLine);
             }
             sb.Append("--------------------------- end ---------------------------------------\n");
@@ -156,11 +156,11 @@ namespace DeconTools.UnitTesting
             {
                 sb.Append(counter);
                 sb.Append("\t");
-                sb.Append(peak.MZ);
+                sb.Append(peak.XValue);
                 sb.Append("\t");
-                sb.Append(peak.Intensity);
+                sb.Append(peak.Height);
                 sb.Append("\t");
-                sb.Append(peak.FWHM);
+                sb.Append(peak.Width);
                 sb.Append("\t");
                 sb.Append(peak.SN);
                 sb.Append("\n");

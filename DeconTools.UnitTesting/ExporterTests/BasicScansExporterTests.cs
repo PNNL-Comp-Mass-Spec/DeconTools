@@ -62,9 +62,9 @@ namespace DeconTools.UnitTesting.ExporterTests
             Assert.AreEqual(9, results.ScanResultList[1].NumIsotopicProfiles);
             Assert.AreEqual(9, results.ScanResultList[2].NumIsotopicProfiles);
 
-            Assert.AreEqual(830.045752112968, (Decimal)results.ScanResultList[0].BasePeak.MZ);
-            Assert.AreEqual(10438, results.ScanResultList[0].BasePeak.Intensity);
-            Assert.AreEqual(0.09454554, (Decimal)results.ScanResultList[0].BasePeak.FWHM);
+            Assert.AreEqual(830.045752112968, (Decimal)results.ScanResultList[0].BasePeak.XValue);
+            Assert.AreEqual(10438, results.ScanResultList[0].BasePeak.Height);
+            Assert.AreEqual(0.09454554, (Decimal)results.ScanResultList[0].BasePeak.Width);
             Assert.AreEqual(434.9167, (Decimal)results.ScanResultList[0].BasePeak.SN);
 
             Exporter<ResultCollection> exporter = new BasicScansExporter(scansExporterTest1output);

@@ -31,9 +31,9 @@ namespace DeconTools.UnitTesting
 
             Assert.AreEqual(1096, peakList[1095].PeakID);
             Assert.AreEqual(6005, peakList[1095].Scan_num);
-            Assert.AreEqual(754.37393, (decimal)peakList[1095].MSPeak.MZ);
-            Assert.AreEqual(3266908, (decimal)peakList[1095].MSPeak.Intensity);
-            Assert.AreEqual(0.01484067, (decimal)peakList[1095].MSPeak.FWHM);
+            Assert.AreEqual(754.37393, (decimal)peakList[1095].MSPeak.XValue);
+            Assert.AreEqual(3266908, (decimal)peakList[1095].MSPeak.Height);
+            Assert.AreEqual(0.01484067, (decimal)peakList[1095].MSPeak.Width);
 
 
             Assert.AreEqual(4088, peakList.Count);
@@ -51,9 +51,9 @@ namespace DeconTools.UnitTesting
 
             Assert.AreEqual(1096, peakList[1095].PeakID);
             Assert.AreEqual(6005, peakList[1095].Scan_num);
-            Assert.AreEqual(754.37393, (decimal)peakList[1095].MSPeak.MZ);
-            Assert.AreEqual(3266908,(decimal)peakList[1095].MSPeak.Intensity);
-            Assert.AreEqual(0.0148,(decimal) peakList[1095].MSPeak.FWHM);
+            Assert.AreEqual(754.37393, (decimal)peakList[1095].MSPeak.XValue);
+            Assert.AreEqual(3266908,(decimal)peakList[1095].MSPeak.Height);
+            Assert.AreEqual(0.0148,(decimal) peakList[1095].MSPeak.Width);
             Assert.AreEqual(32.92,(decimal) peakList[1095].MSPeak.SN);
 
 
@@ -77,13 +77,13 @@ namespace DeconTools.UnitTesting
             sw.Reset();
             Assert.AreEqual(4852790, peakList.Count);
             sw.Start();
-            List<MSPeakResult>testList= peakList.Where(p => p.MSPeak.MZ > 700.01 && p.MSPeak.MZ < 700.03).ToList();
+            List<MSPeakResult>testList= peakList.Where(p => p.MSPeak.XValue > 700.01 && p.MSPeak.XValue < 700.03).ToList();
             sw.Stop();
 
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
             sw.Reset();
             sw.Start();
-            List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.MZ > 891.01 && p.MSPeak.MZ < 891.03).ToList();
+            List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.XValue > 891.01 && p.MSPeak.XValue < 891.03).ToList();
             sw.Stop();
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
 
@@ -107,12 +107,12 @@ namespace DeconTools.UnitTesting
             sw.Reset();
             Assert.AreEqual(4852790, peakList.Count);
             sw.Start();
-            List<MSPeakResult> testList = peakList.Where(p => p.MSPeak.MZ > 700.01 && p.MSPeak.MZ < 700.03).ToList();
+            List<MSPeakResult> testList = peakList.Where(p => p.MSPeak.XValue > 700.01 && p.MSPeak.XValue < 700.03).ToList();
             sw.Stop();
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
             sw.Reset();
             sw.Start();
-            List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.MZ > 891.01 && p.MSPeak.MZ < 891.03).ToList();
+            List<MSPeakResult> testList2 = peakList.Where(p => p.MSPeak.XValue > 891.01 && p.MSPeak.XValue < 891.03).ToList();
             sw.Stop();
             Console.WriteLine("test chrom time = " + sw.ElapsedMilliseconds);
 
@@ -132,7 +132,7 @@ namespace DeconTools.UnitTesting
             {
                 sb.Append(peak.Scan_num);
                 sb.Append("\t");
-                sb.Append(peak.MSPeak.Intensity);
+                sb.Append(peak.MSPeak.Height);
                 sb.Append(Environment.NewLine);
 
                 

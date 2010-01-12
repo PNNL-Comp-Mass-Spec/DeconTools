@@ -68,7 +68,16 @@ namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
 
         }
 
+        public void test3()
+        {
 
+            Peptide testPeptide = new Peptide("TTPSIIAYTDDETIVGQPAKRTTPSIIAYTDDETIVGQPAKRTTPSIIAYTDDETIVGQPAKR");
+            IsotopicProfile cluster = TomIsotopicPattern.GetIsotopePattern(testPeptide.GetEmpiricalFormulaIntArray(), TomIsotopicPattern.aafIsos);
+
+            Console.WriteLine(testPeptide.MonoIsotopicMass);
+            TestUtilities.DisplayIsotopicProfileData(cluster);
+
+        }
 
     }
 }

@@ -33,14 +33,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
 
             peakdetector.Execute(run.ResultCollection);
 
-            Console.WriteLine("Peaks detected = " + run.MSPeakList.Count);
+            Console.WriteLine("Peaks detected = " + run.PeakList.Count);
 
             TomN14N15Analyzer analyzer = new TomN14N15Analyzer();
             analyzer.ExtractN14N15Values(run.ResultCollection);
             
-            Console.WriteLine("Peaks detected = " + run.MSPeakList.Count);
+            Console.WriteLine("Peaks detected = " + run.PeakList.Count);
 
-            Assert.AreEqual(14, run.MSPeakList.Count);
+            Assert.AreEqual(14, run.PeakList.Count);
 
 
         }
@@ -60,12 +60,12 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
             Task peakdetector = new DeconToolsPeakDetector();
             peakdetector.Execute(run.ResultCollection);
 
-            Console.WriteLine("Peaks detected = " + run.MSPeakList.Count);
+            Console.WriteLine("Peaks detected = " + run.PeakList.Count);
 
             TomN14N15Analyzer analyzer = new TomN14N15Analyzer();
             analyzer.ExtractN14N15Values(run.ResultCollection);
 
-            Console.WriteLine("Peaks detected = " + run.MSPeakList.Count);
+            Console.WriteLine("Peaks detected = " + run.PeakList.Count);
 
         }
     }
