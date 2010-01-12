@@ -101,7 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
                 if (addedResult.IsotopicProfile.ChargeState == result.IsotopicProfile.ChargeState
-                    && addedMonoPeak.MZ == baseMonoPeak.MZ)
+                    && addedMonoPeak.XValue == baseMonoPeak.XValue)
                 {
                     return true;   //found a match
                 }

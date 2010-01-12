@@ -89,8 +89,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                         scanNumParam.Value = item.ScanSet.PrimaryScanNumber;
                         scanTimeParam.Value = item.ScanTime;
                         typeParam.Value = item.SpectrumType;
-                        bpiParam.Value = item.BasePeak.Intensity;
-                        bpiMZParam.Value = item.BasePeak.MZ;
+                        bpiParam.Value = item.BasePeak.Height;
+                        bpiMZParam.Value = item.BasePeak.XValue;
                         ticParam.Value = item.TICValue;
                         num_peaksParam.Value = item.NumPeaks;
                         num_deisotopedParam.Value = item.NumIsotopicProfiles;

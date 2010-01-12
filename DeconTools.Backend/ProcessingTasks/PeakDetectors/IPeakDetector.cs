@@ -14,21 +14,24 @@ namespace DeconTools.Backend.ProcessingTasks
 
         protected abstract void addDataToScanResult(ResultCollection resultList, ScanResult scanresult);
 
-        protected MSPeak getBasePeak(List<MSPeak> peakList)
+        protected MSPeak getBasePeak(List<IPeak> peakList)
         {
             if (peakList == null || peakList.Count == 0) return new MSPeak();
 
-            MSPeak maxPeak=new MSPeak();
+            IPeak maxPeak;
+            if (!(peakList[0] is MSPeak)) return null;
+            maxPeak = peakList[0];
+          
 
-            foreach (MSPeak peak in peakList)
+            foreach (IPeak peak in peakList)
             {
-                if (peak.Intensity >= maxPeak.Intensity)
+                if (peak.Height >= maxPeak.Height)
                 {
                     maxPeak = peak;
                 }
                
             }
-            return maxPeak;
+            return (MSPeak)maxPeak;
 
         }
 

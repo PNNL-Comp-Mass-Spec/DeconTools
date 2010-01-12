@@ -47,7 +47,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             //double mzLowerLimit = (mz-ppmTol*
 
-            List<MSPeakResult> filteredPeakList = resultList.MSPeakResultList.Where(p => p.MSPeak.MZ >= lowerMZ && p.MSPeak.MZ <= upperMZ).ToList();
+            List<MSPeakResult> filteredPeakList = resultList.MSPeakResultList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
             IMassTagResult result = new N14N15_TResult();        // TODO: fix this later.  Need to use a factory to create the IMassTagResult. 
             result.MassTag = resultList.Run.CurrentMassTag;
@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks
             for (int i = 0; i < filteredPeakList.Count; i++)
             {
                 data.Xvalues[i] = filteredPeakList[i].Scan_num;
-                data.Yvalues[i] = filteredPeakList[i].MSPeak.Intensity;
+                data.Yvalues[i] = filteredPeakList[i].MSPeak.Height;
                 
             }
 

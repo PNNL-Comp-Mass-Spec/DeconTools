@@ -93,8 +93,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                         frameNumParam.Value = ((UIMFScanResult)item).Frameset.PrimaryFrame;
                         frameTimeParam.Value = ((UIMFScanResult)item).ScanTime;
                         typeParam.Value = item.SpectrumType;
-                        bpiParam.Value = item.BasePeak.Intensity;
-                        bpiMZParam.Value = item.BasePeak.MZ;
+                        bpiParam.Value = item.BasePeak.Height;
+                        bpiMZParam.Value = item.BasePeak.XValue;
                         ticParam.Value = item.TICValue;
                         num_peaksParam.Value = item.NumPeaks;
                         num_deisotopedParam.Value = item.NumIsotopicProfiles;

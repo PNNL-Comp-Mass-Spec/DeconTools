@@ -50,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #region Public Methods
         public override void FindPeaks(DeconTools.Backend.Core.ResultCollection resultList)
         {
-            resultList.Run.MSPeakList = new List<MSPeak>();
+            resultList.Run.PeakList = new List<IPeak>();
 
             oldPeakParameters.PeakBackgroundRatio = this.peakBackgroundRatio;
             oldPeakParameters.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
@@ -79,13 +79,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             foreach (DeconToolsV2.Peaks.clsPeak peak in deconEnginePeaklist)
             {
-                MSPeak chromPeak = new MSPeak();      //TODO:   refactor this.  Need create abstract Peak and inherit from this.
-                chromPeak.MZ = peak.mdbl_mz;          // here,  mz is actually the scan / or NET 
-                chromPeak.Intensity =(float)peak.mdbl_intensity;     
-                chromPeak.SN = (float)peak.mdbl_SN;     
-                chromPeak.FWHM = (float)peak.mdbl_FWHM;    
+                ChromPeak chromPeak = new ChromPeak();      
+                chromPeak.XValue = peak.mdbl_mz;          // here,  mz is actually the scan / or NET 
+                chromPeak.Height =(float)peak.mdbl_intensity;     
+                chromPeak.SigNoise = (float)peak.mdbl_SN;     
+                chromPeak.Width = (float)peak.mdbl_FWHM;
 
-                resultList.Run.MSPeakList.Add(chromPeak);
+                chromPeak.NETValue = resultList.Run.GetNETValueForScan((int)chromPeak.XValue);
+
+
+                resultList.Run.PeakList.Add(chromPeak);
                 
             }
 

@@ -121,9 +121,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     {
                         peakIDParam.Value = resultList.MSPeakResultList[n].PeakID;
                         scanIDParam.Value = resultList.MSPeakResultList[n].Scan_num;
-                        mzParam.Value = resultList.MSPeakResultList[n].MSPeak.MZ.ToString("#.#####");
-                        intensParam.Value = resultList.MSPeakResultList[n].MSPeak.Intensity;
-                        fwhmParam.Value = resultList.MSPeakResultList[n].MSPeak.FWHM;
+                        mzParam.Value = resultList.MSPeakResultList[n].MSPeak.XValue.ToString("#.#####");
+                        intensParam.Value = resultList.MSPeakResultList[n].MSPeak.Height;
+                        fwhmParam.Value = resultList.MSPeakResultList[n].MSPeak.Width;
 
                         mycommand.ExecuteNonQuery();
                     }

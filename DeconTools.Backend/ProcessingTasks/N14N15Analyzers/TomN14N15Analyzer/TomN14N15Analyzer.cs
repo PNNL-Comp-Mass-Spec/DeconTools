@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             double matchTol = 0.03f; // match tolerance
             double fCutOff = 0.01f; // template minimum peak intensity
 
-            List<MSPeak> peakList = resultList.Run.MSPeakList;
+            List<IPeak> peakList = resultList.Run.PeakList;
             InitTemplateHash();
 
             RemovePeaksWithinTol(peakList, matchTol);
@@ -115,7 +115,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             Console.Write(sb.ToString());
         }
 
-        private List<TemplateMatch> GetScoreList(List<MSPeak> peakList, List<TemplateMatch> templateList, bool bLabel)
+        private List<TemplateMatch> GetScoreList(List<IPeak> peakList, List<TemplateMatch> templateList, bool bLabel)
         {
             List<TemplateMatch> scoreList = new List<TemplateMatch>();
             for (int ii = 0; ii < templateList.Count; ii++)
@@ -130,7 +130,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             return scoreList;
         }
 
-        private void ScoreAndMatchTemplate(TemplateMatch TM, List<MSPeak> peakList)
+        private void ScoreAndMatchTemplate(TemplateMatch TM, List<IPeak> peakList)
         {
             // iOffset is where to start in afPeaklist, corresponding to template start m/z
             // (we'll have to shift the template up and down as well!)
@@ -139,13 +139,13 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                 int iOffset = TM.iPos;
                 IsotopicProfile afTemplate = TM.isoPattern;
                 double fScore = 0.0f, fScoreIncr;
-                MSPeak afCurrPeak, myTemplatePeak, myMZPeak;
+                IPeak afCurrPeak, myTemplatePeak, myMZPeak;
                 // we set the maximum peak of the template to this intensity
 
                 myMZPeak = peakList[iOffset];
                 myTemplatePeak = afTemplate.Peaklist[0];
 
-                double fBasePeakInten = myMZPeak.Intensity; // all peaks are relative to this
+                double fBasePeakInten = myMZPeak.Height; // all peaks are relative to this
 
                 // go through both lists side by side; return SD for each peak
 
@@ -168,14 +168,14 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
 
                     for (int kk = iLastPeakMatch; kk < peakList.Count; kk++)
                     {
-                        if (!IsWithinTolPPM(afCurrPeak.MZ, myTemplatePeak.MZ)
-                            && myTemplatePeak.MZ < afCurrPeak.MZ) break;
+                        if (!IsWithinTolPPM(afCurrPeak.XValue, myTemplatePeak.XValue)
+                            && myTemplatePeak.XValue < afCurrPeak.XValue) break;
                         afCurrPeak = peakList[kk];
                         // ; kk++)
 
                         // Now this is a subtle bug: what happens if more than 1 peak matches within tolerance?
                         // We want to pick the biggest one only of course...
-                        if (IsWithinTolPPM(myTemplatePeak.MZ, afCurrPeak.MZ))
+                        if (IsWithinTolPPM(myTemplatePeak.XValue, afCurrPeak.XValue))
                         {
                             bPeakFound = true; // a hit
 
@@ -184,7 +184,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                             //	fScoreIncr = afCurrPeak.Intensity*afCurrPeak.fInUse;
                             //else
                             //	fScoreIncr = myTemplatePeak.Intensity*fBasePeakInten;
-                            fScoreIncr = myTemplatePeak.Intensity * afCurrPeak.Intensity; //* afCurrPeak.fInUse; // like xcorr
+                            fScoreIncr = myTemplatePeak.Height * afCurrPeak.Height; //* afCurrPeak.fInUse; // like xcorr
                             if (b_prevent_overlapping_templates)// && afCurrPeak.fInUse < 0.5)
                                 b_forced_zero_score = true;
                             //if (myTemplatePeak.aiMatchesPeaks.Contains(kk) == false)
@@ -196,8 +196,8 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                             }
                             aiCorrespondingPeaks[jj] = kk; // not sure if this'll work, 5/9/08
                             fScore += fScoreIncr;
-                            fTxSquared += myTemplatePeak.Intensity * myTemplatePeak.Intensity;
-                            fRxSquared += afCurrPeak.Intensity * afCurrPeak.Intensity;
+                            fTxSquared += myTemplatePeak.Height * myTemplatePeak.Height;
+                            fRxSquared += afCurrPeak.Height * afCurrPeak.Height;
 
                         }
                         iLastPeakMatch++;
@@ -226,16 +226,16 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             }
         }
 
-        private void RemovePeaksWithinTol(List<MSPeak> peakList, double tolerance)
+        private void RemovePeaksWithinTol(List<IPeak> peakList, double tolerance)
         {
             if (peakList == null || peakList.Count < 2) return;
 
             for (int i = peakList.Count - 2; i >= 0; i--)     //counting backwards avoids indexing exceptions when peaks are removed
             {
-                if (peakList[i + 1].MZ - peakList[i].MZ < tolerance)
+                if (peakList[i + 1].XValue - peakList[i].XValue < tolerance)
                 {
 
-                    if (peakList[i].Intensity < peakList[i + 1].Intensity)
+                    if (peakList[i].Height < peakList[i + 1].Height)
                     {
                         peakList.RemoveAt(i);
                     }
@@ -268,7 +268,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
         }
 
 
-        private List<TemplateMatch> Make14N15NTemplateList(List<MSPeak> afPeakList, double fCutOff)
+        private List<TemplateMatch> Make14N15NTemplateList(List<IPeak> afPeakList, double fCutOff)
         {
             // this function will take in a top-scoring template then try to match a peak
             // in mass away from it with a 15N peak
@@ -287,20 +287,20 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             // get scorelist
             for (int ii = 0; ii < afPeakList.Count; ii++)// ii < 2; ii++)//
             {
-                MSPeak myLightMZPeak = afPeakList[ii];
-                double iMinMZDiff = myLightMZPeak.MZ * TomIsotopicPattern.fNPerThLow;
-                double iMaxMZDiff = myLightMZPeak.MZ * TomIsotopicPattern.fNPerThHigh;
+                IPeak myLightMZPeak = afPeakList[ii];
+                double iMinMZDiff = myLightMZPeak.XValue * TomIsotopicPattern.fNPerThLow;
+                double iMaxMZDiff = myLightMZPeak.XValue * TomIsotopicPattern.fNPerThHigh;
                 for (int chargeIterator = iStartCharge; chargeIterator <= iMaxCharge; chargeIterator++)
                 // loop over peaks and charge states...
                 {
                     // Check that there aren't any previous N14 isotope peaks if this flag is set
                     if (b_enforce_N14_peak_has_no_iso_preceding && peakListContainsNearbyIsotopePeak(
-                        myLightMZPeak.MZ, chargeIterator, ii, afPeakList, true, false))
+                        myLightMZPeak.XValue, chargeIterator, ii, afPeakList, true, false))
                         continue; // go to next peak, this one's bad
 
                     if (b_enforce_no_diff_charge_iso_peaks
                         && PeakListContainsNearbyDiffChargeIsotopePeak(
-                        myLightMZPeak.MZ, chargeIterator, iMaxCharge, ii, afPeakList))
+                        myLightMZPeak.XValue, chargeIterator, iMaxCharge, ii, afPeakList))
                     {
                         //Console.WriteLine("b_enforce_no_diff_charge_iso_peaks triggered 1");
                         //myLightTomMZPeak.Print();
@@ -310,8 +310,8 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                     for (int jj = ii + 1; jj < afPeakList.Count; jj++)
                     // this is the delta-N loop
                     {
-                        MSPeak myHeavyMZPeak = afPeakList[jj];
-                        double fDiffHere = myHeavyMZPeak.MZ - myLightMZPeak.MZ;
+                        IPeak myHeavyMZPeak = afPeakList[jj];
+                        double fDiffHere = myHeavyMZPeak.XValue - myLightMZPeak.XValue;
 
                         if (iMaxMZDiff < fDiffHere) break;
                         if (fDiffHere < iMinMZDiff) continue;
@@ -319,7 +319,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                         if (b_enforce_no_diff_charge_iso_peaks) // check this flag
                         {
                             if (PeakListContainsNearbyDiffChargeIsotopePeak(
-                                myHeavyMZPeak.MZ, chargeIterator, iMaxCharge, jj, afPeakList))
+                                myHeavyMZPeak.XValue, chargeIterator, iMaxCharge, jj, afPeakList))
                             {
                                 //Console.WriteLine("b_enforce_no_diff_charge_iso_peaks triggered 2");
                                 //myHeavyTomMZPeak.Print();
@@ -330,37 +330,37 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                         if (b_N14_template_must_have_nearby_iso)
                         {
                             if (!peakListContainsNearbyIsotopePeak
-                                (myLightMZPeak.MZ, chargeIterator, ii, afPeakList, true, true))
+                                (myLightMZPeak.XValue, chargeIterator, ii, afPeakList, true, true))
                                 continue;
                         }
                         if (b_N15_template_must_have_nearby_iso)
                         {
                             if (!peakListContainsNearbyIsotopePeak
-                                (myHeavyMZPeak.MZ, chargeIterator, jj, afPeakList, true, true))
+                                (myHeavyMZPeak.XValue, chargeIterator, jj, afPeakList, true, true))
                                 continue;
                         }
                         if (b_N14orN15_template_must_have_nearby_iso)
                         {
                             if (!peakListContainsNearbyIsotopePeak(
-                                myLightMZPeak.MZ, chargeIterator, ii, afPeakList, true, true)
+                                myLightMZPeak.XValue, chargeIterator, ii, afPeakList, true, true)
                                 && !peakListContainsNearbyIsotopePeak(
-                                myHeavyMZPeak.MZ, chargeIterator, jj, afPeakList, true, true))
+                                myHeavyMZPeak.XValue, chargeIterator, jj, afPeakList, true, true))
                                 continue;
                         }
 
                         int deltaN = (int)Math.Round(fDiffHere * chargeIterator / dMassNitrogen);
                         if (deltaN < 1) Console.WriteLine("15N prediction catastrophe");
 
-                        double predictedN15MZ = deltaN * dMassNitrogen / chargeIterator + myLightMZPeak.MZ;
-                        if (IsWithinTolPPM(predictedN15MZ, myHeavyMZPeak.MZ))
+                        double predictedN15MZ = deltaN * dMassNitrogen / chargeIterator + myLightMZPeak.XValue;
+                        if (IsWithinTolPPM(predictedN15MZ, myHeavyMZPeak.XValue))
                         // we found a next peak
                         {
 
 
-                            double fIntensityRatio = myHeavyMZPeak.Intensity / myLightMZPeak.Intensity;
+                            double fIntensityRatio = myHeavyMZPeak.Height / myLightMZPeak.Height;
 
                             TemplateMatch TM = Make14N15NTemplate(
-                                myLightMZPeak.MZ, myHeavyMZPeak.MZ, chargeIterator, ii, jj,
+                                myLightMZPeak.XValue, myHeavyMZPeak.XValue, chargeIterator, ii, jj,
                                 deltaN, fIntensityRatio, fCutOff);
                             atmTemplateList.Add(TM);
                         }
@@ -395,7 +395,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
 
 
         private bool PeakListContainsNearbyDiffChargeIsotopePeak(double fMonoMZ,
-            int iClaimedCharge, int iMaxCharge, int iPos, List<MSPeak> peaklist)
+            int iClaimedCharge, int iMaxCharge, int iPos, List<IPeak> peaklist)
         //returns true if the peaklist contains the C13 peak 
         // at any different charge states, so you don't pick up a 3+ as a 1+ or a 2+ as a 1+
         // tricky thing: if it's a 2+ ion, you'd pick up a "1+" ion as well
@@ -448,7 +448,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
 
 
         private bool peakListContainsNearbyIsotopePeak(double fMonoMZ,
-    int iCharge, int iPos, List<MSPeak> peakList, bool bLookDown, bool bLookUp)
+    int iCharge, int iPos, List<IPeak> peakList, bool bLookDown, bool bLookUp)
         // this returns true if the peaklist contains the peak you'd expect at the charge state as C13
         // bBothDirections set to true means you look up and down the mz, false means up only
         {
@@ -457,25 +457,25 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             double fNextLowestMZ = fMonoMZ - TomIsotopicPattern.fAveMassDefect / iCharge;
             for (int jj = iPos + 1; bLookUp && jj < peakList.Count; jj++)
             {
-                MSPeak myNextMZ = peakList[jj];
+                IPeak myNextMZ = peakList[jj];
                 //if (myNextMZ.fInUse < 0.5f) continue; // peak shouldn't count! // yes it should :P
-                if (IsWithinTolPPM(fNextHighestMZ, myNextMZ.MZ))
+                if (IsWithinTolPPM(fNextHighestMZ, myNextMZ.XValue))
                 {
                     bRet = true;
                     break;
                 }
-                else if (fNextHighestMZ < myNextMZ.MZ) break;
+                else if (fNextHighestMZ < myNextMZ.XValue) break;
             }
             for (int jj = iPos - 1; bLookDown && jj >= 0; jj--)
             {
-                MSPeak myNextMZ = peakList[jj];
+                IPeak myNextMZ = peakList[jj];
                 //if (myNextMZ.fInUse < 0.5f) continue; // peak shouldn't count!
-                if (IsWithinTolPPM(fNextLowestMZ, myNextMZ.MZ))
+                if (IsWithinTolPPM(fNextLowestMZ, myNextMZ.XValue))
                 {
                     bRet = true;
                     break;
                 }
-                else if (myNextMZ.MZ < fNextLowestMZ) break;
+                else if (myNextMZ.XValue < fNextLowestMZ) break;
             }
             return bRet;
         }
@@ -564,7 +564,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                 MSPeak myTemplatePeak = mzIsoPattern.Peaklist[ii];
                 int iTemplatePos = ii - iMonoPosition; // here's our offset
                 fTmpMZ = fStartMZ + (TomIsotopicPattern.fAveMassDefect * iTemplatePos) / iCharge;
-                myTemplatePeak.MZ = fTmpMZ;
+                myTemplatePeak.XValue = fTmpMZ;
             }
 
             //[gord] I think I might have messed this up...  
@@ -619,7 +619,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             {
                 if (foundMostIntensePeak)
                 {
-                    if (mzIsoPattern.Peaklist[i].Intensity > fCutoff)
+                    if (mzIsoPattern.Peaklist[i].Height > fCutoff)
                     {
                         amzNewTemplate.Peaklist.Add(mzIsoPattern.Peaklist[i]);
                     }
@@ -633,7 +633,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
                 {
                     amzNewTemplate.Peaklist.Add(mzIsoPattern.Peaklist[i]);
                 }
-                if (mzIsoPattern.Peaklist[i].Intensity == mostIntensePeak.Intensity) foundMostIntensePeak = true;
+                if (mzIsoPattern.Peaklist[i].Height == mostIntensePeak.Height) foundMostIntensePeak = true;
                
             }
             
@@ -652,7 +652,7 @@ namespace DeconTools.Backend.ProcessingTasks.N14N15Analyzers.TomN14N15Analyzer
             double totalIntensity = 0.0f;
             foreach (MSPeak peak in peakList)
             {
-                totalIntensity += peak.Intensity;
+                totalIntensity += peak.Height;
             }
             return totalIntensity;
         }

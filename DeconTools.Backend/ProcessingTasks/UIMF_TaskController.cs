@@ -128,7 +128,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             int numScansBetweenProgress = getNumScansBetweenProgress(this.TaskCollection);
 
-            if (scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
+            if (run.ScanSetCollection.GetLastScanSet()==scanset.PrimaryScanNumber|| scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
             {
                 if (backgroundWorker != null)
                 {
@@ -136,9 +136,26 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
                 else
                 {
+
                     Console.WriteLine("Completed processing on frame " + frameset.PrimaryFrame + " Scan " + scanset.PrimaryScanNumber + "; Isotopic Profiles = " +scanset.NumIsotopicProfiles);
                 }
             }
+        }
+
+        protected override int getNumScansBetweenProgress(TaskCollection taskCollection)
+        {
+            int numScansBetweenProgress;
+
+
+            if (taskCollectionContainsRapidDeconvolutor(taskCollection))
+            {
+                numScansBetweenProgress = 100;
+            }
+            else
+            {
+                numScansBetweenProgress = 10;
+            }
+            return numScansBetweenProgress;
         }
 
         private void reportProgress(FrameSet frameset, Run run)

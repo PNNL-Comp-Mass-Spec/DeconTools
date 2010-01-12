@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 double summedIntensity = 0;
                 foreach (MSPeak peak in result.IsotopicProfile.Peaklist)
                 {
-                    int indexOfMZ = result.Run.XYData.GetClosestXVal(peak.MZ);
+                    int indexOfMZ = result.Run.XYData.GetClosestXVal(peak.XValue);
                     if (indexOfMZ >= 0)
                     {
                         summedIntensity += result.Run.XYData.Yvalues[indexOfMZ];

@@ -140,16 +140,16 @@ namespace DeconTools.Backend.ProcessingTasks
                 profile.IntensityAggregate = intensityResults[i];
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
-                monoPeak.MZ = ConvertMassToMZ(massResults[i], profile.ChargeState);
+                monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
 
 
-                GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.MZ, ref profile);
+                GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.XValue, ref profile);
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
                 {
                     //So first check and see if it is the most abundant peak (mzResults returns the mz for the most abundant peak); get the m/z from there  (This m/z matches with DeconTools peaklist m/z values)
-                    if (Math.Abs(monoPeak.MZ - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
+                    if (Math.Abs(monoPeak.XValue - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
                     {
-                        monoPeak.MZ = mzResults[i];
+                        monoPeak.XValue = mzResults[i];
                         profile.Peaklist = new List<MSPeak>();
                         profile.Peaklist.Add(monoPeak);
                     }
@@ -194,16 +194,16 @@ namespace DeconTools.Backend.ProcessingTasks
                 profile.IntensityAggregate = 100;
                 profile.Score = 40;
                 MSPeak monoPeak = new MSPeak();
-                monoPeak.MZ = 555;
+                monoPeak.XValue = 555;
 
 
                 //GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.MZ, ref profile);
                 if (profile.Peaklist.Count == 9999999)    // couldn't find original monoIsotopicPeak in the peaklist
                 {
                     //So first check and see if it is the most abundant peak (mzResults returns the mz for the most abundant peak); get the m/z from there  (This m/z matches with DeconTools peaklist m/z values)
-                    if (Math.Abs(monoPeak.MZ - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
+                    if (Math.Abs(monoPeak.XValue - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
                     {
-                        monoPeak.MZ = mzResults[i];
+                        monoPeak.XValue = mzResults[i];
                         profile.Peaklist = new List<MSPeak>();
                         profile.Peaklist.Add(monoPeak);
                     }
@@ -247,16 +247,16 @@ namespace DeconTools.Backend.ProcessingTasks
                 profile.IntensityAggregate = intensityResults[i];
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
-                monoPeak.MZ = ConvertMassToMZ(massResults[i], profile.ChargeState);
+                monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
 
 
-                GetIsotopicProfilePeaks(peaklist, profile.ChargeState, monoPeak.MZ, ref profile);
+                GetIsotopicProfilePeaks(peaklist, profile.ChargeState, monoPeak.XValue, ref profile);
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
                 {
                     //So first check and see if it is the most abundant peak (mzResults returns the mz for the most abundant peak); get the m/z from there  (This m/z matches with DeconTools peaklist m/z values)
-                    if (Math.Abs(monoPeak.MZ - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
+                    if (Math.Abs(monoPeak.XValue - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
                     {
-                        monoPeak.MZ = mzResults[i];
+                        monoPeak.XValue = mzResults[i];
                         profile.Peaklist = new List<MSPeak>();
                         profile.Peaklist.Add(monoPeak);
                     }
@@ -310,10 +310,10 @@ namespace DeconTools.Backend.ProcessingTasks
         {
 
             MSPeak peak = new MSPeak();
-            peak.MZ = monoPeak.mdbl_mz;
-            peak.FWHM = (float)monoPeak.mdbl_FWHM;
+            peak.XValue = monoPeak.mdbl_mz;
+            peak.Width = (float)monoPeak.mdbl_FWHM;
             peak.SN = (float)monoPeak.mdbl_SN;
-            peak.Intensity = (int)monoPeak.mdbl_intensity;
+            peak.Height = (int)monoPeak.mdbl_intensity;
 
             return peak;
         }

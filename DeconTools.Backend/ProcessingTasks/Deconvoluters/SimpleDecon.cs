@@ -32,12 +32,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         {
             Task test = Project.getInstance().TaskCollection.GetTask(typeof(I_MSGenerator));
 
-            List<MSPeak> localPeaklist = new List<MSPeak>(resultList.Run.MSPeakList);
+            List<IPeak> localPeaklist = new List<IPeak>(resultList.Run.PeakList);
 
             while (localPeaklist.Count > 0)
             {
-                MSPeak currentPeak = findMostIntensePeak(localPeaklist);
-                MSPeak plusOnePeak = findPlusOnePeak(currentPeak.MZ + 1.003, localPeaklist, this.mzVar);
+                IPeak currentPeak = findMostIntensePeak(localPeaklist);
+                IPeak plusOnePeak = findPlusOnePeak(currentPeak.XValue + 1.003, localPeaklist, this.mzVar);
 
                 bool foundPlusOnePeak = (plusOnePeak != null);
 
@@ -83,11 +83,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
                 IsosResult result = resultList.CreateIsosResult();
                 result.IsotopicProfile = new IsotopicProfile();
-                result.IsotopicProfile.Peaklist.Add(currentPeak);
-                result.IsotopicProfile.IntensityAggregate = currentPeak.Intensity;
+                result.IsotopicProfile.Peaklist.Add((MSPeak)currentPeak);
+                result.IsotopicProfile.IntensityAggregate = currentPeak.Height;
                 result.IsotopicProfile.ChargeState = 1;
                 result.IsotopicProfile.AverageMass = 0;   //not calculating this...
-                result.IsotopicProfile.MonoIsotopicMass = currentPeak.MZ - 1.00727649;   //  -proton mass 
+                result.IsotopicProfile.MonoIsotopicMass = currentPeak.XValue - 1.00727649;   //  -proton mass 
                 result.IsotopicProfile.MostAbundantIsotopeMass = result.IsotopicProfile.MonoIsotopicMass;
                 result.IsotopicProfile.Score = 0;     //Score of '0' means the algorithm found only one peak.
 
@@ -99,12 +99,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             }
         }
 
-        private MSPeak findPlusOnePeak(double targetMZ, List<MSPeak> localPeaklist, double mzVar)
+        private IPeak findPlusOnePeak(double targetMZ, List<IPeak> localPeaklist, double mzVar)
         {
-            MSPeak plusOnePeak = null;
+            IPeak plusOnePeak = null;
             for (int i = 0; i < localPeaklist.Count; i++)
             {
-                bool isPeakWithinMZVar = (Math.Abs(localPeaklist[i].MZ - targetMZ) <= mzVar);
+                bool isPeakWithinMZVar = (Math.Abs(localPeaklist[i].XValue - targetMZ) <= mzVar);
                 if (isPeakWithinMZVar)
                 {
                     if (plusOnePeak == null)
@@ -113,8 +113,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     }
                     else      //if there is another peak at +1 (rare occurance), pick the one closest to the target mz
                     {
-                        double mzdiffCurrentPeak = Math.Abs(localPeaklist[i].MZ - targetMZ);
-                        double mzdiffBestPlusOnePeak = Math.Abs(plusOnePeak.MZ - targetMZ);
+                        double mzdiffCurrentPeak = Math.Abs(localPeaklist[i].XValue - targetMZ);
+                        double mzdiffBestPlusOnePeak = Math.Abs(plusOnePeak.XValue - targetMZ);
 
                         
                         bool isPeakMZCloser = (mzdiffCurrentPeak < mzdiffBestPlusOnePeak);
@@ -133,15 +133,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         }
 
-        private MSPeak findMostIntensePeak(List<MSPeak> localPeaklist)
+        private IPeak findMostIntensePeak(List<IPeak> localPeaklist)
         {
-            MSPeak mostIntensePeak = new MSPeak();
+            IPeak mostIntensePeak = new MSPeak();
 
             for (int i = 0; i < localPeaklist.Count; i++)
             {
-                if (localPeaklist[i].Intensity > mostIntensePeak.Intensity)
+                if (localPeaklist[i].Height > mostIntensePeak.Height)
                 {
-                    mostIntensePeak = localPeaklist[i];
+                    mostIntensePeak = (MSPeak)localPeaklist[i];
                 }
 
             }

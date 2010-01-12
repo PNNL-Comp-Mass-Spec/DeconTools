@@ -145,17 +145,17 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private List<DeconTools.Backend.Core.MSPeak> ConvertDeconEnginePeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
+        private List<DeconTools.Backend.Core.IPeak> ConvertDeconEnginePeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
         {
-            List<MSPeak> returnedList = new List<MSPeak>();
+            List<IPeak> returnedList = new List<IPeak>();
 
             for (int i = 0; i < peaklist.Length; i++)
             {
                 MSPeak peak = new MSPeak();
-                peak.MZ = peaklist[i].mdbl_mz;
-                peak.Intensity = (int)peaklist[i].mdbl_intensity;
+                peak.XValue = peaklist[i].mdbl_mz;
+                peak.Height = (int)peaklist[i].mdbl_intensity;
                 peak.SN = (float)peaklist[i].mdbl_SN;
-                peak.FWHM = (float)peaklist[i].mdbl_FWHM;
+                peak.Width = (float)peaklist[i].mdbl_FWHM;
 
                 returnedList.Add(peak);
 
@@ -197,15 +197,15 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             resultList.Run.CurrentScanSet.BackgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
-            resultList.Run.MSPeakList = ConvertDeconEnginePeakList(peaklist);    // peak data is stored here on a per scan basis (cleared after each task execution)
+            resultList.Run.PeakList = ConvertDeconEnginePeakList(peaklist);    // peak data is stored here on a per scan basis (cleared after each task execution)
 
             if (this.StorePeakData)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
             {
                 resultList.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
             }
 
-            resultList.Run.CurrentScanSet.NumPeaks = resultList.Run.MSPeakList.Count;    //used in ScanResult
-            resultList.Run.CurrentScanSet.BasePeak = getBasePeak(resultList.Run.MSPeakList);     //Used in ScanResult
+            resultList.Run.CurrentScanSet.NumPeaks = resultList.Run.PeakList.Count;    //used in ScanResult
+            resultList.Run.CurrentScanSet.BasePeak = getBasePeak(resultList.Run.PeakList);     //Used in ScanResult
 
             resultList.Run.DeconToolsPeakList = peaklist;
 

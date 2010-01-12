@@ -79,9 +79,9 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
             sb.Append(delimiter);
             sb.Append(scanresult.SpectrumType);
             sb.Append(delimiter);
-            sb.Append(scanresult.BasePeak.Intensity);
+            sb.Append(scanresult.BasePeak.Height);
             sb.Append(delimiter);
-            sb.Append(scanresult.BasePeak.MZ.ToString("0.#####"));
+            sb.Append(scanresult.BasePeak.XValue.ToString("0.#####"));
             sb.Append(delimiter);
             sb.Append(scanresult.ScanSet.TICValue);
             sb.Append(delimiter);

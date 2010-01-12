@@ -456,7 +456,7 @@ namespace DeconTools.Backend.ProcessingTasks
             List<float> peakListIntensities = new List<float>();
             foreach (MSPeak peak in profile.Peaklist)
             {
-                peakListIntensities.Add(peak.Intensity);
+                peakListIntensities.Add(peak.Height);
                 
             }
             peakListIntensities.Sort();
@@ -528,10 +528,10 @@ namespace DeconTools.Backend.ProcessingTasks
         {
 
             MSPeak peak = new MSPeak();
-            peak.MZ = deconPeak.mdbl_mz;
-            peak.FWHM = (float)deconPeak.mdbl_FWHM;
+            peak.XValue = deconPeak.mdbl_mz;
+            peak.Width = (float)deconPeak.mdbl_FWHM;
             peak.SN = (float)deconPeak.mdbl_SN;
-            peak.Intensity = (int)deconPeak.mdbl_intensity;
+            peak.Height = (int)deconPeak.mdbl_intensity;
 
             return peak;
         }

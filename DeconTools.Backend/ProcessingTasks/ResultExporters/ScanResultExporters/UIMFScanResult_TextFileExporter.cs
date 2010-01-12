@@ -52,9 +52,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(delimiter);
             sb.Append(result.SpectrumType);
             sb.Append(delimiter);
-            sb.Append(uimfScanResult.BasePeak.Intensity);
+            sb.Append(uimfScanResult.BasePeak.Height);
             sb.Append(delimiter);
-            sb.Append(uimfScanResult.BasePeak.MZ.ToString("0.#####"));
+            sb.Append(uimfScanResult.BasePeak.XValue.ToString("0.#####"));
             sb.Append(delimiter);
             sb.Append(uimfScanResult.TICValue);
             sb.Append(delimiter);

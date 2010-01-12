@@ -112,11 +112,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
                 sb.Append(resultList.MSPeakResultList[i].Scan_num);
                 sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.MZ.ToString("0.#####"));
+                sb.Append(resultList.MSPeakResultList[i].MSPeak.XValue.ToString("0.#####"));
                 sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.Intensity);
+                sb.Append(resultList.MSPeakResultList[i].MSPeak.Height);
                 sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.FWHM.ToString("0.####"));
+                sb.Append(resultList.MSPeakResultList[i].MSPeak.Width.ToString("0.####"));
                 sb.Append(delimiter);
                 sb.Append(resultList.MSPeakResultList[i].MSPeak.SN.ToString("0.##"));
                 sb.Append("\n");

@@ -84,7 +84,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
                 else
                 {
-                    Console.WriteLine("Completed processing on Scan " + scanset.PrimaryScanNumber);
+                        Console.WriteLine("Completed processing on Scan " + scanset.PrimaryScanNumber);
                 }
             }
 
