@@ -5,7 +5,7 @@ using System.Text;
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public class MSPeak
+    public class MSPeak : IPeak
     {
 
         public MSPeak()
@@ -17,28 +17,28 @@ namespace DeconTools.Backend.Core
         {
             this.mZ = mz;
             this.intensity = intensity;
-            this.FWHM = fwhm;
+            this.Width = fwhm;
             this.SN = sn;
 
         }
-        
+
         private double mZ;
 
-        public double MZ
+        public override double XValue
         {
             get { return mZ; }
             set { mZ = value; }
         }
         private float intensity;
 
-        public float Intensity
+        public override float Height
         {
             get { return intensity; }
             set { intensity = value; }
         }
         private float fWHM;
 
-        public float FWHM
+        public override float Width
         {
             get { return fWHM; }
             set { fWHM = value; }

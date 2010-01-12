@@ -55,5 +55,11 @@ namespace DeconTools.Backend.Core
 
         }
 
+
+        public int GetLastScanSet()
+        {
+            if (this.ScanSetList == null || this.ScanSetList.Count == 0) return -1;
+            return (this.ScanSetList[this.ScanSetList.Count - 1].PrimaryScanNumber);
+        }
     }
 }

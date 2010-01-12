@@ -97,9 +97,9 @@ namespace DeconTools.Backend.Data
             peakresult.PeakID = Convert.ToInt32(processedLine[0]);
             peakresult.Scan_num = Convert.ToInt32(processedLine[1]);
             peakresult.MSPeak = new DeconTools.Backend.Core.MSPeak();
-            peakresult.MSPeak.MZ = Convert.ToDouble(processedLine[2]);
-            peakresult.MSPeak.Intensity = Convert.ToSingle(processedLine[3]);
-            peakresult.MSPeak.FWHM = Convert.ToSingle(processedLine[4]);
+            peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[2]);
+            peakresult.MSPeak.Height = Convert.ToSingle(processedLine[3]);
+            peakresult.MSPeak.Width = Convert.ToSingle(processedLine[4]);
             peakresult.MSPeak.SN = Convert.ToSingle(processedLine[5]);
 
             return peakresult;

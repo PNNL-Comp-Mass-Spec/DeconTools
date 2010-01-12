@@ -95,7 +95,7 @@ namespace DeconTools.Backend.Utilities
 
             this.IsotopicProfile = new IsotopicProfile();
             this.IsotopicProfile.ChargeState = this.chargeState;
-            this.IsotopicProfile.Peaklist = run.MSPeakList;
+            this.IsotopicProfile.Peaklist = Utilities.Converters.PeakTypeConverter.ConvertToMSPeaks(run.PeakList);
 
             
         }
@@ -115,7 +115,7 @@ namespace DeconTools.Backend.Utilities
 
             foreach (MSPeak peak in list)
             {
-                double currentDiff = Math.Abs(peak.MZ - targetMZ);
+                double currentDiff = Math.Abs(peak.XValue - targetMZ);
                 if (currentDiff < diff)
                 {
                     closestPeak = peak;
@@ -181,7 +181,7 @@ namespace DeconTools.Backend.Utilities
         private double calculateOffset(double targetMZ)
         {
             MSPeak closestPeak = findClosestPeak(this.IsotopicProfile.Peaklist, targetMZ);
-            return (targetMZ - closestPeak.MZ);
+            return (targetMZ - closestPeak.XValue);
 
         }
 
@@ -212,12 +212,12 @@ namespace DeconTools.Backend.Utilities
             {
                 MSPeak targetPeak = targetIsotopicProfile.Peaklist[indexOfMostIntensePeak];
                 //offset = targetPeak.MZ - mostIntensePeak.MZ;
-                offset = targetIsotopicProfile.Peaklist[0].MZ - this.isotopicProfile.Peaklist[0].MZ;   //want to test to see if Thrash is same as rapid
+                offset = targetIsotopicProfile.Peaklist[0].XValue - this.isotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
 
             }
             else
             {
-                offset = targetIsotopicProfile.Peaklist[0].MZ - this.isotopicProfile.Peaklist[0].MZ;
+                offset = targetIsotopicProfile.Peaklist[0].XValue - this.isotopicProfile.Peaklist[0].XValue;
             }
 
             for (int i = 0; i < this.data.Xvalues.Length; i++)

@@ -5,9 +5,20 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTagResult:IMassTagResult
+    public class MassTagResult : IMassTagResult
     {
         #region Constructors
+        public MassTagResult()
+            : this(null)
+        {
+        }
+
+        public MassTagResult(MassTag massTag)
+        {
+            this.IsotopicProfile = new IsotopicProfile();
+            this.MassTag = massTag;
+        }
+
         #endregion
 
         #region Properties
@@ -31,6 +42,15 @@ namespace DeconTools.Backend.Core
             get { return isotopicProfile; }
             set { isotopicProfile = value; }
         }
+
+        private ChromPeak chromPeakSelected;
+
+        public override ChromPeak ChromPeakSelected
+        {
+            get { return chromPeakSelected; }
+            set { chromPeakSelected = value; }
+        }
+
 
         private List<ChromPeak> chromPeaks;
         public override List<ChromPeak> ChromPeaks

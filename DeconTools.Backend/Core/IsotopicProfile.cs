@@ -108,13 +108,33 @@ namespace DeconTools.Backend.Core
         public double GetMZofMostAbundantPeak()
         {
             MSPeak mostIntensePeak = getMostIntensePeak();
-            return mostIntensePeak.MZ;
+            return mostIntensePeak.XValue;
         }
 
         public double GetFWHM()
         {
             MSPeak mostIntensePeak = getMostIntensePeak();
-            return mostIntensePeak.FWHM;
+            return mostIntensePeak.Width;
+        }
+
+
+        public int getIndexOfMostIntensePeak()
+        {
+            if (this.peaklist == null || this.peaklist.Count == 0) return -1;
+
+            int indexOfMaxPeak = -1;
+            float maxIntensity = 0;
+            
+            for (int i = 0; i < this.peaklist.Count; i++)
+            {
+                if (this.peaklist[i].Height > maxIntensity)
+                {
+                    maxIntensity = this.peaklist[i].Height;
+                    indexOfMaxPeak = i;
+                }
+            }
+            return indexOfMaxPeak;
+
         }
 
         public MSPeak getMostIntensePeak()
@@ -124,7 +144,7 @@ namespace DeconTools.Backend.Core
             MSPeak maxPeak = new MSPeak();
             foreach (MSPeak peak in this.peaklist)
             {
-                if (peak.Intensity >= maxPeak.Intensity)
+                if (peak.Height >= maxPeak.Height)
                 {
                     maxPeak = peak;
                 }
@@ -143,19 +163,19 @@ namespace DeconTools.Backend.Core
         public double GetMonoAbundance()
         {
             if (this.peaklist == null) return -1;
-            return this.peaklist[0].Intensity;
+            return this.peaklist[0].Height;
         }
 
         public float GetMonoPlusTwoAbundance()
         {
             if (this.peaklist == null || this.peaklist.Count < 3) return 0;
-            return this.peaklist[2].Intensity;
+            return this.peaklist[2].Height;
         }
 
         public double GetMZ()
         {
             if (this.peaklist == null) return -1;
-            return this.peaklist[0].MZ;
+            return this.peaklist[0].XValue;
         }
 
         public double MonoPeakMZ { get; set; }
@@ -191,11 +211,12 @@ namespace DeconTools.Backend.Core
             double summedIntensity = 0;
             foreach (MSPeak peak in this.peaklist)
             {
-                summedIntensity += (double)peak.Intensity;
+                summedIntensity += (double)peak.Height;
 
             }
             return summedIntensity;
         }
+
 
     }
 }

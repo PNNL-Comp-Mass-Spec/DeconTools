@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution
 {
@@ -114,6 +115,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         public static IsotopicProfile GetIsotopePattern(int[] afFormula, double[][] aafIsoLocal)
         {
+            Check.Require(afFormula != null, "Cannot get Isotope pattern. Empirical formula not defined");
+
             double EPS = 0.001f;
 
             double[] afIonIntensity = new double[100]; // store structure here

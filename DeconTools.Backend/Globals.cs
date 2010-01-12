@@ -7,6 +7,8 @@ namespace DeconTools.Backend
     public class Globals
     {
 
+        public const double PROTON_MASS = 1.00727649;
+
 
         public enum XYDataFileType       //these filetypes are for files that contain a single set of XY values  (i.e. single MS Scan)
         {
@@ -14,7 +16,6 @@ namespace DeconTools.Backend
             Textfile,
             CSV_File
         }
-
         
         public enum MSFileType
         {
@@ -78,6 +79,21 @@ namespace DeconTools.Backend
             MOST_INTENSE,
             INTELLIGENT_MODE
         }
+
+
+        public enum MassTagDBImporterMode
+        {
+            Std_four_parameter_mode,
+            List_of_MT_IDs_Mode
+
+        }
+
+        public enum MassTagResultType
+        {
+            BASIC_MASSTAG_RESULT,
+            N14N15_MASSTAG_RESULT
+        }
+
 
     }
 }

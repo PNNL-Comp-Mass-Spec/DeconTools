@@ -72,11 +72,13 @@ namespace DeconTools.Backend.Core
         }
 
         [field: NonSerialized]
-        private List<MSPeak> mSPeakList;     //this needs to be abstracted out
-        public List<MSPeak> MSPeakList
+
+
+        private List<IPeak> peakList;     
+        public List<IPeak> PeakList
         {
-            get { return mSPeakList; }
-            set { mSPeakList = value; }
+            get { return peakList; }
+            set { peakList = value; }
         }
 
         private ScanSetCollection scanSetCollection;

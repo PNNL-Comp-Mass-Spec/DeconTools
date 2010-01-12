@@ -29,14 +29,14 @@ namespace DeconTools.Backend.Core
             get { return percentDone; }
             set { percentDone = value; }
         }
-        protected int getNumScansBetweenProgress(TaskCollection taskCollection)
+        protected virtual int getNumScansBetweenProgress(TaskCollection taskCollection)
         {
             int numScansBetweenProgress;
 
 
             if (taskCollectionContainsRapidDeconvolutor(taskCollection))
             {
-                numScansBetweenProgress = 1;
+                numScansBetweenProgress = 50;
             }
             else
             {

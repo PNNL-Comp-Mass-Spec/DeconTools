@@ -8,6 +8,10 @@ namespace DeconTools.Backend.Core
     public class N14N15_TResult : IMassTagResult
     {
         #region Constructors
+        public N14N15_TResult()
+        {
+            this.IsotopicProfile = new IsotopicProfile();
+        }
         #endregion
 
         #region Properties
@@ -31,6 +35,13 @@ namespace DeconTools.Backend.Core
         {
             get { return isotopicProfile; }
             set { isotopicProfile = value; }
+        }
+
+        private ChromPeak chromPeakSelected;
+        public override ChromPeak ChromPeakSelected
+        {
+            get { return chromPeakSelected; }
+            set { chromPeakSelected = value; }
         }
 
         private List<ChromPeak> chromPeaks;

@@ -37,7 +37,7 @@ namespace DeconTools.Backend.DTO
                     ScanSet scanset = new ScanSet(uimfresult.ScanSet.PrimaryScanNumber);
                     
                     //get the mass spectrum +/- 5 da from the range of the isotopicProfile
-                    uimfRun.GetMassSpectrum(scanset, frameset, uimfresult.IsotopicProfile.getMonoPeak().MZ - 5, uimfresult.IsotopicProfile.Peaklist.Last().MZ + 5);
+                    uimfRun.GetMassSpectrum(scanset, frameset, uimfresult.IsotopicProfile.getMonoPeak().XValue - 5, uimfresult.IsotopicProfile.Peaklist.Last().XValue + 5);
                 }
                 else
                 {
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.DTO
                     ScanSet scanset = new ScanSet(result.ScanSet.PrimaryScanNumber);
                     
                     //get the mass spectrum +/- 5 da from the range of the isotopicProfile
-                    result.Run.GetMassSpectrum(scanset, result.IsotopicProfile.getMonoPeak().MZ - 5, result.IsotopicProfile.Peaklist.Last().MZ + 5);
+                    result.Run.GetMassSpectrum(scanset, result.IsotopicProfile.getMonoPeak().XValue - 5, result.IsotopicProfile.Peaklist.Last().XValue + 5);
                 }
 
                 double targetMZ = result.IsotopicProfile.MostAbundantIsotopeMass / result.IsotopicProfile.ChargeState + 1.00727649;
@@ -60,7 +60,7 @@ namespace DeconTools.Backend.DTO
                 double summedIntensity = 0;
                 foreach (MSPeak peak in result.IsotopicProfile.Peaklist)
                 {
-                    int indexOfMZ = result.Run.XYData.GetClosestXVal(peak.MZ);
+                    int indexOfMZ = result.Run.XYData.GetClosestXVal(peak.XValue);
                     if (indexOfMZ >= 0)
                     {
                         summedIntensity += result.Run.XYData.Yvalues[indexOfMZ];

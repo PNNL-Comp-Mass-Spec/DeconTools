@@ -82,9 +82,9 @@ namespace DeconTools.Backend.Data
                         peakresult.PeakID = (int)(long)reader["peak_id"];
                         peakresult.Scan_num = (int)(long)reader["scan_num"];
                         peakresult.MSPeak = new MSPeak();
-                        peakresult.MSPeak.MZ = (double)reader["mz"];
-                        peakresult.MSPeak.Intensity = (float)(double)reader["intensity"];
-                        peakresult.MSPeak.FWHM = (float)(double)reader["fwhm"];
+                        peakresult.MSPeak.XValue = (double)reader["mz"];
+                        peakresult.MSPeak.Height = (float)(double)reader["intensity"];
+                        peakresult.MSPeak.Width = (float)(double)reader["fwhm"];
                         peakList.Add(peakresult);
 
                         if (this.backgroundWorker != null)
@@ -109,6 +109,8 @@ namespace DeconTools.Backend.Data
         #endregion
 
         #region Private Methods
+    
+
         #endregion
 
 

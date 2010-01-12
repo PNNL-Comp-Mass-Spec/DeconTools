@@ -6,13 +6,13 @@ namespace DeconTools.Backend.Data
 {
     public abstract class Importer<T>
     {
-        public abstract void Import(T results);
+        public abstract void Import(T data);
 
         protected char delimiter = '\t';
 
         protected string lookup(List<string> data, List<string> headers, string targetHeader)
         {
-            int columnIndex = getIndexForTableHeader(headers, targetHeader);
+            int columnIndex = getIndexForTableHeader(headers, targetHeader,false);
             if (columnIndex == -1) return "null";
 
             return data[columnIndex];
@@ -96,11 +96,24 @@ namespace DeconTools.Backend.Data
             }
             return returnedList;
         }
-        protected int getIndexForTableHeader(List<string> tableHeaders, string target)
+        protected int getIndexForTableHeader(List<string> tableHeaders, string target, bool ignoreCase)
         {
             for (int i = 0; i < tableHeaders.Count; i++)
             {
-                if (tableHeaders[i] == target)
+                string columnHeader;
+
+                if (ignoreCase)
+                {
+                    columnHeader = tableHeaders[i].ToLower();
+                    target = target.ToLower();
+                }
+                else
+                {
+                    columnHeader = tableHeaders[i];
+                }
+
+                
+                if (columnHeader == target)
                 {
                     return i;
                 }

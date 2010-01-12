@@ -50,8 +50,8 @@ namespace DeconTools.Backend.Data
                 fp.frame_num = (ushort)uimfResult.Frameset.PrimaryFrame;
                 fp.frame_time = (float)uimfResult.ScanTime;
                 fp.type = (ushort)uimfResult.SpectrumType;
-                fp.bpi = uimfResult.BasePeak.Intensity;
-                fp.bpi_mz = (float)uimfResult.BasePeak.MZ;
+                fp.bpi = uimfResult.BasePeak.Height;
+                fp.bpi_mz = (float)uimfResult.BasePeak.XValue;
                 fp.tic = uimfResult.TICValue;
                 fp.num_peaks = (uint)uimfResult.NumPeaks;
                 fp.num_deisotoped = (uint)uimfResult.NumIsotopicProfiles;

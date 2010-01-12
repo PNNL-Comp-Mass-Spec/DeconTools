@@ -95,7 +95,7 @@ namespace DeconTools.Backend.Core
         public override void SetBasePeak(MSPeak mspeak)
         {
 
-            if (this.basePeak == null || mspeak.Intensity > this.basePeak.Intensity)     //best peak from all scans in one frame
+            if (this.basePeak == null || mspeak.Height > this.basePeak.Height)     //best peak from all scans in one frame
             {
                 this.basePeak = mspeak;
             }

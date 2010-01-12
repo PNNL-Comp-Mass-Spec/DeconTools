@@ -137,9 +137,9 @@ namespace DeconTools.Backend.Data
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
 
             MSPeak peak = new MSPeak();
-            peak.Intensity = parseIntField(lookup(processedData, headers, "mono_abundance"));
-            peak.FWHM = parseFloatField(lookup(processedData, headers, "fwhm"));
-            peak.MZ = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
+            peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));
+            peak.Width = parseFloatField(lookup(processedData, headers, "fwhm"));
+            peak.XValue = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
             peak.SN = parseFloatField(lookup(processedData, headers, "signal_noise"));
             result.IsotopicProfile.Peaklist.Add(peak);
 

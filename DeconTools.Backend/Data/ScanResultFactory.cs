@@ -77,7 +77,7 @@ namespace DeconTools.Backend.Data
 
                     tic += s.TICValue;
 
-                    if (s.BasePeak.Intensity > basepeak.Intensity)
+                    if (s.BasePeak.Height > basepeak.Height)
                     {
                         basepeak = s.BasePeak;
                     }

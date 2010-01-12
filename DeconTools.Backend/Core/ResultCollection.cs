@@ -31,6 +31,8 @@ namespace DeconTools.Backend.Core
         }
 
 
+  
+
 
         private List<MSPeakResult> mSPeakResultList;
         public List<MSPeakResult> MSPeakResultList
@@ -38,8 +40,6 @@ namespace DeconTools.Backend.Core
             get { return mSPeakResultList; }
             set { mSPeakResultList = value; }
         }
-
-
 
         private List<IsosResult> currentScanIsosResultBin;
         public List<IsosResult> CurrentScanIsosResultBin
@@ -95,7 +95,6 @@ namespace DeconTools.Backend.Core
             if (scanResultList == null || scanResultList.Count == 0) return null;
             return this.scanResultList[scanResultList.Count - 1];
         }
-
 
 
 
@@ -167,6 +166,32 @@ namespace DeconTools.Backend.Core
             this.CurrentScanIsosResultBin.Add(addedResult);
         }
 
+        public IMassTagResult GetMassTagResult(MassTag massTag)
+        {
+            if (massTagResultList.ContainsKey(massTag))
+            {
+                return massTagResultList[massTag];
+
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+     
+
+        public Globals.MassTagResultType MassTagResultType { get; set; }
+
+
+   
+
+
+
+
+
         public void ClearAllResults()
         {
             this.CurrentScanIsosResultBin.Clear();
@@ -182,7 +207,7 @@ namespace DeconTools.Backend.Core
         {
             if (this.Run is UIMFRun)
             {
-                foreach (MSPeak peak in this.Run.MSPeakList)
+                foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
                     MSPeakResult peakResult = new MSPeakResult(PeakCounter,((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
@@ -191,13 +216,51 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                foreach (MSPeak peak in this.Run.MSPeakList)
+                foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
                     MSPeakResult peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
                     this.MSPeakResultList.Add(peakResult);
                 }
             }
+
+        }
+
+        public IMassTagResult CreateMassTagResult(MassTag massTag)
+        {
+            IMassTagResult result;
+
+            switch (MassTagResultType)
+            {
+                case Globals.MassTagResultType.BASIC_MASSTAG_RESULT:
+                    result = new MassTagResult(massTag);
+                    break;
+                case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
+                    result = new N14N15_TResult();
+                    break;
+                default:
+                    result = new MassTagResult();
+                    break;
+            }
+
+            this.MassTagResultList.Add(massTag, result);
+            return result;
+        }
+        
+        public IMassTagResult AddMassTagResult(Globals.MassTagResultType massTagResultType)
+        {
+            IMassTagResult result;
+
+            switch (massTagResultType)
+            {
+                case Globals.MassTagResultType.BASIC_MASSTAG_RESULT:
+                    return new DeconTools.Backend.Core.MassTagResult();
+                case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
+                    return new N14N15_TResult();
+                default:
+                    return new DeconTools.Backend.Core.MassTagResult();
+            }
+
 
         }
     }

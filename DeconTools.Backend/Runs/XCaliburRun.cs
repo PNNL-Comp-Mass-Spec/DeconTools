@@ -98,7 +98,11 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                this.rawData.GetSummedSpectra(scanSet.getLowestScanNumber(), scanSet.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
+                Console.Write("WARNING.... XCalibur data is not being summed properly.  Talk to Gord\n\n");
+                this.rawData.GetSpectrum(scanSet.PrimaryScanNumber, ref xvals, ref yvals);
+
+                
+                //this.rawData.GetSummedSpectra(scanSet.getLowestScanNumber(), scanSet.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
             }
 
 

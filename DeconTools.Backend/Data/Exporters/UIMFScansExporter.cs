@@ -47,9 +47,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.SpectrumType);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.BasePeak.Intensity);
+                sb.Append(uimfResult.BasePeak.Height);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.BasePeak.MZ.ToString("0.#####"));
+                sb.Append(uimfResult.BasePeak.XValue.ToString("0.#####"));
                 sb.Append(delimiter);
                 sb.Append(uimfResult.TICValue);
                 sb.Append(delimiter);
