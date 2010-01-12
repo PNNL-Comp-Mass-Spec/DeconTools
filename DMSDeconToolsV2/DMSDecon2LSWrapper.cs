@@ -22,8 +22,6 @@ namespace DMSDeconToolsV2
     public class DMSDecon2LSWrapper
     {
         private OldSchoolProcRunner oldschoolprocRunner;
-        private BackgroundWorker bw;
-        private UserState detailedState;
 
         #region Constructors
         public DMSDecon2LSWrapper()
@@ -95,21 +93,11 @@ namespace DMSDeconToolsV2
                 {
                     state = DeconState.RUNNING_DECON;
 
-                    this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile);
+                    this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile,null);
                     this.oldschoolprocRunner.IsosResultThreshold = 50000;
                     this.oldschoolprocRunner.Execute();
 
-                    //bw = new BackgroundWorker();
-
-                    //bw.WorkerReportsProgress = true;
-                    //bw.WorkerSupportsCancellation = true;
-
-                    //bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-                    //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-                    //bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-                    //bw.RunWorkerAsync();
-
-
+                    state = DeconState.DONE;
                 }
                 else
                 {
@@ -127,72 +115,6 @@ namespace DMSDeconToolsV2
                 throw ex;
             }
         }
-
-        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                state = DeconState.ERROR;
-            }
-            else if (e.Error != null)
-            {
-                state = DeconState.ERROR;
-            }
-            else
-            {
-                state = DeconState.DONE;
-            }
-        }
-
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            detailedState = (UserState)(e.UserState);
-            this.currentScan = detailedState.getScanOrFrameNum();
-            this.percentDone = detailedState.PercentDone;
-
-            //the following is for testing...
-            Console.WriteLine("CurrentScan = " + this.currentScan + "; PercentDone = " + this.percentDone);
-
-
-        }
-
-        void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker backgroundWorker = (BackgroundWorker)sender;
-
-            try
-            {
-                Console.WriteLine("test");
-                Console.WriteLine(FileTypeConverter.ConvertDeconEngineFileType(fileType));
-
-                this.oldschoolprocRunner = new OldSchoolProcRunner(this.dataFile,
-                    FileTypeConverter.ConvertDeconEngineFileType(fileType), this.paramFile, backgroundWorker);
-                this.oldschoolprocRunner.IsosResultThreshold = 50000;
-                this.oldschoolprocRunner.Execute();
-            }
-            catch (Exception ex)
-            {
-                //Also write details on UserState 
-
-                EventLog elog = new EventLog();
-                elog.Log = "Application";
-                elog.Source = "Decon2LS";
-                elog.WriteEntry(ex.Message + ex.StackTrace);
-                elog.Close();
-                state = DeconState.ERROR;
-                throw ex;
-
-            }
-
-
-
-
-            if (bw.CancellationPending)
-            {
-                e.Cancel = true;
-            }
-        }
-
 
         public void CreateTIC()
         {
