@@ -195,6 +195,38 @@ namespace DeconTools.UnitTesting
             Assert.AreEqual(3558996000, (decimal)ticVal);
         }
 
+        [Test]
+        public void getClosestMSLevelScanTest1()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            Assert.AreEqual(6005,run.GetClosestMSScan(6005, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6005, run.GetClosestMSScan(6006, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6005, run.GetClosestMSScan(6007, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6005, run.GetClosestMSScan(6008, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6012, run.GetClosestMSScan(6009, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6012, run.GetClosestMSScan(6010, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6012, run.GetClosestMSScan(6011, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(6012, run.GetClosestMSScan(6012, Globals.ScanSelectionMode.CLOSEST));
+
+            Assert.AreEqual(6005, run.GetClosestMSScan(6005, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(6012, run.GetClosestMSScan(6006, Globals.ScanSelectionMode.ASCENDING));
+            
+            Assert.AreEqual(6012, run.GetClosestMSScan(6012, Globals.ScanSelectionMode.DESCENDING));
+            Assert.AreEqual(6005, run.GetClosestMSScan(6011, Globals.ScanSelectionMode.DESCENDING));
+            Assert.AreEqual(6005, run.GetClosestMSScan(6010, Globals.ScanSelectionMode.DESCENDING));
+
+
+            Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.DESCENDING));
+            Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.CLOSEST));
+
+            Assert.AreEqual(18505, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(18499, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.DESCENDING));
+
+
+        }
+
+
 
         //[Test]
         //public void GetSpectrumTestAndSum5()       //currently this stalls - takes forever...  

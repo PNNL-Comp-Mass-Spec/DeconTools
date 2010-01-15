@@ -22,6 +22,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         private string outputFilename = "..\\..\\TestFiles\\PeakListExporterOutputTest1.txt";
         private string outputFilename2 = "..\\..\\TestFiles\\PeakListExporterOutputTest2.txt";
 
+        private string xcaliburAllPeaksFileName = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.txt";
+
         private string sqliteOutfileName = "..\\..\\TestFiles\\PeakListExporterOutputTest2.sqlite";
 
         [Test]
@@ -114,7 +116,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void exportToTextFileTest2()
         {
-            if (File.Exists(outputFilename)) File.Delete(outputFilename2);
+            if (File.Exists(outputFilename2)) File.Delete(outputFilename2);
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
@@ -143,5 +145,38 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             exporter.Cleanup();
             Assert.AreEqual(true, File.Exists(outputFilename2));
         }
+
+        [Test]
+        public void exportAllPeaksInXCaliburFile()
+        {
+            if (File.Exists(xcaliburAllPeaksFileName)) File.Delete(xcaliburAllPeaksFileName);
+
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run,run.MinScan,run.MaxScan,1,1, false);
+            scansetCreator.Create();
+
+            Task msgen = new GenericMSGenerator();
+
+            DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
+            Task peakDetector = new DeconToolsPeakDetector(peakParams);
+            ((DeconToolsPeakDetector)peakDetector).StorePeakData = true;
+
+            Task exporter = new DeconTools.Backend.ProcessingTasks.PeakListExporters.PeakListTextExporter(run.MSFileType, 1000000, xcaliburAllPeaksFileName);     //trigger of 1E5 = 310 sec (memory = 150 MB);    trigger of 1E6 =  231 Sec (memory = 250 MB); 
+
+            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                exporter.Execute(run.ResultCollection);
+
+            }
+
+            exporter.Cleanup();
+            Assert.AreEqual(true, File.Exists(xcaliburAllPeaksFileName));
+
+        }
+
     }
 }

@@ -71,10 +71,8 @@ namespace DeconTools.Backend.Data.Importers
             data.MassTagList = new List<MassTag>();
 
             string queryString = createQueryString(this.ImporterMode);
-            
-            //string queryString = "SELECT mt.Mass_Tag_ID, mt.Peptide, mt.Monoisotopic_Mass, mt.Peptide_Obs_Count_Passing_Filter, ";
-            //queryString += "mt.Mod_Count ";
-            //queryString += "FROM [T_Mass_Tags] AS mt WHERE Peptide_Obs_Count_Passing_Filter > 50";
+            Console.WriteLine(queryString);
+
 
             using (DbConnection cnn = fact.CreateConnection())
             {
@@ -84,6 +82,7 @@ namespace DeconTools.Backend.Data.Importers
                 using (DbCommand command = cnn.CreateCommand())
                 {
                     command.CommandText = queryString;
+                    command.CommandTimeout = 60;
                     DbDataReader reader = command.ExecuteReader();
 
                     int progressCounter = 0;
@@ -96,7 +95,18 @@ namespace DeconTools.Backend.Data.Importers
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value)) massTag.ID = Convert.ToInt32(reader["Mass_Tag_ID"]);
                         if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value)) massTag.MonoIsotopicMass = Convert.ToDouble(reader["Monoisotopic_Mass"]);
                         if (!reader["Peptide"].Equals(DBNull.Value)) massTag.PeptideSequence = Convert.ToString(reader["Peptide"]);
-                        
+                        if (!reader["Charge_State"].Equals(DBNull.Value)) massTag.ChargeState = Convert.ToInt16(reader["Charge_State"]);
+                        if (!reader["ObsCount"].Equals(DBNull.Value)) massTag.ObsCount = Convert.ToInt32(reader["ObsCount"]);
+                        if (massTag.ChargeState != 0)
+                        {
+                            massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
+                        }
+
+
+
+                        if (!reader["Avg_GANET"].Equals(DBNull.Value)) massTag.NETVal = Convert.ToSingle(reader["Avg_GANET"]);
+                        if (!reader["Ref_ID"].Equals(DBNull.Value)) massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
+
                         massTag.CreatePeptideObject();
 
                         data.MassTagList.Add(massTag);
@@ -111,11 +121,82 @@ namespace DeconTools.Backend.Data.Importers
 
         }
 
+        private string testQueryString()
+        {
+            string qry = @"SELECT *
+FROM ( SELECT Mass_Tag_ID,
+              Monoisotopic_Mass,
+              Peptide,
+              Charge_State,
+              ObsCount,
+              Monoisotopic_Mass/Charge_State+1.00727649 as mz,
+              Avg_GANET,                            
+              Ref_ID,
+              Description,
+              Row_Number() OVER ( PARTITION BY mass_tag_id ORDER BY ObsCount DESC ) AS ObsRank
+              
+       FROM ( SELECT T_Mass_Tags.Mass_Tag_ID,
+                     T_Mass_Tags.Monoisotopic_Mass,
+                     T_Mass_Tags.Peptide,
+                     T_Peptides.Charge_State,
+                     T_Mass_Tags_NET.Avg_GANET,
+                     T_Mass_Tag_to_Protein_Map.Ref_ID,
+                     T_Proteins.Description,
+                     COUNT(*) AS ObsCount
+              FROM T_Mass_Tags
+                   INNER JOIN T_Peptides
+                     ON T_Mass_Tags.Mass_Tag_ID = T_Peptides.Mass_Tag_ID
+                     INNER JOIN T_Mass_Tags_NET
+                     ON T_Mass_Tags.Mass_Tag_ID=T_Mass_Tags_NET.Mass_Tag_ID
+                     INNER JOIN T_Mass_Tag_to_Protein_Map
+                     ON T_Mass_Tags.Mass_Tag_ID=T_Mass_Tag_to_Protein_Map.Mass_Tag_ID
+                     INNER JOIN T_Proteins
+                     ON T_Mass_Tag_to_Protein_Map.Ref_ID=T_Proteins.Ref_ID
+              GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID, T_Proteins.Description
+             ) LookupQ 
+      ) OuterQ WHERE (ObsRank=1 and Mass_Tag_ID in (339661, 1880720, 127913, 1100499, 1239111, 994489, 417866, 106915, 1149424, 2763428, 2763428, 2763428, 239704, 44696, 213135, 971852, 24917, 101068, 243782, 24826, 194781, 194781, 1709835, 614192, 614192, 25982, 313378, 232945, 2193778, 323142, 1844543, 3176757, 3176757, 56475, 311742, 1116349, 987418, 27168, 306160, 1220666))
+      ORDER BY Mass_Tag_ID";
+            return qry;
+        }
+
+
+
+
         private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT mt.Mass_Tag_ID, mt.Peptide, mt.Monoisotopic_Mass, mt.Peptide_Obs_Count_Passing_Filter, ");
-            sb.Append("mt.Mod_Count FROM [T_Mass_Tags] as mt ");
+            sb.Append(@"SELECT *
+FROM ( SELECT Mass_Tag_ID,
+              Monoisotopic_Mass,
+              Peptide,
+              Charge_State,
+              ObsCount,
+              Monoisotopic_Mass/Charge_State+1.00727649 as mz,
+              Avg_GANET,                            
+              Ref_ID,
+              Description,
+              Row_Number() OVER ( PARTITION BY mass_tag_id ORDER BY ObsCount DESC ) AS ObsRank
+              
+       FROM ( SELECT T_Mass_Tags.Mass_Tag_ID,
+                     T_Mass_Tags.Monoisotopic_Mass,
+                     T_Mass_Tags.Peptide,
+                     T_Peptides.Charge_State,
+                     T_Mass_Tags_NET.Avg_GANET,
+                     T_Mass_Tag_to_Protein_Map.Ref_ID,
+                     T_Proteins.Description,
+                     COUNT(*) AS ObsCount
+              FROM T_Mass_Tags
+                   INNER JOIN T_Peptides
+                     ON T_Mass_Tags.Mass_Tag_ID = T_Peptides.Mass_Tag_ID
+                     INNER JOIN T_Mass_Tags_NET
+                     ON T_Mass_Tags.Mass_Tag_ID=T_Mass_Tags_NET.Mass_Tag_ID
+                     INNER JOIN T_Mass_Tag_to_Protein_Map
+                     ON T_Mass_Tags.Mass_Tag_ID=T_Mass_Tag_to_Protein_Map.Mass_Tag_ID
+                     INNER JOIN T_Proteins
+                     ON T_Mass_Tag_to_Protein_Map.Ref_ID=T_Proteins.Ref_ID
+              GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID, T_Proteins.Description
+             ) LookupQ 
+      ) OuterQ ");
             
 
             switch (massTagDBImporterMode)
@@ -125,7 +206,7 @@ namespace DeconTools.Backend.Data.Importers
                     break;
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
                     Check.Require(this.massTagsToBeRetrieved != null && this.massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
-                    sb.Append("WHERE mt.Mass_Tag_ID in (");
+                    sb.Append("WHERE (ObsRank = 1 and Mass_Tag_ID in (");
 
                     for (int i = 0; i < this.massTagsToBeRetrieved.Count; i++)
                     {
@@ -134,7 +215,7 @@ namespace DeconTools.Backend.Data.Importers
                         //if last one in list, then close parentheses. If not, just append a comma separator.
                         if (i==this.massTagsToBeRetrieved.Count-1)
                         {
-                            sb.Append(")");
+                            sb.Append(")) ORDER BY Mass_Tag_ID");
                         }
                         else
                         {

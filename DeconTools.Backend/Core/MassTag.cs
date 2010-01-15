@@ -20,10 +20,20 @@ namespace DeconTools.Backend.Core
         public int ID { get; set; }
         public double MonoIsotopicMass { get; set; }
         public double MZ { get; set; }
+
+        /// <summary>
+        /// Number of times MassTag was observed at given ChargeState
+        /// </summary>
+        public int ObsCount { get; set; }
         public short ChargeState { get; set; }
         public float NETVal { get; set; }
         public string PeptideSequence { get; set; }    //the base peptide sequence (no mods shown)
         public bool ContainsMods { get; set; }  //indicates whether or not peptide contains modifications or abnormalities
+
+        /// <summary>
+        /// the ID of the protein to which the MassTag is linked
+        /// </summary>
+        public int RefID { get; set; }     
 
         public IsotopicProfile IsotopicProfile { get; set; }    // the theoretical profile
 

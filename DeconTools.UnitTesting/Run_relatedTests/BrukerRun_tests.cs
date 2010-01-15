@@ -221,6 +221,24 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+        [Test]
+        public void getClosestMSLevelScanTest1()
+        {
+            Run run = new BrukerRun(brukerTestFile1);
+
+            Assert.AreEqual(2000, run.GetClosestMSScan(2000, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(2001, run.GetClosestMSScan(2001, Globals.ScanSelectionMode.CLOSEST));
+            Assert.AreEqual(2002, run.GetClosestMSScan(2002, Globals.ScanSelectionMode.CLOSEST));
+
+            Assert.AreEqual(2002, run.GetClosestMSScan(2002, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(2002, run.GetClosestMSScan(2002, Globals.ScanSelectionMode.DESCENDING));
+
+
+
+
+        }
+
+
     }
 
 

@@ -94,6 +94,14 @@ namespace DeconTools.Backend
             N14N15_MASSTAG_RESULT
         }
 
+        public enum ScanSelectionMode
+        {
+            ASCENDING,
+            DESCENDING,
+            CLOSEST
+        }
+
+
 
     }
 }

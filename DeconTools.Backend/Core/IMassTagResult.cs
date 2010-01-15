@@ -24,7 +24,8 @@ namespace DeconTools.Backend.Core
         public void DisplayToConsole()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("MassTag:  ID = \t" + MassTag.ID.ToString() + "; NET = \t"+ MassTag.NETVal.ToString("0.000")+"\n");
+            sb.Append("****** Match ******\n");
+            sb.Append("NET = \t"+ MassTag.NETVal.ToString("0.000")+"\n");
             sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString() + "\n");
             sb.Append("ChromPeak NETVal = " + ChromPeakSelected.NETValue.ToString("0.000") + "\n");
             sb.Append("ScanSet = { ");
@@ -35,6 +36,10 @@ namespace DeconTools.Backend.Core
                 
             }
             sb.Append("} \n");
+            if (this.IsotopicProfile != null)
+            {
+                sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
+            }
             Console.Write(sb.ToString());
         }
 

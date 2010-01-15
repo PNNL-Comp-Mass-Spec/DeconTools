@@ -331,5 +331,72 @@ namespace DeconTools.Backend.Core
             return (float)(scanNum * slope + yintercept);
           
         }
+
+  
+        public virtual int GetClosestMSScan(int inputScan, Globals.ScanSelectionMode scanSelectionMode)
+        {
+            switch (scanSelectionMode)
+            {
+                case Globals.ScanSelectionMode.ASCENDING:
+                    for (int i = inputScan; i <= this.MaxScan; i++)     // MaxScan is an index value
+                    {
+                        if (this.GetMSLevel(i) == 1) return i;
+                    }
+                    // reached end of scans. Don't want to throw a nasty error, so return what was inputted.
+                    return inputScan;
+                    
+                    break;
+                case Globals.ScanSelectionMode.DESCENDING:
+                    for (int i = inputScan; i >= this.MinScan; i--)
+                    {
+                        if (this.GetMSLevel(i) == 1) return i;
+                    }
+                    //reached starting scan. No MS-level scan was found.  Simply return what was inputted. 
+                    return inputScan;
+                    break;
+                case Globals.ScanSelectionMode.CLOSEST:
+                    int upperScan = -1;
+                    int lowerScan = -1;
+                    if (this.GetMSLevel(inputScan) == 1) return inputScan;
+                    for (int i = inputScan; i <= this.MaxScan; i++)
+                    {
+                        if (this.GetMSLevel(i) == 1)
+                        {
+                            upperScan = i;
+                            break;
+                        }
+                    }
+                    for (int i = inputScan; i >= this.MinScan; i--)
+                    {
+                        if (this.GetMSLevel(i) == 1)
+                        {
+                            lowerScan = i;
+                            break;
+                        }
+                    }
+
+                    if (upperScan == -1 && lowerScan == -1) return inputScan;
+                    if (upperScan == -1 && lowerScan != -1) return lowerScan;
+                    if (lowerScan == -1 && upperScan != -1) return upperScan;
+
+                    if (Math.Abs(upperScan - inputScan) < Math.Abs(lowerScan - inputScan))
+                    {
+                        return upperScan;
+                    }
+                    else
+                    {
+                        return lowerScan;
+                    }
+                    //shouldn't reach this point but will provide a return value in case...
+                    return inputScan;
+
+                    break;
+                default:
+
+                    return inputScan;
+                    break;
+            }
+
+        }
     }
 }

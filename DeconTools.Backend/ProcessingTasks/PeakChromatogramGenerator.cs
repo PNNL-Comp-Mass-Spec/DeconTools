@@ -38,6 +38,8 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(resultList.MSPeakResultList != null, "PeakChromatogramGenerator failed. No peaks.");
             Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
+            Check.Require(resultList.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
+
 
             double mz = resultList.Run.CurrentMassTag.MZ;
 

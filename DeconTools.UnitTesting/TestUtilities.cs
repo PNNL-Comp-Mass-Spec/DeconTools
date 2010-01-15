@@ -7,6 +7,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend;
 
 namespace DeconTools.UnitTesting
 {
@@ -170,5 +171,23 @@ namespace DeconTools.UnitTesting
 
             Console.Write(sb.ToString());
         }
+
+
+        public static MassTag GetMassTagStandard(int standardNum)
+        {
+            MassTag mt = new MassTag();
+            mt.ID = 86963986;
+            mt.MonoIsotopicMass = 1516.791851;
+            mt.PeptideSequence = "AAKEGISCEIIDLR";
+            mt.NETVal = 0.2284955f;
+            mt.CreatePeptideObject();
+            mt.ChargeState = 2;
+            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+
+            return mt;
+
+
+        }
+
     }
 }

@@ -78,14 +78,14 @@ namespace DeconTools.Backend.ProcessingTasks
             else if (peaksWithinTol.Count == 1)
             {
                 result.ChromPeakSelected = peaksWithinTol[0];
-                result.ScanSet = createSummedScanSet(result.ChromPeakSelected);
+                result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run);
                 
              
             }
             else
             {
                 result.ChromPeakSelected = selectBestPeak(this.peakSelectionMode, peaksWithinTol, resultList.Run.CurrentMassTag.NETVal);
-                result.ScanSet = createSummedScanSet(result.ChromPeakSelected);
+                result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run);
 
             }
 
@@ -93,12 +93,12 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private ScanSet createSummedScanSet(ChromPeak chromPeak)
+        private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run)
         {
-            //TODO:  this doesn't work with mixed MS and MS/MS data.  Need to find nearest MS and then sum nearest up and down.  so.. needs to be much smarter as to how this functions.
-            
             ScanSet scanSet;
             int bestScan = (int)chromPeak.XValue;
+
+            bestScan= run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
 
             int numPeaksToSum = (int)(chromPeak.Width / 3 + 0.5);
             if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
