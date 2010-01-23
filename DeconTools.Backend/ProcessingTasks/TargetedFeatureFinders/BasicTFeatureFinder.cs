@@ -60,7 +60,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 //find experimental peak(s) within range
                 List<MSPeak> peaksWithinTol = getPeaksWithinTol(resultColl.Run.PeakList, theor.Peaklist[i].XValue, MZTolerance);
 
-                foundMatchingMaxPeak = (i == indexOfMaxTheorPeak && peaksWithinTol.Count > 0);
+                if (i == indexOfMaxTheorPeak)
+                {
+                    foundMatchingMaxPeak = peaksWithinTol.Count > 0;
+                }
+               
                 if (!foundMatchingMaxPeak)   // can't even find the observed peak that matches the most intense theor peak. 
                 {
                     result.IsotopicProfile = null;     //no matching isotopic profile found for this mass tag

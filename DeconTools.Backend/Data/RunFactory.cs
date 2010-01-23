@@ -24,11 +24,11 @@ namespace DeconTools.Backend.Data
                 return new ICR2LSRun(fileName);
             }
 
-            match = Regex.Match(fileName.ToLower(), ".*acqu$");
+            match = Regex.Match(fileName.ToLower(), ".*acqus$");
             if (match.Success)
             {
                 //extract folder name;   the raw data reader (DeconEngine) reads in the folder name
-                string folderName = match.Value.Substring(0,match.Value.IndexOf(@"\Acqu", StringComparison.OrdinalIgnoreCase));
+                string folderName = match.Value.Substring(0,match.Value.IndexOf(@"\Acqus", StringComparison.OrdinalIgnoreCase));
 
                 return new BrukerRun(folderName);
             }

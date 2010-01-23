@@ -189,5 +189,10 @@ namespace DeconTools.UnitTesting
 
         }
 
+
+        public static void DisplayXYValues(Run run)
+        {
+            
+        }
     }
 }

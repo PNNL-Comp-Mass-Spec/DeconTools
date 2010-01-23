@@ -16,6 +16,7 @@ namespace DeconTools.Backend.Runs
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = true;
             this.MSFileType = Globals.MSFileType.Bruker;
+            this.ContainsMSMSData = false;
         }
 
         public BrukerRun(string folderName)

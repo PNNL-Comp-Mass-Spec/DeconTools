@@ -14,6 +14,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     public class BrukerRun_tests
     {
         string brukerTestFile1 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02";
+        string brukerTestFile2 = @"\\Proto-4\SWT_ICR2\SWT_9t_TestDS216_Small\0.ser";
 
 
         [Test]
@@ -43,12 +44,29 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             Assert.AreEqual(211063, run.XYData.Xvalues.Length);
             Assert.AreEqual(211063, run.XYData.Yvalues.Length);
-            //Assert.AreEqual(579.808837890625,run.XYData.Xvalues[85910]);  //TODO:  there seems to be discrepancy - 5th decimal -  between this and the result from the Decon2LS.UI.  Possibly a FT-MS preprocessing difference?
-            Assert.AreEqual(61576.37109375d, run.XYData.Yvalues[85910]);
+            Assert.AreEqual(579.808837890625m, (decimal)run.XYData.Xvalues[85910]);  //TODO:  there seems to be discrepancy - 5th decimal -  between this and the result from the Decon2LS.UI.  Possibly a FT-MS preprocessing difference?
+            //Assert.AreEqual(61576.37109375d, run.XYData.Yvalues[85910]);
 
-           
+
             Assert.AreEqual(1, run.GetMSLevel(testScan));
         }
+
+        [Test]
+        public void GetSpectrum_FromNetwork_Test1()
+        {
+            string testFile = brukerTestFile2;
+            int testScan = 500;
+
+            Run run = new BrukerRun(testFile);
+            run.GetMassSpectrum(new ScanSet(testScan), 200, 2000);
+
+            int numscans = run.GetNumMSScans();
+            Assert.AreEqual(600, numscans);
+            Assert.AreEqual(98896, run.XYData.Xvalues.Length);
+            Assert.AreEqual(98896, run.XYData.Yvalues.Length);
+            Assert.AreEqual(1, run.GetMSLevel(testScan));
+        }
+
 
 
         public void GetSummedSpectrumTest1()
@@ -62,7 +80,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             run.GetMassSpectrum(scan2499, 200, 2000);
             double scan2499testVal = run.XYData.Yvalues[85910];
             Assert.AreEqual(19073.291015625d, scan2499testVal);
-            
+
             ScanSet scan2500 = new ScanSet(2500);
             run.GetMassSpectrum(scan2500, 200, 2000);
             double scan2500testVal = run.XYData.Yvalues[85910];
@@ -87,8 +105,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Console.WriteLine(sb.ToString());
         }
 
-        
-        
+
+
         //[Test]
         //public void OpenTwoBrukerFilesTest1()
         //{
@@ -107,7 +125,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void runFactoryTest1()
         {
-       
+
 
         }
 
@@ -138,7 +156,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(24330, run.XYData.Xvalues.Length);
             Assert.AreEqual(24330, run.XYData.Yvalues.Length);
             //Assert.AreEqual(579.808837890625,run.XYData.Xvalues[85910]);  //TODO:  there seems to be discrepancy - 5th decimal -  between this and the result from the Decon2LS.UI.  Possibly a FT-MS preprocessing difference?
-     
+
             Assert.AreEqual(1, run.GetMSLevel(1005));
         }
 
@@ -153,7 +171,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             for (int i = 0; i < numScansToGet; i++)
             {
                 run.GetMassSpectrum(new ScanSet(1005), 0, 50000);
-                
+
             }
             sw.Stop();
 
@@ -181,6 +199,27 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
         [Test]
+        public void GetSpectrumSpeedTest1_fromNetwork()
+        {
+            Run run = new BrukerRun(brukerTestFile2);
+            int numScansToGet = 50;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < numScansToGet; i++)
+            {
+                run.GetMassSpectrum(new ScanSet(500), 0, 5000000);   //  some filtering is involved... therefore time is added. 
+            }
+            sw.Stop();
+
+            double avgTime = ((double)sw.ElapsedMilliseconds) / (double)numScansToGet;
+            Console.WriteLine("Average GetScans() time in milliseconds for " + numScansToGet + " scans = \t" + avgTime);   //141 ms
+        }
+
+
+
+
+        [Test]
         public void GetSpectrumSpeedTest_summedSpectra_Test1()
         {
             Run run = new BrukerRun(brukerTestFile1);
@@ -190,7 +229,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             sw.Start();
             for (int i = 0; i < numScansToGet; i++)
             {
-                run.GetMassSpectrum(new ScanSet(1005,1003,1007), 0, 50000);   //  sum five scans
+                run.GetMassSpectrum(new ScanSet(1005, 1003, 1007), 0, 50000);   //  sum five scans
             }
             sw.Stop();
 

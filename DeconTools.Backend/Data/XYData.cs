@@ -210,5 +210,28 @@ namespace DeconTools.Backend
             return data;
 
         }
+
+        public XYData GetNonZeroXYData()
+        {
+            XYData data = new XYData();
+            List<double> tempxvals = new List<double>();
+            List<double> tempyvals = new List<double>();
+
+            for (int i = 0; i < xvalues.Length; i++)
+            {
+                if (yvalues[i] > 0)
+                {
+                    tempxvals.Add(xvalues[i]);
+                    tempyvals.Add(yvalues[i]);
+                }
+
+            }
+
+            data.Xvalues = tempxvals.ToArray();
+            data.Yvalues = tempyvals.ToArray();
+
+            return data;
+
+        }
     }
 }

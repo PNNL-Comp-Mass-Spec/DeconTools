@@ -95,15 +95,20 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run)
         {
+            //TODO:  get the summing working for RAW data
+            
             ScanSet scanSet;
             int bestScan = (int)chromPeak.XValue;
-
+            
             bestScan= run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
+            int leftScan = run.GetClosestMSScan(bestScan - 1, Globals.ScanSelectionMode.DESCENDING);
+            int rightScan = run.GetClosestMSScan(bestScan + 1, Globals.ScanSelectionMode.ASCENDING);
 
-            int numPeaksToSum = (int)(chromPeak.Width / 3 + 0.5);
-            if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
+            //int numPeaksToSum = (int)(chromPeak.Width / 3 + 0.5);
+            //if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
 
-            scanSet = new ScanSet(bestScan, bestScan - numPeaksToSum / 2, bestScan + numPeaksToSum / 2);
+
+            scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
             return scanSet;
 
         }

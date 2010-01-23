@@ -116,7 +116,9 @@ namespace DeconTools.Backend.Core
             set { scanToNETAlignmentData = value; }
         }
 
+        public bool ContainsMSMSData { get; set; }
 
+        private List<int> msLevelScanIndexList { get; set; }
 
 
 
@@ -397,6 +399,36 @@ namespace DeconTools.Backend.Core
                     break;
             }
 
+        }
+
+        /// <summary>
+        /// Purpose is to return an array of MS1-level Scan values for the entire Run. 
+        /// </summary>
+        /// <returns>
+        /// List of Scan numbers pertaining to MS1-level scans only. 
+        /// </returns>
+        public List<int> GetMSLevelScanValues()
+        {
+           
+            
+            //see if this has already been populated. if not, then populate it.   
+            if (this.msLevelScanIndexList == null)
+            {
+                msLevelScanIndexList = new List<int>();
+
+                for (int i = this.minScan; i < this.maxScan; i++)
+                {
+                    if (this.GetMSLevel(i) == 1)
+                    {
+                        msLevelScanIndexList.Add(i);
+                    }
+                }
+            }
+            else
+            {
+                
+            }
+            return this.msLevelScanIndexList;
         }
     }
 }

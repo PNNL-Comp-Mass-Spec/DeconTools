@@ -38,41 +38,20 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task peakChromGen = new PeakChromatogramGenerator(10);
             peakChromGen.Execute(run.ResultCollection);
 
-            Assert.AreEqual(true, run.ResultCollection.ResultList[0] is N14N15_TResult);
-            Assert.AreEqual(52, ((N14N15_TResult)run.ResultCollection.ResultList[0]).ChromValues.Xvalues.Length);
+            Assert.AreEqual(1, run.ResultCollection.MassTagResultList.Count);
 
-            Assert.AreEqual(5509, ((N14N15_TResult)run.ResultCollection.ResultList[0]).ChromValues.Xvalues[1]);
-            Assert.AreEqual(14191370, ((N14N15_TResult)run.ResultCollection.ResultList[0]).ChromValues.Yvalues[1]);
+            //Assert.AreEqual(104, run.XYData.Xvalues.Length);
+            //Assert.AreEqual(74, run.ResultCollection.MassTagResultList[massTag].ChromValues.Xvalues.Length);
 
-            displayChromValues(run.ResultCollection);
+            TestUtilities.DisplayXYValues(run.ResultCollection);
 
 
         }
 
         private void displayChromValues(ResultCollection resultCollection)
         {
-            StringBuilder sb = new StringBuilder();
 
-            foreach (IsosResult result in resultCollection.ResultList)
-            {
-                N14N15_TResult targetedResult = (N14N15_TResult)result;
-                sb.Append("---------------- Mass tag ");
-                sb.Append(targetedResult.MassTag.ID);
-                sb.Append("; MZ = \t");
-                sb.Append(targetedResult.MassTag.MZ.ToString("0.00000"));
-                sb.Append("  -------------------------\n");
-                for (int i = 0; i < targetedResult.ChromValues.Xvalues.Length; i++)
-                {
-                    sb.Append(targetedResult.ChromValues.Xvalues[i]);
-                    sb.Append("\t");
-                    sb.Append(targetedResult.ChromValues.Yvalues[i]);
-                    sb.Append(Environment.NewLine);
-                    
-                }
-                sb.Append("----------------------- end -----------------------------\n");
-            }
-
-            Console.Write(sb.ToString());
+          
         }
 
 

@@ -161,8 +161,8 @@ namespace DeconTools.Backend.Core
         //This is the primary way to add an IsosResult
         public void AddIsosResult(IsosResult addedResult)
         {
-            MSFeatureCounter++;
             addedResult.MSFeatureID = MSFeatureCounter;
+            MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID, as Kevin requested in an email (Jan 20/2010)
             this.CurrentScanIsosResultBin.Add(addedResult);
         }
 
