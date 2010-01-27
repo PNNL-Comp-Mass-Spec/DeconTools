@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.Task" Collapsed="true">
+    <Position X="7" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Core\Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IDeconvolutor" Collapsed="true">
+    <Position X="8.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAGAAAAAIAAQAAAAAAAAAAAEAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\IDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IPeakDetector" Collapsed="true">
+    <Position X="6.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAgAIAAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\IPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.I_MSGenerator" Collapsed="true">
+    <Position X="4.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQIAAAACAAgAAAAIAAAACAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\I_MSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.NETAlignment.IChromAligner" Collapsed="true">
+    <Position X="10" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\NETAlignment\IChromAligner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFeatureFinder" Collapsed="true">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAACAAQCAEAAAAAAAAAACAAAA=</HashCode>
+      <FileName>ProcessingTasks\TargetedFeatureFinders\BasicTFeatureFinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
