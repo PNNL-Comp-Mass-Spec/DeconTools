@@ -97,6 +97,7 @@
     <Compile Include="ProcessingTasksTests\ScanResultUpdaterTests.cs" />
     <Compile Include="ProcessingTasksTests\SimpleDeconTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\BasicTMassTagAnalyzerTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\MassTagFitScoreCalculatorTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\TheorFeatureGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_MSGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_TaskControllerTests.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="UtilitiesTests\Logger_ImporterTests.cs" />
     <Compile Include="UtilitiesTests\MathUtilsTests.cs" />
     <Compile Include="UtilitiesTests\MercuryDistributionTests\MercuryDistributionCreatorTests.cs" />
+    <Compile Include="UtilitiesTests\TheoreticalPeakXYDataUtilitiesTests.cs" />
     <Compile Include="UtilitiesTests\TomIsotopicDistributionTests\TomIsotopicDistributionTests.cs" />
     <Compile Include="UtilitiesTests\UtilitiesTests.cs" />
   </ItemGroup>

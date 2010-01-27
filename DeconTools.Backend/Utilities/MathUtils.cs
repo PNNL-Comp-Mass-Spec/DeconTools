@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Utilities
 {
-    public class MathUtils 
+    public class MathUtils
     {
 
         public static double getInterpolatedValue(double x1, double x2, double y1, double y2, double targetXvalue)
@@ -13,7 +13,7 @@ namespace DeconTools.Backend.Utilities
 
             if (x1 == x2) return y1;
 
-            double slope = (y2 - y1) / (x2-x1);
+            double slope = (y2 - y1) / (x2 - x1);
             double yintercept = y1 - (slope * x1);
             double interpolatedVal = targetXvalue * slope + yintercept;
             return interpolatedVal;
@@ -60,6 +60,7 @@ namespace DeconTools.Backend.Utilities
             return System.Math.Sqrt((sum / (values.GetLength(0) - 1)));
 
         }
+
 
 
     }

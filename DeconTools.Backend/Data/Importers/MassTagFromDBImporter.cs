@@ -116,6 +116,8 @@ namespace DeconTools.Backend.Data.Importers
                 }
             }
 
+            data.ApplyChargeStateFilter();
+
          
 
 
@@ -154,7 +156,7 @@ FROM ( SELECT Mass_Tag_ID,
                      ON T_Mass_Tag_to_Protein_Map.Ref_ID=T_Proteins.Ref_ID
               GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID, T_Proteins.Description
              ) LookupQ 
-      ) OuterQ WHERE (ObsRank=1 and Mass_Tag_ID in (339661, 1880720, 127913, 1100499, 1239111, 994489, 417866, 106915, 1149424, 2763428, 2763428, 2763428, 239704, 44696, 213135, 971852, 24917, 101068, 243782, 24826, 194781, 194781, 1709835, 614192, 614192, 25982, 313378, 232945, 2193778, 323142, 1844543, 3176757, 3176757, 56475, 311742, 1116349, 987418, 27168, 306160, 1220666))
+      ) OuterQ WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (339661, 1880720, 127913, 1100499, 1239111, 994489, 417866, 106915, 1149424, 2763428, 2763428, 2763428, 239704, 44696, 213135, 971852, 24917, 101068, 243782, 24826, 194781, 194781, 1709835, 614192, 614192, 25982, 313378, 232945, 2193778, 323142, 1844543, 3176757, 3176757, 56475, 311742, 1116349, 987418, 27168, 306160, 1220666))
       ORDER BY Mass_Tag_ID";
             return qry;
         }
@@ -206,7 +208,7 @@ FROM ( SELECT Mass_Tag_ID,
                     break;
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
                     Check.Require(this.massTagsToBeRetrieved != null && this.massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
-                    sb.Append("WHERE (ObsRank = 1 and Mass_Tag_ID in (");
+                    sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
 
                     for (int i = 0; i < this.massTagsToBeRetrieved.Count; i++)
                     {

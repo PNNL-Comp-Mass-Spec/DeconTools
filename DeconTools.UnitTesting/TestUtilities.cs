@@ -147,6 +147,22 @@ namespace DeconTools.UnitTesting
             Console.Write(sb.ToString());
         }
 
+        public  static void DisplayXYValues(XYData xydata)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("--------- XYData -----------------\n");
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            {
+                sb.Append(xydata.Xvalues[i]);
+                sb.Append("\t");
+                sb.Append(xydata.Yvalues[i]);
+                sb.Append("\n");
+            }
+            sb.Append("--------------------------- end ---------------------------------------\n");
+
+            Console.Write(sb.ToString());
+        }
+
      
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
@@ -194,5 +210,7 @@ namespace DeconTools.UnitTesting
         {
             
         }
+
+     
     }
 }

@@ -233,5 +233,41 @@ namespace DeconTools.Backend
             return data;
 
         }
+
+        public void NormalizeYData()
+        {
+            double maxVal = this.getMaxY();
+
+            for (int i = 0; i < this.Yvalues.Length; i++)
+            {
+                yvalues[i] = yvalues[i] / maxVal;
+                
+            }
+        }
+
+        public void OffSetXValues(double offset)
+        {
+            for (int i = 0; i < this.xvalues.Length; i++)
+            {
+                this.xvalues[i] = this.xvalues[i] + offset;
+                
+            }
+        }
+
+        public void Display()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("--------- XYData -----------------\n");
+            for (int i = 0; i < this.Xvalues.Length; i++)
+            {
+                sb.Append(this.Xvalues[i]);
+                sb.Append("\t");
+                sb.Append(this.Yvalues[i]);
+                sb.Append("\n");
+            }
+            sb.Append("--------------------------- end ---------------------------------------\n");
+
+            Console.Write(sb.ToString());
+        }
     }
 }

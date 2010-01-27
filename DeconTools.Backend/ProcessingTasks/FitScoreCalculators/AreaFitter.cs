@@ -23,7 +23,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(observedXYData != null & observedXYData.Xvalues != null && observedXYData.Yvalues != null, 
                 "AreaFitter failed. Observed XY data is null");
 
-            Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
+            //Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
 
 
             this.theorXYData = theorXYData;

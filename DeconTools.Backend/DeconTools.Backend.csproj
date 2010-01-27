@@ -120,6 +120,7 @@
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
     <Compile Include="ProcessingTasks\ChromPeakSelector.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\MassTagFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
     <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />
@@ -201,8 +202,10 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\BasicTFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\ITargetedFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\ITheorFeatureGenerator.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\MercuryFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />

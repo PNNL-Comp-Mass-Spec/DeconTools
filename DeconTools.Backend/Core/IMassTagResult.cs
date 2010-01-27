@@ -11,6 +11,8 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
+        public double FitScore { get; set; }
+        
         public abstract List<ChromPeak> ChromPeaks { get; set; }
 
         public abstract ChromPeak ChromPeakSelected { get; set; }
@@ -40,6 +42,7 @@ namespace DeconTools.Backend.Core
             {
                 sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
             }
+            sb.Append("FitScore = " + this.FitScore.ToString("0.0000")+"\n");
             Console.Write(sb.ToString());
         }
 

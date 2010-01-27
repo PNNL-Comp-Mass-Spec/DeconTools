@@ -31,7 +31,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-  
+
 
 
         private List<MSPeakResult> mSPeakResultList;
@@ -156,7 +156,7 @@ namespace DeconTools.Backend.Core
         }
 
         public int MSFeatureCounter { get; set; }
-        
+
 
         //This is the primary way to add an IsosResult
         public void AddIsosResult(IsosResult addedResult)
@@ -181,12 +181,12 @@ namespace DeconTools.Backend.Core
 
         }
 
-     
+
 
         public Globals.MassTagResultType MassTagResultType { get; set; }
 
 
-   
+
 
 
 
@@ -210,7 +210,7 @@ namespace DeconTools.Backend.Core
                 foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter,((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, ((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
                     this.MSPeakResultList.Add(peakResult);
                 }
             }
@@ -246,7 +246,7 @@ namespace DeconTools.Backend.Core
             this.MassTagResultList.Add(massTag, result);
             return result;
         }
-        
+
         public IMassTagResult AddMassTagResult(Globals.MassTagResultType massTagResultType)
         {
             IMassTagResult result;
@@ -260,6 +260,36 @@ namespace DeconTools.Backend.Core
                 default:
                     return new DeconTools.Backend.Core.MassTagResult();
             }
+
+
+        }
+
+        public List<IMassTagResult> GetSuccessfulMassTagResults()
+        {
+            List<IMassTagResult> filteredResults = new List<IMassTagResult>();
+
+            HashSet<int> massTagIDs = new HashSet<int>();
+
+            //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
+
+            List<IMassTagResult> resultList = this.MassTagResultList.Values.ToList();
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                massTagIDs.Add(resultList[i].MassTag.ID);
+            }
+
+            foreach (var mtID in massTagIDs)
+            {
+                List<IMassTagResult> tempResults = resultList.Where(p => p.FitScore < 0.15 && p.MassTag.ID == mtID).ToList();
+                if (tempResults.Count > 0)
+                {
+                    filteredResults.Add(tempResults.OrderByDescending(p => p.FitScore).First());
+                }
+            }
+
+            return filteredResults;
+
+
 
 
         }

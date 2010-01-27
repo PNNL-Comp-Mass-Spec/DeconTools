@@ -47,8 +47,7 @@ namespace DeconTools.UnitTesting.ImporterTests
             Assert.AreEqual(35, testMassTagIDs1.Distinct().Count());
             importer.Import(mtCollection);
 
-            Assert.AreEqual(35, mtCollection.MassTagList.Count);
-            Assert.AreEqual(35, mtCollection.MassTagList.Distinct().Count());
+            Assert.AreEqual(43, mtCollection.MassTagList.Count);
             Assert.AreEqual(24917, mtCollection.MassTagList[1].ID);
             Assert.AreEqual("TQLKEFIDAQI", mtCollection.MassTagList[1].PeptideSequence);
             Assert.AreEqual(1304.6975526m, (decimal)mtCollection.MassTagList[1].MonoIsotopicMass);
@@ -75,7 +74,7 @@ namespace DeconTools.UnitTesting.ImporterTests
             importer.Import(massTagColl);
             massTagColl.Display();
 
-            Assert.AreEqual(85, massTagColl.MassTagList.Count);
+            Assert.AreEqual(114, massTagColl.MassTagList.Count);
 
         }
 

@@ -13,6 +13,7 @@ using DeconTools.Backend.Data.Importers;
 using DeconTools.Backend;
 using System.Diagnostics;
 using System.Linq;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -594,9 +595,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
         [Test]
         public void importAllPeaks_find100MassTags_ChromPeakSel_Closest_To_Target()
         {
-
             Run run = new XCaliburRun(xcaliburTestfile);
-
             MassTagCollection massTagColl = new MassTagCollection();
             MassTagIDGenericImporter mtidImporter = new MassTagIDGenericImporter(massTagTestList1, ',');
             mtidImporter.Import(massTagColl);
@@ -607,7 +606,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Assert.AreEqual(100, massTagColl.MassTagIDList.Count);
 
-            Assert.AreEqual(85, massTagColl.MassTagList.Count);
+            Assert.AreEqual(114, massTagColl.MassTagList.Count);
 
             ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
@@ -625,12 +624,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
+            DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
             Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
 
             int successCounter = 0;
+            List<long> timingResults = new List<long>();
 
             foreach (MassTag mt in massTagColl.MassTagList)
             {
@@ -642,6 +643,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                 Console.WriteLine("------------------- MassTag = " + mt.ID + "---------------------------");
                 Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NETVal.ToString("0.000") + "; Sequence = " + mt.PeptideSequence + "\n");
 
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 try
                 {
                     peakChromGen.Execute(run.ResultCollection);
@@ -652,23 +656,37 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     mspeakDet.Execute(run.ResultCollection);
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
+                    fitScoreCalc.Execute(run.ResultCollection);
                     IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
-                    massTagResult.DisplayToConsole();
+                    //massTagResult.DisplayToConsole();
                     if (massTagResult.IsotopicProfile != null) successCounter++;
-                    Console.WriteLine("------------------------------ end --------------------------");
+                    //Console.WriteLine("------------------------------ end --------------------------");
                 }
                 catch (Exception ex)
                 {
 
-                    Console.WriteLine("Task failed. Message: " + ex.Message + ex.StackTrace);
+                    //Console.WriteLine("Task failed. Message: " + ex.Message + ex.StackTrace);
                 }
+                sw.Stop();
+                timingResults.Add(sw.ElapsedMilliseconds);
 
 
             }
 
-            Console.WriteLine();
-            Console.WriteLine("~~~~~~~~~~~~~ Number of Successes = " + successCounter + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+            List<IMassTagResult> successfulResults = run.ResultCollection.GetSuccessfulMassTagResults();
 
+            foreach (long tr in timingResults)
+            {
+                Console.WriteLine(tr);
+
+            }
+            Console.WriteLine("-------- Analysis time for all MTs = " + timingResults.Sum());
+            Console.WriteLine("-------- Average time for each MT = " + timingResults.Average());
+
+            Console.WriteLine();
+            Console.WriteLine("~~~~~~~~~~~~~ Number of Successes = " + successfulResults.Count + " out of " + massTagColl.MassTagIDList.Distinct().Count() + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+
+          
 
         }
 
@@ -715,7 +733,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             int successCounter = 0;
             List<long> timeData = new List<long>();
 
-
             foreach (MassTag mt in massTagColl.MassTagList)
             {
                 run.CurrentMassTag = mt;
@@ -733,11 +750,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     mspeakDet.Execute(run.ResultCollection);
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
-
                 }
                 catch (Exception)
                 {
-
                 }
 
                 sw.Stop();
