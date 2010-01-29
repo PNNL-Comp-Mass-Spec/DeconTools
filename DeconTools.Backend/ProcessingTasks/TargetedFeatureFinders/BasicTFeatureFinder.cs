@@ -10,7 +10,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
     public class BasicTFeatureFinder : ITargetedFeatureFinder
     {
         #region Constructors
-        public BasicTFeatureFinder():this(0.005)     // default mzTolerance
+        public BasicTFeatureFinder()
+            : this(0.005)     // default mzTolerance
         {
 
         }
@@ -45,6 +46,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 result = resultColl.CreateMassTagResult(resultColl.Run.CurrentMassTag);
             }
 
+            if (result.ScanSet == null)
+            {
+                result.ScanSet = resultColl.Run.CurrentScanSet;
+
+            }
+
+
             IsotopicProfile theor = resultColl.Run.CurrentMassTag.IsotopicProfile;
 
 
@@ -64,13 +72,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     foundMatchingMaxPeak = peaksWithinTol.Count > 0;
                 }
-               
+
                 if (!foundMatchingMaxPeak)   // can't even find the observed peak that matches the most intense theor peak. 
                 {
                     result.IsotopicProfile = null;     //no matching isotopic profile found for this mass tag
                     break;   //   give up... 
                 }
-    
+
                 if (peaksWithinTol.Count == 0)
                 {
                     if (NeedMonoIsotopicPeak)
@@ -104,7 +112,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     }
                     else
                     {
-                        bestPeak = findClosestToMZPeak(peaksWithinTol, theor.Peaklist[i].XValue,massDefect);
+                        bestPeak = findClosestToMZPeak(peaksWithinTol, theor.Peaklist[i].XValue, massDefect);
                     }
 
                     if (result.IsotopicProfile.Peaklist.Count == 0)
@@ -113,7 +121,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     }
                     else
                     {
-                        result.IsotopicProfile.Peaklist.Insert(0, bestPeak); 
+                        result.IsotopicProfile.Peaklist.Insert(0, bestPeak);
 
                     }
                 }
@@ -140,7 +148,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     }
                     break;    // finished.  Exit loop. 
                 }
-                else if (peaksWithinTol.Count==1)
+                else if (peaksWithinTol.Count == 1)
                 {
 
                     result.IsotopicProfile.Peaklist.Add(peaksWithinTol[0]);   //here, we tack peaks onto the profile
@@ -151,20 +159,35 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
             }
 
+            addInfoToResult(result);
+
+
+
             return;
+        }
+
+        private void addInfoToResult(IMassTagResult result)
+        {
+            if (result.IsotopicProfile != null)
+            {
+                result.IsotopicProfile.ChargeState = result.MassTag.ChargeState;
+                result.IsotopicProfile.MonoIsotopicMass = (result.IsotopicProfile.GetMZ() - Globals.PROTON_MASS) * result.MassTag.ChargeState;
+                result.IsotopicProfile.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
+            }
+
         }
 
         private List<MSPeak> getPeaksWithinTol(List<IPeak> list, double targetMZ, double mztol)
         {
-            
+
             //TODO: this should be optimized.  I'm simply going through the peaklist from start to the point where the m/z value exceeds the targetMZ. 
             //We should use a smarter approach. 
-            
+
             List<MSPeak> peaksWithinTol = new List<MSPeak>();
 
             for (int n = 0; n < list.Count; n++)
             {
-                bool observedPeakIsWithinTolerance = (Math.Abs(list[n].XValue - targetMZ) <= mztol);
+                bool observedPeakIsWithinTolerance = ((Math.Abs(list[n].XValue - targetMZ)) / targetMZ * 1e6 <= mztol);
                 if (observedPeakIsWithinTolerance)
                 {
                     peaksWithinTol.Add((MSPeak)list[n]);

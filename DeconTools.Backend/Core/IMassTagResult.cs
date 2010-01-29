@@ -11,13 +11,15 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        public double FitScore { get; set; }
         
         public abstract List<ChromPeak> ChromPeaks { get; set; }
 
         public abstract ChromPeak ChromPeakSelected { get; set; }
 
         public abstract MassTag MassTag { get; set; }
+
+        public abstract double Score { get; set; }
+
 
         public abstract XYData ChromValues { get; set; }
         #endregion
@@ -42,7 +44,7 @@ namespace DeconTools.Backend.Core
             {
                 sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
             }
-            sb.Append("FitScore = " + this.FitScore.ToString("0.0000")+"\n");
+            sb.Append("FitScore = " + this.Score.ToString("0.0000")+"\n");
             Console.Write(sb.ToString());
         }
 
@@ -51,5 +53,15 @@ namespace DeconTools.Backend.Core
         #region Private Methods
         #endregion
 
+
+        public double GetNET()
+        {
+            if (ChromPeakSelected == null) return -1;
+            else
+            {
+                return ChromPeakSelected.NETValue;
+            }
+
+        }
     }
 }

@@ -97,7 +97,9 @@
     <Compile Include="ProcessingTasksTests\ScanResultUpdaterTests.cs" />
     <Compile Include="ProcessingTasksTests\SimpleDeconTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\BasicTMassTagAnalyzerTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\LargerScaleTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\MassTagFitScoreCalculatorTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\MassTagResultExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\TheorFeatureGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_MSGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_TaskControllerTests.cs" />

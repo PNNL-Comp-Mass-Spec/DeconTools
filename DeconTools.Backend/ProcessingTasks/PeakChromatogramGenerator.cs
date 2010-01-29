@@ -62,18 +62,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             IMassTagResult result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
-            if (result == null)
-            {
-                result = resultColl.CreateMassTagResult(resultColl.Run.CurrentMassTag);
-            }
-
-            result.MassTag = resultColl.Run.CurrentMassTag;
+       
 
             //store XYData in the Run's data to be used by other tasks...
             resultColl.Run.XYData = getChromValues(filteredPeakList, resultColl.Run);
 
             //store XYData in the MassTag result object
-            result.ChromValues = resultColl.Run.XYData;
+            //result.ChromValues = resultColl.Run.XYData;
 
         }
 

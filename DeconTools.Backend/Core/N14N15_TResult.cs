@@ -73,5 +73,17 @@ namespace DeconTools.Backend.Core
         #endregion
 
 
+
+        public override double Score
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             if (result.IsotopicProfile == null || result.IsotopicProfile.Peaklist == null || result.IsotopicProfile.Peaklist.Count == 0)
             {
-                result.FitScore = 1;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
+                result.Score = 1;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
                 return;
             }
 
@@ -41,7 +41,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             if (result.IsotopicProfile.Peaklist.Count <= indexOfMostAbundantTheorPeak)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
-                result.FitScore = 1;
+                result.Score = 1;
                 return;
             }
 
@@ -61,7 +61,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             double fitval = areafitter.getFit();
 
             if (fitval == double.NaN || fitval > 1) fitval = 1;
-            result.FitScore = fitval;
+            result.Score = fitval;
 
 
 

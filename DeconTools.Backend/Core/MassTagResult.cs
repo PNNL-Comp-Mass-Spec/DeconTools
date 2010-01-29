@@ -67,5 +67,10 @@ namespace DeconTools.Backend.Core
 
         #region Private Methods
         #endregion
+
+
+
+        public override double Score { get; set; }
+
     }
 }

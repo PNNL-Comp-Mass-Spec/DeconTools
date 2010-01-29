@@ -131,6 +131,9 @@
     <Compile Include="Data\RunFactory.cs" />
     <Compile Include="Data\ScanResultFactory.cs" />
     <Compile Include="Data\Exporters\ScansExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\MassTagResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\BasicMTResultSQLiteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\IMassTagResultExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListExporterFactory.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScansExporterFactory.cs" />
     <Compile Include="Data\TaskControllerFactory.cs" />

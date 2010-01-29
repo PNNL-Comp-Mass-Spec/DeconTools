@@ -108,12 +108,17 @@ namespace DeconTools.Backend.Core
         public double GetMZofMostAbundantPeak()
         {
             MSPeak mostIntensePeak = getMostIntensePeak();
+            if (mostIntensePeak == null) return -1;
             return mostIntensePeak.XValue;
         }
 
         public double GetFWHM()
         {
             MSPeak mostIntensePeak = getMostIntensePeak();
+            if (mostIntensePeak == null)
+            {
+                return -1;
+            }
             return mostIntensePeak.Width;
         }
 
@@ -157,12 +162,16 @@ namespace DeconTools.Backend.Core
         public double GetSignalToNoise()
         {
             MSPeak mostIntensePeak = getMostIntensePeak();
+            if (mostIntensePeak == null)
+            {
+                return -1;
+            } 
             return mostIntensePeak.SN;
         }
 
         public double GetMonoAbundance()
         {
-            if (this.peaklist == null) return -1;
+            if (this.peaklist == null||this.Peaklist.Count==0) return -1;
             return this.peaklist[0].Height;
         }
 
@@ -174,7 +183,7 @@ namespace DeconTools.Backend.Core
 
         public double GetMZ()
         {
-            if (this.peaklist == null) return -1;
+            if (this.peaklist == null || this.Peaklist.Count==0) return -1;
             return this.peaklist[0].XValue;
         }
 

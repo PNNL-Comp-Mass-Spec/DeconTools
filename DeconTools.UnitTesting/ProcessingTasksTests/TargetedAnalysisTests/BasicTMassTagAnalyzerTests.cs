@@ -14,6 +14,7 @@ using DeconTools.Backend;
 using System.Diagnostics;
 using System.Linq;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExporters;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -21,6 +22,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
     public class BasicTMassTagAnalyzerTests
     {
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+        private string massTagResultFileName1 = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_85MT_isos.db3";
+
         private string xcaliburPeakDataFile = "..\\..\\TestFiles\\XCaliburPeakDataScans5500-6500.txt";
 
         private string xcaliburAllPeaksFile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.txt";
@@ -627,7 +630,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFeatureFinder(5);
+            Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
+
+
             MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
 
             int successCounter = 0;
@@ -658,22 +664,30 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     targetedFeatureFinder.Execute(run.ResultCollection);
                     fitScoreCalc.Execute(run.ResultCollection);
                     IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
-                    //massTagResult.DisplayToConsole();
-                    if (massTagResult.IsotopicProfile != null) successCounter++;
-                    //Console.WriteLine("------------------------------ end --------------------------");
+                    massTagResult.DisplayToConsole();
+
+
+                    Console.WriteLine("------------------------------ end --------------------------");
                 }
                 catch (Exception ex)
                 {
 
-                    //Console.WriteLine("Task failed. Message: " + ex.Message + ex.StackTrace);
+                    Console.WriteLine("Task failed. Message: " + ex.Message + ex.StackTrace);
                 }
                 sw.Stop();
                 timingResults.Add(sw.ElapsedMilliseconds);
 
+                if (mt == massTagColl.MassTagList.Last())
+                {
+                    exporter.Execute(run.ResultCollection);
+                }
+
 
             }
 
-            List<IMassTagResult> successfulResults = run.ResultCollection.GetSuccessfulMassTagResults();
+            exporter.Cleanup();
+
+            //List<IMassTagResult> successfulResults = run.ResultCollection.GetSuccessfulMassTagResults();
 
             foreach (long tr in timingResults)
             {
@@ -684,9 +698,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Console.WriteLine("-------- Average time for each MT = " + timingResults.Average());
 
             Console.WriteLine();
-            Console.WriteLine("~~~~~~~~~~~~~ Number of Successes = " + successfulResults.Count + " out of " + massTagColl.MassTagIDList.Distinct().Count() + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+            //Console.WriteLine("~~~~~~~~~~~~~ Number of Successes = " + successfulResults.Count + " out of " + massTagColl.MassTagIDList.Distinct().Count() + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
 
-          
+
 
         }
 
@@ -763,7 +777,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
 
 
-   
+
 
 
         }
@@ -1075,6 +1089,96 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
 
         }
+
+
+        [Test]
+        public void importAllPeaks_MT1709835()
+        {
+            int mtID = 1709835;
+
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            MassTagCollection massTagColl = new MassTagCollection();
+            MassTagIDGenericImporter mtidImporter = new MassTagIDGenericImporter(massTagTestList1, ',');
+            mtidImporter.Import(massTagColl);
+
+            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky");
+            importer.SetMassTagsToRetrieve(massTagColl.MassTagIDList);
+            importer.Import(massTagColl);
+
+
+            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            chromAligner.Execute(run);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+            Task peakChromGen = new PeakChromatogramGenerator(20);
+
+            Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
+            Task zeroFill = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
+            Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+
+
+            DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
+            Task mspeakDet = new DeconToolsPeakDetector(peakParams);
+            Task theorFeatureGen = new TomTheorFeatureGenerator();
+            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
+            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
+
+
+
+            run.CurrentMassTag = massTagColl.MassTagList.Find(p => p.ID == mtID);
+            MassTag mt = run.CurrentMassTag;
+            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("------------------- MassTag = " + mt.ID + "---------------------------");
+            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NETVal.ToString("0.000") + "; Sequence = " + mt.PeptideSequence + "\n");
+
+
+            peakChromGen.Execute(run.ResultCollection);
+            smoother.Execute(run.ResultCollection);
+            TestUtilities.DisplayXYValues(run.ResultCollection);
+            peakDet.Execute(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.ResultCollection);
+            chromPeakSel.Execute(run.ResultCollection);
+
+            try
+            {
+                msgen.Execute(run.ResultCollection);
+                mspeakDet.Execute(run.ResultCollection);
+                theorFeatureGen.Execute(run.ResultCollection);
+                targetedFeatureFinder.Execute(run.ResultCollection);
+                fitScoreCalc.Execute(run.ResultCollection);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine("There was a problem. " + ex.Message);
+            }
+            //IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            //massTagResult.DisplayToConsole();
+   
+            exporter.Execute(run.ResultCollection);
+
+
+
+            Console.WriteLine("------------------------------ end --------------------------");
+
+            exporter.Cleanup();
+
+
+
+        }
+
 
 
     }

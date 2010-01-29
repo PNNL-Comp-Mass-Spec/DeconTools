@@ -108,7 +108,8 @@ namespace DeconTools.Backend.ProcessingTasks
             //if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
 
 
-            scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
+            //scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
+            scanSet = new ScanSet(bestScan);
             return scanSet;
 
         }

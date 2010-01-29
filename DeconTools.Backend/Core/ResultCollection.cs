@@ -171,26 +171,15 @@ namespace DeconTools.Backend.Core
             if (massTagResultList.ContainsKey(massTag))
             {
                 return massTagResultList[massTag];
-
             }
             else
             {
-                return null;
+                IMassTagResult result = CreateMassTagResult(massTag);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+                return result;  
             }
-
-
         }
 
-
-
         public Globals.MassTagResultType MassTagResultType { get; set; }
-
-
-
-
-
-
-
 
         public void ClearAllResults()
         {
@@ -244,6 +233,9 @@ namespace DeconTools.Backend.Core
             }
 
             this.MassTagResultList.Add(massTag, result);
+            result.MSFeatureID = MSFeatureCounter;
+            result.Score = 1;
+            this.MSFeatureCounter++;
             return result;
         }
 
@@ -280,10 +272,10 @@ namespace DeconTools.Backend.Core
 
             foreach (var mtID in massTagIDs)
             {
-                List<IMassTagResult> tempResults = resultList.Where(p => p.FitScore < 0.15 && p.MassTag.ID == mtID).ToList();
+                List<IMassTagResult> tempResults = resultList.Where(p => p.Score < 0.15 && p.MassTag.ID == mtID).ToList();
                 if (tempResults.Count > 0)
                 {
-                    filteredResults.Add(tempResults.OrderByDescending(p => p.FitScore).First());
+                    filteredResults.Add(tempResults.OrderByDescending(p => p.Score).First());
                 }
             }
 
