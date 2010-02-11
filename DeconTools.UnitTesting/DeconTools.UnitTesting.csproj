@@ -36,9 +36,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3625.20702, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3625.30679, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="DMSDeconToolsV2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DMSDeconToolsV2.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -46,14 +50,17 @@
     </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ProteinCalc\ProteinCalc\bin\Release\ProteinCalc.dll</HintPath>
+      <HintPath>..\Library\ProteinCalc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
@@ -63,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeconConsole_Tests\DeconConsoleTests.cs" />
+    <Compile Include="DeconEngineTests.cs" />
     <Compile Include="DMSDeconToolsWrapperTests.cs" />
     <Compile Include="DTO_Tests\IsoResultComparerTests.cs" />
     <Compile Include="DTO_Tests\IsosResultUtilitiesTests.cs" />
@@ -141,10 +149,6 @@
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DMSDeconToolsV2\DMSDeconToolsV2.csproj">
-      <Project>{23B9BC46-F89D-41C1-896F-609A67C89F38}</Project>
-      <Name>DMSDeconToolsV2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

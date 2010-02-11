@@ -11,6 +11,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using System.IO;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests
 {
@@ -65,6 +66,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Console.WriteLine("Time required (ms) = " + sw.ElapsedMilliseconds);
             Console.WriteLine("Scans analyzed = " + project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
             Console.WriteLine("Features found = " + project.RunCollection[0].ResultCollection.ResultList.Count);
+
+
+               
+
+              
 
 
             Assert.AreEqual(1, Project.getInstance().RunCollection.Count);

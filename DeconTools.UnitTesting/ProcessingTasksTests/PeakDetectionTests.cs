@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void peakDetectionOnXCaliburTest2_effectOfThresholdingOnPeakDetector()
         {
-            Run run = new XCaliburRun(xcaliburTestfile2);
+            Run run = new XCaliburRun(xcaliburTestfile);
 
             ResultCollection results = new ResultCollection(run);
 

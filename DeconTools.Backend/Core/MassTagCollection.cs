@@ -11,6 +11,7 @@ namespace DeconTools.Backend.Core
         public MassTagCollection()
         {
             MassTagList = new List<MassTag>();
+            this.MassTagIDList = new List<long>();
         }
         #endregion
 
@@ -21,6 +22,10 @@ namespace DeconTools.Backend.Core
             get { return massTagList; }
             set { massTagList = value; }
         }
+
+        public List<double> test = new List<double>();
+        
+
 
         public List<long> MassTagIDList;
 
@@ -34,6 +39,14 @@ namespace DeconTools.Backend.Core
 
         public void Display()
         {
+
+            test.Add(400.3);
+            test.Add(400.3);
+            test.Add(400.3);
+            test.Add(400.3);
+
+            Console.Write(test.Count);
+
             char delim = '\t';
 
             StringBuilder sb = new StringBuilder();
