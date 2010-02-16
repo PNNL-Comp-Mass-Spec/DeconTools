@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.TaskController">
+    <Position X="5.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAABAAYAAQACAAAAAAAAAQAAAAABAAAAAAI=</HashCode>
+      <FileName>Core\TaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.BasicTaskController" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\BasicTaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMF_TaskController" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAIAAAAAQAAgAAAAAAAAAAAQAgAAAAgAAAAAI=</HashCode>
+      <FileName>ProcessingTasks\UIMF_TaskController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

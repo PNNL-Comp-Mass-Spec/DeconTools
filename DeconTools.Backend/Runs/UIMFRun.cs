@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Runs
 {
 
     [Serializable]
-    public class UIMFRun : DeconToolsRun
+    public class UIMFRun : Run
     {
         private int numBins;
 

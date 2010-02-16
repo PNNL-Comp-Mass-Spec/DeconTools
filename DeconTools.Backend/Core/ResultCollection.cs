@@ -30,10 +30,6 @@ namespace DeconTools.Backend.Core
             set { massTagResultList = value; }
         }
 
-
-
-
-
         private List<MSPeakResult> mSPeakResultList;
         public List<MSPeakResult> MSPeakResultList
         {
@@ -57,14 +53,6 @@ namespace DeconTools.Backend.Core
             set { scanResultList = value; }
         }
 
-        private ScanResult currentScanResult;
-
-        public ScanResult CurrentScanResult
-        {
-            get { return currentScanResult; }
-            set { currentScanResult = value; }
-        }
-
 
         private List<IsosResult> resultList;
 
@@ -74,13 +62,6 @@ namespace DeconTools.Backend.Core
             set { resultList = value; }
         }
 
-        private ScanSet currentScanSet;
-
-        public ScanSet CurrentScanSet
-        {
-            get { return currentScanSet; }
-            set { currentScanSet = value; }
-        }
 
         private Run run;
 

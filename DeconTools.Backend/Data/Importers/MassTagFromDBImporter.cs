@@ -40,16 +40,8 @@ namespace DeconTools.Backend.Data.Importers
         #endregion
 
         #region Public Methods
-        /// <summary>
-        /// Use this to set the List of Mass Tags that will be retrieved from the database;  
-        /// make sure the ImporterMode is set to 'List_of_MT_IDs_Mode'
-        /// </summary>
-        /// <param name="MassTagIDList"></param>
-        public void SetMassTagsToRetrieve(List<long> MassTagIDList)
-        {
-            this.massTagsToBeRetrieved = MassTagIDList;
-        }
-
+  
+  
         #endregion
 
         #region Private Methods
@@ -69,6 +61,8 @@ namespace DeconTools.Backend.Data.Importers
         {
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             data.MassTagList = new List<MassTag>();
+
+            this.massTagsToBeRetrieved = data.MassTagIDList;
 
             string queryString = createQueryString(this.ImporterMode);
             Console.WriteLine(queryString);

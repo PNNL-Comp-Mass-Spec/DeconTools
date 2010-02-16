@@ -7,7 +7,7 @@ using DeconTools.Backend.Core;
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class IMFRun : DeconToolsRun
+    public class IMFRun : Run
     {
 
         public IMFRun()

@@ -107,9 +107,12 @@ namespace DeconTools.Backend.ProcessingTasks
             //int numPeaksToSum = (int)(chromPeak.Width / 3 + 0.5);
             //if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
 
+            
 
-            //scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
-            scanSet = new ScanSet(bestScan);
+
+            //TODO:  have a way to control summing
+            scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
+            //scanSet = new ScanSet(bestScan);     //TODO:  no summing here
             return scanSet;
 
         }

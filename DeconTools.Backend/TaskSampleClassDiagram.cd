@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.TaskCollection" Collapsed="true">
+    <Position X="3.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAABAAAAAAAAAAQAAIAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\TaskCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="TaskList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Task">
+    <Position X="6" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Core\Task.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IDeconvolutor" Collapsed="true">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAGAAAAAIAAQAAAAAAAAAAAEAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\IDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.HornDeconvolutor" Collapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IUHAAINVSYSICFEIgIIALQGCAA0KIMYCAKCPDsFMFQQ=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.RapidDeconvolutor" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAgIAGACAAIEAhACABkACAABAACIAAAAAAA=</HashCode>
+      <FileName>ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.IPeakDetector" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAAAgAIAAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\IPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector" Collapsed="true">
+    <Position X="5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAIgAAQAAAgAAAAIAAAAAAAAAAAAAAAAAAgAIQAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\ChromPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector" Collapsed="true">
+    <Position X="6.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CABAAAkJEQAAAAAACBAQAAALAAAAABgABAAIAgAYAAA=</HashCode>
+      <FileName>ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.I_MSGenerator" Collapsed="true">
+    <Position X="2" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQIAAAACAAgAAAAIAAAACAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\I_MSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.MSGenerators.GenericMSGenerator" Collapsed="true">
+    <Position X="1" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\GenericMSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.ProcessingTasks.UIMF_MSGenerator" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgIAAAIgAAAAAAAAAAACA=</HashCode>
+      <FileName>ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.TaskController" Collapsed="true">
+    <Position X="1" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAABAAYAAQACAAAAAAAAAQAAAAABAAAAAAI=</HashCode>
+      <FileName>Core\TaskController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TaskCollection" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

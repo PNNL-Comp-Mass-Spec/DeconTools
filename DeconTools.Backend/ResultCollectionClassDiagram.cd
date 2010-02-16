@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.ResultCollection">
+    <Position X="3.25" Y="4.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AIAAAgAAgCAAIIAEAKAESAAgQAIIIADEAAIEACBAQAY=</HashCode>
+      <FileName>Core\ResultCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ResultList" />
+      <Property Name="ScanResultList" />
+      <Property Name="MassTagResultList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IsosResult">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAI=</HashCode>
+      <FileName>Core\IsosResult.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="IsotopicProfile" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanResult" Collapsed="true">
+    <Position X="7.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACQAAgAAQAAAAJAAAAAAAAAAAAQCAAAEAAAAAAAAA=</HashCode>
+      <FileName>Core\ScanResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IMassTagResult">
+    <Position X="7.75" Y="6.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="DeconTools.Backend.Core.IsosResult" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="6.04" />
+        <Point X="8.5" Y="6.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAgBAAAAgAAAAAAAQAAAEAAAAAAQAAA=</HashCode>
+      <FileName>Core\IMassTagResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IsotopicProfile">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AjAAAAAQAhhSAAiCYACJADgAKAgAAAIAAAgBsAAgIBA=</HashCode>
+      <FileName>Core\IsotopicProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.N14N15_TResult">
+    <Position X="8.75" Y="9" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQAgAAAAAAAAgBAAAAAAAQIAAAQCAAEAAAABAQBAI=</HashCode>
+      <FileName>Core\N14N15_TResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.MassTagResult">
+    <Position X="6.75" Y="9" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAgBAAAAAAAAIAAAQCAAEAAAABAQBAI=</HashCode>
+      <FileName>Core\MassTagResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.5" />
+  <Class Name="DeconTools.Backend.Runs.BrukerRun" Collapsed="true">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAgkAEBAAAAA=</HashCode>
+      <FileName>Runs\BrukerRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.XYDataRun" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAIAAAAAAAAAAAAQAAAAAAAAAAAAEBAAAAA=</HashCode>
+      <FileName>Runs\XYDataRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.ConcreteXYDataRun" Collapsed="true">
+    <Position X="2" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Runs\ConcreteXYDataRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.ICR2LSRun" Collapsed="true">
+    <Position X="13.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAggAEBAAAAA=</HashCode>
+      <FileName>Runs\ICR2LSRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.IMFRun" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAggAEBAAAAA=</HashCode>
+      <FileName>Runs\IMFRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.MSScanFromTextFileRun" Collapsed="true">
+    <Position X="3.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAQAAAAAAABAACgAAKAAAAAAAQAAgAAAAAAAAA=</HashCode>
+      <FileName>Runs\MSScanFromTextFileRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.MZXMLRun" Collapsed="true">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIAAAAAAAAAAAAAAIQAAAAAAAAAggAEBAAAAA=</HashCode>
+      <FileName>Runs\MZXMLRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.UIMFRun" Collapsed="true">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hQAKAEQMgAAABAAAgAAJAAIwAAAAABBEAo0AEBEAgAA=</HashCode>
+      <FileName>Runs\UIMFRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Runs.XCaliburRun" Collapsed="true">
+    <Position X="8.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAMAAAAAAAAAAAAAAIQAAAAAAAAAgkAEBAAAAA=</HashCode>
+      <FileName>Runs\XCaliburRun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Run" Collapsed="true">
+    <Font Name="Tahoma" Size="14" />
+    <Position X="7.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IwEIQLFJAAAIQEAgAAAECA4YAAAiRAUEgwEBEIQQEAA=</HashCode>
+      <FileName>Core\Run.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+
+</ClassDiagram>

@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using System.Diagnostics;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests
@@ -121,6 +122,33 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
 
+
+        [Test]
+        public void xcaliburSimpleTest1()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+            Project.getInstance().RunCollection.Add(run);
+
+            ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1);
+            scanSetCollectionCreator.Create();
+
+            Task msGenerator = new GenericMSGenerator();
+            Task msPeakDetector = new DeconToolsPeakDetector();
+            Task thrashDecon = new HornDeconvolutor();
+            Task exporter = new BasicIsosResultSqliteExporter("..\\..\\TestFiles\\tempOutput.db3");
+
+            Project.getInstance().TaskCollection.TaskList.Add(msGenerator);
+            Project.getInstance().TaskCollection.TaskList.Add(msPeakDetector);
+            Project.getInstance().TaskCollection.TaskList.Add(thrashDecon);
+            Project.getInstance().TaskCollection.TaskList.Add(exporter);
+
+            TaskController controller = new BasicTaskController(Project.getInstance().TaskCollection);
+            controller.Execute(Project.getInstance().RunCollection);
+        }
+
+
+
+
         [Test]
         public void xcaliburFile20ScanHornDeconTest1()
         {
@@ -158,7 +186,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(1, Project.getInstance().RunCollection.Count);
             Assert.AreEqual(3, project.TaskCollection.TaskList.Count);
 
-            Assert.AreEqual(21, project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(3, project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(233, project.RunCollection[0].ResultCollection.ResultList.Count);
 
             Console.WriteLine("Time required (ms) = " + sw.ElapsedMilliseconds);
@@ -208,7 +236,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(3, project.TaskCollection.TaskList.Count);
 
 //            Assert.AreEqual(21, project.RunCollection[0].ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(233, project.RunCollection[0].ResultCollection.ResultList.Count);
+            Assert.AreEqual(0, project.RunCollection[0].ResultCollection.ResultList.Count);
 
             Console.WriteLine("Time required (ms) = " + sw.ElapsedMilliseconds);
             Console.WriteLine("Scans analyzed = " + project.RunCollection[0].ScanSetCollection.ScanSetList.Count);

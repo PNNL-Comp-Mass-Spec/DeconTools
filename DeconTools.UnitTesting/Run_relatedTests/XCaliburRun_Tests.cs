@@ -76,6 +76,17 @@ namespace DeconTools.UnitTesting
             Assert.AreEqual(139510.8515625m, (decimal)run.XYData.Yvalues[2]);
         }
 
+        [Test]
+        public void getSummedSpectrumSimpleTest1()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+            ScanSet scanset = new ScanSet(6005, new int[] { 5991, 5998, 6005, 6012, 6019 });
+            run.GetMassSpectrum(scanset, 400, 1500);
+
+            Assert.AreEqual(70544321.0d, run.XYData.getMaxY());
+        }
+        
+
 
         [Test]
         public void GetNumMSScansTest()

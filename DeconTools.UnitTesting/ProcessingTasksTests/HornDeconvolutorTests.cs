@@ -7,6 +7,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests
 {
@@ -15,6 +16,32 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     {
 
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+       
+        [Test]
+        public void simpleTest1()
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1);
+            scansetCreator.Create();
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            Task msgen = new GenericMSGenerator();
+            Task peakDetector = new DeconToolsPeakDetector();
+            Task decon = new HornDeconvolutor();
+
+            foreach (var scan in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                decon.Execute(run.ResultCollection);
+            }
+
+            Assert.AreEqual(285, run.ResultCollection.ResultList.Count);
+        }
+
+
 
         [Test]
         public void numPeaksUsedInAbundanceTest1()

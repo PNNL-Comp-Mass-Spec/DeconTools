@@ -8,7 +8,7 @@ using System.Linq;
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class XCaliburRun : DeconToolsRun
+    public class XCaliburRun : Run
     {
 
         public XCaliburRun()

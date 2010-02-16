@@ -45,7 +45,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             mtidImporter.Import(massTagColl);
 
             MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky");
-            importer.SetMassTagsToRetrieve(massTagColl.MassTagIDList);
             importer.Import(massTagColl);
 
             Assert.AreEqual(737, massTagColl.MassTagIDList.Count);
@@ -152,7 +151,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             mtidImporter.Import(massTagColl);
 
             MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky");
-            importer.SetMassTagsToRetrieve(massTagColl.MassTagIDList);
             importer.Import(massTagColl);
 
             Assert.AreEqual(6256, massTagColl.MassTagIDList.Count);
@@ -321,7 +319,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
 
             MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky");
-            importer.SetMassTagsToRetrieve(massTagColl.MassTagIDList);
             importer.Import(massTagColl);
 
             Assert.AreEqual(6256, massTagColl.MassTagIDList.Count);

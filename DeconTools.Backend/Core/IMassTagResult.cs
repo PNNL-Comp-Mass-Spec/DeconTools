@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Core
 
         public abstract MassTag MassTag { get; set; }
 
-        public abstract double Score { get; set; }
+        public abstract double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
 
 
         public abstract XYData ChromValues { get; set; }

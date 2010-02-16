@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.ScanSetCollection">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAACAAAAAAABAAAAAAQAAAAEAAAA=</HashCode>
+      <FileName>Core\ScanSetCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ScanSetList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.ScanSet">
+    <Position X="6.25" Y="2.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AFAAUAAwAAQAAAAAAAAIAAQAAAAAUggAABMABAABAEA=</HashCode>
+      <FileName>Core\ScanSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.Run" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IwEIQLFJAAAIQEAgAAAECA4YAAAiRAUEgwEBEIQQEAA=</HashCode>
+      <FileName>Core\Run.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CurrentScanSet" />
+      <Property Name="ScanSetCollection" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
