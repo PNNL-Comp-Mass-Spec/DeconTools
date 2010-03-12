@@ -10,6 +10,7 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using System.Diagnostics;
 using System.IO;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
 {
@@ -37,7 +38,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Run run = new XCaliburRun(xcaliburFile1);
             runcoll.Add(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1,false);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1, false);
             sscc.Create();
 
             Task msgen = new GenericMSGenerator();
@@ -84,12 +85,12 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
         public void outputToText_xcaliburData_Test1()
         {
             string testFile = xcalibur_text_IsosResultOutputFile1;
-            
+
             List<Run> runcoll = new List<Run>();
             Run run = new XCaliburRun(xcaliburFile1);
             runcoll.Add(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1,false);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1, false);
             sscc.Create();
 
             Task msgen = new GenericMSGenerator();
@@ -133,6 +134,49 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
 
         }
 
+
+        [Test]
+        public void outputToText_xcaliburData_Test2()
+        {
+            string testFile = xcalibur_text_IsosResultOutputFile1;
+
+            List<Run> runcoll = new List<Run>();
+            Run run = new XCaliburRun(xcaliburFile1);
+            runcoll.Add(run);
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1, false);
+            sscc.Create();
+
+            Task msgen = new GenericMSGenerator();
+            Task peakDetector = new DeconToolsPeakDetector();
+            Task decon = new HornDeconvolutor();
+            Task flagger = new ResultValidatorTask();
+            BasicIsosResultTextFileExporter isosExporter = new BasicIsosResultTextFileExporter(testFile);
+
+
+            Stopwatch sw;
+
+            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            {
+
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+
+                decon.Execute(run.ResultCollection);
+                flagger.Execute(run.ResultCollection);
+            }
+
+            isosExporter.ExportIsosResults(run.ResultCollection);
+
+            Assert.AreEqual(true, File.Exists(testFile));
+
+            FileInfo fi = new FileInfo(testFile);
+            //Assert.AreEqual(25881, fi.Length);
+            Console.Write(fi.Length);
+
+        }
+
         [Test]
         public void outputToSqlite_uimf_test1()
         {
@@ -143,7 +187,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Run run = new UIMFRun(uimfFile1);
             runcoll.Add(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 200, 240, 9, 1,false);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 200, 240, 9, 1, false);
             sscc.Create();
 
             FrameSetCollectionCreator fsc = new FrameSetCollectionCreator(run, 800, 801, 3, 1);
@@ -202,7 +246,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Run run = new UIMFRun(uimfFile1);
             runcoll.Add(run);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 200, 240, 9, 1,false);
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 200, 240, 9, 1, false);
             sscc.Create();
 
             FrameSetCollectionCreator fsc = new FrameSetCollectionCreator(run, 800, 801, 3, 1);
