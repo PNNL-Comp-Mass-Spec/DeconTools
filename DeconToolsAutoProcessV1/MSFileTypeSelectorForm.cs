@@ -58,7 +58,7 @@ namespace DeconToolsAutoProcessV1
                     {
                         return Globals.MSFileType.MZXML_Rawdata;
                     }
-                    else if (Path.GetFileName(filename).ToLower() == "acqu")
+                    else if (Path.GetFileName(filename).ToLower() == "acqus")
                     {
                         return Globals.MSFileType.Bruker;
                     }

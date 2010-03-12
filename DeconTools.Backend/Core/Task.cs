@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Core
 
         public abstract void Execute(ResultCollection resultColl);
 
-        public string Name;
+        public virtual string Name {get;set;}
         
         public virtual void Cleanup()
         {

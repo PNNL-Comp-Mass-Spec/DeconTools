@@ -4,16 +4,16 @@ using System.Text;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
 using System.Linq;
+using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class XCaliburRun : Run
+    public class XCaliburRun : DeconToolsRun
     {
 
         public XCaliburRun()
         {
-            this.xyData = new XYData();
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = true;
             this.MSFileType = Globals.MSFileType.Finnigan;
@@ -22,13 +22,25 @@ namespace DeconTools.Backend.Runs
         public XCaliburRun(string filename)
             : this()
         {
+
+
+            Check.Require(File.Exists(filename));
+
             this.Filename = filename;
+
+
+            string baseFilename = Path.GetFileName(this.Filename);
+
+            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            
+
+            this.DataSetPath = Path.GetDirectoryName(filename);
 
 
             try
             {
 
-                this.rawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.FINNIGAN);
+                this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.FINNIGAN);
             }
             catch (Exception ex)
             {
@@ -48,39 +60,18 @@ namespace DeconTools.Backend.Runs
 
         #region Properties
 
-        [field: NonSerialized]
-        private XYData xyData;
-
-        public override XYData XYData
-        {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
-        }
-
-        [field: NonSerialized]
-        private DeconToolsV2.Readers.clsRawData rawData;
-        public DeconToolsV2.Readers.clsRawData RawData
-        {
-            get { return rawData; }
-            set { rawData = value; }
-        }
-
 
 
         #endregion
 
         #region Methods
-        public override int GetNumMSScans()
+
+        internal override int GetMaxPossibleScanIndex()
         {
-            if (rawData == null) return 0;
-            return this.rawData.GetNumScans();
+            return GetNumMSScans();        // xcalbur scans are 1-based
         }
+
+
 
         public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
@@ -95,7 +86,7 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
             }
             else
             {
@@ -103,11 +94,11 @@ namespace DeconTools.Backend.Runs
                 alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
-            this.xyData.SetXYValues(ref xvals, ref yvals);
+            this.XYData.SetXYValues(ref xvals, ref yvals);
             if (alreadyFiltered) return;
 
-            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return;
-            bool needsFiltering = (minMZ > this.xyData.Xvalues[0] || maxMZ < this.xyData.Xvalues[this.xyData.Xvalues.Length - 1]);
+            if (XYData.Xvalues == null || XYData.Xvalues.Length == 0) return;
+            bool needsFiltering = (minMZ > this.XYData.Xvalues[0] || maxMZ < this.XYData.Xvalues[this.XYData.Xvalues.Length - 1]);
             if (needsFiltering)
             {
                 this.FilterXYPointsByMZRange(minMZ, maxMZ);
@@ -118,7 +109,7 @@ namespace DeconTools.Backend.Runs
         public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref double[] yvals, double minX, double maxX)
         {
             // [gord] idea borrowed from Anuj! Jan 2010 
-            
+
             //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
             //the integer is added to a dictionary generic list (sorted)
             //
@@ -132,7 +123,7 @@ namespace DeconTools.Backend.Runs
             long maxXLong = (long)(maxX * precision + 0.5);
             for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
             {
-                this.rawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
 
                 for (int i = 0; i < tempXvals.Length; i++)
                 {
@@ -165,25 +156,6 @@ namespace DeconTools.Backend.Runs
         #endregion
 
 
-
-        public override double GetTime(int scanNum)
-        {
-            return this.rawData.GetScanTime(scanNum);
-        }
-
-
-
-
-
-        public override int GetMSLevel(int scanNum)
-        {
-            return this.rawData.GetMSLevel(scanNum);
-        }
-
-        internal override int GetMaxPossibleScanIndex()
-        {
-            return this.GetNumMSScans();        //xcalibur data is 1-based
-        }
 
 
 

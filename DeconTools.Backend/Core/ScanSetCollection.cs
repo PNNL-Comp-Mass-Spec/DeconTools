@@ -51,9 +51,9 @@ namespace DeconTools.Backend.Core
             }
 
             return scan;
-
-
         }
+
+
 
 
         public int GetLastScanSet()

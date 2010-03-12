@@ -54,5 +54,20 @@ namespace DeconTools.Backend.Runs
 
 
 
+
+        public override double GetTime(int scanNum)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetMSLevelFromRawData(int scanNum)
+        {
+            return -1;
+        }
+
+        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -36,9 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3625.30679, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3712.28676, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="DMSDeconToolsV2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\ProteinCalc.dll</HintPath>
+      <HintPath>..\..\ProteinCalc\ProteinCalc\bin\Debug\ProteinCalc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -69,6 +69,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
+    <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />
     <Compile Include="DeconConsole_Tests\DeconConsoleTests.cs" />
     <Compile Include="DeconEngineTests.cs" />
     <Compile Include="DMSDeconToolsWrapperTests.cs" />
@@ -84,7 +87,7 @@
     <Compile Include="ImporterTests\MassTagFromDBImporterTests.cs" />
     <Compile Include="ImporterTests\MassTagListImporterTests.cs" />
     <Compile Include="MassTagRelatedTests.cs" />
-    <Compile Include="OldSchoolProcRunnerTests.cs" />
+    <Compile Include="ProjectControllerTests\OldSchoolProcRunnerTests.cs" />
     <Compile Include="ParameterFileTests.cs" />
     <Compile Include="PeakDataImportersTests.cs" />
     <Compile Include="ProcessingTasksTests\BasicTaskControllerTests.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="QualityControlTests\MZXMLQualityTests.cs" />
     <Compile Include="QualityControlTests\UIMFQualityTests.cs" />
     <Compile Include="ResultSerializationTests.cs" />
+    <Compile Include="ResultValidatorTests\LeftOfMonoPeakLookerTests.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
     <Compile Include="Run_relatedTests\ICR2LSRun_Tests.cs" />
     <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
@@ -141,6 +145,7 @@
     <Compile Include="UtilitiesTests\Logger_ImporterTests.cs" />
     <Compile Include="UtilitiesTests\MathUtilsTests.cs" />
     <Compile Include="UtilitiesTests\MercuryDistributionTests\MercuryDistributionCreatorTests.cs" />
+    <Compile Include="UtilitiesTests\PeakUtilitiesTests.cs" />
     <Compile Include="UtilitiesTests\TheoreticalPeakXYDataUtilitiesTests.cs" />
     <Compile Include="UtilitiesTests\TomIsotopicDistributionTests\TomIsotopicDistributionTests.cs" />
     <Compile Include="UtilitiesTests\UtilitiesTests.cs" />

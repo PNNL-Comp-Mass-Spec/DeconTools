@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
@@ -30,41 +31,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             {
                 throw new Exception("Theoretical feature generator failed. Details: " + ex.Message);
             }
-            trimIsotopicProfile(mt.IsotopicProfile, 0.01);
+            PeakUtilities.TrimIsotopicProfile(mt.IsotopicProfile, 0.01);
             if (mt.ChargeState != 0) mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
         }
 
-        private void trimIsotopicProfile(IsotopicProfile isotopicProfile, double cutOff)
-        {
-            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
-
-            int indexOfMaxPeak = isotopicProfile.getIndexOfMostIntensePeak();
-            List<MSPeak> trimmedPeakList = new List<MSPeak>();
-
-            bool foundMaxPeak = false;
-            for (int i = 0; i < isotopicProfile.Peaklist.Count; i++)
-            {
-                if (!foundMaxPeak)
-                {
-                    trimmedPeakList.Add(isotopicProfile.Peaklist[i]);
-                }
-                else
-                {
-                    if (isotopicProfile.Peaklist[i].Height > cutOff)
-                    {
-                        trimmedPeakList.Add(isotopicProfile.Peaklist[i]);
-                    }
-                    else
-                    {
-                        break;    // at this point, have found max peak and the right-most peaks have fallen below the cutoff. So exit. 
-                    }
-                }
-                if (indexOfMaxPeak == i) foundMaxPeak = true;
-            }
-            isotopicProfile.Peaklist = trimmedPeakList;
-
-        }
+     
         #endregion
 
         #region Private Methods

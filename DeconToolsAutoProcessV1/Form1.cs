@@ -24,6 +24,7 @@ namespace DeconToolsAutoProcessV1
         BackgroundWorker bw;
 
         bool isRunMergingModeUsed;
+        bool m_createMSFeatureForEachPeak;
 
 
 
@@ -47,6 +48,10 @@ namespace DeconToolsAutoProcessV1
 
                 startingFolderPath = "";
             }
+
+            this.m_createMSFeatureForEachPeak = Properties.Settings.Default.MSFeatureForEachPeak;
+            this.isRunMergingModeUsed = Properties.Settings.Default.MergeRuns; 
+            
 
         }
 
@@ -246,6 +251,11 @@ namespace DeconToolsAutoProcessV1
                     ProjectController runner = new RunMergingProjectController(inputFileList.ToList(), this.msFileType, this.parameterFileName,bw);
                     runner.Execute();
                 }
+                else if (this.m_createMSFeatureForEachPeak)
+                {
+                    ProjectController runner = new BonesProjectController(inputFileList.ToList(), this.msFileType, this.parameterFileName,3, bw);
+                    runner.Execute();
+                }
                 else
                 {
                     for (int i = 0; i < inputFileList.Length; i++)
@@ -344,17 +354,21 @@ namespace DeconToolsAutoProcessV1
         {
 
             if (this.startingFolderPath != null) Properties.Settings.Default.startingFolder = this.startingFolderPath;
+            Properties.Settings.Default.MSFeatureForEachPeak = m_createMSFeatureForEachPeak;
+            Properties.Settings.Default.MergeRuns = isRunMergingModeUsed;
+            
             Properties.Settings.Default.Save();
 
         }
 
         private void btnShowOptionsForm_Click(object sender, EventArgs e)
         {
-            OptionsForm frm = new OptionsForm(isRunMergingModeUsed);
+            OptionsForm frm = new OptionsForm(isRunMergingModeUsed,m_createMSFeatureForEachPeak);
             frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 this.isRunMergingModeUsed = frm.IsResultMergingModeUsed;
+                this.m_createMSFeatureForEachPeak = frm.CreateMSFeatureForEachPeakMode;
             }
             else
             {

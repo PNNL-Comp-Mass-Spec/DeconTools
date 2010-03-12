@@ -39,7 +39,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(resultList.Run.CurrentScanSet != null, "FitScoreCalculator failed. Current scanset has not been defined");
 
 
-            foreach (IsosResult result in resultList.CurrentScanIsosResultBin)
+            foreach (IsosResult result in resultList.IsosResultBin)
             {
 
                 double resolution = result.IsotopicProfile.GetMZofMostAbundantPeak() / result.IsotopicProfile.GetFWHM();

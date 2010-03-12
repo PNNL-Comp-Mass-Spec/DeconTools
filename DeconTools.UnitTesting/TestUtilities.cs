@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting
 {
     public class TestUtilities
     {
-        private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+        private static string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
         public static void GetXYValuesToStringBuilder(StringBuilder sb, double[] xvals, double[] yvals)
         {
@@ -108,12 +108,14 @@ namespace DeconTools.UnitTesting
 
         }
 
-        public static void DisplayPeaks(ResultCollection resultCollection)
+        public static void DisplayPeaks(List<IPeak> peakList)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("--------- Peaks found in Run " + resultCollection.Run.Filename + "-----------------\n");
+            sb.Append("--------- Peaks found -----------------\n");
+            sb.Append("x_value\ty_value\twidth\n");
+
             
-            foreach (IPeak peak in resultCollection.Run.PeakList)
+            foreach (IPeak peak in peakList)
             {
                 sb.Append(peak.XValue);
                 sb.Append("\t");
@@ -188,6 +190,35 @@ namespace DeconTools.UnitTesting
             Console.Write(sb.ToString());
         }
 
+        public static void DisplayMSFeatures(List<IsosResult> resultList)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("------------MSFeatures ---------------\n");
+            sb.Append("id\tscanNum\tmz\tz\tintens\tscore\n");
+            foreach (var item in resultList)
+            {
+                sb.Append(item.MSFeatureID);
+                sb.Append("\t");
+                sb.Append(item.ScanSet.PrimaryScanNumber);
+                sb.Append("\t");
+               
+                sb.Append(item.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
+                sb.Append("\t");
+                sb.Append(item.IsotopicProfile.ChargeState);
+                sb.Append("\t");
+                sb.Append(item.IsotopicProfile.IntensityAggregate);
+                sb.Append("\t");
+                sb.Append(item.IsotopicProfile.Score.ToString("0.000"));
+                sb.Append("\n");
+                
+            }
+
+            Console.Write(sb.ToString());
+
+        }
+
+
 
         public static MassTag GetMassTagStandard(int standardNum)
         {
@@ -222,12 +253,105 @@ namespace DeconTools.UnitTesting
         }
 
 
+        public static List<MassTag> CreateN14N15TestMassTagList()
+        {
+            List<MassTag> mtList = new List<MassTag>();
+
+            MassTag mt = new MassTag();
+            mt.ID = 23085473;
+            mt.MonoIsotopicMass = 2538.33284203802;
+            mt.ChargeState = 3;
+            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+            mt.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
+            mt.CreatePeptideObject();
+
+            mtList.Add(mt);
+            return mtList;
+
+        }
+
+
+
 
         public static void DisplayXYValues(Run run)
         {
             
         }
 
-     
+        public static void DisplayMSLevelData(Run run)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("scan\tMSLevel\n");
+
+            for (int i = run.MinScan; i <= run.MaxScan; i++)
+            {
+                sb.Append(i);
+                sb.Append("\t");
+                sb.Append(run.GetMSLevel(i));
+                sb.Append("\n");
+
+            }
+
+            Console.WriteLine(sb.ToString());
+
+        }
+
+
+
+
+        public static void DisplayScanSetData(List<ScanSet> scanSetlist)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("--------------- ScanSetCollection details ---------------------- \n");
+
+            foreach (var scan in scanSetlist)
+            {
+                sb.Append(scan.PrimaryScanNumber);
+                sb.Append("\t{");
+                for (int i = 0; i < scan.IndexValues.Count; i++)
+                {
+                    sb.Append(scan.IndexValues[i]);
+                    if (i == scan.IndexValues.Count - 1)
+                    {
+                        sb.Append("}");
+                    }
+                    else
+                    {  
+                        sb.Append(", ");
+                    }
+                    
+                }
+                sb.Append(Environment.NewLine);
+
+               
+            }
+            Console.WriteLine(sb.ToString());
+
+
+            
+
+        }
+
+        public static List<IPeak> GeneratePeakList(ScanSet scanSet)
+        {
+            Run run = new XCaliburRun(xcaliburTestfile);
+
+            MSGeneratorFactory fact = new MSGeneratorFactory();
+            Task msgen = fact.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            peakDet.PeakBackgroundRatio = 1.3;
+            peakDet.SigNoiseThreshold = 2;
+            peakDet.IsDataThresholded = true;
+
+            run.CurrentScanSet = scanSet;
+
+            msgen.Execute(run.ResultCollection);
+
+            peakDet.Execute(run.ResultCollection);
+
+            return run.PeakList;
+        }
     }
 }

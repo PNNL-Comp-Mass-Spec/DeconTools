@@ -17,6 +17,7 @@ namespace DeconTools.Backend.Core
             this.scanSetCollection = new ScanSetCollection();
             this.ResultCollection = new ResultCollection(this);
             this.XYData = new XYData();
+            this.MSLevelList = new SortedDictionary<int, byte>();
         }
 
         #region Properties
@@ -35,6 +36,11 @@ namespace DeconTools.Backend.Core
             get { return filename; }
             set { filename = value; }
         }
+
+        public string DatasetName { get; set; }
+
+        public string DataSetPath { get; set; }
+
 
         private Globals.MSFileType mSFileType;
         public Globals.MSFileType MSFileType
@@ -120,7 +126,7 @@ namespace DeconTools.Backend.Core
 
         private List<int> msLevelScanIndexList { get; set; }
 
-
+        public IList<int> MSLevelMappings { get; set; }
 
         #endregion
 
@@ -128,7 +134,31 @@ namespace DeconTools.Backend.Core
         public abstract XYData XYData { get; set; }
         public abstract int GetNumMSScans();
         public abstract double GetTime(int scanNum);
-        public abstract int GetMSLevel(int scanNum);
+        public abstract int GetMSLevelFromRawData(int scanNum);
+
+        public virtual int GetMSLevel(int scanNum)
+        {
+            // check to see if we have a value already stored
+            if (this.MSLevelList.ContainsKey(scanNum))
+            {
+                return this.MSLevelList[scanNum];
+            }
+
+                // if not, look up MSLevel from Raw data
+            else
+            {
+                int mslevel = GetMSLevelFromRawData(scanNum);
+
+                this.MSLevelList.Add(scanNum, (byte)mslevel);
+
+                return mslevel;
+
+            }
+
+
+
+
+        }
         public abstract void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
         public virtual float GetTIC(double minMZ, double maxMZ)
         {
@@ -263,6 +293,28 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public virtual int GetNearestScanValueForNET(double minNetVal)
+        {
+            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
+
+            double diff=double.MaxValue;
+            int closestScan = -1;
+
+
+            foreach (var keyValuePair in this.ScanToNETAlignmentData)
+            {
+                double currentDiff = Math.Abs(keyValuePair.Value - minNetVal);
+                if (currentDiff < diff)
+                {
+                    closestScan = keyValuePair.Key;
+                    diff = currentDiff;
+                }
+            }
+            return closestScan;
+
+
+        }
+
 
         public virtual int GetCurrentScanOrFrame()
         {
@@ -333,6 +385,12 @@ namespace DeconTools.Backend.Core
             return (float)(scanNum * slope + yintercept);
           
         }
+
+
+ 
+
+
+        
 
   
         public virtual int GetClosestMSScan(int inputScan, Globals.ScanSelectionMode scanSelectionMode)
@@ -409,17 +467,24 @@ namespace DeconTools.Backend.Core
         /// <returns>
         /// List of Scan numbers pertaining to MS1-level scans only. 
         /// </returns>
+        
+        
         public List<int> GetMSLevelScanValues()
         {
-           
-            
-            //see if this has already been populated. if not, then populate it.   
+            return GetMSLevelScanValues(this.MinScan, this.MaxScan);
+     
+        }
+
+        public List<int> GetMSLevelScanValues(int minScan, int maxScan)
+        {
             if (this.msLevelScanIndexList == null)
             {
                 msLevelScanIndexList = new List<int>();
 
-                for (int i = this.minScan; i < this.maxScan; i++)
+                for (int i = minScan; i <= maxScan; i++)
                 {
+
+
                     if (this.GetMSLevel(i) == 1)
                     {
                         msLevelScanIndexList.Add(i);
@@ -428,9 +493,40 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                
+
             }
             return this.msLevelScanIndexList;
+
         }
+
+
+        protected void addToMSLevelData(int scanNum, int mslevel)
+        {
+            if (this.MSLevelList.ContainsKey(scanNum))
+            {
+                // do nothing
+            }
+            else
+            {
+                this.MSLevelList.Add(scanNum, (byte)mslevel);
+            }
+
+        }
+
+
+        protected SortedDictionary<int,byte> MSLevelList { get; set; }
+
+        public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
+        {
+
+            return null;
+
+       
+
+
+
+        }
+
+    
     }
 }

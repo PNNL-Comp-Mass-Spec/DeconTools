@@ -65,7 +65,9 @@ namespace DeconTools.Backend.Core
                 Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
                 project.RunCollection.Add(run);
                 
-                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, Project.getInstance().Parameters.NumScansSummed, 1,false);
+                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 
+                    Project.getInstance().Parameters.NumScansSummed,
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,false);
                 scanSetCollectionCreator.Create();
             }
 

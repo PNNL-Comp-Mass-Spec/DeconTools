@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 //get the mass spectrum +/- 5 da from the range of the isotopicProfile
                 resultList.Run.GetMassSpectrum(scanset, resultList.Run.MSParameters.MinMZ, resultList.Run.MSParameters.MaxMZ);
             }
-            foreach (IsosResult result in resultList.CurrentScanIsosResultBin)
+            foreach (IsosResult result in resultList.IsosResultBin)
             {
 
 

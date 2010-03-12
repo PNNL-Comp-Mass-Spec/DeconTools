@@ -16,15 +16,15 @@ namespace DeconTools.Backend.Core
         {
             this.run = run;
             this.resultList = new List<IsosResult>();
-            this.massTagResultList = new Dictionary<MassTag, IMassTagResult>();
+            this.massTagResultList = new Dictionary<MassTag, MassTagResultBase>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
-            this.currentScanIsosResultBin = new List<IsosResult>();
+            this.m_IsosResultBin = new List<IsosResult>();
             this.logMessageList = new List<string>();
         }
 
-        private Dictionary<MassTag, IMassTagResult> massTagResultList;
-        public Dictionary<MassTag, IMassTagResult> MassTagResultList
+        private Dictionary<MassTag, MassTagResultBase> massTagResultList;
+        public Dictionary<MassTag, MassTagResultBase> MassTagResultList
         {
             get { return massTagResultList; }
             set { massTagResultList = value; }
@@ -37,11 +37,11 @@ namespace DeconTools.Backend.Core
             set { mSPeakResultList = value; }
         }
 
-        private List<IsosResult> currentScanIsosResultBin;
-        public List<IsosResult> CurrentScanIsosResultBin
+        private IList<IsosResult> m_IsosResultBin;
+        public IList<IsosResult> IsosResultBin
         {
-            get { return currentScanIsosResultBin; }
-            set { currentScanIsosResultBin = value; }
+            get { return m_IsosResultBin; }
+            set { m_IsosResultBin = value; }
         }
 
 
@@ -144,10 +144,10 @@ namespace DeconTools.Backend.Core
         {
             addedResult.MSFeatureID = MSFeatureCounter;
             MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID, as Kevin requested in an email (Jan 20/2010)
-            this.CurrentScanIsosResultBin.Add(addedResult);
+            this.IsosResultBin.Add(addedResult);
         }
 
-        public IMassTagResult GetMassTagResult(MassTag massTag)
+        public MassTagResultBase GetMassTagResult(MassTag massTag)
         {
             if (massTagResultList.ContainsKey(massTag))
             {
@@ -155,7 +155,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                IMassTagResult result = CreateMassTagResult(massTag);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+                MassTagResultBase result = CreateMassTagResult(massTag);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
                 return result;  
             }
         }
@@ -164,7 +164,7 @@ namespace DeconTools.Backend.Core
 
         public void ClearAllResults()
         {
-            this.CurrentScanIsosResultBin.Clear();
+            this.IsosResultBin.Clear();
             this.MSPeakResultList.Clear();
             this.ResultList.Clear();
             this.ScanResultList.Clear();
@@ -196,9 +196,9 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public IMassTagResult CreateMassTagResult(MassTag massTag)
+        public MassTagResultBase CreateMassTagResult(MassTag massTag)
         {
-            IMassTagResult result;
+            MassTagResultBase result;
 
             switch (MassTagResultType)
             {
@@ -206,7 +206,7 @@ namespace DeconTools.Backend.Core
                     result = new MassTagResult(massTag);
                     break;
                 case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
-                    result = new N14N15_TResult();
+                    result = new N14N15_TResult(massTag);
                     break;
                 default:
                     result = new MassTagResult();
@@ -220,9 +220,9 @@ namespace DeconTools.Backend.Core
             return result;
         }
 
-        public IMassTagResult AddMassTagResult(Globals.MassTagResultType massTagResultType)
+        public MassTagResultBase AddMassTagResult(Globals.MassTagResultType massTagResultType)
         {
-            IMassTagResult result;
+            MassTagResultBase result;
 
             switch (massTagResultType)
             {
@@ -237,15 +237,15 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public List<IMassTagResult> GetSuccessfulMassTagResults()
+        public List<MassTagResultBase> GetSuccessfulMassTagResults()
         {
-            List<IMassTagResult> filteredResults = new List<IMassTagResult>();
+            List<MassTagResultBase> filteredResults = new List<MassTagResultBase>();
 
             HashSet<int> massTagIDs = new HashSet<int>();
 
             //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
 
-            List<IMassTagResult> resultList = this.MassTagResultList.Values.ToList();
+            List<MassTagResultBase> resultList = this.MassTagResultList.Values.ToList();
             for (int i = 0; i < resultList.Count; i++)
             {
                 massTagIDs.Add(resultList[i].MassTag.ID);
@@ -253,7 +253,7 @@ namespace DeconTools.Backend.Core
 
             foreach (var mtID in massTagIDs)
             {
-                List<IMassTagResult> tempResults = resultList.Where(p => p.Score < 0.15 && p.MassTag.ID == mtID).ToList();
+                List<MassTagResultBase> tempResults = resultList.Where(p => p.Score < 0.15 && p.MassTag.ID == mtID).ToList();
                 if (tempResults.Count > 0)
                 {
                     filteredResults.Add(tempResults.OrderByDescending(p => p.Score).First());

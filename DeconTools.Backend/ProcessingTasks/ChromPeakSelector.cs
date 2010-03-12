@@ -26,6 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             this.Tolerance = tolerance;
             this.PeakSelectionMode = peakSelectorMode;
+            this.numScansToSum = 1;
         }
 
         #endregion
@@ -46,6 +47,9 @@ namespace DeconTools.Backend.ProcessingTasks
             get { return tolerance; }
             set { tolerance = value; }
         }
+
+
+        public int numScansToSum { get; set; }       // this might be better elsewhere, but for now put it here...
         #endregion
 
         #region Public Methods
@@ -68,12 +72,12 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-            IMassTagResult result = resultList.MassTagResultList[resultList.Run.CurrentMassTag];
+            MassTagResultBase result = resultList.MassTagResultList[resultList.Run.CurrentMassTag];
 
             if (peaksWithinTol.Count == 0)
             {
                 result.ScanSet = null;
-                result.Flags.Add(new ResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
+                result.Flags.Add(new ChromPeakNotFoundResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
             }
             else if (peaksWithinTol.Count == 1)
             {
@@ -89,32 +93,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
+            Check.Ensure(result.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
             resultList.Run.CurrentScanSet = result.ScanSet;   // maybe good to set this here so that the MSGenerator can operate on it...  
 
         }
 
         private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run)
         {
-            //TODO:  get the summing working for RAW data
-            
-            ScanSet scanSet;
             int bestScan = (int)chromPeak.XValue;
-            
             bestScan= run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-            int leftScan = run.GetClosestMSScan(bestScan - 1, Globals.ScanSelectionMode.DESCENDING);
-            int rightScan = run.GetClosestMSScan(bestScan + 1, Globals.ScanSelectionMode.ASCENDING);
-
-            //int numPeaksToSum = (int)(chromPeak.Width / 3 + 0.5);
-            //if (numPeaksToSum % 2 == 0) numPeaksToSum++;            // Ensures odd number
-
-            
-
-
-            //TODO:  have a way to control summing
-            scanSet = new ScanSet(bestScan,new int[]{leftScan,bestScan,rightScan});
-            //scanSet = new ScanSet(bestScan);     //TODO:  no summing here
-            return scanSet;
-
+            return new ScanSetFactory().CreateScanSet(run, bestScan, this.numScansToSum);
         }
 
         private ChromPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<ChromPeak> peaksWithinTol, float targetNET)

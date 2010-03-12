@@ -36,7 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             MassTag mt = results.Run.CurrentMassTag;
 
-            IMassTagResult result = results.GetMassTagResult(mt);
+            MassTagResultBase result = results.GetMassTagResult(mt);
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
             double fwhm = result.IsotopicProfile.GetFWHM();

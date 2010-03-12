@@ -37,7 +37,7 @@ namespace DeconTools.Backend.Data
                     taskcontroller = new BasicTaskController(taskCollection);
                     break;
                 case Globals.MSFileType.Bruker:
-                    taskcontroller = new BasicTaskController(taskCollection);
+                    taskcontroller = new BasicTaskController(taskCollection, backgroundWorker);
                     break;
                 case Globals.MSFileType.Bruker_Ascii:
                     taskcontroller = new BasicTaskController(taskCollection);

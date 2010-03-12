@@ -73,7 +73,7 @@ namespace DeconTools.Backend.Data
                     run = null;
                     break;
                 case Globals.MSFileType.Ascii:
-                    run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile);
+                    run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile, '\t');
                     break;
                 case Globals.MSFileType.Bruker:
                     run = new BrukerRun(fileName);

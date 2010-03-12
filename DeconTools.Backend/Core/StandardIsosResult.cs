@@ -16,34 +16,12 @@ namespace DeconTools.Backend
         
         public StandardIsosResult(Run run, ScanSet scanset)
         {
-            this.run = run;
-            this.scanSet = scanset;
+            this.Run = run;
+            this.ScanSet = scanset;
         }
 
 
-        private Run run;
-
-        public override Run Run
-        {
-            get { return run; }
-            set { run = value; }
-        }
-
-        private ScanSet scanSet;
-
-        public override ScanSet ScanSet
-        {
-            get { return scanSet; }
-            set { scanSet = value; }
-        }
-
-        private IsotopicProfile isotopicProfile;
-
-        public override IsotopicProfile IsotopicProfile
-        {
-            get { return isotopicProfile; }
-            set { isotopicProfile = value; }
-        }
+    
 
 
 

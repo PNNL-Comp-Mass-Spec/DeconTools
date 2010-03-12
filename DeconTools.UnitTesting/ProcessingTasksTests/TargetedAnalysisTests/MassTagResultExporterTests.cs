@@ -59,7 +59,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             exporter.Execute(run.ResultCollection);
             exporter.Cleanup();
 
-            IMassTagResult result = run.ResultCollection.GetMassTagResult(mt);
+            MassTagResultBase result = run.ResultCollection.GetMassTagResult(mt);
             TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfile);
 
 

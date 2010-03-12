@@ -19,6 +19,9 @@ namespace DeconTools.UnitTesting
         private string textFilename = "..\\..\\TestFiles\\PeakListImporterTest1.txt";
         private string textFilename2 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run2_13Jan08_Raptor_07-11-11\RSPH_Aonly_22_run2_13Jan08_Raptor_07-11-11_peaks.txt";
 
+        //private string xcaliburPeaks5509_7504 = "..\\..\\TestFiles\\
+
+
         [Test]
         public void importPeaksFromSqlite()
         {

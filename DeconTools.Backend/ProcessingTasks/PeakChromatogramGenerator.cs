@@ -47,13 +47,65 @@ namespace DeconTools.Backend.ProcessingTasks
 
             double mz = resultColl.Run.CurrentMassTag.MZ;
 
+
+
+            double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set lower bound (10% lower than net val)
+            double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set upper bound (10% higher than net val)
+
+            if (minNetVal < 0) minNetVal = 0;
+            if (maxNetVal > 1) maxNetVal = 1;
+
+            int lowerScan = resultColl.Run.GetNearestScanValueForNET(minNetVal);
+            int upperScan = resultColl.Run.GetNearestScanValueForNET(maxNetVal);
+
+
+
+
             double lowerMZ = -1 * (ppmTol * mz / 1e6 - mz);
             double upperMZ = ppmTol * mz / 1e6 + mz;
 
+            int scanTolerance = 5;
 
-            //double mzLowerLimit = (mz-ppmTol*
+            //binary search for scan value...
+            int indexOfLowerScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, lowerScan, 0, resultColl.MSPeakResultList.Count, scanTolerance);
+            int indexOfUpperScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, upperScan, 0, resultColl.MSPeakResultList.Count, scanTolerance);
 
-            List<MSPeakResult> filteredPeakList = resultColl.MSPeakResultList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+            int currentIndex = indexOfLowerScan;
+
+            List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
+
+            while (currentIndex<= indexOfUpperScan)
+            {
+                filteredPeakList.Add(resultColl.MSPeakResultList[currentIndex]);
+                currentIndex++;
+            }
+
+            filteredPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+
+            //List<MSPeakResult> filteredPeakList = resultColl.MSPeakResultList.Where(p => p.Scan_num >= lowerScan && p.Scan_num <= upperScan)
+            //    .Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+                
+            
+            //List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
+
+            ////have to search linearly - the m/z values are not in order
+            //for (int i = 0; i < resultColl.MSPeakResultList.Count; i++)
+            //{
+            //    if (resultColl.MSPeakResultList[i].MSPeak.XValue >= lowerMZ && resultColl.MSPeakResultList[i].MSPeak.XValue <= upperMZ)
+            //    {
+            //        filteredPeakList.Add(resultColl.MSPeakResultList[i]);
+            //    }
+
+            //}
+
+
+
+            //int indexOfLowerMZValue = getIndexOfClosestMZValue(resultColl.MSPeakResultList, lowerMZ,0,resultColl.MSPeakResultList.Count,1.0d);
+
+
+            bool containsPeaks = (filteredPeakList != null && filteredPeakList.Count() != 0);
+            Check.Ensure(containsPeaks, "No chromatographic peaks were found using the provided m/z range.");
+
 
 
             this.msScanList = resultColl.Run.GetMSLevelScanValues();
@@ -61,14 +113,61 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(this.msScanList != null && this.msScanList.Count > 0, "PeakChromatogramGenerator failed. Had problems defining the Scan array");
 
 
-            IMassTagResult result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
-       
+            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+
 
             //store XYData in the Run's data to be used by other tasks...
-            resultColl.Run.XYData = getChromValues(filteredPeakList, resultColl.Run);
+            resultColl.Run.XYData = getChromValues2(filteredPeakList, resultColl.Run);
 
             //store XYData in the MassTag result object
             //result.ChromValues = resultColl.Run.XYData;
+
+        }
+
+        private int getIndexOfClosestScanValue(List<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
+        {
+            if (leftIndex <= rightIndex)
+            {
+                int middle = (leftIndex + rightIndex) / 2;
+                if (Math.Abs(targetScan - peakList[middle].Scan_num) <= scanTolerance)
+                {
+                    return middle;
+                }
+                else if (targetScan < peakList[middle].Scan_num)
+                {
+                    return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
+                }
+                else
+                {
+                    return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Recursive binary search algorithm for searching through MSPeakResults
+        /// </summary>
+        private int getIndexOfClosestMZValue(List<MSPeakResult> peakList, double targetMZ, int leftIndex, int rightIndex, double toleranceInDaltons)
+        {
+            if (leftIndex <= rightIndex)
+            {
+                int middle = (leftIndex + rightIndex) / 2;
+                if (Math.Abs(targetMZ - peakList[middle].MSPeak.XValue) <= toleranceInDaltons)
+                {
+                    return middle;
+                }
+                else if (targetMZ<peakList[middle].MSPeak.XValue)
+                {
+                    return getIndexOfClosestMZValue(peakList, targetMZ, leftIndex, middle - 1, toleranceInDaltons);
+                }
+                else
+                {
+                    return getIndexOfClosestMZValue(peakList, targetMZ, middle + 1, rightIndex, toleranceInDaltons);
+                }
+            }
+            return -1;
+
 
         }
 
@@ -177,6 +276,68 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
+        }
+
+
+        private XYData getChromValues2(List<MSPeakResult> filteredPeakList, Run run)
+        {
+            XYData xydata = new XYData();
+
+            int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+            int rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+
+            int peakListMinScan = filteredPeakList[0].Scan_num;
+            int peakListMaxScan = filteredPeakList[filteredPeakList.Count - 1].Scan_num;
+
+            //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
+
+            peakListMinScan = peakListMinScan - leftZeroPadding;
+            peakListMaxScan = peakListMaxScan + rightZeroPadding;
+
+            if (peakListMinScan < run.MinScan) peakListMinScan = run.MinScan;
+            if (peakListMaxScan > run.MaxScan) peakListMaxScan = run.MaxScan;
+
+            //populate array with zero intensities.
+            SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
+            for (int i = peakListMinScan; i <= peakListMaxScan; i++)
+            {
+                //add only MS1 level scans
+                if (msScanList.Contains(i))
+                {
+                    xyValues.Add(i, 0);
+                }
+            }
+
+            //now iterate over peakList and add data to output array
+
+
+            //foreach (var item in filteredPeakList)
+            //{
+            //    double intensity = item.MSPeak.Height;
+            //    if (intensity > xyValues[item.Scan_num])
+            //    {
+            //        xyValues[item.Scan_num] = intensity;
+            //    }
+            //}
+
+
+            for (int i = 0; i < filteredPeakList.Count; i++)
+            {
+                double intensity = filteredPeakList[i].MSPeak.Height;
+
+                //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
+                if (intensity > xyValues[filteredPeakList[i].Scan_num])
+                {
+                    xyValues[filteredPeakList[i].Scan_num] = intensity;
+                }
+
+            }
+
+
+            xydata.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
+            xydata.Yvalues = xyValues.Values.ToArray();
+
+            return xydata;
         }
 
 

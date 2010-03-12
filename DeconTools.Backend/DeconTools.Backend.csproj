@@ -38,9 +38,13 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3625.30679, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3712.28676, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\libalglib.dll</HintPath>
     </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -52,7 +56,7 @@
     </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\ProteinCalc.dll</HintPath>
+      <HintPath>..\..\ProteinCalc\ProteinCalc\bin\Debug\ProteinCalc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -71,14 +75,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\ACss.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
+    <Compile Include="Core\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
+    <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
     <Compile Include="Core\FrameSet.cs" />
     <Compile Include="Core\FrameSetCollection.cs" />
     <Compile Include="Core\IPeak.cs" />
     <Compile Include="Core\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />
     <Compile Include="Core\MassTag.cs" />
-    <Compile Include="Core\IMassTagResult.cs" />
+    <Compile Include="Core\MassTagResultBase.cs" />
     <Compile Include="Core\MassTagCollection.cs" />
     <Compile Include="Core\MassTagResult.cs" />
     <Compile Include="Core\MSPeak.cs" />
@@ -86,6 +95,7 @@
     <Compile Include="Core\OldDecon2LSParameters.cs" />
     <Compile Include="Core\OldDeconFormatResult.cs" />
     <Compile Include="Core\PeakCollection.cs" />
+    <Compile Include="Core\PeakToTheLeftResultFlag.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Core\ProjectController.cs" />
     <Compile Include="Core\ProjectFacade.cs" />
@@ -98,6 +108,7 @@
     <Compile Include="Core\ScanResultCollection.cs" />
     <Compile Include="Core\ScanSet.cs" />
     <Compile Include="Core\ScanSetCollection.cs" />
+    <Compile Include="Core\ScanSetFactory.cs" />
     <Compile Include="Core\StandardIsosResult.cs" />
     <Compile Include="Core\StandardScanResult.cs" />
     <Compile Include="Core\TaskCollection.cs" />
@@ -203,8 +214,13 @@
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteTable.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\LeftOfMonoPeakLooker.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidationUtils.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidator.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidatorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\BasicTFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\ITargetedFeatureFinder.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15FeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\ITheorFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\MercuryFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
@@ -265,17 +281,21 @@
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="Exporters_classDiagram.cd" />
-    <None Include="ResultAndExporterClassDiagram.cd" />
-    <None Include="ResultCollectionClassDiagram.cd" />
-    <None Include="RunClassDiagram.cd" />
-    <None Include="RunDetailsClassDiagram.cd" />
-    <None Include="ScanSetDetailsClassDiagram.cd" />
-    <None Include="SimpleClassDiagram1.cd" />
-    <None Include="TaskControllerDetailsClassDiagram.cd" />
-    <None Include="TaskSampleClassDiagram.cd" />
+    <None Include="ClassDiagrams\BasicDataObjects.cd" />
+    <None Include="ClassDiagrams\ClassDiagram1.cd" />
+    <None Include="ClassDiagrams\ClassDiagram2.cd" />
+    <None Include="ClassDiagrams\ClassDiagram3.cd" />
+    <None Include="ClassDiagrams\Exporters_classDiagram.cd" />
+    <None Include="ClassDiagrams\MassTagClassDiagram.cd" />
+    <None Include="ClassDiagrams\ResultAndExporterClassDiagram.cd" />
+    <None Include="ClassDiagrams\ResultCollectionClassDiagram.cd" />
+    <None Include="ClassDiagrams\RunClassDiagram.cd" />
+    <None Include="ClassDiagrams\RunDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\ScanSetDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\SimpleClassDiagram1.cd" />
+    <None Include="ClassDiagrams\TaskControllerDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\TaskSampleClassDiagram.cd" />
+    <None Include="Core\MassTagResultClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IMSCOMP.dll" />

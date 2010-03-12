@@ -65,6 +65,12 @@ namespace DeconTools.Backend.Core
             this.Parameters.OldDecon2LSParameters.FTICRPreProcessParameters = loader.FTICRPreprocessOptions;
             this.Parameters.OldDecon2LSParameters.DTAGenerationParameters = loader.DTAParameters;
 
+            if (this.Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance < 1)
+            {
+                this.Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance = 1;     // ensure that minimum is '1'
+            }
+
+            
             if (this.Parameters.OldDecon2LSParameters.HornTransformParameters.SumSpectraAcrossScanRange)
             {
                 this.Parameters.NumScansSummed = this.Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //I'm changing the format!

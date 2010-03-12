@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Utilities;
+using System.Text.RegularExpressions;
 
 namespace DeconTools.Backend.Runs
 {
@@ -11,17 +12,29 @@ namespace DeconTools.Backend.Runs
         private double[] xdata;
         private double[] ydata;
 
-        public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType)
+        private char m_delimiter;
+        private bool m_containsHeader = false;
+
+        public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter)
+            : this(fileName, fileType, delimiter, false)
+        {
+   
+
+        }
+
+
+        public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter, bool containsHeader)
         {
             this.FileType = fileType;
             this.Filename = fileName;
             this.XYData = new XYData();
             this.CurrentScanSet = new DeconTools.Backend.Core.ScanSet(0);    //
-            
+            this.m_delimiter = delimiter;
+            this.m_containsHeader = containsHeader;
+
         }
 
 
-       
         internal void loadDataFromFile(string filename)
         {
             System.IO.StreamReader sr = new System.IO.StreamReader(filename);
@@ -32,6 +45,14 @@ namespace DeconTools.Backend.Runs
             while (sr.Peek() != -1)
             {
                 string line = sr.ReadLine();
+
+                //if (m_delimiter == ' ')
+                //{
+                //    Regex.Replace(line,@"\s+"," ");
+                //}
+
+
+
                 List<string> vals = processLine(line);
 
                 xvals.Add(parseDoubleField(vals[0]));
@@ -62,10 +83,10 @@ namespace DeconTools.Backend.Runs
 
         private List<string> processLine(string inputLine)
         {
-            char[] splitter = { '\t' };
+            char[] splitter = { m_delimiter };
             List<string> returnedList = new List<string>();
 
-            string[] arr = inputLine.Split(splitter);
+            string[] arr = inputLine.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
             foreach (string str in arr)
             {
                 returnedList.Add(str);
@@ -104,6 +125,6 @@ namespace DeconTools.Backend.Runs
             return 1;      // simply assume that it is a regular MS
         }
 
-       
+
     }
 }

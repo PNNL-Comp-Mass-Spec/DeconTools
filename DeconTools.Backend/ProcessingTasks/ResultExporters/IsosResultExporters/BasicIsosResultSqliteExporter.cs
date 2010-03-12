@@ -85,11 +85,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     SQLiteParameter sigNoiseParam = new SQLiteParameter();
                     SQLiteParameter monoAbundanceParam = new SQLiteParameter();
                     SQLiteParameter monoPlus2AbundParam = new SQLiteParameter();
+                    SQLiteParameter flagCodeParam = new SQLiteParameter();
 
 
                     int n;
 
-                    mycommand.CommandText = "INSERT INTO T_MSFeatures ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    mycommand.CommandText = "INSERT INTO T_MSFeatures ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[flag]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     mycommand.Parameters.Add(featureIDParam);
                     mycommand.Parameters.Add(scanNumParam);
                     mycommand.Parameters.Add(chargeParam);
@@ -104,6 +105,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     mycommand.Parameters.Add(monoAbundanceParam);
 
                     mycommand.Parameters.Add(monoPlus2AbundParam);
+                    mycommand.Parameters.Add(flagCodeParam);
 
                     for (n = 0; n < rc.ResultList.Count; n++)
                     {
@@ -120,7 +122,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                         sigNoiseParam.Value = rc.ResultList[n].IsotopicProfile.GetSignalToNoise();
                         monoAbundanceParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoAbundance();
                         monoPlus2AbundParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoPlusTwoAbundance();
-
+                        flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(rc.ResultList[n].Flags);
                         mycommand.ExecuteNonQuery();
                     }
                 }

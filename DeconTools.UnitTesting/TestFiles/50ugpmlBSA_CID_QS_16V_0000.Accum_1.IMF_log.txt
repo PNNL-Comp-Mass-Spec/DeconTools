@@ -1,10 +1,10 @@
-12/3/2009 11:43:02 AM	DeconTools.Backend.dll version = v1.0.3624.21089
-12/3/2009 11:43:02 AM	ParameterFile = oldSchoolProcRunnerParameterTestFile5_IMFTesting.xml
-12/3/2009 11:43:02 AM	DeconEngine version = v1.0.3535.22659
-12/3/2009 11:43:02 AM	RapidEngine version = v1.0.3165.35432
-12/3/2009 11:43:02 AM	UIMFLibrary version = v1.0.3484.29834
-12/3/2009 11:43:02 AM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.RapidDeconvolutor
-12/3/2009 11:43:02 AM	Started file processing
-12/3/2009 11:43:05 AM	Finished file processing
-12/3/2009 11:43:05 AM	total processing time = 00:00:03.8593256
-12/3/2009 11:43:05 AM	total features = 3961
+2/24/2010 11:21:34 AM	DeconTools.Backend.dll version = v1.0.3707.20435
+2/24/2010 11:21:34 AM	ParameterFile = oldSchoolProcRunnerParameterTestFile5_IMFTesting.xml
+2/24/2010 11:21:34 AM	DeconEngine version = v1.0.3625.30679
+2/24/2010 11:21:34 AM	RapidEngine version = v1.0.3165.35432
+2/24/2010 11:21:34 AM	UIMFLibrary version = v1.0.3484.29834
+2/24/2010 11:21:34 AM	Deconvolution_Algorithm = DeconTools.Backend.ProcessingTasks.RapidDeconvolutor
+2/24/2010 11:21:34 AM	Started file processing
+2/24/2010 11:21:38 AM	Finished file processing
+2/24/2010 11:21:38 AM	total processing time = 00:00:04.0311984
+2/24/2010 11:21:38 AM	total features = 3961

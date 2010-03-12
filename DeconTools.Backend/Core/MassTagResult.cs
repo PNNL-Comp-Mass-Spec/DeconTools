@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTagResult : IMassTagResult
+    public class MassTagResult : MassTagResultBase
     {
         #region Constructors
         public MassTagResult()
@@ -22,44 +22,9 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        private Run run;
-        public override Run Run
-        {
-            get { return run; }
-            set { run = value; }
-        }
+    
 
-        private ScanSet scanSet;
-        public override ScanSet ScanSet
-        {
-            get { return scanSet; }
-            set { scanSet = value; }
-        }
-
-        private IsotopicProfile isotopicProfile;
-        public override IsotopicProfile IsotopicProfile
-        {
-            get { return isotopicProfile; }
-            set { isotopicProfile = value; }
-        }
-
-        private ChromPeak chromPeakSelected;
-
-        public override ChromPeak ChromPeakSelected
-        {
-            get { return chromPeakSelected; }
-            set { chromPeakSelected = value; }
-        }
-
-
-        private List<ChromPeak> chromPeaks;
-        public override List<ChromPeak> ChromPeaks
-        {
-            get { return chromPeaks; }
-            set { chromPeaks = value; }
-        }
-        public override MassTag MassTag { get; set; }
-        public override XYData ChromValues { get; set; }
+     
         #endregion
 
         #region Public Methods
@@ -70,7 +35,6 @@ namespace DeconTools.Backend.Core
 
 
 
-        public override double Score { get; set; }
 
     }
 }

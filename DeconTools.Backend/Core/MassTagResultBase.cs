@@ -5,23 +5,23 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public abstract class IMassTagResult : IsosResult
+    public abstract class MassTagResultBase : IsosResult
     {
         #region Constructors
         #endregion
 
         #region Properties
         
-        public abstract List<ChromPeak> ChromPeaks { get; set; }
+        public IList<ChromPeak> ChromPeaks { get; set; }
 
-        public abstract ChromPeak ChromPeakSelected { get; set; }
+        public ChromPeak ChromPeakSelected { get; set; }
 
-        public abstract MassTag MassTag { get; set; }
+        public MassTag MassTag { get; set; }
 
-        public abstract double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
+        public double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
 
 
-        public abstract XYData ChromValues { get; set; }
+        public XYData ChromValues { get; set; }
         #endregion
 
         #region Public Methods
@@ -62,6 +62,11 @@ namespace DeconTools.Backend.Core
                 return ChromPeakSelected.NETValue;
             }
 
+        }
+
+        internal virtual void AddLabelledIso(IsotopicProfile labelledIso)
+        {
+            throw new NotImplementedException();
         }
     }
 }

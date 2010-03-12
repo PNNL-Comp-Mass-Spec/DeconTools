@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class ResultFlag
+    public abstract class ResultFlag
     {
         #region Constructors
         public ResultFlag()

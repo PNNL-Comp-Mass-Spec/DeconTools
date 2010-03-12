@@ -104,6 +104,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(uimfResult.IsotopicProfile.Original_Total_isotopic_abundance);
             sb.Append(delimiter);
             sb.Append(uimfResult.ScanSet.DriftTime.ToString("0.###"));
+            sb.Append(delimiter);
+            sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+
+
             return sb.ToString();
         }
 
@@ -142,6 +146,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("TIA_orig_intensity");
             sb.Append(Delimiter);
             sb.Append("drift_time");
+            sb.Append(delimiter);
+            sb.Append("flag");
             sb.Append(Environment.NewLine);
 
             return sb.ToString();

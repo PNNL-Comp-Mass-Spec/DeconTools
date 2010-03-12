@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define includeLargeTests
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -18,6 +20,45 @@ namespace DeconTools.UnitTesting
 
         public string parameterFilename = "..\\..\\TestFiles\\testparam.xml";
 
+
+        [Test]
+        public void checkDataSetNamesAndPathsTest()
+        {
+            string testFile = xcaliburTestfile;
+
+            Run run = new XCaliburRun(testFile);
+
+            Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
+
+            Assert.AreEqual("..\\..\\TestFiles", run.DataSetPath);
+
+
+        }
+
+        [Test]
+        public void checkMinAndMaxScansTest1()
+        {
+            string testFile = lowmwRawfile;
+
+            Run run = new XCaliburRun(testFile);
+
+            Assert.AreEqual(1, run.MinScan);
+            Assert.AreEqual(1, run.MaxScan);
+        }
+
+        [Test]
+        public void checkMinAndMaxScansTest2()
+        {
+            string testFile = xcaliburTestfile;
+
+            Run run = new XCaliburRun(testFile);
+
+            Assert.AreEqual(1, run.MinScan);
+            Assert.AreEqual(18505, run.MaxScan);
+        }
+
+        
+        
         [Test]
         public void GetSpectrumTest1()
         {
@@ -105,7 +146,7 @@ namespace DeconTools.UnitTesting
 
         }
 
-
+#if includeLargeTests
         [Test]
         public void GetSpectrumSpeedTest1()
         {
@@ -195,7 +236,7 @@ namespace DeconTools.UnitTesting
 
         }
 
-
+#endif
 
         [Test]
         public void GetSpectrumTypesTest1()
@@ -263,7 +304,7 @@ namespace DeconTools.UnitTesting
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            run.GetMassSpectrum(new ScanSet(6067), 800, 2000);
+            run.GetMassSpectrum(new ScanSet(6067), 400, 2000);
 
             float ticVal = run.GetTIC(400, 2000);
 
@@ -301,7 +342,7 @@ namespace DeconTools.UnitTesting
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.DESCENDING));
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.CLOSEST));
 
-            Assert.AreEqual(18505, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(18504, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
             Assert.AreEqual(18499, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.DESCENDING));
 
 

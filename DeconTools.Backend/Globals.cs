@@ -8,6 +8,10 @@ namespace DeconTools.Backend
     {
 
         public const double PROTON_MASS = 1.00727649;
+        public const double N14_MASS = 14.003074007418;    // IUPAC, 2002
+        public const double N15_MASS = 15.000108973000;
+
+
 
 
         public enum XYDataFileType       //these filetypes are for files that contain a single set of XY values  (i.e. single MS Scan)

@@ -6,6 +6,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using System.IO;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 {
@@ -29,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
                 run.Filename.Length > 0, "MS data file ('run') has not been initialized");
             //Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ChromAligner failed. ScanSets have not been defined.");
 
-            string baseFileName = run.Filename.Substring(0, run.Filename.LastIndexOf('.'));
+            string baseFileName = run.DataSetPath + "\\" + run.DatasetName;
 
             string targetUMCFileName = baseFileName + "_UMCs.txt";
 

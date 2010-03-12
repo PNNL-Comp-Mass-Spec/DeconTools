@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             targetedFeatureFinder.Execute(run.ResultCollection);
             fitScoreCalc.Execute(run.ResultCollection);
 
-            IMassTagResult result = run.ResultCollection.GetMassTagResult(mt);
+            MassTagResultBase result = run.ResultCollection.GetMassTagResult(mt);
             TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfile);
             Console.WriteLine("Fit val = " + result.IsotopicProfile.Score);
 

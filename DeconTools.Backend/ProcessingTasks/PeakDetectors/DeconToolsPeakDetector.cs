@@ -157,6 +157,9 @@ namespace DeconTools.Backend.ProcessingTasks
                 peak.SN = (float)peaklist[i].mdbl_SN;
                 peak.Width = (float)peaklist[i].mdbl_FWHM;
 
+                peak.DataIndex = peaklist[i].mint_data_index;      // this points to the index value of the raw xy values - I think
+                
+
                 returnedList.Add(peak);
 
             }

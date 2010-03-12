@@ -12,14 +12,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class UIMFRun_Tests
     {
-        public string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000.uimf";
-        public string uimfFilepath2 = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
+        private string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
 
         [Test]
         public void getUIMFFileTest1()
         {
 
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
 
 
@@ -33,7 +32,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
 
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
             int numframes = uimfRun.GetNumFrames();
             int numScans = uimfRun.GetNumMSScans();
 
@@ -49,7 +48,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void UIMFLibraryDirectAccessTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath2);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
@@ -61,7 +60,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void UIMFLibrarySumScansTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath2);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
             double[] xvals = new double[100000];
@@ -79,7 +78,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void Weird_MZ_zeroValues_for_lowFrame_whenSummedTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath2);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
             double[] xvals = new double[100000];
@@ -113,7 +112,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getNumMSScansTest1()
         {
-            Run uimfRun = new UIMFRun(uimfFilepath2);
+            Run uimfRun = new UIMFRun(uimfFilepath);
             int numScans = uimfRun.GetNumMSScans();
 
             int numScans2 = uimfRun.GetNumMSScans();
@@ -125,7 +124,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSummedMSTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             ScanSet scanset = new ScanSet(500025, 500000, 500050);
 
@@ -151,7 +150,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSummedFramesMSTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             uimfRun.GetMassSpectrum(new ScanSet(300, 299, 301), new FrameSet(1200, 1199, 1201), 100, 2000);
             Console.WriteLine(uimfRun.XYData.Xvalues.Length);
@@ -172,7 +171,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSummedFramesMSTest2()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             for (int i = 1200; i < (600 * 2400 / 4); i = i + 600)
             {
@@ -185,7 +184,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getOneFrameOneScanTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             for (int i = 200; i < 301; i++)
             {
@@ -202,7 +201,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         public void getSummedFramesAndScansMSTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             uimfRun.GetMassSpectrum(new ScanSet(300, 1, 599), new FrameSet(1200, 1199, 1201), 100, 2000);
             Console.WriteLine(uimfRun.XYData.Xvalues.Length);
@@ -224,7 +223,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getFramePressureTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             double framePressure = uimfRun.GetFramePressure(1000);
 
@@ -236,7 +235,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getFramePressuresUsingLibraryTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath2);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
@@ -260,7 +259,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getDriftTimesTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             
 
@@ -287,7 +286,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getDriftTimes2()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath2);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
@@ -309,7 +308,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             //UIMF scan numbers are 0-based.  But first scan should have a drifttime above 0. 
 
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
             double driftTime = uimfRun.GetDriftTime(1300, 0);
             Assert.Greater((decimal)driftTime, 0);
@@ -327,7 +326,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void GetNumBinsTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath2);
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
             int numBins = uimfRun.GetNumBins();
             Assert.AreEqual(92000, numBins);
         }

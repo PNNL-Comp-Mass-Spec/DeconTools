@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
             smoother.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
 
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             TestUtilities.DisplayXYValues(run.ResultCollection);
 
         }
@@ -81,7 +81,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
             smoother.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
 
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             TestUtilities.DisplayXYValues(run.ResultCollection);
 
         }
@@ -131,10 +131,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
             Console.WriteLine("Now generating MS....");
             msgen.Execute(run.ResultCollection);
             Console.WriteLine("----------- RESULTS ----------------------\n");
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
 
 
-            IMassTagResult massTagResult= run.ResultCollection.MassTagResultList[massTag];
+            MassTagResultBase massTagResult= run.ResultCollection.MassTagResultList[massTag];
             massTagResult.DisplayToConsole();
             Assert.AreEqual(5512, massTagResult.ScanSet.PrimaryScanNumber);
 

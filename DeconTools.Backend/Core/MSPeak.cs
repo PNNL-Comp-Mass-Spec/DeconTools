@@ -50,5 +50,7 @@ namespace DeconTools.Backend.Core
             get { return sN; }
             set { sN = value; }
         }
+
+        public int DataIndex { get; set; }
     }
 }

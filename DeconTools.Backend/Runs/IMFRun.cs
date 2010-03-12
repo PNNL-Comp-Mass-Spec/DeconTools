@@ -7,12 +7,12 @@ using DeconTools.Backend.Core;
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class IMFRun : Run
+    public class IMFRun : DeconToolsRun
     {
 
         public IMFRun()
         {
-            this.xyData = new XYData();
+            this.XYData = new XYData();
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.PNNL_IMS;
         }
@@ -21,7 +21,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             this.Filename = filename;
-            this.rawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.PNNL_IMS);
+            this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.PNNL_IMS);
             this.MinScan = 0;        
             this.MaxScan = GetMaxPossibleScanIndex();
         }
@@ -34,15 +34,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        private DeconToolsV2.Readers.clsRawData rawData;
-
-        public DeconToolsV2.Readers.clsRawData RawData
-        {
-            get { return rawData; }
-            set { rawData = value; }
-        }
-
-
+  
         public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
@@ -67,43 +59,14 @@ namespace DeconTools.Backend.Runs
 
             int upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
             int lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
-            this.rawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
+            this.RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
 
-            this.xyData.SetXYValues(ref xvals, ref yvals);
+            this.XYData.SetXYValues(ref xvals, ref yvals);
 
         }
 
-        public override int GetNumMSScans()
-        {
-            return this.rawData.GetNumScans();
-        }
+    
 
 
-        private XYData xyData;
-
-        public override XYData XYData
-        {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
-        }
-
-
-        public override double GetTime(int scanNum)
-        {
-            return this.rawData.GetScanTime(scanNum);
-        }
-
-        public override int GetMSLevel(int scanNum)
-        {
-            return this.rawData.GetMSLevel(scanNum);
-        }
-
-        
     }
 }

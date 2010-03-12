@@ -103,7 +103,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
                     fitScoreCalc.Execute(run.ResultCollection);
-                    IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+                    MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
                     massTagResult.DisplayToConsole();
 
 
@@ -209,7 +209,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
                     fitScoreCalc.Execute(run.ResultCollection);
-                    IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+                    MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
                     massTagResult.DisplayToConsole();
 
 
@@ -377,7 +377,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
                     fitScoreCalc.Execute(run.ResultCollection);
-                    IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+                    MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
                     massTagResult.DisplayToConsole();
 
 

@@ -141,7 +141,31 @@ namespace DeconTools.Backend.Core
         }
 
 
-        
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(primaryScanNumber);
+
+            if (indexValues.Count > 1)    //if there is summing, will show these scans in the string
+            {
+                sb.Append(" {");
+                for (int i = 0; i < indexValues.Count; i++)
+                {
+                    bool isLast = (i == indexValues.Count - 1);
+                    sb.Append(indexValues[i]);
+                    if (isLast)
+                    {
+                        sb.Append("}");
+                    }
+                    else
+                    {
+                        sb.Append(", ");
+                    }
+                }
+            }
+            return sb.ToString();
+ 
+        }
 
       
 

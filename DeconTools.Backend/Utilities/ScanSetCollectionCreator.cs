@@ -18,6 +18,8 @@ namespace DeconTools.Backend.Utilities
             this.increment = increment;
             this.processMSMS = processMSMS;
 
+
+
         }
 
         public ScanSetCollectionCreator(Run run, int start, int stop, int numScansSummed, int increment)
@@ -41,8 +43,14 @@ namespace DeconTools.Backend.Utilities
         private int increment;
         private bool processMSMS;
 
+        private List<int> m_MSLevelScanList;
+
         public void Create()
         {
+
+            //  TODO:   the advancement (increment) is not working right on Xcalibur data containing MS/MS data.  Need to fix this...
+            //
+
             bool isNumScansOdd = (numScansSummed % 2 == 1 && numScansSummed > 0);
 
             if (this.stopScan < this.startScan)
@@ -66,7 +74,7 @@ namespace DeconTools.Backend.Utilities
             Check.Require(startAndStopLessThanMaxPossible, "Either the Start Scan or Stop Scan value exceeds the maximum possible value");
 
 
-            for (int i = startScan; i <= stopScan; i = i + increment)
+            for (int i = startScan; i <= stopScan; i++)
             {
                 int currentMSLevel = run.GetMSLevel(i);
 
@@ -102,10 +110,15 @@ namespace DeconTools.Backend.Utilities
                 //}
 
 
-
-                ScanSet scanSet = new ScanSet(i,scansToSum.ToArray());
+                scansToSum.Sort();
+                ScanSet scanSet = new ScanSet(i, scansToSum.ToArray());
                 run.ScanSetCollection.ScanSetList.Add(scanSet);
+
+                i = i + increment - 1;   //  '-1' because we advance by +1 when the loop iterates. 
+
             }
+
+
 
 
         }

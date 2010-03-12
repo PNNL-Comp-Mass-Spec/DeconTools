@@ -7,17 +7,13 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
-    public class MZXMLRun : Run
+    public class MZXMLRun : DeconToolsRun
     {
-
-       
-
 
         #region Constructors
 
         public MZXMLRun()
         {
-            this.xyData = new XYData();
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = false;      //TODO: check this
             this.MSFileType = Globals.MSFileType.MZXML_Rawdata;
@@ -32,7 +28,7 @@ namespace DeconTools.Backend.Runs
             try
             {
 
-                this.rawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.MZXMLRAWDATA);
+                this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.MZXMLRAWDATA);
             }
             catch (Exception ex)
             {
@@ -54,49 +50,9 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
-
-        [field: NonSerialized]
-        private XYData xyData;
-
-        public override XYData XYData
-        {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
-        }
-
-        [field: NonSerialized]
-        private DeconToolsV2.Readers.clsRawData rawData;
-        public DeconToolsV2.Readers.clsRawData RawData
-        {
-            get { return rawData; }
-            set { rawData = value; }
-        }
-
-
-
         #region Public Methods
-        public override int GetNumMSScans()
-        {
-            if (rawData == null) return 0;
-            return this.rawData.GetNumScans();
-        }
-
-        public override double GetTime(int scanNum)
-        {
-            return this.rawData.GetScanTime(scanNum);
-        }
-
-        public override int GetMSLevel(int scanNum)
-        {
-            return this.rawData.GetMSLevel(scanNum);
-        }
-
+  
+     
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
@@ -110,7 +66,7 @@ namespace DeconTools.Backend.Runs
 
             if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.rawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
             }
             else
             {
@@ -119,11 +75,10 @@ namespace DeconTools.Backend.Runs
             }
 
 
-            this.xyData.SetXYValues(ref xvals, ref yvals);
+            this.XYData.SetXYValues(ref xvals, ref yvals);
         }
 
         #endregion
-
-
+   
     }
 }

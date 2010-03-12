@@ -61,6 +61,29 @@ namespace DeconTools.Backend.Utilities
 
         }
 
+        public static int BinarySearchWithTolerance(double[] data, double targetVal, int leftIndex, int rightIndex, double tolerance)
+        {
+            if (leftIndex <= rightIndex)
+            {
+                int middle = (leftIndex + rightIndex) / 2;
+                if (Math.Abs(targetVal - data[middle]) <= tolerance)
+                {
+                    return middle;
+                }
+                else if (targetVal < data[middle])
+                {
+                    return BinarySearchWithTolerance(data, targetVal, leftIndex, middle - 1, tolerance);
+                }
+                else
+                {
+                    return BinarySearchWithTolerance(data, targetVal, middle + 1, rightIndex, tolerance);
+                }
+            }
+            return -1;
+
+
+        }
+
 
 
     }

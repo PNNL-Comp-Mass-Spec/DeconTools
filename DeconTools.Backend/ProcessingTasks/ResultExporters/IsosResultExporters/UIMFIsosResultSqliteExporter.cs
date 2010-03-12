@@ -91,10 +91,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     SQLiteParameter driftTimeParam = new SQLiteParameter();
                     SQLiteParameter origIntensParam = new SQLiteParameter();
                     SQLiteParameter tia_origIntensParam = new SQLiteParameter();
+                    SQLiteParameter flagCodeParam = new SQLiteParameter();
+
 
                     int n;
 
-                    mycommand.CommandText = "INSERT INTO T_MSFeatures ([feature_id],[frame_num],[ims_scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[ims_drift_time],[orig_intensity],[TIA_orig_intensity]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    mycommand.CommandText = "INSERT INTO T_MSFeatures ([feature_id],[frame_num],[ims_scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[ims_drift_time],[orig_intensity],[TIA_orig_intensity],[flag]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     mycommand.Parameters.Add(featureIDParam);
                     mycommand.Parameters.Add(frameNumParam);
                     mycommand.Parameters.Add(scanNumParam);
@@ -112,6 +114,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     mycommand.Parameters.Add(driftTimeParam);
                     mycommand.Parameters.Add(origIntensParam);
                     mycommand.Parameters.Add(tia_origIntensParam);
+                    mycommand.Parameters.Add(flagCodeParam);
 
                     for (n = 0; n < rc.ResultList.Count; n++)
                     {
@@ -132,6 +135,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                         driftTimeParam.Value = rc.ResultList[n].ScanSet.DriftTime;
                         origIntensParam.Value = rc.ResultList[n].IsotopicProfile.OriginalIntensity;
                         tia_origIntensParam.Value = rc.ResultList[n].IsotopicProfile.Original_Total_isotopic_abundance;
+                        flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(rc.ResultList[n].Flags);
                         mycommand.ExecuteNonQuery();
                     }
                 }

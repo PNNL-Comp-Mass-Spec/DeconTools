@@ -34,24 +34,20 @@ namespace DeconTools.Backend.ProcessingTasks
             //this allows running of two back-to-back deconvolutors without clearing the results
             //between deconvolutions.   Going backwards through the list prevents exceptions. 
 
-            if (resultList.CurrentScanIsosResultBin == null || resultList.CurrentScanIsosResultBin.Count == 0) return;
-            for (int i = resultList.CurrentScanIsosResultBin.Count-1; i >=0; i--)
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            for (int i = resultList.IsosResultBin.Count-1; i >=0; i--)
             {
-                
-                
-                if (resultList.CurrentScanIsosResultBin[i].ScanSet.PrimaryScanNumber != resultList.Run.CurrentScanSet.PrimaryScanNumber)
+                if (resultList.IsosResultBin[i].ScanSet.PrimaryScanNumber != resultList.Run.CurrentScanSet.PrimaryScanNumber)
                 {
-                    resultList.CurrentScanIsosResultBin.RemoveAt(i);
+                    resultList.IsosResultBin.RemoveAt(i);
                 }
 
-
-                
             }
         }
 
         private void addCurrentScanIsosResultsToOverallList(ResultCollection resultList)
         {
-            resultList.ResultList.AddRange(resultList.CurrentScanIsosResultBin);
+            resultList.ResultList.AddRange(resultList.IsosResultBin);
         }
 
         public void CombineDeconResults(ResultCollection baseResultList, IsosResult addedResult, DeconResultComboMode comboMode)
@@ -71,7 +67,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     //List<IsosResult> scanSetIsosResults = ResultCollection.getIsosResultsForCurrentScanSet(baseResultList);
 
                     //search isosResults for a (monoPeak = addedResult's monoPeak) AND chargeState = addedResult's chargeState 
-                    if (doesResultExist(baseResultList.CurrentScanIsosResultBin, addedResult))
+                    if (doesResultExist(baseResultList.IsosResultBin, addedResult))
                     {
                         //do nothing...  isotopic profile already exists
                     }
@@ -89,7 +85,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private bool doesResultExist(List<IsosResult> scanSetIsosResults, IsosResult addedResult)
+        private bool doesResultExist(IList<IsosResult> scanSetIsosResults, IsosResult addedResult)
         {
             MSPeak addedMonoPeak;
             MSPeak baseMonoPeak;

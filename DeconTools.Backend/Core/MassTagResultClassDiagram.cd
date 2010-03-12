@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DeconTools.Backend.Core.MassTagResult">
+    <Position X="5.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAgBAAAAAAAAIAAAQCAAEAAAABAQBAI=</HashCode>
+      <FileName>Core\MassTagResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.IMassTagResult">
+    <Position X="5.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAgBAAAAgAAAAAAAQAAAEAAAAAAQAAA=</HashCode>
+      <FileName>Core\IMassTagResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.N14N15_TResult">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAgAAAAAAAAgBAAAAAAAQIAAAQCAAEAAAABAQBAI=</HashCode>
+      <FileName>Core\N14N15_TResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

@@ -15,7 +15,38 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     {
         string brukerTestFile1 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02";
         string brukerTestFile2 = @"\\Proto-4\SWT_ICR2\SWT_9t_TestDS216_Small\0.ser";
+        string brukerTestFile1b = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02\acqus";
 
+
+
+        [Test]
+        public void checkDataSetNamesAndPathsTest1()
+        {
+            string testFile = brukerTestFile1;
+
+            Run run = new BrukerRun(testFile);
+
+            Assert.AreEqual("RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02", run.DatasetName);
+
+            Assert.AreEqual(@"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02", run.DataSetPath);
+
+
+        }
+
+
+        [Test]
+        public void checkDataSetNamesAndPathsTest2()
+        {
+            string testFile = brukerTestFile1b;
+
+            Run run = new BrukerRun(testFile);
+
+            Assert.AreEqual("RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02", run.DatasetName);
+
+            Assert.AreEqual(@"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02", run.DataSetPath);
+
+
+        }
 
         [Test]
         public void GetSpectrumTest1()

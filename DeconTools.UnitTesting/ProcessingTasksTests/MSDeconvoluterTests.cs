@@ -23,7 +23,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void DeconvoluteTestXYData()
         {
-            Run run = new MSScanFromTextFileRun(imfMSScanTextfile, Globals.XYDataFileType.Textfile);
+            Run run = new MSScanFromTextFileRun(imfMSScanTextfile, Globals.XYDataFileType.Textfile, '\t');
             ResultCollection resultcollection = new ResultCollection(run);
 
             Task msgen = new GenericMSGenerator();

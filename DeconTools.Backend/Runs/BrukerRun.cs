@@ -23,6 +23,9 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             this.Filename = folderName;
+
+      
+
             try
             {
                 this.rawData = new DeconToolsV2.Readers.clsRawData();
@@ -35,6 +38,44 @@ namespace DeconTools.Backend.Runs
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
+            this.DatasetName = getDataSetName(this.Filename);
+            this.DataSetPath = getDataSetFolderName(this.Filename);
+
+        }
+
+        private string getDataSetFolderName(string p)
+        {
+            if (p.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
+            {
+                return p.Substring(0, p.LastIndexOf('\\'));
+            }
+            else
+            {
+                return p;
+            }
+        }
+
+        private string getDataSetName(string filename)
+        {
+
+
+            string trimmedfilename = filename.TrimEnd(new char[] { '\\' });
+
+            if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
+            {
+                trimmedfilename = getDataSetFolderName(trimmedfilename);
+            }
+
+           
+
+            int pathIndex = trimmedfilename.LastIndexOf('\\');
+            if (pathIndex == -1) return String.Empty;
+
+
+
+            return trimmedfilename.Substring((pathIndex+1), (trimmedfilename.Length - pathIndex-1));
+
+
         }
 
         public BrukerRun(string filename, int minScan, int maxScan)
@@ -134,10 +175,6 @@ namespace DeconTools.Backend.Runs
             return this.rawData.GetScanTime(scanNum);
         }
 
-        public override int GetMSLevel(int scanNum)
-        {
-            return this.rawData.GetMSLevel(scanNum);
-        }
 
         internal override int GetMaxPossibleScanIndex()
         {
@@ -149,5 +186,18 @@ namespace DeconTools.Backend.Runs
 
 
 
+
+        public override int GetMSLevelFromRawData(int scanNum)
+        {
+
+            if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
+            int mslevel =(byte)this.rawData.GetMSLevel(scanNum);
+
+            addToMSLevelData(scanNum, mslevel);
+ 
+            return mslevel;
+        }
+
+  
     }
 }

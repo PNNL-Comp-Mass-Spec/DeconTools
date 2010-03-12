@@ -8,28 +8,14 @@ namespace DeconTools.Backend.Core
     public abstract class IsosResult
     {
         public int MSFeatureID { get; set; }
-        public List<ResultFlag> Flags = new List<ResultFlag>();
+        public IList<ResultFlag> Flags = new List<ResultFlag>();
 
-        public abstract Run Run
-        {
-            get; 
-            set; 
-        }
+        public Run Run { get; set; }
 
-        public abstract ScanSet ScanSet
-        {
-            get;
-            set;
-        }
+        public ScanSet ScanSet { get; set; }
 
+        public IsotopicProfile IsotopicProfile { get; set; }
 
-        public abstract IsotopicProfile IsotopicProfile
-        {
-            get;
-            set;
-        }
-
-        
 
     }
 }

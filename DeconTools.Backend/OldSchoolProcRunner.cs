@@ -91,7 +91,7 @@ namespace DeconTools.Backend
             Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
             //Define ScansetCollection
 
-            Logger.Instance.OutputFilename = Project.getInstance().RunCollection[0].Filename + "_log.txt";
+            Logger.Instance.OutputFilename = run.DataSetPath + "\\" + run.DatasetName + "_log.txt";
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(OldSchoolProcRunner)));
             Logger.Instance.AddEntry("ParameterFile = " + Path.GetFileName(this.paramFilename));
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
@@ -109,7 +109,10 @@ namespace DeconTools.Backend
 
             try
             {
-                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, Project.getInstance().Parameters.NumScansSummed, 1,Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
+                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan,
+                    Project.getInstance().Parameters.NumScansSummed,
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
                 scanSetCollectionCreator.Create();
             }
             catch (Exception ex)
@@ -156,6 +159,8 @@ namespace DeconTools.Backend
             Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
             Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(), Logger.Instance.OutputFilename);
 
+            Task resultFlagger = new DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask();
+            Project.getInstance().TaskCollection.TaskList.Add(resultFlagger);
 
 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ReplaceRAPIDScoreWithHornFitScore == true)
@@ -285,18 +290,19 @@ namespace DeconTools.Backend
         }
         private string getPeakListFileName(Globals.ExporterType exporterType)
         {
-            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+            var run = Project.getInstance().RunCollection[0];
+
+            string baseFileName = run.DataSetPath + "\\" + run.DatasetName;
+
+            //string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
             switch (exporterType)
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_peaks.txt";
-                    break;
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_peaks.sqlite";
-                    break;
                 default:
                     return baseFileName += "_peaks.txt";
-                    break;
             }
 
 
@@ -321,7 +327,11 @@ namespace DeconTools.Backend
 
         private string setScansOutputFileName(Globals.ExporterType exporterType)
         {
-            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+            var run = Project.getInstance().RunCollection[0];
+
+            string baseFileName = run.DataSetPath + "\\" + run.DatasetName;
+
+            // string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
 
             switch (exporterType)
             {
@@ -339,7 +349,11 @@ namespace DeconTools.Backend
 
         private string setIsosOutputFileName(Globals.ExporterType exporterType)
         {
-            string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
+            var run = Project.getInstance().RunCollection[0];
+
+            string baseFileName = run.DataSetPath + "\\" + run.DatasetName;
+
+            //string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
 
             switch (exporterType)
             {

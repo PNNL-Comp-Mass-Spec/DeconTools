@@ -35,6 +35,8 @@ namespace DeconTools.UnitTesting
         public string xcaliburParameterFile1 = "..\\..\\TestFiles\\xcaliburParameterFile1.xml";
         public string xcaliburParameterFile3 = "..\\..\\TestFiles\\xcaliburParameterFile3.xml";
         private string xcaliburParameterFile4_exporttoSqlite = "..\\..\\TestFiles\\xcaliburParameterFile4_exportToSqlite.xml";
+        private string xcal_sum5_adv1_scans6000_6050 = "..\\..\\TestFiles\\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Sum5_Advance1_scans6000-6050.xml";
+
 
         public string imfParameterFile1 = "..\\..\\TestFiles\\imfParameterFile1.xml";
         public string imfParameterFile2 = "..\\..\\TestFiles\\imfParameterFile2.xml";
@@ -240,6 +242,15 @@ namespace DeconTools.UnitTesting
             OldSchoolProcRunner runner = new OldSchoolProcRunner(mzxmlFilepath, Globals.MSFileType.MZXML_Rawdata, mzxmlParameterFile1, bw);
             runner.Execute();
         }
+
+        [Test]
+        public void xcaliburSum5_adv1_horn_test1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(xcaliburTestfile, Globals.MSFileType.Finnigan, xcal_sum5_adv1_scans6000_6050);
+            runner.Execute();
+
+        }
+
 
         //Dec 2, 2009:  Deserializer not used anymore.  Test is decommissioned...
         //[Test]

@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Runs
 {
 
     [Serializable]
-    public class UIMFRun : Run
+    public class UIMFRun : DeconToolsRun
     {
         private int numBins;
 
@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             this.Filename = fileName;
-            this.rawData = new DeconToolsV2.Readers.clsRawData(fileName, DeconToolsV2.Readers.FileType.PNNL_UIMF);
+            this.RawData = new DeconToolsV2.Readers.clsRawData(fileName, DeconToolsV2.Readers.FileType.PNNL_UIMF);
             this.MinFrame = 1;
             this.MaxFrame = GetMaxPossibleFrameIndex();
             this.MinScan = 0;
@@ -59,21 +59,6 @@ namespace DeconTools.Backend.Runs
 
         #region Properties
 
-        [field: NonSerialized]
-        private XYData xyData;
-        public override XYData XYData
-        {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
-        }
-        
-      
         private FrameSetCollection frameSetCollection;
 
         public FrameSetCollection FrameSetCollection
@@ -83,14 +68,6 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        [field: NonSerialized]
-        private DeconToolsV2.Readers.clsRawData rawData;
-
-        public DeconToolsV2.Readers.clsRawData RawData
-        {
-            get { return rawData; }
-            set { rawData = value; }
-        }
 
         private int minFrame;
 
@@ -148,16 +125,16 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             if (scanset.Count() == 1)
             {
-                rawData.GetSpectrum(scanset.getLowestScanNumber(), ref xvals, ref yvals);
+                RawData.GetSpectrum(scanset.getLowestScanNumber(), ref xvals, ref yvals);
             }
             else
             {
-                rawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
+                RawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
             }
 
 
 
-            this.xyData.SetXYValues(ref xvals, ref yvals);
+            this.XYData.SetXYValues(ref xvals, ref yvals);
 
 
 
@@ -177,7 +154,7 @@ namespace DeconTools.Backend.Runs
 
                 Check.Require(UIMFLibraryAdapter.getInstance(this.Filename).Datareader != null, "Data reader is null");
 
-                rawData.GetSummedFrameAndScanSpectra(UIMFLibraryAdapter.getInstance(this.Filename).Datareader,
+                RawData.GetSummedFrameAndScanSpectra(UIMFLibraryAdapter.getInstance(this.Filename).Datareader,
                     ref xvals, ref yvals, frameset.getLowestFrameNumber(),
                     frameset.getHighestFrameNumber(), scanset.getLowestScanNumber(),
                     scanset.getHighestScanNumber(), minMZ, maxMZ, this.numBins);
@@ -251,7 +228,7 @@ namespace DeconTools.Backend.Runs
 
         public double GetFramePressure(int frameNum)
         {
-            return this.rawData.GetFramePressure(frameNum);
+            return this.RawData.GetFramePressure(frameNum);
         }
 
         public double GetFramePressureFront(int frameNum)
@@ -281,10 +258,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override int GetMSLevel(int scanNum)
-        {
-            return this.rawData.GetMSLevel(scanNum);
-        }
+  
         internal void CreateFrameSetCollection(int minFrame, int maxFrame)      // this is an early simplistic version
         {
             for (int i = minFrame; i <= maxFrame; i++)
@@ -348,6 +322,12 @@ namespace DeconTools.Backend.Runs
         public override int GetCurrentScanOrFrame()
         {
             return this.CurrentFrameSet.PrimaryFrame;
+        }
+
+
+        public override int GetMSLevelFromRawData(int scanNum)
+        {
+            return 1;      
         }
 
         #endregion

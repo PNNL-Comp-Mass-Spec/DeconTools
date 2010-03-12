@@ -22,14 +22,13 @@ namespace DeconTools.Backend.Runs
             return -1;
         }
 
-        public override int GetMSLevel(int scanNum)
-        {
-            return -1;
-        }
+ 
 
         public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
         {
             //do nothing...   constructor requires that XY values are inputted
         }
+
+  
     }
 }

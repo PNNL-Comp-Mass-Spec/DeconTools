@@ -32,6 +32,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkCreateMSFeatureForEachPeak = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // chkUseResultMergerMode
@@ -39,9 +41,9 @@
             this.chkUseResultMergerMode.AutoSize = true;
             this.chkUseResultMergerMode.Location = new System.Drawing.Point(13, 13);
             this.chkUseResultMergerMode.Name = "chkUseResultMergerMode";
-            this.chkUseResultMergerMode.Size = new System.Drawing.Size(159, 17);
+            this.chkUseResultMergerMode.Size = new System.Drawing.Size(155, 17);
             this.chkUseResultMergerMode.TabIndex = 0;
-            this.chkUseResultMergerMode.Text = "Use \'Result Merger Mode\' **";
+            this.chkUseResultMergerMode.Text = "Use \'Result Merger Mode\' *";
             this.chkUseResultMergerMode.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -49,14 +51,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(34, 38);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(242, 26);
+            this.label1.Size = new System.Drawing.Size(238, 26);
             this.label1.TabIndex = 1;
-            this.label1.Text = "** This mode will combine results from multiple files\r\ninto a single _isos and a " +
-                "single _scans file\r\n";
+            this.label1.Text = "* This mode will combine results from multiple files\r\ninto a single _isos and a s" +
+                "ingle _scans file\r\n";
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(144, 84);
+            this.btnUpdate.Location = new System.Drawing.Point(136, 131);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 2;
@@ -66,7 +68,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(230, 84);
+            this.btnCancel.Location = new System.Drawing.Point(217, 131);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(52, 23);
             this.btnCancel.TabIndex = 2;
@@ -74,13 +76,35 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkCreateMSFeatureForEachPeak
+            // 
+            this.chkCreateMSFeatureForEachPeak.AutoSize = true;
+            this.chkCreateMSFeatureForEachPeak.Location = new System.Drawing.Point(13, 73);
+            this.chkCreateMSFeatureForEachPeak.Name = "chkCreateMSFeatureForEachPeak";
+            this.chkCreateMSFeatureForEachPeak.Size = new System.Drawing.Size(198, 17);
+            this.chkCreateMSFeatureForEachPeak.TabIndex = 0;
+            this.chkCreateMSFeatureForEachPeak.Text = "Create MS_Feature for each peak **";
+            this.chkCreateMSFeatureForEachPeak.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(34, 89);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(218, 39);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "** This mode will create an MS Feature for \r\neach MS Peak detected.  No Deconvolu" +
+                "tion\r\nis performed. \r\n";
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 126);
+            this.ClientSize = new System.Drawing.Size(281, 162);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnUpdate);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.chkCreateMSFeatureForEachPeak);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chkUseResultMergerMode);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -98,5 +122,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chkCreateMSFeatureForEachPeak;
+        private System.Windows.Forms.Label label2;
     }
 }

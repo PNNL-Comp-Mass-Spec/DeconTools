@@ -16,35 +16,12 @@ namespace DeconTools.Backend.Core
         public UIMFIsosResult(Run run, FrameSet frameset, ScanSet scanset)
         {
             this.Run = run;
-            this.frameSet = frameset;
-            this.scanSet = scanset;
+            this.FrameSet = frameset;
+            this.ScanSet = scanset;
             
         }
 
-        private Run run;
-
-        public override Run Run
-        {
-            get { return run; }
-            set { run = value; }
-        }
-
-        private ScanSet scanSet;
-
-        public override ScanSet ScanSet
-        {
-            get { return scanSet; }
-            set { scanSet = value; }
-        }
-
-        private IsotopicProfile isotopicProfile;
-
-        public override IsotopicProfile IsotopicProfile
-        {
-            get { return isotopicProfile; }
-            set { isotopicProfile = value; }
-        }
-
+    
         private FrameSet frameSet;
 
         public FrameSet FrameSet

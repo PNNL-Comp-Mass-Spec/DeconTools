@@ -58,7 +58,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Assert.AreEqual(1, run.ResultCollection.MassTagResultList.Count);
 
-            IMassTagResult result = run.ResultCollection.GetMassTagResult(mt);
+            MassTagResultBase result = run.ResultCollection.GetMassTagResult(mt);
             Assert.AreNotEqual(null, result);
             Assert.AreEqual(mt, result.MassTag);
             Assert.AreEqual(759.403435061313m, (decimal)result.IsotopicProfile.Peaklist[0].XValue);
@@ -113,7 +113,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             TestUtilities.DisplayXYValues(run.ResultCollection);
 
 
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
             Assert.AreEqual(5495, massTagResult.ScanSet.PrimaryScanNumber);
 
@@ -181,7 +181,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     mspeakDet.Execute(run.ResultCollection);
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
-                    IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+                    MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
                     massTagResult.DisplayToConsole();
                     Console.WriteLine("------------------------------ end --------------------------");
                 }
@@ -256,13 +256,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
             Console.WriteLine("------------------------------ end --------------------------");
@@ -333,13 +333,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
             Console.WriteLine("------------------------------ end --------------------------");
@@ -409,13 +409,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
             Assert.AreEqual(1055.0111851272m, (decimal)massTagResult.IsotopicProfile.getMonoPeak().XValue);
@@ -488,13 +488,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
             //Assert.AreEqual(1055.0111851272m, (decimal)massTagResult.IsotopicProfile.getMonoPeak().XValue);
@@ -568,13 +568,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
             //Assert.AreEqual(1055.0111851272m, (decimal)massTagResult.IsotopicProfile.getMonoPeak().XValue);
@@ -629,7 +629,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
 
-            int successCounter = 0;
             List<long> timingResults = new List<long>();
 
             foreach (MassTag mt in massTagColl.MassTagList)
@@ -656,7 +655,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
                     theorFeatureGen.Execute(run.ResultCollection);
                     targetedFeatureFinder.Execute(run.ResultCollection);
                     fitScoreCalc.Execute(run.ResultCollection);
-                    IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+                    MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
                     massTagResult.DisplayToConsole();
 
 
@@ -736,7 +735,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task theorFeatureGen = new TomTheorFeatureGenerator();
             Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
 
-            int successCounter = 0;
             List<long> timeData = new List<long>();
 
             foreach (MassTag mt in massTagColl.MassTagList)
@@ -831,13 +829,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -906,14 +904,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -982,14 +980,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             //TestUtilities.DisplayXYValues(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -1059,14 +1057,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
             msgen.Execute(run.ResultCollection);
             //TestUtilities.DisplayXYValues(run.ResultCollection);
             mspeakDet.Execute(run.ResultCollection);
             theorFeatureGen.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
-            IMassTagResult massTagResult = run.ResultCollection.MassTagResultList[mt];
+            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -1135,7 +1133,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             smoother.Execute(run.ResultCollection);
             TestUtilities.DisplayXYValues(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
-            TestUtilities.DisplayPeaks(run.ResultCollection);
+            TestUtilities.DisplayPeaks(run.PeakList);
             chromPeakSel.Execute(run.ResultCollection);
 
             try
