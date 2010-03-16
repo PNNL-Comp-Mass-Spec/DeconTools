@@ -33,6 +33,10 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\BaseDataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="DeconEngine, Version=1.0.3165.35432, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
@@ -82,6 +86,8 @@
     <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\ACss.cs" />
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
+    <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
+    <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Core\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
@@ -141,6 +147,7 @@
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
     <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\N14N15QuantifierTask.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
@@ -231,6 +238,7 @@
     <Compile Include="Runs\AgilentD_Run.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
+    <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />

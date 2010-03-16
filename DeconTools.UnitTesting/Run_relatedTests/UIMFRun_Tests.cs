@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class UIMFRun_Tests
     {
-        private string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
+        private string uimfFilepath = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
 
         [Test]
         public void getUIMFFileTest1()
@@ -20,6 +20,17 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
+            Assert.AreEqual(1, uimfRun.MinFrame);
+            Assert.AreEqual(1950, uimfRun.MaxFrame);
+
+            Assert.AreEqual(0, uimfRun.MinScan);
+            Assert.AreEqual(499, uimfRun.MaxScan);
+
+
+            Assert.AreEqual("35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000", uimfRun.DatasetName);
+            Assert.AreEqual("..\\..\\TestFiles", uimfRun.DataSetPath);
+
+            Assert.AreEqual("..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf", uimfRun.Filename);
 
 
         }
@@ -29,9 +40,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void GetNumberOfFramesTest()
         {
             UIMFRun test = new UIMFRun();
-
-
-
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
             int numframes = uimfRun.GetNumFrames();
             int numScans = uimfRun.GetNumMSScans();
@@ -39,8 +47,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             Console.WriteLine("Number of frames = " + numframes);
             Console.WriteLine("Number of scans = " + numScans);
-            Assert.AreEqual(2400, numframes);
-            Assert.AreEqual(1440000, numScans);
+            Assert.AreEqual(1950, numframes);
+            Assert.AreEqual(975000, numScans);
 
 
         }
@@ -54,7 +62,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
 
             Console.WriteLine("Number of frames = " + numFrames);
-            Assert.AreEqual(2400, numFrames);
+            Assert.AreEqual(1950, numFrames);
         }
 
         [Test]

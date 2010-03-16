@@ -5,13 +5,14 @@ using NUnit.Framework;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using System.Linq;
 
 namespace DeconTools.UnitTesting
 {
     [TestFixture]
     public class FrameSetCollectionCreatorTests
     {
-        public string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000.uimf";
+        public string uimfFilepath = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
 
         [Test]
         public void basicCreatorTest1()
@@ -22,11 +23,11 @@ namespace DeconTools.UnitTesting
             creator.Create();
 
             UIMFRun uimfRun = (UIMFRun)run;
-            Assert.AreEqual(2400, uimfRun.FrameSetCollection.FrameSetList.Count);
-            Assert.AreEqual(2, uimfRun.FrameSetCollection.FrameSetList[2].PrimaryFrame);
-            Assert.AreEqual(new int[] { 1, 2, 3 }, uimfRun.FrameSetCollection.FrameSetList[2].IndexValues.ToArray());
-            Assert.AreEqual(new int[] { 0, 1 }, uimfRun.FrameSetCollection.FrameSetList[0].IndexValues.ToArray());
-            Assert.AreEqual(new int[] { 2398, 2399 }, uimfRun.FrameSetCollection.FrameSetList[2399].IndexValues.ToArray());
+            Assert.AreEqual(1950, uimfRun.FrameSetCollection.FrameSetList.Count);
+            Assert.AreEqual(3, uimfRun.FrameSetCollection.FrameSetList[2].PrimaryFrame);
+            Assert.AreEqual(new int[] { 2, 3, 4 }, uimfRun.FrameSetCollection.FrameSetList[2].IndexValues.ToArray());
+            Assert.AreEqual(new int[] { 1, 2 }, uimfRun.FrameSetCollection.FrameSetList[0].IndexValues.ToArray());
+            Assert.AreEqual(new int[] { 1949, 1950 }, uimfRun.FrameSetCollection.FrameSetList.Last().IndexValues.ToArray());
 
         }
 
@@ -62,14 +63,14 @@ namespace DeconTools.UnitTesting
 
 
 
-        [ExpectedException(ExpectedMessage = "Range value must be an odd number")]
-        [Test]
-        public void rangeIsNotOddTest1()
-        {
-            Run run = new UIMFRun(uimfFilepath);
-            FrameSetCollectionCreator creator = new FrameSetCollectionCreator(run, 1200, 1300, 4, 1);
-            creator.Create();
-        }
+        //[ExpectedException(ExpectedMessage = "Range value must be an odd number")]
+        //[Test]
+        //public void rangeIsNotOddTest1()
+        //{
+        //    Run run = new UIMFRun(uimfFilepath);
+        //    FrameSetCollectionCreator creator = new FrameSetCollectionCreator(run, 1200, 1300, 4, 1);
+        //    creator.Create();
+        //}
 
 
 

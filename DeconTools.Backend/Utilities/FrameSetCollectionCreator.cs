@@ -9,25 +9,27 @@ namespace DeconTools.Backend.Utilities
 {
     public class FrameSetCollectionCreator
     {
+      
+        
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="run"></param>
         /// <param name="start">Start frame</param>
         /// <param name="stop">Stop frame</param>
-        /// <param name="range">Range of Frames that makes up each FrameSet created. Must be an odd number.
-        /// eg) A FrameSet with primary Frame of 5 and a range of 3, 
-        /// will consist of Frames 4,5,6</param>
+        /// <param name="numFramesSummed">Number of frames summed.  So, for a Frameset having a primary frame of 5 and 
+        /// numFramesSummed of 3, the FrameSet will consist of Frames 4,5,6</param>
         /// <param name="increment">Frame increment. Must be greater than 0. This will inform the Creator 
-        /// which primary Frames will be created. eg)  If starting at Frame 3. The first Frameset will 
-        /// have a Primary frame of 3. If the increment is 2. The next frameset will have an Primary Frame of 5. 
-        /// This is a way of controlling overlap between FrameSets.</param>
-        public FrameSetCollectionCreator(Run run, int start, int stop, int range, int increment)
+        ///// which primary Frames will be created. eg)  If starting at Frame 3. The first Frameset will 
+        ///// have a Primary frame of 3. If the increment is 2. The next frameset will have an Primary Frame of 5. 
+        ///// This is a way of controlling overlap between FrameSets.</param>
+        public FrameSetCollectionCreator(Run run, int start, int stop, int numFramesSummed, int increment)
         {
             this.run = run;
             this.startFrame = start;
             this.stopFrame = stop;
-            this.range = range;
+            this.numFramesSummed = numFramesSummed;
             this.increment = increment;
         }
 
@@ -46,7 +48,7 @@ namespace DeconTools.Backend.Utilities
             UIMFRun uimfRun = (UIMFRun)run;
             int totalFrames = uimfRun.GetNumFrames();
 
-            if (totalFrames > 0) return (totalFrames - 1);
+            if (totalFrames > 0) return (totalFrames);
             else
             {
                 return 1;     //minimum frame value
@@ -63,13 +65,13 @@ namespace DeconTools.Backend.Utilities
         private int startFrame;
         private int stopFrame;
         private Run run;
-        private int range;
+        private int numFramesSummed;
         private int increment;
 
 
         public void Create()
         {
-            bool isRangeOdd = (range % 2 == 1 && range > 0);
+            bool isRangeOdd = (numFramesSummed % 2 == 1 && numFramesSummed > 0);
 
             Check.Require(run != null, "Run is null");
             Check.Require(run is UIMFRun, "FrameSet Collections can only be created for UIMF files");
@@ -81,7 +83,7 @@ namespace DeconTools.Backend.Utilities
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            int maxFrame = uimfRun.GetNumFrames() - 1;
+            int maxFrame = uimfRun.GetNumFrames();
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 
@@ -92,7 +94,7 @@ namespace DeconTools.Backend.Utilities
 
             for (int i = startFrame; i <= stopFrame; i = i + increment)
             {
-                int lowerFrame = i - ((range - 1) / 2);
+                int lowerFrame = i - ((numFramesSummed - 1) / 2);
                 if (lowerFrame < minFrame)
                 {
                     lowerFrame = minFrame;       //no bounce effect... 
@@ -100,7 +102,7 @@ namespace DeconTools.Backend.Utilities
                 }
 
 
-                int upperFrame = i + ((range - 1) / 2);
+                int upperFrame = i + ((numFramesSummed - 1) / 2);
                 if (upperFrame > maxFrame)
                 {
                     upperFrame = upperFrame - (upperFrame - maxFrame);

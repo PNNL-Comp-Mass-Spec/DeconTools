@@ -33,6 +33,8 @@ namespace DeconTools.Backend.Core
             set { m_n15IsotopicProfile = value; }
         }
 
+        public double RatioN14N15 { get; set; }
+
 
 
 

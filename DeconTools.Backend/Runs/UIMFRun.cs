@@ -4,6 +4,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using UIMFLibrary;
+using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -25,13 +26,25 @@ namespace DeconTools.Backend.Runs
         public UIMFRun(string fileName)
             : this()
         {
+
+            Check.Require(File.Exists(fileName));
             this.Filename = fileName;
+
+
+            string baseFilename = Path.GetFileName(this.Filename);
+            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            this.DataSetPath = Path.GetDirectoryName(fileName);
+
+
+
             this.RawData = new DeconToolsV2.Readers.clsRawData(fileName, DeconToolsV2.Readers.FileType.PNNL_UIMF);
             this.MinFrame = 1;
             this.MaxFrame = GetMaxPossibleFrameIndex();
             this.MinScan = 0;
             this.MaxScan = GetMaxPossibleScanIndex();
             this.numBins = GetNumBins();
+
+
 
 
 
@@ -307,8 +320,8 @@ namespace DeconTools.Backend.Runs
 
         private int GetMaxPossibleFrameIndex()
         {
-            int maxPossibleFrameIndex = GetNumFrames() - 1;
-            if (maxPossibleFrameIndex < 0) maxPossibleFrameIndex = 0;
+            int maxPossibleFrameIndex = GetNumFrames() ;     //frames begin at '1'
+            if (maxPossibleFrameIndex < 0) maxPossibleFrameIndex = 1;
             return maxPossibleFrameIndex;
         }
         public int GetNumBins()

@@ -121,6 +121,7 @@
     <Compile Include="QualityControlTests\UIMFQualityTests.cs" />
     <Compile Include="ResultSerializationTests.cs" />
     <Compile Include="ResultValidatorTests\LeftOfMonoPeakLookerTests.cs" />
+    <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
     <Compile Include="Run_relatedTests\ICR2LSRun_Tests.cs" />
     <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
