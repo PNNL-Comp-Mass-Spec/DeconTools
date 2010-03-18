@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     public class RunFactoryTests
     {
         string brukerTestFile1 = @"H:\N14N15Data\RSPH_Aonly_26_run1_20Oct07_Andromeda_07-09-02\Acqu";
-
+        string agilentDFile1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
 
         [Test]
         public void createBrukerRunTest1()
@@ -23,6 +23,18 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
             Assert.AreEqual(4276, run.MaxScan);
         }
+
+        [Test]
+        public void createAgilentDRunTest1()
+        {
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(agilentDFile1);
+
+            Assert.AreEqual(Globals.MSFileType.Agilent_TOF, run.MSFileType);
+
+        }
+
 
 
     }

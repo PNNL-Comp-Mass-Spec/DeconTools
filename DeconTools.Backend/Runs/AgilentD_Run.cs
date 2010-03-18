@@ -14,24 +14,50 @@ namespace DeconTools.Backend.Runs
         #region Constructors
 
         IMsdrDataReader m_reader;
+        IBDASpecData m_spec;
 
-        
-        public AgilentD_Run(string datasetFullName)
+        /// <summary>
+        /// Agilent XCT .D datafolder
+        /// </summary>
+        /// <param name="folderName">The name of the Agilent data folder. Folder has a '.d' suffix</param>
+
+        public AgilentD_Run()
         {
-            bool isFile = (File.Exists(datasetFullName));
-            bool isFolder = (Directory.Exists(datasetFullName));
+            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
+            this.MSFileType = Globals.MSFileType.Agilent_TOF;
+        }
+
+        public AgilentD_Run(string dataFileName)
+            : this()
+        {
+            bool isFile = (File.Exists(dataFileName));
+            bool isFolder = (Directory.Exists(dataFileName));
 
             Check.Require(!isFile, "Dataset's inputted name refers to a file, but should refer to a Folder");
             Check.Require(isFolder, "Dataset not found.");
 
-            string nameWithExtension = Path.GetFileName(datasetFullName);
+            string nameWithExtension = Path.GetFileName(dataFileName);
 
-            this.Filename = datasetFullName;
+            this.Filename = dataFileName;
             this.DatasetName = nameWithExtension.Substring(0, nameWithExtension.LastIndexOf(".d"));    //get dataset name without .d extension
-            this.DataSetPath = Path.GetDirectoryName(datasetFullName);
+            this.DataSetPath = Path.GetDirectoryName(dataFileName);
 
             OpenDataset();
+
+            this.MinScan = 0;        // AgilentD files are 0-based. 
+            this.MaxScan = GetNumMSScans() - 1;   //
         }
+
+
+        public AgilentD_Run(string dataFileName, int minScan, int maxScan)
+            : this(dataFileName)
+        {
+            this.MinScan = minScan;
+            this.MaxScan = maxScan;
+
+        }
+
+
 
         private void OpenDataset()
         {
@@ -52,27 +78,98 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             //m_reader=new MassSpecDataReader();
-
-
             IBDAMSScanFileInformation msscan = m_reader.FileInformation.MSScanFileInformation;
-
             return (int)msscan.TotalScansPresent;
 
         }
 
         public override double GetTime(int scanNum)
         {
-            throw new NotImplementedException();
+            double time = -1;
+
+            if (m_spec == null || m_spec.ScanId == scanNum)    // get fresh spectrum
+            {
+                getAgilentSpectrum(scanNum);
+            }
+
+
+            if (m_spec == null) return -1;
+
+            IRange[] timeRangeArr = m_spec.AcquiredTimeRange;
+            if (timeRangeArr != null && timeRangeArr.Length == 1)
+            {
+                time = timeRangeArr[0].Start;
+            }
+
+            return time;
+
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            throw new NotImplementedException();
+            MSLevel level;
+            if (m_spec == null || m_spec.ScanId == scanNum)    // get fresh spectrum
+            {
+                getAgilentSpectrum(scanNum);      // this might be very slow
+            }
+
+            level = m_spec.MSLevelInfo;
+
+
+            if (level == MSLevel.MS)
+                return 1;
+            else if (level == MSLevel.MSMS)
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        private void getAgilentSpectrum(int scanNum)
         {
-            throw new NotImplementedException();
+            m_spec = m_reader.GetSpectrum(scanNum, null, null);
+
+
+        }
+
+
+
+        public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
+        {
+            Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
+            Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
+
+
+
+            if (scanSet == null) return;
+
+            IMsdrPeakFilter filter1 = new MsdrPeakFilter();
+            filter1.AbsoluteThreshold = 0;
+            filter1.RelativeThreshold = 0.1;
+            filter1.MaxNumPeaks = 0;
+
+
+
+            IBDASpecFilter specFilter = new BDASpecFilter();
+
+
+
+            if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
+            {
+                getAgilentSpectrum(scanSet.PrimaryScanNumber);
+            }
+            else
+            {
+                throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
+
+            }
+
+            this.XYData.SetXYValues(m_spec.XArray, m_spec.YArray);
+
+
         }
         #endregion
 

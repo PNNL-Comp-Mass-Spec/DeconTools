@@ -16,6 +16,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     {
 
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+        private string agilentDTestfile = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
+
        
         [Test]
         public void simpleTest1()
@@ -40,6 +42,31 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Assert.AreEqual(285, run.ResultCollection.ResultList.Count);
         }
+
+        [Test]
+        public void deconvoluteAgilentTest1()
+        {
+            Run run = new AgilentD_Run(agilentDTestfile);
+
+            ScanSetCollectionCreator scansetCreator = new ScanSetCollectionCreator(run, 25, 27, 1, 1);
+            scansetCreator.Create();
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            Task msgen = new GenericMSGenerator();
+            Task peakDetector = new DeconToolsPeakDetector();
+            Task decon = new HornDeconvolutor();
+
+            foreach (var scan in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                decon.Execute(run.ResultCollection);
+            }
+
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+        }
+
 
 
 

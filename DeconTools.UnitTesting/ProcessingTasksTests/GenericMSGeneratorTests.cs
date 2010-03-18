@@ -19,6 +19,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
         private string xcaliburTestfile2 = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
+        private string agilentDTestFile = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
 
         [Test]
         public void MSGeneratorOnTextfileTest1()
@@ -94,6 +95,19 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Assert.AreEqual(0, results.ScanResultList.Count);   //Scan results are now created by the ScanResultUpdaterTask
         }
+
+        [Test]
+        public void MSGeneratorOnAgilentDFileTest1()
+        {
+            Run run = new AgilentD_Run(agilentDTestFile);
+
+            run.CurrentScanSet = new ScanSet(25);
+
+            Task msGen = new GenericMSGenerator();
+            msGen.Execute(run.ResultCollection);
+
+        }
+
 
 
 

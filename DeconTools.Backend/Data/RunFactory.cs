@@ -51,6 +51,13 @@ namespace DeconTools.Backend.Data
                     run = new UIMFRun(fileName);
                     break;
 
+                case ".db":                            //might want to remove this later
+                    run = new UIMFRun(fileName);  
+                    break;
+
+                case ".d":
+                    run = new AgilentD_Run(fileName);
+                    break;
                 default:
                     run = null;
                     break;
@@ -70,7 +77,7 @@ namespace DeconTools.Backend.Data
                     run = null;
                     break;
                 case Globals.MSFileType.Agilent_TOF:
-                    run = null;
+                    run = new AgilentD_Run(fileName);
                     break;
                 case Globals.MSFileType.Ascii:
                     run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile, '\t');
@@ -122,7 +129,14 @@ namespace DeconTools.Backend.Data
                     run = null;
                     break;
                 case Globals.MSFileType.Agilent_TOF:
-                    run = null;
+                    if (parameters.HornTransformParameters.UseScanRange)
+                    {
+                        run = new AgilentD_Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                    }
+                    else
+                    {
+                        run = new AgilentD_Run(filename);
+                    }
                     break;
                 case Globals.MSFileType.Ascii:
                     run = null;

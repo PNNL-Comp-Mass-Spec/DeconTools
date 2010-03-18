@@ -48,6 +48,9 @@ namespace DeconTools.UnitTesting
         string mzxmlFilepath = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000-7000.mzXML";
         string mzxmlParameterFile1 = "..\\..\\TestFiles\\mxzml_parameterFile1.xml";
 
+        string agilentFile1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
+        string agilentParams1 = "..\\..\\TestFiles\\ParameterFiles\\agilentParams_scans25-27.xml";
+
 
         [Test]
         public void loadParametersTest1()
@@ -250,6 +253,15 @@ namespace DeconTools.UnitTesting
             runner.Execute();
 
         }
+
+        [Test]
+        public void agilent_horn_Test1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(agilentFile1, Globals.MSFileType.Agilent_TOF, agilentParams1);
+            runner.Execute();
+
+        }
+
 
 
         //Dec 2, 2009:  Deserializer not used anymore.  Test is decommissioned...

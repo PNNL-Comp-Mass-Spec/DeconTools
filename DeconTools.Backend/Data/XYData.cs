@@ -29,13 +29,13 @@ namespace DeconTools.Backend
             set { yvalues = value; }
         }
 
-        
+
 
 
         public void GetXYValuesAsSingles(ref float[] xvals, ref float[] yvals)
         {
             //NOTE going from double to single variables could result in a loss of information
-            
+
             {
                 xvals = new float[this.xvalues.Length];
                 yvals = new float[this.yvalues.Length];
@@ -74,8 +74,17 @@ namespace DeconTools.Backend
 
             this.xvalues = xvals;
             this.yvalues = yvals;
-            
+        }
 
+        public void SetXYValues(double[] xvals, float[] yvals)
+        {
+            DeconTools.Utilities.Check.Require(xvals != null && yvals != null, "Cannot set XY Values; Input values are null");
+            this.xvalues = xvals;
+            this.yvalues = new double[yvals.Length];
+            for (int i = 0; i < yvals.Length; i++)
+            {
+                this.yvalues[i] = yvals[i];
+            }
         }
 
         internal static double[] ConvertFloatsToDouble(float[] inputVals)
@@ -87,7 +96,7 @@ namespace DeconTools.Backend
             for (int i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = (double)inputVals[i];
-                
+
             }
             return outputVals;
         }
@@ -112,18 +121,18 @@ namespace DeconTools.Backend
 
 
             int indexOfClosest = -1;
-            int numWrongDirection = 0;    
+            int numWrongDirection = 0;
 
             for (int i = 0; i < this.xvalues.Length; i++)
             {
-                double currentDiff=Math.Abs(targetXVal-this.xvalues[i]);
-                
+                double currentDiff = Math.Abs(targetXVal - this.xvalues[i]);
 
-                if (currentDiff< minDiff )
+
+                if (currentDiff < minDiff)
                 {
                     indexOfClosest = i;
                     minDiff = currentDiff;
-                    
+
                 }
                 else
                 {
@@ -168,7 +177,7 @@ namespace DeconTools.Backend
                     }
 
                 }
-                
+
             }
             return maxY;
         }
@@ -201,7 +210,7 @@ namespace DeconTools.Backend
                     xvals.Add(xvalues[i]);
                     yvals.Add(yvalues[i]);
                 }
-                
+
             }
 
             data.Xvalues = xvals.ToArray();
@@ -241,7 +250,7 @@ namespace DeconTools.Backend
             for (int i = 0; i < this.Yvalues.Length; i++)
             {
                 yvalues[i] = yvalues[i] / maxVal;
-                
+
             }
         }
 
@@ -250,8 +259,58 @@ namespace DeconTools.Backend
             for (int i = 0; i < this.xvalues.Length; i++)
             {
                 this.xvalues[i] = this.xvalues[i] + offset;
+
+            }
+        }
+
+
+        public static XYData GetFilteredXYValues(XYData data, double minX, double maxX, int startingIndex)
+        {
+            //this assumes XY pairs with ordered x-values. 
+
+            if (data == null || startingIndex > data.Xvalues.Length - 1) return null;
+
+            List<double> xvals = new List<double>();
+            List<double> yvals = new List<double>();
+
+
+            for (int i = startingIndex; i < data.Xvalues.Length; i++)
+            {
+                if (data.Xvalues[i] >= minX)
+                {
+                    if (data.Xvalues[i] <= maxX)
+                    {
+                        xvals.Add(data.Xvalues[i]);
+                        yvals.Add(data.Yvalues[i]);
+
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+
+                }
+                else
+                {
+
+                }
                 
             }
+
+            if (xvals.Count == 0) return null;
+
+            XYData returnedData = new XYData();
+            returnedData.Xvalues = xvals.ToArray();
+            returnedData.Yvalues = yvals.ToArray();
+
+            return returnedData;
+
+        }
+
+        public static XYData GetFilteredXYValues(XYData data, double minX, double maxX)
+        {
+            return GetFilteredXYValues(data, minX, maxX, 0);
         }
 
         public void Display()
@@ -269,5 +328,7 @@ namespace DeconTools.Backend
 
             Console.Write(sb.ToString());
         }
+
+  
     }
 }
