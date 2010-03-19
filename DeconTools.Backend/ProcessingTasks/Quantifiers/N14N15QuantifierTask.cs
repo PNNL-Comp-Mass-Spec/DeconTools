@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconTools.Backend.Algorithms.Quantifiers;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 
 namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
@@ -39,7 +40,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             IsotopicProfile iso2 = ((N14N15_TResult)currentResult).N15IsotopicProfile;
 
 
-            ((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnAreaUnderPeaks(resultColl.Run.XYData.Xvalues, resultColl.Run.XYData.Yvalues, iso1, iso2, currentResult.ScanSet.BackgroundIntensity);
+            //((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnAreaUnderPeaks(resultColl.Run.XYData.Xvalues, resultColl.Run.XYData.Yvalues, iso1, iso2, currentResult.ScanSet.BackgroundIntensity);
+            ((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnTopPeaks(iso1, iso2,
+                mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005), currentResult.ScanSet.BackgroundIntensity, 3);
 
 
         }

@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(@"\\pnl\projects\MSSHARE\Gord\Test_data", run.DataSetPath);
             Assert.AreEqual(61, run.MaxScan);
             Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(Globals.MSFileType.Agilent_TOF, run.MSFileType);
+            Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
         }
 
 

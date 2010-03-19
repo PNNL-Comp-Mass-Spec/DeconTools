@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(agilentDFile1);
 
-            Assert.AreEqual(Globals.MSFileType.Agilent_TOF, run.MSFileType);
+            Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
 
         }
 

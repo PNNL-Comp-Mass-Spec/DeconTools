@@ -24,7 +24,8 @@ namespace DeconTools.Backend
         public enum MSFileType
         {
             Undefined,
-            Agilent_TOF,
+            Agilent_WIFF,
+            Agilent_D,
             Ascii,
             Bruker,
             Bruker_Ascii,

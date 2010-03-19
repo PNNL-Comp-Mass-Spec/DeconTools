@@ -42,6 +42,10 @@ namespace DeconToolsAutoProcessV1
                 if (File.Exists(filename))
                 {
                     string extension = Path.GetExtension(filename);
+                    if (extension.ToLower() == ".d")
+                    {
+                        return Globals.MSFileType.Agilent_D;
+                    }
                     if (extension.ToLower() == ".raw")
                     {
                         return Globals.MSFileType.Finnigan;

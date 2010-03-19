@@ -165,5 +165,33 @@ namespace DeconTools.Backend.Utilities
 
 
 
+
+        public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
+        {
+            if (inputList == null || inputList.Count == 0) return null;
+            List<MSPeak> outputList = new List<MSPeak>();
+
+            outputList.Add(inputList[0]);
+            if (inputList.Count > 1)
+            {
+                for (int i = 1; i < inputList.Count; i++)
+                {
+                    if (inputList[i].Height > outputList[0].Height)
+                    {
+                        outputList.Insert(0, inputList[i]);
+                    }
+                    else
+                    {
+                        outputList.Add(inputList[i]);
+                    }
+                }
+            }
+
+            return outputList;
+
+
+
+            
+        }
     }
 }

@@ -22,9 +22,13 @@ namespace DeconTools.Backend.ProcessingTasks
                 case Globals.MSFileType.Undefined:
                     msGenerator = new GenericMSGenerator();
                     break;
-                case Globals.MSFileType.Agilent_TOF:
+                case Globals.MSFileType.Agilent_WIFF:
                     msGenerator = new GenericMSGenerator();
                     break;
+                case Globals.MSFileType.Agilent_D:
+                    msGenerator = new GenericMSGenerator();
+                    break;
+
                 case Globals.MSFileType.Ascii:
                     msGenerator = new GenericMSGenerator();
                     break;

@@ -76,7 +76,11 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.Undefined:
                     run = null;
                     break;
-                case Globals.MSFileType.Agilent_TOF:
+                case Globals.MSFileType.Agilent_WIFF:
+                    run = null;
+                    break;
+
+                case Globals.MSFileType.Agilent_D:
                     run = new AgilentD_Run(fileName);
                     break;
                 case Globals.MSFileType.Ascii:
@@ -128,7 +132,11 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.Undefined:
                     run = null;
                     break;
-                case Globals.MSFileType.Agilent_TOF:
+                case Globals.MSFileType.Agilent_WIFF:
+                    run = null;
+                    break;
+
+                case Globals.MSFileType.Agilent_D:
                     if (parameters.HornTransformParameters.UseScanRange)
                     {
                         run = new AgilentD_Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);

@@ -156,7 +156,11 @@ namespace DeconTools.Backend.Data
             {
                 case Globals.MSFileType.Undefined:
                     break;
-                case Globals.MSFileType.Agilent_TOF:
+                case Globals.MSFileType.Agilent_WIFF:
+                    replacementExtension = ".WIFF";
+                    break;
+                case Globals.MSFileType.Agilent_D:
+                    replacementExtension = ".D";
                     break;
                 case Globals.MSFileType.Ascii:
                     break;

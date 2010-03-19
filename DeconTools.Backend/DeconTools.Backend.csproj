@@ -242,6 +242,7 @@
     <Compile Include="Runs\AgilentD_Run.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />

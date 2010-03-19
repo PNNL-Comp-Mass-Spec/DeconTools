@@ -119,7 +119,8 @@ namespace DeconToolsAutoProcessV1
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 this.startingFolderPath = frm.StartingFolderPath;
-                
+                if (this.startingFolderPath != null) Properties.Settings.Default.startingFolder = this.startingFolderPath;
+
                 return frm.SelectedFileList.ToArray();
             }
             else

@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Utilities.Converters
             switch (filetype)
             {
                 case DeconToolsV2.Readers.FileType.AGILENT_TOF:
-                    return Globals.MSFileType.Agilent_TOF;
+                    return Globals.MSFileType.Agilent_WIFF;
                 case DeconToolsV2.Readers.FileType.ASCII:
                     return Globals.MSFileType.Ascii;
                 case DeconToolsV2.Readers.FileType.BRUKER:

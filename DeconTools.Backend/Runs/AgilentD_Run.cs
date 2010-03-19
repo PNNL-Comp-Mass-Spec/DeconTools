@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Runs
         public AgilentD_Run()
         {
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
-            this.MSFileType = Globals.MSFileType.Agilent_TOF;
+            this.MSFileType = Globals.MSFileType.Agilent_D;
         }
 
         public AgilentD_Run(string dataFileName)

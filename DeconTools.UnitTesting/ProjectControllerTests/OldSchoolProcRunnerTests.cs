@@ -257,7 +257,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void agilent_horn_Test1()
         {
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(agilentFile1, Globals.MSFileType.Agilent_TOF, agilentParams1);
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(agilentFile1, Globals.MSFileType.Agilent_D, agilentParams1);
             runner.Execute();
 
         }

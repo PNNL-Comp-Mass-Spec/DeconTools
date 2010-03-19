@@ -85,10 +85,15 @@ namespace DeconConsole
         {
             Globals.MSFileType msfiletype;
             
-            if (filetype.ToLower() == "agilent_tof")
+            if (filetype.ToLower() == "agilent_wiff")
             {
-                msfiletype = Globals.MSFileType.Agilent_TOF;
+                msfiletype = Globals.MSFileType.Agilent_WIFF;
             }
+            else if (filetype.ToLower() == "agilent_d")
+            {
+                msfiletype = Globals.MSFileType.Agilent_D;
+            }
+
             else if (filetype.ToLower() == "ascii")
             {
                 msfiletype = Globals.MSFileType.Ascii;
@@ -107,7 +112,7 @@ namespace DeconConsole
             }
             else if (filetype.ToLower() == "icr2ls_rawdata")
             {
-                msfiletype = Globals.MSFileType.Agilent_TOF;
+                msfiletype = Globals.MSFileType.Agilent_WIFF;
             }
             else if (filetype.ToLower() == "micromass_rawdata")
             {
@@ -184,8 +189,8 @@ namespace DeconConsole
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("------------- File types ---------------------");
-            Console.WriteLine("\tAgilent_TOF");
-
+            Console.WriteLine("\tAgilent_WIFF");
+            Console.WriteLine("\tAgilent_D");
             Console.WriteLine("\tAscii");
             Console.WriteLine("\tBruker");
             Console.WriteLine("\tBruker_Ascii");

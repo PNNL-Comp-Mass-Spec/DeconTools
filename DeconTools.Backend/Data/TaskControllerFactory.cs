@@ -30,7 +30,11 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.Undefined:
                     taskcontroller = new BasicTaskController(taskCollection, backgroundWorker);
                     break;
-                case Globals.MSFileType.Agilent_TOF:
+                case Globals.MSFileType.Agilent_WIFF:
+                    taskcontroller = new BasicTaskController(taskCollection);
+                    break;
+
+                case Globals.MSFileType.Agilent_D:
                     taskcontroller = new BasicTaskController(taskCollection);
                     break;
                 case Globals.MSFileType.Ascii:
