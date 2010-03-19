@@ -15,6 +15,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
         string agilentDataset1 = @"\\pnl\projects\MSSHARE\Gord\Test_data\BSA_TOF4.d";
+        string aglientDataset2 = @"\\pnl\projects\MSSHARE\Gord\Test_data\bsa_tof5.d";
+
+
         string wrongFileExample1 = @"\\pnl\projects\MSSHARE\Gord\Test_data\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
         [Test]
@@ -39,40 +42,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
-       
 
-
-
-        [Test]
-        public void ConstructorError_wrongKindOfInputTest1()
-        {
-            PreconditionException ex =  Assert.Throws<PreconditionException>(delegate
-            {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1);
-            });
-            Assert.That(ex.Message, Is.EqualTo("Dataset's inputted name refers to a file, but should refer to a Folder"));
-        }
-
-
-        [Test]
-        public void ConstructorError_wrongKindOfInputTest2()
-        {
-            PreconditionException ex = Assert.Throws<PreconditionException>(delegate
-            {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1+".txt");
-            });
-            Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
-        }
-
-        [Test]
-        public void ConstructorError_wrongKindOfInputTest3()
-        {
-            PreconditionException ex = Assert.Throws<PreconditionException>(delegate
-            {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run("J:\test");
-            });
-            Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
-        }
 
         [Test]
         public void GetSpectrumTest1()
@@ -86,6 +56,23 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
             Assert.AreEqual(156721, run.XYData.Xvalues.Length);
         }
+
+        [Test]
+        public void GetSpectrumTest2()
+        {
+            Run run = new DeconTools.Backend.Runs.AgilentD_Run(aglientDataset2);
+
+            ScanSet scanset = new ScanSet(25);
+
+            run.GetMassSpectrum(scanset, 0, 6000);
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+
+
+        }
+
+
+
 
 
         [Test]
@@ -115,6 +102,40 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+
+
+   // ----------------------------- Exception tests -----------------------------------------
+
+        [Test]
+        public void ConstructorError_wrongKindOfInputTest1()
+        {
+            PreconditionException ex = Assert.Throws<PreconditionException>(delegate
+            {
+                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1);
+            });
+            Assert.That(ex.Message, Is.EqualTo("Dataset's inputted name refers to a file, but should refer to a Folder"));
+        }
+
+
+        [Test]
+        public void ConstructorError_wrongKindOfInputTest2()
+        {
+            PreconditionException ex = Assert.Throws<PreconditionException>(delegate
+            {
+                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1 + ".txt");
+            });
+            Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
+        }
+
+        [Test]
+        public void ConstructorError_wrongKindOfInputTest3()
+        {
+            PreconditionException ex = Assert.Throws<PreconditionException>(delegate
+            {
+                Run run = new DeconTools.Backend.Runs.AgilentD_Run("J:\test");
+            });
+            Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
+        }
 
 
 

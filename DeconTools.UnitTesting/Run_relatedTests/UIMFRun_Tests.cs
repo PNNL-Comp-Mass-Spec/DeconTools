@@ -288,7 +288,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             }
 
-            //Console.WriteLine(sb.ToString());
+            Console.WriteLine(sb.ToString());
         }
 
         [Test]

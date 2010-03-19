@@ -130,7 +130,9 @@ namespace DeconTools.Backend.Runs
 
         private void getAgilentSpectrum(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null);
+
+
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);
 
 
         }
@@ -142,20 +144,7 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-
-
             if (scanSet == null) return;
-
-            IMsdrPeakFilter filter1 = new MsdrPeakFilter();
-            filter1.AbsoluteThreshold = 0;
-            filter1.RelativeThreshold = 0.1;
-            filter1.MaxNumPeaks = 0;
-
-
-
-            IBDASpecFilter specFilter = new BDASpecFilter();
-
-
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
