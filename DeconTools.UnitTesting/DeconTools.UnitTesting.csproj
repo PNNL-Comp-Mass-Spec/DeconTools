@@ -63,7 +63,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary2003, Version=0.0.0.0, Culture=neutral">
+    <Reference Include="UIMFLibrary2003, Version=1.0.3484.29834, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
     </Reference>

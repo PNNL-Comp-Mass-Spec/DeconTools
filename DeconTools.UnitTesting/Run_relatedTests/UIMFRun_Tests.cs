@@ -75,7 +75,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             int[] yvals = new int[100000];
 
             int summedTotal = datareader.SumScans(xvals, yvals, 0, 100, 105, 200, 300);
-            Assert.AreEqual(91796, summedTotal);
+            Assert.AreEqual(91949, summedTotal);
         }
 
 
@@ -125,35 +125,35 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             int numScans2 = uimfRun.GetNumMSScans();
 
-            Assert.AreEqual(1440000, numScans);
-            Assert.AreEqual(1440000, numScans2);
+            Assert.AreEqual(975000, numScans);
+            Assert.AreEqual(975000, numScans2);
         }
 
-        [Test]
-        public void getSummedMSTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+        //[Test]
+        //public void getSummedMSTest1()
+        //{
+        //    UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            ScanSet scanset = new ScanSet(500025, 500000, 500050);
+        //    ScanSet scanset = new ScanSet(500025, 500000, 500050);
 
-            uimfRun.GetMassSpectrum(scanset, 100, 2000);
+        //    uimfRun.GetMassSpectrum(scanset, 100, 2000);
 
-            Console.WriteLine(uimfRun.XYData.Xvalues.Length);
+        //    Console.WriteLine(uimfRun.XYData.Xvalues.Length);
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < uimfRun.XYData.Xvalues.Length; i++)
-            {
-                sb.Append(uimfRun.XYData.Xvalues[i]);
-                sb.Append("\t");
-                sb.Append(uimfRun.XYData.Yvalues[i]);
-                sb.Append(Environment.NewLine);
+        //    StringBuilder sb = new StringBuilder();
+        //    for (int i = 0; i < uimfRun.XYData.Xvalues.Length; i++)
+        //    {
+        //        sb.Append(uimfRun.XYData.Xvalues[i]);
+        //        sb.Append("\t");
+        //        sb.Append(uimfRun.XYData.Yvalues[i]);
+        //        sb.Append(Environment.NewLine);
 
-            }
-            //Console.WriteLine(sb.ToString());
+        //    }
+        //    //Console.WriteLine(sb.ToString());
 
-            Assert.AreEqual(4268, uimfRun.XYData.Xvalues.Length);
-            Assert.AreEqual(4268, uimfRun.XYData.Yvalues.Length);
-        }
+        //    Assert.AreEqual(4268, uimfRun.XYData.Xvalues.Length);
+        //    Assert.AreEqual(4268, uimfRun.XYData.Yvalues.Length);
+        //}
 
         [Test]
         public void getSummedFramesMSTest1()
@@ -172,8 +172,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 sb.Append(Environment.NewLine);
             }
             Console.WriteLine(sb.ToString());
-            Assert.AreEqual(3066, uimfRun.XYData.Xvalues.Length);
-            Assert.AreEqual(3066, uimfRun.XYData.Yvalues.Length);
+            Assert.AreEqual(2331, uimfRun.XYData.Xvalues.Length);
+            Assert.AreEqual(2331, uimfRun.XYData.Yvalues.Length);
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double framePressure = uimfRun.GetFramePressure(1000);
 
             Assert.AreNotEqual(0, framePressure);
-            Assert.AreEqual(4.0065, (Decimal)framePressure);
+            Assert.AreEqual(4.043m, (Decimal)framePressure);
 
         }
 
