@@ -87,6 +87,7 @@
     <Compile Include="ImporterTests\MassTagFromDBImporterTests.cs" />
     <Compile Include="ImporterTests\MassTagListImporterTests.cs" />
     <Compile Include="MassTagRelatedTests.cs" />
+    <Compile Include="ProjectControllerTests\KoreaIMSTextFileControllerTests.cs" />
     <Compile Include="ProjectControllerTests\OldSchoolProcRunnerTests.cs" />
     <Compile Include="ParameterFileTests.cs" />
     <Compile Include="PeakDataImportersTests.cs" />

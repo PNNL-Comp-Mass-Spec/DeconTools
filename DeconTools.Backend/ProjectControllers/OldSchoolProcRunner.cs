@@ -308,21 +308,7 @@ namespace DeconTools.Backend
 
         }
 
-        private Globals.ExporterType getExporterTypeFromOldParameters(OldDecon2LSParameters oldDecon2LSParameters)
-        {
-            switch (oldDecon2LSParameters.HornTransformParameters.ExportFileType)
-            {
-                case DeconToolsV2.HornTransform.enmExportFileType.SQLITE:
-                    return Globals.ExporterType.SQLite;
-                    break;
-                case DeconToolsV2.HornTransform.enmExportFileType.TEXT:
-                    return Globals.ExporterType.TEXT;
-                    break;
-                default:
-                    return Globals.ExporterType.TEXT;
-                    break;
-            }
-        }
+  
 
 
         private string setScansOutputFileName(Globals.ExporterType exporterType)

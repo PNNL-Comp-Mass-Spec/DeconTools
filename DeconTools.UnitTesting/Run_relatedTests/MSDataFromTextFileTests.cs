@@ -16,6 +16,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         string textFileContainingMultipleSpaceDelimiters = @"\\pnl\projects\MSSHARE\Yan\textfile\DN_2_1000.txt";
 
+
+        string textFileContainingMulipleHeaderLines = @"F:\Gord\Data\Sang-Won\sampleIMS_Data_09103034.TXT";
+
         [Test]
         public void test1()
         {
@@ -41,6 +44,16 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
+
+        [Test]
+        public void readInTextFileContainingMultipleHeaderLinesTest1()
+        {
+            Run textfiledata = new MSScanFromTextFileRun(textFileContainingMulipleHeaderLines, DeconTools.Backend.Globals.XYDataFileType.Textfile, '\t',true,1,2);
+            textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0), 200, 2000);
+
+            TestUtilities.DisplayXYValues(textfiledata.XYData);
+
+        }
 
 
         [Test]

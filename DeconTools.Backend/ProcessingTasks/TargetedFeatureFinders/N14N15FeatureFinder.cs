@@ -18,6 +18,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
+        /// <summary>
+        /// Finds both N14 and N15 features using a m/z tolerance (default 0.02)
+        /// </summary>
+        /// <param name="toleranceInMZ">Tolerance in m/z</param>
         public N14N15FeatureFinder(double toleranceInMZ)
         {
             this.Tolerance = toleranceInMZ;

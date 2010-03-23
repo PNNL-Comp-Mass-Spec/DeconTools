@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <parameters>
 	<version>1.0</version>
 	<PeakParameters>
@@ -45,8 +45,8 @@
 	<SumSpectra>False</SumSpectra>
 	<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
 	<NumberOfScansToSumOver>1</NumberOfScansToSumOver>
-	<NumberOfScansToAdvance>3</NumberOfScansToAdvance>
-	<SumSpectraAcrossFrameRange>False</SumSpectraAcrossFrameRange>
+	<NumberOfScansToAdvance>0</NumberOfScansToAdvance>
+	<SumSpectraAcrossFrameRange>True</SumSpectraAcrossFrameRange>
 	<NumberOfFramesToSumOver>3</NumberOfFramesToSumOver>
 	<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
 	<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
@@ -60,7 +60,7 @@
 		<MinScan>-2147483648</MinScan>
 		<MaxScan>2147483647</MaxScan>
 		<UseMZRange>True</UseMZRange>
-		<MinMZ>100</MinMZ>
+		<MinMZ>200</MinMZ>
 		<MaxMZ>2000</MaxMZ>
 		<ApplySavitzkyGolay>False</ApplySavitzkyGolay>
 		<SGNumLeft>2</SGNumLeft>
@@ -70,6 +70,8 @@
 		<NumZerosToFill>3</NumZerosToFill>
 		<ProcessMSMS>False</ProcessMSMS>
 		<ExportFileType>TEXT</ExportFileType>
+		<DetectPeaksOnly_NoDeconvolution>False</DetectPeaksOnly_NoDeconvolution>
+		<Process_MS>True</Process_MS>
 		</Miscellaneous>
 	<ElementIsotopes>
 		<NumElements>103</NumElements>

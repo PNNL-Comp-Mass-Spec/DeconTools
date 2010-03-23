@@ -92,7 +92,8 @@
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
-    <Compile Include="Core\BonesProjectController.cs" />
+    <Compile Include="Core\ProjectControllerFactory.cs" />
+    <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
     <Compile Include="Core\FrameSet.cs" />
@@ -117,7 +118,8 @@
     <Compile Include="Core\Rapid.cs" />
     <Compile Include="Core\ResultCollection.cs" />
     <Compile Include="Core\ResultFlag.cs" />
-    <Compile Include="Core\RunMergingProjectController.cs" />
+    <Compile Include="ProjectControllers\KoreaIMSTextFileProjectController.cs" />
+    <Compile Include="ProjectControllers\RunMergingProjectController.cs" />
     <Compile Include="Core\ScanResult.cs" />
     <Compile Include="Core\ScanResultCollection.cs" />
     <Compile Include="Core\ScanSet.cs" />
@@ -177,7 +179,7 @@
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
     <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
-    <Compile Include="OldSchoolProcRunner.cs" />
+    <Compile Include="ProjectControllers\OldSchoolProcRunner.cs" />
     <Compile Include="Parameters\Class1.cs" />
     <Compile Include="Parameters\GenericMSParameters.cs" />
     <Compile Include="ProcessingTasks\BasicTaskController.cs" />

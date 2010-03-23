@@ -107,6 +107,17 @@ namespace DeconTools.Backend
         }
 
 
+        public enum ProjectControllerType
+        {
+            UNDEFINED, 
+            STANDARD,
+            BONES_CONTROLLER,
+            RUN_MERGER_CONTROLLER,
+            KOREA_IMS_PEAKSONLY_CONTROLLER
+        }
+
+
+
 
     }
 }

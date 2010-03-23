@@ -18,7 +18,11 @@ namespace DeconTools.Backend.Data.Importers
             this.DbUsername = "mtuser";
             this.DbUserPassWord = "mt4fun";
             this.ImporterMode = Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode;
+            this.chargeStateFilterThreshold = 0.1;
         }
+
+        
+
         public MassTagFromSqlDBImporter(string dbName, string serverName)
             : this()
         {
@@ -34,8 +38,11 @@ namespace DeconTools.Backend.Data.Importers
         public string DbUserPassWord { get; set; }
         public string DbName { get; set; }
         public DeconTools.Backend.Globals.MassTagDBImporterMode ImporterMode { get; set; }
-        
 
+        /// <summary>
+        /// A value between 0 and 1.  A value of 0 means 
+        /// </summary>
+        public double chargeStateFilterThreshold { get; set; }
 
         #endregion
 
@@ -110,7 +117,7 @@ namespace DeconTools.Backend.Data.Importers
                 }
             }
 
-            data.ApplyChargeStateFilter();
+            data.ApplyChargeStateFilter(this.chargeStateFilterThreshold);
 
          
 

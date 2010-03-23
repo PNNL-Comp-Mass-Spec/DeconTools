@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DeconTools.Utilities;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -14,26 +15,50 @@ namespace DeconTools.Backend.Runs
 
         private char m_delimiter;
         private bool m_containsHeader = false;
+        private int m_xvalsColumnIndex = 0;
+        private int m_yvalsColumnIndex = 0;
 
         public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter)
             : this(fileName, fileType, delimiter, false)
         {
-   
+
 
         }
 
-
         public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter, bool containsHeader)
+            : this(fileName, fileType, delimiter, containsHeader, 0, 1)
         {
+
+
+        }
+
+        public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter, bool containsHeader, 
+            int xvalsColumnIndex, int yvalsColumnIndex)
+        {
+
+
+
+  
+
+
             this.FileType = fileType;
-            this.Filename = fileName;
+            this.Filename = Path.GetFullPath(fileName);
+            
+            string baseFilename = Path.GetFileName(this.Filename);
+            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            this.DataSetPath = Path.GetDirectoryName(this.Filename);
+            
+            
             this.XYData = new XYData();
             this.CurrentScanSet = new DeconTools.Backend.Core.ScanSet(0);    //
             this.m_delimiter = delimiter;
             this.m_containsHeader = containsHeader;
-
+            this.m_xvalsColumnIndex = xvalsColumnIndex;
+            this.m_yvalsColumnIndex = yvalsColumnIndex;
         }
 
+
+        
 
         internal void loadDataFromFile(string filename)
         {
@@ -42,21 +67,61 @@ namespace DeconTools.Backend.Runs
             List<double> xvals = new List<double>();
             List<double> yvals = new List<double>();
 
+            bool foundStartOfXYData = false;
+
             while (sr.Peek() != -1)
             {
                 string line = sr.ReadLine();
 
-                //if (m_delimiter == ' ')
-                //{
-                //    Regex.Replace(line,@"\s+"," ");
-                //}
 
+              
+
+
+                if (foundStartOfXYData)
+                {
+
+                }
+
+                if (m_containsHeader && !foundStartOfXYData)     //contains header, but haven't found start of numerical data
+                {
+                    Match match = Regex.Match(line,@"^\d+");
+                    if (match.Success)
+                    {
+                        foundStartOfXYData = true;     //found a line that starts with numbers. 
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+ 
+                }
+              
+                
 
 
                 List<string> vals = processLine(line);
 
-                xvals.Add(parseDoubleField(vals[0]));
-                yvals.Add(parseDoubleField(vals[1]));
+                if (m_yvalsColumnIndex >= vals.Count)
+                {
+                    using (StreamReader tempSr = sr)
+                    {
+                        try
+                        {
+                            tempSr.Close();
+
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
+                    }
+                    throw new InvalidOperationException("XY importer error. Cannot find y-values in column " + (m_yvalsColumnIndex + 1).ToString());
+                }
+
+
+                xvals.Add(parseDoubleField(vals[m_xvalsColumnIndex]));
+                yvals.Add(parseDoubleField(vals[m_yvalsColumnIndex]));
             }
 
             xdata = xvals.ToArray();

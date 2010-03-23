@@ -3,27 +3,52 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using DeconTools.Backend;
+using DeconTools.Backend.Core;
 
 namespace DeconConsole
 {
-    class Program
+    public class Program
     {
 
 
 
-        static void Main(string[] args)
+
+        public static void Main(string[] args)
         {
             Console.WriteLine("Starting..............");
-            
-            if (args.Length != 3)
+
+            Globals.ProjectControllerType controllerType;
+
+            switch (args.Length)
             {
-                ReportSyntax();
-                return;
+                case 0:
+                    ReportSyntax();
+                    return;
+                case 1:
+                    ReportSyntax();
+                    return;
+                case 2:
+                    ReportSyntax();
+                    return;
+
+                case 3:
+                    controllerType = Globals.ProjectControllerType.STANDARD;
+                    break;
+                case 4:
+                    controllerType = convertArgToControllerType(args[3]);
+                    break;
+                default:
+                    ReportSyntax();
+                    return;
             }
+
+
 
             string filename = args[0];
             string fileType = args[1];
             string parameterFilename = args[2];
+
+
 
             if (!IsFileValid(filename))
             {
@@ -31,7 +56,7 @@ namespace DeconConsole
                 return;
             }
             if (!IsFileValid(parameterFilename))
-            { 
+            {
                 reportFileProblem(parameterFilename);
                 return;
             }
@@ -43,11 +68,22 @@ namespace DeconConsole
                 return;
             }
 
-            OldSchoolProcRunner runner;
+
+            if (controllerType == Globals.ProjectControllerType.UNDEFINED)
+            {
+                reportProjectControllerProblem(controllerType);
+                return;
+            }
+
+
+            ProjectController runner;
+
+
 
             try
             {
-                runner = new OldSchoolProcRunner(filename, msFiletype, parameterFilename);
+                ProjectControllerFactory factory = new ProjectControllerFactory(controllerType);
+                runner = factory.CreateProjectController(filename, msFiletype, parameterFilename);
                 runner.Execute();
             }
             catch (Exception ex)
@@ -67,24 +103,48 @@ namespace DeconConsole
 
 
             Console.WriteLine();
-            Console.WriteLine("Total Features Found = " + runner.Project.RunCollection[0].ResultCollection.ResultList.Count);
+            Console.WriteLine("Total Features Found = " + Project.getInstance().RunCollection[0].ResultCollection.ResultList.Count);
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
+
+
+
+
+
+
+
+
+        }
 
     
+        private static Globals.ProjectControllerType convertArgToControllerType(string arg)
+        {
+            if (arg == null || arg.Length == 0) return Globals.ProjectControllerType.UNDEFINED;
 
+            Globals.ProjectControllerType controllerType;
 
+            if (arg.ToLower() == "standard")
+            {
+                controllerType = Globals.ProjectControllerType.STANDARD;
+            }
+            else if (arg.ToLower() == "korea_ims_custom1")
+            {
+                controllerType = Globals.ProjectControllerType.KOREA_IMS_PEAKSONLY_CONTROLLER;
+            }
+            else
+            {
+                controllerType = Globals.ProjectControllerType.STANDARD;
+            }
 
-          
-
+            return controllerType;
 
         }
 
         private static Globals.MSFileType convertArgToFileType(string filetype)
         {
             Globals.MSFileType msfiletype;
-            
+
             if (filetype.ToLower() == "agilent_wiff")
             {
                 msfiletype = Globals.MSFileType.Agilent_WIFF;
@@ -141,7 +201,7 @@ namespace DeconConsole
             return msfiletype;
         }
 
-      
+
 
         private static void reportFiletypeProblem(string fileType)
         {
@@ -169,9 +229,22 @@ namespace DeconConsole
             Console.WriteLine();
             Console.WriteLine("Hit <enter> to continue");
             Console.ReadLine();
-            
+
 
         }
+
+        private static void reportProjectControllerProblem(Globals.ProjectControllerType controllerType)
+        {
+            Console.WriteLine("------------- ERROR! -----------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Project type is not legal. See below.");
+            Console.WriteLine();
+            Console.WriteLine("------------- ERROR! -----------------------------------");
+
+            ReportSyntax();
+        }
+
+
 
         private static bool IsFileValid(string filename)
         {
@@ -187,6 +260,9 @@ namespace DeconConsole
             Console.WriteLine("\tArg2 = file type (see below)");
             Console.WriteLine("\tArg3 = parameter filename");
             Console.WriteLine();
+
+            Console.WriteLine("Optional argument # 4 = Project type");
+
             Console.WriteLine();
             Console.WriteLine("------------- File types ---------------------");
             Console.WriteLine("\tAgilent_WIFF");
@@ -202,7 +278,16 @@ namespace DeconConsole
             Console.WriteLine("\tPNNL_UIMF");
             Console.WriteLine("\tSUNEXTREL");
             Console.WriteLine();
-            Console.WriteLine(); 
+            Console.WriteLine();
+            Console.WriteLine("------------- Project types ---------------------");
+            Console.WriteLine("\tSTANDARD");
+            Console.WriteLine("\tKOREA_IMS_CUSTOM1");
+
+            Console.WriteLine();
+            Console.WriteLine();
+  
+
+
             Console.WriteLine("Hit <enter> to continue");
 
             Console.ReadLine();

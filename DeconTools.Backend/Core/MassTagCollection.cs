@@ -67,7 +67,19 @@ namespace DeconTools.Backend.Core
             Console.WriteLine(sb.ToString());
         }
 
+        
+        
+        
+        
         internal void ApplyChargeStateFilter()
+        {
+            ApplyChargeStateFilter(0.1);
+
+
+
+        }
+
+        internal void ApplyChargeStateFilter(double threshold)
         {
             List<MassTag> filteredMassTagList = new List<MassTag>();
 
@@ -82,22 +94,22 @@ namespace DeconTools.Backend.Core
 
             foreach (var mtID in massTagIDs)
             {
-                
+
                 //get MTs with same ID (but different charge state) 
                 List<MassTag> mt_withSameID = this.MassTagList.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
-                
+
                 //get sum of all observed MS/MS for the MT
                 int totObs = mt_withSameID.Sum(p => p.ObsCount);
 
                 foreach (MassTag mt in mt_withSameID)
                 {
                     //if the obsCount for a charge state is greater than 10% of the total, add it. 
-                    if ((double)mt.ObsCount / (double)totObs > 0.1)
+                    if ((double)mt.ObsCount / (double)totObs > threshold)
                     {
                         filteredMassTagList.Add(mt);
                     }
 
-                    
+
                 }
 
             }
