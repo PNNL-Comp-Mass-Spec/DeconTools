@@ -64,5 +64,21 @@ namespace DeconTools.Backend.Utilities
 
         #region Private Methods
         #endregion
+
+
+
+        public static MSPeak GetPeakAtGivenMZ(IsotopicProfile iso1, double targetMZ, double mzTolerance)
+        {
+
+            //given the size of an isotopic distribution, we can use a linear (slow) search
+            for (int i = 0; i < iso1.Peaklist.Count; i++)
+            {
+                if (Math.Abs(iso1.Peaklist[i].XValue-targetMZ)<=mzTolerance)
+                {
+                    return iso1.Peaklist[i];
+                }
+            }
+            return null;
+        }
     }
 }

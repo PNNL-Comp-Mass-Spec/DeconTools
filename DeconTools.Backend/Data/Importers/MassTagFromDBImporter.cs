@@ -72,7 +72,7 @@ namespace DeconTools.Backend.Data.Importers
             this.massTagsToBeRetrieved = data.MassTagIDList;
 
             string queryString = createQueryString(this.ImporterMode);
-            Console.WriteLine(queryString);
+            //Console.WriteLine(queryString);
 
 
             using (DbConnection cnn = fact.CreateConnection())

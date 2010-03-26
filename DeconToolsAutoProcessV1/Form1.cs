@@ -26,6 +26,8 @@ namespace DeconToolsAutoProcessV1
         bool isRunMergingModeUsed;
         bool m_createMSFeatureForEachPeak;
 
+        Globals.ProjectControllerType m_projectControllerType;
+
 
 
         public Form1()
@@ -245,6 +247,24 @@ namespace DeconToolsAutoProcessV1
             BackgroundWorker bw = (BackgroundWorker)sender;
 
 
+            //TODO: finish this... re-think and re-organize
+            switch (m_projectControllerType)
+            {
+                case Globals.ProjectControllerType.UNDEFINED:
+                    break;
+                case Globals.ProjectControllerType.STANDARD:
+                    break;
+                case Globals.ProjectControllerType.BONES_CONTROLLER:
+                    break;
+                case Globals.ProjectControllerType.RUN_MERGER_CONTROLLER:
+                    break;
+                case Globals.ProjectControllerType.KOREA_IMS_PEAKSONLY_CONTROLLER:
+                    break;
+                default:
+                    break;
+            }
+
+
             try
             {
                 if (this.isRunMergingModeUsed)
@@ -364,10 +384,12 @@ namespace DeconToolsAutoProcessV1
 
         private void btnShowOptionsForm_Click(object sender, EventArgs e)
         {
-            OptionsForm frm = new OptionsForm(isRunMergingModeUsed,m_createMSFeatureForEachPeak);
+            //OptionsForm frm = new OptionsForm(this.m_projectControllerType);
+            OptionsForm frm = new OptionsForm(this.isRunMergingModeUsed, this.m_createMSFeatureForEachPeak);
             frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
             if (frm.ShowDialog() == DialogResult.OK)
             {
+                this.m_projectControllerType = frm.ProjectControllerType;
                 this.isRunMergingModeUsed = frm.IsResultMergingModeUsed;
                 this.m_createMSFeatureForEachPeak = frm.CreateMSFeatureForEachPeakMode;
             }

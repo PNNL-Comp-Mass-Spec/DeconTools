@@ -12,9 +12,26 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     public class N14N15QuantifierTask : Task
     {
         #region Constructors
+        public N14N15QuantifierTask()
+            : this(3)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numPeaksUsedInRatioCalc">Number of peaks used in the ratio calculation</param>
+        public N14N15QuantifierTask(int numPeaksUsedInRatioCalc)
+        {
+            this.NumPeaksUsedInRatioCalc = numPeaksUsedInRatioCalc;
+
+        }
+
         #endregion
 
         #region Properties
+        public int NumPeaksUsedInRatioCalc { get; set; }
         #endregion
 
         #region Public Methods
@@ -34,15 +51,25 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             Check.Require(currentResult != null, "Quantifier failed. Result doesn't exist for current mass tag.");
             Check.Require(currentResult is N14N15_TResult, "Quantifier failed. Result is not of the N14N15 type.");
 
+            N14N15_TResult n14n15Result = ((N14N15_TResult)currentResult);
+
             BasicN14N15Quantifier quant = new BasicN14N15Quantifier();
 
             IsotopicProfile iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
             IsotopicProfile iso2 = ((N14N15_TResult)currentResult).N15IsotopicProfile;
 
+            if (iso1 == null || iso2 == null)
+            {
+                n14n15Result.RatioN14N15 = -1;
+            }
+            else
+            {
+                n14n15Result.RatioN14N15 = quant.GetRatioBasedOnTopPeaks(iso1, iso2,
+                    mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005), 
+                    currentResult.ScanSet.BackgroundIntensity, NumPeaksUsedInRatioCalc);
+            }
 
             //((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnAreaUnderPeaks(resultColl.Run.XYData.Xvalues, resultColl.Run.XYData.Yvalues, iso1, iso2, currentResult.ScanSet.BackgroundIntensity);
-            ((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnTopPeaks(iso1, iso2,
-                mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005), currentResult.ScanSet.BackgroundIntensity, 3);
 
 
         }

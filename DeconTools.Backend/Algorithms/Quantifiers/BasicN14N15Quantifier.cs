@@ -38,27 +38,92 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
 
             //Find top n peaks of the theor profile.  Reference them by their peak index so that they can be looked up in the experimental. 
-            List<int> sortedTheorIso1Indexes = getIndexValsOfTopPeaks(theorIso1);
-            List<int> sortedTheorIso2Indexes = getIndexValsOfTopPeaks(theorIso2);
+            //List<int> sortedTheorIso1Indexes = getIndexValsOfTopPeaks(theorIso1);
+            //List<int> sortedTheorIso2Indexes = getIndexValsOfTopPeaks(theorIso2);
 
-            //sum the top n peaks of the experimental profile, based on sorted index values
-            double summedIso1Intensities = getSummedIntensitiesForPeakIndices(iso1, sortedTheorIso1Indexes, numPeaks);
-            double summedIso2Intensities = getSummedIntensitiesForPeakIndices(iso2, sortedTheorIso2Indexes, numPeaks);
-            
+            IList<IPeak> topTheorIso1Peaks = getTopPeaks(theorIso1, numPeaks);
+            IList<IPeak> topTheorIso2Peaks = getTopPeaks(theorIso2, numPeaks);
+
+            double toleranceInPPM = 25;
+
+            //get the top n peaks of the experimental profile, based on peaks of the theor profile
+            IList<IPeak> topIso1Peaks = getTopPeaksBasedOnTheor(iso1, topTheorIso1Peaks,toleranceInPPM);
+            IList<IPeak> topIso2Peaks = getTopPeaksBasedOnTheor(iso2, topTheorIso2Peaks, toleranceInPPM);
+
+            //Since the number of top experimental iso peaks may be less than the number of top theor iso peaks,
+            //we have to filter and ensure that they have the same peak numbers, so that the correction factor
+            // (applied below) is properly applied.   HOWEVER,  this may induce some differences between runs 
+            IList<IPeak> filteredTopTheorIso1Peaks = getTopPeaksBasedOnTheor(theorIso1, topIso1Peaks, toleranceInPPM);
+            IList<IPeak> filteredTopTheorIso2Peaks = getTopPeaksBasedOnTheor(theorIso2, topIso2Peaks, toleranceInPPM);
+
+            double summedIso1PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso1Peaks, backgroundIntensity);
+            double summedIso2PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso2Peaks, backgroundIntensity);
+
             //need to find out the contribution of the top n peaks to the overall isotopic envelope.  Base this on the theor profile
-            double summedTheorIso1Intensities = getSummedIntensitiesForPeakIndices(theorIso1, sortedTheorIso1Indexes, numPeaks);
-            double summedTheorIso2Intensities = getSummedIntensitiesForPeakIndices(theorIso2, sortedTheorIso2Indexes, numPeaks);
+            double summedTheorIso1Intensities = filteredTopTheorIso1Peaks.Sum(p => p.Height);
+            double summedTheorIso2Intensities = filteredTopTheorIso2Peaks.Sum(p => p.Height);
+            
+ 
             double fractionTheor1 = summedTheorIso1Intensities / theorIso1.Peaklist.Sum(p => p.Height);
             double fractionTheor2 = summedTheorIso2Intensities / theorIso2.Peaklist.Sum(p => p.Height);
 
             //use the above ratio to correct the intensities based on how much the top n peaks contribute to the profile. 
-            double correctedIso1SummedIntens = summedIso1Intensities / fractionTheor1;
-            double correctedIso2SummedIntens = summedIso2Intensities / fractionTheor2;
+            double correctedIso1SummedIntens = summedIso1PeakIntensities / fractionTheor1;
+            double correctedIso2SummedIntens = summedIso2PeakIntensities / fractionTheor2;
 
             double ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
 
 
             return ratio; 
+
+        }
+
+        private IList<IPeak> getTopPeaksBasedOnTheor(IsotopicProfile iso1, IList<IPeak> topTheorIso1Peaks, double toleranceInPPM)
+        {
+            List<IPeak> topPeaks = new List<IPeak>();
+
+            foreach (var item in topTheorIso1Peaks)
+            {
+                double mzTolerance = toleranceInPPM * item.XValue / 1e6;
+
+                IPeak isoPeak = IsotopicProfileUtilities.GetPeakAtGivenMZ(iso1, item.XValue, mzTolerance);
+
+                if (isoPeak != null)
+                {
+                    topPeaks.Add(isoPeak);
+                }
+                else
+                {
+
+                }
+               
+            }
+
+            return topPeaks;
+        }
+
+        private IList<IPeak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
+        {
+
+            IPeak peak = theorIso1.Peaklist[0];
+
+            IList<IPeak> sortedList = new List<IPeak>();
+            sortedList.Add(theorIso1.Peaklist[0]);
+
+            for (int i = 1; i < theorIso1.Peaklist.Count; i++)
+            {
+                if (theorIso1.Peaklist[i].Height > sortedList[0].Height)
+                {
+                    sortedList.Insert(0, theorIso1.Peaklist[i]);
+                }
+                else
+                {
+                    sortedList.Add(theorIso1.Peaklist[i]);
+                }
+            }
+
+            return sortedList.Take(numPeaks).ToList();
+
 
         }
 

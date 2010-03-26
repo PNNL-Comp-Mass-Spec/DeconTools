@@ -81,9 +81,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary2003, Version=1.0.3484.29834, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -92,7 +92,10 @@
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
+    <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
+    <Compile Include="Data\Importers\MassTagFromTextFileImporter.cs" />
+    <Compile Include="DTO\MassTagMiniDTO.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
@@ -243,6 +246,7 @@
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
     <Compile Include="Runs\AgilentD_Run.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
+    <Compile Include="Utilities\DriftTimeProfileExtractor.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />

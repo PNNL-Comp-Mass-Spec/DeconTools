@@ -67,8 +67,8 @@ namespace DeconTools.Backend.ProcessingTasks
             int scanTolerance = 5;
 
             //binary search for scan value...
-            int indexOfLowerScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, lowerScan, 0, resultColl.MSPeakResultList.Count, scanTolerance);
-            int indexOfUpperScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, upperScan, 0, resultColl.MSPeakResultList.Count, scanTolerance);
+            int indexOfLowerScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, lowerScan, 0, resultColl.MSPeakResultList.Count-1, scanTolerance);
+            int indexOfUpperScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, upperScan, 0, resultColl.MSPeakResultList.Count-1, scanTolerance);
 
             int currentIndex = indexOfLowerScan;
 
@@ -126,9 +126,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private int getIndexOfClosestScanValue(List<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
         {
-            if (leftIndex <= rightIndex)
+            if (leftIndex < rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
+                
                 if (Math.Abs(targetScan - peakList[middle].Scan_num) <= scanTolerance)
                 {
                     return middle;
@@ -140,6 +141,14 @@ namespace DeconTools.Backend.ProcessingTasks
                 else
                 {
                     return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
+                }
+            }
+            else if (leftIndex == rightIndex)
+            {
+              
+                {
+                    return leftIndex;
+
                 }
             }
             return -1;
@@ -279,7 +288,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        private XYData getChromValues2(List<MSPeakResult> filteredPeakList, Run run)
+        public XYData getChromValues2(List<MSPeakResult> filteredPeakList, Run run)
         {
             XYData xydata = new XYData();
 

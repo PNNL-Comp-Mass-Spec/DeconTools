@@ -14,6 +14,7 @@ namespace DeconTools.UnitTesting
     public class TestUtilities
     {
         private static string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+        private static string uimfTestFile = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
 
         public static void GetXYValuesToStringBuilder(StringBuilder sb, double[] xvals, double[] yvals)
         {
@@ -352,6 +353,12 @@ namespace DeconTools.UnitTesting
             peakDet.Execute(run.ResultCollection);
 
             return run.PeakList;
+        }
+
+        public static Run GetStandardUIMFRun()
+        {
+            return new UIMFRun(uimfTestFile);
+           
         }
     }
 }

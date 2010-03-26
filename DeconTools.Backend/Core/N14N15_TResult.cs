@@ -41,6 +41,11 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Public Methods
+        public override void DisplayToConsole()
+        {
+            base.DisplayToConsole();
+            Console.WriteLine("Ratio = \t" + this.RatioN14N15.ToString("0.##"));
+        }
 
         #endregion
 

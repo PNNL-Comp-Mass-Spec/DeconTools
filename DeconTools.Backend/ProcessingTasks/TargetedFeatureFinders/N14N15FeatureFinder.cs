@@ -19,12 +19,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
         /// <summary>
-        /// Finds both N14 and N15 features using a m/z tolerance (default 0.02)
+        /// Finds both N14 and N15 features using a PPM tolerance (default 0.02)
         /// </summary>
-        /// <param name="toleranceInMZ">Tolerance in m/z</param>
-        public N14N15FeatureFinder(double toleranceInMZ)
+        /// <param name="toleranceInMZ">Tolerance in PPM</param>
+        public N14N15FeatureFinder(double toleranceInPPM)
         {
-            this.Tolerance = toleranceInMZ;
+            this.Tolerance = toleranceInPPM;
 
         }
 
@@ -48,7 +48,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             LabeledTheorProfile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(resultColl.Run.CurrentMassTag, 0.005);
 
             BasicMSFeatureFinder bff = new BasicMSFeatureFinder();
+
+            double toleranceInMZ = Tolerance * LabeledTheorProfile.getMonoPeak().XValue / 1e6; 
+
             IsotopicProfile labelledIso = bff.FindMSFeature(resultColl.Run.PeakList, LabeledTheorProfile, Tolerance, false);
+
+            if (labelledIso == null)
+            {
+                massTagresult.Flags.Add(new LabeledProfileMissingResultFlag()); 
+            }
+
 
             massTagresult.AddLabelledIso(labelledIso);
 
