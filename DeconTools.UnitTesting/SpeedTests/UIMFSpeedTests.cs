@@ -21,6 +21,7 @@ namespace DeconTools.UnitTesting.SpeedTests
         public long deconTime;
         public long resultUpdaterTime;
         public long ticExtractorTime;
+        public long driftTimeExtractorTime;
     }
 
     public struct frameAggregateTimingResult
@@ -69,7 +70,8 @@ namespace DeconTools.UnitTesting.SpeedTests
             Task decon = new HornDeconvolutor();
             Task scanResultUpdater = new ScanResultUpdater();
             Task uimfTicExtractor = new UIMF_TICExtractor();
-
+            Task driftTimeExtractor = new DeconTools.Backend.ProcessingTasks.UIMFDriftTimeExtractor();
+           
             
             ((HornDeconvolutor)decon).MinPeptideBackgroundRatio = 4;
 
@@ -115,6 +117,13 @@ namespace DeconTools.UnitTesting.SpeedTests
                     sw.Start();
                     uimfTicExtractor.Execute(results);
                     timeresult.ticExtractorTime = sw.ElapsedMilliseconds;
+
+
+                    sw.Reset();
+                    sw.Start();
+                    driftTimeExtractor.Execute(results);
+
+                    timeresult.driftTimeExtractorTime = sw.ElapsedMilliseconds;
 
                     timingResults.Add(timeresult);
 

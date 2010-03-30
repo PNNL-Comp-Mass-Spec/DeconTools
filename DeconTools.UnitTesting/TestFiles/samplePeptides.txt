@@ -1,0 +1,4 @@
+id	mz	z	net	sequence
+1	500.5	2	0.34	SAMPLER
+23	458.6363	3	0.23	DINGDINGR
+35	1243.3	1	0.45	HAMR

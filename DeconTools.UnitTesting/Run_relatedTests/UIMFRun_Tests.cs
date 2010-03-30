@@ -279,7 +279,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double[] driftTimes = new double[stopScan - startScan + 1];
 
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb        = new StringBuilder();
             for (int i = startScan; i <= stopScan; i++)
             {
                 driftTimes[i - startScan] = uimfRun.GetDriftTime(1300, i);
@@ -308,7 +308,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             double avgTOFLength = Convert.ToDouble(datareader.GetFrameParameters(1000, "AverageTOFLength"));
 
-            //Console.WriteLine(sb.ToString());
+            Console.WriteLine(sb.ToString());
         }
 
         [Test]

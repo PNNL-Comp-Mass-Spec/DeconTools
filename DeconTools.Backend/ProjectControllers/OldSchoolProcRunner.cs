@@ -150,7 +150,7 @@ namespace DeconTools.Backend
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
                 DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory peakexporterFactory = new DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory();
-                Task peakListTextExporter = peakexporterFactory.Create(this.exporterType, this.fileType, 50000, getPeakListFileName(this.exporterType));
+                Task peakListTextExporter = peakexporterFactory.Create(this.exporterType, this.fileType, 10000, getPeakListFileName(this.exporterType));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
 

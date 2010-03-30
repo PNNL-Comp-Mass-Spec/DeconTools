@@ -13,7 +13,7 @@ namespace DeconTools.Backend.Data
         private int triggerToExportValue;
 
         public IsosExporterFactory()
-            : this(25000)
+            : this(10000)
         {
 
         }

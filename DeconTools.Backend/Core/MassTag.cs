@@ -71,11 +71,19 @@ namespace DeconTools.Backend.Core
 
         public void CreatePeptideObject()
         {
-            if (this.PeptideSequence == null || this.PeptideSequence.Length == 0
-                || this.MonoIsotopicMass == 0) return;
+            this.CreatePeptideObject(true);
+
+        }
+
+        public void CreatePeptideObject(bool verifyMass)
+        {
+           
+            if (this.PeptideSequence == null || this.PeptideSequence.Length == 0) return;
             this.Peptide = new Peptide(this.PeptideSequence);
-            //Console.WriteLine(this.Peptide.MonoIsotopicMass - this.MonoIsotopicMass);
-            if ((this.Peptide.MonoIsotopicMass - this.MonoIsotopicMass) > 0.001) this.Peptide = null;   // the MassTag.MonoIsotopicMass is directly from DMS and is the official mass. If the peptide's calculated MonoMW differs, then there must be a modification or something else going on; don't use it. 
+            if (verifyMass)
+            {
+                if ((this.Peptide.MonoIsotopicMass - this.MonoIsotopicMass) > 0.001) this.Peptide = null;   // the MassTag.MonoIsotopicMass is directly from DMS and is the official mass. If the peptide's calculated MonoMW differs, then there must be a modification or something else going on; don't use it. 
+            }
 
 
         }
