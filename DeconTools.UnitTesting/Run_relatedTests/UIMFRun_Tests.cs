@@ -5,6 +5,8 @@ using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 using UIMFLibrary;
+using System.Diagnostics;
+using DeconTools.Backend.Utilities;
 
 
 namespace DeconTools.UnitTesting.Run_relatedTests
@@ -246,10 +248,16 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
+
+
             int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
 
             StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < numFrames; i = i + 200)
+
+
+
+
+            for (int i = 1; i < numFrames; i = i + 1)
             {
                 sb.Append(Convert.ToDouble(datareader.GetFrameParameters(i, "PressureFront")));
                 sb.Append("\t");
@@ -264,12 +272,49 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+
+        [Test]
+        public void memoryTest1()
+        {
+
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+
+            uimfRun.CurrentFrameSet = new FrameSet(800);
+
+            long memory;
+
+            Process currentProcess = Process.GetCurrentProcess();
+            TestUtilities.DisplayInfoForProcess(currentProcess);
+
+            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(uimfRun, 1, 1);
+            scanSetCreator.Create();
+
+            foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
+            {
+                //uimfRun.GetMassSpectrum(scanset, uimfRun.CurrentFrameSet, 0, 2000);
+                
+                uimfRun.GetFramePressureBack(uimfRun.CurrentFrameSet.PrimaryFrame);
+                
+            }
+
+            currentProcess = Process.GetCurrentProcess();
+            TestUtilities.DisplayInfoForProcess(currentProcess);
+
+
+
+
+
+
+        }
+
+
+
         [Test]
         public void getDriftTimesTest1()
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            
+
 
 
 
@@ -279,7 +324,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double[] driftTimes = new double[stopScan - startScan + 1];
 
 
-            StringBuilder sb        = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (int i = startScan; i <= stopScan; i++)
             {
                 driftTimes[i - startScan] = uimfRun.GetDriftTime(1300, i);
@@ -287,6 +332,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 sb.Append(Environment.NewLine);
 
             }
+
+            
 
             Console.WriteLine(sb.ToString());
         }

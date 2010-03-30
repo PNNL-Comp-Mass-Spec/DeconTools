@@ -527,6 +527,16 @@ namespace DeconTools.Backend.Core
 
         }
 
+
+        public virtual void Close()
+        {
+            this.DeconToolsPeakList = null;
+            this.PeakList.Clear();
+            this.ResultCollection.ClearAllResults();
+            this.XYData = null;
+
+        }
+
     
     }
 }

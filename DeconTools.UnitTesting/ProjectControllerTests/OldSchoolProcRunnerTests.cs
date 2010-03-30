@@ -93,7 +93,8 @@ namespace DeconTools.UnitTesting
         [Test]
         public void ExecuteRunnerOnUIMFDataWithHornDeconTest1()
         {
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFilepath2, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile3, Globals.MSFileType.PNNL_UIMF, uimfParameterHorn1);
+            runner.IsosResultThreshold = 100;
             runner.Execute();
 
             //Assert.AreEqual(265, runner.Project.RunCollection[0].ResultCollection.ResultList.Count);

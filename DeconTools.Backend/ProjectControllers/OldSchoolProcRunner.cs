@@ -74,7 +74,7 @@ namespace DeconTools.Backend
             this.paramFilename = paramFileName;
             this.project = Project.getInstance();
             Project.getInstance().LoadOldDecon2LSParameters(this.paramFilename);
-            this.IsosResultThreshold = 100000;       // results will be serialized if count is greater than this number
+            this.IsosResultThreshold = 25000;       // results will be serialized if count is greater than this number
             this.exporterType = getExporterTypeFromOldParameters(Project.getInstance().Parameters.OldDecon2LSParameters);
 
             RunFactory runfactory = new RunFactory();

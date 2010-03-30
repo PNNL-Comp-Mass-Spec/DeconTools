@@ -46,9 +46,9 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3714.21783, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3734.21421, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\backup\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,9 +81,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
+    <Reference Include="UIMFLibrary2003, Version=1.0.3484.29834, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

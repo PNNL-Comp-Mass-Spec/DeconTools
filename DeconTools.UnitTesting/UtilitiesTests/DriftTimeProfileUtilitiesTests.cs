@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
         
 
         [Test]
-        public void getDriftProfileFromRawDataTest1()
+        public void getDriftProfileFromRawDataMZ_771_Test1()
         {
             Run run = TestUtilities.GetStandardUIMFRun();
 
@@ -40,6 +40,65 @@ namespace DeconTools.UnitTesting.UtilitiesTests
 
 
         }
+
+
+        [Test]
+        public void getDriftProfileFromRawDataMZ_967_Test1()
+        {
+            Run run = TestUtilities.GetStandardUIMFRun();
+
+            UIMFRun uimfRun = (UIMFRun)run;
+            DriftTimeProfileExtractor profileExtractor = new DriftTimeProfileExtractor();
+
+            FrameSet frameset = new FrameSet(804, 803, 805);
+            uimfRun.CurrentFrameSet = frameset;
+
+            double targetMZ = 967.26;
+
+
+            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run, 200, 350, 9, 1);
+            ssc.Create();
+
+            //XYData xydata = profileExtractor.ExtractProfileFromRawData(uimfRun, frameset, run.ScanSetCollection, targetMZ, 30d);
+
+            createPeaks(run);
+            XYData xydata = profileExtractor.ExtractProfileFromPeakData(uimfRun, frameset, run.ScanSetCollection, targetMZ, 30d);
+
+
+            TestUtilities.DisplayXYValues(xydata);
+        }
+
+
+        [Test]
+        public void getDriftProfileMZ_796_Test1()
+        {
+            Run run = TestUtilities.GetStandardUIMFRun();
+
+            UIMFRun uimfRun = (UIMFRun)run;
+            DriftTimeProfileExtractor profileExtractor = new DriftTimeProfileExtractor();
+
+            FrameSet frameset = new FrameSet(616, 615, 617);
+            uimfRun.CurrentFrameSet = frameset;
+
+            double targetMZ = 1004.1987;
+
+
+            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run, 200, 350, 3, 1);
+            ssc.Create();
+
+            XYData xydata = profileExtractor.ExtractProfileFromRawData(uimfRun, frameset, run.ScanSetCollection, targetMZ, 30d);
+            TestUtilities.DisplayXYValues(xydata);
+
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+
+            createPeaks(run);
+            xydata = profileExtractor.ExtractProfileFromPeakData(uimfRun, frameset, run.ScanSetCollection, targetMZ, 30d);
+
+
+            TestUtilities.DisplayXYValues(xydata);
+
+        }
+
 
         [Test]
         public void getDriftProfileFrom_peakDataTest1()

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <parameters>
 	<version>1.0</version>
 	<PeakParameters>
@@ -53,8 +53,8 @@
 		</HornTransformParameters>
 	<Miscellaneous>
 		<UseScanRange>True</UseScanRange>
-		<MinScan>1200</MinScan>
-		<MaxScan>1200</MaxScan>
+		<MinScan>800</MinScan>
+		<MaxScan>802</MaxScan>
 		<UseMZRange>False</UseMZRange>
 		<MinMZ>0</MinMZ>
 		<MaxMZ>2000</MaxMZ>

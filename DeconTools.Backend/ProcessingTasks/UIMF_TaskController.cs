@@ -88,6 +88,12 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
                     }
+
+
+
+
+                    run.Close();   
+
                 }
                 
                 //See above... this has been decommissioned. 

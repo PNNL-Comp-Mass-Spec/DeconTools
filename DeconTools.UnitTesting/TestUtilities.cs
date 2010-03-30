@@ -360,5 +360,18 @@ namespace DeconTools.UnitTesting
             return new UIMFRun(uimfTestFile);
            
         }
+
+        public static void DisplayInfoForProcess(System.Diagnostics.Process currentProcess)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Process Name =\t" + currentProcess.ProcessName);
+            sb.Append(Environment.NewLine);
+            sb.Append("Private bytes =\t" + String.Format("{0:N0}", currentProcess.PrivateMemorySize64));
+            sb.Append(Environment.NewLine);
+
+            Console.Write(sb.ToString());
+
+
+        }
     }
 }
