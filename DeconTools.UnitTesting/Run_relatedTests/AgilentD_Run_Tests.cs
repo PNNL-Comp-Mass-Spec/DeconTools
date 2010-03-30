@@ -16,6 +16,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         string agilentDataset1 = @"\\pnl\projects\MSSHARE\Gord\Test_data\BSA_TOF4.d";
         string aglientDataset2 = @"\\pnl\projects\MSSHARE\Gord\Test_data\bsa_tof5.d";
+        string agilentDataset3 = @"\\proto-10\IMS_DEV2\Agilent_QTOF_data\Shew_250ng-r001.d";
 
 
         string wrongFileExample1 = @"\\pnl\projects\MSSHARE\Gord\Test_data\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
@@ -71,6 +72,18 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
+
+        [Test]
+        public void GetBelovSpectrumTest1()
+        {
+            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset3);
+
+            ScanSet scanset = new ScanSet(25);
+
+            run.GetMassSpectrum(scanset, 0, 6000);
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+        }
 
 
 
