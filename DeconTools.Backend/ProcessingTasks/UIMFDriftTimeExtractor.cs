@@ -28,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (result is UIMFIsosResult)
                 {
                     UIMFIsosResult uimfResult = (UIMFIsosResult)result;
-                    uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.FrameSet.PrimaryFrame, uimfResult.ScanSet.PrimaryScanNumber);
+                    uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.FrameSet, uimfResult.ScanSet.PrimaryScanNumber);
                 }
             }
 

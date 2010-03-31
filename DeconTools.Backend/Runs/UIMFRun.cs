@@ -278,7 +278,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-  
+
         internal void CreateFrameSetCollection(int minFrame, int maxFrame)      // this is an early simplistic version
         {
             for (int i = minFrame; i <= maxFrame; i++)
@@ -292,6 +292,60 @@ namespace DeconTools.Backend.Runs
             return -1;   //TODO:  figure out what to return
         }
 
+
+
+        public void GetFrameDataAllFrameSets()
+        {
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+            DataReader datareader = adapter.Datareader;
+
+            Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
+
+            foreach (var frame in FrameSetCollection.FrameSetList)
+            {
+                frame.AvgTOFLength = Convert.ToSingle(datareader.GetFrameParameters(frame.PrimaryFrame, "AverageTOFLength"));
+                frame.FramePressure = (float)this.GetFramePressureBack(frame.PrimaryFrame);
+            }
+
+
+        }
+
+
+        public double GetDriftTime(FrameSet frame, int scanNum)
+        {
+            if (Single.IsNaN(frame.AvgTOFLength))
+            {
+                UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+                DataReader datareader = adapter.Datareader;
+
+                frame.AvgTOFLength = Convert.ToSingle(datareader.GetFrameParameters(frame.PrimaryFrame, "AverageTOFLength"));
+            }
+
+            if (Single.IsNaN(frame.FramePressure))
+            {
+                UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+                DataReader datareader = adapter.Datareader;
+
+                frame.FramePressure = (float)this.GetFramePressureBack(frame.PrimaryFrame);
+            }
+
+            double driftTime = -1;
+            if (frame.AvgTOFLength > 0)
+            {
+                driftTime = frame.AvgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
+            }
+
+            if (frame.FramePressure != 0 && frame.FramePressure != Double.NaN)
+            {
+                driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frame.FramePressure);      // correc
+            }
+
+            return driftTime;
+
+        }
+
+
+
         public double GetDriftTime(int frameNum, int scanNum)
         {
             UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
@@ -302,7 +356,7 @@ namespace DeconTools.Backend.Runs
 
             double avgTOFLength = Convert.ToDouble(datareader.GetFrameParameters(frameNum, "AverageTOFLength"));
 
-            double driftTime = avgTOFLength * (scanNum+1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
+            double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
             double frameBackpressure = this.GetFramePressureBack(frameNum);
             if (frameBackpressure != 0)
@@ -338,7 +392,7 @@ namespace DeconTools.Backend.Runs
 
         private int GetMaxPossibleFrameIndex()
         {
-            int maxPossibleFrameIndex = GetNumFrames() ;     //frames begin at '1'
+            int maxPossibleFrameIndex = GetNumFrames();     //frames begin at '1'
             if (maxPossibleFrameIndex < 0) maxPossibleFrameIndex = 1;
             return maxPossibleFrameIndex;
         }
@@ -358,7 +412,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            return 1;      
+            return 1;
         }
 
         public override void Close()

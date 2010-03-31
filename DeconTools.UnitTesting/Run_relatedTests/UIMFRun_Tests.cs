@@ -386,5 +386,33 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(92000, numBins);
         }
 
+
+        [Test]
+        public void GetFrameDataForUIMFRunTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 3, 1);
+            fscc.Create();
+
+            uimfRun.GetFrameDataAllFrameSets();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in uimfRun.FrameSetCollection.FrameSetList)
+            {
+                sb.Append(item.PrimaryFrame);
+                sb.Append("\t");
+                sb.Append(item.FramePressure.ToString("0.######"));
+                sb.Append("\t");
+                sb.Append(item.AvgTOFLength.ToString("0.###"));
+                sb.Append(Environment.NewLine);
+            }
+
+            Console.Write(sb.ToString());
+
+        }
+
+
+
     }
 }

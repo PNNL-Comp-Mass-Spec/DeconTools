@@ -9,7 +9,23 @@ namespace DeconTools.Backend.Core
     public class FrameSet
     {
 
+        public FrameSet()
+        {
+            this.FramePressure = Single.NaN;
+            this.AvgTOFLength = Single.NaN;
+        }
+
+        public FrameSet(int primaryFrame, List<int> frameArray)
+            : this()
+        {
+            this.primaryFrame = primaryFrame;
+            this.IndexValues = frameArray;
+        }
+
+
+
         public FrameSet(int primaryFrame)
+            : this()
         {
             this.primaryFrame = primaryFrame;
             this.IndexValues = new List<int>();
@@ -18,6 +34,7 @@ namespace DeconTools.Backend.Core
         }
 
         public FrameSet(int primaryFrame, int[] indexArray)
+            : this()
         {
             this.primaryFrame = primaryFrame;
             this.IndexValues = new List<int>();
@@ -30,6 +47,7 @@ namespace DeconTools.Backend.Core
         }
 
         public FrameSet(int primaryFrame, int lowerFrame, int upperFrame)
+            : this()
         {
             this.primaryFrame = primaryFrame;
             Check.Require(lowerFrame <= upperFrame, "Lower frame number must be less than or equal to the frame scan number");
@@ -49,6 +67,9 @@ namespace DeconTools.Backend.Core
             get { return primaryFrame; }
             set { primaryFrame = value; }
         }
+
+        public float FramePressure { get; set; }
+        public float AvgTOFLength { get; set; }
 
         private List<int> indexValues;
 

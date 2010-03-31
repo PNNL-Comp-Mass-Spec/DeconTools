@@ -132,7 +132,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                         sigNoiseParam.Value = rc.ResultList[n].IsotopicProfile.GetSignalToNoise();
                         monoAbundanceParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoAbundance();
                         monoPlus2AbundParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoPlusTwoAbundance();
-                        driftTimeParam.Value = rc.ResultList[n].ScanSet.DriftTime;
+                        driftTimeParam.Value = ((UIMFIsosResult)rc.ResultList[n]).DriftTime;
                         origIntensParam.Value = rc.ResultList[n].IsotopicProfile.OriginalIntensity;
                         tia_origIntensParam.Value = rc.ResultList[n].IsotopicProfile.Original_Total_isotopic_abundance;
                         flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(rc.ResultList[n].Flags);

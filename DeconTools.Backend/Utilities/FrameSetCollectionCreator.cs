@@ -34,8 +34,8 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public FrameSetCollectionCreator(Run run, int range, int increment)
-            : this(run, getFirstFrame(run), getLastFrame(run), range, increment)
+        public FrameSetCollectionCreator(Run run, int numFramesSummed, int increment)
+            : this(run, getFirstFrame(run), getLastFrame(run), numFramesSummed, increment)
         {
 
         }

@@ -103,7 +103,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.Original_Total_isotopic_abundance);
             sb.Append(delimiter);
-            sb.Append(uimfResult.ScanSet.DriftTime.ToString("0.###"));
+            sb.Append(uimfResult.DriftTime.ToString("0.###"));
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
 

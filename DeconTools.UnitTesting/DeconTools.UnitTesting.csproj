@@ -72,6 +72,7 @@
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
+    <Compile Include="ProcessingTasksTests\UIMFDriftTimeExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />
     <Compile Include="DeconConsole_Tests\DeconConsoleTests.cs" />
     <Compile Include="DeconEngineTests.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="ProjectControllerTests\RunMergingProjectControllerTests.cs" />
     <Compile Include="QualityControlTests\IMFQualityTests.cs" />
     <Compile Include="QualityControlTests\MZXMLQualityTests.cs" />
+    <Compile Include="QualityControlTests\ThrashQualityTests.cs" />
     <Compile Include="QualityControlTests\UIMFQualityTests.cs" />
     <Compile Include="ResultSerializationTests.cs" />
     <Compile Include="ResultValidatorTests\LeftOfMonoPeakLookerTests.cs" />

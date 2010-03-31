@@ -105,6 +105,9 @@ namespace DeconTools.Backend
                 FrameSetCollectionCreator frameSetcreator = new FrameSetCollectionCreator(run, uimfRun.MinFrame,
                       uimfRun.MaxFrame, Project.getInstance().Parameters.NumFramesSummed, 1);
                 frameSetcreator.Create();
+
+                uimfRun.GetFrameDataAllFrameSets();     //this adds avgTOFlength and framePressureBack to each frame's object data; I do this so it doesn't have to be repeated looked up.
+
             }
 
             try
