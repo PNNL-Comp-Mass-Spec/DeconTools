@@ -78,8 +78,6 @@ namespace DeconTools.Backend.Core
         }
 
         [field: NonSerialized]
-
-
         private List<IPeak> peakList;     
         public List<IPeak> PeakList
         {

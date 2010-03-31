@@ -16,10 +16,24 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(ResultCollection resultList)
         {
+            Check.Require(resultList.Run != null, "UIMF Drift Time extractor failed. Run is null");
             Check.Require(resultList.Run is UIMFRun, "UIMF Drift Time extractor only works on UIMF files.");
+            Check.Require(resultList != null, "UIMF Drift Time extractor failed. ResultCollection is null");
+
             UIMFRun uimfRun = (UIMFRun)resultList.Run;
 
-            uimfRun.CurrentScanSet.DriftTime = uimfRun.GetDriftTime(uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
+
+            foreach (IsosResult result in resultList.IsosResultBin)
+            {
+                if (result is UIMFIsosResult)
+                {
+                    UIMFIsosResult uimfResult = (UIMFIsosResult)result;
+                    uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.FrameSet.PrimaryFrame, uimfResult.ScanSet.PrimaryScanNumber);
+                }
+            }
+
+
+            // = uimfRun.GetDriftTime(uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
 
         }
     }

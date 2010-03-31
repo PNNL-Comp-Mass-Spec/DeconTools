@@ -250,17 +250,17 @@ namespace DeconTools.Backend.Runs
 
         public double GetFramePressureFront(int frameNum)
         {
-            UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+            DataReader datareader = adapter.Datareader;
 
-            bool check = datareader.OpenUIMF(this.Filename);
             double framepressureFront = Convert.ToDouble(datareader.GetFrameParameters(frameNum, "PressureFront"));
             return framepressureFront;
         }
 
         public double GetFramePressureBack(int frameNum)
         {
-            UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
-            bool check = datareader.OpenUIMF(this.Filename);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+            DataReader datareader = adapter.Datareader;
 
             double framepressure = Convert.ToDouble(datareader.GetFrameParameters(frameNum, "PressureBack"));
             return framepressure;
@@ -294,10 +294,10 @@ namespace DeconTools.Backend.Runs
 
         public double GetDriftTime(int frameNum, int scanNum)
         {
-            //UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            //DataReader datareader = adapter.Datareader;
-            UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
-            bool check = datareader.OpenUIMF(this.Filename);
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+            DataReader datareader = adapter.Datareader;
+            //UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
+            //bool check = datareader.OpenUIMF(this.Filename);
 
 
             double avgTOFLength = Convert.ToDouble(datareader.GetFrameParameters(frameNum, "AverageTOFLength"));

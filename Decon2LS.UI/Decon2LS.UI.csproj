@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -248,78 +248,103 @@
     </Compile>
     <EmbeddedResource Include="ctlAveragineOptions.resx">
       <DependentUpon>ctlAveragineOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlDTASettings.resx">
       <DependentUpon>ctlDTASettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlElementalIsotopeDisplay.resx">
       <DependentUpon>ctlElementalIsotopeDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlHornMassTransform.resx">
       <DependentUpon>ctlHornMassTransform.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlMassSpectrum.resx">
       <DependentUpon>ctlMassSpectrum.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlMiscellaneousOptions.resx">
       <DependentUpon>ctlMiscellaneousOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlOptionsView.resx">
       <DependentUpon>ctlOptionsView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlPeakPickingOptions.resx">
       <DependentUpon>ctlPeakPickingOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlPreprocessOptions.resx">
       <DependentUpon>ctlPreprocessOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ctlThresholdSettings.resx">
       <DependentUpon>ctlThresholdSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frm2DPeakProcessing.resx">
       <DependentUpon>frm2DPeakProcessing.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDecon2LS.resx">
       <DependentUpon>frmDecon2LS.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFitFormulaInput.resx">
       <DependentUpon>frmFitFormulaInput.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFloatDialog.resx">
       <DependentUpon>frmFloatDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFocusParameters.resx">
       <DependentUpon>frmFocusParameters.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMercury.resx">
       <DependentUpon>frmMercury.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProcess.resx">
       <DependentUpon>frmProcess.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSavGolOptions.resx">
       <DependentUpon>frmSavGolOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSelectRaw.resx">
       <DependentUpon>frmSelectRaw.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSimpleDialogBox.resx">
       <DependentUpon>frmSimpleDialogBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSpectra.resx">
       <DependentUpon>frmSpectra.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmStatus.resx">
       <DependentUpon>frmStatus.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTICViewer.resx">
       <DependentUpon>frmTICViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTransformOptions.resx">
       <DependentUpon>frmTransformOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Icons\Averagine.ico" />
     <EmbeddedResource Include="Icons\AxisSwap.ico" />
@@ -334,6 +359,7 @@
     <EmbeddedResource Include="Icons\Spectrum_Summation.ico" />
     <EmbeddedResource Include="MolecularFormula.resx">
       <DependentUpon>MolecularFormula.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Core
         public ResultCollection(Run run)
         {
             this.run = run;
-            this.resultList = new List<IsosResult>();
+            this.ResultList = new List<IsosResult>();
             this.massTagResultList = new Dictionary<MassTag, MassTagResultBase>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
@@ -53,15 +53,8 @@ namespace DeconTools.Backend.Core
             set { scanResultList = value; }
         }
 
-
-        private List<IsosResult> resultList;
-
-        public List<IsosResult> ResultList
-        {
-            get { return resultList; }
-            set { resultList = value; }
-        }
-
+        public List<IsosResult> ResultList {get; set;}
+        
 
         private Run run;
 
