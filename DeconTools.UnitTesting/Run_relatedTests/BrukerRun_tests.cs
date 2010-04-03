@@ -17,6 +17,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         string brukerTestFile2 = @"\\Proto-4\SWT_ICR2\SWT_9t_TestDS216_Small\0.ser";
         string brukerTestFile1b = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_22_run1_19Oct07_Andromeda_07-09-02\acqus";
 
+        string brukerTestfile3 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_28_run2_14Jan08_Raptor_07-11-11\acqus";
 
 
         [Test]
@@ -33,7 +34,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
-
+ 
         [Test]
         public void checkDataSetNamesAndPathsTest2()
         {

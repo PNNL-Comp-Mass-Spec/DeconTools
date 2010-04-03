@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
+using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -20,7 +21,19 @@ namespace DeconTools.Backend.Runs
         public IMFRun(string filename)
             : this()
         {
+            Check.Require(File.Exists(filename));
+
             this.Filename = filename;
+
+
+            string baseFilename = Path.GetFileName(this.Filename);
+
+            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+
+
+            this.DataSetPath = Path.GetDirectoryName(filename);
+
+
             this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.PNNL_IMS);
             this.MinScan = 0;        
             this.MaxScan = GetMaxPossibleScanIndex();

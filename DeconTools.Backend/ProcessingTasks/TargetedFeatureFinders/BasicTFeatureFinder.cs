@@ -11,28 +11,28 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
     {
         #region Constructors
         public BasicTFeatureFinder()
-            : this(0.005)     // default mzTolerance
+            : this(5)     // default toleranceInPPM
         {
 
         }
 
-        public BasicTFeatureFinder(double mzTolerance)
+        public BasicTFeatureFinder(double toleranceInPPM)
+            : this(toleranceInPPM, true)
         {
-            this.Tolerance = mzTolerance;
+            this.ToleranceInPPM = toleranceInPPM;
         }
 
-        public BasicTFeatureFinder(double mzTolerance, bool requiresMonoPeak)
+        public BasicTFeatureFinder(double toleranceInPPM, bool requiresMonoPeak)
         {
             this.NeedMonoIsotopicPeak = requiresMonoPeak;
-
         }
 
         #endregion
-          
 
-  
-    
 
-     
+
+
+
+
     }
 }

@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfile);
             Console.WriteLine("------------------");
-            TestUtilities.DisplayIsotopicProfileData(massTagResult.N15IsotopicProfile);
+            TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfileLabeled);
 
 
 
@@ -114,7 +114,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfile);
             Console.WriteLine("------------------");
-            TestUtilities.DisplayIsotopicProfileData(massTagResult.N15IsotopicProfile);
+            TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfileLabeled);
             Console.WriteLine("------------------");
             Console.WriteLine("Ratio N14/N15 = " + massTagResult.RatioN14N15);
 
@@ -160,7 +160,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfile);
             Console.WriteLine("------------------");
-            TestUtilities.DisplayIsotopicProfileData(massTagResult.N15IsotopicProfile);
+            TestUtilities.DisplayIsotopicProfileData(massTagResult.IsotopicProfileLabeled);
             Console.WriteLine("------------------");
             Console.WriteLine("Ratio N14/N15 = " + massTagResult.RatioN14N15);
 

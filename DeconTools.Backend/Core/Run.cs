@@ -481,9 +481,14 @@ namespace DeconTools.Backend.Core
 
                 for (int i = minScan; i <= maxScan; i++)
                 {
-
-
-                    if (this.GetMSLevel(i) == 1)
+                    if (this.ContainsMSMSData)   // contains MS1 and MS2
+                    {
+                        if (this.GetMSLevel(i) == 1)
+                        {
+                            msLevelScanIndexList.Add(i);
+                        }
+                    }
+                    else      // all MS are MS1
                     {
                         msLevelScanIndexList.Add(i);
                     }

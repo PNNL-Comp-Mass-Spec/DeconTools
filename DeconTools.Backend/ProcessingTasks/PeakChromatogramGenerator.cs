@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconTools.Backend.DTO;
+using DeconTools.Backend.Algorithms;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -46,9 +47,6 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
             double mz = resultColl.Run.CurrentMassTag.MZ;
-
-
-
             double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set lower bound (10% lower than net val)
             double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set upper bound (10% higher than net val)
 
@@ -56,123 +54,61 @@ namespace DeconTools.Backend.ProcessingTasks
             if (maxNetVal > 1) maxNetVal = 1;
 
             int lowerScan = resultColl.Run.GetNearestScanValueForNET(minNetVal);
+            if (lowerScan == -1) lowerScan = resultColl.Run.MinScan;
+
             int upperScan = resultColl.Run.GetNearestScanValueForNET(maxNetVal);
+            if (upperScan == -1) upperScan = resultColl.Run.MaxScan;
 
+            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            XYData chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, mz, ppmTol);
 
-
-
-            double lowerMZ = -1 * (ppmTol * mz / 1e6 - mz);
-            double upperMZ = ppmTol * mz / 1e6 + mz;
-
-            int scanTolerance = 5;
-
-            //binary search for scan value...
-            int indexOfLowerScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, lowerScan, 0, resultColl.MSPeakResultList.Count-1, scanTolerance);
-            int indexOfUpperScan = getIndexOfClosestScanValue(resultColl.MSPeakResultList, upperScan, 0, resultColl.MSPeakResultList.Count-1, scanTolerance);
-
-            int currentIndex = indexOfLowerScan;
-
-            List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
-
-            while (currentIndex<= indexOfUpperScan)
+            if (resultColl.Run.ContainsMSMSData)     // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
             {
-                filteredPeakList.Add(resultColl.MSPeakResultList[currentIndex]);
-                currentIndex++;
+                this.msScanList = resultColl.Run.GetMSLevelScanValues();
+
+                Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+
+                for (int i = 0; i < chromValues.Xvalues.Length; i++)
+                {
+                    int currentScanVal = (int)chromValues.Xvalues[i];
+
+                    if (msScanList.Contains(currentScanVal))
+                    {
+                        filteredChromVals.Add(currentScanVal, chromValues.Yvalues[i]);
+                    }
+                }
+
+                chromValues.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
+                chromValues.Yvalues = filteredChromVals.Values.ToArray();
+
             }
-
-            filteredPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
-
-            //List<MSPeakResult> filteredPeakList = resultColl.MSPeakResultList.Where(p => p.Scan_num >= lowerScan && p.Scan_num <= upperScan)
-            //    .Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
-                
-            
-            //List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
-
-            ////have to search linearly - the m/z values are not in order
-            //for (int i = 0; i < resultColl.MSPeakResultList.Count; i++)
-            //{
-            //    if (resultColl.MSPeakResultList[i].MSPeak.XValue >= lowerMZ && resultColl.MSPeakResultList[i].MSPeak.XValue <= upperMZ)
-            //    {
-            //        filteredPeakList.Add(resultColl.MSPeakResultList[i]);
-            //    }
-
-            //}
-
-
-
-            //int indexOfLowerMZValue = getIndexOfClosestMZValue(resultColl.MSPeakResultList, lowerMZ,0,resultColl.MSPeakResultList.Count,1.0d);
-
-
-            bool containsPeaks = (filteredPeakList != null && filteredPeakList.Count() != 0);
-            Check.Ensure(containsPeaks, "No chromatographic peaks were found using the provided m/z range.");
-
-
-
-            this.msScanList = resultColl.Run.GetMSLevelScanValues();
-
-            Check.Require(this.msScanList != null && this.msScanList.Count > 0, "PeakChromatogramGenerator failed. Had problems defining the Scan array");
-
 
             MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            resultColl.Run.XYData = chromValues;
 
-
-            //store XYData in the Run's data to be used by other tasks...
-            resultColl.Run.XYData = getChromValues2(filteredPeakList, resultColl.Run);
-
-            //store XYData in the MassTag result object
-            //result.ChromValues = resultColl.Run.XYData;
 
         }
 
-        private int getIndexOfClosestScanValue(List<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
-        {
-            if (leftIndex < rightIndex)
-            {
-                int middle = (leftIndex + rightIndex) / 2;
-                
-                if (Math.Abs(targetScan - peakList[middle].Scan_num) <= scanTolerance)
-                {
-                    return middle;
-                }
-                else if (targetScan < peakList[middle].Scan_num)
-                {
-                    return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
-                }
-                else
-                {
-                    return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
-                }
-            }
-            else if (leftIndex == rightIndex)
-            {
-              
-                {
-                    return leftIndex;
-
-                }
-            }
-            return -1;
-        }
 
         /// <summary>
         /// Recursive binary search algorithm for searching through MSPeakResults
         /// </summary>
-        private int getIndexOfClosestMZValue(List<MSPeakResult> peakList, double targetMZ, int leftIndex, int rightIndex, double toleranceInDaltons)
+        private int getIndexOfClosestMZValue(List<MSPeakResult> peakList, double targetMZ, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
-                if (Math.Abs(targetMZ - peakList[middle].MSPeak.XValue) <= toleranceInDaltons)
+                if (Math.Abs(targetMZ - peakList[middle].MSPeak.XValue) <= toleranceInMZ)
                 {
                     return middle;
                 }
-                else if (targetMZ<peakList[middle].MSPeak.XValue)
+                else if (targetMZ < peakList[middle].MSPeak.XValue)
                 {
-                    return getIndexOfClosestMZValue(peakList, targetMZ, leftIndex, middle - 1, toleranceInDaltons);
+                    return getIndexOfClosestMZValue(peakList, targetMZ, leftIndex, middle - 1, toleranceInMZ);
                 }
                 else
                 {
-                    return getIndexOfClosestMZValue(peakList, targetMZ, middle + 1, rightIndex, toleranceInDaltons);
+                    return getIndexOfClosestMZValue(peakList, targetMZ, middle + 1, rightIndex, toleranceInMZ);
                 }
             }
             return -1;

@@ -20,30 +20,25 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void getPeakChromatogramTest1()
         {
-            MassTag massTag = new MassTag();
-            massTag.ID = 56488;
-            massTag.MonoIsotopicMass = 2275.1694779;
-            massTag.ChargeState = 3;
-            massTag.MZ = massTag.MonoIsotopicMass/massTag.ChargeState+1.00727649;
 
+            MassTag mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun(xcaliburTestfile);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburPeakDataFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-
-            run.CurrentMassTag = massTag;
+            run.CurrentMassTag = mt;
 
             Task peakChromGen = new PeakChromatogramGenerator(10);
             peakChromGen.Execute(run.ResultCollection);
 
+            //TestUtilities.DisplayXYValues(run.ResultCollection);
             Assert.AreEqual(1, run.ResultCollection.MassTagResultList.Count);
 
-            //Assert.AreEqual(104, run.XYData.Xvalues.Length);
-            //Assert.AreEqual(74, run.ResultCollection.MassTagResultList[massTag].ChromValues.Xvalues.Length);
-
-            TestUtilities.DisplayXYValues(run.ResultCollection);
+            Assert.AreEqual(133, run.XYData.Xvalues.Length);
+            Assert.AreEqual(5543,(int) run.XYData.Xvalues[35]);
+            Assert.AreEqual(7319569, (int)run.XYData.Yvalues[35]);
 
 
         }

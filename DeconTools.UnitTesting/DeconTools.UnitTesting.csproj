@@ -69,6 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgorithmTests\BasicFeatureFinderTests.cs" />
+    <Compile Include="AlgorithmTests\ChromatogramsForIsotopicProfileExtractorTests.cs" />
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />

@@ -26,14 +26,27 @@ namespace DeconTools.Backend.Core
         #region Properties
 
 
-        private IsotopicProfile m_n15IsotopicProfile;
-        public IsotopicProfile N15IsotopicProfile
+        private IsotopicProfile m_IsotopicProfileLabeled;
+        public IsotopicProfile IsotopicProfileLabeled
         {
-            get { return m_n15IsotopicProfile; }
-            set { m_n15IsotopicProfile = value; }
+            get { return m_IsotopicProfileLabeled; }
+            set { m_IsotopicProfileLabeled = value; }
         }
 
+        
+        
         public double RatioN14N15 { get; set; }
+
+
+        /// <summary>
+        /// Store chromatogram data for one or more peaks from the unlabeled isotopic profile
+        /// </summary>
+        public Dictionary<MSPeak, XYData> UnlabeledPeakChromData { get; set; }
+        
+        /// <summary>
+        /// Store chromatogram data for one or more peaks from the labeled isotopic profile
+        /// </summary>
+        public Dictionary<MSPeak, XYData> LabeledPeakChromData { get; set; }
 
 
 
@@ -54,7 +67,7 @@ namespace DeconTools.Backend.Core
 
         internal override void AddLabelledIso(IsotopicProfile labelledIso)
         {
-            this.N15IsotopicProfile = labelledIso;
+            this.IsotopicProfileLabeled = labelledIso;
         }
 
 

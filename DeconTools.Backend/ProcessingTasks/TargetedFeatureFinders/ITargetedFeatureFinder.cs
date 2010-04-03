@@ -14,7 +14,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #region Properties
         public virtual IsotopicProfile TheorFeature { get; set; }
 
-        public virtual double Tolerance { get; set; }
+        public virtual double ToleranceInPPM { get; set; }
 
         /// <summary>
         /// If true, then FeatureFinder must find the monoIsotopic peak or no feature is reported. (Useful for most peptides or small MassTags)
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             BasicMSFeatureFinder featureFinder = new BasicMSFeatureFinder();
-            result.IsotopicProfile = featureFinder.FindMSFeature(resultColl.Run.PeakList, this.TheorFeature, this.Tolerance, this.NeedMonoIsotopicPeak);
+            result.IsotopicProfile = featureFinder.FindMSFeature(resultColl.Run.PeakList, this.TheorFeature, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
 
 

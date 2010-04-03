@@ -95,13 +95,12 @@ namespace DeconTools.Backend.Data.Importers
             if (mt.MZ == 0 || mt.MZ == double.NaN)
             {
                 mt.MZ = mt.Peptide.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+
                 
             }
-            else
-            {
-                mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) / mt.MonoIsotopicMass;
-                
-            }
+            mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
+
+            
             return mt;
             
         }

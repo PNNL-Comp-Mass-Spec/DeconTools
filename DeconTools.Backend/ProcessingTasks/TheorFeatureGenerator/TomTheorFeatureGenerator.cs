@@ -20,6 +20,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #region Public Methods
         public override void GenerateTheorFeature(ResultCollection results)
         {
+            Check.Require(results.Run.CurrentMassTag != null, "FeatureGenerator failed. MassTag not defined.");
+
+            
             MassTag mt = results.Run.CurrentMassTag;
             Check.Require(mt.GetEmpiricalFormulaAsIntArray() != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 

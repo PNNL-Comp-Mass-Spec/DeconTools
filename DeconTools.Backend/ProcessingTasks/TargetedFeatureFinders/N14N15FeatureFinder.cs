@@ -24,7 +24,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// <param name="toleranceInMZ">Tolerance in PPM</param>
         public N14N15FeatureFinder(double toleranceInPPM)
         {
-            this.Tolerance = toleranceInPPM;
+            this.ToleranceInPPM = toleranceInPPM;
 
         }
 
@@ -49,9 +49,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             BasicMSFeatureFinder bff = new BasicMSFeatureFinder();
 
-            double toleranceInMZ = Tolerance * LabeledTheorProfile.getMonoPeak().XValue / 1e6; 
 
-            IsotopicProfile labelledIso = bff.FindMSFeature(resultColl.Run.PeakList, LabeledTheorProfile, Tolerance, false);
+            IsotopicProfile labelledIso = bff.FindMSFeature(resultColl.Run.PeakList, LabeledTheorProfile, ToleranceInPPM, false);
 
             if (labelledIso == null)
             {

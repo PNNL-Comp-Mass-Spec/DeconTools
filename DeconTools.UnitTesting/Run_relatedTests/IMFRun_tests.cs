@@ -14,6 +14,19 @@ namespace DeconTools.UnitTesting
         public string imfFilepath = "..\\..\\TestFiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
 
         [Test]
+        public void instiatateRunTest1()
+        {
+            Run run = new IMFRun(imfFilepath);
+
+            Assert.AreEqual("..\\..\\TestFiles", run.DataSetPath);
+            Assert.AreEqual("50ugpmlBSA_CID_QS_16V_0000.Accum_1", run.DatasetName);
+        }
+
+
+
+
+
+        [Test]
         public void GetMassSpectrumTest1()
         {
 

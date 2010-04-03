@@ -49,27 +49,27 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         #endregion
 
         #region Public Methods
-        public override void Smooth(ResultCollection resultList)
+        public override XYData Smooth(XYData inputData)
         {
             Check.Require(this.leftParam >= 0, "Savitzky left parameter cannot be negative");
             Check.Require(this.order >= 0, "Savitzky order cannot be negative");
             Check.Require(this.rightParam >= 0, "Savitzky right parameter cannot be negative");
 
-            Check.Require(resultList.Run != null, "Smoother failed. Problem: Run is null");
-            Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null &&
-                resultList.Run.XYData.Yvalues != null && resultList.Run.XYData.Xvalues.Length > 0 &&
-                resultList.Run.XYData.Yvalues.Length > 0, "Smoother failed. Problem: Empty XY values");
+            //Check.Require(resultList.Run != null, "Smoother failed. Problem: Run is null");
+            //Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null &&
+            //    resultList.Run.XYData.Yvalues != null && resultList.Run.XYData.Xvalues.Length > 0 &&
+            //    resultList.Run.XYData.Yvalues.Length > 0, "Smoother failed. Problem: Empty XY values");
 
             float[] xvals = new float[1];
             float[] yvals = new float[1];
 
-            resultList.Run.XYData.GetXYValuesAsSingles(ref xvals, ref yvals);
+            inputData.GetXYValuesAsSingles(ref xvals, ref yvals);
 
             DeconEngine.Utils.SavitzkyGolaySmooth((short)this.leftParam, (short)this.rightParam, (short)this.order, ref xvals, ref yvals);
 
-            resultList.Run.XYData.SetXYValues(ref xvals, ref yvals);
-
-
+            XYData outData = new XYData();
+            outData.SetXYValues(ref xvals, ref yvals);
+            return outData;
         }
         #endregion
 

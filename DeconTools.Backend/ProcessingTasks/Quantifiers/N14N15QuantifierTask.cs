@@ -56,7 +56,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             BasicN14N15Quantifier quant = new BasicN14N15Quantifier();
 
             IsotopicProfile iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
-            IsotopicProfile iso2 = ((N14N15_TResult)currentResult).N15IsotopicProfile;
+            IsotopicProfile iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
 
             if (iso1 == null || iso2 == null)
             {

@@ -25,6 +25,7 @@ namespace DeconTools.Backend.Runs
         {
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.Agilent_D;
+            this.ContainsMSMSData = true;    //not sure if it does, but setting it to 'true' ensures that each scan will be checked. 
         }
 
         public AgilentD_Run(string dataFileName)

@@ -25,6 +25,7 @@ namespace DeconTools.Backend.Runs
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.PNNL_UIMF;
             this.frameSetCollection = new FrameSetCollection();
+            this.ContainsMSMSData = false;
         }
 
         public UIMFRun(string fileName)

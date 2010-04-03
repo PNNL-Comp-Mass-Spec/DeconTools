@@ -18,16 +18,19 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public IsotopicProfile FindMSFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInMZ, bool requireMonoPeak)
+        public IsotopicProfile FindMSFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
+            Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
+
+
 
             IsotopicProfile outFeature = new IsotopicProfile();
 
             int indexOfMaxTheorPeak = theorFeature.getIndexOfMostIntensePeak();
 
 
-
+            double toleranceInMZ = theorFeature.getMonoPeak().XValue * toleranceInPPM / 1e6;
 
             bool foundMatchingMaxPeak = false;
             double massDefect = 0;   // this is the m/z diff between the max peak of theor feature and the max peak of the experimental feature
