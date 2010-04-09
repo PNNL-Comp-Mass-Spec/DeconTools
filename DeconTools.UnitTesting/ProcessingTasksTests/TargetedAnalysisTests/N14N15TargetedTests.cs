@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(0.02);
+            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
             finder.Execute(run.ResultCollection);
 
             //TestUtilities.DisplayIsotopicProfileData(finder.LabeledTheorProfile);
@@ -102,7 +102,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(0.02);
+            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
             finder.Execute(run.ResultCollection);
 
 
@@ -148,7 +148,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(2);
+            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
             finder.Execute(run.ResultCollection);
 
 

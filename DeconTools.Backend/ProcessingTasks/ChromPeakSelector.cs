@@ -59,38 +59,24 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.Run.PeakList != null, "ChromPeakSelector failed. Peak list has not been established. You need to run a peak detector.");
             Check.Require(resultList.Run.CurrentMassTag != null, "ChromPeakSelector failed. Mass Tag must be defined but it isn't.");
-
-            List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
-
-            foreach (ChromPeak peak in resultList.Run.PeakList)
-            {
-                if (Math.Abs(peak.NETValue - resultList.Run.CurrentMassTag.NETVal) <= tolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
-                {
-                    peaksWithinTol.Add(peak);
-                }
-            }
+            Check.Require(resultList.Run.PeakList != null, "ChromPeakSelector failed. Peak list has not been established. You need to run a peak detector.");
+            Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
+            Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
 
             MassTagResultBase result = resultList.MassTagResultList[resultList.Run.CurrentMassTag];
 
-            if (peaksWithinTol.Count == 0)
+            ChromPeak bestPeak =(ChromPeak) selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NETVal, this.Tolerance);
+
+            if (bestPeak == null)
             {
                 result.ScanSet = null;
                 result.Flags.Add(new ChromPeakNotFoundResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
             }
-            else if (peaksWithinTol.Count == 1)
+            else 
             {
-                result.ChromPeakSelected = peaksWithinTol[0];
+                result.ChromPeakSelected = bestPeak;
                 result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run);
-                
-             
-            }
-            else
-            {
-                result.ChromPeakSelected = selectBestPeak(this.peakSelectionMode, peaksWithinTol, resultList.Run.CurrentMassTag.NETVal);
-                result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run);
-
             }
 
             Check.Ensure(result.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
@@ -105,9 +91,21 @@ namespace DeconTools.Backend.ProcessingTasks
             return new ScanSetFactory().CreateScanSet(run, bestScan, this.numScansToSum);
         }
 
-        private ChromPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<ChromPeak> peaksWithinTol, float targetNET)
+        public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance)
         {
-            ChromPeak bestPeak = new ChromPeak();
+            List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
+
+
+            foreach (ChromPeak peak in chromPeakList)
+            {
+                if (Math.Abs(peak.NETValue - targetNET) <= netTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                {
+                    peaksWithinTol.Add(peak);
+                }
+            }
+
+
+            ChromPeak bestPeak = null;
 
             switch (peakSelectorMode)
             {

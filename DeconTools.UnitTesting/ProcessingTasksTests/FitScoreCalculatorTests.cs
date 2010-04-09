@@ -61,6 +61,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(0.0101245114907111, (decimal)run.ResultCollection.ResultList[0].IsotopicProfile.Score);
 
             run.ResultCollection.ClearAllResults();
+
+
+            horn.Execute(run.ResultCollection);
+            fitcalc.Execute(run.ResultCollection);
+            Assert.AreEqual(0.00583991502104572, (decimal)run.ResultCollection.ResultList[0].IsotopicProfile.Score);
+
+            run.ResultCollection.ClearAllResults();
+
             
             //Run RAPID and evaluate the score Rapid gives it
             rapid.Execute(run.ResultCollection);
@@ -73,7 +81,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             //Evaluate the score given by the fitscore calculator
             Assert.AreNotEqual(1.52062147024669, (decimal)run.ResultCollection.ResultList[7].IsotopicProfile.Score);
-            Assert.AreEqual(0.00743059540799006m, (decimal)run.ResultCollection.ResultList[7].IsotopicProfile.Score);
+            Assert.AreEqual(0.00583991502104572m, (decimal)run.ResultCollection.ResultList[7].IsotopicProfile.Score);
         }
 
         private string reportIsotopicProfiles(Run run)

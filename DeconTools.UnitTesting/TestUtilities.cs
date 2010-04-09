@@ -373,5 +373,21 @@ namespace DeconTools.UnitTesting
 
 
         }
+
+        public static List<MassTag> CreateO16O18TestMassTagList1()
+        {
+            List<MassTag> mtList = new List<MassTag>();
+
+            MassTag mt = new MassTag();
+            mt.ID = 1142;
+            mt.MonoIsotopicMass = 921.4807035;
+            mt.ChargeState = 2;
+            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+            mt.PeptideSequence = "AEFVEVTK";
+            mt.CreatePeptideObject();
+
+            mtList.Add(mt);
+            return mtList;
+        }
     }
 }

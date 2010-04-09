@@ -8,6 +8,9 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
+    /// <summary>
+    /// Does a least-squares fit.  
+    /// </summary>
     public class AreaFitter
     {
 
@@ -45,6 +48,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
 
+            //trimmedObservedXYData.Display();
+            //theorXYData.Display();
 
             List<double> interpolatedValues = new List<double>();
             List<double> theoreticalValues = new List<double>();

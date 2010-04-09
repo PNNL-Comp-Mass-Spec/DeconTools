@@ -13,6 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     {
 
         MercuryDistributionCreator distributionCreator;
+        MassTagResultBase m_massTagResult;
 
         #region Constructors
         public MercuryFeatureGenerator()
@@ -22,48 +23,57 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Properties
+        
         #endregion
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
-        public override void GenerateTheorFeature(DeconTools.Backend.Core.ResultCollection results)
+        public override void LoadRunRelatedInfo(ResultCollection resultColl)
         {
-            Check.Require(results.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag hasn't been declared");
-            //Check.Require(results.Run.CurrentMassTag.EmpiricalFormula!=null, this.Name + "failed; Problem with EmpiricalFormular of current mass tag.");
+            Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag hasn't been declared");
 
-            MassTag mt = results.Run.CurrentMassTag;
+            MassTag mt = resultColl.Run.CurrentMassTag;
 
-            MassTagResultBase result = results.GetMassTagResult(mt);
+            MassTagResultBase result = resultColl.GetMassTagResult(mt);
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
             double fwhm = result.IsotopicProfile.GetFWHM();
 
+            
+        }
+        #endregion
 
-            XYData theorXYData = new XYData();
-            for (int i = 0; i < mt.IsotopicProfile.Peaklist.Count; i++)
-            {
-
-                XYData peakXYData = getTheorPeakData(mt.IsotopicProfile.Peaklist[i], fwhm);
-
-
-
-
-            }
+        #region Private Methods
+        #endregion
+        public override void GenerateTheorFeature(MassTag mt)
+        {
+            Check.Require(mt != null, this.Name + " failed; CurrentMassTag hasn't been declared");
+            //Check.Require(results.Run.CurrentMassTag.EmpiricalFormula!=null, this.Name + "failed; Problem with EmpiricalFormular of current mass tag.");
 
 
-            distributionCreator.MolecularFormula = new MolecularFormula();
-            distributionCreator.getIsotopicProfile();
-            distributionCreator.OffsetDistribution(result.IsotopicProfile);
 
-            AreaFitter areafitter = new AreaFitter(distributionCreator.Data, result.Run.XYData, 10);
-            double fitval = areafitter.getFit();
 
-            if (fitval == double.NaN || fitval > 1) fitval = 1;
+            //XYData theorXYData = new XYData();
+            //for (int i = 0; i < mt.IsotopicProfile.Peaklist.Count; i++)
+            //{
 
-            result.IsotopicProfile.Score = fitval;
+            //    XYData peakXYData = getTheorPeakData(mt.IsotopicProfile.Peaklist[i], fwhm);
+
+
+
+
+            //}
+
+
+            //distributionCreator.MolecularFormula = new MolecularFormula();
+            //distributionCreator.getIsotopicProfile();
+            //distributionCreator.OffsetDistribution(result.IsotopicProfile);
+
+            //AreaFitter areafitter = new AreaFitter(distributionCreator.Data, result.Run.XYData, 10);
+            //double fitval = areafitter.getFit();
+
+            //if (fitval == double.NaN || fitval > 1) fitval = 1;
+
+            //result.IsotopicProfile.Score = fitval;
 
         }
 

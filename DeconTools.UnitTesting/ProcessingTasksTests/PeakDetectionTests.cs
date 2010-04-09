@@ -116,7 +116,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Task msgen = new GenericMSGenerator(0,2000);
             msgen.Execute(results);
 
-            run.IsDataThresholded = false;
+            run.IsDataThresholded = true;   //fyi... by default, xcalibur runs are set to be true
 
             Task peakDetector = new DeconToolsPeakDetector();
             ((DeconToolsPeakDetector)(peakDetector)).PeakBackgroundRatio = 1.3;
@@ -124,9 +124,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ((DeconToolsPeakDetector)(peakDetector)).SigNoiseThreshold = 2;
             peakDetector.Execute(results);
 
-            Assert.AreEqual(562, results.Run.PeakList.Count);
+            Assert.AreEqual(646, results.Run.PeakList.Count);
 
-            run.IsDataThresholded = true;      //fyi... by default, xcalibur runs are set to be true
+            run.IsDataThresholded = false;      
 
             peakDetector = new DeconToolsPeakDetector();
             ((DeconToolsPeakDetector)(peakDetector)).PeakBackgroundRatio = 1.3;
@@ -134,7 +134,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ((DeconToolsPeakDetector)(peakDetector)).SigNoiseThreshold = 2;
             peakDetector.Execute(results);
 
-            Assert.AreEqual(570, results.Run.PeakList.Count);
+            Assert.AreEqual(636, results.Run.PeakList.Count);
 
 
         }

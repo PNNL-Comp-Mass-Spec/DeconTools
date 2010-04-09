@@ -36,9 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3734.21421, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3734.21881, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\backup\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="DMSDeconToolsV2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -63,14 +63,15 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary2003, Version=1.0.3484.29834, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgorithmTests\BasicFeatureFinderTests.cs" />
     <Compile Include="AlgorithmTests\ChromatogramsForIsotopicProfileExtractorTests.cs" />
+    <Compile Include="AlgorithmTests\O16O18FeatureFinderTests.cs" />
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />

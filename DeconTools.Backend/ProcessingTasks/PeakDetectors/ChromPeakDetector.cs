@@ -48,9 +48,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #endregion
 
         #region Public Methods
-        public override void FindPeaks(DeconTools.Backend.Core.ResultCollection resultList)
+        public override List<IPeak> FindPeaks(XYData xydata, double xMin, double xMax)
         {
-            resultList.Run.PeakList = new List<IPeak>();
+            List<IPeak> peakList = new List<IPeak>();
+
+            //resultList.Run.PeakList = new List<IPeak>();
 
             oldPeakParameters.PeakBackgroundRatio = this.peakBackgroundRatio;
             oldPeakParameters.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
@@ -63,8 +65,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             float[] xvals = new float[1];
             float[] yvals = new float[1];
 
-            resultList.Run.XYData.GetXYValuesAsSingles(ref xvals, ref yvals);
-            double largestXValue = resultList.Run.XYData.Xvalues[resultList.Run.XYData.Xvalues.Length - 1];
+            xydata.GetXYValuesAsSingles(ref xvals, ref yvals);
+            double largestXValue = xydata.Xvalues[xydata.Xvalues.Length - 1];
 
             deconEnginePeaklist = new DeconToolsV2.Peaks.clsPeak[0];
             try
@@ -85,26 +87,38 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 chromPeak.SigNoise = (float)peak.mdbl_SN;     
                 chromPeak.Width = (float)peak.mdbl_FWHM;
 
-                chromPeak.NETValue = resultList.Run.GetNETValueForScan((int)chromPeak.XValue);
 
 
-                resultList.Run.PeakList.Add(chromPeak);
+                peakList.Add(chromPeak);
                 
             }
+
+            return peakList;
 
             
         }
 
       
 
-        protected override void addDataToScanResult(DeconTools.Backend.Core.ResultCollection resultList, DeconTools.Backend.Core.ScanResult scanresult)
+        protected override void addPeakRelatedData(DeconTools.Backend.Core.ResultCollection resultList)
         {
-            throw new NotImplementedException();
+            foreach (ChromPeak peak in resultList.Run.PeakList)
+            {
+                peak.NETValue = resultList.Run.GetNETValueForScan((int)peak.XValue);
+
+
+                
+            }
         }
         #endregion
 
         #region Private Methods
         #endregion
-     
+
+
+        public override void applyRunRelatedSettings(Run run)
+        {
+            // don't do anything
+        }
     }
 }

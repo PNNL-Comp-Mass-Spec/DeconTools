@@ -10,9 +10,12 @@ namespace DeconTools.Backend.ProcessingTasks
     public abstract class IPeakDetector:Task
     {
 
-        public abstract void FindPeaks(ResultCollection resultList);
+        public abstract List<IPeak> FindPeaks(XYData xydata, double minX, double maxX);
 
-        protected abstract void addDataToScanResult(ResultCollection resultList, ScanResult scanresult);
+
+        public abstract void applyRunRelatedSettings(Run run);
+
+        protected abstract void addPeakRelatedData(ResultCollection resultList);
 
         protected MSPeak getBasePeak(List<IPeak> peakList)
         {
@@ -48,9 +51,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             }
+            applyRunRelatedSettings(resultList.Run);
 
-            FindPeaks(resultList);
-            //addDataToScanResult(resultList, resultList.GetCurrentScanResult());
+            resultList.Run.PeakList= FindPeaks(resultList.Run.XYData, resultList.Run.MSParameters.MinMZ,resultList.Run.MSParameters.MaxMZ);
+            
+            addPeakRelatedData(resultList);
             
         }
     }

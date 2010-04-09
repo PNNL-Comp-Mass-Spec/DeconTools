@@ -16,7 +16,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Public Methods
-        public abstract void GenerateTheorFeature(ResultCollection results);
+        public abstract void LoadRunRelatedInfo(ResultCollection results);
+        public abstract void GenerateTheorFeature(MassTag mt);
         #endregion
 
         #region Private Methods
@@ -24,7 +25,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public override void Execute(ResultCollection results)
         {
             Check.Require(results.Run.CurrentMassTag != null, "Theoretical feature generator failed. No target mass tag was provided");
-            GenerateTheorFeature(results);
+
+            LoadRunRelatedInfo(results);
+            
+            GenerateTheorFeature(results.Run.CurrentMassTag);
         }
     }
 }

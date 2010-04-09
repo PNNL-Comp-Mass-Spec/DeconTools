@@ -204,7 +204,7 @@ namespace DeconTools.Backend.Core
 
         public MSPeak getMonoPeak()
         {
-            if (peaklist != null && peaklist[0] != null)
+            if (peaklist != null && peaklist.Count>0 )
             {
                 return peaklist[0];
             }

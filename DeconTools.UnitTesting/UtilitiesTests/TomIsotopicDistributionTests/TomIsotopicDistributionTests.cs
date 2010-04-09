@@ -32,6 +32,18 @@ namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
         }
 
 
+        [Test]
+        public void tester1()
+        {
+            int[]empIntArray = {43,67,12,13,0};
+
+            IsotopicProfile iso = TomIsotopicPattern.GetIsotopePattern(empIntArray, TomIsotopicPattern.aafIsos);
+
+            TestUtilities.DisplayIsotopicProfileData(iso);
+        }
+
+
+
         public void compareTomIsotopicDist_with_Mercury()
         {
 
@@ -79,6 +91,8 @@ namespace DeconTools.UnitTesting.UtilitiesTests.TomIsotopicDistributionTests
             TestUtilities.DisplayIsotopicProfileData(cluster);
 
         }
+
+
 
     }
 }

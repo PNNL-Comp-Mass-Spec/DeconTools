@@ -10,9 +10,7 @@ namespace DeconTools.Backend.Algorithms
 {
     public class IsotopicProfileMultiChromatogramExtractor
     {
-        IsotopicProfile m_theorIso;
         int m_numPeaks;
-        List<MSPeakResult> m_peakList;
         double m_toleranceInPPM;
         
 
@@ -26,11 +24,9 @@ namespace DeconTools.Backend.Algorithms
         /// <param name="peakList">List of peaks from which chromatogram is constructed</param>
         /// <param name="theorIso">Theoretical isotopic profile, whose peaks are used as the target m/z values for generating the chromatogram</param>
         /// <param name="numPeaks">The number of peaks from the theoretical isotopic profile.  i.e. three numPeaks means that three chromatograms are generated for the top three most intense peaks of the theor isotopic profile </param>
-        public IsotopicProfileMultiChromatogramExtractor(List<MSPeakResult>peakList, IsotopicProfile theorIso, int numPeaks, double toleranceInPPM)
+        public IsotopicProfileMultiChromatogramExtractor(int numPeaks, double toleranceInPPM)
         {
             this.m_numPeaks = numPeaks;
-            this.m_peakList = peakList;
-            this.m_theorIso = theorIso;
             this.m_toleranceInPPM = toleranceInPPM;
         }
 
@@ -41,21 +37,21 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks()
+        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult>peakList, IsotopicProfile theorIso)
         {
-            return GetChromatogramsForIsotopicProfilePeaks(false,null);
+            return GetChromatogramsForIsotopicProfilePeaks(peakList, theorIso,false,null);
         }
 
-        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(bool filterOutMSMSScans, List<int>ms1LevelScanTable)
+        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult> peakList, IsotopicProfile theorIso, bool filterOutMSMSScans, List<int> ms1LevelScanTable)
         {
-            IList<IPeak> topTheorIsoPeaks = getTopPeaks(m_theorIso, m_numPeaks);
+            IList<IPeak> topTheorIsoPeaks = getTopPeaks(theorIso, m_numPeaks);
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
 
             Dictionary<MSPeak, XYData> chromatogramsForIsotopicProfiles = new Dictionary<MSPeak, XYData>();
 
             foreach (var peak in topTheorIsoPeaks)
             {
-                XYData xydata= chromGen.GenerateChromatogram(m_peakList, m_peakList.First().Scan_num, m_peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
+                XYData xydata = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
 
                 if (filterOutMSMSScans && ms1LevelScanTable!=null)
                 {

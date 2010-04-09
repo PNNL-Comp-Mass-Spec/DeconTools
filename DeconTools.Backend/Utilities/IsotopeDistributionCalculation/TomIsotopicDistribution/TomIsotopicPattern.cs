@@ -101,6 +101,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             int[] afAvnPep = new int[5];
             for (int i = 0; i < 5; i++)
                 afAvnPep[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
+
+            
+            //I will reverse these to report  C H N O S
+            int numHydrogens = afAvnPep[0];
+            int numCarbons = afAvnPep[1];
+
+            afAvnPep[0] = numCarbons;
+            afAvnPep[1] = numHydrogens;
+            
             return afAvnPep;
         }
 

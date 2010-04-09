@@ -18,12 +18,11 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Public Methods
-        public override void GenerateTheorFeature(ResultCollection results)
+        public override void GenerateTheorFeature(MassTag mt)
         {
-            Check.Require(results.Run.CurrentMassTag != null, "FeatureGenerator failed. MassTag not defined.");
+            Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
 
             
-            MassTag mt = results.Run.CurrentMassTag;
             Check.Require(mt.GetEmpiricalFormulaAsIntArray() != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
             try
@@ -44,6 +43,11 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Private Methods
         #endregion
-    
+
+
+        public override void LoadRunRelatedInfo(ResultCollection results)
+        {
+            // do nothing
+        }
     }
 }

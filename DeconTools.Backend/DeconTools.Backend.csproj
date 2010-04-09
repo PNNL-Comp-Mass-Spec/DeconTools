@@ -46,9 +46,9 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3734.21421, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3734.21881, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\backup\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,9 +81,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary2003, Version=1.0.3484.29834, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary2003.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -92,12 +92,20 @@
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
     <Compile Include="Algorithms\ChromatogramGenerator.cs" />
     <Compile Include="Algorithms\IsotopicProfileMultiChromatogramExtractor.cs" />
+    <Compile Include="Algorithms\O16O18FeatureFinder.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
+    <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
+    <Compile Include="Core\IsotopicProfileChromData.cs" />
+    <Compile Include="Core\LabeledMassTagResult.cs" />
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Data\Importers\MassTagFromTextFileImporter.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18FeatureFinder.cs" />
+    <Compile Include="ProcessingTasks\TaskControllers\N14N15_ChromatogramApproachTaskController.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />

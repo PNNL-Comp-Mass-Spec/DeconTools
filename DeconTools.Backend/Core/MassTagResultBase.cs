@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Core
 
             }
             sb.Append("} \n");
-            if (this.IsotopicProfile != null)
+            if (this.IsotopicProfile != null && this.IsotopicProfile.Peaklist!=null && this.IsotopicProfile.Peaklist.Count>0)
             {
                 sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
             }
