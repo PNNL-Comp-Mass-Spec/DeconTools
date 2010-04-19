@@ -33,6 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
 
+            if (currentResult.IsotopicProfile == null) return;
             MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
 
 

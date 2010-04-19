@@ -27,7 +27,7 @@ namespace DeconTools.UnitTesting
         string uimfParameterFile3 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile3.xml";
         string uimfParameterHorn1 = "..\\..\\TestFiles\\uimfParameterFileHorn1.xml";
         string uimfParameterHorn2 = "..\\..\\TestFiles\\uimfParameterFileHorn2.xml";
-
+        string uimf_noDeconvolution_peaksOnly = "..\\..\\TestFiles\\uimf_noDeconvolution_peaksOnly.xml";
 
         public string parameterFile4 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile4.xml";
         public string parameterFile5 = "..\\..\\TestFiles\\oldSchoolProcRunnerParameterTestFile5_processMSMS.xml";
@@ -104,6 +104,15 @@ namespace DeconTools.UnitTesting
 
 
         }
+
+        [Test]
+        public void ExecuteRunnerOnUIMFData_NoDeconvolutionTest1()
+        {
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile3, Globals.MSFileType.PNNL_UIMF, uimf_noDeconvolution_peaksOnly);
+            runner.Execute();
+
+        }
+
 
         [Test]
         public void ExecuteRunnerOnXCaliburDataTest1()

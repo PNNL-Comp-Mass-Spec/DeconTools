@@ -62,7 +62,25 @@ namespace DeconTools.Backend.ProcessingTasks
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
             XYData chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, mz, ppmTol);
 
-            if (resultColl.Run.ContainsMSMSData)     // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
+            resultColl.Run.XYData = chromValues;
+
+            if (chromValues == null)
+            {
+                MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+                if (result != null)
+                {
+                    result.Flags.Add(new ChromPeakNotFoundResultFlag());
+                }
+
+                return;
+
+
+            }
+
+
+
+            // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
+            if (resultColl.Run.ContainsMSMSData)     
             {
                 this.msScanList = resultColl.Run.GetMSLevelScanValues();
 
@@ -83,9 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
-            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
-            resultColl.Run.XYData = chromValues;
-
+ 
 
         }
 

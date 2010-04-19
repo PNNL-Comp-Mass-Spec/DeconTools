@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
 
 
         [Test]
-        public void getDriftProfileMZ_796_Test1()
+        public void getDriftProfileMZ_796_Test1()      //**
         {
             Run run = TestUtilities.GetStandardUIMFRun();
 
@@ -83,7 +83,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
             double targetMZ = 1004.1987;
 
 
-            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run, 200, 350, 3, 1);
+            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run, 200, 350, 1, 1);
             ssc.Create();
 
             XYData xydata = profileExtractor.ExtractProfileFromRawData(uimfRun, frameset, run.ScanSetCollection, targetMZ, 30d);

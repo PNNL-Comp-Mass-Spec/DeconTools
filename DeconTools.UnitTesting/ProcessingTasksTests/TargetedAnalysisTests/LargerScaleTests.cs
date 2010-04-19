@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1,0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
@@ -167,7 +167,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1,0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
@@ -335,7 +335,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1,0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);

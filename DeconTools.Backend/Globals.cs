@@ -96,6 +96,7 @@ namespace DeconTools.Backend
         public enum MassTagResultType
         {
             BASIC_MASSTAG_RESULT,
+            O16O18_MASSTAG_RESULT,
             N14N15_MASSTAG_RESULT
         }
 

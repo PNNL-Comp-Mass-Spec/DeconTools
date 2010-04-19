@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.N14N15AnalyzerTests
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(2, 2, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector();
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.1);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1,0.1);
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);

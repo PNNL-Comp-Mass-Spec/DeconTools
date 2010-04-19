@@ -201,6 +201,10 @@ namespace DeconTools.Backend.Core
                 case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
                     result = new N14N15_TResult(massTag);
                     break;
+                case Globals.MassTagResultType.O16O18_MASSTAG_RESULT:
+                    result = new O16O18_TResult(massTag);
+                    break;
+                
                 default:
                     result = new MassTagResult();
                     break;

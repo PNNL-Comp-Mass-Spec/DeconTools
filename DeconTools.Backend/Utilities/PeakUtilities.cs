@@ -44,6 +44,9 @@ namespace DeconTools.Backend.Utilities
 
             int targetIndex = getIndexOfClosestValue(inputList, targetVal,0, inputList.Count - 1, toleranceInMZ);
             // look to the left for other peaks within the tolerance
+
+            if (targetIndex == -1) return outputList;
+            
             if (targetIndex > 0)
             {
 

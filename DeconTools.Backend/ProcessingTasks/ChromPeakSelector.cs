@@ -10,23 +10,23 @@ namespace DeconTools.Backend.ProcessingTasks
     public class ChromPeakSelector : Task
     {
         #region Constructors
-        public ChromPeakSelector()
-            : this(0.05)
+        public ChromPeakSelector(int numLCScansToSum)
+            : this(1, 0.05)
         {
 
         }
 
-        public ChromPeakSelector(double tolerance)
-            : this(tolerance, Globals.PeakSelectorMode.MOST_INTENSE)
+        public ChromPeakSelector(int numLCScansToSum, double tolerance)
+            : this(1,tolerance, Globals.PeakSelectorMode.MOST_INTENSE)
         {
 
         }
 
-        public ChromPeakSelector(double tolerance, Globals.PeakSelectorMode peakSelectorMode)
+        public ChromPeakSelector(int numLCScansToSum, double tolerance, Globals.PeakSelectorMode peakSelectorMode)
         {
             this.Tolerance = tolerance;
             this.PeakSelectionMode = peakSelectorMode;
-            this.numScansToSum = 1;
+            this.numScansToSum = numLCScansToSum;
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
             Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
 
-            MassTagResultBase result = resultList.MassTagResultList[resultList.Run.CurrentMassTag];
+            MassTagResultBase result = resultList.GetMassTagResult(resultList.Run.CurrentMassTag);
 
             ChromPeak bestPeak =(ChromPeak) selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NETVal, this.Tolerance);
 

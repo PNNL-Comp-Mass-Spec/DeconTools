@@ -48,7 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
 
             IPeakDetector peakDetector = new ChromPeakDetector(0.5, 0.5);
 
-            ChromPeakSelector chromPeakSelector = new ChromPeakSelector(0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            ChromPeakSelector chromPeakSelector = new ChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
   
             foreach (Run run in runCollection)

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.Core;
 
-namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
+namespace DeconTools.Backend.Algorithms.Quantifiers
 {
-    public class O16O18FeatureFinder
+    public abstract class O16O18QuantifierBase
     {
         #region Constructors
         #endregion
@@ -14,6 +15,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Public Methods
+
+        public abstract double GetRatio(IsotopicProfile isotopicProfile);
+
+
         #endregion
 
         #region Private Methods

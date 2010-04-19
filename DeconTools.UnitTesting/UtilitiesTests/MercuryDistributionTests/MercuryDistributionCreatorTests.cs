@@ -71,7 +71,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
             int chargeState = 3;
             MolecularFormula formula;
 
-            for (double mz = 500; mz < 800; mz++)
+            for (double mz = 100; mz < 3000; mz++)
             {
 
                 formula = merc.GetAveragineFormula(mz, chargeState);

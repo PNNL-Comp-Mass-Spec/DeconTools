@@ -101,13 +101,24 @@ namespace DeconTools.Backend.Core
                 //get sum of all observed MS/MS for the MT
                 int totObs = mt_withSameID.Sum(p => p.ObsCount);
 
+
+
                 foreach (MassTag mt in mt_withSameID)
                 {
                     //if the obsCount for a charge state is greater than 10% of the total, add it. 
-                    if ((double)mt.ObsCount / (double)totObs > threshold)
+                    if (totObs == 0)
                     {
                         filteredMassTagList.Add(mt);
                     }
+                    else
+                    {
+                        if ((double)mt.ObsCount / (double)totObs > threshold)
+                        {
+                            filteredMassTagList.Add(mt);
+                        }
+                    }
+                    
+    
 
 
                 }
@@ -119,6 +130,43 @@ namespace DeconTools.Backend.Core
 
 
 
+        }
+
+        public void FilterOutDuplicates()
+        {
+            if (this.MassTagList == null || this.MassTagList.Count == 0) return;
+
+            List<MassTag> filteredList = new List<MassTag>();
+
+            foreach (var mt in this.MassTagList)
+            {
+                if (massTagListContainsMassTag(filteredList, mt))
+                {
+                    //do nothing
+                }
+                else
+                {
+                    filteredList.Add(mt);
+                }
+
+            }
+
+            this.MassTagList = filteredList;
+
+
+
+        }
+
+        private bool massTagListContainsMassTag(List<MassTag> filteredList, MassTag targetMassTag)
+        {
+            foreach (var mt in filteredList)
+            {
+                if (mt.ID == targetMassTag.ID && mt.ChargeState == targetMassTag.ChargeState)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

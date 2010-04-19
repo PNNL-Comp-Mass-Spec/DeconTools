@@ -34,6 +34,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 throw new Exception("Theoretical feature generator failed. Details: " + ex.Message);
             }
             PeakUtilities.TrimIsotopicProfile(mt.IsotopicProfile, 0.01);
+            mt.IsotopicProfile.ChargeState = mt.ChargeState;
+
             if (mt.ChargeState != 0) mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
         }

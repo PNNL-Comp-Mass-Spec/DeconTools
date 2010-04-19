@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -11,6 +12,14 @@ namespace DeconTools.Backend.ProcessingTasks
         public IDeconvolutor CreateDeconvolutor(OldDecon2LSParameters parameters)
         {
             IDeconvolutor decon;
+
+            if (parameters.HornTransformParameters.DetectPeaksOnlyWithNoDeconvolution)
+            {
+                return new NullDeconvolutor();
+            }
+
+
+            
             if (parameters.HornTransformParameters.UseRAPIDDeconvolution)
             {
                 decon = new RapidDeconvolutor();

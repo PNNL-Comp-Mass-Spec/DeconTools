@@ -37,7 +37,17 @@ namespace DeconTools.Backend.Algorithms
 
             filteredPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
-            XYData chromData = getChromDataAndFillInZeros(filteredPeakList);
+            XYData chromData = null;
+            if (filteredPeakList == null || filteredPeakList.Count == 0)
+            {
+                return chromData;
+            }
+            else
+            {
+                 chromData = getChromDataAndFillInZeros(filteredPeakList);
+
+            }
+            
             return chromData;
             
 

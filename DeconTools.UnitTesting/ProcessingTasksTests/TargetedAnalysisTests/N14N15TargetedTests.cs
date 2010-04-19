@@ -219,7 +219,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task peakChromGen = new PeakChromatogramGenerator(20);
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1, 0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 3, false, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
@@ -347,7 +347,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1, 0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);

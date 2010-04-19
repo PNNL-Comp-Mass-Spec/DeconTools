@@ -108,6 +108,7 @@ namespace DeconTools.Backend.Data.Importers
                         if (!reader["Avg_GANET"].Equals(DBNull.Value)) massTag.NETVal = Convert.ToSingle(reader["Avg_GANET"]);
                         if (!reader["Ref_ID"].Equals(DBNull.Value)) massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
 
+                      
                         massTag.CreatePeptideObject();
 
                         data.MassTagList.Add(massTag);
