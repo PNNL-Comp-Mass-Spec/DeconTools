@@ -400,5 +400,57 @@ namespace DeconToolsAutoProcessV1
 
 
         }
+
+        private void btnSetOutputPath_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                this.txtOutputPath.Text = fbd.SelectedPath;
+            }
+            
+        }
+
+        private void basic_dragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
+            {
+                e.Effect = DragDropEffects.All;
+            }
+        }
+
+        private void txtOutputPath_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            string firstFile = droppedFiles.First();
+
+
+            bool isFile = !System.IO.Directory.Exists(firstFile) &&
+                         System.IO.File.Exists(firstFile);
+
+
+
+
+            bool isDir = (File.GetAttributes(firstFile) & FileAttributes.Directory)
+                 == FileAttributes.Directory;
+
+
+            if (isDir)
+            {
+                this.txtOutputPath.Text = firstFile;
+                return;
+            }
+
+            if (isFile)
+            {
+                this.txtOutputPath.Text = Path.GetDirectoryName(firstFile);
+            }
+
+
+
+        }
+
+
     }
 }

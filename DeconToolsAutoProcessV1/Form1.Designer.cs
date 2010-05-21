@@ -52,6 +52,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnShowOptionsForm = new System.Windows.Forms.Button();
+            this.txtOutputPath = new System.Windows.Forms.TextBox();
+            this.btnSetOutputPath = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,7 +66,7 @@
             this.btnSetupWizard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetupWizard.Location = new System.Drawing.Point(8, 8);
             this.btnSetupWizard.Name = "btnSetupWizard";
-            this.btnSetupWizard.Size = new System.Drawing.Size(325, 34);
+            this.btnSetupWizard.Size = new System.Drawing.Size(327, 34);
             this.btnSetupWizard.TabIndex = 0;
             this.btnSetupWizard.Text = "Setup Wizard";
             this.btnSetupWizard.UseVisualStyleBackColor = false;
@@ -87,9 +90,9 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.Cancel.BackColor = System.Drawing.Color.GhostWhite;
             this.Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Cancel.Location = new System.Drawing.Point(232, 261);
+            this.Cancel.Location = new System.Drawing.Point(232, 277);
             this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(101, 27);
+            this.Cancel.Size = new System.Drawing.Size(103, 27);
             this.Cancel.TabIndex = 4;
             this.Cancel.Text = "Quit";
             this.Cancel.UseVisualStyleBackColor = false;
@@ -103,7 +106,7 @@
             this.btnAbort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbort.Location = new System.Drawing.Point(241, 48);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(92, 54);
+            this.btnAbort.Size = new System.Drawing.Size(94, 54);
             this.btnAbort.TabIndex = 2;
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = false;
@@ -113,7 +116,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.GhostWhite;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(8, 261);
+            this.button2.Location = new System.Drawing.Point(8, 277);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(215, 27);
             this.button2.TabIndex = 3;
@@ -144,9 +147,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.progressBar1);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox1.Location = new System.Drawing.Point(8, 108);
+            this.groupBox1.Location = new System.Drawing.Point(8, 124);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(325, 147);
+            this.groupBox1.Size = new System.Drawing.Size(327, 147);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Status";
@@ -206,7 +209,7 @@
             this.txtFile.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFile.Location = new System.Drawing.Point(37, 16);
             this.txtFile.Name = "txtFile";
-            this.txtFile.Size = new System.Drawing.Size(281, 13);
+            this.txtFile.Size = new System.Drawing.Size(283, 13);
             this.txtFile.TabIndex = 2;
             this.txtFile.TabStop = false;
             // 
@@ -306,7 +309,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(6, 55);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(315, 22);
+            this.progressBar1.Size = new System.Drawing.Size(317, 22);
             this.progressBar1.TabIndex = 0;
             // 
             // btnShowOptionsForm
@@ -315,27 +318,63 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowOptionsForm.BackColor = System.Drawing.Color.GhostWhite;
             this.btnShowOptionsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowOptionsForm.Location = new System.Drawing.Point(8, 261);
+            this.btnShowOptionsForm.Location = new System.Drawing.Point(8, 277);
             this.btnShowOptionsForm.Name = "btnShowOptionsForm";
-            this.btnShowOptionsForm.Size = new System.Drawing.Size(57, 23);
+            this.btnShowOptionsForm.Size = new System.Drawing.Size(59, 27);
             this.btnShowOptionsForm.TabIndex = 4;
             this.btnShowOptionsForm.Text = "Options";
             this.btnShowOptionsForm.UseVisualStyleBackColor = false;
             this.btnShowOptionsForm.Click += new System.EventHandler(this.btnShowOptionsForm_Click);
+            // 
+            // txtOutputPath
+            // 
+            this.txtOutputPath.AllowDrop = true;
+            this.txtOutputPath.Location = new System.Drawing.Point(8, 323);
+            this.txtOutputPath.Name = "txtOutputPath";
+            this.txtOutputPath.Size = new System.Drawing.Size(284, 20);
+            this.txtOutputPath.TabIndex = 6;
+            this.txtOutputPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtOutputPath_DragDrop);
+            this.txtOutputPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.basic_dragEnter);
+            // 
+            // btnSetOutputPath
+            // 
+            this.btnSetOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetOutputPath.BackColor = System.Drawing.Color.GhostWhite;
+            this.btnSetOutputPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSetOutputPath.Location = new System.Drawing.Point(298, 322);
+            this.btnSetOutputPath.Name = "btnSetOutputPath";
+            this.btnSetOutputPath.Size = new System.Drawing.Size(37, 23);
+            this.btnSetOutputPath.TabIndex = 4;
+            this.btnSetOutputPath.Text = "set";
+            this.btnSetOutputPath.UseVisualStyleBackColor = false;
+            this.btnSetOutputPath.Click += new System.EventHandler(this.btnSetOutputPath_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 311);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(219, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Optional output path (leave empty for default)";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(340, 290);
+            this.ClientSize = new System.Drawing.Size(342, 356);
+            this.Controls.Add(this.txtOutputPath);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.btnSetOutputPath);
             this.Controls.Add(this.btnShowOptionsForm);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnAbort);
             this.Controls.Add(this.btnAutoProcess);
             this.Controls.Add(this.btnSetupWizard);
+            this.Controls.Add(this.label8);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Form1";
             this.ShowIcon = false;
@@ -346,6 +385,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -375,6 +415,9 @@
         private System.Windows.Forms.TextBox txtTotalFeatures;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnShowOptionsForm;
+        private System.Windows.Forms.TextBox txtOutputPath;
+        private System.Windows.Forms.Button btnSetOutputPath;
+        private System.Windows.Forms.Label label8;
     }
 }
 
