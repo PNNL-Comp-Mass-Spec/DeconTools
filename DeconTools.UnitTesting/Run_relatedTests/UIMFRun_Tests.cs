@@ -196,9 +196,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            for (int i = 200; i < 301; i++)
+            for (int i = 250; i < 251; i++)
             {
-                uimfRun.GetMassSpectrum(new ScanSet(i), new FrameSet(1200), 200, 2000);
+
+                ScanSet scan = new ScanSet(i,i - 2, i + 2);
+                FrameSet frame = new FrameSet(501);
+
+                uimfRun.GetMassSpectrum(scan, frame,200,2000);
                 //Console.WriteLine(uimfRun.XYData.Xvalues.Length);
             }
 

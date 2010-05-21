@@ -81,6 +81,26 @@ namespace DeconTools.UnitTesting
         }
 
 
+
+        [Test]
+        public void filterUMCsByMassTagsTest2()
+        {
+            UMCCollection umcs = new UMCCollection();
+            UMCFileImporter importer = new UMCFileImporter(umcO16O18TestFile1, '\t');
+            importer.Import(umcs);
+
+
+            UMCCollection filteredUMCs = new UMCCollection();
+            filteredUMCs.UMCList = umcs.FilterUMCsByMassTagMatch(new List<int> { 22807265, 22580887, 20791942, 20791939, 20750857, 20908613, 20842966, 22598396, 174124103 });
+
+            Assert.AreEqual(8, filteredUMCs.UMCList.Count);
+
+            filteredUMCs.DisplayUMCExpressionInfo();
+
+        }
+
+
+
         [Test]
         public void filterOutPairedUMCsTest1()
         {

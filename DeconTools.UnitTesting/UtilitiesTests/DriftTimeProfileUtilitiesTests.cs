@@ -29,14 +29,17 @@ namespace DeconTools.UnitTesting.UtilitiesTests
             double targetMZ2 = 771.6894;
 
 
-            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run,200,350, 9, 1);
+            ScanSetCollectionCreator ssc = new ScanSetCollectionCreator(run,200,350, 1, 1);
             ssc.Create();
 
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             XYData xydata = profileExtractor.ExtractProfileFromRawData(uimfRun, frameset, run.ScanSetCollection, targetMZ2, 10d);
 
+            sw.Stop();
 
             TestUtilities.DisplayXYValues(xydata);
-            
+            Console.WriteLine(sw.ElapsedMilliseconds);
 
 
         }
@@ -145,7 +148,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
 
                 msgen.Execute(run.ResultCollection);
                 peakDet.Execute(run.ResultCollection);
-
+               
             }
 
            

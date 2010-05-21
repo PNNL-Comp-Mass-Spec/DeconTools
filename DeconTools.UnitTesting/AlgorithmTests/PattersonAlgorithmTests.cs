@@ -37,9 +37,9 @@ namespace DeconTools.UnitTesting.AlgorithmTests
 
 
             PattersonChargeStateCalculator chargeCalc = new PattersonChargeStateCalculator();
-            chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak);
+            short chargeState = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak);
 
-            Console.WriteLine(testPeak.XValue);
+            Console.WriteLine(testPeak.XValue + "; Charge = "+ chargeState);
 
 
         }

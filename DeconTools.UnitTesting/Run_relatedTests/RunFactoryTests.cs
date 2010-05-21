@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class RunFactoryTests
     {
-        string brukerTestFile1 = @"H:\N14N15Data\RSPH_Aonly_26_run1_20Oct07_Andromeda_07-09-02\Acqu";
+        string brukerTestFile1 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_25_run3_16Dec07_Raptor_07-11-11\acqus";
         string agilentDFile1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
 
         [Test]
@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Run run = rf.CreateRun(brukerTestFile1);
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(4276, run.MaxScan);
+            Assert.AreEqual(3924, run.MaxScan);
         }
 
         [Test]

@@ -21,6 +21,9 @@ namespace DeconTools.UnitTesting.QualityControlTests
         private string imf2Frame391 = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.Accum_391.IMF";
 
 
+        string fpgaUIMFFilePath = @"F:\Gord\Data\UIMF\BSA_Mid_600_50_10_3ppdis_10mstrap.uimf";
+
+
         [Test]
         public void UIMF_and_IMF_Nosumming_Test1()
         {
@@ -342,6 +345,46 @@ namespace DeconTools.UnitTesting.QualityControlTests
             Console.Write(sb.ToString());
         }
 
+
+        [Test]
+        public void examineFPGAUIMFTest1()
+        {
+
+            Run run = new DeconTools.Backend.Runs.UIMFRun(fpgaUIMFFilePath);
+
+            FrameSetCollectionCreator ffcc = new FrameSetCollectionCreator(run, 1, 1, 1, 1);
+            ffcc.Create();
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 285, 285, 9, 1);
+            sscc.Create();
+
+            MSGeneratorFactory factory = new MSGeneratorFactory();
+            Task msgen = factory.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            peakDet.PeakBackgroundRatio = 6;
+            peakDet.SigNoiseThreshold = 3;
+
+            HornDeconvolutor decon = new HornDeconvolutor();
+            decon.MinPeptideBackgroundRatio = 5;
+
+
+            foreach (var scanset in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scanset;
+                ((UIMFRun)run).CurrentFrameSet = new FrameSet(1);
+                msgen.Execute(run.ResultCollection);
+
+                peakDet.Execute(run.ResultCollection);
+
+                decon.Execute(run.ResultCollection);
+
+            }
+
+            
+
+
+        }
 
 
 

@@ -63,9 +63,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3790.26278, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibrary\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +73,7 @@
     <Compile Include="AlgorithmTests\ChromatogramsForIsotopicProfileExtractorTests.cs" />
     <Compile Include="AlgorithmTests\O16O18FeatureFinderTests.cs" />
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
+    <Compile Include="ImporterTests\IsosImporterTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="SpeedTests\XCaliburSpeedTests.cs" />
     <Compile Include="SqliteUtils\MSPeakTableTests.cs" />
     <Compile Include="SqliteUtils\SqliteUtilsTests.cs" />
+    <Compile Include="SyntheticSpectraTests.cs" />
     <Compile Include="TestUtilities.cs" />
     <Compile Include="UMC_Tests.cs" />
     <Compile Include="UtilitiesTests\DriftTimeProfileUtilitiesTests.cs" />
@@ -158,6 +160,7 @@
     <Compile Include="UtilitiesTests\PeakUtilitiesTests.cs" />
     <Compile Include="UtilitiesTests\TheoreticalPeakXYDataUtilitiesTests.cs" />
     <Compile Include="UtilitiesTests\TomIsotopicDistributionTests\TomIsotopicDistributionTests.cs" />
+    <Compile Include="UtilitiesTests\UIMFCalibrationConstantsUpdaterTests.cs" />
     <Compile Include="UtilitiesTests\UtilitiesTests.cs" />
   </ItemGroup>
   <ItemGroup>

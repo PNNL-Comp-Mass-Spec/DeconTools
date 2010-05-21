@@ -342,7 +342,7 @@ namespace DeconTools.UnitTesting
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.DESCENDING));
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.CLOSEST));
 
-            Assert.AreEqual(18504, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(18505, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
             Assert.AreEqual(18499, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.DESCENDING));
 
 

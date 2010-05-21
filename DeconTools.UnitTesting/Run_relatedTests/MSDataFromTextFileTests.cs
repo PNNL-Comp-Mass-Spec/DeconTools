@@ -34,15 +34,15 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
-        [Test]
-        public void readInTextFileContainingMultipleSpaceDelimitersTest1()
-        {
-            Run textfiledata = new MSScanFromTextFileRun(textFileContainingMultipleSpaceDelimiters, DeconTools.Backend.Globals.XYDataFileType.Textfile, ' ');
-            textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0), 200, 2000);
+        //[Test]
+        //public void readInTextFileContainingMultipleSpaceDelimitersTest1()
+        //{
+        //    Run textfiledata = new MSScanFromTextFileRun(textFileContainingMultipleSpaceDelimiters, DeconTools.Backend.Globals.XYDataFileType.Textfile, ' ');
+        //    textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0), 200, 2000);
 
-            TestUtilities.DisplayXYValues(textfiledata.XYData);
+        //    TestUtilities.DisplayXYValues(textfiledata.XYData);
 
-        }
+        //}
 
 
         [Test]
@@ -56,18 +56,18 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
-        [Test]
-        public void readInTextFileContainingMultipleSpaceDelimitersTest2()
-        {
-            Run textfiledata = new MSScanFromTextFileRun(textFileContainingMultipleSpaceDelimiters, DeconTools.Backend.Globals.XYDataFileType.Textfile, ' ');
+        //[Test]
+        //public void readInTextFileContainingMultipleSpaceDelimitersTest2()
+        //{
+        //    Run textfiledata = new MSScanFromTextFileRun(textFileContainingMultipleSpaceDelimiters, DeconTools.Backend.Globals.XYDataFileType.Textfile, ' ');
             
-            MSGeneratorFactory fact=new MSGeneratorFactory();
-            Task msGen = fact.CreateMSGenerator(textfiledata.MSFileType);
-            msGen.Execute(textfiledata.ResultCollection);
+        //    MSGeneratorFactory fact=new MSGeneratorFactory();
+        //    Task msGen = fact.CreateMSGenerator(textfiledata.MSFileType);
+        //    msGen.Execute(textfiledata.ResultCollection);
           
-            TestUtilities.DisplayXYValues(textfiledata.XYData);
+        //    TestUtilities.DisplayXYValues(textfiledata.XYData);
 
-        }
+        //}
 
 
 

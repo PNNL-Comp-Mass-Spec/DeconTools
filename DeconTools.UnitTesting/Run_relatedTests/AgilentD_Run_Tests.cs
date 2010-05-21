@@ -21,6 +21,14 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         string wrongFileExample1 = @"\\pnl\projects\MSSHARE\Gord\Test_data\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
+        string temp_agilentFile1 = @"F:\Gord\Data\UIMF\FPGA\2010_05_13\Agilent_Cal_100513.d";
+
+
+
+          
+
+
+
         [Test]
         public void ConstructorTest1()
         {
@@ -32,6 +40,10 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(0, run.MinScan);
             Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
         }
+
+
+
+
 
 
         [Test]
