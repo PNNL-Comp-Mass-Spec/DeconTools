@@ -85,6 +85,30 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+        public static int BinarySearch(int[] data, int targetVal, int leftIndex, int rightIndex)
+        {
+            if (leftIndex <= rightIndex)
+            {
+                int middle = (leftIndex + rightIndex) / 2;
+                if (targetVal== data[middle] )
+                {
+                    return middle;
+                }
+                else if (targetVal < data[middle])
+                {
+                    return BinarySearch(data, targetVal, leftIndex, middle - 1);
+                }
+                else
+                {
+                    return BinarySearch(data, targetVal, middle + 1, rightIndex);
+                }
+            }
+            return -1;
+
+
+        }
+
+
 
     }
 }

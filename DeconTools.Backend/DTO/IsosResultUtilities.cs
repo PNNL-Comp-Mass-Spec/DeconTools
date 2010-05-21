@@ -206,6 +206,15 @@ namespace DeconTools.Backend.DTO
 
         }
 
+
+        public List<IsosResult> getIsosResults(string isosInputFile, DeconTools.Backend.Globals.MSFileType filetype)
+        {
+            IsosResultUtilities isoutil = new IsosResultUtilities();
+            isoutil.LoadResults(isosInputFile, filetype);
+            return isoutil.Results;
+
+        }
+
         public void replaceAbundanceWithMonoAbundance(List<IsosResult> isosResults)
         {
             foreach (IsosResult result in isosResults)
@@ -216,6 +225,144 @@ namespace DeconTools.Backend.DTO
 
 
         //public void exportIsosResults
+
+        public static List<IsosResult>GetIsosResultsByScan(List<IsosResult>inputList, int scanNum)
+        {
+            List<IsosResult> results = new List<IsosResult>();
+
+            var query = from n in inputList select n.ScanSet.PrimaryScanNumber;
+
+            int[] scanNums = query.ToArray();
+
+
+            int indexOfScanNum = MathUtils.BinarySearch(scanNums, scanNum, 0, scanNums.Length - 1);
+            if (indexOfScanNum == -1) return results;
+
+            //the found index might point to a isos result line that is mid way through the scan list.  So need to find the starting index
+            int currentIdx = indexOfScanNum;
+            if (indexOfScanNum > 0)
+            {
+
+                while (inputList[currentIdx].ScanSet.PrimaryScanNumber == scanNum)
+                {
+                    currentIdx--;
+                }
+                currentIdx++;
+
+            }
+
+
+            while (inputList[currentIdx].ScanSet.PrimaryScanNumber == scanNum)
+            {
+                results.Add(inputList[currentIdx]);
+                currentIdx++;
+            }
+
+
+
+            return results;
+
+        }
+
+
+        public static List<IsosResult> GetIntersection(List<IsosResult> list1, List<IsosResult> list2)
+        {
+            List<IsosResult> intersectedResults = new List<IsosResult>();
+
+            double tolerance = 0.005;
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                for (int i2 = 0; i2 < list2.Count ; i2++)
+                {
+                    if (list1[i].ScanSet == list2[i2].ScanSet &&
+                        list1[i].IsotopicProfile.ChargeState == list2[i2].IsotopicProfile.ChargeState &&
+                        Math.Abs(list1[i].IsotopicProfile.MonoIsotopicMass - list2[i2].IsotopicProfile.MonoIsotopicMass) < tolerance)
+                    {
+                        intersectedResults.Add(list1[i]);
+                        break;
+                    }
+
+                }
+                
+            }
+
+
+
+
+            return intersectedResults;
+
+        }
+
+
+
+        public string buildStatsForSingleIsosResultSet(List<IsosResult> resultList)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            IsosResultStats allResults = new IsosResultStats(resultList);
+
+            IsosResultStats cs1results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 1, IsosResultUtilities.enumLinqOperator.EqualTo));
+            IsosResultStats cs2results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 2, IsosResultUtilities.enumLinqOperator.EqualTo));
+            IsosResultStats cs3results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 3, IsosResultUtilities.enumLinqOperator.EqualTo));
+            IsosResultStats cs4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.EqualTo));
+            IsosResultStats greaterThanCS4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.greaterThan));
+
+            List<IsosResultStats> stats = new List<IsosResultStats>();
+            stats.Add(allResults);
+            stats.Add(cs1results);
+            stats.Add(cs2results);
+            stats.Add(cs3results);
+            stats.Add(cs4results);
+            stats.Add(greaterThanCS4results);
+
+
+            allResults.Description = "all";
+            cs1results.Description = "1";
+            cs2results.Description = "2";
+            cs3results.Description = "3";
+            cs4results.Description = "4";
+            greaterThanCS4results.Description = ">4";
+
+            //build header
+            sb.Append("Z");
+            sb.Append("\t");
+            sb.Append("NumIsos");
+            sb.Append("\t");
+            sb.Append("AvgFit");
+            sb.Append("\t");
+            sb.Append("StdDevFit");
+            sb.Append(Environment.NewLine);
+
+            foreach (IsosResultStats statItem in stats)
+            {
+
+                statItem.FitAverage = IsosResultUtilities.getAverageScore(statItem.Results);
+                statItem.FitStdDev = IsosResultUtilities.getStdDevScore(statItem.Results);
+                statItem.Count = IsosResultUtilities.getCount(statItem.Results);
+
+                sb.Append(statItem.Description);
+                sb.Append("\t");
+                sb.Append(statItem.Count);
+                sb.Append("\t");
+                sb.Append(statItem.FitAverage.ToString("0.000"));
+                sb.Append("\t");
+                sb.Append(statItem.FitStdDev.ToString("0.000"));
+                sb.Append(Environment.NewLine);
+
+            }
+
+            return sb.ToString();
+
+
+
+
+
+
+        }
+
+
+
 
 
         public static List<IsosResult> getIsosResultsByChargeState(List<IsosResult> inputList, int chargeState, enumLinqOperator chargeOperator)

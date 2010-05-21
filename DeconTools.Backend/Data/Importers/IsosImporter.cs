@@ -136,11 +136,28 @@ namespace DeconTools.Backend.Data
             result.IsotopicProfile.IntensityAggregate = parseDoubleField(lookup(processedData, headers, "abundance"));
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
 
+            
+
+
             MSPeak peak = new MSPeak();
             peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));
             peak.Width = parseFloatField(lookup(processedData, headers, "fwhm"));
             peak.XValue = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
             peak.SN = parseFloatField(lookup(processedData, headers, "signal_noise"));
+
+            string flagString= lookup(processedData, headers, "flag");
+
+            if (flagString == null || flagString == string.Empty)
+            {
+            }
+            else
+            {
+                int flagNum = parseIntField(flagString);
+                if (flagNum == 1) result.Flags.Add(new DeconTools.Backend.Core.PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
+            }
+
+
+
             result.IsotopicProfile.Peaklist.Add(peak);
 
             return result;

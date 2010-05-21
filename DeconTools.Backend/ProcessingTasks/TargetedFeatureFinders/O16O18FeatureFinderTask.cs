@@ -56,7 +56,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 result.IsotopicProfile.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
             }
 
-            ((O16O18_TResult)result).RatioO16O18 =  m_quantifier.GetRatio(result.IsotopicProfile);
+            ((O16O18_TResult)result).RatioO16O18 = m_quantifier.GetAdjusted_I0_I4_YeoRatio(result.IsotopicProfile, result.MassTag.IsotopicProfile);
+
+            //((O16O18_TResult)result).RatioO16O18 =  m_quantifier.Get_I0_I4_ratio(result.IsotopicProfile);
         }
 
        

@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         }
 
-        protected virtual void CloseOutputFile()
+        public virtual void CloseOutputFile()
         {
             //do nothing here. 
         }

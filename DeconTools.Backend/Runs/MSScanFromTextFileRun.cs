@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Runs
         private int m_yvalsColumnIndex = 0;
 
         public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter)
-            : this(fileName, fileType, delimiter, false)
+            : this(fileName, fileType, delimiter, true)
         {
 
 
@@ -35,19 +35,12 @@ namespace DeconTools.Backend.Runs
         public MSScanFromTextFileRun(string fileName, Globals.XYDataFileType fileType, char delimiter, bool containsHeader, 
             int xvalsColumnIndex, int yvalsColumnIndex)
         {
-
-
-
-  
-
-
             this.FileType = fileType;
             this.Filename = Path.GetFullPath(fileName);
             
             string baseFilename = Path.GetFileName(this.Filename);
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(this.Filename);
-            
             
             this.XYData = new XYData();
             this.CurrentScanSet = new DeconTools.Backend.Core.ScanSet(0);    //
@@ -56,9 +49,6 @@ namespace DeconTools.Backend.Runs
             this.m_xvalsColumnIndex = xvalsColumnIndex;
             this.m_yvalsColumnIndex = yvalsColumnIndex;
         }
-
-
-        
 
         internal void loadDataFromFile(string filename)
         {

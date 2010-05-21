@@ -41,7 +41,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-        
+
         public double GetNETValueForScan(int scanNum)
         {
             double netVal = -1;
@@ -50,8 +50,8 @@ namespace DeconTools.Backend.Core
 
 
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());
-            List<UMC>tempUMCs= distinctItems.ToList();
-               //create a temp copy of list
+            List<UMC> tempUMCs = distinctItems.ToList();
+            //create a temp copy of list
 
 
             UMC umcWithSameScanNum = tempUMCs.Find(p => p.ScanClassRep == scanNum);
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.Core
                 }
 
 
-                
+
             }
 
 
@@ -126,6 +126,43 @@ namespace DeconTools.Backend.Core
         }
 
 
+        public void DisplayBasicInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("umcIndex\tnet\tscan\tumc_mw\tumc_Z\tumc_mz\tumc_Abundance\tumc_Fit\tumc_members\tslic\tdelSlic\tmass_tag_id\n");
+            foreach (var umc in this.UMCList)
+            {
+                sb.Append(umc.UMCIndex);
+                sb.Append("\t");
+                sb.Append(umc.NETClassRep.ToString("0.000"));
+                sb.Append("\t");
+                sb.Append(umc.ScanClassRep);
+                sb.Append("\t");
+                sb.Append(umc.UMCMonoMW.ToString("0.0000"));
+                sb.Append("\t");
+                sb.Append(umc.ClassStatsChargeBasis);
+                sb.Append("\t");
+                sb.Append((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
+                sb.Append("\t");
+                sb.Append(umc.UMCAbundance.ToString("0"));
+                sb.Append("\t");
+                sb.Append(umc.UMCAverageFit.ToString("0.000"));
+                sb.Append("\t");
+                sb.Append(umc.UMCMemberCount);
+                sb.Append("\t");
+                sb.Append(umc.SLiCScore.ToString("0.0"));
+                sb.Append("\t");
+                sb.Append(umc.DelSLiC.ToString("0.0"));
+                sb.Append("\t");
+                sb.Append(umc.MassTagID);
+                sb.Append("\n"); 
+            }
+
+            Console.WriteLine(sb.ToString());
+        }
+
+
 
         public void DisplayUMCExpressionInfo()
         {
@@ -137,9 +174,9 @@ namespace DeconTools.Backend.Core
                 sb.Append(umc.UMCIndex);
                 sb.Append("\t");
                 sb.Append(umc.ScanClassRep);
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(umc.UMCMonoMW.ToString("0.0000"));
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(umc.ClassStatsChargeBasis);
                 sb.Append("\t");
                 sb.Append((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
@@ -161,7 +198,7 @@ namespace DeconTools.Backend.Core
                 }
 
                 sb.Append("\n");
-               
+
             }
 
             Console.WriteLine(sb.ToString());

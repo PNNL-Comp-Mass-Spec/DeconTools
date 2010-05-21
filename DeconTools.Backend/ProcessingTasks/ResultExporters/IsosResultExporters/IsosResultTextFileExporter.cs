@@ -38,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         }
         #endregion
 
-        protected override void CloseOutputFile()
+        public override void CloseOutputFile()
         {
             if (sw == null) return;
             try

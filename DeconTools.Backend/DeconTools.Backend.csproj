@@ -81,9 +81,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3734.18387, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3790.26278, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibrary\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -264,6 +264,7 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\SqliteNETUtils.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
     <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Utilities\MolecularFormula.cs" />
     <Compile Include="Utilities\PeakUtilities.cs" />
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
+    <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
   </ItemGroup>
   <ItemGroup>

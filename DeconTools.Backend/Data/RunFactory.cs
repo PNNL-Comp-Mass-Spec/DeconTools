@@ -43,6 +43,9 @@ namespace DeconTools.Backend.Data
                     run = new IMFRun(fileName);
                     break;
 
+                case ".txt":
+                    run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile, '\t');
+                    break;
                 case ".mzxml":
                     run = new MZXMLRun(fileName);
                     break;

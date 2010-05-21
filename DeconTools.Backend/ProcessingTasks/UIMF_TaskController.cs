@@ -121,7 +121,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
             UserState userstate = new UserState(run, scanset, frameset);
             int framenum = uimfRun.FrameSetCollection.FrameSetList.IndexOf(frameset);
-            double percentDone = (double)(framenum + 1) / (double)(uimfRun.FrameSetCollection.FrameSetList.Count) * 100;
+
+            int scanNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(scanset);
+            int scanTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
+
+            int frameTotal = uimfRun.FrameSetCollection.FrameSetList.Count;
+
+
+
+            double percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal)*100;
             userstate.PercentDone = (float)percentDone;
 
             if (System.DateTime.Now.Subtract(Logger.Instance.TimeOfLastUpdate).TotalMinutes > DEFAULT_TIME_BETWEEN_LOGENTRIES)
@@ -155,11 +163,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (taskCollectionContainsRapidDeconvolutor(taskCollection))
             {
-                numScansBetweenProgress = 100;
+                numScansBetweenProgress = 10;
             }
             else
             {
-                numScansBetweenProgress = 10;
+                numScansBetweenProgress = 1;
             }
             return numScansBetweenProgress;
         }
