@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decon2LS.UI", "Decon2LS.UI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconConsole.UnitTesting", "DeconConsole.UnitTesting\DeconConsole.UnitTesting.csproj", "{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.QCTesting", "DeconTools.QCTesting\DeconTools.QCTesting.csproj", "{4F832038-5C68-4B4A-A4C0-758366095E7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F832038-5C68-4B4A-A4C0-758366095E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F832038-5C68-4B4A-A4C0-758366095E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F832038-5C68-4B4A-A4C0-758366095E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F832038-5C68-4B4A-A4C0-758366095E7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
