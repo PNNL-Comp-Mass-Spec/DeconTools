@@ -80,5 +80,19 @@ namespace DeconTools.Backend.Utilities
             }
             return null;
         }
+
+        public static List<MSPeak> GetTopMSPeaks(List<MSPeak> msPeaklist, double intensityCutoff)
+        {
+            List<MSPeak> filteredMSPeaklist = new List<MSPeak>();
+
+            foreach (var peak in msPeaklist)
+            {
+
+                if (peak.Height >= intensityCutoff) filteredMSPeaklist.Add(peak);
+               
+            }
+
+            return filteredMSPeaklist;
+        }
     }
 }

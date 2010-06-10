@@ -10,15 +10,8 @@ namespace DeconTools.Backend.Runs
     {
        
      
-        private DeconTools.Backend.Globals.XYDataFileType fileType;
 
-        public DeconTools.Backend.Globals.XYDataFileType FileType
-        {
-            get { return fileType; }
-            set { fileType = value; }
-        }
-
-
+  
 
         public XYDataRun()
         {

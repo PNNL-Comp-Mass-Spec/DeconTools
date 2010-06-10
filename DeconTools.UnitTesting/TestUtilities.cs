@@ -260,6 +260,7 @@ namespace DeconTools.UnitTesting
 
             MassTag mt = new MassTag();
             mt.ID = 23085473;
+            mt.NETVal = 0.3807834F;
             mt.MonoIsotopicMass = 2538.33284203802;
             mt.ChargeState = 3;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;

@@ -14,13 +14,7 @@ namespace DeconTools.Backend
 
 
 
-        public enum XYDataFileType       //these filetypes are for files that contain a single set of XY values  (i.e. single MS Scan)
-        {
-            Undefined,
-            Textfile,
-            CSV_File
-        }
-        
+          
         public enum MSFileType
         {
             Undefined,

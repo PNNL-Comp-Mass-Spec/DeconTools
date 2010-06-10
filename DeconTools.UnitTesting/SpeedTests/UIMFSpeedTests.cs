@@ -39,7 +39,6 @@ namespace DeconTools.UnitTesting.SpeedTests
     [TestFixture]
     public class UIMFSpeedTests
     {
-        public string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
         public string uimfFilepath2 = "..\\..\\TestFiles\\SMSL_8_rep2_30minF_c4_500_20_fr1725_0000.uimf";
         string uimfFilePath3 = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
 
@@ -149,71 +148,71 @@ namespace DeconTools.UnitTesting.SpeedTests
         }
 
 
-        [Test]
-        public void msGeneratorsum600scansTest1()
-        {
-            Run run = new UIMFRun(uimfFilepath);
-            int startFrame = 1200;
-            int stopFrame = 1201;
+        //[Test]
+        //public void msGeneratorsum600scansTest1()
+        //{
+        //    Run run = new UIMFRun(uimfFilepath);
+        //    int startFrame = 1200;
+        //    int stopFrame = 1201;
 
-            int numFramesSummed = 1;
-            int numScansSummed = 600;
+        //    int numFramesSummed = 1;
+        //    int numScansSummed = 600;
 
-            FrameSetCollectionCreator framesetCreator = new FrameSetCollectionCreator(run, startFrame, stopFrame, numFramesSummed, 1);
-            framesetCreator.Create();
+        //    FrameSetCollectionCreator framesetCreator = new FrameSetCollectionCreator(run, startFrame, stopFrame, numFramesSummed, 1);
+        //    framesetCreator.Create();
 
           
-            ScanSet sixHundredScanset = new ScanSet(300, 0, 599);   
+        //    ScanSet sixHundredScanset = new ScanSet(300, 0, 599);   
 
-            ResultCollection results = new ResultCollection(run);
-            List<timingResult> timingResults = new List<timingResult>();
+        //    ResultCollection results = new ResultCollection(run);
+        //    List<timingResult> timingResults = new List<timingResult>();
 
-            foreach (FrameSet frameset in ((UIMFRun)run).FrameSetCollection.FrameSetList)
-            {
-                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        //    foreach (FrameSet frameset in ((UIMFRun)run).FrameSetCollection.FrameSetList)
+        //    {
+        //        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
-                ((UIMFRun)run).CurrentFrameSet = frameset;
+        //        ((UIMFRun)run).CurrentFrameSet = frameset;
                 
-                    sw.Reset();
-                    timingResult timeresult = new timingResult();
-                    timeresult.frameNum = frameset.PrimaryFrame;
-                    timeresult.scanNum = sixHundredScanset.PrimaryScanNumber;
-                    sw.Start();
+        //            sw.Reset();
+        //            timingResult timeresult = new timingResult();
+        //            timeresult.frameNum = frameset.PrimaryFrame;
+        //            timeresult.scanNum = sixHundredScanset.PrimaryScanNumber;
+        //            sw.Start();
 
-                    run.CurrentScanSet = sixHundredScanset;
-                    Task msgen = new UIMF_MSGenerator();
-                    msgen.Execute(results);
-                    timeresult.msGenTime = sw.ElapsedMilliseconds;
+        //            run.CurrentScanSet = sixHundredScanset;
+        //            Task msgen = new UIMF_MSGenerator();
+        //            msgen.Execute(results);
+        //            timeresult.msGenTime = sw.ElapsedMilliseconds;
 
-                    sw.Reset();
-                    sw.Start();
-                    Task peakDetector = new DeconToolsPeakDetector();
-                    peakDetector.Execute(results);
-                    timeresult.peakDetectorTime = sw.ElapsedMilliseconds;
+        //            sw.Reset();
+        //            sw.Start();
+        //            Task peakDetector = new DeconToolsPeakDetector();
+        //            peakDetector.Execute(results);
+        //            timeresult.peakDetectorTime = sw.ElapsedMilliseconds;
 
-                    sw.Reset();
-                    sw.Start();
-                    Task rapid = new RapidDeconvolutor();
-                    rapid.Execute(results);
-                    timeresult.deconTime = sw.ElapsedMilliseconds;
+        //            sw.Reset();
+        //            sw.Start();
+        //            Task rapid = new RapidDeconvolutor();
+        //            rapid.Execute(results);
+        //            timeresult.deconTime = sw.ElapsedMilliseconds;
 
-                    sw.Reset();
-                    sw.Start();
-                    //Task scanResultUpdater = new ScanResultUpdater();
-                    //scanResultUpdater.Execute(results);
-                    //timeresult.resultUpdaterTime = sw.ElapsedMilliseconds;
+        //            sw.Reset();
+        //            sw.Start();
+        //            //Task scanResultUpdater = new ScanResultUpdater();
+        //            //scanResultUpdater.Execute(results);
+        //            //timeresult.resultUpdaterTime = sw.ElapsedMilliseconds;
 
-                    timingResults.Add(timeresult);
+        //            timingResults.Add(timeresult);
                 
 
 
-            }
+        //    }
 
-            reportTimingEachFrameEachScan(timingResults);
+        //    reportTimingEachFrameEachScan(timingResults);
 
-            //reportTiming_FrameAggregate(timingResults, startFrame, stopFrame);
+        //    //reportTiming_FrameAggregate(timingResults, startFrame, stopFrame);
 
-        }
+        //}
 
 
 

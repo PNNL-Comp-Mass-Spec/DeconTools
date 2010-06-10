@@ -63,9 +63,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3790.26278, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3807.17525, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibraryVS2008\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +76,7 @@
     <Compile Include="ImporterTests\IsosImporterTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15_CustomWorkflow1Tests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMFDriftTimeExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />

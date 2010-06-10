@@ -68,8 +68,8 @@ namespace DeconTools.Backend.Core
             set { primaryFrame = value; }
         }
 
-        public float FramePressure { get; set; }
-        public float AvgTOFLength { get; set; }
+        public double FramePressure { get; set; }
+        public double AvgTOFLength { get; set; }
 
         private List<int> indexValues;
 

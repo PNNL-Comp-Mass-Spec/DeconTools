@@ -15,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public abstract void applyRunRelatedSettings(Run run);
 
-        protected abstract void addPeakRelatedData(ResultCollection resultList);
+        public abstract void addPeakRelatedData(Run run);
 
         protected MSPeak getBasePeak(List<IPeak> peakList)
         {
@@ -55,7 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             resultList.Run.PeakList= FindPeaks(resultList.Run.XYData, resultList.Run.MSParameters.MinMZ,resultList.Run.MSParameters.MaxMZ);
             
-            addPeakRelatedData(resultList);
+            addPeakRelatedData(resultList.Run);
             
         }
     }

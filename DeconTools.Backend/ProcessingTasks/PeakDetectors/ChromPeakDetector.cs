@@ -100,11 +100,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
       
 
-        protected override void addPeakRelatedData(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void addPeakRelatedData(Run run)
         {
-            foreach (ChromPeak peak in resultList.Run.PeakList)
+            foreach (ChromPeak peak in run.PeakList)
             {
-                peak.NETValue = resultList.Run.GetNETValueForScan((int)peak.XValue);
+                peak.NETValue = run.GetNETValueForScan((int)peak.XValue);
 
 
                 

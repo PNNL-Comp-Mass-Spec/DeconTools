@@ -34,7 +34,7 @@ namespace DeconTools.Backend.ProjectControllers
             this.ExporterType = getExporterTypeFromOldParameters(Project.getInstance().Parameters.OldDecon2LSParameters);
 
 
-            Run run = new MSScanFromTextFileRun(inputFileName, Globals.XYDataFileType.Textfile, '\t', true, 1, 2);
+            Run run = new MSScanFromTextFileRun(inputFileName,'\t', 1, 2);
             Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
             Project.getInstance().RunCollection.Add(run);
 

@@ -81,9 +81,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3790.26278, Culture=neutral">
+    <Reference Include="UIMFLibrary, Version=1.0.3807.17525, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibraryVS2008\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -107,8 +107,10 @@
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18FeatureFinderTask.cs" />
     <Compile Include="ProcessingTasks\TaskControllers\N14N15_ChromatogramApproachTaskController.cs" />
+    <Compile Include="ProcessingTasks\TaskControllers\N14N15_CustomWorkflow1.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />

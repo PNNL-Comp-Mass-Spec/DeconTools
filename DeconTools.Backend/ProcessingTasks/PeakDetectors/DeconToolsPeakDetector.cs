@@ -245,17 +245,17 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-        protected override void addPeakRelatedData(ResultCollection resultList)
+        public override void addPeakRelatedData(Run run)
         {
-            resultList.Run.CurrentScanSet.BackgroundIntensity = m_backgroundIntensity;
-            resultList.Run.CurrentScanSet.NumPeaks = resultList.Run.PeakList.Count;    //used in ScanResult
-            resultList.Run.CurrentScanSet.BasePeak = getBasePeak(resultList.Run.PeakList);     //Used in ScanResult
+            run.CurrentScanSet.BackgroundIntensity = m_backgroundIntensity;
+            run.CurrentScanSet.NumPeaks = run.PeakList.Count;    //used in ScanResult
+            run.CurrentScanSet.BasePeak = getBasePeak(run.PeakList);     //Used in ScanResult
 
-            resultList.Run.DeconToolsPeakList = m_deconEnginePeaklist;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
+            run.DeconToolsPeakList = m_deconEnginePeaklist;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
 
             if (this.StorePeakData)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
             {
-                resultList.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
+                run.ResultCollection.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
             }
 
 

@@ -14,6 +14,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     [TestFixture]
     public class MSGeneratorTests
     {
+        string textFile1 = "..\\..\\TestFiles\\TextFileXYData1.txt";
+
         string imfMSScanTextfile = "..\\..\\Testfiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1_SCAN233_raw_data.txt";
         string imfFilepath = "..\\..\\TestFiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
         private string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
@@ -24,7 +26,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void MSGeneratorOnTextfileTest1()
         {
-            Run run = new MSScanFromTextFileRun(imfMSScanTextfile, Globals.XYDataFileType.Textfile, '\t');
+            Run run = new MSScanFromTextFileRun(imfMSScanTextfile);
             ResultCollection resultcollection = new ResultCollection(run);
 
             Task msgen = new GenericMSGenerator();
@@ -32,6 +34,21 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             Assert.AreEqual(2596, resultcollection.Run.XYData.Xvalues.Length);
         }
+
+
+        [Test]
+        public void MSGeneratoronTextFileTest2()
+        {
+            Run run = new MSScanFromTextFileRun(textFile1);
+
+            Task msgen = new GenericMSGenerator();
+            msgen.Execute(run.ResultCollection);
+
+            Assert.AreEqual(19716, run.XYData.Xvalues.Length);
+
+        }
+
+
 
         [Test]
         public void MSGeneratorOnIMFFileTest1()

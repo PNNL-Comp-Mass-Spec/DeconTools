@@ -20,12 +20,12 @@ namespace DeconTools.Backend.ProcessingTasks
             UIMFRun uimfRun = (UIMFRun)resultList.Run;
 
 
-            //      int ticValue = adapter.Datareader.GetTIC(uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
-            float ticValue=0;
+            //float ticValue=0;
+            //adapter.Datareader.GetTIC(ref ticValue, uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
 
-            adapter.Datareader.GetTIC(ref ticValue, uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
+            double ticValue = adapter.Datareader.GetTIC(uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
 
-            resultList.Run.CurrentScanSet.TICValue = ticValue;
+            resultList.Run.CurrentScanSet.TICValue = (float)ticValue;
 
         }
     }

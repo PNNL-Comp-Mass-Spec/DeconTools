@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Data
                     break;
 
                 case ".txt":
-                    run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile, '\t');
+                    run = new MSScanFromTextFileRun(fileName);
                     break;
                 case ".mzxml":
                     run = new MZXMLRun(fileName);
@@ -87,7 +87,7 @@ namespace DeconTools.Backend.Data
                     run = new AgilentD_Run(fileName);
                     break;
                 case Globals.MSFileType.Ascii:
-                    run = new MSScanFromTextFileRun(fileName, Globals.XYDataFileType.Textfile, '\t');
+                    run = new MSScanFromTextFileRun(fileName);
                     break;
                 case Globals.MSFileType.Bruker:
                     run = new BrukerRun(fileName);

@@ -18,7 +18,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void test1()
         {
-            Run run = new MSScanFromTextFileRun(sourceXYData, DeconTools.Backend.Globals.XYDataFileType.Textfile, '\t');
+            Run run = new MSScanFromTextFileRun(sourceXYData);
 
             MSGeneratorFactory fact = new MSGeneratorFactory();
             Task msGen = fact.CreateMSGenerator(run.MSFileType);

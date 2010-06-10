@@ -27,7 +27,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         public void DeconToolsPeakDetectionTest1()
         {
 
-            Run run = new MSScanFromTextFileRun(imfMSScanTextfile, Globals.XYDataFileType.Textfile, '\t');
+            Run run = new MSScanFromTextFileRun(imfMSScanTextfile);
             ResultCollection resultcollection = new ResultCollection(run);
 
             Task msgen = new GenericMSGenerator();

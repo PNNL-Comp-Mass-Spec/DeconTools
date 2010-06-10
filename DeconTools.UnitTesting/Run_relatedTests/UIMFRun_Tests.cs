@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
-            int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
+            int numFrames = datareader.GetGlobalParameters().NumFrames;
 
             Console.WriteLine("Number of frames = " + numFrames);
             Assert.AreEqual(1950, numFrames);
@@ -179,6 +179,22 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
         [Test]
+        public void getFrameStartTimeTest1()
+        {
+            UIMFRun run = new UIMFRun(uimfFilepath);
+
+            for (int frameNum = 1; frameNum < 1950; frameNum++)
+            {
+                Console.WriteLine(frameNum+ "\t"+ run.GetTime(frameNum));
+                
+            }
+
+
+        }
+
+
+
+        [Test]
         public void getSummedFramesMSTest2()
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
@@ -254,18 +270,20 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
 
-            int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
+            int numFrames = datareader.GetGlobalParameters().NumFrames;
 
             StringBuilder sb = new StringBuilder();
 
 
-
+            
 
             for (int i = 1; i < numFrames; i = i + 1)
             {
-                sb.Append(Convert.ToDouble(datareader.GetFrameParameters(i, "PressureFront")));
+                FrameParameters fp = datareader.GetFrameParameters(i);
+
+                sb.Append(fp.PressureFront);
                 sb.Append("\t");
-                sb.Append(Convert.ToDouble(datareader.GetFrameParameters(i, "PressureBack")));
+                sb.Append(fp.PressureBack);
                 sb.Append(Environment.NewLine);
             }
 
@@ -348,16 +366,19 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
             DataReader datareader = adapter.Datareader;
 
-            int numFrames = Convert.ToInt32(datareader.GetGlobalParameters("NumFrames"));
+            int numFrames = datareader.GetGlobalParameters().NumFrames;
 
             StringBuilder sb = new StringBuilder();
             for (int i = 1; i < numFrames; i++)
             {
-                sb.Append(Convert.ToDouble(datareader.GetFrameParameters(i, "AverageTOFLength")));
+                FrameParameters fp = datareader.GetFrameParameters(i);
+
+
+                sb.Append(fp.AverageTOFLength);
                 sb.Append(Environment.NewLine);
             }
 
-            double avgTOFLength = Convert.ToDouble(datareader.GetFrameParameters(1000, "AverageTOFLength"));
+            double avgTOFLength = datareader.GetFrameParameters(1000).AverageTOFLength;
 
             Console.WriteLine(sb.ToString());
         }

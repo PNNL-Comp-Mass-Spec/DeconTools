@@ -23,14 +23,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void test1()
         {
 
-            MSScanFromTextFileRun textfiledata = new MSScanFromTextFileRun(imfMSScanTextfile, DeconTools.Backend.Globals.XYDataFileType.Textfile, '\t');
+            MSScanFromTextFileRun textfiledata = new MSScanFromTextFileRun(imfMSScanTextfile);
             textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0),200,2000);
 
             Assert.AreEqual(2596, textfiledata.XYData.Xvalues.Length);
             Assert.AreEqual(582.822204589844, Convert.ToDecimal(textfiledata.XYData.Xvalues[418]));
             Assert.AreEqual(2984, textfiledata.XYData.Yvalues[418]);
             Assert.AreEqual(1, textfiledata.GetNumMSScans());
-            Assert.AreEqual(DeconTools.Backend.Globals.XYDataFileType.Textfile, textfiledata.FileType);
 
         }
 
@@ -48,7 +47,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void readInTextFileContainingMultipleHeaderLinesTest1()
         {
-            Run textfiledata = new MSScanFromTextFileRun(textFileContainingMulipleHeaderLines, DeconTools.Backend.Globals.XYDataFileType.Textfile, '\t',true,1,2);
+            Run textfiledata = new MSScanFromTextFileRun(textFileContainingMulipleHeaderLines, '\t',1,2);
             textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0), 200, 2000);
 
             TestUtilities.DisplayXYValues(textfiledata.XYData);

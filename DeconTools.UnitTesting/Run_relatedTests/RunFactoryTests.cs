@@ -14,6 +14,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         string brukerTestFile1 = @"F:\Gord\Data\N14N15\HuttlinTurnover\RSPH_Aonly_25_run3_16Dec07_Raptor_07-11-11\acqus";
         string agilentDFile1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
 
+        string textFile1 = "..\\..\\TestFiles\\TextFileXYData.txt";
+
+
         [Test]
         public void createBrukerRunTest1()
         {
@@ -34,6 +37,17 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
 
         }
+
+        [Test]
+        public void createTextFileRunTest1()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(textFile1);
+
+            Assert.AreEqual(Globals.MSFileType.Ascii, run.MSFileType);
+
+        }
+
 
 
 
