@@ -444,8 +444,28 @@ namespace DeconTools.Backend.Runs
         public override void Close()
         {
             UIMFLibraryAdapter.getInstance(this.Filename).CloseCurrentUIMF();
-            this.RawData = null;
             base.Close();
+        }
+
+
+        public override string GetCurrentScanOrFrameInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("Frame = ");
+            if (this.CurrentFrameSet != null)
+            {
+                sb.Append(this.CurrentFrameSet.PrimaryFrame);
+            }
+            else
+            {
+                sb.Append("NULL");
+            }
+
+            sb.Append("; ");
+            sb.Append(base.GetCurrentScanOrFrameInfo());
+
+            return sb.ToString();
         }
 
         #endregion

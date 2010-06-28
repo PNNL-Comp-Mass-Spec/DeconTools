@@ -534,12 +534,28 @@ namespace DeconTools.Backend.Core
         public virtual void Close()
         {
             this.DeconToolsPeakList = null;
-            this.PeakList.Clear();
+            if (this.PeakList != null)
+            {
+                this.PeakList.Clear();
+            }
             this.ResultCollection.ClearAllResults();
             this.XYData = null;
 
         }
 
-    
+
+
+        public virtual string GetCurrentScanOrFrameInfo()
+        {
+            if (this.CurrentScanSet != null)
+            {
+                return "Scan = " + this.CurrentScanSet.PrimaryScanNumber.ToString(); 
+            }
+            else
+            {
+                return "Scan = NULL";
+            }
+
+        }
     }
 }

@@ -258,7 +258,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double framePressure = uimfRun.GetFramePressure(1000);
 
             Assert.AreNotEqual(0, framePressure);
-            Assert.AreEqual(4.043m, (Decimal)framePressure);
+            Assert.AreEqual(4.058m, (Decimal)framePressure);
 
         }
 

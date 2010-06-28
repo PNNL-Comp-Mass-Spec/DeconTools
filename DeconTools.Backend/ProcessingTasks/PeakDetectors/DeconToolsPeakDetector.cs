@@ -230,7 +230,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("DeconEngine's PeakDetector had a critical error. " ,Logger.Instance.OutputFilename);
+                throw ex; 
             }
 
             this.m_backgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);

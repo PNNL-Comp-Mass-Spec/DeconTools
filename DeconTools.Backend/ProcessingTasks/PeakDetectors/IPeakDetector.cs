@@ -4,6 +4,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using System.IO;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -53,7 +54,48 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             applyRunRelatedSettings(resultList.Run);
 
-            resultList.Run.PeakList= FindPeaks(resultList.Run.XYData, resultList.Run.MSParameters.MinMZ,resultList.Run.MSParameters.MaxMZ);
+
+
+            bool isSuccess = false;
+
+            int maxAttempts = 4;
+            int counter = 1;
+
+
+            //[gord] I'm adding a loop here, because we are experiencing an infrequent and seemingly random failure with the peak detector on data from UIMF files
+            //looping it may force it to process the current ims scan. 
+            while (!isSuccess && counter<=4)
+            {
+                try
+                {
+                    resultList.Run.PeakList = FindPeaks(resultList.Run.XYData, resultList.Run.MSParameters.MinMZ, resultList.Run.MSParameters.MaxMZ);
+                    isSuccess = true;
+                }
+                catch (Exception ex)
+                {
+                    string frameAndScanInfo = resultList.Run.GetCurrentScanOrFrameInfo();
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("Attempt ");
+                    sb.Append(counter);
+                    sb.Append("; PeakDetector is throwing an error; ");
+                    sb.Append(frameAndScanInfo);
+                    sb.Append("; RawXYData counts: xvals = ");
+                    sb.Append(resultList.Run.XYData.Xvalues.Length);
+                    sb.Append("; yvals = ");
+                    sb.Append(resultList.Run.XYData.Yvalues.Length);
+                    sb.Append("; additional details: ");
+                    sb.Append(ex.Message);
+                    sb.Append("; ");
+                    sb.Append(ex.StackTrace);
+
+                    Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
+
+                }
+
+                counter++;
+
+            }
+        
             
             addPeakRelatedData(resultList.Run);
             

@@ -31,6 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 }
                 catch (Exception ex)
                 {
+                    
                     Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
                     throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
                 }

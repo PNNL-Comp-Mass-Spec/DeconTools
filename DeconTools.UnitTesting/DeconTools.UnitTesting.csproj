@@ -63,9 +63,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3807.17525, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UIMFLibrary, Version=1.0.3819.22135, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibraryVS2008\Source_Code\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +75,7 @@
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />
     <Compile Include="ImporterTests\IsosImporterTests.cs" />
     <Compile Include="ImporterTests\MassTagFromTextFileImporterTests.cs" />
+    <Compile Include="ProcessingTasksTests\DemoTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15_CustomWorkflow1Tests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="ProcessingTasksTests\UIMF_TaskControllerTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMF_TICExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\RunMergingProjectControllerTests.cs" />
+    <Compile Include="ProjectControllerTests\UIMFMSOnlyProjectControllerTests.cs" />
     <Compile Include="QualityControlTests\IMFQualityTests.cs" />
     <Compile Include="QualityControlTests\MZXMLQualityTests.cs" />
     <Compile Include="QualityControlTests\ThrashQualityTests.cs" />

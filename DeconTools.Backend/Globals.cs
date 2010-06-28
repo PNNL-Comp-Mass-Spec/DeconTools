@@ -108,7 +108,8 @@ namespace DeconTools.Backend
             STANDARD,
             BONES_CONTROLLER,
             RUN_MERGER_CONTROLLER,
-            KOREA_IMS_PEAKSONLY_CONTROLLER
+            KOREA_IMS_PEAKSONLY_CONTROLLER,
+            UIMF_MS_Only_TestController
         }
 
 

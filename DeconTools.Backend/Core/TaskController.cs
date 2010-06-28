@@ -4,6 +4,7 @@ using System.Text;
 using System.ComponentModel;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -43,6 +44,25 @@ namespace DeconTools.Backend.Core
                 numScansBetweenProgress = 1;
             }
             return numScansBetweenProgress;
+        }
+
+        protected string getErrorInfo(Run run, Task task, Exception ex)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("ERROR THROWN. ProcessingTask = ");
+            sb.Append(task);
+            sb.Append("; ");
+            sb.Append(run.GetCurrentScanOrFrameInfo());
+
+            sb.Append("; ");
+            sb.Append(DiagnosticUtilities.GetCurrentProcessInfo());
+            sb.Append("; errorObject details: ");
+            sb.Append(ex.Message);
+            sb.Append("; ");
+            sb.Append(ex.StackTrace);
+
+            return sb.ToString();
+
         }
 
         protected bool taskCollectionContainsRapidDeconvolutor(TaskCollection taskCollection)
@@ -130,6 +150,7 @@ namespace DeconTools.Backend.Core
             
         }
 
+  
 
 
 

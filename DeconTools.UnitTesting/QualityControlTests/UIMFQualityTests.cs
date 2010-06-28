@@ -22,6 +22,7 @@ namespace DeconTools.UnitTesting.QualityControlTests
 
 
         string fpgaUIMFFilePath = @"F:\Gord\Data\UIMF\BSA_Mid_600_50_10_3ppdis_10mstrap.uimf";
+        string fpgaUIMFFilePath2 = @"F:\Gord\Data\UIMF\FPGA\TroubleShooting_cases\QC_Shew_MSMS_500_100_fr720_Ek_0000.uimf";
 
 
         [Test]
@@ -386,6 +387,119 @@ namespace DeconTools.UnitTesting.QualityControlTests
 
         }
 
+
+        [Test]
+        public void criticalErrorInPeakDetectorTest1()
+        {
+            UIMFRun run = new DeconTools.Backend.Runs.UIMFRun(fpgaUIMFFilePath2);
+
+            FrameSetCollectionCreator ffcc = new FrameSetCollectionCreator(run, 425, 432, 3, 1);
+            ffcc.Create();
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 1,500, 9, 1);
+            sscc.Create();
+
+            MSGeneratorFactory factory = new MSGeneratorFactory();
+            Task msgen = factory.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            peakDet.PeakBackgroundRatio = 4;
+            peakDet.SigNoiseThreshold = 3;
+
+
+            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            {
+                run.CurrentFrameSet = frame;
+
+                foreach (var scan in run.ScanSetCollection.ScanSetList)
+                {
+                    run.CurrentScanSet = scan;
+
+                    msgen.Execute(run.ResultCollection);
+                    peakDet.Execute(run.ResultCollection);
+                }
+
+                
+            }
+
+
+        }
+
+
+        [Test]
+        public void checkIntegrityOfUIMF_RawDataTest1()
+        {
+            UIMFRun run = new DeconTools.Backend.Runs.UIMFRun(fpgaUIMFFilePath2);
+
+            FrameSetCollectionCreator ffcc = new FrameSetCollectionCreator(run, 696, 696, 3, 1);
+            ffcc.Create();
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 350, 500, 9, 1);
+            sscc.Create();
+
+            MSGeneratorFactory factory = new MSGeneratorFactory();
+            Task msgen = factory.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            peakDet.PeakBackgroundRatio = 6;
+            peakDet.SigNoiseThreshold = 3;
+
+
+            StringBuilder sb = new StringBuilder();
+
+
+            sb.Append("frame\tscan\tmaxIntens\tnumZeros\n");
+
+            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            {
+                run.CurrentFrameSet = frame;
+
+                foreach (var scan in run.ScanSetCollection.ScanSetList)
+                {
+                    run.CurrentScanSet = scan;
+
+                    msgen.Execute(run.ResultCollection);
+
+                    List<int> indices = getIndicesOf0MZValues(run.XYData.Xvalues);
+
+                    double maxY = run.XYData.getMaxY();
+
+
+                    if (indices.Count > -1)
+                    {
+                        sb.Append(frame.PrimaryFrame);
+                        sb.Append("\t");
+                        sb.Append(scan.PrimaryScanNumber);
+                        sb.Append("\t");
+                        sb.Append(maxY);
+                        sb.Append("\t");
+                        sb.Append(indices.Count);
+                        sb.Append("\n");
+                    }
+               }
+
+
+            }
+
+            Console.WriteLine(sb.ToString());
+
+        }
+
+        private List<int> getIndicesOf0MZValues(double[] xvals)
+        {
+            List<int> indexList = new List<int>();
+
+            for (int i = 0; i < xvals.Length; i++)
+            {
+                if ((int)xvals[i] == 0)
+                {
+                    indexList.Add(i);
+
+                }
+            }
+
+            return indexList;
+        }
 
 
 

@@ -54,7 +54,21 @@ namespace DeconTools.Backend.ProcessingTasks
                             run.CurrentScanSet = scanset;
                             foreach (Task task in this.TaskCollection.TaskList)
                             {
-                                task.Execute(run.ResultCollection);
+                                try
+                                {
+                                    task.Execute(run.ResultCollection);
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    string errorInfo = getErrorInfo(run, task, ex);
+                                    Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
+
+
+                                    throw ex;   // let something catch it
+                                }
+
                             }
 
                             if (backgroundWorker != null)
@@ -107,6 +121,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
+   
         private string getOutputFileName(Run run)
         {
             return run.Filename + "_tmp.bin";

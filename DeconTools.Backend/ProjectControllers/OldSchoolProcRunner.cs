@@ -24,7 +24,7 @@ namespace DeconTools.Backend
         private string inputDataFilename;
         private string paramFilename;
         private string outputFilepath;
-       
+
         private DeconTools.Backend.Globals.MSFileType fileType;
         private BackgroundWorker backgroundWorker;
 
@@ -201,7 +201,8 @@ namespace DeconTools.Backend
 
         }
 
-        public OldSchoolProcRunner(string inputDataFilename, string outputPath,  DeconTools.Backend.Globals.MSFileType fileType, string paramFileName)
+        //TODO: code duplication!!  fix it!
+        public OldSchoolProcRunner(string inputDataFilename, string outputPath, DeconTools.Backend.Globals.MSFileType fileType, string paramFileName)
         {
 
             // Check.Require(validateFileExistance(inputDataFilename),"Could not process anything. Inputfile does not exist or is inaccessible");
@@ -356,7 +357,6 @@ namespace DeconTools.Backend
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry(" ------------------------------- ERROR: " + ex.Message, Logger.Instance.OutputFilename);
                 throw ex;   //throw the error again and let something else catch it. 
             }
 
@@ -402,10 +402,14 @@ namespace DeconTools.Backend
 
             #endregion
 
-            Logger.Instance.AddEntry("total processing time = " + Logger.Instance.GetTimeDifference("Started file processing", "Finished file processing"));
+            TimeSpan overallProcessingTime = Logger.Instance.GetTimeDifference("Started file processing", "Finished file processing");
+            string formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}", overallProcessingTime.TotalHours, overallProcessingTime.Minutes, overallProcessingTime.Seconds);
+
+            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
 
             ProjectFacade pf = new ProjectFacade();
-            Logger.Instance.AddEntry("total features = " + pf.GetTotalFeaturesFromScanResultCollection());
+
+            Logger.Instance.AddEntry("total features = " + Project.getInstance().RunCollection[0].ResultCollection.MSFeatureCounter);
 
             Logger.Instance.WriteToFile(Project.getInstance().RunCollection[0].Filename + "_log.txt", true);
             Logger.Instance.Close();
@@ -418,12 +422,7 @@ namespace DeconTools.Backend
         #endregion
 
         #region Private Methods
-        private string getPeakListTextfilename(Run run)
-        {
-            string filepath = Path.GetDirectoryName(run.Filename);
-            string baseFilename = Path.GetFileNameWithoutExtension(run.Filename);
-            return filepath + Path.DirectorySeparatorChar + baseFilename + "_peaks.txt";
-        }
+
         private string getPeakListFileName(Globals.ExporterType exporterType)
         {
             var run = Project.getInstance().RunCollection[0];
@@ -444,7 +443,7 @@ namespace DeconTools.Backend
 
         }
 
-  
+
 
 
         private string setScansOutputFileName(Globals.ExporterType exporterType)
@@ -473,7 +472,7 @@ namespace DeconTools.Backend
         {
             var run = Project.getInstance().RunCollection[0];
 
-            string baseFileName = getBaseFileName(run); 
+            string baseFileName = getBaseFileName(run);
 
             //string baseFileName = Project.getInstance().RunCollection[0].Filename.Substring(0, Project.getInstance().RunCollection[0].Filename.LastIndexOf('.'));
 
