@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -88,9 +88,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2, Version=1.0.3693.25042, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2, Version=1.0.3820.28194, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconEngineV2\Debug\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="PJLControls, Version=1.1.3597.24984, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
