@@ -172,6 +172,8 @@ namespace DeconTools.Backend.Runs
 
         }
 
+        
+        //TODO: change the order of parameters so that frameset is first
         public override void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
             GetMassSpectrum2(scanset, frameset, minMZ, maxMZ);

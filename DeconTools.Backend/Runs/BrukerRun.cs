@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -23,13 +24,16 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             this.Filename = folderName;
+            this.DatasetName = getDataSetName(this.Filename);
+            this.DataSetPath = getDataSetFolderName(this.Filename);
 
-      
+            validateFileNameAndFolderStructure();
+
 
             try
             {
                 this.rawData = new DeconToolsV2.Readers.clsRawData();
-                this.rawData.LoadFile(folderName, DeconToolsV2.Readers.FileType.BRUKER);
+                this.rawData.LoadFile(this.Filename, DeconToolsV2.Readers.FileType.BRUKER);
             }
             catch (Exception ex)
             {
@@ -38,20 +42,57 @@ namespace DeconTools.Backend.Runs
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
-            this.DatasetName = getDataSetName(this.Filename);
-            this.DataSetPath = getDataSetFolderName(this.Filename);
+ 
+
+        }
+
+        private void validateFileNameAndFolderStructure()
+        {
+            //check if the datasetPath is the same as the FileName, if so, change the Filename, or else DeconEngine will fail
+            if (this.DataSetPath == this.Filename)
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(this.Filename);
+
+                DirectoryInfo[] childFolders = dirinfo.GetDirectories();
+
+                DirectoryInfo serFolder=null;
+
+                foreach (var folder in childFolders)
+                {
+                    if (folder.Name.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+                    {
+                        serFolder=folder;
+                        break;
+                    }
+                }
+
+                if (serFolder!=null)
+                {
+                    this.Filename = serFolder.FullName;
+                    
+                }
+            }
+
 
         }
 
         private string getDataSetFolderName(string p)
         {
-            if (p.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
+            string trimmedPath = p.TrimEnd('\\');
+
+            if (trimmedPath.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
-                return p.Substring(0, p.LastIndexOf('\\'));
+                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                return dirinfo.Parent.Parent.FullName;
+            }
+            else if (trimmedPath.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                return dirinfo.Parent.FullName;
             }
             else
             {
-                return p;
+                return trimmedPath;
             }
         }
 
@@ -61,9 +102,17 @@ namespace DeconTools.Backend.Runs
 
             string trimmedfilename = filename.TrimEnd(new char[] { '\\' });
 
+            if (trimmedfilename.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
+            }
+
+
             if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
-                trimmedfilename = getDataSetFolderName(trimmedfilename);
+                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                trimmedfilename = dirinfo.Parent.Parent.FullName.TrimEnd('\\');
             }
 
            
