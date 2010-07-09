@@ -46,9 +46,9 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3814.24020, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3820.28194, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

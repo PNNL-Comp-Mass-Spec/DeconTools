@@ -105,11 +105,7 @@ namespace DeconTools.Backend.Data
             row.PairIndex = parseIntField(lookup(processedData, headers, "PairIndex"));
             row.PairMemberType = parseIntField(lookup(processedData, headers, "PairMemberType"));
             row.UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex"));
-            row.ScanStart = parseIntField(lookup(processedData, headers, "ScanStart"));
-            row.ScanEnd = parseIntField(lookup(processedData, headers, "ScanEnd"));
             row.ScanClassRep = parseIntField(lookup(processedData, headers, "ScanClassRep"));
-            row.NETClassRep = parseDoubleField(lookup(processedData, headers, "NETClassRep"));
-            row.UMCMonoMW = parseDoubleField(lookup(processedData, headers, "UMCMonoMW"));
             row.UMCMWStDev = parseDoubleField(lookup(processedData, headers, "UMCMWStDev"));
             row.UMCMWMin = parseDoubleField(lookup(processedData, headers, "UMCMWMin"));
             row.UMCMWMax = parseDoubleField(lookup(processedData, headers, "UMCMWMax"));

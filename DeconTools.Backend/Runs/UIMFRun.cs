@@ -238,6 +238,19 @@ namespace DeconTools.Backend.Runs
                 //TODO: get Anuj to return an accurate value for non-zero intensities. Right now it returns a value near the full bin array size
                 int summedSpecLength = adapter.Datareader.SumScans(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
 
+
+                //StringBuilder sb = new StringBuilder();
+                //for (int i = 0; i < xvals.Length; i++)
+                //{
+                //    sb.Append(xvals[i]);
+                //    sb.Append("\t");
+                //    sb.Append(yvals[i]);
+                //    sb.Append("\n");
+                //}
+                //Console.WriteLine(sb.ToString());
+
+
+
                 for (int i = 0; i < xvals.Length; i++)
                 {
                     bool isWithinMZRange = (xvals[i] >= minMZ && xvals[i] <= maxMZ);

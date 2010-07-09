@@ -15,7 +15,71 @@ namespace DeconTools.UnitTesting.DTO_Tests
     [TestFixture]
     public class OriginalIntensitiesExtractorTests
     {
-        private string uimfFilepath = "..\\..\\TestFiles\\QC_Shew_0.25mg_4T_1.6_600_335_50ms_fr2400_adc_0000_V2009_05_28.uimf";
+        private string uimfFilepath = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
+
+
+        private string uimfFPGAFilePath = @"F:\Gord\Data\UIMF\FPGA\Std_vs_WeightedMZOffset\QC_Shew_noppp_600_100_fr720_th7d_Cougar_rep2.uimf";
+
+
+        [Test]
+        public void examineFPGAFileTest1()
+        {
+
+            UIMFRun run = new UIMFRun(uimfFPGAFilePath);
+
+            Task msGen = new UIMF_MSGenerator(200, 2000);
+
+            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+            detectorParams.PeakBackgroundRatio = 3;
+            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
+            detectorParams.SignalToNoiseThreshold = 3;
+            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+
+            Task decon = new HornDeconvolutor();
+
+            Task scanResultsUpdater = new ScanResultUpdater();
+
+            Task originalIntensitiesExtractor = new OriginalIntensitiesExtractor();
+
+
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 300, 300, 1, 1);
+            sscc.Create();
+
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run, 5, 5, 1, 1);
+            fscc.Create();
+
+            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            {
+                run.CurrentFrameSet = frame;
+
+                foreach (var scan in run.ScanSetCollection.ScanSetList)
+                {
+
+                    run.CurrentScanSet = scan;
+
+                    msGen.Execute(run.ResultCollection);
+
+                    //TestUtilities.DisplayXYValues(run.XYData);
+
+                    originalIntensitiesExtractor.Execute(run.ResultCollection);
+                    TestUtilities.DisplayXYValues(run.XYData);
+
+                    
+
+                }
+
+
+
+                
+            }
+
+
+
+
+        }
+
 
 
 
