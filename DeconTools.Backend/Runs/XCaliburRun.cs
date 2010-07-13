@@ -45,7 +45,13 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-				throw ex;
+				var stackTrace = new System.Diagnostics.StackTrace(ex);
+				foreach (var r in stackTrace.GetFrames())
+				{
+					Console.WriteLine("Filename: {0} Method: {1} Line: {2} Column: {3}  ",
+						r.GetFileName(), r.GetMethod(), r.GetFileLineNumber(),
+						r.GetFileColumnNumber());
+				}
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
