@@ -45,8 +45,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-				var trace = new System.Diagnostics.StackTrace(ex);
-				throw new Exception("ERROR:  Couldn't open the file.  Details: " + trace.ToString());
+				throw ex;
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
