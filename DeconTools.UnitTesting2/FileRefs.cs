@@ -7,7 +7,7 @@ namespace DeconTools.UnitTesting2
 {
     public class FileRefs
     {
-        public static string BasePath = @"\\proto-1\UserData\Slysz\DeconTools_TestFiles\";
+        public static string BasePath = @"G:\UserData\Slysz\DeconTools_TestFiles\";
 
         public static string OrbitrapStdFile1 = FileRefs.BasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
         public static string UIMFStdFile1 = FileRefs.BasePath + "35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
