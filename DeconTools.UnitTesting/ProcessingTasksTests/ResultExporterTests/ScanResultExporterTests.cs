@@ -83,7 +83,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Task msgen = new GenericMSGenerator();
             Task peakDetector = new DeconToolsPeakDetector();
             Task decon = new RapidDeconvolutor();
-            Task sqliteScanResultExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters.BasicScanResult_TextFileExporter(xcalibur_text_ScanResultOutputFile1);
+            Task textScanResultExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters.BasicScanResult_TextFileExporter(xcalibur_text_ScanResultOutputFile1);
             Task scanResultUpdater = new ScanResultUpdater();
 
             Stopwatch sw;
@@ -99,7 +99,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
                 sw = new Stopwatch();
                 sw.Start();
 
-                sqliteScanResultExporter.Execute(run.ResultCollection);
+                textScanResultExporter.Execute(run.ResultCollection);
                 sw.Stop();
                 if (sw.ElapsedMilliseconds > 10)
                 {

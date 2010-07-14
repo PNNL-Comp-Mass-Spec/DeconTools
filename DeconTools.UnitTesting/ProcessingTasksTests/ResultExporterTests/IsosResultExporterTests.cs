@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
@@ -11,6 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
+using DeconTools.Backend;
+using System.Collections;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
 {
@@ -140,6 +143,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
         {
             string testFile = xcalibur_text_IsosResultOutputFile1;
 
+
+
+
             List<Run> runcoll = new List<Run>();
             Run run = new XCaliburRun(xcaliburFile1);
             runcoll.Add(run);
@@ -258,7 +264,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Task decon = new HornDeconvolutor();
             Task driftTimeExtractor = new DeconTools.Backend.ProcessingTasks.UIMFDriftTimeExtractor();
             Task origIntensExtr = new DeconTools.Backend.ProcessingTasks.OriginalIntensitiesExtractor();
-            Task sqliteExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters.UIMFIsosResultTextFileExporter(uimf_text_IsosResultOutputFile1, 1000000);
+            Task isosExporter = new DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters.UIMFIsosResultTextFileExporter(uimf_text_IsosResultOutputFile1, 1000000);
             Task flagger = new ResultValidatorTask();
 
             Stopwatch sw;
@@ -281,11 +287,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
                     sw = new Stopwatch();
                     sw.Start();
 
-                    sqliteExporter.Execute(run.ResultCollection);
+                    isosExporter.Execute(run.ResultCollection);
                     sw.Stop();
                     if (sw.ElapsedMilliseconds > 10)
                     {
-                        Console.WriteLine("SqliteExporter execution time = \t" + sw.ElapsedMilliseconds);
+                        Console.WriteLine("execution time = \t" + sw.ElapsedMilliseconds);
                     }
 
                 }
@@ -295,7 +301,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
             Assert.AreEqual(true, File.Exists(uimf_text_IsosResultOutputFile1));
 
             FileInfo fi = new FileInfo(uimf_text_IsosResultOutputFile1);
-            //Assert.AreEqual(98362, fi.Length);
+            Assert.AreEqual(99743, fi.Length);
             Console.Write(fi.Length);
 
         }
