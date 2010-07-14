@@ -57,11 +57,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FileIO_Tests\MSFeatureExporterTests.cs" />
+    <Compile Include="FileIO_Tests\MSFeatureExporterFactoryTests.cs" />
+    <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
     <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
+    <Compile Include="TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
