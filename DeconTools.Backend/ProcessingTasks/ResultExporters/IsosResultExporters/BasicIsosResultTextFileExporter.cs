@@ -20,22 +20,16 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         }
 
+        
         public BasicIsosResultTextFileExporter(string fileName, int triggerValueToExport)
         {
-            try
-            {
-                sw = new StreamWriter(fileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
-            }
-
             this.TriggerToExport = triggerValueToExport;
             this.delimiter = ',';
+            this.Name = "Basic IsosResult TextFile Exporter";
+            this.FileName = fileName;
 
-            sw.Write(buildHeaderLine());
+            initializeAndWriteHeader();
+
         }
 
         #endregion

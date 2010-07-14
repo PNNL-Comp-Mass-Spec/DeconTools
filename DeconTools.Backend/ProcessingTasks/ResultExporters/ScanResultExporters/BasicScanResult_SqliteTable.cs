@@ -55,11 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         }
         #endregion
 
-        #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
+   
         
       
     }

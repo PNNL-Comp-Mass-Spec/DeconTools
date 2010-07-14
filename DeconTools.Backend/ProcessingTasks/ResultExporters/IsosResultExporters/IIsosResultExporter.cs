@@ -47,20 +47,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             {
                 ExportIsosResults(resultList);
                 resultList.ResultList.Clear();
-
-                if (isLastScan)
-                {
-                    CloseOutputFile();
-                }
-
             }
 
         }
 
-        public virtual void CloseOutputFile()
-        {
-            //do nothing here. 
-        }
 
         #endregion
 

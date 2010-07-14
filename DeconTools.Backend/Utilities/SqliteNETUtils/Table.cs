@@ -11,6 +11,7 @@ namespace DeconTools.Utilities.SqliteUtils
 
         #region Properties
         public abstract string Name { get; set; }
+
         public abstract List<Field> FieldList { get; set; }
         #endregion
 

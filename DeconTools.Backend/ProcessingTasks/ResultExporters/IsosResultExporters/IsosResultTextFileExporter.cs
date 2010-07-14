@@ -5,54 +5,69 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using System.IO;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public abstract class IsosResultTextFileExporter : IIsosResultExporter
     {
 
-        protected StreamWriter sw;
 
         #region Properties
         public abstract char Delimiter { get; set; }
+
+        public string FileName { get; set; }
 
         #endregion
 
         #region Public Methods
         public override void ExportIsosResults(DeconTools.Backend.Core.ResultCollection resultList)
         {
-            foreach (IsosResult result in resultList.ResultList)
+            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            using (StreamWriter writer = File.AppendText(this.FileName))
             {
-                string isosResultOutput = buildIsosResultOutput(result);
+                foreach (IsosResult result in resultList.ResultList)
+                {
+                    string isosResultOutput = buildIsosResultOutput(result);
+                    writer.WriteLine(isosResultOutput);
+                }
 
-                try
-                {
-                    sw.WriteLine(isosResultOutput);
-                }
-                catch (Exception ex)
-                {
-                    
-                    Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                    throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
-                }
+                writer.Flush();
+                writer.Close();
             }
         }
-        #endregion
 
-        public override void CloseOutputFile()
+        protected virtual void initializeAndWriteHeader()
         {
-            if (sw == null) return;
+
+            Check.Assert(this.FileName != null && this.FileName.Length > 0, String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+
             try
             {
-                sw.Flush();
-                sw.Close();
+                if (File.Exists(this.FileName))
+                {
+                    File.Delete(this.FileName);
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("IsosResultExporter failed to close the output file properly. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + "; STACKTRACE = " + ex.StackTrace, this.Name), Logger.Instance.OutputFilename);
+                throw ex;
             }
-            base.CloseOutputFile();
+
+
+            using (StreamWriter writer = File.AppendText(this.FileName))
+            {
+                string headerLine = buildHeaderLine();
+                writer.Write(headerLine);
+                writer.Flush();
+                writer.Close();
+            }
         }
+
+        #endregion
+
 
         protected abstract string buildIsosResultOutput(IsosResult result);
         protected abstract string buildHeaderLine();
