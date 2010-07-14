@@ -111,7 +111,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(141312, fi.Length);
+            Assert.AreEqual(2048, fi.Length);
             Console.Write(fi.Length);
 
 
