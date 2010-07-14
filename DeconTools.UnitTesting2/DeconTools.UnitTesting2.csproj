@@ -72,17 +72,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="FileIO_Tests\MSFeatureExporterTests.cs" />
     <Compile Include="FileIO_Tests\MSFeatureExporterFactoryTests.cs" />
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
-    <Compile Include="FileRefs.cs" />
+    <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
     <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
-    <Compile Include="TestDataCreationUtilities.cs" />
-    <Compile Include="TestUtilities.cs" />
+    <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
+    <Compile Include="TestUtilities\TestUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
@@ -91,16 +90,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IMSCOMP.dll">
+    <Content Include="RequiredDLLs\IMSCOMP.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="sqlite3.dll">
+    <Content Include="RequiredDLLs\sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="xerces-c_2_7.dll">
+    <Content Include="RequiredDLLs\xerces-c_2_7.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="xerces-c_2_7D.dll">
+    <Content Include="RequiredDLLs\xerces-c_2_7D.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
