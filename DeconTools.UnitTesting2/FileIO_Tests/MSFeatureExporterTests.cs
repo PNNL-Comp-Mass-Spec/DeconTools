@@ -18,10 +18,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class MSFeatureExporterTests
     {
-        string exportedMSFeaturesToTextFileFromOrbitrapFile1 = "..\\..\\TestFiles\\FileIOTests\\exportedMSFeaturesToTextFileFromOrbitrapFile1.csv";
-        string exportedMSFeaturesToSQLiteFromOrbitrapFile1 = "..\\..\\TestFiles\\FileIOTests\\exportedMSFeaturesToSQLiteFromOrbitrapFile1.db3";
-        string exportedMSFeaturesToSQLiteFromUIMFFile1 = "..\\..\\TestFiles\\FileIOTests\\exportedMSFeaturesToSQLiteFromUIMFFile1.db3";
-        string exportedMSFeaturesToTextFileFromUIMFFile1 = "..\\..\\TestFiles\\FileIOTests\\exportedMSFeaturesToTextFileFromUIMFFile1.csv";
+        string exportedMSFeaturesToTextFileFromOrbitrapFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSFeaturesToTextFileFromOrbitrapFile1.csv";
+        string exportedMSFeaturesToSQLiteFromOrbitrapFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSFeaturesToSQLiteFromOrbitrapFile1.db3";
+        string exportedMSFeaturesToSQLiteFromUIMFFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSFeaturesToSQLiteFromUIMFFile1.db3";
+        string exportedMSFeaturesToTextFileFromUIMFFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSFeaturesToTextFileFromUIMFFile1.csv";
 
         [Test]
         public void outputToText_xcaliburData_Test1()

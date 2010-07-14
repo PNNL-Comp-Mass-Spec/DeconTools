@@ -8,13 +8,14 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend;
+using DeconTools.UnitTesting2;
 
 namespace DeconTools.UnitTesting
 {
     public class TestUtilities
     {
-        private static string xcaliburTestfile = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-        private static string uimfTestFile = "..\\..\\TestFiles\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
+        private static string xcaliburTestfile = FileRefs.TestFileBasePath + "\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+        private static string uimfTestFile = FileRefs.TestFileBasePath + "\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
 
         public static void GetXYValuesToStringBuilder(StringBuilder sb, double[] xvals, double[] yvals)
         {

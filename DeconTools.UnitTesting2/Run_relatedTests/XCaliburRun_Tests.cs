@@ -26,10 +26,6 @@ namespace DeconTools.UnitTesting
             Run run = new XCaliburRun(testFile);
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
-
-            //Assert.AreEqual("..\\..\\TestFiles", run.DataSetPath);
-
-
         }
 
      
