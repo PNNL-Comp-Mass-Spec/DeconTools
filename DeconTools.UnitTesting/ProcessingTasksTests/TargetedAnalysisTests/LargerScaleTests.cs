@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(6);
+            Task targetedFeatureFinder = new BasicTFF(6);
             Task exporter = new BasicMTResultSQLiteExporter(cysteineAnalysisOutput1);
 
 
@@ -176,7 +176,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(6);
+            Task targetedFeatureFinder = new BasicTFF(6);
             Task exporter = new BasicMTResultSQLiteExporter(methionineAnalysisOutput1);
 
 
@@ -344,7 +344,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(6);
+            Task targetedFeatureFinder = new BasicTFF(6);
             Task exporter = new BasicMTResultSQLiteExporter(cysteineAnalysisOutput1);
 
 

@@ -112,6 +112,14 @@ namespace DeconTools.Backend
             UIMF_MS_Only_TestController
         }
 
+        public enum LabellingType
+        {
+            NONE,
+            O18,
+            N15
+        }
+
+
 
 
 

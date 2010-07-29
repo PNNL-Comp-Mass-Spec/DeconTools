@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend;
 
 namespace DeconTools.UnitTesting2
 {
@@ -88,6 +89,23 @@ namespace DeconTools.UnitTesting2
         }
 
 
+        public static List<MassTag> CreateN14N15TestMassTagList()
+        {
+            List<MassTag> mtList = new List<MassTag>();
+
+            MassTag mt = new MassTag();
+            mt.ID = 23085473;
+            mt.NETVal = 0.3807834F;
+            mt.MonoIsotopicMass = 2538.33284203802;
+            mt.ChargeState = 3;
+            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+            mt.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
+            mt.CreatePeptideObject();
+
+            mtList.Add(mt);
+            return mtList;
+
+        }
 
 
     }

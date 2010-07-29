@@ -27,8 +27,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         }
 
-        public double GetRatioBasedOnTopPeaks(IsotopicProfile iso1, IsotopicProfile iso2,
-            IsotopicProfile theorIso1, IsotopicProfile theorIso2, double backgroundIntensity, int numPeaks)
+
+        public void GetRatioBasedOnTopPeaks(IsotopicProfile iso1, IsotopicProfile iso2,
+                    IsotopicProfile theorIso1, IsotopicProfile theorIso2, double backgroundIntensity, int numPeaks,
+                    out double ratio, out double ratioContribForIso1, out double ratioContribForIso2)
         {
 
 
@@ -42,6 +44,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             double toleranceInPPM = 25;
 
             //get the top n peaks of the experimental profile, based on peaks of the theor profile
+            //adjust intensity (subtract background intensity)
             IList<IPeak> topIso1Peaks = getTopPeaksBasedOnTheor(iso1, topTheorIso1Peaks, toleranceInPPM);
             IList<IPeak> topIso2Peaks = getTopPeaksBasedOnTheor(iso2, topTheorIso2Peaks, toleranceInPPM);
 
@@ -51,25 +54,33 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             IList<IPeak> filteredTopTheorIso1Peaks = getTopPeaksBasedOnTheor(theorIso1, topIso1Peaks, toleranceInPPM);
             IList<IPeak> filteredTopTheorIso2Peaks = getTopPeaksBasedOnTheor(theorIso2, topIso2Peaks, toleranceInPPM);
 
-            double summedIso1PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso1Peaks, backgroundIntensity);
-            double summedIso2PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso2Peaks, backgroundIntensity);
+            double summedTopIso1PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso1Peaks, backgroundIntensity);
+            double summedTopIso2PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso2Peaks, backgroundIntensity);
+
+            //Console.WriteLine(backgroundIntensity);
 
             //need to find out the contribution of the top n peaks to the overall isotopic envelope.  Base this on the theor profile
-            double summedTheorIso1Intensities = filteredTopTheorIso1Peaks.Sum(p => p.Height);
-            double summedTheorIso2Intensities = filteredTopTheorIso2Peaks.Sum(p => p.Height);
+            double summedTheorIso1Intensities = filteredTopTheorIso1Peaks.Sum(p => (p.Height));
+            double summedTheorIso2Intensities = filteredTopTheorIso2Peaks.Sum(p => (p.Height));
 
 
             double fractionTheor1 = summedTheorIso1Intensities / theorIso1.Peaklist.Sum(p => p.Height);
             double fractionTheor2 = summedTheorIso2Intensities / theorIso2.Peaklist.Sum(p => p.Height);
 
             //use the above ratio to correct the intensities based on how much the top n peaks contribute to the profile. 
-            double correctedIso1SummedIntens = summedIso1PeakIntensities / fractionTheor1;
-            double correctedIso2SummedIntens = summedIso2PeakIntensities / fractionTheor2;
+            double correctedIso1SummedIntens = summedTopIso1PeakIntensities / fractionTheor1;
+            double correctedIso2SummedIntens = summedTopIso2PeakIntensities / fractionTheor2;
 
-            double ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
+            double summedAllIsos1PeakIntensities = iso1.Peaklist.Sum(p => (p.Height - backgroundIntensity));
+            double summedAllIsos2PeakIntensities = iso2.Peaklist.Sum(p => (p.Height - backgroundIntensity));
 
 
-            return ratio;
+            ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
+            ratioContribForIso1 = summedTopIso1PeakIntensities / summedAllIsos1PeakIntensities * 1 / fractionTheor1;   //we expect a value of '1'
+            ratioContribForIso2 = summedTopIso2PeakIntensities / summedAllIsos2PeakIntensities * 1 / fractionTheor2;
+
+
+
 
         }
 
@@ -165,27 +176,31 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             return topPeaks;
         }
 
-        private IList<IPeak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
+        private List<IPeak> getTopPeaks(IsotopicProfile iso, int numPeaks)
         {
+            List<IPeak> sortedList = new List<IPeak>();
 
-            IPeak peak = theorIso1.Peaklist[0];
-
-            IList<IPeak> sortedList = new List<IPeak>();
-            sortedList.Add(theorIso1.Peaklist[0]);
-
-            for (int i = 1; i < theorIso1.Peaklist.Count; i++)
+            //add peaks to new List so we don't mess up the old one
+            for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                if (theorIso1.Peaklist[i].Height > sortedList[0].Height)
-                {
-                    sortedList.Insert(0, theorIso1.Peaklist[i]);
-                }
-                else
-                {
-                    sortedList.Add(theorIso1.Peaklist[i]);
-                }
+                sortedList.Add(iso.Peaklist[i]);
             }
 
-            return sortedList.Take(numPeaks).ToList();
+
+            sortedList.Sort(delegate(IPeak peak1, IPeak peak2)
+            {
+                return peak2.Height.CompareTo(peak1.Height);
+            }
+            );
+
+
+            //sortedList.Reverse();
+
+            //take top n peaks
+            sortedList = sortedList.Take(numPeaks).ToList();
+
+            return sortedList;
+
 
 
         }
@@ -231,10 +246,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         }
         #endregion
 
-   
-  
 
-       
+
+
+
 
 
 

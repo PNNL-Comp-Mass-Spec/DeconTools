@@ -87,7 +87,7 @@ namespace DeconTools.Backend.Data.Importers
             mt.ID = parseIntField(lineData[getIndexForTableHeader(headers, "id", true)]);
             mt.PeptideSequence = lineData[getIndexForTableHeader(headers, "sequence", true)];
             mt.NETVal = parseFloatField(lineData[getIndexForTableHeader(headers, "net", true)]);
-
+            mt.ObsCount = parseIntField(lineData[getIndexForTableHeader(headers, "obscount", true)]);
             mt.MZ = parseDoubleField(lineData[getIndexForTableHeader(headers, "mz", true)]);
 
             mt.CreatePeptideObject(false);
@@ -99,7 +99,8 @@ namespace DeconTools.Backend.Data.Importers
                 
             }
             mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
-
+            mt.RefID = parseIntField(lineData[getIndexForTableHeader(headers, "ref_id", true)]);
+           
             
             return mt;
             

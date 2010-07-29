@@ -91,7 +91,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
                 Task msPeakdetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-                Task finder = new O16O18FeatureFinderTask(10);
+                Task finder = new O16O18TFFTask(10);
 
                 run.ResultCollection.MassTagResultType = Globals.MassTagResultType.O16O18_MASSTAG_RESULT;
 
@@ -245,7 +245,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
                     Task fitScoreCalc = new DeconTools.Backend.ProcessingTasks.FitScoreCalculators.MassTagFitScoreCalculator();
 
-                    Task finder = new O16O18FeatureFinderTask(10);
+                    Task finder = new O16O18TFFTask(10);
 
                     LeftOfMonoPeakLooker resultFlagger = new DeconTools.Backend.ProcessingTasks.ResultValidators.LeftOfMonoPeakLooker();
 
@@ -520,7 +520,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 3, false, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task finder = new O16O18FeatureFinderTask(5);
+            Task finder = new O16O18TFFTask(5);
 
             List<Task> taskList = new List<Task>();
 

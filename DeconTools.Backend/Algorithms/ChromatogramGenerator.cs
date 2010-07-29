@@ -16,12 +16,19 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
+        /// <summary>
+        /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
+        /// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
+        /// that encompass individual peaks of an isotopic profile. 
+        /// </summary>
+        /// <param name="msPeakList"></param>
+        /// <param name="minScan"></param>
+        /// <param name="maxScan"></param>
+        /// <param name="targetMZList"></param>
+        /// <param name="toleranceInPPM"></param>
+        /// <returns></returns>
+        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM)
         {
-
-            double lowerMZ = targetMZ - toleranceInPPM * targetMZ / 1e6;
-            double upperMZ = targetMZ + toleranceInPPM * targetMZ / 1e6;
-
             int scanTolerance = 5;     // TODO:   keep an eye on this
 
             int indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
@@ -35,22 +42,48 @@ namespace DeconTools.Backend.Algorithms
                 currentIndex++;
             }
 
-            filteredPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
-
             XYData chromData = null;
-            if (filteredPeakList == null || filteredPeakList.Count == 0)
+
+            foreach (var targetMZ in targetMZList)
             {
-                return chromData;
-            }
-            else
-            {
-                 chromData = getChromDataAndFillInZeros(filteredPeakList);
+                double lowerMZ = targetMZ - toleranceInPPM * targetMZ / 1e6;
+                double upperMZ = targetMZ + toleranceInPPM * targetMZ / 1e6;
+
+                
+
+                List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+
+                if (tempPeakList == null || tempPeakList.Count == 0)
+                {
+
+                }
+                else
+                {
+                    XYData currentChromdata = getChromDataAndFillInZeros(tempPeakList);
+                    chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromdata);
+                }
 
             }
-            
+
             return chromData;
-            
+        }
 
+
+        /// <summary>
+        /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans. 
+        /// </summary>
+        /// <param name="msPeakList"></param>
+        /// <param name="minScan"></param>
+        /// <param name="maxScan"></param>
+        /// <param name="targetMZ"></param>
+        /// <param name="toleranceInPPM"></param>
+        /// <returns></returns>
+        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
+        {
+            List<double> targetMZList = new List<double>();
+            targetMZList.Add(targetMZ);
+
+            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
         }
 
         private XYData getChromDataAndFillInZeros(List<MSPeakResult> filteredPeakList)
@@ -73,7 +106,7 @@ namespace DeconTools.Backend.Algorithms
             SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
             for (int i = peakListMinScan; i <= peakListMaxScan; i++)
             {
-                    xyValues.Add(i, 0);
+                xyValues.Add(i, 0);
             }
 
             //iterate over the peaklist and extract intensity values
@@ -97,6 +130,52 @@ namespace DeconTools.Backend.Algorithms
             return outputXYData;
 
 
+        }
+
+        private XYData AddCurrentXYDataToBaseXYData(XYData baseData, XYData newdata)
+        {
+            XYData returnedData = new XYData();
+
+            if (baseData == null)
+            {
+                returnedData = newdata;
+            }
+            else
+            {
+                //this might need to be cleaned up   :)
+
+                //first add the base data
+                SortedDictionary<int, double> baseValues = new SortedDictionary<int, double>();
+                for (int i = 0; i < baseData.Xvalues.Length; i++)
+                {
+                    baseValues.Add((int)baseData.Xvalues[i], baseData.Yvalues[i]);
+                }
+
+
+                //now combine base data with the new
+                for (int i = 0; i < newdata.Xvalues.Length; i++)
+                {
+                    int scanToBeInserted = (int)newdata.Xvalues[i];
+                    double intensityToBeInserted = newdata.Yvalues[i];
+
+                    if (baseValues.ContainsKey(scanToBeInserted))
+                    {
+                        baseValues[scanToBeInserted] += intensityToBeInserted;
+                    }
+                    else
+                    {
+                        baseValues.Add(scanToBeInserted, intensityToBeInserted);
+                    }
+
+                }
+
+
+                returnedData.Xvalues = XYData.ConvertIntsToDouble(baseValues.Keys.ToArray());
+                returnedData.Yvalues = baseValues.Values.ToArray();
+
+            }
+
+            return returnedData;
         }
 
 
@@ -136,5 +215,7 @@ namespace DeconTools.Backend.Algorithms
         }
 
         #endregion
+
+
     }
 }

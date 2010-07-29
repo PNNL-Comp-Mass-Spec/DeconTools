@@ -16,17 +16,24 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        public ChromPeakSelector(int numLCScansToSum, double tolerance)
-            : this(1,tolerance, Globals.PeakSelectorMode.MOST_INTENSE)
+        public ChromPeakSelector(int numLCScansToSum, double netTolerance)
+            : this(1, netTolerance, Globals.PeakSelectorMode.MOST_INTENSE)
         {
 
         }
 
-        public ChromPeakSelector(int numLCScansToSum, double tolerance, Globals.PeakSelectorMode peakSelectorMode)
+        public ChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode)
+            : this(numLCScansToSum, netTolerance, peakSelectorMode, 0)
         {
-            this.Tolerance = tolerance;
+
+        }
+
+        public ChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode, int scanOffSet)
+        {
+            this.NETTolerance = netTolerance;
             this.PeakSelectionMode = peakSelectorMode;
             this.numScansToSum = numLCScansToSum;
+            this.ScanOffSet = scanOffSet;
         }
 
         #endregion
@@ -42,11 +49,15 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         private double tolerance;
-        public double Tolerance
+        public double NETTolerance
         {
             get { return tolerance; }
             set { tolerance = value; }
         }
+
+        public int ScanOffSet { get; set; }
+
+        public double NETValueForIntelligentMode { get; set; }
 
 
         public int numScansToSum { get; set; }       // this might be better elsewhere, but for now put it here...
@@ -66,34 +77,55 @@ namespace DeconTools.Backend.ProcessingTasks
 
             MassTagResultBase result = resultList.GetMassTagResult(resultList.Run.CurrentMassTag);
 
-            ChromPeak bestPeak =(ChromPeak) selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NETVal, this.Tolerance);
+            int numPeaksWithinTolerance = 0;
+            ChromPeak bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NETVal, this.NETTolerance, out numPeaksWithinTolerance);
+            result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
-            if (bestPeak == null)
-            {
-                result.ScanSet = null;
-                result.Flags.Add(new ChromPeakNotFoundResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
-            }
-            else 
-            {
-                result.ChromPeakSelected = bestPeak;
-                result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run);
-            }
 
-            Check.Ensure(result.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
-            resultList.Run.CurrentScanSet = result.ScanSet;   // maybe good to set this here so that the MSGenerator can operate on it...  
+
+            //if (bestPeak == null)
+            //{
+            //    result.ScanSet = null;
+            //    result.Flags.Add(new ChromPeakNotFoundResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
+            //}
+            //else
+            //{
+            //    result.ChromPeakSelected = bestPeak;
+            //    result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run, this.ScanOffSet);
+            //}
+
+            ScanSet scanset = createSummedScanSet(bestPeak, resultList.Run, this.ScanOffSet);
+            resultList.Run.CurrentScanSet = scanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
+
+            result.AddSelectedChromPeakAndScanSet(bestPeak, scanset);
+
+            Check.Ensure(result.ChromPeakSelected != null && result.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
+
+
 
         }
 
-        private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run)
+        private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run, int scanOffset)
         {
+            if (chromPeak == null || chromPeak.XValue == 0) return null;
+
             int bestScan = (int)chromPeak.XValue;
-            bestScan= run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
+            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
+            bestScan = bestScan + scanOffset;
             return new ScanSetFactory().CreateScanSet(run, bestScan, this.numScansToSum);
         }
 
+
         public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance)
         {
+            int numPeaksWithinTolerance = 0;
+            return selectBestPeak(peakSelectionMode, chromPeakList, targetNET, netTolerance, out numPeaksWithinTolerance);
+        }
+
+        public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
+        {
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
+
 
 
             foreach (ChromPeak peak in chromPeakList)
@@ -103,6 +135,8 @@ namespace DeconTools.Backend.ProcessingTasks
                     peaksWithinTol.Add(peak);
                 }
             }
+
+            numPeaksWithinTolerance = peaksWithinTol.Count;
 
 
             ChromPeak bestPeak = null;
@@ -137,14 +171,25 @@ namespace DeconTools.Backend.ProcessingTasks
                     }
                     break;
                 case Globals.PeakSelectorMode.INTELLIGENT_MODE:
-                    throw new NotImplementedException();
+                    diff = double.MaxValue;
+
+                    for (int i = 0; i < peaksWithinTol.Count; i++)
+                    {
+                        double currentDiff = Math.Abs(peaksWithinTol[i].NETValue - NETValueForIntelligentMode);
+
+                        if (currentDiff < diff)
+                        {
+                            diff = currentDiff;
+                            bestPeak = peaksWithinTol[i];
+                        }
+                    } 
                     break;
                 default:
                     break;
 
 
             }
-            
+
             return bestPeak;
         }
 

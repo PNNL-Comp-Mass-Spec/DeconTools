@@ -29,6 +29,14 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
+        public double BackGroundIntensity
+        {
+            get { return m_backgroundIntensity; }
+            set { m_backgroundIntensity = value; }
+        }
+
+
+
         private double sigNoiseThreshold;
 
         public double SigNoiseThreshold

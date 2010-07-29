@@ -5,6 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
+    [Serializable]
     public abstract class IPeak
     {
         #region Constructors

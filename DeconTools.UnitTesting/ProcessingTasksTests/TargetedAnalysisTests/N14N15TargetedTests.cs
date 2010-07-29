@@ -33,6 +33,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
         List<long> fourTestMTs = new List<long>{ 23091034, 23091326, 23095273, 2320533 };
 
 
+        double chromPPMTolerance = 15;
+        double msPPMTolerance = 15;
+
+
+
         [Test]
         public void find_unlabelledAndUnlabelledIsotopicProfilesTest1()
         {
@@ -61,7 +66,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
+            N14N15TFFTask finder = new N14N15TFFTask(30);
             finder.Execute(run.ResultCollection);
 
             //TestUtilities.DisplayIsotopicProfileData(finder.LabeledTheorProfile);
@@ -102,7 +107,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
+            N14N15TFFTask finder = new N14N15TFFTask(30);
             finder.Execute(run.ResultCollection);
 
 
@@ -121,6 +126,16 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
 
         }
+
+
+        [Test]
+        public void examineEffectOfNumberOfPeaksInQuantCalcOnTop40MassTags()
+        {
+
+
+        }
+
+
 
 
         [Test]
@@ -148,7 +163,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             theorFeature.Execute(run.ResultCollection);
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(30);
+            N14N15TFFTask finder = new N14N15TFFTask(30);
             finder.Execute(run.ResultCollection);
 
 
@@ -216,7 +231,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
         public List<Task> getStandardTaskList(Run run)
         {
-            Task peakChromGen = new PeakChromatogramGenerator(20);
+            Task peakChromGen = new PeakChromatogramGenerator(chromPPMTolerance);
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
             Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1, 0.01, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
@@ -225,7 +240,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 3, false, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task finder = new N14N15FeatureFinder(5);
+            Task finder = new N14N15TFFTask(5);
             Task quant = new N14N15QuantifierTask(1);
             Task fitScoreCalc = new MassTagFitScoreCalculator();
 
@@ -358,7 +373,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task theorFeatureGen = new TomTheorFeatureGenerator();
 
 
-            N14N15FeatureFinder finder = new N14N15FeatureFinder(0.01);
+            N14N15TFFTask finder = new N14N15TFFTask(0.01);
 
 
 

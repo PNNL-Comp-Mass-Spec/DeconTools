@@ -37,6 +37,9 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile IsotopicProfile { get; set; }    // the theoretical profile
 
+        public IsotopicProfile IsotopicProfileLabelled { get; set; }  // an optional labelled isotopic profile (i.e used in N15-labelling)
+
+
         public Peptide Peptide { get; set; }
 
         public string EmpiricalFormula { get; set; }

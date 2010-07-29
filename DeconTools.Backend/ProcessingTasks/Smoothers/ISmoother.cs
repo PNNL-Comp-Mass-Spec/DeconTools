@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
@@ -10,6 +11,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
         public override void Execute(ResultCollection resultList)
         {
+            Check.Require(resultList.Run.XYData != null, "Smoother not executed; no data in XYData object");
             resultList.Run.XYData = Smooth(resultList.Run.XYData);
         }
 

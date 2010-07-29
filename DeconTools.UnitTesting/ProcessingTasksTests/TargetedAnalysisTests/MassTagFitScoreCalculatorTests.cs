@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
 
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
 
             MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
 

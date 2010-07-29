@@ -6,15 +6,31 @@ using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Algorithms;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
+
+
+    public enum ChromatogramGeneratorMode
+    {
+        MONOISOTOPIC_PEAK,
+        MOST_ABUNDANT_PEAK,
+        TOP_N_PEAKS
+    }
+
+    public enum IsotopicProfileType
+    {
+        UNLABELLED,
+        LABELLED
+    }
+
+
+
     public class PeakChromatogramGenerator : Task
     {
-        double ppmTol;
         int maxZerosToAdd = 2;
         List<int> msScanList = new List<int>();
-
 
         #region Constructors
         public PeakChromatogramGenerator()
@@ -24,20 +40,44 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         public PeakChromatogramGenerator(double ppmTol)
+            : this(ppmTol, ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
         {
-            this.ppmTol = ppmTol;
 
         }
+
+        public PeakChromatogramGenerator(double ppmTolerance, ChromatogramGeneratorMode chromMode)
+            : this(ppmTolerance, chromMode, IsotopicProfileType.UNLABELLED)
+        {
+
+        }
+
+        public PeakChromatogramGenerator(double ppmTolerance, ChromatogramGeneratorMode chromMode, IsotopicProfileType isotopicProfileTarget)
+        {
+            this.PPMTolerance = ppmTolerance;
+            this.ChromatogramGeneratorMode = chromMode;
+            this.IsotopicProfileTarget = isotopicProfileTarget;
+
+            this.TopNPeaksLowerCutOff = 0.3;
+
+        }
+
         #endregion
 
         #region Properties
+        public IsotopicProfileType IsotopicProfileTarget { get; set; }
+
+        public ChromatogramGeneratorMode ChromatogramGeneratorMode { get; set; }
+
+        public double PPMTolerance { get; set; }
+
+        /// <summary>
+        /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram. 
+        /// </summary>
+        public double TopNPeaksLowerCutOff { get; set; }
+
         #endregion
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
         public override void Execute(ResultCollection resultColl)
         {
             Check.Require(resultColl.MSPeakResultList != null, "PeakChromatogramGenerator failed. No peaks.");
@@ -46,7 +86,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
-            double mz = resultColl.Run.CurrentMassTag.MZ;
             double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set lower bound (10% lower than net val)
             double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set upper bound (10% higher than net val)
 
@@ -59,14 +98,33 @@ namespace DeconTools.Backend.ProcessingTasks
             int upperScan = resultColl.Run.GetNearestScanValueForNET(maxNetVal);
             if (upperScan == -1) upperScan = resultColl.Run.MaxScan;
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
-            XYData chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, mz, ppmTol);
+
+            XYData chromValues;
+
+            if (ChromatogramGeneratorMode == ChromatogramGeneratorMode.TOP_N_PEAKS)
+            {
+                List<double> targetMZList = getTargetMZListForTopNPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
+                ChromatogramGenerator chromGen = new ChromatogramGenerator();
+                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+
+            }
+            else
+            {
+                double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
+                ChromatogramGenerator chromGen = new ChromatogramGenerator();
+                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
+            }
+
+
+
+            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
+
 
             resultColl.Run.XYData = chromValues;
 
             if (chromValues == null)
             {
-                MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
                 if (result != null)
                 {
                     result.Flags.Add(new ChromPeakNotFoundResultFlag());
@@ -80,7 +138,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
-            if (resultColl.Run.ContainsMSMSData)     
+            if (resultColl.Run.ContainsMSMSData)
             {
                 this.msScanList = resultColl.Run.GetMSLevelScanValues();
 
@@ -101,14 +159,90 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
- 
+
+
+        }
+
+        private List<double> getTargetMZListForTopNPeaks(MassTag massTag, IsotopicProfileType isotopicProfileTarget)
+        {
+            List<double> targetMZList = new List<double>();
+
+            IsotopicProfile iso = new IsotopicProfile();
+            switch (isotopicProfileTarget)
+            {
+                case IsotopicProfileType.UNLABELLED:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+                case IsotopicProfileType.LABELLED:
+                    iso = massTag.IsotopicProfileLabelled;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
+                    break;
+                default:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+            }
+
+            List<MSPeak> msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, this.TopNPeaksLowerCutOff);
+
+            Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+
+            targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
+
+            return targetMZList;
+
+
+
+        }
+
+        private double getTargetMZBasedOnChromGeneratorMode(MassTag massTag, ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
+        {
+            IsotopicProfile iso = new IsotopicProfile();
+            switch (isotopicProfileTarget)
+            {
+                case IsotopicProfileType.UNLABELLED:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+                case IsotopicProfileType.LABELLED:
+                    iso = massTag.IsotopicProfileLabelled;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
+                    break;
+                default:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+            }
+
+            MSPeak peak;
+            switch (chromatogramGeneratorMode)
+            {
+
+                case ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
+                    peak = iso.getMonoPeak();
+                    break;
+                case ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
+                    peak = iso.getMostIntensePeak();
+                    break;
+                case ChromatogramGeneratorMode.TOP_N_PEAKS:
+                    throw new NotSupportedException();
+                default:
+                    peak = iso.getMostIntensePeak();
+                    break;
+            }
+
+            return peak.XValue;
+
+
+
 
         }
 
 
-        /// <summary>
-        /// Recursive binary search algorithm for searching through MSPeakResults
-        /// </summary>
+        #endregion
+
+        #region Private Methods
         private int getIndexOfClosestMZValue(List<MSPeakResult> peakList, double targetMZ, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
@@ -381,5 +515,11 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        /// <summary>
+        /// Recursive binary search algorithm for searching through MSPeakResults
+        /// </summary>
+
     }
 }

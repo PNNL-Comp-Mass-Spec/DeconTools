@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Core
         }
 
         public List<double> test = new List<double>();
-        
+
 
 
         public List<long> MassTagIDList;
@@ -67,11 +67,11 @@ namespace DeconTools.Backend.Core
             Console.WriteLine(sb.ToString());
         }
 
-        
-        
-        
-        
-        internal void ApplyChargeStateFilter()
+
+
+
+
+        public void ApplyChargeStateFilter()
         {
             ApplyChargeStateFilter(0.1);
 
@@ -79,51 +79,54 @@ namespace DeconTools.Backend.Core
 
         }
 
-        internal void ApplyChargeStateFilter(double threshold)
+        public void ApplyChargeStateFilter(double threshold)
         {
             List<MassTag> filteredMassTagList = new List<MassTag>();
 
-            HashSet<int> massTagIDs = new HashSet<int>();
+            List<MassTag> massTagsNonRedundant = new List<MassTag>();
 
-            //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
             for (int i = 0; i < this.MassTagList.Count; i++)
             {
-                massTagIDs.Add(this.MassTagList[i].ID);
+                MassTag mtCurrent = this.MassTagList[i];
+                if (massTagsNonRedundant.Where(p => p.ID == mtCurrent.ID && p.ChargeState == mtCurrent.ChargeState).Count() == 0)
+                {
+                    massTagsNonRedundant.Add(mtCurrent);
+                }
             }
 
 
-            foreach (var mtID in massTagIDs)
+            List<int> uniqueMTIDs = (from n in massTagsNonRedundant select n.ID).Distinct().ToList();
+
+
+            foreach (int mtID in uniqueMTIDs)
             {
-
-                //get MTs with same ID (but different charge state) 
-                List<MassTag> mt_withSameID = this.MassTagList.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
-
-                //get sum of all observed MS/MS for the MT
+                List<MassTag> mt_withSameID = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
                 int totObs = mt_withSameID.Sum(p => p.ObsCount);
 
-
-
-                foreach (MassTag mt in mt_withSameID)
+                foreach (MassTag uniquelyChargedMT in mt_withSameID)
                 {
                     //if the obsCount for a charge state is greater than 10% of the total, add it. 
                     if (totObs == 0)
                     {
-                        filteredMassTagList.Add(mt);
+                        filteredMassTagList.Add(uniquelyChargedMT);
                     }
                     else
                     {
-                        if ((double)mt.ObsCount / (double)totObs > threshold)
+                        if ((double)uniquelyChargedMT.ObsCount / (double)totObs > threshold)
                         {
-                            filteredMassTagList.Add(mt);
+                            filteredMassTagList.Add(uniquelyChargedMT);
                         }
                     }
-                    
-    
+
+
 
 
                 }
 
+
             }
+
+
 
             this.MassTagList = filteredMassTagList;
 

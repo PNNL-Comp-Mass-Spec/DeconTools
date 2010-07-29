@@ -31,6 +31,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             IsotopicProfile labeledTheorProfile = TomIsotopicPattern.GetIsotopePattern(mt.GetEmpiricalFormulaAsIntArray(), TomIsotopicPattern.aafN15Isos);
             addMZInfoToTheorProfile(mt.IsotopicProfile,labeledTheorProfile, numNitrogens, mt.ChargeState);
             PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
+            
+            labeledTheorProfile.ChargeState = mt.ChargeState;
 
             return labeledTheorProfile;
 

@@ -14,12 +14,18 @@ namespace DeconTools.Backend.Core
         
         public IList<ChromPeak> ChromPeaks { get; set; }
 
+        public int NumChromPeaksWithinTolerance { get; set; }
+
+
+        public bool WasPreviouslyProcessed { get; set; }
+
         public ChromPeak ChromPeakSelected { get; set; }
 
         public MassTag MassTag { get; set; }
 
         public double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
 
+        public string ErrorDescription { get; set; }
 
         public XYData ChromValues { get; set; }
         #endregion
@@ -62,6 +68,16 @@ namespace DeconTools.Backend.Core
         #endregion
 
 
+        public int GetScanNum()
+        {
+            if (ScanSet == null) return -1;
+            else
+            {
+                return ScanSet.PrimaryScanNumber;
+            }
+        }
+
+
         public double GetNET()
         {
             if (ChromPeakSelected == null) return -1;
@@ -75,6 +91,27 @@ namespace DeconTools.Backend.Core
         internal virtual void AddLabelledIso(IsotopicProfile labelledIso)
         {
             throw new NotImplementedException();
+        }
+
+        internal virtual void AddTheoreticalLabelledIsotopicProfile(IsotopicProfile theorLabelledIso)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+      
+
+        public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
+        {
+            this.ChromPeakSelected = bestPeak;
+            this.ScanSet = scanset;
+            WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labelled (N15) data
+        }
+
+        public virtual void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
+        {
+            this.NumChromPeaksWithinTolerance = numChromPeaksWithinTolerance;
         }
     }
 }

@@ -8,9 +8,8 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend;
-using DeconTools.UnitTesting2;
 
-namespace DeconTools.UnitTesting
+namespace DeconTools.UnitTesting2
 {
     public class TestUtilities
     {

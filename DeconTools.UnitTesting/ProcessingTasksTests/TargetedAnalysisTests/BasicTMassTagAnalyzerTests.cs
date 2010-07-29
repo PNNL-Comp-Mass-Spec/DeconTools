@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             peakParams.ThresholdedData = true;
             Task peakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
             msgen.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);
@@ -158,7 +158,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
             foreach (MassTag mt in massTagColl.MassTagList)
             {
@@ -237,7 +237,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -314,7 +314,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -390,7 +390,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -469,7 +469,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -549,7 +549,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -623,7 +623,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 0.75, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(5);
+            Task targetedFeatureFinder = new BasicTFF(5);
             Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
 
 
@@ -733,7 +733,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
 
             List<long> timeData = new List<long>();
 
@@ -811,7 +811,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder();
+            Task targetedFeatureFinder = new BasicTFF();
 
 
 
@@ -886,7 +886,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
 
 
 
@@ -962,7 +962,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
 
 
 
@@ -1039,7 +1039,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
 
 
 
@@ -1113,7 +1113,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             DeconToolsV2.Peaks.clsPeakProcessorParameters peakParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters(2, 1.3, true, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             Task mspeakDet = new DeconToolsPeakDetector(peakParams);
             Task theorFeatureGen = new TomTheorFeatureGenerator();
-            Task targetedFeatureFinder = new BasicTFeatureFinder(0.01);
+            Task targetedFeatureFinder = new BasicTFF(0.01);
             Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
             MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
 

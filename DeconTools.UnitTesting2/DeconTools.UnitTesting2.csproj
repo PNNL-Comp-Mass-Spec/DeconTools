@@ -54,6 +54,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\ProteinCalc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -72,9 +76,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="FileIO_Tests\MSFeatureExporterTests.cs" />
     <Compile Include="FileIO_Tests\MSFeatureExporterFactoryTests.cs" />
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15QuantificationTesting.cs" />
+    <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
+    <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
@@ -82,6 +91,7 @@
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities\TestUtilities.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\TomTheorFeatureGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
@@ -90,6 +100,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="IMSCOMP.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="RequiredDLLs\IMSCOMP.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -100,6 +113,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="RequiredDLLs\xerces-c_2_7D.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlite3.dll" />
+    <Content Include="xerces-c_2_7.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="xerces-c_2_7D.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

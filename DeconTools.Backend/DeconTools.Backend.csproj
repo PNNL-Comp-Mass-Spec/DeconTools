@@ -136,7 +136,7 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
-    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18FeatureFinderTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
     <Compile Include="ProcessingTasks\TaskControllers\N14N15_ChromatogramApproachTaskController.cs" />
     <Compile Include="ProcessingTasks\TaskControllers\N14N15_CustomWorkflow1.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
@@ -281,9 +281,9 @@
     <Compile Include="ProcessingTasks\ResultValidators\ResultValidationUtils.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\ResultValidator.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\ResultValidatorTask.cs" />
-    <Compile Include="ProcessingTasks\TargetedFeatureFinders\BasicTFeatureFinder.cs" />
-    <Compile Include="ProcessingTasks\TargetedFeatureFinders\ITargetedFeatureFinder.cs" />
-    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15FeatureFinder.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\BasicTFF.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\TFFBase.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15TFFTask.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\ITheorFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\MercuryFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
@@ -295,6 +295,7 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
+    <Compile Include="Utilities\SerializerGeneric.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\SqliteNETUtils.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />

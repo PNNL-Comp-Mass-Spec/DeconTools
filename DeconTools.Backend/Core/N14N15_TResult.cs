@@ -7,6 +7,8 @@ namespace DeconTools.Backend.Core
 {
     public class N14N15_TResult : MassTagResultBase
     {
+
+
         #region Constructors
 
         public N14N15_TResult()
@@ -33,16 +35,28 @@ namespace DeconTools.Backend.Core
             set { m_IsotopicProfileLabeled = value; }
         }
 
-        
-        
+
+        public IsotopicProfile TheorIsotopicProfileLabeled { get; set; }
+
+
+        public int NumChromPeaksWithinToleranceForN15Profile { get; set; }
+        public ChromPeak ChromPeakSelectedForN15Profile { get; set; }
+        public ScanSet ScanSetForN15Profile { get; set; }
+
+
+        public double ScoreN15 { get; set; }
+
         public double RatioN14N15 { get; set; }
+        public double RatioContributionN14 { get; set; }
+        public double RatioContributionN15 { get; set; }
+
 
 
         /// <summary>
         /// Store chromatogram data for one or more peaks from the unlabeled isotopic profile
         /// </summary>
         public Dictionary<MSPeak, XYData> UnlabeledPeakChromData { get; set; }
-        
+
         /// <summary>
         /// Store chromatogram data for one or more peaks from the labeled isotopic profile
         /// </summary>
@@ -60,6 +74,55 @@ namespace DeconTools.Backend.Core
             Console.WriteLine("Ratio = \t" + this.RatioN14N15.ToString("0.##"));
         }
 
+
+        public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
+        {
+            //if result was not previously processed, will do a standard add of selected chrom peak and scanset
+            //if result was previously processed, add new data to the Labelled results 
+            if (!WasPreviouslyProcessed)
+            {
+                base.AddSelectedChromPeakAndScanSet(bestPeak, scanset);
+            }
+            else
+            {
+                this.ChromPeakSelectedForN15Profile = bestPeak;
+                this.ScanSetForN15Profile = scanset;
+            }
+        }
+
+
+        public override void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
+        {
+            if (!WasPreviouslyProcessed)
+            {
+                base.AddNumChromPeaksWithinTolerance(numChromPeaksWithinTolerance);
+            }
+            else
+            {
+                this.NumChromPeaksWithinToleranceForN15Profile = numChromPeaksWithinTolerance;
+            }
+        }
+
+        public int GetScanNumN15()
+        {
+            if (this.ScanSetForN15Profile == null) return -1;
+            else
+            {
+                return this.ScanSetForN15Profile.PrimaryScanNumber;
+            }
+        }
+
+
+        public double GetNETN15()
+        {
+            if (this.ChromPeakSelectedForN15Profile == null) return -1;
+            return this.ChromPeakSelectedForN15Profile.NETValue;
+
+        }
+
+
+
+
         #endregion
 
         #region Private Methods
@@ -68,6 +131,11 @@ namespace DeconTools.Backend.Core
         internal override void AddLabelledIso(IsotopicProfile labelledIso)
         {
             this.IsotopicProfileLabeled = labelledIso;
+        }
+
+        internal override void AddTheoreticalLabelledIsotopicProfile(IsotopicProfile theorLabelledIso)
+        {
+            this.TheorIsotopicProfileLabeled = theorLabelledIso;
         }
 
 

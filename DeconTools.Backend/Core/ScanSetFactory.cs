@@ -23,9 +23,12 @@ namespace DeconTools.Backend.Core
 
             List<int> lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
             List<int> upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            
             List<int> scansToSum = lowerScansToSum;
             scansToSum.Add(scan);
             scansToSum.AddRange(upperScansToSum);
+            //scansToSum.Sort();
+
             return new ScanSet(scan, scansToSum.ToArray());
 
         }
