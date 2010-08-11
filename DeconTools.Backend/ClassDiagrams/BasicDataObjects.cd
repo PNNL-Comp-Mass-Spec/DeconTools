@@ -10,14 +10,14 @@
   <Class Name="DeconTools.Backend.Core.MSPeak">
     <Position X="4.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQAABAAAAAAAAAAAAEAgACAAKAAAAAAAAACAAAA=</HashCode>
+      <HashCode>AAAAAQAABAAAAAAAAAAAAEAgACAAKAAAAAAAAACQAAA=</HashCode>
       <FileName>Core\MSPeak.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DeconTools.Backend.Core.ChromPeak">
     <Position X="2.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAABAAAAgAAQAIAAUAAAAAACAAAAAAAAACAAAA=</HashCode>
+      <HashCode>AAAAEAAABAAAAgAEQAIAAUAAAAAACAAAAAAAAACAAAA=</HashCode>
       <FileName>Core\ChromPeak.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -32,7 +32,11 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="DeconTools.Backend.Core.IsotopicProfile">
-    <Position X="11.25" Y="1.75" Width="3" />
+    <Position X="10.75" Y="1.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AjAAAAAQAhhSAAiCYACJADgAKAgAAAIAAAgBsAAgIBA=</HashCode>
       <FileName>Core\IsotopicProfile.cs</FileName>
@@ -41,7 +45,7 @@
   <Class Name="DeconTools.Backend.Core.MassTag">
     <Position X="2.25" Y="7" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAAABCgAQAAACAIAAgAgACAAQAAAAAACCAAEI=</HashCode>
+      <HashCode>AAAIAAAAAABCgAQAAACAIAAgQgACAAQAAAAAACCAAEI=</HashCode>
       <FileName>Core\MassTag.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -55,7 +59,7 @@
   <Class Name="DeconTools.Backend.XYData">
     <Position X="2.25" Y="11.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>IQIAgAEBAAAAAAAAAAAAAQBAIADQAABIAAAgAAAAAIA=</HashCode>
+      <HashCode>IQIAgAEBAAAAAAAAAAAAAQBAIADQAABIAAQgAAAAAIA=</HashCode>
       <FileName>Data\XYData.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -65,7 +69,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>IwEIQLFJAAAIQEAgAAAECA4YAAAiRAUEgwEBkIQQEAA=</HashCode>
+      <HashCode>IxEIQLFJAAgIQEAgAAQECA4YBAAiRAUEgwFhkISQEAA=</HashCode>
       <FileName>Core\Run.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -74,6 +78,13 @@
     <TypeIdentifier>
       <HashCode>AFAAUAAwAAQAAAAEAAAIAAQAAAAAUggAABMABAABAEA=</HashCode>
       <FileName>Core\ScanSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeconTools.Backend.Core.UIMFIsosResult">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAQAAAAAAAAAAAAAAAAAAAAAgAAAAIAAAAAAAA=</HashCode>
+      <FileName>Core\UIMFIsosResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Tahoma" Size="8.25" />

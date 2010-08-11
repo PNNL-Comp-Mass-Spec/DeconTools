@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.GetAbundance());
             sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
+            sb.Append(result.IsotopicProfile.GetMZofMostAbundantPeak().ToString("0.#####"));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.Score.ToString("0.####"));
             sb.Append(delimiter);

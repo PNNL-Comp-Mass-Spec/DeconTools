@@ -6,20 +6,19 @@ using NUnit.Framework;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.ProcessingTasks;
 
-namespace DeconTools.Backend.ProcessingTasks
+namespace DeconTools.UnitTesting2
 {
     [TestFixture]
     public class DemoTests
     {
-        string xcaliburTestFile1 = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-
         [Test]
         public void createRunAndReadMSSpectraTest1()
         {
             //Create the run
             DeconTools.Backend.Data.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(xcaliburTestFile1);
+            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
 
 
             //Create the task
@@ -39,11 +38,11 @@ namespace DeconTools.Backend.ProcessingTasks
                 run.CurrentScanSet = scan;
                 msgen.Execute(run.ResultCollection);
 
-                Console.WriteLine("XYPair count = " + run.XYData.Xvalues.Length); 
+                Console.WriteLine("XYPair count = " + run.XYData.Xvalues.Length);
             }
 
-            
-            
+
+
 
 
         }
@@ -54,7 +53,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             //Create the run
             DeconTools.Backend.Data.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(xcaliburTestFile1);
+            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
 
 
             //Create the task
@@ -68,20 +67,20 @@ namespace DeconTools.Backend.ProcessingTasks
 
             for (int i = startScan; i < stopScan; i++)
             {
-                if (run.GetMSLevel(i)==2)
+                if (run.GetMSLevel(i) == 2)
                 {
                     ScanSet scanset = new ScanSet(i);
                     run.CurrentScanSet = scanset;
                     msgen.Execute(run.ResultCollection);
 
-                    Console.WriteLine("Working on Scan " + scanset.PrimaryScanNumber);
-                    Console.WriteLine("XYPair count = " + run.XYData.Xvalues.Length); 
+                    Console.Write("Working on Scan " + scanset.PrimaryScanNumber);
+                    Console.WriteLine("; XYPair count = " + run.XYData.Xvalues.Length);
 
 
                 }
 
 
-                
+
             }
 
 
@@ -91,6 +90,27 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-     
+        [Test]
+        public void tempGetMSMSDataTest2()
+        {
+            DeconToolsV2.Readers.clsRawData run = new DeconToolsV2.Readers.clsRawData(FileRefs.OrbitrapStdFile1, DeconToolsV2.Readers.FileType.FINNIGAN);
+
+            int startScan = 6000;
+            int stopScan = 7000;
+
+            for (int i = startScan; i < stopScan; i++)
+            {
+                string scanInfo = run.GetScanDescription(i);
+                int scanLevel = run.GetMSLevel(i);
+
+                Console.Write("Working on Scan " + i);
+                Console.WriteLine("; Scan info = " + scanInfo);
+
+            }
+
+
+            
+        }
+
     }
 }

@@ -54,6 +54,12 @@ namespace DeconTools.Backend.Core
             get { return sigNoise; }
             set { sigNoise = value; }
         }
+
+        public override string ToString()
+        {
+            return (XValue.ToString("0.#") + "; " + Height.ToString("0.#"));
+        }
+
         #endregion
 
         #region Public Methods

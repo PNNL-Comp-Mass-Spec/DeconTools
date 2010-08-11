@@ -213,6 +213,8 @@ namespace DeconTools.Backend.Core
             this.MassTagResultList.Add(massTag, result);
             result.MSFeatureID = MSFeatureCounter;
             result.Score = 1;
+            result.Run = this.Run;
+
             this.MSFeatureCounter++;
             return result;
         }
