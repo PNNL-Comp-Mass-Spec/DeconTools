@@ -6,6 +6,7 @@ using NUnit.Framework;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -17,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks
         public void createRunAndReadMSSpectraTest1()
         {
             //Create the run
-            DeconTools.Backend.Data.RunFactory runFactory = new RunFactory();
+            DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
             DeconTools.Backend.Core.Run run = runFactory.CreateRun(xcaliburTestFile1);
 
 

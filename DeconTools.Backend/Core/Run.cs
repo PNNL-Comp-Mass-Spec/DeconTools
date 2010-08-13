@@ -9,7 +9,7 @@ using DeconTools.Utilities;
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public abstract class Run
+    public abstract class Run : IDisposable
     {
 
         public Run()
@@ -78,7 +78,7 @@ namespace DeconTools.Backend.Core
         }
 
         [field: NonSerialized]
-        private List<IPeak> peakList;     
+        private List<IPeak> peakList;
         public List<IPeak> PeakList
         {
             get { return peakList; }
@@ -152,12 +152,16 @@ namespace DeconTools.Backend.Core
                 return mslevel;
 
             }
-
-
-
-
         }
+
+        public virtual void GetMassSpectrum(ScanSet scanset)
+        {
+            //set a wide mz range so we get everything
+            this.GetMassSpectrum(scanset, 0, 100000);
+        }
+
         public abstract void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
+
         public virtual float GetTIC(double minMZ, double maxMZ)
         {
             if (this.XYData == null || this.XYData.Xvalues == null || this.XYData.Yvalues == null) return -1;
@@ -295,7 +299,7 @@ namespace DeconTools.Backend.Core
         {
             if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
 
-            double diff=double.MaxValue;
+            double diff = double.MaxValue;
             int closestScan = -1;
 
 
@@ -341,8 +345,8 @@ namespace DeconTools.Backend.Core
         {
             if (scanNum < 2) return 0;
             int maxScan = this.GetNumMSScans();
-            
-          
+
+
             double lowerNET = 0;
             double upperNET = 1;
             int lowerScan = 1;
@@ -350,9 +354,9 @@ namespace DeconTools.Backend.Core
 
 
             bool found = false;
-            int currentScan=scanNum;
+            int currentScan = scanNum;
 
-            while (!found && currentScan>0)
+            while (!found && currentScan > 0)
             {
                 currentScan--;
                 if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
@@ -363,8 +367,8 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-            found=false;
-            currentScan=scanNum;
+            found = false;
+            currentScan = scanNum;
             while (!found && currentScan < maxScan)
             {
                 currentScan++;
@@ -381,19 +385,19 @@ namespace DeconTools.Backend.Core
             double yintercept = (upperNET - slope * upperScan);
 
             return (float)(scanNum * slope + yintercept);
-          
+
         }
 
 
- 
 
 
-        
 
-  
+
+
+
         public virtual int GetClosestMSScan(int inputScan, Globals.ScanSelectionMode scanSelectionMode)
         {
-   
+
 
             switch (scanSelectionMode)
             {
@@ -404,7 +408,7 @@ namespace DeconTools.Backend.Core
                     }
                     // reached end of scans. Don't want to throw a nasty error, so return what was inputted.
                     return inputScan;
-                    
+
                     break;
                 case Globals.ScanSelectionMode.DESCENDING:
                     for (int i = inputScan; i >= this.MinScan; i--)
@@ -465,12 +469,12 @@ namespace DeconTools.Backend.Core
         /// <returns>
         /// List of Scan numbers pertaining to MS1-level scans only. 
         /// </returns>
-        
-        
+
+
         public List<int> GetMSLevelScanValues()
         {
             return GetMSLevelScanValues(this.MinScan, this.MaxScan);
-     
+
         }
 
         public List<int> GetMSLevelScanValues(int minScan, int maxScan)
@@ -517,14 +521,14 @@ namespace DeconTools.Backend.Core
         }
 
 
-        protected SortedDictionary<int,byte> MSLevelList { get; set; }
+        protected SortedDictionary<int, byte> MSLevelList { get; set; }
 
         public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
         {
 
             return null;
 
-       
+
 
 
 
@@ -549,7 +553,7 @@ namespace DeconTools.Backend.Core
         {
             if (this.CurrentScanSet != null)
             {
-                return "Scan = " + this.CurrentScanSet.PrimaryScanNumber.ToString(); 
+                return "Scan = " + this.CurrentScanSet.PrimaryScanNumber.ToString();
             }
             else
             {
@@ -557,5 +561,14 @@ namespace DeconTools.Backend.Core
             }
 
         }
+
+        #region IDisposable Members
+
+        public virtual void Dispose()
+        {
+            this.Close();
+        }
+
+        #endregion
     }
 }

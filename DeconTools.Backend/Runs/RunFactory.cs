@@ -6,7 +6,7 @@ using DeconTools.Backend.Runs;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace DeconTools.Backend.Data
+namespace DeconTools.Backend.Runs
 {
     public class RunFactory
     {
@@ -61,6 +61,10 @@ namespace DeconTools.Backend.Data
                 case ".d":
                     run = new AgilentD_Run(fileName);
                     break;
+                case ".yafms":
+                    run = new YAFMSRun(fileName);
+                    break;
+                
                 default:
                     run = null;
                     break;
@@ -116,6 +120,10 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
+                case Globals.MSFileType.YAFMS:
+                    run = new YAFMSRun(fileName);
+                    break;
+                
                 default:
                     run = null;
                     break;
@@ -223,6 +231,17 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
+                case Globals.MSFileType.YAFMS:
+                    if (parameters.HornTransformParameters.UseScanRange)
+                    {
+                        run = new YAFMSRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                    }
+                    else
+                    {
+                        run = new YAFMSRun(filename);
+                    }
+                    break;
+
                 default:
                     run = null;
                     break;

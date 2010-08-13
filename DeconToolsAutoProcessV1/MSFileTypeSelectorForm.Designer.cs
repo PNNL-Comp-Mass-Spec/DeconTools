@@ -35,7 +35,8 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(12, 201);
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnOK.Location = new System.Drawing.Point(12, 229);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(80, 36);
             this.btnOK.TabIndex = 1;
@@ -45,7 +46,8 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(98, 201);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCancel.Location = new System.Drawing.Point(97, 229);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 36);
             this.btnCancel.TabIndex = 1;
@@ -55,17 +57,19 @@
             // 
             // listBox1
             // 
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(12, 12);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(165, 173);
+            this.listBox1.Size = new System.Drawing.Size(165, 212);
             this.listBox1.TabIndex = 2;
             // 
             // MSFileTypeSelectorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(198, 249);
+            this.ClientSize = new System.Drawing.Size(198, 267);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);

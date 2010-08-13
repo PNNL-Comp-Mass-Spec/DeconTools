@@ -51,7 +51,7 @@ namespace DeconToolsAutoProcessV1
                         return Globals.MSFileType.Finnigan;
                     }
                     else if (extension.ToLower() == ".imf")
-                    {
+                    {   
                         return Globals.MSFileType.PNNL_IMS;
                     }
                     else if (extension.ToLower() == ".uimf")
@@ -62,10 +62,15 @@ namespace DeconToolsAutoProcessV1
                     {
                         return Globals.MSFileType.MZXML_Rawdata;
                     }
+                    else if (extension.ToLower() == ".yafms")
+                    {
+                        return Globals.MSFileType.YAFMS;
+                    }
                     else if (Path.GetFileName(filename).ToLower() == "acqus")
                     {
                         return Globals.MSFileType.Bruker;
                     }
+                   
                     else
                     {
                         return Globals.MSFileType.Undefined;

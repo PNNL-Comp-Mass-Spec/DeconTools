@@ -7,6 +7,7 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.UnitTesting2
 {
@@ -17,7 +18,7 @@ namespace DeconTools.UnitTesting2
         public void createRunAndReadMSSpectraTest1()
         {
             //Create the run
-            DeconTools.Backend.Data.RunFactory runFactory = new RunFactory();
+            DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
             DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
 
 
@@ -52,7 +53,7 @@ namespace DeconTools.UnitTesting2
         public void getMSMSDataTest1()
         {
             //Create the run
-            DeconTools.Backend.Data.RunFactory runFactory = new RunFactory();
+            DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
             DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
 
 

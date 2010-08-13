@@ -98,6 +98,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="YafmsLibrary, Version=1.0.3831.22870, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
@@ -203,7 +207,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
-    <Compile Include="Data\RunFactory.cs" />
+    <Compile Include="Runs\RunFactory.cs" />
     <Compile Include="Data\ScanResultFactory.cs" />
     <Compile Include="Data\Exporters\ScansExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\MassTagResult_SqliteTable.cs" />
@@ -289,6 +293,7 @@
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
     <Compile Include="ProjectControllers\UIMFMSOnlyProjectController.cs" />
     <Compile Include="Runs\AgilentD_Run.cs" />
+    <Compile Include="Runs\YAFMSRun.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
     <Compile Include="Utilities\DriftTimeProfileExtractor.cs" />

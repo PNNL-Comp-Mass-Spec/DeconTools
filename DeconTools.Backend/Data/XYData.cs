@@ -56,7 +56,15 @@ namespace DeconTools.Backend
 
         public void SetXYValues(ref float[] xvals, ref float[] yvals)
         {
-            DeconTools.Utilities.Check.Require(xvals != null && yvals != null, "Cannot set XY Values; Input values are null");
+            if (xvals == null || yvals==null)
+            {
+                this.Xvalues = null;
+                this.Yvalues = null;
+
+                return;
+            }
+
+
 
             this.xvalues = new double[xvals.Length];
             this.yvalues = new double[yvals.Length];
@@ -70,15 +78,21 @@ namespace DeconTools.Backend
 
         public void SetXYValues(ref double[] xvals, ref double[] yvals)
         {
-            DeconTools.Utilities.Check.Require(xvals != null && yvals != null, "Cannot set XY Values; Input values are null");
-
             this.xvalues = xvals;
             this.yvalues = yvals;
         }
 
         public void SetXYValues(double[] xvals, float[] yvals)
         {
-            DeconTools.Utilities.Check.Require(xvals != null && yvals != null, "Cannot set XY Values; Input values are null");
+            if (xvals == null || yvals == null)
+            {
+                this.Xvalues = null;
+                this.Yvalues = null;
+
+                return;
+            }
+
+            
             this.xvalues = xvals;
             this.yvalues = new double[yvals.Length];
             for (int i = 0; i < yvals.Length; i++)
@@ -199,6 +213,9 @@ namespace DeconTools.Backend
 
         public XYData TrimData(double xmin, double xmax)
         {
+
+            if (xvalues == null || yvalues == null) return this;
+
             XYData data = new XYData();
             List<double> xvals = new List<double>();
             List<double> yvals = new List<double>();

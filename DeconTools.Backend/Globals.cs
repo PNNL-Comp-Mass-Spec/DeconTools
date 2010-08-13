@@ -29,7 +29,8 @@ namespace DeconTools.Backend
             MZXML_Rawdata,
             PNNL_IMS,
             PNNL_UIMF,
-            SUNEXTREL
+            SUNEXTREL,
+            YAFMS
 
         }
 

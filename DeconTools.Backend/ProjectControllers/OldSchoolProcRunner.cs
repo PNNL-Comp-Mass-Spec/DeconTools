@@ -357,6 +357,7 @@ namespace DeconTools.Backend
             }
             catch (Exception ex)
             {
+                Console.Write(ex.StackTrace);
                 throw ex;   //throw the error again and let something else catch it. 
             }
 
