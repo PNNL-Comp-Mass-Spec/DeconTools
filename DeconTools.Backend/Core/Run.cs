@@ -134,6 +134,20 @@ namespace DeconTools.Backend.Core
         public abstract double GetTime(int scanNum);
         public abstract int GetMSLevelFromRawData(int scanNum);
 
+        /// <summary>
+        /// Returns Scan information.
+        /// </summary>
+        /// <param name="scanSet"></param>
+        /// <returns></returns>
+        public virtual string GetScanInfo(ScanSet scanSet)  
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(scanSet.ToString());
+            return sb.ToString();
+        }
+
+
+
         public virtual int GetMSLevel(int scanNum)
         {
             // check to see if we have a value already stored

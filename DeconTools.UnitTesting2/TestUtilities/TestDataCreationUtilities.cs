@@ -15,10 +15,39 @@ namespace DeconTools.UnitTesting2
 {
     public class TestDataCreationUtilities
     {
+
+        public static Run CreatePeakDataFromStandardOrbitrapData()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6050, 1, 1, false);
+            sscc.Create();
+
+            Task msgen = new GenericMSGenerator();
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            peakDetector.StorePeakData = true;
+
+            Task decon = new HornDeconvolutor();
+            Task msScanInfoCreator = new ScanResultUpdater();
+            Task flagger = new ResultValidatorTask();
+
+            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scan;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+            }
+
+            return run;
+
+
+        }
+
+
         public static Run CreateResultsFromThreeScansOfStandardOrbitrapData()
         {
 
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1, false);
@@ -46,7 +75,7 @@ namespace DeconTools.UnitTesting2
 
         public static Run CreateResultsFromTwoFramesOfStandardUIMFData()
         {
-            UIMFRun run = new UIMFRun(FileRefs.UIMFStdFile1);
+            UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
 
             FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run, 500, 501, 3, 1);
             fscc.Create();

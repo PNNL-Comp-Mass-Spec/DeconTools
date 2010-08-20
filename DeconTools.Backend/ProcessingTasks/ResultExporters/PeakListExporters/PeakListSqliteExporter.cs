@@ -13,7 +13,7 @@ using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
-    public class PeakListSQLiteExporter : IPeakListExporter
+    public class PeakListSQLiteExporter : IPeakListExporter, IDisposable
     {
 
 
@@ -94,7 +94,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
 
-        public override void WriteOutPeaks(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void WriteOutPeaks(List<MSPeakResult>peakResultList)
         {
             SQLiteConnection myconnection = (SQLiteConnection)cnn;
 
@@ -117,16 +117,20 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     mycommand.Parameters.Add(intensParam);
                     mycommand.Parameters.Add(fwhmParam);
 
-                    for (n = 0; n < resultList.MSPeakResultList.Count; n++)
+                    foreach (var peak in peakResultList)
                     {
-                        peakIDParam.Value = resultList.MSPeakResultList[n].PeakID;
-                        scanIDParam.Value = resultList.MSPeakResultList[n].Scan_num;
-                        mzParam.Value = resultList.MSPeakResultList[n].MSPeak.XValue.ToString("#.#####");
-                        intensParam.Value = resultList.MSPeakResultList[n].MSPeak.Height;
-                        fwhmParam.Value = resultList.MSPeakResultList[n].MSPeak.Width;
+                        peakIDParam.Value = peak.PeakID;
+                        scanIDParam.Value = peak.Scan_num;
+                        mzParam.Value = peak.MSPeak.XValue.ToString("#.#####");
+                        intensParam.Value = peak.MSPeak.Height;
+                        fwhmParam.Value = peak.MSPeak.Width;
 
                         mycommand.ExecuteNonQuery();
+                        
                     }
+
+
+             
                 }
                 mytransaction.Commit();
 
@@ -198,7 +202,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
 
 
-        protected override void CloseOutputFile()
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
         {
             if (cnn != null)
             {
@@ -218,7 +224,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
                 }
             }
-
         }
+
+        #endregion
     }
 }

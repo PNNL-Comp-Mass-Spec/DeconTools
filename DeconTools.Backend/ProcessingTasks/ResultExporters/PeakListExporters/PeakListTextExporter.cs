@@ -7,16 +7,16 @@ using DeconTools.Backend.Runs;
 using System.IO;
 using DeconTools.Utilities;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public class PeakListTextExporter : IPeakListExporter
     {
-        private char delimiter;
-        private ResultCollection results;
-        private StreamWriter sw;
-        private Globals.MSFileType fileType;
-
+        private char m_delimiter;
+        private Globals.MSFileType m_FileType;
+        private int[] m_msLevelsToExport;
+        private int m_triggerValue;
 
         #region Constructors
         public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
@@ -27,155 +27,176 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public PeakListTextExporter(Globals.MSFileType fileType, int triggerValue, string outputFileName)
         {
+
+            this.FileName = outputFileName;
+            this.TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
+            this.m_delimiter = '\t';
+            this.m_FileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
+
+
+            bool fileExists;
             try
             {
-                sw = new StreamWriter(outputFileName);
+                fileExists = File.Exists(outputFileName);
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
+                Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
             }
 
-            this.TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
-            this.delimiter = '\t';
-            this.fileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
-            sw.Write(getHeaderLine());
+
+            if (fileExists)
+            {
+                try
+                {
+                    File.Delete(outputFileName);
+                }
+                catch (Exception ex)
+                {
+                Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
+ 
+                }
+            }
+            else
+            {
+
+            }
+
+
+
+            initializeAndWriteHeader();
         }
 
-     
+
 
         #endregion
 
         #region Properties
 
-        private int[] mSLevelsToExport;
+        public string FileName { get; set; }
+
         public override int[] MSLevelsToExport
         {
-            get { return mSLevelsToExport; }
-            set { mSLevelsToExport = value; }
-        }
-        private StreamWriter outputStream;
-        public StreamWriter OutputStream
-        {
-            get { return outputStream; }
-            set { outputStream = value; }
+            get { return m_msLevelsToExport; }
+            set { m_msLevelsToExport = value; }
         }
 
-        private int triggerValue;
         public override int TriggerToWriteValue
         {
-            get { return triggerValue; }
-            set { triggerValue = value; }
+            get { return m_triggerValue; }
+            set { m_triggerValue = value; }
         }
 
         #endregion
 
         #region Public Methods
-        public override void WriteOutPeaks(ResultCollection resultList)
+        public override void WriteOutPeaks(List<MSPeakResult> peakList)
         {
-            results = resultList;
-
-            string peakdata;
-
-            peakdata = buildPeakString(resultList);
-
-
-            try
+            using (StreamWriter sw = File.AppendText(this.FileName))
             {
-                sw.Write(peakdata);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("There was a problem writing out the peak data. Details: " + ex.Message);
+                foreach (var peak in peakList)
+                {
+                    string lineOfPeakData = buildPeakString(peak);
+                    sw.Write(lineOfPeakData);
+                }
 
+                sw.Flush();
+                sw.Close();
             }
         }
 
-        private string buildPeakString(ResultCollection resultList)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < resultList.MSPeakResultList.Count; i++)
-            {
-                sb.Append(resultList.MSPeakResultList[i].PeakID);
-                sb.Append(delimiter);
-
-                if (resultList.Run is UIMFRun)
-                {
-                    sb.Append(resultList.MSPeakResultList[i].Frame_num);
-                    sb.Append(delimiter);
-                }
-                else
-                {
-
-                }
-                sb.Append(resultList.MSPeakResultList[i].Scan_num);
-                sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.XValue.ToString("0.#####"));
-                sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.Height);
-                sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.Width.ToString("0.####"));
-                sb.Append(delimiter);
-                sb.Append(resultList.MSPeakResultList[i].MSPeak.SN.ToString("0.##"));
-                sb.Append("\n");
-            }
-
-            return sb.ToString();
-        }
-        
         public override void Cleanup()
         {
             base.Cleanup();
-
-
         }
 
-        private void FlushOutUnwrittenResults(ResultCollection results)
-        {
-            WriteOutPeaks(results);
-        }
+    
         # endregion
 
         #region Private Methods
+        private string buildPeakString(MSPeakResult peak)
+        {
+            StringBuilder sb = new StringBuilder();
 
-        private string getHeaderLine()
+            if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
+            {
+                sb.Append(peak.Frame_num);
+                sb.Append(m_delimiter);
+            }
+            else
+            {
+
+            }
+            sb.Append(peak.Scan_num);
+            sb.Append(m_delimiter);
+            sb.Append(peak.MSPeak.XValue.ToString("0.#####"));
+            sb.Append(m_delimiter);
+            sb.Append(peak.MSPeak.Height);
+            sb.Append(m_delimiter);
+            sb.Append(peak.MSPeak.Width.ToString("0.####"));
+            sb.Append(m_delimiter);
+            sb.Append(peak.MSPeak.SN.ToString("0.##"));
+            sb.Append(Environment.NewLine);
+
+
+            return sb.ToString();
+        }
+
+        private string buildHeaderLine()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("peak_index");
-            sb.Append(delimiter);
-            if (this.fileType == Globals.MSFileType.PNNL_UIMF)
+            sb.Append(m_delimiter);
+            if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
             {
                 sb.Append("frame_num");
-                sb.Append(delimiter);
+                sb.Append(m_delimiter);
             }
             sb.Append("scan_num");
-            sb.Append(delimiter);
+            sb.Append(m_delimiter);
             sb.Append("mz");
-            sb.Append(delimiter);
+            sb.Append(m_delimiter);
             sb.Append("intensity");
-            sb.Append(delimiter);
+            sb.Append(m_delimiter);
             sb.Append("fwhm");
-            sb.Append(delimiter);
+            sb.Append(m_delimiter);
             sb.Append("signal_noise");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }
-        #endregion
-
-        protected override void CloseOutputFile()
+        protected void initializeAndWriteHeader()
         {
-            if (sw == null) return;
+
+            Check.Assert(this.FileName != null && this.FileName.Length > 0, String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+
             try
             {
-                sw.Flush();
-                sw.Close();
+                if (File.Exists(this.FileName))
+                {
+                    File.Delete(this.FileName);
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("IsosResultExporter failed to close the output file properly. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + "; STACKTRACE = " + ex.StackTrace, this.Name), Logger.Instance.OutputFilename);
+                throw ex;
+            }
+
+
+            using (StreamWriter writer = File.AppendText(this.FileName))
+            {
+                string headerLine = buildHeaderLine();
+                writer.Write(headerLine);
+                writer.Flush();
+                writer.Close();
             }
         }
+
+        #endregion
+
+  
     }
 }

@@ -173,7 +173,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.ResultExporterTests
                 flagger.Execute(run.ResultCollection);
             }
 
-            isosExporter.ExportIsosResults(run.ResultCollection);
+            isosExporter.ExportIsosResults(run.ResultCollection.ResultList);
 
             Assert.AreEqual(true, File.Exists(testFile));
 

@@ -15,7 +15,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         [Test]
         public void Test01_getRetentionTimesFromOrbitrapData()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("scan\tRT\n");

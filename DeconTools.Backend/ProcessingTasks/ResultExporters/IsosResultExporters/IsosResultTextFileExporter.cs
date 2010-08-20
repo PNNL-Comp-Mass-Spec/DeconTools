@@ -21,12 +21,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
         #region Public Methods
-        public override void ExportIsosResults(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void ExportIsosResults(List<IsosResult> isosResultList)
         {
             Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
             using (StreamWriter writer = File.AppendText(this.FileName))
             {
-                foreach (IsosResult result in resultList.ResultList)
+                foreach (IsosResult result in isosResultList)
                 {
                     string isosResultOutput = buildIsosResultOutput(result);
                     writer.WriteLine(isosResultOutput);

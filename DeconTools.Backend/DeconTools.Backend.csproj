@@ -98,9 +98,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="YafmsLibrary, Version=1.0.3831.22870, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="YafmsLibrary, Version=1.0.3880.25149, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
+      <HintPath>..\..\YafmsLibrary\YafmsLibrary\bin\Debug\YafmsLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +120,7 @@
     <Compile Include="Core\O16O18_TResult.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Data\Importers\MassTagFromTextFileImporter.cs" />
+    <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterBasic.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\DemoTests.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
@@ -294,6 +296,7 @@
     <Compile Include="ProjectControllers\UIMFMSOnlyProjectController.cs" />
     <Compile Include="Runs\AgilentD_Run.cs" />
     <Compile Include="Runs\YAFMSRun.cs" />
+    <Compile Include="Utilities\Converters\PeakDatFileConverter.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
     <Compile Include="Utilities\DriftTimeProfileExtractor.cs" />

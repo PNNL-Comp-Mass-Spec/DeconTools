@@ -40,10 +40,6 @@ namespace DeconTools.Backend.Data
         #endregion
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
         public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
         {
             using (StreamReader reader = new StreamReader(filename))
@@ -61,10 +57,13 @@ namespace DeconTools.Backend.Data
                     reportProgress(progressCounter);
 
                 }
-
-
             }
         }
+
+        #endregion
+
+        #region Private Methods
+        #endregion
         protected override void reportProgress(int progressCounter)
         {
             if (numRecords == 0) return;

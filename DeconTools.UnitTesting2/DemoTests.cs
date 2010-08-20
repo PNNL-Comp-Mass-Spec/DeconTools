@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2
         {
             //Create the run
             DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
+            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             //Create the task
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2
         {
             //Create the run
             DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.OrbitrapStdFile1);
+            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             //Create the task
@@ -94,7 +94,7 @@ namespace DeconTools.UnitTesting2
         [Test]
         public void tempGetMSMSDataTest2()
         {
-            DeconToolsV2.Readers.clsRawData run = new DeconToolsV2.Readers.clsRawData(FileRefs.OrbitrapStdFile1, DeconToolsV2.Readers.FileType.FINNIGAN);
+            DeconToolsV2.Readers.clsRawData run = new DeconToolsV2.Readers.clsRawData(FileRefs.RawDataMSFiles.OrbitrapStdFile1, DeconToolsV2.Readers.FileType.FINNIGAN);
 
             int startScan = 6000;
             int stopScan = 7000;

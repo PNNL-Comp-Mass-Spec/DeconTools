@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class UIMFRun_Tests
     {
-        private string uimfFilepath = FileRefs.UIMFStdFile1;
+        private string uimfFilepath = FileRefs.RawDataMSFiles.UIMFStdFile1;
 
         [Test]
         public void getUIMFFileTest1()

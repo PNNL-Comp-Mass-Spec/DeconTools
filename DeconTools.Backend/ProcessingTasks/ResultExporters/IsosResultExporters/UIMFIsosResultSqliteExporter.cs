@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             command.ExecuteNonQuery();
         }
 
-        protected override void addIsosResults(DeconTools.Backend.Core.ResultCollection rc)
+        protected override void addIsosResults(List<IsosResult> isosResultList)
         {
             SQLiteConnection myconnection = (SQLiteConnection)cnn;
 
@@ -116,26 +116,26 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     mycommand.Parameters.Add(tia_origIntensParam);
                     mycommand.Parameters.Add(flagCodeParam);
 
-                    for (n = 0; n < rc.ResultList.Count; n++)
+                    for (n = 0; n < isosResultList.Count; n++)
                     {
-                        featureIDParam.Value = rc.ResultList[n].MSFeatureID;
-                        frameNumParam.Value = ((UIMFIsosResult)rc.ResultList[n]).FrameSet.PrimaryFrame;
-                        scanNumParam.Value = rc.ResultList[n].ScanSet.PrimaryScanNumber;
-                        chargeParam.Value = rc.ResultList[n].IsotopicProfile.ChargeState;
-                        abundanceParam.Value = rc.ResultList[n].IsotopicProfile.GetAbundance();
-                        mzParam.Value = rc.ResultList[n].IsotopicProfile.GetMZ();
-                        fitParam.Value = rc.ResultList[n].IsotopicProfile.GetScore();
-                        averageMWParam.Value = rc.ResultList[n].IsotopicProfile.AverageMass;
-                        monoIsotopicMWParam.Value = rc.ResultList[n].IsotopicProfile.MonoIsotopicMass;
-                        mostAbundantMWParam.Value = rc.ResultList[n].IsotopicProfile.MostAbundantIsotopeMass;
-                        fwhmParam.Value = rc.ResultList[n].IsotopicProfile.GetFWHM();
-                        sigNoiseParam.Value = rc.ResultList[n].IsotopicProfile.GetSignalToNoise();
-                        monoAbundanceParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoAbundance();
-                        monoPlus2AbundParam.Value = rc.ResultList[n].IsotopicProfile.GetMonoPlusTwoAbundance();
-                        driftTimeParam.Value = ((UIMFIsosResult)rc.ResultList[n]).DriftTime;
-                        origIntensParam.Value = rc.ResultList[n].IsotopicProfile.OriginalIntensity;
-                        tia_origIntensParam.Value = rc.ResultList[n].IsotopicProfile.Original_Total_isotopic_abundance;
-                        flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(rc.ResultList[n].Flags);
+                        featureIDParam.Value = isosResultList[n].MSFeatureID;
+                        frameNumParam.Value = ((UIMFIsosResult)isosResultList[n]).FrameSet.PrimaryFrame;
+                        scanNumParam.Value = isosResultList[n].ScanSet.PrimaryScanNumber;
+                        chargeParam.Value = isosResultList[n].IsotopicProfile.ChargeState;
+                        abundanceParam.Value = isosResultList[n].IsotopicProfile.GetAbundance();
+                        mzParam.Value = isosResultList[n].IsotopicProfile.GetMZ();
+                        fitParam.Value = isosResultList[n].IsotopicProfile.GetScore();
+                        averageMWParam.Value = isosResultList[n].IsotopicProfile.AverageMass;
+                        monoIsotopicMWParam.Value = isosResultList[n].IsotopicProfile.MonoIsotopicMass;
+                        mostAbundantMWParam.Value = isosResultList[n].IsotopicProfile.MostAbundantIsotopeMass;
+                        fwhmParam.Value = isosResultList[n].IsotopicProfile.GetFWHM();
+                        sigNoiseParam.Value = isosResultList[n].IsotopicProfile.GetSignalToNoise();
+                        monoAbundanceParam.Value = isosResultList[n].IsotopicProfile.GetMonoAbundance();
+                        monoPlus2AbundParam.Value = isosResultList[n].IsotopicProfile.GetMonoPlusTwoAbundance();
+                        driftTimeParam.Value = ((UIMFIsosResult)isosResultList[n]).DriftTime;
+                        origIntensParam.Value = isosResultList[n].IsotopicProfile.OriginalIntensity;
+                        tia_origIntensParam.Value = isosResultList[n].IsotopicProfile.Original_Total_isotopic_abundance;
+                        flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(isosResultList[n].Flags);
                         mycommand.ExecuteNonQuery();
                     }
                 }

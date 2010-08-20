@@ -11,13 +11,14 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class YAFMS_Tests
     {
+        string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile2;
+
         [Test]
         public void checkDataSetNamesAndPathsTest()
         {
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
-            Assert.AreEqual(FileRefs.YAFMSStandardFile1, run.Filename);
+            Assert.AreEqual(FileRefs.RawDataMSFiles.YAFMSStandardFile1, run.Filename);
             Assert.AreEqual("QC_Shew_09_01_pt5_a_20Mar09_Earth_09-01-01", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataBasePath.TrimEnd('\\'), run.DataSetPath);
         }
@@ -25,13 +26,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void checkMinAndMaxScansTest1()
         {
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
             Assert.AreEqual(14428, run.GetNumMSScans());
             Assert.AreEqual(0, run.MinScan);
             Assert.AreEqual(14427, run.MaxScan);
-            
         }
 
 
@@ -40,8 +39,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             int testScan = 6009;
 
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
             ScanSet scanset = new ScanSet(testScan);
 
@@ -63,8 +61,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double minMZ = 0;
             double maxMZ = 50000;
 
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
             ScanSet scanset = new ScanSet(testScan);
 
@@ -82,8 +79,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double minMZ = 800;
             double maxMZ = 850;
 
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
             ScanSet scanset = new ScanSet(testScan);
 
@@ -102,12 +98,25 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTypesTest1()
         {
-            string testFile = FileRefs.YAFMSStandardFile1;
-            Run run = new YAFMSRun(testFile);
+            Run run = new YAFMSRun(m_testFile);
 
             Assert.AreEqual(1, run.GetMSLevel(6009));
             Assert.AreEqual(2, run.GetMSLevel(6010));
             Assert.AreEqual(2, run.GetMSLevel(6011));
+        }
+
+
+        [Test]
+        public void GetSpectrumTypesTest2()
+        {
+            Run run = new YAFMSRun(m_testFile);
+
+            for (int i = 6000; i < 7000; i++)
+            {
+                Console.WriteLine("scan " + i + "; mslevel = " + run.GetMSLevel(i));
+                
+            }
+  
         }
 
 

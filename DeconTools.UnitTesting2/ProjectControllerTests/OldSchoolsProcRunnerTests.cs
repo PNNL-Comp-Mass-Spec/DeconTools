@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
         [Test]
         public void processYAFMSFile1()
         {
-            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.YAFMSStandardFile1, Globals.MSFileType.YAFMS, FileRefs.ParameterFiles.YAFMSParameterFileScans6000_6050);
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.YAFMSStandardFile2, Globals.MSFileType.YAFMS, FileRefs.ParameterFiles.YAFMSParameterFileScans4000_4050);
             oldSchool.Execute();
 
 

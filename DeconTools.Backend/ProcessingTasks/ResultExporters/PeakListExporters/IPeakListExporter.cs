@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using System.IO;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
@@ -14,8 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         public abstract int TriggerToWriteValue { get; set; }
         public abstract int[] MSLevelsToExport { get; set; }
 
-        public abstract void WriteOutPeaks(ResultCollection resultList);
-        protected abstract void CloseOutputFile();
+        public abstract void WriteOutPeaks(List<MSPeakResult>peakResultList);
 
 
         public override void Execute(ResultCollection resultList)
@@ -43,16 +43,14 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             //Write out results if exceeds trigger value or is last scan
             if (resultList.MSPeakResultList.Count >= TriggerToWriteValue || isLastScan)
             {
-                WriteOutPeaks(resultList);
-                resultList.MSPeakResultList.Clear();
-
-                if (isLastScan)
-                {
-                    CloseOutputFile();
-                }
+                WriteOutPeaks(resultList.MSPeakResultList);
+               resultList.MSPeakResultList.Clear();
 
             }
         }
+
+
+
 
 
 

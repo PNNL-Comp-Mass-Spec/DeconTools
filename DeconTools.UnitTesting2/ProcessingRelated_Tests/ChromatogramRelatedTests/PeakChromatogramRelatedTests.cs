@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         {
             MassTag mt = TestUtilities.GetMassTagStandard(1);
 
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburPeakDataFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -46,7 +46,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         {
             MassTag mt = TestUtilities.GetMassTagStandard(1);
 
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburPeakDataFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);

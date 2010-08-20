@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void checkDataSetNamesAndPathsTest()
         {
-            string testFile = FileRefs.OrbitrapStdFile1;
+            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun(testFile);
 
@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void checkMinAndMaxScansTest2()
         {
-            string testFile = FileRefs.OrbitrapStdFile1;
+            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun(testFile);
 
@@ -46,7 +46,7 @@ namespace DeconTools.UnitTesting
         public void GetSpectrumTest1()
         {
 
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             run.MSParameters = new DeconEngine_MSParameters(6067, 1);
 
@@ -79,7 +79,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSummedSpectrumTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.GetMassSpectrum(new ScanSet(5998), 500.02, 500.037);
             Assert.AreEqual(0, run.XYData.Xvalues.Length);
 
@@ -103,7 +103,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void getSummedSpectrumSimpleTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             ScanSet scanset = new ScanSet(6005, new int[] { 5991, 5998, 6005, 6012, 6019 });
             run.GetMassSpectrum(scanset, 400, 1500);
 
@@ -118,7 +118,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSpectrumSpeedTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             int numScansToGet = 100;
 
@@ -140,7 +140,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSummedSpectrumSpeedTest_5_summedSpectra()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             int numScansToGet = 50;
 
@@ -162,7 +162,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSummedSpectrumSpeedTest_3_summedSpectra()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             int numScansToGet = 50;
 
@@ -185,7 +185,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSpectrumSpeedTest2()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             int numScansToGet = 100;
 
@@ -209,7 +209,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetSpectrumTypesTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             Assert.AreEqual(1, run.GetMSLevel(6067));
@@ -221,7 +221,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void ConstructorTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             Assert.AreEqual(1, run.MinScan);
             Assert.AreEqual(18505, run.MaxScan);
@@ -232,7 +232,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void ConstructorTest2()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1, 6000, 7000);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
 
             Assert.AreEqual(6000, run.MinScan);
             Assert.AreEqual(7000, run.MaxScan);
@@ -244,7 +244,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void GetNextSpectrumTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1, 6000, 7000);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
 
             ScanSetCollection scansetCollection = new ScanSetCollection();
             for (int i = 6000; i < 6015; i++)
@@ -270,7 +270,7 @@ namespace DeconTools.UnitTesting
         public void GetTICTest1()
         {
 
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             run.GetMassSpectrum(new ScanSet(6067), 400, 2000);
 
@@ -288,7 +288,7 @@ namespace DeconTools.UnitTesting
         [Test]
         public void getClosestMSLevelScanTest1()
         {
-            Run run = new XCaliburRun(FileRefs.OrbitrapStdFile1);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             Assert.AreEqual(6005, run.GetClosestMSScan(6005, Globals.ScanSelectionMode.CLOSEST));
             Assert.AreEqual(6005, run.GetClosestMSScan(6006, Globals.ScanSelectionMode.CLOSEST));

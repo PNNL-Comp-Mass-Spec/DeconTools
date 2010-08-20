@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Common;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
@@ -15,9 +16,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
         #region Public Methods
-        public override void ExportIsosResults(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void ExportIsosResults(List<IsosResult> isosResultList)
         {
-            addIsosResults(resultList);
+            addIsosResults(isosResultList);
         }
         #endregion
 
@@ -28,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
 
         protected abstract void buildTables();
-        protected abstract void addIsosResults(DeconTools.Backend.Core.ResultCollection resultList);
+        protected abstract void addIsosResults(List<IsosResult> isosResultList);
 
 
         public override int TriggerToExport

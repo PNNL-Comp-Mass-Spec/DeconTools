@@ -81,7 +81,12 @@
     <Compile Include="FileIO_Tests\MSFeatureExporterTests.cs" />
     <Compile Include="FileIO_Tests\MSFeatureExporterFactoryTests.cs" />
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
+    <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
+    <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorFromPeakDataTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\SyntheticMSGeneratorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\MSPeakDetectionTests.cs" />
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15QuantificationTesting.cs" />
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />

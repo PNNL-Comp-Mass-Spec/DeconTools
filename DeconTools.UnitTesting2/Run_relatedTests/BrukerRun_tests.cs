@@ -15,9 +15,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     public class BrukerRun_tests
     {
 
-        string bruker9TFolderRef = FileRefs.Bruker9TStandardFile1;
-        string bruker9T_ser_FolderRef = FileRefs.Bruker9TStandardFile1 + @"\0.ser";             //Bruker files can be referenced by their 0.ser folder
-        string bruker9T_ACQUS_alternateRef = FileRefs.Bruker9TStandardFile1 + @"\0.ser\acqus";   //Bruker files can be referenced by their acqus file
+        string bruker9TFolderRef = FileRefs.RawDataMSFiles.Bruker9TStandardFile1;
+        string bruker9T_ser_FolderRef = FileRefs.RawDataMSFiles.Bruker9TStandardFile1 + @"\0.ser";             //Bruker files can be referenced by their 0.ser folder
+        string bruker9T_ACQUS_alternateRef = FileRefs.RawDataMSFiles.Bruker9TStandardFile1 + @"\0.ser\acqus";   //Bruker files can be referenced by their acqus file
 
         [Test]
         public void checkDataSetNamesAndPathsTest1()

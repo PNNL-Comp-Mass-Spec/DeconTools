@@ -18,35 +18,35 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Public Methods
 
-        public abstract void ExportIsosResults(ResultCollection resultList);
-        public override void Execute(ResultCollection resultList)
+        public abstract void ExportIsosResults(List<IsosResult> isosResultList);
+        public override void Execute(ResultCollection resultColl)
         {
-            if (resultList.ResultList == null || resultList.ResultList.Count == 0) return;
+            if (resultColl.ResultList == null || resultColl.ResultList.Count == 0) return;
 
             // check if results exceed Trigger value or is the last Scan 
             bool isLastScan;
-            if (resultList.Run is UIMFRun)
+            if (resultColl.Run is UIMFRun)
             {
-                List<FrameSet> uimfFrameSet = ((UIMFRun)resultList.Run).FrameSetCollection.FrameSetList;
+                List<FrameSet> uimfFrameSet = ((UIMFRun)resultColl.Run).FrameSetCollection.FrameSetList;
 
                 int lastFrameNum = uimfFrameSet[uimfFrameSet.Count - 1].PrimaryFrame;
-                int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+                int lastScanNum = resultColl.Run.ScanSetCollection.ScanSetList[resultColl.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
-                isLastScan = (((UIMFRun)resultList.Run).CurrentFrameSet.PrimaryFrame == lastFrameNum &&
-                    resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
+                isLastScan = (((UIMFRun)resultColl.Run).CurrentFrameSet.PrimaryFrame == lastFrameNum &&
+                    resultColl.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
             else
             {
-                int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
-                isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
+                int lastScanNum = resultColl.Run.ScanSetCollection.ScanSetList[resultColl.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+                isLastScan = (resultColl.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
 
 
 
-            if (resultList.ResultList.Count >= TriggerToExport || isLastScan)
+            if (resultColl.ResultList.Count >= TriggerToExport || isLastScan)
             {
-                ExportIsosResults(resultList);
-                resultList.ResultList.Clear();
+                ExportIsosResults(resultColl.ResultList);
+                resultColl.ResultList.Clear();
             }
 
         }
