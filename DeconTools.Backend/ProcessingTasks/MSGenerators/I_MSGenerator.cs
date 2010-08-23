@@ -27,14 +27,14 @@ namespace DeconTools.Backend.ProcessingTasks
             set { maxMZ = value; }
         }
 
-        public abstract void GenerateMS(ResultCollection resultList);
+        public abstract void GenerateMS(Run run);
 
         protected abstract void createNewScanResult(ResultCollection resultList, ScanSet scanSet);
 
         public override void Execute(ResultCollection resultList)
         {
 
-            GenerateMS(resultList);
+             GenerateMS(resultList.Run);
 
         }
     }

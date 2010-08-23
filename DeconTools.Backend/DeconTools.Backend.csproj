@@ -251,7 +251,6 @@
     <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\I_MSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
-    <Compile Include="ProcessingTasks\MSGenerators\XYDataMSGenerator.cs" />
     <Compile Include="ProcessingTasks\N14N15Analyzers\I_N14N15Analyzer.cs" />
     <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\Class1.cs" />
     <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TomN14N15Analyzer.cs" />
@@ -330,7 +329,6 @@
     <Compile Include="Runs\IMFRun.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\MSParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs" />
-    <Compile Include="ProcessingTasks\MSGenerators\IMF_MSGenerator.cs" />
     <Compile Include="Parameters\ParameterLoader.cs" />
     <Compile Include="Parameters\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

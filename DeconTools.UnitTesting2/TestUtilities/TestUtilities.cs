@@ -8,6 +8,7 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend;
+using System.IO;
 
 namespace DeconTools.UnitTesting2
 {
@@ -27,6 +28,8 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\n");
             }
         }
+
+
 
 
         public static bool AreIsosResultsTheSame(List<IsosResult> resultList1, List<IsosResult> resultList2)
@@ -390,5 +393,25 @@ namespace DeconTools.UnitTesting2
             mtList.Add(mt);
             return mtList;
         }
+
+
+        public static void WriteToFile(XYData xydata, string outputFile)
+        {
+            using (StreamWriter sw = new StreamWriter(outputFile))
+            {
+                sw.WriteLine("mz\tintensity");
+                for (int i = 0; i < xydata.Xvalues.Length; i++)
+                {
+                    sw.Write(xydata.Xvalues[i]);
+                    sw.Write("\t");
+                    sw.Write(xydata.Yvalues[i]);
+                    sw.Write(Environment.NewLine);
+                }
+
+            }
+
+
+        }
+
     }
 }

@@ -20,6 +20,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         //TODO:  make this more generic!  doesn't need to be linked to IPeak or fwhm.... 
         public static XYData getTheorPeakData(IPeak peak, double fwhm)
         {
+            return getTheorPeakData(peak, fwhm, 100);
+        }
+
+        public static XYData getTheorPeakData(IPeak peak, double fwhm, int numPointsPerPeak)
+        {
             XYData xydata = new XYData();
             double one_over_sqrt_of_2_pi = 0.3989423;
             double sigma = fwhm / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
@@ -28,14 +33,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             double sixsigma = 3 * fwhm;
 
 
-            int numPoints = 201;
-            double mz_per_point = sixsigma / (double)(numPoints - 1);
 
-            int startPoint = 0 - (numPoints - 1) / 2;
-            int stopPoint = 0 + (numPoints - 1) / 2;
+            double mz_per_point = sixsigma / (double)(numPointsPerPeak - 1);
 
-            xydata.Xvalues = new double[numPoints];
-            xydata.Yvalues = new double[numPoints];
+            int startPoint = 0 - (numPointsPerPeak - 1) / 2;
+            int stopPoint = 0 + (numPointsPerPeak - 1) / 2;
+
+            xydata.Xvalues = new double[numPointsPerPeak];
+            xydata.Yvalues = new double[numPointsPerPeak];
 
             int counter = 0;
             for (int i = startPoint; i <= stopPoint; i++)
@@ -58,6 +63,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             return xydata;
         }
 
+
         public static XYData Get_Theoretical_IsotopicProfileXYData(IsotopicProfile isotopicProfile, double fwhm)
         {
             Check.Require(isotopicProfile != null && isotopicProfile.Peaklist != null &&
@@ -70,8 +76,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             for (int i = 0; i < isotopicProfile.Peaklist.Count; i++)
             {
                 XYData tempXYData = getTheorPeakData(isotopicProfile.Peaklist[i], fwhm);
-                xvals.AddRange(tempXYData.Xvalues.ToList());
-                yvals.AddRange(tempXYData.Yvalues.ToList());
+                xvals.AddRange(tempXYData.Xvalues);
+                yvals.AddRange(tempXYData.Yvalues);
 
             }
             xydata.Xvalues = xvals.ToArray();

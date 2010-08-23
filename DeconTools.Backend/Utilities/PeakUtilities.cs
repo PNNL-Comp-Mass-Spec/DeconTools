@@ -82,6 +82,22 @@ namespace DeconTools.Backend.Utilities
             return outputList;
         }
 
+        public static List<IPeak> CreatePeakDataFromXYData(XYData xydata, double peakWidth)
+        {
+            List<IPeak> mspeakList = new List<IPeak>();
+
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            {
+                MSPeak peak = new MSPeak(xydata.Xvalues[i], (float)xydata.Yvalues[i], (float) peakWidth, 0);
+                mspeakList.Add(peak);
+            }
+
+            return mspeakList;
+
+        }
+
+
+
         public static List<IPeak> GetPeaksWithinTolerance(List<IPeak> inputList, double targetVal, double toleranceInMZ)
         {
             // assuming peaklist is in order 

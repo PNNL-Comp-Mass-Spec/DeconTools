@@ -45,17 +45,14 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        public override void GenerateMS(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void GenerateMS(Run run)
         {
-            Check.Require(resultList.Run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
+            Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
+            Check.Require(run.CurrentScanSet != null, "Cannot generate MS. Target ScanSet ('CurrentScanSet') has not been assigned to the Run");
 
-            Check.Require(resultList.Run.CurrentScanSet != null, "Cannot generate MS. Target ScanSet ('CurrentScanSet') has not been assigned to the Run");
 
-
-            UIMFRun uimfRun = (UIMFRun)(resultList.Run);
+            UIMFRun uimfRun = (UIMFRun)(run);
             Check.Require(uimfRun.CurrentFrameSet != null, "Cannot generate MS. Target FrameSet ('CurrentFrameSet') has not been assigned to the Run");
-
-
             Check.Require(uimfRun.FrameSetCollection != null, "UIMF_MSGenerator failed... FrameSetCollection is null");
 
 
