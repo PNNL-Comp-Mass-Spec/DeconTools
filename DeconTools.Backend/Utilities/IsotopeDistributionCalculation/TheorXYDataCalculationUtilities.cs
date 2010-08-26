@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         //TODO:  make this more generic!  doesn't need to be linked to IPeak or fwhm.... 
         public static XYData getTheorPeakData(IPeak peak, double fwhm)
         {
-            return getTheorPeakData(peak, fwhm, 100);
+            return getTheorPeakData(peak, fwhm, 101);
         }
 
         public static XYData getTheorPeakData(IPeak peak, double fwhm, int numPointsPerPeak)

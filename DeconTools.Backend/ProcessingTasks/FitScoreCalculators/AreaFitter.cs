@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
             double xmin = theorXYData.Xvalues[0];
-            double xmax = theorXYData.Xvalues[theorXYData.Xvalues.Length - 1];
+            double xmax = theorXYData.Xvalues.Max();
 
             XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
 

@@ -13,6 +13,9 @@ namespace DeconTools.Backend.ProcessingTasks
     {
         RapidEngine.Decon2LS.Peaks.clsPeak[] rapidPeakList;
 
+        DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator fitScoreCalculator;
+
+
         public static string getRapidVersion()
         {
             return AssemblyInfoRetriever.GetVersion(typeof(RapidEngine.Decon2LS.HornTransform.clsHornTransform));
@@ -21,6 +24,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private double minPeptideToBackgroundRatio;
         #region Properties
+
+        public bool IsNewFitCalculationPerformed { get; set; }
 
         private DeconResultComboMode resultCombiningMode;
 
@@ -66,6 +71,8 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             this.minPeptideToBackgroundRatio = minPeptideToBackgroundRatio;
             this.resultCombiningMode = comboMode;
+            this.IsNewFitCalculationPerformed = true;
+            this.fitScoreCalculator = new DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator();
         }
 
         #endregion
@@ -102,6 +109,9 @@ namespace DeconTools.Backend.ProcessingTasks
                 ref mzResults, ref scoreResults,
                 ref avgmassResults, ref massResults,
                 ref mostAbundantMassResults,this.resultCombiningMode);
+
+
+            fitScoreCalculator.Execute(resultList);
 
         }
 
