@@ -6,6 +6,7 @@ using DeconTools.Utilities;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -14,6 +15,10 @@ namespace DeconTools.Backend.ProcessingTasks
         RapidEngine.Decon2LS.Peaks.clsPeak[] rapidPeakList;
 
         DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator fitScoreCalculator;
+
+        //The BasicTFF is used to re-find the peaks of the isotopic profile, once Rapid returns the monoIsotopic mass and charge state.  
+        //We have to do this since RAPID doesn't return the list of peaks within the MSFeature. 
+        BasicTFF targetedFeatureFinder;    
 
 
         public static string getRapidVersion()
@@ -73,6 +78,7 @@ namespace DeconTools.Backend.ProcessingTasks
             this.resultCombiningMode = comboMode;
             this.IsNewFitCalculationPerformed = true;
             this.fitScoreCalculator = new DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator();
+            this.targetedFeatureFinder = new BasicTFF();
         }
 
         #endregion
@@ -110,8 +116,14 @@ namespace DeconTools.Backend.ProcessingTasks
                 ref avgmassResults, ref massResults,
                 ref mostAbundantMassResults,this.resultCombiningMode);
 
-
-            fitScoreCalculator.Execute(resultList);
+            if (this.IsNewFitCalculationPerformed)
+            {
+                //the fit score calculator also calculates the theor isotopic profile and then offsets its m/z values. We will also use
+                //the adjusted theor isotopic profile in finding the other peaks of the isotopic profile (RAPID 
+                //does not currently return the list of peaks making up an isotopic profile, forcing us to find them). 
+                fitScoreCalculator.Execute(resultList);
+                
+            }
 
         }
 
@@ -145,6 +157,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if ((float)rapidScore == 0.9999999999999f) continue;   // this is an oddity about the Rapid results. For very poor or immeasurable scores, it will give a score of 1.000000000; 
 
                 IsosResult result = resultList.CreateIsosResult();
+                
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
                 profile.IntensityAggregate = intensityResults[i];
@@ -153,6 +166,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
 
 
+                //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found. 
                 GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.XValue, ref profile);
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
                 {

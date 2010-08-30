@@ -78,6 +78,10 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
 
         #region Public Methods
+        
+
+        
+        
         public override void Execute(ResultCollection resultColl)
         {
             Check.Require(resultColl.MSPeakResultList != null, "PeakChromatogramGenerator failed. No peaks.");

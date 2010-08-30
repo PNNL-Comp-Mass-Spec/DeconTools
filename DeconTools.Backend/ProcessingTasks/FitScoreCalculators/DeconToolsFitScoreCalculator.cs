@@ -20,11 +20,10 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         PeakUtilities peakUtil = new PeakUtilities();
 
         public double MZVar { get; set; }
-
+        public IsotopicProfile TheorIsotopicProfile { get; set; }
 
         public DeconToolsFitScoreCalculator()
         {
-
             this.distributionCreator = new MercuryDistributionCreator();
         }
 
@@ -57,6 +56,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
                 mt.IsotopicProfile = TomIsotopicPattern.GetIsotopePattern(empircalFormulaAsIntArray, TomIsotopicPattern.aafIsos);
+                this.TheorIsotopicProfile = mt.IsotopicProfile;
 
                 mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
@@ -97,8 +97,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             if (enoughPeaksInTarget)
             {
                 MSPeak targetPeak = observedIsotopicProfile.Peaklist[indexOfMostIntensePeak];
-                //offset = targetPeak.MZ - mostIntensePeak.MZ;
-                offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
+                offset = targetPeak.XValue - mostIntensePeak.XValue;
+                //offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
 
             }
             else
@@ -109,6 +109,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             for (int i = 0; i < theorXYData.Xvalues.Length; i++)
             {
                 theorXYData.Xvalues[i] = theorXYData.Xvalues[i] + offset;
+            }
+
+            foreach (var peak in theorIsotopicProfile.Peaklist)
+            {
+                peak.XValue = peak.XValue + offset;
+                
             }
 
 

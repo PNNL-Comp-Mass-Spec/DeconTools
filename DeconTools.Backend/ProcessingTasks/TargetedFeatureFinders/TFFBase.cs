@@ -35,8 +35,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
 
-
-
             IsotopicProfile outFeature = new IsotopicProfile();
 
             int indexOfMaxTheorPeak = theorFeature.getIndexOfMostIntensePeak();
