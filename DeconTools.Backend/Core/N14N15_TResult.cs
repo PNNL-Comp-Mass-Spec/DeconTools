@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -119,6 +120,31 @@ namespace DeconTools.Backend.Core
             return this.ChromPeakSelectedForN15Profile.NETValue;
 
         }
+
+        public MSPeak GetMonoisotopicPeakForLabelledProfile()
+        {
+            if (this.MassTag == null ||
+                this.IsotopicProfile == null ||
+                this.IsotopicProfileLabeled == null)
+            {
+                return null;
+            }
+
+            int numNitrogens = this.MassTag.Peptide.GetElementQuantity("N");
+
+            MSPeak monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
+            if (monoPeakForUnlabelled == null) return null;
+
+            double expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / this.IsotopicProfile.ChargeState;
+
+            MSPeak monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(this.IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
+
+            return monoPeakOfLabelled;
+
+
+
+        }
+
 
 
 

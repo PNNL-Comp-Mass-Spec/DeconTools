@@ -18,6 +18,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private int[] m_msLevelsToExport;
         private int m_triggerValue;
 
+        private int m_peakIndex=0;
+
         #region Constructors
         public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
             : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1  
@@ -98,6 +100,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             {
                 foreach (var peak in peakList)
                 {
+                    
                     string lineOfPeakData = buildPeakString(peak);
                     sw.Write(lineOfPeakData);
                 }
@@ -119,6 +122,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private string buildPeakString(MSPeakResult peak)
         {
             StringBuilder sb = new StringBuilder();
+
+            sb.Append(peak.PeakID);
+            sb.Append(m_delimiter);
 
             if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
             {

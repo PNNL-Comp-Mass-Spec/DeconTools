@@ -7,6 +7,7 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Algorithms;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTests
 {
@@ -14,6 +15,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
     public class PeakChromatogramRelatedTests
     {
         string xcaliburPeakDataFile = "..\\..\\..\\TestFiles\\Chromagram_related\\XCaliburPeakDataScans5500-6500.txt";
+
+
+
 
 
         [Test]
@@ -67,6 +71,40 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
         }
+
+
+        [Test]
+        public void getPeakChromatogramUsingChromGenTest1()
+        {
+            double targetMZ = 831.48;
+            double toleranceInPPM = 20;
+
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+
+            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, toleranceInPPM);
+
+
+            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+            {
+                run.XYData.Xvalues[i] = run.GetTime(i);
+
+                
+            }
+
+       
+
+
+            run.XYData.Display();
+
+
+        }
+
+
 
 
     }

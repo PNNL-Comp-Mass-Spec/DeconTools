@@ -27,6 +27,8 @@ namespace DeconTools.UnitTesting2
         public class PeakDataFiles
         {
             public static string OrbitrapOldDecon2LSPeakFile = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.dat";
+            public static string OrbitrapPeakFile1 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.txt";
+
 
         }
 

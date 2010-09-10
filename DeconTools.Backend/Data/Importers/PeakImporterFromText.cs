@@ -62,8 +62,7 @@ namespace DeconTools.Backend.Data
 
         #endregion
 
-        #region Private Methods
-        #endregion
+       
         protected override void reportProgress(int progressCounter)
         {
             if (numRecords == 0) return;

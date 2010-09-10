@@ -45,6 +45,28 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         }
 
 
+        [Test]
+        public void GenerateN15LabelledTheorProfileTest2()
+        {
+            MassTag mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
+
+            Console.WriteLine("Total nitrogens = "+mt.Peptide.GetElementQuantity("N"));
+
+
+            TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
+            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+
+
+            TomTheorFeatureGenerator n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            n15theorGenerator.GenerateTheorFeature(mt);
+
+            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
+            //TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabelled);
+
+            //TODO: add an Assert, with a manually confirmed number. 
+
+        }
+
 
     }
 }

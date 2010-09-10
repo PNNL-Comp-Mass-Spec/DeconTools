@@ -122,16 +122,29 @@ namespace DeconTools.UnitTesting2
         {
             List<MassTag> mtList = new List<MassTag>();
 
-            MassTag mt = new MassTag();
-            mt.ID = 23085473;
-            mt.NETVal = 0.3807834F;
-            mt.MonoIsotopicMass = 2538.33284203802;
-            mt.ChargeState = 3;
-            mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
-            mt.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
-            mt.CreatePeptideObject();
+            MassTag mt1 = new MassTag();
+            mt1.ID = 23085473;
+            mt1.NETVal = 0.3807834F;
+            mt1.MonoIsotopicMass = 2538.33284203802;
+            mt1.ChargeState = 3;
+            mt1.MZ = mt1.MonoIsotopicMass / mt1.ChargeState + Globals.PROTON_MASS;
+            mt1.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
+            mt1.CreatePeptideObject();
 
-            mtList.Add(mt);
+            mtList.Add(mt1);
+
+
+            MassTag mt2 = new MassTag();
+            mt2.ID = 23085470;
+            mt2.NETVal = 0.6053093f;
+            mt2.MonoIsotopicMass = 2329.24291507994;
+            mt2.ChargeState = 3;
+            mt2.MZ = mt2.MonoIsotopicMass / mt2.ChargeState + Globals.PROTON_MASS;
+            mt2.PeptideSequence = "TAIRDPNPVIFLENEILYGR";
+            mt2.CreatePeptideObject();
+
+            mtList.Add(mt2);
+
             return mtList;
 
         }
