@@ -8,16 +8,34 @@ namespace DeconTools.Backend.Core
 {
     public class ElutingPeak
     {
-        public List<MSPeakResult> PeakList { get; set; } //TODO:  SK ElutingPeak class added 9-16-10
+        #region Constructors
+
+        public ElutingPeak()
+        {
+            PeakList = new List<MSPeakResult>();
+            this.ID = -1;
+            this.ScanStart = -1;
+            this.ScanEnd = -1;
+            this.RetentionTime = 0;
+            this.Intensity = 0;
+        }
+        
+        #endregion
+
+        #region Properties
+        public List<MSPeakResult> PeakList { get; set; }
 
         public int ID { get; set; }
 
         public float RetentionTime { get; set; }
 
-        public float intensity { get; set; }
+        public float Intensity { get; set; }
 
         public int ScanStart { get; set; }
 
-        public int ScanEnd { get; set; }
+        public int ScanEnd { get; set; } 
+        #endregion
+
+
     }
 }
