@@ -88,15 +88,13 @@ namespace DeconTools.Backend.Core
         }
 
         private List<string> logMessageList;
-
         public List<string> LogMessageList
         {
             get { return logMessageList; }
             set { logMessageList = value; }
         }
 
-        private List<ElutingPeak> m_ElutingPeakCollection;  //TODO:  SK ResultCollection property added 9-16-10
-
+        private List<ElutingPeak> m_ElutingPeakCollection;  
         public List<ElutingPeak> ElutingPeakCollection
         {
             get { return m_ElutingPeakCollection; }

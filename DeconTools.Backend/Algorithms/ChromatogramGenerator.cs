@@ -16,6 +16,34 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
+
+        /// <summary>
+        /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans. 
+        /// </summary>
+        /// <param name="msPeakList"></param>
+        /// <param name="minScan"></param>
+        /// <param name="maxScan"></param>
+        /// <param name="targetMZ"></param>
+        /// <param name="toleranceInPPM"></param>
+        /// <returns></returns>
+        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
+        {
+            List<double> targetMZList = new List<double>();
+            targetMZList.Add(targetMZ);
+
+            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
+        }
+
+
+        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM, int chromIDToAssign)
+        {
+            List<double> targetMZList = new List<double>();
+            targetMZList.Add(targetMZ);
+
+            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM, chromIDToAssign);
+        }
+
+
         /// <summary>
         /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
         /// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
@@ -28,6 +56,16 @@ namespace DeconTools.Backend.Algorithms
         /// <param name="toleranceInPPM"></param>
         /// <returns></returns>
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM)
+        {
+            int defaultChromID = 0;
+
+            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM, defaultChromID);
+
+        }
+
+
+
+        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM, int chromIDToAssign)
         {
             int scanTolerance = 5;     // TODO:   keep an eye on this
 
@@ -49,17 +87,19 @@ namespace DeconTools.Backend.Algorithms
                 double lowerMZ = targetMZ - toleranceInPPM * targetMZ / 1e6;
                 double upperMZ = targetMZ + toleranceInPPM * targetMZ / 1e6;
 
-                
+
 
                 List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
-                if (tempPeakList == null || tempPeakList.Count == 0)
+
+                if (tempPeakList == null || tempPeakList.Count() == 0)
                 {
 
                 }
                 else
                 {
-                    XYData currentChromdata = getChromDataAndFillInZeros(tempPeakList);
+                    XYData currentChromdata = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+
                     chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromdata);
                 }
 
@@ -69,24 +109,9 @@ namespace DeconTools.Backend.Algorithms
         }
 
 
-        /// <summary>
-        /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans. 
-        /// </summary>
-        /// <param name="msPeakList"></param>
-        /// <param name="minScan"></param>
-        /// <param name="maxScan"></param>
-        /// <param name="targetMZ"></param>
-        /// <param name="toleranceInPPM"></param>
-        /// <returns></returns>
-        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
-        {
-            List<double> targetMZList = new List<double>();
-            targetMZList.Add(targetMZ);
 
-            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
-        }
 
-        private XYData getChromDataAndFillInZeros(List<MSPeakResult> filteredPeakList)
+        private XYData getChromDataAndFillInZerosAndAssignChromID(List<MSPeakResult> filteredPeakList, int chromID)
         {
 
             int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
@@ -109,18 +134,24 @@ namespace DeconTools.Backend.Algorithms
                 xyValues.Add(i, 0);
             }
 
-            //iterate over the peaklist and extract intensity values
+            //iterate over the peaklist, assign chromID,  and extract intensity values
             for (int i = 0; i < filteredPeakList.Count; i++)
             {
-                double intensity = filteredPeakList[i].MSPeak.Height;
+                MSPeakResult p = filteredPeakList[i];
+
+               //NOTE:   we assign the chromID here. 
+                p.ChromID = chromID;
+
+                double intensity = p.MSPeak.Height;
 
                 //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
-                if (intensity > xyValues[filteredPeakList[i].Scan_num])
+                if (intensity > xyValues[p.Scan_num])
                 {
-                    xyValues[filteredPeakList[i].Scan_num] = intensity;
+                    xyValues[p.Scan_num] = intensity;
                 }
 
             }
+
 
             XYData outputXYData = new XYData();
 

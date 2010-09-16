@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Runs
             this.IsDataThresholded = false;      //TODO: check this
             this.MSFileType = Globals.MSFileType.MZXML_Rawdata;
         }
-        
+
         public MZXMLRun(string filename)
             : this()
         {
@@ -51,8 +51,13 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
-  
-     
+
+        internal override int GetMaxPossibleScanIndex()
+        {
+            return GetNumMSScans() - 1;      // this is tricky...  some mzXML files might be 1-based;  others might be 0-based. So I will play it safe and go zero-based
+        }
+
+
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
@@ -79,6 +84,6 @@ namespace DeconTools.Backend.Runs
         }
 
         #endregion
-   
+
     }
 }
