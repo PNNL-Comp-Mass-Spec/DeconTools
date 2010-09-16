@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -83,6 +83,8 @@
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
+    <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorFromPeakDataTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\SyntheticMSGeneratorTests.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="ProjectControllerTests\OldSchoolsProcRunnerTests.cs" />
+    <Compile Include="Run_relatedTests\DeconTools.Backend.Basic_class_template1.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
