@@ -116,7 +116,13 @@ namespace DeconTools.Backend.Core
             set { driftTime = value; }
         }
 
+        private List<int> m_MSPeakResultPeakListIndex;       //TODO:  SK ScanSet property added 9-16-10
 
+        public List<int> MSPeakResultPeakListIndex
+        {
+            get { return m_MSPeakResultPeakListIndex; }
+            set { m_MSPeakResultPeakListIndex = value; }
+        }
 
         internal virtual int getLowestScanNumber()
         {

@@ -95,6 +95,15 @@ namespace DeconTools.Backend.Core
             set { logMessageList = value; }
         }
 
+        private List<ElutingPeak> m_ElutingPeakCollection;  //TODO:  SK ResultCollection property added 9-16-10
+
+        public List<ElutingPeak> ElutingPeakCollection
+        {
+            get { return m_ElutingPeakCollection; }
+            set { m_ElutingPeakCollection = value; }
+        }
+
+
 
         internal void AddLog(string logMessage)
         {
