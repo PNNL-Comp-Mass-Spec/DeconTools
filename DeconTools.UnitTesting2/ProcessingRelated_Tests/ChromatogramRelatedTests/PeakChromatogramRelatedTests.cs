@@ -252,5 +252,90 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         }
 
 
+        [Test]
+        public void getPeakChromatogramsForManyPeaks_Test2()
+        {
+            Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
+
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+
+            List<int> indexArray = new List<int>();
+
+            for (int i = 3000; i < 5000; i++)
+            {
+                IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
+
+
+                //List<MSPeakResult> filteredResults = query.ToList();
+                var indexQuery = (from n in query select n.PeakID);
+
+
+
+                foreach (var peak in query)
+                {
+                }
+
+                
+            }
+            sw.Stop();
+
+            Console.WriteLine("time = " + sw.ElapsedMilliseconds);
+
+
+
+        }
+
+
+        [Test]
+        public void getPeakChromatogramsForManyPeaks_Test3()
+        {
+            Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
+
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+
+            List<int> indexArray = new List<int>();
+
+            for (int i = 3000; i < 5000; i++)
+            {
+                IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
+
+
+                //List<MSPeakResult> filteredResults = query.ToList();
+                var indexQuery = (from n in query select n.PeakID);
+
+
+
+                foreach (var peak in query)
+                {
+                }
+
+
+            }
+            sw.Stop();
+
+            Console.WriteLine("time = " + sw.ElapsedMilliseconds);
+
+
+
+        }
+
+
+
+
+
     }
 }
