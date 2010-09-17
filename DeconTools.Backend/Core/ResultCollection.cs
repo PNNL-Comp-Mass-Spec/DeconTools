@@ -18,10 +18,10 @@ namespace DeconTools.Backend.Core
             this.ResultList = new List<IsosResult>();
             this.massTagResultList = new Dictionary<MassTag, MassTagResultBase>();
             this.scanResultList = new List<ScanResult>();
-            this.m_peakResultIndexList = new List<List<int>>();  //TODO:  SK added the peaks indexes from each scan
             this.MSPeakResultList = new List<MSPeakResult>();
             this.m_IsosResultBin = new List<IsosResult>();
             this.logMessageList = new List<string>();
+            this.ElutingPeakCollection = new List<ElutingPeak>();
         }
 
         private Dictionary<MassTag, MassTagResultBase> massTagResultList;
@@ -51,13 +51,6 @@ namespace DeconTools.Backend.Core
         {
             get { return scanResultList; }
             set { scanResultList = value; }
-        }
-
-        private List<List<int>> m_peakResultIndexList; //TODO:  SK added the peaks indexes from each scan
-        public List<List<int>> PeakResultIndexList
-        {
-            get { return m_peakResultIndexList; }
-            set { m_peakResultIndexList = value; }
         }
 
         public List<IsosResult> ResultList {get; set;}
@@ -106,8 +99,6 @@ namespace DeconTools.Backend.Core
             get { return m_ElutingPeakCollection; }
             set { m_ElutingPeakCollection = value; }
         }
-
-
 
         internal void AddLog(string logMessage)
         {
