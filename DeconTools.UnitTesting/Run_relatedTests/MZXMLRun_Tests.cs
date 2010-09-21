@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     [TestFixture]
     public class MZXMLRun_Tests
     {
-        private string mzxmlfile1 = "..\\..\\TestFiles\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000-7000.mzXML";
+        private string mzxmlfile1 = "..\\..\\TestFiles\\QC_Shew_08_04-p t5-2_11Jan09_Sphinx_08-11-18_Scans6000-7000.mzXML";
     
 
 
