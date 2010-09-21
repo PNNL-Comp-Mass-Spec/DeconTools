@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Testing.ProblemC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMSViewer", "..\SimpleMSViewer\SimpleMSViewer\SimpleMSViewer.csproj", "{E7B95E08-E3EB-4446-8082-5DD435A78EB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWSGraphLibrary", "..\GWSGraphLibrarySVN\GWSGraphLibrary\GWSGraphLibrary.csproj", "{7016B784-8F0C-4536-A03A-E4D2EA7BBAC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWSGraphLibrary", "..\GWSGraphLibrary\GWSGraphLibrary\GWSGraphLibrary.csproj", "{7016B784-8F0C-4536-A03A-E4D2EA7BBAC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
