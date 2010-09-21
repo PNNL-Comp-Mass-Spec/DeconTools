@@ -23,9 +23,13 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        public List<MSPeakResult> PeakList { get; set; }
 
         public int ID { get; set; }
+        public ChromPeak ChromPeak { get; set; }
+        public List<MSPeakResult> PeakList { get; set; }
+
+
+
 
         public float RetentionTime { get; set; }
 
@@ -34,7 +38,23 @@ namespace DeconTools.Backend.Core
         public int ScanStart { get; set; }
 
         public int ScanEnd { get; set; } 
+        
+        public ScanSet ScanSet {get;set;}
+        
+
+        
         #endregion
+
+
+        public MSPeakResult GetMSPeakResultRepresentative()
+        {
+            if (this.PeakList == null || this.PeakList.Count == 0) return null;
+            else
+            {
+                return this.PeakList[0];
+            }
+        }
+
 
 
     }

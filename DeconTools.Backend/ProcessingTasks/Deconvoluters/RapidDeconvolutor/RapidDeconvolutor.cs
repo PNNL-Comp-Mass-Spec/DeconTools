@@ -7,6 +7,9 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -18,7 +21,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         //The BasicTFF is used to re-find the peaks of the isotopic profile, once Rapid returns the monoIsotopic mass and charge state.  
         //We have to do this since RAPID doesn't return the list of peaks within the MSFeature. 
-        BasicTFF targetedFeatureFinder;    
+        BasicTFF targetedFeatureFinder;
 
 
         public static string getRapidVersion()
@@ -114,17 +117,117 @@ namespace DeconTools.Backend.ProcessingTasks
             GenerateResults(resultList, ref chargeResults, ref intensityResults,
                 ref mzResults, ref scoreResults,
                 ref avgmassResults, ref massResults,
-                ref mostAbundantMassResults,this.resultCombiningMode);
+                ref mostAbundantMassResults, this.resultCombiningMode);
 
             if (this.IsNewFitCalculationPerformed)
             {
-                //the fit score calculator also calculates the theor isotopic profile and then offsets its m/z values. We will also use
-                //the adjusted theor isotopic profile in finding the other peaks of the isotopic profile (RAPID 
-                //does not currently return the list of peaks making up an isotopic profile, forcing us to find them). 
-                fitScoreCalculator.Execute(resultList);
-                
+
+                //HACK:  RAPID doesn't return the peaks of the isotopic profile. And it's score is meaningless. So will iterate over
+                //the results and 1) get the peaks of the isotopic profile  and  2) get a least-squares fit of the isotopic profile.
+                foreach (IsosResult result in resultList.IsosResultBin)
+                {
+                    //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
+                    MassTag mt = new MassTag();
+
+                    mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
+                    mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
+                    mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
+
+                    int[] empircalFormulaAsIntArray = TomIsotopicPattern.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
+
+                    mt.IsotopicProfile = TomIsotopicPattern.GetIsotopePattern(empircalFormulaAsIntArray, TomIsotopicPattern.aafIsos);
+                    mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
+
+                    double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(result.IsotopicProfile);
+
+                    //this finds the isotopic profile based on the theor. isotopic profile.
+                    BasicTFF bff = new BasicTFF(toleranceInPPM);
+
+                    IsotopicProfile iso = bff.FindMSFeature(resultList.Run.PeakList, mt.IsotopicProfile, toleranceInPPM, false);
+
+                    if (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 1)
+                    {
+                        //start at the second peak... and add the newly found peaks
+                        for (int i = 1; i < iso.Peaklist.Count; i++)
+                        {
+                            result.IsotopicProfile.Peaklist.Add(iso.Peaklist[i]);
+                        }
+
+                        //now that we have the peaks, we can get info for MonoPlusTwoAbundance
+                        result.IsotopicProfile.MonoPlusTwoAbundance = result.IsotopicProfile.GetMonoPlusTwoAbundance();
+                    }
+
+                    XYData theorXYData = TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
+
+                    //offset the theor isotopic profile
+                    offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
+
+                    AreaFitter areafitter = new AreaFitter(theorXYData, result.Run.XYData, 0.1);
+                    double fitval = areafitter.getFit();
+
+                    if (fitval == double.NaN || fitval > 1) fitval = 1;
+
+                    result.IsotopicProfile.Score = fitval;
+
+
+                }
+
+
             }
 
+        }
+
+        private double calcToleranceInPPMFromIsotopicProfile(IsotopicProfile isotopicProfile)
+        {
+            double toleranceInPPM = 20;
+            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
+            {
+                return toleranceInPPM;
+            }
+
+            double fwhm = isotopicProfile.GetFWHM();
+            double toleranceInMZ = fwhm / 2;
+
+            toleranceInPPM = toleranceInMZ / isotopicProfile.MonoPeakMZ * 1e6;
+
+            return toleranceInPPM;
+
+        }
+
+        private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile obsIsotopicProfile)
+        {
+            double offset = 0;
+            if (theorIsotopicProfile == null || theorIsotopicProfile.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
+
+            MSPeak mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
+            int indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
+
+            if (obsIsotopicProfile.Peaklist == null || obsIsotopicProfile.Peaklist.Count == 0) return;
+
+            bool enoughPeaksInTarget = (indexOfMostIntensePeak <= obsIsotopicProfile.Peaklist.Count - 1);
+
+            if (enoughPeaksInTarget)
+            {
+                MSPeak targetPeak = obsIsotopicProfile.Peaklist[indexOfMostIntensePeak];
+                offset = targetPeak.XValue - mostIntensePeak.XValue;
+                //offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
+
+            }
+            else
+            {
+                offset = obsIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;
+            }
+
+            for (int i = 0; i < theorXYData.Xvalues.Length; i++)
+            {
+                theorXYData.Xvalues[i] = theorXYData.Xvalues[i] + offset;
+            }
+
+            foreach (var peak in theorIsotopicProfile.Peaklist)
+            {
+                peak.XValue = peak.XValue + offset;
+
+            }
         }
 
         #endregion
@@ -142,9 +245,9 @@ namespace DeconTools.Backend.ProcessingTasks
             return counter;
         }
 
-        private void GenerateResults(ResultCollection resultList, ref int[] chargeResults, 
-            ref double[] intensityResults, ref double[] mzResults, ref double[] scoreResults, 
-            ref double[] avgmassResults, ref double[] massResults, 
+        private void GenerateResults(ResultCollection resultList, ref int[] chargeResults,
+            ref double[] intensityResults, ref double[] mzResults, ref double[] scoreResults,
+            ref double[] avgmassResults, ref double[] massResults,
             ref double[] mostAbundantMassResults, DeconResultComboMode comboMode)
         {
             resultList.Run.CurrentScanSet.NumIsotopicProfiles = 0;   //reset to 0;
@@ -157,7 +260,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if ((float)rapidScore == 0.9999999999999f) continue;   // this is an oddity about the Rapid results. For very poor or immeasurable scores, it will give a score of 1.000000000; 
 
                 IsosResult result = resultList.CreateIsosResult();
-                
+
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
                 profile.IntensityAggregate = intensityResults[i];
@@ -168,6 +271,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found. 
                 GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.XValue, ref profile);
+
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
                 {
                     //So first check and see if it is the most abundant peak (mzResults returns the mz for the most abundant peak); get the m/z from there  (This m/z matches with DeconTools peaklist m/z values)
@@ -307,6 +411,16 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             return isotopicProfileList;
         }
+
+
+        private void GetIsotopicProfilePeaks(List<IPeak> peakList, int chargeState, double monoMSZ, ref IsotopicProfile profile)
+        {
+            BasicTFF ff = new BasicTFF(20);
+
+        }
+
+
+
 
         private void GetIsotopicProfilePeaks(DeconToolsV2.Peaks.clsPeak[] peaklist, int chargeState, double monoMZ, ref IsotopicProfile profile)
         {

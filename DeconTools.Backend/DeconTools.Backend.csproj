@@ -102,9 +102,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="YafmsLibrary, Version=1.0.3831.22870, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="YafmsLibrary, Version=1.0.3916.16899, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
+      <HintPath>..\..\YafmsLibrary\YafmsLibrary\bin\Debug\YafmsLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -362,6 +362,8 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\IWorkflow.cs" />
+    <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />

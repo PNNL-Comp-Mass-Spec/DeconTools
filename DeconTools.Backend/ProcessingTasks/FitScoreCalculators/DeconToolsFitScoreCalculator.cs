@@ -50,10 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                 mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
 
-
                 int[] empircalFormulaAsIntArray = TomIsotopicPattern.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
-
-
 
                 mt.IsotopicProfile = TomIsotopicPattern.GetIsotopePattern(empircalFormulaAsIntArray, TomIsotopicPattern.aafIsos);
                 this.TheorIsotopicProfile = mt.IsotopicProfile;
@@ -83,8 +80,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
             double offset = 0;
-
-
             if (theorIsotopicProfile == null || theorIsotopicProfile.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
 
             MSPeak mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();

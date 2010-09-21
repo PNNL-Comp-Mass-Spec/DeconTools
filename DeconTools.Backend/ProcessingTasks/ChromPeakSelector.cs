@@ -55,6 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks
             set { tolerance = value; }
         }
 
+        //TODO:   figure out what uses this and why!   Default is 0 - that's all I know
         public int ScanOffSet { get; set; }
 
         public double NETValueForIntelligentMode { get; set; }

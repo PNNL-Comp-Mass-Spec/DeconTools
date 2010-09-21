@@ -124,7 +124,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetNumMSScans()
         {
-            int numScans = m_reader.GetTotalNumScans();
+            int numScans = m_reader.GetTotalNumberScans();
             return numScans;
         }
 
@@ -149,19 +149,8 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int scanNum)
         {
 
-            int msLevel;
-
-            //TODO:  improve this once a better YafMSLibrary method is written for accessing the MSLevel
-            int precursorScanNum = m_reader.GetPrecursorScanNum(this.SpectraID, scanNum);
-            if (precursorScanNum == -1)
-            {
-                msLevel = 1;
-            }
-            else
-            {
-                msLevel = 2;
-            }
-
+            int msLevel = m_reader.GetMSLevel(this.SpectraID, scanNum);
+            
             return msLevel;
         }
 
