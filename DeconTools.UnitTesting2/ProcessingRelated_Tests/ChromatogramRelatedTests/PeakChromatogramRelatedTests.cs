@@ -17,12 +17,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
     [TestFixture]
     public class PeakChromatogramRelatedTests
     {
-        string xcaliburPeakDataFile = "..\\..\\..\\TestFiles\\Chromagram_related\\XCaliburPeakDataScans5500-6500.txt";
-
-
-
-
-
         [Test]
         public void getPeakChromatogramTest1()
         {
@@ -30,7 +24,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburPeakDataFile);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.CurrentMassTag = mt;
@@ -55,7 +49,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburPeakDataFile);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.CurrentMassTag = mt;
@@ -178,6 +172,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramsForManyPeaks_Test1()
         {
+
+
+
             Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -186,9 +183,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
+            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+           // PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(
+
+
             long timeForSort = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
+          
             var sortedList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height);
             sw.Stop();
             timeForSort = sw.ElapsedMilliseconds;
@@ -196,6 +198,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             long timeToList = 0;
             sw = new Stopwatch();
             sw.Start();
+
+
             List<MSPeakResult> sortedMSPeakResultList = sortedList.ToList();
             sw.Stop();
             timeToList = sw.ElapsedMilliseconds;
@@ -205,41 +209,40 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
 
             Stopwatch allChromsStopwatch = new Stopwatch();
             allChromsStopwatch.Start();
 
             Stopwatch chromGenStopwatch = new Stopwatch();
-            for (int i = 0; i < 10000; i++)
+
+            //iterate over the MSPeakResults and pull out chromatograms
+
+            int counter=-1;
+            foreach (var peakResult in sortedMSPeakResultList)
             {
-                MSPeakResult r = sortedMSPeakResultList[i];
+                counter++;
 
-                if (i % 1000 == 0)
+                if (counter > 1000) break;
+                if (peakResult.ChromID != -1)
                 {
-                    Console.WriteLine(" working on peak" + i + " of "+sortedMSPeakResultList.Count);
-                }
-
-
-                if (r.ChromID!=-1)
-                {
-                    //Console.WriteLine(r.MSPeak.XValue.ToString("0.0000") + " already found...  skipping.");
                     continue;
-
                 }
                 chromGenStopwatch.Reset();
                 chromGenStopwatch.Start();
-                run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, r.MSPeak.XValue, 20, i);
+                run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, peakResult.MSPeak.XValue, 20, counter);
                 chromGenStopwatch.Stop();
                 chromGenTimes.Add(chromGenStopwatch.ElapsedMilliseconds);
 
+
+
+
                 
             }
-
+                      
 
             allChromsStopwatch.Stop();
 
-          
+
 
             Console.WriteLine("Original peaklist count = " + run.ResultCollection.MSPeakResultList.Count);
             Console.WriteLine("Sort time = " + timeForSort);
@@ -282,7 +285,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
                 {
                 }
 
-                
+
             }
             sw.Stop();
 

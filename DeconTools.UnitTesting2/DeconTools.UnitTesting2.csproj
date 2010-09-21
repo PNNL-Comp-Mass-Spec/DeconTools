@@ -83,6 +83,7 @@
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
@@ -93,7 +94,6 @@
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="ProjectControllerTests\OldSchoolsProcRunnerTests.cs" />
-    <Compile Include="Run_relatedTests\DeconTools.Backend.Basic_class_template1.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities\TestUtilities.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\TomTheorFeatureGeneratorTests.cs" />
+    <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">

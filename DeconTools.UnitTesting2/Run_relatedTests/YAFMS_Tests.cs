@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class YAFMS_Tests
     {
-        string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile2;
+        string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile1;
 
         [Test]
         public void checkDataSetNamesAndPathsTest()
@@ -121,23 +121,36 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
 
         [Test]
-        public void GetTICTest1()
+        public void getPrecursorScanAndMZTest1()
         {
+            YAFMSRun run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
+
+            int testScan = 2000;
+
+
+            int scanLevel =  run.GetMSLevel(testScan);
+
+            Assert.AreEqual(1, scanLevel);
+
 
         }
+
 
         [Test]
-        public void getClosestMSLevelScanTest1()
+        public void getPrecursorScanAndMZTest2()
         {
+            YAFMSRun run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
+
+            for (int i = 2000; i < 3000; i++)
+            {
+                Console.WriteLine("scan " + i + "; mslevel = " + run.GetMSLevel(i));
+
+            }
+
+
         }
 
 
-        [Test]
-        public void GetMSLevelsTest1()
-        {
-
-
-        }
 
 
 

@@ -24,13 +24,14 @@ namespace DeconTools.UnitTesting2
 
             public static string YAFMSStandardFile1 = FileRefs.RawDataBasePath + "QC_Shew_09_01_pt5_a_20Mar09_Earth_09-01-01.yafms";
             public static string YAFMSStandardFile2 = FileRefs.RawDataBasePath + "metabolite_eqd.yafms";
+            public static string YAFMSStandardFile3 = FileRefs.RawDataBasePath + "3_c_elegans_eqd.yafms";
         }
 
         public class PeakDataFiles
         {
             public static string OrbitrapOldDecon2LSPeakFile = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.dat";
             public static string OrbitrapPeakFile1 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.txt";
-
+            public static string OrbitrapPeakFile_scans5500_6500 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
         }
 

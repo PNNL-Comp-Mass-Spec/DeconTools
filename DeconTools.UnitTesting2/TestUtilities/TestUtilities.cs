@@ -413,5 +413,33 @@ namespace DeconTools.UnitTesting2
 
         }
 
+
+        public static void DisplayMSPeakResults(List<DeconTools.Backend.DTO.MSPeakResult> list)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("peakID\tframe\tscan\tChromID\tmz\tintens\tfwhm\n");
+            foreach (var peak in list)
+            {
+                sb.Append(peak.PeakID);
+                sb.Append("\t");
+                sb.Append(peak.Frame_num);
+                sb.Append("\t"); 
+                sb.Append(peak.Scan_num);
+                sb.Append("\t"); 
+                sb.Append(peak.ChromID);
+                sb.Append("\t"); 
+                sb.Append(peak.MSPeak.XValue.ToString("0.00000"));
+                sb.Append("\t"); 
+                sb.Append(peak.MSPeak.Height.ToString("0"));
+                sb.Append("\t"); 
+                sb.Append(peak.MSPeak.Width.ToString("0.0000"));
+                sb.Append(Environment.NewLine);
+
+                
+            }
+
+            Console.WriteLine(sb.ToString());
+
+        }
     }
 }
