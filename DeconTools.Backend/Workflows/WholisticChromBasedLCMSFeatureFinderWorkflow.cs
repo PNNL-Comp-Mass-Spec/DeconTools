@@ -101,15 +101,19 @@ namespace DeconTools.Backend.Workflows
             StringBuilder sb = new StringBuilder();
 
 
+            int totalPeaks = sortedMSPeakResultList.Count;
+
             int counter = -1;
+
+            Dictionary<int, string> whatPeakWentWhere = new Dictionary<int, string>();
+
             foreach (var peakResult in sortedMSPeakResultList)
             {
                 counter++;
 
-                if (counter > 1000)
+                if (counter % 1000==0)
                 {
-                    break;
-                    Console.WriteLine(DateTime.Now + "\tWorking on peak " + counter);
+                    Console.WriteLine(DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks);
                 }
 
                 if (peakResult.PeakID == 396293)
@@ -118,21 +122,24 @@ namespace DeconTools.Backend.Workflows
                 }
 
 
+
                 bool peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
                 if (peakResultAlreadyIncludedInChromatogram)
                 {
+                    whatPeakWentWhere.Add(peakResult.PeakID, "ChromAlready");
                     continue;
                 }
 
                 bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
                 if (peakResultAlreadyFoundInAnMSFeature)
                 {
+                    whatPeakWentWhere.Add(peakResult.PeakID, "MSFeatureAlready");
                     continue;
                 }
 
-
+                whatPeakWentWhere.Add(peakResult.PeakID, "ChromGen");
                 //generate chromatogram & tag MSPeakResults
-                XYData chromatogram = this.ChromGenerator.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM);
+                XYData chromatogram = this.ChromGenerator.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
 
                 if (chromatogram == null) continue;
 
@@ -184,7 +191,7 @@ namespace DeconTools.Backend.Workflows
 
                     sb.Append(sw.ElapsedMilliseconds);
                     sb.Append("\t");
-                    
+
                     sb.Append(peakResult.Scan_num);
                     sb.Append("\t");
                     sb.Append(peakResult.MSPeak.XValue.ToString("0.00000"));
@@ -198,9 +205,9 @@ namespace DeconTools.Backend.Workflows
                     sb.Append(run.XYData.Xvalues.Length);
                     sb.Append(Environment.NewLine);
 
-                        
 
-                    
+
+
                     //Need to find the target peak within the MSFeature.  Then mark other peaks of the MSFeature as being found, so that we don't bother generating a MS and deisotoping
 
                     findTargetPeakAddResultsToCollectionAndMarkAssociatedPeaks(tempChromPeakMSFeatures, peakResult, run, scanTolerance);
@@ -219,7 +226,17 @@ namespace DeconTools.Backend.Workflows
             //Console.WriteLine("Top 50 = " + deconTimes.Take(50).Average());
             //Console.WriteLine("Next 50 = " + deconTimes.Skip(50).Take(50).Average());
 
-            Console.WriteLine(sb.ToString());
+            StringBuilder peaksb = new StringBuilder();
+            foreach (var item in whatPeakWentWhere)
+            {
+                peaksb.Append(item.Key);
+                peaksb.Append("\t");
+                peaksb.Append(item.Value);
+                peaksb.Append(Environment.NewLine);
+            }
+
+
+            //Console.WriteLine(sb.ToString());
 
 
 
@@ -228,7 +245,7 @@ namespace DeconTools.Backend.Workflows
         private bool findPeakWithinMSFeatureResults(List<IsosResult> msFeatureList, MSPeakResult peakResult, double scanTolerance)
         {
             double toleranceInPPM = 5;
-            double toleranceInMZ = toleranceInPPM  / 1e6 * peakResult.MSPeak.XValue;
+            double toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
 
             foreach (var msfeature in msFeatureList)
             {
@@ -248,9 +265,9 @@ namespace DeconTools.Backend.Workflows
                 {
                     return true;
                 }
-                
 
-                
+
+
             }
 
             return false;
@@ -261,12 +278,12 @@ namespace DeconTools.Backend.Workflows
         {
             double toleranceInPPM = 5;
 
-            double toleranceInMZ = toleranceInPPM  / 1e6 * peakResult.MSPeak.XValue;
+            double toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
             bool foundPeakWithinMSFeature = false;
 
             IList<IsosResult> msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak. 
-            
-            
+
+
             for (int i = 0; i < msFeatureList.Count; i++)
             {
                 IsosResult msfeature = msFeatureList[i];
@@ -278,11 +295,11 @@ namespace DeconTools.Backend.Workflows
                 {
                     foundPeakWithinMSFeature = false;
                 }
-                else if (peaksWithinTol.Count==1)
+                else if (peaksWithinTol.Count == 1)
                 {
                     foundPeakWithinMSFeature = true;
 
-                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(chromPeakBasedMSFeatures,peakResult, scanTolerance);
+                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(chromPeakBasedMSFeatures, peakResult, scanTolerance);
                     if (!peakResultAlreadyFoundInAnMSFeature)
                     {
                         run.ResultCollection.ResultList.Add(msfeature);   // add it to the big long list of MSFeatures found
@@ -290,7 +307,7 @@ namespace DeconTools.Backend.Workflows
 
                     chromPeakBasedMSFeatures.Add(msfeature);       //also add it to a temporary list.  This list is much smaller and can be searched more quickly. 
 
-                    
+
                 }
                 else
                 {

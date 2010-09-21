@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define peaksAreFilteredToNarrowMZ
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +9,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Data;
 using NUnit.Framework;
+using DeconTools.Backend.DTO;
 
 namespace DeconTools.UnitTesting2.WorkflowTests
 {
@@ -73,14 +76,22 @@ namespace DeconTools.UnitTesting2.WorkflowTests
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
+
+#if peaksAreFilteredToNarrowMZ
+
             run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue>771 && p.MSPeak.XValue<775).ToList();
-
-            TestUtilities.DisplayMSPeakResults(run.ResultCollection.MSPeakResultList);
-
-
+#else
+            run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
+#endif
+            
             workflow.ExecuteWorkflow(run);
 
-            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            
+            
+            List<MSPeakResult>filteredPeakResults = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue>771 && p.MSPeak.XValue<775).ToList();
+            
+            TestUtilities.DisplayMSPeakResults(filteredPeakResults);
 
         }
 

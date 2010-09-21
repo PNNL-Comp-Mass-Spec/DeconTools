@@ -102,9 +102,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="YafmsLibrary, Version=1.0.3916.16899, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="YafmsLibrary, Version=1.0.3916.17384, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\YafmsLibrary\YafmsLibrary\bin\Debug\YafmsLibrary.dll</HintPath>
+      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
