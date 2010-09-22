@@ -50,15 +50,19 @@ namespace DeconTools.UnitTesting2.WorkflowTests
 
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
 
+            Console.WriteLine(run.ResultCollection.MSPeakResultList.Count);
 
-            workflow.ExecuteWorkflow(run);
 
-            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+
+           // workflow.ExecuteWorkflow(run);
+
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
         }
 
@@ -68,11 +72,11 @@ namespace DeconTools.UnitTesting2.WorkflowTests
         public void processOrbi_Refining_Case01_whatHappensTo_PeakID_396293()
         {
             WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow();
-            int minScan = 5500;
-            int maxScan = 6500;
+            int minScan = 200;
+            int maxScan = 18500;
 
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
@@ -86,12 +90,12 @@ namespace DeconTools.UnitTesting2.WorkflowTests
             
             workflow.ExecuteWorkflow(run);
 
-            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
             
             
             List<MSPeakResult>filteredPeakResults = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue>771 && p.MSPeak.XValue<775).ToList();
             
-            TestUtilities.DisplayMSPeakResults(filteredPeakResults);
+            //TestUtilities.DisplayMSPeakResults(filteredPeakResults);
 
         }
 
