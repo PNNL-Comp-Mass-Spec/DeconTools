@@ -16,8 +16,10 @@ namespace DeconTools.Backend.Core
             this.ID = -1;
             this.ScanStart = -1;
             this.ScanEnd = -1;
+            this.ScanMaxIntensity = -1;
             this.RetentionTime = 0;
             this.Intensity = 0;
+            
         }
         
         #endregion
@@ -37,7 +39,9 @@ namespace DeconTools.Backend.Core
 
         public int ScanStart { get; set; }
 
-        public int ScanEnd { get; set; } 
+        public int ScanEnd { get; set; }
+
+        public int ScanMaxIntensity { get; set; } 
         
         public ScanSet ScanSet {get;set;}
         
