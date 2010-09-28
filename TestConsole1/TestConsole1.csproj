@@ -3,14 +3,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F6400614-6098-4163-93BB-42DBFE0850F6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TestConsole1</RootNamespace>
     <AssemblyName>TestConsole1</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -51,6 +51,9 @@
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -62,6 +65,10 @@
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
+      <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
+      <Name>DeconTools.UnitTesting2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -100,6 +100,7 @@ Global
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Debug|x64.ActiveCfg = Debug|x64
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Debug|x86.ActiveCfg = Debug|x86
+		{F6400614-6098-4163-93BB-42DBFE0850F6}.Debug|x86.Build.0 = Debug|x86
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|Any CPU.ActiveCfg = Release|x86
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|Mixed Platforms.ActiveCfg = Release|x64
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|Mixed Platforms.Build.0 = Release|x64
