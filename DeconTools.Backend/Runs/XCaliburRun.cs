@@ -96,6 +96,12 @@ namespace DeconTools.Backend.Runs
                 alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
+            if (this.XYData == null)
+            {
+                this.XYData = new XYData();
+            }
+
+
             this.XYData.SetXYValues(ref xvals, ref yvals);
             if (alreadyFiltered) return;
 

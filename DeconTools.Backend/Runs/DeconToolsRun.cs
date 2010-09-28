@@ -50,8 +50,24 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            
-            return this.RawData.GetMSLevel(scanNum);
+            try
+            {
+                return this.RawData.GetMSLevel(scanNum);
+
+            }
+            catch (Exception ex)
+            {
+                if (scanNum > this.GetMaxPossibleScanIndex())
+                {
+                    throw new ArgumentOutOfRangeException("Failed to get MS level. Input scan was greater than dataset's max scan.");
+
+                }
+                else
+                {
+                    throw ex;
+                }
+                
+            }
         }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)

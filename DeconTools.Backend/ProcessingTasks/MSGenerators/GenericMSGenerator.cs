@@ -38,9 +38,13 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             
             run.MSParameters.MinMZ = this.MinMZ;    
             run.MSParameters.MaxMZ = this.MaxMZ;
-            
-            
 
+
+            if (run.XYData ==null)
+            {
+                run.XYData = new XYData();
+            }
+            
             bool isScan_MS_only = (run.GetMSLevel(run.CurrentScanSet.PrimaryScanNumber) == 1);
             if (true)
             {
@@ -51,13 +55,13 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             {
                 
             }
-
+            
             if (run.XYData.Xvalues == null || run.XYData.Xvalues.Length == 0)
             {
                 run.XYData.Xvalues = new double[1];
                 run.XYData.Yvalues = new double[1];
             }
-
+           
             run.CurrentScanSet.TICValue = run.GetTIC(this.MinMZ, this.MaxMZ);
 
         }

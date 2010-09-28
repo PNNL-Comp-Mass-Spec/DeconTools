@@ -59,9 +59,9 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3820.28194, Culture=neutral">
+    <Reference Include="DeconEngineV2, Version=1.0.3919.21186, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\DeconEngineV2\Debug\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,6 +98,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="UIMFLibrary, Version=1.0.3819.22135, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
@@ -215,6 +218,9 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
+    <Compile Include="Runs\BrukerSolarixRun.cs" />
+    <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
+    <Compile Include="Runs\CalibrationData\CalibrationDataBase.cs" />
     <Compile Include="Runs\RunFactory.cs" />
     <Compile Include="Data\ScanResultFactory.cs" />
     <Compile Include="Data\Exporters\ScansExporter.cs" />

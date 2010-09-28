@@ -31,12 +31,12 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-        private string outputFilename;
+        private string m_outputFilename;
 
         public string OutputFilename
         {
-            get { return outputFilename; }
-            set { outputFilename = value; }
+            get { return m_outputFilename; }
+            set { m_outputFilename = value; }
         }
 
 
@@ -117,7 +117,7 @@ namespace DeconTools.Backend.Utilities
             {
                 if (sw == null)
                 {
-                    sw = new StreamWriter(new System.IO.FileStream(outputFilename, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read));
+                    sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read));
                     sw.AutoFlush = true;
                 }
 

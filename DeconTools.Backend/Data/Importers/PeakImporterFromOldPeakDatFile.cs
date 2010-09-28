@@ -68,8 +68,8 @@ namespace DeconTools.Backend.Data.Importers
                  peakList.Add(peak);
              }
 
-             oldPeakResults.__dtor();
-             oldProcessor.__dtor();
+             //oldPeakResults.__dtor();
+             //oldProcessor.__dtor();
 
 
         }
