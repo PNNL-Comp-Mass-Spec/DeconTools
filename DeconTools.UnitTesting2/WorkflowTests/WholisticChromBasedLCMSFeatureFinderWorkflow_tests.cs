@@ -1,4 +1,4 @@
-﻿#define peaksAreFilteredToNarrowMZ
+﻿//#define peaksAreFilteredToNarrowMZ
 
 using System;
 using System.Collections.Generic;
@@ -72,8 +72,8 @@ namespace DeconTools.UnitTesting2.WorkflowTests
         public void processOrbi_Refining_Case01_whatHappensTo_PeakID_396293()
         {
             WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow();
-            int minScan = 200;
-            int maxScan = 18500;
+            int minScan = 5500;
+            int maxScan = 6500;
 
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
