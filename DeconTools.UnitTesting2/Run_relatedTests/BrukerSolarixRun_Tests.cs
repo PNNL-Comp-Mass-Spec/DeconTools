@@ -43,14 +43,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetMassSpectrumTest1()
         {
-
             BrukerSolarixRun run = new BrukerSolarixRun(FileRefs.RawDataMSFiles.BrukerSolarixFile1);
-
             ScanSet scanset=new ScanSet(4);
             run.GetMassSpectrum(scanset,0,50000);
-
             run.XYData.Display();
-
         }
 
 

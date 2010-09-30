@@ -19,6 +19,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         string bruker9T_ser_FolderRef = FileRefs.RawDataMSFiles.Bruker9TStandardFile1 + @"\0.ser";             //Bruker files can be referenced by their 0.ser folder
         string bruker9T_ACQUS_alternateRef = FileRefs.RawDataMSFiles.Bruker9TStandardFile1 + @"\0.ser\acqus";   //Bruker files can be referenced by their acqus file
 
+        string brukerFIDFile = @"\\pnl\projects\MSSHARE\BrukerTestFiles\LIFT_CID\0_G3\1\1347.7400.LIFT_2\1SRef\fid";
+
+
         [Test]
         public void checkDataSetNamesAndPathsTest1()
         {
@@ -46,6 +49,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual("SWT_9t_TestDS216_Small", run.DatasetName);
             Assert.AreEqual(bruker9TFolderRef, run.DataSetPath);
         }
+
+
+
 
 
         [Test]

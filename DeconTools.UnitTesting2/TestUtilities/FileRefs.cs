@@ -21,6 +21,10 @@ namespace DeconTools.UnitTesting2
 
             public static string TestFileBasePath = @"..\\..\\..\\TestFiles";
             public static string Bruker9TStandardFile1 = FileRefs.RawDataBasePath + "SWT_9t_TestDS216_Small";
+            public static string Bruker9TStandardFile1AlternateRef = FileRefs.RawDataBasePath + @"SWT_9t_TestDS216_Small\0.ser\acqus";
+
+            public static string BrukerSolarix12TFile1 = FileRefs.RawDataBasePath + @"Bruker_Solarix12T\12Ttest_000003\ser";
+            
 
             public static string YAFMSStandardFile1 = FileRefs.RawDataBasePath + "QC_Shew_09_01_pt5_a_20Mar09_Earth_09-01-01.yafms";
             public static string YAFMSStandardFile2 = FileRefs.RawDataBasePath + "metabolite_eqd.yafms";
