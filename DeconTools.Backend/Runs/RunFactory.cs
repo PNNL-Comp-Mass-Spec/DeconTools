@@ -5,64 +5,76 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace DeconTools.Backend.Runs
 {
     public class RunFactory
     {
 
-        public Run CreateRun(string fileName)
+        public Run CreateRun(string fullfileName)
         {
             Run run;
 
-            string extension = Path.GetExtension(fileName).ToLower();
+            string extension = Path.GetExtension(fullfileName).ToLower();
 
             //check for ICR2LS type extension....
             Match match = Regex.Match(extension, @"\.\d\d\d\d\d$");
             if (match.Success)
             {
-                return new ICR2LSRun(fileName);
+                return new ICR2LSRun(fullfileName);
             }
 
-            match = Regex.Match(fileName.ToLower(), ".*acqus$");
-            if (match.Success)
+
+            string fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
+
+            bool mightBeBrukerData = (fileNameWithoutPathOrExtension.Contains("acqus") || fileNameWithoutPathOrExtension.Contains("fid") || 
+                fileNameWithoutPathOrExtension.Contains("ser") || fullfileName.ToLower().Contains("0.ser"));
+
+            if (mightBeBrukerData)
             {
-                //extract folder name;   the raw data reader (DeconEngine) reads in the folder name
-                string folderName = match.Value.Substring(0,match.Value.IndexOf(@"\Acqus", StringComparison.OrdinalIgnoreCase));
+                run = determineBrukerTypeAndCreateRun(fullfileName);
 
-                return new BrukerRun(folderName);
+                if (run != null)
+                {
+                    return run;
+                }
+                else
+                {
+                    // there was likely some problem... but will let the remaining code execute and see if ms filetype can
+                    // be determined from the extension. 
+                }
             }
-
 
             switch (extension)
             {
                 case ".raw":
-                    run = new XCaliburRun(fileName);
+                    run = new XCaliburRun(fullfileName);
                     break;
                 case ".imf":
-                    run = new IMFRun(fileName);
+                    run = new IMFRun(fullfileName);
                     break;
 
                 case ".txt":
-                    run = new MSScanFromTextFileRun(fileName);
+                    run = new MSScanFromTextFileRun(fullfileName);
                     break;
                 case ".mzxml":
-                    run = new MZXMLRun(fileName);
+                    run = new MZXMLRun(fullfileName);
                     break;
 
                 case ".uimf":
-                    run = new UIMFRun(fileName);
+                    run = new UIMFRun(fullfileName);
                     break;
 
                 case ".db":                            //might want to remove this later
-                    run = new UIMFRun(fileName);  
+                    run = new UIMFRun(fullfileName);  
                     break;
 
                 case ".d":
-                    run = new AgilentD_Run(fileName);
+                    run = new AgilentD_Run(fullfileName);
                     break;
                 case ".yafms":
-                    run = new YAFMSRun(fileName);
+                    run = new YAFMSRun(fullfileName);
                     break;
                 
                 default:
@@ -70,6 +82,47 @@ namespace DeconTools.Backend.Runs
                     break;
             }
             return run;
+        }
+
+        private Run determineBrukerTypeAndCreateRun(string fullfileName)
+        {
+            Run run = null;
+
+            string filenameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
+
+            FileInfo fileInfo = new FileInfo(fullfileName);
+            DirectoryInfo parentDirInfo = fileInfo.Directory;
+
+            DirectoryInfo[] folderList = parentDirInfo.GetDirectories();
+
+            //check for Bruker solarix-type folder (xmass_method.m)
+            if (folderList != null && folderList.Length >0)
+            {
+
+                var folder = (from n in folderList where n.Name.ToLower().Contains("xmass_method.m") select n);
+
+
+                bool hasBrukerSolarixTypeFolder = (folder.Count()>0);
+                if (hasBrukerSolarixTypeFolder)
+                {
+                    run = new BrukerSolarixRun(fullfileName);
+                }
+            }
+
+
+            if (filenameWithoutPathOrExtension.Contains("acqus"))
+            {
+                run = new BrukerRun(parentDirInfo.FullName);
+            }
+
+            return run;
+
+
+
+
+
+       
+
         }
 
 

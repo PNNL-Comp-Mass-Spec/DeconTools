@@ -30,7 +30,8 @@ namespace DeconTools.Backend
             PNNL_IMS,
             PNNL_UIMF,
             SUNEXTREL,
-            YAFMS
+            YAFMS,
+            Bruker_12T_Solarix
 
         }
 

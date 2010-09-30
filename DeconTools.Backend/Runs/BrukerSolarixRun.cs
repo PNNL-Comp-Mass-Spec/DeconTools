@@ -27,7 +27,18 @@ namespace DeconTools.Backend.Runs
 
         #region Constructors
 
+        public BrukerSolarixRun()
+        {
+            this.XYData = new XYData();
+            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
+            this.MSFileType = Globals.MSFileType.Bruker_12T_Solarix;
+            this.IsDataThresholded = false;
+
+
+        }
+
         public BrukerSolarixRun(string fileName)
+            : this()
         {
             validateFileSelection(fileName);
             this.Filename = fileName;
@@ -39,6 +50,10 @@ namespace DeconTools.Backend.Runs
 
             this.RawData = new DeconToolsV2.Readers.clsRawData(this.Filename, DeconToolsV2.Readers.FileType.BRUKER);
             applySettings();
+
+
+            this.MinScan = 1;        //  remember that DeconEngine is 1-based
+            this.MaxScan = GetMaxPossibleScanIndex();
 
 
         }
@@ -61,7 +76,7 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
-        
+
         //NOTE: code duplication here... see BrukerRun too
         public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
@@ -111,7 +126,10 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
+        internal override int GetMaxPossibleScanIndex()
+        {
+            return this.GetNumMSScans();
+        }
 
         #endregion
 
