@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -25,11 +26,34 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(184346289.692624m, (decimal)run.CalibrationData.ML1);
             Assert.AreEqual(12.8161378555916m, (decimal)run.CalibrationData.ML2);
-            Assert.AreEqual(416666.666666667m, (decimal)run.CalibrationData.SW_h);
+            Assert.AreEqual(833333.333333334m, (decimal)run.CalibrationData.SW_h);
             Assert.AreEqual(524288, run.CalibrationData.TD);
-            Assert.AreEqual(73725.699739194m, (decimal)run.CalibrationData.FR_Low);
+            Assert.AreEqual(0m, (decimal)run.CalibrationData.FR_Low);
             Assert.AreEqual(0, run.CalibrationData.ByteOrder);
         }
+
+
+        [Test]
+        public void GetNumSpectraTest1()
+        {
+            BrukerSolarixRun run = new BrukerSolarixRun(FileRefs.RawDataMSFiles.BrukerSolarixFile1);
+            Assert.AreEqual(8, run.GetNumMSScans());
+        }
+
+        [Test]
+        public void GetMassSpectrumTest1()
+        {
+
+            BrukerSolarixRun run = new BrukerSolarixRun(FileRefs.RawDataMSFiles.BrukerSolarixFile1);
+
+            ScanSet scanset=new ScanSet(4);
+            run.GetMassSpectrum(scanset,0,50000);
+
+            run.XYData.Display();
+
+        }
+
+
 
 
 
