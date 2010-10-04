@@ -9,6 +9,7 @@ using System.Diagnostics;
 using DeconTools.Backend.Utilities;
 using DeconTools.UnitTesting2;
 using System.IO;
+using DeconTools.Backend;
 
 
 namespace DeconTools.UnitTesting.Run_relatedTests
@@ -17,6 +18,10 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     public class UIMFRun_Tests
     {
         private string uimfFilepath = FileRefs.RawDataMSFiles.UIMFStdFile1;
+
+
+        private string uimfFileContainingMSMSScans = FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData;
+
 
         [Test]
         public void getUIMFFileTest1()
@@ -36,6 +41,57 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(uimfFilepath, uimfRun.Filename);
 
         }
+
+
+        [Test]
+        public void checkSummingOfMS1LevelData_inFileContainingMSMSData()
+        {
+            UIMFRun uimfRun = new UIMFRun(uimfFileContainingMSMSScans);
+
+
+            //int[] frameArray = {1,5,9,13,17};
+
+
+            //FrameSet frameSet = new FrameSet(9, frameArray);
+            //ScanSet scanSet = new ScanSet(300, 100, 500);
+            //uimfRun.GetMassSpectrum(scanSet, frameSet, 0, 50000);
+
+
+            //UIMFLibrary.DataReader reader = new DataReader();
+            //reader.OpenUIMF(uimfFileContainingMSMSScans);
+
+            //GlobalParameters gp= reader.GetGlobalParameters();
+
+            //int numBins = gp.Bins;
+
+            //XYData xydata = new XYData();
+
+            //double[] xvals = new double[numBins];
+            //int[] yvals = new int[numBins];
+
+            //List<double> tempXvalues = new List<double>();
+            //List<double> tempYValues = new List<double>();
+
+            //reader.SumScansRange(xvals,yvals, 1, 9, 2, 100, 500);
+
+            //for (int i = 0; i < xvals.Length; i++)
+            //{
+            //    tempXvalues.Add(xvals[i]);
+            //    tempYValues.Add(yvals[i]);
+            //}
+
+            //xydata.Xvalues = tempXvalues.ToArray();
+            //xydata.Yvalues = tempYValues.ToArray();
+
+            //xydata.Display();
+
+            
+
+            
+           
+
+        }
+
 
 
         [Test]

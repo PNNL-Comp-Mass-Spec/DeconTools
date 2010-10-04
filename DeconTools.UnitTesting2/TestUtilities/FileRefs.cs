@@ -18,6 +18,7 @@ namespace DeconTools.UnitTesting2
             public static string MZXMLOrbitrapStdFile1 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzxml";
             
             public static string UIMFStdFile1 = FileRefs.RawDataBasePath + "35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
+            public static string UIMFFileContainingMSMSLevelData = FileRefs.RawDataBasePath + "QC_Shew_MSMS_500_100_fr1200_c2_Ek_0000.uimf";
 
             public static string TestFileBasePath = @"..\\..\\..\\TestFiles";
             public static string Bruker9TStandardFile1 = FileRefs.RawDataBasePath + "SWT_9t_TestDS216_Small";

@@ -83,7 +83,7 @@ namespace DeconTools.Backend.Runs
             if (trimmedPath.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
                 DirectoryInfo dirinfo = new DirectoryInfo(p);
-                return dirinfo.Parent.Parent.FullName;
+                return dirinfo.Parent.FullName;
             }
             else if (trimmedPath.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
             {
@@ -96,6 +96,8 @@ namespace DeconTools.Backend.Runs
             }
         }
 
+        
+        //TODO:  need to finalize what to expect in an unzipped file structure...  things are inconsistant right now (Oct 2010)
         private string getDataSetName(string filename)
         {
 
@@ -112,7 +114,7 @@ namespace DeconTools.Backend.Runs
             if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
                 DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
-                trimmedfilename = dirinfo.Parent.Parent.FullName.TrimEnd('\\');
+                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
             }
 
            

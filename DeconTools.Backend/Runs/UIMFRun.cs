@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
 
-            Check.Require(File.Exists(fileName));
+            Check.Require(File.Exists(fileName), "File does not exist.");
             this.Filename = fileName;
 
             SetGlobalParameters();
