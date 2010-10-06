@@ -103,11 +103,9 @@ namespace DeconTools.Backend.Data.Importers
                             massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
                         }
 
-
-
                         if (!reader["Avg_GANET"].Equals(DBNull.Value)) massTag.NETVal = Convert.ToSingle(reader["Avg_GANET"]);
                         if (!reader["Ref_ID"].Equals(DBNull.Value)) massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
-
+                        if (!reader["Description"].Equals(DBNull.Value)) massTag.ProteinDescription = Convert.ToString(reader["Description"]);
                       
                         massTag.CreatePeptideObject();
 
@@ -219,7 +217,9 @@ FROM ( SELECT Mass_Tag_ID,
                         //if last one in list, then close parentheses. If not, just append a comma separator.
                         if (i==this.massTagsToBeRetrieved.Count-1)
                         {
-                            sb.Append(")) ORDER BY Mass_Tag_ID");
+                            //sb.Append(")) ORDER BY Mass_Tag_ID");
+                            sb.Append("))");
+
                         }
                         else
                         {

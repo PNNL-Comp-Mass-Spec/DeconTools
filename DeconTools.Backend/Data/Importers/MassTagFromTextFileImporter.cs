@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Data.Importers
             }
             mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
             mt.RefID = parseIntField(lineData[getIndexForTableHeader(headers, "ref_id", true)]);
-           
+            mt.ProteinDescription = lineData[getIndexForTableHeader(headers, "description", true)];
             
             return mt;
             

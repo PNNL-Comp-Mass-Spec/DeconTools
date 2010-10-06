@@ -128,6 +128,7 @@
     <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
+    <Compile Include="FileIO\MassTagTextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterBasic.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterUIMF.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterBasic.cs" />

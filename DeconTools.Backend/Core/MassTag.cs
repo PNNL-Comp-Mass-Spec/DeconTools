@@ -33,7 +33,8 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// the ID of the protein to which the MassTag is linked
         /// </summary>
-        public int RefID { get; set; }     
+        public int RefID { get; set; }
+        public string ProteinDescription { get; set; }
 
         public IsotopicProfile IsotopicProfile { get; set; }    // the theoretical profile
 
