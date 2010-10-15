@@ -19,6 +19,7 @@ namespace DeconTools.Backend.Core
             this.ScanMaxIntensity = -1;
             this.RetentionTime = 0;
             this.Intensity = 0;
+            this.Mass = 0;
             
         }
         
@@ -35,6 +36,8 @@ namespace DeconTools.Backend.Core
 
         public float RetentionTime { get; set; }
 
+        public double Mass { get; set; }
+
         public float Intensity { get; set; }
 
         public int ScanStart { get; set; }
@@ -45,7 +48,6 @@ namespace DeconTools.Backend.Core
         
         public ScanSet ScanSet {get;set;}
         
-
         
         #endregion
 
