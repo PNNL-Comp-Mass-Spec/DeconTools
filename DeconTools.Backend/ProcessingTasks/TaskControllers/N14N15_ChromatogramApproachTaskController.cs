@@ -37,65 +37,61 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
 
         #region Private Methods
         #endregion
-        public override void Execute(List<Run> runCollection)
-        {
 
+
+        public override void Execute(Run run)
+        {
             LabeledMultiPeakChromGeneratorTask chromGenerator = new LabeledMultiPeakChromGeneratorTask(3, 25);
 
 
 
-            ISmoother smoother= new Smoothers.DeconToolsSavitzkyGolaySmoother(11,11,2);
+            ISmoother smoother = new Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
 
             IPeakDetector peakDetector = new ChromPeakDetector(0.5, 0.5);
 
             ChromPeakSelector chromPeakSelector = new ChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
 
-  
-            foreach (Run run in runCollection)
+
+
+            run.ResultCollection.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            List<MSPeakResult> masterMSPeakList = run.ResultCollection.MSPeakResultList;
+
+
+            //get alignment info
+
+
+            foreach (var mt in m_massTagCollection.MassTagList)
             {
+                run.CurrentMassTag = mt;
 
 
+                TomTheorFeatureGenerator featureGenerator = new TomTheorFeatureGenerator();
+                featureGenerator.GenerateTheorFeature(mt);   //generate theor profile for unlabeled feature
+
+                IsotopicProfile labeledProfile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005);
+
+                IsotopicProfileChromData theorIsopeakChromData = new IsotopicProfileChromData();
+                IsotopicProfileChromData isopeakChromData = new IsotopicProfileChromData();
+
+                IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(3, 25);
+
+                theorIsopeakChromData.ChromXYData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(masterMSPeakList, mt.IsotopicProfile);
+                isopeakChromData.ChromXYData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(masterMSPeakList, labeledProfile);
+
+                smoothChromatograms(theorIsopeakChromData.ChromXYData, smoother);
+                smoothChromatograms(isopeakChromData.ChromXYData, smoother);
 
 
-                run.ResultCollection.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
-                List<MSPeakResult> masterMSPeakList = run.ResultCollection.MSPeakResultList; 
+                theorIsopeakChromData.ChromPeakData = detectChromPeaks(theorIsopeakChromData.ChromXYData, peakDetector);
+                isopeakChromData.ChromPeakData = detectChromPeaks(isopeakChromData.ChromXYData, peakDetector);
 
 
-                //get alignment info
+                getNETValues(theorIsopeakChromData.ChromPeakData, run);
+                getNETValues(isopeakChromData.ChromPeakData, run);
 
 
-                foreach (var mt in m_massTagCollection.MassTagList)
-                {
-                    run.CurrentMassTag = mt;
-
-
-                    TomTheorFeatureGenerator featureGenerator = new TomTheorFeatureGenerator();
-                    featureGenerator.GenerateTheorFeature(mt);   //generate theor profile for unlabeled feature
-
-                    IsotopicProfile labeledProfile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005);
-
-                    IsotopicProfileChromData theorIsopeakChromData = new IsotopicProfileChromData();
-                    IsotopicProfileChromData isopeakChromData = new IsotopicProfileChromData();
-
-                    IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(3, 25);
-
-                    theorIsopeakChromData.ChromXYData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(masterMSPeakList, mt.IsotopicProfile);
-                    isopeakChromData.ChromXYData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(masterMSPeakList, labeledProfile);
-
-                    smoothChromatograms(theorIsopeakChromData.ChromXYData, smoother);
-                    smoothChromatograms(isopeakChromData.ChromXYData, smoother);
-
-
-                    theorIsopeakChromData.ChromPeakData=  detectChromPeaks(theorIsopeakChromData.ChromXYData, peakDetector);
-                    isopeakChromData.ChromPeakData =  detectChromPeaks(isopeakChromData.ChromXYData, peakDetector);
-
-
-                    getNETValues(theorIsopeakChromData.ChromPeakData, run);
-                    getNETValues(isopeakChromData.ChromPeakData, run);
-
-
-                    theorIsopeakChromData.ChromBestPeakData = selectBestChromPeaks(theorIsopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
-                    isopeakChromData.ChromBestPeakData = selectBestChromPeaks(isopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
+                theorIsopeakChromData.ChromBestPeakData = selectBestChromPeaks(theorIsopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
+                isopeakChromData.ChromBestPeakData = selectBestChromPeaks(isopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
 
 
 
@@ -103,16 +99,14 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
 
 
 
-                }
-
-
-
-
-
-
-
-                
             }
+        }
+
+        public override void Execute(List<Run> runCollection)
+        {
+            throw new NotImplementedException();
+
+    
         }
 
         private void getNETValues(Dictionary<MSPeak, List<IPeak>> isoChromPeakData, Run run)
@@ -184,5 +178,6 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
    
 
         }
+
     }
 }

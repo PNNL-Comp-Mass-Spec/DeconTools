@@ -19,6 +19,7 @@ namespace DeconTools.Backend.Core
             set { taskCollection = value; }
         }
 
+        public abstract void Execute(Run run);
         public abstract void Execute(List<Run> runCollection);
 
         protected BackgroundWorker backgroundWorker;

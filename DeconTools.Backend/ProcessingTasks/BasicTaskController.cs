@@ -23,48 +23,52 @@ namespace DeconTools.Backend.ProcessingTasks
             this.backgroundWorker = backgroundWorker;
         }
 
+        public override void Execute(Run run)
+        {
+            int counter = 1;
+            foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scanset;
+                foreach (Task task in this.TaskCollection.TaskList)
+                {
 
-        public override void Execute(List<Run>runCollection)
+                    try
+                    {
+                        task.Execute(run.ResultCollection);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorInfo = getErrorInfo(run, task, ex);
+                        Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
+
+                        throw ex;
+                    }
+                }
+
+                if (backgroundWorker != null)
+                {
+                    if (backgroundWorker.CancellationPending)
+                    {
+                        return;
+                    }
+
+                }
+                reportProgress(scanset, run);
+
+
+                counter++;
+            }
+        }
+
+
+        public override void Execute(List<Run> runCollection)
         {
 
 
             foreach (Run run in runCollection)
             {
-                int counter = 1;
-                foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
-                {
-                    run.CurrentScanSet = scanset;
-                    foreach (Task task in this.TaskCollection.TaskList)
-                    {
-
-                        try
-                        {
-                            task.Execute(run.ResultCollection);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            string errorInfo = getErrorInfo(run, task, ex);
-                            Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
-                            
-                            throw ex;
-                        }
-                    }
-
-                    if (backgroundWorker != null)
-                    {
-                        if (backgroundWorker.CancellationPending)
-                        {
-                            return;
-                        }
-
-                    }
-                    reportProgress(scanset, run);
-
-
-                    counter++;
-                }
-
+                Execute(run);
             }
 
         }
@@ -85,7 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     + percentDone.ToString("0.#") + "% complete, " + run.ResultCollection.getTotalIsotopicProfiles() + " accumulated features", Logger.Instance.OutputFilename);
             }
 
-            
+
             int numScansBetweenProgress = getNumScansBetweenProgress(this.TaskCollection);
 
             if (scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
@@ -96,14 +100,14 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
                 else
                 {
-                        Console.WriteLine("Completed processing on Scan " + scanset.PrimaryScanNumber);
+                    Console.WriteLine("Completed processing on Scan " + scanset.PrimaryScanNumber);
                 }
             }
 
 
         }
 
- 
+
 
     }
 }

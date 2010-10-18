@@ -7,10 +7,11 @@ using System.Xml;
 using DeconTools.Utilities;
 using System.Xml.Linq;
 using DeconTools.Backend.Runs.CalibrationData;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Runs
 {
-    public class BrukerSolarixRun : DeconToolsRun
+    public class BrukerSolarixRun : Run
     {
 
 
@@ -33,7 +34,7 @@ namespace DeconTools.Backend.Runs
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.Bruker_12T_Solarix;
             this.IsDataThresholded = false;
-
+            this.ContainsMSMSData = false;
 
         }
 
@@ -48,15 +49,40 @@ namespace DeconTools.Backend.Runs
             this.SettingsFilePath = validateDataFolderStructureAndFindSettingsFilePath();
             loadSettings(this.SettingsFilePath);
 
-            this.RawData = new DeconToolsV2.Readers.clsRawData(this.Filename, DeconToolsV2.Readers.FileType.BRUKER);
+
+            try
+            {
+                this.rawData = new DeconToolsV2.Readers.clsRawData();
+                this.rawData.LoadFile(this.Filename, DeconToolsV2.Readers.FileType.BRUKER);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
+            }
+
+            Check.Ensure(this.rawData != null, "Run initialization problem. Details:  DeconEngine tried to load the file but failed.");
+
             applySettings();
+            Check.Ensure(this.rawData != null, "Run initialization problem. Details:  Run was loaded but after FFT settings were applied, there was a problem.");
 
 
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
 
+            Check.Ensure(this.MaxScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
+
 
         }
+
+        public BrukerSolarixRun(string fileName, int minScan, int maxScan)
+            : this(fileName)
+        {
+            this.MinScan = minScan;
+            this.MaxScan = maxScan;
+        }
+
+
+
 
         #endregion
 
@@ -67,11 +93,32 @@ namespace DeconTools.Backend.Runs
         /// </summary>
         public DeconTools.Backend.Runs.CalibrationData.BrukerCalibrationData CalibrationData { get; set; }
 
+        [field: NonSerialized]
+        private XYData xyData;
+        public override XYData XYData
+        {
+            get
+            {
+                return xyData;
+            }
+            set
+            {
+                xyData = value;
+            }
+        }
+
         /// <summary>
         /// File path to the Bruker Solarix 'apexAcquisition.method' file
         /// </summary>
         public string SettingsFilePath { get; set; }
 
+        [field: NonSerialized]
+        private DeconToolsV2.Readers.clsRawData rawData;
+        public DeconToolsV2.Readers.clsRawData RawData
+        {
+            get { return rawData; }
+            set { rawData = value; }
+        }
 
         #endregion
 
@@ -126,12 +173,37 @@ namespace DeconTools.Backend.Runs
 
         }
 
+     
+        public override double GetTime(int scanNum)
+        {
+            return this.rawData.GetScanTime(scanNum);
+        }
+
+        public override int GetNumMSScans()
+        {
+            if (rawData == null) return 0;
+            return this.rawData.GetNumScans();
+        }
+
         internal override int GetMaxPossibleScanIndex()
         {
             return this.GetNumMSScans();
         }
 
+        public override int GetMSLevelFromRawData(int scanNum)
+        {
+
+            if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
+            int mslevel = (byte)this.rawData.GetMSLevel(scanNum);
+
+            addToMSLevelData(scanNum, mslevel);
+
+            return mslevel;
+        }
+
         #endregion
+
+     
 
         #region Private Methods
         private void applySettings()

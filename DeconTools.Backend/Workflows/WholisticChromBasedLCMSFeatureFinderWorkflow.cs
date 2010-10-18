@@ -109,7 +109,7 @@ namespace DeconTools.Backend.Workflows
             Check.Require(run.ResultCollection != null && run.ResultCollection.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
                 String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
 
-            var sortedList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height);
+            List<MSPeakResult> sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
             bool msGeneratorNeedsInitializing = (this.MSgen == null);
             if (msGeneratorNeedsInitializing)
@@ -119,7 +119,6 @@ namespace DeconTools.Backend.Workflows
             }
 
 
-            List<MSPeakResult> sortedMSPeakResultList = sortedList.ToList();
 
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             List<long> deconTimes = new List<long>();
@@ -152,9 +151,9 @@ namespace DeconTools.Backend.Workflows
 
                 if (counter % 1000 == 0)
                 {
-                    
 
-                    string logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t"+ m_msFeatureCounter + "\tChomPeaks =\t"+chromPeaksCounter;
+
+                    string logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
                     Logger.Instance.AddEntry(logEntry, m_logFileName);
                     Console.WriteLine(logEntry);
                     chromPeaksCounter = 0;
@@ -221,9 +220,15 @@ namespace DeconTools.Backend.Workflows
 
                         foreach (var chromPeak in chromPeakList)
                         {
+                            int diffBetweenSourcePeakAndChromPeak = Math.Abs(peakResult.Scan_num - (int)chromPeak.XValue);
+
+                            //TODO: examine whether or not we should iterate over the chromPeakList or not....
                             chromPeaksCounter++;
+                            //Console.WriteLine("source peak = " + peakResult.PeakID + "; scan = " + peakResult.Scan_num + "; diff = " + diffBetweenSourcePeakAndChromPeak);
+
                             try
                             {
+
                                 run.CurrentScanSet = createScanSetFromChromatogramPeak(run, chromPeak);
 
                                 MSgen.Execute(run.ResultCollection);
@@ -243,7 +248,7 @@ namespace DeconTools.Backend.Workflows
                             catch (Exception ex)
                             {
 
-                                Logger.Instance.AddEntry("ERROR:  peakID = "+ peakResult.PeakID + "\t"+ ex.Message + ";\t" + ex.StackTrace, m_logFileName);
+                                Logger.Instance.AddEntry("ERROR:  peakID = " + peakResult.PeakID + "\t" + ex.Message + ";\t" + ex.StackTrace, m_logFileName);
                             }
                         }
 
@@ -264,7 +269,7 @@ namespace DeconTools.Backend.Workflows
                     isosExporter.ExportResults(run.ResultCollection.ResultList);
                     run.ResultCollection.ResultList.Clear();
 
-                   
+
 
                     exportPeakData(run, m_peakOutputFileName, whatPeakWentWhere);
                     whatPeakWentWhere.Clear();
@@ -297,6 +302,347 @@ namespace DeconTools.Backend.Workflows
 
 
         }
+
+        public void ExecuteWorkflow2(DeconTools.Backend.Core.Run run)
+        {
+            double scanTolerance = 100;
+
+
+            Check.Require(run != null, String.Format("{0} failed. Run not defined.", this.Name));
+            Check.Require(run.ResultCollection != null && run.ResultCollection.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
+                String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
+
+            List<MSPeakResult> sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
+
+            bool msGeneratorNeedsInitializing = (this.MSgen == null);
+            if (msGeneratorNeedsInitializing)
+            {
+                MSGeneratorFactory factoryMSGen = new MSGeneratorFactory();
+                this.MSgen = factoryMSGen.CreateMSGenerator(run.MSFileType);
+            }
+
+
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            List<long> deconTimes = new List<long>();
+
+            StringBuilder sb = new StringBuilder();
+
+            int totalPeaks = sortedMSPeakResultList.Count;
+
+            int counter = -1;
+
+
+
+
+            Dictionary<int, string> whatPeakWentWhere = new Dictionary<int, string>();
+
+            MSPeakResult lastPeakResult = sortedMSPeakResultList.Last();
+
+            int chromPeaksCounter = 0;
+            int numFeaturesOnLastUpdate = 0;
+
+            foreach (var peakResult in sortedMSPeakResultList)
+            {
+                counter++;
+
+                //if (counter > 10000)
+                //{
+                //    break;
+                //}
+
+
+                if (counter % 1000 == 0)
+                {
+
+
+                    string logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
+                    Logger.Instance.AddEntry(logEntry, m_logFileName);
+                    Console.WriteLine(logEntry);
+                    chromPeaksCounter = 0;
+                }
+
+                //if (peakResult.PeakID == 396293)
+                //{
+                //    Console.WriteLine(DateTime.Now + "\tWorking on peak " + peakResult.PeakID);
+                //}
+
+
+                string peakFate = "Undefined";
+
+                bool peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
+                if (peakResultAlreadyIncludedInChromatogram)
+                {
+                    peakFate = "Chrom_Already";
+                }
+
+                if (!peakResultAlreadyIncludedInChromatogram)
+                {
+                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
+                    if (peakResultAlreadyFoundInAnMSFeature)
+                    {
+                        peakFate = "MSFeature_Already";
+                    }
+                    else
+                    {
+                        peakFate = "CHROM";
+                    }
+                }
+
+                whatPeakWentWhere.Add(peakResult.PeakID, peakFate);
+
+                try
+                {
+                    if (peakFate == "CHROM")
+                    {
+                        //generate chromatogram & tag MSPeakResults
+
+                        int minScanForChrom = peakResult.Scan_num - (int)scanTolerance;
+                        if (minScanForChrom < run.MinScan)
+                        {
+                            minScanForChrom = run.MinScan;
+                        }
+
+                        int maxScanForChrom = peakResult.Scan_num + (int)scanTolerance;
+                        if (maxScanForChrom > run.MaxScan)
+                        {
+                            maxScanForChrom = run.MaxScan;
+                        }
+
+                        PeakChrom chrom = new BasicPeakChrom();
+                        chrom.Data = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                            peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM);
+
+                        if (chrom.IsNullOrEmpty) continue;
+
+                        chrom.XYData = chrom.GetXYDataFromChromPeakData();
+
+
+
+                        //remove points from chromatogram due to MS/MS level data
+                        if (run.ContainsMSMSData)
+                        {
+                            chrom.XYData = filterOutMSMSRelatedPoints(run, chrom.XYData);
+                        }
+
+                        //smooth the chromatogram
+                        chrom.XYData = this.ChromSmoother.Smooth(chrom.XYData);
+
+                        //detect peaks in chromatogram
+                        chrom.PeakList = this.ChromPeakDetector.FindPeaks(chrom.XYData, 0, 0);
+
+                        //Console.WriteLine("source peak -> scan= " + peakResult.Scan_num + "; m/z= " + peakResult.MSPeak.XValue);
+                        //chrom.XYData.Display();
+
+
+
+                        if (!chrom.PeakDataIsNullOrEmpty)
+                        {
+                            IPeak chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
+
+                            if (chromPeak == null)
+                            {
+                                continue;
+                            }
+
+                            double peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+
+                            //now mark all peakResults that are members of this chromPeak
+                            chrom.GetMSPeakMembersForGivenChromPeakAndAssignChromID(chromPeak, peakWidthSigma * 4, peakResult.PeakID);
+
+                            run.CurrentScanSet = createScanSetFromChromatogramPeak(run, chromPeak);
+
+                            List<IsosResult> tempChromPeakMSFeatures = new List<IsosResult>();
+
+                            MSgen.Execute(run.ResultCollection);
+
+                            //trim the XYData to help the peak detector and Deconvolutor work faster
+                            run.XYData = run.XYData.TrimData(peakResult.MSPeak.XValue - 2, peakResult.MSPeak.XValue + 2);
+
+                            this.MSPeakDetector.Execute(run.ResultCollection);
+
+                            //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
+                            run.ResultCollection.IsosResultBin.Clear();
+                            this.Deconvolutor.deconvolute(run.ResultCollection);
+
+
+                            //now, look in the isosResultBin and see what IsosResult (if any) the source peak is a member of
+                            IsosResult msfeature = getMSFeatureForCurrentSourcePeak(peakResult, run);
+
+                            //Console.WriteLine("source peak -> peakID= " + peakResult.PeakID + ";scan= " + peakResult.Scan_num + "; m/z= " + peakResult.MSPeak.XValue);
+
+                            if (msfeature == null)  // didn't find a feature.  Source peak might be a 'lone wolf'
+                            {
+                                //Console.WriteLine("No MSFeature found!");
+                            }
+                            else
+                            {
+                                //Console.WriteLine("!!!!!!! MSFeature found!");
+
+                                double toleranceInMZ = peakResult.MSPeak.Width / 2;
+
+                                bool msFeatureAlreadyExists = checkIfMSFeatureAlreadyExists(msfeature, run.ResultCollection.ResultList, toleranceInMZ, peakWidthSigma);
+
+                                if (msFeatureAlreadyExists)
+                                {
+                                    //Console.WriteLine("---- but MSFeature was already present");
+
+                                }
+                                else
+                                {
+
+                                    //generate chromatograms and tag other peak members of the isotopic profile...
+                                    foreach (var isoPeak in msfeature.IsotopicProfile.Peaklist)
+                                    {
+                                        PeakChrom isoPeakChrom = new BasicPeakChrom();
+
+                                        isoPeakChrom.Data = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                                            isoPeak.XValue, this.ChromGenToleranceInPPM);
+                                        if (!isoPeakChrom.IsNullOrEmpty)
+                                        {
+                                            isoPeakChrom.GetMSPeakMembersForGivenChromPeakAndAssignChromID(chromPeak, peakWidthSigma * 4, peakResult.PeakID);
+                                        }
+
+                                    }
+
+                                    run.ResultCollection.ResultList.Add(msfeature);
+                                    m_msFeatureCounter++;
+                                }
+
+                            }
+
+                            //Console.WriteLine();
+
+
+                        }
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.AddEntry("ERROR:  peakID = " + peakResult.PeakID + "\t" + ex.Message + ";\t" + ex.StackTrace, m_logFileName);
+                }
+
+
+
+                int triggerToExport = 10;
+                if (run.ResultCollection.ResultList.Count > triggerToExport)
+                {
+                    isosExporter.ExportResults(run.ResultCollection.ResultList);
+                    run.ResultCollection.ResultList.Clear();
+
+                    exportPeakData(run, m_peakOutputFileName, whatPeakWentWhere);
+                    whatPeakWentWhere.Clear();
+                }
+
+
+            }
+
+
+            //needs clean up....   sometimes there might be a case where the above loop is broken and we need the last few results written out. 
+            isosExporter.ExportResults(run.ResultCollection.ResultList);
+            run.ResultCollection.ResultList.Clear();
+
+            exportPeakData(run, m_peakOutputFileName, whatPeakWentWhere);
+            whatPeakWentWhere.Clear();
+
+
+
+            //foreach (var item in deconTimes)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            //Console.WriteLine("Average = " + deconTimes.Average());
+            //Console.WriteLine("Top 50 = " + deconTimes.Take(50).Average());
+            //Console.WriteLine("Next 50 = " + deconTimes.Skip(50).Take(50).Average());
+
+
+
+
+
+
+
+            //Console.WriteLine(sb.ToString());
+
+
+
+        }
+
+        private bool checkIfMSFeatureAlreadyExists(IsosResult msfeature, List<IsosResult> list, double toleranceInMZ, double scanTolerance)
+        {
+
+
+
+            var query = (from n in list
+                         where (Math.Abs(n.IsotopicProfile.MonoPeakMZ - msfeature.IsotopicProfile.MonoPeakMZ) <= toleranceInMZ) &&
+                         n.IsotopicProfile.ChargeState == msfeature.IsotopicProfile.ChargeState &&
+                         (Math.Abs(n.ScanSet.PrimaryScanNumber - msfeature.ScanSet.PrimaryScanNumber) <= scanTolerance)
+                         select n);
+
+
+            if (query.Count() == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
+        private IsosResult getMSFeatureForCurrentSourcePeak(MSPeakResult peakResult, Run run)
+        {
+            if (run.ResultCollection.IsosResultBin == null || run.ResultCollection.IsosResultBin.Count == 0)
+            {
+                return null;
+            }
+
+            Dictionary<IsosResult, double> isosResultPossiblyContainingSourcePeak = new Dictionary<IsosResult, double>();    //store possible isosResult, along with it's difference with the peakResult
+
+            for (int i = 0; i < run.ResultCollection.IsosResultBin.Count; i++)
+            {
+                IsosResult msfeature = run.ResultCollection.IsosResultBin[i];
+
+                double toleranceInMZ = peakResult.MSPeak.Width / 2;
+
+
+                List<MSPeak> peaksWithinTolerance = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
+                if (peaksWithinTolerance == null || peaksWithinTolerance.Count == 0)
+                {
+
+                }
+                else
+                {
+                    double diff = Math.Abs(peaksWithinTolerance[0].XValue - peakResult.MSPeak.XValue);
+                    isosResultPossiblyContainingSourcePeak.Add(msfeature, diff);
+                }
+            }
+
+            if (isosResultPossiblyContainingSourcePeak.Count == 0)
+            {
+                return null;
+            }
+            else if (isosResultPossiblyContainingSourcePeak.Count == 1)
+            {
+                return isosResultPossiblyContainingSourcePeak.First().Key;
+
+            }
+            else
+            {
+                return isosResultPossiblyContainingSourcePeak.Keys.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).First();
+            }
+
+
+
+
+        }
+
+
+
 
         private void exportPeakData(Run run, string outputFilename, Dictionary<int, string> whatPeakWentWhere)
         {

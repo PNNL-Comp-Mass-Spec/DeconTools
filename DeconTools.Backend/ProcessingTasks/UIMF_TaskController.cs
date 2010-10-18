@@ -32,92 +32,69 @@ namespace DeconTools.Backend.ProcessingTasks
             this.backgroundWorker = backgroundWorker;
         }
 
-        public override void Execute(List<Run>runCollection)
+        public override void Execute(Run run)
         {
 
-            foreach (Run run in runCollection)
+            if (run is UIMFRun)
             {
-                if (run is UIMFRun)
+                UIMFRun uimfRun = (UIMFRun)run;
+
+                serializer = null;
+                //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+
+                foreach (FrameSet frameset in uimfRun.FrameSetCollection.FrameSetList)
                 {
-                    UIMFRun uimfRun = (UIMFRun)run;
+                    uimfRun.CurrentFrameSet = frameset;
+                    //sw.Start();
 
-                    serializer = null;
-                    //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-
-                    foreach (FrameSet frameset in uimfRun.FrameSetCollection.FrameSetList)
+                    foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
                     {
-                        uimfRun.CurrentFrameSet = frameset;
-                        //sw.Start();
-
-                        foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
+                        run.CurrentScanSet = scanset;
+                        foreach (Task task in this.TaskCollection.TaskList)
                         {
-                            run.CurrentScanSet = scanset;
-                            foreach (Task task in this.TaskCollection.TaskList)
+                            try
                             {
-                                try
-                                {
-                                    task.Execute(run.ResultCollection);
-
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    string errorInfo = getErrorInfo(run, task, ex);
-                                    Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
-
-
-                                    throw ex;   // let something catch it
-                                }
+                                task.Execute(run.ResultCollection);
 
                             }
-
-                            if (backgroundWorker != null)
+                            catch (Exception ex)
                             {
-                                if (backgroundWorker.CancellationPending)
-                                {
-                                    return;
-                                }
+
+                                string errorInfo = getErrorInfo(run, task, ex);
+                                Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
+
+
+                                throw ex;   // let something catch it
                             }
-                            reportProgress(frameset, scanset, run);
 
                         }
-                        //Dec 2, 2009:  [gord].  Following code is decommissioned...  I rebuilt the exporters with triggers. No need for binary file output. 
-                        //If numberOfResultsExceedsLimit, serialize
-                        //if (run.ResultCollection.ResultList.Count > this.IsosResultThresholdNum)
-                        //{
-                        //    if (serializer == null)
-                        //    {
-                        //        string binaryOutputFilename = getOutputFileName(run);
 
-                        //        bool deletePreviousBinaryFile = true;
-                        //        serializer = new IsosResultSerializer(binaryOutputFilename, System.IO.FileMode.Append, deletePreviousBinaryFile);
-
-                        //    }
-                        //    serializer.Serialize(run.ResultCollection);
-
-                        //    run.ResultCollection.ResultList.Clear();
-                        //    run.AreRunResultsSerialized = true;   //Indicate if serialized; this flag will be used when exporting data
-
-                        //}
-
+                        if (backgroundWorker != null)
+                        {
+                            if (backgroundWorker.CancellationPending)
+                            {
+                                return;
+                            }
+                        }
+                        reportProgress(frameset, scanset, run);
 
                     }
 
 
 
-
-                    run.Close();   
-
                 }
-                
-                //See above... this has been decommissioned. 
-                //Next take care of the last chunk of results that didn't exceed the threshold
-                //if (run.AreRunResultsSerialized)
-                //{
-                //    serializer.Serialize(run.ResultCollection);
-                //    serializer.Close();
-                //}
-                
+
+                run.Close();
+
+            }
+
+        }
+        public override void Execute(List<Run>runCollection)
+        {
+
+            foreach (Run run in runCollection)
+            {
+                Execute(run);
             }
         }
 

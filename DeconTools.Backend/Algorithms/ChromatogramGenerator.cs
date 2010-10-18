@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.DTO;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Algorithms
 {
@@ -15,6 +16,56 @@ namespace DeconTools.Backend.Algorithms
         #endregion
 
         #region Public Methods
+        public List<MSPeakResult> GeneratePeakChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
+        {
+            List<double> targetMZList = new List<double>();
+            targetMZList.Add(targetMZ);
+
+            return GeneratePeakChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
+        }
+
+
+        public List<MSPeakResult> GeneratePeakChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM)
+        {
+            int scanTolerance = 5;     // TODO:   keep an eye on this
+
+            int indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
+            int indexOfUpperScan = getIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
+
+            int currentIndex = indexOfLowerScan;
+            List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
+            while (currentIndex <= indexOfUpperScan)
+            {
+                filteredPeakList.Add(msPeakList[currentIndex]);
+                currentIndex++;
+            }
+
+            List<MSPeakResult> compiledChromPeakList = new List<MSPeakResult>();
+
+            int counter = 0;
+            foreach (var targetMZ in targetMZList)
+            {
+                counter++;
+                double lowerMZ = targetMZ - toleranceInPPM * targetMZ / 1e6;
+                double upperMZ = targetMZ + toleranceInPPM * targetMZ / 1e6;
+
+                List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+
+                compiledChromPeakList.AddRange(tempPeakList);
+            }
+
+            if (counter > 1) // if the list contains multiple peak chromatograms, then need to sort.  Otherwise, don't need to sort.
+            {
+                compiledChromPeakList.Sort(delegate(MSPeakResult peak1, MSPeakResult peak2)
+                {
+                    return peak2.Scan_num.CompareTo(peak1.Scan_num);
+                });
+            }
+
+            return compiledChromPeakList;
+        }
+
+
 
 
         /// <summary>
@@ -63,10 +114,15 @@ namespace DeconTools.Backend.Algorithms
 
         }
 
+        //TODO:  make a ChromatogramObject that will help handle my MSPeakResults, etc.
 
 
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM, int chromIDToAssign)
         {
+            Check.Require(msPeakList != null && msPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+
+
+
             int scanTolerance = 5;     // TODO:   keep an eye on this
 
             int indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
@@ -139,7 +195,7 @@ namespace DeconTools.Backend.Algorithms
             {
                 MSPeakResult p = filteredPeakList[i];
 
-               //NOTE:   we assign the chromID here. 
+                //NOTE:   we assign the chromID here. 
                 p.ChromID = chromID;
 
                 double intensity = p.MSPeak.Height;

@@ -35,7 +35,7 @@ namespace DeconTools.Backend.Data
                     break;
 
                 case Globals.MSFileType.Agilent_D:
-                    taskcontroller = new BasicTaskController(taskCollection);
+                    taskcontroller = new BasicTaskController(taskCollection,backgroundWorker);
                     break;
                 case Globals.MSFileType.Ascii:
                     taskcontroller = new BasicTaskController(taskCollection);
@@ -67,8 +67,11 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.SUNEXTREL:
                     taskcontroller = new BasicTaskController(taskCollection);
                     break;
+                case Globals.MSFileType.Bruker_12T_Solarix:
+                    taskcontroller = new BasicTaskController(taskCollection,backgroundWorker);
+                    break;
                 default:
-                    taskcontroller = new BasicTaskController(taskCollection);
+                    taskcontroller = new BasicTaskController(taskCollection,backgroundWorker);
                     break;
             }
             return taskcontroller;

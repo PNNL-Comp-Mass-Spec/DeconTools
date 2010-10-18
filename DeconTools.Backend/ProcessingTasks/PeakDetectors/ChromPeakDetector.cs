@@ -87,8 +87,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 chromPeak.SigNoise = (float)peak.mdbl_SN;     
                 chromPeak.Width = (float)peak.mdbl_FWHM;
 
-
-
                 peakList.Add(chromPeak);
                 
             }

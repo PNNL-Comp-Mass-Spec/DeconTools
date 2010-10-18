@@ -46,6 +46,14 @@ namespace DeconTools.Backend.Runs
 
         }
 
+
+        public BrukerRun(string filename, int minScan, int maxScan)
+            : this(filename)
+        {
+            this.MinScan = minScan;
+            this.MaxScan = maxScan;
+        }
+
         private void validateFileNameAndFolderStructure()
         {
             //check if the datasetPath is the same as the FileName, if so, change the Filename, or else DeconEngine will fail
@@ -129,12 +137,6 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public BrukerRun(string filename, int minScan, int maxScan)
-            : this(filename)
-        {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
-        }
 
 
         #region Properties

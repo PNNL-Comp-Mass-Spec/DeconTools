@@ -187,7 +187,7 @@ namespace DeconTools.Backend.Runs
 
 
 
-        internal Run CreateRun(Globals.MSFileType fileType, string filename, OldDecon2LSParameters parameters)
+        public Run CreateRun(Globals.MSFileType fileType, string filename, OldDecon2LSParameters parameters)
         {
             Run run;
 
@@ -294,6 +294,18 @@ namespace DeconTools.Backend.Runs
                         run = new YAFMSRun(filename);
                     }
                     break;
+                   
+                case Globals.MSFileType.Bruker_12T_Solarix:
+                    if (parameters.HornTransformParameters.UseScanRange)
+                    {
+                        run = new BrukerSolarixRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                    }
+                    else
+                    {
+                        run = new BrukerSolarixRun(filename);
+                    }
+                    break;
+
 
                 default:
                     run = null;

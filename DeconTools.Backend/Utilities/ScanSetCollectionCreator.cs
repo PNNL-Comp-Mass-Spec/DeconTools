@@ -17,9 +17,6 @@ namespace DeconTools.Backend.Utilities
             this.numScansSummed = numScansSummed;
             this.increment = increment;
             this.processMSMS = processMSMS;
-
-
-
         }
 
         public ScanSetCollectionCreator(Run run, int start, int stop, int numScansSummed, int increment)
