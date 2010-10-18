@@ -40,6 +40,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
+        [Test]
+        public void createBrukerSolarixRunTest2()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun( Globals.MSFileType.Bruker_12T_Solarix, FileRefs.RawDataMSFiles.BrukerSolarix12TFile1,new OldDecon2LSParameters());
+
+            Assert.AreEqual(Globals.MSFileType.Bruker_12T_Solarix, run.MSFileType);
+            Assert.AreEqual(8, run.MaxScan);
+
+        }
+
+
 
 
         [Test]

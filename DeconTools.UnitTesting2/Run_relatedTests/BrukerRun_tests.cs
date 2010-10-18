@@ -55,7 +55,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void checkMinMaxScansFromAnotherBrukerFileTest1()
         {
             Run run = new BrukerRun(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker_9T\RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02\acqus");
-
             Assert.AreEqual(1, run.MinScan);
             Assert.AreEqual(4275, run.MaxScan);
 

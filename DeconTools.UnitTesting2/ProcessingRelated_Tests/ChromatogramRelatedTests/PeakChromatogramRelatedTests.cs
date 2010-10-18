@@ -11,6 +11,7 @@ using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.DTO;
 using System.Diagnostics;
+using DeconTools.Backend;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTests
 {
@@ -20,11 +21,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramTest1()
         {
+            double chromToleranceInPPM = 10;
+
             MassTag mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.CurrentMassTag = mt;
@@ -32,7 +35,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
-            Task peakChromGen = new PeakChromatogramGenerator(10);
+            Task peakChromGen = new PeakChromatogramGenerator(chromToleranceInPPM);
             peakChromGen.Execute(run.ResultCollection);
 
             Assert.AreEqual(133, run.XYData.Xvalues.Length);
@@ -43,13 +46,66 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
         [Test]
+        public void getPeakChromatogramInTheFormOfMSPeakResult_Test1()
+        {
+            double chromToleranceInPPM = 20;
+            double targetMZ = 831.48;
+
+
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+
+            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            List<MSPeakResult> filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
+
+            //Assert.AreEqual(56, filteredMSPeaks.Count);
+
+            TestUtilities.DisplayMSPeakResults(filteredMSPeaks);
+
+        }
+
+        [Test]
+        public void getPeakChromAndStoreInPeakChromObject_Test1()
+        {
+            double chromToleranceInPPM = 20;
+            double targetMZ = 831.48;
+
+
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+
+            PeakChrom chrom = new BasicPeakChrom();
+            chrom.Data = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
+
+            Assert.AreEqual(59, chrom.Data.Count);
+
+            //for XCalibur data, zeros will be inserted for non-contiguous scans.  Since this dataset has MS/MS, there are many zeros inserted. 
+            //these zeros are removed in the PeakChromGenerator - which is coupled to the Run (and thus knows where the MS/MS scans are).  
+            //The ChromatogramGenerator is not coupled to the Dataset. 
+            Assert.AreEqual(1207, chrom.XYData.Xvalues.Length);
+
+
+        }
+
+
+
+
+
+        [Test]
         public void getPeakChromatogramTest2()
         {
             MassTag mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.CurrentMassTag = mt;
@@ -78,7 +134,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
@@ -184,13 +240,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
-           // PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(
+            // PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(
 
 
             long timeForSort = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-          
+
             var sortedList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height);
             sw.Stop();
             timeForSort = sw.ElapsedMilliseconds;
@@ -217,7 +273,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             //iterate over the MSPeakResults and pull out chromatograms
 
-            int counter=-1;
+            int counter = -1;
             foreach (var peakResult in sortedMSPeakResultList)
             {
                 counter++;
@@ -236,9 +292,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
 
-                
+
             }
-                      
+
 
             allChromsStopwatch.Stop();
 

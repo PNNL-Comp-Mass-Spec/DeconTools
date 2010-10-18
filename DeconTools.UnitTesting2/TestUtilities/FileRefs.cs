@@ -31,14 +31,16 @@ namespace DeconTools.UnitTesting2
             public static string YAFMSStandardFile2 = FileRefs.RawDataBasePath + "metabolite_eqd.yafms";
             public static string YAFMSStandardFile3 = FileRefs.RawDataBasePath + "3_c_elegans_eqd.yafms";
 
-            public static string BrukerSolarixFile1 = @"\\pnl\projects\MSSHARE\BrukerTestFiles\12Ttest_000003\ser";
+            public static string BrukerSolarixFile1 = FileRefs.RawDataBasePath + @"\Bruker_Solarix12T\12Ttest_000003\ser";
+
+            //public static string BrukerSolarixFile1 =@"D:\Data\12Ttest_000003\ser";
 
         }
 
         public class PeakDataFiles
         {
             public static string OrbitrapOldDecon2LSPeakFile = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.dat";
-            public static string OrbitrapPeakFile1 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaks.txt";
+            public static string OrbitrapPeakFile1 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_FOR_REF_ONLY_peaks.txt";
             public static string OrbitrapPeakFile_scans5500_6500 = FileRefs.RawDataBasePath + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
         }
@@ -50,6 +52,9 @@ namespace DeconTools.UnitTesting2
         public class ParameterFiles
         {
             public static string YAFMSParameterFileScans4000_4050 = FileRefs.RawDataBasePath + "LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans4000-4050.xml";
+
+            public static string Bruker12TSolarixScans4_8ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_Solarix_SampleParameterFile.xml";
+
         }
 
 
