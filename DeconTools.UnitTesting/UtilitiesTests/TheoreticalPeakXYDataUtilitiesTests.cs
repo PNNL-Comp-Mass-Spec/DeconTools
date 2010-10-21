@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting.UtilitiesTests
             mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
-            XYData xydata = TheorXYDataCalculationUtilities.getTheorPeakData(mt.IsotopicProfile.Peaklist[1], 0.007);
+            XYData xydata = TheorXYDataCalculationUtilities.GetTheorPeakData(mt.IsotopicProfile.Peaklist[1], 0.007);
             TestUtilities.DisplayXYValues(xydata);
 
         }
