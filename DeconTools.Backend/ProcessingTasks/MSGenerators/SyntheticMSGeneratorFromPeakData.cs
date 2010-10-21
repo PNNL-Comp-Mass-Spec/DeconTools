@@ -63,13 +63,13 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 switch (ModeOfPeakWidthCalculation)
                 {
                     case SyntheticMSGeneratorFromPeakDataMode.WidthsCalculatedFromSingleValue:
-                        generatedXYData = TheorXYDataCalculationUtilities.getTheorPeakData(peak, this.PeakWidthForAllPeaks, 11);
+                        generatedXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(peak, this.PeakWidthForAllPeaks, 11);
                         break;
                     case SyntheticMSGeneratorFromPeakDataMode.WidthsCalculatedOnAPerPeakBasis:
-                        generatedXYData = TheorXYDataCalculationUtilities.getTheorPeakData(peak, peak.Width, 11);
+                        generatedXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(peak, peak.Width, 11);
                         break;
                     default:
-                        generatedXYData = TheorXYDataCalculationUtilities.getTheorPeakData(peak, this.PeakWidthForAllPeaks, 11);
+                        generatedXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(peak, this.PeakWidthForAllPeaks, 11);
                         break;
                 }
 
