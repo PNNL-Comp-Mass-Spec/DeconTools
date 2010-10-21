@@ -31,17 +31,20 @@ namespace DeconTools.Backend.Runs
         public AgilentD_Run(string dataFileName)
             : this()
         {
-            bool isFile = (File.Exists(dataFileName));
-            bool isFolder = (Directory.Exists(dataFileName));
+            DirectoryInfo dirInfo = new DirectoryInfo(dataFileName);
+            FileInfo fileInfo = new FileInfo(dataFileName);
 
-            Check.Require(!isFile, "Dataset's inputted name refers to a file, but should refer to a Folder");
-            Check.Require(isFolder, "Dataset not found.");
+            Check.Require(!fileInfo.Exists, "Dataset's inputted name refers to a file, but should refer to a Folder");
+            Check.Require(dirInfo.Exists, "Dataset not found.");
 
-            string nameWithExtension = Path.GetFileName(dataFileName);
+            Check.Require(dirInfo.FullName.EndsWith("d", StringComparison.OrdinalIgnoreCase), "Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name.");
 
-            this.Filename = dataFileName;
-            this.DatasetName = nameWithExtension.Substring(0, nameWithExtension.LastIndexOf(".d"));    //get dataset name without .d extension
-            this.DataSetPath = Path.GetDirectoryName(dataFileName);
+
+
+
+            this.Filename = dirInfo.FullName;
+            this.DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));    //get dataset name without .d extension
+            this.DataSetPath = dirInfo.FullName;
 
             OpenDataset();
 
@@ -65,6 +68,7 @@ namespace DeconTools.Backend.Runs
             m_reader = new MassSpecDataReader();
             m_reader.OpenDataFile(this.Filename);
         }
+
 
 
 
@@ -164,7 +168,30 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Private Methods
+
         #endregion
+        public override void Dispose()
+        {
+
+            if (m_reader != null)
+            {
+                try
+                {
+                    m_reader.CloseDataFile();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error occurred when trying to close AgilentD file: " + this.DatasetName + "\nDetails: " + ex.Message);
+
+                }
+
+            }
+
+
+            base.Dispose();
+
+        }
 
 
 

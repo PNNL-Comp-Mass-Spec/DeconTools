@@ -67,7 +67,7 @@ namespace DeconTools.Backend.Data
                 case Globals.MSFileType.SUNEXTREL:
                     taskcontroller = new BasicTaskController(taskCollection);
                     break;
-                case Globals.MSFileType.Bruker_12T_Solarix:
+                case Globals.MSFileType.Bruker_V2:
                     taskcontroller = new BasicTaskController(taskCollection,backgroundWorker);
                     break;
                 default:

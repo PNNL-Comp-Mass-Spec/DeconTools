@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
         [Test]
         public void processBruker12TSolarixFile1()
         {
-            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1, Globals.MSFileType.Bruker_12T_Solarix, FileRefs.ParameterFiles.Bruker12TSolarixScans4_8ParamFile);
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1, Globals.MSFileType.Bruker_V2, FileRefs.ParameterFiles.Bruker12TSolarixScans4_8ParamFile);
             oldSchool.Execute();
         }
 

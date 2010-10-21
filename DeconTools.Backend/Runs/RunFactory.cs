@@ -28,12 +28,12 @@ namespace DeconTools.Backend.Runs
 
             string fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
 
-            bool mightBeBrukerData = (fileNameWithoutPathOrExtension.Contains("acqus") || fileNameWithoutPathOrExtension.Contains("fid") || 
-                fileNameWithoutPathOrExtension.Contains("ser") || fullfileName.ToLower().Contains("0.ser"));
+            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
+            bool isFolder = dirInfo.Exists;
 
-            if (mightBeBrukerData)
+            if (isFolder)
             {
-                run = determineBrukerTypeAndCreateRun(fullfileName);
+                run = determineIfRunIsABrukerTypeAndCreateRun(fullfileName);
 
                 if (run != null)
                 {
@@ -45,6 +45,7 @@ namespace DeconTools.Backend.Runs
                     // be determined from the extension. 
                 }
             }
+
 
             switch (extension)
             {
@@ -67,7 +68,7 @@ namespace DeconTools.Backend.Runs
                     break;
 
                 case ".db":                            //might want to remove this later
-                    run = new UIMFRun(fullfileName);  
+                    run = new UIMFRun(fullfileName);
                     break;
 
                 case ".d":
@@ -76,57 +77,13 @@ namespace DeconTools.Backend.Runs
                 case ".yafms":
                     run = new YAFMSRun(fullfileName);
                     break;
-                
+
                 default:
                     run = null;
                     break;
             }
             return run;
         }
-
-        private Run determineBrukerTypeAndCreateRun(string fullfileName)
-        {
-            Run run = null;
-
-            string filenameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
-
-            FileInfo fileInfo = new FileInfo(fullfileName);
-            DirectoryInfo parentDirInfo = fileInfo.Directory;
-
-            DirectoryInfo[] folderList = parentDirInfo.GetDirectories();
-
-            //check for Bruker solarix-type folder (xmass_method.m)
-            if (folderList != null && folderList.Length >0)
-            {
-
-                var folder = (from n in folderList where n.Name.ToLower().Contains("xmass_method.m") select n);
-
-
-                bool hasBrukerSolarixTypeFolder = (folder.Count()>0);
-                if (hasBrukerSolarixTypeFolder)
-                {
-                    run = new BrukerSolarixRun(fullfileName);
-                }
-            }
-
-
-            if (filenameWithoutPathOrExtension.Contains("acqus"))
-            {
-                run = new BrukerRun(parentDirInfo.FullName);
-            }
-
-            return run;
-
-
-
-
-
-       
-
-        }
-
-
-
         public Run CreateRun(Globals.MSFileType filetype, string fileName)
         {
             Run run;
@@ -148,6 +105,9 @@ namespace DeconTools.Backend.Runs
                     break;
                 case Globals.MSFileType.Bruker:
                     run = new BrukerRun(fileName);
+                    break;
+                case Globals.MSFileType.Bruker_V2:
+                    run = new BrukerV2Run(fileName);
                     break;
                 case Globals.MSFileType.Bruker_Ascii:
                     run = null;
@@ -176,7 +136,7 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.YAFMS:
                     run = new YAFMSRun(fileName);
                     break;
-                
+
                 default:
                     run = null;
                     break;
@@ -184,9 +144,6 @@ namespace DeconTools.Backend.Runs
 
             return run;
         }
-
-
-
         public Run CreateRun(Globals.MSFileType fileType, string filename, OldDecon2LSParameters parameters)
         {
             Run run;
@@ -223,6 +180,8 @@ namespace DeconTools.Backend.Runs
                         run = new BrukerRun(filename);
                     }
                     break;
+
+
                 case Globals.MSFileType.Bruker_Ascii:
                     run = null;
                     break;
@@ -294,15 +253,15 @@ namespace DeconTools.Backend.Runs
                         run = new YAFMSRun(filename);
                     }
                     break;
-                   
-                case Globals.MSFileType.Bruker_12T_Solarix:
+
+                case Globals.MSFileType.Bruker_V2:
                     if (parameters.HornTransformParameters.UseScanRange)
                     {
-                        run = new BrukerSolarixRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                        run = new BrukerV2Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
                     }
                     else
                     {
-                        run = new BrukerSolarixRun(filename);
+                        run = new BrukerV2Run(filename);
                     }
                     break;
 
@@ -313,5 +272,131 @@ namespace DeconTools.Backend.Runs
             }
             return run;
         }
+
+
+
+        private Run determineIfRunIsABrukerTypeAndCreateRun(string folderName)
+        {
+            Run run = null;
+
+
+            FileInfo serFileInfo = findSerFile(folderName);
+            FileInfo apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
+            List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
+
+            bool isBrukerV2File = (apexAcquisitionMethodFileInfo != null && serFileInfo != null);
+            bool isBrukerV1File = (apexAcquisitionMethodFileInfo == null && acqusFileInfos != null && serFileInfo != null);
+
+            if (isBrukerV2File)
+            {
+                run = new BrukerV2Run(folderName);
+            }
+            else if (isBrukerV1File)
+            {
+                //in this case 'ser' file was found below the '0.ser' folder.  Need to reference the 0.ser folder. 
+                    run = new BrukerRun(serFileInfo.Directory.FullName);
+                
+
+            }
+            else
+            {
+                run = null;
+            }
+
+
+            return run;
+
+
+
+
+
+
+
+        }
+
+        private List<FileInfo> findAcqusFile(string folderName)
+        {
+            string[] acqusFiles = Directory.GetFiles(folderName, "acqus", SearchOption.AllDirectories);
+
+            List<FileInfo> acqusFileInfoList = new List<FileInfo>();
+
+            if (acqusFiles == null || acqusFiles.Length == 0)
+            {
+                return null;
+            }
+            else
+            {
+                foreach (var file in acqusFiles)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    acqusFileInfoList.Add(fi);
+                }
+            }
+
+            return acqusFileInfoList;
+
+        }
+
+        private FileInfo findAcquisitionMethodFile(string folderName)
+        {
+            string[] dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
+
+            if (dotMethodFiles == null || dotMethodFiles.Length == 0)
+            {
+                return null;
+            }
+
+            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (acquistionMethodFiles.Count == 0)
+            {
+                return null;
+            }
+            else if (acquistionMethodFiles.Count == 1)
+            {
+                return new FileInfo(acquistionMethodFiles[0]);
+            }
+            else
+            {
+                throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
+            }
+        }
+
+
+        private FileInfo findSerFile(string folderName)
+        {
+            string[] serFiles = Directory.GetFiles(folderName, "ser", SearchOption.AllDirectories);
+
+            if (serFiles == null || serFiles.Length == 0)
+            {
+                return null;
+            }
+            else if (serFiles.Length == 1)
+            {
+                FileInfo serFileInfo = new FileInfo(serFiles[0]);
+                return serFileInfo;
+            }
+            else
+            {
+
+                foreach (var file in serFiles)
+                {
+                    FileInfo serFileInfo = new FileInfo(file);
+                    if (serFileInfo.Directory.Name.ToLower() == "0.ser")
+                    {
+                        return serFileInfo;
+                    }
+
+
+                }
+
+                throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
+            }
+
+
+        }
+
+
+
     }
 }

@@ -217,7 +217,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
-    <Compile Include="Runs\BrukerSolarixRun.cs" />
+    <Compile Include="Runs\BrukerV2Run.cs" />
     <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
     <Compile Include="Runs\CalibrationData\CalibrationDataBase.cs" />
     <Compile Include="Runs\RunFactory.cs" />

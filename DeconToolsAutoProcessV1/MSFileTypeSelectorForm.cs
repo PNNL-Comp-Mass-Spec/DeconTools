@@ -37,8 +37,24 @@ namespace DeconToolsAutoProcessV1
 
         private Globals.MSFileType guessFileTypeFromFileName(string filename)
         {
+
+
+
+
             try
             {
+
+                if (Directory.Exists(filename))
+                {
+                    if (filename.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return Globals.MSFileType.Agilent_D;
+                    }
+
+                }
+
+
+
                 if (File.Exists(filename))
                 {
                     string extension = Path.GetExtension(filename);

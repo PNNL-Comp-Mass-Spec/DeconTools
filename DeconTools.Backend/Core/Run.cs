@@ -582,6 +582,9 @@ namespace DeconTools.Backend.Core
         public virtual void Dispose()
         {
             this.Close();
+            
+
+            
         }
 
         #endregion

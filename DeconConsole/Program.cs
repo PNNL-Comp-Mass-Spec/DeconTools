@@ -78,7 +78,7 @@ namespace DeconConsole
 
             ProjectController runner;
 
-
+            Console.WriteLine("Dataset = " + filename);
 
             try
             {
@@ -100,13 +100,7 @@ namespace DeconConsole
             Console.WriteLine("************** SUCCESS! ****************");
             Console.WriteLine("****************************************");
             Console.WriteLine("****************************************");
-
-
-            Console.WriteLine();
-            Console.WriteLine("Total Features Found = " + Project.getInstance().RunCollection[0].ResultCollection.ResultList.Count);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+           Console.WriteLine();
 
 
 
@@ -248,6 +242,8 @@ namespace DeconConsole
 
         private static bool IsFileValid(string filename)
         {
+            if (Directory.Exists(filename)) return true;
+            
             if (File.Exists(filename)) return true;
             else { return false; }
 
