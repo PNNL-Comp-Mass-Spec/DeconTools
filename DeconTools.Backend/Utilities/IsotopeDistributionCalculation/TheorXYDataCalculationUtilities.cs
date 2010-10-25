@@ -11,7 +11,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
     {
         #region Public Methods
 
-        //TODO:  make this more generic!  doesn't need to be linked to IPeak or fwhm.... 
         public static XYData GetTheorPeakData(IPeak peak, double fwhm)
         {
             return GetTheorPeakData(peak, fwhm, 101);
