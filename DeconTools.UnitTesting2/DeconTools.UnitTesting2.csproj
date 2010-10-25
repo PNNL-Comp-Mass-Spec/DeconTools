@@ -86,6 +86,7 @@
     <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />
     <Compile Include="Run_relatedTests\BrukerV2Run_Tests.cs" />
