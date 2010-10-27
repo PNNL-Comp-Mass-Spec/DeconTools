@@ -375,8 +375,7 @@ namespace DeconTools.Backend.Workflows
                 {
                     peakFate = "Chrom_Already";
                 }
-
-                if (!peakResultAlreadyIncludedInChromatogram)
+                else
                 {
                     bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
                     if (peakResultAlreadyFoundInAnMSFeature)
@@ -387,6 +386,7 @@ namespace DeconTools.Backend.Workflows
                     {
                         peakFate = "CHROM";
                     }
+
                 }
 
                 whatPeakWentWhere.Add(peakResult.PeakID, peakFate);
@@ -439,7 +439,6 @@ namespace DeconTools.Backend.Workflows
                         if (!chrom.PeakDataIsNullOrEmpty)
                         {
                             IPeak chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
-
                             if (chromPeak == null)
                             {
                                 continue;
@@ -863,11 +862,5 @@ namespace DeconTools.Backend.Workflows
 
 
 
-
-        #region IWorkflow Members
-
-
-
-        #endregion
     }
 }

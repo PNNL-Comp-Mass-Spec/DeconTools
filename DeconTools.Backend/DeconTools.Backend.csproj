@@ -367,6 +367,7 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IWorkflow.cs" />
     <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
   </ItemGroup>

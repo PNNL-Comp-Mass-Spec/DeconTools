@@ -415,6 +415,36 @@ namespace DeconTools.Backend.Runs
 
         }
 
+
+        public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
+        {
+            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
+            DataReader datareader = adapter.Datareader;
+
+            int[]scanValues = null;
+            int[]intensityVals = null;
+
+            datareader.GetDriftTimeProfile(frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+
+            if (scanValues == null || scanValues.Length == 0)
+            {
+                this.XYData.Xvalues = null;
+                this.XYData.Yvalues = null;
+            }
+            else
+            {
+                this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
+                this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
+            }
+            
+
+
+
+
+        }
+
+
+
         internal int GetNumScansPerFrame()
         {
             UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
@@ -461,6 +491,9 @@ namespace DeconTools.Backend.Runs
             UIMFLibraryAdapter.getInstance(this.Filename).CloseCurrentUIMF();
             base.Close();
         }
+
+
+
 
 
         public override string GetCurrentScanOrFrameInfo()

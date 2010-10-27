@@ -40,9 +40,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         {
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
-
-
-
             double xmin = theorXYData.Xvalues[0];
             double xmax = theorXYData.Xvalues.Max();
 

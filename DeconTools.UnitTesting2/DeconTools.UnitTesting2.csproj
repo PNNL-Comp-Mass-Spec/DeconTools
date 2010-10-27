@@ -101,6 +101,7 @@
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="ProjectControllerTests\OldSchoolsProcRunnerTests.cs" />
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
+    <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities\TestUtilities.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\TomTheorFeatureGeneratorTests.cs" />
+    <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />
   </ItemGroup>
   <ItemGroup>
