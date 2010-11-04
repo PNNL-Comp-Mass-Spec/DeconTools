@@ -32,6 +32,19 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(FileRefs.RawDataBasePath + @"\Bruker\Bruker_15T\092410_ubiquitin_AutoCID_000004\092410_ubiquitin_AutoCID_000004.d\ser", run.RawData.FileName);
         }
 
+
+        [Test]
+        public void bruker12T_FID_file_checkDatasetNames_andPaths()
+        {
+            BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+            Assert.AreEqual("HVY_000001", run.DatasetName);
+            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\Bruker\\Bruker_Solarix12T\\HVY_000001", run.Filename);
+
+        }
+
+
+
+
         [Test]
         public void ConstructorError_wrongFileInput()
         {
@@ -70,9 +83,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 Assert.AreEqual(0m, (decimal)run.CalibrationData.FR_Low);
                 Assert.AreEqual(0, run.CalibrationData.ByteOrder);
             }
-            
 
-              
+
+
         }
 
 
@@ -105,10 +118,28 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void bruker12T_GetMassSpectrumTest1()
         {
             BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
-            ScanSet scanset=new ScanSet(4);
-            run.GetMassSpectrum(scanset,0,50000);
+            ScanSet scanset = new ScanSet(4);
+            run.GetMassSpectrum(scanset, 0, 50000);
             //run.XYData.Display();
         }
+
+
+        [Test]
+        public void bruker12T_FID_GetSpectrumTest1()
+        {
+            BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+
+            Assert.AreEqual(1, run.MinScan);
+            Assert.AreEqual(1, run.MaxScan);
+
+            ScanSet scanset = new ScanSet(1);
+
+            run.GetMassSpectrum(scanset, 0, 50000);
+            //run.XYData.Display();
+
+        }
+
+
 
 
         [Test]
@@ -119,7 +150,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18, run.MaxScan);
         }
 
-           
+
 
         [Test]
         public void bruker15T_GetMassSpectrumTest1()
@@ -130,11 +161,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(789.967903595286m, (decimal)run.XYData.Xvalues[129658]);
             Assert.AreEqual(9503829, run.XYData.Yvalues[129658]);
-                        
+
         }
 
 
-   
+
 
 
     }

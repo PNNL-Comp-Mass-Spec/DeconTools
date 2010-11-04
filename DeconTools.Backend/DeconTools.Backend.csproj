@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="DeconEngineV2, Version=1.0.3924.26313, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\Decon2LS_Beta_1.3.3\release\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="libalglib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

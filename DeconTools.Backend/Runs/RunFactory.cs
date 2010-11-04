@@ -281,10 +281,14 @@ namespace DeconTools.Backend.Runs
 
 
             FileInfo serFileInfo = findSerFile(folderName);
+            FileInfo fidFileInfo = findFIDFile(folderName);
+            
             FileInfo apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
             List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
 
-            bool isBrukerV2File = (apexAcquisitionMethodFileInfo != null && serFileInfo != null);
+            bool hasSerOrFid = (serFileInfo != null || fidFileInfo != null);
+
+            bool isBrukerV2File = (apexAcquisitionMethodFileInfo != null && hasSerOrFid);
             bool isBrukerV1File = (apexAcquisitionMethodFileInfo == null && acqusFileInfos != null && serFileInfo != null);
 
             if (isBrukerV2File)
@@ -312,6 +316,25 @@ namespace DeconTools.Backend.Runs
 
 
 
+        }
+
+        private FileInfo findFIDFile(string folderName)
+        {
+            string[] fidFiles = Directory.GetFiles(folderName, "fid", SearchOption.AllDirectories);
+
+            if (fidFiles == null || fidFiles.Length == 0)
+            {
+                return null;
+            }
+            else if (fidFiles.Length == 1)
+            {
+                FileInfo fidFileInfo = new FileInfo(fidFiles[0]);
+                return fidFileInfo;
+            }
+            else
+            {
+                throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
+            }
         }
 
         private List<FileInfo> findAcqusFile(string folderName)

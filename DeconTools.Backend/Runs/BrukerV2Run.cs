@@ -15,6 +15,7 @@ namespace DeconTools.Backend.Runs
     {
         FileInfo m_serFileInfo;
         FileInfo m_settingsfileInfo;
+        FileInfo m_fidFileInfo;
 
         internal class brukerNameValuePair
         {
@@ -46,10 +47,30 @@ namespace DeconTools.Backend.Runs
             this.Filename = folderName;
 
             m_serFileInfo = findSerFile();
-            if (m_serFileInfo == null)
+            m_fidFileInfo = findFIDFile();
+
+            string filePathForDeconEngine = "";
+
+            if (m_serFileInfo == null && m_fidFileInfo == null)
             {
-                throw new FileNotFoundException("Run initialization problem. Could not find the 'ser' file within the directory structure.");
+                throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
+
+            //if there is a ser file, 'fid' files will be ignored.  
+            if (m_serFileInfo != null)
+            {
+                filePathForDeconEngine = m_serFileInfo.FullName;
+            }
+            else if (m_serFileInfo == null && m_fidFileInfo != null)
+            {
+                filePathForDeconEngine = m_fidFileInfo.FullName;
+            }
+            else
+            {
+                throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
+            }
+
+
 
             m_settingsfileInfo = findSettingsFile();
             if (m_settingsfileInfo == null)
@@ -69,7 +90,7 @@ namespace DeconTools.Backend.Runs
             try
             {
                 this.rawData = new DeconToolsV2.Readers.clsRawData();
-                this.rawData.LoadFile(m_serFileInfo.FullName, DeconToolsV2.Readers.FileType.BRUKER);
+                this.rawData.LoadFile(filePathForDeconEngine, DeconToolsV2.Readers.FileType.BRUKER);
             }
             catch (Exception ex)
             {
@@ -88,6 +109,25 @@ namespace DeconTools.Backend.Runs
             Check.Ensure(this.MaxScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
 
 
+        }
+
+        private FileInfo findFIDFile()
+        {
+            string[] fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
+
+            if (fidFiles == null || fidFiles.Length == 0)
+            {
+                return null;
+            }
+            else if (fidFiles.Length == 1)
+            {
+                FileInfo fidFileInfo = new FileInfo(fidFiles[0]);
+                return fidFileInfo;
+            }
+            else
+            {
+                throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
+            }
         }
 
         private FileInfo findSettingsFile()
@@ -274,11 +314,7 @@ namespace DeconTools.Backend.Runs
         private void applySettings()
         {
             DeconToolsV2.CalibrationSettings deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(this.CalibrationData);
-
             this.RawData.SetFFTCalibrationValues(deconEngineCalibrationSettings);
-
-
-
 
         }
 
@@ -384,7 +420,7 @@ namespace DeconTools.Backend.Runs
         public void loadSettings(string settingsFileName)
         {
             XDocument xdoc = XDocument.Load(settingsFileName);
-            List<brukerNameValuePair> paramList=new List<brukerNameValuePair>();
+            List<brukerNameValuePair> paramList = new List<brukerNameValuePair>();
 
             try
             {
@@ -495,7 +531,7 @@ namespace DeconTools.Backend.Runs
             return valueString;
         }
 
-    
+
 
         #endregion
     }

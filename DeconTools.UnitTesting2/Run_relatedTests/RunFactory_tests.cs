@@ -27,6 +27,19 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
+        public void createBrukerV2_fromBruker12T_FID_Test1()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+
+            Assert.IsNotNull(run);
+            Assert.AreEqual(Globals.MSFileType.Bruker_V2, run.MSFileType);
+            Assert.AreEqual(1, run.MaxScan);
+        }
+
+
+
+        [Test]
         public void createBrukerV2_fromBruker12T_Test1()
         {
             RunFactory rf = new RunFactory();
