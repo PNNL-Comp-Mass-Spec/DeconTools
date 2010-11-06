@@ -134,7 +134,26 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(1);
 
-            run.GetMassSpectrum(scanset, 0, 50000);
+            run.GetMassSpectrum(scanset, 0, 100000);
+
+            Assert.AreEqual(369657, run.XYData.Xvalues.Length);
+            //run.XYData.Display();
+
+        }
+
+        [Test]
+        public void bruker12T_FID_GetSpectrumTest2()
+        {
+            BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File2);
+
+            Assert.AreEqual(1, run.MinScan);
+            Assert.AreEqual(1, run.MaxScan);
+
+            ScanSet scanset = new ScanSet(1);
+
+            run.GetMassSpectrum(scanset, 0, 100000);
+
+            Assert.AreEqual(369657, run.XYData.Xvalues.Length);
             //run.XYData.Display();
 
         }
