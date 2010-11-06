@@ -26,6 +26,7 @@ namespace DeconTools.UnitTesting2
 
             public static string BrukerSolarix12TFile1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\12Ttest_000003";
             public static string BrukerSolarix12T_FID_File1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\HVY_000001";
+            public static string BrukerSolarix12T_FID_File2 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\\HVY_MSCAL_000001";
 
             public static string Bruker15TFile1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_15T\092410_ubiquitin_AutoCID_000004";
 
