@@ -59,6 +59,19 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(4275, run.MaxScan);
         }
 
+        [Test]
+        public void GetSpectrum1000Test1()
+        {
+            Run run = new BrukerRun(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_9T\RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02\acqus");
+            ScanSet scanSet=new ScanSet(1001);
+
+            run.GetMassSpectrum(scanSet);
+
+            run.XYData.Display();
+
+
+        }
+
         
 
 
