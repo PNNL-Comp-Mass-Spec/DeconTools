@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="DemoTests.cs" />
+    <Compile Include="FileIO_Tests\AcqusFileReaderTests.cs" />
     <Compile Include="FileIO_Tests\MassTagFromDBImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagTextFileExporterTests.cs" />

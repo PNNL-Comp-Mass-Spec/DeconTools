@@ -94,6 +94,34 @@ namespace DeconTools.QCTesting
 
         }
 
+        private void btnTestBrukerV2Files_Click(object sender, EventArgs e)
+        {
+            processBrukerV2Files();
+        }
+
+        private void processBrukerV2Files()
+        {
+            string basePath = UnitTesting2.FileRefs.RawDataBasePath;
+
+            string brukerTestFile1 = basePath + "\\Bruker\\Bruker_Solarix12T\\12Ttest_000003";
+            string brukerTestFile2 = basePath + "\\Bruker\\Bruker_Solarix12T\\HVY_000001";
+            string brukerTestFile3 = basePath + "\\Bruker\\Bruker_Solarix12T\\HVY_000001";
+            string brukerTestFile4 = basePath + "\\Bruker\\Bruker_Solarix12T\\HVY_000001";
+            string brukerTestFile5 = basePath + "\\Bruker\\Bruker_Solarix12T\\HVY_000001";
+
+
+            string settingsFile = basePath + "\\Bruker\\Bruker_Solarix12T\\Bruker_Solarix_SampleParameterFile.xml";
+
+            
+            string[] args = new string[3];
+            args[0] = brukerTestFile1;
+            args[1] = "Bruker_V2";
+            args[2] = settingsFile;
+
+            DeconConsole.Program.Main(args);
+
+        }
+
 
     }
 }

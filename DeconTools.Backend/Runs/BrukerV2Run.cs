@@ -424,14 +424,6 @@ namespace DeconTools.Backend.Runs
 
             try
             {
-                //List<brukerNameValuePair> paramList = (from node in xdoc.Element("method").Element("paramlist").Elements()
-                //                                       select new brukerNameValuePair
-                //                                       {
-                //                                           Name = node.Element("name").Value,
-                //                                           Value = node.Element("value").Value
-                //                                       }).ToList();
-
-
                 var paramNodes = (from node in xdoc.Element("method").Element("paramlist").Elements() select node);
 
                 foreach (var node in paramNodes)

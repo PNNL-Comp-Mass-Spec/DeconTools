@@ -97,9 +97,17 @@
     <Compile Include="TimeResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeconConsole\DeconConsole.csproj">
+      <Project>{3F630119-F9F7-4FF3-8748-11DAED656472}</Project>
+      <Name>DeconConsole</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
+      <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
+      <Name>DeconTools.UnitTesting2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

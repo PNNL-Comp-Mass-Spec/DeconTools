@@ -100,7 +100,7 @@ namespace DeconConsole
             Console.WriteLine("************** SUCCESS! ****************");
             Console.WriteLine("****************************************");
             Console.WriteLine("****************************************");
-           Console.WriteLine();
+            Console.WriteLine();
 
 
 
@@ -111,7 +111,7 @@ namespace DeconConsole
 
         }
 
-    
+
         private static Globals.ProjectControllerType convertArgToControllerType(string arg)
         {
             if (arg == null || arg.Length == 0) return Globals.ProjectControllerType.UNDEFINED;
@@ -188,6 +188,11 @@ namespace DeconConsole
             {
                 msfiletype = Globals.MSFileType.SUNEXTREL;
             }
+            else if (filetype.ToLower() == "bruker_v2")
+            {
+                msfiletype = Globals.MSFileType.Bruker_V2;
+            }
+
             else
             {
                 msfiletype = Globals.MSFileType.Undefined;
@@ -243,7 +248,7 @@ namespace DeconConsole
         private static bool IsFileValid(string filename)
         {
             if (Directory.Exists(filename)) return true;
-            
+
             if (File.Exists(filename)) return true;
             else { return false; }
 
@@ -281,7 +286,7 @@ namespace DeconConsole
 
             Console.WriteLine();
             Console.WriteLine();
-  
+
 
 
             Console.WriteLine("Hit <enter> to continue");
