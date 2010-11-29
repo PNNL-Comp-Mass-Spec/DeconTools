@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using DeconTools.Backend;
 using System.IO;
+using DeconTools.Backend.Runs;
+using DeconTools.Backend.Core;
 
 namespace DeconToolsAutoProcessV1
 {
@@ -38,8 +40,16 @@ namespace DeconToolsAutoProcessV1
         private Globals.MSFileType guessFileTypeFromFileName(string filename)
         {
 
+            RunFactory runFactory = new RunFactory();
+            
+            Run run = runFactory.CreateRun(filename);
 
-
+            if (run != null)
+            {
+                DeconTools.Backend.Globals.MSFileType filetype = run.MSFileType;
+                run.Dispose();
+                return filetype;
+            }
 
             try
             {

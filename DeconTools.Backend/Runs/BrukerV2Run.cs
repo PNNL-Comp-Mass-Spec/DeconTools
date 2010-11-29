@@ -111,6 +111,13 @@ namespace DeconTools.Backend.Runs
 
         }
 
+        public BrukerV2Run(string fileName, int minScan, int maxScan)
+            : this(fileName)
+        {
+            this.MinScan = minScan;
+            this.MaxScan = maxScan;
+        }
+
         private FileInfo findFIDFile()
         {
             string[] fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
@@ -176,13 +183,6 @@ namespace DeconTools.Backend.Runs
             }
 
 
-        }
-
-        public BrukerV2Run(string fileName, int minScan, int maxScan)
-            : this(fileName)
-        {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
         }
 
 

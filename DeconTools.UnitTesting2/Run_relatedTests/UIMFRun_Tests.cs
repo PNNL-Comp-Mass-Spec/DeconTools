@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
@@ -18,10 +19,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
     public class UIMFRun_Tests
     {
         private string uimfFilepath = FileRefs.RawDataMSFiles.UIMFStdFile1;
-
-
         private string uimfFileContainingMSMSScans = FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData;
-
 
         [Test]
         public void getUIMFFileTest1()
@@ -41,7 +39,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             Assert.AreEqual(uimfFilepath, uimfRun.Filename);
 
         }
-
 
         [Test]
         public void checkSummingOfMS1LevelData_inFileContainingMSMSData()
@@ -85,14 +82,12 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             //xydata.Display();
 
-            
 
-            
-           
+
+
+
 
         }
-
-
 
         [Test]
         public void GetNumberOfFramesTest()
@@ -114,10 +109,11 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void UIMFLibraryDirectAccessTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
-            DataReader datareader = adapter.Datareader;
+            int numFrames = 0;
 
-            int numFrames = datareader.GetGlobalParameters().NumFrames;
+            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
+            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            numFrames = reader.GetGlobalParameters().NumFrames;
 
             Console.WriteLine("Number of frames = " + numFrames);
             Assert.AreEqual(1950, numFrames);
@@ -126,13 +122,14 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void UIMFLibrarySumScansTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
-            DataReader datareader = adapter.Datareader;
-
             double[] xvals = new double[100000];
             int[] yvals = new int[100000];
+            int summedTotal = 0;
 
-            int summedTotal = datareader.SumScans(xvals, yvals, 0, 100, 105, 200, 300);
+            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
+
+            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            summedTotal = reader.SumScansNonCached(xvals, yvals, 0, 100, 105, 200, 300);
             Assert.AreEqual(91949, summedTotal);
         }
 
@@ -177,7 +174,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double frametime1 = run.GetTime(1);
 
             Assert.AreEqual(35.48137, frametime1);
-          
+
         }
 
 
@@ -203,10 +200,10 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             for (int i = 250; i < 251; i++)
             {
 
-                ScanSet scan = new ScanSet(i,i - 2, i + 2);
+                ScanSet scan = new ScanSet(i, i - 2, i + 2);
                 FrameSet frame = new FrameSet(501);
 
-                uimfRun.GetMassSpectrum(scan, frame,200,2000);
+                uimfRun.GetMassSpectrum(scan, frame, 200, 2000);
                 //Console.WriteLine(uimfRun.XYData.Xvalues.Length);
             }
 
@@ -250,7 +247,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
-       
+
         [Test]
         public void memoryTest1()
         {
@@ -267,13 +264,30 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
             {
                 //uimfRun.GetMassSpectrum(scanset, uimfRun.CurrentFrameSet, 0, 2000);
-                
+
                 uimfRun.GetFramePressureBack(uimfRun.CurrentFrameSet.PrimaryFrame);
-                
+
             }
 
             currentProcess = Process.GetCurrentProcess();
             TestUtilities.DisplayInfoForProcess(currentProcess);
+
+        }
+
+
+        [Test]
+        public void GetFrameParameters_Test1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            int frameStart = 800;
+            int frameStop = 810;
+            int numFramesSummed = 3;
+
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, frameStart, frameStop, numFramesSummed, 1);
+            fscc.Create();
+
+            uimfRun.GetFrameDataAllFrameSets();
 
         }
 
@@ -308,13 +322,12 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getAvgTOFLengthTest1()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(uimfFilepath);
-            DataReader datareader = adapter.Datareader;
-
-            double avgTOFLength = datareader.GetFrameParameters(1000).AverageTOFLength;
+            double avgTOFLength = 0;
+            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
+            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            avgTOFLength = reader.GetFrameParameters(1000).AverageTOFLength;
 
             Assert.AreEqual(99488.2, (decimal)avgTOFLength);
-
 
         }
 
@@ -352,7 +365,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun,500,600, 3, 1);
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 500, 600, 3, 1);
             fscc.Create();
 
             uimfRun.GetFrameDataAllFrameSets();
@@ -372,6 +385,50 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
+
+        [Test]
+        public void SimpleSpeedTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            int numFramesSummed = 3;
+            int numScansSummed = 9;
+            double minMZ = 300;
+            double maxMZ = 2000;
+
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 500, 510, numFramesSummed, 1);
+            fscc.Create();
+
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(uimfRun, 300, 310, numScansSummed, 1);
+            sscc.Create();
+
+            List<long> times = new List<long>();
+            Stopwatch sw = new Stopwatch();
+
+
+            foreach (var frame in uimfRun.FrameSetCollection.FrameSetList)
+            {
+                uimfRun.CurrentFrameSet = frame;
+                foreach (var scan in uimfRun.ScanSetCollection.ScanSetList)
+                {
+                    uimfRun.CurrentScanSet = scan;
+                    sw.Start();
+                    uimfRun.GetMassSpectrum(scan, frame, minMZ, maxMZ);
+                    sw.Stop();
+
+                    times.Add(sw.ElapsedMilliseconds);
+                    sw.Reset();
+
+                }
+
+            }
+
+            Console.WriteLine("NumMSScans= " + times.Count);
+            Console.WriteLine("Time (ms) per scan = " + times.Average());
+
+
+
+        }
 
 
     }

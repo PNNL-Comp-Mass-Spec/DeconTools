@@ -7,17 +7,18 @@ namespace DeconTools.Backend.Core
 {
     
     /// <summary>
+    /// this class has been decommissioned. Delete after Jan 2011. 
     /// Singleton class that functions to allow only one UIMF file to be opened at a time
     /// and keeps the file open allowing for more efficient use of the UIMFLibrary class. 
     /// (instead of opening and closing it everytime you want to retrieve information from
     /// the class)
     /// </summary>
-    public class UIMFLibraryAdapter
+    public class UIMFLibraryAdapter_DoNotUse
     {
-        private static UIMFLibraryAdapter instance;
+        private static UIMFLibraryAdapter_DoNotUse instance;
         private string fileName;
 
-        private UIMFLibraryAdapter(string filename)
+        private UIMFLibraryAdapter_DoNotUse(string filename)
         {
             this.fileName = filename;
             datareader = new UIMFLibrary.DataReader();
@@ -33,12 +34,12 @@ namespace DeconTools.Backend.Core
             set { datareader = value; }
         }
 
-        
-        public static UIMFLibraryAdapter getInstance(string filename)
+
+        public static UIMFLibraryAdapter_DoNotUse getInstance(string filename)
         {
             if (instance == null)
             {
-                instance = new UIMFLibraryAdapter(filename);
+                instance = new UIMFLibraryAdapter_DoNotUse(filename);
             }
             else
             {

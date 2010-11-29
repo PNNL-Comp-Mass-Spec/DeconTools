@@ -104,7 +104,7 @@ namespace DeconTools.Backend.Runs
                     run = new MSScanFromTextFileRun(fileName);
                     break;
                 case Globals.MSFileType.Bruker:
-                    run = new BrukerRun(fileName);
+                    run = new BrukerV3Run(fileName);
                     break;
                 case Globals.MSFileType.Bruker_V2:
                     run = new BrukerV2Run(fileName);
@@ -173,11 +173,11 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.Bruker:
                     if (parameters.HornTransformParameters.UseScanRange)
                     {
-                        run = new BrukerRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                        run = new BrukerV3Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
                     }
                     else
                     {
-                        run = new BrukerRun(filename);
+                        run = new BrukerV3Run(filename);
                     }
                     break;
 
@@ -287,26 +287,12 @@ namespace DeconTools.Backend.Runs
             List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
 
             bool hasSerOrFid = (serFileInfo != null || fidFileInfo != null);
+            bool hasSettingFile = (apexAcquisitionMethodFileInfo != null || acqusFileInfos != null);
 
-            bool isBrukerV2File = (apexAcquisitionMethodFileInfo != null && hasSerOrFid);
-            bool isBrukerV1File = (apexAcquisitionMethodFileInfo == null && acqusFileInfos != null && serFileInfo != null);
-
-            if (isBrukerV2File)
+            if (hasSerOrFid && hasSettingFile)
             {
-                run = new BrukerV2Run(folderName);
+                run = new BrukerV3Run(folderName);
             }
-            else if (isBrukerV1File)
-            {
-                //in this case 'ser' file was found below the '0.ser' folder.  Need to reference the 0.ser folder. 
-                    run = new BrukerRun(serFileInfo.Directory.FullName);
-                
-
-            }
-            else
-            {
-                run = null;
-            }
-
 
             return run;
 

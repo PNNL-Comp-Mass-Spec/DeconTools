@@ -7,6 +7,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using System.Xml.Linq;
 using DeconTools.Backend.Runs.CalibrationData;
+using DeconTools.Backend.FileIO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -16,6 +17,8 @@ namespace DeconTools.Backend.Runs
         FileInfo m_settingsfileInfo;
         FileInfo m_fidFileInfo;
         FileInfo m_acqusFileInfo;
+
+        BrukerDataReader.DataReader m_rawDataReader;
 
         internal class brukerNameValuePair
         {
@@ -44,7 +47,7 @@ namespace DeconTools.Backend.Runs
             m_fidFileInfo = findFIDFile();
 
             //TODO: change this name once things are in place.
-            string filePathForDeconEngine = "";
+            string filePathForRawDataReader = "";
 
 
             if (m_serFileInfo == null && m_fidFileInfo == null)
@@ -54,16 +57,18 @@ namespace DeconTools.Backend.Runs
 
             if (m_serFileInfo != null)
             {
-                filePathForDeconEngine = m_serFileInfo.FullName;
+                filePathForRawDataReader = m_serFileInfo.FullName;
             }
             else if (m_serFileInfo == null && m_fidFileInfo != null)
             {
-                filePathForDeconEngine = m_fidFileInfo.FullName;
+                filePathForRawDataReader = m_fidFileInfo.FullName;
             }
             else
             {
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
+
+
 
             m_settingsfileInfo = findSettingsFile();
             bool standardSettingsFileNotFound = (m_settingsfileInfo == null);
@@ -87,13 +92,30 @@ namespace DeconTools.Backend.Runs
                 loadSettingsFromApexMethodFile(this.SettingsFilePath);
             }
 
+            //intantiate the BrukerDataReader and set parameters
+            m_rawDataReader = new BrukerDataReader.DataReader(filePathForRawDataReader);
+            m_rawDataReader.SetParameters(this.CalibrationData.ML1, this.CalibrationData.ML2, this.CalibrationData.SW_h, this.CalibrationData.TD);
+
+            this.DatasetName = getDatasetName(this.Filename);
+            this.DataSetPath = getDatasetfolderName(this.Filename);
+
+
+            this.MinScan = 0;        // zero-based
+            this.MaxScan = GetMaxPossibleScanIndex();
+
+            Check.Ensure(m_rawDataReader != null, "BrukerRun could not be initialized. Failed to connect to raw data.");
+
 
 
 
         }
 
-
-
+        public BrukerV3Run(string fileName, int minScan, int maxScan)
+            : this(fileName)
+        {
+            this.MinScan = minScan;
+            this.MaxScan = maxScan;
+        }
 
 
         #endregion
@@ -127,27 +149,83 @@ namespace DeconTools.Backend.Runs
         #region Public Methods
         public override int GetNumMSScans()
         {
-            throw new NotImplementedException();
+            return m_rawDataReader.GetNumMSScans();
+
         }
+
+        internal override int GetMaxPossibleScanIndex()
+        {
+            return GetNumMSScans() - 1;
+        }
+
 
         public override double GetTime(int scanNum)
         {
-            throw new NotImplementedException();
+            return scanNum;
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            throw new NotImplementedException();
+            if (ContainsMSMSData)
+            {
+                throw new NotImplementedException("Cannot get MSLevel from BrukerData yet.");
+            }
+            else
+            {
+                return 1;
+            }
+
         }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-            throw new NotImplementedException();
+            float[] xvals = null;
+            float[] yvals = null;
+            m_rawDataReader.GetMassSpectrum(scanset.PrimaryScanNumber, (float)minMZ, (float)maxMZ, ref xvals, ref yvals);
+
+            this.XYData.Xvalues = xvals.Select<float, double>(i => i).ToArray();
+            this.XYData.Yvalues = yvals.Select<float, double>(i => i).ToArray();
+
         }
+
+        public override void GetMassSpectrum(ScanSet scanset)
+        {
+            float[] xvals = null;
+            float[] yvals = null;
+            m_rawDataReader.GetMassSpectrum(scanset.PrimaryScanNumber, ref xvals, ref yvals);
+
+            this.XYData.Xvalues = xvals.Select<float, double>(i => i).ToArray();
+            this.XYData.Yvalues = yvals.Select<float, double>(i => i).ToArray();
+        }
+
+
+
 
         #endregion
 
         #region Private Methods
+
+        private string getDatasetName(string fullFolderPath)
+        {
+
+            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+
+            if (dirInfo.Name.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
+            {
+                return dirInfo.Name.Substring(0, dirInfo.Name.Length - ".d".Length);
+            }
+            else
+            {
+                return dirInfo.Name;
+            }
+
+        }
+
+        private string getDatasetfolderName(string fullFolderPath)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            return dirInfo.FullName;
+        }
         private void validateSelectionIsFolder(string folderName)
         {
             bool isDirectory;
@@ -201,6 +279,17 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
+                foreach (var serFile in serFiles)
+                {
+                    FileInfo fi = new FileInfo(serFile);
+
+                    if (fi.Directory.Name == "0.ser")
+                    {
+                        return fi;
+                    }
+
+                }
+
                 throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
             }
 
@@ -272,7 +361,7 @@ namespace DeconTools.Backend.Runs
                 foreach (var file in acqusFiles)
                 {
                     FileInfo fi = new FileInfo(file);
-                    if (fi.Directory == favoredDirectory)
+                    if (fi.Directory.Name.Equals(favoredDirectory.Name, StringComparison.OrdinalIgnoreCase))
                     {
                         return fi;
                     }
@@ -280,20 +369,22 @@ namespace DeconTools.Backend.Runs
 
                 throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
             }
+
         }
 
         internal void loadSettingsFromAcqusFile(string settingsFileName)
         {
             this.CalibrationData = new BrukerCalibrationData();
 
-            using (StreamReader sw = new StreamReader(File.OpenRead(settingsFileName)))
-            {
+            AcqusFileReader acqusReader;
+            acqusReader = new AcqusFileReader(settingsFileName);
 
-
-            }
-
-
-
+            this.CalibrationData.ML1 = acqusReader.DataLookupTable["ML1"];
+            this.CalibrationData.ML2 = acqusReader.DataLookupTable["ML2"];
+            //this.CalibrationData.NF =  acqusReader.DataLookupTable["ML1"];
+            this.CalibrationData.SW_h = acqusReader.DataLookupTable["SW_h"] * 2;   // //  from Gordon A.:  SW_h is the digitizer rate and Bruker entered it as the nyquist frequency so it needs to be multiplied by 2.
+            this.CalibrationData.TD = (int)acqusReader.DataLookupTable["TD"];
+            this.CalibrationData.FR_Low = acqusReader.DataLookupTable["FR_low"];
         }
 
         internal void loadSettingsFromApexMethodFile(string settingsFileName)

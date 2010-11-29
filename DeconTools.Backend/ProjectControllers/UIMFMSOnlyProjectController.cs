@@ -85,7 +85,8 @@ namespace DeconTools.Backend.ProjectControllers
             Logger.Instance.AddEntry("ParameterFile = " + Path.GetFileName(this.paramFilename));
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
             Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
-            Logger.Instance.AddEntry("UIMFLibrary version = " + UIMFLibraryAdapter.getLibraryVersion(), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
+            Logger.Instance.AddEntry("UIMFLibrary version = " + DeconTools.Backend.Utilities.AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), 
+                Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
 
 
             if (run is UIMFRun)     // not pretty...  

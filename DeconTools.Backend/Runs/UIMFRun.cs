@@ -16,8 +16,10 @@ namespace DeconTools.Backend.Runs
         const double FRAME_PRESSURE_STANDARD = 4.00000d;   // 
 
         private int numBins;
-        
-        private GlobalParameters m_globalParameters ;
+
+        private GlobalParameters m_globalParameters;
+
+        private UIMFLibrary.DataReader m_reader;
 
 
         #region Constructors
@@ -28,6 +30,8 @@ namespace DeconTools.Backend.Runs
             this.MSFileType = Globals.MSFileType.PNNL_UIMF;
             this.frameSetCollection = new FrameSetCollection();
             this.ContainsMSMSData = false;
+            this.RawData = null;
+
         }
 
         public UIMFRun(string fileName)
@@ -37,6 +41,9 @@ namespace DeconTools.Backend.Runs
             Check.Require(File.Exists(fileName), "File does not exist.");
             this.Filename = fileName;
 
+            m_reader = new DataReader();
+            m_reader.OpenUIMF(this.Filename);
+
             SetGlobalParameters();
 
 
@@ -44,9 +51,6 @@ namespace DeconTools.Backend.Runs
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(fileName);
 
-            
-
-            this.RawData = new DeconToolsV2.Readers.clsRawData(fileName, DeconToolsV2.Readers.FileType.PNNL_UIMF);
             this.MinFrame = 1;
 
             this.MaxFrame = GetMaxPossibleFrameIndex();
@@ -60,8 +64,7 @@ namespace DeconTools.Backend.Runs
 
         private void SetGlobalParameters()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            m_globalParameters = adapter.Datareader.GetGlobalParameters();
+            m_globalParameters = m_reader.GetGlobalParameters();
         }
 
 
@@ -132,20 +135,13 @@ namespace DeconTools.Backend.Runs
         #region Public Methods
         public override int GetNumMSScans()
         {
-   
             int numFrames = m_globalParameters.NumFrames;
+            int numScansPerFrame = 0;
 
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
-
-
-            FrameParameters frameParam = datareader.GetFrameParameters(1);
-
-            int numScansPerFrame = frameParam.Scans;
-
+            FrameParameters frameParam = m_reader.GetFrameParameters(1);
+            numScansPerFrame = frameParam.Scans;
 
             return (numScansPerFrame * numFrames);
-
         }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
@@ -154,119 +150,80 @@ namespace DeconTools.Backend.Runs
             double[] xvals = new double[1];
             double[] yvals = new double[1];
 
-            Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
-            if (scanset.Count() == 1)
-            {
-                RawData.GetSpectrum(scanset.getLowestScanNumber(), ref xvals, ref yvals);
-            }
-            else
-            {
-                RawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
-            }
+            throw new NotImplementedException("this 'GetMassSpectrum' method is no longer supported");
+
+            //Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
+            //if (scanset.Count() == 1)
+            //{
+            //    RawData.GetSpectrum(scanset.getLowestScanNumber(), ref xvals, ref yvals);
+            //}
+            //else
+            //{
+            //    RawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
+            //}
 
 
 
-            this.XYData.SetXYValues(ref xvals, ref yvals);
+            //this.XYData.SetXYValues(ref xvals, ref yvals);
 
 
 
         }
 
-        
+
         //TODO: change the order of parameters so that frameset is first
         public override void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
             GetMassSpectrum2(scanset, frameset, minMZ, maxMZ);
             return;
 
-            //double[] xvals = new double[1];
-            //double[] yvals = new double[1];
-
-            //Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
-            //Check.Require(frameset.Count() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");
-
-
-            //try
-            //{
-
-            //    Check.Require(UIMFLibraryAdapter.getInstance(this.Filename).Datareader != null, "Data reader is null");
-
-            //    RawData.GetSummedFrameAndScanSpectra(UIMFLibraryAdapter.getInstance(this.Filename).Datareader,
-            //        ref xvals, ref yvals, frameset.getLowestFrameNumber(),
-            //        frameset.getHighestFrameNumber(), scanset.getLowestScanNumber(),
-            //        scanset.getHighestScanNumber(), minMZ, maxMZ, this.numBins);
-
-
-
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    throw ex;
-            //}
-            //finally
-            //{
-
-
-            //}
-
-
-
-            //this.XYData.Xvalues = xvals;
-            //this.XYData.Yvalues = yvals;
         }
         public void GetMassSpectrum2(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
             Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             Check.Require(frameset.Count() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");
 
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-
             int numBins = this.GetNumBins();
             double[] xvals = new double[numBins];
             int[] yvals = new int[numBins];
 
-            List<double> trimmedXvalues = new List<double>();
-            List<double> trimmedYValues = new List<double>();
 
             try
             {
-
                 int frameLower = frameset.getLowestFrameNumber();
                 int frameUpper = frameset.getHighestFrameNumber();
                 int scanLower = scanset.getLowestScanNumber();
                 int scanUpper = scanset.getHighestScanNumber();
-                
-                //TODO: get Anuj to return an accurate value for non-zero intensities. Right now it returns a value near the full bin array size
-                int summedSpecLength = adapter.Datareader.SumScans(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
 
+                int nonZeroLength = m_reader.SumScansNonCached(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
 
-                //StringBuilder sb = new StringBuilder();
-                //for (int i = 0; i < xvals.Length; i++)
-                //{
-                //    sb.Append(xvals[i]);
-                //    sb.Append("\t");
-                //    sb.Append(yvals[i]);
-                //    sb.Append("\n");
-                //}
-                //Console.WriteLine(sb.ToString());
-
-
-
-                for (int i = 0; i < xvals.Length; i++)
+                if (xvals == null || xvals.Length == 0 || yvals == null || yvals.Length == 0)
                 {
-                    bool isWithinMZRange = (xvals[i] >= minMZ && xvals[i] <= maxMZ);
-                    bool isIntensityAbove0 = (yvals[i] > 0);
-
-                    
-                    if (isWithinMZRange && isIntensityAbove0)
-                    {
-                        trimmedXvalues.Add(xvals[i]);
-                        trimmedYValues.Add(yvals[i]);
-                    }
+                    this.XYData.Xvalues = null;
+                    this.XYData.Yvalues = null;
+                    return;
                 }
 
-         
+                int intensityArrLength = yvals.Length;
+                int[] tempIntensities = yvals;
+                int zeros = 0;
+
+
+                for (int k = 0; k < intensityArrLength; k++)
+                {
+                    if (tempIntensities[k] != 0 && (minMZ <= xvals[k] && maxMZ >= xvals[k]))
+                    {
+                        xvals[k - zeros] = xvals[k];
+                        yvals[k - zeros] = tempIntensities[k];
+                    }
+                    else
+                    {
+                        zeros++;
+                    }
+                }
+                // resize arrays cutting off the zeroes at the end.
+                Array.Resize(ref xvals, intensityArrLength - zeros);
+                Array.Resize(ref yvals, intensityArrLength - zeros);
             }
             catch (Exception ex)
             {
@@ -277,8 +234,9 @@ namespace DeconTools.Backend.Runs
             {
             }
 
-            this.XYData.Xvalues = trimmedXvalues.ToArray();
-            this.XYData.Yvalues = trimmedYValues.ToArray();
+
+            this.XYData.Xvalues = xvals;
+            this.XYData.Yvalues = yvals.Select<int, double>(i => i).ToArray();
         }
 
         public double GetFramePressure(int frameNum)
@@ -288,19 +246,17 @@ namespace DeconTools.Backend.Runs
 
         public double GetFramePressureFront(int frameNum)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
+            double framepressureFront = -1;
 
-            double framepressureFront = datareader.GetFrameParameters(frameNum).PressureFront;
+            framepressureFront = m_reader.GetFrameParameters(frameNum).PressureFront;
+
             return framepressureFront;
         }
 
         public double GetFramePressureBack(int frameNum)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
-
-            double framepressure = datareader.GetFrameParameters(frameNum).PressureBack;
+            double framepressure = -1;
+            framepressure = m_reader.GetFrameParameters(frameNum).PressureBack;
             return framepressure;
 
         }
@@ -327,41 +283,39 @@ namespace DeconTools.Backend.Runs
         }
         public override double GetTime(int frameNum)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
+            double time = 0;
 
-            return datareader.GetFrameParameters(frameNum).StartTime;
+            time = m_reader.GetFrameParameters(frameNum).StartTime;
+
+            return time;
+
         }
 
 
 
         public void GetFrameDataAllFrameSets()
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
-
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
             foreach (var frame in FrameSetCollection.FrameSetList)
             {
-                FrameParameters fp = datareader.GetFrameParameters(frame.PrimaryFrame);
+                FrameParameters fp = m_reader.GetFrameParameters(frame.PrimaryFrame);
 
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressure = fp.PressureBack;
             }
-
 
         }
 
 
         public double GetDriftTime(FrameSet frame, int scanNum)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
+            FrameParameters fp = null;
+            fp = m_reader.GetFrameParameters(frame.PrimaryFrame);
 
-            FrameParameters fp = datareader.GetFrameParameters(frame.PrimaryFrame);
+            Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
 
-            
+
             if (Double.IsNaN(frame.AvgTOFLength))
             {
                 frame.AvgTOFLength = fp.AverageTOFLength;
@@ -391,15 +345,10 @@ namespace DeconTools.Backend.Runs
 
         public double GetDriftTime(int frameNum, int scanNum)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
-            //UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
-            //bool check = datareader.OpenUIMF(this.Filename);
-
-            FrameParameters fp = datareader.GetFrameParameters(frameNum);
+            FrameParameters fp = null;
+            fp = m_reader.GetFrameParameters(frameNum);
 
             double avgTOFLength = fp.AverageTOFLength;
-
             double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
             double frameBackpressure = fp.PressureBack;
@@ -407,8 +356,6 @@ namespace DeconTools.Backend.Runs
             {
                 driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frameBackpressure);      // correc
             }
-
-
 
             return driftTime;
 
@@ -418,13 +365,9 @@ namespace DeconTools.Backend.Runs
 
         public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         {
-            UIMFLibraryAdapter adapter = UIMFLibraryAdapter.getInstance(this.Filename);
-            DataReader datareader = adapter.Datareader;
-
-            int[]scanValues = null;
-            int[]intensityVals = null;
-
-            datareader.GetDriftTimeProfile(frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+            int[] scanValues = null;
+            int[] intensityVals = null;
+            m_reader.GetDriftTimeProfile(frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
             if (scanValues == null || scanValues.Length == 0)
             {
@@ -436,10 +379,6 @@ namespace DeconTools.Backend.Runs
                 this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
                 this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
             }
-            
-
-
-
 
         }
 
@@ -488,7 +427,10 @@ namespace DeconTools.Backend.Runs
 
         public override void Close()
         {
-            UIMFLibraryAdapter.getInstance(this.Filename).CloseCurrentUIMF();
+            if (m_reader != null)
+            {
+                m_reader.CloseUIMF();
+            }
             base.Close();
         }
 
@@ -518,5 +460,10 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
+
+        public float GetTIC(FrameSet frameSet, ScanSet scanSet)
+        {
+            return (float)m_reader.GetTIC(frameSet.PrimaryFrame, scanSet.PrimaryScanNumber);
+        }
     }
 }

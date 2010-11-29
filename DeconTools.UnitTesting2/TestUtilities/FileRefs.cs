@@ -22,11 +22,13 @@ namespace DeconTools.UnitTesting2
 
             public static string TestFileBasePath = @"..\\..\\..\\TestFiles";
             public static string Bruker9TStandardFile1 = FileRefs.RawDataBasePath + "\\SWT_9t_TestDS216_Small";
+            public static string Bruker9TStandardFile2 = FileRefs.RawDataBasePath + "\\Bruker\\Bruker_9T\\RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02";
             public static string Bruker9TStandardFile1AlternateRef = FileRefs.RawDataBasePath + @"\SWT_9t_TestDS216_Small\0.ser\acqus";
 
             public static string BrukerSolarix12TFile1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\12Ttest_000003";
             public static string BrukerSolarix12T_FID_File1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\HVY_000001";
             public static string BrukerSolarix12T_FID_File2 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\\HVY_MSCAL_000001";
+            public static string BrukerSolarix12T_dotD_File1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\Oct8_2010_BSA\BSA_10082010_000003.d";
 
             public static string Bruker15TFile1 = FileRefs.RawDataBasePath + @"\Bruker\Bruker_15T\092410_ubiquitin_AutoCID_000004";
 
@@ -58,6 +60,11 @@ namespace DeconTools.UnitTesting2
             public static string YAFMSParameterFileScans4000_4050 = FileRefs.RawDataBasePath + "\\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans4000-4050.xml";
 
             public static string Bruker12TSolarixScans4_8ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_Solarix_SampleParameterFile.xml";
+
+            public static string Bruker9T_Scans1000_1010ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_9T_ParameterFile.xml";
+
+            public static string UIMFFrames800_802 = FileRefs.RawDataBasePath + @"\ParameterFiles\UIMF_frames_peakBR7_800-802.xml";
+
 
         }
 

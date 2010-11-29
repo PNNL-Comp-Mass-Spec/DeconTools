@@ -70,9 +70,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.0.3819.22135, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UIMFLibrary, Version=1.2.3945.28285, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\Debug\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +91,7 @@
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />
     <Compile Include="Run_relatedTests\BrukerV2Run_Tests.cs" />
+    <Compile Include="Run_relatedTests\BrukerV3Tests.cs" />
     <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />

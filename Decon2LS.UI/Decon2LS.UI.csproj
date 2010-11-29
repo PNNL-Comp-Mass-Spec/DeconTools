@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -130,6 +130,12 @@
     <Content Include="ErrorProviderIconYellow.ico" />
     <Content Include="Icons\Spectrum_Fit.bmp" />
     <Content Include="Icons\Spectrum_Fit.ico" />
+    <Content Include="xerces-c_2_7.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="xerces-c_2_7D.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
