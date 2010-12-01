@@ -11,32 +11,24 @@ using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Utilities;
 
 
-namespace DeconTools.UnitTesting.ProcessingTasksTests
+namespace DeconTools.UnitTesting2.ProcessingTasksTests
 {
     [TestFixture]
     public class DeconToolsZeroFillerTests
     {
-        string imfMSScanTextfile = "..\\..\\Testfiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1_SCAN233_raw_data.txt";
-        string imfFilepath = "..\\..\\TestFiles\\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
-
-        string imfStrangeOneFilepath = "..\\..\\TestFiles\\7peptides_1uM_600_50_4t_114Vpp_0000.Accum_1_recal.imf";
+  
+        string imfStrangeOneFilepath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\IMF\7peptides_1uM_600_50_4t_114Vpp_0000.Accum_1_recal.imf";
 
         [Test]
         public void test1()
         {
-            Run run = new MSScanFromTextFileRun(imfMSScanTextfile);
+            Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
             ResultCollection resultcollection = new ResultCollection(run);
 
             Task msgen = new GenericMSGenerator();
             msgen.Execute(resultcollection);
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 3;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
-
-            Task peakdetector = new DeconToolsPeakDetector(detectorParams);
+            Task peakdetector = new DeconToolsPeakDetector(3,3, Globals.PeakFitType.QUADRATIC,false);
             peakdetector.Execute(resultcollection);
 
             Assert.AreEqual(82, resultcollection.Run.PeakList.Count);

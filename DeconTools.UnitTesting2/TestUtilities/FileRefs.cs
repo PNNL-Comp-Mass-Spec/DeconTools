@@ -13,14 +13,24 @@ namespace DeconTools.UnitTesting2
 
         public class RawDataMSFiles
         {
+            public static string TestFileBasePath = @"..\\..\\..\\TestFiles";
+
+
             public static string AgilentDFile1 = FileRefs.RawDataBasePath + @"\AgilentD\BSA_TOF4\BSA_TOF4.D";
+
+            public static string IMFStdFile1 = FileRefs.RawDataBasePath + @"\IMF\50ugpmlBSA_CID_QS_16V_0000.Accum_1.IMF";
+
+            public static string TextFileMS_std1 = FileRefs.RawDataBasePath + @"\MassSpectra_TextFiles\50ugpmlBSA_CID_QS_16V_0000.Accum_1_SCAN233_raw_data.txt";
+            public static string TextFileMS_multipleHeaderLines = FileRefs.RawDataBasePath + @"\MassSpectra_TextFiles\sampleIMS_Data_09103034.TXT";
+            public static string TextFileMS_multipleDelimiters = FileRefs.RawDataBasePath + @"\MassSpectra_TextFiles\DN_sym5_A1_87.txt";
+            
             public static string OrbitrapStdFile1 = FileRefs.RawDataBasePath + "\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            public static string MZXMLOrbitrapStdFile1 = FileRefs.RawDataBasePath + "\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzxml";
+            public static string MZXMLOrbitrapStdFile1 = FileRefs.RawDataBasePath + "\\mzXML\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzxml";
 
             public static string UIMFStdFile1 = FileRefs.RawDataBasePath + "\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
             public static string UIMFFileContainingMSMSLevelData = FileRefs.RawDataBasePath + "\\QC_Shew_MSMS_500_100_fr1200_c2_Ek_0000.uimf";
 
-            public static string TestFileBasePath = @"..\\..\\..\\TestFiles";
+            
             public static string Bruker9TStandardFile1 = FileRefs.RawDataBasePath + "\\SWT_9t_TestDS216_Small";
             public static string Bruker9TStandardFile2 = FileRefs.RawDataBasePath + "\\Bruker\\Bruker_9T\\RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02";
             public static string Bruker9TStandardFile1AlternateRef = FileRefs.RawDataBasePath + @"\SWT_9t_TestDS216_Small\0.ser\acqus";

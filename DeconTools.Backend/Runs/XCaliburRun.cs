@@ -25,7 +25,7 @@ namespace DeconTools.Backend.Runs
         {
 
 
-            Check.Require(File.Exists(filename));
+            Check.Require(File.Exists(filename),"Run not initialized. File not found");
 
             this.Filename = filename;
 

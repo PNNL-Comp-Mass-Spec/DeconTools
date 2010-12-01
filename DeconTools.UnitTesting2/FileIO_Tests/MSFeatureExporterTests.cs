@@ -48,6 +48,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
         }
 
+        
+        /// <summary>
+        /// Note:  this test fails if Configuration is set to 'x86'
+        /// </summary>
         [Test]
         public void ouputToSQLite_xcaliburData_Test1()
         {
@@ -94,7 +98,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(131602, fi.Length);
+            Assert.AreEqual(133856, fi.Length);
             Console.Write(fi.Length);
         }
 
@@ -117,7 +121,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(141312, fi.Length);
+            Assert.AreEqual(143360, fi.Length);
             Console.Write(fi.Length);
 
 

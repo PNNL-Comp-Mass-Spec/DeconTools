@@ -172,13 +172,7 @@ namespace DeconTools.Backend.Runs
 
 
         //TODO: change the order of parameters so that frameset is first
-        public override void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
-        {
-            GetMassSpectrum2(scanset, frameset, minMZ, maxMZ);
-            return;
-
-        }
-        public void GetMassSpectrum2(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
+        public void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
             Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             Check.Require(frameset.Count() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");
@@ -272,15 +266,6 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-        internal void CreateFrameSetCollection(int minFrame, int maxFrame)      // this is an early simplistic version
-        {
-            for (int i = minFrame; i <= maxFrame; i++)
-            {
-                this.frameSetCollection.FrameSetList.Add(new FrameSet(i));
-            }
-
-        }
         public override double GetTime(int frameNum)
         {
             double time = 0;
@@ -290,8 +275,6 @@ namespace DeconTools.Backend.Runs
             return time;
 
         }
-
-
 
         public void GetFrameDataAllFrameSets()
         {
@@ -306,7 +289,6 @@ namespace DeconTools.Backend.Runs
             }
 
         }
-
 
         public double GetDriftTime(FrameSet frame, int scanNum)
         {
@@ -340,9 +322,6 @@ namespace DeconTools.Backend.Runs
             return driftTime;
 
         }
-
-
-
         public double GetDriftTime(int frameNum, int scanNum)
         {
             FrameParameters fp = null;
@@ -362,7 +341,6 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
         public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         {
             int[] scanValues = null;
@@ -381,7 +359,6 @@ namespace DeconTools.Backend.Runs
             }
 
         }
-
 
 
         internal int GetNumScansPerFrame()

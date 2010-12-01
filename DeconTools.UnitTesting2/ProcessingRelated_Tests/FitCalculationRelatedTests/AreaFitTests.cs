@@ -114,10 +114,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             XYData theorXYData = distcreator.Data;
 
-            StringBuilder sb = new StringBuilder();
-            TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
-
-            Console.WriteLine(sb.ToString());
+            theorXYData.Display();
 
             AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
             double fitval = areafitter.getFit();

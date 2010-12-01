@@ -16,6 +16,8 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests
 {
+
+    //TODO: remove from Solution and save to backup folder
     [TestFixture]
     public class RapidDeconvolutorTests
     {

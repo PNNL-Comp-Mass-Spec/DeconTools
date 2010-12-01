@@ -56,7 +56,7 @@ namespace DeconTools.Backend.FileIO
                     createParameterList(myCommand);
 
                     myCommand.CommandText = createInsertionCommandString();
-
+                    Console.WriteLine(myCommand.CommandText);
                     foreach (T result in resultList)
                     {
                         AddResults(myCommand.Parameters, result);
