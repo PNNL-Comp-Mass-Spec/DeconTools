@@ -115,9 +115,6 @@ namespace DeconTools.Backend
                 this.outputFilepath = outputPath;
             }
 
-
-
-
             Logger.Instance.OutputFilename = m_run.DataSetPath + "\\" + m_run.DatasetName + "_log.txt";
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(OldSchoolProcRunner)));
             Logger.Instance.AddEntry("ParameterFile = " + Path.GetFileName(this.paramFilename));
@@ -126,36 +123,18 @@ namespace DeconTools.Backend
             Logger.Instance.AddEntry("UIMFLibrary version = " + DeconTools.Backend.Utilities.AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
 
 
-            if (m_run is UIMFRun)     // not pretty...  
+            //Define the Frames and Scans to analyze.
+            //This defines the FrameSetCollection (for IMS data) and ScanSetCollection
+            createTargetMassSpectra(m_run);
+
+
+            //this is not in the right place... but must be done after the FrameSetCollection is created.   
+            if (m_run is UIMFRun)
             {
-                UIMFRun uimfRun = (UIMFRun)m_run;
-                FrameSetCollectionCreator frameSetcreator = new FrameSetCollectionCreator(m_run, uimfRun.MinFrame,
-                      uimfRun.MaxFrame, Project.getInstance().Parameters.NumFramesSummed, 1);
-                frameSetcreator.Create();
-
-                uimfRun.GetFrameDataAllFrameSets();     //this adds avgTOFlength and framePressureBack to each frame's object data; I do this so it doesn't have to be repeated looked up.
-
+                ((UIMFRun)m_run).GetFrameDataAllFrameSets();     //this adds avgTOFlength and framePressureBack to each frame's object data; I do this so it doesn't have to be repeated looked up.
             }
-
-            try
-            {
-                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan,
-                    Project.getInstance().Parameters.NumScansSummed,
-                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
-                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
-                scanSetCollectionCreator.Create();
-            }
-            catch (Exception ex)
-            {
-
-                Logger.Instance.AddEntry("ERROR: " + ex.Message, Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
-                throw ex;
-            }
-
-
 
             //Create Tasks and add to task collection...
-
             MSGeneratorFactory msGeneratorFactory = new MSGeneratorFactory();
             Task msGen = msGeneratorFactory.CreateMSGenerator(fileType, Project.getInstance().Parameters.OldDecon2LSParameters);
             Project.getInstance().TaskCollection.TaskList.Add(msGen);
@@ -224,6 +203,68 @@ namespace DeconTools.Backend
             Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
         }
 
+        private void createTargetMassSpectra(Run m_run)
+        {
+            try
+            {
+                if (m_run is UIMFRun)
+                {
+                    UIMFRun uimfRun = (UIMFRun)m_run;
+                    FrameSetCollectionCreator frameSetcreator = new FrameSetCollectionCreator(m_run, uimfRun.MinFrame,
+                        uimfRun.MaxFrame, Project.getInstance().Parameters.NumFramesSummed, 1);
+                    frameSetcreator.Create();
+
+
+                    bool sumAllIMSScansInAFrame = (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SumSpectra == true);
+
+
+                    if (sumAllIMSScansInAFrame)
+                    {
+                        int centerScan = (m_run.MinScan + m_run.MaxScan + 1) / 2;
+
+                        int numSummed = m_run.MaxScan - m_run.MinScan + 1;
+                        if (numSummed % 2 != 0)
+                        {
+                            numSummed++;
+                        }
+
+                        uimfRun.ScanSetCollection.ScanSetList.Clear();
+                        ScanSet scanset = new ScanSet(centerScan, m_run.MinScan, m_run.MaxScan);
+                        uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
+                    }
+                    else
+                    {
+                        ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan, 
+                            Project.getInstance().Parameters.NumScansSummed, 
+                            Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance, 
+                            Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
+                        scanSetCollectionCreator.Create();
+                    }
+
+          
+
+                }
+                else     //not a UIMF
+                {
+                    ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan,
+                          Project.getInstance().Parameters.NumScansSummed,
+                          Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
+                          Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
+                    scanSetCollectionCreator.Create();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.AddEntry("ERROR: " + ex.Message, Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
+                throw ex;
+            }
+
+
+
+        }
+
         private string createOutputPath(Run m_run)
         {
             return m_run.DataSetPath;
@@ -278,7 +319,7 @@ namespace DeconTools.Backend
                 Project.Reset();      //sets Project singleton to null;
 
             }
-          
+
         }
         #endregion
 

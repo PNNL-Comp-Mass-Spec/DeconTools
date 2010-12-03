@@ -42,10 +42,8 @@ namespace DeconTools.Backend.Runs
             this.Filename = fileName;
 
             m_reader = new DataReader();
-            m_reader.OpenUIMF(this.Filename);
 
             SetGlobalParameters();
-
 
             string baseFilename = Path.GetFileName(this.Filename);
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
@@ -64,7 +62,10 @@ namespace DeconTools.Backend.Runs
 
         private void SetGlobalParameters()
         {
+            //handleUIMFDataReader(m_reader);
+            m_reader.OpenUIMF(this.Filename);
             m_globalParameters = m_reader.GetGlobalParameters();
+            m_reader.CloseUIMF();
         }
 
 
@@ -189,7 +190,9 @@ namespace DeconTools.Backend.Runs
                 int scanLower = scanset.getLowestScanNumber();
                 int scanUpper = scanset.getHighestScanNumber();
 
+                m_reader.OpenUIMF(this.Filename);
                 int nonZeroLength = m_reader.SumScansNonCached(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
+                m_reader.CloseUIMF();
 
                 if (xvals == null || xvals.Length == 0 || yvals == null || yvals.Length == 0)
                 {
@@ -250,7 +253,9 @@ namespace DeconTools.Backend.Runs
         public double GetFramePressureBack(int frameNum)
         {
             double framepressure = -1;
+            m_reader.OpenUIMF(this.Filename);
             framepressure = m_reader.GetFrameParameters(frameNum).PressureBack;
+            m_reader.CloseUIMF();
             return framepressure;
 
         }
@@ -269,9 +274,9 @@ namespace DeconTools.Backend.Runs
         public override double GetTime(int frameNum)
         {
             double time = 0;
-
+            m_reader.OpenUIMF(this.Filename);
             time = m_reader.GetFrameParameters(frameNum).StartTime;
-
+            m_reader.CloseUIMF();
             return time;
 
         }
@@ -282,8 +287,9 @@ namespace DeconTools.Backend.Runs
 
             foreach (var frame in FrameSetCollection.FrameSetList)
             {
+                m_reader.OpenUIMF(this.Filename);
                 FrameParameters fp = m_reader.GetFrameParameters(frame.PrimaryFrame);
-
+                m_reader.CloseUIMF();
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressure = fp.PressureBack;
             }
@@ -293,8 +299,9 @@ namespace DeconTools.Backend.Runs
         public double GetDriftTime(FrameSet frame, int scanNum)
         {
             FrameParameters fp = null;
+            m_reader.OpenUIMF(this.Filename);
             fp = m_reader.GetFrameParameters(frame.PrimaryFrame);
-
+            m_reader.CloseUIMF();
             Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
 
 
@@ -325,8 +332,9 @@ namespace DeconTools.Backend.Runs
         public double GetDriftTime(int frameNum, int scanNum)
         {
             FrameParameters fp = null;
+            m_reader.OpenUIMF(this.Filename);
             fp = m_reader.GetFrameParameters(frameNum);
-
+            m_reader.CloseUIMF();
             double avgTOFLength = fp.AverageTOFLength;
             double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
@@ -345,8 +353,9 @@ namespace DeconTools.Backend.Runs
         {
             int[] scanValues = null;
             int[] intensityVals = null;
+            m_reader.OpenUIMF(this.Filename);
             m_reader.GetDriftTimeProfile(frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
-
+            m_reader.CloseUIMF();
             if (scanValues == null || scanValues.Length == 0)
             {
                 this.XYData.Xvalues = null;
@@ -363,12 +372,9 @@ namespace DeconTools.Backend.Runs
 
         internal int GetNumScansPerFrame()
         {
-            UIMFLibrary.DataReader datareader = new UIMFLibrary.DataReader();
-            bool check = datareader.OpenUIMF(this.Filename);
-
-            int numScansPerFrame = datareader.GetFrameParameters(1).Scans;
-
-            datareader.CloseUIMF(this.Filename);
+            m_reader.OpenUIMF(this.Filename);
+            int numScansPerFrame = m_reader.GetFrameParameters(1).Scans;
+            m_reader.CloseUIMF();
             return numScansPerFrame;
 
         }
@@ -440,7 +446,9 @@ namespace DeconTools.Backend.Runs
 
         public float GetTIC(FrameSet frameSet, ScanSet scanSet)
         {
+            m_reader.OpenUIMF(this.Filename); 
             return (float)m_reader.GetTIC(frameSet.PrimaryFrame, scanSet.PrimaryScanNumber);
+            m_reader.CloseUIMF();
         }
     }
 }

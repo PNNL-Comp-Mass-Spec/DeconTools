@@ -77,8 +77,30 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             oldSchool.Execute();
 
             Assert.That(File.Exists(expectedIsosOutput));
+        }
+
+        [Test]
+        public void processUIMF_Frames800_802_SumAllIMSScansPerFrame()
+        {
+            string testFile = FileRefs.RawDataMSFiles.UIMFStdFile1;
+            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_800-802_OneSpectrumPerFrame.xml";
+
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, parameterFile);
+            oldSchool.Execute();
+
+            
+
+            Assert.That(File.Exists(expectedIsosOutput));
 
         }
+
 
 
 

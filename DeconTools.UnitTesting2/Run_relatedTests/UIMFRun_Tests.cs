@@ -248,6 +248,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+        //this is a useful test to help show memory issues when contantly using the UIMFLibrary
         [Test]
         public void memoryTest1()
         {
@@ -257,6 +258,9 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             Process currentProcess = Process.GetCurrentProcess();
             TestUtilities.DisplayInfoForProcess(currentProcess);
+
+            long privateMemorySizeBeforeProcessing = currentProcess.PrivateMemorySize64;
+
 
             ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(uimfRun, 1, 1);
             scanSetCreator.Create();
@@ -269,8 +273,15 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             }
 
+
             currentProcess = Process.GetCurrentProcess();
+            long privateMemorySizeAfterProcessing = currentProcess.PrivateMemorySize64; 
+
             TestUtilities.DisplayInfoForProcess(currentProcess);
+
+            long numBytesAdded = privateMemorySizeAfterProcessing - privateMemorySizeBeforeProcessing;
+            Console.WriteLine("Number of bytes added by processing = " + numBytesAdded);
+
 
         }
 
