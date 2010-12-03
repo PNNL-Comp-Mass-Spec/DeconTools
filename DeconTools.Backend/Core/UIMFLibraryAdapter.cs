@@ -13,16 +13,17 @@ namespace DeconTools.Backend.Core
     /// (instead of opening and closing it everytime you want to retrieve information from
     /// the class)
     /// </summary>
-    public class UIMFLibraryAdapter_DoNotUse
+    public class UIMFLibraryAdapter
     {
-        private static UIMFLibraryAdapter_DoNotUse instance;
+        private static UIMFLibraryAdapter instance;
         private string fileName;
 
-        private UIMFLibraryAdapter_DoNotUse(string filename)
+        private UIMFLibraryAdapter(string filename)
         {
             this.fileName = filename;
             datareader = new UIMFLibrary.DataReader();
             datareader.OpenUIMF(this.fileName);
+            ConnectionState = System.Data.ConnectionState.Open;
         }
 
 
@@ -35,11 +36,11 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public static UIMFLibraryAdapter_DoNotUse getInstance(string filename)
+        public static UIMFLibraryAdapter getInstance(string filename)
         {
             if (instance == null)
             {
-                instance = new UIMFLibraryAdapter_DoNotUse(filename);
+                instance = new UIMFLibraryAdapter(filename);
             }
             else
             {
@@ -51,18 +52,31 @@ namespace DeconTools.Backend.Core
                 }
                 else     // method's caller is requesting the same filename that is already open
                 {
-                         // don't need to do anything but return the instance (below)
+                    if (ConnectionState== System.Data.ConnectionState.Closed)
+                    {
+                        instance = new UIMFLibraryAdapter(filename);
+                    }
+                    else
+                    {
+                        // don't need to do anything but return the instance (below)
+
+
+                    }
+
                 }
             }
             
             return instance;
         }
 
+        public static System.Data.ConnectionState ConnectionState { get; set; }
+
         public void CloseCurrentUIMF()
         {
             if (instance != null)
             {
                 datareader.CloseUIMF(instance.fileName);
+                ConnectionState = System.Data.ConnectionState.Closed;
             }
         }
 

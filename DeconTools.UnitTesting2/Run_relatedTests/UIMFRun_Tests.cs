@@ -442,5 +442,24 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+        [Test]
+        public void getAllFrameParametersTest1()
+        {
+            string testFile = @"\\protoapps\UserData\FPGA\Data\112310-QCShew_1sec_frames_100min_run\1sec_frames_70_out_theshold\QCShew_15coadds_10kframes_380scans_7in_70out_2.UIMF";
+
+
+            UIMFRun uimfRun = new UIMFRun(testFile);
+
+            Console.WriteLine("Num frames= " + uimfRun.GetNumFrames());
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 1, 1);
+            fscc.Create();
+            uimfRun.GetFrameDataAllFrameSets();
+
+
+        }
+
+
+
     }
 }
