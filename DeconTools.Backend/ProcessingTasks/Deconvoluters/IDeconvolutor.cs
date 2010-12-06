@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -33,16 +34,27 @@ namespace DeconTools.Backend.ProcessingTasks
             //remove the result if it was a result of a different scan. Otherwise keep it
             //this allows running of two back-to-back deconvolutors without clearing the results
             //between deconvolutions.   Going backwards through the list prevents exceptions. 
-
             if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
-            for (int i = resultList.IsosResultBin.Count-1; i >=0; i--)
+
+            if (resultList.Run is UIMFRun)
             {
-                if (resultList.IsosResultBin[i].ScanSet.PrimaryScanNumber != resultList.Run.CurrentScanSet.PrimaryScanNumber)
-                {
-                    resultList.IsosResultBin.RemoveAt(i);
-                }
+                resultList.IsosResultBin.Clear();
 
             }
+            else
+            {
+                for (int i = resultList.IsosResultBin.Count - 1; i >= 0; i--)
+                {
+                    if (resultList.IsosResultBin[i].ScanSet.PrimaryScanNumber != resultList.Run.CurrentScanSet.PrimaryScanNumber)
+                    {
+                        resultList.IsosResultBin.RemoveAt(i);
+                    }
+
+                }
+            }
+
+
+   
         }
 
         private void addCurrentScanIsosResultsToOverallList(ResultCollection resultList)
