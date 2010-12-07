@@ -72,7 +72,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIMFLibrary, Version=1.2.3987.1806, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\Release\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

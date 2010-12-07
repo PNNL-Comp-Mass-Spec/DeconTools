@@ -5,6 +5,8 @@ using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend;
 using System.IO;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.UnitTesting2.ProjectControllerTests
 {
@@ -68,6 +70,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile1;
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
 
+
             if (File.Exists(expectedIsosOutput))
             {
                 File.Delete(expectedIsosOutput);
@@ -76,7 +79,14 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, FileRefs.ParameterFiles.UIMFFrames800_802);
             oldSchool.Execute();
 
+            List<IsosResult> results = new List<IsosResult>();
+
             Assert.That(File.Exists(expectedIsosOutput));
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
+            importer.Import(results);
+
+            Assert.AreEqual(4709, results.Count);
+            Assert.AreEqual(21756127, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
         }
 
         [Test]
@@ -96,8 +106,15 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             oldSchool.Execute();
 
             
+            List<IsosResult>results=new List<IsosResult>();
 
             Assert.That(File.Exists(expectedIsosOutput));
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
+            importer.Import(results);
+
+            //TestUtilities.DisplayMSFeatures(results);
+            Assert.AreEqual(180, results.Count);
+            Assert.AreEqual(2330765, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
 
         }
 
