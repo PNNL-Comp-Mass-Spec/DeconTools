@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ProteinCalc;
+using System.Text.RegularExpressions;
+using DeconTools.Utilities;
 
 
 namespace DeconTools.Backend.Core
@@ -53,10 +55,76 @@ namespace DeconTools.Backend.Core
         #region Private Methods
         #endregion
 
+        /// <summary>
+        /// Outputs the number of C,H,N,O,S atoms in that order.
+        /// TODO:  this needs to be cleaned up!
+        /// </summary>
+        /// <returns></returns>
         public int[] GetEmpiricalFormulaAsIntArray()
         {
-            if (this.Peptide == null) return null;
+            if (this.Peptide == null)
+            {
+                if (this.EmpiricalFormula != null && this.EmpiricalFormula.Length > 0)
+                {
+                    Dictionary<string, int> atomCounts = parseEmpiricalFormulaString(this.EmpiricalFormula);
+                    Check.Require(atomCounts.Count == 5, "Currently, formulas must be five elements in length and contain C, H, N, O, S, in that order. '0' must be used if there are no atoms of that element.");
+                    Check.Require(atomCounts.ContainsKey("C"), "Currently, formulas must contain Carbon");
+                    Check.Require(atomCounts.ContainsKey("H"), "Currently, formulas must contain Hydrogen");
+                    Check.Require(atomCounts.ContainsKey("N"), "Currently, formulas must contain Nitrogen");
+                    Check.Require(atomCounts.ContainsKey("O"), "Currently, formulas must contain Oxygen");
+                    Check.Require(atomCounts.ContainsKey("S"), "Currently, formulas must contain Sulfur");
+
+                    int[] formulaIntArray = new int[5];
+                    formulaIntArray[0] = atomCounts["C"];
+                    formulaIntArray[1] = atomCounts["H"];
+                    formulaIntArray[2] = atomCounts["N"];
+                    formulaIntArray[3] = atomCounts["O"];
+                    formulaIntArray[4] = atomCounts["S"];
+                    return formulaIntArray;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
             return this.Peptide.GetEmpiricalFormulaIntArray();
+        }
+
+        private Dictionary<string, int> parseEmpiricalFormulaString(string p)
+        {
+            Regex re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
+            MatchCollection mc = re.Matches(p);
+
+            Dictionary<string, int> parsedFormula = new Dictionary<string, int>();
+
+            foreach (Match item in mc)
+            {
+                bool numAtomsAreIndicated = (item.Groups.Count == 3);
+
+                int numAtoms = 0;
+                string elementSymbol = String.Empty;
+
+                elementSymbol = item.Groups[1].Value;
+                if (numAtomsAreIndicated)
+                {
+                    numAtoms = Int32.Parse(item.Groups[2].Value);
+                }
+                else
+                {
+                    numAtoms = 1;
+                }
+
+                bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
+                Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
+
+                parsedFormula.Add(elementSymbol, numAtoms);
+            
+   
+            }
+
+            return parsedFormula;
+
         }
 
         public void CalculateMassesForIsotopicProfile(int chargeState)

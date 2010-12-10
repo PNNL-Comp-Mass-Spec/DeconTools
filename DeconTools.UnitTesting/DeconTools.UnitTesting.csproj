@@ -83,7 +83,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlgorithmTests\BasicFeatureFinderTests.cs" />
     <Compile Include="AlgorithmTests\ChromatogramsForIsotopicProfileExtractorTests.cs" />
     <Compile Include="AlgorithmTests\O16O18FeatureFinderTests.cs" />
     <Compile Include="AlgorithmTests\PattersonAlgorithmTests.cs" />

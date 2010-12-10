@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -87,6 +88,41 @@ namespace DeconTools.Backend.Core
             }
 
         }
+
+        public double GetMZOfMostIntenseTheorIsotopicPeak()
+        {
+            if (this.MassTag == null || this.MassTag.IsotopicProfile == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return this.MassTag.IsotopicProfile.getMostIntensePeak().XValue;
+            }
+
+        }
+
+
+        public double GetMZOfObservedPeakClosestToTargetVal(double targetMZ)
+        {
+            if (this.IsotopicProfile == null || this.IsotopicProfile.Peaklist == null)
+            {
+                return 0;
+            }
+            else
+            {
+                int indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(this.IsotopicProfile.Peaklist, targetMZ, 0, this.IsotopicProfile.Peaklist.Count - 1, 0.1);
+                if (indexOfTargetPeak != -1)
+                {
+                    return this.IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
 
         internal virtual void AddLabelledIso(IsotopicProfile labelledIso)
         {

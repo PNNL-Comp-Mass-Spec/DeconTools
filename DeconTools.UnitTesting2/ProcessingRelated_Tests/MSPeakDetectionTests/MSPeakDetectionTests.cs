@@ -25,29 +25,36 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun(testFile);
+            
+            //create list of target scansets
             ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6015, 1, 1);
             sscc.Create();
 
+            //in the 'run' object there is now a list of scans : run.ScanSetCollection
+
             MSGeneratorFactory msFactory = new MSGeneratorFactory();
-
-
-
             Task msgen = msFactory.CreateMSGenerator(run.MSFileType);
+            
+            
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);
             peakDet.StorePeakData = true;
 
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
+                //set the target scan:
                 run.CurrentScanSet = scan;
 
                 msgen.Execute(run.ResultCollection);
                 peakDet.Execute(run.ResultCollection);
 
+
+
+
             }
 
             StringBuilder sb = new StringBuilder();
 
-
+            //this shows how to retrieve the peak data... 
             foreach (var peak in run.ResultCollection.MSPeakResultList)
             {
                 sb.Append(peak.PeakID);

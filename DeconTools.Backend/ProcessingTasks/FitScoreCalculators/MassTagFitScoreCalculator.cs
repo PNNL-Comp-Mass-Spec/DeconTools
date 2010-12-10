@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
@@ -38,6 +39,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             IsotopicProfile theorProfile = resultColl.Run.CurrentMassTag.IsotopicProfile;
             int indexOfMostAbundantTheorPeak = theorProfile.getIndexOfMostIntensePeak();
+            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(result.IsotopicProfile.Peaklist,
+                theorProfile.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
+
 
             if (result.IsotopicProfile.Peaklist.Count <= indexOfMostAbundantTheorPeak)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
@@ -46,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             }
 
 
-            double mzOffset = result.IsotopicProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+            double mzOffset = result.IsotopicProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
             double fwhm = result.IsotopicProfile.GetFWHM();
 

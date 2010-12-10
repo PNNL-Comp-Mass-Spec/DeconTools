@@ -110,6 +110,7 @@
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
+    <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
