@@ -13,16 +13,20 @@ namespace DeconTools.Backend.Core
         public ElutingPeak()
         {
             PeakList = new List<MSPeakResult>();
+            IsosResultList = new List<StandardIsosResult>();
             this.ID = -1;
             this.ScanStart = -1;
             this.ScanEnd = -1;
             this.ScanMaxIntensity = -1;
             this.RetentionTime = 0;
             this.Intensity = 0;
+            this.SummedIntensity = 0;
             this.Mass = 0;
-            
+            this.NumberOfPeaks = 0;
+            this.NumberOfPeaksFlag = 0;
+            this.NumberOfPeaksMode = "Current"; //"Current" for current peak or "NewPeak" for possible next peak after this one
         }
-        
+
         #endregion
 
         #region Properties
@@ -31,8 +35,7 @@ namespace DeconTools.Backend.Core
         public ChromPeak ChromPeak { get; set; }
         public List<MSPeakResult> PeakList { get; set; }
 
-
-
+        public List<StandardIsosResult> IsosResultList { get; set; }
 
         public float RetentionTime { get; set; }
 
@@ -40,17 +43,26 @@ namespace DeconTools.Backend.Core
 
         public float Intensity { get; set; }
 
+        public float SummedIntensity { get; set; }
+
         public int ScanStart { get; set; }
 
         public int ScanEnd { get; set; }
 
-        public int ScanMaxIntensity { get; set; } 
-        
-        public ScanSet ScanSet {get;set;}
-        
-        
-        #endregion
+        public int ScanMaxIntensity { get; set; }
 
+        public int NumberOfPeaks { get; set; }
+
+        public int NumberOfPeaksFlag { get; set; }
+
+        public string NumberOfPeaksMode { get; set; }
+
+        public ScanSet ScanSet { get; set; }
+
+
+
+
+        #endregion
 
         public MSPeakResult GetMSPeakResultRepresentative()
         {
