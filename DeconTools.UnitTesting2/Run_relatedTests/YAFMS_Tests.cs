@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     {
         string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile1;
 
-       // string tempFile = @"D:\Data\MEND\3_c_elegans_large_eqd_zero.yafms";
+        // string tempFile = @"D:\Data\MEND\3_c_elegans_large_eqd_zero.yafms";
 
 
         [Test]
@@ -68,7 +68,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(testScan);
 
-            run.GetMassSpectrum(scanset,minMZ,maxMZ);
+            run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
             Assert.AreNotEqual(run.XYData, null);
             Assert.AreNotEqual(run.XYData.Xvalues, null);
@@ -94,9 +94,24 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Assert.AreEqual(run.XYData.Xvalues.Length, 1000);
         }
 
+        [Test]
+        public void GetSpectrumTest4_SummedSpectra()
+        {
+            int testScan = 6009;
+            double minMZ = 800;
+            double maxMZ = 850;
 
+            Run run = new YAFMSRun(m_testFile);
 
+            ScanSet scanset = new ScanSet(testScan, 6009, 6020);
 
+            run.GetMassSpectrum(scanset, minMZ, maxMZ);
+
+            Assert.AreNotEqual(run.XYData, null);
+            Assert.AreNotEqual(run.XYData.Xvalues, null);
+            Assert.AreNotEqual(run.XYData.Xvalues.Length, 0);
+            Assert.AreEqual(run.XYData.Xvalues.Length, 462);
+        }
 
         [Test]
         public void GetSpectrumTypesTest1()
@@ -117,9 +132,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             for (int i = 6000; i < 7000; i++)
             {
                 Console.WriteLine("scan " + i + "; mslevel = " + run.GetMSLevel(i));
-                
+
             }
-  
+
         }
 
 
@@ -131,7 +146,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             int testScan = 2000;
 
 
-            int scanLevel =  run.GetMSLevel(testScan);
+            int scanLevel = run.GetMSLevel(testScan);
 
             Assert.AreEqual(1, scanLevel);
 
@@ -152,12 +167,5 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
 
         }
-
-
-
-
-
-
-
     }
 }

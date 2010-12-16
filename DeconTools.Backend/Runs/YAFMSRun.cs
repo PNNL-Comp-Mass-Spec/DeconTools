@@ -1,17 +1,17 @@
-﻿using System;
+﻿using System;//SK
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using System.IO;
 using DeconTools.Utilities;
+using YafmsLibrary;
 
 namespace DeconTools.Backend.Runs
 {
     public class YAFMSRun : DeconToolsRun
     {
-        YafmsLibrary.YafmsReader m_reader;
-
+        YafmsReader m_reader;
 
         #region Constructors
 
@@ -25,7 +25,6 @@ namespace DeconTools.Backend.Runs
             //SpectraID is specific to the YAFMS schema. Default is '1'. 
             this.SpectraID = 1;
         }
-
 
         public YAFMSRun(string filename)
             : this()
@@ -44,10 +43,10 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
+                Console.ReadKey();
                 throw ex;
             }
-
-
 
             this.MinScan = 0;
             this.MaxScan = GetMaxPossibleScanIndex();
@@ -61,12 +60,9 @@ namespace DeconTools.Backend.Runs
             Check.Require(minScan >= MinScan, "Cannot initialize YAFMS run. Inputted minScan is lower than the minimum possible scan number.");
             Check.Require(maxScan <= MaxScan, "Cannot initialize YAFMS run. Inputted MaxScan is greater than the maximum possible scan number.");
 
-
             this.MinScan = minScan;
             this.MaxScan = maxScan;
-
         }
-
 
         #endregion
 
@@ -76,22 +72,37 @@ namespace DeconTools.Backend.Runs
         /// </summary>
         public int SpectraID { get; set; }
 
-
         #endregion
 
         #region Public Methods
 
-
         public override void GetMassSpectrum(ScanSet scanset)
         {
-            if (scanset.IndexValues.Count > 1)
-            {
-                throw new NotImplementedException("Summing was attempted on YafMS data, but summing hasn't been implemented");
-            }
+            //if (scanset.IndexValues.Count > 1)
+            //{
+            //    throw new NotImplementedException("Summing was attempted on YafMS data, but summing hasn't been implemented");
+            //}
+            //double[] xvals = null;
+            //float[] yvals = null;
+
+            // m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+
+            //TODO: This simple scanset only method is not implemented in XCaliburRun
+
             double[] xvals = null;
             float[] yvals = null;
 
-            m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+            if (scanset.IndexValues.Count <= 1)
+            {
+                m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+            }
+            else
+            {
+                xvals = new double[0];
+                yvals = new float[0];
+
+                this.getSummedSpectrum(scanset, ref xvals, ref yvals);
+            }
 
             this.XYData.SetXYValues(xvals, yvals);
         }
@@ -100,27 +111,142 @@ namespace DeconTools.Backend.Runs
         {
             //TODO: Update upon error fix....  the YAFMS library is throwing an error if I give an m/z outside it's expected range. So until that is fixed, I'll go get all the m/z values and trim them myself
 
-            GetMassSpectrum(scanset);
-
-            this.XYData = this.XYData.TrimData(minMZ, maxMZ);
-            return;
-            
-            //
-            
-            if (scanset.IndexValues.Count > 1)
-            {
-                throw new NotImplementedException("Summing was attempted on YafMS data, but summing hasn't been implemented");
-            }
-
-
+            bool alreadyFiltered = false;
             double[] xvals = null;
             float[] yvals = null;
 
-            m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals, minMZ, maxMZ);
-            
+            if (scanset.IndexValues.Count <= 1)
+            {
+                m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+            }
+            else
+            {
+                xvals = new double[0];
+                yvals = new float[0];
+
+                this.getSummedSpectrum(scanset, ref xvals, ref yvals, minMZ, maxMZ);
+                alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
+            }
+
             this.XYData.SetXYValues(xvals, yvals);
+
+            if (alreadyFiltered == false)
+            {
+                this.XYData = this.XYData.TrimData(minMZ, maxMZ);
+            }
+            return;
+
+            //if (scanset.IndexValues.Count > 1)
+            //{
+            //    throw new NotImplementedException("Summing was attempted on YafMS data, but summing hasn't been implemented");
+            //}
+
+            //double[] xvals = null;
+            //float[] yvals = null;
+
+            //m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals, minMZ, maxMZ);
+
+            //this.XYData.SetXYValues(xvals, yvals);
         }
 
+        public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals, double minX, double maxX)
+        {
+            // [gord] idea borrowed from Anuj! Jan 2010 
+
+            //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
+            //the integer is added to a dictionary generic list (sorted)
+
+            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
+            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            //double[] tempXvals = new double[0];
+            //float[] tempYvals = new float[0];
+            double[] tempXvals = null;
+            float[] tempYvals = null;
+
+            long minXLong = (long)(minX * precision + 0.5);
+            long maxXLong = (long)(maxX * precision + 0.5);
+            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            {
+                //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+
+                for (int i = 0; i < tempXvals.Length; i++)
+                {
+                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    if (tempmz < minXLong || tempmz > maxXLong) continue;
+
+                    if (mz_intensityPair.ContainsKey(tempmz))
+                    {
+                        mz_intensityPair[tempmz] += tempYvals[i];
+                    }
+                    else
+                    {
+                        mz_intensityPair.Add(tempmz, tempYvals[i]);
+                    }
+                }
+            }
+
+            if (mz_intensityPair.Count == 0) return;
+            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+
+            xvals = new double[summedXVals.Count];
+            yvals = mz_intensityPair.Values.ToArray();
+
+            for (int i = 0; i < summedXVals.Count; i++)
+            {
+                xvals[i] = summedXVals[i] / precision;
+            }
+        }
+
+        public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals)
+        {
+            // [gord] idea borrowed from Anuj! Jan 2010 
+
+            //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
+            //the integer is added to a dictionary generic list (sorted)
+            //
+
+            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
+            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            //double[] tempXvals = new double[0];
+            //float[] tempYvals = new float[0];
+            double[] tempXvals = null;
+            float[] tempYvals = null;
+
+            //long minXLong = (long)(minX * precision + 0.5);
+            //long maxXLong = (long)(maxX * precision + 0.5);
+            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            {
+                //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+
+                for (int i = 0; i < tempXvals.Length; i++)
+                {
+                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    //if (tempmz < minXLong || tempmz > maxXLong) continue;
+
+                    if (mz_intensityPair.ContainsKey(tempmz))
+                    {
+                        mz_intensityPair[tempmz] += tempYvals[i];
+                    }
+                    else
+                    {
+                        mz_intensityPair.Add(tempmz, tempYvals[i]);
+                    }
+                }
+            }
+
+            if (mz_intensityPair.Count == 0) return;
+            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+
+            xvals = new double[summedXVals.Count];
+            yvals = mz_intensityPair.Values.ToArray();
+
+            for (int i = 0; i < summedXVals.Count; i++)
+            {
+                xvals[i] = summedXVals[i] / precision;
+            }
+        }
 
         public override int GetNumMSScans()
         {
@@ -133,7 +259,6 @@ namespace DeconTools.Backend.Runs
             return m_reader.GetRetentionTime(this.SpectraID, scanNum);
         }
 
-
         public override void Close()
         {
             base.Close();
@@ -142,26 +267,20 @@ namespace DeconTools.Backend.Runs
             {
                 m_reader.CloseYafms();
             }
-
         }
-
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
 
             int msLevel = m_reader.GetMSLevel(this.SpectraID, scanNum);
-            
+
             return msLevel;
         }
-
 
         #endregion
 
         #region Private Methods
 
-
         #endregion
-
-
     }
 }
