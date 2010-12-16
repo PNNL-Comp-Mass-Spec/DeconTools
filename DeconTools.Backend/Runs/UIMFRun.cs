@@ -340,7 +340,7 @@ namespace DeconTools.Backend.Runs
             int[] intensityVals = null;
 
             UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
-            
+
             if (scanValues == null || scanValues.Length == 0)
             {
                 this.XYData.Xvalues = null;
@@ -359,7 +359,7 @@ namespace DeconTools.Backend.Runs
         {
 
             int numScansPerFrame = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(1).Scans;
-            
+
             return numScansPerFrame;
 
         }
@@ -398,7 +398,7 @@ namespace DeconTools.Backend.Runs
             if (UIMFLibraryAdapter.getInstance(this.Filename).Datareader != null)
             {
                 UIMFLibraryAdapter.getInstance(this.Filename).CloseCurrentUIMF();
-                
+
             }
             base.Close();
         }
@@ -434,7 +434,31 @@ namespace DeconTools.Backend.Runs
         {
 
             return (float)UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetTIC(frameSet.PrimaryFrame, scanSet.PrimaryScanNumber);
-            
+
+        }
+
+        public void GetLCProfile(int startFrame, int stopFrame, double targetMZ, double toleranceInPPM)
+        {
+            double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
+            double lowerMZ = targetMZ - toleranceInMZ;
+            double upperMZ = targetMZ + toleranceInMZ;
+
+            List<double> frameVals = new List<double>();
+            List<double> intensityVals = new List<double>();
+
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                FrameSet frameset = new FrameSet(frame);
+                ScanSet scan = new ScanSet(this.MinScan, this.MinScan, this.MaxScan);
+                this.GetMassSpectrum(scan, frameset, lowerMZ, upperMZ);
+
+                double sumIntensities = this.XYData.Yvalues.Sum();
+                frameVals.Add(frame);
+                intensityVals.Add(sumIntensities);
+            }
+
+            this.XYData.Xvalues = frameVals.ToArray();
+            this.XYData.Yvalues = intensityVals.ToArray();
         }
     }
 }

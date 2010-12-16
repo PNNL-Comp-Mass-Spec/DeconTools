@@ -275,7 +275,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
             currentProcess = Process.GetCurrentProcess();
-            long privateMemorySizeAfterProcessing = currentProcess.PrivateMemorySize64; 
+            long privateMemorySizeAfterProcessing = currentProcess.PrivateMemorySize64;
 
             TestUtilities.DisplayInfoForProcess(currentProcess);
 
@@ -458,6 +458,22 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
         }
+
+        [Test]
+        public void getLCProfileTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+
+            int startFrame = 370;
+            int stopFrame = 420;
+            double targetMZ = 713.86;
+            double toleranceInPPM = 25;
+
+            uimfRun.GetLCProfile(startFrame, stopFrame, targetMZ, toleranceInPPM);
+
+            uimfRun.XYData.Display();
+        }
+
 
 
 

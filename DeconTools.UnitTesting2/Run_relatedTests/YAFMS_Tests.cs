@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     {
         string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile1;
 
-        string tempFile = @"D:\Data\MEND\3_c_elegans_large_eqd_zero.yafms";
+       // string tempFile = @"D:\Data\MEND\3_c_elegans_large_eqd_zero.yafms";
 
 
         [Test]

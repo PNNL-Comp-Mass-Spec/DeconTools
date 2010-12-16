@@ -93,7 +93,6 @@
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMFDriftTimeExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />
-    <Compile Include="DeconConsole_Tests\DeconConsoleTests.cs" />
     <Compile Include="DeconEngineTests.cs" />
     <Compile Include="DMSDeconToolsWrapperTests.cs" />
     <Compile Include="DTO_Tests\IsoResultComparerTests.cs" />
