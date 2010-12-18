@@ -437,7 +437,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public void GetLCProfile(int startFrame, int stopFrame, double targetMZ, double toleranceInPPM)
+        public void GetChromatogram(int startFrame, int stopFrame, double targetMZ, double toleranceInPPM)
         {
             double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
             double lowerMZ = targetMZ - toleranceInMZ;
