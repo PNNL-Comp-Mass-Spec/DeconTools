@@ -16,6 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             //create a default collection
             ResultValidatorColl = new List<ResultValidator>();
             ResultValidatorColl.Add(new LeftOfMonoPeakLooker());
+            ResultValidatorColl.Add(new IsotopicProfileInterferenceScorer());
 
 
         }

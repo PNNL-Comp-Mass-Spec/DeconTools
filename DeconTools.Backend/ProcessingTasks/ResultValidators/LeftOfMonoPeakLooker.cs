@@ -36,7 +36,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             if (currentResult.IsotopicProfile == null) return;
             MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
 
-
             MSPeak peakToTheLeft = lookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
             if (peakToTheLeft == null) return;  // no peak found... so no problem.
 

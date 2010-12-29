@@ -16,6 +16,8 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile IsotopicProfile { get; set; }
 
+        public double InterferenceScore { get; set; }
+
 
     }
 }

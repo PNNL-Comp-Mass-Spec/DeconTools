@@ -437,7 +437,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public void GetChromatogram(int startFrame, int stopFrame, double targetMZ, double toleranceInPPM)
+        public void GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
         {
             double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
             double lowerMZ = targetMZ - toleranceInMZ;
@@ -449,7 +449,7 @@ namespace DeconTools.Backend.Runs
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
                 FrameSet frameset = new FrameSet(frame);
-                ScanSet scan = new ScanSet(this.MinScan, this.MinScan, this.MaxScan);
+                ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
                 this.GetMassSpectrum(scan, frameset, lowerMZ, upperMZ);
 
                 double sumIntensities = this.XYData.Yvalues.Sum();

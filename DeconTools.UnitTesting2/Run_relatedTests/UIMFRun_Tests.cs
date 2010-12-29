@@ -469,7 +469,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double targetMZ = 713.86;
             double toleranceInPPM = 25;
 
-            uimfRun.GetChromatogram(startFrame, stopFrame, targetMZ, toleranceInPPM);
+            uimfRun.GetChromatogram(startFrame, stopFrame, uimfRun.MinScan, uimfRun.MaxScan, targetMZ, toleranceInPPM);
 
             uimfRun.XYData.Display();
         }

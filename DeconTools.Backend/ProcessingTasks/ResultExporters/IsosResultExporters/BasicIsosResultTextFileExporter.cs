@@ -88,6 +88,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+            sb.Append(delimiter);
+            sb.Append(result.InterferenceScore.ToString("0.#####"));
             return sb.ToString();
         }
         protected override string buildHeaderLine()
@@ -118,6 +120,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("mono_plus2_abundance");
             sb.Append(delimiter);
             sb.Append("flag");
+            sb.Append(delimiter);
+            sb.Append("interference_score");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }

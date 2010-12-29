@@ -98,6 +98,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(uimfResult.DriftTime.ToString("0.###"));
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+            sb.Append(delimiter);
+            sb.Append(uimfResult.InterferenceScore.ToString("0.#####"));
 
 
             return sb.ToString();
@@ -140,6 +142,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("drift_time");
             sb.Append(delimiter);
             sb.Append("flag");
+            sb.Append(delimiter);
+            sb.Append("interference_score");
             sb.Append(Environment.NewLine);
 
             return sb.ToString();

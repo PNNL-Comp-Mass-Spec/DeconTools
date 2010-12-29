@@ -214,6 +214,9 @@ namespace DeconTools.UnitTesting2
                 sb.Append(item.IsotopicProfile.IntensityAggregate);
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.Score.ToString("0.000"));
+                sb.Append("\t");
+                sb.Append(item.InterferenceScore.ToString("0.000"));
+
                 sb.Append("\n");
                 
             }
