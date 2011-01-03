@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             MassTagCollection mtc = new MassTagCollection();
 
             MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
-            massTagImporter.Import(mtc);
+            mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.MassTagList);
             Assert.AreEqual(101, mtc.MassTagList.Count);

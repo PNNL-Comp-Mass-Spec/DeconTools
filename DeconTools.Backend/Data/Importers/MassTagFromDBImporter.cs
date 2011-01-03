@@ -64,9 +64,12 @@ namespace DeconTools.Backend.Data.Importers
             return builder.ConnectionString;
         }
         #endregion
-        public override void Import(DeconTools.Backend.Core.MassTagCollection data)
+        public override DeconTools.Backend.Core.MassTagCollection Import()
         {
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            
+            DeconTools.Backend.Core.MassTagCollection data=new MassTagCollection();
+            
             data.MassTagList = new List<MassTag>();
 
             this.massTagsToBeRetrieved = data.MassTagIDList;
@@ -117,7 +120,7 @@ namespace DeconTools.Backend.Data.Importers
             }
 
             data.ApplyChargeStateFilter(this.chargeStateFilterThreshold);
-
+            return data;
          
 
 

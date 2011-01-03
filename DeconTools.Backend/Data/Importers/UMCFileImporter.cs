@@ -44,9 +44,13 @@ namespace DeconTools.Backend.Data
 
         #region Private Methods
         #endregion
-        public override void Import(UMCCollection umcCollection)
+        public override UMCCollection Import()
         {
+            UMCCollection umcCollection = new UMCCollection();
+
             umcCollection.UMCList= getUMCs();
+            return umcCollection;
+
         }
 
         private List<UMC> getUMCs()

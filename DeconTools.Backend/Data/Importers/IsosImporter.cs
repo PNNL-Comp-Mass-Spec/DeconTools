@@ -46,8 +46,12 @@ namespace DeconTools.Backend.Data
         }
 
 
-        public override void Import(List<IsosResult> results)
+        public override List<IsosResult> Import()
         {
+
+            List<IsosResult> results = new List<IsosResult>();
+
+
             if (reader.Peek() == -1)
             {
                 reader.Close();
@@ -96,6 +100,8 @@ namespace DeconTools.Backend.Data
             }
 
             reader.Close();
+            return results;
+
         }
 
         private IsosResult convertTextToIsosResult(List<string> processedData, List<string> headers)
@@ -136,7 +142,7 @@ namespace DeconTools.Backend.Data
             result.IsotopicProfile.Score = parseDoubleField(lookup(processedData, headers, "fit"));
             result.IsotopicProfile.IntensityAggregate = parseDoubleField(lookup(processedData, headers, "abundance"));
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
-
+            result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
             
 
 

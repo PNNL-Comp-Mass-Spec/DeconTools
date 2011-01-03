@@ -83,7 +83,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
             Assert.That(File.Exists(expectedIsosOutput));
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
-            importer.Import(results);
+            results =importer.Import();
 
             Assert.AreEqual(4709, results.Count);
             Assert.AreEqual(21756127, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
@@ -110,7 +110,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
             Assert.That(File.Exists(expectedIsosOutput));
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
-            importer.Import(results);
+            results =importer.Import();
 
             //TestUtilities.DisplayMSFeatures(results);
             Assert.AreEqual(180, results.Count);

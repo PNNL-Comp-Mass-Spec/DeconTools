@@ -59,7 +59,7 @@ namespace DeconTools.Backend.DTO
             List<IsosResult> isosResults = new List<IsosResult>();
 
             IsosImporter importer = new IsosImporter(isosTextFile, fileType);
-            importer.Import(isosResults);
+            isosResults= importer.Import();
 
             this.results = isosResults;
         }
@@ -81,7 +81,7 @@ namespace DeconTools.Backend.DTO
             List<IsosResult> isosResults = new List<IsosResult>();
 
             IsosImporter importer = new IsosImporter(isosTextFile, fileType, minVal, maxVal);
-            importer.Import(isosResults);
+            isosResults = importer.Import();
 
             this.results = isosResults;
         }

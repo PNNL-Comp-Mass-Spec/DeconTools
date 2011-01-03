@@ -6,7 +6,7 @@ namespace DeconTools.Backend.Data
 {
     public abstract class Importer<T>
     {
-        public abstract void Import(T data);
+        public abstract T Import();
 
         protected char delimiter = '\t';
 

@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             MassTagCollection mtc = new MassTagCollection();
             string massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
             MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
-            massTagImporter.Import(mtc);
+            mtc = massTagImporter.Import();
 
             //second, export it
 

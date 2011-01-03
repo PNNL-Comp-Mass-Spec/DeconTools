@@ -50,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             UMCCollection umcs = new UMCCollection();
 
             UMCFileImporter importer = new UMCFileImporter(m_targetUMCFileStoringAlignmentInfo, '\t');
-            importer.Import(umcs);
+            umcs = importer.Import();
 
             run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
             run.UpdateNETAlignment();

@@ -37,8 +37,10 @@ namespace DeconTools.Backend.Data.Importers
 
         #region Private Methods
         #endregion
-        public override void Import(DeconTools.Backend.Core.MassTagCollection data)
+        public override DeconTools.Backend.Core.MassTagCollection Import()
         {
+            DeconTools.Backend.Core.MassTagCollection data = new MassTagCollection();
+
             using (StreamReader reader = new StreamReader(m_filename))
             {
                 string headerLine = reader.ReadLine();    //first line is the header line.   
@@ -74,6 +76,7 @@ namespace DeconTools.Backend.Data.Importers
 
 
             }
+            return data;
         }
 
         private MassTag convertTextToMassTag(List<string> lineData, List<string> headers)

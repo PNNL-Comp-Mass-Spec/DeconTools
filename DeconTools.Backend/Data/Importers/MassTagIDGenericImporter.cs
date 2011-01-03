@@ -51,8 +51,10 @@ namespace DeconTools.Backend.Data.Importers
 
         #region Private Methods
         #endregion
-        public override void Import(MassTagCollection massTagCollection)
+        public override MassTagCollection Import()
         {
+            MassTagCollection massTagCollection = new MassTagCollection();
+
             massTagCollection.MassTagIDList = new List<long>();
 
             using (StreamReader reader = this.reader)
@@ -87,6 +89,7 @@ namespace DeconTools.Backend.Data.Importers
 
 
             }
+            return massTagCollection;
 
 
         }
