@@ -199,7 +199,7 @@ namespace DeconTools.UnitTesting2
             StringBuilder sb = new StringBuilder();
 
             sb.Append("------------MSFeatures ---------------\n");
-            sb.Append("id\tscanNum\tmz\tz\tintens\tscore\n");
+            sb.Append("id\tscanNum\tmz\tz\tintens\tscore\tinterferenceScore\n");
             foreach (var item in resultList)
             {
                 sb.Append(item.MSFeatureID);

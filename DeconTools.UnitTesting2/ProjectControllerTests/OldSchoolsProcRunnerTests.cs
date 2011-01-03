@@ -22,6 +22,34 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
 
         [Test]
+        public void processOrbitrapData1()
+        {
+            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.OrbitrapStdFile1, Globals.MSFileType.Finnigan, FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile);
+            oldSchool.Execute();
+
+            Assert.That(File.Exists(expectedIsosOutput));
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+
+            List<IsosResult> results = new List<IsosResult>();
+            results = importer.Import();
+
+            TestUtilities.DisplayMSFeatures(results);
+
+            Assert.AreEqual(1340, results.Count);
+            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+
+        }
+
+
+        [Test]
         public void processBruker12TSolarixFile1()
         {
             string testFile = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1;

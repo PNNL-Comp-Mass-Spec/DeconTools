@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools", "DeconTools\DeconTools.csproj", "{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Backend", "DeconTools.Backend\DeconTools.Backend.csproj", "{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}"

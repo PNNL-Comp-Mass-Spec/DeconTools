@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 if (currentIndex >= xydata.Xvalues.Length) break;
             }
 
-            double interferenceScore = sumPeakIntensities / sumIntensities;
+            double interferenceScore = 1 - (sumPeakIntensities / sumIntensities);
             return interferenceScore;
         }
 

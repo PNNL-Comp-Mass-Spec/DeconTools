@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DeconTools">
+</Property><Property Name="Solution File" Value="C:\Users\d3x720\Documents\Projects\DeconToolsVS2010\DeconTools.sln">
+</Property><Property Name="Date" Value="Monday, January 03, 2011">
+</Property><Property Name="Time" Value="14:47 PM">
+</Property></Properties><Event ErrorLevel="0" Project="DeconTools" Source="DeconTools\DeconTools.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools" Source="DeconTools\DeconTools.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.Backend" Source="DeconTools.Backend\DeconTools.Backend.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.Backend" Source="DeconTools.Backend\DeconTools.Backend.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.UnitTesting" Source="DeconTools.UnitTesting\DeconTools.UnitTesting.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.UnitTesting" Source="DeconTools.UnitTesting\DeconTools.UnitTesting.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.UI.Testing" Source="DeconTools.UI.Testing\DeconTools.UI.Testing.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.UI.Testing" Source="DeconTools.UI.Testing\DeconTools.UI.Testing.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TestConsole1" Source="TestConsole1\TestConsole1.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="TestConsole1" Source="TestConsole1\TestConsole1.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DMSDeconToolsV2" Source="DMSDeconToolsV2\DMSDeconToolsV2.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DMSDeconToolsV2" Source="DMSDeconToolsV2\DMSDeconToolsV2.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconConsole" Source="DeconConsole\DeconConsole.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconConsole" Source="DeconConsole\DeconConsole.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconToolsAutoProcessV1" Source="DeconToolsAutoProcessV1\DeconToolsAutoProcessV1.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconToolsAutoProcessV1" Source="DeconToolsAutoProcessV1\DeconToolsAutoProcessV1.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Decon2LS.UI" Source="Decon2LS.UI\Decon2LS.UI.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Decon2LS.UI" Source="Decon2LS.UI\Decon2LS.UI.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconConsole.UnitTesting" Source="DeconConsole.UnitTesting\DeconConsole.UnitTesting.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconConsole.UnitTesting" Source="DeconConsole.UnitTesting\DeconConsole.UnitTesting.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.QCTesting" Source="DeconTools.QCTesting\DeconTools.QCTesting.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.QCTesting" Source="DeconTools.QCTesting\DeconTools.QCTesting.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.UnitTesting2" Source="DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.UnitTesting2" Source="DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools.Testing.ProblemCases" Source="DeconTools.Testing.ProblemCases\DeconTools.Testing.ProblemCases.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeconTools.Testing.ProblemCases" Source="DeconTools.Testing.ProblemCases\DeconTools.Testing.ProblemCases.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DeconTools.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="DeconTools.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DeconTools" Source="DeconTools\DeconTools.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.Backend" Source="DeconTools.Backend\DeconTools.Backend.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.UnitTesting" Source="DeconTools.UnitTesting\DeconTools.UnitTesting.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.UI.Testing" Source="DeconTools.UI.Testing\app.config" Description="File converted successfully. All &lt;supportedRuntime&gt; and &lt;requiredRuntime&gt; tags were removed to enable the project to build and run with Visual Studio 2005.">
+</Event><Event ErrorLevel="3" Project="DeconTools.UI.Testing" Source="DeconTools.UI.Testing\app.config" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TestConsole1" Source="TestConsole1\TestConsole1.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DMSDeconToolsV2" Source="DMSDeconToolsV2\DMSDeconToolsV2.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconConsole" Source="DeconConsole\DeconConsole.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconToolsAutoProcessV1" Source="DeconToolsAutoProcessV1\DeconToolsAutoProcessV1.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Decon2LS.UI" Source="Decon2LS.UI\Decon2LS.UI.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconConsole.UnitTesting" Source="DeconConsole.UnitTesting\DeconConsole.UnitTesting.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.QCTesting" Source="DeconTools.QCTesting\DeconTools.QCTesting.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.UnitTesting2" Source="DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DeconTools.Testing.ProblemCases" Source="DeconTools.Testing.ProblemCases\DeconTools.Testing.ProblemCases.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

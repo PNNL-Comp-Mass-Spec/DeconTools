@@ -75,8 +75,7 @@ namespace DeconTools.UnitTesting2
 
             public static string UIMFFrames800_802 = FileRefs.RawDataBasePath + @"\ParameterFiles\UIMF_frames_peakBR7_800-802.xml";
 
-           
-
+            public static string Orbitrap_Scans6000_6050ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans6000_6050.xml";
         }
 
 
