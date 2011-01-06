@@ -103,9 +103,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             foreach (ChromPeak peak in run.PeakList)
             {
                 peak.NETValue = run.GetNETValueForScan((int)peak.XValue);
-
-
-                
             }
 
 

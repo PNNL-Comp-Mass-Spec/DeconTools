@@ -98,7 +98,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(133856, fi.Length);
+            Assert.AreEqual(142546, fi.Length);
             Console.Write(fi.Length);
         }
 
@@ -121,7 +121,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(143360, fi.Length);
+            Assert.AreEqual(154624, fi.Length);
             Console.Write(fi.Length);
 
 

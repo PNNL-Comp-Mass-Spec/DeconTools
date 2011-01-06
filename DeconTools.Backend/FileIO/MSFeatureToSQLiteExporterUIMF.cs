@@ -70,6 +70,7 @@ namespace DeconTools.Backend.FileIO
             dbParameters[15].Value = result.IsotopicProfile.OriginalIntensity;
             dbParameters[16].Value = result.IsotopicProfile.Original_Total_isotopic_abundance;
             dbParameters[17].Value = DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
+            dbParameters[18].Value = result.InterferenceScore;
         }
 
         protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
@@ -94,6 +95,7 @@ namespace DeconTools.Backend.FileIO
             fieldList.Add(new Field("orig_intensity", "FLOAT"));
             fieldList.Add(new Field("TIA_orig_intensity", "FLOAT"));
             fieldList.Add(new Field("flag", "INTEGER"));
+            fieldList.Add(new Field("interference_score", "float"));
 
             return fieldList;
         }

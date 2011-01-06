@@ -79,7 +79,7 @@ namespace DeconTools.Backend.Data
                     if (((UIMFIsosResult)result).FrameSet.PrimaryFrame >= minVal )
                     {
                         results.Add(result);
-                        if (((UIMFIsosResult)result).FrameSet.PrimaryFrame >= maxVal)
+                        if (((UIMFIsosResult)result).FrameSet.PrimaryFrame > maxVal)
                         {
                             break;
                         }
