@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
     {
 
         [Test]
-        public void interference_weakFeature_test1()
+        public void rawinterference_weakFeature_test1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
@@ -41,7 +41,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             IsosResult testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598).First();
 
             MSPeak monoPeak = testResult.IsotopicProfile.getMonoPeak();
-            MSPeak lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count-1];
+            MSPeak lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
 
             int startIndexOfXYData = MathUtils.BinarySearchWithTolerance(run.XYData.Xvalues, monoPeak.XValue - 3, 0, (run.XYData.Xvalues.Length - 1), 2);
 
@@ -51,19 +51,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            double interferenceScore = interferenceScorer.GetInterferenceScore(run.XYData,testResult.IsotopicProfile.Peaklist,monoPeak.XValue-1.1,
-                lastPeak.XValue+lastPeak.Width,startIndexOfXYData);
+            double interferenceScore = interferenceScorer.GetInterferenceScore(run.XYData, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
+                lastPeak.XValue + lastPeak.Width, startIndexOfXYData);
             stopwatch.Stop();
 
-            Console.WriteLine("interference= "+ interferenceScore);
+            Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-            
+
 
 
         }
 
         [Test]
-        public void interference_strongFeature_test1()
+        public void raw_interference_strongFeature_test1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
@@ -99,6 +99,101 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             stopwatch.Start();
             double interferenceScore = interferenceScorer.GetInterferenceScore(run.XYData, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
                 lastPeak.XValue + lastPeak.Width, startIndexOfXYData);
+            stopwatch.Stop();
+
+            Console.WriteLine("interference= " + interferenceScore);
+            Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
+
+
+
+        }
+
+        [Test]
+        public void peak_interference_weakFeature_test1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSet scanSet = new ScanSet(6005);
+            run.CurrentScanSet = scanSet;
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            HornDeconvolutor decon = new HornDeconvolutor();
+
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+            decon.Execute(run.ResultCollection);
+
+            Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
+
+            IsosResult testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598).First();
+
+            MSPeak monoPeak = testResult.IsotopicProfile.getMonoPeak();
+            MSPeak lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
+
+            int startIndexOfXYData = MathUtils.BinarySearchWithTolerance(run.XYData.Xvalues, monoPeak.XValue - 3, 0, (run.XYData.Xvalues.Length - 1), 2);
+
+            //interference scorer
+
+            InterferenceScorer interferenceScorer = new InterferenceScorer();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<MSPeak> scanPeaks = run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            double interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
+    lastPeak.XValue + lastPeak.Width);
+            stopwatch.Stop();
+
+            Console.WriteLine("interference= " + interferenceScore);
+            Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
+
+
+
+        }
+
+        [Test]
+        public void peak_interference_strongFeature_test1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSet scanSet = new ScanSet(6005);
+            run.CurrentScanSet = scanSet;
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            HornDeconvolutor decon = new HornDeconvolutor();
+
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+            decon.Execute(run.ResultCollection);
+
+            Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
+
+            IsosResult testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 903 && p.IsotopicProfile.MonoPeakMZ < 904).First();
+
+            MSPeak monoPeak = testResult.IsotopicProfile.getMonoPeak();
+            MSPeak lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
+
+            int startIndexOfXYData = MathUtils.BinarySearchWithTolerance(run.XYData.Xvalues, monoPeak.XValue - 3, 0, (run.XYData.Xvalues.Length - 1), 2);
+
+            //interference scorer
+
+            InterferenceScorer interferenceScorer = new InterferenceScorer();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            List<MSPeak> scanPeaks = run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            double interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
+    lastPeak.XValue + lastPeak.Width); 
             stopwatch.Stop();
 
             Console.WriteLine("interference= " + interferenceScore);
@@ -154,8 +249,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             }
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-            
-         
+
+
 
 
 

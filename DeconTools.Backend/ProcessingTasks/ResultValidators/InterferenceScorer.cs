@@ -83,17 +83,39 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         /// <summary>
         /// This calculates a score:  1- (I1/I2) where:
-        /// I1= sum of intensities of non-noise peaks.
-        /// I2 = sum of intensities of all peak.
+        /// I1= sum of intensities of target peaks.
+        /// I2 = sum of intensities of all peaks.
         /// </summary>
         /// <param name="allPeaks">all peaks, including noise and non-noise</param>
-        /// <param name="nonNoisePeaks">non-noise peaks. </param>
-        /// <param name="leftBoundary"></param>
-        /// <param name="rightBoundary"></param>
+        /// <param name="nonNoisePeaks">target peaks. </param>
+        /// <param name="leftBoundary">the left-most x-value boundary. If any peak is less than this value, it isn't considered</param>
+        /// <param name="rightBoundary">the right-most x-value boundary. If any peak is greater than this value, it isn't considered</param>
         /// <returns></returns>
-        public double GetInterferenceScore(List<MSPeak> allPeaks, List<MSPeak> nonNoisePeaks, double leftBoundary, double rightBoundary)
+        public double GetInterferenceScore(List<MSPeak> allPeaks, List<MSPeak> targetPeaks, double leftBoundary, double rightBoundary)
         {
-            return 0;
+            double sumAllPeakIntensities = 0;
+            double sumTargetPeakIntensities = 0;
+
+            for (int i = 0; i < allPeaks.Count; i++)
+            {
+                if (allPeaks[i].XValue > leftBoundary && allPeaks[i].XValue < rightBoundary)
+                {
+                    sumAllPeakIntensities += allPeaks[i].Height;
+                }
+                
+            }
+
+            foreach (var peak in targetPeaks)
+            {
+                if (peak.XValue > leftBoundary && peak.XValue < rightBoundary)
+                {
+                    sumTargetPeakIntensities += peak.Height;
+                }
+                
+            }
+
+            double interferenceScore = 1 - (sumTargetPeakIntensities / sumAllPeakIntensities);
+            return interferenceScore;
         }
 
         #endregion
