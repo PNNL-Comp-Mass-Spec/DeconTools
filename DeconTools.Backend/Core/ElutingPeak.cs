@@ -67,7 +67,7 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// Aggregate intensity across mass
         /// </summary>
-        public float AggregateIntensity { get; set; }
+        public double AggregateIntensity { get; set; }
 
 
         #endregion
