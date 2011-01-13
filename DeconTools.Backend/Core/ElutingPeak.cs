@@ -43,6 +43,9 @@ namespace DeconTools.Backend.Core
 
         public float Intensity { get; set; }
 
+        /// <summary>
+        /// Summed intensity across time
+        /// </summary>
         public float SummedIntensity { get; set; }
 
         public int ScanStart { get; set; }
@@ -59,7 +62,12 @@ namespace DeconTools.Backend.Core
 
         public ScanSet ScanSet { get; set; }
 
+        public int ChargeState { get; set; }
 
+        /// <summary>
+        /// Aggregate intensity across mass
+        /// </summary>
+        public float AggregateIntensity { get; set; }
 
 
         #endregion
