@@ -70,6 +70,11 @@ namespace DeconTools.Backend.Core
         public int ChargeState { get; set; }
 
         /// <summary>
+        /// deisotoping fit score
+        /// </summary>
+        public float FitScore { get; set; }
+
+        /// <summary>
         /// Aggregate intensity across mass
         /// </summary>
         public double AggregateIntensity { get; set; }
