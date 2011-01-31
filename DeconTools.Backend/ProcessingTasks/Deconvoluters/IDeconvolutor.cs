@@ -27,6 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks
             deconvolute(resultList);
 
             addCurrentScanIsosResultsToOverallList(resultList);
+
         }
 
         private void clearCurrentScanIsosResultBin(ResultCollection resultList)

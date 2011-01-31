@@ -261,6 +261,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
             run.DeconToolsPeakList = m_deconEnginePeaklist;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
 
+
+            //if (run.CurrentScanSet.PrimaryScanNumber == 142)
+            //{
+            //    foreach (var peak in run.PeakList)
+            //    {
+            //        Console.WriteLine(peak.XValue + "\t" + peak.Height);
+
+            //    }
+            //}
+
             if (this.StorePeakData)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
             {
                 run.ResultCollection.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'

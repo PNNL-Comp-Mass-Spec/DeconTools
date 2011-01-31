@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
             IsosResult testResult = run.ResultCollection.ResultList[0];
-            Assert.AreEqual(0.89647500236721m, (decimal)testResult.InterferenceScore);
+            Assert.AreEqual(0.0532199478712594m, (decimal)testResult.InterferenceScore);
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
         }
@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
 
             Assert.AreEqual(190, run.ResultCollection.ResultList.Count);
             IsosResult testResult = run.ResultCollection.ResultList[0];
-            Assert.AreEqual(0.934351538973281m, (decimal)testResult.InterferenceScore);
+            Assert.AreEqual(0.0213668719893332m, (decimal)testResult.InterferenceScore);
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
         }

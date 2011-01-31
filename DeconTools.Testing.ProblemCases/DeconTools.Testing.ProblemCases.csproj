@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,12 +55,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="InferferenceScorePeakBase_issue.cs" />
+    <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
+    <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
+      <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
+      <Name>DeconTools.UnitTesting2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -357,9 +357,8 @@ namespace DeconTools.Backend.Runs
 
         internal int GetNumScansPerFrame()
         {
-
+            //TODO:  need to make this so it isn't hard coded to frame '1'.  We have an instance of a UIMF file starting at frame '400' and this doesn't work. 
             int numScansPerFrame = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(1).Scans;
-
             return numScansPerFrame;
 
         }

@@ -19,5 +19,28 @@ namespace DeconTools.Backend.Core
         public double InterferenceScore { get; set; }
 
 
+
+        public void Display()
+        {
+            if (this.IsotopicProfile == null) return;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.MSFeatureID);
+            sb.Append("\t");
+            sb.Append(this.ScanSet.PrimaryScanNumber);
+            sb.Append("\t");
+
+            sb.Append(this.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
+            sb.Append("\t");
+            sb.Append(this.IsotopicProfile.ChargeState);
+            sb.Append("\t");
+            sb.Append(this.IsotopicProfile.IntensityAggregate);
+            sb.Append("\t");
+            sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));
+            sb.Append("\t");
+            sb.Append(this.InterferenceScore.ToString("0.0000"));
+
+            Console.WriteLine(sb.ToString());
+
+        }
     }
 }

@@ -168,7 +168,7 @@ namespace DeconTools.Backend.Runs
                     }
                     break;
                 case Globals.MSFileType.Ascii:
-                    run = null;
+                    run = new DeconTools.Backend.Runs.MSScanFromTextFileRun(filename);
                     break;
                 case Globals.MSFileType.Bruker:
                     if (parameters.HornTransformParameters.UseScanRange)

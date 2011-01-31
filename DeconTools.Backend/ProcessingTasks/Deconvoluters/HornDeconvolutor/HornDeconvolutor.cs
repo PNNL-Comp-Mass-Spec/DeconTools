@@ -332,6 +332,9 @@ namespace DeconTools.Backend.ProcessingTasks
             this.Transformer.PerformTransform(backgroundIntensity, minPeptideIntensity, ref xvals, ref yvals, ref mspeakList, ref transformResults);
             GenerateResults(transformResults, mspeakList, resultList);
 
+          
+
+
             //addDataToScanResults(transformResults.Length, resultList.GetCurrentScanResult());
 
 

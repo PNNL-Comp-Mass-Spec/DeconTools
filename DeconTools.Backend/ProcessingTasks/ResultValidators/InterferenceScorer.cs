@@ -7,6 +7,9 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
+    /// <summary>
+    /// Calculates a score that indicates the amount of noise present in XYData.  Currently geared for MS data but could be used for other data
+    /// </summary>
     public class InterferenceScorer
     {
 

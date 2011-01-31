@@ -16,6 +16,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(ResultCollection resultList)
         {
+            //TODO: fix this!!
+            return;
+
             Check.Require(resultList != null, "OriginalIntensitiesExtractor failed. ResultCollection is null");
             Check.Require(resultList.Run != null, "OriginalIntensitiesExtractor failed. Run is null");
             Check.Require(resultList.Run.CurrentScanSet != null, "OriginalIntensitiesExtractor failed. Current scanset has not been defined");

@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2
         public static bool AreIsosResultsTheSame(List<IsosResult> resultList1, List<IsosResult> resultList2)
         {
             if (resultList1.Count != resultList2.Count) return false;     //counts are different
-            
+
             for (int i = 0; i < resultList1.Count; i++)
             {
                 bool resultIsTheSame = (resultList1[i].IsotopicProfile.ChargeState == resultList2[i].IsotopicProfile.ChargeState &&
@@ -58,7 +58,7 @@ namespace DeconTools.UnitTesting2
                     Console.WriteLine("The method 'AreIsosResultsTheSame' found at least one differing IsosResult at index = " + i);
                     return false;
                 }
-                
+
             }
             return true;
 
@@ -72,7 +72,7 @@ namespace DeconTools.UnitTesting2
             foreach (MSPeak peak in profile.Peaklist)
             {
                 sb.Append(counter);
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.XValue);
                 sb.Append("\t");
                 sb.Append(peak.Height);
@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting2
             }
         }
 
-        public  List<IsosResult> CreateThrashIsosResults1()
+        public List<IsosResult> CreateThrashIsosResults1()
         {
             Run run = new XCaliburRun(xcaliburTestfile);
 
@@ -118,7 +118,7 @@ namespace DeconTools.UnitTesting2
             sb.Append("--------- Peaks found -----------------\n");
             sb.Append("x_value\ty_value\twidth\n");
 
-            
+
             foreach (IPeak peak in peakList)
             {
                 sb.Append(peak.XValue);
@@ -153,7 +153,7 @@ namespace DeconTools.UnitTesting2
             Console.Write(sb.ToString());
         }
 
-        public  static void DisplayXYValues(XYData xydata)
+        public static void DisplayXYValues(XYData xydata)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
@@ -169,7 +169,7 @@ namespace DeconTools.UnitTesting2
             Console.Write(sb.ToString());
         }
 
-     
+
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
             StringBuilder sb = new StringBuilder();
@@ -206,7 +206,7 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(item.ScanSet.PrimaryScanNumber);
                 sb.Append("\t");
-               
+
                 sb.Append(item.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.ChargeState);
@@ -218,7 +218,7 @@ namespace DeconTools.UnitTesting2
                 sb.Append(item.InterferenceScore.ToString("0.000"));
 
                 sb.Append("\n");
-                
+
             }
 
             Console.Write(sb.ToString());
@@ -283,7 +283,7 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayXYValues(Run run)
         {
-            
+
         }
 
         public static void DisplayMSLevelData(Run run)
@@ -325,19 +325,19 @@ namespace DeconTools.UnitTesting2
                         sb.Append("}");
                     }
                     else
-                    {  
+                    {
                         sb.Append(", ");
                     }
-                    
+
                 }
                 sb.Append(Environment.NewLine);
 
-               
+
             }
             Console.WriteLine(sb.ToString());
 
 
-            
+
 
         }
 
@@ -365,7 +365,7 @@ namespace DeconTools.UnitTesting2
         public static Run GetStandardUIMFRun()
         {
             return new UIMFRun(uimfTestFile);
-           
+
         }
 
         public static void DisplayInfoForProcess(System.Diagnostics.Process currentProcess)
@@ -426,19 +426,19 @@ namespace DeconTools.UnitTesting2
                 sb.Append(peak.PeakID);
                 sb.Append("\t");
                 sb.Append(peak.Frame_num);
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.Scan_num);
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.ChromID);
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.MSPeak.XValue.ToString("0.00000"));
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.MSPeak.Height.ToString("0"));
-                sb.Append("\t"); 
+                sb.Append("\t");
                 sb.Append(peak.MSPeak.Width.ToString("0.0000"));
                 sb.Append(Environment.NewLine);
 
-                
+
             }
 
             Console.WriteLine(sb.ToString());
