@@ -10,7 +10,9 @@ namespace DeconTools.Backend.Core
 
         public MSPeak()
         {
-
+            this.DataIndex = -1;
+            this.MSFeatureID = -1;
+            
         }
 
         public MSPeak(double mz, float intensity, float fwhm, float sn)
@@ -51,6 +53,14 @@ namespace DeconTools.Backend.Core
             set { sN = value; }
         }
 
+        /// <summary>
+        /// The index of the raw xy data from which the peak originates. 
+        /// </summary>
         public int DataIndex { get; set; }
+
+        /// <summary>
+        /// The MSFeatureID to which this peak has been assigned
+        /// </summary>
+        public int MSFeatureID { get; set; }
     }
 }

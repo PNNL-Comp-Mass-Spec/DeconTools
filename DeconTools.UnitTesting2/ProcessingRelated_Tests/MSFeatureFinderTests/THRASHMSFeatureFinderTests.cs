@@ -50,6 +50,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
 
+            foreach (var result in run.ResultCollection.ResultList)
+            {
+                foreach (var peak in result.IsotopicProfile.Peaklist)
+                {
+                    Console.WriteLine(peak.MSFeatureID);
+                    
+                }
+                
+            }
+
 
 
         }

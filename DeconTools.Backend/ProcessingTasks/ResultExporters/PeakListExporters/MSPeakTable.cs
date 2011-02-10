@@ -21,7 +21,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             this.FieldList.Add(new Field("mz", "FLOAT"));
             this.FieldList.Add(new Field("intensity", "FLOAT"));
             this.FieldList.Add(new Field("fwhm", "FLOAT"));
-           
+            this.FieldList.Add(new Field("msfeatureID", "FLOAT"));
+         
             
 
 

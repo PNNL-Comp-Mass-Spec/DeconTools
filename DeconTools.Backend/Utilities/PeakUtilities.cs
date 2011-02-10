@@ -146,46 +146,46 @@ namespace DeconTools.Backend.Utilities
             return outputList;
         }
 
-        public static int getIndexOfClosestValue(List<IPeak> inputList, double targetVal, int leftIndex, int rightIndex, double tolerance)
+        public static int getIndexOfClosestValue(List<IPeak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
 
-                if (Math.Abs(targetVal - inputList[middle].XValue) <= tolerance)
+                if (Math.Abs(targetVal - inputList[middle].XValue) <= toleranceInMZ)
                 {
                     return middle;
                 }
                 else if (targetVal < inputList[middle].XValue)
                 {
-                    return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, tolerance);
+                    return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, toleranceInMZ);
                 }
                 else
                 {
-                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, tolerance);
+                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
                 }
             }
             return -1;
         }
 
         //TODO:  fix this.  I'm duplicating above code.  There should be a better way.... 
-        public static int getIndexOfClosestValue(List<MSPeak> inputList, double targetVal, int leftIndex, int rightIndex, double tolerance)
+        public static int getIndexOfClosestValue(List<MSPeak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
 
-                if (Math.Abs(targetVal - inputList[middle].XValue) <= tolerance)
+                if (Math.Abs(targetVal - inputList[middle].XValue) <= toleranceInMZ)
                 {
                     return middle;
                 }
                 else if (targetVal < inputList[middle].XValue)
                 {
-                    return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, tolerance);
+                    return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, toleranceInMZ);
                 }
                 else
                 {
-                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, tolerance);
+                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
                 }
             }
             return -1;

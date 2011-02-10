@@ -144,6 +144,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             sb.Append(peak.MSPeak.Width.ToString("0.####"));
             sb.Append(m_delimiter);
             sb.Append(peak.MSPeak.SN.ToString("0.##"));
+            sb.Append(m_delimiter);
+            sb.Append(peak.MSPeak.MSFeatureID);
             sb.Append(Environment.NewLine);
 
 
@@ -169,6 +171,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             sb.Append("fwhm");
             sb.Append(m_delimiter);
             sb.Append("signal_noise");
+            sb.Append(m_delimiter);
+            sb.Append("MSFeatureID");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }

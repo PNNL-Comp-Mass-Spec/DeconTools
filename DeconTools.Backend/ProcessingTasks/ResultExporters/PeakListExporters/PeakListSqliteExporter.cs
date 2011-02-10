@@ -107,15 +107,18 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     SQLiteParameter mzParam = new SQLiteParameter();
                     SQLiteParameter intensParam = new SQLiteParameter();
                     SQLiteParameter fwhmParam = new SQLiteParameter();
+                    SQLiteParameter msfeatureParam = new SQLiteParameter();
 
                     int n;
 
-                    mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm]) VALUES(?,?,?,?,?)";
+                    mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
                     mycommand.Parameters.Add(peakIDParam);
                     mycommand.Parameters.Add(scanIDParam);
                     mycommand.Parameters.Add(mzParam);
                     mycommand.Parameters.Add(intensParam);
                     mycommand.Parameters.Add(fwhmParam);
+                    mycommand.Parameters.Add(msfeatureParam);
+
 
                     foreach (var peak in peakResultList)
                     {
@@ -124,7 +127,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                         mzParam.Value = peak.MSPeak.XValue.ToString("#.#####");
                         intensParam.Value = peak.MSPeak.Height;
                         fwhmParam.Value = peak.MSPeak.Width;
-
+                        msfeatureParam.Value = peak.MSPeak.MSFeatureID;
                         mycommand.ExecuteNonQuery();
                         
                     }

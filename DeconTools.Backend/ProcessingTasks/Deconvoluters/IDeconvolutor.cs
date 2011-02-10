@@ -26,7 +26,29 @@ namespace DeconTools.Backend.ProcessingTasks
             
             deconvolute(resultList);
 
+            associatePeaksToMSFeatureID(resultList);
+
             addCurrentScanIsosResultsToOverallList(resultList);
+
+            
+
+        }
+
+        private void associatePeaksToMSFeatureID(ResultCollection resultList)
+        {
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+
+            foreach (var msfeature in resultList.IsosResultBin)
+            {
+                foreach (MSPeak peak in msfeature.IsotopicProfile.Peaklist)
+                {
+                    peak.MSFeatureID = msfeature.MSFeatureID;
+                    
+                }
+                
+            }
+
+
 
         }
 

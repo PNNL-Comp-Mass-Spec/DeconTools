@@ -40,6 +40,31 @@ namespace DeconTools.Backend.Data
         #endregion
 
         #region Public Methods
+
+        public void ImportUIMFPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
+        {
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                reader.ReadLine();    //first line is the header line.   
+
+                int progressCounter = 0;
+                while (reader.Peek() != -1)
+                {
+                    string line = reader.ReadLine();
+                    MSPeakResult peak = convertTextToPeakUIMFResult(line);
+                    peakList.Add(peak);
+
+                    progressCounter++;
+                    reportProgress(progressCounter);
+
+                }
+            }
+
+        }
+
+     
+        
+        
         public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
         {
             using (StreamReader reader = new StreamReader(filename))
@@ -89,8 +114,6 @@ namespace DeconTools.Backend.Data
         {
             MSPeakResult peakresult = new MSPeakResult();
 
-            //TODO:  this doesn't work for UIMF peak files  (they have an extra column)
-
             List<string> processedLine = processLine(line);
             peakresult.PeakID = Convert.ToInt32(processedLine[0]);
             peakresult.Scan_num = Convert.ToInt32(processedLine[1]);
@@ -100,11 +123,48 @@ namespace DeconTools.Backend.Data
             peakresult.MSPeak.Width = Convert.ToSingle(processedLine[4]);
             peakresult.MSPeak.SN = Convert.ToSingle(processedLine[5]);
 
+
+            if (processedLine.Count > 6)
+            {
+                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[6]);
+            }
+
+
             return peakresult;
 
 
 
         }
+
+
+        private MSPeakResult convertTextToPeakUIMFResult(string line)
+        {
+            MSPeakResult peakresult = new MSPeakResult();
+            List<string> processedLine = processLine(line);
+            if (processedLine.Count < 7)
+            {
+                throw new System.IO.IOException("Trying to import peak data into UIMF data object, but not enough columns are present in the source text file");
+            }
+
+            peakresult.PeakID = Convert.ToInt32(processedLine[0]);
+            peakresult.Frame_num = Convert.ToInt32(processedLine[1]);
+            peakresult.Scan_num = Convert.ToInt32(processedLine[2]);
+            peakresult.MSPeak = new DeconTools.Backend.Core.MSPeak();
+            peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[3]);
+            peakresult.MSPeak.Height = Convert.ToSingle(processedLine[4]);
+            peakresult.MSPeak.Width = Convert.ToSingle(processedLine[5]);
+            peakresult.MSPeak.SN = Convert.ToSingle(processedLine[6]);
+
+            if (processedLine.Count > 7)
+            {
+                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[7]);
+            }
+
+            return peakresult;
+
+        }
+
+        
 
 
 

@@ -27,15 +27,29 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
 
+            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+            
+
+
             if (File.Exists(expectedIsosOutput))
             {
                 File.Delete(expectedIsosOutput);
             }
 
+            if (File.Exists(expectedPeaksFileOutput))
+            {
+                File.Delete(expectedPeaksFileOutput);
+            }
+
+
+
             OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.OrbitrapStdFile1, Globals.MSFileType.Finnigan, FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile);
             oldSchool.Execute();
 
             Assert.That(File.Exists(expectedIsosOutput));
+            Assert.That(File.Exists(expectedPeaksFileOutput));
+
+
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
 
             List<IsosResult> results = new List<IsosResult>();

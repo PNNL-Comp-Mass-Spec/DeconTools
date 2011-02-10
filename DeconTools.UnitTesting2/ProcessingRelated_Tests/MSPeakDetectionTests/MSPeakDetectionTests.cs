@@ -64,6 +64,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 sb.Append(peak.MSPeak.XValue);
                 sb.Append("\t");
                 sb.Append(peak.MSPeak.Height);
+                sb.Append("\t");
+                sb.Append(peak.MSPeak.DataIndex);
                 sb.Append(Environment.NewLine);
 
                 
@@ -87,13 +89,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             foreach (var item in mzValues)
             {
-                Console.Write(item);
-                Console.Write('\n');
+                //Console.Write(item);
+                //Console.Write('\n');
             }
             
 
 
-            //Console.WriteLine(sb.ToString());
+            Console.WriteLine(sb.ToString());
 
 
 

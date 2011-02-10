@@ -156,17 +156,26 @@ namespace DeconTools.Backend
             Task peakDetector = new DeconToolsPeakDetector(Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters);
             Project.getInstance().TaskCollection.TaskList.Add(peakDetector);
 
+           
+            DeconvolutorFactory deconFactory = new DeconvolutorFactory();
+            Task deconvolutor = deconFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
+            Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
+            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(), Logger.Instance.OutputFilename);
+
+            //for exporting peaks.  Also add a task for associating peaks with MSFeatures 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
                 DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory peakexporterFactory = new DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory();
                 Task peakListTextExporter = peakexporterFactory.Create(this.exporterType, this.fileType, 10000, getPeakListFileName(this.exporterType));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
+
+                Task peakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
+                Project.getInstance().TaskCollection.TaskList.Add(peakToMSFeatureAssociator);
+
+
             }
 
-            DeconvolutorFactory deconFactory = new DeconvolutorFactory();
-            Task deconvolutor = deconFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
-            Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
-            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(), Logger.Instance.OutputFilename);
+
 
             Task resultFlagger = new DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask();
             Project.getInstance().TaskCollection.TaskList.Add(resultFlagger);
