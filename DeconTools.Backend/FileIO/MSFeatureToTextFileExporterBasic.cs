@@ -57,6 +57,8 @@ namespace DeconTools.Backend.FileIO
             sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
             sb.Append(Delimiter);
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+            sb.Append(Delimiter);
+            sb.Append(result.InterferenceScore.ToString("0.#####"));
             return sb.ToString();
         }
 
@@ -88,6 +90,8 @@ namespace DeconTools.Backend.FileIO
             sb.Append("mono_plus2_abundance");
             sb.Append(Delimiter);
             sb.Append("flag");
+            sb.Append(Delimiter);
+            sb.Append("interference_score");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }

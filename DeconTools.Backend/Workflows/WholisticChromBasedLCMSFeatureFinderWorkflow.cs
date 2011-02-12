@@ -10,6 +10,7 @@ using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using System.IO;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
 
 namespace DeconTools.Backend.Workflows
 {
@@ -28,7 +29,7 @@ namespace DeconTools.Backend.Workflows
         {
             this.Name = this.ToString();
 
-            this.m_baseOutputPath = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2010\2010_09_21_directedSumming_orbiData";
+            this.m_baseOutputPath = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\2011_02_10_SmartAveraging_OrbitrapData";
             this.m_isosResultFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "MSFeaturesOutput.csv";
             this.m_peakOutputFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "peakOutput.txt";
             this.m_logFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "log.txt";
@@ -94,6 +95,9 @@ namespace DeconTools.Backend.Workflows
             this.MSPeakDetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
 
             this.Deconvolutor = new RapidDeconvolutor();
+
+            Validator = new ResultValidatorTask();
+             
 
             isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic(m_isosResultFileName);
 
@@ -241,6 +245,8 @@ namespace DeconTools.Backend.Workflows
                                 //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
                                 run.ResultCollection.IsosResultBin.Clear();
                                 this.Deconvolutor.deconvolute(run.ResultCollection);
+
+                                this.Validator.Execute(run.ResultCollection);
 
                                 //Need to find the target peak within the MSFeature.  Then mark other peaks of the MSFeature as being found, so that we don't bother generating a MS and deisotoping
                                 findTargetPeakAddResultsToCollectionAndMarkAssociatedPeaks(tempChromPeakMSFeatures, peakResult, run, scanTolerance);
@@ -456,7 +462,18 @@ namespace DeconTools.Backend.Workflows
                             MSgen.Execute(run.ResultCollection);
 
                             //trim the XYData to help the peak detector and Deconvolutor work faster
+
+                            if (run.XYData == null)
+                            {
+                                continue;
+                            }
+
                             run.XYData = run.XYData.TrimData(peakResult.MSPeak.XValue - 2, peakResult.MSPeak.XValue + 2);
+
+                            if (run.XYData == null || run.XYData.Xvalues == null || run.XYData.Xvalues.Length == 0)
+                            {
+                                continue;
+                            }
 
                             this.MSPeakDetector.Execute(run.ResultCollection);
 
@@ -464,6 +481,7 @@ namespace DeconTools.Backend.Workflows
                             run.ResultCollection.IsosResultBin.Clear();
                             this.Deconvolutor.deconvolute(run.ResultCollection);
 
+                            this.Validator.Execute(run.ResultCollection);
 
                             //now, look in the isosResultBin and see what IsosResult (if any) the source peak is a member of
                             IsosResult msfeature = getMSFeatureForCurrentSourcePeak(peakResult, run);
@@ -769,8 +787,8 @@ namespace DeconTools.Backend.Workflows
 
             //the idea is to start at the center scan and add scans to the left and right.  It is easier to set a maximum number of scans to add this way.
 
-            int maxScansToAddToTheLeft = 1;
-            int maxScansToAddToTheRight = 1;
+            int maxScansToAddToTheLeft = 0;
+            int maxScansToAddToTheRight = 0;
 
             //add center scan
             scanIndexList.Add(centerScan);
@@ -816,7 +834,9 @@ namespace DeconTools.Backend.Workflows
 
             scanIndexList.Sort();
 
-            ScanSet scanSet = new ScanSet(centerScan, scanIndexList.ToArray());
+            //ScanSet scanSet = new ScanSet(centerScan, scanIndexList.ToArray());
+            ScanSet scanSet = new ScanSet(centerScan);
+
             return scanSet;
 
         }
@@ -862,5 +882,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
+
+        public ResultValidatorTask Validator { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Data
                 scanresult.NumIsotopicProfiles = scanSet.NumIsotopicProfiles;
                 scanresult.BasePeak = scanSet.BasePeak;
                 scanresult.TICValue = scanSet.TICValue;
-                
+
             }
             else
             {
@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Data
                 scanresult.TICValue = tic;
                 scanresult.ScanTime = run.GetTime(frameSet.PrimaryFrame);
                 scanresult.SpectrumType = run.GetMSLevel(frameSet.PrimaryFrame);
-                scanresult.FramePressureBack = run.GetFramePressureBack(frameSet.PrimaryFrame);
+                scanresult.FramePressureBack = frameSet.FramePressure;
                 scanresult.FramePressureFront = run.GetFramePressureFront(frameSet.PrimaryFrame);
 
             }

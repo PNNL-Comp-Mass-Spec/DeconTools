@@ -6,6 +6,7 @@ using DeconTools.Utilities;
 using UIMFLibrary;
 using System.Linq;
 using System.IO;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
@@ -272,6 +273,73 @@ namespace DeconTools.Backend.Runs
 
         }
 
+
+
+        public void SmoothFramePressuresInFrameSets()
+        {
+            Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot smooth frame pressures. FrameSet collection has not been defined.");
+
+            int numFrames = GetNumFrames();
+            double numPointsToSmooth = 100;
+
+            int lowerFrameBoundary = (int)Math.Round(numPointsToSmooth / 2);
+            int upperFrameBoundary = Convert.ToInt32(Math.Round(Convert.ToDouble(numFrames - numPointsToSmooth) / 2));
+
+
+
+            foreach (var frame in FrameSetCollection.FrameSetList)
+            {
+                if (frame.FramePressure == Single.NaN)
+                {
+                    throw new System.ArgumentOutOfRangeException("Cannot smooth frame pressures.  You need to first populate frame pressures within the Frameset.");
+                }
+
+
+
+                if (frame.PrimaryFrame < lowerFrameBoundary)
+                {
+                    frame.FramePressure = getAverageFramePressure(1, (int)numPointsToSmooth);
+
+                }
+                else if (upperFrameBoundary < numPointsToSmooth)
+                {
+                    frame.FramePressure = getAverageFramePressure((numFrames - (int)numPointsToSmooth + 1), numFrames);
+                }
+                else
+                {
+                    int lowerFrame = frame.PrimaryFrame - (int)Math.Round(numPointsToSmooth / 2) + 1;     //frame is 1-based
+                    int upperFrame = frame.PrimaryFrame + (int)Math.Round(numPointsToSmooth / 2);
+                    frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
+                }
+
+
+            }
+
+        }
+
+        private double getAverageFramePressure(int startFrame, int stopFrame)
+        {
+            List<double> framePressures = new List<double>();
+
+
+            FrameParameters fp = null;
+
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame);
+                framePressures.Add(fp.PressureBack);
+            }
+
+            return framePressures.Average();
+
+
+
+        }
+
+
+
+
+
         public void GetFrameDataAllFrameSets()
         {
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
@@ -281,6 +349,7 @@ namespace DeconTools.Backend.Runs
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressure = fp.PressureBack;
+
             }
 
         }

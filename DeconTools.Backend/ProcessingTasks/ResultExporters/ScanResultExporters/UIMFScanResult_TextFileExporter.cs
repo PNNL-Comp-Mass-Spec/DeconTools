@@ -62,9 +62,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(delimiter);
             sb.Append(uimfScanResult.NumIsotopicProfiles);
             sb.Append(delimiter);
-            sb.Append(uimfScanResult.FramePressureFront.ToString("0.####"));
+            sb.Append(uimfScanResult.FramePressureFront.ToString("0.#####"));
             sb.Append(delimiter);
-            sb.Append(uimfScanResult.FramePressureBack.ToString("0.####"));
+            sb.Append(uimfScanResult.FramePressureBack.ToString("0.#####"));
 
             return sb.ToString();
 

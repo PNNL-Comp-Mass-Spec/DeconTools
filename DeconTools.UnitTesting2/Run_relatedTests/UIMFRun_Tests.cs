@@ -476,6 +476,76 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
 
+        [Test]
+        public void getSmoothedFramePressuresTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            int startFrame = 25;
+            int stopFrame = 700;
+
+            List<double> pressuresBeforeAveraging = new List<double>();
+            for (int frame = 1; frame <= stopFrame; frame++)
+            {
+                pressuresBeforeAveraging.Add(uimfRun.GetFramePressure(frame));
+                
+            }
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
+            fscc.Create();
+
+            uimfRun.SmoothFramePressuresInFrameSets();
+
+            //foreach (var item in pressuresBeforeAveraging)
+            //{
+            //    Console.WriteLine(item);
+
+            //}
+
+
+
+            double observedPressureFrame25 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 25).First().FramePressure;
+            double observedPressureFrame200 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 200).First().FramePressure;
+            double observedPressureFrame500 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 500).First().FramePressure;
+
+            Assert.AreEqual(4.05438, (decimal)observedPressureFrame25);
+            Assert.AreEqual(4.05599, (decimal)observedPressureFrame200);
+            Assert.AreEqual(4.05654, (decimal)observedPressureFrame500);
+
+
+
+        }
+        
+        [Test]
+        public void getSmoothedFramePressuresTest2()
+        {
+             UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            int startFrame = 25;
+            int stopFrame = 500;
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
+            fscc.Create();
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            uimfRun.SmoothFramePressuresInFrameSets();
+            sw.Stop();
+
+            Console.WriteLine("time taken to smooth framepressures = " + sw.ElapsedMilliseconds);
+
+            sw.Reset();
+            sw.Start();
+            uimfRun.SmoothFramePressuresInFrameSets();
+            sw.Stop();
+            Console.WriteLine("time taken to smooth framepressures a second time = " + sw.ElapsedMilliseconds);
+
+
+            
+
+
+
+        }
+
+
 
     }
 }

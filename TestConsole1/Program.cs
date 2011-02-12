@@ -32,7 +32,7 @@ namespace TestConsole1
             //run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue > 771 && p.MSPeak.XValue < 775).ToList();
 
 
-            workflow.ExecuteWorkflow(run);
+            workflow.ExecuteWorkflow2(run);
 
 
         }
