@@ -444,5 +444,14 @@ namespace DeconTools.UnitTesting2
             Console.WriteLine(sb.ToString());
 
         }
+
+        public static XYData LoadXYDataFromFile(string testChromatogramDataFile)
+        {
+            DeconTools.Backend.Runs.MSScanFromTextFileRun tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
+            tempRun.GetMassSpectrum(new ScanSet(0));
+
+            return tempRun.XYData;
+
+        }
     }
 }

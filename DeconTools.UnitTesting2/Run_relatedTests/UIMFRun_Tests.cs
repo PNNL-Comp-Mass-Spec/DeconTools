@@ -516,7 +516,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
         
         [Test]
-        public void getSmoothedFramePressuresTest2()
+        public void getSmoothedFramePressuresTowardsEndOFUIMFFileTest1()
         {
              UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
             int startFrame = 25;
@@ -545,6 +545,54 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
+
+        [Test]
+        public void getSmoothedFramePressuresTest2()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            int startFrame = uimfRun.MaxFrame - 200;
+            int stopFrame = uimfRun.MaxFrame;
+
+            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
+            fscc.Create();
+
+            Dictionary<int, double> pressuresBeforeAveraging = new Dictionary<int, double>();
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                pressuresBeforeAveraging.Add(frame, uimfRun.GetFramePressure(frame));
+            }
+
+            uimfRun.SmoothFramePressuresInFrameSets();
+
+
+            Dictionary<int, double> pressuresAfterAveraging = new Dictionary<int, double>();
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                double pressure = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == frame).First().FramePressure;
+
+                pressuresAfterAveraging.Add(frame, pressure);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                sb.Append(frame);
+                sb.Append("\t");
+                sb.Append(pressuresBeforeAveraging[frame]);
+                sb.Append("\t");
+                sb.Append(pressuresAfterAveraging[frame]);
+                sb.Append(Environment.NewLine);
+            }
+
+            //Console.WriteLine(sb.ToString());
+
+            Assert.AreEqual(4.05802,(decimal)pressuresAfterAveraging[1896]);
+
+            Assert.AreEqual(4.05801, (decimal)pressuresAfterAveraging[1940]);
+
+
+
+        }
 
 
     }

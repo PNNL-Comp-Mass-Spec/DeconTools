@@ -75,7 +75,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.2.3987.1806, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UIMFLibrary, Version=1.2.4062.18164, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
@@ -121,6 +121,8 @@
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />
+    <Compile Include="TargetedProcessing_Tests\SmartChromPeakSelectorTests.cs" />
+    <Compile Include="TargetedProcessing_Tests\TargetedProcessingOrbiDataTests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />

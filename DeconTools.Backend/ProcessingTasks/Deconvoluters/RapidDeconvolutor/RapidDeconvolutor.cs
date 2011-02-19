@@ -309,60 +309,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private void GenerateResults2(ResultCollection resultList, ref int[] chargeResults, ref double[] intensityResults, ref double[] mzResults, ref double[] scoreResults, ref double[] avgmassResults, ref double[] massResults, ref double[] mostAbundantMassResults)
-        {
-
-            for (int i = 0; i < chargeResults.Length; i++)
-            {
-                if (chargeResults[i] == 0) continue;
-
-                IsosResult result = resultList.CreateIsosResult();
-                IsotopicProfile profile = new IsotopicProfile();
-                profile.ChargeState = 1;
-                profile.IntensityAggregate = 100;
-                profile.Score = 40;
-                MSPeak monoPeak = new MSPeak();
-                monoPeak.XValue = 555;
-
-
-                //GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.MZ, ref profile);
-                if (profile.Peaklist.Count == 9999999)    // couldn't find original monoIsotopicPeak in the peaklist
-                {
-                    //So first check and see if it is the most abundant peak (mzResults returns the mz for the most abundant peak); get the m/z from there  (This m/z matches with DeconTools peaklist m/z values)
-                    if (Math.Abs(monoPeak.XValue - mzResults[i]) < (1 / profile.ChargeState - 1 / profile.ChargeState * 0.2))
-                    {
-                        monoPeak.XValue = mzResults[i];
-                        profile.Peaklist = new List<MSPeak>();
-                        profile.Peaklist.Add(monoPeak);
-                    }
-                    else   // happens if the mono peak is not the most abundant peak.  Will have to use Rapid's calculated value for the mono peak
-                    {
-                        profile.Peaklist = new List<MSPeak>();
-                        profile.Peaklist.Add(monoPeak);
-                    }
-                }
-
-                double mostabundantPeakMZ = 400;
-                //Console.WriteLine("mostAbundantPeakMZ = " + mostabundantPeakMZ);
-                //Console.WriteLine("calculated mostAbundantMZ = " + ConvertMassToMZ(mostAbundantMassResults[i], profile.ChargeState));
-
-
-                profile.MonoIsotopicMass = 500;
-                profile.MostAbundantIsotopeMass = 900;
-                profile.AverageMass = 9067;
-
-                result.IsotopicProfile = profile;
-
-
-                resultList.ResultList.Add(result);
-            }
-
-        }
-
-
-
         private List<DeconTools.Backend.Core.IsotopicProfile> ConvertRapidResultsToProfileList(DeconToolsV2.Peaks.clsPeak[] peaklist, ref int[] chargeResults, ref double[] intensityResults,
-            ref double[] mzResults, ref double[] scoreResults, ref double[] avgmassResults, ref double[] massResults, ref double[] mostAbundantMassResults)
+          ref double[] mzResults, ref double[] scoreResults, ref double[] avgmassResults, ref double[] massResults, ref double[] mostAbundantMassResults)
         {
 
             List<IsotopicProfile> isotopicProfileList = new List<IsotopicProfile>();

@@ -159,5 +159,21 @@ namespace DeconTools.Backend.Core
 
 
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.ID);
+            sb.Append("\t");
+            sb.Append(this.MZ.ToString("0.0000"));
+            sb.Append("\t");
+            sb.Append(this.ChargeState);
+            sb.Append("\t");
+            sb.Append(this.NETVal);
+            sb.Append("\t");
+            sb.Append(this.PeptideSequence);
+
+            return sb.ToString();
+        }
     }
 }

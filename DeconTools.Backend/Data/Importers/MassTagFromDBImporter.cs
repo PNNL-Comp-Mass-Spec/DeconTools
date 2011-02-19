@@ -5,12 +5,13 @@ using System.Text;
 using System.Data.Common;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
+using System.Collections.ObjectModel;
 
 namespace DeconTools.Backend.Data.Importers
 {
     public class MassTagFromSqlDBImporter : IMassTagImporter
     {
-        private List<long> massTagsToBeRetrieved;
+        public List<long> MassTagsToBeRetrieved {get; private set;} 
 
         #region Constructors
         public MassTagFromSqlDBImporter()
@@ -23,11 +24,12 @@ namespace DeconTools.Backend.Data.Importers
 
         
 
-        public MassTagFromSqlDBImporter(string dbName, string serverName)
+        public MassTagFromSqlDBImporter(string dbName, string serverName, List<long> massTagsToBeRetrieved)
             : this()
         {
             this.DbName = dbName;
             this.DbServerName = serverName;
+            this.MassTagsToBeRetrieved = massTagsToBeRetrieved;
         }
 
         #endregion
@@ -69,10 +71,9 @@ namespace DeconTools.Backend.Data.Importers
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             
             DeconTools.Backend.Core.MassTagCollection data=new MassTagCollection();
-            
             data.MassTagList = new List<MassTag>();
 
-            this.massTagsToBeRetrieved = data.MassTagIDList;
+            
 
             string queryString = createQueryString(this.ImporterMode);
             //Console.WriteLine(queryString);
@@ -210,15 +211,15 @@ FROM ( SELECT Mass_Tag_ID,
                     throw new NotImplementedException();
                     break;
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
-                    Check.Require(this.massTagsToBeRetrieved != null && this.massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
+                    Check.Require(this.MassTagsToBeRetrieved != null && this.MassTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
 
-                    for (int i = 0; i < this.massTagsToBeRetrieved.Count; i++)
+                    for (int i = 0; i < this.MassTagsToBeRetrieved.Count; i++)
                     {
-                        sb.Append(this.massTagsToBeRetrieved[i]);    //Appends the mass_tag_id
+                        sb.Append(this.MassTagsToBeRetrieved[i]);    //Appends the mass_tag_id
 
                         //if last one in list, then close parentheses. If not, just append a comma separator.
-                        if (i==this.massTagsToBeRetrieved.Count-1)
+                        if (i == this.MassTagsToBeRetrieved.Count - 1)
                         {
                             //sb.Append(")) ORDER BY Mass_Tag_ID");
                             sb.Append("))");

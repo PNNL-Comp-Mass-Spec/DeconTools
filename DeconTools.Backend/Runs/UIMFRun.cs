@@ -190,6 +190,7 @@ namespace DeconTools.Backend.Runs
 
                 int nonZeroLength = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
 
+
                 if (xvals == null || xvals.Length == 0 || yvals == null || yvals.Length == 0)
                 {
                     this.XYData.Xvalues = null;
@@ -283,7 +284,7 @@ namespace DeconTools.Backend.Runs
             double numPointsToSmooth = 100;
 
             int lowerFrameBoundary = (int)Math.Round(numPointsToSmooth / 2);
-            int upperFrameBoundary = Convert.ToInt32(Math.Round(Convert.ToDouble(numFrames - numPointsToSmooth) / 2));
+            int upperFrameBoundary = (int)Math.Round(numFrames - numPointsToSmooth / 2);
 
 
 
@@ -296,21 +297,27 @@ namespace DeconTools.Backend.Runs
 
 
 
+                int lowerFrame = -1;
+                int upperFrame = -1;
+
+
                 if (frame.PrimaryFrame < lowerFrameBoundary)
                 {
-                    frame.FramePressure = getAverageFramePressure(1, (int)numPointsToSmooth);
-
+                    lowerFrame = 1;
+                    upperFrame = (int)numPointsToSmooth;
                 }
-                else if (upperFrameBoundary < numPointsToSmooth)
+                else if (frame.PrimaryFrame > upperFrameBoundary)
                 {
-                    frame.FramePressure = getAverageFramePressure((numFrames - (int)numPointsToSmooth + 1), numFrames);
+                    lowerFrame = (numFrames - (int)numPointsToSmooth + 1);
+                    upperFrame = numFrames;
                 }
                 else
                 {
-                    int lowerFrame = frame.PrimaryFrame - (int)Math.Round(numPointsToSmooth / 2) + 1;     //frame is 1-based
-                    int upperFrame = frame.PrimaryFrame + (int)Math.Round(numPointsToSmooth / 2);
-                    frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
+                    lowerFrame = frame.PrimaryFrame - (int)Math.Round(numPointsToSmooth / 2) + 1;     //frame is 1-based
+                    upperFrame = frame.PrimaryFrame + (int)Math.Round(numPointsToSmooth / 2);
                 }
+
+                frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
 
 
             }

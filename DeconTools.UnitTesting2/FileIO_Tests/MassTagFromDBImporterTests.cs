@@ -33,7 +33,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
 
             setUpTests();
-            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky");
+            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky",massTagColl.MassTagIDList);
             massTagColl =importer.Import();
 
             Assert.AreEqual(43, massTagColl.MassTagList.Count);

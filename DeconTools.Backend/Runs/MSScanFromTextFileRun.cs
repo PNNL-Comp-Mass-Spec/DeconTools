@@ -91,9 +91,14 @@ namespace DeconTools.Backend.Runs
 
 
 
+                if (line == "")
+                {
+                    break;
+                }
 
                 List<string> vals = processLine(line);
 
+                
                 if (m_yvalsColumnIndex >= vals.Count)
                 {
                     using (StreamReader tempSr = sr)

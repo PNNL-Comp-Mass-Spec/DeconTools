@@ -27,6 +27,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// </summary>
         public IsotopicProfileType IsotopicProfileType { get; set; }
 
+
+        public int NumPeaksUsedInAbundance { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -143,6 +146,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
             }
 
+            //outFeature.
+
             return outFeature;
 
 
@@ -158,6 +163,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
             IsotopicProfile iso;
+
+            resultColl.IsosResultBin.Clear();
 
 
             switch (IsotopicProfileType)
@@ -175,6 +182,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     result.IsotopicProfile = iso;
                     break;
             }
+
+
+            if (iso != null)
+            {
+                iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+            }
+
+            
+
+
+
+            resultColl.IsosResultBin.Add(result);
 
         }
         #endregion
@@ -225,6 +244,36 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             return closestPeak;
         }
+
+
+        private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
+        {
+            if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
+            List<float> peakListIntensities = new List<float>();
+            foreach (MSPeak peak in profile.Peaklist)
+            {
+                peakListIntensities.Add(peak.Height);
+
+            }
+            peakListIntensities.Sort();
+            peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
+            double summedIntensities = 0;
+
+            for (int i = 0; i < peakListIntensities.Count; i++)
+            {
+                if (i < numPeaksUsedInAbundance)
+                {
+                    summedIntensities += peakListIntensities[i];
+                }
+
+
+            }
+
+            return summedIntensities;
+
+        }
+
+
         #endregion
 
 

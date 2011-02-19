@@ -82,6 +82,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UIMFLibrary, Version=1.0.3819.22135, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
@@ -96,6 +97,7 @@
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15_CustomWorkflow1Tests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
+    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\SmartChromPeakSelectorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMFDriftTimeExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />
     <Compile Include="DeconEngineTests.cs" />
@@ -124,7 +126,6 @@
     <Compile Include="ProcessingTasksTests\MultiDeconvolutorTests.cs" />
     <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TargetedN14N15AnalyzerTests.cs" />
     <Compile Include="ProcessingTasksTests\N14N15AnalyzerTests\TomN14N15AnalyzerTests.cs" />
-    <Compile Include="ProcessingTasksTests\PeakChromatogramGeneratorTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\PeakListExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\IsosResultExporterTests.cs" />
     <Compile Include="ProcessingTasksTests\ResultExporterTests\ScanResultExporterTests.cs" />

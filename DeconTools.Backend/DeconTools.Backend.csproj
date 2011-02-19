@@ -107,7 +107,7 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIMFLibrary, Version=1.2.3985.25710, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UIMFLibrary, Version=1.2.4062.18164, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
@@ -155,6 +155,7 @@
     <Compile Include="FileIO\SQLiteExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
@@ -221,7 +222,7 @@
     <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
-    <Compile Include="ProcessingTasks\ChromPeakSelector.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\MassTagFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />

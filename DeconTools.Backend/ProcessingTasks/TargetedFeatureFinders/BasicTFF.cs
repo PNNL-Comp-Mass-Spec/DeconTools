@@ -32,6 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             this.ToleranceInPPM = toleranceInPPM;
             this.NeedMonoIsotopicPeak = requiresMonoPeak;
             this.IsotopicProfileType = isotopicProfileTarget;
+            this.NumPeaksUsedInAbundance = 1;
 
         }
 

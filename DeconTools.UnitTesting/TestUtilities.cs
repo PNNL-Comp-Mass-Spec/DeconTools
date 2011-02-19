@@ -390,5 +390,10 @@ namespace DeconTools.UnitTesting
             mtList.Add(mt);
             return mtList;
         }
+
+        internal static XYData LoadXYDataFromFile(string testChromatogramDataFile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
