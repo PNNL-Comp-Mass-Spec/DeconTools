@@ -52,13 +52,19 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIMFLibrary, Version=1.2.4062.18164, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\Debug\UIMFLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="InferferenceScorePeakBase_issue.cs" />
+    <Compile Include="Issue00168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIMFRunTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
