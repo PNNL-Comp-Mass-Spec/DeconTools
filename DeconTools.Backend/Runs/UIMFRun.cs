@@ -143,6 +143,8 @@ namespace DeconTools.Backend.Runs
             return (numScansPerFrame * numFrames);
         }
 
+
+
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
 
@@ -150,23 +152,6 @@ namespace DeconTools.Backend.Runs
             double[] yvals = new double[1];
 
             throw new NotImplementedException("this 'GetMassSpectrum' method is no longer supported");
-
-            //Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
-            //if (scanset.Count() == 1)
-            //{
-            //    RawData.GetSpectrum(scanset.getLowestScanNumber(), ref xvals, ref yvals);
-            //}
-            //else
-            //{
-            //    RawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
-            //}
-
-
-
-            //this.XYData.SetXYValues(ref xvals, ref yvals);
-
-
-
         }
 
 
@@ -339,26 +324,23 @@ namespace DeconTools.Backend.Runs
 
             return framePressures.Average();
 
-
-
         }
-
-
-
-
 
         public void GetFrameDataAllFrameSets()
         {
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
-            foreach (var frame in FrameSetCollection.FrameSetList)
+            Dictionary<int, FrameParameters> frameParametersMap = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetAllParentFrameParameters();
+
+            if (frameParametersMap != null)
             {
-                FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
-                frame.AvgTOFLength = fp.AverageTOFLength;
-                frame.FramePressure = fp.PressureBack;
-
+                foreach (var frame in FrameSetCollection.FrameSetList)
+                {
+                    FrameParameters fp = frameParametersMap[frame.PrimaryFrame];
+                    frame.AvgTOFLength = fp.AverageTOFLength;
+                    frame.FramePressure = fp.PressureBack;
+                }
             }
-
         }
 
         public double GetDriftTime(FrameSet frame, int scanNum)
@@ -392,6 +374,43 @@ namespace DeconTools.Backend.Runs
             return driftTime;
 
         }
+
+        public int[][] GetFramesAndScanIntensitiesForAGivenMz(int startFrame, int endFrame , int frameType, int startScan, int endScan, double targetMz, double toleranceInMZ){
+            return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramesAndScanIntensitiesForAGivenMz(startFrame, endFrame, frameType, startScan, endScan, targetMz, toleranceInMZ);
+        }
+
+
+        //for now I am converting this dictionary to a frame and scna list, only because the UIMF library already has that method
+        public void GetMassSpectrum(Dictionary<ushort, List<ushort>> frameAndScans, double minMz, double MaxMz)
+        {
+            List<ushort> frameNumbers = frameAndScans.Keys.ToList<ushort>();
+            List<List<ushort>> scanNumbers = new List<List<ushort>>();
+
+            foreach (ushort frameNum in frameNumbers)
+            {
+                List<ushort> scanList = frameAndScans[frameNum];
+                scanNumbers.Add(scanList);
+            }
+
+            GetMassSpectrum(frameNumbers, scanNumbers, minMz, MaxMz);
+
+        }
+
+        public void GetMassSpectrum(List<ushort> frameNumbers, List<List<ushort>> scanNumbersForFrameNumbers, double minMz, double maxMz)
+        {
+            List<double> mzList = new List<double>();
+            List<double> intensityList = new List<double>();
+            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(frameNumbers, scanNumbersForFrameNumbers, mzList, intensityList, minMz, maxMz);
+            this.XYData.Xvalues = mzList.ToArray();
+            this.XYData.Yvalues = intensityList.ToArray();
+        }
+
+
+        public Stack<int[]> GetDescendingBpiValuesByFramesAndScans()
+        {
+            return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameAndScanListByDescendingIntensity();
+        }
+
         public double GetDriftTime(int frameNum, int scanNum)
         {
             FrameParameters fp = null;
@@ -402,7 +421,7 @@ namespace DeconTools.Backend.Runs
             double frameBackpressure = fp.PressureBack;
             if (frameBackpressure != 0)
             {
-                driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frameBackpressure);      // correc
+                driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frameBackpressure);  // correc
             }
 
             return driftTime;
