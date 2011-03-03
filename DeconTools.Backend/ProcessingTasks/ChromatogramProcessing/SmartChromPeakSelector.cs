@@ -83,8 +83,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
 
-
-
             if (msgen == null)
             {
                 MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
@@ -107,7 +105,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             List<PeakQualityData> peakQualityList = new List<PeakQualityData>();
 
-
             MassTagResultBase currentResult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
@@ -118,8 +115,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 peakQualityList.Add(pq);
 
                 resultColl.Run.CurrentScanSet = scanset;
-
-
 
                 //generate a mass spectrum
                 msgen.Execute(resultColl);
@@ -139,7 +134,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 //collect the results together
                 addScoresToPeakQualityData(pq, currentResult);
 
-                //pq.Display();
+                pq.Display();
 
             }
 
@@ -158,8 +153,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
         }
-
-
 
         //helper method
         public void SetDefaultMSPeakDetectorSettings(double peakBR, double signoiseRatio, Globals.PeakFitType peakFitType, bool isThresholded)

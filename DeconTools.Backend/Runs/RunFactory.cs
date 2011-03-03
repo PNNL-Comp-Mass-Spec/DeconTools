@@ -16,6 +16,9 @@ namespace DeconTools.Backend.Runs
         {
             Run run;
 
+            fullfileName = fullfileName.Trim(new char[] { ' ', '"' });
+
+
             string extension = Path.GetExtension(fullfileName).ToLower();
 
             //check for ICR2LS type extension....
@@ -282,7 +285,7 @@ namespace DeconTools.Backend.Runs
 
             FileInfo serFileInfo = findSerFile(folderName);
             FileInfo fidFileInfo = findFIDFile(folderName);
-            
+
             FileInfo apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
             List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
 

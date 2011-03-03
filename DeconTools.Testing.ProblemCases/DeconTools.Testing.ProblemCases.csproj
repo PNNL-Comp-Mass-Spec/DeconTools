@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="InferferenceScorePeakBase_issue.cs" />
-    <Compile Include="Issue00168_FailureProcessOlderKristinsUIMFFile.cs" />
+    <Compile Include="Issue0168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
