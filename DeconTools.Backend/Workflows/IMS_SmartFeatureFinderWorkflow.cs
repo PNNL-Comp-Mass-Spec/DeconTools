@@ -315,12 +315,13 @@ namespace DeconTools.Backend.Workflows
                         int maxIntensity = getMax(intensityMap, out maxIntensityFrameInMap, out maxIntensityScanInMap);
                         ushort minimumScanNumber = 0;
                         ushort maximumScanNumber = 0;
+                        ushort totalSummed = 0;
                         List<MSPeak> isotopicPeakList = null;
                         try
                         {
                             frameAndScanNumbers = new Dictionary<ushort, List<ushort>>();
-
-                            List<MSPeakResult> peaksForCurveFitting = imgProcessor.getFrameAndScanNumberListFromIntensityMap(intensityMap, maxIntensity, 0.1f, (ushort) maxIntensityFrameInMap, (ushort)maxIntensityScanInMap, startFrame, startScan, frameAndScanNumbers, out minimumScanNumber, out maximumScanNumber);
+                            
+                            List<MSPeakResult> peaksForCurveFitting = imgProcessor.getFrameAndScanNumberListFromIntensityMap(intensityMap, maxIntensity, 0.1f, (ushort) maxIntensityFrameInMap, (ushort)maxIntensityScanInMap, startFrame, startScan, frameAndScanNumbers, out minimumScanNumber, out maximumScanNumber, out totalSummed);
                             if ( frameAndScanNumbers.Keys.Count != 0)
                             {
                                 thisUimfRun.GetMassSpectrum(frameAndScanNumbers, hornConvolutor.DeconEngineHornParameters.MinMZ, hornConvolutor.DeconEngineHornParameters.MaxMZ);
@@ -347,7 +348,7 @@ namespace DeconTools.Backend.Workflows
                             UIMFIsosResult matchingIsosResult = (UIMFIsosResult) thisUimfRun.ResultCollection.IsosResultBin[isosResultIndex];
 
                             //there may be a better way than starting a new thread everytime. Maybe a thread pool. but we'll attack that later.
-                            oThread = new Thread(() => writeFeatureToFile(featureIndex, matchingIsosResult, minimumFrameNumber, maximumFrameNumber, minimumScanNumber, maximumScanNumber, startFrame, startScan, featureFileWriter));
+                            oThread = new Thread(() => writeFeatureToFile(featureIndex, matchingIsosResult, minimumFrameNumber, maximumFrameNumber, minimumScanNumber, maximumScanNumber, startFrame, startScan, featureFileWriter, totalSummed));
 
                             // Start the thread to write the data to the output file. 
                             oThread.Start();
@@ -413,8 +414,9 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private void writeFeatureToFile(int featureIndex, UIMFIsosResult matchingIsosResult, int minFrameNum, int maxFrameNum, int minScanNum, int maxScanNum, int startFrame, int startScan, TextWriter featureFile)
+        private void writeFeatureToFile(int featureIndex, UIMFIsosResult matchingIsosResult, int minFrameNum, int maxFrameNum, int minScanNum, int maxScanNum, int startFrame, int startScan, TextWriter featureFile, ushort totalSummed)
         {
+            float averageIntensity = (float) matchingIsosResult.IsotopicProfile.IntensityAggregate / totalSummed;
             StringBuilder featureOutputStringBuilder = new StringBuilder();
             //umc.OriginalIndex = isotopicPeakList[0].DataIndex
             featureOutputStringBuilder.Append(featureIndex + "\t");
@@ -438,7 +440,7 @@ namespace DeconTools.Backend.Workflows
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.Score.ToString("0.00000") + "\t");
             featureOutputStringBuilder.Append("1\t"); //this represents UMC member count for now
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.IntensityAggregate.ToString("0.00000") + "\t");
-            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.IntensityAggregate.ToString("0.00000") + "\t");
+            featureOutputStringBuilder.Append(averageIntensity.ToString("0.00000") + "\t");
 
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.00000") + "\t");
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.ChargeState.ToString("0.00000") + "\t");
