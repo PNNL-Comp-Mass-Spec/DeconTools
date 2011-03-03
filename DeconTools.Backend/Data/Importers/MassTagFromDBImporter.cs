@@ -209,7 +209,6 @@ FROM ( SELECT Mass_Tag_ID,
             {
                 case Globals.MassTagDBImporterMode.Std_four_parameter_mode:
                     throw new NotImplementedException();
-                    break;
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
                     Check.Require(this.MassTagsToBeRetrieved != null && this.MassTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");

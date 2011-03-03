@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.IO;
 using DeconTools.Backend.DTO;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Data
 {
@@ -41,7 +42,7 @@ namespace DeconTools.Backend.Data
 
         #region Public Methods
 
-        public void ImportUIMFPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
+        public void ImportUIMFPeaksIntoTree(Data.Structures.BinaryTree<IPeak> tree)
         {
             using (StreamReader reader = new StreamReader(filename))
             {
@@ -51,7 +52,28 @@ namespace DeconTools.Backend.Data
                 while (reader.Peek() != -1)
                 {
                     string line = reader.ReadLine();
-                    MSPeakResult peak = convertTextToPeakUIMFResult(line);
+                    IPeak peak = convertTextToPeakUIMFResult(line);
+                    peak.SortOnKey = IPeak.SortKey.INTENSITY;
+                    tree.Add(peak);
+                    progressCounter++;
+                    reportProgress(progressCounter);
+
+                }
+            }
+
+        }
+
+        public void ImportUIMFPeaks(List<IPeak> peakList)
+        {
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                reader.ReadLine();    //first line is the header line.   
+
+                int progressCounter = 0;
+                while (reader.Peek() != -1)
+                {
+                    string line = reader.ReadLine();
+                    IPeak peak = convertTextToPeakUIMFResult(line);
                     peakList.Add(peak);
 
                     progressCounter++;
