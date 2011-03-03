@@ -232,15 +232,6 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
-
-
-
-
-
-
-
-
         public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
         {
             if (inputList == null || inputList.Count == 0) return null;
