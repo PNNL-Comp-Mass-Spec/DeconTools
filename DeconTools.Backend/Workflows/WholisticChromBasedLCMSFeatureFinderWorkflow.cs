@@ -141,7 +141,6 @@ namespace DeconTools.Backend.Workflows
             MSPeakResult lastPeakResult = sortedMSPeakResultList.Last();
 
             int chromPeaksCounter = 0;
-            int numFeaturesOnLastUpdate = 0;
 
             foreach (var peakResult in sortedMSPeakResultList)
             {
