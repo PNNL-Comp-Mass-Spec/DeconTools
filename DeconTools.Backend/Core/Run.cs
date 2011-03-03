@@ -424,7 +424,6 @@ namespace DeconTools.Backend.Core
                     // reached end of scans. Don't want to throw a nasty error, so return what was inputted.
                     return inputScan;
 
-                    break;
                 case Globals.ScanSelectionMode.DESCENDING:
                     for (int i = inputScan; i >= this.MinScan; i--)
                     {
@@ -432,7 +431,7 @@ namespace DeconTools.Backend.Core
                     }
                     //reached starting scan. No MS-level scan was found.  Simply return what was inputted. 
                     return inputScan;
-                    break;
+
                 case Globals.ScanSelectionMode.CLOSEST:
                     int upperScan = -1;
                     int lowerScan = -1;
@@ -466,14 +465,10 @@ namespace DeconTools.Backend.Core
                     {
                         return lowerScan;
                     }
-                    //shouldn't reach this point but will provide a return value in case...
-                    return inputScan;
 
-                    break;
                 default:
 
                     return inputScan;
-                    break;
             }
 
         }

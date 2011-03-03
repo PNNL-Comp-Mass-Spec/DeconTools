@@ -225,8 +225,6 @@ namespace DeconTools.Backend.Core
 
         public MassTagResultBase AddMassTagResult(Globals.MassTagResultType massTagResultType)
         {
-            MassTagResultBase result;
-
             switch (massTagResultType)
             {
                 case Globals.MassTagResultType.BASIC_MASSTAG_RESULT:

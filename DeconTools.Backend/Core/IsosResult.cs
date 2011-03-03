@@ -19,10 +19,11 @@ namespace DeconTools.Backend.Core
         public double InterferenceScore { get; set; }
 
 
-
-        public void Display()
+        public override string ToString()
         {
-            if (this.IsotopicProfile == null) return;
+            if (this.IsotopicProfile == null) 
+                return base.ToString();
+
             StringBuilder sb = new StringBuilder();
             sb.Append(this.MSFeatureID);
             sb.Append("\t");
@@ -37,10 +38,17 @@ namespace DeconTools.Backend.Core
             sb.Append("\t");
             sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));
             sb.Append("\t");
-            sb.Append(this.InterferenceScore.ToString("0.0000"));
+            sb.Append(this.InterferenceScore.ToString("0.0000") + "\n");
 
-            Console.WriteLine(sb.ToString());
+            return sb.ToString();
+        }
+        
+        public void Display()
+        {
+            Console.WriteLine(this.ToString());
 
         }
+
+
     }
 }

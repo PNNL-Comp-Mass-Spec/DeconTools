@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Core
             this.intensity = intensity;
             this.Width = fwhm;
             this.SN = sn;
-
         }
 
         private double mZ;
@@ -57,10 +56,10 @@ namespace DeconTools.Backend.Core
         /// The index of the raw xy data from which the peak originates. 
         /// </summary>
         public int DataIndex { get; set; }
-
         /// <summary>
         /// The MSFeatureID to which this peak has been assigned
         /// </summary>
         public int MSFeatureID { get; set; }
+
     }
 }

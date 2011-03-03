@@ -60,6 +60,19 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public void AddFrame(int frameNumber)
+        {
+            if (indexValues != null)
+            {
+                indexValues.Add(frameNumber);
+            }
+            else
+            {
+                indexValues = new List<int>();
+                indexValues.Add(frameNumber);
+            }
+        }
+
         private int primaryFrame;
 
         public int PrimaryFrame
@@ -67,6 +80,14 @@ namespace DeconTools.Backend.Core
             get { return primaryFrame; }
             set { primaryFrame = value; }
         }
+        private bool isContiguous = true;
+
+        public bool IsContiguous
+        {
+            get { return isContiguous; }
+            set { isContiguous = value; }
+        }
+
 
         public double FramePressure { get; set; }
         public double AvgTOFLength { get; set; }

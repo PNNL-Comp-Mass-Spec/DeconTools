@@ -26,13 +26,13 @@ namespace DeconTools.Backend.Core
             {
                 case DeconToolsV2.HornTransform.enmExportFileType.SQLITE:
                     return Globals.ExporterType.SQLite;
-                    break;
+                    
                 case DeconToolsV2.HornTransform.enmExportFileType.TEXT:
                     return Globals.ExporterType.TEXT;
-                    break;
+                    
                 default:
                     return Globals.ExporterType.TEXT;
-                    break;
+                    
             }
         }
 

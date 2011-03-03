@@ -102,6 +102,20 @@ namespace DeconTools.Backend.Core
 
         private double backgroundIntensity;
 
+
+        public void AddScan(int scanNumber)
+        {
+            if (this.indexValues != null)
+            {
+                indexValues.Add(scanNumber);
+            }
+            else
+            {
+                indexValues = new List<int>();
+                indexValues.Add(scanNumber);
+            }
+        }
+        
         public double BackgroundIntensity
         {
             get { return backgroundIntensity; }
@@ -172,8 +186,6 @@ namespace DeconTools.Backend.Core
             return sb.ToString();
  
         }
-
-      
 
 
         internal int Count()
