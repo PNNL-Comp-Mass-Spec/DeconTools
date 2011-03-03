@@ -13,9 +13,14 @@ namespace TestConsole1
 {
     class Program
     {
+        public static string sarcUIMFFile1 = "C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
+        public static string bsaUIMFFile1 = "C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000.uimf";
+
 
         static void Main(string[] args)
         {
+
+            /*
             WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow();
             int minScan = 200;
             int maxScan = 18500;
@@ -33,6 +38,11 @@ namespace TestConsole1
 
 
             workflow.ExecuteWorkflow2(run);
+             * */
+
+            DeconTools.Backend.Core.Run run = new DeconTools.Backend.Runs.UIMFRun(bsaUIMFFile1);
+            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow();
+            workflow.ExecuteWorkflow(run);
 
 
         }
