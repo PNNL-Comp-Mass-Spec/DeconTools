@@ -248,8 +248,16 @@ namespace DeconTools.Backend.Workflows
                 IntensityToImageConverter imgProcessor = new IntensityToImageConverter();
                 while ( peaksLine != null)
                 {
-                    
-                    MSPeakResult mostIntensePeak = parse(peaksLine); //(MSPeakResult)masterPeakStack.Pop();
+                    MSPeakResult mostIntensePeak = null;
+                    try
+                    {
+                        mostIntensePeak = parse(peaksLine); //(MSPeakResult)masterPeakStack.Pop();
+                    }
+                    catch(Exception x){
+                        logFileWriter.Write("Parsing exception. Probablly a line with text");
+                        continue;
+                    }
+
                     if (peaksProcessedCounter % 3000 == 0)
                     {
                         logFileWriter.WriteLine("processing peak number " + peaksProcessedCounter);
@@ -320,7 +328,6 @@ namespace DeconTools.Backend.Workflows
                         try
                         {
                             frameAndScanNumbers = new Dictionary<ushort, List<ushort>>();
-                            
                             List<MSPeakResult> peaksForCurveFitting = imgProcessor.getFrameAndScanNumberListFromIntensityMap(intensityMap, maxIntensity, 0.1f, (ushort) maxIntensityFrameInMap, (ushort)maxIntensityScanInMap, startFrame, startScan, frameAndScanNumbers, out minimumScanNumber, out maximumScanNumber, out totalSummed);
                             if ( frameAndScanNumbers.Keys.Count != 0)
                             {
