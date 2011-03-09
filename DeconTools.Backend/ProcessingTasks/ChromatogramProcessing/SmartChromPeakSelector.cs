@@ -108,9 +108,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             MassTagResultBase currentResult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
+            Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+
             foreach (var peak in peaksWithinTol)
             {
-                ScanSet scanset = createSummedScanSet(peak, resultColl.Run);
+                ScanSet scanset = createNonSummedScanSet(peak, resultColl.Run);
                 PeakQualityData pq = new PeakQualityData(peak);
                 peakQualityList.Add(pq);
 
@@ -153,6 +155,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
         }
+
+       
 
         //helper method
         public void SetDefaultMSPeakDetectorSettings(double peakBR, double signoiseRatio, Globals.PeakFitType peakFitType, bool isThresholded)
@@ -222,8 +226,21 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             int bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
 
-            return new ScanSetFactory().CreateScanSet(run, bestScan, NumScansToSum);
+            return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
         }
+
+        private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)
+        {
+            if (chromPeak == null || chromPeak.XValue == 0) return null;
+
+            int bestScan = (int)chromPeak.XValue;
+            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
+
+            int numScansToSum = 1;
+            return new ScanSetFactory().CreateScanSet(run, bestScan, numScansToSum);
+
+        }
+
         #endregion
 
     }

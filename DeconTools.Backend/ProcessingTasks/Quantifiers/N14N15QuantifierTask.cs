@@ -13,7 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     {
         #region Constructors
         public N14N15QuantifierTask()
-            : this(3)
+            : this(3,25)
         {
 
         }
@@ -22,16 +22,17 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         /// 
         /// </summary>
         /// <param name="numPeaksUsedInRatioCalc">Number of peaks used in the ratio calculation</param>
-        public N14N15QuantifierTask(int numPeaksUsedInRatioCalc)
+        public N14N15QuantifierTask(int numPeaksUsedInRatioCalc, double msToleranceInPPM)
         {
             this.NumPeaksUsedInRatioCalc = numPeaksUsedInRatioCalc;
-
+            this.MSToleranceInPPM = msToleranceInPPM;
         }
 
         #endregion
 
         #region Properties
         public int NumPeaksUsedInRatioCalc { get; set; }
+        public double MSToleranceInPPM { get; set; }
         #endregion
 
         #region Public Methods
@@ -53,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             N14N15_TResult n14n15Result = ((N14N15_TResult)currentResult);
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier();
+            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(this.MSToleranceInPPM);
 
             IsotopicProfile iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
             IsotopicProfile iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
@@ -88,5 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

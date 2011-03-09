@@ -9,6 +9,13 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 {
     public class BasicN14N15Quantifier : N14N15Quantifier
     {
+        private double MSToleranceInPPM;
+
+        public BasicN14N15Quantifier(double msToleranceInPPM)
+        {
+            // TODO: Complete member initialization
+            this.MSToleranceInPPM = msToleranceInPPM;
+        }
         #region Constructors
         #endregion
 
@@ -41,18 +48,18 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             IList<IPeak> topTheorIso1Peaks = getTopPeaks(theorIso1, numPeaks);
             IList<IPeak> topTheorIso2Peaks = getTopPeaks(theorIso2, numPeaks);
 
-            double toleranceInPPM = 25;
+            
 
             //get the top n peaks of the experimental profile, based on peaks of the theor profile
             //adjust intensity (subtract background intensity)
-            IList<IPeak> topIso1Peaks = getTopPeaksBasedOnTheor(iso1, topTheorIso1Peaks, toleranceInPPM);
-            IList<IPeak> topIso2Peaks = getTopPeaksBasedOnTheor(iso2, topTheorIso2Peaks, toleranceInPPM);
+            IList<IPeak> topIso1Peaks = getTopPeaksBasedOnTheor(iso1, topTheorIso1Peaks, MSToleranceInPPM);
+            IList<IPeak> topIso2Peaks = getTopPeaksBasedOnTheor(iso2, topTheorIso2Peaks, MSToleranceInPPM);
 
             //Since the number of top experimental iso peaks may be less than the number of top theor iso peaks,
             //we have to filter and ensure that they have the same peak numbers, so that the correction factor
             // (applied below) is properly applied.   HOWEVER,  this may induce some differences between runs 
-            IList<IPeak> filteredTopTheorIso1Peaks = getTopPeaksBasedOnTheor(theorIso1, topIso1Peaks, toleranceInPPM);
-            IList<IPeak> filteredTopTheorIso2Peaks = getTopPeaksBasedOnTheor(theorIso2, topIso2Peaks, toleranceInPPM);
+            IList<IPeak> filteredTopTheorIso1Peaks = getTopPeaksBasedOnTheor(theorIso1, topIso1Peaks, MSToleranceInPPM);
+            IList<IPeak> filteredTopTheorIso2Peaks = getTopPeaksBasedOnTheor(theorIso2, topIso2Peaks, MSToleranceInPPM);
 
             double summedTopIso1PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso1Peaks, backgroundIntensity);
             double summedTopIso2PeakIntensities = PeakUtilities.GetSumOfIntensities(topIso2Peaks, backgroundIntensity);

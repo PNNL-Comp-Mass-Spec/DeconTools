@@ -194,9 +194,9 @@ namespace DeconTools.Backend.Workflows
             st.Start();
 
             thisUimfRun = (UIMFRun)run;
-            string outputFeatureFile = @"C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_outputFeatures.txt";
-            string testPeakFile = @"C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
-            string logFile = @"C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_logProcessing.txt";
+            string outputFeatureFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_LCMSFeatures.txt";
+            string testPeakFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_peaks.txt";
+            string logFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_log.txt";
             FrameSetCollectionCreator fscc;
             ScanSetCollectionCreator sscc;
             Dictionary<ushort, List<ushort>> frameAndScanNumbers = null;
@@ -255,6 +255,7 @@ namespace DeconTools.Backend.Workflows
                     }
                     catch(Exception x){
                         logFileWriter.Write("Parsing exception. Probablly a line with text");
+                        peaksLine = peaksFileReader.ReadLine();
                         continue;
                     }
 

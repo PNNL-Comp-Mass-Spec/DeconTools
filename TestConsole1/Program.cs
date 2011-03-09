@@ -14,7 +14,7 @@ namespace TestConsole1
     class Program
     {
         public static string sarcUIMFFile1 = "C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
-        public static string bsaUIMFFile1 = "C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000.uimf";
+        public static string bsaUIMFFile1 = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000 - Copy.uimf";
 
 
         static void Main(string[] args)

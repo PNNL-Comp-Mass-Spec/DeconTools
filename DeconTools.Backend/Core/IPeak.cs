@@ -21,6 +21,12 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
         public SortKey SortOnKey { get; set; }
+
+
+        public override string ToString()
+        {
+            return (this.XValue.ToString("0.00000") + ";" + this.Height);
+        }
         #endregion
 
         #region Private Methods

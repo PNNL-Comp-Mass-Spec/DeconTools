@@ -99,7 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     }
                     else
                     {
-                        bestPeak = (MSPeak)findClosestToXValue(peaksWithinTol, theorFeature.Peaklist[i].XValue + massDefect);
+                        bestPeak = (MSPeak)findClosestToXValue(peaksWithinTol, theorFeature.Peaklist[i].XValue - massDefect);
                     }
 
                     if (outFeature.Peaklist.Count == 0)
@@ -142,7 +142,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
                 else    //two or more peaks are within tolerance. Need to get the best one, which is based on the distance from the 
                 {
-                    outFeature.Peaklist.Add((MSPeak)findClosestToXValue(peaksWithinTol, theorFeature.Peaklist[i].XValue + massDefect));
+                    outFeature.Peaklist.Add((MSPeak)findClosestToXValue(peaksWithinTol, theorFeature.Peaklist[i].XValue - massDefect));
                 }
             }
 

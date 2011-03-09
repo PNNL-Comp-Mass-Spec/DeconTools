@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Core
         public ChromPeak ChromPeakSelectedForN15Profile { get; set; }
         public ScanSet ScanSetForN15Profile { get; set; }
 
-
+        public double InterferenceScoreN15 { get; set; }
         public double ScoreN15 { get; set; }
 
         public double RatioN14N15 { get; set; }

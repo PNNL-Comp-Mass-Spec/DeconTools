@@ -320,7 +320,7 @@ namespace DeconTools.Backend.Data.Structures
 
             }
 
-            public bool FindPeakWithinFeatures(IPeak value, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netTolRange, ushort driftTolRange)
+            public bool FindPeakWithinFeatures(IPeak value, int frameNum, int scanNum, int toleranceInPPM, int netTolRange, int driftTolRange)
             {
                 BinaryTreeNode<T> node = this.head;
                 while (node != null)
@@ -328,8 +328,10 @@ namespace DeconTools.Backend.Data.Structures
                     try
                     {
                         MSResultPeakWithLocation thisFeature = node.Value as MSResultPeakWithLocation;
+                        MSPeak msPeak = value as MSPeak;
+
                         //now check if the peak value is within the mass tolerance of this UMC
-                        int number = thisFeature.containsPeak(((MSPeakResult)value).MSPeak, frameNum, scanNum, toleranceInPPM, netTolRange, driftTolRange);
+                        int number = thisFeature.containsPeak(msPeak, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
                         if ( number == 0)
                         {
                             //we've found a node that contains that feature value

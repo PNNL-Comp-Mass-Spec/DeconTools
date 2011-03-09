@@ -135,10 +135,16 @@
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
     <Compile Include="Core\O16O18_TResult.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
+    <Compile Include="Data\AVLTree.cs" />
+    <Compile Include="Data\BinarySearchTree.cs" />
+    <Compile Include="Data\BitArray2D.cs" />
     <Compile Include="Data\Importers\MassTagFromTextFileImporter.cs" />
     <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
+    <Compile Include="DTO\MSResultPeakWithLocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FileIO\AcqusFileReader.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
     <Compile Include="FileIO\MassTagTextFileExporter.cs" />
@@ -322,6 +328,7 @@
     <Compile Include="ProjectControllers\UIMFMSOnlyProjectController.cs" />
     <Compile Include="Runs\AgilentD_Run.cs" />
     <Compile Include="Runs\YAFMSRun.cs" />
+    <Compile Include="Utilities\Converters\IntensityToImageConverter.cs" />
     <Compile Include="Utilities\Converters\PeakDatFileConverter.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
@@ -383,6 +390,7 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IWorkflow.cs" />
     <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />

@@ -103,6 +103,7 @@ Global
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|Mixed Platforms.Build.0 = Release|x64
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|x64.ActiveCfg = Release|x64
 		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|x86.ActiveCfg = Release|x86
+		{F6400614-6098-4163-93BB-42DBFE0850F6}.Release|x86.Build.0 = Release|x86
 		{23B9BC46-F89D-41C1-896F-609A67C89F38}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{23B9BC46-F89D-41C1-896F-609A67C89F38}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
 		{23B9BC46-F89D-41C1-896F-609A67C89F38}.Debug|Mixed Platforms.Build.0 = Debug|x64

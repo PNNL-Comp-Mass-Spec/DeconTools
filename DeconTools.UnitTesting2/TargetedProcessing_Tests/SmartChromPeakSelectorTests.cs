@@ -73,11 +73,14 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             theorFeatureGen.Execute(run.ResultCollection);
             chromPeakDet.Execute(run.ResultCollection);
 
+            //first run the standard peak selector
             basicChromPeakSelector.Execute(run.ResultCollection);
 
             var result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
             Assert.AreEqual(10066, (int)Math.Round(result.ChromPeakSelected.XValue));
 
+
+            //now run the smart chrom peak selector
             run.XYData = xydata;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.NETTolerance = 0.025f;

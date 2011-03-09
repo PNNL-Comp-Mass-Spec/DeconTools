@@ -95,13 +95,27 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
 
-            ScanSet scanSet = new ScanSet(1001);
+            ScanSet scanSet = new ScanSet(1000);
             run.GetMassSpectrum(scanSet);
             Assert.That(run.XYData.Xvalues != null);
             Assert.That(run.XYData.Xvalues.Length > 0);
             Assert.AreEqual(211064, run.XYData.Xvalues.Length);
 
         }
+
+        [Test]
+        public void Get_summed_Spectrum_Bruker9T_Test1()
+        {
+            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
+
+            ScanSet scanSet = new ScanSet(1000,999,1001);
+            run.GetMassSpectrum(scanSet);
+            Assert.That(run.XYData.Xvalues != null);
+            Assert.That(run.XYData.Xvalues.Length > 0);
+            Assert.AreEqual(211064, run.XYData.Xvalues.Length);
+
+        }
+
 
         [Test]
         public void GetSpectrum_Bruker12T_fid_Test1()

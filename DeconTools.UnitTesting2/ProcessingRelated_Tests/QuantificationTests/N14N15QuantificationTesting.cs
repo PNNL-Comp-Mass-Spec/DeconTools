@@ -72,7 +72,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TestUtilities.DisplayIsotopicProfileData(n15Profile);
 
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier();
+            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(featureFinderTol);
             double ratioContribIso1;
             double ratioContribIso2;
             double ratio;
@@ -151,7 +151,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TestUtilities.DisplayIsotopicProfileData(n15Profile);
 
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier();
+            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(featureFinderTol);
             double ratioContribIso1;
             double ratioContribIso2;
             double ratio;
