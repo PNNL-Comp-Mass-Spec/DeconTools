@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools", "DeconTools\DeconTools.csproj", "{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Backend", "DeconTools.Backend\DeconTools.Backend.csproj", "{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.UnitTesting", "DeconTools.UnitTesting\DeconTools.UnitTesting.csproj", "{C41F8FF3-CF73-4F01-A57E-6717E61F32F9}"
@@ -43,19 +41,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|x64.ActiveCfg = Debug|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|x64.Build.0 = Debug|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Debug|x86.ActiveCfg = Debug|x86
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|Any CPU.ActiveCfg = Release|x86
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|Mixed Platforms.Build.0 = Release|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|x64.ActiveCfg = Release|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|x64.Build.0 = Release|x64
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|x86.ActiveCfg = Release|x86
-		{8C9A6864-E6EE-4F95-9629-7F13FD991A4F}.Release|x86.Build.0 = Release|x86
 		{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
 		{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}.Debug|Mixed Platforms.Build.0 = Debug|x64
