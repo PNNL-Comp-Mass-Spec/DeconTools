@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 {
     public class N15IsotopeProfileGenerator
     {
-        #region Constructors
+          #region Constructors
         #endregion
 
         #region Properties
@@ -30,8 +30,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             IsotopicProfile labeledTheorProfile = TomIsotopicPattern.GetIsotopePattern(mt.GetEmpiricalFormulaAsIntArray(), TomIsotopicPattern.aafN15Isos);
             addMZInfoToTheorProfile(mt.IsotopicProfile,labeledTheorProfile, numNitrogens, mt.ChargeState);
-            PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
             
+            PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
+
             labeledTheorProfile.ChargeState = mt.ChargeState;
 
             return labeledTheorProfile;
@@ -48,7 +49,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3) return;
 
             //assign the baseN15 mass
-            labeledTheorProfile.Peaklist[numNitrogens].XValue = unlabeledProfile.Peaklist[0].XValue + (Globals.N15_MASS - Globals.N14_MASS) * (double)numNitrogens / (double)chargeState;
+            labeledTheorProfile.MonoPeakMZ = unlabeledProfile.Peaklist[0].XValue + (Globals.N15_MASS - Globals.N14_MASS) * (double)numNitrogens / (double)chargeState;
+
+            labeledTheorProfile.Peaklist[numNitrogens].XValue = labeledTheorProfile.MonoPeakMZ;
+            labeledTheorProfile.MonoIsotopicMass = (labeledTheorProfile.MonoPeakMZ - Globals.PROTON_MASS) * chargeState;
+
+
+
 
             //Assign m/z values to the left of the monoN15Mass
             int counter = 1;

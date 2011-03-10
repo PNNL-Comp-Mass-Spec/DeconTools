@@ -33,7 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Public Methods
-        public virtual IsotopicProfile FindMSFeature(List<IPeak>peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool needMonoIsotopicPeak)
+        public virtual IsotopicProfile FindMSFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool needMonoIsotopicPeak)
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
@@ -148,12 +148,47 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             //outFeature.
 
+
+            addMassInfoToIsotopicProfile(theorFeature, outFeature);
+
             return outFeature;
 
 
 
-            
+
         }
+
+        private void addMassInfoToIsotopicProfile(IsotopicProfile theorFeature, IsotopicProfile outFeature)
+        {
+            int indexOfTheorMono = PeakUtilities.getIndexOfClosestValue(theorFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.05);
+            bool theorMonoPeakNotFound = (indexOfTheorMono == -1);
+            if (theorMonoPeakNotFound) return;
+
+            MSPeak targetTheorPeak = theorFeature.Peaklist[indexOfTheorMono];
+
+            int indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, targetTheorPeak.XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
+
+            outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
+
+            bool monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
+            if (monoPeakFoundInObservedIso)
+            {
+                MSPeak monoPeak = outFeature.Peaklist[outFeature.MonoIsotopicPeakIndex];
+
+                outFeature.MonoPeakMZ = monoPeak.XValue;
+                outFeature.MonoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
+
+
+
+            }
+
+
+
+
+        }
+
+
+
 
         public override void Execute(ResultCollection resultColl)
         {
@@ -176,6 +211,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 case IsotopicProfileType.LABELLED:
                     iso = FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfileLabelled, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
                     result.AddLabelledIso(iso);
+
+
                     break;
                 default:
                     iso = FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfile, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
@@ -183,15 +220,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     break;
             }
 
-
-            if (iso != null)
+            bool isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
+            if (isoIsGood)
             {
                 iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
             }
-
-            
-
-
 
             resultColl.IsosResultBin.Add(result);
 
@@ -224,6 +257,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
             return mostIntensePeak;
         }
+
+
+        private MSPeak findClosestToXValue(List<MSPeak> list, double p)
+        {
+            throw new NotImplementedException();
+        }
+
         private IPeak findClosestToXValue(List<IPeak> peaksWithinTol, double targetVal)
         {
             double diff = double.MaxValue;

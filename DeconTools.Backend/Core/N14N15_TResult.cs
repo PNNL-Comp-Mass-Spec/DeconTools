@@ -41,7 +41,7 @@ namespace DeconTools.Backend.Core
 
 
         public int NumChromPeaksWithinToleranceForN15Profile { get; set; }
-        public ChromPeak ChromPeakSelectedForN15Profile { get; set; }
+        public ChromPeak ChromPeakSelectedN15 { get; set; }
         public ScanSet ScanSetForN15Profile { get; set; }
 
         public double InterferenceScoreN15 { get; set; }
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                this.ChromPeakSelectedForN15Profile = bestPeak;
+                this.ChromPeakSelectedN15 = bestPeak;
                 this.ScanSetForN15Profile = scanset;
             }
         }
@@ -116,8 +116,8 @@ namespace DeconTools.Backend.Core
 
         public double GetNETN15()
         {
-            if (this.ChromPeakSelectedForN15Profile == null) return -1;
-            return this.ChromPeakSelectedForN15Profile.NETValue;
+            if (this.ChromPeakSelectedN15 == null) return -1;
+            return this.ChromPeakSelectedN15.NETValue;
 
         }
 

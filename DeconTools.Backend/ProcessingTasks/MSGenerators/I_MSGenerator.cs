@@ -8,6 +8,9 @@ namespace DeconTools.Backend.ProcessingTasks
     public abstract class I_MSGenerator : Task
     {
 
+
+        public bool IsTICRequested { get; set; }
+
         private double minMZ;
 
         public virtual double MinMZ

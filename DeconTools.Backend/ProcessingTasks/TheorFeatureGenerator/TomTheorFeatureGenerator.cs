@@ -54,6 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                     throw new NotImplementedException();
                 case Globals.LabellingType.N15:
                     mt.IsotopicProfileLabelled = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
+                    
                     break;
                 default:
                     break;

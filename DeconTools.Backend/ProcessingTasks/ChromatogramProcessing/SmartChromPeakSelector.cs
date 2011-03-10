@@ -87,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
                 msgen = msgenFactory.CreateMSGenerator(resultColl.Run.MSFileType);
-
+                msgen.IsTICRequested = false;
             }
 
             MassTag mt = resultColl.Run.CurrentMassTag;
@@ -109,6 +109,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
             Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+
+            currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
+
 
             foreach (var peak in peaksWithinTol)
             {
@@ -136,7 +139,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 //collect the results together
                 addScoresToPeakQualityData(pq, currentResult);
 
-                pq.Display();
+                //pq.Display();
 
             }
 
@@ -194,6 +197,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             else
             {
                 //for now, simply select the peak with the lowest fit score
+                
+                //TODO: remove flagged features and then look for lowest fitscore. 
+                
                 filteredList1 = filteredList1.OrderBy(p => p.fitScore).ToList();
                 bestpeak = filteredList1[0].peak;
             }

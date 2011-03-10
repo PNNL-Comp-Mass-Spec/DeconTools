@@ -21,6 +21,12 @@ namespace DeconTools.Backend.Core
             set { peaklist = value; }
         }
 
+        /// <summary>
+        /// Zero-based index value that points to which peak of the PeakList is the monoisotopic peak.  (it isn't always the first one)
+        /// </summary>
+        public int MonoIsotopicPeakIndex { get; set; }
+
+
         private int chargeState;
 
         public int ChargeState

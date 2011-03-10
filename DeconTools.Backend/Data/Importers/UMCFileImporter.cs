@@ -102,8 +102,8 @@ namespace DeconTools.Backend.Data
             UMC row = new UMC();
 
             row.UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex"));
-            row.LCScanStart = parseIntField(lookup(processedData, headers, "ScanStart"));
-            row.LCScanEnd = parseIntField(lookup(processedData, headers, "ScanEnd"));
+            row.ScanStart = parseIntField(lookup(processedData, headers, "ScanStart"));
+            row.ScanEnd = parseIntField(lookup(processedData, headers, "ScanEnd"));
             row.NETClassRep = parseDoubleField(lookup(processedData, headers, "NETClassRep"));
             row.UMCMonoMW = parseDoubleField(lookup(processedData, headers, "UMCMonoMW"));
             row.PairIndex = parseIntField(lookup(processedData, headers, "PairIndex"));
