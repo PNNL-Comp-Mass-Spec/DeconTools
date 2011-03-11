@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderTests
 {
@@ -73,6 +74,52 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             TestUtilities.DisplayIsotopicProfileData(n15profile);
 
 
+
+        }
+
+
+
+        [Test]
+        public void getVeryLowN15ProfileWithIterativeTFFTest1()
+        {
+            N14N15TestingUtilities n14n15Util = new N14N15TestingUtilities();
+            //get sample MS from Test Data
+            
+            RunFactory rf=new RunFactory();
+            Run run = rf.CreateRun(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
+            
+            
+            run.XYData = N14N15TestingUtilities.GetTestSpectrum(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
+
+            MassTag mt23140708 = n14n15Util.CreateMT23085904_Z2();
+            run.CurrentMassTag = mt23140708;
+            run.ResultCollection.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+
+            TomTheorFeatureGenerator theorN14FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            theorN14FeatureGen.GenerateTheorFeature(mt23140708);
+
+            TomTheorFeatureGenerator theorN15FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            theorN15FeatureGen.GenerateTheorFeature(mt23140708);
+
+
+            IterativeTFFParameters parameters=new IterativeTFFParameters();
+            parameters.IsotopicProfileType = IsotopicProfileType.LABELLED;
+            parameters.ToleranceInPPM = 30;
+
+
+            IterativeTFF itff = new IterativeTFF(parameters);
+
+            itff.Execute(run.ResultCollection);
+//            IsotopicProfile iso = itff.iterativelyFindMSFeature(run, mt23140708.IsotopicProfileLabelled);
+
+            N14N15_TResult result = (N14N15_TResult)run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+
+
+
+            Assert.IsNotNull(result.IsotopicProfileLabeled);
+            Assert.AreEqual(82280, (int)result.IsotopicProfileLabeled.IntensityAggregate);
+
+            TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfileLabeled);
 
         }
 

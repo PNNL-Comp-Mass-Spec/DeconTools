@@ -160,16 +160,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private void addMassInfoToIsotopicProfile(IsotopicProfile theorFeature, IsotopicProfile outFeature)
         {
-            int indexOfTheorMono = PeakUtilities.getIndexOfClosestValue(theorFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.05);
-            bool theorMonoPeakNotFound = (indexOfTheorMono == -1);
-            if (theorMonoPeakNotFound) return;
-
-            MSPeak targetTheorPeak = theorFeature.Peaklist[indexOfTheorMono];
-
-            int indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, targetTheorPeak.XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
+            int indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.1);
 
             outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
-
             bool monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
             if (monoPeakFoundInObservedIso)
             {

@@ -75,6 +75,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             {
                 throw new Exception("Theoretical feature generator failed. Details: " + ex.Message);
             }
+            
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
             if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
@@ -93,11 +94,16 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             if (iso == null || iso.Peaklist == null) return;
 
+          
+
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
                 double calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * 1.00235 / mt.ChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
+
+            iso.MonoPeakMZ = iso.Peaklist[0].XValue;
+            iso.MonoIsotopicMass = (iso.MonoPeakMZ - Globals.PROTON_MASS) * mt.ChargeState;
 
         }
 

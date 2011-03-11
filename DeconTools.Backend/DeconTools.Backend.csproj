@@ -168,6 +168,8 @@
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\IsotopicProfileInterferenceScorer.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\IterativeTFF.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\IterativeTFFParameters.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />

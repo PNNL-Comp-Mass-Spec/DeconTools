@@ -17,6 +17,9 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public static string MS_AMTTag23140708_z3_sum1 = "..\\..\\..\\TestFiles\\Quantification\\N14N15_AMTTag23140708_mz0689_z3_sum1Scan.txt";    // scan 1428 from RSPH_AOnly_run3_16Dec07_raptor_07-11-11
         public static string MS_AMTTag23140708_z3_sum3 = "..\\..\\..\\TestFiles\\Quantification\\N14N15_AMTTag23140708_mz0689_z3_sum3Scans.txt";
 
+        public static string MS_AMTTag23085904_z2_sum1_lowN15 = "..\\..\\..\\TestFiles\\Quantification\\N14N15_AMTTag23085904_mz0878_z2_sum1Scan.txt";  //scan 1659 from :  RSPH_POnly_24_run1_30Jan08_Raptor_07-11-11   (15 min growth)
+
+
 
         #region Constructors
         #endregion
@@ -59,12 +62,34 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         }
 
 
+        public static XYData GetTestSpectrum(string xydataFileName)
+        {
+            Run run = new MSScanFromTextFileRun(xydataFileName);
+            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return run.XYData;
+        }
+
+
 
         #endregion
 
         #region Private Methods
         #endregion
 
+        public MassTag CreateMT23085904_Z2()
+        {
+            MassTag mt = new MassTag();
+            mt.ChargeState = 2;
+            mt.PeptideSequence = "AMPIDLSNLALLDANGK";
+            mt.MonoIsotopicMass = 1754.923582420;
+            mt.MZ = 878.4690677;
+            mt.NETVal = 0.4509717f;
+            mt.CreatePeptideObject();
+
+            return mt;
+        }
+        
+        
         public MassTag CreateMT23140708_Z2()
         {
             MassTag mt = new MassTag();
