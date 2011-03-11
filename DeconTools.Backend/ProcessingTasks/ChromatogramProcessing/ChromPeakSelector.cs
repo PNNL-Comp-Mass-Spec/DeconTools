@@ -174,6 +174,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 case Globals.PeakSelectorMode.INTELLIGENT_MODE:
                     diff = double.MaxValue;
 
+                   
+
+
+
                     for (int i = 0; i < peaksWithinTol.Count; i++)
                     {
                         double currentDiff = Math.Abs(peaksWithinTol[i].NETValue - NETValueForIntelligentMode);
@@ -183,7 +187,37 @@ namespace DeconTools.Backend.ProcessingTasks
                             diff = currentDiff;
                             bestPeak = peaksWithinTol[i];
                         }
-                    } 
+                    }
+
+                    break;
+
+                case Globals.PeakSelectorMode.N15IntelligentMode:
+                    diff = double.MaxValue;
+
+                    //want to only consider peaks that are less than the target NET.  (N15 peptides elutes at the same NET or earlier). 
+
+                    peaksWithinTol.Clear();
+
+                    foreach (ChromPeak peak in chromPeakList)
+                    {
+
+                        double currentDiff = NETValueForIntelligentMode - peak.NETValue;
+
+                        if ((currentDiff) >= 0 && currentDiff <= netTolerance)     
+                        {
+                            peaksWithinTol.Add(peak);
+                            if (currentDiff < diff)
+                            {
+                                diff = currentDiff;
+                                bestPeak = peak;
+                            }
+                        }
+                    }
+
+                    numPeaksWithinTolerance = peaksWithinTol.Count;
+
+
+
                     break;
                 default:
                     break;

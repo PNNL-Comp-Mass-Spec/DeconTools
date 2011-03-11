@@ -78,7 +78,8 @@ namespace DeconTools.Backend
         {
             CLOSEST_TO_TARGET,
             MOST_INTENSE,
-            INTELLIGENT_MODE
+            INTELLIGENT_MODE,
+            N15IntelligentMode
         }
 
 
