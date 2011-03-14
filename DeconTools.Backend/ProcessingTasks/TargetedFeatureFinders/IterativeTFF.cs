@@ -110,6 +110,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile iso = null;
 
+            //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
             for (double d = peakDetectorPeakBR; d >= peakBRMin; d = d - this.peakBRStep)
             {
 
@@ -117,7 +118,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 this.msPeakDetector.PeakBackgroundRatio = d;
                 this.msPeakDetector.Execute(run.ResultCollection);
 
-                Console.WriteLine("PeakBR= " + d + "; NumPeaks= " + run.PeakList.Count);
+                //Console.WriteLine("PeakBR= " + d + "; NumPeaks= " + run.PeakList.Count);
 
 
                 iso = FindMSFeature(run.PeakList, theorIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);

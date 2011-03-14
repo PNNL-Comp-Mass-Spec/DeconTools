@@ -36,6 +36,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             internal double i_score;
             internal double abundance;
 
+            internal bool isIsotopicProfileFlagged;
+
 
             internal void Display()
             {
@@ -153,13 +155,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             currentResult.AddSelectedChromPeakAndScanSet(bestChromPeak, bestScanset);
 
             Check.Ensure(currentResult.ChromPeakSelected != null && currentResult.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
-
-
-
-
         }
 
-       
+
 
         //helper method
         public void SetDefaultMSPeakDetectorSettings(double peakBR, double signoiseRatio, Globals.PeakFitType peakFitType, bool isThresholded)
@@ -181,11 +179,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #region Private Methods
         private ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList)
         {
-            var filteredList1 = (from n in peakQualityList where n.isotopicProfileFound == true && n.fitScore < 1 && n.i_score < 1 select n).ToList();
+            var filteredList1 = (from n in peakQualityList 
+                                 where n.isotopicProfileFound == true && 
+                                 n.fitScore < 1 && n.i_score < 1 &&
+                                 n.isIsotopicProfileFlagged == false
+                                 select n).ToList();
 
             ChromPeak bestpeak;
 
-            bool allChromPeaksAreBad = filteredList1.Count == 0;
             if (filteredList1.Count == 0)
             {
                 bestpeak = null;
@@ -196,10 +197,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                //for now, simply select the peak with the lowest fit score
-                
-                //TODO: remove flagged features and then look for lowest fitscore. 
-                
                 filteredList1 = filteredList1.OrderBy(p => p.fitScore).ToList();
                 bestpeak = filteredList1[0].peak;
             }
@@ -222,6 +219,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 pq.abundance = currentResult.IsotopicProfile.IntensityAggregate;
                 pq.fitScore = currentResult.Score;
                 pq.i_score = currentResult.InterferenceScore;
+
+
+                bool resultHasFlags = (currentResult.Flags !=null && currentResult.Flags.Count>0);
+                pq.isIsotopicProfileFlagged = resultHasFlags;
+
             }
         }
 
