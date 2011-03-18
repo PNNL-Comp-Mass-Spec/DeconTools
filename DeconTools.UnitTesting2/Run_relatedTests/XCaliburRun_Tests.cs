@@ -40,6 +40,21 @@ namespace DeconTools.UnitTesting
             Assert.AreEqual(18505, run.MaxScan);
         }
 
+
+        [Test]
+        public void initializeVelosOrbiFile_Test1()
+        {
+            string testFile = FileRefs.RawDataMSFiles.VOrbiFile1;
+
+
+            Run run = new XCaliburRun(testFile);
+
+            Assert.AreEqual(1, run.MinScan);
+            Assert.AreEqual(18505, run.MaxScan);
+
+        }
+
+
         
         
         [Test]

@@ -51,6 +51,8 @@ namespace DeconTools.UnitTesting2
 
             //public static string BrukerSolarixFile1 =@"D:\Data\12Ttest_000003\ser";
 
+
+            public static string VOrbiFile1 = FileRefs.RawDataBasePath + "\\Orbitrap\\Vorbi\\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
         }
 
         public class PeakDataFiles
