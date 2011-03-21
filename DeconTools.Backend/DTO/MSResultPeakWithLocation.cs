@@ -19,6 +19,10 @@ namespace DeconTools.Backend.DTO
             this.XValue = peak.MSPeak.XValue;
             this.frameNumber = (ushort) peak.Frame_num;
             this.scanNumber = (ushort) peak.Scan_num;
+            frameAndScansRange = new Dictionary<ushort, List<ushort>>();
+            List<ushort> numbers = new List<ushort>();
+            numbers.Add(this.scanNumber);
+            frameAndScansRange.Add(this.frameNumber, numbers);
         }
 
         /*
@@ -218,7 +222,7 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public int containsPeak(MSPeak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange )
+        public int containsPeak(IPeak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange )
         {
             if (peak == null)
             {
@@ -230,7 +234,7 @@ namespace DeconTools.Backend.DTO
                 //TODO:: two peaks are the same if they are within a tolerance of each other in
                 //terms of mz, scan and lc frame. in this case we're only implementing mz values
                 //
-                double differenceInPPM = Math.Abs(1000000 * (peak.XValue - this.XValue) / this.XValue);
+                double differenceInPPM = Math.Abs(1000000 * (peak.XValue- this.XValue) / this.XValue);
 
                 if (differenceInPPM <= toleranceInPPM)
                 {
