@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Utilities.Converters
 
         public List<MSPeakResult> getFrameAndScanNumberListFromIntensityMap(int[][] intensityMap, int maxIntensity, float threshold, ushort startFrameInMap, ushort startScanInMap, ushort startFrame, ushort startScan, Dictionary<ushort, List<ushort>> frameAndScanNumbers, out ushort minimumScanNumber, out ushort maximumScanNumber, out ushort totalSummed)
         {
-            List<MSPeakResult> peaksForCurveFitting = new List<MSPeakResult>();
+            List<MSPeakResult> peaksForCurveFitting = new List<MSPeakResult>(3000);
             int peakId = 0;
             ushort frameIndex = startFrameInMap;
             ushort scanIndex = startScanInMap;
@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Utilities.Converters
                 //go up from the start frame value
                 while (frameIndex > 0 && intensityMap[frameIndex][startScanInMap] >= threshold )
                 {
-                    List<ushort> scanNumberList = new List<ushort>();
+                    List<ushort> scanNumberList = new List<ushort>(200);
                     int end = intensityMap[frameIndex].Length;
                     scanIndex = startScanInMap;
                     scanNumber = startScan;
@@ -134,7 +134,7 @@ namespace DeconTools.Backend.Utilities.Converters
                 {
                     //processing frame
                     // Console.WriteLine("processing frame " + frameIndex);
-                    List<ushort> scanNumberList = new List<ushort>();
+                    List<ushort> scanNumberList = new List<ushort>(200);
                     
 
                     int end = intensityMap[frameIndex].Length;
@@ -285,7 +285,7 @@ namespace DeconTools.Backend.Utilities.Converters
             {
                 c = Color.FromArgb(red, green, blue);
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 c = Color.Blue;
             }
