@@ -13,7 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     {
         #region Constructors
         public N14N15QuantifierTask()
-            : this(3,25)
+            : this(3, 25)
         {
 
         }
@@ -26,6 +26,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             this.NumPeaksUsedInRatioCalc = numPeaksUsedInRatioCalc;
             this.MSToleranceInPPM = msToleranceInPPM;
+            this.RatioType = Algorithms.Quantifiers.RatioType.ISO2_OVER_ISO1;
+        }
+
+
+        public N14N15QuantifierTask(int numPeaksUsedInRatioCalc, double msToleranceInPPM, RatioType ratioType)
+            : this(numPeaksUsedInRatioCalc, msToleranceInPPM)
+        {
+            this.RatioType = ratioType;
         }
 
         #endregion
@@ -33,6 +41,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         #region Properties
         public int NumPeaksUsedInRatioCalc { get; set; }
         public double MSToleranceInPPM { get; set; }
+        public RatioType RatioType { get; set; }
+
+
         #endregion
 
         #region Public Methods
@@ -54,7 +65,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             N14N15_TResult n14n15Result = ((N14N15_TResult)currentResult);
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(this.MSToleranceInPPM);
+            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(this.MSToleranceInPPM,this.RatioType);
 
             IsotopicProfile iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
             IsotopicProfile iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
@@ -70,7 +81,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 double ratio;
 
 
-                quant.GetRatioBasedOnTopPeaks(iso1, iso2,mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
+                quant.GetRatioBasedOnTopPeaks(iso1, iso2, mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
                     currentResult.ScanSet.BackgroundIntensity, NumPeaksUsedInRatioCalc,
                     out ratio, out ratioContribIso1, out ratioContribIso2);
 
@@ -90,6 +101,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             throw new NotImplementedException();
         }
 
-        
+
     }
 }

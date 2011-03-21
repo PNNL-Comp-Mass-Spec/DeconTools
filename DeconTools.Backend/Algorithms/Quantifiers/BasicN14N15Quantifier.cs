@@ -7,19 +7,43 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Algorithms.Quantifiers
 {
+
+    public enum RatioType
+    {
+        ISO1_OVER_ISO2,
+        ISO2_OVER_ISO1
+
+    }
+
     public class BasicN14N15Quantifier : N14N15Quantifier
     {
         private double MSToleranceInPPM;
+
+
+        #region Constructors
 
         public BasicN14N15Quantifier(double msToleranceInPPM)
         {
             // TODO: Complete member initialization
             this.MSToleranceInPPM = msToleranceInPPM;
+            this.RatioType = Quantifiers.RatioType.ISO1_OVER_ISO2;
         }
-        #region Constructors
+
+        public BasicN14N15Quantifier(double msToleranceInPPM, RatioType ratioType)
+            : this(msToleranceInPPM)
+        {
+            this.RatioType = ratioType;
+        }
+
+
+
         #endregion
 
         #region Properties
+
+        public RatioType RatioType { get; set; }
+
+
         #endregion
 
         #region Public Methods
@@ -48,7 +72,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             IList<IPeak> topTheorIso1Peaks = getTopPeaks(theorIso1, numPeaks);
             IList<IPeak> topTheorIso2Peaks = getTopPeaks(theorIso2, numPeaks);
 
-            
+
 
             //get the top n peaks of the experimental profile, based on peaks of the theor profile
             //adjust intensity (subtract background intensity)
@@ -82,7 +106,20 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             double summedAllIsos2PeakIntensities = iso2.Peaklist.Sum(p => (p.Height - backgroundIntensity));
 
 
-            ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
+            switch (this.RatioType)
+            {
+                case RatioType.ISO1_OVER_ISO2:
+                    ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
+                    break;
+                case RatioType.ISO2_OVER_ISO1:
+                    ratio = correctedIso2SummedIntens/ correctedIso1SummedIntens ;
+                    break;
+                default:
+                    ratio = correctedIso1SummedIntens / correctedIso2SummedIntens;
+                    break;
+            }
+
+            
             ratioContribForIso1 = summedTopIso1PeakIntensities / summedAllIsos1PeakIntensities * 1 / fractionTheor1;   //we expect a value of '1'
             ratioContribForIso2 = summedTopIso2PeakIntensities / summedAllIsos2PeakIntensities * 1 / fractionTheor2;
 
