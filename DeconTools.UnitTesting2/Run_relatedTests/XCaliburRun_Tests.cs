@@ -46,11 +46,10 @@ namespace DeconTools.UnitTesting
         {
             string testFile = FileRefs.RawDataMSFiles.VOrbiFile1;
 
-
             Run run = new XCaliburRun(testFile);
 
             Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(18505, run.MaxScan);
+            Assert.AreEqual(17773, run.MaxScan);
 
         }
 
