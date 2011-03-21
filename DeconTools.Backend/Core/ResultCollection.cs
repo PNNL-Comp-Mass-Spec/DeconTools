@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Core
             this.massTagResultList = new Dictionary<MassTag, MassTagResultBase>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
-            this.m_IsosResultBin = new List<IsosResult>();
+            this.m_IsosResultBin = new List<IsosResult>(10);
             this.logMessageList = new List<string>();
             this.ElutingPeakCollection = new List<ElutingPeak>();
         }
@@ -240,18 +240,16 @@ namespace DeconTools.Backend.Core
 
         public List<MassTagResultBase> GetSuccessfulMassTagResults()
         {
-            List<MassTagResultBase> filteredResults = new List<MassTagResultBase>();
-
-            HashSet<int> massTagIDs = new HashSet<int>();
 
             //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
 
             List<MassTagResultBase> resultList = this.MassTagResultList.Values.ToList();
+            HashSet<int> massTagIDs = new HashSet<int>();
             for (int i = 0; i < resultList.Count; i++)
             {
                 massTagIDs.Add(resultList[i].MassTag.ID);
             }
-
+            List<MassTagResultBase> filteredResults = new List<MassTagResultBase>(massTagIDs.Count);
             foreach (var mtID in massTagIDs)
             {
                 List<MassTagResultBase> tempResults = resultList.Where(p => p.Score < 0.15 && p.MassTag.ID == mtID).ToList();
