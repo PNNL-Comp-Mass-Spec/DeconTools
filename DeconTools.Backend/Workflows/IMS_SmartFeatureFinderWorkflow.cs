@@ -194,9 +194,13 @@ namespace DeconTools.Backend.Workflows
             st.Start();
 
             thisUimfRun = (UIMFRun)run;
-            string outputFeatureFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_LCMSFeatures.txt";
-            string testPeakFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_peaks.txt";
-            string logFile = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000_log.txt";
+            string outputFeatureFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_Smartfeatures.txt";
+            string testPeakFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
+            string logFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_logFile.txt";
+            
+            Console.WriteLine("Writing features to file " + outputFeatureFile);
+            Console.WriteLine("Writing logs to " + logFile);
+
             FrameSetCollectionCreator fscc;
             ScanSetCollectionCreator sscc;
             Dictionary<ushort, List<ushort>> frameAndScanNumbers = null;
@@ -206,20 +210,20 @@ namespace DeconTools.Backend.Workflows
             int featureIndex = 0;
             int isosResultIndex = 0;
             ushort lcScanSpan = 80;
-            ushort imsScanSpan = 40;
+            ushort imsScanSpan = 30;
             int peaksProcessedCounter = 0;
             int totalLCFrames = thisUimfRun.GetNumFrames();
             int totalIMSScans = thisUimfRun.GetNumScansPerFrame();
 
             ushort intensityCutoff = 500;
-
-            double driftToleranceInMilliseconds = 0.6 ; //milliseconds
+            double driftToleranceInMilliseconds = 0.5 ; //milliseconds
 
             ushort netToleranceInScans = (ushort) (0.02 * totalLCFrames);
             ushort driftToleranceInScans = (ushort) (driftToleranceInMilliseconds / 0.16); //here 0.16 stands for the 160 microseconds that it takes to capture 1 scan.
             ushort massToleranceInPPM = 30;
             UIMFDriftTimeExtractor driftTimeExtractorTask = new UIMFDriftTimeExtractor();
             StreamReader peaksFileReader = null;
+            int peaksSkipped = 0;
 
             try
             {
@@ -270,11 +274,21 @@ namespace DeconTools.Backend.Workflows
 
 
                     //just so that we don't print a 10GB log file. 
-                    if (peaksProcessedCounter % 3000 == 0)
+                    if (peaksProcessedCounter % 1000 == 0)
                     {
+                        Console.Write(".");
                         logFileWriter.WriteLine("processing peak number " + peaksProcessedCounter);
                         logFileWriter.WriteLine("Peak mz = " + mostIntensePeak.XValue + "; intensity = " + mostIntensePeak.Height);
                         logFileWriter.WriteLine("Peak was found at frame = " + mostIntensePeak.Frame_num.ToString() + " and scan = " + mostIntensePeak.Scan_num.ToString());
+                        logFileWriter.Flush();
+
+                        //break here after processing 1000 peaks for now.
+                        /*if (peaksProcessedCounter == 2000)
+                        {
+                            logFileWriter.Write("Done!!");
+                            logFileWriter.Flush();
+                            break;
+                        }*/
                     }
 
                     //we're looking at stopping when we hit the lower intensity limit. 
@@ -289,12 +303,17 @@ namespace DeconTools.Backend.Workflows
                     //if this peak is not in the list of processed peak, then we need to work through this one to see if there's a feature at this position
                     if (!peaksInAFeatureTree.FindPeakWithinFeatures(mostIntensePeak, (ushort) mostIntensePeak.Frame_num, (ushort) mostIntensePeak.Scan_num, massToleranceInPPM, netToleranceInScans, driftToleranceInScans))
                     {
-
                         if (peaksNotDeisotopedTree.FindPeakWithinFeatures(mostIntensePeak, (ushort)mostIntensePeak.Frame_num, (ushort)mostIntensePeak.Scan_num, massToleranceInPPM, netToleranceInScans, driftToleranceInScans))
                         {
-                            logFileWriter.WriteLine("It's within tolerance and range of another peak that we couldn't deisotope, Let's skip it for now");
+
+                            if (peaksProcessedCounter % 500 == 0)
+                            {
+                                logFileWriter.WriteLine("It's within tolerance and range of another peak that we couldn't deisotope, Let's skip it for now");
+                                logFileWriter.Flush();
+                            }
                             peaksLine = peaksFileReader.ReadLine();
                             peaksProcessedCounter++;
+                            peaksSkipped++;
                             continue;
                         }
 
@@ -363,13 +382,12 @@ namespace DeconTools.Backend.Workflows
                                 driftTimeExtractorTask.Execute(thisUimfRun.ResultCollection);
                                 isotopicPeakList = findPeakListClosestIsotopicDistribution(mostIntensePeak, thisUimfRun.ResultCollection.IsosResultBin, out isosResultIndex);
                             }
-
                         }
                         catch (IndexOutOfRangeException rangeException)
                         {
                             logFileWriter.WriteLine ( "Had a rangeException at " + rangeException.Message);
                             logFileWriter.WriteLine ( mostIntensePeak.XValue + "\t" + mostIntensePeak.Frame_num.ToString() + " \t" + mostIntensePeak.Scan_num.ToString());
-                            logFileWriter.Flush();
+                            //logFileWriter.Flush();
                         }
 
                         if (isotopicPeakList != null)
@@ -414,16 +432,19 @@ namespace DeconTools.Backend.Workflows
                             peaksNotDeisotopedTree.Add(tempPeak);
                         }
                     }
-                  /*else
+                    else
                     {
-                        logFileWriter.WriteLine("Peak was processed before.");
-                    }*/
+                        //logFileWriter.WriteLine("Peak was processed before.");
+                        peaksSkipped++;
+                    }
                     peaksProcessedCounter++;
-                    if (peaksProcessedCounter % 2000 == 0)
+                    if (peaksProcessedCounter % 800 == 0)
                     {
                         logFileWriter.WriteLine("Height of binary tree = " + peaksInAFeatureTree.GetHeight().ToString());
                         logFileWriter.WriteLine("Features found= " + featureIndex.ToString() + "; Peaks in Tree= "+ peaksInTheTreeCounter.ToString());
+                        logFileWriter.WriteLine("Peaks skipped = " + peaksSkipped);
                         logFileWriter.WriteLine("**********************************************");
+                        //logFileWriter.Flush();
                     }
                     
                     peaksLine = peaksFileReader.ReadLine();
@@ -431,30 +452,30 @@ namespace DeconTools.Backend.Workflows
             }
             finally
             {
-                st.Stop();
-                TimeSpan ts = st.Elapsed;
-                logFileWriter.WriteLine("**********************************************");
-                logFileWriter.Write("Time taken to complete the deisotoping on a large file " + 
-                    ts.Hours.ToString() + ":" + ts.Minutes.ToString() + ":" + ts.Seconds.ToString());
-                logFileWriter.WriteLine("**********************************************");
 
                 if (featureFileWriter != null)
                 {
+                    featureFileWriter.Flush();
                     featureFileWriter.Close();
                 }
                 thisUimfRun.Close();
 
                 if (logFileWriter != null)
                 {
+                    st.Stop();
+                    TimeSpan ts = st.Elapsed;
+                    logFileWriter.WriteLine("**********************************************");
+                    logFileWriter.Write("Time taken to complete the deisotoping on a large file " +
+                        ts.Hours.ToString() + ":" + ts.Minutes.ToString() + ":" + ts.Seconds.ToString());
+                    logFileWriter.WriteLine("\n**********************************************");
+
+                    logFileWriter.Flush();
                     logFileWriter.Close();
                 }
                 if ( peaksFileReader != null){
                     peaksFileReader.Close();
                 }
-                
-                
             }
-
         }
 
         private void writeFeatureToFile(int featureIndex, UIMFIsosResult matchingIsosResult, int minFrameNum, int maxFrameNum, int minScanNum, int maxScanNum, int startFrame, int startScan, TextWriter featureFile, ushort totalSummed)
@@ -496,7 +517,7 @@ namespace DeconTools.Backend.Workflows
             featureOutputStringBuilder.Append("CombScore\n");*/
 
             featureFile.Write(featureOutputStringBuilder.ToString());
-            featureFile.Flush();
+            //featureFile.Flush();
 
         }
 
