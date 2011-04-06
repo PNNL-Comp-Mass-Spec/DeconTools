@@ -6,14 +6,14 @@ using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
 {
-    public class ElutingPeak
+    public class ElutingPeak:IDisposable
     {
         #region Constructors
 
         public ElutingPeak()
         {
             PeakList = new List<MSPeakResult>();
-            IsosResultList = new List<StandardIsosResult>();
+            //IsosResultList = new List<StandardIsosResult>();
             this.ID = -1;
             this.ScanStart = -1;
             this.ScanEnd = -1;
@@ -40,18 +40,18 @@ namespace DeconTools.Backend.Core
         public ChromPeak ChromPeak { get; set; }
         public List<MSPeakResult> PeakList { get; set; }
 
-        public List<StandardIsosResult> IsosResultList { get; set; }
+        //public List<StandardIsosResult> IsosResultList { get; set; }
 
         public float RetentionTime { get; set; }
 
         public double Mass { get; set; }
 
-        public float Intensity { get; set; }
+        public double Intensity { get; set; }
 
         /// <summary>
         /// Summed intensity across time
         /// </summary>
-        public float SummedIntensity { get; set; }
+        public double SummedIntensity { get; set; }
 
         public int ScanStart { get; set; }
 
@@ -91,7 +91,15 @@ namespace DeconTools.Backend.Core
             }
         }
 
+        #region IDisposable Members
 
+        public void Dispose()
+        {
+            this.ChromPeak = null;
+            this.PeakList = null;
+            this.ScanSet = null;
+        }
 
+        #endregion
     }
 }
