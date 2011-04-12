@@ -19,6 +19,12 @@ namespace DeconTools.Backend.Data.Structures
         public class BinaryTreeNode<T>
             where T : IComparable
         {
+
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
+
             private T value;
             private BinaryTreeNode<T> leftChild;
             private BinaryTreeNode<T> rightChild;
@@ -328,25 +334,35 @@ namespace DeconTools.Backend.Data.Structures
                     try
                     {
                         MSResultPeakWithLocation thisFeature = node.Value as MSResultPeakWithLocation;
-                        MSPeak msPeak = value as MSPeak;
 
                         //now check if the peak value is within the mass tolerance of this UMC
-                        int number = thisFeature.containsPeak(msPeak, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
-                        if ( number == 0)
+                        //int number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
+                        bool hasMass = thisFeature.containsMass(value.XValue, toleranceInPPM);
+
+                        if (hasMass)
                         {
-                            //we've found a node that contains that feature value
-                            return true;
+
+                            int number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
+
+                            if (number == 0)
+                            {
+                                //we've found a node that contains that feature value
+                                return true;
+                            }
                         }
-                        else if ( number < 0 )
+
+                        
+                        if (value.XValue < thisFeature.XValue)
                         {
-                           
-                            //search in the left tree
                             node = node.LeftChild;
-                        }
-                        else{
-                            //search in the right tree
+                         }
+                         else
+                         {
                             node = node.RightChild;
-                        }
+                         }
+
+                        
+
 
                     }
                     catch (InvalidCastException invalidCast)
