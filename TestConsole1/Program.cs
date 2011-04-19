@@ -13,8 +13,8 @@ namespace TestConsole1
 {
     class Program
     {
-        public static string sarcUIMFFile1 = "C:\\ProteomicsSoftwareTools\\SmartSummingTestFiles\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
-        public static string bsaUIMFFile1 = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000 - Copy.uimf";
+        public static string sarcUIMFFile1 = @"D:\Data\UIMF\SmartSumming\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
+        //public static string bsaUIMFFile1 = @"\\protoapps\UserData\Shah\TestFiles\BSA_0pt01_2_20Sep10_Cheetah_10-08-05_0000 - Copy.uimf";
 
 
         static void Main(string[] args)
@@ -40,11 +40,11 @@ namespace TestConsole1
             workflow.ExecuteWorkflow2(run);
              * */
 
-            DeconTools.Backend.Core.Run run = new DeconTools.Backend.Runs.UIMFRun(bsaUIMFFile1);
-            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow();
+            string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
+            Run run = new UIMFRun(@"D:\Data\UIMF\Sarc\the_10_testDatasets\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf");
+
+            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(masterPeaksFilepath);
             workflow.ExecuteWorkflow(run);
-
-
         }
     }
 }

@@ -199,14 +199,15 @@ namespace DeconTools.UnitTesting2
             StringBuilder sb = new StringBuilder();
 
             sb.Append("------------MSFeatures ---------------\n");
-            sb.Append("id\tscanNum\tmz\tz\tintens\tscore\tinterferenceScore\n");
+            sb.Append("id\tscanNum\tmonomass\tmz\tz\tintens\tscore\tinterferenceScore\n");
             foreach (var item in resultList)
             {
                 sb.Append(item.MSFeatureID);
                 sb.Append("\t");
                 sb.Append(item.ScanSet.PrimaryScanNumber);
                 sb.Append("\t");
-
+                sb.Append(item.IsotopicProfile.MonoIsotopicMass.ToString("0.0000"));
+                sb.Append("\t");
                 sb.Append(item.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.ChargeState);

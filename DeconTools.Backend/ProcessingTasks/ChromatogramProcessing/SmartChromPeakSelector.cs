@@ -110,7 +110,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             MassTagResultBase currentResult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
-            Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+            //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
 

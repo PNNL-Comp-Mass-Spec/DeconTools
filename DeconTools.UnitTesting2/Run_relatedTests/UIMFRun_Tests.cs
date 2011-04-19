@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
-using UIMFLibrary;
 using System.Diagnostics;
 using DeconTools.Backend.Utilities;
 using DeconTools.UnitTesting2;
@@ -26,8 +25,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            Assert.AreEqual(1, uimfRun.MinFrame);
-            Assert.AreEqual(1950, uimfRun.MaxFrame);
+            Assert.AreEqual(0, uimfRun.MinFrame);
+            Assert.AreEqual(1949, uimfRun.MaxFrame);
 
             Assert.AreEqual(0, uimfRun.MinScan);
             Assert.AreEqual(499, uimfRun.MaxScan);
@@ -106,32 +105,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
         }
 
-        [Test]
-        public void UIMFLibraryDirectAccessTest1()
-        {
-            int numFrames = 0;
-
-            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
-            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            numFrames = reader.GetGlobalParameters().NumFrames;
-
-            Console.WriteLine("Number of frames = " + numFrames);
-            Assert.AreEqual(1950, numFrames);
-        }
-
-        [Test]
-        public void UIMFLibrarySumScansTest1()
-        {
-            double[] xvals = new double[100000];
-            int[] yvals = new int[100000];
-            int summedTotal = 0;
-
-            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
-
-            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            summedTotal = reader.SumScansNonCached(xvals, yvals, 0, 100, 105, 200, 300);
-            Assert.AreEqual(91949, summedTotal);
-        }
+        
+     
 
         [Test]
         public void getNumMSScansTest1()
@@ -150,7 +125,14 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(uimfFilepath);
 
-            uimfRun.GetMassSpectrum(new ScanSet(300, 299, 301), new FrameSet(1200, 1199, 1201), 100, 2000);
+            int frame = 1199;
+            int scan = 300;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            uimfRun.GetMassSpectrum(new ScanSet(scan, scan-1, scan+1), new FrameSet(frame, frame - 1, frame + 1), 100, 2000);
+            sw.Stop();
+            
             Console.WriteLine(uimfRun.XYData.Xvalues.Length);
 
             StringBuilder sb = new StringBuilder();
@@ -162,6 +144,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 sb.Append(Environment.NewLine);
             }
             Console.WriteLine(sb.ToString());
+            Console.WriteLine("Time to get MS = " + sw.ElapsedMilliseconds);
+
             Assert.AreEqual(2331, uimfRun.XYData.Xvalues.Length);
             Assert.AreEqual(2331, uimfRun.XYData.Yvalues.Length);
         }
@@ -171,25 +155,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         {
             UIMFRun run = new UIMFRun(uimfFilepath);
 
-            double frametime1 = run.GetTime(1);
+            int frameNum = 0;
+            double frametime1 = run.GetTime(frameNum);
 
             Assert.AreEqual(35.48137, frametime1);
 
         }
 
-
-
-        [Test]
-        public void getSummedFramesMSTest2()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-
-            for (int i = 1200; i < (600 * 2400 / 4); i = i + 600)
-            {
-                uimfRun.GetMassSpectrum(new ScanSet(i), new FrameSet(1200, 1199, 1201), 100, 2000);
-                //Console.WriteLine(uimfRun.XYData.Xvalues.Length);
-            }
-        }
 
 
         [Test]
@@ -207,9 +179,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 //Console.WriteLine(uimfRun.XYData.Xvalues.Length);
             }
 
+            //TestUtilities.DisplayXYValues(uimfRun.XYData);
 
+            double sumOfIntensities = uimfRun.XYData.Yvalues.Sum();
 
+            Console.WriteLine("intensity sum = " + sumOfIntensities);
 
+            Assert.AreEqual(440753, sumOfIntensities);
 
         }
 
@@ -231,8 +207,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             }
             //Console.WriteLine(sb.ToString());
-            Assert.AreEqual(23505, uimfRun.XYData.Xvalues.Length);
-            Assert.AreEqual(23505, uimfRun.XYData.Yvalues.Length);
+            Assert.AreEqual(32752, uimfRun.XYData.Xvalues.Length);
+            Assert.AreEqual(32752, uimfRun.XYData.Yvalues.Length);
         }
 
         [Test]
@@ -330,17 +306,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             //Console.WriteLine(sb.ToString());
         }
 
-        [Test]
-        public void getAvgTOFLengthTest1()
-        {
-            double avgTOFLength = 0;
-            UIMFLibrary.DataReader reader = new UIMFLibrary.DataReader();
-            reader.OpenUIMF(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            avgTOFLength = reader.GetFrameParameters(1000).AverageTOFLength;
-
-            Assert.AreEqual(99488.2, (decimal)avgTOFLength);
-
-        }
+     
 
         [Test]
         public void getDriftTimeForScanZero()
@@ -442,22 +408,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
-        [Test]
-        public void getAllFrameParametersTest1()
-        {
-            string testFile = @"\\protoapps\UserData\FPGA\Data\112310-QCShew_1sec_frames_100min_run\1sec_frames_70_out_theshold\QCShew_15coadds_10kframes_380scans_7in_70out_2.UIMF";
-
-
-            UIMFRun uimfRun = new UIMFRun(testFile);
-
-            Console.WriteLine("Num frames= " + uimfRun.GetNumFrames());
-
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 1, 1);
-            fscc.Create();
-            uimfRun.GetFrameDataAllFrameSets();
-
-
-        }
 
         [Test]
         public void getLCProfileTest1()
@@ -475,16 +425,30 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+        [Test]
+        public void getPressureLastFrameTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+
+            int lastFrame = uimfRun.MaxFrame;
+
+            double pressureLastFrame = uimfRun.GetFramePressure(lastFrame);
+
+
+            Console.WriteLine("pressure on last frame = " + pressureLastFrame);
+
+        }
+
 
         [Test]
         public void getSmoothedFramePressuresTest1()
         {
             UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            int startFrame = 25;
-            int stopFrame = 700;
+            int startFrame = 24;
+            int stopFrame = 699;
 
             List<double> pressuresBeforeAveraging = new List<double>();
-            for (int frame = 1; frame <= stopFrame; frame++)
+            for (int frame = 0; frame <= stopFrame; frame++)
             {
                 pressuresBeforeAveraging.Add(uimfRun.GetFramePressure(frame));
                 
@@ -503,17 +467,33 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
 
-            double observedPressureFrame25 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 25).First().FramePressure;
-            double observedPressureFrame200 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 200).First().FramePressure;
-            double observedPressureFrame500 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 500).First().FramePressure;
+            double observedPressureFrame24 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 24).First().FramePressure;
+            double observedPressureFrame199 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 199).First().FramePressure;
+            double observedPressureFrame499 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 499).First().FramePressure;
 
-            Assert.AreEqual(4.05438, (decimal)observedPressureFrame25);
-            Assert.AreEqual(4.05599, (decimal)observedPressureFrame200);
-            Assert.AreEqual(4.05654, (decimal)observedPressureFrame500);
+            Assert.AreEqual(4.05438, (decimal)observedPressureFrame24);
+            Assert.AreEqual(4.05599, (decimal)observedPressureFrame199);
+            Assert.AreEqual(4.05654, (decimal)observedPressureFrame499);
 
 
 
         }
+
+        [Test]
+        public void getFramePressureDemultiplexedUIMF_Test1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+
+            int firstFrame = 0;
+
+            double pressure = uimfRun.GetFramePressure(firstFrame);
+            Assert.AreNotEqual(0, pressure);
+
+            //TODO: need to verify this number!!
+            Assert.AreEqual(4.0092m, (decimal)pressure);
+        }
+
+
         
         [Test]
         public void getSmoothedFramePressuresTowardsEndOFUIMFFileTest1()
@@ -584,11 +564,11 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 sb.Append(Environment.NewLine);
             }
 
-            //Console.WriteLine(sb.ToString());
+            Console.WriteLine(sb.ToString());
 
-            Assert.AreEqual(4.05802,(decimal)pressuresAfterAveraging[1896]);
+            Assert.AreEqual(4.05802,(decimal)pressuresAfterAveraging[1895]);
 
-            Assert.AreEqual(4.05801, (decimal)pressuresAfterAveraging[1940]);
+            Assert.AreEqual(4.058, (decimal)pressuresAfterAveraging[1939]);
 
 
 

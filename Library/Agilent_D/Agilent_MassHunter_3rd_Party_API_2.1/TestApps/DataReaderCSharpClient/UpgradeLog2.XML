@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DataReaderCSharpClient">
+</Property><Property Name="Solution File" Value="D:\My Documents\Projects\SPIKES\Agilent_MassHunterDataAccess\MassHunter_3rd_Party_API_2.1\TestApps\DataReaderCSharpClient\DataReaderCSharpClient.sln">
+</Property><Property Name="Date" Value="Thursday, March 11, 2010">
+</Property><Property Name="Time" Value="16:25 PM">
+</Property><Property Name="Log Number" Value="2">
+</Property></Properties><Event ErrorLevel="0" Project="DataReaderCSharpClient" Source="DataReaderCSharpClient\DataReaderCSharpClient.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DataReaderCSharpClient" Source="DataReaderCSharpClient\DataReaderCSharpClient.csproj" Description="Converted">
+</Event><Event ErrorLevel="2" Project="" Source="DataReaderCSharpClient.sln" Description="Solution file 'D:\My Documents\Projects\SPIKES\Agilent_MassHunterDataAccess\MassHunter_3rd_Party_API_2.1\TestApps\DataReaderCSharpClient\DataReaderCSharpClient.sln' cannot be converted because it cannot be modified. To convert the solution, change the permissions on the solution file to allow modification and re-open it.">
+</Event><Event ErrorLevel="3" Project="" Source="DataReaderCSharpClient.sln" Description="Not Converted">
+</Event></UpgradeLog>

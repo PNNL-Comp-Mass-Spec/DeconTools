@@ -36,6 +36,21 @@ namespace DeconTools.Backend.Utilities.Converters
 
         }
 
+        /// <summary>
+        /// TODO: add info here
+        /// </summary>
+        /// <param name="intensityMap"></param>
+        /// <param name="maxIntensity"></param>
+        /// <param name="threshold"></param>
+        /// <param name="startFrameInMap"></param>
+        /// <param name="startScanInMap"></param>
+        /// <param name="startFrame"></param>
+        /// <param name="startScan"></param>
+        /// <param name="frameAndScanNumbers"></param>
+        /// <param name="minimumScanNumber"></param>
+        /// <param name="maximumScanNumber"></param>
+        /// <param name="totalSummed"></param>
+        /// <returns></returns>
         public List<MSPeakResult> getFrameAndScanNumberListFromIntensityMap(int[][] intensityMap, int maxIntensity, float threshold, ushort startFrameInMap, ushort startScanInMap, ushort startFrame, ushort startScan, Dictionary<ushort, List<ushort>> frameAndScanNumbers, out ushort minimumScanNumber, out ushort maximumScanNumber, out ushort totalSummed)
         {
             List<MSPeakResult> peaksForCurveFitting = new List<MSPeakResult>(3000);

@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
         }
 
         [Test]
-        public void processUIMF_Frames800_802()
+        public void processUIMF_Frames799_801()
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile1;
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
@@ -118,7 +118,7 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
                 File.Delete(expectedIsosOutput);
             }
 
-            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, FileRefs.ParameterFiles.UIMFFrames800_802);
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, FileRefs.ParameterFiles.UIMFFrames799_801);
             oldSchool.Execute();
 
             List<IsosResult> results = new List<IsosResult>();
@@ -134,10 +134,10 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
       
         [Test]
-        public void processUIMF_Frames800_802_SumAllIMSScansPerFrame()
+        public void processUIMF_Frames799_810_SumAllIMSScansPerFrame()
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile1;
-            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_800-802_OneSpectrumPerFrame.xml";
+            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_799-801_OneSpectrumPerFrame.xml";
 
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
 
@@ -163,6 +163,37 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
         }
 
 
+        [Test]
+        public void processUIMF_Frames0_10_demultiplexedUIMF()
+        {
+            string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
+            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_frames - 000-010.xml";
+
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, parameterFile);
+            oldSchool.Execute();
+
+
+            List<IsosResult> results = new List<IsosResult>();
+
+            Assert.That(File.Exists(expectedIsosOutput));
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
+            results = importer.Import();
+
+            TestUtilities.DisplayMSFeatures(results);
+
+            Console.WriteLine(results.Count);
+
+            //Assert.AreEqual(180, results.Count);
+            //Assert.AreEqual(2330765, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+
+        }
 
 
 

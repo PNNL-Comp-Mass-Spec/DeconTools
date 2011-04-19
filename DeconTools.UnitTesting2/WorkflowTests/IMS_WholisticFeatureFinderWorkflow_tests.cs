@@ -16,16 +16,23 @@ namespace DeconTools.UnitTesting2.WorkflowTests
         [Test]
         public void test1()
         {
-            int frameNum = 2000;
+
+            //string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_filtered_peaks.txt";
+    //        string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_filteredIssue383_peaks.txt";
+
+            string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_MZfiltered_peaks.txt";
+
 
             Run run = new UIMFRun(FileRefs.RawDataMSFiles.sarcUIMFFile1);
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run, frameNum, frameNum, 1, 1);
-            fscc.Create();
 
-            IMS_WholisticFeatureFinderWorkflow workflow = new IMS_WholisticFeatureFinderWorkflow();
+            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(masterPeaksFilepath);
             workflow.ExecuteWorkflow(run);
+
+
+
         }
+
 
 
     }

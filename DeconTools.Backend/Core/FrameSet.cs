@@ -130,6 +130,20 @@ namespace DeconTools.Backend.Core
             if (this.indexValues == null || this.indexValues.Count == 0) return 0;
             return this.indexValues.Count;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in IndexValues)
+            {
+                sb.Append(item);
+                sb.Append(",");
+                
+            }
+
+            return sb.ToString().TrimEnd(',');
+        }
+
     }
 
 

@@ -28,7 +28,7 @@ namespace DeconTools.Backend.Workflows
     public class IMS_SmartFeatureFinderWorkflow : IWorkflow
     {
 
-        public static string sarcUIMFFile1 = "C:\\ProteomicsSoftwareTools\\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
+        private string rawdataFile;   //@"D:\Data\UIMF\SmartSumming\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
 
         int peaksInTheTreeCounter = 0;
         DeconToolsPeakDetector peakDetector;
@@ -36,11 +36,29 @@ namespace DeconTools.Backend.Workflows
         const int TENPOWSIX = 1000000;
         UIMFRun thisUimfRun;
 
+        private string outputFeatureFile;
+        private string peakFile;
+        private string logFile;
+
 
         #region Constructors
-        public IMS_SmartFeatureFinderWorkflow()
+        public IMS_SmartFeatureFinderWorkflow(string masterPeakListFilePath)
         {
+            this.peakFile = masterPeakListFilePath;
+
             InitializeWorkflow();
+
+        }
+
+        private string getlogFileName()
+        {
+            return Path.GetDirectoryName(this.rawdataFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smartSumming_log.txt";
+
+        }
+
+        private string getOutputFileName()
+        {
+            return Path.GetDirectoryName(this.rawdataFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smart_LCMSFeatures.txt";
         }
         #endregion
 
@@ -98,15 +116,15 @@ namespace DeconTools.Backend.Workflows
             this.ChromSmoother.RightParam = 11;
             this.ChromSmoother.Order = 2;
 
-            this.peakDetector = new DeconToolsPeakDetector(4,3, Globals.PeakFitType.QUADRATIC, true);
+            this.peakDetector = new DeconToolsPeakDetector(4, 3, Globals.PeakFitType.QUADRATIC, true);
 
 
             this.ChromGenerator = new ChromatogramGenerator();
 
-               hornConvolutor = new HornDeconvolutor();
+            hornConvolutor = new HornDeconvolutor();
         }
 
-        private bool peakPresent(IPeak peak, ScanSet scanSet,UIMFRun run)
+        private bool peakPresent(IPeak peak, ScanSet scanSet, UIMFRun run)
         {
             bool found = false;
             //basically we have to check if the peak is present in the given scan set
@@ -114,14 +132,14 @@ namespace DeconTools.Backend.Workflows
             run.CurrentScanSet = scanSet;
             msgen.Execute(run.ResultCollection);
             List<IPeak> peaks = peakDetector.FindPeaks(run.XYData, 0, 5000);
-            
+
             if (peaks.Count > 0)
             {
                 //binary search the peak mz within a certain tolerance in this list
                 //never mind for now
                 for (int i = 0; i < peaks.Count; i++)
                 {
-                    if (Math.Abs(peak.XValue - peaks[i].XValue)* TENPOWSIX/peak.XValue <= 20)
+                    if (Math.Abs(peak.XValue - peaks[i].XValue) * TENPOWSIX / peak.XValue <= 20)
                     {
                         found = true;
                         break;
@@ -132,7 +150,7 @@ namespace DeconTools.Backend.Workflows
             return found;
         }
 
-        
+
         private IPeak getMaxPeak(List<IPeak> peakList)
         {
             IPeak maxPeak = null;
@@ -156,7 +174,7 @@ namespace DeconTools.Backend.Workflows
         private MSPeakResult parse(string peaksline)
         {
             MSPeakResult peakresult = new MSPeakResult();
-            string [] processedLine = peaksline.Split('\t');
+            string[] processedLine = peaksline.Split('\t');
             if (processedLine.Length < 7)
             {
                 throw new System.IO.IOException("Trying to import peak data into UIMF data object, but not enough columns are present in the source text file");
@@ -181,7 +199,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private void getAndUpdateFramePressures ( )
+        private void getAndUpdateFramePressures()
         {
             thisUimfRun.GetFrameDataAllFrameSets();
             thisUimfRun.SmoothFramePressuresInFrameSets();
@@ -190,14 +208,17 @@ namespace DeconTools.Backend.Workflows
 
         public void ExecuteWorkflow(DeconTools.Backend.Core.Run run)
         {
+            this.rawdataFile = run.Filename;
+            this.outputFeatureFile = getOutputFileName();
+            this.logFile = getlogFileName();
+
+
+
             Stopwatch st = new Stopwatch();
             st.Start();
 
             thisUimfRun = (UIMFRun)run;
-            string outputFeatureFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_Smartfeatures.txt";
-            string testPeakFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
-            string logFile = @"c:\proteomicssoftwaretools\smartsummingtestfiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_logFile.txt";
-            
+
             Console.WriteLine("Writing features to file " + outputFeatureFile);
             Console.WriteLine("Writing logs to " + logFile);
 
@@ -216,10 +237,10 @@ namespace DeconTools.Backend.Workflows
             int totalIMSScans = thisUimfRun.GetNumScansPerFrame();
 
             ushort intensityCutoff = 500;
-            double driftToleranceInMilliseconds = 0.5 ; //milliseconds
+            double driftToleranceInMilliseconds = 0.5; //milliseconds
 
-            ushort netToleranceInScans = (ushort) (0.02 * totalLCFrames);
-            ushort driftToleranceInScans = (ushort) (driftToleranceInMilliseconds / 0.16); //here 0.16 stands for the 160 microseconds that it takes to capture 1 scan.
+            ushort netToleranceInScans = (ushort)(0.02 * totalLCFrames);
+            ushort driftToleranceInScans = (ushort)(driftToleranceInMilliseconds / 0.16); //here 0.16 stands for the 160 microseconds that it takes to capture 1 scan.
             ushort massToleranceInPPM = 30;
             UIMFDriftTimeExtractor driftTimeExtractorTask = new UIMFDriftTimeExtractor();
             StreamReader peaksFileReader = null;
@@ -227,7 +248,7 @@ namespace DeconTools.Backend.Workflows
 
             try
             {
-                peaksFileReader = new StreamReader(testPeakFile);
+                peaksFileReader = new StreamReader(peakFile);
                 string peaksLine = peaksFileReader.ReadLine();
                 //this is done to get the frame pressures loaded and corrected using a smoother.
                 fscc = new FrameSetCollectionCreator(thisUimfRun, 1, totalLCFrames, 1, 1);
@@ -239,8 +260,13 @@ namespace DeconTools.Backend.Workflows
 
                 // Start the thread
                 oThread.Start();
-                
+
                 featureFileWriter = new StreamWriter(outputFeatureFile);
+
+                //write the header
+                featureFileWriter.WriteLine("Feature_Index	Original_Index	Monoisotopic_Mass	Average_Mono_Mass	UMC_MW_Min	UMC_MW_Max	Scan_Start	Scan_End	Scan	IMS_Scan_Start	IMS_Scan_End	IMS_Scan	Decon2ls_Fit_Score	UMC_Member_Count	Max_Abundance	Abundance	Class_Rep_MZ	Class_Rep_Charge	Charge_Max	Drift_Time");
+
+
                 logFileWriter = new StreamWriter(logFile);
                 hornConvolutor.DeconEngineHornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
 
@@ -256,16 +282,17 @@ namespace DeconTools.Backend.Workflows
 
                 //The original intension here was to try some image analysis algorithms and hence the name
                 IntensityToImageConverter imgProcessor = new IntensityToImageConverter();
-                while ( peaksLine != null)
+                while (peaksLine != null)
                 {
 
                     //start with the current most intense peak,
                     MSPeakResult mostIntensePeak = null;
                     try
                     {
-                        mostIntensePeak = parse(peaksLine); 
+                        mostIntensePeak = parse(peaksLine);
                     }
-                    catch(Exception x){
+                    catch (Exception x)
+                    {
                         logFileWriter.Write("Parsing exception. Probably a line with text");
                         peaksLine = peaksFileReader.ReadLine();
                         peaksLine = peaksFileReader.ReadLine();
@@ -277,9 +304,15 @@ namespace DeconTools.Backend.Workflows
                     if (peaksProcessedCounter % 1000 == 0)
                     {
                         Console.Write(".");
-                        logFileWriter.WriteLine("processing peak number " + peaksProcessedCounter);
-                        logFileWriter.WriteLine("Peak mz = " + mostIntensePeak.XValue + "; intensity = " + mostIntensePeak.Height);
-                        logFileWriter.WriteLine("Peak was found at frame = " + mostIntensePeak.Frame_num.ToString() + " and scan = " + mostIntensePeak.Scan_num.ToString());
+
+                        string progressString = DateTime.Now + "\tpeakNum= \t" + peaksProcessedCounter + "\tpeakMZ= \t"
+                            + mostIntensePeak.XValue + "\tpeakIntensity=\t" + mostIntensePeak.Height + "\tframe=\t" + mostIntensePeak.Frame_num + "\tScan=\t" + mostIntensePeak.Scan_num
+                            + "\ttreeHeight=\t" + peaksInAFeatureTree.GetHeight() + "\tpeaksInTree=\t" + peaksInTheTreeCounter + "\tFeaturesFound=\t" + featureIndex;
+
+
+                        logFileWriter.WriteLine(progressString);
+                        
+
                         logFileWriter.Flush();
 
                         //break here after processing 1000 peaks for now.
@@ -301,15 +334,15 @@ namespace DeconTools.Backend.Workflows
 
                     //check if this peak is already present in any of our existing features.
                     //if this peak is not in the list of processed peak, then we need to work through this one to see if there's a feature at this position
-                    if (!peaksInAFeatureTree.FindPeakWithinFeatures(mostIntensePeak, (ushort) mostIntensePeak.Frame_num, (ushort) mostIntensePeak.Scan_num, massToleranceInPPM, netToleranceInScans, driftToleranceInScans))
+                    if (!peaksInAFeatureTree.FindPeakWithinFeatures(mostIntensePeak, (ushort)mostIntensePeak.Frame_num, (ushort)mostIntensePeak.Scan_num, massToleranceInPPM, netToleranceInScans, driftToleranceInScans))
                     {
                         if (peaksNotDeisotopedTree.FindPeakWithinFeatures(mostIntensePeak, (ushort)mostIntensePeak.Frame_num, (ushort)mostIntensePeak.Scan_num, massToleranceInPPM, netToleranceInScans, driftToleranceInScans))
                         {
 
                             if (peaksProcessedCounter % 500 == 0)
                             {
-                                logFileWriter.WriteLine("It's within tolerance and range of another peak that we couldn't deisotope, Let's skip it for now");
-                                logFileWriter.Flush();
+                                //logFileWriter.WriteLine("It's within tolerance and range of another peak that we couldn't deisotope, Let's skip it for now");
+                                //logFileWriter.Flush();
                             }
                             peaksLine = peaksFileReader.ReadLine();
                             peaksProcessedCounter++;
@@ -317,8 +350,8 @@ namespace DeconTools.Backend.Workflows
                             continue;
                         }
 
-                        ushort startFrame = (ushort) mostIntensePeak.Frame_num;
-                        ushort startScan = (ushort) mostIntensePeak.Scan_num;
+                        ushort startFrame = (ushort)mostIntensePeak.Frame_num;
+                        ushort startScan = (ushort)mostIntensePeak.Scan_num;
                         ushort maxIntensityFrameInMap = 0;
                         ushort maxIntensityScanInMap = 0;
 
@@ -353,14 +386,14 @@ namespace DeconTools.Backend.Workflows
                             startIms = 0;
                         }
 
-                        if (endLc >= totalLCFrames )
+                        if (endLc >= totalLCFrames)
                         {
-                            endLc = totalLCFrames-1;
+                            endLc = totalLCFrames - 1;
                         }
 
                         if (endIms >= totalIMSScans)
                         {
-                            endIms = totalIMSScans-1;
+                            endIms = totalIMSScans - 1;
                         }
 
                         intensityMap = thisUimfRun.GetFramesAndScanIntensitiesForAGivenMz(startLc, endLc, 0, startIms, endIms, mostIntensePeak.XValue, toleranceInMZ);
@@ -372,9 +405,9 @@ namespace DeconTools.Backend.Workflows
                         List<MSPeak> isotopicPeakList = null;
                         try
                         {
-                            frameAndScanNumbers = new Dictionary<ushort, List<ushort>>(lcScanSpan*2);
-                            List<MSPeakResult> peaksForCurveFitting = imgProcessor.getFrameAndScanNumberListFromIntensityMap(intensityMap, maxIntensity, 0.1f, (ushort) maxIntensityFrameInMap, (ushort)maxIntensityScanInMap, startFrame, startScan, frameAndScanNumbers, out minimumScanNumber, out maximumScanNumber, out totalSummed);
-                            if ( frameAndScanNumbers.Keys.Count != 0)
+                            frameAndScanNumbers = new Dictionary<ushort, List<ushort>>(lcScanSpan * 2);
+                            List<MSPeakResult> peaksForCurveFitting = imgProcessor.getFrameAndScanNumberListFromIntensityMap(intensityMap, maxIntensity, 0.1f, (ushort)maxIntensityFrameInMap, (ushort)maxIntensityScanInMap, startFrame, startScan, frameAndScanNumbers, out minimumScanNumber, out maximumScanNumber, out totalSummed);
+                            if (frameAndScanNumbers.Keys.Count != 0)
                             {
                                 thisUimfRun.GetMassSpectrum(frameAndScanNumbers, hornConvolutor.DeconEngineHornParameters.MinMZ, hornConvolutor.DeconEngineHornParameters.MaxMZ);
                                 peakDetector.Execute(thisUimfRun.ResultCollection);
@@ -385,15 +418,15 @@ namespace DeconTools.Backend.Workflows
                         }
                         catch (IndexOutOfRangeException rangeException)
                         {
-                            logFileWriter.WriteLine ( "Had a rangeException at " + rangeException.Message);
-                            logFileWriter.WriteLine ( mostIntensePeak.XValue + "\t" + mostIntensePeak.Frame_num.ToString() + " \t" + mostIntensePeak.Scan_num.ToString());
+                            logFileWriter.WriteLine("Had a rangeException at " + rangeException.Message);
+                            logFileWriter.WriteLine(mostIntensePeak.XValue + "\t" + mostIntensePeak.Frame_num.ToString() + " \t" + mostIntensePeak.Scan_num.ToString());
                             //logFileWriter.Flush();
                         }
 
                         if (isotopicPeakList != null)
                         {
                             int minimumFrameNumber = 0;
-                            int maximumFrameNumber = 0; 
+                            int maximumFrameNumber = 0;
                             getMinMax(frameAndScanNumbers.Keys.ToList<ushort>(), out minimumFrameNumber, out maximumFrameNumber);
 
                             UIMFIsosResult matchingIsosResult = (UIMFIsosResult)thisUimfRun.ResultCollection.IsosResultBin[isosResultIndex];
@@ -402,10 +435,13 @@ namespace DeconTools.Backend.Workflows
                             {
                                 featureIndex++;
                                 //there may be a better way than starting a new thread everytime. Maybe a thread pool. but we'll attack that later.
-                                oThread = new Thread(() => writeFeatureToFile(featureIndex, matchingIsosResult, minimumFrameNumber, maximumFrameNumber, minimumScanNumber, maximumScanNumber, startFrame, startScan, featureFileWriter, totalSummed));
-                                // Start the thread to write the data to the output file. 
-                                oThread.Start();
-                                //you want to process this list starting from the middle and moving left and right, 
+
+                               writeFeatureToFile(featureIndex, matchingIsosResult, minimumFrameNumber, maximumFrameNumber, minimumScanNumber, maximumScanNumber, startFrame, startScan, featureFileWriter, totalSummed);
+
+                                //oThread = new Thread(() => writeFeatureToFile(featureIndex, matchingIsosResult, minimumFrameNumber, maximumFrameNumber, minimumScanNumber, maximumScanNumber, startFrame, startScan, featureFileWriter, totalSummed));
+                                //// Start the thread to write the data to the output file. 
+                                //oThread.Start();
+                                ////you want to process this list starting from the middle and moving left and right, 
                                 //this is to ensure that the binary tree insertions are balanced since the peaks in an 
                                 //isotopic profile are going to be in increasing order of mzs. 
                                 int midPoint = isotopicPeakList.Count / 2;
@@ -438,17 +474,23 @@ namespace DeconTools.Backend.Workflows
                         peaksSkipped++;
                     }
                     peaksProcessedCounter++;
-                    if (peaksProcessedCounter % 800 == 0)
-                    {
-                        logFileWriter.WriteLine("Height of binary tree = " + peaksInAFeatureTree.GetHeight().ToString());
-                        logFileWriter.WriteLine("Features found= " + featureIndex.ToString() + "; Peaks in Tree= "+ peaksInTheTreeCounter.ToString());
-                        logFileWriter.WriteLine("Peaks skipped = " + peaksSkipped);
-                        logFileWriter.WriteLine("**********************************************");
-                        //logFileWriter.Flush();
-                    }
-                    
+                    //if (peaksProcessedCounter % 100 == 0)
+                    //{
+                    //    logFileWriter.WriteLine(DateTime.Now + "\tprocessing peak number " + peaksProcessedCounter);
+                    //    logFileWriter.WriteLine("Peak mz = " + mostIntensePeak.XValue + "; intensity = " + mostIntensePeak.Height);
+                    //    logFileWriter.WriteLine("Peak was found at frame = " + mostIntensePeak.Frame_num.ToString() + " and scan = " + mostIntensePeak.Scan_num.ToString());
+                    //    logFileWriter.Flush();
+
+
+                    //    logFileWriter.WriteLine("Height of binary tree = " + peaksInAFeatureTree.GetHeight().ToString());
+                    //    logFileWriter.WriteLine("Features found= " + featureIndex.ToString() + "; Peaks in Tree= " + peaksInTheTreeCounter.ToString());
+                    //    logFileWriter.WriteLine("Peaks skipped = " + peaksSkipped);
+                    //    logFileWriter.WriteLine("**********************************************");
+                    //    //logFileWriter.Flush();
+                    //}
+
                     peaksLine = peaksFileReader.ReadLine();
-                   }
+                }
             }
             finally
             {
@@ -472,7 +514,8 @@ namespace DeconTools.Backend.Workflows
                     logFileWriter.Flush();
                     logFileWriter.Close();
                 }
-                if ( peaksFileReader != null){
+                if (peaksFileReader != null)
+                {
                     peaksFileReader.Close();
                 }
             }
@@ -480,7 +523,7 @@ namespace DeconTools.Backend.Workflows
 
         private void writeFeatureToFile(int featureIndex, UIMFIsosResult matchingIsosResult, int minFrameNum, int maxFrameNum, int minScanNum, int maxScanNum, int startFrame, int startScan, TextWriter featureFile, ushort totalSummed)
         {
-            float averageIntensity = (float) matchingIsosResult.IsotopicProfile.IntensityAggregate / totalSummed;
+            float averageIntensity = (float)matchingIsosResult.IsotopicProfile.IntensityAggregate / totalSummed;
             StringBuilder featureOutputStringBuilder = new StringBuilder();
             //umc.OriginalIndex = isotopicPeakList[0].DataIndex
             featureOutputStringBuilder.Append(featureIndex + "\t");
@@ -502,40 +545,45 @@ namespace DeconTools.Backend.Workflows
             featureOutputStringBuilder.Append(startScan + "\t");
 
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.Score.ToString("0.00000") + "\t");
-            featureOutputStringBuilder.Append("1\t"); //this represents UMC member count for now
-            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.IntensityAggregate.ToString("0.00000") + "\t");
-            featureOutputStringBuilder.Append(averageIntensity.ToString("0.00000") + "\t");
+            featureOutputStringBuilder.Append(totalSummed + "\t"); //this represents UMC member count for now
 
-            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.00000") + "\t");
+            featureOutputStringBuilder.Append(averageIntensity.ToString("0.00000") + "\t");  // comparable to 'max_abundance'
+            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.IntensityAggregate.ToString("0.00000") + "\t");   //comparable to 'sum_abundance'
+
+            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.00000") + "\t");   //comparable to 'class_rep_mz' in traditional UMC output
             featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.ChargeState.ToString("0.00000") + "\t");
-            featureOutputStringBuilder.Append(matchingIsosResult.DriftTime.ToString("0.0000") + "\t");
+            featureOutputStringBuilder.Append(matchingIsosResult.IsotopicProfile.ChargeState.ToString("0.00000") + "\t");  // comparable to 'charge_max'
 
-            featureOutputStringBuilder.Append("ConfScore\n");
+            featureOutputStringBuilder.Append(matchingIsosResult.DriftTime.ToString("0.0000"));
+
+            featureOutputStringBuilder.Append(Environment.NewLine);
+
+            //featureOutputStringBuilder.Append("0\n");
             /*featureOutputStringBuilder.Append("LCFitScore\t");
             featureOutputStringBuilder.Append("AverFit\t");
             featureOutputStringBuilder.Append("MemPerc\t");
             featureOutputStringBuilder.Append("CombScore\n");*/
 
             featureFile.Write(featureOutputStringBuilder.ToString());
-            //featureFile.Flush();
+            featureFile.Flush();
 
         }
 
         private void addPeakToFeatureTree(MSPeak msPeakInIsotopicProfile, Dictionary<ushort, List<ushort>> frameScanLoc, AVLTree<MSResultPeakWithLocation> peaksInAFeatureTree, int startFrame, int startScan)
         {
-                BinaryTreeNode<MSResultPeakWithLocation> featureNode = peaksInAFeatureTree.FindFeatureWithGivenMass(msPeakInIsotopicProfile.XValue, 20);
-                if (featureNode != null)
-                {
-                    //that means we found something that is exactly the same mass. let's simply update the frame scans map for this peak
-                    featureNode.Value.updateFrameScansRange(frameScanLoc);
-                }
-                else
-                {
-                    //there's nothing with a mass close to ours and we have to insert this into the free, based on its mass.
-                    peaksInTheTreeCounter++;
-                    peaksInAFeatureTree.Add(new MSResultPeakWithLocation(msPeakInIsotopicProfile, frameScanLoc, startFrame, startScan));
-                    //logFileWriter.Write(msPeakInIsotopicProfile.XValue.ToString() + ";");
-                }
+            BinaryTreeNode<MSResultPeakWithLocation> featureNode = peaksInAFeatureTree.FindFeatureWithGivenMass(msPeakInIsotopicProfile.XValue, 20);
+            if (featureNode != null)
+            {
+                //that means we found something that is exactly the same mass. let's simply update the frame scans map for this peak
+                featureNode.Value.updateFrameScansRange(frameScanLoc);
+            }
+            else
+            {
+                //there's nothing with a mass close to ours and we have to insert this into the free, based on its mass.
+                peaksInTheTreeCounter++;
+                peaksInAFeatureTree.Add(new MSResultPeakWithLocation(msPeakInIsotopicProfile, frameScanLoc, startFrame, startScan));
+                //logFileWriter.Write(msPeakInIsotopicProfile.XValue.ToString() + ";");
+            }
         }
 
         private void getMinMax(List<ushort> frameNumbers, out int minimum, out int maximum)
@@ -555,7 +603,7 @@ namespace DeconTools.Backend.Workflows
                 }
             }
 
-                
+
         }
         private List<MSPeak> findPeakListClosestIsotopicDistribution(IPeak mostIntensePeak, IList<IsosResult> isosResults, out int isosResultIndex)
         {
@@ -708,7 +756,7 @@ namespace DeconTools.Backend.Workflows
                         continue;
                     }
 
-                 
+
                     // find other peaks in the master peaklist that are members of the found drift profile peak
                     // tag these peaks with the source peak's ID
                     double peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
@@ -720,12 +768,12 @@ namespace DeconTools.Backend.Workflows
                     double minMZForChromFilter = peak.MSPeak.XValue - peakToleranceInMZ;
                     double maxMZForChromFilter = peak.MSPeak.XValue + peakToleranceInMZ;
 
-                    
+
                     chrom.Data = (from n in masterPeakList
                                   where n.Scan_num >= minScanForChrom && n.Scan_num <= maxScanForChrom &&
                                       n.MSPeak.XValue >= minMZForChromFilter && n.MSPeak.XValue < maxMZForChromFilter
                                   select n).ToList();
-                    
+
                     foreach (var item in chrom.Data)
                     {
                         item.ChromID = peak.PeakID;
@@ -799,7 +847,7 @@ namespace DeconTools.Backend.Workflows
                 }
 
                 sb.Append("\n");
-                
+
 
             }
 
@@ -836,7 +884,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private int getMax(int[][] values, out ushort x, out ushort y )
+        private int getMax(int[][] values, out ushort x, out ushort y)
         {
             int max = 0;
             x = 0;
@@ -852,7 +900,7 @@ namespace DeconTools.Backend.Workflows
                         y = (ushort)j;
                     }
                 }
-                
+
             }
 
             return max;

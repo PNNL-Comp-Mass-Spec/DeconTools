@@ -48,17 +48,17 @@ namespace DeconTools.Backend.Utilities
             UIMFRun uimfRun = (UIMFRun)run;
             int totalFrames = uimfRun.GetNumFrames();
 
-            if (totalFrames > 0) return (totalFrames);
+            if (totalFrames > 0) return (totalFrames-1);    //frame is 0-based
             else
             {
-                return 1;     //minimum frame value
+                return 0;     //minimum frame value
             }
 
         }
 
         private static int getFirstFrame(Run run)
         {
-            return 1;        //minimum frame
+            return 0;        //minimum frame
         }
 
 
@@ -76,21 +76,21 @@ namespace DeconTools.Backend.Utilities
             Check.Require(run != null, "Run is null");
             Check.Require(run is UIMFRun, "FrameSet Collections can only be created for UIMF files");
             Check.Require(startFrame <= stopFrame, "Stop frame must be greater than or equal to the Start frame");
-            Check.Require(startFrame > 0, "Start frame must be greater than 0");
+            Check.Require(startFrame >= 0, "Start frame must be greater than or equal to 0");
             Check.Require(isRangeOdd, "Range value must be an odd number");
             Check.Require(increment > 0, "Increment must be greater than 0");
 
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            int maxFrame = uimfRun.GetNumFrames();
+            int maxFrame = uimfRun.GetNumFrames()-1;    // frames are zero-based
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 
 
             uimfRun.FrameSetCollection = new FrameSetCollection();
 
-            int minFrame = 1;
+            int minFrame = 0;    //uimf frames are 0-based 
 
             for (int i = startFrame; i <= stopFrame; i = i + increment)
             {

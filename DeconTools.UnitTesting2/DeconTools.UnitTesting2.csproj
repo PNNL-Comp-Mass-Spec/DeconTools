@@ -75,10 +75,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.2.4062.18164, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
@@ -100,6 +96,8 @@
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\THRASHMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\Post_MSFeatureDetectionTests\PeakToMSFeatureAssociatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ResultValidatorTests\ResultValidatorTasks_Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ScanSet_FrameSet_relatedTests\FrameSetCollectionCreator.cs" />
+    <Compile Include="ProcessingRelated_Tests\ScanSet_FrameSet_relatedTests\ScanSetCollectionCreatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\SmoothingTests\DeconToolsSavitzkyGolaySmootherTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ZeroFillingTests\DeconToolsZeroFillerTests.cs" />
     <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />

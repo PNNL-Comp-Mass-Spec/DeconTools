@@ -331,6 +331,21 @@ namespace DeconTools.UnitTesting
         }
 
 
+        [Test]
+        public void GetScanInfoTest1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            int msmsScanNum1 = 6000;
+
+            ScanSet scan = new ScanSet(msmsScanNum1);
+
+            string scanInfoString = run.GetScanInfo(scan);
+            Assert.AreEqual(@"ITMS + c NSI d Full ms2 543.80@cid35.00 [135.00-2000.00]", scanInfoString);
+
+        }
+
+
 
         //[Test]
         //public void GetSpectrumTestAndSum5()       //currently this stalls - takes forever...  
