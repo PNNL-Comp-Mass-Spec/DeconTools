@@ -109,7 +109,7 @@
     </Reference>
     <Reference Include="UIMFLibrary, Version=1.2.4104.23343, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\Debug\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
     <Reference Include="YafmsLibrary, Version=1.0.3989.9960, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

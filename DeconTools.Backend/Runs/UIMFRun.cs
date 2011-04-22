@@ -342,9 +342,6 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
-
-
-
             foreach (var frame in FrameSetCollection.FrameSetList)
             {
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
