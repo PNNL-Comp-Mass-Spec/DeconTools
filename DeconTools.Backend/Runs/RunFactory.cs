@@ -236,7 +236,45 @@ namespace DeconTools.Backend.Runs
                     {
                         //note! I am (temporarily?) using the 'MinScan' property from the Decon2LS parameter file in the MinFrame property of the UIMFRun
                         //We might want to add separate MinFrame and MaxFrame (and UseFrameRange) parameters to the XML file. 
-                        run = new UIMFRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+
+                        //parameter file refers to 'FrameNum';  but during processing UIMFRun refers to 'frame_index'
+
+
+                        run = new UIMFRun(filename);
+
+                        UIMFRun uimfrun = (UIMFRun)run;
+
+
+                        int minFrameIndex = uimfrun.MinFrame;
+                        int maxFrameIndex = uimfrun.MaxFrame;
+
+
+
+
+                        try
+                        {
+                            minFrameIndex = UIMFLibraryAdapter.getInstance(filename).Datareader.get_FrameIndex(parameters.HornTransformParameters.MinScan);
+                            maxFrameIndex = UIMFLibraryAdapter.getInstance(filename).Datareader.get_FrameIndex(parameters.HornTransformParameters.MaxScan);
+
+                        }
+                        catch (IndexOutOfRangeException ex)
+                        {
+
+                            throw new IndexOutOfRangeException("Error occurred when trying to define Min and Max frame of UIMF dataset. Details: " + ex.Message);
+                        }
+
+                        if (minFrameIndex < uimfrun.MinFrame) minFrameIndex = uimfrun.MinFrame;
+                        if (minFrameIndex > uimfrun.MaxFrame) minFrameIndex = uimfrun.MaxFrame;
+
+                        if (maxFrameIndex < uimfrun.MinFrame) maxFrameIndex = uimfrun.MinFrame;
+                        if (maxFrameIndex > uimfrun.MaxFrame) maxFrameIndex = uimfrun.MaxFrame;
+
+                        if (minFrameIndex > maxFrameIndex) minFrameIndex = maxFrameIndex;
+
+                        uimfrun.MinFrame = minFrameIndex;
+                        uimfrun.MaxFrame = maxFrameIndex;
+
+
                     }
                     else
                     {

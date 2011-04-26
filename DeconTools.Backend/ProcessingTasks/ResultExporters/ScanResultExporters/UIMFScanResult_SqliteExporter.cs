@@ -88,18 +88,18 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
                     for (int n = 0; n < rc.ScanResultList.Count; n++)
                     {
-                        ScanResult item = rc.ScanResultList[n];
+                        UIMFScanResult r = (UIMFScanResult)rc.ScanResultList[n];
 
-                        frameNumParam.Value = ((UIMFScanResult)item).Frameset.PrimaryFrame;
-                        frameTimeParam.Value = ((UIMFScanResult)item).ScanTime;
-                        typeParam.Value = item.SpectrumType;
-                        bpiParam.Value = item.BasePeak.Height;
-                        bpiMZParam.Value = item.BasePeak.XValue;
-                        ticParam.Value = item.TICValue;
-                        num_peaksParam.Value = item.NumPeaks;
-                        num_deisotopedParam.Value = item.NumIsotopicProfiles;
-                        frame_pressure_front.Value = ((UIMFScanResult)item).FramePressureFront;
-                        frame_pressure_back.Value = ((UIMFScanResult)item).FramePressureBack;
+                        frameNumParam.Value = r.FrameNum;
+                        frameTimeParam.Value = r.ScanTime;
+                        typeParam.Value = r.SpectrumType;
+                        bpiParam.Value = r.BasePeak.Height;
+                        bpiMZParam.Value = r.BasePeak.XValue;
+                        ticParam.Value = r.TICValue;
+                        num_peaksParam.Value = r.NumPeaks;
+                        num_deisotopedParam.Value = r.NumIsotopicProfiles;
+                        frame_pressure_front.Value = r.FramePressureFront;
+                        frame_pressure_back.Value = r.FramePressureBack;
 
                         mycommand.ExecuteNonQuery();
                     }

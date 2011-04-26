@@ -17,6 +17,8 @@ namespace DeconTools.Backend.Data
 
         public ScanResult CreateScanResult(Run run)
         {
+
+
             ScanResult scanresult;
             if (run is UIMFRun)
             {
@@ -27,6 +29,8 @@ namespace DeconTools.Backend.Data
             {
                 scanresult = createStandardScanResult(run, run.CurrentScanSet);
             }
+
+
             return scanresult;
 
         }
@@ -83,6 +87,10 @@ namespace DeconTools.Backend.Data
                     }
                 }
                 scanresult = new UIMFScanResult(frameSet);
+
+                scanresult.FrameNum = UIMFLibraryAdapter.getInstance(run.Filename).Datareader.GetFrameNumByIndex(frameSet.PrimaryFrame);
+                
+
                 scanresult.NumIsotopicProfiles = totIsotopicProfiles;
                 scanresult.NumPeaks = totPeaks;
                 scanresult.BasePeak = basepeak;

@@ -65,7 +65,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             UIMFIsosResult uimfResult = (UIMFIsosResult)result;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(uimfResult.FrameSet.PrimaryFrame);
+          
+            //We wish to report the FrameNum Not the FrameIndex.   FrameNum is unique
+            sb.Append(UIMFLibraryAdapter.getInstance(result.Run.Filename).Datareader.GetFrameNumByIndex(uimfResult.FrameSet.PrimaryFrame));
+
+
             sb.Append(delimiter);
             sb.Append(uimfResult.ScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
             sb.Append(delimiter);

@@ -57,6 +57,11 @@ namespace DeconTools.Backend.Core
             set { scanTime = value; }
         }
 
+
+        public int FrameNum { get; set; }
+
+
+
         private FrameSet frameset;
 
         public FrameSet Frameset

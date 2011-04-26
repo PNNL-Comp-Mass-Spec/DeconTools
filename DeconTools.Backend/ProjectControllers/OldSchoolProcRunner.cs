@@ -220,7 +220,7 @@ namespace DeconTools.Backend
                 if (m_run is UIMFRun)
                 {
 
-
+                    //TODO: update this so that FrameNum is changed to Frame_index
 
                     UIMFRun uimfRun = (UIMFRun)m_run;
 

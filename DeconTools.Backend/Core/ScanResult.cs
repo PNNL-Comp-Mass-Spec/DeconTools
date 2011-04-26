@@ -8,6 +8,10 @@ namespace DeconTools.Backend.Core
     public abstract class ScanResult
     {
 
+        public Run Run { get; set; }
+
+
+
         public abstract int NumPeaks
         {
             get;

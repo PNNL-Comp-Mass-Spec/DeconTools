@@ -7,6 +7,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Core;
+using DeconTools.Backend;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -14,10 +15,10 @@ namespace DeconTools.Testing.ProblemCases
     public class Issue0468_indexoutofBounds_demultiplexedUIMF
     {
         [Test]
-        public void Test1()
+        public void accessFrameSetsAndScansetsTest1()
         {
 
-            string uimfFile = @"\\protoapps\userdata\Matt\IMS\DeconTools\Sarc_P01_F11_0071_16Apr11_Cheetah_11-02-19_inverse.uimf";
+            string uimfFile = @"\\pnl\projects\MSSHARE\MonroeM\Sarc_MS2_UIMF_Test\Sarc_MS2_77_21Feb11_Cheetah_11-01-10_0000.uimf";
 
             UIMFRun run = new UIMFRun(uimfFile);
 
@@ -54,6 +55,23 @@ namespace DeconTools.Testing.ProblemCases
 
 
         }
+
+        [Test]
+        public void procRunner_test1()
+        {
+
+            string uimfFile = @"\\pnl\projects\MSSHARE\MonroeM\Sarc_MS2_UIMF_Test\Sarc_MS2_77_21Feb11_Cheetah_11-01-10_0000.uimf";
+            string paramFile = @"\\pnl\projects\MSSHARE\MonroeM\Sarc_MS2_UIMF_Test\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Thrash_2011-02-09.xml";
+
+            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile, Globals.MSFileType.PNNL_UIMF, paramFile);
+
+            runner.Execute();
+
+
+
+        }
+
+
 
     }
 }

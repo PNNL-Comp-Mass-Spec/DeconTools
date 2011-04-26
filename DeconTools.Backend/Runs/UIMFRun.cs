@@ -286,10 +286,10 @@ namespace DeconTools.Backend.Runs
                 int lowerFrame = -1;
                 int upperFrame = -1;
 
-
+              
                 if (frame.PrimaryFrame < lowerFrameBoundary)
                 {
-                    lowerFrame = this.MinFrame;
+                    lowerFrame = this.GetMinPossibleFrameIndex();
                     upperFrame = (int)(numPointsToSmooth) - 1;     // zero-based
                 }
                 else if (frame.PrimaryFrame > upperFrameBoundary)
@@ -301,6 +301,17 @@ namespace DeconTools.Backend.Runs
                 {
                     lowerFrame = frame.PrimaryFrame - (int)Math.Round(numPointsToSmooth / 2) + 1;
                     upperFrame = frame.PrimaryFrame + (int)Math.Round(numPointsToSmooth / 2);
+                }
+
+                //for short UIMF files (with few frames),  we need to ensure we are within bounds
+                if (lowerFrame < this.GetMinPossibleFrameIndex())
+                {
+                    lowerFrame = this.GetMinPossibleFrameIndex();
+                }
+
+                if (upperFrame > this.GetMaxPossibleFrameIndex())
+                {
+                    upperFrame = this.GetMaxPossibleFrameIndex();
                 }
 
                 frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
@@ -315,16 +326,9 @@ namespace DeconTools.Backend.Runs
             List<double> framePressures = new List<double>();
 
 
-            FrameParameters fp = null;
-
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
-                fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame);
-
-                if (fp.PressureBack > 0)
-                {
-                    framePressures.Add(fp.PressureBack);
-                }
+                framePressures.Add(GetFramePressureBack(frame));
             }
 
             if (framePressures.Count > 0)
@@ -473,6 +477,13 @@ namespace DeconTools.Backend.Runs
             if (maxPossibleScanIndex < 0) maxPossibleScanIndex = 0;
             return maxPossibleScanIndex;
         }
+
+
+        private int GetMinPossibleFrameIndex()
+        {
+            return 0;    //zero-based
+        }
+
 
         private int GetMaxPossibleFrameIndex()
         {

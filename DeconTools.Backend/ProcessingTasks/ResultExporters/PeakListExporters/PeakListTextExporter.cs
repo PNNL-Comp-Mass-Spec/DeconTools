@@ -128,6 +128,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
             {
+                
+                //TODO:  do we want to export 'frame_index' or 'frameNum' ??   arggh   I don't want to look it up everytime I write the peak!
                 sb.Append(peak.Frame_num);
                 sb.Append(m_delimiter);
             }

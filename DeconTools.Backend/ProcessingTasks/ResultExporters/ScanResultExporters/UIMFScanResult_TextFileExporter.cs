@@ -46,7 +46,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             StringBuilder sb = new StringBuilder();
 
             UIMFScanResult uimfScanResult=(UIMFScanResult)result;
-            sb.Append(uimfScanResult.Frameset.PrimaryFrame);
+           
+            
+            //sb.Append(uimfScanResult.Frameset.PrimaryFrame);
+
+            //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
+            sb.Append(uimfScanResult.FrameNum);
             sb.Append(delimiter);
             sb.Append(uimfScanResult.ScanTime.ToString("0.###"));
             sb.Append(delimiter);
