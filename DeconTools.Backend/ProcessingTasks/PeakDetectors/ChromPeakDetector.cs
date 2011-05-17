@@ -52,6 +52,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         {
             List<IPeak> peakList = new List<IPeak>();
 
+            if (xydata == null)
+            {
+                return peakList;
+            }
+
             //resultList.Run.PeakList = new List<IPeak>();
 
             oldPeakParameters.PeakBackgroundRatio = this.peakBackgroundRatio;

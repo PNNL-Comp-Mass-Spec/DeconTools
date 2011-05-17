@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.DTO;
 using DeconTools.Utilities;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Algorithms
 {
     public class ChromatogramGenerator
     {
+        private I_MSGenerator msgen;
         #region Constructors
         #endregion
 
@@ -22,6 +26,107 @@ namespace DeconTools.Backend.Algorithms
             targetMZList.Add(targetMZ);
 
             return GeneratePeakChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
+        }
+
+        public XYData GenerateChromatogramFromRawData(Run run, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
+        {
+            XYData xydata = new XYData();
+
+
+            List<double> xvals = new List<double>();
+            List<double> yvals = new List<double>();
+
+            for (int scan = minScan; scan <= maxScan; scan++)
+            {
+
+                bool scanIsGoodToGet = true;
+
+
+                bool currentScanContainsMSMS = (run.ContainsMSMSData && run.GetMSLevel(scan) > 1);
+                if (currentScanContainsMSMS)
+                {
+                    scanIsGoodToGet = false;
+                }
+
+                if (!scanIsGoodToGet)
+                {
+                    continue;
+                }
+
+                ScanSet scanset = new ScanSet(scan);
+                run.GetMassSpectrum(scanset);
+
+                double chromDataPointIntensity = getChromDataPoint(run.XYData, targetMZ, toleranceInPPM);
+
+                xvals.Add(scan);
+                yvals.Add(chromDataPointIntensity);
+
+
+                
+            }
+
+            xydata.Xvalues = xvals.ToArray();
+            xydata.Yvalues = yvals.ToArray();
+
+            return xydata;
+            
+
+
+
+
+        }
+
+
+
+
+        private double getChromDataPoint(XYData xydata, double targetMZ, double toleranceInPPM)
+        {
+            bool dataIsEmpty = (xydata == null || xydata.Xvalues.Length == 0);
+            if (dataIsEmpty)
+            {
+                return 0;
+            }
+
+            double toleranceInMZ = toleranceInPPM * targetMZ / 1e6;
+
+            double lowerMZ = targetMZ - toleranceInMZ;
+            double upperMZ = targetMZ + toleranceInMZ;
+
+            double startingPointMZ = lowerMZ - 2;
+
+            int indexOfGoodStartingPoint = MathUtils.BinarySearchWithTolerance(xydata.Xvalues, startingPointMZ, 0, xydata.Xvalues.Length - 1, 1.9);
+
+            if (indexOfGoodStartingPoint == -1)
+            {
+                indexOfGoodStartingPoint = 0;
+            }
+
+
+            double intensitySum = 0;
+
+            for (int i = indexOfGoodStartingPoint; i < xydata.Xvalues.Length; i++)
+            {
+                if (xydata.Xvalues[i] >= lowerMZ)
+                {
+
+                    if (xydata.Xvalues[i] > upperMZ)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        intensitySum = +xydata.Yvalues[i];
+                    }
+
+
+                }
+
+            }
+
+            return intensitySum;
+
+
+
         }
 
 

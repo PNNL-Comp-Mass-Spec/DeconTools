@@ -101,7 +101,7 @@ namespace DeconTools.Backend
             }
         }
 
-        internal static double[] ConvertFloatsToDouble(float[] inputVals)
+        public static double[] ConvertFloatsToDouble(float[] inputVals)
         {
             if (inputVals == null) return null;
             if (inputVals.Length == 0) return null;
@@ -115,7 +115,7 @@ namespace DeconTools.Backend
             return outputVals;
         }
 
-        internal static double[] ConvertIntsToDouble(int[] inputVals)
+        public static double[] ConvertIntsToDouble(int[] inputVals)
         {
             if (inputVals == null) return null;
             if (inputVals.Length == 0) return null;

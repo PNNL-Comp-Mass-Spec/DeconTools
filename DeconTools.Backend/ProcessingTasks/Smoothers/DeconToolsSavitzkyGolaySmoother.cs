@@ -51,6 +51,11 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         #region Public Methods
         public override XYData Smooth(XYData inputData)
         {
+            if (inputData == null)
+            {
+                return null;
+            }
+
             Check.Require(this.leftParam >= 0, "Savitzky left parameter cannot be negative");
             Check.Require(this.order >= 0, "Savitzky order cannot be negative");
             Check.Require(this.rightParam >= 0, "Savitzky right parameter cannot be negative");

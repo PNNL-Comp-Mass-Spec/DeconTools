@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -137,6 +139,65 @@ namespace DeconTools.Testing.ProblemCases
 
 
         }
+
+
+        [Test]
+        public void reopenedRedmineIssue_test1()
+        {
+            string problemFile = @"\\proto-10\IMS_TOF_3\2010_4\okd_urine_S15_19Nov10_Cheetah_10-08-06_0000\okd_urine_S15_19Nov10_Cheetah_10-08-06_0000.UIMF";
+
+            RunFactory runfactory = new RunFactory();
+
+            UIMFRun run = (UIMFRun)runfactory.CreateRun(problemFile);
+
+            UIMFRunTester tester = new UIMFRunTester();
+
+            int startScan = run.MinScan;
+            int stopScan = run.MaxScan;
+
+            int startFrame = 0;
+            int stopFrame = 9;
+
+
+            tester.DisplayBasicRunInfo(run);
+            tester.GenerateMassSpectraForRanges(run, startFrame, stopFrame, startScan, stopScan);
+
+            //Getting error:
+            //1	0	FAILED. 	Specified argument was out of the range of valid values.
+            // Parameter name: ERROR in SumScansNonCached: frame_index 1 is not in range; should be >= 0 and < 0
+
+        }
+
+        [Test]
+        public void frameIndexProblem_test1()
+        {
+            string problemFile = @"\\proto-10\IMS_TOF_3\2010_4\okd_urine_S15_19Nov10_Cheetah_10-08-06_0000\okd_urine_S15_19Nov10_Cheetah_10-08-06_0000.UIMF";
+
+            RunFactory runfactory = new RunFactory();
+
+            UIMFRun run = (UIMFRun)runfactory.CreateRun(problemFile);
+
+
+            FrameSet frame = new FrameSet(1);
+            ScanSet scan = new ScanSet(200);
+
+            run.CurrentFrameSet = frame;
+            run.CurrentScanSet = scan;
+
+            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
+            var msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+
+            msgen.Execute(run.ResultCollection);
+
+            //fixed it. DeconTools was hard-coded to get the spectrum for frameType '0'. The above file has frameType properly set to '1'. We are eventually moving to the 
+            //format of having MS1 frametype set to '1'  and MS2 set to '2'.  Currently, many datasets have '0' as their frameType. 
+
+        }
+
+
+
+
+
 
 
     }

@@ -16,12 +16,15 @@ namespace DeconTools.Backend.Runs
     {
         const double FRAME_PRESSURE_STANDARD = 4.00000d;   // 
 
+        private int FrameTypeForMS1;     // the frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
+
+
         private int numBins;
 
         private GlobalParameters m_globalParameters;
 
         //private UIMFLibrary.DataReader m_reader;
-
+        private Dictionary<int, double> framePressuresUnsmoothed;
 
         #region Constructors
         public UIMFRun()
@@ -32,6 +35,7 @@ namespace DeconTools.Backend.Runs
             this.frameSetCollection = new FrameSetCollection();
             this.ContainsMSMSData = false;
             this.RawData = null;
+            this.framePressuresUnsmoothed = new Dictionary<int, double>();
 
         }
 
@@ -57,6 +61,10 @@ namespace DeconTools.Backend.Runs
             this.MaxScan = GetMaxPossibleScanIndex();
             this.numBins = GetNumBins();
 
+
+            this.FrameTypeForMS1 = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.CurrentFrameType;
+
+            
 
 
         }
@@ -120,7 +128,7 @@ namespace DeconTools.Backend.Runs
 
 
         private FrameSet currentFrameSet;
-
+      
         public FrameSet CurrentFrameSet
         {
             get { return currentFrameSet; }
@@ -173,7 +181,7 @@ namespace DeconTools.Backend.Runs
                 int scanLower = scanset.getLowestScanNumber();
                 int scanUpper = scanset.getHighestScanNumber();
 
-                int nonZeroLength = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(xvals, yvals, 0, frameLower, frameUpper, scanLower, scanUpper);
+                int nonZeroLength = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(xvals, yvals, FrameTypeForMS1, frameLower, frameUpper, scanLower, scanUpper);
 
 
                 if (xvals == null || xvals.Length == 0 || yvals == null || yvals.Length == 0)
@@ -220,7 +228,14 @@ namespace DeconTools.Backend.Runs
 
         public double GetFramePressure(int frameNum)
         {
-            return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frameNum);
+            return lookupFramePressure(frameNum);
+            
+        }
+
+        public double GetFramePressureBack(int frameNum)
+        {
+            return GetFramePressure(frameNum);
+
         }
 
         public double GetFramePressureFront(int frameNum)
@@ -232,13 +247,23 @@ namespace DeconTools.Backend.Runs
             return framepressureFront;
         }
 
-        public double GetFramePressureBack(int frameNum)
-        {
-            double framepressure = -1;
-            framepressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frameNum);
-            return framepressure;
 
+
+        private double lookupFramePressure(int frameNum)
+        {
+            if (!this.framePressuresUnsmoothed.ContainsKey(frameNum))
+            {
+                double pressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frameNum);
+                this.framePressuresUnsmoothed.Add(frameNum, pressure);
+            }
+
+            return this.framePressuresUnsmoothed[frameNum];
+
+            
         }
+
+     
+    
 
         public int GetNumFrames()
         {
@@ -260,6 +285,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
+        
 
         public void SmoothFramePressuresInFrameSets()
         {
@@ -272,6 +298,8 @@ namespace DeconTools.Backend.Runs
             int lowerFrameBoundary = (int)Math.Round(numPointsToSmooth / 2) - 1;    //zero-based
             int upperFrameBoundary = (int)Math.Round(numFrames - numPointsToSmooth / 2) - 1;   //zero-based
 
+            int maxFrame = this.GetMaxPossibleFrameIndex();
+            int minFrame = this.GetMinPossibleFrameIndex();
 
 
             foreach (var frame in FrameSetCollection.FrameSetList)
@@ -281,21 +309,19 @@ namespace DeconTools.Backend.Runs
                     throw new System.ArgumentOutOfRangeException("Cannot smooth frame pressures.  You need to first populate frame pressures within the Frameset.");
                 }
 
-
-
                 int lowerFrame = -1;
                 int upperFrame = -1;
 
-              
+
                 if (frame.PrimaryFrame < lowerFrameBoundary)
                 {
-                    lowerFrame = this.GetMinPossibleFrameIndex();
+                    lowerFrame = minFrame;
                     upperFrame = (int)(numPointsToSmooth) - 1;     // zero-based
                 }
                 else if (frame.PrimaryFrame > upperFrameBoundary)
                 {
-                    lowerFrame = (this.GetMaxPossibleFrameIndex() - (int)numPointsToSmooth + 1);
-                    upperFrame = this.GetMaxPossibleFrameIndex();
+                    lowerFrame = maxFrame - (int)numPointsToSmooth + 1;
+                    upperFrame =maxFrame;
                 }
                 else
                 {
@@ -304,15 +330,17 @@ namespace DeconTools.Backend.Runs
                 }
 
                 //for short UIMF files (with few frames),  we need to ensure we are within bounds
-                if (lowerFrame < this.GetMinPossibleFrameIndex())
+                if (lowerFrame < minFrame)
                 {
-                    lowerFrame = this.GetMinPossibleFrameIndex();
+                    lowerFrame = minFrame;
                 }
 
-                if (upperFrame > this.GetMaxPossibleFrameIndex())
+                if (upperFrame > maxFrame)
                 {
-                    upperFrame = this.GetMaxPossibleFrameIndex();
+                    upperFrame = maxFrame;
                 }
+
+
 
                 frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
 
@@ -321,19 +349,36 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        private double getAverageFramePressure(int startFrame, int stopFrame)
+        private double getAverageFramePressure(int lowerFrame, int upperFrame)
         {
             List<double> framePressures = new List<double>();
 
+            //int actualLower = lowerFrame;
+            //int actualUpper = upperFrame;
 
-            for (int frame = startFrame; frame <= stopFrame; frame++)
+            //int minFrame = this.GetMinPossibleFrameIndex();
+            //int maxFrame = this.GetMaxPossibleFrameIndex();
+
+            //bool lowerFrameOutOfRange = lowerFrame < minFrame || lowerFrame>maxFrame;
+            //if (lowerFrameOutOfRange)
+            //{
+            //    actualLower = minFrame;
+            //}
+
+            //bool upperFrameOutOfRange = upperFrame < minFrame || upperFrame > maxFrame;
+            //if (upperFrameOutOfRange)
+            //{
+            //    actualUpper = maxFrame;
+            //}
+
+
+            for (int i = lowerFrame; i <= upperFrame; i++)
             {
-                framePressures.Add(GetFramePressureBack(frame));
+                framePressures.Add(GetFramePressure(i));
             }
 
             if (framePressures.Count > 0)
             {
-
                 return framePressures.Average();
             }
             else
@@ -342,6 +387,7 @@ namespace DeconTools.Backend.Runs
             }
         }
 
+    
         public void GetFrameDataAllFrameSets()
         {
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
@@ -351,19 +397,26 @@ namespace DeconTools.Backend.Runs
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryFrame);
+                
             }
 
         }
 
         public double GetDriftTime(FrameSet frame, int scanNum)
         {
-            FrameParameters fp = null;
-            fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
-            Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
 
+
+            bool framePressureIsZero = (frame.FramePressure == 0 || frame.FramePressure == Double.NaN);
+            if (framePressureIsZero)
+            {
+                return 0;
+            }
 
             if (Double.IsNaN(frame.AvgTOFLength))
             {
+                FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
+                Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
+
                 frame.AvgTOFLength = fp.AverageTOFLength;
             }
 
@@ -378,10 +431,8 @@ namespace DeconTools.Backend.Runs
                 driftTime = frame.AvgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
             }
 
-            if (frame.FramePressure != 0 && frame.FramePressure != Double.NaN)
-            {
-                driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frame.FramePressure);      // correct the drift time according to the pressure
-            }
+            driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frame.FramePressure);      // correct the drift time according to the pressure
+
 
             return driftTime;
 

@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                if (this.Data == null || this.Data.Count == 0)
+                if (this.ChromSourceData == null || this.ChromSourceData.Count == 0)
                 {
                     return true;
                 }
@@ -54,44 +54,48 @@ namespace DeconTools.Backend.Core
 
 
 
-        public XYData GetXYDataFromChromPeakData()
+        public XYData GetXYDataFromChromPeakData(int minScan, int maxScan)
         {
-            bool msPeakDataIsEmpty = (this.Data == null || this.Data.Count == 0);
-            if (msPeakDataIsEmpty) return null;
+        
 
-
+            //TODO:  figure out what to do with this
             int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
             int rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
 
-            int peakListMinScan = this.Data[0].Scan_num;
-            int peakListMaxScan = this.Data[this.Data.Count - 1].Scan_num;
-
+         
             //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
 
-            peakListMinScan = peakListMinScan - leftZeroPadding;
-            peakListMaxScan = peakListMaxScan + rightZeroPadding;
-
-            if (peakListMinScan < 0) peakListMinScan = 0;
+         
 
             //populate array with zero intensities.
             SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
-            for (int i = peakListMinScan; i <= peakListMaxScan; i++)
+            for (int i = minScan; i <= maxScan; i++)
             {
                 xyValues.Add(i, 0);
             }
 
-            //iterate over the peaklist, assign chromID,  and extract intensity values
-            for (int i = 0; i < this.Data.Count; i++)
+
+            bool msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
+            if (!msPeakDataIsEmpty)
             {
-                MSPeakResult p = this.Data[i];
-                double intensity = p.MSPeak.Height;
-
-                //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
-                if (intensity > xyValues[p.Scan_num])
+                //iterate over the peaklist, assign chromID,  and extract intensity values
+                for (int i = 0; i < this.ChromSourceData.Count; i++)
                 {
-                    xyValues[p.Scan_num] = intensity;
-                }
+                    MSPeakResult p = this.ChromSourceData[i];
+                    double intensity = p.MSPeak.Height;
 
+                    //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
+
+                    if (xyValues.ContainsKey(p.Scan_num))
+                    {
+
+                        if (intensity > xyValues[p.Scan_num])
+                        {
+                            xyValues[p.Scan_num] = intensity;
+                        }
+                    }
+
+                }
             }
 
 
@@ -109,7 +113,7 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// If the chromatogram was based on peak-level data we may store the Peak-based chrom data here
         /// </summary>
-        public List<MSPeakResult> Data { get; set; }
+        public List<MSPeakResult> ChromSourceData { get; set; }
 
         /// <summary>
         /// Peaks from this chromatogram can be stored here
@@ -121,13 +125,13 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public List<MSPeakResult> GetMSPeakMembersForGivenChromPeak(IPeak chromPeak, double scanTolerance)
         {
-            bool msPeakDataIsEmpty = (this.Data == null || this.Data.Count == 0);
+            bool msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
             if (msPeakDataIsEmpty) return null;
 
             int minScan = (int)Math.Floor(chromPeak.XValue - scanTolerance);
             int maxScan = (int)Math.Ceiling(chromPeak.XValue + scanTolerance);
 
-            List<MSPeakResult> filteredMSPeaks = (from n in this.Data where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
+            List<MSPeakResult> filteredMSPeaks = (from n in this.ChromSourceData where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
             return filteredMSPeaks;
         }
 
@@ -151,10 +155,8 @@ namespace DeconTools.Backend.Core
         #endregion
 
 
-
         public IPeak GetChromPeakForGivenSource(MSPeakResult peakResult)
         {
-
             if (this.PeakDataIsNullOrEmpty) return null;
 
             double averagePeakWidth = this.PeakList.Average(p => p.Width);
@@ -162,10 +164,18 @@ namespace DeconTools.Backend.Core
 
             double fourSigma = 4 * peakWidthSigma;
 
-            //TODO:  this tolerance seems to narrow
+            return GetChromPeakForGivenSource(peakResult, fourSigma);
+
+        }
 
 
-            var peakQuery = (from n in this.PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= fourSigma select n);
+        public IPeak GetChromPeakForGivenSource(MSPeakResult peakResult, double scanTolerance)
+        {
+
+            if (this.PeakDataIsNullOrEmpty) return null;
+
+      
+            var peakQuery = (from n in this.PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n);
 
             int peaksWithinTol = peakQuery.Count();
             if (peaksWithinTol == 0)

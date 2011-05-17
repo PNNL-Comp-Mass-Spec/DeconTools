@@ -82,9 +82,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
 
             PeakChrom chrom = new BasicPeakChrom();
-            chrom.Data = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
+            chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
 
-            Assert.AreEqual(59, chrom.Data.Count);
+            Assert.AreEqual(59, chrom.ChromSourceData.Count);
 
             //for XCalibur data, zeros will be inserted for non-contiguous scans.  Since this dataset has MS/MS, there are many zeros inserted. 
             //these zeros are removed in the PeakChromGenerator - which is coupled to the Run (and thus knows where the MS/MS scans are).  

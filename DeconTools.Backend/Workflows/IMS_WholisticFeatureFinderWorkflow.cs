@@ -214,12 +214,12 @@ namespace DeconTools.Backend.Workflows
                     double maxMZForChromFilter = peak.MSPeak.XValue + peakToleranceInMZ;
 
                     
-                    chrom.Data = (from n in masterPeakList
+                    chrom.ChromSourceData = (from n in masterPeakList
                                   where n.Scan_num >= minScanForChrom && n.Scan_num <= maxScanForChrom &&
                                       n.MSPeak.XValue >= minMZForChromFilter && n.MSPeak.XValue < maxMZForChromFilter
                                   select n).ToList();
                     
-                    foreach (var item in chrom.Data)
+                    foreach (var item in chrom.ChromSourceData)
                     {
                         item.ChromID = peak.PeakID;
                     }

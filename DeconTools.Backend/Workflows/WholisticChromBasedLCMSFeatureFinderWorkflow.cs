@@ -415,12 +415,12 @@ namespace DeconTools.Backend.Workflows
                         }
 
                         PeakChrom chrom = new BasicPeakChrom();
-                        chrom.Data = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                        chrom.ChromSourceData = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
                             peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM);
 
                         if (chrom.IsNullOrEmpty) continue;
 
-                        chrom.XYData = chrom.GetXYDataFromChromPeakData();
+                        chrom.XYData = chrom.GetXYDataFromChromPeakData(minScanForChrom, maxScanForChrom);
 
 
 
@@ -512,7 +512,7 @@ namespace DeconTools.Backend.Workflows
                                     {
                                         PeakChrom isoPeakChrom = new BasicPeakChrom();
 
-                                        isoPeakChrom.Data = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                                        isoPeakChrom.ChromSourceData = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
                                             isoPeak.XValue, this.ChromGenToleranceInPPM);
                                         if (!isoPeakChrom.IsNullOrEmpty)
                                         {
@@ -842,6 +842,8 @@ namespace DeconTools.Backend.Workflows
 
         private XYData filterOutMSMSRelatedPoints(Run run, XYData chromatogram)
         {
+            if (chromatogram == null) return null;
+
             XYData output = new XYData();
             Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
 

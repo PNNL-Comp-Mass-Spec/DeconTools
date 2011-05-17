@@ -457,6 +457,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
             fscc.Create();
 
+            uimfRun.GetFrameDataAllFrameSets();
+
             uimfRun.SmoothFramePressuresInFrameSets();
 
             //foreach (var item in pressuresBeforeAveraging)
@@ -471,7 +473,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             double observedPressureFrame199 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 199).First().FramePressure;
             double observedPressureFrame499 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 499).First().FramePressure;
 
-            Assert.AreEqual(4.05438, (decimal)observedPressureFrame24);
+            Assert.AreEqual(4.05438, (decimal)observedPressureFrame24);    //this number was manually validated! 
             Assert.AreEqual(4.05599, (decimal)observedPressureFrame199);
             Assert.AreEqual(4.05654, (decimal)observedPressureFrame499);
 
