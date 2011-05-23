@@ -52,9 +52,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=1.2.4077.32700, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UIMFLibrary, Version=1.3.4153.21177, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\x86\Debug\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +63,7 @@
     <Compile Include="Issue0168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
     <Compile Include="Issue0468_indexoutofBounds_demultiplexedUIMF.cs" />
+    <Compile Include="Issue0531_FPGAUIMF_IndexingError.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIMFRunTester.cs" />

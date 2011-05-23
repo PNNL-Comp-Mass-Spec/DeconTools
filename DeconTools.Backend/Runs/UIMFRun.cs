@@ -493,6 +493,28 @@ namespace DeconTools.Backend.Runs
 
         }
 
+
+        public void GetDriftTimeProfile(int frameStartIndex, int frameStopIndex, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
+        {
+            int[] scanValues = null;
+            int[] intensityVals = null;
+
+            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameStartIndex, frameStopIndex, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+
+            if (scanValues == null || scanValues.Length == 0)
+            {
+                this.XYData.Xvalues = null;
+                this.XYData.Yvalues = null;
+            }
+            else
+            {
+                this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
+                this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
+            }
+
+        }
+        
+        
         public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         {
             int[] scanValues = null;
@@ -530,15 +552,16 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        private int GetMinPossibleFrameIndex()
+        internal int GetMinPossibleFrameIndex()
         {
             return 0;    //zero-based
         }
 
 
-        private int GetMaxPossibleFrameIndex()
+        internal int GetMaxPossibleFrameIndex()
         {
-            int maxPossibleFrameIndex = GetNumFrames() - 1;     //frames begin at '0'
+            int maxPossibleFrameIndex = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameIndexMax();   
+
             if (maxPossibleFrameIndex < 0) maxPossibleFrameIndex = 0;
             return maxPossibleFrameIndex;
         }
