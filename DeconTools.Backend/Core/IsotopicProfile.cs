@@ -233,5 +233,26 @@ namespace DeconTools.Backend.Core
         }
 
 
+        public IsotopicProfile CloneIsotopicProfile()
+        {
+            IsotopicProfile iso = new IsotopicProfile();
+            iso.AverageMass = this.AverageMass;
+            iso.ChargeState = this.ChargeState;
+            iso.IntensityAggregate = this.IntensityAggregate;
+            iso.MonoIsotopicMass = this.MonoIsotopicMass;
+            iso.MonoIsotopicPeakIndex = this.MonoIsotopicPeakIndex;
+            iso.MonoPeakMZ = this.MonoPeakMZ;
+            iso.MonoPlusTwoAbundance = this.MonoPlusTwoAbundance;
+            iso.MostAbundantIsotopeMass = this.MostAbundantIsotopeMass;
+            iso.Original_Total_isotopic_abundance = this.Original_Total_isotopic_abundance;
+            iso.OriginalIntensity = this.OriginalIntensity;
+            iso.Peaklist = this.Peaklist;
+            iso.Score = this.Score;
+
+            return iso;
+
+        }
+
+
     }
 }

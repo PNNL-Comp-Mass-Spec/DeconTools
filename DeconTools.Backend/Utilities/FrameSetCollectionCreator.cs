@@ -46,9 +46,11 @@ namespace DeconTools.Backend.Utilities
             Check.Require(run is UIMFRun, "FrameSet Collections can only be created for UIMF files");
 
             UIMFRun uimfRun = (UIMFRun)run;
-            int totalFrames = uimfRun.GetNumFrames();
+            int maxFrameIndex = uimfRun.GetMaxPossibleFrameIndex();
 
-            if (totalFrames > 0) return (totalFrames-1);    //frame is 0-based
+
+
+            if (maxFrameIndex > 0) return (maxFrameIndex);    //frame is 0-based
             else
             {
                 return 0;     //minimum frame value
@@ -83,7 +85,7 @@ namespace DeconTools.Backend.Utilities
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            int maxFrame = uimfRun.GetNumFrames()-1;    // frames are zero-based
+            int maxFrame = uimfRun.GetMaxPossibleFrameIndex();    
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 

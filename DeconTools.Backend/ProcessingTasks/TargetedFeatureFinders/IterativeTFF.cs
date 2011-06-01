@@ -29,12 +29,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             peakDetectorPeakFitType = parameters.PeakDetectorPeakFitType;
             peakBRMin = 0.5;
 
-
             this.NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;
             this.ToleranceInPPM = parameters.ToleranceInPPM;
 
             this.NumPeaksUsedInAbundance = parameters.NumPeaksUsedInAbundance;
             this.IsotopicProfileType = parameters.IsotopicProfileType;
+
+
+            this.msPeakDetector = new DeconToolsPeakDetector(peakDetectorPeakBR, peakDetectorSigNoiseRatioThreshold,
+                 peakDetectorPeakFitType, peakDetectorIsDataThresholded);
         }
 
 
@@ -105,8 +108,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public IsotopicProfile iterativelyFindMSFeature(Run run, IsotopicProfile theorIso)
         {
-            this.msPeakDetector = new DeconToolsPeakDetector(peakDetectorPeakBR, peakDetectorSigNoiseRatioThreshold,
-                 peakDetectorPeakFitType, peakDetectorIsDataThresholded);
+            
 
             IsotopicProfile iso = null;
 

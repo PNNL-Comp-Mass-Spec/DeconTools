@@ -397,6 +397,7 @@
     <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IWorkflow.cs" />
     <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
+    <Compile Include="Workflows\WorkflowParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />

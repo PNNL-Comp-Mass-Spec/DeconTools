@@ -66,7 +66,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     return null;
                 }
 
-                if (peaksWithinTol.Count == 0)
+                if (peaksWithinTol.Count ==
+                    0)
                 {
                     if (needMonoIsotopicPeak)
                     {

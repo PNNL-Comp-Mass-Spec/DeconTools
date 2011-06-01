@@ -220,10 +220,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 pq.fitScore = currentResult.Score;
                 pq.i_score = currentResult.InterferenceScore;
 
-
                 bool resultHasFlags = (currentResult.Flags !=null && currentResult.Flags.Count>0);
                 pq.isIsotopicProfileFlagged = resultHasFlags;
-
             }
         }
 
