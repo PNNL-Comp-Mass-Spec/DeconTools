@@ -14,6 +14,7 @@ namespace DeconTools.Backend.Data.Importers
         #region Constructors
 
         string m_filename;
+        private List<string> _headers;
 
         public MassTagFromTextFileImporter(string filename)
         {
@@ -45,7 +46,7 @@ namespace DeconTools.Backend.Data.Importers
             {
                 string headerLine = reader.ReadLine();    //first line is the header line.   
 
-                List<string> headers = processLine(headerLine);
+                _headers = processLine(headerLine);
                 
                 int lineCounter = 1;
                 while (reader.Peek() != -1)
@@ -58,7 +59,7 @@ namespace DeconTools.Backend.Data.Importers
                     MassTag massTag;
                     try
                     {
-                        massTag = convertTextToMassTag(lineData, headers);
+                        massTag = convertTextToMassTag(lineData);
                     }
                     catch (Exception ex)
                     {
@@ -79,34 +80,60 @@ namespace DeconTools.Backend.Data.Importers
             return data;
         }
 
-        private MassTag convertTextToMassTag(List<string> lineData, List<string> headers)
+        private MassTag convertTextToMassTag(List<string> lineData)
         {
 
             MassTag mt = new MassTag();
-            mt.ChargeState =(short) parseIntField(lineData[getIndexForTableHeader(headers, "z", true)]);
+            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state"}, lineData, "0")); 
 
-            Check.Assert(mt.ChargeState != 0, "Charge state cannot be 0");
+            mt.ID = parseIntField(getValue(new string[]{"id","mass_tag_id","massTagid"},lineData,"-1"));
+            mt.PeptideSequence = getValue(new string[] { "peptide", "sequence" }, lineData, ""); 
+            mt.NETVal = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
+            mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
 
-            mt.ID = parseIntField(lineData[getIndexForTableHeader(headers, "id", true)]);
-            mt.PeptideSequence = lineData[getIndexForTableHeader(headers, "sequence", true)];
-            mt.NETVal = parseFloatField(lineData[getIndexForTableHeader(headers, "net", true)]);
-            mt.ObsCount = parseIntField(lineData[getIndexForTableHeader(headers, "obscount", true)]);
-            mt.MZ = parseDoubleField(lineData[getIndexForTableHeader(headers, "mz", true)]);
+            mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass" }, lineData, "0"));
 
             mt.CreatePeptideObject(false);
 
-            if (mt.MZ == 0 || mt.MZ == double.NaN)
+            if (mt.ChargeState == 0)
             {
-                mt.MZ = mt.Peptide.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
-                
             }
-            mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
-            mt.RefID = parseIntField(lineData[getIndexForTableHeader(headers, "ref_id", true)]);
-            mt.ProteinDescription = lineData[getIndexForTableHeader(headers, "description", true)];
+            else
+            {
+                mt.MZ = parseDoubleField(getValue(new string[] { "mz" }, lineData, "0"));
+                if (mt.MZ == 0 || mt.MZ == double.NaN)
+                {
+                    mt.MZ = mt.Peptide.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+                }
+
+                mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
+            }
+            
+            mt.RefID = parseIntField(getValue(new string[] { "ref_id" }, lineData, "-1"));
+            mt.ProteinDescription = getValue(new string[] { "description" }, lineData, "");
             
             return mt;
             
+        }
+
+        private string getValue(string[] possibleHeaders, List<string> lineData, string defaultVal)
+        {
+            foreach (var possibleHeader in possibleHeaders)
+            {
+
+                
+                int indexOfHeader = getIndexForTableHeader(_headers, possibleHeader, true);
+                bool foundHeader = (indexOfHeader != -1);
+
+                if (foundHeader)
+                {
+                    return lineData[indexOfHeader];
+                }
+                
+            }
+            return defaultVal;
+
         }
 
         private List<string> getHeaders(string headerLine)

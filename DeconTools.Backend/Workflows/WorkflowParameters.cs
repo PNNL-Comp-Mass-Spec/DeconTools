@@ -14,10 +14,7 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
         #region Properties
-        public string WorkflowParametersType
-        {
-            get { return this.GetType().Name;  }
-        }
+        public abstract string WorkflowType { get;  }
 
       
 

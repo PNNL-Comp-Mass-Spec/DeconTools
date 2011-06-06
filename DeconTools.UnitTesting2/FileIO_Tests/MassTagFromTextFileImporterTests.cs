@@ -13,6 +13,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     {
 
         string massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
+        string massTagTestFile2 = "..\\..\\..\\TestFiles\\FileIOTests\\importedMassTagsFormat2.txt";
 
 
         [Test]
@@ -41,6 +42,32 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(4225609, testMassTag.ID);
 
             
+        }
+
+
+        [Test]
+        public void importFromSQLManagmentStyleTextFile_test1()
+        {
+            MassTagCollection mtc = new MassTagCollection();
+
+            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile2);
+            mtc = massTagImporter.Import();
+
+            Assert.AreNotEqual(null, mtc.MassTagList);
+            Assert.AreEqual(13, mtc.MassTagList.Count);
+
+            MassTag testMassTag = mtc.MassTagList[0];
+
+
+            Assert.AreEqual("AVTTADQVQQEVER", testMassTag.PeptideSequence);
+            Assert.AreEqual(0, testMassTag.ChargeState);
+            Assert.AreEqual(0.2365603m, (decimal)testMassTag.NETVal);
+            Assert.AreEqual("C64H108N20O26S0", testMassTag.Peptide.GetEmpiricalFormula());
+            Assert.AreEqual(137, testMassTag.RefID);
+            Assert.AreEqual(1572.774283m, (decimal)testMassTag.MonoIsotopicMass);
+            Assert.AreEqual(0, (decimal)testMassTag.MZ);
+            Assert.AreEqual(6, testMassTag.ObsCount);
+            Assert.AreEqual(354885422, testMassTag.ID);
         }
 
     }

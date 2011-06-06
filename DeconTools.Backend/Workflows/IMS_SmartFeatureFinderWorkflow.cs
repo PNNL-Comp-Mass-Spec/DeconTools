@@ -25,7 +25,7 @@ using System.Threading;
 
 namespace DeconTools.Backend.Workflows
 {
-    public class IMS_SmartFeatureFinderWorkflow : IWorkflow
+    public class IMS_SmartFeatureFinderWorkflow : WorkflowBase
     {
 
         private string rawdataFile;   //@"D:\Data\UIMF\SmartSumming\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
@@ -42,8 +42,9 @@ namespace DeconTools.Backend.Workflows
 
 
         #region Constructors
-        public IMS_SmartFeatureFinderWorkflow(string masterPeakListFilePath)
+        public IMS_SmartFeatureFinderWorkflow(Run run, string masterPeakListFilePath)
         {
+            this.Run = run;
             this.peakFile = masterPeakListFilePath;
 
             InitializeWorkflow();
@@ -94,9 +95,21 @@ namespace DeconTools.Backend.Workflows
 
         #region IWorkflow Members
 
+        //  public override WorkflowParameters WorkflowParameters
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
         public string Name { get; set; }
 
-        public void InitializeWorkflow()
+        public override void InitializeWorkflow()
         {
 
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
@@ -206,9 +219,9 @@ namespace DeconTools.Backend.Workflows
             Console.WriteLine("Finished updating frame pressures from the other thread");
         }
 
-        public void ExecuteWorkflow(DeconTools.Backend.Core.Run run)
+        public override void Execute()
         {
-            this.rawdataFile = run.Filename;
+            this.rawdataFile = this.Run.Filename;
             this.outputFeatureFile = getOutputFileName();
             this.logFile = getlogFileName();
 
@@ -217,7 +230,7 @@ namespace DeconTools.Backend.Workflows
             Stopwatch st = new Stopwatch();
             st.Start();
 
-            thisUimfRun = (UIMFRun)run;
+            thisUimfRun = (UIMFRun)this.Run;
 
             Console.WriteLine("Writing features to file " + outputFeatureFile);
             Console.WriteLine("Writing logs to " + logFile);

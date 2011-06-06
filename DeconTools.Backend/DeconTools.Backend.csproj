@@ -173,6 +173,7 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
     <Compile Include="ProcessingTasks\TaskControllers\N14N15_ChromatogramApproachTaskController.cs" />
     <Compile Include="ProcessingTasks\TaskControllers\N14N15_CustomWorkflow1.cs" />
@@ -395,7 +396,7 @@
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
     <Compile Include="Workflows\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
-    <Compile Include="Workflows\IWorkflow.cs" />
+    <Compile Include="Workflows\WorkflowBase.cs" />
     <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\WorkflowParameters.cs" />
   </ItemGroup>

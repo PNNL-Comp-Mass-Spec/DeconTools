@@ -12,14 +12,15 @@ using DeconTools.Backend.Algorithms;
 
 namespace DeconTools.Backend.Workflows
 {
-    public class IMS_WholisticFeatureFinderWorkflow : IWorkflow
+    public class IMS_WholisticFeatureFinderWorkflow : WorkflowBase
     {
         List<MSPeakResult> processedMSPeaks;
 
 
         #region Constructors
-        public IMS_WholisticFeatureFinderWorkflow()
+        public IMS_WholisticFeatureFinderWorkflow(Run run)
         {
+            this.Run = run;
             InitializeWorkflow();
         }
         #endregion
@@ -59,7 +60,20 @@ namespace DeconTools.Backend.Workflows
 
         public string Name { get; set; }
 
-        public void InitializeWorkflow()
+        //public override WorkflowParameters WorkflowParameters
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
+
+        public override void InitializeWorkflow()
         {
 
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
@@ -90,10 +104,10 @@ namespace DeconTools.Backend.Workflows
             processedMSPeaks = new List<MSPeakResult>();
         }
 
-        public void ExecuteWorkflow(DeconTools.Backend.Core.Run run)
+        public override void Execute()
         {
 
-            UIMFRun uimfRun = (UIMFRun)run;
+            UIMFRun uimfRun = (UIMFRun)this.Run;
 
             //for each frame
 
@@ -158,7 +172,7 @@ namespace DeconTools.Backend.Workflows
 
                     // create drift profile from raw data
                     double driftTimeProfileMZTolerance = this.DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
-                    uimfRun.GetDriftTimeProfile(frame.PrimaryFrame, run.MinScan, run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
+                    uimfRun.GetDriftTimeProfile(frame.PrimaryFrame, this.Run.MinScan, this.Run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
 
                     bool driftTimeProfileIsEmpty = (uimfRun.XYData.Xvalues == null);
                     if (driftTimeProfileIsEmpty)

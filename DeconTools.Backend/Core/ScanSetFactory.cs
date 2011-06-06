@@ -17,6 +17,27 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
+
+        public ScanSet CreateScanSet(Run run, int targetScan, int scansSummed, int desiredMSLevel)
+        {
+            int currentLevel = run.GetMSLevel(targetScan);
+
+            int closestDesiredMSLevelScan = 0;
+
+            if (currentLevel == desiredMSLevel)
+            {
+                closestDesiredMSLevelScan = targetScan;
+            }
+            else
+            {
+                closestDesiredMSLevelScan = run.GetClosestMSScan(targetScan, Globals.ScanSelectionMode.CLOSEST);
+            }
+
+            return CreateScanSet(run, closestDesiredMSLevelScan,scansSummed);
+
+
+        }
+
         public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
         {
             int currentLevel = run.GetMSLevel(scan);
