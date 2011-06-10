@@ -394,6 +394,7 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\DeconToolsTargetedWorkflowParameters.cs" />
     <Compile Include="Workflows\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\WorkflowBase.cs" />

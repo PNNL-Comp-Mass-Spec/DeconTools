@@ -50,6 +50,8 @@ namespace DeconTools.Backend.Runs
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxScan = GetMaxPossibleScanIndex();
+
+
         }
 
         public XCaliburRun(string filename, int minScan, int maxScan)

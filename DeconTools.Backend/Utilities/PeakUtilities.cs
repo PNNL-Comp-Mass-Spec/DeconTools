@@ -169,6 +169,7 @@ namespace DeconTools.Backend.Utilities
         }
 
         //TODO:  fix this.  I'm duplicating above code.  There should be a better way.... 
+        //TODO: there is a bug here; need to unit test this and fix it.
         public static int getIndexOfClosestValue(List<MSPeak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)

@@ -149,6 +149,17 @@ namespace DeconTools.Backend.Core
         {
             this.NumChromPeaksWithinTolerance = numChromPeaksWithinTolerance;
         }
+
+
+        public virtual void ResetResult()
+        {
+            this.Flags.Clear();
+            this.ErrorDescription = "";
+            this.Score = 1;
+            this.InterferenceScore = 1;
+            this.IsotopicProfile = null;
+        }
+
                
     }
 }

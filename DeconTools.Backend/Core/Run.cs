@@ -116,8 +116,29 @@ namespace DeconTools.Backend.Core
         private Dictionary<int, double> scanToNETAlignmentData;
         public Dictionary<int, double> ScanToNETAlignmentData
         {
-            get { return scanToNETAlignmentData; }
-            set { scanToNETAlignmentData = value; }
+            get
+            {
+                if (scanToNETAlignmentData == null|| scanToNETAlignmentData.Count==0)
+                {
+                    createScanToNETAlignmentData();
+                }
+                return scanToNETAlignmentData;
+            }
+            set
+            {
+                scanToNETAlignmentData = value;
+            }
+        }
+
+        private void createScanToNETAlignmentData()
+        {
+            scanToNETAlignmentData = new Dictionary<int, double>();
+
+            for (int i = this.MinScan; i <= this.MaxScan; i++)
+            {
+                scanToNETAlignmentData.Add(i, (double)i / (double)this.MaxScan);
+                
+            }
         }
 
         public bool ContainsMSMSData { get; set; }
@@ -139,7 +160,7 @@ namespace DeconTools.Backend.Core
         /// </summary>
         /// <param name="scanSet"></param>
         /// <returns></returns>
-        public virtual string GetScanInfo(ScanSet scanSet)  
+        public virtual string GetScanInfo(ScanSet scanSet)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(scanSet.ToString());
@@ -296,6 +317,10 @@ namespace DeconTools.Backend.Core
         //}
 
 
+    
+
+
+        #region Scan_To_NET_Alignment
         public virtual float GetNETValueForScan(int scanNum)
         {
             if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
@@ -331,13 +356,6 @@ namespace DeconTools.Backend.Core
 
 
         }
-
-
-        public virtual int GetCurrentScanOrFrame()
-        {
-            return this.CurrentScanSet.PrimaryScanNumber;
-        }
-
         public virtual void UpdateNETAlignment()
         {
 
@@ -404,11 +422,14 @@ namespace DeconTools.Backend.Core
         }
 
 
+        #endregion
 
+   
 
-
-
-
+        public virtual int GetCurrentScanOrFrame()
+        {
+            return this.CurrentScanSet.PrimaryScanNumber;
+        }
 
         public virtual int GetClosestMSScan(int inputScan, Globals.ScanSelectionMode scanSelectionMode)
         {
@@ -530,7 +551,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-
         protected SortedDictionary<int, byte> MSLevelList { get; set; }
 
         public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
@@ -544,7 +564,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-
         public virtual void Close()
         {
             this.DeconToolsPeakList = null;
@@ -556,8 +575,6 @@ namespace DeconTools.Backend.Core
             this.XYData = null;
 
         }
-
-
 
         public virtual string GetCurrentScanOrFrameInfo()
         {
@@ -577,9 +594,9 @@ namespace DeconTools.Backend.Core
         public virtual void Dispose()
         {
             this.Close();
-            
 
-            
+
+
         }
 
         #endregion

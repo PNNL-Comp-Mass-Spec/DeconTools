@@ -24,8 +24,23 @@ namespace DeconTools.Backend.Workflows
 
 
         public abstract void LoadParameters(string xmlFilename);
-       
 
+        public virtual string ToStringWithDetails()
+        {
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, string> parameterValues = GetParameterTable();
+
+            foreach (var item in parameterValues)
+            {
+                sb.Append(item.Key);
+                sb.Append("\t");
+                sb.Append(item.Value);
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+
+        }
 
         public virtual void SaveParametersToXML(string xmlFilename)
         {

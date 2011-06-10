@@ -123,6 +123,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                 resultColl.Run.CurrentScanSet = scanset;
 
+                //This resets the flags and the scores on a given result
+                currentResult.ResetResult();
+
                 //generate a mass spectrum
                 msgen.Execute(resultColl);
 
