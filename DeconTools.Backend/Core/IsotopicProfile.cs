@@ -246,7 +246,7 @@ namespace DeconTools.Backend.Core
             iso.MostAbundantIsotopeMass = this.MostAbundantIsotopeMass;
             iso.Original_Total_isotopic_abundance = this.Original_Total_isotopic_abundance;
             iso.OriginalIntensity = this.OriginalIntensity;
-            iso.Peaklist = this.Peaklist;
+            iso.Peaklist = new List<MSPeak>(this.Peaklist);
             iso.Score = this.Score;
 
             return iso;

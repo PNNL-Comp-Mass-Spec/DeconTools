@@ -33,5 +33,7 @@ namespace DeconTools.Backend.Core
 
         #region Private Methods
         #endregion
+
+        public double IntensityI4Adjusted { get; set; }
     }
 }

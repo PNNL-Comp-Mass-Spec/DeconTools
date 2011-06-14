@@ -23,40 +23,55 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         public double Get_I0_I4_ratio(IsotopicProfile iso)
         {
-            double i0Intensity = getI0Intensity(iso);
-            double i2Intensity = getI2Intensity(iso);
-            double i4Intensity = GetI4Intensity(iso);
+            resetIntensityValues();
 
-            if (i4Intensity == 0) i4Intensity = double.Epsilon;
+            intensityI0 = getI0Intensity(iso);
+            intensityI2 = getI2Intensity(iso);
+            intensityI4 = GetI4Intensity(iso);
 
-            return i0Intensity / i4Intensity;
+            if (intensityI4 == 0) intensityI4 = double.Epsilon;
+
+            return intensityI0 / intensityI4;
+        }
+
+        private void resetIntensityValues()
+        {
+            intensityI0 = 0;
+            intensityI2 = 0;
+            intensityI4 = 0;
+            intensityTheorI0 = 0;
+            intensityTheorI2 = 0;
+            intensityTheorI4 = 0;
+            adjustedI4Intensity = 0;
+
         }
 
 
         public double GetAdjusted_I0_I4_YeoRatio(IsotopicProfile iso, IsotopicProfile theorIso)
         {
-            double i0 = getI0Intensity(iso);
-            double i2 = getI2Intensity(iso);
-            double i4 = GetI4Intensity(iso);
+            resetIntensityValues();
 
-            double theorI0 = getI0Intensity(theorIso);
-            double theorI2 = getI2Intensity(theorIso);
-            double theorI4 = GetI4Intensity(theorIso);
+            intensityI0 = getI0Intensity(iso);
+            intensityI2 = getI2Intensity(iso);
+            intensityI4 = GetI4Intensity(iso);
 
-            double adjustedI4Intensity;
+            intensityTheorI0 = getI0Intensity(theorIso);
+            intensityTheorI2 = getI2Intensity(theorIso);
+            intensityTheorI4 = GetI4Intensity(theorIso);
 
-            if (i4 == 0)
+            
+            if (intensityI4 == 0)
             {
-                adjustedI4Intensity = i4;
+                adjustedI4Intensity = intensityI4;
             }
             else
             {
                 // see Yeo et al (2001), Analytical Chemistry. "Proteolytic O-18 labeling for comparative proteomics: Model studies with two serotypes of adenovirus."
-                adjustedI4Intensity = i4 - (theorI4 / theorI0 * i0);
+                adjustedI4Intensity = intensityI4 - (intensityTheorI4 / intensityTheorI0 * intensityI0);
 
-                if (i2 > 0)
+                if (intensityI2 > 0)
                 {
-                    adjustedI4Intensity = adjustedI4Intensity - (theorI2 / theorI0) * (i2 - theorI2 / theorI0 * i0) + 0.5 * (i2 - theorI2 / theorI0 * i0);
+                    adjustedI4Intensity = adjustedI4Intensity - (intensityTheorI2 / intensityTheorI0) * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0) + 0.5 * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0);
                 }
                 else
                 {
@@ -69,10 +84,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
 
 
-            if (adjustedI4Intensity <= 0) adjustedI4Intensity = 0;
+            if (adjustedI4Intensity <= 0) adjustedI4Intensity = double.Epsilon;
 
 
-            return i0 / adjustedI4Intensity;
+            return intensityI0 / adjustedI4Intensity;
 
 
         }
@@ -124,5 +139,19 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         #endregion
 
 
+
+        public double intensityI0 { get; set; }
+
+        public double intensityI2 { get; set; }
+
+        public double intensityI4 { get; set; }
+
+        public double intensityTheorI0 { get; set; }
+
+        public double intensityTheorI2 { get; set; }
+
+        public double intensityTheorI4 { get; set; }
+
+        public double adjustedI4Intensity { get; set; }
     }
 }

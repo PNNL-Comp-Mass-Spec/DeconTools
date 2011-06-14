@@ -166,6 +166,7 @@
     <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\IsotopicProfileInterferenceScorer.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\IterativeTFF.cs" />

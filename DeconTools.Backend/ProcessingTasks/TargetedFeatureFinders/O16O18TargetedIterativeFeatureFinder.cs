@@ -54,16 +54,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             IsotopicProfile foundO16O18Profile = o16profile.CloneIsotopicProfile();
+           
+            //rebuild isotopic peak list
             addIsotopePeaks(foundO16O18Profile, o16profile, 2);
-            addIsotopePeaks(foundO16O18Profile, o18SingleLabelProfile, 2);
+            addIsotopePeaks(foundO16O18Profile, o18SingleLabelProfile, 4);      // add the O18(1) and the O18(2) if present
             addIsotopePeaks(foundO16O18Profile, o18DoubleLabelProfile, 100);    // add as many peaks as possible
 
 
-            //lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16profile);
+            lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16profile);
 
             result.IsotopicProfile = foundO16O18Profile;
 
-        
+
 
 
         }
@@ -109,9 +111,17 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             for (int i = 0; i < numIsotopePeaksToAdd; i++)
             {
-                if (i < profileToAdd.Peaklist.Count - 1)
+                if (i < profileToAdd.Peaklist.Count)
                 {
-                    foundO16O18Profile.Peaklist.Add(profileToAdd.Peaklist[i]);
+                    double peakmz = profileToAdd.Peaklist[i].XValue;
+                    double toleranceInMZ = this.ToleranceInPPM / 1e6 * peakmz;
+
+                    List<MSPeak> peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakmz, toleranceInMZ);
+
+                    if (peaksAlreadyThere == null || peaksAlreadyThere.Count == 0)
+                    {
+                        foundO16O18Profile.Peaklist.Add(profileToAdd.Peaklist[i]);
+                    }
                 }
                 else    // if profileToAdd doesn't have enough peaks
                 {
