@@ -43,8 +43,8 @@ namespace TestConsole1
             string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
             Run run = new UIMFRun(@"D:\Data\UIMF\Sarc\the_10_testDatasets\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf");
 
-            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(masterPeaksFilepath);
-            workflow.ExecuteWorkflow(run);
+            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
+            workflow.Execute();
         }
     }
 }
