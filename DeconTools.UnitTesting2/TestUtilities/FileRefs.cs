@@ -87,5 +87,7 @@ namespace DeconTools.UnitTesting2
 
 
 
+
+        public static string BasicTargetedWorkflowPARAMETERS_EXPORTED_TESTFILE1 = TestFileBasePath + "\\" + "BasicTargetedWorkflowParameters_exported1.xml";
     }
 }
