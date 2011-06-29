@@ -177,7 +177,7 @@ namespace DeconTools.Backend.Core
 
         public double GetMonoAbundance()
         {
-            if (this.peaklist == null||this.Peaklist.Count==0) return -1;
+            if (this.peaklist == null||this.Peaklist.Count==0) return 0;
             return this.peaklist[0].Height;
         }
 

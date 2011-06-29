@@ -92,7 +92,6 @@ namespace DeconTools.Backend.FileIO
             sb.Append("flag");
             sb.Append(Delimiter);
             sb.Append("interference_score");
-            sb.Append(Environment.NewLine);
             return sb.ToString();
         }
         #endregion

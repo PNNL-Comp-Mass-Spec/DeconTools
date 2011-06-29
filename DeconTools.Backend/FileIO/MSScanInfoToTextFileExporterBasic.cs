@@ -69,8 +69,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append("num_peaks");
             sb.Append(Delimiter);
             sb.Append("num_deisotoped");
-            sb.Append(Environment.NewLine);
-
+           
             return sb.ToString();
         }
         #endregion

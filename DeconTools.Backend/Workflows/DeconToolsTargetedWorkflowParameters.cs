@@ -26,6 +26,22 @@ namespace DeconTools.Backend.Workflows
         public double MSPeakDetectorSigNoise { get; set; }
         public double MSToleranceInPPM { get; set; }
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
+      
+
+
+        /// <summary>
+        /// The MS peak detection PeakBR that is used in forming the _peaks.txt file that 
+        /// contains the peak-level information on which extracted ion chromatograms are based
+        /// </summary>
+        public double ChromGenSourceDataPeakBR { get; set; }
+        
+        
+        /// <summary>
+        /// The MS peak detection SigNoise threshold that is used in forming the _peaks.txt
+        /// file that contains the peak-level information on which extracted ion chromatograms
+        /// are based
+        /// </summary>
+        public double ChromGenSourceDataSigNoise { get; set; }
 
         #endregion
 

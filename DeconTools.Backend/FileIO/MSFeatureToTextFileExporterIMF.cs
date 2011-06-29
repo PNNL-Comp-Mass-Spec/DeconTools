@@ -96,7 +96,6 @@ namespace DeconTools.Backend.FileIO
             sb.Append("TIA_orig_intensity");
             sb.Append(Delimiter);
             sb.Append("flag");
-            sb.Append(Environment.NewLine);
             return sb.ToString();
         }
         #endregion

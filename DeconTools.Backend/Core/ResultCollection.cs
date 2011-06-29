@@ -238,6 +238,12 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public List<MassTagResultBase> GetMassTagResults()
+        {
+            return this.MassTagResultList.Values.ToList();
+        }
+
+
         public List<MassTagResultBase> GetSuccessfulMassTagResults()
         {
 

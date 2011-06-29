@@ -322,5 +322,22 @@ namespace DeconTools.Backend.Workflows
         }
 
         #endregion
+
+        public override void InitializeRunRelatedTasks()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override WorkflowParameters WorkflowParameters
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace DeconTools.Backend.Workflows
         #region Properties
         public abstract string WorkflowType { get;  }
 
+        public Globals.MassTagResultType ResultType { get; set; }
       
 
         #endregion

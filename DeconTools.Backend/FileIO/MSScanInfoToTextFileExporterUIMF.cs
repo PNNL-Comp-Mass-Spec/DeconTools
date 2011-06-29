@@ -80,8 +80,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append("frame_pressure_front");
             sb.Append(Delimiter);
             sb.Append("frame_pressure_back");
-            sb.Append(Environment.NewLine);
-
+         
             return sb.ToString();
         }
         #endregion

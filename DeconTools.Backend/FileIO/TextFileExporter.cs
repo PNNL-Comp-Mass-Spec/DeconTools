@@ -59,7 +59,7 @@ namespace DeconTools.Backend.FileIO
             using (StreamWriter writer = File.AppendText(this.FileName))
             {
                 string headerLine = buildHeaderLine();
-                writer.Write(headerLine);
+                writer.WriteLine(headerLine);
                 writer.Flush();
                 writer.Close();
             }
@@ -72,8 +72,8 @@ namespace DeconTools.Backend.FileIO
             {
                 foreach (T result in resultList)
                 {
-                    string isosResultOutput = buildResultOutput(result);
-                    writer.WriteLine(isosResultOutput);
+                    string resultOutput = buildResultOutput(result);
+                    writer.WriteLine(resultOutput);
                 }
 
                 writer.Flush();

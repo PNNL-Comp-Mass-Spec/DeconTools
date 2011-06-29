@@ -135,6 +135,13 @@
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
     <Compile Include="Core\O16O18_TResult.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
+    <Compile Include="Core\Results\DeconToolsResult.cs" />
+    <Compile Include="Core\Results\N14N15TargetedResult.cs" />
+    <Compile Include="Core\Results\O16O18TargetedResult.cs" />
+    <Compile Include="Core\Results\ResultFactory.cs" />
+    <Compile Include="Core\Results\TargetedResult.cs" />
+    <Compile Include="Core\Results\TargetedResultRepository.cs" />
+    <Compile Include="Core\Results\UnlabelledTargetedResult.cs" />
     <Compile Include="Data\AVLTree.cs" />
     <Compile Include="Data\BinarySearchTree.cs" />
     <Compile Include="Data\BitArray2D.cs" />
@@ -147,6 +154,7 @@
     </Compile>
     <Compile Include="FileIO\AcqusFileReader.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
+    <Compile Include="FileIO\ImporterBase.cs" />
     <Compile Include="FileIO\MassTagTextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterBasic.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterUIMF.cs" />
@@ -159,6 +167,14 @@
     <Compile Include="FileIO\MSScanInfoToTextFileExporterBasic.cs" />
     <Compile Include="FileIO\MSScanInfoToTextFileExporterUIMF.cs" />
     <Compile Include="FileIO\SQLiteExporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\N14N15TargetedResultFromTextImporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\N14N15TargetedResultToTextExporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\O16O18TargetedResultFromTextImporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\O16O18TargetedResultToTextExporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\TargetedResultFromTextImporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\TargetedResultToTextExporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\UnlabelledTargetedResultFromTextImporter.cs" />
+    <Compile Include="FileIO\TargetedResultFileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
@@ -341,6 +357,7 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\ObjectCopier.cs" />
+    <Compile Include="Utilities\RunUtilities.cs" />
     <Compile Include="Utilities\SerializerGeneric.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
     <Compile Include="Utilities\SqliteNETUtils\SqliteNETUtils.cs" />
@@ -395,9 +412,13 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\BasicTargetedWorkflow.cs" />
+    <Compile Include="Workflows\BasicTargetedWorkflowParameters.cs" />
     <Compile Include="Workflows\DeconToolsTargetedWorkflowParameters.cs" />
     <Compile Include="Workflows\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\IMS_WholisticFeatureFinderWorkflow.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="Workflows\WorkflowBase.cs" />
     <Compile Include="Workflows\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
     <Compile Include="Workflows\WorkflowParameters.cs" />
