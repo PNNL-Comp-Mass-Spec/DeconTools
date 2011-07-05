@@ -11,6 +11,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public abstract class TFFBase : Task
     {
+
+
+
+
         #region Properties
 
         public virtual double ToleranceInPPM { get; set; }
@@ -29,6 +33,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
         public int NumPeaksUsedInAbundance { get; set; }
+
+        protected MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo { get; set; }
+
+
 
         #endregion
 

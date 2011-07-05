@@ -13,6 +13,8 @@ using DeconTools.Backend;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.FileIO;
+
 
 namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 {

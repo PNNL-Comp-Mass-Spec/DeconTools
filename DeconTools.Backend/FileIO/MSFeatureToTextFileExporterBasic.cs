@@ -9,21 +9,10 @@ namespace DeconTools.Backend.FileIO
     public class MSFeatureToTextFileExporterBasic : TextFileExporter<IsosResult>
     {
         #region Constructors
-        public MSFeatureToTextFileExporterBasic(string fileName)
-            : this(fileName, ',')
-        {
+        public MSFeatureToTextFileExporterBasic(string fileName) : base(fileName,',') { }
 
-        }
 
-        public MSFeatureToTextFileExporterBasic(string fileName, char delimiter)
-        {
-            this.Name = "MSFeatureToTextFileExporterBasic";
-            this.Delimiter = delimiter;
-            this.FileName = fileName;
-
-            initializeAndWriteHeader();
-
-        }
+        public MSFeatureToTextFileExporterBasic(string fileName, char delimiter) : base(fileName, delimiter) { }
 
         #endregion
 
@@ -96,6 +85,6 @@ namespace DeconTools.Backend.FileIO
         }
         #endregion
 
-  
+
     }
 }

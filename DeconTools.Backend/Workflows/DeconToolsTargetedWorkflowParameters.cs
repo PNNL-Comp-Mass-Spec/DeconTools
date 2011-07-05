@@ -43,6 +43,14 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         public double ChromGenSourceDataSigNoise { get; set; }
 
+
+        /// <summary>
+        /// Number of chrom peaks allowed. For example if this is set to '5' 
+        /// and '6' peaks were found within the tolerance, then the selected best peak is set to
+        /// null indicating a failed execution
+        /// </summary>
+        public int NumChromPeaksAllowedDuringSelection { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -92,6 +100,7 @@ namespace DeconTools.Backend.Workflows
             this.MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
             this.MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
             this.NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
+            this.NumChromPeaksAllowedDuringSelection = Convert.ToInt32(parameterTableFromXML["NumChromPeaksAllowedDuringSelection"]);
         }
 
 

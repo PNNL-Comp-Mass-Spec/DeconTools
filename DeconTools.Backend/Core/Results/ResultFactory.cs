@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DeconTools.Backend.Core.Results
 {
@@ -105,8 +102,8 @@ namespace DeconTools.Backend.Core.Results
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();
             tr.IntensityMostAbundantPeak = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.getMostIntensePeak().Height;
             tr.IScore = (float)result.InterferenceScore;
-            tr.MonoMass = result.IsotopicProfile.MonoIsotopicMass;
-            tr.MonoMZ = result.IsotopicProfile.MonoPeakMZ;
+            tr.MonoMass = result.IsotopicProfile == null ? 0f: result.IsotopicProfile.MonoIsotopicMass;
+            tr.MonoMZ = result.IsotopicProfile == null ? 0f : result.IsotopicProfile.MonoPeakMZ;
             tr.NET = (float)result.GetNET();
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
             tr.FitScore = (float)result.Score;

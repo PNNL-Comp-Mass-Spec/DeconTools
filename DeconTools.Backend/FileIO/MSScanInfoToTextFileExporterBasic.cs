@@ -6,23 +6,15 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSScanInfoToTextFileExporterBasic:TextFileExporter<ScanResult>
+    public class MSScanInfoToTextFileExporterBasic : TextFileExporter<ScanResult>
     {
         #region Constructors
-        public MSScanInfoToTextFileExporterBasic(string fileName)
-            : this(fileName, ',')
-        {
-
-        }
+        public MSScanInfoToTextFileExporterBasic(string fileName) : base(fileName, ',') { }
 
         public MSScanInfoToTextFileExporterBasic(string fileName, char delimiter)
+            : base(fileName, delimiter)
         {
             this.Name = "MSScanInfoToTextFileExporterBasic";
-            this.Delimiter = delimiter;
-            this.FileName = fileName;
-
-            initializeAndWriteHeader();
-
         }
 
         #endregion
@@ -69,10 +61,10 @@ namespace DeconTools.Backend.FileIO
             sb.Append("num_peaks");
             sb.Append(Delimiter);
             sb.Append("num_deisotoped");
-           
+
             return sb.ToString();
         }
         #endregion
-     
+
     }
 }

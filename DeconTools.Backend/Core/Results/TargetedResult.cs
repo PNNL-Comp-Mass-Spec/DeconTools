@@ -15,6 +15,7 @@ namespace DeconTools.Backend.Core.Results
         public int ScanLCEnd { get; set; }
 
         public float NET { get; set; }
+        public float NETAligned { get; set; }
 
         public int NumChromPeaksWithinTol { get; set; }
         #endregion

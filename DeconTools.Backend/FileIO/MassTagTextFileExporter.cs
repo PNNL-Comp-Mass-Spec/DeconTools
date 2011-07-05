@@ -10,22 +10,9 @@ namespace DeconTools.Backend.FileIO
     {
 
         #region Constructors
-        public MassTagTextFileExporter(string fileName)
-            : this(fileName, '\t')
-        {
+        public MassTagTextFileExporter(string fileName):base(fileName,'\t'){}
 
-
-        }
-
-        public MassTagTextFileExporter(string fileName, char delimiter)
-        {
-            this.Name = "MassTagTextFileExporter";
-            this.Delimiter = delimiter;
-            this.FileName = fileName;
-
-            initializeAndWriteHeader();
-
-        }
+        public MassTagTextFileExporter(string fileName, char delimiter):base(fileName,delimiter){}
 
         #endregion
 

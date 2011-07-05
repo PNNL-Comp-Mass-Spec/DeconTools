@@ -6,18 +6,12 @@ using DeconTools.Backend.Core.Results;
 
 namespace DeconTools.Backend.FileIO.TargetedResultFileIO
 {
-    public abstract class TargetedResultToTextExporter:TextFileExporter<TargetedResult>
+    public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResult>
     {
-       
+
         #region Constructors
-        public TargetedResultToTextExporter(string filename)
-        {
-            this.FileName = filename;
-            this.Delimiter = '\t';
+        public TargetedResultToTextExporter(string filename) : base(filename, '\t') { }
 
-            initializeAndWriteHeader();
-
-        }
         #endregion
 
         #region Properties
@@ -79,7 +73,7 @@ namespace DeconTools.Backend.FileIO.TargetedResultFileIO
             sb.Append(Delimiter);
             sb.Append(result.IScore.ToString("0.0000"));
             return sb.ToString();
-            
+
         }
 
         protected override string buildHeaderLine()

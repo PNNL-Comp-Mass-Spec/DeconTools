@@ -84,6 +84,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MSDBLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="MultiAlignEngine">
+      <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
@@ -131,9 +134,9 @@
     <Compile Include="Core\PeakChrom.cs" />
     <Compile Include="Core\ElutingPeak.cs" />
     <Compile Include="Core\IsotopicProfileChromData.cs" />
-    <Compile Include="Core\LabeledMassTagResult.cs" />
+    <Compile Include="Core\Results\LabeledMassTagResult.cs" />
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
-    <Compile Include="Core\O16O18_TResult.cs" />
+    <Compile Include="Core\Results\O16O18_TResult.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Core\Results\DeconToolsResult.cs" />
     <Compile Include="Core\Results\N14N15TargetedResult.cs" />
@@ -142,10 +145,11 @@
     <Compile Include="Core\Results\TargetedResult.cs" />
     <Compile Include="Core\Results\TargetedResultRepository.cs" />
     <Compile Include="Core\Results\UnlabelledTargetedResult.cs" />
+    <Compile Include="Core\ScanNETPair.cs" />
     <Compile Include="Data\AVLTree.cs" />
     <Compile Include="Data\BinarySearchTree.cs" />
     <Compile Include="Data\BitArray2D.cs" />
-    <Compile Include="Data\Importers\MassTagFromTextFileImporter.cs" />
+    <Compile Include="FileIO\MassTagFromTextFileImporter.cs" />
     <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
@@ -155,6 +159,10 @@
     <Compile Include="FileIO\AcqusFileReader.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
     <Compile Include="FileIO\ImporterBase.cs" />
+    <Compile Include="FileIO\MassAlignmentInfoFromTextImporter.cs" />
+    <Compile Include="FileIO\MassAlignmentInfoToTextExporter.cs" />
+    <Compile Include="FileIO\NETAlignmentFromTextImporter.cs" />
+    <Compile Include="FileIO\NETAlignmentInfoToTextExporter.cs" />
     <Compile Include="FileIO\MassTagTextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterBasic.cs" />
     <Compile Include="FileIO\MSFeatureToSQLiteExporterUIMF.cs" />
@@ -181,6 +189,9 @@
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
+    <Compile Include="ProcessingTasks\NETAlignment\NETAndMassAligner.cs" />
+    <Compile Include="ProcessingTasks\NETAlignment\NETGrouping.cs" />
+    <Compile Include="ProcessingTasks\NETAlignment\TargetedAligner.cs" />
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />
@@ -200,14 +211,14 @@
     <Compile Include="Core\FrameSet.cs" />
     <Compile Include="Core\FrameSetCollection.cs" />
     <Compile Include="Core\IPeak.cs" />
-    <Compile Include="Core\IsosResult.cs" />
+    <Compile Include="Core\Results\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />
     <Compile Include="Core\MassTag.cs" />
-    <Compile Include="Core\MassTagResultBase.cs" />
+    <Compile Include="Core\Results\MassTagResultBase.cs" />
     <Compile Include="Core\MassTagCollection.cs" />
-    <Compile Include="Core\MassTagResult.cs" />
+    <Compile Include="Core\Results\MassTagResult.cs" />
     <Compile Include="Core\MSPeak.cs" />
-    <Compile Include="Core\N14N15_TResult.cs" />
+    <Compile Include="Core\Results\N14N15_TResult.cs" />
     <Compile Include="Core\OldDecon2LSParameters.cs" />
     <Compile Include="Core\OldDeconFormatResult.cs" />
     <Compile Include="Core\PeakCollection.cs" />
@@ -221,16 +232,16 @@
     <Compile Include="Core\ResultFlag.cs" />
     <Compile Include="ProjectControllers\KoreaIMSTextFileProjectController.cs" />
     <Compile Include="ProjectControllers\RunMergingProjectController.cs" />
-    <Compile Include="Core\ScanResult.cs" />
+    <Compile Include="Core\Results\ScanResult.cs" />
     <Compile Include="Core\ScanResultCollection.cs" />
     <Compile Include="Core\ScanSet.cs" />
     <Compile Include="Core\ScanSetCollection.cs" />
     <Compile Include="Core\ScanSetFactory.cs" />
-    <Compile Include="Core\StandardIsosResult.cs" />
-    <Compile Include="Core\StandardScanResult.cs" />
+    <Compile Include="Core\Results\StandardIsosResult.cs" />
+    <Compile Include="Core\Results\StandardScanResult.cs" />
     <Compile Include="Core\TaskCollection.cs" />
     <Compile Include="Core\TaskController.cs" />
-    <Compile Include="Core\UIMFIsosResult.cs" />
+    <Compile Include="Core\Results\UIMFIsosResult.cs" />
     <Compile Include="Core\UIMFLibraryAdapter.cs" />
     <Compile Include="Core\UMC.cs" />
     <Compile Include="Core\UMCCollection.cs" />
@@ -239,12 +250,12 @@
     <Compile Include="Data\DeconResultCombiner.cs" />
     <Compile Include="Data\Exporters\Exporter.cs" />
     <Compile Include="Data\Exporters\IMFIsosExporter.cs" />
-    <Compile Include="Data\Importers\IMassTagImporter.cs" />
+    <Compile Include="FileIO\IMassTagImporter.cs" />
     <Compile Include="Data\Importers\Importer.cs" />
     <Compile Include="Data\Importers\IPeakImporter.cs" />
     <Compile Include="Data\Exporters\IsosExporter.cs" />
-    <Compile Include="Data\Importers\MassTagFromDBImporter.cs" />
-    <Compile Include="Data\Importers\MassTagIDGenericImporter.cs" />
+    <Compile Include="FileIO\MassTagFromDBImporter.cs" />
+    <Compile Include="FileIO\MassTagIDGenericImporter.cs" />
     <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
@@ -391,7 +402,7 @@
     <Compile Include="Core\Run.cs" />
     <Compile Include="Data\XYData.cs" />
     <Compile Include="Runs\XYDataRun.cs" />
-    <Compile Include="Core\UIMFScanResult.cs" />
+    <Compile Include="Core\Results\UIMFScanResult.cs" />
     <Compile Include="Utilities\AssemblyInfoRetriever.cs" />
     <Compile Include="Utilities\Converters\FileTypeConverter.cs" />
     <Compile Include="Utilities\DesignByContract.cs" />

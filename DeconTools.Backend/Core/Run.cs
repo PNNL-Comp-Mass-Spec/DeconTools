@@ -41,6 +41,29 @@ namespace DeconTools.Backend.Core
 
         public string DataSetPath { get; set; }
 
+        /// <summary>
+        /// Contains the LCMSWarp mass and NET alignment information needed for Targeted workflows
+        /// </summary>
+        public MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo
+        {
+            get
+            {
+                return _alignmentInfo;
+            }
+            set
+            {
+                _alignmentInfo = value;
+                if (_alignmentInfo!=null)
+                {
+                    if (_alignmentInfo.marrNETFncTimeInput != null && _alignmentInfo.marrNETFncTimeOutput != null)
+                    {
+                        SetScanToNETAlignmentData(_alignmentInfo.marrNETFncTimeInput, _alignmentInfo.marrNETFncTimeOutput);
+                    }
+                }
+            }
+        }
+
+
 
         private Globals.MSFileType mSFileType;
         public Globals.MSFileType MSFileType
@@ -114,11 +137,12 @@ namespace DeconTools.Backend.Core
         }
 
         private Dictionary<int, double> scanToNETAlignmentData;
+        private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
         public Dictionary<int, double> ScanToNETAlignmentData
         {
             get
             {
-                if (scanToNETAlignmentData == null|| scanToNETAlignmentData.Count==0)
+                if (scanToNETAlignmentData == null || scanToNETAlignmentData.Count == 0)
                 {
                     createScanToNETAlignmentData();
                 }
@@ -137,7 +161,7 @@ namespace DeconTools.Backend.Core
             for (int i = this.MinScan; i <= this.MaxScan; i++)
             {
                 scanToNETAlignmentData.Add(i, (double)i / (double)this.MaxScan);
-                
+
             }
         }
 
@@ -317,7 +341,7 @@ namespace DeconTools.Backend.Core
         //}
 
 
-    
+
 
 
         #region Scan_To_NET_Alignment
@@ -356,9 +380,31 @@ namespace DeconTools.Backend.Core
 
 
         }
+
+        public virtual void SetScanToNETAlignmentData(float[] scanVals, float[] netVals)
+        {
+            this.ScanToNETAlignmentData.Clear();
+
+            for (int i = 0; i < scanVals.Length; i++)
+            {
+                int scanToAdd = (int)scanVals[i];
+
+                if (!this.ScanToNETAlignmentData.ContainsKey(scanToAdd))
+                {
+                    this.ScanToNETAlignmentData.Add(scanToAdd, netVals[i]);
+                }
+
+
+            }
+
+            UpdateNETAlignment();
+
+        }
+
         public virtual void UpdateNETAlignment()
         {
 
+            if (ScanSetCollection == null) return;
 
             foreach (ScanSet scan in ScanSetCollection.ScanSetList)
             {
@@ -424,7 +470,7 @@ namespace DeconTools.Backend.Core
 
         #endregion
 
-   
+
 
         public virtual int GetCurrentScanOrFrame()
         {

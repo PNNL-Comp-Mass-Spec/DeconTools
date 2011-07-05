@@ -93,5 +93,31 @@ namespace DeconTools.Backend.Utilities
            // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
         }
+
+        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile)
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(rawdataFilename);
+
+            //Console.WriteLine(run.DatasetName + " loaded.");
+
+            string basePath = run.DataSetPath;
+
+
+            string sourcePeaksFile;
+            if (peaksTestFile == null || peaksTestFile == String.Empty)
+            {
+                sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            }
+            else
+            {
+                sourcePeaksFile = peaksTestFile;
+            }
+
+            GetPeaks(run, sourcePeaksFile);
+
+            // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
+            return run;
+        }
     }
 }

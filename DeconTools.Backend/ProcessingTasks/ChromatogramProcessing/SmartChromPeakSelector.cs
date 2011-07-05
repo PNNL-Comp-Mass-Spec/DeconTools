@@ -55,6 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             this.NETTolerance = 0.025f;
             this.NumScansToSum = 1;
+            this.NumChromPeaksAllowed = 20;  //default is high so that many chrom peaks are considered
 
         }
 
@@ -67,6 +68,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         }
 
+        public SmartChromPeakSelector(float netTolerance, int numScansToSum, int numChromPeaksAllowed)
+            : this(netTolerance,numScansToSum)
+        {
+
+            this.NumChromPeaksAllowed = numChromPeaksAllowed;
+
+        }
+
 
         #endregion
 
@@ -74,6 +83,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         public float NETTolerance { get; set; }
 
         public int NumScansToSum { get; set; }
+
+        /// <summary>
+        /// Number of chrom peaks allowed. For example if this is set to '5' 
+        /// and '6' peaks were found within the tolerance, then the selected best peak is set to
+        /// null indicating a failed execution
+        /// 
+        /// </summary>
+        public int NumChromPeaksAllowed { get; set; }
+
 
         public DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector MSPeakDetector { get; set; }
         public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
@@ -114,43 +132,51 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
 
-
-            foreach (var peak in peaksWithinTol)
+            ChromPeak bestChromPeak;
+            if (currentResult.NumChromPeaksWithinTolerance > NumChromPeaksAllowed)
             {
-                ScanSet scanset = createNonSummedScanSet(peak, resultColl.Run);
-                PeakQualityData pq = new PeakQualityData(peak);
-                peakQualityList.Add(pq);
+                bestChromPeak = null;
+            }
+            else
+            {
+                foreach (var peak in peaksWithinTol)
+                {
+                    ScanSet scanset = createNonSummedScanSet(peak, resultColl.Run);
+                    PeakQualityData pq = new PeakQualityData(peak);
+                    peakQualityList.Add(pq);
 
-                resultColl.Run.CurrentScanSet = scanset;
+                    resultColl.Run.CurrentScanSet = scanset;
 
-                //This resets the flags and the scores on a given result
-                currentResult.ResetResult();
+                    //This resets the flags and the scores on a given result
+                    currentResult.ResetResult();
 
-                //generate a mass spectrum
-                msgen.Execute(resultColl);
+                    //generate a mass spectrum
+                    msgen.Execute(resultColl);
 
-                //detect peaks
-                MSPeakDetector.Execute(resultColl);
+                    //detect peaks
+                    MSPeakDetector.Execute(resultColl);
 
-                //find isotopic profile
-                TargetedMSFeatureFinder.Execute(resultColl);
+                    //find isotopic profile
+                    TargetedMSFeatureFinder.Execute(resultColl);
 
-                //get fit score
-                fitScoreCalc.Execute(resultColl);
+                    //get fit score
+                    fitScoreCalc.Execute(resultColl);
 
-                //get i_score
-                resultValidator.Execute(resultColl);
+                    //get i_score
+                    resultValidator.Execute(resultColl);
 
-                //collect the results together
-                addScoresToPeakQualityData(pq, currentResult);
+                    //collect the results together
+                    addScoresToPeakQualityData(pq, currentResult);
 
-                //pq.Display();
+                    //pq.Display();
 
+                }
+
+
+                //run a algorithm that decides, based on fit score mostly. 
+                bestChromPeak = determineBestChromPeak(peakQualityList);
             }
 
-
-            //run a algorithm that decides, based on fit score mostly. 
-            ChromPeak bestChromPeak = determineBestChromPeak(peakQualityList);
 
             ScanSet bestScanset = createSummedScanSet(bestChromPeak, resultColl.Run);
             resultColl.Run.CurrentScanSet = bestScanset;   // maybe good to set this here so that the MSGenerator can operate on it...  

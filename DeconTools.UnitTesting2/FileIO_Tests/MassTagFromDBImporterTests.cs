@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using DeconTools.Backend.Data.Importers;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.FileIO;
 
 namespace DeconTools.UnitTesting2.FileIO_Tests
 {

@@ -6,27 +6,15 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSScanInfoToTextFileExporterUIMF:TextFileExporter<ScanResult>
+    public class MSScanInfoToTextFileExporterUIMF : TextFileExporter<ScanResult>
     {
         #region Constructors
 
-        public MSScanInfoToTextFileExporterUIMF(string fileName)
-            : this(fileName, ',')
-        {
+        public MSScanInfoToTextFileExporterUIMF(string fileName) : base(fileName, ',') { }
 
-        }
-
-        public MSScanInfoToTextFileExporterUIMF(string fileName, char delimiter)
-        {
-            this.Name = "MSScanInfoToTextFileExporterUIMF";
-            this.Delimiter = delimiter;
-            this.FileName = fileName;
-
-            initializeAndWriteHeader();
-
-        }
+        public MSScanInfoToTextFileExporterUIMF(string fileName, char delimiter) : base(fileName, delimiter) { }
         #endregion
-   
+
 
         #region Private Methods
         protected override string buildResultOutput(ScanResult result)
@@ -80,7 +68,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append("frame_pressure_front");
             sb.Append(Delimiter);
             sb.Append("frame_pressure_back");
-         
+
             return sb.ToString();
         }
         #endregion

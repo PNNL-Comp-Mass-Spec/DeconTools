@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
@@ -91,6 +95,8 @@
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterTests.cs" />
     <Compile Include="FileIO_Tests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
+    <Compile Include="NET_Mass_AlignmentTests\AlignmentTests.cs" />
+    <Compile Include="NET_Mass_AlignmentTests\TargetedAlignerTests.cs" />
     <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
     <Compile Include="ProcessingRelated_Tests\IsotopicProfileQualityScoringTests\InterferenceScorerTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />

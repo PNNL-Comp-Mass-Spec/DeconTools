@@ -21,9 +21,11 @@ namespace DeconTools.Backend.Core.Results
 
         public string DatasetName { get; set; }
         public int ScanLC { get; set; }
+
   
         public int ChargeState { get; set; }
         public double MonoMass { get; set; }
+        public double MonoMassCalibrated { get; set; }
         public double MonoMZ { get; set; }
         public float FitScore { get; set; }
         public float IScore { get; set; }

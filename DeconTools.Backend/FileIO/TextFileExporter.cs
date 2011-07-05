@@ -9,18 +9,36 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
-    public abstract class TextFileExporter<T>:ExporterBase<T> 
+    public abstract class TextFileExporter<T> : ExporterBase<T>
     {
         #region Constructors
+
+        public TextFileExporter(string filename)
+            : this(filename, '\t')
+        {
+
+
+        }
+
+        public TextFileExporter(string filename, char delimiter)
+        {
+            this.FileName = filename;
+            this.Delimiter = delimiter;
+
+            initializeAndWriteHeader();
+        }
+
+
+
         #endregion
 
         #region Properties
-        
+
         /// <summary>
         /// Name of the Exporter - e.g. 'ScanResultExporter'; to be used in error reporting, etc. 
         /// </summary>
-        public string Name { get; set; } 
-        
+        public string Name { get; set; }
+
         /// <summary>
         /// Full file path to which data is written
         /// </summary>

@@ -7,25 +7,15 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSFeatureToTextFileExporterUIMF:TextFileExporter<IsosResult>
+    public class MSFeatureToTextFileExporterUIMF : TextFileExporter<IsosResult>
     {
         #region Constructors
-        public MSFeatureToTextFileExporterUIMF(string fileName)
-            : this(fileName, ',')
-        {
+        public MSFeatureToTextFileExporterUIMF(string fileName) : base(fileName, ',') { }
 
-        }
+        public MSFeatureToTextFileExporterUIMF(string fileName, char delimiter) : base(fileName, delimiter) { }
 
-        public MSFeatureToTextFileExporterUIMF(string fileName, char delimiter)
-        {
-            this.Name = "MSFeatureToTextFileExporterUIMF";
-            this.Delimiter = delimiter;
-            this.FileName = fileName;
-
-            initializeAndWriteHeader();
-        }
         #endregion
-  
+
         #region Private Methods
         protected override string buildResultOutput(IsosResult result)
         {
@@ -68,7 +58,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
             sb.Append(uimfResult.InterferenceScore.ToString("0.####"));
-  
+
 
             return sb.ToString();
         }
@@ -112,10 +102,10 @@ namespace DeconTools.Backend.FileIO
             sb.Append("flag");
             sb.Append(Delimiter);
             sb.Append("interference_score");
-           
+
             return sb.ToString();
         }
         #endregion
-    
+
     }
 }

@@ -84,7 +84,7 @@ namespace DeconTools.Backend.ProcessingTasks
         
         public override void Execute(ResultCollection resultColl)
         {
-            Check.Require(resultColl.MSPeakResultList != null, "PeakChromatogramGenerator failed. No peaks.");
+            Check.Require(resultColl.MSPeakResultList != null && resultColl.MSPeakResultList.Count>0, "PeakChromatogramGenerator failed. No peaks.");
             Check.Require(resultColl.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
             Check.Require(resultColl.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
 
@@ -115,6 +115,9 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
                 double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
+                
+                
+                
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
                 chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
             }

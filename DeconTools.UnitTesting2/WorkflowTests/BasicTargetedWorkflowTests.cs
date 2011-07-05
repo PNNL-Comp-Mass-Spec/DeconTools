@@ -8,6 +8,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data.Importers;
 using DeconTools.Backend.Workflows;
 using System.IO;
+using DeconTools.Backend.FileIO;
 
 namespace DeconTools.UnitTesting2.WorkflowTests
 {
