@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3041D403-9165-4018-8F83-FFBAA8528B79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.Workflows</RootNamespace>
+    <AssemblyName>DeconTools.Workflows</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeconTools.Backend">
+      <HintPath>..\..\DeconTools\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
+    </Reference>
+    <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backend\Core\BasicTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\DeconToolsTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\NETAndMassAligner.cs" />
+    <Compile Include="Backend\Core\NETGrouping.cs" />
+    <Compile Include="Backend\Core\PeakDetectAndExportWorkflow.cs" />
+    <Compile Include="Backend\Core\PeakDetectAndExportWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\TargetedAlignerWorkflow.cs" />
+    <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\WorkflowBase.cs" />
+    <Compile Include="Backend\Core\WorkflowParameters.cs" />
+    <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\Results\DeconToolsResult.cs" />
+    <Compile Include="Backend\Results\N14N15TargetedResult.cs" />
+    <Compile Include="Backend\Results\O16O18TargetedResult.cs" />
+    <Compile Include="Backend\Results\ResultFactory.cs" />
+    <Compile Include="Backend\Results\TargetedResult.cs" />
+    <Compile Include="Backend\Results\TargetedResultRepository.cs" />
+    <Compile Include="Backend\Results\UnlabelledTargetedResult.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Backend\Parameters\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows", "DeconTools.Workflows\DeconTools.Workflows.csproj", "{3041D403-9165-4018-8F83-FFBAA8528B79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.UnitTesting", "DeconTools.Workflows.UnitTesting\DeconTools.Workflows.UnitTesting.csproj", "{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3041D403-9165-4018-8F83-FFBAA8528B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3041D403-9165-4018-8F83-FFBAA8528B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3041D403-9165-4018-8F83-FFBAA8528B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3041D403-9165-4018-8F83-FFBAA8528B79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
