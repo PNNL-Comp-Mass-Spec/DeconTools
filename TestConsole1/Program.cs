@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.Workflows;
-using DeconTools.UnitTesting2;
-using System.Linq;
 
 namespace TestConsole1
 {
@@ -43,8 +35,8 @@ namespace TestConsole1
             string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
             Run run = new UIMFRun(@"D:\Data\UIMF\Sarc\the_10_testDatasets\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf");
 
-            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
-            workflow.Execute();
+            //IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
+            //workflow.Execute();
         }
     }
 }
