@@ -16,6 +16,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.MSPeakDetectorSigNoise = 2;
             this.MSToleranceInPPM = 10;
             this.NumMSScansToSum = 1;
+            this.NumChromPeaksAllowedDuringSelection = 20;
 
 
             this.ChromGenSourceDataPeakBR = 2;

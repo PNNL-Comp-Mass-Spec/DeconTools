@@ -14,10 +14,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             RunFactory rf = new RunFactory();
 
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.ScanMin = 6000;
+            parameters.ScanMin = 5500;
             parameters.ScanMax = 6500;
 
             PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run,parameters);

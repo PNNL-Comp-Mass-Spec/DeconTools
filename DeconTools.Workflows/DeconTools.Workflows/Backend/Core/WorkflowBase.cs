@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend;
 
 namespace DeconTools.Workflows.Backend.Core
 {

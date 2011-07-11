@@ -21,26 +21,53 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.ChromGenSourceDataPeakBR = 2;
             this.ChromGenSourceDataSigNoise = 3;
+
+
+            AlignmentInfoIsExported = true;
+            this.FeaturesAreSavedToTextFile = true;
+
+            NumDesiredMassTagsPerNETGrouping = 25;
+            NumMaxAttemptsPerNETGrouping = 200;
+
+            NumChromPeaksAllowedDuringSelection = 1;
+
+            
+            this.UpperFitScoreAllowedCriteria = 0.1;
+            this.MinimumChromPeakIntensityCriteria = 2.5e5f;
+            this.IScoreAllowedCriteria = 0.15;
+            
+
         }
 
         #endregion
 
         #region Properties
+        public double UpperFitScoreAllowedCriteria { get; set; }
 
-        #endregion
+        public double IScoreAllowedCriteria { get; set; }
 
-        #region Public Methods
+        public float MinimumChromPeakIntensityCriteria { get; set; }
 
-        #endregion
+        public int NumDesiredMassTagsPerNETGrouping { get; set; }
 
-        #region Private Methods
+        public int NumMaxAttemptsPerNETGrouping { get; set; }
 
-        #endregion
+        public bool AlignmentInfoIsExported { get; set; }
+
+        public bool FeaturesAreSavedToTextFile { get; set; }
+
+        public string ExportAlignmentFolder { get; set; }
+
+        public string ImportedFeaturesFilename { get; set; }
 
         public override string WorkflowType
         {
             get { return "TargetedAlignerWorkflow1"; }
         }
+
+        #endregion
+
+         
 
         public override void LoadParameters(string xmlFilename)
         {

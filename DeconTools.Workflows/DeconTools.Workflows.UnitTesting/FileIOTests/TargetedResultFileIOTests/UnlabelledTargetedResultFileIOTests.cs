@@ -18,8 +18,8 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void exporterTest1()
         {
-            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
             string exportedResultFile = FileRefs.OutputFolderPath + Path.DirectorySeparatorChar + "UnlabelledTargetedResultsExporterOutput1.txt";

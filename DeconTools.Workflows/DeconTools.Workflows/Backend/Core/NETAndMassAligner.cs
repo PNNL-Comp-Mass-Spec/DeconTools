@@ -26,13 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        #region Properties
-
-
-
-
-        #endregion
-
+  
         #region Public Methods
 
         public void SetReferenceMassTags(List<MassTag> massTagList)

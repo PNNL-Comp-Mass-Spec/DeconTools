@@ -10,10 +10,11 @@ using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend;
+using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class BasicTargetedWorkflow:WorkflowBase
+    public class BasicTargetedWorkflow : WorkflowBase
     {
         private DeconToolsTargetedWorkflowParameters _workflowParameters;
         private TomTheorFeatureGenerator theorFeatureGen;
@@ -33,9 +34,14 @@ namespace DeconTools.Workflows.Backend.Core
         {
             this.WorkflowParameters = parameters;
             this.Run = run;
-            this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
 
             InitializeWorkflow();
+        }
+
+        public BasicTargetedWorkflow(DeconToolsTargetedWorkflowParameters parameters)
+            : this(null, parameters)
+        {
+
         }
 
         #endregion
@@ -98,13 +104,13 @@ namespace DeconTools.Workflows.Backend.Core
             IterativeTFFParameters iterativeTFFParameters = new IterativeTFFParameters();
             iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
 
-            msfeatureFinder = new  IterativeTFF(iterativeTFFParameters);
+            msfeatureFinder = new IterativeTFF(iterativeTFFParameters);
 
             fitScoreCalc = new MassTagFitScoreCalculator();
 
             resultValidator = new ResultValidatorTask();
 
-            
+
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
@@ -121,6 +127,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
+            Check.Require(this.Run != null, "Run has not been defined.");
+
+            this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
+
+
             ResetStoredData();
 
             try
@@ -153,7 +164,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 resultValidator.Execute(this.Run.ResultCollection);
 
-             
+
 
             }
             catch (Exception ex)

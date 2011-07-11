@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_MZfiltered_peaks.txt";
 
 
-            Run run = new UIMFRun(FileRefs.RawDataMSFiles.sarcUIMFFile1);
+            Run run = new UIMFRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.sarcUIMFFile1);
 
 
             IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);

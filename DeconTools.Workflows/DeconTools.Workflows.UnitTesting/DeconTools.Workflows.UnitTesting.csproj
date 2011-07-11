@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DeconTools.Backend">
-      <HintPath>..\..\DeconTools\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="DeconTools.UnitTesting2">
-      <HintPath>..\..\DeconTools\DeconTools.UnitTesting2\bin\x86\Debug\DeconTools.UnitTesting2.dll</HintPath>
+      <HintPath>..\..\DeconTools.UnitTesting2\bin\x86\Debug\DeconTools.UnitTesting2.dll</HintPath>
     </Reference>
     <Reference Include="MultiAlignEngine">
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -52,10 +52,10 @@
   <ItemGroup>
     <Compile Include="AlignmentTests\AlignmentTests.cs" />
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
+    <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTestTemplate1.cs" />
+    <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
