@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using DeconTools.Backend.Parameters;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -53,7 +50,7 @@ namespace DeconTools.Backend.Core
             set
             {
                 _alignmentInfo = value;
-                if (_alignmentInfo!=null)
+                if (_alignmentInfo != null)
                 {
                     if (_alignmentInfo.marrNETFncTimeInput != null && _alignmentInfo.marrNETFncTimeOutput != null)
                     {
@@ -584,6 +581,72 @@ namespace DeconTools.Backend.Core
         }
 
 
+        /// <summary>
+        /// The method returns the m/z that you should look for, when m/z alignment is considered
+        /// </summary>
+        /// <param name="theorMZ"></param>
+        /// <returns></returns>
+        public double GetTargetMZAligned(double theorMZ)
+        {
+            if (this.AlignmentInfo == null) return theorMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)theorMZ);
+
+            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            return alignedMZ;
+        }
+
+        /// <summary>
+        /// The method returns the m/z that you should look for, when m/z alignment is considered
+        /// </summary>
+        /// <param name="theorMZ"></param>
+        /// <returns></returns>
+        public double GetTargetMZAligned(double theorMZ, double scan)
+        {
+            if (this.AlignmentInfo == null) return theorMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)theorMZ);
+
+            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            return alignedMZ;
+        }
+
+        /// <summary>
+        /// Returns the adjusted m/z after alignment
+        /// </summary>
+        /// <param name="observedMZ"></param>
+        /// <returns></returns>
+        public double GetAlignedMZ(double observedMZ)
+        {
+            if (this.AlignmentInfo == null) return observedMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)observedMZ);
+
+            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
+            return alignedMZ;
+
+        }
+
+        /// <summary>
+        /// Returns the adjusted m/z after alignment
+        /// </summary>
+        /// <param name="observedMZ"></param>
+        /// <param name="scan"></param>
+        /// <returns></returns>
+        public double GetAlignedMZ(double observedMZ, double scan)
+        {
+            if (this.AlignmentInfo == null) return observedMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)observedMZ);
+
+            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
+            return alignedMZ;
+        }
+
+
+
+
+
         protected void addToMSLevelData(int scanNum, int mslevel)
         {
             if (this.MSLevelList.ContainsKey(scanNum))
@@ -646,5 +709,19 @@ namespace DeconTools.Backend.Core
         }
 
         #endregion
+
+        public bool IsAligned()
+        {
+            if (this.AlignmentInfo == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
     }
 }

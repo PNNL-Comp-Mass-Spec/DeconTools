@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks.NETAlignment;
-using DeconTools.Backend.Runs;
-using System.IO;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.FileIO;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -43,6 +41,64 @@ namespace DeconTools.Backend.Utilities
 
         #endregion
 
+        public static bool AlignRunUsingAlignmentInfoInFiles(Run run)
+        {
+            bool alignmentSuccessful = false;
+
+            string basePath = run.DataSetPath;
+
+            string expectedMZAlignmentFile = run.DataSetPath + "\\" + run.DatasetName + "_MZAlignment.txt";
+            string expectedNETAlignmentFile = run.DataSetPath + "\\" + run.DatasetName + "_NETAlignment.txt";
+
+            //first will try to load the multiAlign alignment info
+            if (File.Exists(expectedMZAlignmentFile))
+            {
+                MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(expectedMZAlignmentFile);
+                run.AlignmentInfo = importer.Import();
+            }
+
+            if (File.Exists(expectedNETAlignmentFile))
+            {
+                NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(expectedNETAlignmentFile);
+                netAlignmentInfoImporter.ImportIntoAlignmentInfo(run.AlignmentInfo);   //this will append the NET alignment info to the AlignmentInfo object
+            }
+
+            //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
+            if (run.IsAligned())
+            {
+
+                alignmentSuccessful = true;
+            }
+            else
+            {
+                DirectoryInfo datasetDirInfo = new DirectoryInfo(basePath);
+                FileInfo[] umcFileInfo = datasetDirInfo.GetFiles("*_umcs.txt");
+
+                if (umcFileInfo.Count() > 0)
+                {
+                    string targetUMCFileName = umcFileInfo.First().FullName;
+
+                    UMCCollection umcs = new UMCCollection();
+                    UMCFileImporter importer = new UMCFileImporter(targetUMCFileName, '\t');
+                    umcs = importer.Import();
+
+                    run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
+                    run.UpdateNETAlignment();
+                    Console.WriteLine(run.DatasetName + " aligned.");
+                    alignmentSuccessful = true;
+
+                }
+                else
+                {
+                    Console.WriteLine(run.DatasetName + " NOT aligned.");
+                    alignmentSuccessful = false;
+                }
+            }
+
+            return alignmentSuccessful;
+        }
+
+
 
         public static Run CreateAndAlignRun(string filename, string peaksFile)
         {
@@ -53,28 +109,9 @@ namespace DeconTools.Backend.Utilities
             //Console.WriteLine(run.DatasetName + " loaded.");
 
 
-            string basePath = run.DataSetPath;
+            AlignRunUsingAlignmentInfoInFiles(run);
 
-            DirectoryInfo datasetDirInfo = new DirectoryInfo(basePath);
-            FileInfo[] umcFileInfo = datasetDirInfo.GetFiles("*_umcs.txt");
 
-            if (umcFileInfo.Count() > 0)
-            {
-                string targetUMCFileName = umcFileInfo.First().FullName;
-
-                UMCCollection umcs = new UMCCollection();
-                UMCFileImporter importer = new UMCFileImporter(targetUMCFileName, '\t');
-                umcs = importer.Import();
-
-                run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
-                run.UpdateNETAlignment();
-                Console.WriteLine(run.DatasetName + " aligned.");
-
-            }
-            else
-            {
-                Console.WriteLine(run.DatasetName + " NOT aligned.");
-            }
 
 
 

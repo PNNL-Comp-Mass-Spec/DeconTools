@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
-using DeconTools.Backend.DTO;
 using DeconTools.Backend.Algorithms;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -58,6 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks
             this.IsotopicProfileTarget = isotopicProfileTarget;
 
             this.TopNPeaksLowerCutOff = 0.3;
+            this.NETWindowWidth = 0.3f;
 
         }
 
@@ -69,6 +69,12 @@ namespace DeconTools.Backend.ProcessingTasks
         public ChromatogramGeneratorMode ChromatogramGeneratorMode { get; set; }
 
         public double PPMTolerance { get; set; }
+
+        /// <summary>
+        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
+        /// </summary>
+        public float NETWindowWidth { get; set; }
+
 
         /// <summary>
         /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram. 
@@ -90,12 +96,20 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
-            double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set lower bound (10% lower than net val)
-            double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * 0.1;  // set upper bound (10% higher than net val)
+            double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;
+            double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;  
 
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
+            
+
+            //[gord] restricting the scan range from which the chromatogram is generated greatly improves speed. e.g) on an Orbitrap file
+            //if I get the chrom from the entire scan range (18500 scans) the average time is 120ms. If I restrict to a width of 3000 scans
+            //the average time is 20ms. But if we are too restrictive, I have seen cases where the real chrom peak is never generated because
+            //it fell outside the chrom generator window. 
+            
+            
             int lowerScan = resultColl.Run.GetNearestScanValueForNET(minNetVal);
             if (lowerScan == -1) lowerScan = resultColl.Run.MinScan;
 
@@ -108,6 +122,18 @@ namespace DeconTools.Backend.ProcessingTasks
             if (ChromatogramGeneratorMode == ChromatogramGeneratorMode.TOP_N_PEAKS)
             {
                 List<double> targetMZList = getTargetMZListForTopNPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
+
+                if (resultColl.Run.IsAligned())
+                {
+                    //if we have alignment information, we can adjust the targetMZ...
+                    for (int i = 0; i < targetMZList.Count; i++)
+                    {
+                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultColl.Run);
+                    }
+                   
+                }
+
+
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
                 chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
 
@@ -115,9 +141,13 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
                 double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
-                
-                
-                
+
+                //if we have alignment information, we can adjust the targetMZ...
+                if (resultColl.Run.IsAligned())
+                {
+                    targetMZ = getAlignedMZValue(targetMZ, resultColl.Run);
+                }
+
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
                 chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
             }
@@ -169,6 +199,23 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
         }
+
+        private double getAlignedMZValue(double targetMZ, Run run)
+        {
+            if (run == null) return targetMZ;
+
+            if (run.IsAligned())
+            {
+                return run.GetTargetMZAligned(targetMZ);
+
+            }
+            else
+            {
+                return targetMZ;
+            }
+        }
+
+      
 
         private List<double> getTargetMZListForTopNPeaks(MassTag massTag, IsotopicProfileType isotopicProfileTarget)
         {
@@ -222,24 +269,24 @@ namespace DeconTools.Backend.ProcessingTasks
                     break;
             }
 
-            MSPeak peak;
+            MSPeak msPeak;
             switch (chromatogramGeneratorMode)
             {
 
                 case ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
-                    peak = iso.getMonoPeak();
+                    msPeak = iso.getMonoPeak();
                     break;
                 case ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
-                    peak = iso.getMostIntensePeak();
+                    msPeak = iso.getMostIntensePeak();
                     break;
                 case ChromatogramGeneratorMode.TOP_N_PEAKS:
                     throw new NotSupportedException();
                 default:
-                    peak = iso.getMostIntensePeak();
+                    msPeak = iso.getMostIntensePeak();
                     break;
             }
 
-            return peak.XValue;
+            return msPeak.XValue;
 
 
 
@@ -528,5 +575,7 @@ namespace DeconTools.Backend.ProcessingTasks
         /// Recursive binary search algorithm for searching through MSPeakResults
         /// </summary>
 
+
+        
     }
 }

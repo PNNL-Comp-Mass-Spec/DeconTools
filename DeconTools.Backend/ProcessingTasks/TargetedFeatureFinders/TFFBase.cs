@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Algorithms;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
@@ -61,6 +58,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             for (int i = indexOfMaxTheorPeak; i >= 0; i--)
             {
+
+
                 //find experimental peak(s) within range
                 List<IPeak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
 
@@ -74,8 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     return null;
                 }
 
-                if (peaksWithinTol.Count ==
-                    0)
+                if (peaksWithinTol.Count == 0)
                 {
                     if (needMonoIsotopicPeak)
                     {
@@ -203,21 +201,23 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             resultColl.IsosResultBin.Clear();
 
+            this.RunIsAligned = resultColl.Run.IsAligned();
+
+
+
+            IsotopicProfile targetedIso = createTargetIso(resultColl.Run);
+            iso = FindMSFeature(resultColl.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
+
 
             switch (IsotopicProfileType)
             {
                 case IsotopicProfileType.UNLABELLED:
-                    iso = FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfile, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
                     result.IsotopicProfile = iso;
                     break;
                 case IsotopicProfileType.LABELLED:
-                    iso = FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfileLabelled, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
                     result.AddLabelledIso(iso);
-
-
                     break;
                 default:
-                    iso = FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfile, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
                     result.IsotopicProfile = iso;
                     break;
             }
@@ -229,6 +229,39 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             resultColl.IsosResultBin.Add(result);
+
+        }
+
+        private IsotopicProfile createTargetIso(Run run)
+        {
+            IsotopicProfile iso;
+
+            switch (this.IsotopicProfileType)
+            {
+                case IsotopicProfileType.UNLABELLED:
+                    iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
+                    break;
+                case IsotopicProfileType.LABELLED:
+                    iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
+                    break;
+                default:
+                    iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
+                    break;
+            }
+
+            //adjust the target m/z based on the alignment information
+            if (this.RunIsAligned)
+            {
+                for (int i = 0; i < iso.Peaklist.Count; i++)
+                {
+                    iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
+                    
+                }
+               
+            }
+
+
+            return iso;
 
         }
         #endregion
@@ -320,5 +353,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
+
+        public bool RunIsAligned { get; set; }
     }
 }

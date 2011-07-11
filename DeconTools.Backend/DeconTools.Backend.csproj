@@ -439,7 +439,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileIO\TargetedResultFileIO\" />
-    <Folder Include="Workflows\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
