@@ -202,12 +202,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Stopwatch sw = new Stopwatch();
 
+            int startScan = 5500;
+            int stopScan = 8500;
+
+
             for (int i = 0; i < totalIterations; i++)
             {
                 sw.Reset();
                 sw.Start();
 
-                run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, (targetMZ + totalIterations), toleranceInPPM, 1);
+                run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, startScan, stopScan, (targetMZ + totalIterations), toleranceInPPM, 1);
                 sw.Stop();
 
                 speedResults.Add(sw.ElapsedMilliseconds);
