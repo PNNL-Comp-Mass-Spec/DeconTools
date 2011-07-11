@@ -131,6 +131,7 @@
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />
+    <Compile Include="Core\MassAlignmentDataItem.cs" />
     <Compile Include="Core\PeakChrom.cs" />
     <Compile Include="Core\ElutingPeak.cs" />
     <Compile Include="Core\IsotopicProfileChromData.cs" />

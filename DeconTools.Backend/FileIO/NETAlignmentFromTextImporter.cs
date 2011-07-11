@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MultiAlignEngine.Alignment;
-using DeconTools.Backend.Core;
 using System.IO;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class NETAlignmentFromTextImporter : ImporterBase<clsAlignmentFunction>
+    public class NETAlignmentFromTextImporter : ImporterBase<List<ScanNETPair>>
     {
-        private clsAlignmentFunction _alignmentInfo;
-
+  
         protected string[] scanHeaders = { "scan", "scanClassRep" };
         protected string[] netHeaders = { "net", "NETClassRep" };
         private string _filename;
@@ -32,36 +28,22 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Public Methods
-        public override clsAlignmentFunction Import()
+        public override List<ScanNETPair> Import()
         {
-            _alignmentInfo = new clsAlignmentFunction(enmCalibrationType.HYBRID_CALIB, enmAlignmentType.NET_MASS_WARP);
-
-            ImportIntoAlignmentInfo(_alignmentInfo);
-
-            return _alignmentInfo;
-
-        }
-
-
-        public void ImportIntoAlignmentInfo(clsAlignmentFunction alignmentInfo)
-        {
-
+          
             GetScanNETPairsFromFile();
-
-            float[] scanVals = _scanNETPairs.Select(p => p.Scan).ToArray();
-            float[] netVals = _scanNETPairs.Select(p => p.NET).ToArray();
-
-            alignmentInfo.SetNETFunction(ref scanVals, ref netVals);
-
-
+            return _scanNETPairs;
 
         }
+
         #endregion
 
         #region Private Methods
 
         private void GetScanNETPairsFromFile()
         {
+            _scanNETPairs.Clear();
+
             StreamReader reader;
 
             try

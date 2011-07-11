@@ -53,7 +53,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             umcs = importer.Import();
 
             run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
-            run.UpdateNETAlignment();
+            run.UpdateNETValuesInScanSetCollection();
 
 
         }

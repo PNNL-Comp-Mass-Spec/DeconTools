@@ -1,38 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MultiAlignEngine.Alignment;
 using System.IO;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MassAlignmentInfoFromTextImporter : ImporterBase<clsAlignmentFunction>
+    public class MassAlignmentInfoFromTextImporter : ImporterBase<List<MassAlignmentDataItem>>
     {
 
-        List<MassAndTimePPMCorrectionItem> _massAndTimeCorrectionData = new List<MassAndTimePPMCorrectionItem>();
+        List<MassAlignmentDataItem> _massAndTimeCorrectionData = new List<MassAlignmentDataItem>();
         private string[] mzHeaders = { "mz" };
         private string[] mzPPMCorrectionHeaders = { "mzPPMCorrection" };
         private string[] scanHeaders= { "scan" };
         private string[] scanPPMCorrectionHeaders = { "scanPPMCorrection" };
         private string _filename;
 
-        private class MassAndTimePPMCorrectionItem
-        {
-            internal float mz;
-            internal float mzPPMCorrection;
-            internal float scan;
-            internal float scanPPMCorrection;
-           
-
-            public MassAndTimePPMCorrectionItem(float mz, float mzPPMCorrection, float scan, float scanPPMCorrection)
-            {
-                this.mz = mz;
-                this.mzPPMCorrection = mzPPMCorrection;
-                this.scan = scan;
-                this.scanPPMCorrection = scanPPMCorrection;
-            }
-        }
+     
 
 
         #region Constructors
@@ -54,33 +37,10 @@ namespace DeconTools.Backend.FileIO
 
         #endregion
 
-        public override clsAlignmentFunction Import()
-        {
-            clsAlignmentFunction alignmentInfo = new clsAlignmentFunction(enmCalibrationType.HYBRID_CALIB, enmAlignmentType.NET_MASS_WARP);
-
-
-            ImportIntoAlignmentInfo(alignmentInfo);
-            
-            return alignmentInfo;
-        }
-
-        public void ImportIntoAlignmentInfo(clsAlignmentFunction alignmentInfo)
+        public override List<MassAlignmentDataItem> Import()
         {
             GetMassAndTimePPMCorrectionsFromFile();
-
-            float[] mzVals = _massAndTimeCorrectionData.Select(p => p.mz).ToArray();
-            float[] mzPPMCorrVals = _massAndTimeCorrectionData.Select(p => p.mzPPMCorrection).ToArray();
-            float[] scanVals = _massAndTimeCorrectionData.Select(p => p.scan).ToArray();
-            float[] scanPPMCorrVals = _massAndTimeCorrectionData.Select(p => p.scanPPMCorrection).ToArray();
-
-            alignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
-            alignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
-            alignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
-            alignmentInfo.marrMassFncTimePPMOutput= new float[mzVals.Length];
-
-            alignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
-            alignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
-
+            return _massAndTimeCorrectionData;
         }
 
         private void GetMassAndTimePPMCorrectionsFromFile()
@@ -131,22 +91,21 @@ namespace DeconTools.Backend.FileIO
                         throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    MassAndTimePPMCorrectionItem massAndTimePPMCorrItem = ConvertTextToDataObject(processedData);
+                    MassAlignmentDataItem massAndTimePPMCorrItem = ConvertTextToDataObject(processedData);
                     _massAndTimeCorrectionData.Add(massAndTimePPMCorrItem);
                     lineCounter++;
-
                 }
             }
         }
 
-        private MassAndTimePPMCorrectionItem ConvertTextToDataObject(List<string> processedData)
+        private MassAlignmentDataItem ConvertTextToDataObject(List<string> processedData)
         {
             float mz = ParseFloatField(LookupData(processedData, mzHeaders));
             float mzPPMCorrection = ParseFloatField(LookupData(processedData, mzPPMCorrectionHeaders));
             float scan = ParseFloatField(LookupData(processedData, scanHeaders));
             float scanPPMCorrection = ParseFloatField(LookupData(processedData, scanPPMCorrectionHeaders));
 
-            MassAndTimePPMCorrectionItem item = new MassAndTimePPMCorrectionItem(mz, mzPPMCorrection, scan, scanPPMCorrection);
+            MassAlignmentDataItem item = new MassAlignmentDataItem(mz, mzPPMCorrection, scan, scanPPMCorrection);
             return item;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
@@ -9,7 +10,6 @@ using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -128,6 +128,9 @@ namespace DeconTools.Workflows.Backend.Core
         public override void Execute()
         {
             Check.Require(this.Run != null, "Run has not been defined.");
+
+            //TODO: remove this later:
+            //this.Run.CreateDefaultScanToNETAlignmentData();
 
             this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
 

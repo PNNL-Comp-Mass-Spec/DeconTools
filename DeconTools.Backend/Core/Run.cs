@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DeconTools.Backend.Parameters;
 
@@ -15,6 +16,8 @@ namespace DeconTools.Backend.Core
             this.ResultCollection = new ResultCollection(this);
             this.XYData = new XYData();
             this.MSLevelList = new SortedDictionary<int, byte>();
+            this.ScanToNETAlignmentData = new Dictionary<int, float>();
+
         }
 
         #region Properties
@@ -133,16 +136,12 @@ namespace DeconTools.Backend.Core
             set { isDataThresholded = value; }
         }
 
-        private Dictionary<int, double> scanToNETAlignmentData;
+        private Dictionary<int, float> scanToNETAlignmentData;
         private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
-        public Dictionary<int, double> ScanToNETAlignmentData
+        internal Dictionary<int, float> ScanToNETAlignmentData
         {
             get
             {
-                if (scanToNETAlignmentData == null || scanToNETAlignmentData.Count == 0)
-                {
-                    createScanToNETAlignmentData();
-                }
                 return scanToNETAlignmentData;
             }
             set
@@ -151,16 +150,7 @@ namespace DeconTools.Backend.Core
             }
         }
 
-        private void createScanToNETAlignmentData()
-        {
-            scanToNETAlignmentData = new Dictionary<int, double>();
 
-            for (int i = this.MinScan; i <= this.MaxScan; i++)
-            {
-                scanToNETAlignmentData.Add(i, (double)i / (double)this.MaxScan);
-
-            }
-        }
 
         public bool ContainsMSMSData { get; set; }
 
@@ -338,137 +328,6 @@ namespace DeconTools.Backend.Core
         //}
 
 
-
-
-
-        #region Scan_To_NET_Alignment
-        public virtual float GetNETValueForScan(int scanNum)
-        {
-            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
-            if (this.ScanToNETAlignmentData.ContainsKey(scanNum))
-            {
-                return (float)this.ScanToNETAlignmentData[scanNum];
-            }
-            else
-            {
-                return calculateNET(scanNum);
-            }
-
-        }
-
-        public virtual int GetNearestScanValueForNET(double minNetVal)
-        {
-            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
-
-            double diff = double.MaxValue;
-            int closestScan = -1;
-
-
-            foreach (var keyValuePair in this.ScanToNETAlignmentData)
-            {
-                double currentDiff = Math.Abs(keyValuePair.Value - minNetVal);
-                if (currentDiff < diff)
-                {
-                    closestScan = keyValuePair.Key;
-                    diff = currentDiff;
-                }
-            }
-            return closestScan;
-
-
-        }
-
-        public virtual void SetScanToNETAlignmentData(float[] scanVals, float[] netVals)
-        {
-            this.ScanToNETAlignmentData.Clear();
-
-            for (int i = 0; i < scanVals.Length; i++)
-            {
-                int scanToAdd = (int)scanVals[i];
-
-                if (!this.ScanToNETAlignmentData.ContainsKey(scanToAdd))
-                {
-                    this.ScanToNETAlignmentData.Add(scanToAdd, netVals[i]);
-                }
-
-
-            }
-
-            UpdateNETAlignment();
-
-        }
-
-        public virtual void UpdateNETAlignment()
-        {
-
-            if (ScanSetCollection == null) return;
-
-            foreach (ScanSet scan in ScanSetCollection.ScanSetList)
-            {
-                if (this.ScanToNETAlignmentData.ContainsKey(scan.PrimaryScanNumber))
-                {
-                    scan.NETValue = (float)this.ScanToNETAlignmentData[scan.PrimaryScanNumber];
-                }
-                else
-                {
-                    scan.NETValue = calculateNET(scan.PrimaryScanNumber);
-                }
-
-            }
-        }
-
-        private float calculateNET(int scanNum)
-        {
-            if (scanNum < 2) return 0;
-            int maxScan = this.GetNumMSScans();
-
-
-            double lowerNET = 0;
-            double upperNET = 1;
-            int lowerScan = 1;
-            int upperScan = maxScan;
-
-
-            bool found = false;
-            int currentScan = scanNum;
-
-            while (!found && currentScan > 0)
-            {
-                currentScan--;
-                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
-                {
-                    lowerScan = currentScan;
-                    lowerNET = this.ScanToNETAlignmentData[lowerScan];
-                    found = true;
-                }
-            }
-
-            found = false;
-            currentScan = scanNum;
-            while (!found && currentScan < maxScan)
-            {
-                currentScan++;
-                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
-                {
-                    upperScan = currentScan;
-                    upperNET = this.ScanToNETAlignmentData[upperScan];
-                    found = true;
-                }
-
-            }
-
-            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            double yintercept = (upperNET - slope * upperScan);
-
-            return (float)(scanNum * slope + yintercept);
-
-        }
-
-
-        #endregion
-
-
-
         public virtual int GetCurrentScanOrFrame()
         {
             return this.CurrentScanSet.PrimaryScanNumber;
@@ -581,70 +440,6 @@ namespace DeconTools.Backend.Core
         }
 
 
-        /// <summary>
-        /// The method returns the m/z that you should look for, when m/z alignment is considered
-        /// </summary>
-        /// <param name="theorMZ"></param>
-        /// <returns></returns>
-        public double GetTargetMZAligned(double theorMZ)
-        {
-            if (this.AlignmentInfo == null) return theorMZ;
-
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)theorMZ);
-
-            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
-            return alignedMZ;
-        }
-
-        /// <summary>
-        /// The method returns the m/z that you should look for, when m/z alignment is considered
-        /// </summary>
-        /// <param name="theorMZ"></param>
-        /// <returns></returns>
-        public double GetTargetMZAligned(double theorMZ, double scan)
-        {
-            if (this.AlignmentInfo == null) return theorMZ;
-
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)theorMZ);
-
-            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
-            return alignedMZ;
-        }
-
-        /// <summary>
-        /// Returns the adjusted m/z after alignment
-        /// </summary>
-        /// <param name="observedMZ"></param>
-        /// <returns></returns>
-        public double GetAlignedMZ(double observedMZ)
-        {
-            if (this.AlignmentInfo == null) return observedMZ;
-
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)observedMZ);
-
-            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
-            return alignedMZ;
-
-        }
-
-        /// <summary>
-        /// Returns the adjusted m/z after alignment
-        /// </summary>
-        /// <param name="observedMZ"></param>
-        /// <param name="scan"></param>
-        /// <returns></returns>
-        public double GetAlignedMZ(double observedMZ, double scan)
-        {
-            if (this.AlignmentInfo == null) return observedMZ;
-
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)observedMZ);
-
-            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
-            return alignedMZ;
-        }
-
-
-
 
 
         protected void addToMSLevelData(int scanNum, int mslevel)
@@ -710,6 +505,255 @@ namespace DeconTools.Backend.Core
 
         #endregion
 
+
+
+
+        #region Mass and NET Alignment
+        public virtual void CreateDefaultScanToNETAlignmentData()
+        {
+            scanToNETAlignmentData = new Dictionary<int, float>();
+
+            List<ScanNETPair> scanNETList = new List<ScanNETPair>();
+
+            for (int i = this.MinScan; i <= this.MaxScan; i++)
+            {
+                ScanNETPair snp = new ScanNETPair((float)this.MinScan, i/(float)this.MaxScan);
+                scanNETList.Add(snp);
+            }
+
+            SetScanToNETAlignmentData(scanNETList);
+
+
+        }
+
+        public virtual float GetNETValueForScan(int scanNum)
+        {
+            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0)
+            {
+                CreateDefaultScanToNETAlignmentData();
+
+                bool scanToNETTableIsStillEmpty = this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0;
+                if (scanToNETTableIsStillEmpty)
+                {
+                    throw new ArgumentException("Scan-to-NET table is empty. Tried to create it from Dataset but failed.");
+                }
+
+            }
+
+
+            if (this.ScanToNETAlignmentData.ContainsKey(scanNum))
+            {
+                return (float)this.ScanToNETAlignmentData[scanNum];
+            }
+            else
+            {
+                return calculateNET(scanNum);
+            }
+
+        }
+
+        public virtual int GetNearestScanValueForNET(double minNetVal)
+        {
+            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0) return -1;
+
+            double diff = double.MaxValue;
+            int closestScan = -1;
+
+
+            foreach (var keyValuePair in this.ScanToNETAlignmentData)
+            {
+                double currentDiff = Math.Abs(keyValuePair.Value - minNetVal);
+                if (currentDiff < diff)
+                {
+                    closestScan = keyValuePair.Key;
+                    diff = currentDiff;
+                }
+            }
+            return closestScan;
+
+
+        }
+
+
+        public void SetScanToNETAlignmentData(List<ScanNETPair> scanNETList)
+        {
+            float[] scanVals = scanNETList.Select(p => p.Scan).ToArray();
+            float[] netVals = scanNETList.Select(p => p.NET).ToArray();
+
+            SetScanToNETAlignmentData(scanVals, netVals);
+        }
+
+        public virtual void SetScanToNETAlignmentData(float[] scanVals, float[] netVals)
+        {
+            this.ScanToNETAlignmentData.Clear();
+
+
+            for (int i = 0; i < scanVals.Length; i++)
+            {
+                int scanToAdd = (int)(Math.Round(scanVals[i]));
+
+                if (!this.ScanToNETAlignmentData.ContainsKey(scanToAdd))
+                {
+                    this.ScanToNETAlignmentData.Add(scanToAdd, netVals[i]);
+                }
+            }
+
+            UpdateNETValuesInScanSetCollection();
+
+        }
+
+        public void SetMassAlignmentData(List<MassAlignmentDataItem> massAlignmentData)
+        {
+            float[] mzVals = massAlignmentData.Select(p => p.mz).ToArray();
+            float[] mzPPMCorrVals = massAlignmentData.Select(p => p.mzPPMCorrection).ToArray();
+            float[] scanVals = massAlignmentData.Select(p => p.scan).ToArray();
+            float[] scanPPMCorrVals = massAlignmentData.Select(p => p.scanPPMCorrection).ToArray();
+
+            if (this.AlignmentInfo == null) this.AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+
+            this.AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
+
+            this.AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
+            this.AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
+
+        }
+
+
+
+        public virtual void UpdateNETValuesInScanSetCollection()
+        {
+
+            if (ScanSetCollection == null) return;
+
+            foreach (ScanSet scan in ScanSetCollection.ScanSetList)
+            {
+                if (this.ScanToNETAlignmentData.ContainsKey(scan.PrimaryScanNumber))
+                {
+                    scan.NETValue = (float)this.ScanToNETAlignmentData[scan.PrimaryScanNumber];
+                }
+                else
+                {
+                    scan.NETValue = calculateNET(scan.PrimaryScanNumber);
+                }
+
+            }
+        }
+
+
+
+        private float calculateNET(int scanNum)
+        {
+            if (scanNum < 2) return 0;
+            int maxScan = this.GetNumMSScans();
+
+
+            double lowerNET = 0;
+            double upperNET = 1;
+            int lowerScan = 1;
+            int upperScan = maxScan;
+
+
+            bool found = false;
+            int currentScan = scanNum;
+
+            while (!found && currentScan > 0)
+            {
+                currentScan--;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    lowerScan = currentScan;
+                    lowerNET = this.ScanToNETAlignmentData[lowerScan];
+                    found = true;
+                }
+            }
+
+            found = false;
+            currentScan = scanNum;
+            while (!found && currentScan < maxScan)
+            {
+                currentScan++;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    upperScan = currentScan;
+                    upperNET = this.ScanToNETAlignmentData[upperScan];
+                    found = true;
+                }
+
+            }
+
+            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            double yintercept = (upperNET - slope * upperScan);
+
+            return (float)(scanNum * slope + yintercept);
+
+        }
+
+        /// <summary>
+        /// The method returns the m/z that you should look for, when m/z alignment is considered
+        /// </summary>
+        /// <param name="theorMZ"></param>
+        /// <returns></returns>
+        public double GetTargetMZAligned(double theorMZ)
+        {
+            if (this.AlignmentInfo == null) return theorMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)theorMZ);
+
+            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            return alignedMZ;
+        }
+
+        /// <summary>
+        /// The method returns the m/z that you should look for, when m/z alignment is considered
+        /// </summary>
+        /// <param name="theorMZ"></param>
+        /// <returns></returns>
+        public double GetTargetMZAligned(double theorMZ, double scan)
+        {
+            if (this.AlignmentInfo == null) return theorMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)theorMZ);
+
+            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            return alignedMZ;
+        }
+
+        /// <summary>
+        /// Returns the adjusted m/z after alignment
+        /// </summary>
+        /// <param name="observedMZ"></param>
+        /// <returns></returns>
+        public double GetAlignedMZ(double observedMZ)
+        {
+            if (this.AlignmentInfo == null) return observedMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)observedMZ);
+
+            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
+            return alignedMZ;
+
+        }
+
+        /// <summary>
+        /// Returns the adjusted m/z after alignment
+        /// </summary>
+        /// <param name="observedMZ"></param>
+        /// <param name="scan"></param>
+        /// <returns></returns>
+        public double GetAlignedMZ(double observedMZ, double scan)
+        {
+            if (this.AlignmentInfo == null) return observedMZ;
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)observedMZ);
+
+            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
+            return alignedMZ;
+        }
+
+
         public bool IsAligned()
         {
             if (this.AlignmentInfo == null)
@@ -721,6 +765,8 @@ namespace DeconTools.Backend.Core
                 return true;
             }
         }
+
+        #endregion
 
 
     }

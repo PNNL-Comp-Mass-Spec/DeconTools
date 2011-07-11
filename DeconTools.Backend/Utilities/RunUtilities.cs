@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -54,13 +55,21 @@ namespace DeconTools.Backend.Utilities
             if (File.Exists(expectedMZAlignmentFile))
             {
                 MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(expectedMZAlignmentFile);
-                run.AlignmentInfo = importer.Import();
+
+                List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+
+                run.SetMassAlignmentData(massAlignmentData);
+
+
             }
 
             if (File.Exists(expectedNETAlignmentFile))
             {
                 NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(expectedNETAlignmentFile);
-                netAlignmentInfoImporter.ImportIntoAlignmentInfo(run.AlignmentInfo);   //this will append the NET alignment info to the AlignmentInfo object
+                List<ScanNETPair> scanNETList = netAlignmentInfoImporter.Import();
+
+                run.SetScanToNETAlignmentData(scanNETList);
+
             }
 
             //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
@@ -83,7 +92,7 @@ namespace DeconTools.Backend.Utilities
                     umcs = importer.Import();
 
                     run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
-                    run.UpdateNETAlignment();
+                    run.UpdateNETValuesInScanSetCollection();
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
 
@@ -127,7 +136,7 @@ namespace DeconTools.Backend.Utilities
 
             GetPeaks(run, sourcePeaksFile);
 
-           // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
+            // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
         }
 

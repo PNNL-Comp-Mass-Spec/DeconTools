@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
@@ -90,10 +92,14 @@ namespace DeconTools.Workflows.UnitTesting
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             NETAlignmentFromTextImporter importer = new NETAlignmentFromTextImporter(importFilename);
-            run.AlignmentInfo = importer.Import();
+            List<ScanNETPair> scanNETdata = importer.Import();
+            run.SetScanToNETAlignmentData(scanNETdata);
 
             float testScan = 6005;
-            float testNET1 = run.AlignmentInfo.GetNETFromTime(testScan);
+            float testNET1 = run.GetNETValueForScan((int)testScan);
+
+            
+           // float testNET1 = run.AlignmentInfo.GetNETFromTime(testScan);
 
             Assert.AreEqual(0.3253423m, (decimal)testNET1);
 
@@ -108,7 +114,8 @@ namespace DeconTools.Workflows.UnitTesting
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(importFilename);
-            run.AlignmentInfo = importer.Import();
+            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            run.SetMassAlignmentData(massAlignmentData);
 
             float testScan = 6439;
             float testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)    See Redmine issue 627:  http://redmine.pnl.gov/issues/627
@@ -134,10 +141,12 @@ namespace DeconTools.Workflows.UnitTesting
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            run.AlignmentInfo = importer.Import();
+            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            run.SetMassAlignmentData(massAlignmentData);
 
             NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            netAlignmentInfoImporter.ImportIntoAlignmentInfo(run.AlignmentInfo);   //this will append the NET alignment info to the AlignmentInfo object
+            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            run.SetScanToNETAlignmentData(scanNETdata);
 
             float testScan = 6439;
             float testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
@@ -164,10 +173,13 @@ namespace DeconTools.Workflows.UnitTesting
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            run.AlignmentInfo = importer.Import();
+            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            run.SetMassAlignmentData(massAlignmentData);
 
             NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            netAlignmentInfoImporter.ImportIntoAlignmentInfo(run.AlignmentInfo);   //this will append the NET alignment info to the AlignmentInfo object
+            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            run.SetScanToNETAlignmentData(scanNETdata);
+
 
             float testScan = 6439;
             float theorMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
@@ -195,6 +207,88 @@ namespace DeconTools.Workflows.UnitTesting
 
 
 
+        }
+
+
+
+        [Test]
+        public void ensure_alignmentIsBeingUsed_duringProcessing_test1()
+        {
+            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+
+            string mzAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_MZAlignment.txt";
+            string NETAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_NETAlignment.txt";
+
+           
+            string rawDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
+            string peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
+            Run run =  DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
+          
+          
+            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
+            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            run.SetMassAlignmentData(massAlignmentData);
+
+         
+
+
+            MassTagCollection mtc = new MassTagCollection();
+            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            mtc = mtimporter.Import();
+
+            int testMassTagID = 24817;
+            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+
+
+
+            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            parameters.ChromNETTolerance = 0.2;
+            parameters.ChromToleranceInPPM = 5;
+            parameters.MSToleranceInPPM = 15;
+
+            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            workflow.Execute();
+
+            MassTagResultBase result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+
+            Assert.IsTrue(result.ChromPeakSelected != null);
+            Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
+
+
+            double netDiff = result.MassTag.NETVal - result.GetNET();
+            Console.WriteLine("NET diff before alignment = " + netDiff);
+            
+            decimal expectedNETDiff = 0.057m;
+            Assert.AreEqual(expectedNETDiff, (decimal)Math.Round(netDiff, 3));
+
+
+
+            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            run.SetScanToNETAlignmentData(scanNETdata);
+
+
+
+            parameters = new BasicTargetedWorkflowParameters();
+            parameters.ChromNETTolerance = 0.025;
+            parameters.ChromToleranceInPPM = 5;
+            parameters.MSToleranceInPPM = 15;
+
+            workflow = new BasicTargetedWorkflow(run, parameters);
+            workflow.Execute();
+
+
+            netDiff = result.MassTag.NETVal - result.GetNET();
+            Console.WriteLine("NET diff before alignment = " + netDiff);
+
+
+            Assert.IsTrue(result.ChromPeakSelected != null);
+            Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
+            
+            double expectedNETDiffMaximum = 0.1;
+            Assert.IsTrue(netDiff < expectedNETDiffMaximum);
+
+            
         }
 
 
