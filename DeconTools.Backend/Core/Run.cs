@@ -16,7 +16,7 @@ namespace DeconTools.Backend.Core
             this.ResultCollection = new ResultCollection(this);
             this.XYData = new XYData();
             this.MSLevelList = new SortedDictionary<int, byte>();
-            this.ScanToNETAlignmentData = new Dictionary<int, float>();
+            this.ScanToNETAlignmentData = new SortedDictionary<int, float>();
 
         }
 
@@ -136,9 +136,9 @@ namespace DeconTools.Backend.Core
             set { isDataThresholded = value; }
         }
 
-        private Dictionary<int, float> scanToNETAlignmentData;
+        private SortedDictionary<int, float> scanToNETAlignmentData;
         private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
-        internal Dictionary<int, float> ScanToNETAlignmentData
+        internal SortedDictionary<int, float> ScanToNETAlignmentData
         {
             get
             {
@@ -511,7 +511,7 @@ namespace DeconTools.Backend.Core
         #region Mass and NET Alignment
         public virtual void CreateDefaultScanToNETAlignmentData()
         {
-            scanToNETAlignmentData = new Dictionary<int, float>();
+            scanToNETAlignmentData = new SortedDictionary<int, float>();
 
             List<ScanNETPair> scanNETList = new List<ScanNETPair>();
 
@@ -522,7 +522,7 @@ namespace DeconTools.Backend.Core
             }
 
             SetScanToNETAlignmentData(scanNETList);
-
+            this.NETIsAligned = false;
 
         }
 
@@ -551,6 +551,174 @@ namespace DeconTools.Backend.Core
             }
 
         }
+
+
+        public int GetScanValueForNET(float netVal)
+        {
+            if (this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0)
+            {
+                CreateDefaultScanToNETAlignmentData();
+
+                bool scanToNETTableIsStillEmpty = this.ScanToNETAlignmentData == null || this.ScanToNETAlignmentData.Count == 0;
+                if (scanToNETTableIsStillEmpty)
+                {
+                    throw new ArgumentException("Scan-to-NET table is empty. Tried to create it from Dataset but failed.");
+                }
+            }
+
+            return (int)calculateScanForNET(netVal);
+
+
+            
+        }
+
+
+        private float calculateScanForNET(float net)
+        {
+            //need to find the two (scan,net) pairs that are the lower and upper boundaries of the input NET
+            //then do an intersect
+
+            KeyValuePair<int, float> closestNETPair = new KeyValuePair<int, float>();
+
+
+            int lowerScan =this.MinScan;
+            int upperScan =this.MaxScan;
+
+            float lowerNET = 0;
+            float upperNET =1;
+
+
+            //first find the closest ScanNET pair
+            float diff= float.MaxValue;
+            foreach (var item in this.ScanToNETAlignmentData)
+            {
+                float currentDiff = Math.Abs(item.Value - net);
+                if (currentDiff < diff)
+                {
+                    closestNETPair = item;
+                    diff = currentDiff;
+                }
+                
+            }
+
+            //we found either the point above the inputted NET or below. Need to fill the appropriate lower and upper scan/NET
+            bool isLowerThanInputNET = closestNETPair.Value <= net;
+
+            if (isLowerThanInputNET)
+            {
+                lowerScan = closestNETPair.Key;
+                lowerNET = closestNETPair.Value;
+
+                bool found = false;
+                int currentScan = lowerScan+1; //add one and then start looking for next higher scan
+                while (!found && currentScan <= maxScan)
+                {
+                    currentScan++;
+                    if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                    {
+                        upperScan = currentScan;
+                        upperNET = this.ScanToNETAlignmentData[upperScan];
+                        found = true;
+                    }
+
+                }
+                
+
+            }
+            else
+            {
+                upperScan = closestNETPair.Key;
+                upperNET = closestNETPair.Value;
+
+                bool found = false;
+                int currentScan = upperScan-1;
+
+                while (!found && currentScan > this.MinScan)
+                {
+                    currentScan--;
+                    if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                    {
+                        lowerScan = currentScan;
+                        lowerNET = this.ScanToNETAlignmentData[lowerScan];
+                        found = true;
+                    }
+                }
+
+
+            }
+
+
+            float slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            float yintercept = (upperNET - slope * upperScan);
+
+            float xvalue = (net - yintercept) / slope;
+
+            if (xvalue < this.minScan)
+            {
+                xvalue = this.MinScan;
+            }
+
+            if (xvalue > this.MaxScan)
+            {
+                xvalue = this.MaxScan;
+            }
+
+            return xvalue;
+            
+
+
+
+        }
+
+        private float calculateNET(int scanNum)
+        {
+            if (scanNum < 2) return 0;
+            int maxScan = this.MaxScan;
+
+
+            double lowerNET = 0;
+            double upperNET = 1;
+            int lowerScan = 1;
+            int upperScan = maxScan;
+
+
+            bool found = false;
+            int currentScan = scanNum;
+
+            while (!found && currentScan > 0)
+            {
+                currentScan--;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    lowerScan = currentScan;
+                    lowerNET = this.ScanToNETAlignmentData[lowerScan];
+                    found = true;
+                }
+            }
+
+            found = false;
+            currentScan = scanNum;
+            while (!found && currentScan <= maxScan)
+            {
+                currentScan++;
+                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
+                {
+                    upperScan = currentScan;
+                    upperNET = this.ScanToNETAlignmentData[upperScan];
+                    found = true;
+                }
+
+            }
+
+            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            double yintercept = (upperNET - slope * upperScan);
+
+            return (float)(scanNum * slope + yintercept);
+
+        }
+
+
+
 
         public virtual int GetNearestScanValueForNET(double minNetVal)
         {
@@ -644,53 +812,7 @@ namespace DeconTools.Backend.Core
 
 
 
-        private float calculateNET(int scanNum)
-        {
-            if (scanNum < 2) return 0;
-            int maxScan = this.GetNumMSScans();
-
-
-            double lowerNET = 0;
-            double upperNET = 1;
-            int lowerScan = 1;
-            int upperScan = maxScan;
-
-
-            bool found = false;
-            int currentScan = scanNum;
-
-            while (!found && currentScan > 0)
-            {
-                currentScan--;
-                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
-                {
-                    lowerScan = currentScan;
-                    lowerNET = this.ScanToNETAlignmentData[lowerScan];
-                    found = true;
-                }
-            }
-
-            found = false;
-            currentScan = scanNum;
-            while (!found && currentScan < maxScan)
-            {
-                currentScan++;
-                if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
-                {
-                    upperScan = currentScan;
-                    upperNET = this.ScanToNETAlignmentData[upperScan];
-                    found = true;
-                }
-
-            }
-
-            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            double yintercept = (upperNET - slope * upperScan);
-
-            return (float)(scanNum * slope + yintercept);
-
-        }
-
+      
         /// <summary>
         /// The method returns the m/z that you should look for, when m/z alignment is considered
         /// </summary>
@@ -754,19 +876,31 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public bool IsAligned()
+        public bool MassIsAligned
         {
-            if (this.AlignmentInfo == null)
+            get
             {
-                return false;
-            }
-            else
-            {
-                return true;
+                if (this.AlignmentInfo == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 
+        public bool NETIsAligned 
+        { 
+            get; 
+            private set; 
+        }
+
+
+
         #endregion
+
 
 
     }

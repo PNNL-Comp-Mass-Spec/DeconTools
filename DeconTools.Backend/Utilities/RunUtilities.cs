@@ -73,7 +73,7 @@ namespace DeconTools.Backend.Utilities
             }
 
             //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
-            if (run.IsAligned())
+            if (run.NETIsAligned)
             {
 
                 alignmentSuccessful = true;

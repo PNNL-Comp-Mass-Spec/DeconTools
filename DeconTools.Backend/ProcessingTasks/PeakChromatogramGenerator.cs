@@ -96,8 +96,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
-            double minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;
-            double maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;  
+            float minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;
+            float maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;  
 
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
@@ -108,12 +108,12 @@ namespace DeconTools.Backend.ProcessingTasks
             //if I get the chrom from the entire scan range (18500 scans) the average time is 120ms. If I restrict to a width of 3000 scans
             //the average time is 20ms. But if we are too restrictive, I have seen cases where the real chrom peak is never generated because
             //it fell outside the chrom generator window. 
-            
-            
-            int lowerScan = resultColl.Run.GetNearestScanValueForNET(minNetVal);
+
+
+            int lowerScan = resultColl.Run.GetScanValueForNET(minNetVal);
             if (lowerScan == -1) lowerScan = resultColl.Run.MinScan;
 
-            int upperScan = resultColl.Run.GetNearestScanValueForNET(maxNetVal);
+            int upperScan = resultColl.Run.GetScanValueForNET(maxNetVal);
             if (upperScan == -1) upperScan = resultColl.Run.MaxScan;
 
 
@@ -123,7 +123,7 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 List<double> targetMZList = getTargetMZListForTopNPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
 
-                if (resultColl.Run.IsAligned())
+                if (resultColl.Run.MassIsAligned)
                 {
                     //if we have alignment information, we can adjust the targetMZ...
                     for (int i = 0; i < targetMZList.Count; i++)
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
 
                 //if we have alignment information, we can adjust the targetMZ...
-                if (resultColl.Run.IsAligned())
+                if (resultColl.Run.MassIsAligned)
                 {
                     targetMZ = getAlignedMZValue(targetMZ, resultColl.Run);
                 }
@@ -204,7 +204,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             if (run == null) return targetMZ;
 
-            if (run.IsAligned())
+            if (run.MassIsAligned)
             {
                 return run.GetTargetMZAligned(targetMZ);
 

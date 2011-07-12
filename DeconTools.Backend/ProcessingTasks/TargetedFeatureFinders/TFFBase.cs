@@ -201,7 +201,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             resultColl.IsosResultBin.Clear();
 
-            this.RunIsAligned = resultColl.Run.IsAligned();
+            this.RunIsAligned = resultColl.Run.MassIsAligned;
 
 
 

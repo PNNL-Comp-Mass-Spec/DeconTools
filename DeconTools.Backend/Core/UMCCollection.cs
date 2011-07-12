@@ -27,9 +27,9 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-        public Dictionary<int, float> GetScanNETLookupTable()
+        public SortedDictionary<int, float> GetScanNETLookupTable()
         {
-            Dictionary<int, float> lookupTable = new Dictionary<int, float>();
+            SortedDictionary<int, float> lookupTable = new SortedDictionary<int, float>();
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());    //this creates a list of UMCs distinct with reference to the ScanClassRep field
             List<UMC> tempUMCs = distinctItems.ToList();
 
