@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using System.IO;
 using DeconTools.Backend.Runs;
-using GWSFileUtilities;
 using DeconTools.Backend.Utilities;
+using GWSFileUtilities;
 
 namespace DeconToolsAutoProcessV1
 {
@@ -202,7 +200,9 @@ namespace DeconToolsAutoProcessV1
             UserState currentState = (UserState)(e.UserState);
 
             this.txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
-            this.progressBar2.Value = setProgress2Value(currentState.CurrentRun.CurrentScanSet.NumIsotopicProfiles);
+
+            int numIsotopicProfilesFoundInScan =  currentState.CurrentRun.ResultCollection.IsosResultBin.Count;
+            this.progressBar2.Value = setProgress2Value(numIsotopicProfilesFoundInScan);
             
             
             this.lblNumIsotopicProfiles.Text = this.progressBar2.Maximum.ToString();
