@@ -55,6 +55,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             double massDefect = 0;   // this is the m/z diff between the max peak of theor feature and the max peak of the experimental feature
 
 
+            bool failedResult = false;
+
 
             for (int i = indexOfMaxTheorPeak; i >= 0; i--)
             {
@@ -70,14 +72,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 if (!foundMatchingMaxPeak)   // can't even find the observed peak that matches the most intense theor peak. 
                 {
-                    return null;
+                    failedResult = true;
+                    break;
                 }
 
                 if (peaksWithinTol.Count == 0)
                 {
                     if (needMonoIsotopicPeak)
                     {
-                        return null;    //here, we are looking to the left of most intense theor peak.  If we have the prerequisite of finding the monoIsotopic peak and fail here, we'll return a null isotopic profile
+                        //here, we are looking to the left of most intense theor peak.  If we have the prerequisite of finding the monoIsotopic peak and fail here, we'll return a failed result
+                        failedResult = true;
+                        break;
+                        
                     }
                     else
                     {
@@ -128,7 +134,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             }
 
-            if (outFeature == null) return null;   // above has failed.  Don't bother looking anymore.  No feature found for this mass tag.
 
             //------------------------- look right -------------------------------------------
             for (int i = indexOfMaxTheorPeak + 1; i < theorFeature.Peaklist.Count; i++)     //start one peak to the right of the max intense theor peak
@@ -138,7 +143,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     if (i == indexOfMaxTheorPeak + 1)  // first peak to the right of the max peak.  We need this one or we declare it to be a failure (= null)
                     {
-                        return null;
+                        failedResult = true;
+                        break;
                     }
                     break;    // finished.  Exit loop. 
                 }
@@ -153,12 +159,22 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
             }
 
-            //outFeature.
+
+            if (failedResult)
+            {
+                return null;   // return a null Isotopic profile, indicating a failed result
+            }
+            else
+            {
+                addMassInfoToIsotopicProfile(theorFeature, outFeature);
+                return outFeature;
+            }
+           
 
 
-            addMassInfoToIsotopicProfile(theorFeature, outFeature);
+           
 
-            return outFeature;
+            
 
 
 
@@ -226,6 +242,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (isoIsGood)
             {
                 iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+            }
+            else
+            {
+                result.FailedResult = true;     //note: for labelled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing 
+                result.FailureType = Globals.TargetedResultFailureType.MSFEATURE_NOT_FOUND;
             }
 
             resultColl.IsosResultBin.Add(result);

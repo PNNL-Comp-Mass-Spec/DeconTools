@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace DeconTools.Backend.Utilities
@@ -63,13 +61,13 @@ namespace DeconTools.Backend.Utilities
             this.LogEntryBuffer.Add(entry);
             this.logEntries.Add(entry);
             TimeOfLastUpdate = DateTime.Now;
-            
+
         }
 
         public void AddEntry(string desc, string outputFilename)
         {
             this.AddEntry(desc);
-            WriteToFile(outputFilename, false);
+            WriteToFile(outputFilename);
             this.LogEntryBuffer.Clear();         // since they were already written out to file. will clear them
         }
 
@@ -111,33 +109,22 @@ namespace DeconTools.Backend.Utilities
 
 
 
-        public void WriteToFile(string outputfilename, bool closeAfterWriting)
+        public void WriteToFile(string outputfilename)
         {
-            try
+            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Append,
+                          System.IO.FileAccess.Write, System.IO.FileShare.Read)))
             {
-                if (sw == null)
-                {
-                    sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read));
-                    sw.AutoFlush = true;
-                }
+                sw.AutoFlush = true;
 
                 foreach (LogEntry entry in LogEntryBuffer)
                 {
                     sw.WriteLine(entry.LogTime.ToString() + "\t" + entry.LogDescription);
 
                 }
-                if (closeAfterWriting) sw.Close();
+                
+                sw.Flush();
 
             }
-            catch (Exception)
-            {
-
-
-            }
-
-
-
-
 
 
         }

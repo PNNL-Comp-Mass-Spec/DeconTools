@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.Runs;
-using System.IO;
-using DeconTools.Backend.ProcessingTasks.ZeroFillers;
-using DeconTools.Backend.ProcessingTasks.Smoothers;
 using System.ComponentModel;
+using System.IO;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.Smoothers;
+using DeconTools.Backend.ProcessingTasks.ZeroFillers;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
-using DeconTools.Backend.ProcessingTasks.PeakListExporters;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 
 namespace DeconTools.Backend
 {
@@ -83,7 +80,7 @@ namespace DeconTools.Backend
             // Check.Require(validateFileExistance(paramFileName), "Could not process anything. Parameter file does not exist or is inaccessible");
 
 
-
+            
 
             Project.Reset();
             project = Project.getInstance();
@@ -116,6 +113,22 @@ namespace DeconTools.Backend
             }
 
             Logger.Instance.OutputFilename = m_run.DataSetPath + "\\" + m_run.DatasetName + "_log.txt";
+
+            try
+            {
+                if (File.Exists(Logger.Instance.OutputFilename))
+                {
+                    File.Delete(Logger.Instance.OutputFilename);
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
+
+
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(OldSchoolProcRunner)));
             Logger.Instance.AddEntry("ParameterFile = " + Path.GetFileName(this.paramFilename));
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
@@ -352,7 +365,7 @@ namespace DeconTools.Backend
 
                 Logger.Instance.AddEntry("total features = " + m_run.ResultCollection.MSFeatureCounter);
 
-                Logger.Instance.WriteToFile(m_run.Filename + "_log.txt", true);
+                Logger.Instance.WriteToFile(Logger.Instance.OutputFilename);
                 Logger.Instance.Close();
 
                 TaskCleaner taskCleaner = new TaskCleaner(Project.getInstance().TaskCollection);

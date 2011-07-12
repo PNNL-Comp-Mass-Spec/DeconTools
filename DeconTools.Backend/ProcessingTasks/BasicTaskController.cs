@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using System.ComponentModel;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
     public class BasicTaskController : TaskController
     {
-        const double DEFAULT_TIME_BETWEEN_LOGENTRIES = 15;    //number of minutes between log entries during processing
+        const double DEFAULT_TIME_BETWEEN_LOGENTRIES = 5;    //number of minutes between log entries during processing
+        private int _scanCounter;
 
 
         public BasicTaskController(TaskCollection taskcollection)
@@ -25,7 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(Run run)
         {
-            int counter = 1;
+            _scanCounter = 1;
             foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanset;
@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         string errorInfo = getErrorInfo(run, task, ex);
                         Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
 
-                        throw ex;
+                        throw;
                     }
                 }
 
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 reportProgress(scanset, run);
 
 
-                counter++;
+                _scanCounter++;
             }
         }
 
@@ -79,32 +79,48 @@ namespace DeconTools.Backend.ProcessingTasks
 
             UserState userstate = new UserState(run, scanset, null);
 
-            int scannum = run.ScanSetCollection.ScanSetList.IndexOf(scanset) + 1;
-            float percentDone = (float)(scannum) / (float)(run.ScanSetCollection.ScanSetList.Count) * 100;
+            
+            float percentDone = (float)(_scanCounter) / (float)(run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
-            if (System.DateTime.Now.Subtract(Logger.Instance.TimeOfLastUpdate).TotalMinutes > DEFAULT_TIME_BETWEEN_LOGENTRIES)
-            {
-                Logger.Instance.AddEntry("Processed scan/frame " + run.GetCurrentScanOrFrame() + ", "
-                    + percentDone.ToString("0.#") + "% complete, " + run.ResultCollection.getTotalIsotopicProfiles() + " accumulated features", Logger.Instance.OutputFilename);
-            }
-
+            string logText = "Scan/Frame= " + run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + run.ResultCollection.getTotalIsotopicProfiles();
 
             int numScansBetweenProgress = getNumScansBetweenProgress(this.TaskCollection);
 
-            if (scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
+
+            if (backgroundWorker != null)
             {
-                if (backgroundWorker != null)
+                backgroundWorker.ReportProgress((int)percentDone, userstate);
+            }
+            
+            if (_scanCounter % numScansBetweenProgress == 0)
+            {
+                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+
+                if (backgroundWorker == null)
                 {
-                    backgroundWorker.ReportProgress((int)percentDone, userstate);
+                    Console.WriteLine(DateTime.Now + "\t" + logText);
                 }
-                else
-                {
-                    Console.WriteLine("Completed processing on Scan " + scanset.PrimaryScanNumber);
-                }
+                
             }
 
 
+        }
+
+        protected override int getNumScansBetweenProgress(TaskCollection taskCollection)
+        {
+            int numScansBetweenProgress;
+
+
+            if (taskCollectionContainsRapidDeconvolutor(taskCollection))
+            {
+                numScansBetweenProgress = 10;
+            }
+            else
+            {
+                numScansBetweenProgress = 20;
+            }
+            return numScansBetweenProgress;
         }
 
 

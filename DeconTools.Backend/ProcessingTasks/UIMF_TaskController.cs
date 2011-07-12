@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
 using System.ComponentModel;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
-using System.IO;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -14,14 +12,15 @@ namespace DeconTools.Backend.ProcessingTasks
     {
         const int DEFAULT_ISOSRESULT_THRESHOLD = 500000;
         const double DEFAULT_TIME_BETWEEN_LOGENTRIES = 15;    //number of minutes between log entries during processing
-        
+
         private BackgroundWorker backgroundWorker;
         private IsosResultSerializer serializer;
+        private int _frameCounter;
 
 
         public UIMF_TaskController(TaskCollection taskcollection)
         {
-            this.IsosResultThresholdNum = DEFAULT_ISOSRESULT_THRESHOLD;      
+            this.IsosResultThresholdNum = DEFAULT_ISOSRESULT_THRESHOLD;
             this.TaskCollection = taskcollection;
         }
 
@@ -31,6 +30,8 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             this.backgroundWorker = backgroundWorker;
         }
+
+
 
         public override void Execute(Run run)
         {
@@ -42,8 +43,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 serializer = null;
                 //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
+                _frameCounter = 0;
                 foreach (FrameSet frameset in uimfRun.FrameSetCollection.FrameSetList)
                 {
+                    _frameCounter++;
                     uimfRun.CurrentFrameSet = frameset;
                     //sw.Start();
 
@@ -89,7 +92,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
         }
-        public override void Execute(List<Run>runCollection)
+        public override void Execute(List<Run> runCollection)
         {
 
             foreach (Run run in runCollection)
@@ -98,7 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-   
+
         private string getOutputFileName(Run run)
         {
             return run.Filename + "_tmp.bin";
@@ -106,8 +109,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private void reportProgress(FrameSet frameset, ScanSet scanset, Run run)
         {
-            ProjectFacade pf=new ProjectFacade();
-            
+            ProjectFacade pf = new ProjectFacade();
+
             UIMFRun uimfRun = (UIMFRun)run;
             if (uimfRun.FrameSetCollection == null || uimfRun.FrameSetCollection.FrameSetList.Count == 0) return;
 
@@ -121,31 +124,34 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-            double percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal)*100;
+            double percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal) * 100;
             userstate.PercentDone = (float)percentDone;
 
-            if (System.DateTime.Now.Subtract(Logger.Instance.TimeOfLastUpdate).TotalMinutes > DEFAULT_TIME_BETWEEN_LOGENTRIES)
-            {
-                Logger.Instance.AddEntry("Processed scan/frame " + uimfRun.GetCurrentScanOrFrame() + ", "
-                    + percentDone.ToString("0.#") + "% complete, " + uimfRun.ResultCollection.getTotalIsotopicProfiles() + " accumulated features",Logger.Instance.OutputFilename);
-            }
 
-
+            string logText = "Scan/Frame= " + run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + run.ResultCollection.getTotalIsotopicProfiles();
 
             int numScansBetweenProgress = getNumScansBetweenProgress(this.TaskCollection);
 
-            if (run.ScanSetCollection.GetLastScanSet()==scanset.PrimaryScanNumber|| scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
+
+            bool imsScanIsLastInFrame = run.ScanSetCollection.GetLastScanSet() == scanset.PrimaryScanNumber;
+            if (imsScanIsLastInFrame)
             {
-                if (backgroundWorker != null)
+                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+                Console.WriteLine(DateTime.Now + "\t" + logText);
+            }
+
+            if (backgroundWorker != null)
+            {
+                if (imsScanIsLastInFrame || scanset.PrimaryScanNumber % numScansBetweenProgress == 0)
                 {
                     backgroundWorker.ReportProgress((int)percentDone, userstate);
                 }
-                else
-                {
-
-                    Console.WriteLine("Completed processing on frame " + frameset.PrimaryFrame + " Scan " + scanset.PrimaryScanNumber + "; Isotopic Profiles = " +scanset.NumIsotopicProfiles);
-                }
             }
+
+
+           
+
+
         }
 
         protected override int getNumScansBetweenProgress(TaskCollection taskCollection)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Utilities;
@@ -183,7 +182,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             currentResult.AddSelectedChromPeakAndScanSet(bestChromPeak, bestScanset);
 
-            Check.Ensure(currentResult.ChromPeakSelected != null && currentResult.ChromPeakSelected.XValue != 0, "ChromPeakSelector failed. No chromatographic peak found within tolerances.");
+            bool failedChromPeakSelection = (currentResult.ChromPeakSelected == null || currentResult.ChromPeakSelected.XValue == 0);
+            if (failedChromPeakSelection)
+            {
+                currentResult.FailedResult = true;
+                currentResult.FailureType = Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES;
+            }
+
         }
 
 

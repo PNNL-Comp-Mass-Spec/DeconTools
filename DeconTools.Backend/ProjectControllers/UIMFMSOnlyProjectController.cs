@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
-using DeconTools.Backend.Utilities;
-using DeconTools.Utilities;
-using System.IO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
-using System.ComponentModel;
+using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProjectControllers
 {
@@ -160,7 +157,7 @@ namespace DeconTools.Backend.ProjectControllers
             ProjectFacade pf = new ProjectFacade();
             Logger.Instance.AddEntry("total features = " + pf.GetTotalFeaturesFromScanResultCollection());
 
-            Logger.Instance.WriteToFile(Project.getInstance().RunCollection[0].Filename + "_log.txt", true);
+            Logger.Instance.WriteToFile(Project.getInstance().RunCollection[0].Filename + "_log.txt");
             Logger.Instance.Close();
 
             TaskCleaner taskCleaner = new TaskCleaner(Project.getInstance().TaskCollection);

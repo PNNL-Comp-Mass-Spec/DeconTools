@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
-using System.IO;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -48,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 resultList.Run.XYData.Xvalues.Length == 0 ||
                 resultList.Run.XYData.Yvalues.Length == 0)
             {
-                resultList.AddLog("Peak Detector aborted; XY data is empty; Scan = " + resultList.Run.CurrentScanSet.PrimaryScanNumber.ToString());
+                //resultList.AddLog("Peak Detector aborted; XY data is empty; Scan = " + resultList.Run.CurrentScanSet.PrimaryScanNumber.ToString());
 
 
             }

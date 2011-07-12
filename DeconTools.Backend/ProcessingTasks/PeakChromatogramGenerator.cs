@@ -174,12 +174,20 @@ namespace DeconTools.Backend.ProcessingTasks
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
 
 
+
+
+
             resultColl.Run.XYData = chromValues;
+
+            
 
             if (chromValues == null)
             {
                 if (result != null)
                 {
+                    result.FailedResult = true;
+                    result.FailureType = Globals.TargetedResultFailureType.CHROM_XYDATA_NOT_FOUND;
+                    
                     result.Flags.Add(new ChromPeakNotFoundResultFlag());
                 }
 

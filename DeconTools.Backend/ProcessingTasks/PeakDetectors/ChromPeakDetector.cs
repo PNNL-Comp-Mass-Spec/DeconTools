@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
@@ -105,6 +103,19 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         public override void addPeakRelatedData(Run run)
         {
+
+            if (run.PeakList == null || run.PeakList.Count == 0)
+            {
+                bool workflowIsTargeted = (run.CurrentMassTag != null);
+                if (workflowIsTargeted)
+                {
+                    MassTagResultBase result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+                    result.FailedResult = true;
+                    result.FailureType = Globals.TargetedResultFailureType.CHROM_PEAKS_NOT_DETECTED;
+                }
+            }
+            
+
             foreach (ChromPeak peak in run.PeakList)
             {
                 peak.NETValue = run.GetNETValueForScan((int)peak.XValue);

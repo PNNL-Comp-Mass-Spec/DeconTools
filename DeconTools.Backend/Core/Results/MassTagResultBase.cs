@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend.Utilities;
 
@@ -29,6 +28,18 @@ namespace DeconTools.Backend.Core
         public string ErrorDescription { get; set; }
 
         public XYData ChromValues { get; set; }
+
+        /// <summary>
+        /// True when processing encounters a critical problem. Normally happens when the target doesn't exist in data.
+        /// </summary>
+        public bool FailedResult { get; set; }
+
+        /// <summary>
+        /// Type of failure during targeted processing
+        /// </summary>
+        public DeconTools.Backend.Globals.TargetedResultFailureType FailureType { get; set; }
+
+
         #endregion
 
         #region Public Methods
@@ -158,6 +169,9 @@ namespace DeconTools.Backend.Core
             this.Score = 1;
             this.InterferenceScore = 1;
             this.IsotopicProfile = null;
+            this.ChromPeakSelected = null;
+            this.FailedResult = false;
+            this.FailureType = Globals.TargetedResultFailureType.NONE;
         }
 
                

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend
 {
     public class Globals
@@ -121,6 +118,18 @@ namespace DeconTools.Backend
             O18,
             N15
         }
+
+        public enum TargetedResultFailureType
+        {
+            NONE,
+            CHROM_XYDATA_NOT_FOUND,
+            CHROM_PEAKS_NOT_DETECTED,
+            CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES,
+            MSPEAKS_NOT_DETECTED,
+            MSFEATURE_NOT_FOUND
+
+        }
+
 
 
 
