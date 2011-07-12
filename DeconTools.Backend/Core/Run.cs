@@ -517,7 +517,7 @@ namespace DeconTools.Backend.Core
 
             for (int i = this.MinScan; i <= this.MaxScan; i++)
             {
-                ScanNETPair snp = new ScanNETPair((float)this.MinScan, i/(float)this.MaxScan);
+                ScanNETPair snp = new ScanNETPair((float)this.MinScan, i / (float)this.MaxScan);
                 scanNETList.Add(snp);
             }
 
@@ -569,7 +569,7 @@ namespace DeconTools.Backend.Core
             return (int)calculateScanForNET(netVal);
 
 
-            
+
         }
 
 
@@ -581,15 +581,15 @@ namespace DeconTools.Backend.Core
             KeyValuePair<int, float> closestNETPair = new KeyValuePair<int, float>();
 
 
-            int lowerScan =this.MinScan;
-            int upperScan =this.MaxScan;
+            int lowerScan = this.MinScan;
+            int upperScan = this.MaxScan;
 
             float lowerNET = 0;
-            float upperNET =1;
+            float upperNET = 1;
 
 
             //first find the closest ScanNET pair
-            float diff= float.MaxValue;
+            float diff = float.MaxValue;
             foreach (var item in this.ScanToNETAlignmentData)
             {
                 float currentDiff = Math.Abs(item.Value - net);
@@ -598,7 +598,7 @@ namespace DeconTools.Backend.Core
                     closestNETPair = item;
                     diff = currentDiff;
                 }
-                
+
             }
 
             //we found either the point above the inputted NET or below. Need to fill the appropriate lower and upper scan/NET
@@ -610,7 +610,7 @@ namespace DeconTools.Backend.Core
                 lowerNET = closestNETPair.Value;
 
                 bool found = false;
-                int currentScan = lowerScan+1; //add one and then start looking for next higher scan
+                int currentScan = lowerScan + 1; //add one and then start looking for next higher scan
                 while (!found && currentScan <= maxScan)
                 {
                     currentScan++;
@@ -622,7 +622,7 @@ namespace DeconTools.Backend.Core
                     }
 
                 }
-                
+
 
             }
             else
@@ -631,7 +631,7 @@ namespace DeconTools.Backend.Core
                 upperNET = closestNETPair.Value;
 
                 bool found = false;
-                int currentScan = upperScan-1;
+                int currentScan = upperScan - 1;
 
                 while (!found && currentScan > this.MinScan)
                 {
@@ -664,7 +664,7 @@ namespace DeconTools.Backend.Core
             }
 
             return xvalue;
-            
+
 
 
 
@@ -749,6 +749,7 @@ namespace DeconTools.Backend.Core
             float[] netVals = scanNETList.Select(p => p.NET).ToArray();
 
             SetScanToNETAlignmentData(scanVals, netVals);
+            
         }
 
         public virtual void SetScanToNETAlignmentData(float[] scanVals, float[] netVals)
@@ -765,6 +766,8 @@ namespace DeconTools.Backend.Core
                     this.ScanToNETAlignmentData.Add(scanToAdd, netVals[i]);
                 }
             }
+
+            this.NETIsAligned = true;   //Keep an eye on this!
 
             UpdateNETValuesInScanSetCollection();
 
@@ -812,7 +815,7 @@ namespace DeconTools.Backend.Core
 
 
 
-      
+
         /// <summary>
         /// The method returns the m/z that you should look for, when m/z alignment is considered
         /// </summary>
@@ -891,11 +894,7 @@ namespace DeconTools.Backend.Core
             }
         }
 
-        public bool NETIsAligned 
-        { 
-            get; 
-            private set; 
-        }
+        public bool NETIsAligned { get; set; }
 
 
 

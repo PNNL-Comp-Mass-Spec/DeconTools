@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
@@ -33,6 +34,18 @@ namespace DeconTools.Backend.FileIO
           
             GetScanNETPairsFromFile();
             return _scanNETPairs;
+
+        }
+
+        public void Execute(Run run)
+        {
+            Check.Require(run != null, "NETAlignmentInfoImporter failed. Run is not defined.");
+
+            GetScanNETPairsFromFile();
+            run.SetScanToNETAlignmentData(_scanNETPairs);
+            run.NETIsAligned = true;
+
+
 
         }
 

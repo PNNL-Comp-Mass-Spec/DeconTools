@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
-using System.IO;
 using DeconTools.Backend.Data;
-using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 {
@@ -55,6 +50,8 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
             run.UpdateNETValuesInScanSetCollection();
 
+            run.NETIsAligned = true;
+            
 
         }
 

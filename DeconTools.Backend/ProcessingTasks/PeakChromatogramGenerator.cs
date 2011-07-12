@@ -57,7 +57,8 @@ namespace DeconTools.Backend.ProcessingTasks
             this.IsotopicProfileTarget = isotopicProfileTarget;
 
             this.TopNPeaksLowerCutOff = 0.3;
-            this.NETWindowWidth = 0.3f;
+            this.NETWindowWidthForNonAlignedData = 0.4f;
+            this.NETWindowWidthForAlignedData = 0.05f;
 
         }
 
@@ -73,8 +74,14 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <summary>
         /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
         /// </summary>
-        public float NETWindowWidth { get; set; }
+        public float NETWindowWidthForNonAlignedData { get; set; }
 
+
+        /// <summary>
+        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
+        /// For Aligned data, we should be able to use a smaller range which will lead to faster chromatogram generation
+        /// </summary>
+        public float NETWindowWidthForAlignedData { get; set; }
 
         /// <summary>
         /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram. 
@@ -96,19 +103,28 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
-            float minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;
-            float maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidth;  
-
-            if (minNetVal < 0) minNetVal = 0;
-            if (maxNetVal > 1) maxNetVal = 1;
-
-            
 
             //[gord] restricting the scan range from which the chromatogram is generated greatly improves speed. e.g) on an Orbitrap file
             //if I get the chrom from the entire scan range (18500 scans) the average time is 120ms. If I restrict to a width of 3000 scans
             //the average time is 20ms. But if we are too restrictive, I have seen cases where the real chrom peak is never generated because
             //it fell outside the chrom generator window. 
 
+            float minNetVal;
+            float maxNetVal;
+            if (resultColl.Run.NETIsAligned)
+            {
+                minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidthForAlignedData;
+                maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidthForAlignedData;  
+            }
+            else
+            {
+                minNetVal = resultColl.Run.CurrentMassTag.NETVal - resultColl.Run.CurrentMassTag.NETVal * NETWindowWidthForNonAlignedData;
+                maxNetVal = resultColl.Run.CurrentMassTag.NETVal + resultColl.Run.CurrentMassTag.NETVal * NETWindowWidthForNonAlignedData;  
+   
+            }
+          
+            if (minNetVal < 0) minNetVal = 0;
+            if (maxNetVal > 1) maxNetVal = 1;
 
             int lowerScan = resultColl.Run.GetScanValueForNET(minNetVal);
             if (lowerScan == -1) lowerScan = resultColl.Run.MinScan;
