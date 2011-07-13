@@ -102,10 +102,32 @@ namespace DeconTools.Workflows.UnitTesting
 
             
            // float testNET1 = run.AlignmentInfo.GetNETFromTime(testScan);
-
+            Assert.IsTrue(run.NETIsAligned);
             Assert.AreEqual(0.3252918m, (decimal)testNET1);
 
         }
+
+
+        [Test]
+        public void ImportNET_and_Try_Alignment_Test2()
+        {
+            string importFilename = FileRefs.ImportedData + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt";
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            NETAlignmentFromTextImporter importer = new NETAlignmentFromTextImporter(importFilename);
+
+            importer.Execute(run);
+
+
+            float testScan = 6005;
+            float testNET1 = run.GetNETValueForScan((int)testScan);
+
+            Assert.AreEqual(0.3252918m, (decimal)testNET1);
+            Assert.IsTrue(run.NETIsAligned);
+        }
+
 
         [Test]
         public void ImportMassAndTimePPMCorrections_and_Try_Alignment_Test1()

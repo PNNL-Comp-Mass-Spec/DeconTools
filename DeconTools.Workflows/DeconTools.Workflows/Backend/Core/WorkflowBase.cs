@@ -120,6 +120,10 @@ namespace DeconTools.Workflows.Backend.Core
         {
             this.ResetStoredXYData(this.ChromatogramXYData);
             this.ResetStoredXYData(this.MassSpectrumXYData);
+
+            this.Run.XYData = null;
+            this.Run.PeakList = new List<IPeak>();
+
             this.ChromPeaksDetected.Clear();
             this.ChromPeakSelected = null;
         }

@@ -296,6 +296,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             bool passesCriteria = true;
 
+            if (result.FailedResult) return false;      
+
             if (result.ChromPeakSelected == null) return false;
 
             if (result.IsotopicProfile == null) return false;

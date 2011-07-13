@@ -30,7 +30,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
 
             Run run= RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
@@ -40,8 +40,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24707;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
+            int testMassTagID = 24800;
+            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
 
             DeconToolsTargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
@@ -54,31 +54,36 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.IsotopicProfile);
             Assert.IsNotNull(result.ScanSet);
             Assert.IsNotNull(result.ChromPeakSelected);
-            Assert.AreEqual(4, result.IsotopicProfile.ChargeState);
-            Assert.AreEqual(610.81m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(),2));
-            Assert.AreEqual(6483, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+            Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
+            Assert.AreEqual(718.41m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
+            Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
 
         }
 
 
-        [Test]
-        public void findSingleMassTag_test2()
-        {
 
+
+
+   
+
+        [Test]
+        public void cannotFindMassTag_test1()
+        {
+            //
             string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
 
             MassTagCollection mtc = new MassTagCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24707;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
+            int testMassTagID = 26523;
+            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
 
             DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -86,16 +91,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow.Execute();
 
             MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
-            result.DisplayToConsole();
+           
+            Assert.IsNull(result.IsotopicProfile);
+            Assert.IsNull(result.ScanSet);
+            Assert.IsNull(result.ChromPeakSelected);
 
-            Assert.IsNotNull(result.IsotopicProfile);
-            Assert.IsNotNull(result.ScanSet);
-            Assert.IsNotNull(result.ChromPeakSelected);
-            Assert.AreEqual(4, result.IsotopicProfile.ChargeState);
-            Assert.AreEqual(610.81m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
-            Assert.AreEqual(6483, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+            Assert.IsTrue(result.FailedResult);
+            Assert.AreEqual(DeconTools.Backend.Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES, result.FailureType);
 
+          
         }
+
+
 
 
         [Test]

@@ -141,33 +141,28 @@ namespace DeconTools.Workflows.Backend.Core
             {
 
                 this.Result = this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
+                this.Result.ResetResult();
+                
 
-                theorFeatureGen.Execute(this.Run.ResultCollection);
-
-                chromGen.Execute(this.Run.ResultCollection);
-
-                chromSmoother.Execute(this.Run.ResultCollection);
+                executeTask(theorFeatureGen);
+                executeTask(chromGen);
+                executeTask(chromSmoother);
                 updateChromDataXYValues(this.Run.XYData);
 
-                chromPeakDetector.Execute(this.Run.ResultCollection);
+                executeTask(chromPeakDetector);
                 updateChromDetectedPeaks(this.Run.PeakList);
 
-                chromPeakSelector.Execute(this.Run.ResultCollection);
+                executeTask(chromPeakSelector);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
 
-                MSGenerator.Execute(this.Run.ResultCollection);
-
+                executeTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 
-                msPeakDetector.Execute(this.Run.ResultCollection);
+                executeTask(msPeakDetector);
+                executeTask(msfeatureFinder);
 
-                msfeatureFinder.Execute(this.Run.ResultCollection);
-
-                fitScoreCalc.Execute(this.Run.ResultCollection);
-
-                resultValidator.Execute(this.Run.ResultCollection);
-
-
+                executeTask(fitScoreCalc);
+                executeTask(resultValidator);
 
             }
             catch (Exception ex)
@@ -176,6 +171,14 @@ namespace DeconTools.Workflows.Backend.Core
                 result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
 
                 return;
+            }
+        }
+
+        private void executeTask(Task task)
+        {
+            if (!Result.FailedResult)
+            {
+                task.Execute(this.Run.ResultCollection);
             }
         }
     }
