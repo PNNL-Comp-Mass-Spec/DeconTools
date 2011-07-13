@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities.SqliteUtils;
-using System.Data.SQLite;
-using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
@@ -103,5 +100,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             }
 
         }
+
+
+
+      
     }
 }

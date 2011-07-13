@@ -1,36 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public class BasicScanResult_TextFileExporter : ScanResult_TextFileExporter
     {
-        private char delimiter;
-       
-
+  
         #region Constructors
-        public BasicScanResult_TextFileExporter(string fileName)
-        {
-            try
-            {
-                sw = new StreamWriter(fileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
-            }
-
-            this.delimiter = ',';
-
-            sw.Write(buildHeaderLine());
-
-        }
+        public BasicScanResult_TextFileExporter(string fileName):base(fileName) {}
+        
         #endregion
 
    
@@ -38,19 +16,19 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(result.ScanSet.PrimaryScanNumber);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.ScanTime.ToString("0.####"));
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.SpectrumType);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.BasePeak.Height);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.BasePeak.XValue.ToString("0.#####"));
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.ScanSet.TICValue);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.NumPeaks);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.NumIsotopicProfiles);
 
             return sb.ToString();
@@ -76,21 +54,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append("num_peaks");
             sb.Append(Delimiter);
             sb.Append("num_deisotoped");
-            sb.Append(Environment.NewLine);
+           
 
             return sb.ToString();
         }
 
-        public override char Delimiter
-        {
-            get
-            {
-                return delimiter;
-            }
-            set
-            {
-                delimiter = value;
-            }
-        }
+      
     }
 }

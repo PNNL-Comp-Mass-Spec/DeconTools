@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
@@ -26,6 +23,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         protected abstract void buildTables();
         protected abstract void addScanResults(DeconTools.Backend.Core.ResultCollection resultList);
 
-    
+
+
+        public override void ExportScanResult(Core.ScanResult scanResult)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

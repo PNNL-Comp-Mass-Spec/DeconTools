@@ -8,31 +8,14 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public class UIMFScanResult_TextFileExporter:ScanResult_TextFileExporter
+    public class UIMFScanResult_TextFileExporter : ScanResult_TextFileExporter
     {
-        private char delimiter;
-
+   
         #region Constructors
-        public UIMFScanResult_TextFileExporter(string fileName)
-        {
-            try
-            {
-                sw = new StreamWriter(fileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
-            }
-
-            this.delimiter = ',';
-
-            sw.Write(buildHeaderLine());
-
-        }
+        public UIMFScanResult_TextFileExporter(string fileName) : base(fileName) { }
         #endregion
 
- 
+
 
 
         #region Public Methods
@@ -45,30 +28,30 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             StringBuilder sb = new StringBuilder();
 
-            UIMFScanResult uimfScanResult=(UIMFScanResult)result;
-           
-            
+            UIMFScanResult uimfScanResult = (UIMFScanResult)result;
+
+
             //sb.Append(uimfScanResult.Frameset.PrimaryFrame);
 
             //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
             sb.Append(uimfScanResult.FrameNum);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.ScanTime.ToString("0.###"));
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(result.SpectrumType);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.BasePeak.Height);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.BasePeak.XValue.ToString("0.#####"));
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.TICValue);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.NumPeaks);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.NumIsotopicProfiles);
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.FramePressureFront.ToString("0.#####"));
-            sb.Append(delimiter);
+            sb.Append(Delimiter);
             sb.Append(uimfScanResult.FramePressureBack.ToString("0.#####"));
 
             return sb.ToString();
@@ -98,22 +81,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append("frame_pressure_front");
             sb.Append(Delimiter);
             sb.Append("frame_pressure_back");
-            sb.Append(Environment.NewLine);
+           
 
             return sb.ToString();
         }
 
 
-        public override char Delimiter
-        {
-            get
-            {
-                return delimiter;
-            }
-            set
-            {
-                delimiter = value;
-            }
-        }
+     
     }
 }

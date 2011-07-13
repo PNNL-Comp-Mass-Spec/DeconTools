@@ -1,22 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities;
+﻿using System.IO;
 using DeconTools.Backend.Core;
-using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public abstract class ScanResult_TextFileExporter:IScanResultExporter
+    public abstract class ScanResult_TextFileExporter : IScanResultExporter
     {
-        protected StreamWriter sw;
+        protected string _filename;
 
         #region Constructors
+        public ScanResult_TextFileExporter(string filename)
+        {
+            _filename = filename;
+
+            try
+            {
+                if (File.Exists(_filename)) File.Delete(_filename);
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            
+
+
+            Delimiter = ',';
+
+            string header = buildHeaderLine();
+
+            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(_filename, System.IO.FileMode.Append,
+                        System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            {
+                sw.AutoFlush = true;
+                sw.WriteLine(header);
+            }
+        }
+
         #endregion
 
         #region Properties
-        public abstract char Delimiter { get; set; }
+        public virtual char Delimiter { get; set; }
         #endregion
 
 
@@ -25,36 +48,42 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         #region Private Methods
         #endregion
+
+
         public override void ExportScanResults(DeconTools.Backend.Core.ResultCollection resultList)
         {
-            foreach (ScanResult result in resultList.ScanResultList)
+            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(_filename, System.IO.FileMode.Append,
+                        System.IO.FileAccess.Write, System.IO.FileShare.Read)))
             {
-                string isosResultOutput = buildScansResultOutput(result);
+                sw.AutoFlush = true;
 
-                try
+                foreach (var scanResult in resultList.ScanResultList)
                 {
-                    sw.WriteLine(isosResultOutput);
+                    string output = buildScansResultOutput(scanResult);
+                    sw.WriteLine(output);
+
                 }
-                catch (Exception ex)
-                {
-                    Logger.Instance.AddEntry("IsosResultExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                    throw new Exception("Result exporter failed.  Check to see if it is already open or not.");
-                }
+
             }
         }
 
+        public override void ExportScanResult(ScanResult scanResult)
+        {
+            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(_filename, System.IO.FileMode.Append,
+                         System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            {
+                sw.AutoFlush = true;
+
+                string output = buildScansResultOutput(scanResult);
+                sw.WriteLine(output);
+                
+            }
+        }
+
+
         protected override void CloseOutputFile()
         {
-            if (sw == null) return;
-            try
-            {
-                sw.Flush();
-                sw.Close();
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.AddEntry("IsosResultExporter failed to close the output file properly. Details: " + ex.Message, Logger.Instance.OutputFilename);
-            }
+
             base.CloseOutputFile();
         }
 
