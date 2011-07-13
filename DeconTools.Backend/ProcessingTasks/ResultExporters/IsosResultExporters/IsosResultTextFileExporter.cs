@@ -72,7 +72,5 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         protected abstract string buildIsosResultOutput(IsosResult result);
         protected abstract string buildHeaderLine();
 
-        #region Private Methods
-        #endregion
     }
 }
