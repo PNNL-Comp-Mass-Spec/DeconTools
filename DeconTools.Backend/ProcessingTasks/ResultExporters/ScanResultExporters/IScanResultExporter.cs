@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
@@ -27,6 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             if (resultNotWritten)
             {
                 ExportScanResult(resultList.ScanResultList[currentScanResultIndex]);
+                _indexOfLastScanResultWritten = currentScanResultIndex;
             }
 
 
