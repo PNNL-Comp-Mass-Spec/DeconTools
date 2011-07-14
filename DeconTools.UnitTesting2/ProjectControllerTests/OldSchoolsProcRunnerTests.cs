@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
-using DeconTools.Backend;
+﻿using System.Collections.Generic;
 using System.IO;
-using DeconTools.Backend.Data;
+using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProjectControllerTests
 {
@@ -164,16 +162,23 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
 
         [Test]
-        public void processUIMF_Frames1_10_demultiplexedUIMF()
+        public void processUIMF_demultiplexedUIMF()
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
-            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_frames - 000-010.xml";
+            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Frame_500-501.xml";
 
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
+
 
             if (File.Exists(expectedIsosOutput))
             {
                 File.Delete(expectedIsosOutput);
+            }
+
+            if (File.Exists(expectedScansOutput))
+            {
+                File.Delete(expectedScansOutput);
             }
 
             OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(testFile, Globals.MSFileType.PNNL_UIMF, parameterFile);
@@ -183,15 +188,34 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
             List<IsosResult> results = new List<IsosResult>();
 
             Assert.That(File.Exists(expectedIsosOutput));
+            Assert.That(File.Exists(expectedScansOutput));
+
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
             results = importer.Import();
 
-            TestUtilities.DisplayMSFeatures(results);
+            int scansFileLineCounter = 0;
+            using (StreamReader sr=new StreamReader(expectedScansOutput))
+            {
+                sr.ReadLine();
 
-            Console.WriteLine(results.Count);
+                
+                while (sr.Peek()!=-1)
+                {
+                    sr.ReadLine();
+                    scansFileLineCounter++;
+                }
+                
+            }
 
-            Assert.AreEqual(815, results.Count);
-            Assert.AreEqual(6341935, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(2, scansFileLineCounter);
+           
+
+            //TestUtilities.DisplayMSFeatures(results);
+
+            //Console.WriteLine(results.Count);
+
+            Assert.AreEqual(1573, results.Count);
+            Assert.AreEqual(109217766, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
 
         }
 

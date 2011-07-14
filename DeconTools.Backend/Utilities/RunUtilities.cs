@@ -7,6 +7,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -91,8 +92,10 @@ namespace DeconTools.Backend.Utilities
                     UMCFileImporter importer = new UMCFileImporter(targetUMCFileName, '\t');
                     umcs = importer.Import();
 
-                    run.ScanToNETAlignmentData = umcs.GetScanNETLookupTable();
-                    run.UpdateNETValuesInScanSetCollection();
+                    List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
+                    run.SetScanToNETAlignmentData(scannetPairs);
+
+                   
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
 
@@ -112,8 +115,16 @@ namespace DeconTools.Backend.Utilities
         public static Run CreateAndAlignRun(string filename, string peaksFile)
         {
 
+            bool folderExists = Directory.Exists(filename);
+            bool fileExists = File.Exists(filename);
+            
+            
+            Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilites tried to create Run.");
+     
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(filename);
+
+            Check.Ensure(run != null, "RunUtilites could not create run. Run is null.");
 
             //Console.WriteLine(run.DatasetName + " loaded.");
 

@@ -43,7 +43,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
 
-            Check.Require(File.Exists(fileName), "File does not exist.");
+            Check.Require(File.Exists(fileName), "UIMF file does not exist.");
             this.Filename = fileName;
 
             //m_reader = new DataReader();

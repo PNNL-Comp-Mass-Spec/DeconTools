@@ -21,7 +21,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         public abstract void Execute();
 
-        
+        public virtual void ExecuteTask(Task task)
+        {
+            if (Result!=null && !Result.FailedResult)
+            {
+                task.Execute(this.Run.ResultCollection);
+            }
+        }
 
         
 

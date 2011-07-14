@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2
 
             public static string UIMFStdFile1 = FileRefs.RawDataBasePath + "\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
             public static string UIMFStdFile2 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
-            public static string UIMFStdFile3 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19_inverse.uimf";
+            public static string UIMFStdFile3 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
             
    
             

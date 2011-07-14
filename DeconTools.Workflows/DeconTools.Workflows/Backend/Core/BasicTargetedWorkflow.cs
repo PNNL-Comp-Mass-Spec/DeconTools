@@ -144,25 +144,25 @@ namespace DeconTools.Workflows.Backend.Core
                 this.Result.ResetResult();
                 
 
-                executeTask(theorFeatureGen);
-                executeTask(chromGen);
-                executeTask(chromSmoother);
+                ExecuteTask(theorFeatureGen);
+                ExecuteTask(chromGen);
+                ExecuteTask(chromSmoother);
                 updateChromDataXYValues(this.Run.XYData);
 
-                executeTask(chromPeakDetector);
+                ExecuteTask(chromPeakDetector);
                 updateChromDetectedPeaks(this.Run.PeakList);
 
-                executeTask(chromPeakSelector);
+                ExecuteTask(chromPeakSelector);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
 
-                executeTask(MSGenerator);
+                ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 
-                executeTask(msPeakDetector);
-                executeTask(msfeatureFinder);
+                ExecuteTask(msPeakDetector);
+                ExecuteTask(msfeatureFinder);
 
-                executeTask(fitScoreCalc);
-                executeTask(resultValidator);
+                ExecuteTask(fitScoreCalc);
+                ExecuteTask(resultValidator);
 
             }
             catch (Exception ex)
@@ -174,12 +174,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private void executeTask(Task task)
-        {
-            if (!Result.FailedResult)
-            {
-                task.Execute(this.Run.ResultCollection);
-            }
-        }
+     
     }
 }

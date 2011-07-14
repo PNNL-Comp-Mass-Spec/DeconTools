@@ -27,20 +27,24 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-        public SortedDictionary<int, float> GetScanNETLookupTable()
+        public List<ScanNETPair> GetScanNETLookupTable()
         {
-            SortedDictionary<int, float> lookupTable = new SortedDictionary<int, float>();
+            List<ScanNETPair> lookupTable = new List<ScanNETPair>();
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());    //this creates a list of UMCs distinct with reference to the ScanClassRep field
             List<UMC> tempUMCs = distinctItems.ToList();
 
+
+
             foreach (UMC umc in tempUMCs)
             {
-                lookupTable.Add(umc.ScanClassRep,(float)umc.NETClassRep);
+                ScanNETPair scannetpair = new ScanNETPair((float)umc.ScanClassRep, (float)umc.NETClassRep);
+
+                lookupTable.Add(scannetpair);
             }
             return lookupTable;
-
         }
 
+       
 
         public double GetNETValueForScan(int scanNum)
         {

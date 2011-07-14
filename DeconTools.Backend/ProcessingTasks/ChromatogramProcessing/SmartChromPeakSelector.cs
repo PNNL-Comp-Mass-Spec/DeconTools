@@ -68,7 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
         public SmartChromPeakSelector(float netTolerance, int numScansToSum, int numChromPeaksAllowed)
-            : this(netTolerance,numScansToSum)
+            : this(netTolerance, numScansToSum)
         {
 
             this.NumChromPeaksAllowed = numChromPeaksAllowed;
@@ -130,6 +130,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
+            currentResult.NumQualityChromPeaks = -1;
 
             ChromPeak bestChromPeak;
             if (currentResult.NumChromPeaksWithinTolerance > NumChromPeaksAllowed)
@@ -173,7 +174,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
                 //run a algorithm that decides, based on fit score mostly. 
-                bestChromPeak = determineBestChromPeak(peakQualityList);
+                bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 
 
@@ -190,6 +191,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
         }
+
+
 
 
 
@@ -211,15 +214,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
         #region Private Methods
-        private ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList)
+
+        private ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList, MassTagResultBase currentResult)
         {
-            var filteredList1 = (from n in peakQualityList 
-                                 where n.isotopicProfileFound == true && 
+            var filteredList1 = (from n in peakQualityList
+                                 where n.isotopicProfileFound == true &&
                                  n.fitScore < 1 && n.i_score < 1 &&
                                  n.isIsotopicProfileFlagged == false
                                  select n).ToList();
 
             ChromPeak bestpeak;
+
+            currentResult.NumQualityChromPeaks = filteredList1.Count;
 
             if (filteredList1.Count == 0)
             {
@@ -231,14 +237,36 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
+
                 filteredList1 = filteredList1.OrderBy(p => p.fitScore).ToList();
-                bestpeak = filteredList1[0].peak;
+
+
+
+                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].fitScore - filteredList1[1].fitScore);
+
+                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                if (differenceIsSmall)
+                {
+                    if (filteredList1[0].abundance >= filteredList1[1].abundance)
+                    {
+                        bestpeak = filteredList1[0].peak;
+                    }
+                    else
+                    {
+                        bestpeak = filteredList1[1].peak;
+                    }
+                }
+                else
+                {
+                    bestpeak = filteredList1[0].peak;
+                }
+
+
             }
 
             return bestpeak;
-
-
         }
+
 
         private void addScoresToPeakQualityData(PeakQualityData pq, MassTagResultBase currentResult)
         {
@@ -254,7 +282,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 pq.fitScore = currentResult.Score;
                 pq.i_score = currentResult.InterferenceScore;
 
-                bool resultHasFlags = (currentResult.Flags !=null && currentResult.Flags.Count>0);
+                bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
                 pq.isIsotopicProfileFlagged = resultHasFlags;
             }
         }

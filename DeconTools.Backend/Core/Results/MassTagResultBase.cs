@@ -174,6 +174,8 @@ namespace DeconTools.Backend.Core
             this.FailureType = Globals.TargetedResultFailureType.NONE;
         }
 
-               
+
+
+        public int NumQualityChromPeaks { get; set; }
     }
 }
