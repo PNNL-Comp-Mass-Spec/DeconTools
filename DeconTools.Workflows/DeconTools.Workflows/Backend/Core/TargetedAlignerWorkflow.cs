@@ -302,7 +302,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (result.IsotopicProfile == null) return false;
 
-            if (result.NumChromPeaksWithinTolerance > _parameters.NumChromPeaksAllowedDuringSelection) return false;
+            if (result.NumQualityChromPeaks > _parameters.NumChromPeaksAllowedDuringSelection) return false;
 
             if (result.Flags.Count > 0) return false;
 
