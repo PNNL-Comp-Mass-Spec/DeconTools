@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace DeconTools.UnitTesting2
 {
     public class FileRefs
@@ -76,7 +72,7 @@ namespace DeconTools.UnitTesting2
         {
             public static string YAFMSParameterFileScans4000_4050 = FileRefs.RawDataBasePath + "\\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans4000-4050.xml";
 
-            public static string Bruker12TSolarixScans4_8ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_Solarix_SampleParameterFile.xml";
+            public static string Bruker12TSolarixScans4_8ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_12T_Solarix_Scans4-8.xml";
 
             public static string Bruker9T_Scans1000_1010ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_9T_ParameterFile.xml";
 

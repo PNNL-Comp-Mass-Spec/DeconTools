@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -61,5 +59,7 @@ namespace DeconTools.Backend.Core
 
 
 
+
+        public string Description { get; set; }
     }
 }

@@ -216,7 +216,7 @@ namespace DeconTools.Backend
                 Project.getInstance().TaskCollection.TaskList.Add(originalIntensitiesExtractor);
             }
 
-            Task scanResultUpdater = new ScanResultUpdater();
+            Task scanResultUpdater = new ScanResultUpdater(Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
             Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
             Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(fileType, this.ExporterType, setIsosOutputFileName(exporterType));

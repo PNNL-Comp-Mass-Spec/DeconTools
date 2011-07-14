@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
+using DeconTools.Utilities;
 
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -11,6 +8,17 @@ namespace DeconTools.Backend.ProcessingTasks
     public class ScanResultUpdater : Task
     {
 
+        public bool MS2_IsOutputted { get; set; }
+
+        public ScanResultUpdater()
+        {
+            MS2_IsOutputted = false;
+        }
+
+        public ScanResultUpdater(bool ms2_is_outputted)
+        {
+            MS2_IsOutputted = ms2_is_outputted;
+        }
 
 
         public override void Execute(ResultCollection resultList)
@@ -19,13 +27,25 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.Run != null, "Run is null");
 
 
-            ScanResultFactory srf = new ScanResultFactory();
-            ScanResult scanresult =  srf.CreateScanResult(resultList.Run);
+            bool scanIsMS2 = (resultList.Run.GetMSLevel(resultList.Run.CurrentScanSet.PrimaryScanNumber) == 2);
 
-            if (scanresult != null)
+
+
+            if (!MS2_IsOutputted && scanIsMS2)
             {
-                resultList.ScanResultList.Add(scanresult);
-                //Console.WriteLine("ScanResult isotopic profiles = \t" + scanresult.NumIsotopicProfiles);
+
+            }
+            else
+            {
+
+                ScanResultFactory srf = new ScanResultFactory();
+                ScanResult scanresult = srf.CreateScanResult(resultList.Run);
+
+                if (scanresult != null)
+                {
+                    resultList.ScanResultList.Add(scanresult);
+                    //Console.WriteLine("ScanResult isotopic profiles = \t" + scanresult.NumIsotopicProfiles);
+                }
             }
 
         }

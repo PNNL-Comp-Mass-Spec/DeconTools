@@ -30,6 +30,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(result.NumPeaks);
             sb.Append(Delimiter);
             sb.Append(result.NumIsotopicProfiles);
+            sb.Append(Delimiter);
+            sb.Append(result.Description);
 
             return sb.ToString();
 
@@ -54,6 +56,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append("num_peaks");
             sb.Append(Delimiter);
             sb.Append("num_deisotoped");
+            sb.Append(Delimiter);
+            sb.Append("info");
            
 
             return sb.ToString();

@@ -60,6 +60,56 @@ namespace DeconTools.UnitTesting2.ProjectControllerTests
 
         }
 
+        [Test]
+        public void processOrbitrapData_outputMS2_and_peaks_test1()
+        {
+            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string paramFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans6000_6050_MS2.xml";
+            
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
+
+            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+
+
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            if (File.Exists(expectedScansOutput))
+            {
+                File.Delete(expectedScansOutput);
+            }
+
+
+            if (File.Exists(expectedPeaksFileOutput))
+            {
+                File.Delete(expectedPeaksFileOutput);
+            }
+
+
+
+            OldSchoolProcRunner oldSchool = new OldSchoolProcRunner(FileRefs.RawDataMSFiles.OrbitrapStdFile1, Globals.MSFileType.Finnigan, paramFile);
+            oldSchool.Execute();
+
+            Assert.That(File.Exists(expectedIsosOutput));
+            Assert.That(File.Exists(expectedScansOutput));
+            Assert.That(File.Exists(expectedPeaksFileOutput));
+
+
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+
+            List<IsosResult> results = new List<IsosResult>();
+            results = importer.Import();
+
+            TestUtilities.DisplayMSFeatures(results);
+
+            Assert.AreEqual(1340, results.Count);
+            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+        }
+
 
         [Test]
         public void processBruker12TSolarixFile1()
