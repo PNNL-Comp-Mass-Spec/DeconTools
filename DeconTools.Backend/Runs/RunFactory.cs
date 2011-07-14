@@ -12,12 +12,36 @@ namespace DeconTools.Backend.Runs
     public class RunFactory
     {
 
-        public Run CreateRun(string fullfileName)
+        private string getFullPath(string filename)
+        {
+            string fullfileName= filename.Trim(new char[] { ' ', '"' });
+
+            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
+            FileInfo fileInfo = new FileInfo(fullfileName);
+
+            if (!dirInfo.Exists && !fileInfo.Exists)
+            {
+                throw new System.ApplicationException("Cannot create Run. File/Folder not found.");
+            }
+
+            if (dirInfo.Exists)
+            {
+                fullfileName = dirInfo.FullName;
+            }
+
+            if (fileInfo.Exists)
+            {
+                fullfileName = fileInfo.FullName;
+            }
+
+            return fullfileName;
+        }
+
+        public Run CreateRun(string filename)
         {
             Run run;
 
-            fullfileName = fullfileName.Trim(new char[] { ' ', '"' });
-
+            string fullfileName = getFullPath(filename);
 
             string extension = Path.GetExtension(fullfileName).ToLower();
 
@@ -87,9 +111,11 @@ namespace DeconTools.Backend.Runs
             }
             return run;
         }
-        public Run CreateRun(Globals.MSFileType filetype, string fileName)
+        public Run CreateRun(Globals.MSFileType filetype, string f)
         {
             Run run;
+
+            string fileName = getFullPath(f);
 
             switch (filetype)
             {
@@ -147,9 +173,11 @@ namespace DeconTools.Backend.Runs
 
             return run;
         }
-        public Run CreateRun(Globals.MSFileType fileType, string filename, OldDecon2LSParameters parameters)
+        public Run CreateRun(Globals.MSFileType fileType, string f, OldDecon2LSParameters parameters)
         {
             Run run;
+
+            string filename = getFullPath(f);
 
             switch (fileType)
             {
