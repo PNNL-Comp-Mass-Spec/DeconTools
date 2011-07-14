@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 
@@ -37,10 +34,10 @@ namespace DeconTools.Backend.Data
 
         private ScanResult createStandardScanResult(Run run, ScanSet scanSet)
         {
-            bool is_ms_only = (run.GetMSLevel(scanSet.PrimaryScanNumber) == 1);
+            
+
             ScanResult scanresult;
-            if (is_ms_only)
-            {
+            
                 scanresult = new StandardScanResult(scanSet);
                 scanresult.ScanTime = run.GetTime(scanSet.PrimaryScanNumber);
                 scanresult.SpectrumType = run.GetMSLevel(scanSet.PrimaryScanNumber);
@@ -48,12 +45,9 @@ namespace DeconTools.Backend.Data
                 scanresult.NumIsotopicProfiles = scanSet.NumIsotopicProfiles;
                 scanresult.BasePeak = scanSet.BasePeak;
                 scanresult.TICValue = scanSet.TICValue;
+                scanresult.Description = run.GetScanInfo(scanSet);
 
-            }
-            else
-            {
-                scanresult = null;
-            }
+            
             return scanresult;
         }
 
