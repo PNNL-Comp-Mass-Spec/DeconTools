@@ -158,7 +158,6 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 
-                ExecuteTask(msPeakDetector);
                 ExecuteTask(msfeatureFinder);
 
                 ExecuteTask(fitScoreCalc);

@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
     public class SmartChromPeakSelector : Task
     {
-        private const double DEFAULT_MSPEAKDETECTOR_PEAKBR = 1.3;
-        private const double DEFAULT_MSPEAKDETECTOR_SIGNOISERATIO = 2;
-        private const double DEFAULT_TARGETEDMSFEATUREFINDERTOLERANCE_PPM = 20;
+      
 
         private DeconTools.Backend.ProcessingTasks.I_MSGenerator msgen;
         private DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
@@ -45,55 +44,47 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
         #region Constructors
-        public SmartChromPeakSelector()
+        public SmartChromPeakSelector(SmartChromPeakSelectorParameters parameters)
         {
-            MSPeakDetector = new DeconToolsPeakDetector(DEFAULT_MSPEAKDETECTOR_PEAKBR, DEFAULT_MSPEAKDETECTOR_SIGNOISERATIO, Globals.PeakFitType.QUADRATIC, true);
-            TargetedMSFeatureFinder = new TargetedFeatureFinders.BasicTFF(DEFAULT_TARGETEDMSFEATUREFINDERTOLERANCE_PPM);
+            this.Parameters = parameters;
+
+            MSPeakDetector = new DeconToolsPeakDetector(parameters.MSPeakDetectorPeakBR, parameters.MSPeakDetectorSigNoiseThresh, Globals.PeakFitType.QUADRATIC, true);
+
+            IterativeTFFParameters iterativeTFFParams = new IterativeTFFParameters();
+            iterativeTFFParams.ToleranceInPPM = parameters.MSToleranceInPPM;
+
+            if (parameters.MSFeatureFinderType == Globals.TargetedFeatureFinderType.BASIC)
+            {
+                TargetedMSFeatureFinder = new TargetedFeatureFinders.BasicTFF(parameters.MSToleranceInPPM);
+            }
+            else
+            {
+                TargetedMSFeatureFinder = new IterativeTFF(iterativeTFFParams);
+            }
+            
+            
+
             resultValidator = new ResultValidators.ResultValidatorTask();
             fitScoreCalc = new MassTagFitScoreCalculator();
 
-            this.NETTolerance = 0.025f;
-            this.NumScansToSum = 1;
-            this.NumChromPeaksAllowed = 20;  //default is high so that many chrom peaks are considered
+           
 
         }
 
 
-        public SmartChromPeakSelector(float netTolerance, int numScansToSum)
-            : this()
-        {
-            this.NETTolerance = netTolerance;
-            this.NumScansToSum = numScansToSum;
-
-        }
-
-        public SmartChromPeakSelector(float netTolerance, int numScansToSum, int numChromPeaksAllowed)
-            : this(netTolerance, numScansToSum)
-        {
-
-            this.NumChromPeaksAllowed = numChromPeaksAllowed;
-
-        }
 
 
         #endregion
 
         #region Properties
-        public float NETTolerance { get; set; }
-
-        public int NumScansToSum { get; set; }
-
-        /// <summary>
-        /// Number of chrom peaks allowed. For example if this is set to '5' 
-        /// and '6' peaks were found within the tolerance, then the selected best peak is set to
-        /// null indicating a failed execution
-        /// 
-        /// </summary>
-        public int NumChromPeaksAllowed { get; set; }
-
+      
 
         public DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector MSPeakDetector { get; set; }
-        public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
+        //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
+
+        public TFFBase TargetedMSFeatureFinder { get; set; }
+
+        
 
         #endregion
 
@@ -115,7 +106,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
             foreach (ChromPeak peak in resultColl.Run.PeakList)
             {
-                if (Math.Abs(peak.NETValue - mt.NETVal) <= NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                if (Math.Abs(peak.NETValue - mt.NETVal) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
                 }
@@ -133,7 +124,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             currentResult.NumQualityChromPeaks = -1;
 
             ChromPeak bestChromPeak;
-            if (currentResult.NumChromPeaksWithinTolerance > NumChromPeaksAllowed)
+            if (currentResult.NumChromPeaksWithinTolerance > this.Parameters.NumChromPeaksAllowed)
             {
                 bestChromPeak = null;
             }
@@ -294,7 +285,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             int bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
 
-            return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
+            return new ScanSetFactory().CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
         }
 
         private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)
@@ -311,5 +302,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #endregion
 
+
+        public SmartChromPeakSelectorParameters Parameters { get; set; }
     }
 }

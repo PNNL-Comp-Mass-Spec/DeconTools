@@ -130,6 +130,12 @@ namespace DeconTools.Backend
 
         }
 
+        public enum TargetedFeatureFinderType
+        {
+            BASIC,
+            ITERATIVE
+        }
+
 
 
 
