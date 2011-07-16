@@ -62,6 +62,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.NumChromPeaksWithinTol);
             sb.Append(Delimiter);
+            sb.Append(result.NumQualityChromPeaksWithinTol);
+            sb.Append(Delimiter);
             sb.Append(result.MonoMass.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(result.MonoMZ.ToString("0.00000"));
@@ -71,6 +73,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(result.FitScore.ToString("0.0000"));
             sb.Append(Delimiter);
             sb.Append(result.IScore.ToString("0.0000"));
+            sb.Append(Delimiter);
+            sb.Append(result.FailureType);
+
+            
             return sb.ToString();
 
         }
@@ -94,6 +100,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("NumChromPeaksWithinTol");
             sb.Append(Delimiter);
+            sb.Append("NumQualityChromPeaksWithinTol");
+            sb.Append(Delimiter);
             sb.Append("MonoisotopicMass");
             sb.Append(Delimiter);
             sb.Append("MonoMZ");
@@ -103,6 +111,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("FitScore");
             sb.Append(Delimiter);
             sb.Append("IScore");
+            sb.Append(Delimiter);
+            sb.Append("FailureType");
 
             return sb.ToString();
         }

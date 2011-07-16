@@ -49,8 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Core\BasicTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
-    <Compile Include="Backend\Core\DeconToolsTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\NETAndMassAligner.cs" />
@@ -59,8 +61,11 @@
     <Compile Include="Backend\Core\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedAlignerWorkflow.cs" />
     <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflow.cs" />
     <Compile Include="Backend\Core\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\WorkflowBase.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\WorkflowExecutorBaseParameters.cs" />
     <Compile Include="Backend\Core\WorkflowParameters.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
@@ -77,6 +82,7 @@
     <Compile Include="Backend\Results\TargetedResult.cs" />
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
     <Compile Include="Backend\Results\UnlabelledTargetedResult.cs" />
+    <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

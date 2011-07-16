@@ -24,7 +24,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
 
-
+            Assert.AreEqual("O16O18_MASSTAG_RESULT", parameters.ResultType.ToString());
+            
 
         }
 

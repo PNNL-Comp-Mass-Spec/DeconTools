@@ -14,9 +14,9 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class BasicTargetedWorkflow : WorkflowBase
+    public class BasicTargetedWorkflow : TargetedWorkflow
     {
-        private DeconToolsTargetedWorkflowParameters _workflowParameters;
+        private TargetedWorkflowParameters _workflowParameters;
         private TomTheorFeatureGenerator theorFeatureGen;
         private PeakChromatogramGenerator chromGen;
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
@@ -30,7 +30,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Constructors
 
-        public BasicTargetedWorkflow(Run run, DeconToolsTargetedWorkflowParameters parameters)
+        public BasicTargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
         {
             this.WorkflowParameters = parameters;
             this.Run = run;
@@ -38,7 +38,7 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-        public BasicTargetedWorkflow(DeconToolsTargetedWorkflowParameters parameters)
+        public BasicTargetedWorkflow(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
 
@@ -77,7 +77,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             set
             {
-                _workflowParameters = value as DeconToolsTargetedWorkflowParameters;
+                _workflowParameters = value as TargetedWorkflowParameters;
             }
         }
 
@@ -94,9 +94,16 @@ namespace DeconTools.Workflows.Backend.Core
             chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-            chromPeakSelector = new SmartChromPeakSelector((float)_workflowParameters.ChromNETTolerance, _workflowParameters.NumMSScansToSum);
+            SmartChromPeakSelectorParameters smartchrompeakSelector = new SmartChromPeakSelectorParameters();
+            smartchrompeakSelector.MSFeatureFinderType = Globals.TargetedFeatureFinderType.ITERATIVE;
+            smartchrompeakSelector.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
+            smartchrompeakSelector.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
+            smartchrompeakSelector.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
+            smartchrompeakSelector.NETTolerance = _workflowParameters.ChromToleranceInPPM;
+            smartchrompeakSelector.NumScansToSum = _workflowParameters.NumMSScansToSum;
+            smartchrompeakSelector.NumChromPeaksAllowed = 10;
 
-            //chromPeakSelector.SetDefaultMSPeakDetectorSettings(_workflowParameters.SmartChromSelectorPeakBR, _workflowParameters.SmartChromSelectorPeakSigNoiseRatio, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
+            chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelector);
 
 
             msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);

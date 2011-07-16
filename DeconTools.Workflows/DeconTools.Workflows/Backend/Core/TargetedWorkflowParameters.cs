@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Linq;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -24,7 +20,8 @@ namespace DeconTools.Workflows.Backend.Core
         public double MSPeakDetectorSigNoise { get; set; }
         public double MSToleranceInPPM { get; set; }
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
-      
+        public DeconTools.Backend.Globals.MassTagResultType ResultType { get; set; }
+
 
 
         /// <summary>

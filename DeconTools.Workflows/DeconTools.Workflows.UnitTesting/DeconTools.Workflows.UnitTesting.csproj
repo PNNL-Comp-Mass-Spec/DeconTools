@@ -61,7 +61,10 @@
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
+    <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />
+    <Compile Include="WorkflowTests\WorkflowExecutorParametersTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">

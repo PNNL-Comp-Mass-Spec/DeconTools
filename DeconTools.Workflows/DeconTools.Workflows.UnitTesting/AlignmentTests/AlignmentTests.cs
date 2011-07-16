@@ -324,7 +324,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             //first will execute workflow on a dataset that was NOT aligned
 
-            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;   //use a very wide tolerance
             parameters.ChromToleranceInPPM = 5;
             parameters.MSToleranceInPPM = 15;
@@ -397,7 +397,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             //first will execute workflow on a dataset that was NOT aligned
 
-            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;   //use a very wide tolerance
             parameters.ChromToleranceInPPM = 5;
             parameters.MSToleranceInPPM = 15;

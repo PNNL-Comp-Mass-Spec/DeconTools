@@ -18,14 +18,13 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
         public abstract string WorkflowType { get; }
 
-        public DeconTools.Backend.Globals.MassTagResultType ResultType { get; set; }
-
+      
 
         #endregion
 
         #region Public Methods
 
-        //TODO: figure out what to do about 'enum' type parameters. How to convert the text to enum
+  
         public virtual void LoadParameters(string xmlFilename)
         {
             Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
@@ -53,34 +52,39 @@ namespace DeconTools.Workflows.Backend.Core
                     System.Reflection.PropertyInfo pi = (PropertyInfo)mi;
                     string propertyName = pi.Name;
 
+   
                     if (parameterTableFromXML.ContainsKey(propertyName))
                     {
                         Type propertyType = pi.PropertyType;
-                        object value = Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
+
+                        object value;
                         
-                        pi.SetValue(this, value, null);
+                        if (propertyType.IsEnum)
+                        {
+                            //value = Enum.ToObject(propertyType
+                            value =Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
+
+                        }
+                        else
+                        {
+                            value= Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
+                        }
+
+                        if (pi.CanWrite)
+                        {
+                            pi.SetValue(this, value, null);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Imported parameter values missing the Parameter: " + propertyName + ". Value was not updated. Current value= " + pi.GetValue(this, null));
                     }
                 }
             }
 
         }
 
-        public virtual string ToStringWithDetails()
-        {
-            StringBuilder sb = new StringBuilder();
-            Dictionary<string, object> parameterValues = GetParameterTable();
-
-            foreach (var item in parameterValues)
-            {
-                sb.Append(item.Key);
-                sb.Append("\t");
-                sb.Append(item.Value);
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString();
-
-        }
+    
 
         public virtual void SaveParametersToXML(string xmlFilename)
         {
@@ -100,6 +104,26 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         }
+
+
+        public virtual string ToStringWithDetails()
+        {
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, object> parameterValues = GetParameterTable();
+
+            foreach (var item in parameterValues)
+            {
+                sb.Append(item.Key);
+                sb.Append("\t");
+                sb.Append(item.Value);
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+
+        }
+
+
 
         public Dictionary<string, object> GetParameterTable()
         {

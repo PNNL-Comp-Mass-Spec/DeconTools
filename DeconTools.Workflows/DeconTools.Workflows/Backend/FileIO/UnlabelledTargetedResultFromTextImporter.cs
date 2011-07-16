@@ -33,6 +33,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.MonoMZ = ParseDoubleField(LookupData(processedData, mzHeaders));
             result.NET = ParseFloatField(LookupData(processedData, netHeaders));
             result.NumChromPeaksWithinTol = ParseIntField(LookupData(processedData, numchromPeaksWithinTolHeaders));
+            result.NumQualityChromPeaksWithinTol = ParseIntField(LookupData(processedData, numQualitychromPeaksWithinTolHeaders));
             result.ScanLC = ParseIntField(LookupData(processedData, scanHeaders));
             result.ScanLCEnd = ParseIntField(LookupData(processedData, scanEndHeaders));
             result.ScanLCStart = ParseIntField(LookupData(processedData, scanStartHeaders));

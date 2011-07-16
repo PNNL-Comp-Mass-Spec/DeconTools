@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void constructor_noRun_test1()
         {
-            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(parameters);
 
             
@@ -44,7 +44,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
 
-            DeconToolsTargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
 
-            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
@@ -124,7 +124,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
 
 
-            DeconToolsTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
             parameters.MSToleranceInPPM = 25;
 

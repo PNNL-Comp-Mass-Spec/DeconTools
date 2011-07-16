@@ -1,7 +1,7 @@
 ﻿
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class TargetedAlignerWorkflowParameters:DeconToolsTargetedWorkflowParameters
+    public class TargetedAlignerWorkflowParameters:TargetedWorkflowParameters
     {
 
         #region Constructors
@@ -69,9 +69,5 @@ namespace DeconTools.Workflows.Backend.Core
 
          
 
-        public override void LoadParameters(string xmlFilename)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -24,6 +24,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] scanStartHeaders = { "scanStart", "scan_start" };
         protected string[] netHeaders = { "net", "NETClassRep" };
         protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol" };
+        protected string[] numQualitychromPeaksWithinTolHeaders = { "NumQualityChromPeaksWithinTol" };
 
 
         protected string _filename { get; set; }
@@ -37,17 +38,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
+    
 
         public override TargetedResultRepository Import()
         {

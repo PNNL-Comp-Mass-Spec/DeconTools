@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.MonoMZ = result.IsotopicProfile.MonoPeakMZ;
             r.NET = (float)result.GetNET();
             r.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
-
+            r.NumQualityChromPeaksWithinTol = result.NumQualityChromPeaks;
             r.ScanLC = result.GetScanNum();
             if (result.ChromPeakSelected != null)
             {
@@ -61,5 +61,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         #endregion
 
+
+        
     }
 }

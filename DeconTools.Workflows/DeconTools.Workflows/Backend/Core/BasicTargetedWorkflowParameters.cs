@@ -2,8 +2,10 @@
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class BasicTargetedWorkflowParameters:DeconToolsTargetedWorkflowParameters
+    public class BasicTargetedWorkflowParameters:TargetedWorkflowParameters
     {
+
+      
         public BasicTargetedWorkflowParameters()
         {
             this.ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;

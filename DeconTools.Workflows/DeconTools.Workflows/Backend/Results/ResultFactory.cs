@@ -107,6 +107,7 @@ namespace DeconTools.Workflows.Backend.Results
             tr.MonoMZ = result.IsotopicProfile == null ? 0f : result.IsotopicProfile.MonoPeakMZ;
             tr.NET = (float)result.GetNET();
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
+            tr.NumQualityChromPeaksWithinTol = result.NumQualityChromPeaks;
             tr.FitScore = (float)result.Score;
             tr.ScanLC = result.GetScanNum();
             if (result.ChromPeakSelected != null)
@@ -114,6 +115,11 @@ namespace DeconTools.Workflows.Backend.Results
                 double sigma = result.ChromPeakSelected.Width / 2.35;
                 tr.ScanLCStart = (int)Math.Round(result.ChromPeakSelected.XValue - sigma);
                 tr.ScanLCEnd = (int)Math.Round(result.ChromPeakSelected.XValue + sigma);
+            }
+
+            if (result.FailedResult)
+            {
+                tr.FailureType = result.FailureType.ToString();
             }
 
         }

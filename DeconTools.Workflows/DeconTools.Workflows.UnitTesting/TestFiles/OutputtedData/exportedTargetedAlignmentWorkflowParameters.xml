@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <AlignmentInfoIsExported>true</AlignmentInfoIsExported>
+  <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
+  <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
+  <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
+  <ChromNETTolerance>0.2</ChromNETTolerance>
+  <ChromPeakDetectorPeakBR>2</ChromPeakDetectorPeakBR>
+  <ChromPeakDetectorSigNoise>2</ChromPeakDetectorSigNoise>
+  <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
+  <ChromToleranceInPPM>25</ChromToleranceInPPM>
+  <ExportAlignmentFolder />
+  <FeaturesAreSavedToTextFile>true</FeaturesAreSavedToTextFile>
+  <ImportedFeaturesFilename />
+  <IScoreAllowedCriteria>0.15</IScoreAllowedCriteria>
+  <MinimumChromPeakIntensityCriteria>250000</MinimumChromPeakIntensityCriteria>
+  <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
+  <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
+  <MSToleranceInPPM>25</MSToleranceInPPM>
+  <NumChromPeaksAllowedDuringSelection>1</NumChromPeaksAllowedDuringSelection>
+  <NumDesiredMassTagsPerNETGrouping>25</NumDesiredMassTagsPerNETGrouping>
+  <NumMaxAttemptsPerNETGrouping>200</NumMaxAttemptsPerNETGrouping>
+  <NumMSScansToSum>1</NumMSScansToSum>
+  <ResultType>BASIC_MASSTAG_RESULT</ResultType>
+  <UpperFitScoreAllowedCriteria>0.1</UpperFitScoreAllowedCriteria>
+  <WorkflowType>TargetedAlignerWorkflow1</WorkflowType>
+</WorkflowParameters>

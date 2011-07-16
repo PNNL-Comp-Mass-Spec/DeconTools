@@ -15,6 +15,10 @@ namespace DeconTools.Workflows.Backend.Results
         public float NETAligned { get; set; }
 
         public int NumChromPeaksWithinTol { get; set; }
+        public int NumQualityChromPeaksWithinTol { get; set; }
+
+        public string FailureType { get; set; }
+
         #endregion
 
         #region Public Methods
