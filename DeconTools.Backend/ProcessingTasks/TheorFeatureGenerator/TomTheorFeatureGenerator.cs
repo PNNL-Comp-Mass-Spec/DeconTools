@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
@@ -98,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                double calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * 1.00235 / mt.ChargeState;
+                double calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / mt.ChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
 

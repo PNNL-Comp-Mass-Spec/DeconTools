@@ -5,6 +5,7 @@ namespace DeconTools.Backend
     {
 
         public const double PROTON_MASS = 1.00727649;
+        public const double MASS_DIFF_BETWEEN_ISOTOPICPEAKS = 1.00235;
         public const double N14_MASS = 14.003074007418;    // IUPAC, 2002
         public const double N15_MASS = 15.000108973000;
 

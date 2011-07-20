@@ -83,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                         //here, we are looking to the left of most intense theor peak.  If we have the prerequisite of finding the monoIsotopic peak and fail here, we'll return a failed result
                         failedResult = true;
                         break;
-                        
+
                     }
                     else
                     {
@@ -169,12 +169,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 addMassInfoToIsotopicProfile(theorFeature, outFeature);
                 return outFeature;
             }
-           
 
 
-           
 
-            
+
+
+
 
 
 
@@ -184,19 +184,52 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         private void addMassInfoToIsotopicProfile(IsotopicProfile theorFeature, IsotopicProfile outFeature)
         {
             int indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.1);
-
             outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
+
+
+            double monopeakMZ = 0;
+            double monoIsotopicMass = 0;
             bool monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
             if (monoPeakFoundInObservedIso)
             {
                 MSPeak monoPeak = outFeature.Peaklist[outFeature.MonoIsotopicPeakIndex];
 
-                outFeature.MonoPeakMZ = monoPeak.XValue;
-                outFeature.MonoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
-
-
+                monopeakMZ = monoPeak.XValue;
+                monoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
+               
 
             }
+            else
+            {
+
+                int indexOfMostAbundantTheorPeak = theorFeature.getIndexOfMostIntensePeak();
+                int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
+
+                if (indexOfCorrespondingObservedPeak != -1)
+                {
+
+                    //double mzOffset = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+
+                    int locationOfMonoPeakRelativeToTheorMaxPeak = theorFeature.MonoIsotopicPeakIndex - indexOfMostAbundantTheorPeak;
+
+                    double mzOfObservedMostAbundantPeak = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue;
+
+                    monopeakMZ = mzOfObservedMostAbundantPeak + (locationOfMonoPeakRelativeToTheorMaxPeak * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / outFeature.ChargeState);
+                    monoIsotopicMass = (monopeakMZ - Globals.PROTON_MASS) * outFeature.ChargeState;
+                }
+            }
+
+            outFeature.MonoPeakMZ = monopeakMZ;
+            outFeature.MonoIsotopicMass = monoIsotopicMass;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -276,9 +309,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 for (int i = 0; i < iso.Peaklist.Count; i++)
                 {
                     iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
-                    
+
                 }
-               
+
             }
 
 
