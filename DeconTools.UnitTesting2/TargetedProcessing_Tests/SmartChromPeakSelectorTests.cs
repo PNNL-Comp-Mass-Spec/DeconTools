@@ -49,7 +49,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
             chromPeakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
-            smartChromPeakSelector = new SmartChromPeakSelector();
+
+            SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
+            smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
             basicChromPeakSelector = new ChromPeakSelector(1);
         }
@@ -84,7 +86,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             //now run the smart chrom peak selector
             run.XYData = xydata;
             chromPeakDet.Execute(run.ResultCollection);
-            smartChromPeakSelector.NETTolerance = 0.025f;
+            smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Execute(run.ResultCollection);
         
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));

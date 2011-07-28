@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using NUnit.Framework;
-using DeconTools.UnitTesting2.QuantificationTests;
 using DeconTools.Backend;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.FileIO;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
+using DeconTools.UnitTesting2.QuantificationTests;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderTests
 {
@@ -19,6 +19,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
         [Test]
         public void unlabelled_data_TFFTest1()
         {
+            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
+
+            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagFile);
+            MassTagCollection massTagColl = masstagImporter.Import();
+
+            MassTag mt24702_charge3 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 3 select n).First();
+            MassTag mt24702_charge4 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 4 select n).First();
+
 
 
 
@@ -118,6 +126,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             Assert.IsNotNull(result.IsotopicProfileLabeled);
             Assert.AreEqual(82280, (int)result.IsotopicProfileLabeled.IntensityAggregate);
+            Assert.AreEqual(3, result.IsotopicProfileLabeled.MonoIsotopicPeakIndex);
 
             TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfileLabeled);
 
