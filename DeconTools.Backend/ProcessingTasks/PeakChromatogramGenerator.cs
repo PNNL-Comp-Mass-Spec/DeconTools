@@ -58,7 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             this.TopNPeaksLowerCutOff = 0.3;
             this.NETWindowWidthForNonAlignedData = 0.4f;
-            this.NETWindowWidthForAlignedData = 0.05f;
+            this.NETWindowWidthForAlignedData = 0.1f;
 
         }
 
