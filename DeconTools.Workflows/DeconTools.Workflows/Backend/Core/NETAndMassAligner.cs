@@ -26,7 +26,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-  
+
+        public AlignmentResult Result { get; set; }
+
+
         #region Public Methods
 
         public void SetReferenceMassTags(List<MassTag> massTagList)
@@ -67,7 +70,58 @@ namespace DeconTools.Workflows.Backend.Core
             processor.SetAligneeDatasetFeatures(multialignUMCs, alignmentOptions.MZBoundaries[0]);
             processor.PerformAlignmentToMSFeatures();
 
+            this.Result = getResultsForAlignment(processor);
+
+
             return processor.GetAlignmentFunction();
+
+
+        }
+
+        private AlignmentResult getResultsForAlignment(clsAlignmentProcessor processor)
+        {
+            float[]scanLCValues = null;
+            float[]NETValues = null;
+
+            float[,]scores = null;
+
+            processor.GetAlignmentHeatMap(ref scores, ref scanLCValues, ref NETValues);
+
+            AlignmentResult result = new AlignmentResult();
+            result.ScanLCValues = scanLCValues;
+            result.NETValues = NETValues;
+            result.AlignmentHeatmapScores = scores;
+
+
+            //get massResiduals_vs_scan and massResiduals_vs_m/z
+            classAlignmentResidualData residuals = processor.GetResidualData();
+            result.massErrorResidualsBeforeAlignment = residuals.massError;
+            result.massErrorResidualsAfterAlignement = residuals.massErrorCorrected;
+            result.ScanValuesForMassErrorResiduals = residuals.scans;
+
+
+            result.mass_vs_mz_residualsBeforeAlignment = residuals.mzMassError;
+            result.mass_vs_mz_residualsAfterAlignment = residuals.mzMassErrorCorrected;
+            result.mass_vs_mz_residualsMZValues = residuals.mz;
+            
+            
+            //get stats on variability
+            result.NETStDev = processor.GetNETStandardDeviation();
+            result.NETAverage = processor.GetNETMean();
+            result.MassAverage= processor.GetMassMean();
+            result.MassStDev = processor.GetMassStandardDeviation();
+
+            double[,] massHistogramData = null;
+            double[,] netHistogramData=null;
+            processor.GetErrorHistograms(0.1, 0.002, ref massHistogramData, ref netHistogramData);
+
+            result.massHistogramData = massHistogramData;
+            result.NETHistogramData = netHistogramData;
+
+
+            return result;
+
+            
 
 
         }

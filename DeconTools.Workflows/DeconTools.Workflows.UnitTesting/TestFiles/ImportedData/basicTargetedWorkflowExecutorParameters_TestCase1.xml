@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
+  <AlignmentInfoFolder>d:\temp\AlignmentInfo</AlignmentInfoFolder>
   <CopyRawFileLocal>false</CopyRawFileLocal>
   <DeleteLocalDatasetAfterProcessing>false</DeleteLocalDatasetAfterProcessing>
   <FileContainingDatasetPaths>\\protoapps\UserData\Slysz\Data\WorkflowExecutor_Parameters\datasetList1.txt</FileContainingDatasetPaths>
@@ -8,6 +9,7 @@
   <MassTagsForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</MassTagsForAlignmentFilePath>
   <MassTagsToBeTargetedFilePath>\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt</MassTagsToBeTargetedFilePath>
   <ResultsFolder>d:\temp\results</ResultsFolder>
+  <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>\\protoapps\UserData\Slysz\Data\Workflow_Parameters\TargetedAlignmentWorkflowParameters1.xml</TargetedAlignmentWorkflowParameterFile>
   <WorkflowParameterFile>\\protoapps\UserData\Slysz\Data\Workflow_Parameters\UnlabelledTargeted_WorkflowParameters_noSum_testCase1.xml</WorkflowParameterFile>
   <WorkflowType>BasicTargetedWorkflowExecutor</WorkflowType>

@@ -29,5 +29,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+
+        [Test]
+        public void createParametersObjectTest1()
+        {
+            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedBasicTargetedWorkflowParameters.xml";
+            WorkflowParameters wp = WorkflowParameters.CreateParameters(importedParametersFile);
+
+            Assert.AreEqual("UnlabelledTargeted1", wp.WorkflowType);
+            Assert.IsTrue(wp is BasicTargetedWorkflowParameters);
+
+            wp.LoadParameters(importedParametersFile);
+
+        }
+
     }
 }

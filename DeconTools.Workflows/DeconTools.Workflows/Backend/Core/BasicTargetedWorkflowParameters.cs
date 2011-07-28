@@ -27,11 +27,11 @@ namespace DeconTools.Workflows.Backend.Core
             this.ResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
         }
 
-        public override string WorkflowType
+        public override Globals.TargetedWorkflowTypes WorkflowType
         {
             get
             {
-                return "UnlabelledTargeted1";
+                return  Globals.TargetedWorkflowTypes.UnlabelledTargeted1;
             }
         }
 

@@ -34,5 +34,17 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
         }
 
+
+        public static void CopyAll(FileInfo fileToBeCopied, DirectoryInfo targetFolder)
+        {
+            // Check if the target directory exists, if not, create it.
+            if (Directory.Exists(targetFolder.FullName) == false)
+            {
+                Directory.CreateDirectory(targetFolder.FullName);
+            }
+
+            fileToBeCopied.CopyTo(targetFolder.FullName + Path.DirectorySeparatorChar + fileToBeCopied.Name,true);
+
+        }
     }
 }

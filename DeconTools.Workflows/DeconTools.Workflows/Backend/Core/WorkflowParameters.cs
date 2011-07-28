@@ -16,13 +16,78 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Properties
-        public abstract string WorkflowType { get; }
+        public abstract Globals.TargetedWorkflowTypes WorkflowType { get; }
 
       
 
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// A factory method for creating the WorkflowParameters class. Based on the 'WorkflowType' parameter of the xml file.
+        /// </summary>
+        /// <param name="xmlFilename"></param>
+        /// <returns></returns>
+        public static WorkflowParameters CreateParameters(string xmlFilename)
+        {
+            Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
+            XDocument doc = XDocument.Load(xmlFilename);
+            var query = doc.Element("WorkflowParameters").Elements();
+
+            Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
+            foreach (var item in query)
+            {
+                string paramName = item.Name.ToString();
+                string paramValue = item.Value;
+
+                if (!parameterTableFromXML.ContainsKey(paramName))
+                {
+                    parameterTableFromXML.Add(paramName, paramValue);
+                }
+            }
+
+            Globals.TargetedWorkflowTypes workflowType;
+
+            bool successfulEnum = Enum.TryParse<Globals.TargetedWorkflowTypes>(parameterTableFromXML["WorkflowType"], out workflowType);
+
+            if (successfulEnum)
+            {
+
+                WorkflowParameters workflowParameters;
+                switch (workflowType)
+                {
+                    case Globals.TargetedWorkflowTypes.Undefined:
+                        workflowParameters = new BasicTargetedWorkflowParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
+                        workflowParameters = new BasicTargetedWorkflowParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.O16O18Targeted1:
+                        workflowParameters = new O16O18WorkflowParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.N14N15Targeted1:
+                        workflowParameters = new N14N15Workflow2Parameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
+                        workflowParameters = new TargetedAlignerWorkflowParameters();
+                        break;
+                    default:
+                        workflowParameters = new BasicTargetedWorkflowParameters();
+                        break;
+                }
+
+                return workflowParameters;
+
+            }
+            else
+            {
+                throw new System.ArgumentOutOfRangeException("Tried to create WorkflowParameter object. But WorkflowType is unknown.");
+            }
+
+
+        }
+
 
   
         public virtual void LoadParameters(string xmlFilename)
@@ -58,22 +123,26 @@ namespace DeconTools.Workflows.Backend.Core
                         Type propertyType = pi.PropertyType;
 
                         object value;
-                        
-                        if (propertyType.IsEnum)
-                        {
-                            //value = Enum.ToObject(propertyType
-                            value =Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
-
-                        }
-                        else
-                        {
-                            value= Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
-                        }
 
                         if (pi.CanWrite)
                         {
+                            if (propertyType.IsEnum)
+                            {
+                                //value = Enum.ToObject(propertyType
+                                value = Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
+
+                            }
+                            else
+                            {
+                                value = Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
+                            }
+                            
                             pi.SetValue(this, value, null);
                         }
+
+                      
+
+                       
                     }
                     else
                     {

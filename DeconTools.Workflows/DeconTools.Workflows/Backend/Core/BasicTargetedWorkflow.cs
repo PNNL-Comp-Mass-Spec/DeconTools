@@ -89,17 +89,18 @@ namespace DeconTools.Workflows.Backend.Core
 
             chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             chromGen.TopNPeaksLowerCutOff = 0.333;
+            chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
 
             int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;   // adding 0.5 prevents rounding problems
             chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
             SmartChromPeakSelectorParameters smartchrompeakSelector = new SmartChromPeakSelectorParameters();
-            smartchrompeakSelector.MSFeatureFinderType = Globals.TargetedFeatureFinderType.ITERATIVE;
+            smartchrompeakSelector.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
             smartchrompeakSelector.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
             smartchrompeakSelector.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
             smartchrompeakSelector.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            smartchrompeakSelector.NETTolerance = _workflowParameters.ChromToleranceInPPM;
+            smartchrompeakSelector.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
             smartchrompeakSelector.NumScansToSum = _workflowParameters.NumMSScansToSum;
             smartchrompeakSelector.NumChromPeaksAllowed = 10;
 

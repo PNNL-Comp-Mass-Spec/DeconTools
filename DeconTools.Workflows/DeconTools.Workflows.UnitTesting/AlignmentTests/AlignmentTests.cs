@@ -433,12 +433,11 @@ namespace DeconTools.Workflows.UnitTesting
 
 
             netDiff = result.MassTag.NETVal - result.GetNET();
-            Console.WriteLine("NET diff before alignment = " + netDiff);
+            Console.WriteLine("NET diff after alignment = " + netDiff);
 
 
             Assert.IsTrue(result.ChromPeakSelected != null);
-            Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
-
+            
             double expectedNETDiffMaximum = 0.01;
             Assert.IsTrue(netDiff < expectedNETDiffMaximum);
 

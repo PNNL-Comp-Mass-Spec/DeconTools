@@ -23,13 +23,13 @@ namespace DeconTools.Workflows.Backend.Core
             this.ChromGenSourceDataSigNoise = 3;
 
 
-            AlignmentInfoIsExported = true;
+            this.AlignmentInfoIsExported = true;
             this.FeaturesAreSavedToTextFile = true;
 
-            NumDesiredMassTagsPerNETGrouping = 25;
-            NumMaxAttemptsPerNETGrouping = 200;
+            this.NumDesiredMassTagsPerNETGrouping = 25;
+            this.NumMaxAttemptsPerNETGrouping = 200;
 
-            NumChromPeaksAllowedDuringSelection = 1;
+            this.NumChromPeaksAllowedDuringSelection = 1;
 
             
             this.UpperFitScoreAllowedCriteria = 0.1;
@@ -60,9 +60,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string ImportedFeaturesFilename { get; set; }
 
-        public override string WorkflowType
+        public override Globals.TargetedWorkflowTypes WorkflowType
         {
-            get { return "TargetedAlignerWorkflow1"; }
+            get { return  Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1; }
         }
 
         #endregion

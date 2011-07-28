@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Utilities;
@@ -14,10 +15,9 @@ namespace DeconTools.Workflows.Backend.Core
     /// This is a controller class that handles execution of targeted alignment. 
     /// 
     /// </summary>
-    public class TargetedAlignerWorkflow
+    public class TargetedAlignerWorkflow : TargetedWorkflow
     {
         TargetedAlignerWorkflowParameters _parameters;
-        Run _run;
 
         private List<NETGrouping> _netGroupings;
         private BasicTargetedWorkflow _workflow;
@@ -28,17 +28,26 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Constructors
 
-        public TargetedAlignerWorkflow(Run run, TargetedAlignerWorkflowParameters workflowParameters)
+        public TargetedAlignerWorkflow(WorkflowParameters workflowParameters)
+            : this(null, workflowParameters)
         {
-            _run = run;
-            _parameters = workflowParameters;
+
+        }
+
+        public TargetedAlignerWorkflow(Run run, WorkflowParameters workflowParameters)
+        {
+            Run = run;
+
+            Check.Require(workflowParameters is TargetedAlignerWorkflowParameters, "TargetedAlignerWorkflow could not be instantiated. Parameters are not of the correct type.");
+            _parameters = (TargetedAlignerWorkflowParameters)workflowParameters;
             _netGroupings = createNETGroupings();
-            _workflow = new BasicTargetedWorkflow(_run, workflowParameters);
+            NumSuccessesPerNETGrouping = new List<int>();
+            NumFailuresPerNETGrouping = new List<int>();
 
 
         }
 
-        public TargetedAlignerWorkflow(Run run, TargetedAlignerWorkflowParameters workflowParameters, BackgroundWorker bw)
+        public TargetedAlignerWorkflow(Run run, WorkflowParameters workflowParameters, BackgroundWorker bw)
             : this(run, workflowParameters)
         {
             _backgroundWorker = bw;
@@ -47,7 +56,28 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
+        public override void InitializeWorkflow()
+        {
+            _workflow = new BasicTargetedWorkflow(Run, _parameters);
+        }
+
         #region Properties
+
+
+
+
+        public override WorkflowParameters WorkflowParameters
+        {
+            get
+            {
+                return _parameters;
+            }
+            set
+            {
+                _parameters = value as TargetedAlignerWorkflowParameters;
+            }
+        }
+
 
 
         public List<MassTag> MassTagList { get; set; }
@@ -56,9 +86,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Public Methods
 
-        public void Execute()
+        public override void Execute()
         {
-            Check.Require(_run != null, "Run has not been defined.");
+            Check.Require(Run != null, "Run has not been defined.");
+
+            _workflow = new BasicTargetedWorkflow(Run, _parameters);
+
 
             List<MassTagResultBase> resultsPassingCriteria;
             _targetedResultRepository = new TargetedResultRepository();
@@ -74,7 +107,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                Check.Require(_run.ResultCollection.MSPeakResultList != null && _run.ResultCollection.MSPeakResultList.Count > 0, "Dataset's Peak-level data is empty. This is needed for chromatogram generation.");
+                Check.Require(Run.ResultCollection.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0, "Dataset's Peak-level data is empty. This is needed for chromatogram generation.");
 
                 //execute targeted feature finding to find the massTags in the raw data
                 resultsPassingCriteria = FindTargetsThatPassCriteria();
@@ -94,7 +127,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 doAlignment();
 
-                if (_run.AlignmentInfo != null)
+                if (Run.AlignmentInfo != null)
                 {
                     saveAlignmentData();
                 }
@@ -109,7 +142,7 @@ namespace DeconTools.Workflows.Backend.Core
         public List<MassTagResultBase> FindTargetsThatPassCriteria()
         {
             Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
-            Check.Require(_run != null, "Run is null");
+            Check.Require(Run != null, "Run is null");
 
             List<MassTagResultBase> resultsPassingCriteria = new List<MassTagResultBase>();
 
@@ -135,10 +168,10 @@ namespace DeconTools.Workflows.Backend.Core
 
                 foreach (var massTag in filteredMasstags)
                 {
-                    _run.CurrentMassTag = massTag;
+                    Run.CurrentMassTag = massTag;
                     _workflow.Execute();
 
-                    var result = _run.ResultCollection.GetMassTagResult(massTag);
+                    var result = Run.ResultCollection.GetMassTagResult(massTag);
 
                     if (resultPassesCriteria(result))
                     {
@@ -165,6 +198,9 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                 }
+
+                NumFailuresPerNETGrouping.Add(numFailingMassTagsInGrouping);
+                NumSuccessesPerNETGrouping.Add(numPassingMassTagsInGrouping);
 
                 string progressInfo2 = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper + " COMPLETE. Found massTags= " + numPassingMassTagsInGrouping + "; Missing massTags = " + numFailingMassTagsInGrouping;
                 reportProgess(progressPercentage, progressInfo2);
@@ -199,6 +235,10 @@ namespace DeconTools.Workflows.Backend.Core
             MassTagList = mtc.MassTagList;
         }
 
+        public List<int> NumSuccessesPerNETGrouping { get; set; }
+        public List<int> NumFailuresPerNETGrouping { get; set; }
+
+
         #endregion
 
         #region Private Methods
@@ -209,7 +249,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (_parameters.ExportAlignmentFolder == null || _parameters.ExportAlignmentFolder.Length == 0)
             {
-                outputfolder = _run.DataSetPath;
+                outputfolder = Run.DataSetPath;
             }
             else
             {
@@ -217,7 +257,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            string exportTargetedFeaturesFile = outputfolder + "\\" + _run.DatasetName + "_alignedFeatures.txt";
+            string exportTargetedFeaturesFile = outputfolder + "\\" + Run.DatasetName + "_alignedFeatures.txt";
 
             UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
@@ -231,21 +271,21 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (_parameters.ExportAlignmentFolder == null || _parameters.ExportAlignmentFolder.Length == 0)
                 {
-                    outputfolder = _run.DataSetPath;
+                    outputfolder = Run.DataSetPath;
                 }
                 else
                 {
                     outputfolder = _parameters.ExportAlignmentFolder;
                 }
 
-                string exportNETAlignmentFilename = outputfolder + "\\" + _run.DatasetName + "_NETAlignment.txt";
-                string exportMZAlignmentFilename = outputfolder + "\\" + _run.DatasetName + "_MZAlignment.txt";
+                string exportNETAlignmentFilename = outputfolder + "\\" + Run.DatasetName + "_NETAlignment.txt";
+                string exportMZAlignmentFilename = outputfolder + "\\" + Run.DatasetName + "_MZAlignment.txt";
 
                 MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
-                mzAlignmentExporter.ExportAlignmentInfo(_run.AlignmentInfo);
+                mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
                 NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
-                netAlignmentExporter.ExportAlignmentInfo(_run.AlignmentInfo);
+                netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
             }
         }
@@ -255,7 +295,7 @@ namespace DeconTools.Workflows.Backend.Core
             NETAndMassAligner aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(_targetedResultRepository.Results);
             aligner.SetReferenceMassTags(this.MassTagList);
-            aligner.Execute(this._run);
+            aligner.Execute(this.Run);
         }
 
         private List<NETGrouping> createNETGroupings()
@@ -282,7 +322,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (_backgroundWorker == null)
             {
-                Console.WriteLine(DateTime.Now + "\t" + progressString);
+                //Console.WriteLine(DateTime.Now + "\t" + progressString);
             }
             else
             {
@@ -296,7 +336,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             bool passesCriteria = true;
 
-            if (result.FailedResult) return false;      
+            if (result.FailedResult) return false;
 
             if (result.ChromPeakSelected == null) return false;
 
@@ -317,6 +357,30 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
+
+        public string GetAlignmentReport1()
+        {
+            if (_netGroupings == null || _netGroupings.Count == 0) return String.Empty;
+
+            if (this.NumFailuresPerNETGrouping.Count != _netGroupings.Count) return String.Empty;
+            if (this.NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return String.Empty;
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("NETGrouping\tSuccesses\tFailures\n");
+
+            for (int i = 0; i < this._netGroupings.Count; i++)
+            {
+                sb.Append(_netGroupings[i].Lower + "-" + _netGroupings[i].Upper);
+                sb.Append("\t");
+                sb.Append(NumSuccessesPerNETGrouping[i]);
+                sb.Append("\t");
+                sb.Append(NumFailuresPerNETGrouping[i]);
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
 
 
     }

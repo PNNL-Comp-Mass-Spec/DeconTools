@@ -12,6 +12,7 @@
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
   <MSToleranceInPPM>10</MSToleranceInPPM>
   <NumChromPeaksAllowedDuringSelection>20</NumChromPeaksAllowedDuringSelection>
+  <NumMSScansToSum>1</NumMSScansToSum>
   <ResultType>O16O18_MASSTAG_RESULT</ResultType>
   <WorkflowType>UnlabelledTargeted1</WorkflowType>
 </WorkflowParameters>

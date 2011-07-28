@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using DeconTools.Backend.Utilities;
+﻿using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
-using DeconTools.Workflows.Backend.Results;
-using DeconTools.Workflows.Backend.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -18,22 +14,22 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
         
         /// <summary>
-        /// WorkflowExecutor paramters. Careful not to confuse it with the other workflow parameters used in processing in each massTag
+        /// WorkflowExecutor parameters. Careful not to confuse it with the other workflow parameters used in processing in each massTag
         /// </summary>
-        public override WorkflowParameters WorkflowParameters
-        {
-            get
-            {
-                return ExecutorParameters;
-            }
-            set
-            {
-                if (value is BasicTargetedWorkflowExecutorParameters)
-                {
-                    ExecutorParameters = value as BasicTargetedWorkflowExecutorParameters;
-                }
-            }
-        }
+        //public override WorkflowParameters WorkflowParameters
+        //{
+        //    get
+        //    {
+        //        return ExecutorParameters;
+        //    }
+        //    set
+        //    {
+        //        if (value is BasicTargetedWorkflowExecutorParameters)
+        //        {
+        //            ExecutorParameters = value as BasicTargetedWorkflowExecutorParameters;
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Public Methods
@@ -45,13 +41,19 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.MassTagsForTargetedAlignment = getMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
             this.MassTagsToBeTargeted = getMassTagTargets(ExecutorParameters.MassTagsToBeTargetedFilePath);
-            this._workflowParameters = new BasicTargetedWorkflowParameters();
+
+            Check.Ensure(this.MassTagsToBeTargeted != null && this.MassTagsToBeTargeted.MassTagList.Count > 0, "Target massTags is empty. Check the path to the massTag data file.");
+
+
+            this._workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
             this._workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
 
             this.TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
             this.TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
 
-            this.targetedWorkflow = new BasicTargetedWorkflow(_workflowParameters);
+            this.targetedWorkflow = TargetedWorkflow.CreateWorkflow(this._workflowParameters);
+            this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(Run, this.TargetedAlignmentWorkflowParameters);
+            
 
         }
 

@@ -1,10 +1,15 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using DeconTools.Workflows.Backend.Utilities;
@@ -16,11 +21,15 @@ namespace DeconTools.Workflows.Backend.Core
         protected List<string> _datasetPathList;
         protected string _loggingFileName;
         protected string _resultsFolder;
-        protected TargetedWorkflowParameters _workflowParameters;
+        protected WorkflowParameters _workflowParameters;
+
+
 
         #region Constructors
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters)
         {
+
+
             this.WorkflowParameters = parameters;
             InitializeWorkflow();
         }
@@ -32,11 +41,23 @@ namespace DeconTools.Workflows.Backend.Core
 
         public MassTagCollection MassTagsToBeTargeted { get; set; }
 
-        public Run RunCurrent { get; set; }
+        public override WorkflowParameters WorkflowParameters
+        {
+            get
+            {
+                return ExecutorParameters;
+            }
+            set
+            {
+                ExecutorParameters = value as WorkflowExecutorBaseParameters;
+            }
+        }
 
         public WorkflowExecutorBaseParameters ExecutorParameters { get; set; }
-        
+
         public TargetedAlignerWorkflowParameters TargetedAlignmentWorkflowParameters { get; set; }
+
+        public TargetedAlignerWorkflow TargetedAlignmentWorkflow { get; set; }
 
         public TargetedWorkflow targetedWorkflow { get; set; }
 
@@ -44,6 +65,124 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Public Methods
+        public override void Execute()
+        {
+            reportProgress(DateTime.Now + "\tstarted processing....");
+            reportProgress("Parameters:\n" + this._workflowParameters.ToStringWithDetails());
+
+            int datasetCounter = 0;
+            foreach (var dataset in this._datasetPathList)
+            {
+                datasetCounter++;
+                reportProgress(DateTime.Now + "\t---------\t " + dataset + "\t --- file " + datasetCounter + " of " + this._datasetPathList.Count);
+
+                try
+                {
+                    InitializeRun(dataset);
+                    ProcessDataset();
+                }
+                catch (Exception ex)
+                {
+                    reportProgress("--------------------------------------------------------------");
+                    reportProgress("-------------------   ERROR    -------------------------------");
+                    reportProgress("--------------------------------------------------------------");
+
+                    try
+                    {
+                        finalizeRun();
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    reportProgress(ex.Message);
+                    reportProgress(ex.StackTrace);
+                    reportProgress("");
+                    reportProgress("");
+                    
+                    
+                }
+
+             
+             
+                
+
+            }
+        }
+
+        private void ProcessDataset()
+        {
+            
+
+            bool runIsNotAligned = (!Run.MassIsAligned || !Run.NETIsAligned);
+
+
+            //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
+            if (runIsNotAligned && this.ExecutorParameters.TargetedAlignmentIsPerformed)
+            {
+                Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.MassTagList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
+
+                reportProgress(DateTime.Now + "\tPerforming TargetedAlignment using mass tags from file:" + this.ExecutorParameters.MassTagsForAlignmentFilePath);
+                reportProgress(DateTime.Now + "\tTotal mass tags to be aligned = " + this.MassTagsForTargetedAlignment.MassTagList.Count);
+
+                this.TargetedAlignmentWorkflow.SetMassTags(this.MassTagsForTargetedAlignment.MassTagList);
+                this.TargetedAlignmentWorkflow.Run = Run;
+                this.TargetedAlignmentWorkflow.Execute();
+
+                reportProgress(DateTime.Now + "\tTargeted Alignment COMPLETE.");
+                reportProgress("Targeted Alignment Report: ");
+                reportProgress(this.TargetedAlignmentWorkflow.GetAlignmentReport1());
+
+                performAlignment();
+
+            }
+
+        
+
+            this.targetedWorkflow.Run = Run;
+
+            TargetedResultRepository resultRepository = new TargetedResultRepository();
+
+            int mtCounter = 0;
+
+            foreach (var massTag in this.MassTagsToBeTargeted.MassTagList)
+            {
+                mtCounter++;
+                if (mtCounter % 500 == 0)
+                {
+                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.MassTagsToBeTargeted.MassTagList.Count);
+                }
+
+                Run.CurrentMassTag = massTag;
+                try
+                {
+                    this.targetedWorkflow.Execute();
+                    resultRepository.AddResult(this.targetedWorkflow.Result);
+
+                }
+                catch (Exception ex)
+                {
+                    string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
+                    reportProgress(errorString);
+
+                    throw;
+                }
+
+
+
+            }
+            reportProgress(DateTime.Now + "\t---- PROCESSING COMPLETE    ------------------------------------");
+
+            string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
+            backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
+
+            TargetedResultToTextExporter exporter = createExporter(outputFileName);
+            exporter.ExportResults(resultRepository.Results);
+
+            HandleAlignmentInfoFiles();
+            finalizeRun();
+        }
 
         #endregion
 
@@ -63,6 +202,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected MassTagCollection getMassTagTargets(string massTagFileName)
         {
+            if (!File.Exists(massTagFileName))
+            {
+
+            }
+
+
             MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
             return importer.Import();
         }
@@ -101,7 +246,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-
         protected void reportProgress(string reportString)
         {
             Console.WriteLine(reportString);
@@ -123,71 +267,54 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        public override void Execute()
+        private void HandleAlignmentInfoFiles()
         {
-            reportProgress(DateTime.Now + "\tstarted processing....");
-            reportProgress("Parameters:\n" + this._workflowParameters.ToStringWithDetails());
+            FileAttributes attr = File.GetAttributes(Run.Filename);
 
-            int datasetCounter = 0;
-            foreach (var dataset in this._datasetPathList)
+
+            FileInfo[] datasetRelatedFiles;
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                datasetCounter++;
-                reportProgress(DateTime.Now + "\t---------\t " + dataset + "\t --- file " + datasetCounter + " of " + this._datasetPathList.Count);
+                DirectoryInfo dirInfo = new DirectoryInfo(Run.Filename);
+                datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
-                InitializeRun(dataset);
-
-                if (RunCurrent == null)
-                {
-                    reportProgress("INFO - because run was NOT initialized... moving to next dataset.");
-                    continue;
-                }
-
-                this.targetedWorkflow.Run = RunCurrent;
-
-                TargetedResultRepository resultRepository = new TargetedResultRepository();
-
-                int mtCounter = 0;
-
-                foreach (var massTag in this.MassTagsToBeTargeted.MassTagList)
-                {
-                    mtCounter++;
-                    if (mtCounter % 500 == 0)
-                    {
-                        reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.MassTagsToBeTargeted.MassTagList.Count);
-                    }
-
-                    RunCurrent.CurrentMassTag = massTag;
-                    try
-                    {
-                        this.targetedWorkflow.Execute();
-                        resultRepository.AddResult(this.targetedWorkflow.Result);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
-                        reportProgress(errorString);
-
-                        throw;
-                    }
-
-                   
-
-                }
-                reportProgress(DateTime.Now + "\t---- PROCESSING COMPLETE    ------------------------------------");
-
-                string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + RunCurrent.DatasetName + "_results.txt";
-                backupResultsFileIfNecessary(RunCurrent.DatasetName, outputFileName);
-
-                TargetedResultToTextExporter exporter = createExporter(outputFileName);
-                exporter.ExportResults(resultRepository.Results);
-
-                finalizeRun();
 
 
             }
-        }
+            else
+            {
+                FileInfo fi = new FileInfo(Run.Filename);
+                DirectoryInfo dirInfo = fi.Directory;
+                datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
+            }
+
+            foreach (var file in datasetRelatedFiles)
+            {
+                if (file.Name.Contains("_alignedFeatures") || file.Name.Contains("_MZAlignment") || file.Name.Contains("_NETAlignment"))
+                {
+                    bool allowOverwrite = false;
+
+                    string targetCopiedFilename = ExecutorParameters.AlignmentInfoFolder + Path.DirectorySeparatorChar + file.Name;
+
+                    //upload alignment data only if it doesn't already exist
+                    if (!File.Exists(targetCopiedFilename))
+                    {
+                        file.CopyTo(ExecutorParameters.AlignmentInfoFolder + Path.DirectorySeparatorChar + file.Name, allowOverwrite);
+                    }
+
+                    if (this.ExecutorParameters.CopyRawFileLocal)
+                    {
+                        file.Delete();       //if things were copied locally, we are going to delete anything created. 
+                    }
+
+                }
+
+            }
+
+
+        }
 
         private void InitializeRun(string dataset)
         {
@@ -198,47 +325,183 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 reportProgress(DateTime.Now + "\tStarted copying raw data to local folder: " + this.ExecutorParameters.FolderPathForCopiedRawDataset);
 
-
-
                 FileAttributes attr = File.GetAttributes(dataset);
 
                 DirectoryInfo sourceDirInfo;
+                DirectoryInfo targetDirInfo;
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     sourceDirInfo = new DirectoryInfo(dataset);
                     runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + sourceDirInfo.Name;
+                    targetDirInfo = new DirectoryInfo(runFilename);
+                    FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
+                    reportProgress(DateTime.Now + "\tCopying complete.");
                 }
                 else
                 {
                     FileInfo fileinfo = new FileInfo(dataset);
                     sourceDirInfo = fileinfo.Directory;
-
                     runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + Path.GetFileName(dataset);
+
+                    targetDirInfo = new DirectoryInfo(this.ExecutorParameters.FolderPathForCopiedRawDataset);
+
+                    if (!File.Exists(runFilename))
+                    {
+                        FileUtilities.CopyAll(fileinfo, targetDirInfo);
+                        reportProgress(DateTime.Now + "\tCopying complete.");
+                    }
+                    else
+                    {
+                        reportProgress(DateTime.Now + "\tDatafile already exists on local drive. Using existing datafile.");
+
+                    }
+
                 }
-
-                DirectoryInfo targetDirInfo = new DirectoryInfo(runFilename);
-
-                FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
-                reportProgress(DateTime.Now + "\tCopying complete.");
+                
             }
             else
             {
                 runFilename = dataset;
             }
 
-            try
+            //create Run
+            RunFactory rf = new RunFactory();
+            Run = rf.CreateRun(runFilename);
+
+            bool runInstantiationFailed = (Run == null);
+            if (runInstantiationFailed)
             {
-                reportProgress(DateTime.Now + "\tPeak Loading started");
-                RunCurrent = RunUtilities.CreateAndAlignRun(runFilename, null);
-                reportProgress(DateTime.Now + "\tPeak Loading completed");
+                reportProgress(DateTime.Now + "\tRun initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
+                return;
+            }
+            else
+            {
+                reportProgress(DateTime.Now + "\tRun initialized successfully.");
+            }
+
+
+            //Retrieve alignment data
+            CopyAlignmentInfoIfExists();
+
+            //apply mass calibration and NET alignment
+            performAlignment();
+
+
+            //check and load chrom source data (_peaks.txt)
+            bool peaksFileExists = checkForPeaksFile();
+            if (!peaksFileExists)
+            {
+                reportProgress(DateTime.Now + "\tCreating extracted ion chromatogram (XIC) source data... takes 1-5 minutes.. only needs to be done once.");
+
+                CreatePeaksForChromSourceData();
+                reportProgress(DateTime.Now + "\tDone creating XIC source data.");
+            }
+
+
+
+            reportProgress(DateTime.Now + "\tPeak loading started...");
+
+
+            string baseFileName;
+            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+
+            string possibleFilename1 = baseFileName + "_peaks.txt";
+
+            if (File.Exists(possibleFilename1))
+            {
+                //create background worker so that updates don't go out to console.
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.WorkerSupportsCancellation = true;
+                bw.WorkerReportsProgress = true;
+                PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(possibleFilename1, bw);
+                peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
+            }
+            else
+            {
+                reportProgress(DateTime.Now + "\tCRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
+                return;
+            }
+
+
+            reportProgress(DateTime.Now + "\tPeak Loading complete.");
+            return;
+        }
+
+        private void CopyAlignmentInfoIfExists()
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(ExecutorParameters.AlignmentInfoFolder);
+
+            if (dirInfo.Exists)
+            {
+
+                FileInfo[] datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
+
+                foreach (var file in datasetRelatedFiles)
+                {
+                    if (file.Name.Contains("_MZAlignment") || file.Name.Contains("_NETAlignment"))
+                    {
+
+                        file.CopyTo(Run.DataSetPath + Path.DirectorySeparatorChar + file.Name, true);
+
+                    }
+
+
+                }
+
 
             }
-            catch (Exception ex)
+        }
+
+        private void performAlignment()
+        {
+            RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run);
+
+            if (Run.MassIsAligned)
             {
-                string errorMessage = DateTime.Now + "\t---------\t " + dataset + "\t-------------ERROR! " + ex.Message + "\t" + ex.StackTrace;
-                reportProgress(errorMessage);
+                reportProgress(DateTime.Now + "\tRun has been mass aligned using info in _MZAlignment.txt file");
             }
-            return;
+            else
+            {
+                reportProgress(DateTime.Now + "\tFYI - Run has NOT been mass aligned.");
+            }
+
+            if (Run.NETIsAligned)
+            {
+                reportProgress(DateTime.Now + "\tRun has been NET aligned using info in either the _NETAlignment.txt file or the _UMCs.txt file");
+            }
+            else
+            {
+                reportProgress(DateTime.Now + "\tWarning - Run has NOT been NET aligned.");
+            }
+        }
+
+        private void CreatePeaksForChromSourceData()
+        {
+            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
+            TargetedWorkflowParameters deconParam = (TargetedWorkflowParameters)this._workflowParameters;
+
+            parameters.PeakBR = deconParam.ChromGenSourceDataPeakBR;
+            parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
+            parameters.SigNoiseThreshold = deconParam.ChromGenSourceDataSigNoise;
+            PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, null);
+            peakCreator.Execute();
+        }
+
+        private bool checkForPeaksFile()
+        {
+            string baseFileName;
+            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+
+            string possibleFilename1 = baseFileName + "_peaks.txt";
+
+            if (File.Exists(possibleFilename1))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
@@ -249,19 +512,74 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        private void cleanUpLocalFiles()
+        {
+            throw new NotImplementedException();
+        }
+
         protected void finalizeRun()
         {
+
+            string runfileName = Run.Filename;
+            string datasetName = Run.DatasetName;
+
+            Run.Close();
+            Run = null;
+            GC.Collect();
+
+
+
             if (this.ExecutorParameters.CopyRawFileLocal && this.ExecutorParameters.DeleteLocalDatasetAfterProcessing)
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(RunCurrent.Filename);
-                dirInfo.Delete(true);
+                FileAttributes attr = File.GetAttributes(runfileName);
+
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(runfileName);
+                    dirInfo.Delete(true);
+                }
+                else
+                {
+                    FileInfo fileinfo = new FileInfo(runfileName);
+
+                    string fileSuffix = fileinfo.Extension;
+
+                    DirectoryInfo dirInfo = fileinfo.Directory;
+
+                    string expectedPeaksFile = dirInfo.FullName + Path.DirectorySeparatorChar + datasetName + "_peaks.txt";
+
+                    if (File.Exists(expectedPeaksFile))
+                    {
+                        //File.Delete(expectedPeaksFile);
+                    }
+
+                    FileInfo[] allRawDataFiles = dirInfo.GetFiles("*" + fileSuffix);
+                    if (allRawDataFiles.Count() > 35)
+                    {
+                        foreach (var file in allRawDataFiles)
+                        {
+                            try
+                            {
+                                file.Delete();
+                            }
+                            catch (Exception)
+                            {
+                                
+                            }
+                            
+                            
+                        }
+                    }
+
+
+                }
+
+
+
 
             }
 
 
-            RunCurrent.Close();
-            RunCurrent = null;
-            GC.Collect();
 
 
         }

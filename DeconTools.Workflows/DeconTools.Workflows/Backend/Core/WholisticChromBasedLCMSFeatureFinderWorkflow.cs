@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.ChromPeakDetector = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
 
-            this.MSPeakDetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
+            this.MSPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
             this.Deconvolutor = new RapidDeconvolutor();
 
@@ -791,9 +791,9 @@ namespace DeconTools.Workflows.Backend.Core
             int rightMostScan = (int)Math.Ceiling(centerXVal + sigma);
             int centerScan = (int)Math.Round(centerXVal);
 
-            centerScan = run.GetClosestMSScan(centerScan, Globals.ScanSelectionMode.CLOSEST);
-            leftMostScan = run.GetClosestMSScan(leftMostScan, Globals.ScanSelectionMode.DESCENDING);
-            rightMostScan = run.GetClosestMSScan(rightMostScan, Globals.ScanSelectionMode.ASCENDING);
+            centerScan = run.GetClosestMSScan(centerScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
+            leftMostScan = run.GetClosestMSScan(leftMostScan, DeconTools.Backend.Globals.ScanSelectionMode.DESCENDING);
+            rightMostScan = run.GetClosestMSScan(rightMostScan, DeconTools.Backend.Globals.ScanSelectionMode.ASCENDING);
 
             List<int> scanIndexList = new List<int>();
 

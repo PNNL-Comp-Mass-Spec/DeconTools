@@ -2,7 +2,7 @@
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class PeakDetectAndExportWorkflowParameters:WorkflowParameters
+    public class PeakDetectAndExportWorkflowParameters : WorkflowParameters
     {
 
         #region Constructors
@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //and empty OutputFolder
             this.OutputFolder = String.Empty;
-            
+
             this.FrameMax = -1;
             this.FrameMin = -1;
             this.ScanMin = -1;
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public int Num_LC_TimePointsSummed { get; set; }
 
-      
+
 
         /// <summary>
         /// Minimum scan to process. A value of -1 is interpreted as 'all scans'
@@ -70,11 +70,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-      
 
-        public override string WorkflowType
+
+        public override Globals.TargetedWorkflowTypes WorkflowType
         {
-            get { return "PeakDetectAndExportWorkflow1"; }
+            get { return Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1; }
         }
 
         public override void LoadParameters(string xmlFilename)
@@ -82,6 +82,6 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-       
+
     }
 }

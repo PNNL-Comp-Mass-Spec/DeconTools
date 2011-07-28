@@ -22,8 +22,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ResultsFolder = @"d:\temp\results";
             parameters.TargetedAlignmentWorkflowParameterFile = @"d:\temp\Parameters\targetedAlignmentParameters.xml";
             parameters.WorkflowParameterFile = @"d:\temp\Parameters\WorkflowParameters.xml";
-            
 
+            parameters.AlignmentInfoFolder = @"d:\temp\AlignmentInfo";
 
             parameters.SaveParametersToXML(exportedParametersFile);
 

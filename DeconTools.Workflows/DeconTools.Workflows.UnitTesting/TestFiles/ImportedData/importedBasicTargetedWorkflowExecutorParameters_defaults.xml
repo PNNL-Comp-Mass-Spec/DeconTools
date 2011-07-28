@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
+  <AlignmentInfoFolder>d:\temp\AlignmentInfo</AlignmentInfoFolder>
   <CopyRawFileLocal>true</CopyRawFileLocal>
   <DeleteLocalDatasetAfterProcessing>true</DeleteLocalDatasetAfterProcessing>
   <FileContainingDatasetPaths>d:\temp\fileContainingDatasetpaths.txt</FileContainingDatasetPaths>
@@ -8,6 +9,7 @@
   <MassTagsForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</MassTagsForAlignmentFilePath>
   <MassTagsToBeTargetedFilePath>d:\temp\MassTags\massTagsToBeTargeted.txt</MassTagsToBeTargetedFilePath>
   <ResultsFolder>d:\temp\results</ResultsFolder>
+  <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>d:\temp\Parameters\targetedAlignmentParameters.xml</TargetedAlignmentWorkflowParameterFile>
   <WorkflowParameterFile>d:\temp\Parameters\WorkflowParameters.xml</WorkflowParameterFile>
   <WorkflowType>BasicTargetedWorkflowExecutor</WorkflowType>

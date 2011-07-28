@@ -103,5 +103,46 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
+
+        /// <summary>
+        /// Factory method for creating the Workflow object using the WorkflowType information in the parameter object
+        /// </summary>
+        /// <param name="workflowParameters"></param>
+        /// <returns></returns>
+        public static TargetedWorkflow CreateWorkflow(WorkflowParameters workflowParameters)
+        {
+            TargetedWorkflow wf;
+
+            switch (workflowParameters.WorkflowType)
+            {
+                case Globals.TargetedWorkflowTypes.Undefined:
+                    wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
+                case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
+                    wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
+                case Globals.TargetedWorkflowTypes.O16O18Targeted1:
+                    wf = new O16O18Workflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
+                case Globals.TargetedWorkflowTypes.N14N15Targeted1:
+                    wf = new N14N15Workflow2(workflowParameters as TargetedWorkflowParameters);
+                    break;
+                case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
+                    wf = new TargetedAlignerWorkflow(workflowParameters);
+                    break;
+                case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
+                    throw new System.NotImplementedException("Cannot create this workflow type here.");
+                    break;
+                case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
+                    throw new System.NotImplementedException("Cannot create this workflow type here.");
+                    break;
+                default:
+                    wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
+            }
+
+            return wf;
+
+        }
     }
 }

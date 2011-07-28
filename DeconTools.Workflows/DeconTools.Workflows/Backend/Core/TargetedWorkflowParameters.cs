@@ -57,10 +57,10 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-        public override string WorkflowType
-        {
-            get { throw new NotImplementedException(); }
-        }
+        //public override string WorkflowType
+        //{
+        //    get { throw new NotImplementedException(); }
+        //}
 
 
 
