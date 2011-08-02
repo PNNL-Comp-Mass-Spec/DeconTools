@@ -22,6 +22,29 @@ namespace DeconTools.Backend.Utilities
         #endregion
 
         #region Public Methods
+
+        public static string GetDatasetName(string datasetPath)
+        {
+            string datasetName;
+
+            FileAttributes attr = File.GetAttributes(datasetPath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                DirectoryInfo sourceDirInfo;
+                sourceDirInfo = new DirectoryInfo(datasetPath);
+                datasetName = sourceDirInfo.Name;
+            }
+            else
+            {
+                datasetName = Path.GetFileNameWithoutExtension(datasetPath);
+            }
+
+            return datasetName;
+
+        }
+
+
         public static Run CreateAndAlignRun(string filename)
         {
             return CreateAndAlignRun(filename, null);
