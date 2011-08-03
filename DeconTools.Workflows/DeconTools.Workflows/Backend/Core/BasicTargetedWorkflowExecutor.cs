@@ -7,7 +7,7 @@ namespace DeconTools.Workflows.Backend.Core
     {
 
         #region Constructors
-        public BasicTargetedWorkflowExecutor(BasicTargetedWorkflowExecutorParameters parameters) : base(parameters) { }
+        public BasicTargetedWorkflowExecutor(BasicTargetedWorkflowExecutorParameters parameters, string datasetPath) : base(parameters,datasetPath) { }
 
         #endregion
 
@@ -35,8 +35,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
         public override void InitializeWorkflow()
         {
-            _datasetPathList = getListDatasetPaths(ExecutorParameters.FileContainingDatasetPaths);
-            _loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
+            //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
 
             this.MassTagsForTargetedAlignment = getMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
@@ -52,7 +51,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
 
             this.targetedWorkflow = TargetedWorkflow.CreateWorkflow(this._workflowParameters);
-            this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(Run, this.TargetedAlignmentWorkflowParameters);
+           
             
 
         }

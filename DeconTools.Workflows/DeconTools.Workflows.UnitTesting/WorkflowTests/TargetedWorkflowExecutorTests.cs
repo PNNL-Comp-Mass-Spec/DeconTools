@@ -15,6 +15,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string executorParameterFile = @"\\protoapps\UserData\Slysz\Data\WorkflowExecutor_Parameters\basicTargetedWorkflowExecutorParameters_TestCase1.xml";
             string resultsFolderLocation = @"D:\Temp\results";
+            string testDatasetPath = @"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
             string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
@@ -26,7 +27,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters);
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
@@ -56,6 +57,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string executorParameterFile = @"\\protoapps\UserData\Slysz\Data\WorkflowExecutor_Parameters\basicTargetedWorkflowExecutorParameters_CopyToLocalTestCase2.xml";
             string resultsFolderLocation = @"D:\Temp\results";
+            string datasetPath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
             string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
@@ -67,7 +69,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters);
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
             executor.Execute();
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));

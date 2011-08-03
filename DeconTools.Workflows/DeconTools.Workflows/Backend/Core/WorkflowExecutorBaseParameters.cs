@@ -17,7 +17,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public bool CopyRawFileLocal { get; set; }
         public bool DeleteLocalDatasetAfterProcessing { get; set; }
-        public string FileContainingDatasetPaths { get; set; }
         public string FolderPathForCopiedRawDataset { get; set; }
         public string LoggingFolder { get; set; }
         public string MassTagsForAlignmentFilePath { get; set; }

@@ -18,17 +18,17 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class TargetedWorkflowExecutor : WorkflowBase
     {
 
-        protected List<string> _datasetPathList;
         protected string _loggingFileName;
         protected string _resultsFolder;
         protected WorkflowParameters _workflowParameters;
+        private string _datasetPath;
 
 
 
         #region Constructors
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters)
+        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath)
         {
-
+            this._datasetPath = datasetPath;
 
             this.WorkflowParameters = parameters;
             InitializeWorkflow();
@@ -67,65 +67,56 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
         public override void Execute()
         {
-            reportProgress(DateTime.Now + "\tstarted processing....");
+            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(_datasetPath) + "_log.txt";
+
+            reportProgress(DateTime.Now + "\tStarted processing");
+            reportProgress(DateTime.Now + "\t" + _datasetPath);
+            reportProgress("");
             reportProgress("Parameters:\n" + this._workflowParameters.ToStringWithDetails());
 
-            int datasetCounter = 0;
-            foreach (var dataset in this._datasetPathList)
+
+            try
             {
-                datasetCounter++;
-                reportProgress(DateTime.Now + "\t---------\t " + dataset + "\t --- file " + datasetCounter + " of " + this._datasetPathList.Count);
+                InitializeRun(_datasetPath);
+                ProcessDataset();
+            }
+            catch (Exception ex)
+            {
+                reportProgress("--------------------------------------------------------------");
+                reportProgress("-------------------   ERROR    -------------------------------");
+                reportProgress("--------------------------------------------------------------");
 
                 try
                 {
-                    InitializeRun(dataset);
-                    ProcessDataset();
+                    finalizeRun();
+
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    reportProgress("--------------------------------------------------------------");
-                    reportProgress("-------------------   ERROR    -------------------------------");
-                    reportProgress("--------------------------------------------------------------");
-
-                    try
-                    {
-                        finalizeRun();
-
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    reportProgress(ex.Message);
-                    reportProgress(ex.StackTrace);
-                    reportProgress("");
-                    reportProgress("");
-                    
-                    
                 }
 
-             
-             
-                
+                reportProgress(ex.Message);
+                reportProgress(ex.StackTrace);
+                reportProgress("");
+                reportProgress("");
 
             }
+
         }
 
         private void ProcessDataset()
         {
-            
-
             bool runIsNotAligned = (!Run.MassIsAligned || !Run.NETIsAligned);
-
 
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
             if (runIsNotAligned && this.ExecutorParameters.TargetedAlignmentIsPerformed)
             {
                 Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.MassTagList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
-                reportProgress(DateTime.Now + "\tPerforming TargetedAlignment using mass tags from file:" + this.ExecutorParameters.MassTagsForAlignmentFilePath);
+                reportProgress(DateTime.Now + "\tPerforming TargetedAlignment using mass tags from file: " + this.ExecutorParameters.MassTagsForAlignmentFilePath);
                 reportProgress(DateTime.Now + "\tTotal mass tags to be aligned = " + this.MassTagsForTargetedAlignment.MassTagList.Count);
 
+                this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(this.TargetedAlignmentWorkflowParameters);
                 this.TargetedAlignmentWorkflow.SetMassTags(this.MassTagsForTargetedAlignment.MassTagList);
                 this.TargetedAlignmentWorkflow.Run = Run;
                 this.TargetedAlignmentWorkflow.Execute();
@@ -136,9 +127,16 @@ namespace DeconTools.Workflows.Backend.Core
 
                 performAlignment();
 
+                reportProgress("");
+                reportProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
+                reportProgress("MassStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassStDev.ToString("0.00000"));
+                reportProgress("NETAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETAverage.ToString("0.00000"));
+                reportProgress("NETStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETStDev.ToString("0.00000"));
+                reportProgress("---------------- END OF Alignment info -------------");
+
             }
 
-        
+
 
             this.targetedWorkflow.Run = Run;
 
@@ -357,7 +355,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                 }
-                
+
             }
             else
             {
@@ -564,10 +562,10 @@ namespace DeconTools.Workflows.Backend.Core
                             }
                             catch (Exception)
                             {
-                                
+
                             }
-                            
-                            
+
+
                         }
                     }
 

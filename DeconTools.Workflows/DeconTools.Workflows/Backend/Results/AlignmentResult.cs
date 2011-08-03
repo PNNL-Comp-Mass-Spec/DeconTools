@@ -7,6 +7,13 @@ namespace DeconTools.Workflows.Backend.Results
       
 
         #region Constructors
+        public AlignmentResult()
+        {
+            this.MassAverage = 0;
+            this.MassStDev = 0;
+            this.NETAverage = 0;
+            this.NETStDev = 0;
+        }
         #endregion
 
         #region Properties

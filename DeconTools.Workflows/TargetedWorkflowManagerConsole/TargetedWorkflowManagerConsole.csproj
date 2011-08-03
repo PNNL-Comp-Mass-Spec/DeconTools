@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}</ProjectGuid>
+    <ProjectGuid>{E47D0F42-F72F-4030-95D4-B2D136583595}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TargetedWorkflowConsole</RootNamespace>
-    <AssemblyName>TargetedWorkflowConsole</AssemblyName>
+    <RootNamespace>TargetedWorkflowManagerConsole</RootNamespace>
+    <AssemblyName>TargetedWorkflowManagerConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -45,27 +45,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
-      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
-      <Name>DeconTools.Workflows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj">
-      <Project>{E47D0F42-F72F-4030-95D4-B2D136583595}</Project>
-      <Name>TargetedWorkflowManagerConsole</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="xerces-c_2_7.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="xerces-c_2_7D.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

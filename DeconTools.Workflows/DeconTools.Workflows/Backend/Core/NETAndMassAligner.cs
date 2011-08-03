@@ -21,6 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             _massTagList = new List<MassTag>();
             _featuresToBeAligned = new TargetedResultRepository();
+            this.Result = new AlignmentResult();
 
         }
 
@@ -56,9 +57,16 @@ namespace DeconTools.Workflows.Backend.Core
             clsMassTagDB multialignMassTagDB = new clsMassTagDB();
 
             //TODO: figure out which options I need to parameterize in this class. For now, use defaults
+            //TODO: I might be able to dynamically update these values. Take my foundFeatures and calculate their avg PPMDiff. Then use that info here. 
             clsAlignmentOptions alignmentOptions = new clsAlignmentOptions();
-            clsAlignmentProcessor processor = new clsAlignmentProcessor();
+            alignmentOptions.MassTolerance = 10;          
+            alignmentOptions.MassCalibrationWindow = 20;  //note -  it seems that 50 ppm is used as a default setting. 
+            alignmentOptions.NETTolerance = 0.05;
+            
 
+            clsAlignmentProcessor processor = new clsAlignmentProcessor();
+            processor.AlignmentOptions = alignmentOptions;
+          
 
             clsMassTag[] multiAlignMassTags = convertDeconToolsMassTagsToMultialignMassTags(massTagList);
 

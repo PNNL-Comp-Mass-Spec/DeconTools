@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         private BackgroundWorker _backgroundWorker;
-
+     
         #region Constructors
 
         public TargetedAlignerWorkflow(WorkflowParameters workflowParameters)
@@ -64,6 +64,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
 
 
+        public NETAndMassAligner Aligner { get; set; }
 
 
         public override WorkflowParameters WorkflowParameters
@@ -287,15 +288,19 @@ namespace DeconTools.Workflows.Backend.Core
                 NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
                 netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
+                
+               // AlignmentInfoToTextExporter
+
+
             }
         }
 
         private void doAlignment()
         {
-            NETAndMassAligner aligner = new NETAndMassAligner();
-            aligner.SetFeaturesToBeAligned(_targetedResultRepository.Results);
-            aligner.SetReferenceMassTags(this.MassTagList);
-            aligner.Execute(this.Run);
+            Aligner = new NETAndMassAligner();
+            Aligner.SetFeaturesToBeAligned(_targetedResultRepository.Results);
+            Aligner.SetReferenceMassTags(this.MassTagList);
+            Aligner.Execute(this.Run);
         }
 
         private List<NETGrouping> createNETGroupings()

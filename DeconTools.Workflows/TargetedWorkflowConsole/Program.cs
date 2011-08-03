@@ -24,20 +24,23 @@ namespace TargetedWorkflowConsole
                 ReportSyntax();
             }
 
-            if (args.Length == 1)
+            if (args.Length == 2)
             {
-                FileInfo fi = new FileInfo(args[0]);
-                if (!fi.Exists)
+
+                string datasetPath = args[0];
+                
+                FileInfo parametersFileInfo = new FileInfo(args[1]);
+                if (!parametersFileInfo.Exists)
                 {
-                    reportFileProblem(fi.FullName);
+                    reportFileProblem(parametersFileInfo.FullName);
                     return;
                 }
                 else
                 {
                     BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-                    executorParameters.LoadParameters(args[0]);
+                    executorParameters.LoadParameters(args[1]);
 
-                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters);
+                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
                     executor.Execute();
 
                 }
@@ -57,8 +60,10 @@ namespace TargetedWorkflowConsole
         private static void ReportSyntax()
         {
             Console.WriteLine();
-            Console.WriteLine("This Commandline app requires one argument.");
-            Console.WriteLine("\tArg1 = parameter filename (.xml)");
+            Console.WriteLine("This Commandline app requires two arguments.");
+            Console.WriteLine("\tArg1 = dataset path");
+            Console.WriteLine("\tArg2 = workflow executor parameter file (.xml)");
+         
             Console.WriteLine();
         }
     }

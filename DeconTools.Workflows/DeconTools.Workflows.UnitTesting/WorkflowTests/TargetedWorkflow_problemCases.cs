@@ -106,16 +106,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+
         [Test]
-        public void temp()
+        public void issue0705_completelyFailedAlignment_multialignErrors()
         {
+     
 
-            double val1 = double.MaxValue;
-            int int1 = Convert.ToInt32(val1);
+            string executorParameterFile = @"\\protoapps\UserData\Slysz\Data\Redmine_Issues\Issue0705_failedAlignment\workflowExecutorParameters.xml";
+            string datasetPath = @"\\proto-3\LTQ_Orb_3\2010_1\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26.raw";
 
-            Console.WriteLine(int1);
+             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+             executorParameters.LoadParameters(executorParameterFile);
 
+             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
+             executor.Execute();
         }
+
 
     }
 }
