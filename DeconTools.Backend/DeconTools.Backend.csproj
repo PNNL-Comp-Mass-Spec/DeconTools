@@ -344,6 +344,7 @@
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
     <Compile Include="ProjectControllers\UIMFMSOnlyProjectController.cs" />
     <Compile Include="Runs\AgilentD_Run.cs" />
+    <Compile Include="Runs\XCaliburRun2.cs" />
     <Compile Include="Runs\YAFMSRun.cs" />
     <Compile Include="Utilities\Converters\IntensityToImageConverter.cs" />
     <Compile Include="Utilities\Converters\PeakDatFileConverter.cs" />
@@ -443,6 +444,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileIO\TargetedResultFileIO\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="XRAWFILE2Lib">
+      <Guid>{5FE970A2-29C3-11D3-811D-00104B304896}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

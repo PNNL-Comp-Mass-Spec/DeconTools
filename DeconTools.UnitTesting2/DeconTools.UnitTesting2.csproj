@@ -120,6 +120,7 @@
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="ProjectControllerTests\OldSchoolsProcRunnerTests.cs" />
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
+    <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />

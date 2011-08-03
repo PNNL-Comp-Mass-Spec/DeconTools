@@ -12,31 +12,7 @@ namespace DeconTools.Backend.Runs
     public class RunFactory
     {
 
-        private string getFullPath(string filename)
-        {
-            string fullfileName= filename.Trim(new char[] { ' ', '"' });
-
-            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
-            FileInfo fileInfo = new FileInfo(fullfileName);
-
-            if (!dirInfo.Exists && !fileInfo.Exists)
-            {
-                throw new System.ApplicationException("Cannot create Run. File/Folder not found.");
-            }
-
-            if (dirInfo.Exists)
-            {
-                fullfileName = dirInfo.FullName;
-            }
-
-            if (fileInfo.Exists)
-            {
-                fullfileName = fileInfo.FullName;
-            }
-
-            return fullfileName;
-        }
-
+       
         public Run CreateRun(string filename)
         {
             Run run;
@@ -77,7 +53,7 @@ namespace DeconTools.Backend.Runs
             switch (extension)
             {
                 case ".raw":
-                    run = new XCaliburRun(fullfileName);
+                    run = new XCaliburRun2(fullfileName);
                     break;
                 case ".imf":
                     run = new IMFRun(fullfileName);
@@ -142,7 +118,7 @@ namespace DeconTools.Backend.Runs
                     run = null;
                     break;
                 case Globals.MSFileType.Finnigan:
-                    run = new XCaliburRun(fileName);
+                    run = new XCaliburRun2(fileName);
                     break;
                 case Globals.MSFileType.ICR2LS_Rawdata:
                     run = null;
@@ -219,11 +195,11 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.Finnigan:
                     if (parameters.HornTransformParameters.UseScanRange)
                     {
-                        run = new XCaliburRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                        run = new XCaliburRun2(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
                     }
                     else
                     {
-                        run = new XCaliburRun(filename);
+                        run = new XCaliburRun2(filename);
                     }
                     break;
                 case Globals.MSFileType.ICR2LS_Rawdata:
@@ -342,6 +318,31 @@ namespace DeconTools.Backend.Runs
             return run;
         }
 
+
+        private string getFullPath(string filename)
+        {
+            string fullfileName = filename.Trim(new char[] { ' ', '"' });
+
+            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
+            FileInfo fileInfo = new FileInfo(fullfileName);
+
+            if (!dirInfo.Exists && !fileInfo.Exists)
+            {
+                throw new System.ApplicationException("Cannot create Run. File/Folder not found.");
+            }
+
+            if (dirInfo.Exists)
+            {
+                fullfileName = dirInfo.FullName;
+            }
+
+            if (fileInfo.Exists)
+            {
+                fullfileName = fileInfo.FullName;
+            }
+
+            return fullfileName;
+        }
 
 
         private Run determineIfRunIsABrukerTypeAndCreateRun(string folderName)
