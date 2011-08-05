@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using DeconTools.Utilities;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -44,8 +42,8 @@ namespace DeconTools.Backend.Core
 
             List<int> lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
             List<int> upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
-            
-            List<int> scansToSum = lowerScansToSum;
+
+            List<int> scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
             scansToSum.Add(scan);
             scansToSum.AddRange(upperScansToSum);
             //scansToSum.Sort();
@@ -114,7 +112,7 @@ namespace DeconTools.Backend.Core
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
                 {
-                    lowerScans.Add(currentScan);
+                    lowerScans.Insert(0,currentScan);
                     scansCounter++;
                 }
                 currentScan--;

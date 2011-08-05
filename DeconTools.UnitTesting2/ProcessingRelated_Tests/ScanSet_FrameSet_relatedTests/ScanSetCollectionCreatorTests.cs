@@ -2,6 +2,7 @@
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
+using System;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ScanSet_FrameSet_relatedTests
 {
@@ -37,6 +38,28 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ScanSet_FrameSet_relat
 
             Assert.AreEqual(3, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6005, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
+        }
+
+
+        [Test]
+        public void createScanSets_summed_MS1_test1()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            int startScan = 6000;
+            int stopScan = 6020;
+
+            int numSummed = 5;
+
+            bool processMSMS = false;
+            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, startScan, stopScan,numSummed, 1, processMSMS);
+            sscc.Create();
+
+            Assert.AreEqual(3, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(6005, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
+
+            Console.WriteLine(run.ScanSetCollection.ScanSetList[0]);
         }
 
     }

@@ -100,6 +100,41 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public virtual double GetNETAlignmentError()
+        {
+            double NETError = 0;
+            if (Run.NETIsAligned)
+            {
+                double theorNET = this.MassTag.NETVal;
+                double alignedNET = this.Run.GetNETValueForScan(GetScanNum());
+
+                NETError = theorNET - alignedNET;
+
+            }
+            return NETError;
+
+        }
+
+        public virtual double GetMassAlignmentErrorInPPM()
+        {
+            double massErrorInPPM = 0;
+
+            if (Run.MassIsAligned)
+            {
+                double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+                double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+
+                int scan= GetScanNum();
+
+                double alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
+
+                massErrorInPPM = (theorMZ - alignedMZ)/theorMZ * 1e6;
+
+            }
+            return massErrorInPPM;
+        }
+
+
         public double GetMZOfMostIntenseTheorIsotopicPeak()
         {
             if (this.MassTag == null || this.MassTag.IsotopicProfile == null)

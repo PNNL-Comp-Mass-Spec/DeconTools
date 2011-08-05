@@ -252,10 +252,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             this.RunIsAligned = resultColl.Run.MassIsAligned;
 
-
-
             IsotopicProfile targetedIso = createTargetIso(resultColl.Run);
             iso = FindMSFeature(resultColl.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
+
 
 
             switch (IsotopicProfileType)
@@ -310,6 +309,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
 
+                    
                 }
 
             }
