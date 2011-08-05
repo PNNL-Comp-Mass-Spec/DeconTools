@@ -35,17 +35,24 @@ namespace DeconTools.Workflows.Backend.Results
 
         public float[,] AlignmentHeatmapScores { get; set; }
 
-        public float[] massErrorResidualsBeforeAlignment { get; set; }
+        public float[] Mass_vs_scan_ResidualsBeforeAlignment { get; set; }
+        public float[] Mass_vs_scan_ResidualsAfterAlignment { get; set; }
+        public float[] Mass_vs_scan_ResidualsScanValues { get; set; }
 
-        public float[] massErrorResidualsAfterAlignement { get; set; }
+        public float[] Mass_vs_mz_ResidualsBeforeAlignment { get; set; }
+        public float[] Mass_vs_mz_ResidualsAfterAlignment { get; set; }
+        public float[] Mass_vs_mz_ResidualsMZValues { get; set; }
 
-        public float[] ScanValuesForMassErrorResiduals { get; set; }
+        public float[] NET_vs_scan_ResidualsBeforeAlignment { get; set; }
+        public float[] NET_vs_scan_ResidualsAfterAlignment { get; set; }
+        public float[] NET_vs_scan_ResidualsScanValues { get; set; }
 
-        public float[] mass_vs_mz_residualsBeforeAlignment { get; set; }
+        public float[] NET_vs_MZ_ResidualsBeforeAlignment { get; set; }
+        public float[] NET_vs_MZ_ResidualsAfterAlignment { get; set; }
+        public float[] NET_vs_MZ_ResidualsMZValues { get; set; }
 
-        public float[] mass_vs_mz_residualsMZValues { get; set; }
+        
 
-        public float[] mass_vs_mz_residualsAfterAlignment { get; set; }
 
         public double NETStDev { get; set; }
 

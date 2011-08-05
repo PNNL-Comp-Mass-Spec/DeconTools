@@ -51,6 +51,13 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        protected virtual void updateMassAndNETValuesAfterAlignment()
+        {
+          
+            
+        }
+
+
         protected void updateMassSpectrumXYValues(XYData xydata)
         {
             if (xydata == null)

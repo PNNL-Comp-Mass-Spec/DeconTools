@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AlignmentTests\AlignmentResults_Tests.cs" />
     <Compile Include="AlignmentTests\AlignmentTests.cs" />
+    <Compile Include="AlignmentTests\NETAndMassAlignerParameterTesting.cs" />
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />

@@ -51,10 +51,15 @@ namespace DeconTools.Workflows.UnitTesting
             aligner.SetMassTags(massTagFile);
             aligner.Execute();
 
+            Console.WriteLine(aligner.GetAlignmentReport1());
+
             Assert.IsNotNull(run.AlignmentInfo);
             Assert.AreEqual(-3.6m, (decimal)(Math.Round(run.AlignmentInfo.GetPPMShiftFromMZ(600.0f), 1)));
 
         }
+
+
+       
 
 
 

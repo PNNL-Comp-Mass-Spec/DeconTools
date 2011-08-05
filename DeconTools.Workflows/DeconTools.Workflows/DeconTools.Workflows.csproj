@@ -54,6 +54,7 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\N14N15Workflow2.cs" />
     <Compile Include="Backend\Core\N14N15Workflow2Parameters.cs" />
+    <Compile Include="Backend\Core\NETAndMassAlignerParameters.cs" />
     <Compile Include="Backend\Core\O16O18Workflow.cs" />
     <Compile Include="Backend\Core\O16O18WorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />

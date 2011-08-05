@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
@@ -6,8 +7,6 @@ using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
-using System.Text;
-using System;
 
 namespace DeconTools.Workflows.UnitTesting
 {
@@ -73,13 +72,13 @@ namespace DeconTools.Workflows.UnitTesting
             StringBuilder sb = new StringBuilder();
 
             sb.Append("scan\tbefore\tafter");
-            for (int i = 0; i < aligner.Result.massErrorResidualsBeforeAlignment.Length; i++)
+            for (int i = 0; i < aligner.Result.Mass_vs_scan_ResidualsBeforeAlignment.Length; i++)
             {
-                sb.Append(aligner.Result.ScanValuesForMassErrorResiduals[i]);
+                sb.Append(aligner.Result.Mass_vs_scan_ResidualsScanValues[i]);
                 sb.Append("\t");
-                sb.Append(aligner.Result.massErrorResidualsBeforeAlignment[i]);
+                sb.Append(aligner.Result.Mass_vs_scan_ResidualsBeforeAlignment[i]);
                 sb.Append("\t");
-                sb.Append(aligner.Result.massErrorResidualsAfterAlignement[i]);
+                sb.Append(aligner.Result.Mass_vs_scan_ResidualsAfterAlignment[i]);
                 sb.Append(Environment.NewLine);
             }
 
@@ -94,19 +93,22 @@ namespace DeconTools.Workflows.UnitTesting
 
             sb.Append("scan\tbefore\tafter");
             sb.Append(Environment.NewLine);
-            for (int i = 0; i < aligner.Result.mass_vs_mz_residualsMZValues.Length; i++)
+            for (int i = 0; i < aligner.Result.Mass_vs_mz_ResidualsMZValues.Length; i++)
             {
-                sb.Append(aligner.Result.mass_vs_mz_residualsMZValues[i]);
+                sb.Append(aligner.Result.Mass_vs_mz_ResidualsMZValues[i]);
                 sb.Append("\t");
-                sb.Append(aligner.Result.mass_vs_mz_residualsBeforeAlignment[i]);
+                sb.Append(aligner.Result.Mass_vs_mz_ResidualsBeforeAlignment[i]);
                 sb.Append("\t");
-                sb.Append(aligner.Result.mass_vs_mz_residualsAfterAlignment[i]);
+                sb.Append(aligner.Result.Mass_vs_mz_ResidualsAfterAlignment[i]);
                 sb.Append(Environment.NewLine);
             }
 
             Console.WriteLine(sb.ToString());
 
         }
+
+     
+
 
         [Test]
         public void getStatsOnVariablity()

@@ -22,6 +22,9 @@ namespace DeconTools.Workflows.Backend.Results
         public int ChargeState { get; set; }
         public double MonoMass { get; set; }
         public double MonoMassCalibrated { get; set; }
+        public double MassErrorInPPM { get; set; }
+
+
         public double MonoMZ { get; set; }
         public float FitScore { get; set; }
         public float IScore { get; set; }

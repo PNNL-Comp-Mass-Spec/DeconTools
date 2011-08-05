@@ -22,6 +22,13 @@ namespace DeconTools.Workflows.Backend.Core
             _massTagList = new List<MassTag>();
             _featuresToBeAligned = new TargetedResultRepository();
             this.Result = new AlignmentResult();
+            this.AlignerParameters = new NETAndMassAlignerParameters();
+        }
+
+        public NETAndMassAligner(NETAndMassAlignerParameters alignerParameters)
+            : this()
+        {
+            this.AlignerParameters = alignerParameters;
 
         }
 
@@ -56,17 +63,31 @@ namespace DeconTools.Workflows.Backend.Core
 
             clsMassTagDB multialignMassTagDB = new clsMassTagDB();
 
-            //TODO: figure out which options I need to parameterize in this class. For now, use defaults
             //TODO: I might be able to dynamically update these values. Take my foundFeatures and calculate their avg PPMDiff. Then use that info here. 
             clsAlignmentOptions alignmentOptions = new clsAlignmentOptions();
-            alignmentOptions.MassTolerance = 10;          
-            alignmentOptions.MassCalibrationWindow = 20;  //note -  it seems that 50 ppm is used as a default setting. 
-            alignmentOptions.NETTolerance = 0.05;
-            
-
+             alignmentOptions.MassCalibrationWindow = this.AlignerParameters.MassCalibrationWindow;  //note -  it seems that 50 ppm is used as a default setting in VIPER. 
+            alignmentOptions.ContractionFactor = this.AlignerParameters.ContractionFactor;
+            alignmentOptions.IsAlignmentBaselineAMasstagDB = this.AlignerParameters.IsAlignmentBaselineAMassTagDB;
+            alignmentOptions.MassBinSize = this.AlignerParameters.MassBinSize;
+            alignmentOptions.MassCalibrationLSQNumKnots = this.AlignerParameters.MassCalibrationLSQNumKnots;
+            alignmentOptions.MassCalibrationLSQZScore = this.AlignerParameters.MassCalibrationLSQZScore;
+            alignmentOptions.MassCalibrationMaxJump = this.AlignerParameters.MassCalibrationMaxJump;
+            alignmentOptions.MassCalibrationMaxZScore = this.AlignerParameters.MassCalibrationMaxZScore;
+            alignmentOptions.MassCalibrationNumMassDeltaBins = this.AlignerParameters.MassCalibrationNumMassDeltaBins;
+            alignmentOptions.MassCalibrationNumXSlices = this.AlignerParameters.MassCalibrationNumXSlices;
+            alignmentOptions.MassCalibrationUseLSQ = this.AlignerParameters.MassCalibrationUseLSQ;
+            alignmentOptions.MassCalibrationWindow = this.AlignerParameters.MassCalibrationWindow;
+            alignmentOptions.MassTolerance = this.AlignerParameters.MassToleranceForNETAlignment;
+            alignmentOptions.MaxPromiscuity = this.AlignerParameters.MaxPromiscuity;
+            alignmentOptions.MaxTimeJump = this.AlignerParameters.MaxTimeJump;
+            alignmentOptions.NETBinSize = this.AlignerParameters.NETBinSize;
+            alignmentOptions.NETTolerance = this.AlignerParameters.NETTolerance;
+            alignmentOptions.NumTimeSections = this.AlignerParameters.NumTimeSections;
+            alignmentOptions.UsePromiscuousPoints = this.AlignerParameters.UsePromiscuousPoints;
+       
             clsAlignmentProcessor processor = new clsAlignmentProcessor();
             processor.AlignmentOptions = alignmentOptions;
-          
+
 
             clsMassTag[] multiAlignMassTags = convertDeconToolsMassTagsToMultialignMassTags(massTagList);
 
@@ -88,10 +109,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         private AlignmentResult getResultsForAlignment(clsAlignmentProcessor processor)
         {
-            float[]scanLCValues = null;
-            float[]NETValues = null;
+            float[] scanLCValues = null;
+            float[] NETValues = null;
 
-            float[,]scores = null;
+            float[,] scores = null;
 
             processor.GetAlignmentHeatMap(ref scores, ref scanLCValues, ref NETValues);
 
@@ -103,24 +124,28 @@ namespace DeconTools.Workflows.Backend.Core
 
             //get massResiduals_vs_scan and massResiduals_vs_m/z
             classAlignmentResidualData residuals = processor.GetResidualData();
-            result.massErrorResidualsBeforeAlignment = residuals.massError;
-            result.massErrorResidualsAfterAlignement = residuals.massErrorCorrected;
-            result.ScanValuesForMassErrorResiduals = residuals.scans;
+            
+
+            result.Mass_vs_scan_ResidualsBeforeAlignment = residuals.massError;
+            result.Mass_vs_scan_ResidualsAfterAlignment = residuals.massErrorCorrected;
+            result.Mass_vs_scan_ResidualsScanValues = residuals.scans;
 
 
-            result.mass_vs_mz_residualsBeforeAlignment = residuals.mzMassError;
-            result.mass_vs_mz_residualsAfterAlignment = residuals.mzMassErrorCorrected;
-            result.mass_vs_mz_residualsMZValues = residuals.mz;
+            result.Mass_vs_mz_ResidualsBeforeAlignment = residuals.mzMassError;
+            result.Mass_vs_mz_ResidualsAfterAlignment = residuals.mzMassErrorCorrected;
+            result.Mass_vs_mz_ResidualsMZValues = residuals.mz;
+
             
-            
+
+
             //get stats on variability
             result.NETStDev = processor.GetNETStandardDeviation();
             result.NETAverage = processor.GetNETMean();
-            result.MassAverage= processor.GetMassMean();
+            result.MassAverage = processor.GetMassMean();
             result.MassStDev = processor.GetMassStandardDeviation();
 
             double[,] massHistogramData = null;
-            double[,] netHistogramData=null;
+            double[,] netHistogramData = null;
             processor.GetErrorHistograms(0.1, 0.002, ref massHistogramData, ref netHistogramData);
 
             result.massHistogramData = massHistogramData;
@@ -129,12 +154,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             return result;
 
-            
+
 
 
         }
 
-      
+
 
 
 
@@ -205,7 +230,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-      
+
 
         private clsMassTag[] convertDeconToolsMassTagsToMultialignMassTags(List<MassTag> massTagList)
         {
@@ -254,6 +279,8 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-       
+
+
+        public NETAndMassAlignerParameters AlignerParameters { get; set; }
     }
 }
