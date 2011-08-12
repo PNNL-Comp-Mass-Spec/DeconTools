@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -246,7 +245,14 @@ namespace DeconTools.Backend.Core
             iso.MostAbundantIsotopeMass = this.MostAbundantIsotopeMass;
             iso.Original_Total_isotopic_abundance = this.Original_Total_isotopic_abundance;
             iso.OriginalIntensity = this.OriginalIntensity;
-            iso.Peaklist = new List<MSPeak>(this.Peaklist);
+            iso.Peaklist = new List<MSPeak>();
+
+            foreach (var mspeak in this.Peaklist)
+            {
+                MSPeak peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SN);
+                iso.Peaklist.Add(peak);
+            }
+
             iso.Score = this.Score;
 
             return iso;

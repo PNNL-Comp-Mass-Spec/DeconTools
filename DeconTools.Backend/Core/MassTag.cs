@@ -176,13 +176,13 @@ namespace DeconTools.Backend.Core
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(this.ID);
-            sb.Append("\t");
+            sb.Append("; ");
             sb.Append(this.MZ.ToString("0.0000"));
-            sb.Append("\t");
+            sb.Append("; ");
             sb.Append(this.ChargeState);
-            sb.Append("\t");
+            sb.Append("; ");
             sb.Append(this.NETVal);
-            sb.Append("\t");
+            sb.Append("; ");
             sb.Append(this.PeptideSequence);
 
             return sb.ToString();

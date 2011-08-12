@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Algorithms;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
@@ -56,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
-            IsotopicProfile theorFeature = getTheorProfile(resultColl.Run.CurrentMassTag, this.IsotopicProfileType);
+            IsotopicProfile theorFeature = createTargetIso(resultColl.Run);
             resultColl.IsosResultBin.Clear();
 
             IsotopicProfile iso = iterativelyFindMSFeature(resultColl.Run, theorFeature);
@@ -108,7 +104,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public IsotopicProfile iterativelyFindMSFeature(Run run, IsotopicProfile theorIso)
         {
-            
+
 
             IsotopicProfile iso = null;
 
@@ -156,23 +152,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 default:
                     result.IsotopicProfile = iso;
                     break;
-            }
-        }
-
-        private IsotopicProfile getTheorProfile(MassTag massTag, IsotopicProfileType isotopicProfileType)
-        {
-
-            switch (isotopicProfileType)
-            {
-                case IsotopicProfileType.UNLABELLED:
-                    return massTag.IsotopicProfile;
-
-                case IsotopicProfileType.LABELLED:
-                    return massTag.IsotopicProfileLabelled;
-
-                default:
-                    return massTag.IsotopicProfile;
-
             }
         }
 

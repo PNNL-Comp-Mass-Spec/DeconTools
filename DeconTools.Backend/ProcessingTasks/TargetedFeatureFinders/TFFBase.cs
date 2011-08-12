@@ -285,7 +285,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
-        private IsotopicProfile createTargetIso(Run run)
+        protected IsotopicProfile createTargetIso(Run run)
         {
             IsotopicProfile iso;
 
@@ -303,7 +303,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             //adjust the target m/z based on the alignment information
-            if (this.RunIsAligned)
+            if (run.MassIsAligned)
             {
                 for (int i = 0; i < iso.Peaklist.Count; i++)
                 {

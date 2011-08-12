@@ -55,9 +55,9 @@ namespace DeconTools.Backend.Core
                 _alignmentInfo = value;
                 if (_alignmentInfo != null)
                 {
-                    if (_alignmentInfo.marrNETFncTimeInput != null && _alignmentInfo.marrNETFncTimeOutput != null)
+                    if (_alignmentInfo.marrNETFncTimeInput != null && _alignmentInfo.marrNETFncNETOutput != null)
                     {
-                        SetScanToNETAlignmentData(_alignmentInfo.marrNETFncTimeInput, _alignmentInfo.marrNETFncTimeOutput);
+                        SetScanToNETAlignmentData(_alignmentInfo.marrNETFncTimeInput, _alignmentInfo.marrNETFncNETOutput);
                     }
                 }
             }
@@ -749,7 +749,7 @@ namespace DeconTools.Backend.Core
             float[] netVals = scanNETList.Select(p => p.NET).ToArray();
 
             SetScanToNETAlignmentData(scanVals, netVals);
-            
+
         }
 
         public virtual void SetScanToNETAlignmentData(float[] scanVals, float[] netVals)
@@ -840,10 +840,69 @@ namespace DeconTools.Backend.Core
         {
             if (this.AlignmentInfo == null) return theorMZ;
 
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)theorMZ);
+            float ppmShift = GetPPMShift(theorMZ, scan);
+
+
+
 
             double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
             return alignedMZ;
+        }
+
+
+        public float GetPPMShift(double theorMZ, double scan)
+        {
+            if (this.AlignmentInfo == null) return 0;
+
+            bool alignmentInfoContainsScanInfo = (this.AlignmentInfo.marrMassFncTimeInput != null && this.AlignmentInfo.marrMassFncTimeInput.Length > 0);
+            bool alignmentInfoContainsMZInfo = (this.AlignmentInfo.marrMassFncMZInput != null && this.AlignmentInfo.marrMassFncMZInput.Length > 0);
+            float ppmShift = 0;
+
+            if (alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo)
+            {
+
+                float scanForGettingAlignmentInfo = (float)scan;
+
+                if (scanForGettingAlignmentInfo < AlignmentInfo.marrMassFncTimeInput[0])
+                {
+                    scanForGettingAlignmentInfo = AlignmentInfo.marrMassFncTimeInput[0];
+                }
+                else if (scanForGettingAlignmentInfo > AlignmentInfo.marrMassFncTimeInput[AlignmentInfo.marrMassFncTimeInput.Length - 1])
+                {
+                    scanForGettingAlignmentInfo = AlignmentInfo.marrMassFncTimeInput[AlignmentInfo.marrMassFncTimeInput.Length - 1];
+                }
+                else
+                {
+                    scanForGettingAlignmentInfo = (float)scan;
+                }
+
+
+                float mzForGettingAlignmentInfo = (float)theorMZ;
+
+                if (mzForGettingAlignmentInfo < AlignmentInfo.marrMassFncMZInput[0])
+                {
+                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[0];
+                }
+                else if (mzForGettingAlignmentInfo < AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1])
+                {
+                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1];
+                }
+                else
+                {
+                    mzForGettingAlignmentInfo = (float)theorMZ;
+
+                }
+
+
+
+                ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, (float)mzForGettingAlignmentInfo);
+
+            }
+            else
+            {
+                ppmShift = 0;
+            }
+            return ppmShift;
         }
 
         /// <summary>
@@ -872,7 +931,8 @@ namespace DeconTools.Backend.Core
         {
             if (this.AlignmentInfo == null) return observedMZ;
 
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ((float)scan, (float)observedMZ);
+            float ppmShift = GetPPMShift(observedMZ, scan);
+
 
             double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
             return alignedMZ;

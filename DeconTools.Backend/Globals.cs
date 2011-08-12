@@ -127,7 +127,8 @@ namespace DeconTools.Backend
             CHROM_PEAKS_NOT_DETECTED,
             CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES,
             MSPEAKS_NOT_DETECTED,
-            MSFEATURE_NOT_FOUND
+            MSFEATURE_NOT_FOUND,
+            TOO_MANY_HIGH_QUALITY_CHROMPEAKS
 
         }
 

@@ -108,6 +108,8 @@ namespace DeconTools.Backend.FileIO
                     lineCounter++;
 
                 }
+
+                sr.Close();
             }
         }
 

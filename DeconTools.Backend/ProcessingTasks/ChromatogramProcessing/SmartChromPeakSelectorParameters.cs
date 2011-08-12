@@ -36,6 +36,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         /// </summary>
         public int NumChromPeaksAllowed { get; set; }
 
+        /// <summary>
+        /// This is useful, especially in targetedAlignment, to allow strict selection of chrom peak.
+        /// If true, the chromPeak that is most abundant will be allowed through (if the ms_fit value difference is small between first and second chrom peaks)
+        /// If false, a null chromPeak will be reported. 
+        /// </summary>
+        public bool MultipleHighQualityMatchesAreAllowed { get; set; }
+
+
         public double MSPeakDetectorPeakBR { get; set; }
 
         public double MSPeakDetectorSigNoiseThresh { get; set; }

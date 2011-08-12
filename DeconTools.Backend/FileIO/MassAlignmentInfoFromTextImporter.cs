@@ -95,6 +95,8 @@ namespace DeconTools.Backend.FileIO
                     _massAndTimeCorrectionData.Add(massAndTimePPMCorrItem);
                     lineCounter++;
                 }
+
+                sr.Close();
             }
         }
 

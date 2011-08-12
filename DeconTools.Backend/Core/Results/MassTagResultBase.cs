@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        
+
         public IList<ChromPeak> ChromPeaks { get; set; }
 
         public int NumChromPeaksWithinTolerance { get; set; }
@@ -64,7 +64,7 @@ namespace DeconTools.Backend.Core
 
             }
             sb.Append("} \n");
-            if (this.IsotopicProfile != null && this.IsotopicProfile.Peaklist!=null && this.IsotopicProfile.Peaklist.Count>0)
+            if (this.IsotopicProfile != null && this.IsotopicProfile.Peaklist != null && this.IsotopicProfile.Peaklist.Count > 0)
             {
                 sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
             }
@@ -103,14 +103,13 @@ namespace DeconTools.Backend.Core
         public virtual double GetNETAlignmentError()
         {
             double NETError = 0;
-            if (Run.NETIsAligned)
-            {
-                double theorNET = this.MassTag.NETVal;
-                double alignedNET = this.Run.GetNETValueForScan(GetScanNum());
 
-                NETError = theorNET - alignedNET;
+            double theorNET = this.MassTag.NETVal;
+            double obsNET = this.Run.GetNETValueForScan(GetScanNum());
 
-            }
+            NETError = theorNET - obsNET;
+
+
             return NETError;
 
         }
@@ -118,18 +117,24 @@ namespace DeconTools.Backend.Core
         public virtual double GetMassAlignmentErrorInPPM()
         {
             double massErrorInPPM = 0;
+            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+            double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+
+            int scan = GetScanNum();
+            if (scan == -1)
+            {
+                return 0;
+            }
+
 
             if (Run.MassIsAligned)
             {
-                double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
-                double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
-
-                int scan= GetScanNum();
-
                 double alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
-
-                massErrorInPPM = (theorMZ - alignedMZ)/theorMZ * 1e6;
-
+                massErrorInPPM = (theorMZ - alignedMZ) / theorMZ * 1e6;
+            }
+            else
+            {
+                massErrorInPPM = (theorMZ - observedMZ) / theorMZ * 1e6;
             }
             return massErrorInPPM;
         }
@@ -182,7 +187,7 @@ namespace DeconTools.Backend.Core
 
 
 
-      
+
 
         public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
         {
@@ -207,6 +212,13 @@ namespace DeconTools.Backend.Core
             this.ChromPeakSelected = null;
             this.FailedResult = false;
             this.FailureType = Globals.TargetedResultFailureType.NONE;
+        }
+
+        public virtual void ResetMassSpectrumRelatedInfo()
+        {
+            this.Score = 1;
+            this.InterferenceScore = 1;
+            this.IsotopicProfile = null;
         }
 
 
