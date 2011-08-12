@@ -18,12 +18,16 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] iscoreHeaders = { "iscore" };
         protected string[] targetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid" };
         protected string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW" };
+        protected string[] monomassCalibratedHeaders = { "MonoisotopicMassCalibrated" };
+        protected string[] massErrorHeaders = { "MassErrorInPPM" };
+
         protected string[] mzHeaders = { "MonoMZ", "UMCMZForChargeBasis" };
         protected string[] scanHeaders = { "scan", "scanClassRep" };
         protected string[] scanEndHeaders = { "scanEnd", "scan_end" };
         protected string[] scanStartHeaders = { "scanStart", "scan_start" };
         protected string[] netHeaders = { "net", "NETClassRep" };
-        protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol" };
+        protected string[] netErrorHeaders =  {"netError"};
+         protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol" };
         protected string[] numQualitychromPeaksWithinTolHeaders = { "NumQualityChromPeaksWithinTol" };
 
 

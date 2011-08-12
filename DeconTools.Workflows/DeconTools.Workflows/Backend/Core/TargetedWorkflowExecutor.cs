@@ -106,6 +106,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ProcessDataset()
         {
+
+
+            //apply mass calibration and NET alignment from .txt files, if they exist
+            performAlignment();
+
+
             bool runIsNotAligned = (!Run.MassIsAligned || !Run.NETIsAligned);
 
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
@@ -125,7 +131,7 @@ namespace DeconTools.Workflows.Backend.Core
                 reportProgress("Targeted Alignment Report: ");
                 reportProgress(this.TargetedAlignmentWorkflow.GetAlignmentReport1());
 
-                performAlignment();
+                performAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
                 reportProgress("");
                 reportProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
@@ -133,6 +139,8 @@ namespace DeconTools.Workflows.Backend.Core
                 reportProgress("NETAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETAverage.ToString("0.00000"));
                 reportProgress("NETStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETStDev.ToString("0.00000"));
                 reportProgress("---------------- END OF Alignment info -------------");
+
+
 
             }
 
@@ -378,11 +386,10 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            //Retrieve alignment data
+            //Retrieve alignment data if it exists
             CopyAlignmentInfoIfExists();
 
-            //apply mass calibration and NET alignment
-            performAlignment();
+
 
 
             //check and load chrom source data (_peaks.txt)
@@ -436,11 +443,13 @@ namespace DeconTools.Workflows.Backend.Core
 
                 foreach (var file in datasetRelatedFiles)
                 {
-                    if (file.Name.Contains("_MZAlignment") || file.Name.Contains("_NETAlignment"))
+                    if (file.Name.ToLower() == Run.DatasetName.ToLower() + "_mzalignment.txt" || file.Name.ToLower() == Run.DatasetName.ToLower() + "_netalignment.txt")
                     {
-
-                        file.CopyTo(Run.DataSetPath + Path.DirectorySeparatorChar + file.Name, true);
-
+                        string targetFileName = Run.DataSetPath + Path.DirectorySeparatorChar + file.Name;
+                        if (!File.Exists(targetFileName))
+                        {
+                            file.CopyTo(Run.DataSetPath + Path.DirectorySeparatorChar + file.Name, true);
+                        }
                     }
 
 

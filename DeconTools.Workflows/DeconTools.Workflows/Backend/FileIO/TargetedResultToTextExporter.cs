@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.ScanLCEnd);
             sb.Append(Delimiter);
-            sb.Append(result.NET.ToString("0.0000"));
+            sb.Append(result.NET.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(result.NETError.ToString("0.000000"));
             sb.Append(Delimiter);
@@ -67,6 +67,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(result.NumQualityChromPeaksWithinTol);
             sb.Append(Delimiter);
             sb.Append(result.MonoMass.ToString("0.00000"));
+            sb.Append(Delimiter);
+            sb.Append(result.MonoMassCalibrated.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(result.MassErrorInPPM.ToString("0.00"));
             sb.Append(Delimiter);
@@ -110,7 +112,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("MonoisotopicMass");
             sb.Append(Delimiter);
-            sb.Append("MassError");
+            sb.Append("MonoisotopicMassCalibrated");
+            sb.Append(Delimiter);
+            sb.Append("MassErrorInPPM");
             sb.Append(Delimiter);
             sb.Append("MonoMZ");
             sb.Append(Delimiter);

@@ -55,14 +55,17 @@
     <Compile Include="AlignmentTests\AlignmentResults_Tests.cs" />
     <Compile Include="AlignmentTests\AlignmentTests.cs" />
     <Compile Include="AlignmentTests\NETAndMassAlignerParameterTesting.cs" />
+    <Compile Include="AlignmentTests\NETAndMassAlignerTests.cs" />
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflow_problemCases.cs" />

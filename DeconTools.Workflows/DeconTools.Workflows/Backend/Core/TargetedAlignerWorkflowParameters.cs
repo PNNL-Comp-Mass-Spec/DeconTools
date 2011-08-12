@@ -35,6 +35,8 @@ namespace DeconTools.Workflows.Backend.Core
             this.UpperFitScoreAllowedCriteria = 0.1;
             this.MinimumChromPeakIntensityCriteria = 2.5e5f;
             this.IScoreAllowedCriteria = 0.15;
+            this.MultipleHighQualityMatchesAreAllowed = false;
+
             
 
         }

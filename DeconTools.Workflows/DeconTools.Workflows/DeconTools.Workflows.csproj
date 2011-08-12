@@ -90,6 +90,7 @@
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
     <Compile Include="Backend\Results\UnlabelledTargetedResult.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
+    <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

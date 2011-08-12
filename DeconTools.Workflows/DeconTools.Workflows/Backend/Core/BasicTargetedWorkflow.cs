@@ -103,6 +103,7 @@ namespace DeconTools.Workflows.Backend.Core
             smartchrompeakSelector.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
             smartchrompeakSelector.NumScansToSum = _workflowParameters.NumMSScansToSum;
             smartchrompeakSelector.NumChromPeaksAllowed = 10;
+            smartchrompeakSelector.MultipleHighQualityMatchesAreAllowed = _workflowParameters.MultipleHighQualityMatchesAreAllowed;
 
             chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelector);
 
@@ -162,6 +163,11 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExecuteTask(chromPeakSelector);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
+
+                if (this.ChromPeakSelected == null)
+                {
+                    this.Result.ResetMassSpectrumRelatedInfo();
+                }
 
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);

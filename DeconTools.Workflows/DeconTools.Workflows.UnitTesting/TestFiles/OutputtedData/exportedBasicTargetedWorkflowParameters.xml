@@ -11,6 +11,7 @@
   <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
   <MSToleranceInPPM>10</MSToleranceInPPM>
+  <MultipleHighQualityMatchesAreAllowed>true</MultipleHighQualityMatchesAreAllowed>
   <NumChromPeaksAllowedDuringSelection>20</NumChromPeaksAllowedDuringSelection>
   <NumMSScansToSum>1</NumMSScansToSum>
   <ResultType>BASIC_MASSTAG_RESULT</ResultType>

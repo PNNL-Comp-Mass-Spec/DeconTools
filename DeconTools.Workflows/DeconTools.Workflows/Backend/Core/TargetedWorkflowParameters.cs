@@ -46,6 +46,15 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public int NumChromPeaksAllowedDuringSelection { get; set; }
 
+        /// <summary>
+        /// If true, and if there are multiple high quality Features found for a given mass tag, will select the most abundant targeted Feature found within the given tolerances
+        /// If false, and if there are multiple high quality Features, will reject them all and report no Feature found. This is a way of being very strict. Good for targeted Alignment
+        /// Default = true;
+        /// 
+        /// </summary>
+        public bool MultipleHighQualityMatchesAreAllowed { get; set; }
+
+
         #endregion
 
         #region Public Methods
@@ -106,5 +115,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return (T)Enum.Parse(typeof(T), name);
         }
+
+        
     }
 }

@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.NumMSScansToSum = 1;
             this.NumChromPeaksAllowedDuringSelection = 20;
 
-
+            this.MultipleHighQualityMatchesAreAllowed = true;
             this.ChromGenSourceDataPeakBR = 2;
             this.ChromGenSourceDataSigNoise = 3;
 

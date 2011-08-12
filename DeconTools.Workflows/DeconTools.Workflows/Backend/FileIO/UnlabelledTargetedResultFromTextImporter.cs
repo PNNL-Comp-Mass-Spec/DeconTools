@@ -5,7 +5,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class UnlabelledTargetedResultFromTextImporter : TargetedResultFromTextImporter
     {
-
+        
         #region Constructors
         public UnlabelledTargetedResultFromTextImporter(string filename) : base(filename) { }
 
@@ -30,8 +30,13 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IScore = ParseFloatField(LookupData(processedData, iscoreHeaders));
             result.MassTagID = ParseLongField(LookupData(processedData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(processedData, monomassHeaders));
+            result.MonoMassCalibrated = ParseDoubleField(LookupData(processedData, monomassCalibratedHeaders));
+            result.MassErrorInPPM = ParseDoubleField(LookupData(processedData, massErrorHeaders));
             result.MonoMZ = ParseDoubleField(LookupData(processedData, mzHeaders));
             result.NET = ParseFloatField(LookupData(processedData, netHeaders));
+            result.NETError = ParseFloatField(LookupData(processedData, netErrorHeaders));
+         
+
             result.NumChromPeaksWithinTol = ParseIntField(LookupData(processedData, numchromPeaksWithinTolHeaders));
             result.NumQualityChromPeaksWithinTol = ParseIntField(LookupData(processedData, numQualitychromPeaksWithinTolHeaders));
             result.ScanLC = ParseIntField(LookupData(processedData, scanHeaders));

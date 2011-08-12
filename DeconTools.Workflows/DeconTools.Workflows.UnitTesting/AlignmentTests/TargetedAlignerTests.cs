@@ -54,7 +54,7 @@ namespace DeconTools.Workflows.UnitTesting
             Console.WriteLine(aligner.GetAlignmentReport1());
 
             Assert.IsNotNull(run.AlignmentInfo);
-            Assert.AreEqual(-3.6m, (decimal)(Math.Round(run.AlignmentInfo.GetPPMShiftFromMZ(600.0f), 1)));
+            Assert.AreEqual(-4.2m, (decimal)(Math.Round(run.AlignmentInfo.GetPPMShiftFromMZ(600.0f), 1)));
 
         }
 

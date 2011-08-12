@@ -103,13 +103,20 @@ namespace DeconTools.Workflows.Backend.Results
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();
             tr.IntensityMostAbundantPeak = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.getMostIntensePeak().Height;
             tr.IScore = (float)result.InterferenceScore;
-            tr.MonoMass = result.IsotopicProfile == null ? 0f: result.IsotopicProfile.MonoIsotopicMass;
-            tr.MonoMZ = result.IsotopicProfile == null ? 0f : result.IsotopicProfile.MonoPeakMZ;
+            tr.MonoMass = result.IsotopicProfile == null ? 0d: result.IsotopicProfile.MonoIsotopicMass;
+            tr.MonoMZ = result.IsotopicProfile == null ? 0d : result.IsotopicProfile.MonoPeakMZ;
+            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d: result.GetMassAlignmentErrorInPPM();
+            tr.MonoMassCalibrated = result.IsotopicProfile == null ? 0d : -1 * ((result.MassTag.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) - result.MassTag.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
+
+            tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();
+            tr.NETError = result.MassTag.NETVal - tr.NET;
+            
+            
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
             tr.NumQualityChromPeaksWithinTol = result.NumQualityChromPeaks;
             tr.FitScore = (float)result.Score;
-            tr.ScanLC = result.GetScanNum();
+            
             if (result.ChromPeakSelected != null)
             {
                 double sigma = result.ChromPeakSelected.Width / 2.35;

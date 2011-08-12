@@ -12,9 +12,8 @@ namespace DeconTools.Workflows.Backend.Results
         public int ScanLCEnd { get; set; }
 
         public float NET { get; set; }
-        public float NETAligned { get; set; }
         public float NETError { get; set; }
-
+     
 
         public int NumChromPeaksWithinTol { get; set; }
         public int NumQualityChromPeaksWithinTol { get; set; }

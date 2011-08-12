@@ -123,5 +123,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void issue0725_targetedAlignmentProblems()
+        {
+
+            string executorParameterFile = @"D:\Data\Orbitrap\Issue0725_badAlignment\Issue0725_executorWorkflow.xml";
+            string datasetPath = @"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW";
+
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
+            executor.Execute();
+
+
+        }
+
+
     }
 }

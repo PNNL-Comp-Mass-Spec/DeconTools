@@ -8,6 +8,7 @@ using DeconTools.Backend.FileIO;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
+using DeconTools.Workflows.Backend.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -25,7 +26,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         private BackgroundWorker _backgroundWorker;
-     
+        
+
         #region Constructors
 
         public TargetedAlignerWorkflow(WorkflowParameters workflowParameters)
@@ -83,6 +85,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<MassTag> MassTagList { get; set; }
 
+        public bool outputToConsole { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -91,7 +95,9 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(Run != null, "Run has not been defined.");
 
-            _workflow = new BasicTargetedWorkflow(Run, _parameters);
+
+
+
 
 
             List<MassTagResultBase> resultsPassingCriteria;
@@ -111,6 +117,66 @@ namespace DeconTools.Workflows.Backend.Core
                 Check.Require(Run.ResultCollection.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0, "Dataset's Peak-level data is empty. This is needed for chromatogram generation.");
 
                 //execute targeted feature finding to find the massTags in the raw data
+
+                _workflow = new BasicTargetedWorkflow(Run, _parameters);
+
+                List<MassTagResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
+                firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
+
+                List<double> ppmErrors = getMassErrors(firstPassResults);
+                List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
+
+                double avg;
+                if (filteredUsingGrubbsPPMErrors.Count == 0)
+                {
+                    avg = double.MaxValue;
+
+                }
+                else
+                {
+                    avg = filteredUsingGrubbsPPMErrors.Average();
+                }
+
+                double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
+
+
+
+
+
+
+                bool canUseNarrowTolerances = (ppmErrors.Count > 12 && avg < 10);
+
+                if (canUseNarrowTolerances)
+                {
+
+
+                    double tolerance = Math.Abs(avg) + 2 * stdev;
+
+                    this._parameters.ChromToleranceInPPM = (int)Math.Ceiling(tolerance);
+                    this._parameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
+
+                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avg.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+                    reportProgess(0, progressString);
+
+                    progressString = "NOTE: using the new PPMTolerance=  " + this._parameters.ChromToleranceInPPM;
+                    reportProgess(0, progressString);
+                    
+                    _workflow = new BasicTargetedWorkflow(Run, _parameters);
+
+                }
+                else
+                {
+                  
+                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avg.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+                    reportProgess(0, progressString);
+                    
+                    progressString = "Cannot use narrow ppm tolerances during NET/Mass alignment. Either the massError was too high or couldn't find enough strict matches.";
+                    reportProgess(0, progressString);
+
+                    // find a way to work with datasets with masses way off but low stdev
+                }
+
+                
                 resultsPassingCriteria = FindTargetsThatPassCriteria();
 
                 _targetedResultRepository.AddResults(resultsPassingCriteria);
@@ -136,6 +202,96 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
         }
+
+        private List<double> getMassErrors(List<MassTagResultBase> firstPassResults)
+        {
+            List<double> ppmErrors = new List<double>();
+
+
+            foreach (var result in firstPassResults)
+            {
+
+
+                double theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
+                double observedMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+
+
+                double ppmError = (theorMZ - observedMZ) / theorMZ * 1e6;
+
+                ppmErrors.Add(ppmError);
+
+
+            }
+
+            return ppmErrors;
+        }
+
+        private List<MassTagResultBase> FindTargetsThatPassWideMassTolerance(double netGrouping)
+        {
+            Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
+            Check.Require(Run != null, "Run is null");
+
+
+
+
+            List<MassTagResultBase> resultsPassingCriteria = new List<MassTagResultBase>();
+
+            var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
+
+            var filteredMasstags = (from n in this.MassTagList
+                                    where n.NETVal >= netgrouping1.Lower && n.NETVal < netgrouping1.Upper
+                                    select n);
+
+            int numPassingMassTagsInGrouping = 0;
+            int numFailingMassTagsInGrouping = 0;
+
+
+            foreach (var massTag in filteredMasstags)
+            {
+                Run.CurrentMassTag = massTag;
+                _workflow.Execute();
+
+                var result = Run.ResultCollection.GetMassTagResult(massTag);
+
+                if (resultPassesStrictCriteria(result))
+                {
+
+                    double theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
+                    double obsMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+                    double ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
+
+                    string progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NETVal.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
+                    reportProgess(0, progressInfo);
+
+                    //reportProgess(progressPercentage, progressInfo);
+                    resultsPassingCriteria.Add(result);   //where passing results are added
+                    numPassingMassTagsInGrouping++;
+                }
+                else
+                {
+                    numFailingMassTagsInGrouping++;
+                }
+
+                if (numPassingMassTagsInGrouping >= 10)
+                {
+                    break;   //found enough massTags in this grouping
+                }
+
+                if (numFailingMassTagsInGrouping > _parameters.NumMaxAttemptsPerNETGrouping)
+                {
+                    break;  // too many failed massTags in this grouping. Will move on to next grouping
+                }
+
+            }
+
+            return resultsPassingCriteria;
+
+
+
+
+        }
+
+
 
 
 
@@ -288,8 +444,8 @@ namespace DeconTools.Workflows.Backend.Core
                 NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
                 netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
-                
-               // AlignmentInfoToTextExporter
+
+                // AlignmentInfoToTextExporter
 
 
             }
@@ -327,7 +483,12 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (_backgroundWorker == null)
             {
-                //Console.WriteLine(DateTime.Now + "\t" + progressString);
+                if (outputToConsole)
+                {
+                    Console.WriteLine(DateTime.Now + "\t" + progressString);
+
+                }
+                
             }
             else
             {
@@ -336,6 +497,31 @@ namespace DeconTools.Workflows.Backend.Core
                 _backgroundWorker.ReportProgress(progressPercentage, progressString);
             }
         }
+
+
+        private bool resultPassesStrictCriteria(MassTagResultBase result)
+        {
+            bool passesCriteria = true;
+
+            if (result.FailedResult) return false;
+
+            if (result.ChromPeakSelected == null) return false;
+
+            if (result.IsotopicProfile == null) return false;
+
+            if (result.NumQualityChromPeaks > 1) return false;
+
+            if (result.Flags.Count > 0) return false;
+
+            if (result.ChromPeakSelected.Height < _parameters.MinimumChromPeakIntensityCriteria) return false;
+
+            if (result.Score > _parameters.UpperFitScoreAllowedCriteria) return false;
+
+            if (result.InterferenceScore > _parameters.IScoreAllowedCriteria) return false;
+
+            return passesCriteria;
+        }
+
 
         private bool resultPassesCriteria(MassTagResultBase result)
         {
