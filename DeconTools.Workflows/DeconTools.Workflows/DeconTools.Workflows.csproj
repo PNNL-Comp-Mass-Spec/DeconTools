@@ -89,6 +89,7 @@
     <Compile Include="Backend\Results\TargetedResult.cs" />
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
     <Compile Include="Backend\Results\UnlabelledTargetedResult.cs" />
+    <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Class1.cs" />

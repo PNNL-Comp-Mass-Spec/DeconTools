@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.Utilities;
+
 
 namespace TargetedWorkflowManagerConsole
 {
@@ -25,49 +28,53 @@ namespace TargetedWorkflowManagerConsole
 
             if (args.Length == 2)
             {
-
-                string fileContainingDatasetPaths = args[0];
                 string parameterFile = args[1];
+                string fileContainingDatasetNames = args[0];
 
+                BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+                executorParameters.LoadParameters(args[1]);
 
-                if (!File.Exists(fileContainingDatasetPaths))
+                
+
+                using (StreamReader reader = new StreamReader(fileContainingDatasetNames))
                 {
-                    Console.WriteLine("Problem with the inputted path of the file containing list of target datasets (argument 1). File does not exist.");
-                    return;
-                }
-                else
-                {
-                    using (StreamReader reader = new StreamReader(fileContainingDatasetPaths))
+                    int datasetCounter = 0;
+                    while (reader.Peek() != -1)
                     {
-                        int datasetCounter = 0;
-                        while (reader.Peek()!=-1)
+                        datasetCounter++;
+                        string datsetName = reader.ReadLine();
+
+                        DatasetUtilities datasetutil = new DatasetUtilities();
+
+                        string currentDatasetPath = datasetutil.GetDatasetPath(datsetName) + "\\" + datsetName + ".raw";
+
+                        if (currentDatasetPath.Contains("purged"))
                         {
-                            datasetCounter++;
-                            string currentDatasetPath = reader.ReadLine();
-               
-                            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-                            //processStartInfo.UseShellExecute = false;
-
-                            processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
-                            processStartInfo.Arguments = currentDatasetPath + " " + parameterFile;
-
-                            try
-                            {
-                                Console.WriteLine("Working on dataset " + datasetCounter + "\t" + currentDatasetPath);
-                                Process p=  Process.Start(processStartInfo);
-                                p.WaitForExit();
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("!!!!!!!!!!!!  Dataset FAILED. See log file for details. Error:");
-                                Console.WriteLine(ex.Message);
-                                Console.WriteLine(ex.StackTrace);
-                                
-                            }
-                            
-                            
+                            currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
                         }
+
                         
+
+                        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+                        //processStartInfo.UseShellExecute = false;
+
+                        processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
+                        processStartInfo.Arguments = currentDatasetPath + " " + parameterFile;
+
+                        try
+                        {
+                            Console.WriteLine("Working on dataset " + datasetCounter + "\t" + currentDatasetPath);
+                            Process p = Process.Start(processStartInfo);
+                            p.WaitForExit();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("!!!!!!!!!!!!  Dataset FAILED. See log file for details. Error:");
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine(ex.StackTrace);
+
+                        }
+
                     }
 
                 }

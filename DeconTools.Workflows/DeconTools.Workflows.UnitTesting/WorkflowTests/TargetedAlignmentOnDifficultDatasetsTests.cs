@@ -39,6 +39,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedAlignerWorkflow aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.SetMassTags(massTagFile);
+            aligner.outputToConsole = true;
             aligner.Execute();
         }
 

@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         private BackgroundWorker _backgroundWorker;
-        
+
 
         #region Constructors
 
@@ -123,39 +123,26 @@ namespace DeconTools.Workflows.Backend.Core
                 List<MassTagResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
                 firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
 
-                List<double> ppmErrors = getMassErrors(firstPassResults);
-                List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
-
-                double avg;
-                if (filteredUsingGrubbsPPMErrors.Count == 0)
-                {
-                    avg = double.MaxValue;
-
-                }
-                else
-                {
-                    avg = filteredUsingGrubbsPPMErrors.Average();
-                }
-
-                double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
+                     List<double> ppmErrors = getMassErrors(firstPassResults);
+            List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
 
+                bool canUseNarrowTolerances = executeDecisionOnUsingTightTolerances(filteredUsingGrubbsPPMErrors);
 
-
-
-
-                bool canUseNarrowTolerances = (ppmErrors.Count > 12 && avg < 10);
+              
+               
+               
 
                 if (canUseNarrowTolerances)
                 {
+                    double avgPPMError = filteredUsingGrubbsPPMErrors.Average();
+                    double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
 
-
-                    double tolerance = Math.Abs(avg) + 2 * stdev;
-
+                    double tolerance = Math.Abs(avgPPMError) + 2 * stdev;
                     this._parameters.ChromToleranceInPPM = (int)Math.Ceiling(tolerance);
                     this._parameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
-                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avg.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     reportProgess(0, progressString);
 
                     progressString = "NOTE: using the new PPMTolerance=  " + this._parameters.ChromToleranceInPPM;
@@ -166,8 +153,17 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 else
                 {
-                  
-                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avg.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+
+                    double avgPPMError = 0;
+                    double stdev = 0;
+                    if (filteredUsingGrubbsPPMErrors.Count != 0)
+                    {
+                        avgPPMError = filteredUsingGrubbsPPMErrors.Average();
+                        stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
+                    }
+
+
+                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     reportProgess(0, progressString);
                     
                     progressString = "Cannot use narrow ppm tolerances during NET/Mass alignment. Either the massError was too high or couldn't find enough strict matches.";
@@ -200,6 +196,19 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
             }
+
+        }
+
+        private bool executeDecisionOnUsingTightTolerances(List<double> ppmErrors)
+        {
+
+            if (ppmErrors.Count < 12) return false;
+
+            double avgPPMError = ppmErrors.Average();
+
+            if (avgPPMError > 10) return false;
+
+            return true;
 
         }
 
@@ -488,7 +497,7 @@ namespace DeconTools.Workflows.Backend.Core
                     Console.WriteLine(DateTime.Now + "\t" + progressString);
 
                 }
-                
+
             }
             else
             {

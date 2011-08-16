@@ -9,10 +9,12 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         public static double GetStDev(IEnumerable<double> vals)
         {
-            double avg = vals.Average();
             double count = vals.Count();
-
             if (count < 3) return double.MinValue;
+
+            double avg = vals.Average();
+
+            
 
             double sumSquareDiffs = 0;
 
@@ -30,6 +32,10 @@ namespace DeconTools.Workflows.Backend.Utilities
         public static List<double> filterWithGrubbsApplied(List<double> vals)
         {
             List<double> filteredVals = new List<double>();
+            if (vals.Count < 3)
+            {
+                return vals;
+            }
 
             double stdev = MathUtilities.GetStDev(vals);
             double average = vals.Average();
