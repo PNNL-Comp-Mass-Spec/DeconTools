@@ -64,6 +64,7 @@
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
+    <Compile Include="WorkflowTests\O16O18WorkflowTests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />

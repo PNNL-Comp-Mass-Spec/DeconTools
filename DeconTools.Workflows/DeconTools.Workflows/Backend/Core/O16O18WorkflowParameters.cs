@@ -9,7 +9,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public O16O18WorkflowParameters()
         {
-            this.ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            this.ChromGeneratorMode = ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             this.ChromNETTolerance = 0.025;
             this.ChromPeakDetectorPeakBR = 2;
             this.ChromPeakDetectorSigNoise = 2;
