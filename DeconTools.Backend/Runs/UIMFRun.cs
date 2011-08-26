@@ -499,7 +499,7 @@ namespace DeconTools.Backend.Runs
             int[] scanValues = null;
             int[] intensityVals = null;
 
-            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameStartIndex, frameStopIndex, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameStartIndex, frameStopIndex, this.FrameTypeForMS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
             if (scanValues == null || scanValues.Length == 0)
             {

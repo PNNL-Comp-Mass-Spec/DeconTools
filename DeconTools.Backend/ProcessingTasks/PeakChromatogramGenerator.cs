@@ -15,7 +15,8 @@ namespace DeconTools.Backend.ProcessingTasks
     {
         MONOISOTOPIC_PEAK,
         MOST_ABUNDANT_PEAK,
-        TOP_N_PEAKS
+        TOP_N_PEAKS,
+        O16O18_THREE_MONOPEAKS
     }
 
     public enum IsotopicProfileType
@@ -154,6 +155,22 @@ namespace DeconTools.Backend.ProcessingTasks
                 chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
 
             }
+            else if (ChromatogramGeneratorMode== ProcessingTasks.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
+            {
+                List<double> targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
+
+                if (resultColl.Run.MassIsAligned)
+                {
+                    for (int i = 0; i < targetMZList.Count; i++)
+                    {
+                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultColl.Run);
+                    }
+
+                }
+
+                ChromatogramGenerator chromGen = new ChromatogramGenerator();
+                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+            }
             else
             {
                 double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
@@ -224,6 +241,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
+  
+
         private double getAlignedMZValue(double targetMZ, Run run)
         {
             if (run == null) return targetMZ;
@@ -239,7 +258,50 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-      
+        private List<double> getTargetMZListForO16O18ThreeMonoPeaks(MassTag massTag, IsotopicProfileType isotopicProfileType)
+        {
+            List<double> targetMZList = new List<double>();
+
+            IsotopicProfile iso = new IsotopicProfile();
+            switch (isotopicProfileType)
+            {
+                case IsotopicProfileType.UNLABELLED:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+                case IsotopicProfileType.LABELLED:
+                    iso = massTag.IsotopicProfileLabelled;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+                default:
+                    iso = massTag.IsotopicProfile;
+                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+                    break;
+            }
+
+
+            if (iso.Peaklist.Count > 0)
+            {
+                targetMZList.Add(iso.Peaklist[0].XValue);
+            }
+
+            if (iso.Peaklist.Count > 2)
+            {
+                targetMZList.Add(iso.Peaklist[2].XValue);
+            }
+
+            if (iso.Peaklist.Count > 4)
+            {
+                targetMZList.Add(iso.Peaklist[4].XValue);
+            }
+
+            return targetMZList;
+            
+
+
+
+
+        }
 
         private List<double> getTargetMZListForTopNPeaks(MassTag massTag, IsotopicProfileType isotopicProfileTarget)
         {

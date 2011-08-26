@@ -43,7 +43,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            return "ID\tMonoisotopic_Mass\tSequence\tZ\tObsCount\tMZ\tNET\tRef_ID\tDescription\n";
+            return "ID\tMonoisotopic_Mass\tSequence\tZ\tObsCount\tMZ\tNET\tRef_ID\tDescription";
         }
     }
 }
