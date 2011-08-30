@@ -62,6 +62,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.IntensityTheorI2 = getIntensityFromIso(result.MassTag.IsotopicProfile, 2);
             r.IntensityTheorI4 = getIntensityFromIso(result.MassTag.IsotopicProfile, 4);
             r.IntensityI4Adjusted = result.IntensityI4Adjusted;
+            r.Ratio = result.RatioO16O18;
         }
 
         private static float getIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)

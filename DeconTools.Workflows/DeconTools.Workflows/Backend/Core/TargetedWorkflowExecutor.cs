@@ -183,7 +183,7 @@ namespace DeconTools.Workflows.Backend.Core
             string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
-            TargetedResultToTextExporter exporter = createExporter(outputFileName);
+            TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters,outputFileName);
             exporter.ExportResults(resultRepository.Results);
 
             HandleAlignmentInfoFiles();

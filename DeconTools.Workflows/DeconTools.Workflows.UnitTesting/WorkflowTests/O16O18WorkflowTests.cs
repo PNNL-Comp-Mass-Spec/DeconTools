@@ -94,7 +94,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //{
             //    Console.WriteLine("peak\t" + item.XValue.ToString("0.0") + "\t" + item.Height.ToString("0"));
             //} 
-            TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
+           // TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
 
             parameters.ChromGeneratorMode = DeconTools.Backend.ProcessingTasks.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             workflow = new O16O18Workflow(run, parameters);
@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine("MonoChromMode PeaksWithinTol = " + result.NumChromPeaksWithinTolerance);
             Console.WriteLine("O16O18 ChromMode HQPeaksWithinTol = " + result.NumQualityChromPeaks);
-            TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
+           // TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
 
             //foreach (var item in workflow.ChromPeaksDetected)
             //{

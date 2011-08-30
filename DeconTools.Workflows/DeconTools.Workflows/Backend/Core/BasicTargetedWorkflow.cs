@@ -164,11 +164,9 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecuteTask(chromPeakSelector);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
 
-                if (this.ChromPeakSelected == null)
-                {
-                    this.Result.ResetMassSpectrumRelatedInfo();
-                }
-
+                
+                this.Result.ResetMassSpectrumRelatedInfo();
+                
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 

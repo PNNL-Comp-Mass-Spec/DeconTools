@@ -22,6 +22,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Delimiter);
+            sb.Append(o16o18result.IntensityTheorI0);
+            sb.Append(Delimiter);
+            sb.Append(o16o18result.IntensityTheorI2);
+            sb.Append(Delimiter);
+            sb.Append(o16o18result.IntensityTheorI4);
+            sb.Append(Delimiter);
             sb.Append(o16o18result.IntensityI0);
             sb.Append(Delimiter);
             sb.Append(o16o18result.IntensityI2);

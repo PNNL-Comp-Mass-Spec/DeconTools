@@ -2,11 +2,54 @@
 using System.Text;
 using DeconTools.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
+using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
     public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResult>
     {
+
+
+        public static TargetedResultToTextExporter CreateExporter(WorkflowParameters workflowParameters, string outputFileName)
+        {
+            TargetedResultToTextExporter exporter;
+
+            switch (workflowParameters.WorkflowType)
+            {
+                case Globals.TargetedWorkflowTypes.Undefined:
+                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                    break;
+                case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
+                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                    break;
+                case Globals.TargetedWorkflowTypes.O16O18Targeted1:
+                    exporter = new O16O18TargetedResultToTextExporter(outputFileName);
+                    break;
+                case Globals.TargetedWorkflowTypes.N14N15Targeted1:
+                    throw new NotImplementedException("This hasn't been implemented for N14N15 data");
+                    break;
+                case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
+                    throw new NotImplementedException("Cannot create exporter for this type of workflow");
+                    break;
+                case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
+                    throw new NotImplementedException("Cannot create exporter for this type of workflow");
+                    break;
+                case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
+                    throw new NotImplementedException("Cannot create exporter for this type of workflow");
+                    break;
+                default:
+                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                    break;
+            }
+
+            return exporter;
+
+
+
+        }
+
+
+
 
         #region Constructors
         public TargetedResultToTextExporter(string filename) : base(filename, '\t') { }

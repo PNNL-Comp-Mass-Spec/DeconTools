@@ -4,11 +4,13 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -23,6 +25,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private DeconToolsPeakDetector msPeakDetector;
         private O16O18TargetedIterativeFeatureFinder o16o18FeatureFinder;
+        private MassTagFitScoreCalculator fitScoreCalc;
         private O16O18QuantifierTask quant;
 
         #region Constructors
@@ -76,16 +79,16 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecuteTask(chromPeakSelector);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
 
-                if (this.ChromPeakSelected == null)
-                {
-                    this.Result.ResetMassSpectrumRelatedInfo();
-                }
-
+                
+                this.Result.ResetMassSpectrumRelatedInfo();
+                
 
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 
                 ExecuteTask(o16o18FeatureFinder);
+                ExecuteTask(fitScoreCalc);
+                ExecuteTask(resultValidator);
 
                 ExecuteTask(quant);
 
@@ -135,6 +138,8 @@ namespace DeconTools.Workflows.Backend.Core
             o16o18FeatureFinder = new O16O18TargetedIterativeFeatureFinder(iterativeTFFParameters);
 
             quant = new O16O18QuantifierTask();
+            fitScoreCalc = new MassTagFitScoreCalculator();
+            resultValidator = new ResultValidatorTask();
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
@@ -169,6 +174,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         TargetedWorkflowParameters _workflowParameters;
+        private ResultValidatorTask resultValidator;
         public override WorkflowParameters WorkflowParameters
         {
             get
