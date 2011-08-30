@@ -90,7 +90,6 @@ namespace DeconConsole
             {
 
                 Console.WriteLine(ex.Message);
-                Console.ReadLine();
                 return;
             }
             Console.WriteLine();
@@ -225,10 +224,8 @@ namespace DeconConsole
                 Console.WriteLine("Inputted filename does not exist");
             }
             Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Hit <enter> to continue");
-            Console.ReadLine();
-
+         
+         
 
         }
 
@@ -286,13 +283,6 @@ namespace DeconConsole
 
             Console.WriteLine();
             Console.WriteLine();
-
-
-
-            Console.WriteLine("Hit <enter> to continue");
-
-            Console.ReadLine();
-
 
         }
     }

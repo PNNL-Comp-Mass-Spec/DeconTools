@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using NUnit.Framework;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend;
-using System.IO;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2
 {
@@ -223,6 +222,31 @@ namespace DeconTools.UnitTesting2
             }
 
             Console.Write(sb.ToString());
+
+        }
+
+
+        public static string DisplayRunInformation(Run run)
+        {
+            StringBuilder sb = new StringBuilder();
+            string delim = Environment.NewLine;
+
+            sb.Append("Dataset name = " + run.DatasetName);
+            sb.Append(delim);
+            sb.Append("Datatset path = " + run.DataSetPath);
+            sb.Append(delim);
+            sb.Append("MinScan = " + run.MinScan);
+            sb.Append(delim);
+            sb.Append("MaxScan = " + run.MaxScan);
+            sb.Append(delim);
+            sb.Append("FileType = " + run.MSFileType);
+            sb.Append(delim);
+            sb.Append("MassIsAligned = " + run.MassIsAligned);
+            sb.Append(delim);
+            sb.Append("NETIsAligned = " + run.NETIsAligned);
+
+            return sb.ToString();
+
 
         }
 
