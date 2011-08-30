@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Utilities;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
@@ -65,7 +61,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             result.IsotopicProfile = foundO16O18Profile;
 
-
+            resultColl.IsosResultBin.Add(result);
 
 
         }

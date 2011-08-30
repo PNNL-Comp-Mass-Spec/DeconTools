@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -79,6 +77,15 @@ namespace DeconTools.Backend.Runs
             double RTForAGivenScan = 0;
             xraw.RTFromScanNum(scanNum, ref RTForAGivenScan);
             return RTForAGivenScan;
+        }
+
+
+        internal override int GetMaxPossibleScanIndex()
+        {
+            int maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
+            if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;
+
+            return maxpossibleScanIndex;
         }
 
       
