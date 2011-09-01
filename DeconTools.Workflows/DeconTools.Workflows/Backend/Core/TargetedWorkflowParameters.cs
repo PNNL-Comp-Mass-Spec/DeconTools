@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
         public double MSPeakDetectorSigNoise { get; set; }
         public double MSToleranceInPPM { get; set; }
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
-        public DeconTools.Backend.Globals.MassTagResultType ResultType { get; set; }
+        public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
 
 
 

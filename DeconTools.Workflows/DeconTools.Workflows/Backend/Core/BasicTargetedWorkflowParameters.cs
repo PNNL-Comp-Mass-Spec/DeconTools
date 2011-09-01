@@ -24,7 +24,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.ChromGenSourceDataPeakBR = 2;
             this.ChromGenSourceDataSigNoise = 3;
 
-            this.ResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
+            this.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
         }
 
         public override Globals.TargetedWorkflowTypes WorkflowType

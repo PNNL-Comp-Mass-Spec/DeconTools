@@ -171,7 +171,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
-            this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 
             ValidateParameters();
 

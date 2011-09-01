@@ -24,7 +24,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.ChromGenSourceDataPeakBR = 2;
             this.ChromGenSourceDataSigNoise = 3;
 
-            this.ResultType = DeconTools.Backend.Globals.MassTagResultType.O16O18_MASSTAG_RESULT;
+            this.ResultType = DeconTools.Backend.Globals.ResultType.O16O18_TARGETED_RESULT;
 
         }
         #endregion

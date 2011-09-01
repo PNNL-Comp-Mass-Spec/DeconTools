@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             ResetStoredData();
 
-            this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.O16O18_MASSTAG_RESULT;
+            this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.O16O18_TARGETED_RESULT;
 
 
 

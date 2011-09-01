@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.NumPeaksUsedInQuant = 3;
             this.TargetedFeatureFinderIsotopicProfileTargetType = IsotopicProfileType.LABELLED;
             this.TargetedFeatureFinderToleranceInPPM = this.MSToleranceInPPM;
-            this.ResultType = DeconTools.Backend.Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            this.ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 
             this.SmartChromSelectorPeakBR = 5;
             this.SmartChromSelectorPeakSigNoiseRatio = 3;

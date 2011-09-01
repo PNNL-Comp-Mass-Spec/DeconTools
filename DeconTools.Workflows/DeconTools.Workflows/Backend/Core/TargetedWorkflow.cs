@@ -98,7 +98,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (this.WorkflowParameters is TargetedWorkflowParameters)
             {
-                this.Run.ResultCollection.MassTagResultType = ((TargetedWorkflowParameters)this.WorkflowParameters).ResultType;
+                this.Run.ResultCollection.ResultType = ((TargetedWorkflowParameters)this.WorkflowParameters).ResultType;
             }
         }
 

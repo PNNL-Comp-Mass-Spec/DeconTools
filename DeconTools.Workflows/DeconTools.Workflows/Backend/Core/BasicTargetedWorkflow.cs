@@ -141,7 +141,7 @@ namespace DeconTools.Workflows.Backend.Core
             //TODO: remove this later:
             //this.Run.CreateDefaultScanToNETAlignmentData();
 
-            this.Run.ResultCollection.MassTagResultType = DeconTools.Backend.Globals.MassTagResultType.BASIC_MASSTAG_RESULT;
+            this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
 
 
             ResetStoredData();
