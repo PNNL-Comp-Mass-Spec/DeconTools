@@ -53,7 +53,7 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
 
 
 
-            run.ResultCollection.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            run.ResultCollection.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
             List<MSPeakResult> masterMSPeakList = run.ResultCollection.MSPeakResultList;
 
 

@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. Mass tags haven't been defined.", this.Name));
 
-            resultColl.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            resultColl.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
             featureGenerator.GenerateTheorFeature(resultColl.Run.CurrentMassTag);   //generate theor profile for unlabeled feature
             IsotopicProfile labeledProfile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(resultColl.Run.CurrentMassTag, 0.005);

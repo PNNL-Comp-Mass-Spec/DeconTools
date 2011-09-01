@@ -14,9 +14,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
 
         #region Properties
-        public abstract char Delimiter { get; set; }
+        public virtual char Delimiter { get; set; }
 
         public string FileName { get; set; }
+
+        public override int TriggerToExport {get;set;}
+       
 
         #endregion
 

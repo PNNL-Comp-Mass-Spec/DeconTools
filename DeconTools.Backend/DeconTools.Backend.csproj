@@ -132,6 +132,7 @@
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />
     <Compile Include="Core\MassAlignmentDataItem.cs" />
+    <Compile Include="Core\O16O18IsosResult.cs" />
     <Compile Include="Core\PeakChrom.cs" />
     <Compile Include="Core\ElutingPeak.cs" />
     <Compile Include="Core\IsotopicProfileChromData.cs" />
@@ -177,8 +178,10 @@
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
+    <Compile Include="ProcessingTasks\O16O18PeakDataAppender.cs" />
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\O16O18IsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\IsotopicProfileInterferenceScorer.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\LabelledIsotopicProfileScorer.cs" />

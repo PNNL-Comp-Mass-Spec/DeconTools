@@ -1,4 +1,5 @@
 ﻿
+using DeconTools.Backend.Runs;
 namespace DeconTools.Backend.Core
 {
     public abstract class ProjectController
@@ -32,6 +33,24 @@ namespace DeconTools.Backend.Core
                     return Globals.ExporterType.TEXT;
                     
             }
+        }
+
+
+        protected Globals.ResultType GetResultType(Run run, OldDecon2LSParameters oldDecon2LSParameters)
+        {
+
+            if (run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
+            if (run is IMFRun) return Globals.ResultType.IMS_TRADITIONAL_RESULT;
+
+            if (oldDecon2LSParameters.HornTransformParameters.O16O18Media)
+            {
+                return Globals.ResultType.O16O18_TRADITIONAL_RESULT;
+            }
+            else
+            {
+                return Globals.ResultType.BASIC_TRADITIONAL_RESULT;
+            }
+
         }
 
     }

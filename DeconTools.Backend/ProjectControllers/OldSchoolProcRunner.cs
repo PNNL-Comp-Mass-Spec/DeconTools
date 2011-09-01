@@ -100,6 +100,10 @@ namespace DeconTools.Backend
             m_run = runfactory.CreateRun(fileType, this.inputDataFilename, Project.getInstance().Parameters.OldDecon2LSParameters);
             //Project.getInstance().RunCollection.Add(m_run);
 
+
+            m_run.ResultCollection.ResultType = GetResultType(m_run, Project.getInstance().Parameters.OldDecon2LSParameters); 
+
+
             Check.Assert(m_run != null, "Processing aborted. Could not handle supplied File(s)");
             //Define ScansetCollection
 
@@ -195,6 +199,14 @@ namespace DeconTools.Backend
             Project.getInstance().TaskCollection.TaskList.Add(resultFlagger);
 
 
+            if (m_run.ResultCollection.ResultType == Globals.ResultType.O16O18_TRADITIONAL_RESULT)
+            {
+
+                Task o16o18PeakDataAppender = new O16O18PeakDataAppender();
+                Project.getInstance().TaskCollection.TaskList.Add(o16o18PeakDataAppender);
+            }
+
+
             if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ReplaceRAPIDScoreWithHornFitScore == true)
             {
                 Task fitscoreCalculator = new DeconToolsFitScoreCalculator();
@@ -219,12 +231,16 @@ namespace DeconTools.Backend
             Task scanResultUpdater = new ScanResultUpdater(Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
             Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
-            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(fileType, this.ExporterType, setIsosOutputFileName(exporterType));
+            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(m_run.ResultCollection.ResultType, this.ExporterType, setIsosOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
 
             Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, this.ExporterType, setScansOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
+
+
         }
+
+     
 
         private void createTargetMassSpectra(Run m_run)
         {

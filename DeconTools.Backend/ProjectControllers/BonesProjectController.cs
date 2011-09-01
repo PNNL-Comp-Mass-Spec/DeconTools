@@ -42,11 +42,17 @@ namespace DeconTools.Backend.Core
             RunFactory runfactory = new RunFactory();
 
 
+            Globals.ResultType resultType = Globals.ResultType.BASIC_TRADITIONAL_RESULT;
+
             //Create runs and create ScanSets
             foreach (string filename in this.m_inputDataFilenames)
             {
                 Run run;
                 run = runfactory.CreateRun(fileType, filename, Project.getInstance().Parameters.OldDecon2LSParameters);
+                run.ResultCollection.ResultType = GetResultType(run,Project.getInstance().Parameters.OldDecon2LSParameters);
+                
+                resultType= run.ResultCollection.ResultType;
+                
                 Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
                 Project.getInstance().RunCollection.Add(run);
 
@@ -83,7 +89,9 @@ namespace DeconTools.Backend.Core
             Task deconvolutor = new SimpleDecon(0.0005);
             Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
 
-            Task isosResultExporter = new IsosExporterFactory(50000).CreateIsosExporter(fileType, Globals.ExporterType.TEXT, setIsosOutputFileName(Globals.ExporterType.TEXT));
+
+
+            Task isosResultExporter = new IsosExporterFactory(50000).CreateIsosExporter(resultType, Globals.ExporterType.TEXT, setIsosOutputFileName(Globals.ExporterType.TEXT));
             Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
 
             Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, Globals.ExporterType.TEXT, setScansOutputFileName(Globals.ExporterType.TEXT));

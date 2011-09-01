@@ -101,7 +101,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             MassTag mt23140708 = n14n15Util.CreateMT23085904_Z2();
             run.CurrentMassTag = mt23140708;
-            run.ResultCollection.MassTagResultType = Globals.MassTagResultType.N14N15_MASSTAG_RESULT;
+            run.ResultCollection.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
             TomTheorFeatureGenerator theorN14FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
             theorN14FeatureGen.GenerateTheorFeature(mt23140708);

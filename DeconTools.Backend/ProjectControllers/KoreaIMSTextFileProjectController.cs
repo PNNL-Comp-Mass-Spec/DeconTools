@@ -35,6 +35,8 @@ namespace DeconTools.Backend.ProjectControllers
 
 
             Run run = new MSScanFromTextFileRun(inputFileName,'\t', 1, 2);
+            run.ResultCollection.ResultType = Globals.ResultType.BASIC_TRADITIONAL_RESULT;
+
             Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
             Project.getInstance().RunCollection.Add(run);
 

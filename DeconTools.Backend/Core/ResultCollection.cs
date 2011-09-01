@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
-using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
 {
     [Serializable]
     public class ResultCollection
     {
-
+        #region Constructors
         public ResultCollection(Run run)
         {
             this.run = run;
@@ -23,6 +22,10 @@ namespace DeconTools.Backend.Core
             this.logMessageList = new List<string>();
             this.ElutingPeakCollection = new List<ElutingPeak>();
         }
+
+        #endregion
+
+        #region Properties
 
         private Dictionary<MassTag, MassTagResultBase> massTagResultList;
         public Dictionary<MassTag, MassTagResultBase> MassTagResultList
@@ -53,7 +56,7 @@ namespace DeconTools.Backend.Core
             set { scanResultList = value; }
         }
 
-        public List<IsosResult> ResultList {get; set;}
+        public List<IsosResult> ResultList { get; set; }
 
 
         private Run run;
@@ -63,29 +66,6 @@ namespace DeconTools.Backend.Core
             set { run = value; }
         }
 
-        public ScanResult GetCurrentScanResult()
-        {
-            if (scanResultList == null || scanResultList.Count == 0) return null;
-            return this.scanResultList[scanResultList.Count - 1];
-        }
-
-
-
-        internal IsosResult CreateIsosResult()
-        {
-            IsosResult result;
-            if (this.Run is UIMFRun)
-            {
-                UIMFRun uimfRun = (UIMFRun)run;
-                result = new UIMFIsosResult(this.Run, uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
-            }
-            else
-            {
-                result = new StandardIsosResult(this.Run, this.Run.CurrentScanSet);
-            }
-            return result;
-        }
-
         private List<string> logMessageList;
         public List<string> LogMessageList
         {
@@ -93,31 +73,27 @@ namespace DeconTools.Backend.Core
             set { logMessageList = value; }
         }
 
-        private List<ElutingPeak> m_ElutingPeakCollection;  
+        private List<ElutingPeak> m_ElutingPeakCollection;
         public List<ElutingPeak> ElutingPeakCollection
         {
             get { return m_ElutingPeakCollection; }
             set { m_ElutingPeakCollection = value; }
         }
 
-        internal void AddLog(string logMessage)
+        public int MSFeatureCounter { get; set; }
+
+        //public Globals.IsosResultType ResultType { get; set; }
+
+        public Globals.ResultType ResultType { get; set; }
+
+        public int PeakCounter { get; set; }
+        #endregion
+
+        #region Public Methods
+        public ScanResult GetCurrentScanResult()
         {
-            logMessageList.Add(logMessage);
-        }
-
-
-        internal static List<IsosResult> getIsosResultsForCurrentScanSet(ResultCollection results)
-        {
-            Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
-
-
-
-            var queryList = from n in results.ResultList
-                            where n.ScanSet == results.Run.CurrentScanSet
-                            select n;
-
-
-            return queryList.ToList();
+            if (scanResultList == null || scanResultList.Count == 0) return null;
+            return this.scanResultList[scanResultList.Count - 1];
         }
 
         public int getTotalIsotopicProfiles()
@@ -133,17 +109,6 @@ namespace DeconTools.Backend.Core
             return totIsotopicProfiles;
         }
 
-        public int MSFeatureCounter { get; set; }
-
-
-        //This is the primary way to add an IsosResult
-        public void AddIsosResult(IsosResult addedResult)
-        {
-            addedResult.MSFeatureID = MSFeatureCounter;
-            MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID, as Kevin requested in an email (Jan 20/2010)
-            this.IsosResultBin.Add(addedResult);
-        }
-
         public MassTagResultBase GetMassTagResult(MassTag massTag)
         {
             if (massTagResultList.ContainsKey(massTag))
@@ -153,11 +118,18 @@ namespace DeconTools.Backend.Core
             else
             {
                 MassTagResultBase result = CreateMassTagResult(massTag);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
-                return result;  
+                return result;
             }
         }
 
-        public Globals.MassTagResultType MassTagResultType { get; set; }
+        //This is the primary way to add an IsosResult
+        public void AddIsosResult(IsosResult addedResult)
+        {
+            addedResult.MSFeatureID = MSFeatureCounter;
+            MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID, as Kevin requested in an email (Jan 20/2010)
+            this.IsosResultBin.Add(addedResult);
+        }
+
 
         public void ClearAllResults()
         {
@@ -167,48 +139,22 @@ namespace DeconTools.Backend.Core
             this.ScanResultList.Clear();
         }
 
-
-        public int PeakCounter { get; set; }
-
-        public void FillMSPeakResults()
-        {
-            if (this.Run is UIMFRun)
-            {
-                foreach (MSPeak peak in this.Run.PeakList)
-                {
-                    PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, ((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
-                    this.MSPeakResultList.Add(peakResult);
-                }
-            }
-            else
-            {
-                foreach (MSPeak peak in this.Run.PeakList)
-                {
-                    PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
-                    this.MSPeakResultList.Add(peakResult);
-                }
-            }
-
-        }
-
         public MassTagResultBase CreateMassTagResult(MassTag massTag)
         {
             MassTagResultBase result;
 
-            switch (MassTagResultType)
+            switch (ResultType)
             {
-                case Globals.MassTagResultType.BASIC_MASSTAG_RESULT:
+                case Globals.ResultType.BASIC_TARGETED_RESULT:
                     result = new MassTagResult(massTag);
                     break;
-                case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
+                case Globals.ResultType.N14N15_TARGETED_RESULT:
                     result = new N14N15_TResult(massTag);
                     break;
-                case Globals.MassTagResultType.O16O18_MASSTAG_RESULT:
+                case Globals.ResultType.O16O18_TARGETED_RESULT:
                     result = new O16O18_TResult(massTag);
                     break;
-                
+
                 default:
                     result = new MassTagResult();
                     break;
@@ -223,20 +169,21 @@ namespace DeconTools.Backend.Core
             return result;
         }
 
-        public MassTagResultBase AddMassTagResult(Globals.MassTagResultType massTagResultType)
-        {
-            switch (massTagResultType)
-            {
-                case Globals.MassTagResultType.BASIC_MASSTAG_RESULT:
-                    return new DeconTools.Backend.Core.MassTagResult();
-                case Globals.MassTagResultType.N14N15_MASSTAG_RESULT:
-                    return new N14N15_TResult();
-                default:
-                    return new DeconTools.Backend.Core.MassTagResult();
-            }
+        //TODO: delete this if sure not used
+        //public MassTagResultBase AddMassTagResult(Globals.ResultType massTagResultType)
+        //{
+        //    switch (massTagResultType)
+        //    {
+        //        case Globals.ResultType.BASIC_TARGETED_RESULT:
+        //            return new DeconTools.Backend.Core.MassTagResult();
+        //        case Globals.ResultType.N14N15_TARGETED_RESULT:
+        //            return new N14N15_TResult();
+        //        default:
+        //            return new DeconTools.Backend.Core.MassTagResult();
+        //    }
 
 
-        }
+        //}
 
         public List<MassTagResultBase> GetMassTagResults()
         {
@@ -271,5 +218,93 @@ namespace DeconTools.Backend.Core
 
 
         }
+
+        public void FillMSPeakResults()
+        {
+            if (this.Run is UIMFRun)
+            {
+                foreach (MSPeak peak in this.Run.PeakList)
+                {
+                    PeakCounter++;
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, ((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    this.MSPeakResultList.Add(peakResult);
+                }
+            }
+            else
+            {
+                foreach (MSPeak peak in this.Run.PeakList)
+                {
+                    PeakCounter++;
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    this.MSPeakResultList.Add(peakResult);
+                }
+            }
+
+        }
+
+
+        #endregion
+
+        #region Internal Methods
+        internal IsosResult CreateIsosResult()
+        {
+            IsosResult result;
+
+            switch (this.ResultType)
+            {
+                case Globals.ResultType.BASIC_TRADITIONAL_RESULT:
+                    result = new StandardIsosResult(this.Run, this.Run.CurrentScanSet);
+                    break;
+                case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
+                    Check.Require(this.Run is UIMFRun, "Tried to create an IMS_TRADITIONAL_RESULT but the Dataset is not a UIMF file.");
+                    UIMFRun uimfRun = (UIMFRun)run;
+                    result = new UIMFIsosResult(this.Run, uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
+                    break;
+                case Globals.ResultType.O16O18_TRADITIONAL_RESULT:
+                    result = new O16O18IsosResult(this.Run, this.Run.CurrentScanSet);
+                    break;
+                case Globals.ResultType.IMS_TRADITIONAL_RESULT:
+                    result = new StandardIsosResult(this.Run, this.Run.CurrentScanSet);
+                    break;
+                case Globals.ResultType.BASIC_TARGETED_RESULT:
+                    throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
+                case Globals.ResultType.O16O18_TARGETED_RESULT:
+                    throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
+                case Globals.ResultType.N14N15_TARGETED_RESULT:
+                    throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
+                default:
+                    throw new ApplicationException("ResultType is not of a know type: " + this.ResultType);
+                   
+            }
+
+
+            return result;
+        }
+
+
+
+        internal void AddLog(string logMessage)
+        {
+            logMessageList.Add(logMessage);
+        }
+
+
+        internal static List<IsosResult> getIsosResultsForCurrentScanSet(ResultCollection results)
+        {
+            Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
+
+
+
+            var queryList = from n in results.ResultList
+                            where n.ScanSet == results.Run.CurrentScanSet
+                            select n;
+
+
+            return queryList.ToList();
+        }
+
+
+        #endregion
+
     }
 }

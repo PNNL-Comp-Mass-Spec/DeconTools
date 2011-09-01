@@ -88,11 +88,15 @@ namespace DeconTools.Backend
 
         }
 
-        public enum MassTagResultType
+        public enum ResultType
         {
-            BASIC_MASSTAG_RESULT,
-            O16O18_MASSTAG_RESULT,
-            N14N15_MASSTAG_RESULT
+            BASIC_TRADITIONAL_RESULT,
+            UIMF_TRADITIONAL_RESULT,    // this is used for .UIMF files (LC-IMS-MS data)
+            IMS_TRADITIONAL_RESULT,         // this is for .imf type files (uncommon now)
+            O16O18_TRADITIONAL_RESULT,
+            BASIC_TARGETED_RESULT,
+            O16O18_TARGETED_RESULT,
+            N14N15_TARGETED_RESULT
         }
 
         public enum ScanSelectionMode
