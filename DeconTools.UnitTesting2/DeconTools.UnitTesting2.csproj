@@ -107,7 +107,6 @@
     <Compile Include="ProcessingRelated_Tests\SmoothingTests\DeconToolsSavitzkyGolaySmootherTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ZeroFillingTests\DeconToolsZeroFillerTests.cs" />
     <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />
-    <Compile Include="Run_relatedTests\BrukerV2Run_Tests.cs" />
     <Compile Include="Run_relatedTests\BrukerV3Tests.cs" />
     <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
     <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
@@ -130,7 +129,6 @@
     <Compile Include="TargetedProcessing_Tests\TargetedProcessingOrbiDataTests.cs" />
     <Compile Include="TestUtilities\FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Run_relatedTests\BrukerRun_tests.cs" />
     <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />

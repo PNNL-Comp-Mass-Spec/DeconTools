@@ -374,7 +374,14 @@ namespace DeconTools.Backend.Runs
 
             for (int i = lowerFrame; i <= upperFrame; i++)
             {
-                framePressures.Add(GetFramePressure(i));
+
+                double framePressure = GetFramePressure(i);
+                if (framePressure > 0)
+                {
+                    framePressures.Add(framePressure);
+                }
+                
+                
             }
 
             if (framePressures.Count > 0)

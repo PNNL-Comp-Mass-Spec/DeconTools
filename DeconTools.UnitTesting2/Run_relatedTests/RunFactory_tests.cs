@@ -9,12 +9,10 @@ using DeconTools.Backend;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
+    [TestFixture]
     public class RunFactory_tests
     {
-
-        string agilentDFile1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";
-
-        string textFile1 = "..\\..\\TestFiles\\TextFileXYData.txt";
+        string textFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TextFile\sampleXYData.txt";
 
         [Test]
         public void createBruker_fromBruker15T_Test1()
@@ -61,7 +59,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
 
 
-     
+
         [Test]
         public void createBrukerSolarixRunTest1()
         {
@@ -78,7 +76,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void createBrukerSolarixRunTest2()
         {
             RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun( Globals.MSFileType.Bruker, FileRefs.RawDataMSFiles.BrukerSolarix12TFile1,new OldDecon2LSParameters());
+            Run run = rf.CreateRun(Globals.MSFileType.Bruker, FileRefs.RawDataMSFiles.BrukerSolarix12TFile1, new OldDecon2LSParameters());
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
             Assert.AreEqual(7, run.MaxScan);

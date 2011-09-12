@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run("J:\test");
+                Run run = new DeconTools.Backend.Runs.AgilentD_Run(@"J:\test");
             });
             Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
         }

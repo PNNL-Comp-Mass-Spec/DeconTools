@@ -531,7 +531,8 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSmoothedFramePressuresTest2()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+           
             int startFrame = uimfRun.MaxFrame - 200;
             int stopFrame = uimfRun.MaxFrame;
 
@@ -566,11 +567,10 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 sb.Append(Environment.NewLine);
             }
 
-            Console.WriteLine(sb.ToString());
+            //Console.WriteLine(sb.ToString());
 
-            Assert.AreEqual(4.05802,(decimal)pressuresAfterAveraging[1895]);
+            Assert.AreEqual(4.0091229m, (decimal)pressuresAfterAveraging[1100]);
 
-            Assert.AreEqual(4.058, (decimal)pressuresAfterAveraging[1939]);
 
 
 
