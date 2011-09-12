@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeconTools.Backend, Version=1.0.4260.24173, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
+    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -93,12 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Backend\Parameters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
-      <Name>DeconTools.Backend</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
