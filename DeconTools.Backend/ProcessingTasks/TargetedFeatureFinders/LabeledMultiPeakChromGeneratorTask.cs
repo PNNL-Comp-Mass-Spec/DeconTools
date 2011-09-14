@@ -14,7 +14,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
     public class LabeledMultiPeakChromGeneratorTask : Task
     {
          TomTheorFeatureGenerator featureGenerator = new TomTheorFeatureGenerator();
-
+         N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
 
         #region Constructors
@@ -49,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             resultColl.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
             featureGenerator.GenerateTheorFeature(resultColl.Run.CurrentMassTag);   //generate theor profile for unlabeled feature
-            IsotopicProfile labeledProfile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(resultColl.Run.CurrentMassTag, 0.005);
+            IsotopicProfile labeledProfile = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(resultColl.Run.CurrentMassTag, 0.005);
 
             IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
                 NumPeaksForGeneratingChrom, ToleranceInPPM);
