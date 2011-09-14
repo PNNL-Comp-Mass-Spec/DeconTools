@@ -258,7 +258,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private List<double> getTargetMZListForO16O18ThreeMonoPeaks(MassTag massTag, IsotopicProfileType isotopicProfileType)
+        private List<double> getTargetMZListForO16O18ThreeMonoPeaks(TargetBase target, IsotopicProfileType isotopicProfileType)
         {
             List<double> targetMZList = new List<double>();
 
@@ -266,15 +266,15 @@ namespace DeconTools.Backend.ProcessingTasks
             switch (isotopicProfileType)
             {
                 case IsotopicProfileType.UNLABELLED:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
                 case IsotopicProfileType.LABELLED:
-                    iso = massTag.IsotopicProfileLabelled;
+                    iso = target.IsotopicProfileLabelled;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
                 default:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
             }
@@ -303,7 +303,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private List<double> getTargetMZListForTopNPeaks(MassTag massTag, IsotopicProfileType isotopicProfileTarget)
+        private List<double> getTargetMZListForTopNPeaks(TargetBase target, IsotopicProfileType isotopicProfileTarget)
         {
             List<double> targetMZList = new List<double>();
 
@@ -311,15 +311,15 @@ namespace DeconTools.Backend.ProcessingTasks
             switch (isotopicProfileTarget)
             {
                 case IsotopicProfileType.UNLABELLED:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
                 case IsotopicProfileType.LABELLED:
-                    iso = massTag.IsotopicProfileLabelled;
+                    iso = target.IsotopicProfileLabelled;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
                     break;
                 default:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
             }
@@ -336,21 +336,21 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private double getTargetMZBasedOnChromGeneratorMode(MassTag massTag, ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
+        private double getTargetMZBasedOnChromGeneratorMode(TargetBase target, ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
         {
             IsotopicProfile iso = new IsotopicProfile();
             switch (isotopicProfileTarget)
             {
                 case IsotopicProfileType.UNLABELLED:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
                 case IsotopicProfileType.LABELLED:
-                    iso = massTag.IsotopicProfileLabelled;
+                    iso = target.IsotopicProfileLabelled;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
                     break;
                 default:
-                    iso = massTag.IsotopicProfile;
+                    iso = target.IsotopicProfile;
                     Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
                     break;
             }

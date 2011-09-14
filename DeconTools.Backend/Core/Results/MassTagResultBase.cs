@@ -8,6 +8,17 @@ namespace DeconTools.Backend.Core
     public abstract class MassTagResultBase : IsosResult
     {
         #region Constructors
+        public MassTagResultBase()
+        {
+
+        }
+        
+        public MassTagResultBase(TargetBase target)
+        {
+            this.MassTag = target;
+            this.IsotopicProfile = new IsotopicProfile();
+        }
+
         #endregion
 
         #region Properties
@@ -21,7 +32,7 @@ namespace DeconTools.Backend.Core
 
         public ChromPeak ChromPeakSelected { get; set; }
 
-        public MassTag MassTag { get; set; }
+        public TargetBase MassTag { get; set; }
 
         public double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
 

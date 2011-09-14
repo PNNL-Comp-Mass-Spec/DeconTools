@@ -225,7 +225,7 @@ namespace DeconTools.Backend.Core
             return (float)summedIntensities;
         }
 
-        public MassTag CurrentMassTag { get; set; }
+        public TargetBase CurrentMassTag { get; set; }
 
         public virtual void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {

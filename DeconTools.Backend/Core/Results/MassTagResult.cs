@@ -8,17 +8,10 @@ namespace DeconTools.Backend.Core
     public class MassTagResult : MassTagResultBase
     {
         #region Constructors
-        public MassTagResult()
-            : this(null)
-        {
-        }
+        public MassTagResult() : base() { }
 
-        public MassTagResult(MassTag massTag)
-        {
-            this.IsotopicProfile = new IsotopicProfile();
-            this.MassTag = massTag;
-        }
-
+        public MassTagResult(TargetBase target) : base(target) { }
+       
         #endregion
 
         #region Properties

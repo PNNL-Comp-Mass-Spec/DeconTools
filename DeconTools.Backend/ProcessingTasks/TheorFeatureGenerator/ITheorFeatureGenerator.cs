@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Public Methods
         public abstract void LoadRunRelatedInfo(ResultCollection results);
-        public abstract void GenerateTheorFeature(MassTag mt);
+        public abstract void GenerateTheorFeature(TargetBase mt);
         #endregion
 
         #region Private Methods

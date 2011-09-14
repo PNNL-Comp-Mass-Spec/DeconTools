@@ -10,67 +10,24 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public MassTagCollection()
         {
-            MassTagList = new List<MassTag>();
+            MassTagList = new List<TargetBase>();
             this.MassTagIDList = new List<long>();
         }
         #endregion
 
         #region Properties
-        private List<MassTag> massTagList;
-        public List<MassTag> MassTagList
+        private List<TargetBase> massTagList;
+        public List<TargetBase> MassTagList
         {
             get { return massTagList; }
             set { massTagList = value; }
         }
-
-        public List<double> test = new List<double>();
-
-
 
         public List<long> MassTagIDList;
 
         #endregion
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
-
-        public void Display()
-        {
-
-            test.Add(400.3);
-            test.Add(400.3);
-            test.Add(400.3);
-            test.Add(400.3);
-
-            Console.Write(test.Count);
-
-            char delim = '\t';
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("---------------------------------------- mass tags -------------------------------------\n");
-            sb.Append("Mass_Tag_ID\tmonoMW\tNET\tPeptide\n");
-            foreach (MassTag mt in MassTagList)
-            {
-                sb.Append(mt.ID);
-                sb.Append(delim);
-                sb.Append(mt.MonoIsotopicMass.ToString("#.####"));
-                sb.Append(delim);
-                sb.Append(mt.NormalizedElutionTime.ToString("0.00"));
-                sb.Append(delim);
-                sb.Append(mt.Code);
-                sb.Append(Environment.NewLine);
-            }
-
-            Console.WriteLine(sb.ToString());
-        }
-
-
-
-
-
         public void ApplyChargeStateFilter()
         {
             ApplyChargeStateFilter(0.1);
@@ -79,15 +36,19 @@ namespace DeconTools.Backend.Core
 
         }
 
+        /// <summary>
+        /// This filters the list of mass tags on the basis of their number of observations
+        /// </summary>
+        /// <param name="threshold"></param>
         public void ApplyChargeStateFilter(double threshold)
         {
-            List<MassTag> filteredMassTagList = new List<MassTag>();
+            var filteredMassTagList = new List<TargetBase>();
 
-            List<MassTag> massTagsNonRedundant = new List<MassTag>();
+            var massTagsNonRedundant = new List<TargetBase>();
 
             for (int i = 0; i < this.MassTagList.Count; i++)
             {
-                MassTag mtCurrent = this.MassTagList[i];
+                var mtCurrent = this.MassTagList[i];
                 if (massTagsNonRedundant.Where(p => p.ID == mtCurrent.ID && p.ChargeState == mtCurrent.ChargeState).Count() == 0)
                 {
                     massTagsNonRedundant.Add(mtCurrent);
@@ -100,25 +61,25 @@ namespace DeconTools.Backend.Core
 
             foreach (int mtID in uniqueMTIDs)
             {
-                List<MassTag> mt_withSameID = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
+                List<TargetBase> mt_withSameID = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
                 int totObs = mt_withSameID.Sum(p => p.ObsCount);
 
-                foreach (MassTag uniquelyChargedMT in mt_withSameID)
+                foreach (var uniquelyChargedMT in mt_withSameID)
                 {
-                    //if the obsCount for a charge state is greater than 10% of the total, add it. 
-                    if (totObs == 0)
+                    
+                    if (totObs < 20)    // if total obs is low, add all observed charge states
                     {
                         filteredMassTagList.Add(uniquelyChargedMT);
                     }
+
                     else
                     {
-                        if ((double)uniquelyChargedMT.ObsCount / (double)totObs > threshold)
+                        bool hasEnoughCounts = ((double)uniquelyChargedMT.ObsCount / (double)totObs > threshold);  //if the obsCount for a charge state is greater than threshold of the total, add it. 
+                        if (hasEnoughCounts)
                         {
                             filteredMassTagList.Add(uniquelyChargedMT);
                         }
                     }
-
-
 
 
                 }
@@ -139,7 +100,7 @@ namespace DeconTools.Backend.Core
         {
             if (this.MassTagList == null || this.MassTagList.Count == 0) return;
 
-            List<MassTag> filteredList = new List<MassTag>();
+            var filteredList = new List<TargetBase>();
 
             foreach (var mt in this.MassTagList)
             {
@@ -159,8 +120,10 @@ namespace DeconTools.Backend.Core
 
 
         }
+        #endregion
 
-        private bool massTagListContainsMassTag(List<MassTag> filteredList, MassTag targetMassTag)
+        #region Private Methods
+        private bool massTagListContainsMassTag(List<TargetBase> filteredList, TargetBase targetMassTag)
         {
             foreach (var mt in filteredList)
             {
@@ -171,5 +134,12 @@ namespace DeconTools.Backend.Core
             }
             return false;
         }
+        #endregion
+
+
+
+
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class NETAndMassAligner
     {
-        private List<MassTag> _massTagList;
+        private List<TargetBase> _massTagList;
         private TargetedResultRepository _featuresToBeAligned;
 
 
@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public NETAndMassAligner()
         {
-            _massTagList = new List<MassTag>();
+            _massTagList = new List<TargetBase>();
             _featuresToBeAligned = new TargetedResultRepository();
             this.Result = new AlignmentResult();
             this.AlignerParameters = new NETAndMassAlignerParameters();
@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Public Methods
 
-        public void SetReferenceMassTags(List<MassTag> massTagList)
+        public void SetReferenceMassTags(List<TargetBase> massTagList)
         {
             _massTagList = massTagList;
         }
@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.Backend.Core
             _featuresToBeAligned.AddResults(featuresToAlign);
         }
 
-        public clsAlignmentFunction GetAlignment(List<MassTag> massTagList, List<TargetedResult> featuresToAlign)
+        public clsAlignmentFunction GetAlignment(List<TargetBase> massTagList, List<TargetedResult> featuresToAlign)
         {
 
             clsMassTagDB multialignMassTagDB = new clsMassTagDB();
@@ -232,7 +232,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        private clsMassTag[] convertDeconToolsMassTagsToMultialignMassTags(List<MassTag> massTagList)
+        private clsMassTag[] convertDeconToolsMassTagsToMultialignMassTags(List<TargetBase> massTagList)
         {
             List<clsMassTag> massTags = new List<clsMassTag>();
 
@@ -247,7 +247,7 @@ namespace DeconTools.Workflows.Backend.Core
             return massTags.ToArray();
         }
 
-        private clsMassTag convertDeconToolsMassTagToMultialignMassTag(MassTag mt)
+        private clsMassTag convertDeconToolsMassTagToMultialignMassTag(TargetBase mt)
         {
             clsMassTag multialignMassTag = new clsMassTag();
 

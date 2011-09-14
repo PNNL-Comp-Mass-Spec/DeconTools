@@ -60,7 +60,10 @@ namespace DeconTools.Backend.Core
 
         public Dictionary<string, int> ElementLookupTable { get; private set; }
 
-
+        /// <summary>
+        /// Number of times MassTag was observed at given ChargeState
+        /// </summary>
+        public int ObsCount { get; set; }
 
         #endregion
 

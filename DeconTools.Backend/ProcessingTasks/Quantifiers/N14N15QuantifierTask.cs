@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using DeconTools.Backend.Algorithms.Quantifiers;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class N14N15QuantifierTask : Task
     {
+
+        N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+
+
         #region Constructors
         public N14N15QuantifierTask()
             : this(3, 25)
@@ -55,7 +56,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         #endregion
         public override void Execute(ResultCollection resultColl)
         {
-            MassTag mt = resultColl.Run.CurrentMassTag;
+            TargetBase mt = resultColl.Run.CurrentMassTag;
             Check.Require(mt != null, "Current mass tag is not defined.");
 
             MassTagResultBase currentResult = resultColl.GetMassTagResult(mt);
@@ -81,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 double ratio;
 
 
-                quant.GetRatioBasedOnTopPeaks(iso1, iso2, mt.IsotopicProfile, N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
+                quant.GetRatioBasedOnTopPeaks(iso1, iso2, mt.IsotopicProfile, _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
                     currentResult.ScanSet.BackgroundIntensity, NumPeaksUsedInRatioCalc,
                     out ratio, out ratioContribIso1, out ratioContribIso2);
 

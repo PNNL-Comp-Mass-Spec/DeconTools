@@ -9,6 +9,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     public class TomTheorFeatureGenerator : ITheorFeatureGenerator
     {
         #region Constructors
+
+        TomIsotopicPattern _isotopicPatternGenerator = new TomIsotopicPattern();
+        N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+
         public TomTheorFeatureGenerator()
             : this(Globals.LabellingType.NONE,0.005)
         {
@@ -36,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Public Methods
-        public override void GenerateTheorFeature(MassTag mt)
+        public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
             Check.Require(mt.EmpiricalFormula != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
@@ -50,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 case Globals.LabellingType.O18:
                     throw new NotImplementedException();
                 case Globals.LabellingType.N15:
-                    mt.IsotopicProfileLabelled = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
+                    mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
                     
                     break;
                 default:
@@ -59,14 +63,14 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         }
 
-        private IsotopicProfile GetUnlabelledIsotopicProfile(MassTag mt)
+        private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
             IsotopicProfile iso = new IsotopicProfile();
 
             try
             {
-                iso = TomIsotopicPattern.GetIsotopePattern(mt.GetEmpiricalFormulaAsIntArray(), TomIsotopicPattern.aafIsos);
+                iso = _isotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _isotopicPatternGenerator.aafIsos);
             }
             catch (Exception ex)
             {
@@ -87,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
 
-        private void calculateMassesForIsotopicProfile(IsotopicProfile iso, MassTag mt)
+        private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
         {
             if (iso == null || iso.Peaklist == null) return;
 

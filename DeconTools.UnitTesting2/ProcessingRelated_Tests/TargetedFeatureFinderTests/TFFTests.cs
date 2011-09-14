@@ -24,8 +24,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagFile);
             MassTagCollection massTagColl = masstagImporter.Import();
 
-            MassTag mt24702_charge3 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 3 select n).First();
-            MassTag mt24702_charge4 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 4 select n).First();
+            TargetBase mt24702_charge3 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 3 select n).First();
+            TargetBase mt24702_charge4 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 4 select n).First();
 
 
 

@@ -69,7 +69,7 @@ namespace DeconTools.Backend.FileIO
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             
             DeconTools.Backend.Core.MassTagCollection data=new MassTagCollection();
-            data.MassTagList = new List<MassTag>();
+            data.MassTagList.Clear();
 
             
 

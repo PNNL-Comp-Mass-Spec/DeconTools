@@ -70,7 +70,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 msgen.IsTICRequested = false;
             }
 
-            MassTag mt = resultColl.Run.CurrentMassTag;
+            TargetBase mt = resultColl.Run.CurrentMassTag;
 
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 

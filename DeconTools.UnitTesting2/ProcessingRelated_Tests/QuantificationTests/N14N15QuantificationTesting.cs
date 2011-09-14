@@ -46,8 +46,9 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TomTheorFeatureGenerator featureGen = new TomTheorFeatureGenerator();
             featureGen.GenerateTheorFeature(mt23140708);
 
+            N15IsotopeProfileGenerator gen = new N15IsotopeProfileGenerator();
 
-            IsotopicProfile theorN15Profile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt23140708, 0.005);
+            IsotopicProfile theorN15Profile = gen.GetN15IsotopicProfile(mt23140708, 0.005);
 
 
 
@@ -125,8 +126,8 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TomTheorFeatureGenerator featureGen = new TomTheorFeatureGenerator();
             featureGen.GenerateTheorFeature(mt23140708);
 
-
-            IsotopicProfile theorN15Profile = N15IsotopeProfileGenerator.GetN15IsotopicProfile(mt23140708, 0.005);
+            N15IsotopeProfileGenerator profileGen = new N15IsotopeProfileGenerator();
+            IsotopicProfile theorN15Profile = profileGen.GetN15IsotopicProfile(mt23140708, 0.005);
 
 
 

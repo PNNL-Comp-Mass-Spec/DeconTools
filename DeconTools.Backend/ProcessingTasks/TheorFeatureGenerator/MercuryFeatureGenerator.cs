@@ -31,7 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag hasn't been declared");
 
-            MassTag mt = resultColl.Run.CurrentMassTag;
+            TargetBase mt = resultColl.Run.CurrentMassTag;
 
             MassTagResultBase result = resultColl.GetMassTagResult(mt);
 
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Private Methods
         #endregion
-        public override void GenerateTheorFeature(MassTag mt)
+        public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, this.Name + " failed; CurrentMassTag hasn't been declared");
             //Check.Require(results.Run.CurrentMassTag.EmpiricalFormula!=null, this.Name + "failed; Problem with EmpiricalFormular of current mass tag.");

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using BrukerDataReader;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MassTagTextFileExporter : TextFileExporter<MassTag>
+    public class MassTagTextFileExporter : TextFileExporter<TargetBase>
     {
 
         #region Constructors
@@ -16,26 +17,29 @@ namespace DeconTools.Backend.FileIO
 
         #endregion
 
-        protected override string buildResultOutput(MassTag result)
+        protected override string buildResultOutput(TargetBase target)
         {
             StringBuilder sb = new StringBuilder();
+            Check.Require(target is MassTag, "Exported result is of the wrong type.");
 
-            sb.Append(result.ID);
+            MassTag result = (MassTag)target;
+
+            sb.Append(target.ID);
             sb.Append(this.Delimiter);
-            sb.Append(result.MonoIsotopicMass);
+            sb.Append(target.MonoIsotopicMass);
             sb.Append(this.Delimiter); 
-            sb.Append(result.Code);
+            sb.Append(target.Code);
             sb.Append(this.Delimiter); 
-            sb.Append(result.ChargeState);
+            sb.Append(target.ChargeState);
             sb.Append(this.Delimiter); 
-            sb.Append(result.ObsCount);
+            sb.Append(target.ObsCount);
             sb.Append(this.Delimiter); 
-            sb.Append(result.MZ);
+            sb.Append(target.MZ);
             sb.Append(this.Delimiter); 
-            sb.Append(result.NormalizedElutionTime);
+            sb.Append(target.NormalizedElutionTime);
             sb.Append(this.Delimiter);
             sb.Append(result.RefID);
-            sb.Append(this.Delimiter); 
+            sb.Append(this.Delimiter);
             sb.Append(result.ProteinDescription);
 
             return sb.ToString();

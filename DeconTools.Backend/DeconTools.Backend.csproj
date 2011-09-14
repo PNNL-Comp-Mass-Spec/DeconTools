@@ -193,8 +193,6 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
-    <Compile Include="ProcessingTasks\TaskControllers\N14N15_ChromatogramApproachTaskController.cs" />
-    <Compile Include="ProcessingTasks\TaskControllers\N14N15_CustomWorkflow1.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
@@ -245,7 +243,6 @@
     <Compile Include="Data\Importers\IPeakImporter.cs" />
     <Compile Include="Data\Exporters\IsosExporter.cs" />
     <Compile Include="FileIO\MassTagFromDBImporter.cs" />
-    <Compile Include="FileIO\MassTagIDGenericImporter.cs" />
     <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
@@ -305,9 +302,6 @@
     <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\I_MSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
-    <Compile Include="ProcessingTasks\N14N15Analyzers\I_N14N15Analyzer.cs" />
-    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\Class1.cs" />
-    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TomN14N15Analyzer.cs" />
     <Compile Include="ProcessingTasks\OriginalIntensitiesExtractor.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\IPeakDetector.cs" />
@@ -400,9 +394,7 @@
     <Compile Include="Utilities\DesignByContract.cs" />
     <Compile Include="Utilities\FrameSetCollectionCreator.cs" />
     <Compile Include="Utilities\IsosResultSerializer.cs" />
-    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TemplateMatch.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\TomIsotopicPattern.cs" />
-    <Compile Include="ProcessingTasks\N14N15Analyzers\TomN14N15Analyzer\TomMZPeak.cs" />
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Utilities\Logger_Importer.cs" />
     <Compile Include="Utilities\MathUtils.cs" />

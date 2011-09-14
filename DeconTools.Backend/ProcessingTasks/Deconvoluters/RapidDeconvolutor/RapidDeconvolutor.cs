@@ -19,6 +19,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
         DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator fitScoreCalculator;
 
+        TomIsotopicPattern _TomIsotopicPatternCreator = new TomIsotopicPattern();
+
+
         //The BasicTFF is used to re-find the peaks of the isotopic profile, once Rapid returns the monoIsotopic mass and charge state.  
         //We have to do this since RAPID doesn't return the list of peaks within the MSFeature. 
         BasicTFF targetedFeatureFinder;
@@ -133,9 +136,9 @@ namespace DeconTools.Backend.ProcessingTasks
                     mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                     mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
 
-                    int[] empircalFormulaAsIntArray = TomIsotopicPattern.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
+                    mt.EmpiricalFormula = _TomIsotopicPatternCreator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
 
-                    mt.IsotopicProfile = TomIsotopicPattern.GetIsotopePattern(empircalFormulaAsIntArray, TomIsotopicPattern.aafIsos);
+                    mt.IsotopicProfile = _TomIsotopicPatternCreator.GetIsotopePattern(mt.EmpiricalFormula, _TomIsotopicPatternCreator.aafIsos);
                     mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
                     double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(result.IsotopicProfile);

@@ -15,10 +15,7 @@ namespace DeconTools.Backend.Core
         #region Properties
 
 
-        /// <summary>
-        /// Number of times MassTag was observed at given ChargeState
-        /// </summary>
-        public int ObsCount { get; set; }
+   
 
 
 
@@ -41,23 +38,6 @@ namespace DeconTools.Backend.Core
         }
 
 
-
-        /// <summary>
-        /// Outputs the number of C,H,N,O,S atoms in that order.
-        /// TODO:  this needs to be depreciated!
-        /// </summary>
-        /// <returns></returns>
-        public int[] GetEmpiricalFormulaAsIntArray()
-        {
-                   
-                    int[] formulaIntArray = new int[5];
-                    formulaIntArray[0] = this.GetAtomCountForElement("C");
-                    formulaIntArray[1] = this.GetAtomCountForElement("H");
-                    formulaIntArray[2] = this.GetAtomCountForElement("N");
-                    formulaIntArray[3] = this.GetAtomCountForElement("O");
-                    formulaIntArray[4] = this.GetAtomCountForElement("S");
-                    return formulaIntArray;
-        }
 
         public void CalculateMassesForIsotopicProfile(int chargeState)
         {

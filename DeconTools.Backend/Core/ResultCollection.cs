@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Core
         {
             this.run = run;
             this.ResultList = new List<IsosResult>();
-            this.massTagResultList = new Dictionary<MassTag, MassTagResultBase>();
+            this.MassTagResultList = new Dictionary<TargetBase, MassTagResultBase>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
             this.m_IsosResultBin = new List<IsosResult>(10);
@@ -27,12 +27,9 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-        private Dictionary<MassTag, MassTagResultBase> massTagResultList;
-        public Dictionary<MassTag, MassTagResultBase> MassTagResultList
-        {
-            get { return massTagResultList; }
-            set { massTagResultList = value; }
-        }
+
+        public Dictionary<TargetBase, MassTagResultBase> MassTagResultList { get; set; }
+
 
         private List<MSPeakResult> mSPeakResultList;
         public List<MSPeakResult> MSPeakResultList
@@ -109,11 +106,11 @@ namespace DeconTools.Backend.Core
             return totIsotopicProfiles;
         }
 
-        public MassTagResultBase GetMassTagResult(MassTag massTag)
+        public MassTagResultBase GetMassTagResult(TargetBase massTag)
         {
-            if (massTagResultList.ContainsKey(massTag))
+            if (MassTagResultList.ContainsKey(massTag))
             {
-                return massTagResultList[massTag];
+                return MassTagResultList[massTag];
             }
             else
             {
@@ -139,7 +136,7 @@ namespace DeconTools.Backend.Core
             this.ScanResultList.Clear();
         }
 
-        public MassTagResultBase CreateMassTagResult(MassTag massTag)
+        public MassTagResultBase CreateMassTagResult(TargetBase massTag)
         {
             MassTagResultBase result;
 
@@ -156,7 +153,7 @@ namespace DeconTools.Backend.Core
                     break;
 
                 default:
-                    result = new MassTagResult();
+                    result = new MassTagResult(massTag);
                     break;
             }
 
@@ -274,7 +271,7 @@ namespace DeconTools.Backend.Core
                     throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
                 default:
                     throw new ApplicationException("ResultType is not of a know type: " + this.ResultType);
-                   
+
             }
 
 

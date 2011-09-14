@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreNotEqual(null, mtc.MassTagList);
             Assert.AreEqual(101, mtc.MassTagList.Count);
 
-            MassTag testMassTag = mtc.MassTagList[0];
+            MassTag testMassTag = (MassTag)mtc.MassTagList[0];
 
 
             Assert.AreEqual("AVAFGEALRPEFK", testMassTag.Code);
@@ -57,7 +57,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreNotEqual(null, mtc.MassTagList);
             Assert.AreEqual(13, mtc.MassTagList.Count);
 
-            MassTag testMassTag = mtc.MassTagList[0];
+            MassTag testMassTag = mtc.MassTagList[0] as MassTag;
 
 
             Assert.AreEqual("AVTTADQVQQEVER", testMassTag.Code);

@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public List<MassTag> MassTagList { get; set; }
+        public List<TargetBase> MassTagList { get; set; }
 
         public bool outputToConsole { get; set; }
 
@@ -389,7 +389,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public void SetMassTags(List<MassTag> massTagList)
+        public void SetMassTags(List<TargetBase> massTagList)
         {
             MassTagList = massTagList;
         }

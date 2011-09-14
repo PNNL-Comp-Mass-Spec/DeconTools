@@ -8,18 +8,9 @@ namespace DeconTools.Backend.Core
     public class O16O18_TResult : MassTagResultBase
     {
         #region Constructors
-        public O16O18_TResult()
-            : this(null)
-        {
+        public O16O18_TResult() : base() { }
 
-        }
-
-        public O16O18_TResult(MassTag massTag)
-        {
-            this.MassTag = massTag;
-            this.IsotopicProfile = new IsotopicProfile();
-
-        }
+        public O16O18_TResult(TargetBase target) : base(target) { }
         #endregion
 
         #region Properties

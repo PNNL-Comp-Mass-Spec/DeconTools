@@ -16,6 +16,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     public class DeconToolsFitScoreCalculator : IFitScoreCalculator
     {
         MercuryDistributionCreator distributionCreator;
+        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
+
 
         PeakUtilities peakUtil = new PeakUtilities();
 
@@ -50,9 +52,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                 mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
 
-                int[] empircalFormulaAsIntArray = TomIsotopicPattern.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
+                mt.EmpiricalFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
 
-                mt.IsotopicProfile = TomIsotopicPattern.GetIsotopePattern(empircalFormulaAsIntArray, TomIsotopicPattern.aafIsos);
+                mt.IsotopicProfile = _tomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _tomIsotopicPatternGenerator.aafIsos);
                 this.TheorIsotopicProfile = mt.IsotopicProfile;
 
                 mt.CalculateMassesForIsotopicProfile(mt.ChargeState);

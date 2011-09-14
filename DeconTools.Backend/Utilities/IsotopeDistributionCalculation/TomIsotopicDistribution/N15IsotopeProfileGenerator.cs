@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution
 {
     public class N15IsotopeProfileGenerator
     {
+
+        TomIsotopicPattern _isotopicPatternGenerator = new TomIsotopicPattern();
+
           #region Constructors
         #endregion
 
@@ -17,7 +16,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         #region Public Methods
 
-        public static IsotopicProfile GetN15IsotopicProfile(MassTag mt, double lowpeakCutoff)
+        public IsotopicProfile GetN15IsotopicProfile(TargetBase mt, double lowpeakCutoff)
         {
             Check.Require(mt != null, "Mass tag not defined");
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
@@ -25,7 +24,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             int numNitrogens = mt.GetAtomCountForElement("N");
 
-            IsotopicProfile labeledTheorProfile = TomIsotopicPattern.GetIsotopePattern(mt.GetEmpiricalFormulaAsIntArray(), TomIsotopicPattern.aafN15Isos);
+            IsotopicProfile labeledTheorProfile = _isotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _isotopicPatternGenerator.aafN15Isos);
             addMZInfoToTheorProfile(mt.IsotopicProfile,labeledTheorProfile, numNitrogens, mt.ChargeState);
             
             PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
@@ -41,7 +40,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         #region Private Methods
 
-        private static void addMZInfoToTheorProfile(IsotopicProfile unlabeledProfile, IsotopicProfile labeledTheorProfile, int numNitrogens, int chargeState)
+        private void addMZInfoToTheorProfile(IsotopicProfile unlabeledProfile, IsotopicProfile labeledTheorProfile, int numNitrogens, int chargeState)
         {
             if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3) return;
 

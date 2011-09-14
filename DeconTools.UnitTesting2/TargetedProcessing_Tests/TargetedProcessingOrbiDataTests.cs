@@ -68,7 +68,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
             run.CurrentMassTag = massTagColl.MassTagList.Find(p => p.ID == mtID);
-            MassTag mt = run.CurrentMassTag;
+            TargetBase mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
@@ -82,7 +82,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("------------------- MassTag = " + mt.ID + "---------------------------");
-            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NormalizedElutionTime.ToString("0.000") + "; Sequence = " + mt.Code + "\n");
+            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NormalizedElutionTime.ToString("0.000") + "; Sequence = " + mt.Code + "; EmpiricalFormula= " + mt.EmpiricalFormula+ "\n" );
 
             peakChromGen.Execute(run.ResultCollection);
             smoother.Execute(run.ResultCollection);
@@ -130,7 +130,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
             run.CurrentMassTag = massTagColl.MassTagList.Find(p => p.ID == mtID);
-            MassTag mt = run.CurrentMassTag;
+            TargetBase mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);

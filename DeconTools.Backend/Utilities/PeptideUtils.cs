@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using DeconTools.Utilities;
-using System.Text;
 
 
 namespace DeconTools.Backend.Utilities
@@ -146,6 +146,10 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+
+
+
+
         private string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
         {
 
@@ -172,7 +176,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (!aminoAcidSingleLetterCodes.Contains(aminoAcidCode))
             {
-                throw new ArgumentException("Inputted amino acid code is not a proper single letter code. Inputted code = " + aminoAcidCode);
+                throw new ArgumentException("Amino acid code is invalid. Inputted code= " + aminoAcidCode);
             }
 
             var aminoAcid = (from n in _aminoAcidList where n.Item1 == aminoAcidCode select n).First();
@@ -199,6 +203,62 @@ namespace DeconTools.Backend.Utilities
 
 
 
+        public int GetNumAtomsForElement(string element, string empiricalFormula)
+        {
+            var parsedFormula = parseEmpiricalFormulaString(empiricalFormula);
+
+            if (parsedFormula.ContainsKey(element))
+            {
+                return parsedFormula[element];
+            }
+            else
+            {
+                return 0;
+            }
+
+
+        }
+
+
+        public Dictionary<string, int> parseEmpiricalFormulaString(string p)
+        {
+            Dictionary<string, int> parsedFormula = new Dictionary<string, int>();
+
+            if (p == null || p.Length == 0) return parsedFormula;
+
+            Regex re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
+            MatchCollection mc = re.Matches(p);
+
+
+            foreach (Match item in mc)
+            {
+
+                int numAtoms = 0;
+                string elementSymbol = item.Groups[1].Value;
+
+                string elementCountString = item.Groups[2].Value;
+
+
+                if (elementCountString.Length > 0)
+                {
+                    numAtoms = Int32.Parse(elementCountString);
+                }
+                else
+                {
+                    numAtoms = 1;
+                }
+
+                bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
+                Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
+
+                parsedFormula.Add(elementSymbol, numAtoms);
+
+
+            }
+
+            return parsedFormula;
+
+        }
 
 
 
@@ -223,45 +283,7 @@ namespace DeconTools.Backend.Utilities
         #endregion
 
         #region Private Methods
-        public Dictionary<string, int> parseEmpiricalFormulaString(string p)
-        {
-            Dictionary<string, int> parsedFormula = new Dictionary<string, int>();
-
-            if (p == null || p.Length == 0) return parsedFormula;
-
-            Regex re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
-            MatchCollection mc = re.Matches(p);
-
-
-            foreach (Match item in mc)
-            {
-               
-                int numAtoms = 0;
-                string elementSymbol = item.Groups[1].Value;
-
-                string elementCountString = item.Groups[2].Value;
-
-
-                if (elementCountString.Length>0)
-                {
-                    numAtoms = Int32.Parse(elementCountString);
-                }
-                else
-                {
-                    numAtoms = 1;
-                }
-
-                bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
-
-                parsedFormula.Add(elementSymbol, numAtoms);
-
-
-            }
-
-            return parsedFormula;
-
-        }
+   
         #endregion
 
     }

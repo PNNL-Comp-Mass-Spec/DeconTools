@@ -1,76 +1,113 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution
 {
+
+    /// <summary>
+    /// Written by Tom Tavener
+    /// </summary>
     public class TomIsotopicPattern
     {
+        public TomIsotopicPattern()
+        {
+            _peptideUtils = new PeptideUtils();
+
+            initializeVariables();
+        }
+
+        private void initializeVariables()
+        {
+            fNPerThLow = 0.0090f;
+            fNPerThHigh = 0.0180f;
+            fNn15a = 0.98f;  //0.996337f;//  // this is our N15 abundance
+            fNn14a = 1.0f - fNn15a;//0.003663f;//
+            afHa = new double[] { fH1a, fH2a };
+            afCa = new double[] { fC12a, fC13a };
+            afNa = new double[] { fN14a, fN15a };
+            afNna = new double[] { fNn14a, fNn15a };
+            afOa = new double[] { fO16a, fO18a };  // ignore below 0.1%
+            afSa = new double[] { fS32a, fS34a };  // ignore below 1%
+            aafIsos = new double[][] { afCa, afHa, afNa, afOa, afSa };       //[Gord]  - I adjusted the order
+            aafN15Isos = new double[][] { afCa, afHa, afNna, afOa, afSa };
+            afHm = new double[] { fH1m, fH2m };
+            afCm = new double[] { fC12m, fC13m };
+            afNm = new double[] { fN14m, fN15m };
+            afOm = new double[] { fO16m, fO18m };  // ignore below 0.1%
+            afSm = new double[] { fS32m, fS34m };  // ignore below 1%
+            aafIsosm = new double[][] { afHm, afCm, afNm, afOm, afSm };
+
+            fAveMassDefect = fC13m - fC12m; //is this the best way to do it?
+            fAvnC = 4.9384f;
+            fAvnH = 7.7583f;
+            fAvnN = 1.3577f;
+            fAvnO = 1.4773f;
+            fAvnS = 0.0417f;
+            afAvn =new double[] { fAvnH, fAvnC, fAvnN, fAvnO, fAvnS };
+
+        }
+
+        public double fNPerThLow; // lower and upper limits of how many 
+        public double fNPerThHigh;  // nitrogen atoms are in most peptides
+
+        public double fNn15a = 0.98f;//0.996337f;//  // this is our N15 abundance
+        public double fNn14a;
 
 
-        public static double fNPerThLow = 0.0090f; // lower and upper limits of how many 
-        public static double fNPerThHigh = 0.0180f; // nitrogen atoms are in most peptides
+        public double fH1m = 1.007825f;
+        double fH1a = 0.99985f;
+        double fH2m = 2.014102f;
+        double fH2a = 0.00015f;
+        double fC12m = 12.0f;
+        double fC12a = 0.98893f;
+        double fC13m = 13.00336f;
+        double fC13a = 0.01107f;
+        public double fN14m = 14.00307f;
+        double fN14a = 0.996337f;
+        public double fN15m = 15.00011f;
+        double fN15a = 0.003663f;
+        double fO16m = 15.99491f;
+        double fO16a = 0.99759f;
+        double fO17m = 16.99913f;
+        double fO17a = 0.000374f;
+        double fO18m = 17.99916f;
+        double fO18a = 0.002036f;
+        double fS32m = 31.97207f;
+        double fS32a = 0.9502f;
+        double fS33m = 32.97145f;
+        double fS33a = 0.0075f;
+        double fS34m = 33.96786f;
+        double fS34a = 0.0421f;
+        double fS35m = 35.96754f;
+        double fS35a = 0.0002f;
+        double[] afHa;
+        double[] afCa;
+        double[] afNa;
+        double[] afNna;
+        double[] afOa;
+        double[] afSa;
+        //public double[][] aafIsos = { afHa, afCa, afNa, afOa, afSa };
+        //public double[][] aafN15Isos = { afHa, afCa, afNna, afOa, afSa };
+        public double[][] aafIsos;
+        public double[][] aafN15Isos;
+        double[] afHm ;
+        double[] afCm ;
+        double[] afNm;
+        double[] afOm;
+        double[] afSm;
+        double[][] aafIsosm;
 
-        public static double fNn15a = 0.98f;//0.996337f;//  // this is our N15 abundance
-        public static double fNn14a = 1.0f - fNn15a;//0.003663f;//
+        public double fAveMassDefect;
 
+        double fAvnC = 4.9384f;
+        double fAvnH = 7.7583f;
+        double fAvnN = 1.3577f;
+        double fAvnO = 1.4773f;
+        double fAvnS = 0.0417f;
+        double[] afAvn;
+        private PeptideUtils _peptideUtils;
 
-        public static double fH1m = 1.007825f;
-        static double fH1a = 0.99985f;
-        static double fH2m = 2.014102f;
-        static double fH2a = 0.00015f;
-        static double fC12m = 12.0f;
-        static double fC12a = 0.98893f;
-        static double fC13m = 13.00336f;
-        static double fC13a = 0.01107f;
-        public static double fN14m = 14.00307f;
-        static double fN14a = 0.996337f;
-        public static double fN15m = 15.00011f;
-        static double fN15a = 0.003663f;
-        static double fO16m = 15.99491f;
-        static double fO16a = 0.99759f;
-        static double fO17m = 16.99913f;
-        static double fO17a = 0.000374f;
-        static double fO18m = 17.99916f;
-        static double fO18a = 0.002036f;
-        static double fS32m = 31.97207f;
-        static double fS32a = 0.9502f;
-        static double fS33m = 32.97145f;
-        static double fS33a = 0.0075f;
-        static double fS34m = 33.96786f;
-        static double fS34a = 0.0421f;
-        static double fS35m = 35.96754f;
-        static double fS35a = 0.0002f;
-        static double[] afHa = { fH1a, fH2a };
-        static double[] afCa = { fC12a, fC13a };
-        static double[] afNa = { fN14a, fN15a };
-        static double[] afNna = { fNn14a, fNn15a };
-        static double[] afOa = { fO16a, fO18a };  // ignore below 0.1%
-        static double[] afSa = { fS32a, fS34a };  // ignore below 1%
-        //public static double[][] aafIsos = { afHa, afCa, afNa, afOa, afSa };
-        //public static double[][] aafN15Isos = { afHa, afCa, afNna, afOa, afSa };
-        public static double[][] aafIsos = { afCa, afHa, afNa, afOa, afSa };       //[Gord]  - I adjusted the order
-        public static double[][] aafN15Isos = { afCa, afHa, afNna, afOa, afSa };
-        static double[] afHm = { fH1m, fH2m };
-        static double[] afCm = { fC12m, fC13m };
-        static double[] afNm = { fN14m, fN15m };
-        static double[] afOm = { fO16m, fO18m };  // ignore below 0.1%
-        static double[] afSm = { fS32m, fS34m };  // ignore below 1%
-        static double[][] aafIsosm = { afHm, afCm, afNm, afOm, afSm };
-
-        public static double fAveMassDefect = fC13m - fC12m; //is this the best way to do it?
-
-        static double fAvnC = 4.9384f;
-        static double fAvnH = 7.7583f;
-        static double fAvnN = 1.3577f;
-        static double fAvnO = 1.4773f;
-        static double fAvnS = 0.0417f;
-        static double[] afAvn = { fAvnH, fAvnC, fAvnN, fAvnO, fAvnS };
-
-        public static double GetBasePeakMass(int[] afFormula)
+        public double GetBasePeakMass(int[] afFormula)
         {
             double fBase = 0f;
             for (int i = 0; i < 5; i++)
@@ -78,7 +115,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             return fBase;
         }
 
-        public static double GetBasePeakMass(double[] afFormula, bool bLabel)
+        public double GetBasePeakMass(double[] afFormula, bool bLabel)
         {
             double fBase = 0f;
             if (bLabel == false)
@@ -93,38 +130,52 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             return fBase;
 
         }
-        public static int[] GetClosestAvnFormula(double fInputMass, bool bLabel)
+        public string GetClosestAvnFormula(double inputMass, bool hasLabel)
         {
-            double fAvnMass = GetBasePeakMass(afAvn, bLabel);
+            double fAvnMass = GetBasePeakMass(afAvn, hasLabel);
             // get closest pattern to mass 
-            double fNumAvn = fInputMass / fAvnMass;
-            int[] afAvnPep = new int[5];
+            double fNumAvn = inputMass / fAvnMass;
+            int[] averagineIntArray = new int[5];
             for (int i = 0; i < 5; i++)
-                afAvnPep[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
+                averagineIntArray[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
 
-            
+
             //I will reverse these to report  C H N O S
-            int numHydrogens = afAvnPep[0];
-            int numCarbons = afAvnPep[1];
+            int numHydrogens = averagineIntArray[0];
+            int numCarbons = averagineIntArray[1];
 
-            afAvnPep[0] = numCarbons;
-            afAvnPep[1] = numHydrogens;
+            averagineIntArray[0] = numCarbons;
+            averagineIntArray[1] = numHydrogens;
+
+            return ("C" + averagineIntArray[0] + "H" + averagineIntArray[1] + "N" + averagineIntArray[2] + "O" + averagineIntArray[3] + "S" + averagineIntArray[4]);
+
             
-            return afAvnPep;
         }
 
-        public static IsotopicProfile GetAvnPattern(double fInputMass, bool bLabel)
+        public IsotopicProfile GetAvnPattern(double fInputMass, bool bLabel)
         {
-            int[] afAvnPep = GetClosestAvnFormula(fInputMass, bLabel);
+            string averagineFormula = GetClosestAvnFormula(fInputMass, bLabel);
+
+
             if (bLabel == false)
-                return GetIsotopePattern(afAvnPep, aafIsos);
+                return GetIsotopePattern(averagineFormula, aafIsos);
             else
-                return GetIsotopePattern(afAvnPep, aafN15Isos);
+                return GetIsotopePattern(averagineFormula, aafN15Isos);
         }
 
-        public static IsotopicProfile GetIsotopePattern(int[] afFormula, double[][] aafIsoLocal)
+        public IsotopicProfile GetIsotopePattern(string empiricalFormula, double[][] aafIsoLocal)
         {
-            Check.Require(afFormula != null, "Cannot get Isotope pattern. Empirical formula not defined");
+
+            Dictionary<string,int>elementTable = _peptideUtils.parseEmpiricalFormulaString(empiricalFormula);
+
+            int[] formulaArray = new int[5];
+            formulaArray[0] = getAtomCount(elementTable, "C");
+            formulaArray[1] = getAtomCount(elementTable, "H");
+            formulaArray[2] = getAtomCount(elementTable, "N");
+            formulaArray[3] = getAtomCount(elementTable, "O");
+            formulaArray[4] = getAtomCount(elementTable, "S");
+            
+
 
             double EPS = 0.001f;
 
@@ -138,10 +189,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             { // iterate thru elements
                 double fLogAmtLight = (double)System.Math.Log10((double)aafIsoLocal[i0][0]);
                 double fLogAmtHeavy = (double)System.Math.Log10((double)aafIsoLocal[i0][1]);
-                for (int i1 = 0; i1 <= afFormula[i0]; i1++)
+                for (int i1 = 0; i1 <= formulaArray[i0]; i1++)
                 {
-                    fLogTotal = fLogAmtLight * (afFormula[i0] - i1) + fLogAmtHeavy * i1;
-                    fLogTotal += (double)LogAChooseB(afFormula[i0], i1);
+                    fLogTotal = fLogAmtLight * (formulaArray[i0] - i1) + fLogAmtHeavy * i1;
+                    fLogTotal += (double)LogAChooseB(formulaArray[i0], i1);
                     aafIons[i0, i1] = (double)(System.Math.Pow(10, fLogTotal));
                     maxIndices[i0] = i1;
                     if (i1 > 1 && fLogTotalLast > fLogTotal && aafIons[i0, i1] < EPS)
@@ -177,7 +228,20 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             return isoCluster;
         }
 
-        public static double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
+        private int getAtomCount(Dictionary<string, int> elementTable, string elementSymbol)
+        {
+            if (elementTable.ContainsKey(elementSymbol))
+            {
+                return elementTable[elementSymbol];
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
         {
             if (a == 0) return 0.0f;
             if (b == 0) return 0.0f;
@@ -189,7 +253,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             return (double)total;
         }
 
-        public static double LogFactorial(int n)
+        public double LogFactorial(int n)
         {
             //log n! = 0.5log(2.pi) + 0.5logn + nlog(n/e) + log(1 + 1/(12n))
             return (double)0.5 * (

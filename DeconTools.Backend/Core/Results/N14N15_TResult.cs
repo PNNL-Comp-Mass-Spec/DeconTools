@@ -12,18 +12,9 @@ namespace DeconTools.Backend.Core
 
         #region Constructors
 
-        public N14N15_TResult()
-            : this(null)
-        {
+        public N14N15_TResult() : base() { }
 
-        }
-
-
-        public N14N15_TResult(MassTag massTag)
-        {
-            this.IsotopicProfile = new IsotopicProfile();
-            this.MassTag = massTag;
-        }
+        public N14N15_TResult(TargetBase target) : base(target) { }
         #endregion
 
         #region Properties
