@@ -67,7 +67,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             IsotopicProfile n14profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
             IsotopicProfile n15profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabelled, featureFinderTol, featureFinderRequiresMonoPeak);
 
-            Console.WriteLine(mt23140708.Peptide.GetEmpiricalFormula());
+            Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
 
             TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);

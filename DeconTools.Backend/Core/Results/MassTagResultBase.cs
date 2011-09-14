@@ -53,7 +53,7 @@ namespace DeconTools.Backend.Core
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("****** Match ******\n");
-            sb.Append("NET = \t" + MassTag.NETVal.ToString("0.000") + "\n");
+            sb.Append("NET = \t" + MassTag.NormalizedElutionTime.ToString("0.000") + "\n");
             sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString() + "\n");
             sb.Append("ChromPeak NETVal = " + ChromPeakSelected.NETValue.ToString("0.000") + "\n");
             sb.Append("ScanSet = { ");
@@ -104,7 +104,7 @@ namespace DeconTools.Backend.Core
         {
             double NETError = 0;
 
-            double theorNET = this.MassTag.NETVal;
+            double theorNET = this.MassTag.NormalizedElutionTime;
             double obsNET = this.Run.GetNETValueForScan(GetScanNum());
 
             NETError = theorNET - obsNET;

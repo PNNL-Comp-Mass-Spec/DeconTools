@@ -170,9 +170,9 @@ namespace DeconTools.Backend.Core
         }
 
         //TODO: delete this if sure not used
-        //public MassTagResultBase AddMassTagResult(Globals.ResultType massTagResultType)
+        //public MassTagResultBase AddMassTagResult(Globals.ResultType ResultType)
         //{
-        //    switch (massTagResultType)
+        //    switch (ResultType)
         //    {
         //        case Globals.ResultType.BASIC_TARGETED_RESULT:
         //            return new DeconTools.Backend.Core.MassTagResult();

@@ -92,7 +92,7 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
                 addNETDataToChromPeaks(run, peakList);
 
                 //4. Select best chrom peak
-                IPeak selectedChromPeak = chromPeakSel.selectBestPeak(chromPeakSelectorMode, peakList, mt.NETVal, chromPeakSelectorNETTolerance);
+                IPeak selectedChromPeak = chromPeakSel.selectBestPeak(chromPeakSelectorMode, peakList, mt.NormalizedElutionTime, chromPeakSelectorNETTolerance);
                 n14N15Result.ChromPeakSelectedUnlabeled.Add(selectedChromPeak);
             }
 
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
                 addNETDataToChromPeaks(run, peakList);
 
                 //7.4 Select best chrom peak
-                IPeak selectedChromPeak = chromPeakSel.selectBestPeak(chromPeakSelectorMode, peakList, mt.NETVal, chromPeakSelectorNETTolerance);
+                IPeak selectedChromPeak = chromPeakSel.selectBestPeak(chromPeakSelectorMode, peakList, mt.NormalizedElutionTime, chromPeakSelectorNETTolerance);
                 n14N15Result.ChromPeakSelectedLabeled.Add(selectedChromPeak);
 
             }

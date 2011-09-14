@@ -24,7 +24,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(this.Delimiter);
             sb.Append(result.MonoIsotopicMass);
             sb.Append(this.Delimiter); 
-            sb.Append(result.PeptideSequence);
+            sb.Append(result.Code);
             sb.Append(this.Delimiter); 
             sb.Append(result.ChargeState);
             sb.Append(this.Delimiter); 
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(this.Delimiter); 
             sb.Append(result.MZ);
             sb.Append(this.Delimiter); 
-            sb.Append(result.NETVal);
+            sb.Append(result.NormalizedElutionTime);
             sb.Append(this.Delimiter);
             sb.Append(result.RefID);
             sb.Append(this.Delimiter); 

@@ -130,7 +130,7 @@ namespace DeconTools.Backend.Core
                 return null;
             }
 
-            int numNitrogens = this.MassTag.Peptide.GetElementQuantity("N");
+            int numNitrogens = this.MassTag.GetAtomCountForElement("N");
 
             MSPeak monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
             if (monoPeakForUnlabelled == null) return null;

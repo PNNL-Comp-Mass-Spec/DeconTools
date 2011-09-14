@@ -82,7 +82,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("------------------- MassTag = " + mt.ID + "---------------------------");
-            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NETVal.ToString("0.000") + "; Sequence = " + mt.PeptideSequence + "\n");
+            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NormalizedElutionTime.ToString("0.000") + "; Sequence = " + mt.Code + "\n");
 
             peakChromGen.Execute(run.ResultCollection);
             smoother.Execute(run.ResultCollection);
@@ -144,7 +144,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("------------------- MassTag = " + mt.ID + "---------------------------");
-            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NETVal.ToString("0.000") + "; Sequence = " + mt.PeptideSequence + "\n");
+            Console.WriteLine("monoMass = " + mt.MonoIsotopicMass.ToString("0.0000") + "; monoMZ = " + mt.MZ.ToString("0.0000") + "; ChargeState = " + mt.ChargeState + "; NET = " + mt.NormalizedElutionTime.ToString("0.000") + "; Sequence = " + mt.Code + "\n");
 
             peakChromGen.Execute(run.ResultCollection);
             smoother.Execute(run.ResultCollection);

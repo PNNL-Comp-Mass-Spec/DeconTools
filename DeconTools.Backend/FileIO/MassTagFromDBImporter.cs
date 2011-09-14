@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
-using DeconTools.Utilities;
+using System.Text;
 using DeconTools.Backend.Core;
-using System.Collections.ObjectModel;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
@@ -99,7 +97,7 @@ namespace DeconTools.Backend.FileIO
    
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value)) massTag.ID = Convert.ToInt32(reader["Mass_Tag_ID"]);
                         if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value)) massTag.MonoIsotopicMass = Convert.ToDouble(reader["Monoisotopic_Mass"]);
-                        if (!reader["Peptide"].Equals(DBNull.Value)) massTag.PeptideSequence = Convert.ToString(reader["Peptide"]);
+                        if (!reader["Peptide"].Equals(DBNull.Value)) massTag.Code = Convert.ToString(reader["Peptide"]);
                         if (!reader["Charge_State"].Equals(DBNull.Value)) massTag.ChargeState = Convert.ToInt16(reader["Charge_State"]);
                         if (!reader["ObsCount"].Equals(DBNull.Value)) massTag.ObsCount = Convert.ToInt32(reader["ObsCount"]);
                         if (massTag.ChargeState != 0)
@@ -107,12 +105,11 @@ namespace DeconTools.Backend.FileIO
                             massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
                         }
 
-                        if (!reader["Avg_GANET"].Equals(DBNull.Value)) massTag.NETVal = Convert.ToSingle(reader["Avg_GANET"]);
+                        if (!reader["Avg_GANET"].Equals(DBNull.Value)) massTag.NormalizedElutionTime = Convert.ToSingle(reader["Avg_GANET"]);
                         if (!reader["Ref_ID"].Equals(DBNull.Value)) massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
                         if (!reader["Description"].Equals(DBNull.Value)) massTag.ProteinDescription = Convert.ToString(reader["Description"]);
                       
-                        massTag.CreatePeptideObject();
-
+                   
                         data.MassTagList.Add(massTag);
                         
                         if (progressCounter % 100 == 0) Console.WriteLine(progressCounter + " records loaded; " + reader[0]);

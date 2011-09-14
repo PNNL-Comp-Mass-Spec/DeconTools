@@ -76,7 +76,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
             foreach (ChromPeak peak in resultColl.Run.PeakList)
             {
-                if (Math.Abs(peak.NETValue - mt.NETVal) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                if (Math.Abs(peak.NETValue - mt.NormalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
                 }

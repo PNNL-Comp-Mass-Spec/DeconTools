@@ -77,7 +77,7 @@ namespace DeconTools.Backend.ProcessingTasks
             MassTagResultBase result = resultList.GetMassTagResult(resultList.Run.CurrentMassTag);
 
             int numPeaksWithinTolerance = 0;
-            ChromPeak bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NETVal, this.NETTolerance, out numPeaksWithinTolerance);
+            ChromPeak bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NormalizedElutionTime, this.NETTolerance, out numPeaksWithinTolerance);
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
 

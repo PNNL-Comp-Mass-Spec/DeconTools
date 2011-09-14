@@ -124,24 +124,24 @@ namespace DeconTools.UnitTesting2
 
             MassTag mt1 = new MassTag();
             mt1.ID = 23085473;
-            mt1.NETVal = 0.3807834F;
+            mt1.NormalizedElutionTime = 0.3807834F;
             mt1.MonoIsotopicMass = 2538.33284203802;
             mt1.ChargeState = 3;
             mt1.MZ = mt1.MonoIsotopicMass / mt1.ChargeState + Globals.PROTON_MASS;
-            mt1.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
-            mt1.CreatePeptideObject();
-
+            mt1.Code = "AIHQPAPTFAEQSTTSEILVTGIK";
+            mt1.EmpiricalFormula = mt1.GetEmpiricalFormulaFromTargetCode();
+          
             mtList.Add(mt1);
 
 
             MassTag mt2 = new MassTag();
             mt2.ID = 23085470;
-            mt2.NETVal = 0.6053093f;
+            mt2.NormalizedElutionTime = 0.6053093f;
             mt2.MonoIsotopicMass = 2329.24291507994;
             mt2.ChargeState = 3;
             mt2.MZ = mt2.MonoIsotopicMass / mt2.ChargeState + Globals.PROTON_MASS;
-            mt2.PeptideSequence = "TAIRDPNPVIFLENEILYGR";
-            mt2.CreatePeptideObject();
+            mt2.Code = "TAIRDPNPVIFLENEILYGR";
+            mt1.EmpiricalFormula = mt1.GetEmpiricalFormulaFromTargetCode();
 
             mtList.Add(mt2);
 

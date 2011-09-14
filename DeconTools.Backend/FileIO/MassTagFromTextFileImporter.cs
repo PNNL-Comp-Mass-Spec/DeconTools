@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MassTagFromTextFileImporter:IMassTagImporter
+    public class MassTagFromTextFileImporter : IMassTagImporter
     {
         #region Constructors
 
@@ -47,7 +45,7 @@ namespace DeconTools.Backend.FileIO
                 string headerLine = reader.ReadLine();    //first line is the header line.   
 
                 _headers = processLine(headerLine);
-                
+
                 int lineCounter = 1;
                 while (reader.Peek() != -1)
                 {
@@ -67,9 +65,12 @@ namespace DeconTools.Backend.FileIO
                         throw new Exception(msg);
                     }
 
+
+                    massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
+
                     data.MassTagList.Add(massTag);
-                    
-                     
+
+
 
 
 
@@ -84,16 +85,13 @@ namespace DeconTools.Backend.FileIO
         {
 
             MassTag mt = new MassTag();
-            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state"}, lineData, "0")); 
+            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" }, lineData, "0"));
 
-            mt.ID = parseIntField(getValue(new string[]{"id","mass_tag_id","massTagid"},lineData,"-1"));
-            mt.PeptideSequence = getValue(new string[] { "peptide", "sequence" }, lineData, ""); 
-            mt.NETVal = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
+            mt.ID = parseIntField(getValue(new string[] { "id", "mass_tag_id", "massTagid" }, lineData, "-1"));
+            mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
+            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
             mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
-
-            mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass" }, lineData, "0"));
-
-            mt.CreatePeptideObject(false);
+            mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
 
             if (mt.ChargeState == 0)
             {
@@ -104,17 +102,15 @@ namespace DeconTools.Backend.FileIO
                 mt.MZ = parseDoubleField(getValue(new string[] { "mz" }, lineData, "0"));
                 if (mt.MZ == 0 || mt.MZ == double.NaN)
                 {
-                    mt.MZ = mt.Peptide.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
+                    mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
                 }
-
-                mt.MonoIsotopicMass = (mt.MZ - Globals.PROTON_MASS) * mt.ChargeState;
             }
-            
+
             mt.RefID = parseIntField(getValue(new string[] { "ref_id" }, lineData, "-1"));
             mt.ProteinDescription = getValue(new string[] { "description" }, lineData, "");
-            
+
             return mt;
-            
+
         }
 
         private string getValue(string[] possibleHeaders, List<string> lineData, string defaultVal)
@@ -122,7 +118,7 @@ namespace DeconTools.Backend.FileIO
             foreach (var possibleHeader in possibleHeaders)
             {
 
-                
+
                 int indexOfHeader = getIndexForTableHeader(_headers, possibleHeader, true);
                 bool foundHeader = (indexOfHeader != -1);
 
@@ -130,7 +126,7 @@ namespace DeconTools.Backend.FileIO
                 {
                     return lineData[indexOfHeader];
                 }
-                
+
             }
             return defaultVal;
 

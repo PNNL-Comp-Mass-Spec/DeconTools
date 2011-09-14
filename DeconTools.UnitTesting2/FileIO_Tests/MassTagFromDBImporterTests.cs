@@ -39,12 +39,12 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(43, massTagColl.MassTagList.Count);
             Assert.AreEqual(24917, massTagColl.MassTagList[1].ID);
-            Assert.AreEqual("TQLKEFIDAQI", massTagColl.MassTagList[1].PeptideSequence);
+            Assert.AreEqual("TQLKEFIDAQI", massTagColl.MassTagList[1].Code);
             Assert.AreEqual(1304.6975526m, (decimal)massTagColl.MassTagList[1].MonoIsotopicMass);
             Assert.AreEqual(2, massTagColl.MassTagList[1].ChargeState);
             Assert.AreEqual(3192, massTagColl.MassTagList[1].ObsCount);
             Assert.AreEqual(653.35605279, (decimal)massTagColl.MassTagList[1].MZ);
-            Assert.AreEqual(0.3989965, (decimal)massTagColl.MassTagList[1].NETVal);
+            Assert.AreEqual(0.3989965, (decimal)massTagColl.MassTagList[1].NormalizedElutionTime);
             Assert.AreEqual(359, massTagColl.MassTagList[1].RefID);
             Assert.AreEqual("thioredoxin 1 (TrxA)", massTagColl.MassTagList[1].ProteinDescription);
         }

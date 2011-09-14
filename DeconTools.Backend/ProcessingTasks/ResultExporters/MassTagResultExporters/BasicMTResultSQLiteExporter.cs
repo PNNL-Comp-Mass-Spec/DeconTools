@@ -141,8 +141,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                         netParam.Value = item.Value.GetNET();
                         massTagIDParam.Value = item.Value.MassTag.ID;
                         massTagMZParam.Value = item.Value.MassTag.MZ;
-                        massTagNETParam.Value = item.Value.MassTag.NETVal;
-                        massTagSequenceParam.Value = item.Value.MassTag.PeptideSequence;
+                        massTagNETParam.Value = item.Value.MassTag.NormalizedElutionTime;
+                        massTagSequenceParam.Value = item.Value.MassTag.Code;
 
                         if (item.Value.IsotopicProfile != null)
                         {

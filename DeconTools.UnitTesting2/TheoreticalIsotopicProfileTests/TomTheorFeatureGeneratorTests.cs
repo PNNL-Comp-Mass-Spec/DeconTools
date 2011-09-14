@@ -49,8 +49,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         public void GenerateN15LabelledTheorProfileTest2()
         {
             MassTag mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
+           mt.EmpiricalFormula=   mt.GetEmpiricalFormulaFromTargetCode();
 
-            Console.WriteLine("Total nitrogens = "+mt.Peptide.GetElementQuantity("N"));
+            Console.WriteLine("Total nitrogens = "+mt.GetAtomCountForElement("N"));
 
 
             TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();

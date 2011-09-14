@@ -90,8 +90,8 @@ namespace DeconTools.Backend.ProcessingTasks.TaskControllers
                 getNETValues(isopeakChromData.ChromPeakData, run);
 
 
-                theorIsopeakChromData.ChromBestPeakData = selectBestChromPeaks(theorIsopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
-                isopeakChromData.ChromBestPeakData = selectBestChromPeaks(isopeakChromData.ChromPeakData, chromPeakSelector, mt.NETVal, 0.1);
+                theorIsopeakChromData.ChromBestPeakData = selectBestChromPeaks(theorIsopeakChromData.ChromPeakData, chromPeakSelector, mt.NormalizedElutionTime, 0.1);
+                isopeakChromData.ChromBestPeakData = selectBestChromPeaks(isopeakChromData.ChromPeakData, chromPeakSelector, mt.NormalizedElutionTime, 0.1);
 
 
 

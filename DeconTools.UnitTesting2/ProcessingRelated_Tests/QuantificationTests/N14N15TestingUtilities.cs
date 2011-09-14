@@ -80,12 +80,11 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         {
             MassTag mt = new MassTag();
             mt.ChargeState = 2;
-            mt.PeptideSequence = "AMPIDLSNLALLDANGK";
+            mt.Code = "AMPIDLSNLALLDANGK";
             mt.MonoIsotopicMass = 1754.923582420;
             mt.MZ = 878.4690677;
-            mt.NETVal = 0.4509717f;
-            mt.CreatePeptideObject();
-
+            mt.NormalizedElutionTime = 0.4509717f;
+        
             return mt;
         }
         
@@ -94,12 +93,11 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         {
             MassTag mt = new MassTag();
             mt.ChargeState = 2;
-            mt.PeptideSequence = "IVKVNVDENPESPAMLGVR";
+            mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.MonoIsotopicMass = 2066.08292;
             mt.MZ = 1034.048737;
-            mt.NETVal = 0.329644f;
-            mt.CreatePeptideObject();
-
+            mt.NormalizedElutionTime = 0.329644f;
+     
             return mt;
         }
 
@@ -107,12 +105,11 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         {
             MassTag mt = new MassTag();
             mt.ChargeState = 3;
-            mt.PeptideSequence = "IVKVNVDENPESPAMLGVR";
+            mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.MonoIsotopicMass = 2066.08292;
             mt.MZ = 689.7015832;
-            mt.NETVal = 0.329644f;
-            mt.CreatePeptideObject();
-
+            mt.NormalizedElutionTime = 0.329644f;
+           
             return mt;
         }
 

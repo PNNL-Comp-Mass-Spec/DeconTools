@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         //{
             
             
-        //    resultColl.MassTagResultType = Globals.MassTagResultType.O16O18_MASSTAG_RESULT;
+        //    resultColl.ResultType = Globals.ResultType.O16O18_MASSTAG_RESULT;
 
         //    MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
         //    if (result == null)

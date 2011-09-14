@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DeconTools.Backend</RootNamespace>
     <AssemblyName>DeconTools.Backend</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -141,6 +141,7 @@
     <Compile Include="Core\Results\O16O18_TResult.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Core\ScanNETPair.cs" />
+    <Compile Include="Core\TargetBase.cs" />
     <Compile Include="Data\AVLTree.cs" />
     <Compile Include="Data\BinarySearchTree.cs" />
     <Compile Include="Data\BitArray2D.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\ObjectCopier.cs" />
+    <Compile Include="Utilities\PeptideUtils.cs" />
     <Compile Include="Utilities\RunUtilities.cs" />
     <Compile Include="Utilities\SerializerGeneric.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Field.cs" />

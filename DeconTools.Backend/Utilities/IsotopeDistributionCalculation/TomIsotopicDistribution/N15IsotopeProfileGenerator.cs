@@ -23,10 +23,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
-
-            if (mt.Peptide == null) mt.CreatePeptideObject();
-
-            int numNitrogens = mt.Peptide.GetElementQuantity("N");
+            int numNitrogens = mt.GetAtomCountForElement("N");
 
             IsotopicProfile labeledTheorProfile = TomIsotopicPattern.GetIsotopePattern(mt.GetEmpiricalFormulaAsIntArray(), TomIsotopicPattern.aafN15Isos);
             addMZInfoToTheorProfile(mt.IsotopicProfile,labeledTheorProfile, numNitrogens, mt.ChargeState);

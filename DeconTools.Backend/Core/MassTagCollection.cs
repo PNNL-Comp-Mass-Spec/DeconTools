@@ -58,9 +58,9 @@ namespace DeconTools.Backend.Core
                 sb.Append(delim);
                 sb.Append(mt.MonoIsotopicMass.ToString("#.####"));
                 sb.Append(delim);
-                sb.Append(mt.NETVal.ToString("0.00"));
+                sb.Append(mt.NormalizedElutionTime.ToString("0.00"));
                 sb.Append(delim);
-                sb.Append(mt.PeptideSequence);
+                sb.Append(mt.Code);
                 sb.Append(Environment.NewLine);
             }
 

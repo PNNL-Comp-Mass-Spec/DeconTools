@@ -257,9 +257,8 @@ namespace DeconTools.UnitTesting2
             MassTag mt = new MassTag();
             mt.ID = 86963986;
             mt.MonoIsotopicMass = 1516.791851;
-            mt.PeptideSequence = "AAKEGISCEIIDLR";
-            mt.NETVal = 0.2284955f;
-            mt.CreatePeptideObject();
+            mt.Code = "AAKEGISCEIIDLR";
+            mt.NormalizedElutionTime = 0.2284955f;
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
@@ -277,9 +276,8 @@ namespace DeconTools.UnitTesting2
             mt.MonoIsotopicMass = 2086.0595;
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
-            mt.PeptideSequence = "DFNEALVHQVVVAYAANAR";
-            mt.CreatePeptideObject();
-
+            mt.Code = "DFNEALVHQVVVAYAANAR";
+         
             mtList.Add(mt);
             return mtList;
         }
@@ -291,13 +289,12 @@ namespace DeconTools.UnitTesting2
 
             MassTag mt = new MassTag();
             mt.ID = 23085473;
-            mt.NETVal = 0.3807834F;
+            mt.NormalizedElutionTime = 0.3807834F;
             mt.MonoIsotopicMass = 2538.33284203802;
             mt.ChargeState = 3;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
-            mt.PeptideSequence = "AIHQPAPTFAEQSTTSEILVTGIK";
-            mt.CreatePeptideObject();
-
+            mt.Code = "AIHQPAPTFAEQSTTSEILVTGIK";
+         
             mtList.Add(mt);
             return mtList;
 
@@ -415,9 +412,8 @@ namespace DeconTools.UnitTesting2
             mt.MonoIsotopicMass = 921.4807035;
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
-            mt.PeptideSequence = "AEFVEVTK";
-            mt.CreatePeptideObject();
-
+            mt.Code = "AEFVEVTK";
+        
             mtList.Add(mt);
             return mtList;
         }

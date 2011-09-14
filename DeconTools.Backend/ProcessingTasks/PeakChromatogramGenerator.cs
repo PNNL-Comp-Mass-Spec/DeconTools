@@ -114,13 +114,13 @@ namespace DeconTools.Backend.ProcessingTasks
             float maxNetVal;
             if (resultColl.Run.NETIsAligned)
             {
-                minNetVal = resultColl.Run.CurrentMassTag.NETVal - NETWindowWidthForAlignedData;
-                maxNetVal = resultColl.Run.CurrentMassTag.NETVal + NETWindowWidthForAlignedData;  
+                minNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime - NETWindowWidthForAlignedData;
+                maxNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime + NETWindowWidthForAlignedData;  
             }
             else
             {
-                minNetVal = resultColl.Run.CurrentMassTag.NETVal - NETWindowWidthForNonAlignedData;
-                maxNetVal = resultColl.Run.CurrentMassTag.NETVal + NETWindowWidthForNonAlignedData;  
+                minNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime - NETWindowWidthForNonAlignedData;
+                maxNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime + NETWindowWidthForNonAlignedData;  
    
             }
           
