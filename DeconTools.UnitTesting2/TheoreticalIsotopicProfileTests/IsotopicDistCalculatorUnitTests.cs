@@ -52,9 +52,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 		{
 			Dictionary<string, int> formula = formBuild.ConvertToMolecularFormula("ANKYLSRRH");
 			Assert.AreEqual(49, formula["C"]);
-			Assert.AreEqual(81, formula["H"]);
+			Assert.AreEqual(79, formula["H"]);
 			Assert.AreEqual(19, formula["N"]);
-			Assert.AreEqual(13, formula["O"]);
+			Assert.AreEqual(12, formula["O"]);
 
 
 			formBuild.AddFormulaToPreviousFormula("HPO4", ref formula);
@@ -184,7 +184,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 			Dictionary<string, int> formula = formBuild.FormulaToDictionary("C150H300N50O60");
 
 			IsotopicProfile cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
-			StringBuilder sb = new StringBuilder();
+			
+            
+            StringBuilder sb = new StringBuilder();
 			sb.Append(Environment.NewLine);
 			TestUtilities.ReportIsotopicProfileData(sb, cluster);
 

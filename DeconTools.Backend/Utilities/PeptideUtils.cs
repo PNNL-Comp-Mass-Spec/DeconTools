@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Utilities
 
             _aminoAcidList.Add(Tuple.Create('A', "C3H5NO", 71.037114d));
             _aminoAcidList.Add(Tuple.Create('R', "C6H12N4O", 156.10111d));
-            _aminoAcidList.Add(Tuple.Create('N', "C5H8N2O2", 128.05858d));
+            _aminoAcidList.Add(Tuple.Create('N', "C4H6N2O2", 114.04293d));
             _aminoAcidList.Add(Tuple.Create('D', "C4H5NO3", 115.02694d));
             _aminoAcidList.Add(Tuple.Create('C', "C3H5NOS", 103.00919d));
             _aminoAcidList.Add(Tuple.Create('E', "C5H7NO3", 129.04259d));
@@ -90,10 +90,10 @@ namespace DeconTools.Backend.Utilities
             return outputMonoisotopicMass;
         }
 
-      
 
 
-        public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence)
+
+        public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
         {
 
             bool sequenceIsValid = ValidateSequence(peptideSequence);
@@ -106,21 +106,24 @@ namespace DeconTools.Backend.Utilities
             {
                 string aminoAcidFormula = GetEmpiricalFormulaForAminoAcidResidue(aminoAcid);
 
-                outputEmpiricalFormula = combineTwoEmpiricalFormulas(outputEmpiricalFormula, aminoAcidFormula);
+                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, aminoAcidFormula);
             }
 
-            string nterminalHydrogen = "H";
-            string cterminalFreeAcid = "OH";
+            if (includeAmineHydrogenAndFreeAcid)
+            {
 
-            outputEmpiricalFormula = combineTwoEmpiricalFormulas(outputEmpiricalFormula, nterminalHydrogen);
-            outputEmpiricalFormula = combineTwoEmpiricalFormulas(outputEmpiricalFormula, cterminalFreeAcid);
+                string nterminalHydrogen = "H";
+                string cterminalFreeAcid = "OH";
 
+                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, nterminalHydrogen);
+                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, cterminalFreeAcid);
+            }
             return outputEmpiricalFormula;
         }
 
-        public string combineTwoEmpiricalFormulas(string outputEmpiricalFormula, string formulaToBeAdded)
+        public string addFormula(string baseFormula, string formulaToBeAdded)
         {
-            var baseElementTable = parseEmpiricalFormulaString(outputEmpiricalFormula);
+            var baseElementTable = parseEmpiricalFormulaString(baseFormula);
             var addedTable = parseEmpiricalFormulaString(formulaToBeAdded);
 
             foreach (var item in addedTable)
