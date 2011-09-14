@@ -63,6 +63,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PNNLOmics">
+      <HintPath>..\..\PNNLOmics\PNNLOmics\bin\x86\Release\PNNLOmics.dll</HintPath>
+    </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\ProteinCalc.dll</HintPath>
@@ -133,6 +136,7 @@
     <Compile Include="Run_relatedTests\XCaliburRun_Tests.cs" />
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities\TestUtilities.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\IsotopicDistCalculatorUnitTests.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\TomTheorFeatureGeneratorTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
   </ItemGroup>
