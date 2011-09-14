@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -48,33 +47,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
 		[Test]
-		public void TestFormulaCalculator()
-		{
-			Dictionary<string, int> formula = formBuild.ConvertToMolecularFormula("ANKYLSRRH");
-			Assert.AreEqual(49, formula["C"]);
-			Assert.AreEqual(79, formula["H"]);
-			Assert.AreEqual(19, formula["N"]);
-			Assert.AreEqual(12, formula["O"]);
-
-
-			formBuild.AddFormulaToPreviousFormula("HPO4", ref formula);
-			Assert.AreEqual(49, formula["C"]);
-			Assert.AreEqual(82, formula["H"]);
-			Assert.AreEqual(19, formula["N"]);
-			Assert.AreEqual(17, formula["O"]);
-			Assert.AreEqual(1, formula["P"]);
-
-			formBuild.RemoveFormulaFromPreviousFormula("H2O", ref formula);
-			Assert.AreEqual(49, formula["C"]);
-			Assert.AreEqual(80, formula["H"]);
-			Assert.AreEqual(19, formula["N"]);
-			Assert.AreEqual(16, formula["O"]);
-			Assert.AreEqual(1, formula["P"]);
-
-
-
-		}
-		[Test]
 		public void TestIsotopeDict()
 		{
 			Dictionary<string, int> formula = formBuild.FormulaToDictionary("C80H100N20O30Na2F3Mg2S10");
@@ -82,74 +54,74 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 			isotopicDistributionCalculator.GetIsotopePattern(formula);
 		}
 
-        [Test]
-        public void SendData()
-        {
-            DataTable dt = TextFileToDataTable(@"C:\Documents and Settings\aldr699\My Documents\ForGordon\ShawnaData.txt");
+        //[Test]
+        //public void SendData()
+        //{
+        //    DataTable dt = TextFileToDataTable(@"C:\Documents and Settings\aldr699\My Documents\ForGordon\ShawnaData.txt");
 
-			string[] fields = new string[5] { "n_ac", "n_p", "n_me2","n_me3", "n_me"};
-            dt.Columns.Add("Formula", typeof(string));
+        //    string[] fields = new string[5] { "n_ac", "n_p", "n_me2","n_me3", "n_me"};
+        //    dt.Columns.Add("Formula", typeof(string));
 
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
 
 
-				Dictionary<string, int> temp = formBuild.ConvertToMolecularFormula((string)dt.Rows[i]["Clean_Seqence"]);
-				for (int j = 0; j < fields.Length; j++)
-				{
-					int count = int.Parse((string)dt.Rows[i][fields[j]]);
-					if (j == 0)
-					{
-						for (int k = 0; k < count; k++)
-						{
-							formBuild.AddFormulaToPreviousFormula("C2H3O", ref temp);
-						}
-					}
-					else if (j == 1)
-					{
-						for (int k = 0; k < count; k++)
-						{
-							formBuild.AddFormulaToPreviousFormula("PO3", ref temp);
-						}
-					}
-					else if (j == 2)
-					{
-						for (int k = 0; k < count; k++)
-						{
-							formBuild.AddFormulaToPreviousFormula("C2H6", ref temp);
-						}
-					}
-					else if (j == 3)
-					{
-						for (int k = 0; k < count; k++)
-						{
-							formBuild.AddFormulaToPreviousFormula("C3H9", ref temp);
-						}
-					}
-					else if (j == 4)
-					{
-						for (int k = 0; k < count; k++)
-						{
-							formBuild.AddFormulaToPreviousFormula("CH3", ref temp);
-						}
-					}
-					count = 0;
-				}
+        //        Dictionary<string, int> temp = formBuild.ConvertToMolecularFormula((string)dt.Rows[i]["Clean_Seqence"]);
+        //        for (int j = 0; j < fields.Length; j++)
+        //        {
+        //            int count = int.Parse((string)dt.Rows[i][fields[j]]);
+        //            if (j == 0)
+        //            {
+        //                for (int k = 0; k < count; k++)
+        //                {
+        //                    formBuild.AddFormulaToPreviousFormula("C2H3O", ref temp);
+        //                }
+        //            }
+        //            else if (j == 1)
+        //            {
+        //                for (int k = 0; k < count; k++)
+        //                {
+        //                    formBuild.AddFormulaToPreviousFormula("PO3", ref temp);
+        //                }
+        //            }
+        //            else if (j == 2)
+        //            {
+        //                for (int k = 0; k < count; k++)
+        //                {
+        //                    formBuild.AddFormulaToPreviousFormula("C2H6", ref temp);
+        //                }
+        //            }
+        //            else if (j == 3)
+        //            {
+        //                for (int k = 0; k < count; k++)
+        //                {
+        //                    formBuild.AddFormulaToPreviousFormula("C3H9", ref temp);
+        //                }
+        //            }
+        //            else if (j == 4)
+        //            {
+        //                for (int k = 0; k < count; k++)
+        //                {
+        //                    formBuild.AddFormulaToPreviousFormula("CH3", ref temp);
+        //                }
+        //            }
+        //            count = 0;
+        //        }
 
-				string input = "";
-				SortedList<string, int> fine = new SortedList<string, int>();
-				foreach(KeyValuePair<string, int> l in temp)
-				{
-					fine.Add(l.Key, l.Value);
-				}
-                foreach (KeyValuePair<string, int> s in fine)
-                {
-                    input += s.Key + s.Value + " ";
-                }
-                dt.Rows[i]["Formula"] = input.TrimEnd(' ');
-            }
-            //GuiInteraction.Write(dt, @"C:\Documents and Settings\aldr699\My Documents\ForGordon\ShawnaDatappend.txt");
-        }
+        //        string input = "";
+        //        SortedList<string, int> fine = new SortedList<string, int>();
+        //        foreach(KeyValuePair<string, int> l in temp)
+        //        {
+        //            fine.Add(l.Key, l.Value);
+        //        }
+        //        foreach (KeyValuePair<string, int> s in fine)
+        //        {
+        //            input += s.Key + s.Value + " ";
+        //        }
+        //        dt.Rows[i]["Formula"] = input.TrimEnd(' ');
+        //    }
+        //    //GuiInteraction.Write(dt, @"C:\Documents and Settings\aldr699\My Documents\ForGordon\ShawnaDatappend.txt");
+        //}
 
 
 		[Test]
@@ -315,51 +287,51 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 		}
 
 
-		public static DataTable TextFileToDataTable(string filePath)
-		{
-			string line = "";
-			string[] fields = null;
-		//	string dataSetName = System.IO.Path.GetFileName(filePath).Substring(0, System.IO.Path.GetFileName(filePath).IndexOf("_fht", 0));
-			DataTable dt = new DataTable();
-			try
-			{
-				using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath))
-				{
-					// first line has headers   
-					if ((line = sr.ReadLine()) != null)
-					{
-						fields = line.Split('\t');
-						foreach (string s in fields)
-						{
-							dt.Columns.Add(s);
-						}
-					}
-					else
-					{
-						throw new ApplicationException("The data provided is not in a valid format.");
-					}
-					// fill the rest of the table; positional   
-					while ((line = sr.ReadLine()) != null)
-					{
-						DataRow row = dt.NewRow();
-						fields = line.Split('\t');
-						int i = 0;
-						foreach (string s in fields)
-						{
-							row[i] = s;
-							i++;
-						}
-						dt.Rows.Add(row);
-					}
-				}
-				return dt;
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("The file failed to load" + ex.Message);
-				return null;
-			}
-		}
+        //public static DataTable TextFileToDataTable(string filePath)
+        //{
+        //    string line = "";
+        //    string[] fields = null;
+        ////	string dataSetName = System.IO.Path.GetFileName(filePath).Substring(0, System.IO.Path.GetFileName(filePath).IndexOf("_fht", 0));
+        //    DataTable dt = new DataTable();
+        //    try
+        //    {
+        //        using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath))
+        //        {
+        //            // first line has headers   
+        //            if ((line = sr.ReadLine()) != null)
+        //            {
+        //                fields = line.Split('\t');
+        //                foreach (string s in fields)
+        //                {
+        //                    dt.Columns.Add(s);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                throw new ApplicationException("The data provided is not in a valid format.");
+        //            }
+        //            // fill the rest of the table; positional   
+        //            while ((line = sr.ReadLine()) != null)
+        //            {
+        //                DataRow row = dt.NewRow();
+        //                fields = line.Split('\t');
+        //                int i = 0;
+        //                foreach (string s in fields)
+        //                {
+        //                    row[i] = s;
+        //                    i++;
+        //                }
+        //                dt.Rows.Add(row);
+        //            }
+        //        }
+        //        return dt;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("The file failed to load" + ex.Message);
+        //        return null;
+        //    }
+        //}
 
 		[Test]
 		public void test01()
