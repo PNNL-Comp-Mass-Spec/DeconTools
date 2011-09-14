@@ -338,7 +338,7 @@ namespace DeconTools.Workflows.UnitTesting
             Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.MassTag.NETVal - result.GetNET();
+            double netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
             
             decimal expectedNETDiff = 0.057m;
@@ -359,7 +359,7 @@ namespace DeconTools.Workflows.UnitTesting
             workflow.Execute();
 
 
-            netDiff = result.MassTag.NETVal - result.GetNET();
+            netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
 
 
@@ -411,7 +411,7 @@ namespace DeconTools.Workflows.UnitTesting
             Assert.AreEqual(9367, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.MassTag.NETVal - result.GetNET();
+            double netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
 
             decimal expectedNETDiff = 0.071m;
@@ -432,7 +432,7 @@ namespace DeconTools.Workflows.UnitTesting
             workflow.Execute();
 
 
-            netDiff = result.MassTag.NETVal - result.GetNET();
+            netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff after alignment = " + netDiff);
 
 

@@ -182,7 +182,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 MassTagResultBase result = (MassTagResultBase)this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
                 result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
-
+                result.FailedResult = true;
                 return;
             }
         }

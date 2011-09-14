@@ -87,7 +87,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow.Execute();
 
             
+
+
             MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
+
+
+            Assert.AreEqual(false, result.FailedResult);
+            
             result.DisplayToConsole();
 
             Assert.IsNotNull(result.IsotopicProfile);

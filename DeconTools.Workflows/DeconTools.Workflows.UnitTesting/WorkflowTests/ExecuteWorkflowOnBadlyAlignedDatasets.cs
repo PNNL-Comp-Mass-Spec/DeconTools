@@ -53,7 +53,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
            
             Console.WriteLine("theor mono mass = " + mt1.MonoIsotopicMass);
             Console.WriteLine("theorMZ = " + mt1.MZ);
-            Console.WriteLine("theorNET = " + mt1.NETVal);
+            Console.WriteLine("theorNET = " + mt1.NormalizedElutionTime);
             Console.WriteLine("obsScan = " + repo.Results[0].ScanLC);
             Console.WriteLine("obsNET = " + repo.Results[0].NET);
             Console.WriteLine("NETError = " + repo.Results[0].NETError);
@@ -105,7 +105,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine("theor mono mass = " + mt1.MonoIsotopicMass);
             Console.WriteLine("theorMZ = " + mt1.MZ);
-            Console.WriteLine("theorNET = " + mt1.NETVal);
+            Console.WriteLine("theorNET = " + mt1.NormalizedElutionTime);
             Console.WriteLine("obsScan = " + repo.Results[0].ScanLC);
             Console.WriteLine("obsNET = " + repo.Results[0].NET);
             Console.WriteLine("NETError = " + repo.Results[0].NETError);

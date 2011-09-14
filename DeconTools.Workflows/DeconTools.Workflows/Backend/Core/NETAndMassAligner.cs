@@ -265,10 +265,10 @@ namespace DeconTools.Workflows.Backend.Core
             multialignMassTag.Modifications = String.Empty;
             multialignMassTag.MSGFSpecProbMax = 0;
             multialignMassTag.MSMSObserved = mt.ObsCount;
-            multialignMassTag.NetAverage = mt.NETVal;
+            multialignMassTag.NetAverage = mt.NormalizedElutionTime;
             multialignMassTag.NetPredicted = -1;
             multialignMassTag.NetStandardDeviation = 0;
-            multialignMassTag.Peptide = mt.PeptideSequence;
+            multialignMassTag.Peptide = mt.Code;
             multialignMassTag.PeptideEx = String.Empty;
             multialignMassTag.XCorr = -1;
 

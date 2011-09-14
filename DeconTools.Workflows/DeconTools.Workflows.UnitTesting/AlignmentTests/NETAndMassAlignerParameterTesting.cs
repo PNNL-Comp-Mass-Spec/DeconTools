@@ -461,7 +461,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double alignedMZ = run.GetAlignedMZ(obsMZ, scan);
                     double ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
-                    double theorNET = mt.NETVal;
+                    double theorNET = mt.NormalizedElutionTime;
                     double obsNET = result.NET;
                     float alignedNET = run.GetNETValueForScan((int)scan);
 

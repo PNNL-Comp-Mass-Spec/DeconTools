@@ -248,7 +248,7 @@ namespace DeconTools.Workflows.Backend.Core
             var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
 
             var filteredMasstags = (from n in this.MassTagList
-                                    where n.NETVal >= netgrouping1.Lower && n.NETVal < netgrouping1.Upper
+                                    where n.NormalizedElutionTime >= netgrouping1.Lower && n.NormalizedElutionTime < netgrouping1.Upper
                                     select n);
 
             int numPassingMassTagsInGrouping = 0;
@@ -269,7 +269,7 @@ namespace DeconTools.Workflows.Backend.Core
                     double obsMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
                     double ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
 
-                    string progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NETVal.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
+                    string progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
                     reportProgess(0, progressInfo);
 
                     //reportProgess(progressPercentage, progressInfo);
@@ -325,7 +325,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 var filteredMasstags = (from n in this.MassTagList
-                                        where n.NETVal >= netGrouping.Lower && n.NETVal < netGrouping.Upper
+                                        where n.NormalizedElutionTime >= netGrouping.Lower && n.NormalizedElutionTime < netGrouping.Upper
                                         select n);
 
                 int numPassingMassTagsInGrouping = 0;
@@ -342,7 +342,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (resultPassesCriteria(result))
                     {
 
-                        string progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NETVal.ToString("0.000") + "; found in scan: " + result.GetScanNum();
+                        string progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum();
 
                         reportProgess(progressPercentage, progressInfo);
                         resultsPassingCriteria.Add(result);   //where passing results are added

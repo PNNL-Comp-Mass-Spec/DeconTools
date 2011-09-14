@@ -111,7 +111,7 @@ namespace DeconTools.Workflows.Backend.Results
 
             tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();
-            tr.NETError = result.MassTag.NETVal - tr.NET;
+            tr.NETError = result.MassTag.NormalizedElutionTime - tr.NET;
             
             
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
