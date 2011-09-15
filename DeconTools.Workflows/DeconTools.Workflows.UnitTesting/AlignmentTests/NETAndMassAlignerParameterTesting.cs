@@ -61,7 +61,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    MassTag mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -145,7 +145,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    MassTag mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -235,7 +235,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    MassTag mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    MassTag mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -454,7 +454,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    MassTag mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;

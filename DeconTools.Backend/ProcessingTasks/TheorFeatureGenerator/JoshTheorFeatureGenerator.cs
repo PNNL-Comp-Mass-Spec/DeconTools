@@ -1,42 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Utilities;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
-    public class TomTheorFeatureGenerator : ITheorFeatureGenerator
+    public class JoshTheorFeatureGenerator:ITheorFeatureGenerator
     {
-        #region Constructors
-
-        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
-        
+        IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
         N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
-        public TomTheorFeatureGenerator()
-            : this(Globals.LabellingType.NONE,0.005)
+        #region Constructors
+        public JoshTheorFeatureGenerator()
+            : this(Globals.LabellingType.NONE, 0.005)
         {
-            
+
+
         }
 
-        public TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
         {
             this.LabellingType = labellingType;
             this.LowPeakCutOff = lowPeakCutOff;
         }
+
         #endregion
 
         #region Properties
-
         public Globals.LabellingType LabellingType { get; set; }
-        
-        /// <summary>
-        /// Peaks below the cutoff will be trimmed out from the theoretical profile
-        /// </summary>
         public double LowPeakCutOff { get; set; }
-
-
 
         #endregion
 
@@ -55,17 +52,18 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 case Globals.LabellingType.O18:
                     throw new NotImplementedException();
                 case Globals.LabellingType.N15:
-                    mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
                     
+                    mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile2(mt, LowPeakCutOff);
+
                     break;
                 default:
                     break;
             }
 
         }
+        #endregion
 
-       
-
+        #region Private Methods
         private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
@@ -73,24 +71,23 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             try
             {
-                iso = _tomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _tomIsotopicPatternGenerator.aafIsos);
+                
+                iso = _isotopicDistCalculator.GetIsotopePattern(mt.EmpiricalFormula);
             }
             catch (Exception ex)
             {
                 throw new Exception("Theoretical feature generator failed. Details: " + ex.Message);
             }
-            
+
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
             if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
 
             return iso;
+
+            
         }
 
-
-        #endregion
-
-        #region Private Methods
         #endregion
 
 
@@ -98,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             if (iso == null || iso.Peaklist == null) return;
 
-          
+
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
@@ -111,10 +108,11 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         }
 
-
-        public override void LoadRunRelatedInfo(ResultCollection results)
+        public override void LoadRunRelatedInfo(Core.ResultCollection results)
         {
-            // do nothing
+            //
         }
+
+      
     }
 }

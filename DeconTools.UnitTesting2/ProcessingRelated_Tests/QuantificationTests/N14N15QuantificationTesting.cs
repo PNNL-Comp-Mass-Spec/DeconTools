@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Backend.Algorithms.Quantifiers;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
 
 namespace DeconTools.UnitTesting2.QuantificationTests
@@ -46,13 +47,22 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TomTheorFeatureGenerator featureGen = new TomTheorFeatureGenerator();
             featureGen.GenerateTheorFeature(mt23140708);
 
+            TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
+
+            JoshTheorFeatureGenerator featureGen2 = new JoshTheorFeatureGenerator();
+            featureGen2.GenerateTheorFeature(mt23140708);
+
+            Console.WriteLine();
+            TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
+
             N15IsotopeProfileGenerator gen = new N15IsotopeProfileGenerator();
 
             IsotopicProfile theorN15Profile = gen.GetN15IsotopicProfile(mt23140708, 0.005);
 
 
 
-            BasicMSFeatureFinder bff = new BasicMSFeatureFinder();
+
+            BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
             IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
 
 
@@ -131,7 +141,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
 
-            BasicMSFeatureFinder bff = new BasicMSFeatureFinder();
+            BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
             IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
 
 

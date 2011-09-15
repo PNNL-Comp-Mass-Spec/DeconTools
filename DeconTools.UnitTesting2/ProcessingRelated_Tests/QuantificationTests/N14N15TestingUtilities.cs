@@ -81,6 +81,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             MassTag mt = new MassTag();
             mt.ChargeState = 2;
             mt.Code = "AMPIDLSNLALLDANGK";
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mt.MonoIsotopicMass = 1754.923582420;
             mt.MZ = 878.4690677;
             mt.NormalizedElutionTime = 0.4509717f;
@@ -94,6 +95,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             MassTag mt = new MassTag();
             mt.ChargeState = 2;
             mt.Code = "IVKVNVDENPESPAMLGVR";
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mt.MonoIsotopicMass = 2066.08292;
             mt.MZ = 1034.048737;
             mt.NormalizedElutionTime = 0.329644f;
@@ -106,6 +108,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             MassTag mt = new MassTag();
             mt.ChargeState = 3;
             mt.Code = "IVKVNVDENPESPAMLGVR";
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mt.MonoIsotopicMass = 2066.08292;
             mt.MZ = 689.7015832;
             mt.NormalizedElutionTime = 0.329644f;

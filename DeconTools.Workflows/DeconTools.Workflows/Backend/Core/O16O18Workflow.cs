@@ -7,16 +7,16 @@ using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks.ResultValidators;
 
 namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18Workflow : TargetedWorkflow
     {
-        private TomTheorFeatureGenerator theorFeatureGen;
+        private JoshTheorFeatureGenerator theorFeatureGen;
         private PeakChromatogramGenerator chromGen;
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
@@ -110,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             ValidateParameters();
 
-            theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.002);
+            theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.002);
 
             chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             chromGen.TopNPeaksLowerCutOff = 0.333;

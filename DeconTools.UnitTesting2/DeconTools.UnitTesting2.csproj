@@ -137,7 +137,7 @@
     <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
     <Compile Include="TestUtilities\TestUtilities.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\IsotopicDistCalculatorUnitTests.cs" />
-    <Compile Include="TheoreticalIsotopicProfileTests\TomTheorFeatureGeneratorTests.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\IsotopicProfileGeneratorTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
   </ItemGroup>
   <ItemGroup>

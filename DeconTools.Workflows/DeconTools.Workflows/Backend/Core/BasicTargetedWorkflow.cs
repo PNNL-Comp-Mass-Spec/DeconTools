@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.Backend.Core
     public class BasicTargetedWorkflow : TargetedWorkflow
     {
         private TargetedWorkflowParameters _workflowParameters;
-        private TomTheorFeatureGenerator theorFeatureGen;
+        private JoshTheorFeatureGenerator theorFeatureGen;
         private PeakChromatogramGenerator chromGen;
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
@@ -85,7 +85,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             ValidateParameters();
 
-            theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
             chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             chromGen.TopNPeaksLowerCutOff = 0.333;

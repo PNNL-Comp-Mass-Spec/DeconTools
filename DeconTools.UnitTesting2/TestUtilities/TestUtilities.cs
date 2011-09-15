@@ -258,6 +258,8 @@ namespace DeconTools.UnitTesting2
             mt.ID = 86963986;
             mt.MonoIsotopicMass = 1516.791851;
             mt.Code = "AAKEGISCEIIDLR";
+
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mt.NormalizedElutionTime = 0.2284955f;
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
@@ -277,7 +279,7 @@ namespace DeconTools.UnitTesting2
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "DFNEALVHQVVVAYAANAR";
-         
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mtList.Add(mt);
             return mtList;
         }
@@ -294,7 +296,7 @@ namespace DeconTools.UnitTesting2
             mt.ChargeState = 3;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "AIHQPAPTFAEQSTTSEILVTGIK";
-         
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mtList.Add(mt);
             return mtList;
 
@@ -413,7 +415,7 @@ namespace DeconTools.UnitTesting2
             mt.ChargeState = 2;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "AEFVEVTK";
-        
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mtList.Add(mt);
             return mtList;
         }

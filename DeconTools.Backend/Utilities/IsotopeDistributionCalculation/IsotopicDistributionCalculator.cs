@@ -19,6 +19,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         int lightIsotopeNum = -1;
         int heavyIsotopeNum = -1;
         double[] probabilities;
+        private PeptideUtils _peptideUtils = new PeptideUtils();
+
 
         #endregion
 
@@ -91,7 +93,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <summary>
         /// Clears the labeling, resetting to the natural abundances
         /// </summary>
-        public void ResetToUnlabled()
+        public void ResetToUnlabeled()
         {
             Constants.Elements[elementalSymbol].IsotopeDictionary[elementalSymbol + lightIsotopeNum].NaturalAbundance =
                 naturalAbundanceLight;
@@ -104,6 +106,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             lightIsotopeNum = -1;
             heavyIsotopeNum = -1;
         }
+
+
+
+        public IsotopicProfile GetIsotopePattern(string empiricalFormula)
+        {
+            Dictionary<string, int> elementLookupTable = _peptideUtils.parseEmpiricalFormulaString(empiricalFormula);
+            return GetIsotopePattern(elementLookupTable);
+        }
+
 
         /// <summary>
         /// Isotope pattern calculator
@@ -151,6 +162,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 elementCount++;
             }
             RecursiveCalculator(jaggedProbability);
+            
+            
+            //normalize the probabilities
             double max = 0.0;
             foreach (double f in probabilities)
             {
@@ -161,14 +175,23 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             for (int i = 0; i < probabilities.Length; i++)
             {
+                
                 probabilities[i] = probabilities[i] / max;
             }
 
+            
             IsotopicProfile isoCluster = new IsotopicProfile();
             for (int l = 0; l < probabilities.Length; l++)
             {
+                if (probabilities[l] == 0)    // avoid adding all the zero probability peaks
+                {
+                    break;
+                }
                 isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)probabilities[l], 0.0f, 0.0f));
             }
+
+
+
             return isoCluster;
         }
 
@@ -378,7 +401,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <param name="jaggedProbabilities">probabilities provided by getisotopepattern</param>
         private void RecursiveCalculator(double[][] jaggedProbabilities)
         {
-            probabilities = new double[100];
+            probabilities = new double[300];
             ProbabilityCalculator(jaggedProbabilities, 0, 0, new List<double>());
         }
 

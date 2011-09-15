@@ -196,6 +196,7 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\JoshTheorFeatureGenerator.cs" />
     <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />

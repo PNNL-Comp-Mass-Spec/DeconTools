@@ -35,7 +35,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             mtc = mtimporter.Import();
 
             
-            List<MassTag> selectedMassTags = mtc.MassTagList.OrderBy(p => p.ID).Take(10).ToList();
+            List<TargetBase> selectedMassTags = mtc.MassTagList.OrderBy(p => p.ID).Take(10).ToList();
             
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();

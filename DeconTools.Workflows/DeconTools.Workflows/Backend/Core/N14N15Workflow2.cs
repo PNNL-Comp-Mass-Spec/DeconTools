@@ -17,8 +17,8 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class N14N15Workflow2 : TargetedWorkflow
     {
-        private TomTheorFeatureGenerator theorFeatureGen;
-        private TomTheorFeatureGenerator theorN15FeatureGen;
+        private JoshTheorFeatureGenerator theorFeatureGen;
+        private JoshTheorFeatureGenerator theorN15FeatureGen;
 
         private PeakChromatogramGenerator chromGenN14;
         private PeakChromatogramGenerator chromGenN15;
@@ -175,8 +175,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             ValidateParameters();
 
-            theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
-            theorN15FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            theorN15FeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
 
             chromGenN14 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             chromGenN14.TopNPeaksLowerCutOff = 0.333;

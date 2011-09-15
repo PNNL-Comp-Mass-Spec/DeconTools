@@ -163,6 +163,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                 return GetIsotopePattern(averagineFormula, aafN15Isos);
         }
 
+
+
+        public IsotopicProfile GetIsotopePattern(string empiricalFormula)
+        {
+            return GetIsotopePattern(empiricalFormula, this.aafIsos);
+        }
+
         public IsotopicProfile GetIsotopePattern(string empiricalFormula, double[][] aafIsoLocal)
         {
 
