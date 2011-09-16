@@ -10,8 +10,7 @@ namespace DeconTools.Backend.DTO
     public class IsosResultComparer : IEqualityComparer<IsosResult>
     {
 
-        private double massTolerance;
-
+       
         public IsosResultComparer()
         {
 

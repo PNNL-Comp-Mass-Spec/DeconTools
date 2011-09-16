@@ -300,7 +300,7 @@ namespace DeconTools.Backend.Utilities.Converters
             {
                 c = Color.FromArgb(red, green, blue);
             }
-            catch (Exception e) 
+            catch (Exception) 
             {
                 c = Color.Blue;
             }

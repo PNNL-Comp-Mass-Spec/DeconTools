@@ -12,7 +12,6 @@ namespace DeconTools.Backend.Algorithms
 {
     public class ChromatogramGenerator
     {
-        private I_MSGenerator msgen;
         #region Constructors
         #endregion
 

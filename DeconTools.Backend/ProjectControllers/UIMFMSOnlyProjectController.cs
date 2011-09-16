@@ -16,8 +16,7 @@ namespace DeconTools.Backend.ProjectControllers
     {
         private string inputDataFilename;
         private string paramFilename;
-        private string outputFilepath;
-
+        
         private DeconTools.Backend.Globals.MSFileType fileType;
         private BackgroundWorker backgroundWorker;
 

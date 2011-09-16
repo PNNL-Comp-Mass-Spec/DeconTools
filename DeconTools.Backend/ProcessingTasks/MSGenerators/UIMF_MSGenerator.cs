@@ -10,9 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks
     public class UIMF_MSGenerator : I_MSGenerator
     {
 
-        private FrameSet frameSet;
-        private ScanSet scanSet;
-
         public UIMF_MSGenerator()
             : this(0, 5000)
         {

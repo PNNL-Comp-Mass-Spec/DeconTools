@@ -18,8 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private int[] m_msLevelsToExport;
         private int m_triggerValue;
 
-        private int m_peakIndex=0;
-
+       
         #region Constructors
         public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
             : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1  

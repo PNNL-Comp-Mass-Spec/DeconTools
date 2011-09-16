@@ -12,9 +12,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     public class MercuryFeatureGenerator : ITheorFeatureGenerator
     {
 
-        MercuryDistributionCreator distributionCreator;
-        TargetedResultBase m_massTagResult;
-
+       
+        
         #region Constructors
         public MercuryFeatureGenerator()
         {

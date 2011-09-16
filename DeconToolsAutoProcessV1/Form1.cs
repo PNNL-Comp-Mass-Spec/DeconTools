@@ -220,7 +220,7 @@ namespace DeconToolsAutoProcessV1
                     this.txtTotalFeatures.Text = query.ToString();
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //throw;
                     //TODO: need to fix this later.  The .Sum is not working correctly on IMF files.

@@ -8,8 +8,7 @@ namespace DeconTools.Backend.Data
 {
     public class IsosExporterFactory
     {
-        DeconTools.Backend.Globals.ExporterType exporterType;
-
+        
         private int triggerToExportValue;
 
         public IsosExporterFactory()
@@ -69,7 +68,7 @@ namespace DeconTools.Backend.Data
                             break;
                         case Globals.ExporterType.SQLite:
                             throw new NotImplementedException();
-                            break;
+                            
                         default:
                             isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, triggerToExportValue);
                             break;
@@ -84,7 +83,7 @@ namespace DeconTools.Backend.Data
                             break;
                         case Globals.ExporterType.SQLite:
                             throw new NotImplementedException();
-                            break;
+                            
                         default:
                             isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, triggerToExportValue);
                             break;
@@ -92,16 +91,16 @@ namespace DeconTools.Backend.Data
                     break;
                 case Globals.ResultType.BASIC_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    break;
+                    
                 case Globals.ResultType.O16O18_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    break;
+                    
                 case Globals.ResultType.N14N15_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    break;
+                    
                 default:
                     throw new ApplicationException("Cannot create IsosExporter for this type of Result: " + resultType);
-                    break;
+                    
             }
 
 

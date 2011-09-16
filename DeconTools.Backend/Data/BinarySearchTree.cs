@@ -413,7 +413,7 @@ namespace DeconTools.Backend.Data.Structures
                             }
                         }
                     }
-                    catch (InvalidCastException ice)
+                    catch (InvalidCastException)
                     {
                         return null;
                     }

@@ -40,8 +40,7 @@ namespace DeconTools.Backend.Utilities
         private int increment;
         private bool processMSMS;
 
-        private List<int> m_MSLevelScanList;
-
+       
         public void Create()
         {
 

@@ -109,9 +109,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     SQLiteParameter fwhmParam = new SQLiteParameter();
                     SQLiteParameter msfeatureParam = new SQLiteParameter();
 
-                    int n;
-
-                    mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
+                                       mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
                     mycommand.Parameters.Add(peakIDParam);
                     mycommand.Parameters.Add(scanIDParam);
                     mycommand.Parameters.Add(mzParam);

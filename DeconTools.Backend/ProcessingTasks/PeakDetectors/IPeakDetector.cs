@@ -56,7 +56,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
             bool isSuccess = false;
 
-            int maxAttempts = 4;
             int counter = 1;
 
 

@@ -427,13 +427,13 @@ namespace DeconTools.Backend
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_scans.csv";
-                    break;
+                    
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_scans.sqlite";
-                    break;
+                    
                 default:
                     return baseFileName += "_scans.csv";
-                    break;
+                    
             }
         }
 
@@ -447,13 +447,13 @@ namespace DeconTools.Backend
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_isos.csv";
-                    break;
+                    
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_isos.sqlite";
-                    break;
+                    
                 default:
                     return baseFileName += "_isos.csv";
-                    break;
+                    
             }
 
 

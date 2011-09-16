@@ -8,8 +8,7 @@ namespace DeconTools.Backend.Data
 {
     public class ScansExporterFactory
     {
-        DeconTools.Backend.Globals.ExporterType exporterType;
-
+       
         public Task CreateScansExporter(Globals.MSFileType fileType, Globals.ExporterType exporterType, string outputFileName)
         {
             Task scansExporter;

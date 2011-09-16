@@ -16,7 +16,6 @@ namespace DeconTools.Backend.Core
     {
         private List<string> m_inputDataFilenames;
         private string m_paramFilename;
-        private string m_outputFilename;
         private DeconTools.Backend.Globals.MSFileType m_fileType;
         private BackgroundWorker m_backgroundWorker;
 
@@ -129,13 +128,13 @@ namespace DeconTools.Backend.Core
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_isos.csv";
-                    break;
+                    
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_isos.sqlite";
-                    break;
+                    
                 default:
                     return baseFileName += "_isos.csv";
-                    break;
+                    
             }
         }
 

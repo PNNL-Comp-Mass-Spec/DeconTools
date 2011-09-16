@@ -30,7 +30,7 @@ namespace DeconTools.Backend.Data
             {
                 this.reader = new StreamReader(importFilename);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw new System.IO.IOException("There was a problem reading the _isos data file\n");

@@ -45,9 +45,7 @@ namespace DeconTools.Backend.Parameters
             set { maxMZ = value; }
         }
 
-        private int minScan;
-        private int maxScan;
-
+        
 
 
 

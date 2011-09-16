@@ -164,7 +164,7 @@ namespace DeconTools.Backend.Runs
 
 
         //TODO: change the order of parameters so that frameset is first
-        public void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
+        public override void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
         {
             Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             Check.Require(frameset.Count() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");

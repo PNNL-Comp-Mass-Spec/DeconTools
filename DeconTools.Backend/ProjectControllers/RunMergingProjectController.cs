@@ -21,19 +21,10 @@ namespace DeconTools.Backend.Core
     {
         private List<string> inputDataFilenames;
         private string paramFilename;
-        private string outputFilename;
         private DeconTools.Backend.Globals.MSFileType fileType;
         private BackgroundWorker backgroundWorker;
 
         #region Properties
-        private Project project;
-
-        public Project Project
-        {
-            get { return project; }
-            set { project = value; }
-        }
-
 
         private int isosResultThreshold;
 
@@ -51,8 +42,7 @@ namespace DeconTools.Backend.Core
             this.paramFilename = paramFileName;
 
             Project.Reset();
-            this.project = Project.getInstance();
-            this.project.LoadOldDecon2LSParameters(this.paramFilename);
+            Project.getInstance().LoadOldDecon2LSParameters(this.paramFilename);
             this.IsosResultThreshold = 100000;       // results will be serialized if count is greater than this number
 
             RunFactory runfactory = new RunFactory();
@@ -62,51 +52,51 @@ namespace DeconTools.Backend.Core
             foreach (string filename in this.inputDataFilenames)
             {
                 Run run;
-                run = runfactory.CreateRun(fileType, filename, project.Parameters.OldDecon2LSParameters);
+                run = runfactory.CreateRun(fileType, filename, Project.getInstance().Parameters.OldDecon2LSParameters);
                 Check.Assert(run != null, "Processing aborted. Could not handle supplied File(s)");
-                project.RunCollection.Add(run);
-                
-                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan, 
+                Project.getInstance().RunCollection.Add(run);
+
+                ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(run, run.MinScan, run.MaxScan,
                     Project.getInstance().Parameters.NumScansSummed,
-                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,false);
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance, false);
                 scanSetCollectionCreator.Create();
             }
 
             MSGeneratorFactory msGeneratorFactory = new MSGeneratorFactory();
-            Task msGen = msGeneratorFactory.CreateMSGenerator(fileType, project.Parameters.OldDecon2LSParameters);
-            project.TaskCollection.TaskList.Add(msGen);
+            Task msGen = msGeneratorFactory.CreateMSGenerator(fileType, Project.getInstance().Parameters.OldDecon2LSParameters);
+            Project.getInstance().TaskCollection.TaskList.Add(msGen);
 
-            if (project.Parameters.OldDecon2LSParameters.HornTransformParameters.ZeroFill)
+            if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ZeroFill)
             {
-                Task zeroFiller = new DeconToolsZeroFiller(project.Parameters.OldDecon2LSParameters.HornTransformParameters.NumZerosToFill);
-                project.TaskCollection.TaskList.Add(zeroFiller);
+                Task zeroFiller = new DeconToolsZeroFiller(Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumZerosToFill);
+                Project.getInstance().TaskCollection.TaskList.Add(zeroFiller);
             }
-            if (project.Parameters.OldDecon2LSParameters.HornTransformParameters.UseSavitzkyGolaySmooth)
+            if (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.UseSavitzkyGolaySmooth)
             {
                 Task smoother = new DeconToolsSavitzkyGolaySmoother(
-                    this.project.Parameters.OldDecon2LSParameters.HornTransformParameters.SGNumLeft,
-                    this.project.Parameters.OldDecon2LSParameters.HornTransformParameters.SGNumRight,
-                    this.project.Parameters.OldDecon2LSParameters.HornTransformParameters.SGOrder);
-                project.TaskCollection.TaskList.Add(smoother);
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SGNumLeft,
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SGNumRight,
+                    Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SGOrder);
+                Project.getInstance().TaskCollection.TaskList.Add(smoother);
             }
 
-            Task peakDetector = new DeconToolsPeakDetector(project.Parameters.OldDecon2LSParameters.PeakProcessorParameters);
-            project.TaskCollection.TaskList.Add(peakDetector);
+            Task peakDetector = new DeconToolsPeakDetector(Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters);
+            Project.getInstance().TaskCollection.TaskList.Add(peakDetector);
 
-            
+
             //DeconvolutorFactory deconFactory = new DeconvolutorFactory();
             //Task deconvolutor = deconFactory.CreateDeconvolutor(project.Parameters.OldDecon2LSParameters);
             Task deconvolutor = new SimpleDecon(0.0005);
-            project.TaskCollection.TaskList.Add(deconvolutor);
+            Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
 
             Task isosmergerExporter = new BasicIsosMergerExporter(getIsosOutputFilename());
-            project.TaskCollection.TaskList.Add(isosmergerExporter);
+            Project.getInstance().TaskCollection.TaskList.Add(isosmergerExporter);
 
             Task scanResultUpdater = new ScanResultUpdater();
-            project.TaskCollection.TaskList.Add(scanResultUpdater);
+            Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
             Task scanmergerExporter = new BasicScansMergerExporter(getScansOutputFilename());
-            project.TaskCollection.TaskList.Add(scanmergerExporter);
+            Project.getInstance().TaskCollection.TaskList.Add(scanmergerExporter);
 
 
 
@@ -140,18 +130,18 @@ namespace DeconTools.Backend.Core
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(OldSchoolProcRunner)));
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
-            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + project.TaskCollection.GetDeconvolutorType());
+            Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType());
             Logger.Instance.AddEntry("Started file processing");
 
             TaskControllerFactory taskControllerFactory = new TaskControllerFactory(this.backgroundWorker);
-            TaskController controller = taskControllerFactory.CreateTaskController(fileType, project.TaskCollection);
+            TaskController controller = taskControllerFactory.CreateTaskController(fileType, Project.getInstance().TaskCollection);
             controller.IsosResultThresholdNum = this.IsosResultThreshold;
-            controller.Execute(project.RunCollection);
+            controller.Execute(Project.getInstance().RunCollection);
 
             Logger.Instance.AddEntry("Finished file processing");
 
 
-            TaskCleaner cleaner = new TaskCleaner(project.TaskCollection);
+            TaskCleaner cleaner = new TaskCleaner(Project.getInstance().TaskCollection);
             cleaner.CleanTasks();
             Logger.Instance.AddEntry("Closed output files");
         }

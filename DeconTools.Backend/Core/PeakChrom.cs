@@ -57,16 +57,6 @@ namespace DeconTools.Backend.Core
         public XYData GetXYDataFromChromPeakData(int minScan, int maxScan)
         {
         
-
-            //TODO:  figure out what to do with this
-            int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
-            int rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
-
-         
-            //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
-
-         
-
             //populate array with zero intensities.
             SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
             for (int i = minScan; i <= maxScan; i++)

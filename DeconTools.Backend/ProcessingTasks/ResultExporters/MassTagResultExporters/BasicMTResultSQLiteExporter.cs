@@ -101,8 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                     SQLiteParameter massTagNETParam = new SQLiteParameter();
                     SQLiteParameter massTagSequenceParam = new SQLiteParameter();
 
-                    int n;
-
+                    
                     mycommand.CommandText = @"INSERT INTO T_MassTagResults ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],
 [net],[mass_tag_id],[mass_tag_mz],[mass_tag_NET],[mass_tag_sequence],
 [average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

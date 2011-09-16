@@ -13,8 +13,6 @@ namespace DeconTools.Backend.ProcessingTasks
         const int DEFAULT_ISOSRESULT_THRESHOLD = 500000;
         const double DEFAULT_TIME_BETWEEN_LOGENTRIES = 15;    //number of minutes between log entries during processing
 
-        private BackgroundWorker backgroundWorker;
-        private IsosResultSerializer serializer;
         private int _frameCounter;
 
 
@@ -39,9 +37,6 @@ namespace DeconTools.Backend.ProcessingTasks
             if (run is UIMFRun)
             {
                 UIMFRun uimfRun = (UIMFRun)run;
-
-                serializer = null;
-                //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
                 _frameCounter = 0;
                 foreach (FrameSet frameset in uimfRun.FrameSetCollection.FrameSetList)
