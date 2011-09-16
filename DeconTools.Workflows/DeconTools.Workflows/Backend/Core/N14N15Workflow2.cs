@@ -92,7 +92,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             try
             {
-                this.Result = this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
+                this.Result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
                 this.Result.ResetResult();
 
                 ExecuteTask(theorFeatureGen);
@@ -161,7 +161,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                N14N15_TResult result = (N14N15_TResult)this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
+                N14N15_TResult result = (N14N15_TResult)this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
                 result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
 
                 return;

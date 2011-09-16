@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -36,7 +36,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
             int scan = 7835;
             double theorMZ = 780.08485;    //massTagID = 24701 (+3)

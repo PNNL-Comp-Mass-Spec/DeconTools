@@ -94,7 +94,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                         throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    TargetedResult result = ConvertTextToDataObject(processedData);
+                    TargetedResultDTO result = ConvertTextToDataObject(processedData);
                     repos.Results.Add(result);
                     lineCounter++;
 
@@ -107,7 +107,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             return repos;
         }
 
-        protected abstract TargetedResult ConvertTextToDataObject(List<string> processedData);
+        protected abstract TargetedResultDTO ConvertTextToDataObject(List<string> processedData);
 
         protected virtual bool ValidateHeaders()
         {

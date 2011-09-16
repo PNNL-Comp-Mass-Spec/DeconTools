@@ -30,12 +30,12 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             
-            List<TargetBase> selectedMassTags = mtc.MassTagList.OrderBy(p => p.ID).Take(10).ToList();
+            List<TargetBase> selectedMassTags = mtc.TargetList.OrderBy(p => p.ID).Take(10).ToList();
             
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -74,10 +74,10 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Assert.IsNotNull(repo);
             Assert.IsTrue(repo.Results.Count > 0);
 
-            TargetedResult testResult1 = repo.Results[0];
+            TargetedResultDTO testResult1 = repo.Results[0];
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", testResult1.DatasetName);
-            Assert.AreEqual(24698, testResult1.MassTagID);
+            Assert.AreEqual(24698, testResult1.TargetID);
             Assert.AreEqual(3, testResult1.ChargeState);
             Assert.AreEqual(5880, testResult1.ScanLC);
             Assert.AreEqual(5876, testResult1.ScanLCStart);

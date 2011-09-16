@@ -3,15 +3,15 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.Results
 {
-    public class UnlabelledTargetedResult : TargetedResult
+    public class UnlabelledTargetedResultDTO : TargetedResultDTO
     {
 
         #region Constructors
-        public UnlabelledTargetedResult()
+        public UnlabelledTargetedResultDTO()
         {
             this.ScanLCStart = 0;
             this.ScanLCEnd = 0;
-            this.MassTagID = 0;
+            this.TargetID = 0;
             this.NET = 0;
             this.NumChromPeaksWithinTol = 0;
 

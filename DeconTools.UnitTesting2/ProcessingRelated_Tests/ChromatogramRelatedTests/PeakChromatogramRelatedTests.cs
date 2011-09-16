@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         {
             double chromToleranceInPPM = 10;
 
-            MassTag mt = TestUtilities.GetMassTagStandard(1);
+            PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramTest2()
         {
-            MassTag mt = TestUtilities.GetMassTagStandard(1);
+            PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 

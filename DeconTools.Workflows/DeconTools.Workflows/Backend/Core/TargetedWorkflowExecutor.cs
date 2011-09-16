@@ -37,9 +37,9 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Properties
-        public MassTagCollection MassTagsForTargetedAlignment { get; set; }
+        public TargetCollection MassTagsForTargetedAlignment { get; set; }
 
-        public MassTagCollection MassTagsToBeTargeted { get; set; }
+        public TargetCollection MassTagsToBeTargeted { get; set; }
 
         public override WorkflowParameters WorkflowParameters
         {
@@ -117,13 +117,13 @@ namespace DeconTools.Workflows.Backend.Core
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
             if (runIsNotAligned && this.ExecutorParameters.TargetedAlignmentIsPerformed)
             {
-                Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.MassTagList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
+                Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
                 reportProgress(DateTime.Now + "\tPerforming TargetedAlignment using mass tags from file: " + this.ExecutorParameters.MassTagsForAlignmentFilePath);
-                reportProgress(DateTime.Now + "\tTotal mass tags to be aligned = " + this.MassTagsForTargetedAlignment.MassTagList.Count);
+                reportProgress(DateTime.Now + "\tTotal mass tags to be aligned = " + this.MassTagsForTargetedAlignment.TargetList.Count);
 
                 this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(this.TargetedAlignmentWorkflowParameters);
-                this.TargetedAlignmentWorkflow.SetMassTags(this.MassTagsForTargetedAlignment.MassTagList);
+                this.TargetedAlignmentWorkflow.SetMassTags(this.MassTagsForTargetedAlignment.TargetList);
                 this.TargetedAlignmentWorkflow.Run = Run;
                 this.TargetedAlignmentWorkflow.Execute();
 
@@ -152,12 +152,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             int mtCounter = 0;
 
-            foreach (var massTag in this.MassTagsToBeTargeted.MassTagList)
+            foreach (var massTag in this.MassTagsToBeTargeted.TargetList)
             {
                 mtCounter++;
                 if (mtCounter % 500 == 0)
                 {
-                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.MassTagsToBeTargeted.MassTagList.Count);
+                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.MassTagsToBeTargeted.TargetList.Count);
                 }
 
                 Run.CurrentMassTag = massTag;
@@ -206,7 +206,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected MassTagCollection getMassTagTargets(string massTagFileName)
+        protected TargetCollection getMassTagTargets(string massTagFileName)
         {
             if (!File.Exists(massTagFileName))
             {

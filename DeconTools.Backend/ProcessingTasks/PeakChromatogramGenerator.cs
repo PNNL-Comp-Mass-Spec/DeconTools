@@ -187,7 +187,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
 
 

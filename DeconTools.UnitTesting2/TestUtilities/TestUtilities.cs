@@ -252,9 +252,9 @@ namespace DeconTools.UnitTesting2
 
 
 
-        public static MassTag GetMassTagStandard(int standardNum)
+        public static PeptideTarget GetMassTagStandard(int standardNum)
         {
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ID = 86963986;
             mt.MonoIsotopicMass = 1516.791851;
             mt.Code = "AAKEGISCEIIDLR";
@@ -269,11 +269,11 @@ namespace DeconTools.UnitTesting2
 
         }
 
-        public static List<MassTag> CreateTestMassTagList()
+        public static List<PeptideTarget> CreateTestMassTagList()
         {
-            List<MassTag> mtList = new List<MassTag>();
+            List<PeptideTarget> mtList = new List<PeptideTarget>();
 
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ID = 24769;
             mt.MonoIsotopicMass = 2086.0595;
             mt.ChargeState = 2;
@@ -285,11 +285,11 @@ namespace DeconTools.UnitTesting2
         }
 
 
-        public static List<MassTag> CreateN14N15TestMassTagList()
+        public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
-            List<MassTag> mtList = new List<MassTag>();
+            List<PeptideTarget> mtList = new List<PeptideTarget>();
 
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ID = 23085473;
             mt.NormalizedElutionTime = 0.3807834F;
             mt.MonoIsotopicMass = 2538.33284203802;
@@ -405,11 +405,11 @@ namespace DeconTools.UnitTesting2
 
         }
 
-        public static List<MassTag> CreateO16O18TestMassTagList1()
+        public static List<PeptideTarget> CreateO16O18TestMassTagList1()
         {
-            List<MassTag> mtList = new List<MassTag>();
+            List<PeptideTarget> mtList = new List<PeptideTarget>();
 
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ID = 1142;
             mt.MonoIsotopicMass = 921.4807035;
             mt.ChargeState = 2;

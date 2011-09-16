@@ -244,7 +244,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
 
             IsotopicProfile iso;
 
@@ -321,7 +321,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Private Methods
-        private void addInfoToResult(IsotopicProfile iso, MassTag mt)
+        private void addInfoToResult(IsotopicProfile iso, PeptideTarget mt)
         {
             if (iso != null)
             {

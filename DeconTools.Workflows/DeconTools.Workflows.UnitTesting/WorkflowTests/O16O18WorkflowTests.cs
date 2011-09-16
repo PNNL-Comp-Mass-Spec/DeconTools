@@ -24,12 +24,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 6643962;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
             parameters.ChromNETTolerance = 0.1;
@@ -39,7 +39,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow.Execute();
 
 
-            var result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsNotNull(result);
             result.DisplayToConsole();
@@ -66,12 +66,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 20746149;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
             parameters.ChromNETTolerance = 0.1;
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             O16O18Workflow workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
-            var result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             result.DisplayToConsole();
            // Assert.AreEqual(3498, result.ScanSet.PrimaryScanNumber);
@@ -102,7 +102,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
            
 
-            result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Console.WriteLine("MonoChromMode PeaksWithinTol = " + result.NumChromPeaksWithinTolerance);
             Console.WriteLine("O16O18 ChromMode HQPeaksWithinTol = " + result.NumQualityChromPeaks);

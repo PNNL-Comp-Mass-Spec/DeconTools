@@ -9,34 +9,34 @@ namespace DeconTools.Workflows.Backend.Results
         #region Constructors
         public TargetedResultRepository()
         {
-            this.Results = new List<TargetedResult>();
+            this.Results = new List<TargetedResultDTO>();
         }
         #endregion
 
         #region Properties
-        public List<TargetedResult> Results { get; set; }
+        public List<TargetedResultDTO> Results { get; set; }
 
 
         #endregion
 
-        public void AddResult(MassTagResultBase resultToConvert)
+        public void AddResult(TargetedResultBase resultToConvert)
         {
-            TargetedResult result = ResultFactory.CreateTargetedResult(resultToConvert);
+            TargetedResultDTO result = ResultDTOFactory.CreateTargetedResult(resultToConvert);
             this.Results.Add(result);
         }
 
 
 
-        public void AddResults(List<TargetedResult> featuresToAlign)
+        public void AddResults(List<TargetedResultDTO> featuresToAlign)
         {
             this.Results.AddRange(featuresToAlign);
         }
 
-        public void AddResults(List<MassTagResultBase> resultsToConvert)
+        public void AddResults(List<TargetedResultBase> resultsToConvert)
         {
             foreach (var item in resultsToConvert)
             {
-                TargetedResult result = ResultFactory.CreateTargetedResult(item);
+                TargetedResultDTO result = ResultDTOFactory.CreateTargetedResult(item);
                 this.Results.Add(result);
             }
         }

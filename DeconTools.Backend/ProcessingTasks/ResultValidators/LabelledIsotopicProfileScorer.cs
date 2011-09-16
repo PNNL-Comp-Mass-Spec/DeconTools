@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             Check.Require(currentResult is N14N15_TResult, "Currently, this is only implemented for N14N15 results");
 
             N14N15_TResult n14n15result = (N14N15_TResult)currentResult;
-            Check.Require(n14n15result.MassTag.IsotopicProfileLabelled != null, "Cannot validate labelled isotopic profile. Theoretical profile was not defined.");
+            Check.Require(n14n15result.Target.IsotopicProfileLabelled != null, "Cannot validate labelled isotopic profile. Theoretical profile was not defined.");
 
             // stop, but don't throw an error if there is no labelled isotopic profile. 
             if (n14n15result.IsotopicProfileLabeled == null) return;
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             // get fit score
 
-            double fitval = getFitValue(resultColl.Run.XYData, n14n15result.MassTag.IsotopicProfileLabelled, isoN15);
+            double fitval = getFitValue(resultColl.Run.XYData, n14n15result.Target.IsotopicProfileLabelled, isoN15);
             n14n15result.ScoreN15 = fitval;
 
             

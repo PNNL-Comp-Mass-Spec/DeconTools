@@ -141,7 +141,7 @@
     <Compile Include="Core\IsotopicProfileChromData.cs" />
     <Compile Include="Core\Results\LabeledMassTagResult.cs" />
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
-    <Compile Include="Core\Results\O16O18_TResult.cs" />
+    <Compile Include="Core\Results\O16O18TargetedResultObject.cs" />
     <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Core\ScanNETPair.cs" />
     <Compile Include="Core\TargetBase.cs" />
@@ -206,8 +206,8 @@
     <Compile Include="Core\Results\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />
     <Compile Include="Core\MassTag.cs" />
-    <Compile Include="Core\Results\MassTagResultBase.cs" />
-    <Compile Include="Core\MassTagCollection.cs" />
+    <Compile Include="Core\Results\TargetedResultBase.cs" />
+    <Compile Include="Core\TargetCollection.cs" />
     <Compile Include="Core\Results\MassTagResult.cs" />
     <Compile Include="Core\MSPeak.cs" />
     <Compile Include="Core\Results\N14N15_TResult.cs" />

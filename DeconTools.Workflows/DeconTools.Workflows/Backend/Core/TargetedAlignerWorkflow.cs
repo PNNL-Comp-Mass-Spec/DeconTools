@@ -100,7 +100,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            List<MassTagResultBase> resultsPassingCriteria;
+            List<TargetedResultBase> resultsPassingCriteria;
             _targetedResultRepository = new TargetedResultRepository();
 
 
@@ -120,7 +120,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 _workflow = new BasicTargetedWorkflow(Run, _parameters);
 
-                List<MassTagResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
+                List<TargetedResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
                 firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
 
                      List<double> ppmErrors = getMassErrors(firstPassResults);
@@ -212,7 +212,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private List<double> getMassErrors(List<MassTagResultBase> firstPassResults)
+        private List<double> getMassErrors(List<TargetedResultBase> firstPassResults)
         {
             List<double> ppmErrors = new List<double>();
 
@@ -235,7 +235,7 @@ namespace DeconTools.Workflows.Backend.Core
             return ppmErrors;
         }
 
-        private List<MassTagResultBase> FindTargetsThatPassWideMassTolerance(double netGrouping)
+        private List<TargetedResultBase> FindTargetsThatPassWideMassTolerance(double netGrouping)
         {
             Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
@@ -243,7 +243,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            List<MassTagResultBase> resultsPassingCriteria = new List<MassTagResultBase>();
+            List<TargetedResultBase> resultsPassingCriteria = new List<TargetedResultBase>();
 
             var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
 
@@ -260,7 +260,7 @@ namespace DeconTools.Workflows.Backend.Core
                 Run.CurrentMassTag = massTag;
                 _workflow.Execute();
 
-                var result = Run.ResultCollection.GetMassTagResult(massTag);
+                var result = Run.ResultCollection.GetTargetedResult(massTag);
 
                 if (resultPassesStrictCriteria(result))
                 {
@@ -305,12 +305,12 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public List<MassTagResultBase> FindTargetsThatPassCriteria()
+        public List<TargetedResultBase> FindTargetsThatPassCriteria()
         {
             Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
-            List<MassTagResultBase> resultsPassingCriteria = new List<MassTagResultBase>();
+            List<TargetedResultBase> resultsPassingCriteria = new List<TargetedResultBase>();
 
             int netGroupingCounter = 0;
             foreach (var netGrouping in _netGroupings)
@@ -337,7 +337,7 @@ namespace DeconTools.Workflows.Backend.Core
                     Run.CurrentMassTag = massTag;
                     _workflow.Execute();
 
-                    var result = Run.ResultCollection.GetMassTagResult(massTag);
+                    var result = Run.ResultCollection.GetTargetedResult(massTag);
 
                     if (resultPassesCriteria(result))
                     {
@@ -397,8 +397,8 @@ namespace DeconTools.Workflows.Backend.Core
         public void SetMassTags(string massTagFilename)
         {
             MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFilename);
-            MassTagCollection mtc = importer.Import();
-            MassTagList = mtc.MassTagList;
+            TargetCollection mtc = importer.Import();
+            MassTagList = mtc.TargetList;
         }
 
         public List<int> NumSuccessesPerNETGrouping { get; set; }
@@ -508,7 +508,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        private bool resultPassesStrictCriteria(MassTagResultBase result)
+        private bool resultPassesStrictCriteria(TargetedResultBase result)
         {
             bool passesCriteria = true;
 
@@ -532,7 +532,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        private bool resultPassesCriteria(MassTagResultBase result)
+        private bool resultPassesCriteria(TargetedResultBase result)
         {
             bool passesCriteria = true;
 

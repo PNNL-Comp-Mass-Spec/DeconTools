@@ -85,7 +85,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             List<PeakQualityData> peakQualityList = new List<PeakQualityData>();
 
-            MassTagResultBase currentResult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase currentResult = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
             //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
@@ -158,7 +158,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #region Private Methods
 
 
-        private void addScoresToPeakQualityData(PeakQualityData pq, MassTagResultBase currentResult)
+        private void addScoresToPeakQualityData(PeakQualityData pq, TargetedResultBase currentResult)
         {
             if (currentResult.IsotopicProfile == null)
             {
@@ -217,7 +217,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
 
-        protected virtual ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList, MassTagResultBase currentResult)
+        protected virtual ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList, TargetedResultBase currentResult)
         {
             var filteredList1 = (from n in peakQualityList
                                  where n.isotopicProfileFound == true &&

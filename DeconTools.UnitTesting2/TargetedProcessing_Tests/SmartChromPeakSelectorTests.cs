@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
     {
         private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
-        private MassTagCollection massTagColl;
+        private TargetCollection massTagColl;
         private XCaliburRun run;
 
         ChromPeakDetector chromPeakDet;
@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         {
             run = new XCaliburRun(xcaliburTestfile);
 
-            massTagColl = new MassTagCollection();
+            massTagColl = new TargetCollection();
 
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             massTagColl = masstagImporter.Import();
@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             run.XYData = xydata;
            // run.XYData.Display();
 
-            run.CurrentMassTag = massTagColl.MassTagList.Where(p => p.ID == 635428).First();
+            run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
 
             Console.WriteLine("------MT = " + run.CurrentMassTag.ToString());
 
@@ -79,7 +79,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             //first run the standard peak selector
             basicChromPeakSelector.Execute(run.ResultCollection);
 
-            var result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
             Assert.AreEqual(10066, (int)Math.Round(result.ChromPeakSelected.XValue));
 
 

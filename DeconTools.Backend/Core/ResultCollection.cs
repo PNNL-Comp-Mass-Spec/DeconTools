@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Core
         {
             this.run = run;
             this.ResultList = new List<IsosResult>();
-            this.MassTagResultList = new Dictionary<TargetBase, MassTagResultBase>();
+            this.MassTagResultList = new Dictionary<TargetBase, TargetedResultBase>();
             this.scanResultList = new List<ScanResult>();
             this.MSPeakResultList = new List<MSPeakResult>();
             this.m_IsosResultBin = new List<IsosResult>(10);
@@ -28,7 +28,7 @@ namespace DeconTools.Backend.Core
         #region Properties
 
 
-        public Dictionary<TargetBase, MassTagResultBase> MassTagResultList { get; set; }
+        public Dictionary<TargetBase, TargetedResultBase> MassTagResultList { get; set; }
 
 
         private List<MSPeakResult> mSPeakResultList;
@@ -106,15 +106,15 @@ namespace DeconTools.Backend.Core
             return totIsotopicProfiles;
         }
 
-        public MassTagResultBase GetMassTagResult(TargetBase massTag)
+        public TargetedResultBase GetTargetedResult(TargetBase target)
         {
-            if (MassTagResultList.ContainsKey(massTag))
+            if (MassTagResultList.ContainsKey(target))
             {
-                return MassTagResultList[massTag];
+                return MassTagResultList[target];
             }
             else
             {
-                MassTagResultBase result = CreateMassTagResult(massTag);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+                TargetedResultBase result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
                 return result;
             }
         }
@@ -136,9 +136,9 @@ namespace DeconTools.Backend.Core
             this.ScanResultList.Clear();
         }
 
-        public MassTagResultBase CreateMassTagResult(TargetBase massTag)
+        public TargetedResultBase CreateMassTagResult(TargetBase massTag)
         {
-            MassTagResultBase result;
+            TargetedResultBase result;
 
             switch (ResultType)
             {
@@ -149,7 +149,7 @@ namespace DeconTools.Backend.Core
                     result = new N14N15_TResult(massTag);
                     break;
                 case Globals.ResultType.O16O18_TARGETED_RESULT:
-                    result = new O16O18_TResult(massTag);
+                    result = new O16O18TargetedResultObject(massTag);
                     break;
 
                 default:
@@ -182,27 +182,27 @@ namespace DeconTools.Backend.Core
 
         //}
 
-        public List<MassTagResultBase> GetMassTagResults()
+        public List<TargetedResultBase> GetMassTagResults()
         {
             return this.MassTagResultList.Values.ToList();
         }
 
 
-        public List<MassTagResultBase> GetSuccessfulMassTagResults()
+        public List<TargetedResultBase> GetSuccessfulMassTagResults()
         {
 
             //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
 
-            List<MassTagResultBase> resultList = this.MassTagResultList.Values.ToList();
+            List<TargetedResultBase> resultList = this.MassTagResultList.Values.ToList();
             HashSet<int> massTagIDs = new HashSet<int>();
             for (int i = 0; i < resultList.Count; i++)
             {
-                massTagIDs.Add(resultList[i].MassTag.ID);
+                massTagIDs.Add(resultList[i].Target.ID);
             }
-            List<MassTagResultBase> filteredResults = new List<MassTagResultBase>(massTagIDs.Count);
+            List<TargetedResultBase> filteredResults = new List<TargetedResultBase>(massTagIDs.Count);
             foreach (var mtID in massTagIDs)
             {
-                List<MassTagResultBase> tempResults = resultList.Where(p => p.Score < 0.15 && p.MassTag.ID == mtID).ToList();
+                List<TargetedResultBase> tempResults = resultList.Where(p => p.Score < 0.15 && p.Target.ID == mtID).ToList();
                 if (tempResults.Count > 0)
                 {
                     filteredResults.Add(tempResults.OrderByDescending(p => p.Score).First());

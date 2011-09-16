@@ -40,9 +40,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10, repository.Results.Count);
 
-            TargetedResult result1 = repository.Results[2];
+            TargetedResultDTO result1 = repository.Results[2];
 
-            Assert.AreEqual(24702, result1.MassTagID);
+            Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
@@ -103,10 +103,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10, repository.Results.Count);
 
-            TargetedResult result1 = repository.Results[2];
+            TargetedResultDTO result1 = repository.Results[2];
 
 
-            Assert.AreEqual(24702, result1.MassTagID);
+            Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
@@ -160,10 +160,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10, repository.Results.Count);
 
-            TargetedResult result1 = repository.Results[2];
+            TargetedResultDTO result1 = repository.Results[2];
 
 
-            Assert.AreEqual(24702, result1.MassTagID);
+            Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
@@ -208,9 +208,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10, repository.Results.Count);
 
-            TargetedResult result1 = repository.Results[0];
+            TargetedResultDTO result1 = repository.Results[0];
 
-            Assert.AreEqual(24702, result1.MassTagID);
+            Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
 

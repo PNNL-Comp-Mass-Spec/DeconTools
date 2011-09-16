@@ -33,18 +33,29 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Run run= RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24800;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
+
+
+            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+
+            if (result.FailedResult)
+            {
+                Console.WriteLine(result.ErrorDescription);
+            }            
+
+            Assert.IsFalse(result.FailedResult);
+
+
             result.DisplayToConsole();
 
             Assert.IsNotNull(result.IsotopicProfile);
@@ -65,19 +76,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24800;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
+            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             Assert.AreEqual(false, result.FailedResult);
             
             result.DisplayToConsole();
@@ -119,19 +130,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 26523;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
+            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
            
             Assert.IsNull(result.IsotopicProfile);
             Assert.IsNull(result.ScanSet);
@@ -157,12 +168,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24709;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -172,7 +183,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag) as MassTagResult;
+            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             result.DisplayToConsole();
 
             Assert.IsNotNull(result.IsotopicProfile);

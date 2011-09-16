@@ -22,10 +22,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
 
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagFile);
-            MassTagCollection massTagColl = masstagImporter.Import();
+            TargetCollection massTagColl = masstagImporter.Import();
 
-            TargetBase mt24702_charge3 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 3 select n).First();
-            TargetBase mt24702_charge4 = (from n in massTagColl.MassTagList where n.ID == 24702 && n.ChargeState == 4 select n).First();
+            TargetBase mt24702_charge3 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 3 select n).First();
+            TargetBase mt24702_charge4 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
 
 
 
@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             N14N15TestingUtilities n14n15Util = new N14N15TestingUtilities();
             //get sample MS from Test Data
             XYData massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
-            MassTag mt23140708 = n14n15Util.CreateMT23140708_Z3();
+            PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z3();
 
 
             //get ms peaks
@@ -99,7 +99,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             
             run.XYData = N14N15TestingUtilities.GetTestSpectrum(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
 
-            MassTag mt23140708 = n14n15Util.CreateMT23085904_Z2();
+            PeptideTarget mt23140708 = n14n15Util.CreateMT23085904_Z2();
             run.CurrentMassTag = mt23140708;
             run.ResultCollection.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
@@ -120,7 +120,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             itff.Execute(run.ResultCollection);
 //            IsotopicProfile iso = itff.iterativelyFindMSFeature(run, mt23140708.IsotopicProfileLabelled);
 
-            N14N15_TResult result = (N14N15_TResult)run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            N14N15_TResult result = (N14N15_TResult)run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
 
 

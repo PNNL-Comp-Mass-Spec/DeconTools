@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 
 
@@ -46,12 +41,13 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             foreach (IsosResult result in resultList.IsosResultBin)
             {
                 //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
-                MassTag mt = new MassTag();
+                PeptideTarget mt = new PeptideTarget();
 
                 mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
                 mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                 mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
 
+                //TODO: use Josh's isotopicDistribution calculator after confirming averagine formula
                 mt.EmpiricalFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
 
                 mt.IsotopicProfile = _tomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _tomIsotopicPatternGenerator.aafIsos);

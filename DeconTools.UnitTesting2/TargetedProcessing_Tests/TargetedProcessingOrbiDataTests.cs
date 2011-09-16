@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
         private string xcaliburAllPeaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile1;
         private XCaliburRun run;
-        private MassTagCollection massTagColl;
+        private TargetCollection massTagColl;
 
 
         [SetUp]
@@ -33,12 +33,12 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         {
             run = new XCaliburRun(xcaliburTestfile);
 
-            massTagColl = new MassTagCollection();
+            massTagColl = new TargetCollection();
 
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             massTagColl = masstagImporter.Import();
 
-            Assert.AreEqual(2719, massTagColl.MassTagList.Count);
+            Assert.AreEqual(2719, massTagColl.TargetList.Count);
 
             ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
@@ -67,7 +67,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
-            run.CurrentMassTag = massTagColl.MassTagList.Find(p => p.ID == mtID);
+            run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
             TargetBase mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
@@ -98,7 +98,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             targetedFeatureFinder.Execute(run.ResultCollection);
             fitScoreCalc.Execute(run.ResultCollection);
 
-            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
+            TargetedResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -129,7 +129,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             Task msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
 
-            run.CurrentMassTag = massTagColl.MassTagList.Find(p => p.ID == mtID);
+            run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
             TargetBase mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
@@ -160,7 +160,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             targetedFeatureFinder.Execute(run.ResultCollection);
             fitScoreCalc.Execute(run.ResultCollection);
 
-            MassTagResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
+            TargetedResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
             //massTagResult.DisplayToConsole();
 
 

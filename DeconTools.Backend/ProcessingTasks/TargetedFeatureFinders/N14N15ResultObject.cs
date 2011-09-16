@@ -11,7 +11,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public string  DatasetName { get; set; }
 
-        public MassTag MassTag { get; set; }
+        public PeptideTarget MassTag { get; set; }
 
         public List<XYData> ChromListUnlabeled { get; set; }
         public List<XYData> ChromListLabeled { get; set; }
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public List<IPeak> ChromPeakSelectedLabeled { get; set; }
 
 
-        public N14N15ResultObject(String datasetName, MassTag mt)
+        public N14N15ResultObject(String datasetName, PeptideTarget mt)
         {
             this.DatasetName = datasetName;
             this.MassTag = mt;

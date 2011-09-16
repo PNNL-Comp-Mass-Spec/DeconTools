@@ -74,7 +74,7 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
             Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
 
-            MassTagResultBase result = resultList.GetMassTagResult(resultList.Run.CurrentMassTag);
+            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
             int numPeaksWithinTolerance = 0;
             ChromPeak bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NormalizedElutionTime, this.NETTolerance, out numPeaksWithinTolerance);

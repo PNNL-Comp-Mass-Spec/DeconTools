@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4261.21633, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
-    </Reference>
     <Reference Include="DeconTools.UnitTesting2, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DeconTools.UnitTesting2\bin\x86\Release\DeconTools.UnitTesting2.dll</HintPath>
@@ -75,6 +71,10 @@
     <Compile Include="WorkflowTests\WorkflowExecutorParametersTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>

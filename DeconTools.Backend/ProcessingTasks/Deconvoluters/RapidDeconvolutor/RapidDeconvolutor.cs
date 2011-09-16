@@ -130,7 +130,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 foreach (IsosResult result in resultList.IsosResultBin)
                 {
                     //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
-                    MassTag mt = new MassTag();
+                    PeptideTarget mt = new PeptideTarget();
 
                     mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
                     mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;

@@ -139,10 +139,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                             scanNumParam.Value = item.Value.ScanSet.PrimaryScanNumber;
                         }
                         netParam.Value = item.Value.GetNET();
-                        massTagIDParam.Value = item.Value.MassTag.ID;
-                        massTagMZParam.Value = item.Value.MassTag.MZ;
-                        massTagNETParam.Value = item.Value.MassTag.NormalizedElutionTime;
-                        massTagSequenceParam.Value = item.Value.MassTag.Code;
+                        massTagIDParam.Value = item.Value.Target.ID;
+                        massTagMZParam.Value = item.Value.Target.MZ;
+                        massTagNETParam.Value = item.Value.Target.NormalizedElutionTime;
+                        massTagSequenceParam.Value = item.Value.Target.Code;
 
                         if (item.Value.IsotopicProfile != null)
                         {

@@ -149,7 +149,7 @@ namespace DeconTools.Workflows.Backend.Core
             try
             {
 
-                this.Result = this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
+                this.Result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
                 this.Result.ResetResult();
                 
 
@@ -180,7 +180,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                MassTagResultBase result = (MassTagResultBase)this.Run.ResultCollection.GetMassTagResult(this.Run.CurrentMassTag);
+                TargetedResultBase result = (TargetedResultBase)this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
                 result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
                 result.FailedResult = true;
                 return;

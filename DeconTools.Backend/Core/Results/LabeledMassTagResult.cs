@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public abstract class LabeledMassTagResult:MassTagResultBase
+    public abstract class LabeledMassTagResult:TargetedResultBase
     {
         #region Constructors
         #endregion

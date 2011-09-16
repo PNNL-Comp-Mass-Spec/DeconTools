@@ -337,7 +337,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void test3()
         {
-            TargetBase target = new MassTag();
+            TargetBase target = new PeptideTarget();
             target.Code = "TTPSIIAYTDDETIVGQPAKRTTPSIIAYTDDETIVGQPAKRTTPSIIAYTDDETIVGQPAKR";
             target.EmpiricalFormula = target.GetEmpiricalFormulaFromTargetCode();
 

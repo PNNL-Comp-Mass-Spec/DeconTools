@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4261.21633, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
-    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -82,21 +78,31 @@
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />
     <Compile Include="Backend\Results\AlignmentResult.cs" />
-    <Compile Include="Backend\Results\DeconToolsResult.cs" />
-    <Compile Include="Backend\Results\N14N15TargetedResult.cs" />
-    <Compile Include="Backend\Results\O16O18TargetedResult.cs" />
-    <Compile Include="Backend\Results\ResultFactory.cs" />
-    <Compile Include="Backend\Results\TargetedResult.cs" />
+    <Compile Include="Backend\Results\DeconToolsResultDTO.cs" />
+    <Compile Include="Backend\Results\N14N15TargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\O16O18TargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\ResultDTOFactory.cs" />
+    <Compile Include="Backend\Results\TargetedResultDTO.cs" />
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
-    <Compile Include="Backend\Results\UnlabelledTargetedResult.cs" />
+    <Compile Include="Backend\Results\UnlabelledTargetedResultDTO.cs" />
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Backend\Parameters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PNNLOmicsElementData2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

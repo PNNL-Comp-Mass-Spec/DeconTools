@@ -13,7 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     {
 
         MercuryDistributionCreator distributionCreator;
-        MassTagResultBase m_massTagResult;
+        TargetedResultBase m_massTagResult;
 
         #region Constructors
         public MercuryFeatureGenerator()
@@ -33,7 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             TargetBase mt = resultColl.Run.CurrentMassTag;
 
-            MassTagResultBase result = resultColl.GetMassTagResult(mt);
+            TargetedResultBase result = resultColl.GetTargetedResult(mt);
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
             double fwhm = result.IsotopicProfile.GetFWHM();

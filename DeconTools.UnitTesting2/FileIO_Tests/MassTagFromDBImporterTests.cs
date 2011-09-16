@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     public class MassTagFromDBImporterTests
     {
         string massTagstring = "339661, 1880720, 127913, 1100499, 1239111, 994489, 417866, 106915, 1149424, 2763428, 2763428, 2763428, 239704, 44696, 213135, 971852, 24917, 101068, 243782, 24826, 194781, 194781, 1709835, 614192, 614192, 25982, 313378, 232945, 2193778, 323142, 1844543, 3176757, 3176757, 56475, 311742, 1116349, 987418, 27168, 306160, 1220666";
-        MassTagCollection massTagColl = new MassTagCollection();
+        TargetCollection massTagColl = new TargetCollection();
 
 
         public void setUpTests()
@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             foreach (string s in massTagArr)
             {
-                massTagColl.MassTagIDList.Add(Convert.ToInt64(s));
+                massTagColl.TargetIDList.Add(Convert.ToInt64(s));
             }
 
 
@@ -34,15 +34,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
 
             setUpTests();
-            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky",massTagColl.MassTagIDList);
+            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky",massTagColl.TargetIDList);
             massTagColl =importer.Import();
 
-            MassTag testPeptide1 = (MassTag)massTagColl.MassTagList[1];
+            PeptideTarget testPeptide1 = (PeptideTarget)massTagColl.TargetList[1];
 
-            Assert.AreEqual(43, massTagColl.MassTagList.Count);
-            Assert.AreEqual(24917, massTagColl.MassTagList[1].ID);
-            Assert.AreEqual("TQLKEFIDAQI", massTagColl.MassTagList[1].Code);
-            Assert.AreEqual(1304.6975526m, (decimal)massTagColl.MassTagList[1].MonoIsotopicMass);
+            Assert.AreEqual(43, massTagColl.TargetList.Count);
+            Assert.AreEqual(24917, massTagColl.TargetList[1].ID);
+            Assert.AreEqual("TQLKEFIDAQI", massTagColl.TargetList[1].Code);
+            Assert.AreEqual(1304.6975526m, (decimal)massTagColl.TargetList[1].MonoIsotopicMass);
             Assert.AreEqual(2, testPeptide1.ChargeState);
             Assert.AreEqual(3192, testPeptide1.ObsCount);
             Assert.AreEqual(653.35605279, (decimal)testPeptide1.MZ);

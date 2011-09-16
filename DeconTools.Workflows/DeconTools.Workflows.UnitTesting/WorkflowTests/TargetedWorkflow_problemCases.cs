@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             mtc = mtimporter.Import();
 
 
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             int testMassTagID = 3513677;
             int massTagChargeState = 2;
 
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == massTagChargeState select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == massTagChargeState select n).First();
 
             WorkflowParameters parameters = WorkflowParameters.CreateParameters(parameterFile);
 
@@ -71,7 +71,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             mtc = mtimporter.Import();
 
 
@@ -87,7 +87,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             int testMassTagID = 25517;
             int massTagChargeState = 4;
 
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == massTagChargeState select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == massTagChargeState select n).First();
 
             WorkflowParameters parameters = WorkflowParameters.CreateParameters(parameterFile);
 

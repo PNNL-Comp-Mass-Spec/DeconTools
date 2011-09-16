@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        public MassTagResultBase Result { get; set; }
+        public TargetedResultBase Result { get; set; }
 
 
         //public static WorkflowBase CreateWorkflow(string workflowParameterFilename)

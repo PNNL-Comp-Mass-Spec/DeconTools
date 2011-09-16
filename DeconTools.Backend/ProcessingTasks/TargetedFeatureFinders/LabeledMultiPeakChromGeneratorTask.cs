@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
                 NumPeaksForGeneratingChrom, ToleranceInPPM);
 
-            MassTagResultBase massTagresult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase massTagresult = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
 
             N14N15_TResult n14n15result;
 

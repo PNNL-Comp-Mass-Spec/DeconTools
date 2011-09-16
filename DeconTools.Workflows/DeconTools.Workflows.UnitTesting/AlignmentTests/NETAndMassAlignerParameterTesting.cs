@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -36,7 +36,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
        
 
@@ -61,7 +61,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
 
-                    sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
                     
 
@@ -107,7 +107,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -116,7 +116,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
 
 
@@ -145,7 +145,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -154,7 +154,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
 
-                    sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
                     
 
@@ -197,7 +197,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -206,7 +206,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
 
 
@@ -235,7 +235,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -244,7 +244,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
 
-                    sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
 
@@ -287,7 +287,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -297,7 +297,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
             
 
@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -335,7 +335,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
 
-                    sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
 
@@ -414,7 +414,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_for_alignment.txt";
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
@@ -424,7 +424,7 @@ namespace DeconTools.Workflows.UnitTesting
             NETAndMassAligner aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
 
 
@@ -454,7 +454,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    TargetBase mt = mtc.MassTagList.Where(p => p.ID == result.MassTagID).Where(p => p.ChargeState == result.ChargeState).First();
+                    TargetBase mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
                     double theorMZ = mt.MZ;
                     double obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -465,7 +465,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double obsNET = result.NET;
                     float alignedNET = run.GetNETValueForScan((int)scan);
 
-                    sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0") + "\t" + theorNET.ToString("0.0000") + "\t" + obsNET.ToString("0.0000") + "\t" + alignedNET.ToString("0.0000"));
+                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0") + "\t" + theorNET.ToString("0.0000") + "\t" + obsNET.ToString("0.0000") + "\t" + alignedNET.ToString("0.0000"));
 
                     //sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theo
                     sb.Append(Environment.NewLine);

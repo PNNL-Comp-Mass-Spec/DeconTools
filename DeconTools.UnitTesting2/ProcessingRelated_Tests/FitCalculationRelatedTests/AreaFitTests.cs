@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.Runs;
+using DeconTools.Backend.Utilities;
+using NUnit.Framework;
 
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedTests
@@ -122,7 +121,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
 
-            Assert.AreEqual(0.021245316579128, (decimal)fitval);
+            Assert.AreEqual(0.0207350903681061m, (decimal)fitval);
 
         }
 

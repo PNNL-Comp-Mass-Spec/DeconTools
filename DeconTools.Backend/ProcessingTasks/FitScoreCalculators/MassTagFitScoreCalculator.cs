@@ -1,34 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     public class MassTagFitScoreCalculator:Task
     {
-        #region Constructors
-        #endregion
-
-        #region Properties
-        #endregion
+     
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
         public override void Execute(ResultCollection resultColl)
         {
             Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
             Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
             Check.Require(resultColl.Run.XYData != null && resultColl.Run.XYData.Xvalues != null && resultColl.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
 
-            MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
             Check.Require(result != null, "No MassTagResult has been generated for CurrentMassTag");
 
             if (result.IsotopicProfile == null || result.IsotopicProfile.Peaklist == null || result.IsotopicProfile.Peaklist.Count == 0)
@@ -56,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             XYData theorXYData = TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(theorProfile, result.IsotopicProfile.GetFWHM());
             //theorXYData.Display();
-            
+
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
 
             //theorXYData.Display();
@@ -71,8 +59,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
 
-            
+
 
         }
+        #endregion
+
+        
     }
 }

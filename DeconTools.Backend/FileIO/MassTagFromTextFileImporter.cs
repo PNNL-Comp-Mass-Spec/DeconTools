@@ -36,9 +36,9 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-        public override DeconTools.Backend.Core.MassTagCollection Import()
+        public override DeconTools.Backend.Core.TargetCollection Import()
         {
-            DeconTools.Backend.Core.MassTagCollection data = new MassTagCollection();
+            DeconTools.Backend.Core.TargetCollection data = new TargetCollection();
 
             using (StreamReader reader = new StreamReader(m_filename))
             {
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.FileIO
 
                     List<string> lineData = processLine(line);
 
-                    MassTag massTag;
+                    PeptideTarget massTag;
                     try
                     {
                         massTag = convertTextToMassTag(lineData);
@@ -68,7 +68,7 @@ namespace DeconTools.Backend.FileIO
 
                     massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
 
-                    data.MassTagList.Add(massTag);
+                    data.TargetList.Add(massTag);
 
 
 
@@ -81,10 +81,10 @@ namespace DeconTools.Backend.FileIO
             return data;
         }
 
-        private MassTag convertTextToMassTag(List<string> lineData)
+        private PeptideTarget convertTextToMassTag(List<string> lineData)
         {
 
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" }, lineData, "0"));
 
             mt.ID = parseIntField(getValue(new string[] { "id", "mass_tag_id", "massTagid" }, lineData, "-1"));

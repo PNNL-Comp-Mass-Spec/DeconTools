@@ -109,7 +109,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 bool workflowIsTargeted = (run.CurrentMassTag != null);
                 if (workflowIsTargeted)
                 {
-                    MassTagResultBase result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+                    TargetedResultBase result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
                     result.FailedResult = true;
                     result.FailureType = Globals.TargetedResultFailureType.CHROM_PEAKS_NOT_DETECTED;
                 }

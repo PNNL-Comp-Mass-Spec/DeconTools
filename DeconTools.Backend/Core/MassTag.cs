@@ -3,10 +3,10 @@
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTag : TargetBase
+    public class PeptideTarget : TargetBase
     {
         #region Constructors
-        public MassTag()
+        public PeptideTarget()
         {
 
         }

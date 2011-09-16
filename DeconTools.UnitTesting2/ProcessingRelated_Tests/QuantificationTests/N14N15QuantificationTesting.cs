@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             
 
             //get target MT
-            MassTag mt23140708 = n14n15Util.CreateMT23140708_Z3();
+            PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z3();
 
 
             //get ms peaks
@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             XYData massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z2_Sum3();  //scan 1428 of 
 
             //get target MT
-            MassTag mt23140708 = n14n15Util.CreateMT23140708_Z2();
+            PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z2();
 
 
             DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(1, 1, 2);

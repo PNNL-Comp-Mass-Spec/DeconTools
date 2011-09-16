@@ -27,13 +27,13 @@ namespace DeconTools.Workflows.UnitTesting
             TargetedResultRepository repo = importer.Import();
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
             aligner.Execute(run);
         }

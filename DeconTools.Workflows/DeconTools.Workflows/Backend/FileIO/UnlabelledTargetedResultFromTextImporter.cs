@@ -11,9 +11,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #endregion
 
-        protected override TargetedResult ConvertTextToDataObject(List<string> processedData)
+        protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
-            UnlabelledTargetedResult result = new UnlabelledTargetedResult();
+            UnlabelledTargetedResultDTO result = new UnlabelledTargetedResultDTO();
 
             result.DatasetName = LookupData(processedData, datasetHeaders);
 
@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IntensityI0 = ParseFloatField(LookupData(processedData, intensityI0Headers));
 
             result.IScore = ParseFloatField(LookupData(processedData, iscoreHeaders));
-            result.MassTagID = ParseLongField(LookupData(processedData, targetIDHeaders));
+            result.TargetID = ParseLongField(LookupData(processedData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(processedData, monomassHeaders));
             result.MonoMassCalibrated = ParseDoubleField(LookupData(processedData, monomassCalibratedHeaders));
             result.MassErrorInPPM = ParseDoubleField(LookupData(processedData, massErrorHeaders));

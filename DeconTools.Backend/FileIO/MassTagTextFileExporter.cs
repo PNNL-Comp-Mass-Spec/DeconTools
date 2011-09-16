@@ -20,9 +20,9 @@ namespace DeconTools.Backend.FileIO
         protected override string buildResultOutput(TargetBase target)
         {
             StringBuilder sb = new StringBuilder();
-            Check.Require(target is MassTag, "Exported result is of the wrong type.");
+            Check.Require(target is PeptideTarget, "Exported result is of the wrong type.");
 
-            MassTag result = (MassTag)target;
+            PeptideTarget result = (PeptideTarget)target;
 
             sb.Append(target.ID);
             sb.Append(this.Delimiter);

@@ -6,7 +6,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
-    public class N14N15_TResult : MassTagResultBase
+    public class N14N15_TResult : TargetedResultBase
     {
 
 
@@ -114,14 +114,14 @@ namespace DeconTools.Backend.Core
 
         public MSPeak GetMonoisotopicPeakForLabelledProfile()
         {
-            if (this.MassTag == null ||
+            if (this.Target == null ||
                 this.IsotopicProfile == null ||
                 this.IsotopicProfileLabeled == null)
             {
                 return null;
             }
 
-            int numNitrogens = this.MassTag.GetAtomCountForElement("N");
+            int numNitrogens = this.Target.GetAtomCountForElement("N");
 
             MSPeak monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
             if (monoPeakForUnlabelled == null) return null;

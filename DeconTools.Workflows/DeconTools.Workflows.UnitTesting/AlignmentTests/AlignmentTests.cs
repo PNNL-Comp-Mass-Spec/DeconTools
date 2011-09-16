@@ -26,13 +26,13 @@ namespace DeconTools.Workflows.UnitTesting
             TargetedResultRepository repo = importer.Import();
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             NETAndMassAligner aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
             aligner.Execute(run);
 
@@ -67,13 +67,13 @@ namespace DeconTools.Workflows.UnitTesting
             TargetedResultRepository repo = importer.Import();
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             NETAndMassAligner aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(repo.Results);
-            aligner.SetReferenceMassTags(mtc.MassTagList);
+            aligner.SetReferenceMassTags(mtc.TargetList);
 
             aligner.Execute(run);
 
@@ -315,12 +315,12 @@ namespace DeconTools.Workflows.UnitTesting
             List<MassAlignmentDataItem> massAlignmentData = importer.Import();
             run.SetMassAlignmentData(massAlignmentData);
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24817;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             //first will execute workflow on a dataset that was NOT aligned
 
@@ -332,13 +332,13 @@ namespace DeconTools.Workflows.UnitTesting
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResultBase result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            TargetedResultBase result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
+            double netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
             
             decimal expectedNETDiff = 0.057m;
@@ -359,7 +359,7 @@ namespace DeconTools.Workflows.UnitTesting
             workflow.Execute();
 
 
-            netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
+            netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
 
 
@@ -388,12 +388,12 @@ namespace DeconTools.Workflows.UnitTesting
             List<MassAlignmentDataItem> massAlignmentData = importer.Import();
             run.SetMassAlignmentData(massAlignmentData);
 
-            MassTagCollection mtc = new MassTagCollection();
+            TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24730;
-            run.CurrentMassTag = (from n in mtc.MassTagList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             //first will execute workflow on a dataset that was NOT aligned
 
@@ -405,13 +405,13 @@ namespace DeconTools.Workflows.UnitTesting
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResultBase result = run.ResultCollection.GetMassTagResult(run.CurrentMassTag);
+            TargetedResultBase result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(9367, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
+            double netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
 
             decimal expectedNETDiff = 0.071m;
@@ -432,7 +432,7 @@ namespace DeconTools.Workflows.UnitTesting
             workflow.Execute();
 
 
-            netDiff = result.MassTag.NormalizedElutionTime - result.GetNET();
+            netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff after alignment = " + netDiff);
 
 

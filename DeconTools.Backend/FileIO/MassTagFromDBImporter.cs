@@ -64,12 +64,12 @@ namespace DeconTools.Backend.FileIO
             return builder.ConnectionString;
         }
         #endregion
-        public override DeconTools.Backend.Core.MassTagCollection Import()
+        public override DeconTools.Backend.Core.TargetCollection Import()
         {
             DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             
-            DeconTools.Backend.Core.MassTagCollection data=new MassTagCollection();
-            data.MassTagList.Clear();
+            DeconTools.Backend.Core.TargetCollection data=new TargetCollection();
+            data.TargetList.Clear();
 
             
 
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.FileIO
                     int progressCounter = 0;
                     while (reader.Read())
                     {
-                        MassTag massTag = new MassTag();
+                        PeptideTarget massTag = new PeptideTarget();
 
                         progressCounter++;
    
@@ -110,7 +110,7 @@ namespace DeconTools.Backend.FileIO
                         if (!reader["Description"].Equals(DBNull.Value)) massTag.ProteinDescription = Convert.ToString(reader["Description"]);
                       
                    
-                        data.MassTagList.Add(massTag);
+                        data.TargetList.Add(massTag);
                         
                         if (progressCounter % 100 == 0) Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
                     }

@@ -118,11 +118,11 @@ namespace DeconTools.UnitTesting2
         }
 
 
-        public static List<MassTag> CreateN14N15TestMassTagList()
+        public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
-            List<MassTag> mtList = new List<MassTag>();
+            List<PeptideTarget> mtList = new List<PeptideTarget>();
 
-            MassTag mt1 = new MassTag();
+            PeptideTarget mt1 = new PeptideTarget();
             mt1.ID = 23085473;
             mt1.NormalizedElutionTime = 0.3807834F;
             mt1.MonoIsotopicMass = 2538.33284203802;
@@ -134,7 +134,7 @@ namespace DeconTools.UnitTesting2
             mtList.Add(mt1);
 
 
-            MassTag mt2 = new MassTag();
+            PeptideTarget mt2 = new PeptideTarget();
             mt2.ID = 23085470;
             mt2.NormalizedElutionTime = 0.6053093f;
             mt2.MonoIsotopicMass = 2329.24291507994;

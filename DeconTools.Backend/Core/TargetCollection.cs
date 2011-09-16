@@ -5,25 +5,25 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassTagCollection
+    public class TargetCollection
     {
         #region Constructors
-        public MassTagCollection()
+        public TargetCollection()
         {
-            MassTagList = new List<TargetBase>();
-            this.MassTagIDList = new List<long>();
+            TargetList = new List<TargetBase>();
+            this.TargetIDList = new List<long>();
         }
         #endregion
 
         #region Properties
         private List<TargetBase> massTagList;
-        public List<TargetBase> MassTagList
+        public List<TargetBase> TargetList
         {
             get { return massTagList; }
             set { massTagList = value; }
         }
 
-        public List<long> MassTagIDList;
+        public List<long> TargetIDList;
 
         #endregion
 
@@ -46,9 +46,9 @@ namespace DeconTools.Backend.Core
 
             var massTagsNonRedundant = new List<TargetBase>();
 
-            for (int i = 0; i < this.MassTagList.Count; i++)
+            for (int i = 0; i < this.TargetList.Count; i++)
             {
-                var mtCurrent = this.MassTagList[i];
+                var mtCurrent = this.TargetList[i];
                 if (massTagsNonRedundant.Where(p => p.ID == mtCurrent.ID && p.ChargeState == mtCurrent.ChargeState).Count() == 0)
                 {
                     massTagsNonRedundant.Add(mtCurrent);
@@ -80,16 +80,10 @@ namespace DeconTools.Backend.Core
                             filteredMassTagList.Add(uniquelyChargedMT);
                         }
                     }
-
-
                 }
-
-
             }
 
-
-
-            this.MassTagList = filteredMassTagList;
+            this.TargetList = filteredMassTagList;
 
 
 
@@ -98,11 +92,11 @@ namespace DeconTools.Backend.Core
 
         public void FilterOutDuplicates()
         {
-            if (this.MassTagList == null || this.MassTagList.Count == 0) return;
+            if (this.TargetList == null || this.TargetList.Count == 0) return;
 
             var filteredList = new List<TargetBase>();
 
-            foreach (var mt in this.MassTagList)
+            foreach (var mt in this.TargetList)
             {
                 if (massTagListContainsMassTag(filteredList, mt))
                 {
@@ -115,7 +109,7 @@ namespace DeconTools.Backend.Core
 
             }
 
-            this.MassTagList = filteredList;
+            this.TargetList = filteredList;
 
 
 

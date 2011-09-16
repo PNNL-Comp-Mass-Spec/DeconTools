@@ -20,14 +20,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
             I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
-
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-
             HornDeconvolutor decon = new HornDeconvolutor();
-
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -38,7 +34,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             //order and get the most intense msfeature
             run.ResultCollection.ResultList = run.ResultCollection.ResultList.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).ToList();
             IsosResult testIso = run.ResultCollection.ResultList[0];
-
             Assert.AreEqual(13084442, testIso.IsotopicProfile.IntensityAggregate);
             Assert.AreEqual(2, testIso.IsotopicProfile.ChargeState);
             Assert.AreEqual(0.0101245114907111m, (decimal)testIso.IsotopicProfile.Score);
@@ -49,17 +44,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
-
-            foreach (var result in run.ResultCollection.ResultList)
-            {
-                foreach (var peak in result.IsotopicProfile.Peaklist)
-                {
-                    Console.WriteLine(peak.MSFeatureID);
-                    
-                }
-                
-            }
-
+          
 
 
         }

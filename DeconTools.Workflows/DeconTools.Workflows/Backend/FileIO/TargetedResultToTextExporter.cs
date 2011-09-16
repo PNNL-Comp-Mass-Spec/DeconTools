@@ -6,7 +6,7 @@ using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResult>
+    public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResultDTO>
     {
 
 
@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #endregion
 
-        protected override string buildResultOutput(TargetedResult result)
+        protected override string buildResultOutput(TargetedResultDTO result)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -80,18 +80,18 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         }
 
-        protected virtual string addAdditionalInfo(TargetedResult result)
+        protected virtual string addAdditionalInfo(TargetedResultDTO result)
         {
             return String.Empty;
         }
 
-        protected virtual string addBasicTargetedResult(TargetedResult result)
+        protected virtual string addBasicTargetedResult(TargetedResultDTO result)
         {
             StringBuilder sb = new StringBuilder();
 
             sb.Append(result.DatasetName);
             sb.Append(Delimiter);
-            sb.Append(result.MassTagID);
+            sb.Append(result.TargetID);
             sb.Append(Delimiter);
             sb.Append(result.ChargeState);
             sb.Append(Delimiter);

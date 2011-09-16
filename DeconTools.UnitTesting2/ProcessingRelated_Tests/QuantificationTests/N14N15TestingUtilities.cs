@@ -76,9 +76,9 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         #region Private Methods
         #endregion
 
-        public MassTag CreateMT23085904_Z2()
+        public PeptideTarget CreateMT23085904_Z2()
         {
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ChargeState = 2;
             mt.Code = "AMPIDLSNLALLDANGK";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
@@ -90,9 +90,9 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         }
         
         
-        public MassTag CreateMT23140708_Z2()
+        public PeptideTarget CreateMT23140708_Z2()
         {
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ChargeState = 2;
             mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
@@ -103,9 +103,9 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             return mt;
         }
 
-        public MassTag CreateMT23140708_Z3()
+        public PeptideTarget CreateMT23140708_Z3()
         {
-            MassTag mt = new MassTag();
+            PeptideTarget mt = new PeptideTarget();
             mt.ChargeState = 3;
             mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();

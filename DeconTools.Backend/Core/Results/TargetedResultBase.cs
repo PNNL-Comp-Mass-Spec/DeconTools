@@ -5,17 +5,17 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
-    public abstract class MassTagResultBase : IsosResult
+    public abstract class TargetedResultBase : IsosResult
     {
         #region Constructors
-        public MassTagResultBase()
+        public TargetedResultBase()
         {
 
         }
         
-        public MassTagResultBase(TargetBase target)
+        public TargetedResultBase(TargetBase target)
         {
-            this.MassTag = target;
+            this.Target = target;
             this.IsotopicProfile = new IsotopicProfile();
         }
 
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.Core
 
         public ChromPeak ChromPeakSelected { get; set; }
 
-        public TargetBase MassTag { get; set; }
+        public TargetBase Target { get; set; }
 
         public double Score { get; set; }   // TODO: Do I need this  (IsosResult already has a Score in IsotopicProfile)
 
@@ -64,7 +64,7 @@ namespace DeconTools.Backend.Core
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("****** Match ******\n");
-            sb.Append("NET = \t" + MassTag.NormalizedElutionTime.ToString("0.000") + "\n");
+            sb.Append("NET = \t" + Target.NormalizedElutionTime.ToString("0.000") + "\n");
             sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString() + "\n");
             sb.Append("ChromPeak NETVal = " + ChromPeakSelected.NETValue.ToString("0.000") + "\n");
             sb.Append("ScanSet = { ");
@@ -115,7 +115,7 @@ namespace DeconTools.Backend.Core
         {
             double NETError = 0;
 
-            double theorNET = this.MassTag.NormalizedElutionTime;
+            double theorNET = this.Target.NormalizedElutionTime;
             double obsNET = this.Run.GetNETValueForScan(GetScanNum());
 
             NETError = theorNET - obsNET;
@@ -153,13 +153,13 @@ namespace DeconTools.Backend.Core
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()
         {
-            if (this.MassTag == null || this.MassTag.IsotopicProfile == null)
+            if (this.Target == null || this.Target.IsotopicProfile == null)
             {
                 return 0;
             }
             else
             {
-                return this.MassTag.IsotopicProfile.getMostIntensePeak().XValue;
+                return this.Target.IsotopicProfile.getMostIntensePeak().XValue;
             }
 
         }

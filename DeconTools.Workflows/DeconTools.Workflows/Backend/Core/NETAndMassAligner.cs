@@ -45,20 +45,20 @@ namespace DeconTools.Workflows.Backend.Core
             _massTagList = massTagList;
         }
 
-        public void SetFeaturesToBeAligned(List<MassTagResultBase> featuresToAlign)
+        public void SetFeaturesToBeAligned(List<TargetedResultBase> featuresToAlign)
         {
             _featuresToBeAligned.Clear();
             _featuresToBeAligned.AddResults(featuresToAlign);
         }
 
 
-        public void SetFeaturesToBeAligned(List<TargetedResult> featuresToAlign)
+        public void SetFeaturesToBeAligned(List<TargetedResultDTO> featuresToAlign)
         {
             _featuresToBeAligned.Clear();
             _featuresToBeAligned.AddResults(featuresToAlign);
         }
 
-        public clsAlignmentFunction GetAlignment(List<TargetBase> massTagList, List<TargetedResult> featuresToAlign)
+        public clsAlignmentFunction GetAlignment(List<TargetBase> massTagList, List<TargetedResultDTO> featuresToAlign)
         {
 
             clsMassTagDB multialignMassTagDB = new clsMassTagDB();
@@ -179,7 +179,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Private Methods
 
-        private List<clsUMC> convertDeconToolsLCMSFeaturesToMultialignFeatures(List<TargetedResult> featuresToAlign)
+        private List<clsUMC> convertDeconToolsLCMSFeaturesToMultialignFeatures(List<TargetedResultDTO> featuresToAlign)
         {
             List<clsUMC> umcs = new List<clsUMC>();
 
@@ -199,7 +199,7 @@ namespace DeconTools.Workflows.Backend.Core
             return umcs;
         }
 
-        private clsUMC convertDeconToolsTargetedFeatureToUMC(TargetedResult result)
+        private clsUMC convertDeconToolsTargetedFeatureToUMC(TargetedResultDTO result)
         {
             clsUMC umc = new clsUMC();
             umc.AbundanceMax = result.Intensity;
@@ -215,7 +215,7 @@ namespace DeconTools.Workflows.Backend.Core
             umc.DatasetId = 0;
             umc.DriftTime = 0;
             umc.DriftTimeUncorrected = 0;
-            umc.Id = (int)result.MassTagID;
+            umc.Id = (int)result.TargetID;
             umc.Mass = result.MonoMass;
             umc.MZForCharge = result.MonoMZ;
             umc.Net = result.NET;
