@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Utilities;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -144,8 +142,16 @@ namespace DeconTools.Backend.Utilities
 
             this.elementTable = molecularFormula.ToElementTable();
             this.decon2LSMercuryDistribution = new DeconToolsV2.clsMercuryIsotopeDistribution();
+
+            
+           
+            
+
             this.decon2LSMercuryDistribution.Resolution = this.resolution;
             this.decon2LSMercuryDistribution.ChargeState = (short)this.chargeState;
+
+            
+
             System.Drawing.PointF[] drawingpoints = this.decon2LSMercuryDistribution.CalculateDistribution(this.elementTable);
 
             this.data = XYData.ConvertDrawingPoints(drawingpoints);
