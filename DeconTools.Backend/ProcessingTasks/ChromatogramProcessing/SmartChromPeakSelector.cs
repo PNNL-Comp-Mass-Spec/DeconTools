@@ -10,11 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
     public class SmartChromPeakSelector : SmartChromPeakSelectorBase
     {
-      
-
-       
-
-        
 
         #region Constructors
         public SmartChromPeakSelector(SmartChromPeakSelectorParameters parameters)
@@ -34,13 +29,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 TargetedMSFeatureFinder = new IterativeTFF(iterativeTFFParams);
             }
-            
-            
 
             resultValidator = new ResultValidators.ResultValidatorTask();
             fitScoreCalc = new MassTagFitScoreCalculator();
-
-           
 
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -9,6 +8,9 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
+   
+
+
     public abstract class SmartChromPeakSelectorBase : Task
     {
 
@@ -16,6 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
         protected MassTagFitScoreCalculator fitScoreCalc;
 
+        ScanSetFactory scansetFactory = new ScanSetFactory();
 
         protected class PeakQualityData
         {
@@ -55,6 +58,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         public TFFBase TargetedMSFeatureFinder { get; set; }
 
         public SmartChromPeakSelectorParameters Parameters { get; set; }
+
+
 
         #endregion
 
@@ -184,7 +189,31 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             int bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
 
-            return new ScanSetFactory().CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
+            switch (this.Parameters.SummingMode)
+            {
+                case SummingModeEnum.SUMMINGMODE_STATIC:
+                    return scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
+                    
+                case SummingModeEnum.SUMMINGMODE_DYNAMIC:
+                    double sigma = chromPeak.Width / 2.35;
+
+                    int lowerScan = (int)Math.Round(chromPeak.XValue - (this.Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
+                    int closestLowerScan = run.GetClosestMSScan(lowerScan, Globals.ScanSelectionMode.CLOSEST);
+
+                    int upperScan = (int)Math.Round(chromPeak.XValue + (this.Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
+                    int closestUpperScan = run.GetClosestMSScan(upperScan,Globals.ScanSelectionMode.CLOSEST);
+
+                    ScanSet scanset = scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
+                    scansetFactory.TrimScans(scanset, this.Parameters.MaxScansSummedInDynamicSumming);
+
+                    return scanset;
+
+                default:
+                    return scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
+            }
+
+
+            
         }
 
         private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)

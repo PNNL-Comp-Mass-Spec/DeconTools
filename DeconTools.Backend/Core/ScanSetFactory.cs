@@ -16,7 +16,7 @@ namespace DeconTools.Backend.Core
         #region Public Methods
 
 
-        public ScanSet CreateScanSet(Run run, int targetScan, int scansSummed, int desiredMSLevel)
+        public ScanSet CreateScanSet(Run run, int targetScan, int scansSummed, byte desiredMSLevel)
         {
             int currentLevel = run.GetMSLevel(targetScan);
 
@@ -35,6 +35,57 @@ namespace DeconTools.Backend.Core
 
 
         }
+
+
+        public ScanSet CreateScanSet(Run run, int primaryScan, int startScan, int stopScan)
+        {
+            int currentLevel = run.GetMSLevel(primaryScan);
+
+            List<int> scansToSum = new List<int>();
+
+            for (int i = startScan; i <= stopScan; i++)
+            {
+                if (run.GetMSLevel(i) == currentLevel)
+                {
+                    scansToSum.Add(i);
+                }
+                
+            }
+
+            return new ScanSet(primaryScan, scansToSum.ToArray());
+
+        }
+
+        public void TrimScans(ScanSet scanset, int maxScansAllowed)
+        {
+            Check.Require(maxScansAllowed > 0, "Scans cannot be trimmed to fewer than one");
+
+            
+
+            if (scanset.IndexValues.Count > maxScansAllowed)
+            {
+                int numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed+1)/2;
+
+                List<int> newScans = new List<int>();
+
+                for (int i = numScansToBeRemoved; i < (scanset.IndexValues.Count-numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
+                {
+                    newScans.Add(scanset.IndexValues[i]);
+                    
+                }
+
+                scanset.IndexValues = newScans;
+
+
+            }
+
+
+
+
+
+
+        }
+
 
         public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
         {

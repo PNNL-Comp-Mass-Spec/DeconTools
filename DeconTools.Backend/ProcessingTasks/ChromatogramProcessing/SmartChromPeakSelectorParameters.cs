@@ -1,6 +1,14 @@
 ﻿
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
+    public enum SummingModeEnum
+    {
+        SUMMINGMODE_STATIC,     // mode in which the number of scans summed is always the same
+        SUMMINGMODE_DYNAMIC    // mode in which the number of scans summed is variable; depends on chromatograph peak dimensions
+
+    }
+
+
     public class SmartChromPeakSelectorParameters
     {
 
@@ -14,6 +22,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             this.MSPeakDetectorSigNoiseThresh = 2;
             this.NumChromPeaksAllowed = 20;
             this.NumScansToSum = 1;
+            this.MaxScansSummedInDynamicSumming = 21;
+            this.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+            this.AreaOfPeakToSumInDynamicSumming = 1;
             
         }
         #endregion
@@ -47,7 +58,20 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         public double MSPeakDetectorPeakBR { get; set; }
 
         public double MSPeakDetectorSigNoiseThresh { get; set; }
-   
+
+        /// <summary>
+        /// Summing mode. Static indicates that the number of scans summed is always the same. Dynamic indicates that the number of scans summed is variable
+        /// </summary>
+        public SummingModeEnum SummingMode { get; set; }
+
+
+        public int MaxScansSummedInDynamicSumming { get; set; }
+
+        /// <summary>
+        /// Area of peak to sum, based on units of sigma. Eg a value of '2' means +/- 2 sigma; thus 4 sigma or ~ 95% of a gaussian peak will be summed
+        /// </summary>
+        public double AreaOfPeakToSumInDynamicSumming { get; set; }
+
 
         #endregion
 
