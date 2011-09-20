@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             IsosResult testIso = run.ResultCollection.ResultList[0];
             Assert.AreEqual(13084442, testIso.IsotopicProfile.IntensityAggregate);
             Assert.AreEqual(2, testIso.IsotopicProfile.ChargeState);
-            Assert.AreEqual(0.0101245114907111m, (decimal)testIso.IsotopicProfile.Score);
+            Assert.AreEqual(0.01012m, (decimal)Math.Round(testIso.IsotopicProfile.Score,5));
             Assert.AreEqual(3, testIso.IsotopicProfile.Peaklist.Count);
             Assert.AreEqual(481.274105402604m, (decimal)testIso.IsotopicProfile.Peaklist[0].XValue);
             Assert.AreEqual(481.775412188198m, (decimal)testIso.IsotopicProfile.Peaklist[1].XValue);

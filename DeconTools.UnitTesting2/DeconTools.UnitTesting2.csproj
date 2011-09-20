@@ -25,6 +25,9 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -51,7 +54,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2, Version=1.0.4055.24533, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2, Version=1.0.4279.18325, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
@@ -84,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm_tests\PattersonAlgorithmTests.cs" />
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="DemoTests.cs" />
     <Compile Include="FileIO_Tests\AcqusFileReaderTests.cs" />

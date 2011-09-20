@@ -61,6 +61,64 @@ namespace DeconTools.Backend.Utilities
 
         }
 
+
+        public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
+        {
+            int binarySearchIndex = BinarySearchWithTolerance(data, targetVal, 0, data.Length - 1, tolerance);
+            if (binarySearchIndex == -1) binarySearchIndex = 0;
+
+            bool indexIsBelowTarget = (data[binarySearchIndex] < targetVal);
+
+            int indexOfClosest = -1;
+
+
+            if (indexIsBelowTarget)
+            {
+                double diff = double.MaxValue;
+                for (int i = binarySearchIndex; i < data.Length; i++)
+                {
+                    double currentDiff = Math.Abs(data[i] - targetVal);
+                    if (currentDiff < diff)
+                    {
+                        diff = currentDiff;
+                        indexOfClosest = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+
+                    
+                }
+            }
+            else
+            {
+                double diff = double.MaxValue;
+                for (int i = binarySearchIndex; i >= 0; i--)
+                {
+                    double currentDiff = Math.Abs(data[i] - targetVal);
+                    if (currentDiff < diff)
+                    {
+                        diff = currentDiff;
+                        indexOfClosest = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    
+                }
+
+
+            }
+            return indexOfClosest;
+
+
+        }
+
+
         public static int BinarySearchWithTolerance(double[] data, double targetVal, int leftIndex, int rightIndex, double tolerance)
         {
             if (leftIndex <= rightIndex)
