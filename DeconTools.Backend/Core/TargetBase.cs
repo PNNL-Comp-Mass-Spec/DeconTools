@@ -94,7 +94,7 @@ namespace DeconTools.Backend.Core
 
         private void updateElementLookupTable()
         {
-            this.ElementLookupTable = this.PeptideUtils.parseEmpiricalFormulaString(this.EmpiricalFormula);
+            this.ElementLookupTable = this.PeptideUtils.ParseEmpiricalFormulaString(this.EmpiricalFormula);
         }
 
 

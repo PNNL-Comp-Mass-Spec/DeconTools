@@ -123,8 +123,8 @@ namespace DeconTools.Backend.Utilities
 
         public string addFormula(string baseFormula, string formulaToBeAdded)
         {
-            var baseElementTable = parseEmpiricalFormulaString(baseFormula);
-            var addedTable = parseEmpiricalFormulaString(formulaToBeAdded);
+            var baseElementTable = ParseEmpiricalFormulaString(baseFormula);
+            var addedTable = ParseEmpiricalFormulaString(formulaToBeAdded);
 
             foreach (var item in addedTable)
             {
@@ -136,14 +136,14 @@ namespace DeconTools.Backend.Utilities
                 {
                     baseElementTable.Add(item.Key, item.Value);
                 }
-                
+
             }
 
 
             return GetEmpiricalFormulaFromElementTable(baseElementTable);
-      
 
-            
+
+
 
 
         }
@@ -208,7 +208,7 @@ namespace DeconTools.Backend.Utilities
 
         public int GetNumAtomsForElement(string element, string empiricalFormula)
         {
-            var parsedFormula = parseEmpiricalFormulaString(empiricalFormula);
+            var parsedFormula = ParseEmpiricalFormulaString(empiricalFormula);
 
             if (parsedFormula.ContainsKey(element))
             {
@@ -223,43 +223,12 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public Dictionary<string, int> parseEmpiricalFormulaString(string p)
+        public Dictionary<string, int> ParseEmpiricalFormulaString(string empiricalFormula)
         {
-            Dictionary<string, int> parsedFormula = new Dictionary<string, int>();
 
-            if (p == null || p.Length == 0) return parsedFormula;
-
-            Regex re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
-            MatchCollection mc = re.Matches(p);
+            return EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
 
 
-            foreach (Match item in mc)
-            {
-
-                int numAtoms = 0;
-                string elementSymbol = item.Groups[1].Value;
-
-                string elementCountString = item.Groups[2].Value;
-
-
-                if (elementCountString.Length > 0)
-                {
-                    numAtoms = Int32.Parse(elementCountString);
-                }
-                else
-                {
-                    numAtoms = 1;
-                }
-
-                bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
-
-                parsedFormula.Add(elementSymbol, numAtoms);
-
-
-            }
-
-            return parsedFormula;
 
         }
 
@@ -286,7 +255,7 @@ namespace DeconTools.Backend.Utilities
         #endregion
 
         #region Private Methods
-   
+
         #endregion
 
     }

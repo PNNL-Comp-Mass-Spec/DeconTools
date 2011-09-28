@@ -173,7 +173,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         public IsotopicProfile GetIsotopePattern(string empiricalFormula, double[][] aafIsoLocal)
         {
 
-            Dictionary<string,int>elementTable = _peptideUtils.parseEmpiricalFormulaString(empiricalFormula);
+            Dictionary<string,int>elementTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
 
             int[] formulaArray = new int[5];
             formulaArray[0] = getAtomCount(elementTable, "C");

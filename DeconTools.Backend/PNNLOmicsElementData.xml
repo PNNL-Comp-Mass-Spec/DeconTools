@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <?IUPAC 2000 Atomic Weights of the Elements. Updated Elements H, B, C, N, O, Na, P, S, Cl, K, Ca Table 5 for probabilty best measuremnt?>
 <?We need to add average mass and check all isotope probabilities add to 1?>
+<?Average mass comes from IUPAC 2007.  () uncertanties were not included?>
 <parameters>
 	<version>1.0</version>
 	<ElementIsotopes>
@@ -10,6 +11,8 @@
 			<Name>Hydrogen</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>1</Atomicity>
+			<MassAverage>1.00794</MassAverage>
+			<MassAverageUncertainty>0.00007</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>1</IsotopeNumber>
 				<Mass>1.00782503196</Mass>
@@ -26,6 +29,8 @@
 			<Name>Helium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>2</Atomicity>
+			<MassAverage>4.002602</MassAverage>
+			<MassAverageUncertainty>0.000002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>3</IsotopeNumber>
 				<Mass>3.01603</Mass>
@@ -42,6 +47,8 @@
 			<Name>Lithium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>3</Atomicity>
+			<MassAverage>6.941</MassAverage>
+			<MassAverageUncertainty>0.002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>6</IsotopeNumber>
 				<Mass>6.015121</Mass>
@@ -58,6 +65,8 @@
 			<Name>Beryllium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>4</Atomicity>
+			<MassAverage>9.012182</MassAverage>
+			<MassAverageUncertainty>0.000003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>9</IsotopeNumber>
 				<Mass>9.012182</Mass>
@@ -69,6 +78,8 @@
 			<Name>Boron</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>5</Atomicity>
+			<MassAverage>10.811</MassAverage>
+			<MassAverageUncertainty>0.007</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>10</IsotopeNumber>
 				<Mass>10.01293713</Mass>
@@ -85,6 +96,8 @@
 			<Name>Carbon</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>6</Atomicity>
+			<MassAverage>12.0107</MassAverage>
+			<MassAverageUncertainty>0.0008</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>12</IsotopeNumber>
 				<Mass>12.0000000000</Mass>
@@ -101,6 +114,8 @@
 			<Name>Nitrogen</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>7</Atomicity>
+			<MassAverage>14.0067</MassAverage>
+			<MassAverageUncertainty>0.0002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>14</IsotopeNumber>
 				<Mass>14.003074007418</Mass>
@@ -117,6 +132,8 @@
 			<Name>Oxygen</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>8</Atomicity>
+			<MassAverage>15.9994</MassAverage>
+			<MassAverageUncertainty>0.0003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>16</IsotopeNumber>
 				<Mass>15.994914622325</Mass>
@@ -138,6 +155,8 @@
 			<Name>Fluorine</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>9</Atomicity>
+			<MassAverage>18.9984032</MassAverage>
+			<MassAverageUncertainty>0.0000005</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>19</IsotopeNumber>
 				<Mass>18.9984</Mass>
@@ -149,6 +168,8 @@
 			<Name>Neon</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>10</Atomicity>
+			<MassAverage>20.1797</MassAverage>
+			<MassAverageUncertainty>0.0006</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>20</IsotopeNumber>
 				<Mass>19.99244</Mass>
@@ -170,6 +191,8 @@
 			<Name>Sodium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>11</Atomicity>
+			<MassAverage>22.98976928</MassAverage>
+			<MassAverageUncertainty>0.00000002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>23</IsotopeNumber>
 				<Mass>22.9897696626</Mass>
@@ -181,6 +204,8 @@
 			<Name>Magnesium</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>12</Atomicity>
+			<MassAverage>24.305</MassAverage>
+			<MassAverageUncertainty>0.006</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>24</IsotopeNumber>
 				<Mass>23.98504</Mass>
@@ -202,6 +227,8 @@
 			<Name>Alumunium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>13</Atomicity>
+			<MassAverage>26.9815386</MassAverage>
+			<MassAverageUncertainty>0.0000008</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>27</IsotopeNumber>
 				<Mass>26.98154</Mass>
@@ -213,6 +240,8 @@
 			<Name>Silicon</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>14</Atomicity>
+			<MassAverage>28.0855</MassAverage>
+			<MassAverageUncertainty>0.0003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>28</IsotopeNumber>
 				<Mass>27.97693</Mass>
@@ -234,6 +263,8 @@
 			<Name>Phosphorous</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>15</Atomicity>
+			<MassAverage>30.973762</MassAverage>
+			<MassAverageUncertainty>0.000002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>31</IsotopeNumber>
 				<Mass>30.9737614927</Mass>
@@ -245,6 +276,8 @@
 			<Name>Sulfur</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>16</Atomicity>
+			<MassAverage>32.065</MassAverage>
+			<MassAverageUncertainty>0.005</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>32</IsotopeNumber>
 				<Mass>31.9720707315</Mass>
@@ -271,6 +304,8 @@
 			<Name>Chlorine</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>17</Atomicity>
+			<MassAverage>35.453</MassAverage>
+			<MassAverageUncertainty>0.002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>35</IsotopeNumber>
 				<Mass>34.968852714</Mass>
@@ -287,6 +322,8 @@
 			<Name>Argon</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>18</Atomicity>
+			<MassAverage>39.948</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>36</IsotopeNumber>
 				<Mass>35.96754</Mass>
@@ -308,6 +345,8 @@
 			<Name>Potassium</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>19</Atomicity>
+			<MassAverage>39.0983</MassAverage>
+			<MassAverageUncertainty>0.0001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>39</IsotopeNumber>
 				<Mass>38.96370693</Mass>
@@ -329,6 +368,8 @@
 			<Name>Calcium</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>20</Atomicity>
+			<MassAverage>40.078</MassAverage>
+			<MassAverageUncertainty>0.004</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>40</IsotopeNumber>
 				<Mass>39.96259123</Mass>
@@ -365,6 +406,9 @@
 			<Name>Scandium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>21</Atomicity>
+			<MassAverage>44.955912</MassAverage>
+			<MassAverageUncertainty>0.000006</MassAverageUncertainty>
+
 			<Isotope>
 				<IsotopeNumber>45</IsotopeNumber>
 				<Mass>44.95591</Mass>
@@ -376,6 +420,8 @@
 			<Name>Titanium</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>22</Atomicity>
+			<MassAverage>47.867</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>46</IsotopeNumber>
 				<Mass>45.95263</Mass>
@@ -407,6 +453,8 @@
 			<Name>Vanadium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>23</Atomicity>
+			<MassAverage>50.9415</MassAverage>
+			<MassAverageUncertainty>0.0001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>50</IsotopeNumber>
 				<Mass>49.94716</Mass>
@@ -423,6 +471,8 @@
 			<Name>Chromium</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>24</Atomicity>
+			<MassAverage>51.9961</MassAverage>
+			<MassAverageUncertainty>0.0006</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>50</IsotopeNumber>
 				<Mass>49.94604</Mass>
@@ -449,6 +499,8 @@
 			<Name>Manganese</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>25</Atomicity>
+			<MassAverage>54.938045</MassAverage>
+			<MassAverageUncertainty>0.000005</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>55</IsotopeNumber>
 				<Mass>54.93805</Mass>
@@ -460,6 +512,8 @@
 			<Name>Iron</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>26</Atomicity>
+			<MassAverage>55.845</MassAverage>
+			<MassAverageUncertainty>0.002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>54</IsotopeNumber>
 				<Mass>53.93961</Mass>
@@ -486,6 +540,8 @@
 			<Name>Cobalt</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>27</Atomicity>
+			<MassAverage>58.933195</MassAverage>
+			<MassAverageUncertainty>0.000005</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>59</IsotopeNumber>
 				<Mass>58.9332</Mass>
@@ -494,9 +550,11 @@
 		</Element>
 		<Element>
 			<Symbol>Ni</Symbol>
-			<Name>Nickle</Name>
+			<Name>Nickel</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>28</Atomicity>
+			<MassAverage>58.6934</MassAverage>
+			<MassAverageUncertainty>0.0004</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>58</IsotopeNumber>
 				<Mass>57.93534</Mass>
@@ -528,6 +586,8 @@
 			<Name>Copper</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>29</Atomicity>
+			<MassAverage>63.546</MassAverage>
+			<MassAverageUncertainty>0.003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>63</IsotopeNumber>
 				<Mass>62.9396</Mass>
@@ -544,6 +604,8 @@
 			<Name>Zinc</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>30</Atomicity>
+			<MassAverage>65.38</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>64</IsotopeNumber>
 				<Mass>63.92915</Mass>
@@ -575,6 +637,8 @@
 			<Name>Gallium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>31</Atomicity>
+			<MassAverage>69.723</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>69</IsotopeNumber>
 				<Mass>68.92558</Mass>
@@ -591,6 +655,8 @@
 			<Name>Germanium</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>32</Atomicity>
+			<MassAverage>72.64</MassAverage>
+			<MassAverageUncertainty>0.01</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>70</IsotopeNumber>
 				<Mass>69.92425</Mass>
@@ -622,6 +688,8 @@
 			<Name>Arsenic</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>33</Atomicity>
+			<MassAverage>74.9216</MassAverage>
+			<MassAverageUncertainty>0.0002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>75</IsotopeNumber>
 				<Mass>74.92159</Mass>
@@ -633,6 +701,8 @@
 			<Name>Selenium</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>34</Atomicity>
+			<MassAverage>78.96</MassAverage>
+			<MassAverageUncertainty>0.03</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>74</IsotopeNumber>
 				<Mass>73.92248</Mass>
@@ -669,6 +739,8 @@
 			<Name>Bromine</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>35</Atomicity>
+			<MassAverage>79.904</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>79</IsotopeNumber>
 				<Mass>78.91833</Mass>
@@ -685,6 +757,8 @@
 			<Name>Krypton</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>36</Atomicity>
+			<MassAverage>83.798</MassAverage>
+			<MassAverageUncertainty>0.002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>78</IsotopeNumber>
 				<Mass>77.914</Mass>
@@ -721,6 +795,8 @@
 			<Name>Rubidium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>37</Atomicity>
+			<MassAverage>85.4678</MassAverage>
+			<MassAverageUncertainty>0.0003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>85</IsotopeNumber>
 				<Mass>84.9118</Mass>
@@ -737,6 +813,8 @@
 			<Name>Strontium</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>38</Atomicity>
+			<MassAverage>87.62</MassAverage>
+			<MassAverageUncertainty>0.01</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>84</IsotopeNumber>
 				<Mass>83.91343</Mass>
@@ -763,6 +841,8 @@
 			<Name>Yttrium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>39</Atomicity>
+			<MassAverage>88.90585</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>89</IsotopeNumber>
 				<Mass>88.90585</Mass>
@@ -774,6 +854,8 @@
 			<Name>Zirconium</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>40</Atomicity>
+			<MassAverage>91.224</MassAverage>
+			<MassAverageUncertainty>0.002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>90</IsotopeNumber>
 				<Mass>89.9047</Mass>
@@ -805,6 +887,8 @@
 			<Name>Niobium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>41</Atomicity>
+			<MassAverage>92.90638</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>93</IsotopeNumber>
 				<Mass>92.90638</Mass>
@@ -816,6 +900,8 @@
 			<Name>Molybdenum</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>42</Atomicity>
+			<MassAverage>95.96</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>92</IsotopeNumber>
 				<Mass>91.90681</Mass>
@@ -857,6 +943,8 @@
 			<Name>Technetium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>43</Atomicity>
+			<MassAverage>98</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>98</IsotopeNumber>
 				<Mass>98</Mass>
@@ -868,6 +956,8 @@
 			<Name>Ruthenium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>44</Atomicity>
+			<MassAverage>101.07</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>96</IsotopeNumber>
 				<Mass>95.9076</Mass>
@@ -909,6 +999,9 @@
 			<Name>Rhodium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>45</Atomicity>
+			<MassAverage>102.9055</MassAverage>
+			<MassAverageUncertainty>0.0002</MassAverageUncertainty>
+
 			<Isotope>
 				<IsotopeNumber>103</IsotopeNumber>
 				<Mass>102.9055</Mass>
@@ -920,6 +1013,8 @@
 			<Name> Palladium</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>46</Atomicity>
+			<MassAverage>106.42</MassAverage>
+			<MassAverageUncertainty>0.01</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>102</IsotopeNumber>
 				<Mass>101.9056</Mass>
@@ -956,6 +1051,8 @@
 			<Name>Silver</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>47</Atomicity>
+			<MassAverage>107.8682</MassAverage>
+			<MassAverageUncertainty>0.0002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>107</IsotopeNumber>
 				<Mass>106.9051</Mass>
@@ -972,6 +1069,8 @@
 			<Name>Cadmium</Name>
 			<NumIsotopes>8</NumIsotopes>
 			<Atomicity>48</Atomicity>
+			<MassAverage>112.411</MassAverage>
+			<MassAverageUncertainty>0.008</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>106</IsotopeNumber>
 				<Mass>105.9065</Mass>
@@ -1018,6 +1117,8 @@
 			<Name>Indium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>49</Atomicity>
+			<MassAverage>114.818</MassAverage>
+			<MassAverageUncertainty>0.003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>113</IsotopeNumber>
 				<Mass>112.9041</Mass>
@@ -1034,6 +1135,8 @@
 			<Name>Tin</Name>
 			<NumIsotopes>10</NumIsotopes>
 			<Atomicity>50</Atomicity>
+			<MassAverage>118.71</MassAverage>
+			<MassAverageUncertainty>0.07</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>112</IsotopeNumber>
 				<Mass>111.9048</Mass>
@@ -1090,6 +1193,8 @@
 			<Name>Antimony</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>51</Atomicity>
+			<MassAverage>121.76</MassAverage>
+			<MassAverageUncertainty>0.01</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>121</IsotopeNumber>
 				<Mass>120.9038</Mass>
@@ -1106,6 +1211,8 @@
 			<Name>Tellurium</Name>
 			<NumIsotopes>8</NumIsotopes>
 			<Atomicity>52</Atomicity>
+			<MassAverage>127.6</MassAverage>
+			<MassAverageUncertainty>0.3</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>120</IsotopeNumber>
 				<Mass>119.904</Mass>
@@ -1152,6 +1259,8 @@
 			<Name>Iodine</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>53</Atomicity>
+			<MassAverage>126.90447</MassAverage>
+			<MassAverageUncertainty>0.00003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>127</IsotopeNumber>
 				<Mass>126.9045</Mass>
@@ -1163,6 +1272,8 @@
 			<Name>Xenon</Name>
 			<NumIsotopes>9</NumIsotopes>
 			<Atomicity>54</Atomicity>
+			<MassAverage>131.293</MassAverage>
+			<MassAverageUncertainty>0.006</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>124</IsotopeNumber>
 				<Mass>123.9059</Mass>
@@ -1214,6 +1325,8 @@
 			<Name>Cesium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>55</Atomicity>
+			<MassAverage>132.9054519</MassAverage>
+			<MassAverageUncertainty>0.0000002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>133</IsotopeNumber>
 				<Mass>132.9054</Mass>
@@ -1225,6 +1338,8 @@
 			<Name>Barium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>56</Atomicity>
+			<MassAverage>137.327</MassAverage>
+			<MassAverageUncertainty>0.007</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>130</IsotopeNumber>
 				<Mass>129.9063</Mass>
@@ -1266,6 +1381,8 @@
 			<Name>Lanthanum</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>57</Atomicity>
+			<MassAverage>138.90547</MassAverage>
+			<MassAverageUncertainty>0.00007</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>138</IsotopeNumber>
 				<Mass>137.9071</Mass>
@@ -1282,6 +1399,8 @@
 			<Name>Cerium</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>58</Atomicity>
+			<MassAverage>140.116</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>136</IsotopeNumber>
 				<Mass>135.9071</Mass>
@@ -1308,6 +1427,8 @@
 			<Name>Praseodymium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>59</Atomicity>
+			<MassAverage>140.90765</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>141</IsotopeNumber>
 				<Mass>140.9077</Mass>
@@ -1319,6 +1440,8 @@
 			<Name>Neodymium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>60</Atomicity>
+			<MassAverage>144.242</MassAverage>
+			<MassAverageUncertainty>0.003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>142</IsotopeNumber>
 				<Mass>141.9077</Mass>
@@ -1360,6 +1483,8 @@
 			<Name>Promethium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>61</Atomicity>
+			<MassAverage>145</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>145</IsotopeNumber>
 				<Mass>145</Mass>
@@ -1371,6 +1496,8 @@
 			<Name>Samarium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>62</Atomicity>
+			<MassAverage>150.36</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>144</IsotopeNumber>
 				<Mass>143.912</Mass>
@@ -1412,6 +1539,8 @@
 			<Name>Europium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>63</Atomicity>
+			<MassAverage>151.964</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>151</IsotopeNumber>
 				<Mass>150.9198</Mass>
@@ -1428,6 +1557,8 @@
 			<Name>Gadolinium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>64</Atomicity>
+			<MassAverage>157.25</MassAverage>
+			<MassAverageUncertainty>0.03</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>152</IsotopeNumber>
 				<Mass>151.9198</Mass>
@@ -1469,6 +1600,8 @@
 			<Name>Terbium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>65</Atomicity>
+			<MassAverage>158.92535</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>159</IsotopeNumber>
 				<Mass>158.9253</Mass>
@@ -1480,6 +1613,8 @@
 			<Name>Dysprosium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>66</Atomicity>
+			<MassAverage>162.5</MassAverage>
+			<MassAverageUncertainty>0.1</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>156</IsotopeNumber>
 				<Mass>155.9253</Mass>
@@ -1521,6 +1656,8 @@
 			<Name>Holmium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>67</Atomicity>
+			<MassAverage>164.93032</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>165</IsotopeNumber>
 				<Mass>164.9303</Mass>
@@ -1532,6 +1669,8 @@
 			<Name>Erbium</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>68</Atomicity>
+			<MassAverage>167.259</MassAverage>
+			<MassAverageUncertainty>0.003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>162</IsotopeNumber>
 				<Mass>161.9288</Mass>
@@ -1568,6 +1707,8 @@
 			<Name>Thulium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>69</Atomicity>
+			<MassAverage>168.93421</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>169</IsotopeNumber>
 				<Mass>168.9342</Mass>
@@ -1579,6 +1720,8 @@
 			<Name>Ytterbium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>70</Atomicity>
+			<MassAverage>173.054</MassAverage>
+			<MassAverageUncertainty>0.005</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>168</IsotopeNumber>
 				<Mass>167.9339</Mass>
@@ -1620,6 +1763,8 @@
 			<Name>Lutetium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>71</Atomicity>
+			<MassAverage>174.9668</MassAverage>
+			<MassAverageUncertainty>0.0001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>175</IsotopeNumber>
 				<Mass>174.9408</Mass>
@@ -1636,6 +1781,8 @@
 			<Name>Hafnium</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>72</Atomicity>
+			<MassAverage>178.49</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>174</IsotopeNumber>
 				<Mass>173.94</Mass>
@@ -1672,6 +1819,8 @@
 			<Name>Tantalum</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>73</Atomicity>
+			<MassAverage>180.94788</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>180</IsotopeNumber>
 				<Mass>179.9475</Mass>
@@ -1688,6 +1837,8 @@
 			<Name>Tungsten</Name>
 			<NumIsotopes>5</NumIsotopes>
 			<Atomicity>74</Atomicity>
+			<MassAverage>183.84</MassAverage>
+			<MassAverageUncertainty>0.01</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>180</IsotopeNumber>
 				<Mass>179.9467</Mass>
@@ -1719,6 +1870,8 @@
 			<Name>Rhenium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>75</Atomicity>
+			<MassAverage>186.207</MassAverage>
+			<MassAverageUncertainty>0.001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>185</IsotopeNumber>
 				<Mass>184.953</Mass>
@@ -1735,6 +1888,8 @@
 			<Name>Osmium</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>76</Atomicity>
+			<MassAverage>190.23</MassAverage>
+			<MassAverageUncertainty>0.03</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>184</IsotopeNumber>
 				<Mass>183.9525</Mass>
@@ -1776,6 +1931,8 @@
 			<Name>Iridium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>77</Atomicity>
+			<MassAverage>192.217</MassAverage>
+			<MassAverageUncertainty>0.003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>191</IsotopeNumber>
 				<Mass>190.9606</Mass>
@@ -1792,6 +1949,8 @@
 			<Name>Platinum</Name>
 			<NumIsotopes>6</NumIsotopes>
 			<Atomicity>78</Atomicity>
+			<MassAverage>195.084</MassAverage>
+			<MassAverageUncertainty>0.009</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>190</IsotopeNumber>
 				<Mass>189.9599</Mass>
@@ -1828,6 +1987,8 @@
 			<Name>Gold</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>79</Atomicity>
+			<MassAverage>196.966569</MassAverage>
+			<MassAverageUncertainty>0.000004</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>197</IsotopeNumber>
 				<Mass>196.9665</Mass>
@@ -1839,6 +2000,8 @@
 			<Name>Mercury</Name>
 			<NumIsotopes>7</NumIsotopes>
 			<Atomicity>80</Atomicity>
+			<MassAverage>200.59</MassAverage>
+			<MassAverageUncertainty>0.02</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>196</IsotopeNumber>
 				<Mass>195.9658</Mass>
@@ -1880,6 +2043,8 @@
 			<Name>Thallium</Name>
 			<NumIsotopes>2</NumIsotopes>
 			<Atomicity>81</Atomicity>
+			<MassAverage>204.3833</MassAverage>
+			<MassAverageUncertainty>0.0002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>203</IsotopeNumber>
 				<Mass>202.9723</Mass>
@@ -1896,6 +2061,8 @@
 			<Name>Lead</Name>
 			<NumIsotopes>4</NumIsotopes>
 			<Atomicity>82</Atomicity>
+			<MassAverage>207.2</MassAverage>
+			<MassAverageUncertainty>0.1</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>204</IsotopeNumber>
 				<Mass>203.973</Mass>
@@ -1922,6 +2089,8 @@
 			<Name>Bismuth</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>83</Atomicity>
+			<MassAverage>208.9804</MassAverage>
+			<MassAverageUncertainty>0.0001</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>209</IsotopeNumber>
 				<Mass>208.9804</Mass>
@@ -1933,6 +2102,8 @@
 			<Name>Polonium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>84</Atomicity>
+			<MassAverage>209</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>209</IsotopeNumber>
 				<Mass>209</Mass>
@@ -1944,6 +2115,8 @@
 			<Name>Astatine</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>85</Atomicity>
+			<MassAverage>210</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>210</IsotopeNumber>
 				<Mass>210</Mass>
@@ -1955,6 +2128,8 @@
 			<Name>Radon</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>86</Atomicity>
+			<MassAverage>222</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>222</IsotopeNumber>
 				<Mass>222</Mass>
@@ -1966,6 +2141,8 @@
 			<Name>Francium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>87</Atomicity>
+			<MassAverage>223</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>223</IsotopeNumber>
 				<Mass>223</Mass>
@@ -1977,6 +2154,8 @@
 			<Name>Radium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>88</Atomicity>
+			<MassAverage>226.25</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>226</IsotopeNumber>
 				<Mass>226.025</Mass>
@@ -1988,6 +2167,8 @@
 			<Name>Actinium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>89</Atomicity>
+			<MassAverage>227.028</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>227</IsotopeNumber>
 				<Mass>227.028</Mass>
@@ -1999,6 +2180,8 @@
 			<Name>Thorium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>90</Atomicity>
+			<MassAverage>232.03806</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>232</IsotopeNumber>
 				<Mass>232.0381</Mass>
@@ -2010,6 +2193,8 @@
 			<Name>Protactinium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>91</Atomicity>
+			<MassAverage>231.03588</MassAverage>
+			<MassAverageUncertainty>0.00002</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>231</IsotopeNumber>
 				<Mass>231.0359</Mass>
@@ -2021,6 +2206,8 @@
 			<Name>Uranium</Name>
 			<NumIsotopes>3</NumIsotopes>
 			<Atomicity>92</Atomicity>
+			<MassAverage>238.02891</MassAverage>
+			<MassAverageUncertainty>0.00003</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>234</IsotopeNumber>
 				<Mass>234.0409</Mass>
@@ -2042,6 +2229,8 @@
 			<Name>Neptunium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>93</Atomicity>
+			<MassAverage>237.048</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>237</IsotopeNumber>
 				<Mass>237.048</Mass>
@@ -2053,6 +2242,8 @@
 			<Name>Plutonium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>94</Atomicity>
+			<MassAverage>244</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>244</IsotopeNumber>
 				<Mass>244</Mass>
@@ -2064,6 +2255,8 @@
 			<Name>Americium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>95</Atomicity>
+			<MassAverage>243</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>243</IsotopeNumber>
 				<Mass>243</Mass>
@@ -2075,6 +2268,8 @@
 			<Name>Curium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>96</Atomicity>
+			<MassAverage>247</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>247</IsotopeNumber>
 				<Mass>247</Mass>
@@ -2086,6 +2281,8 @@
 			<Name>Berkelium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>97</Atomicity>
+			<MassAverage>247</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>247</IsotopeNumber>
 				<Mass>247</Mass>
@@ -2097,6 +2294,8 @@
 			<Name>Californium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>98</Atomicity>
+			<MassAverage>251</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>251</IsotopeNumber>
 				<Mass>251</Mass>
@@ -2108,6 +2307,8 @@
 			<Name>Einsteinium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>99</Atomicity>
+			<MassAverage>252</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>252</IsotopeNumber>
 				<Mass>252</Mass>
@@ -2119,6 +2320,8 @@
 			<Name>Fermium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>100</Atomicity>
+			<MassAverage>257</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>257</IsotopeNumber>
 				<Mass>257</Mass>
@@ -2130,6 +2333,8 @@
 			<Name>Medelevium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>101</Atomicity>
+			<MassAverage>258</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>258</IsotopeNumber>
 				<Mass>258</Mass>
@@ -2141,6 +2346,8 @@
 			<Name>Nobelium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>102</Atomicity>
+			<MassAverage>259</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>259</IsotopeNumber>
 				<Mass>259</Mass>
@@ -2152,6 +2359,8 @@
 			<Name>Lawrencium</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>103</Atomicity>
+			<MassAverage>262</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>262</IsotopeNumber>
 				<Mass>260</Mass>
@@ -2163,6 +2372,8 @@
 			<Name>Generic</Name>
 			<NumIsotopes>1</NumIsotopes>
 			<Atomicity>104</Atomicity>
+			<MassAverage>999</MassAverage>
+			<MassAverageUncertainty>0</MassAverageUncertainty>
 			<Isotope>
 				<IsotopeNumber>999</IsotopeNumber>
 				<Mass>999</Mass>

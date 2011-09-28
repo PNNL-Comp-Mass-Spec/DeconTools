@@ -1,5 +1,9 @@
-﻿using DeconTools.Backend.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution;
 
 namespace TestConsole1
 {
@@ -30,13 +34,41 @@ namespace TestConsole1
 
 
             workflow.ExecuteWorkflow2(run);
-             * */
+            // * */
 
-            string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
-            Run run = new UIMFRun(@"D:\Data\UIMF\Sarc\the_10_testDatasets\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf");
+            //string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_peaksDesc.txt";
+            //Run run = new UIMFRun(@"D:\Data\UIMF\Sarc\the_10_testDatasets\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf");
 
             //IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
             //workflow.Execute();
+
+            testMercury();
+
+
+
+
+        }
+
+
+
+        private static void testMercury()
+        {
+            var mercury = new MercuryIsoDistCreator2();
+            mercury.Resolution = 100000;
+            var iso = mercury.GetIsotopePattern("C66H114N20O21S2", 2);    //Peptide 'SAMPLERSAMPLER'
+
+            var timeVals = new List<long>();
+
+            int numIterations = 200;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            for (int i = 0; i < numIterations; i++)
+            {
+                iso = mercury.GetIsotopePattern("C66H114N20O21S2", 2);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds / (double)numIterations);
         }
     }
 }

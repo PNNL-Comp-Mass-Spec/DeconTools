@@ -24,19 +24,12 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             Task peakDetector = new DeconToolsPeakDetector();
 
             run.CurrentScanSet = new ScanSet(6005);
-
           
             msgen.Execute(run.ResultCollection);
-            //TestUtilities.DisplayXYValues(run.XYData);
-
-
-
             peakDetector.Execute(run.ResultCollection);
 
             MSPeak testPeak1 = (MSPeak)run.PeakList[384];
-
             MSPeak testPeak2 = (MSPeak)run.PeakList[543];
-
             MSPeak testPeak3 = (MSPeak)run.PeakList[59];
             MSPeak testPeak4 = (MSPeak)run.PeakList[454];
             MSPeak testPeak5 = (MSPeak)run.PeakList[455];
@@ -46,7 +39,6 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             PattersonChargeStateCalculator chargeCalc = new PattersonChargeStateCalculator();
             int testpeak1CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak1);
-
             int testpeak2CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak2);
             int testpeak3CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak3);
             int testpeak4CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak4);

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TestConsole1</RootNamespace>
     <AssemblyName>TestConsole1</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -63,17 +63,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
-      <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
-      <Name>DeconTools.UnitTesting2</Name>
+    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows\DeconTools.Workflows.csproj">
+      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
+      <Name>DeconTools.Workflows</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <Content Include="PNNLOmicsElementData.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

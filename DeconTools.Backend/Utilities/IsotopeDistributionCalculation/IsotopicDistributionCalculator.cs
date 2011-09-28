@@ -111,7 +111,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         public IsotopicProfile GetIsotopePattern(string empiricalFormula)
         {
-            Dictionary<string, int> elementLookupTable = _peptideUtils.parseEmpiricalFormulaString(empiricalFormula);
+            Dictionary<string, int> elementLookupTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
             return GetIsotopePattern(elementLookupTable);
         }
 

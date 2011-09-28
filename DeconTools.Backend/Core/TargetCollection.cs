@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -61,26 +59,9 @@ namespace DeconTools.Backend.Core
 
             foreach (int mtID in uniqueMTIDs)
             {
-                List<TargetBase> mt_withSameID = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).ToList();
-                int totObs = mt_withSameID.Sum(p => p.ObsCount);
+                List<TargetBase> topChargeStatesOfMassTag = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).Take(3).ToList();
+                filteredMassTagList.AddRange(topChargeStatesOfMassTag);
 
-                foreach (var uniquelyChargedMT in mt_withSameID)
-                {
-                    
-                    if (totObs < 20)    // if total obs is low, add all observed charge states
-                    {
-                        filteredMassTagList.Add(uniquelyChargedMT);
-                    }
-
-                    else
-                    {
-                        bool hasEnoughCounts = ((double)uniquelyChargedMT.ObsCount / (double)totObs > threshold);  //if the obsCount for a charge state is greater than threshold of the total, add it. 
-                        if (hasEnoughCounts)
-                        {
-                            filteredMassTagList.Add(uniquelyChargedMT);
-                        }
-                    }
-                }
             }
 
             this.TargetList = filteredMassTagList;
