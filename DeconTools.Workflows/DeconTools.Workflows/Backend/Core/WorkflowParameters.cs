@@ -51,10 +51,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             bool successfulEnum = Enum.TryParse<Globals.TargetedWorkflowTypes>(parameterTableFromXML["WorkflowType"], out workflowType);
 
+            WorkflowParameters workflowParameters;
             if (successfulEnum)
             {
 
-                WorkflowParameters workflowParameters;
+                
                 switch (workflowType)
                 {
                     case Globals.TargetedWorkflowTypes.Undefined:
@@ -77,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Core
                         break;
                 }
 
-                return workflowParameters;
+                
 
             }
             else
@@ -85,6 +86,9 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new System.ArgumentOutOfRangeException("Tried to create WorkflowParameter object. But WorkflowType is unknown.");
             }
 
+            workflowParameters.LoadParameters(xmlFilename);
+
+            return workflowParameters;
 
         }
 

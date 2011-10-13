@@ -44,16 +44,25 @@ namespace TargetedWorkflowManagerConsole
                         datasetCounter++;
                         string datsetName = reader.ReadLine();
 
-                        DatasetUtilities datasetutil = new DatasetUtilities();
+                        bool datasetNameContainsPath = datsetName.Contains("\\");
 
-                        string currentDatasetPath = datasetutil.GetDatasetPath(datsetName) + "\\" + datsetName + ".raw";
+                        string currentDatasetPath = datsetName;
 
-                        if (currentDatasetPath.Contains("purged"))
+                        if (datasetNameContainsPath)
                         {
-                            currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
+                            currentDatasetPath = datsetName;
                         }
+                        else
+                        {
+                            var datasetutil = new DatasetUtilities();
 
-                        
+                            currentDatasetPath = datasetutil.GetDatasetPath(datsetName) + "\\" + datsetName + ".raw";
+
+                            if (currentDatasetPath.Contains("purged"))
+                            {
+                                currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
+                            }
+                        }
 
                         ProcessStartInfo processStartInfo = new ProcessStartInfo();
                         //processStartInfo.UseShellExecute = false;

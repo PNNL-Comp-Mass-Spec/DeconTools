@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeconTools.Backend, Version=1.0.4261.21633, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
+    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -53,6 +57,7 @@
     <Compile Include="Backend\Core\NETAndMassAlignerParameters.cs" />
     <Compile Include="Backend\Core\O16O18Workflow.cs" />
     <Compile Include="Backend\Core\O16O18WorkflowParameters.cs" />
+    <Compile Include="Backend\Core\ScanBasedWorkflow.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
@@ -94,15 +99,7 @@
     <Folder Include="Backend\Parameters\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PNNLOmicsElementData2.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
-      <Name>DeconTools.Backend</Name>
-    </ProjectReference>
+    <Content Include="PNNLOmicsElementData.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
