@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using System.Text;
 using BrukerDataReader;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
@@ -31,6 +28,12 @@ namespace DeconTools.Backend.FileIO
             sb.Append(target.Code);
             sb.Append(this.Delimiter); 
             sb.Append(target.ChargeState);
+            sb.Append(Delimiter);
+            sb.Append(target.EmpiricalFormula);
+            sb.Append(Delimiter);
+            sb.Append(target.ModCount);
+            sb.Append(Delimiter);
+            sb.Append(target.ModDescription);
             sb.Append(this.Delimiter); 
             sb.Append(target.ObsCount);
             sb.Append(this.Delimiter); 
@@ -47,7 +50,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            return "ID\tMonoisotopic_Mass\tSequence\tZ\tObsCount\tMZ\tNET\tRef_ID\tDescription";
+            return "ID\tMonoisotopic_Mass\tSequence\tZ\tFormula\tModCount\tMod\tObsCount\tMZ\tNET\tRef_ID\tDescription";
         }
     }
 }

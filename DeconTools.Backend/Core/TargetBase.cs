@@ -27,6 +27,28 @@ namespace DeconTools.Backend.Core
         public short ChargeState { get; set; }
         public double MZ { get; set; }
 
+
+
+        /// <summary>
+        /// Indicates if target contains modifications
+        /// </summary>
+        public bool ContainsMods
+        {
+            get { return ModCount > 0; }
+        }
+
+        /// <summary>
+        /// Number of modifications on target
+        /// </summary>
+        public short ModCount { get; set; }
+
+        /// <summary>
+        /// Description of modification
+        /// </summary>
+        public string ModDescription { get; set; }
+
+
+
         private string _empiricalFormula;
         public string EmpiricalFormula
         {

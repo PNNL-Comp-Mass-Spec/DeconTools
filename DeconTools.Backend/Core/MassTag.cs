@@ -15,14 +15,12 @@ namespace DeconTools.Backend.Core
         #region Properties
 
 
-   
 
 
 
-        public bool ContainsMods { get; set; }  //indicates whether or not peptide contains modifications or abnormalities
-
+       
         /// <summary>
-        /// the ID of the protein to which the MassTag is linked
+        /// the ID of the protein to which the peptide MassTag is linked
         /// </summary>
         public int RefID { get; set; }
         public string ProteinDescription { get; set; }

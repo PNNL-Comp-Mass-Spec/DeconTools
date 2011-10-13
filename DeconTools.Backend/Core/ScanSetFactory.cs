@@ -15,28 +15,8 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-
-        public ScanSet CreateScanSet(Run run, int targetScan, int scansSummed, byte desiredMSLevel)
-        {
-            int currentLevel = run.GetMSLevel(targetScan);
-
-            int closestDesiredMSLevelScan = 0;
-
-            if (currentLevel == desiredMSLevel)
-            {
-                closestDesiredMSLevelScan = targetScan;
-            }
-            else
-            {
-                closestDesiredMSLevelScan = run.GetClosestMSScan(targetScan, Globals.ScanSelectionMode.CLOSEST);
-            }
-
-            return CreateScanSet(run, closestDesiredMSLevelScan,scansSummed);
-
-
-        }
-
-
+       
+     
         public ScanSet CreateScanSet(Run run, int primaryScan, int startScan, int stopScan)
         {
             int currentLevel = run.GetMSLevel(primaryScan);
@@ -55,6 +35,24 @@ namespace DeconTools.Backend.Core
             return new ScanSet(primaryScan, scansToSum.ToArray());
 
         }
+
+
+        public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
+        {
+            int currentLevel = run.GetMSLevel(scan);
+
+            List<int> lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            List<int> upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+
+            List<int> scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
+            scansToSum.Add(scan);
+            scansToSum.AddRange(upperScansToSum);
+            //scansToSum.Sort();
+
+            return new ScanSet(scan, scansToSum.ToArray());
+
+        }
+
 
         public void TrimScans(ScanSet scanset, int maxScansAllowed)
         {
@@ -87,21 +85,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
-        {
-            int currentLevel = run.GetMSLevel(scan);
-
-            List<int> lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
-            List<int> upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
-
-            List<int> scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
-            scansToSum.Add(scan);
-            scansToSum.AddRange(upperScansToSum);
-            //scansToSum.Sort();
-
-            return new ScanSet(scan, scansToSum.ToArray());
-
-        }
+      
 
         public FrameSet CreateFrameSet(Run run, int frame, int framesSummed)
         {

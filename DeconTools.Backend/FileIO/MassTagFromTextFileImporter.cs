@@ -66,13 +66,12 @@ namespace DeconTools.Backend.FileIO
                     }
 
 
-                    massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
+                    if (!massTag.ContainsMods && String.IsNullOrEmpty(massTag.EmpiricalFormula))
+                    {
+                        massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
+                    }
 
                     data.TargetList.Add(massTag);
-
-
-
-
 
                 }
 
@@ -92,7 +91,9 @@ namespace DeconTools.Backend.FileIO
             mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
             mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
             mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
-
+            mt.EmpiricalFormula = getValue(new string[] { "formula", "empirical_formula" }, lineData, "");
+            mt.ModCount = parseShortField(getValue(new string[] { "modCount", "mod_count" }, lineData, "0"));
+            mt.ModDescription = getValue(new string[] { "mod", "mod_description" }, lineData, "");
             if (mt.ChargeState == 0)
             {
 

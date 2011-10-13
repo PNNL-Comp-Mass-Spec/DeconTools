@@ -15,7 +15,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
         string massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
         string massTagTestFile2 = "..\\..\\..\\TestFiles\\FileIOTests\\importedMassTagsFormat2.txt";
-
+        private string massTagsWithModsFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\massTagsWithModsSample.txt";
 
         [Test]
         public void test1()
@@ -43,6 +43,27 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(4225609, testMassTag.ID);
 
             
+        }
+
+        [Test]
+        public void ImportPeptidesWithModsTest1()
+        {
+             TargetCollection mtc = new TargetCollection();
+
+            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagsWithModsFile1);
+            mtc = massTagImporter.Import();
+
+            Assert.AreNotEqual(null, mtc.TargetList);
+            Assert.AreEqual(1868, mtc.TargetList.Count);
+
+            PeptideTarget testMassTag = (PeptideTarget)mtc.TargetList[1021];
+            Assert.AreEqual(testMassTag.EmpiricalFormula, "C56H82N10O13");
+            Assert.AreEqual(1,testMassTag.ModCount);
+            Assert.AreEqual(testMassTag.ModDescription, "NH3_Loss:1");
+           
+
+            //250663994	1102.60623	QFPILLDFK	2	C56H82N10O13	1	NH3_Loss:1
+
         }
 
 

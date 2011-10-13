@@ -106,7 +106,7 @@ namespace DeconTools.Backend.Utilities
             {
                 string aminoAcidFormula = GetEmpiricalFormulaForAminoAcidResidue(aminoAcid);
 
-                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, aminoAcidFormula);
+                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, aminoAcidFormula);
             }
 
             if (includeAmineHydrogenAndFreeAcid)
@@ -115,65 +115,20 @@ namespace DeconTools.Backend.Utilities
                 string nterminalHydrogen = "H";
                 string cterminalFreeAcid = "OH";
 
-                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, nterminalHydrogen);
-                outputEmpiricalFormula = addFormula(outputEmpiricalFormula, cterminalFreeAcid);
+                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, nterminalHydrogen);
+                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, cterminalFreeAcid);
             }
             return outputEmpiricalFormula;
         }
 
-        public string addFormula(string baseFormula, string formulaToBeAdded)
-        {
-            var baseElementTable = ParseEmpiricalFormulaString(baseFormula);
-            var addedTable = ParseEmpiricalFormulaString(formulaToBeAdded);
-
-            foreach (var item in addedTable)
-            {
-                if (baseElementTable.ContainsKey(item.Key))
-                {
-                    baseElementTable[item.Key] = baseElementTable[item.Key] + item.Value;
-                }
-                else
-                {
-                    baseElementTable.Add(item.Key, item.Value);
-                }
-
-            }
-
-
-            return GetEmpiricalFormulaFromElementTable(baseElementTable);
-
-
-
-
-
-        }
+    
 
 
 
 
 
 
-        private string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
-        {
-
-            StringBuilder sb = new StringBuilder();
-            foreach (var item in elementTable)
-            {
-                if (item.Value == 1)
-                {
-                    sb.Append(item.Key);
-
-                }
-                else
-                {
-                    sb.Append(item.Key);
-                    sb.Append(item.Value);
-                }
-
-            }
-            return sb.ToString();
-
-        }
+     
 
         private double GetMonoisotopicMassForAminoAcidResidue(char aminoAcidCode)
         {
