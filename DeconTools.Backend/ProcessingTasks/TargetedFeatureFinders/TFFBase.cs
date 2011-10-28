@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfile outFeature = new IsotopicProfile();
             outFeature.ChargeState = theorFeature.ChargeState;
 
-            int indexOfMaxTheorPeak = theorFeature.getIndexOfMostIntensePeak();
+            int indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
 
 
             double toleranceInMZ = theorFeature.getMonoPeak().XValue * toleranceInPPM / 1e6;
@@ -127,7 +127,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
 
 
-                if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will use the most intense peak
+                if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will get the mass defect using the most intense peak
                 {
                     massDefect = theorFeature.Peaklist[i].XValue - outFeature.Peaklist[0].XValue;
                 }
@@ -202,7 +202,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             else
             {
 
-                int indexOfMostAbundantTheorPeak = theorFeature.getIndexOfMostIntensePeak();
+                int indexOfMostAbundantTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
                 int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
 
                 if (indexOfCorrespondingObservedPeak != -1)

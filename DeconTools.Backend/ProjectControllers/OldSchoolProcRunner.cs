@@ -224,7 +224,7 @@ namespace DeconTools.Backend
 
             if (m_run is UIMFRun || m_run is IMFRun)
             {
-                Task originalIntensitiesExtractor = new OriginalIntensitiesExtractor();
+                Task originalIntensitiesExtractor = new SaturationDetector();
                 Project.getInstance().TaskCollection.TaskList.Add(originalIntensitiesExtractor);
             }
 

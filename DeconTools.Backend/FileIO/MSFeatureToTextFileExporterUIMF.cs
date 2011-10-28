@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -51,7 +48,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(uimfResult.IsotopicProfile.OriginalIntensity);
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.Original_Total_isotopic_abundance);
+            sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(Delimiter);
             sb.Append(uimfResult.DriftTime.ToString("0.###"));
             sb.Append(Delimiter);

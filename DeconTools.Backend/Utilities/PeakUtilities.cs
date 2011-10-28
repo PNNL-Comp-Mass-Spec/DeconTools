@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Utilities
@@ -197,7 +195,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
 
-            int indexOfMaxPeak = isotopicProfile.getIndexOfMostIntensePeak();
+            int indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
             List<MSPeak> trimmedPeakList = new List<MSPeak>();
 
 

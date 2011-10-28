@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSFeatureToTextFileExporterIMF:TextFileExporter<IsosResult>
+    public class MSFeatureToTextFileExporterIMF : TextFileExporter<IsosResult>
     {
         #region Constructors
-        public MSFeatureToTextFileExporterIMF(string fileName):base(fileName,','){}
+        public MSFeatureToTextFileExporterIMF(string fileName) : base(fileName, ',') { }
 
-        public MSFeatureToTextFileExporterIMF(string fileName, char delimiter):base(fileName,delimiter){}
+        public MSFeatureToTextFileExporterIMF(string fileName, char delimiter) : base(fileName, delimiter) { }
         #endregion
 
- 
+
 
         #region Private Methods
         protected override string buildResultOutput(IsosResult result)
@@ -46,7 +43,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.OriginalIntensity);
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.Original_Total_isotopic_abundance);
+            sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);   // 1 if true
             sb.Append(Delimiter);
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             return sb.ToString();
@@ -88,6 +85,6 @@ namespace DeconTools.Backend.FileIO
         }
         #endregion
 
-  
+
     }
 }

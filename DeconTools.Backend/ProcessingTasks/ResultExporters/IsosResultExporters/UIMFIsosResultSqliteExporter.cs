@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Utilities.SqliteUtils;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
+using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
@@ -134,7 +132,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                         monoPlus2AbundParam.Value = isosResultList[n].IsotopicProfile.GetMonoPlusTwoAbundance();
                         driftTimeParam.Value = ((UIMFIsosResult)isosResultList[n]).DriftTime;
                         origIntensParam.Value = isosResultList[n].IsotopicProfile.OriginalIntensity;
-                        tia_origIntensParam.Value = isosResultList[n].IsotopicProfile.Original_Total_isotopic_abundance;
+                        //tia_origIntensParam.Value = isosResultList[n].IsotopicProfile.OriginalTotalIsotopicAbundance;
                         flagCodeParam.Value = ResultValidators.ResultValidationUtils.GetStringFlagCode(isosResultList[n].Flags);
                         mycommand.ExecuteNonQuery();
                     }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace DeconTools.Backend.Data
 {
@@ -71,7 +69,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.OriginalIntensity);
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.Original_Total_isotopic_abundance);
+                sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);
                 sw.WriteLine(sb.ToString());
             }
 

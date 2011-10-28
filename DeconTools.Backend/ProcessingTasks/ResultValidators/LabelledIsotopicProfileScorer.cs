@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         private double getFitValue(XYData rawXYData, IsotopicProfile theorIso, IsotopicProfile isoN15)
         {
-            int indexOfMostAbundantTheorPeak = theorIso.getIndexOfMostIntensePeak();
+            int indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
             int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(isoN15.Peaklist,
                 theorIso.getMostIntensePeak().XValue, 0, isoN15.Peaklist.Count - 1, 0.1);
 

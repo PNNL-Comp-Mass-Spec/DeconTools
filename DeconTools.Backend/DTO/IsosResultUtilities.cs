@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Utilities;
-using System.IO;
-using System.Text.RegularExpressions;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.DTO
 {
@@ -527,7 +527,7 @@ namespace DeconTools.Backend.DTO
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.OriginalIntensity);
                 sb.Append("\t");
-                sb.Append(result.IsotopicProfile.Original_Total_isotopic_abundance);
+                sb.Append(result.IsotopicProfile.IsSaturated);
                 sb.Append("\n");
 
 

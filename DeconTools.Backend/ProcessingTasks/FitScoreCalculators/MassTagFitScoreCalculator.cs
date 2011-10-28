@@ -26,7 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             }
 
             IsotopicProfile theorProfile = resultColl.Run.CurrentMassTag.IsotopicProfile;
-            int indexOfMostAbundantTheorPeak = theorProfile.getIndexOfMostIntensePeak();
+            int indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
             int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(result.IsotopicProfile.Peaklist,
                 theorProfile.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 

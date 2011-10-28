@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities.SqliteUtils;
 
@@ -68,7 +65,7 @@ namespace DeconTools.Backend.FileIO
             dbParameters[13].Value = result.IsotopicProfile.GetMonoPlusTwoAbundance();
             dbParameters[14].Value = ((UIMFIsosResult)result).DriftTime;
             dbParameters[15].Value = result.IsotopicProfile.OriginalIntensity;
-            dbParameters[16].Value = result.IsotopicProfile.Original_Total_isotopic_abundance;
+            dbParameters[16].Value = result.IsotopicProfile.IsSaturated ? 1 : 0;
             dbParameters[17].Value = DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
             dbParameters[18].Value = result.InterferenceScore;
         }

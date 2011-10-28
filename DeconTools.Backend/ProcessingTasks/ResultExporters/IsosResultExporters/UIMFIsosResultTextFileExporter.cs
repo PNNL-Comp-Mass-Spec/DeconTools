@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -97,7 +93,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.OriginalIntensity);
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.Original_Total_isotopic_abundance);
+            sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(delimiter);
             sb.Append(uimfResult.DriftTime.ToString("0.###"));
             sb.Append(delimiter);
@@ -139,9 +135,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append("mono_plus2_abundance");
             sb.Append(Delimiter);
-            sb.Append("orig_intensity");
+            sb.Append("unsummed_intensity");
             sb.Append(Delimiter);
-            sb.Append("TIA_orig_intensity");
+            sb.Append("saturation_flag");
             sb.Append(Delimiter);
             sb.Append("drift_time");
             sb.Append(delimiter);

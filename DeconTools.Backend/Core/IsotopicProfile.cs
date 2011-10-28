@@ -9,15 +9,14 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile()
         {
-            this.peaklist = new List<MSPeak>();
+            _peaklist = new List<MSPeak>();
         }
         
-        private List<MSPeak> peaklist;
-
+        private List<MSPeak> _peaklist;
         public List<MSPeak> Peaklist
         {
-            get { return peaklist; }
-            set { peaklist = value; }
+            get { return _peaklist; }
+            set { _peaklist = value; }
         }
 
         /// <summary>
@@ -26,87 +25,84 @@ namespace DeconTools.Backend.Core
         public int MonoIsotopicPeakIndex { get; set; }
 
 
-        private int chargeState;
+        public bool IsSaturated { get; set; }
 
+
+        private int _chargeState;
         public int ChargeState
         {
-            get { return chargeState; }
-            set { chargeState = value; }
+            get { return _chargeState; }
+            set { _chargeState = value; }
         }
 
 
-        private double intensityAggregate;   //    a way of storing an overall intensity for the whole profile
-
+        private double _intensityAggregate;   //    a way of storing an overall intensity for the whole profile
         public double IntensityAggregate
         {
-            get { return intensityAggregate; }
-            set { intensityAggregate = value; }
+            get { return _intensityAggregate; }
+            set { _intensityAggregate = value; }
         }
 
+        /// <summary>
+        /// The adjusted intensity of the isotopic profile. Currently used for correcting saturated profiles in IMS workflows
+        /// </summary>
+        public double IntensityAggregateAdjusted { get; set; }
 
-        private double originalIntensity;   // the unsummed intensity;  
+
+
+        private double _originalIntensity;   // the unsummed intensity;  
         public double OriginalIntensity
         {
-            get { return originalIntensity; }
-            set { originalIntensity = value; }
+            get { return _originalIntensity; }
+            set { _originalIntensity = value; }
         }
 
-        private double original_Total_isotopic_abundance;  // aka original_TIA;   used in IMS-TOF analysis.
+        //private double _originalTotalIsotopicAbundance;  // aka original_TIA;   used in IMS-TOF analysis.
+        //public double OriginalTotalIsotopicAbundance
+        //{
+        //    get { return _originalTotalIsotopicAbundance; }
+        //    set { _originalTotalIsotopicAbundance = value; }
+        //}
 
-        public double Original_Total_isotopic_abundance
-        {
-            get { return original_Total_isotopic_abundance; }
-            set { original_Total_isotopic_abundance = value; }
-        }
-
-
-
-        private double score;
-
+        private double _score;
         public double Score
         {
-            get { return score; }
-            set { score = value; }
+            get { return _score; }
+            set { _score = value; }
         }
 
 
-        private double monoIsotopicMass;
-
+        private double _monoIsotopicMass;
         public double MonoIsotopicMass
         {
-            get { return monoIsotopicMass; }
-            set { monoIsotopicMass = value; }
+            get { return _monoIsotopicMass; }
+            set { _monoIsotopicMass = value; }
         }
 
-        private double mostAbundantIsotopeMass;
-
+        private double _mostAbundantIsotopeMass;
         public double MostAbundantIsotopeMass
         {
-            get { return mostAbundantIsotopeMass; }
-            set { mostAbundantIsotopeMass = value; }
+            get { return _mostAbundantIsotopeMass; }
+            set { _mostAbundantIsotopeMass = value; }
         }
 
-        private float monoPlusTwoAbundance;
-
+        private float _monoPlusTwoAbundance;
         public float MonoPlusTwoAbundance
         {
-            get { return monoPlusTwoAbundance; }
-            set { monoPlusTwoAbundance = value; }
+            get { return _monoPlusTwoAbundance; }
+            set { _monoPlusTwoAbundance = value; }
         }
 
-        private double averageMass; 
-
+        private double _averageMass; 
         public double AverageMass
         {
-            get { return averageMass; }
-            set { averageMass = value; }
+            get { return _averageMass; }
+            set { _averageMass = value; }
         }
-
-
 
         public int GetNumOfIsotopesInProfile()
         {
-            return peaklist.Count;
+            return _peaklist.Count;
         }
 
 
@@ -128,18 +124,18 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public int getIndexOfMostIntensePeak()
+        public int GetIndexOfMostIntensePeak()
         {
-            if (this.peaklist == null || this.peaklist.Count == 0) return -1;
+            if (_peaklist == null || _peaklist.Count == 0) return -1;
 
             int indexOfMaxPeak = -1;
             float maxIntensity = 0;
             
-            for (int i = 0; i < this.peaklist.Count; i++)
+            for (int i = 0; i < _peaklist.Count; i++)
             {
-                if (this.peaklist[i].Height > maxIntensity)
+                if (_peaklist[i].Height > maxIntensity)
                 {
-                    maxIntensity = this.peaklist[i].Height;
+                    maxIntensity = _peaklist[i].Height;
                     indexOfMaxPeak = i;
                 }
             }
@@ -149,10 +145,10 @@ namespace DeconTools.Backend.Core
 
         public MSPeak getMostIntensePeak()
         {
-            if (this.peaklist == null || this.peaklist.Count == 0) return null;
+            if (_peaklist == null || _peaklist.Count == 0) return null;
 
             MSPeak maxPeak = new MSPeak();
-            foreach (MSPeak peak in this.peaklist)
+            foreach (MSPeak peak in _peaklist)
             {
                 if (peak.Height >= maxPeak.Height)
                 {
@@ -176,42 +172,42 @@ namespace DeconTools.Backend.Core
 
         public double GetMonoAbundance()
         {
-            if (this.peaklist == null||this.Peaklist.Count==0) return 0;
-            return this.peaklist[0].Height;
+            if (_peaklist == null||Peaklist.Count==0) return 0;
+            return _peaklist[0].Height;
         }
 
         public float GetMonoPlusTwoAbundance()
         {
-            if (this.peaklist == null || this.peaklist.Count < 3) return 0;
-            return this.peaklist[2].Height;
+            if (_peaklist == null || _peaklist.Count < 3) return 0;
+            return _peaklist[2].Height;
         }
 
         public double GetMZ()
         {
-            if (this.peaklist == null || this.Peaklist.Count==0) return -1;
-            return this.peaklist[0].XValue;
+            if (_peaklist == null || Peaklist.Count==0) return -1;
+            return _peaklist[0].XValue;
         }
 
         public double MonoPeakMZ { get; set; }
 
         public double GetAbundance()
         {
-            //MSPeak mostIntensePeak = getMostIntensePeak(this.peaklist);
+            //MSPeak mostIntensePeak = getMostIntensePeak(peaklist);
             //return mostIntensePeak.Intensity;
 
-            return this.IntensityAggregate;
+            return IntensityAggregate;
         }
 
         public double GetScore()
         {
-            return score;
+            return _score;
         }
 
         public MSPeak getMonoPeak()
         {
-            if (peaklist != null && peaklist.Count>0 )
+            if (_peaklist != null && _peaklist.Count>0 )
             {
-                return peaklist[0];
+                return _peaklist[0];
             }
             else
             {
@@ -221,9 +217,9 @@ namespace DeconTools.Backend.Core
 
         public double GetSummedIntensity()
         {
-            if (peaklist == null) return -1;
+            if (_peaklist == null) return -1;
             double summedIntensity = 0;
-            foreach (MSPeak peak in this.peaklist)
+            foreach (MSPeak peak in _peaklist)
             {
                 summedIntensity += (double)peak.Height;
 
@@ -235,25 +231,25 @@ namespace DeconTools.Backend.Core
         public IsotopicProfile CloneIsotopicProfile()
         {
             IsotopicProfile iso = new IsotopicProfile();
-            iso.AverageMass = this.AverageMass;
-            iso.ChargeState = this.ChargeState;
-            iso.IntensityAggregate = this.IntensityAggregate;
-            iso.MonoIsotopicMass = this.MonoIsotopicMass;
-            iso.MonoIsotopicPeakIndex = this.MonoIsotopicPeakIndex;
-            iso.MonoPeakMZ = this.MonoPeakMZ;
-            iso.MonoPlusTwoAbundance = this.MonoPlusTwoAbundance;
-            iso.MostAbundantIsotopeMass = this.MostAbundantIsotopeMass;
-            iso.Original_Total_isotopic_abundance = this.Original_Total_isotopic_abundance;
-            iso.OriginalIntensity = this.OriginalIntensity;
+            iso.AverageMass = AverageMass;
+            iso.ChargeState = ChargeState;
+            iso.IntensityAggregate = IntensityAggregate;
+            iso.MonoIsotopicMass = MonoIsotopicMass;
+            iso.MonoIsotopicPeakIndex = MonoIsotopicPeakIndex;
+            iso.MonoPeakMZ = MonoPeakMZ;
+            iso.MonoPlusTwoAbundance = MonoPlusTwoAbundance;
+            iso.MostAbundantIsotopeMass = MostAbundantIsotopeMass;
+            iso.IsSaturated = IsSaturated;
+            iso.OriginalIntensity = OriginalIntensity;
             iso.Peaklist = new List<MSPeak>();
 
-            foreach (var mspeak in this.Peaklist)
+            foreach (var mspeak in Peaklist)
             {
                 MSPeak peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SN);
                 iso.Peaklist.Add(peak);
             }
 
-            iso.Score = this.Score;
+            iso.Score = Score;
 
             return iso;
 

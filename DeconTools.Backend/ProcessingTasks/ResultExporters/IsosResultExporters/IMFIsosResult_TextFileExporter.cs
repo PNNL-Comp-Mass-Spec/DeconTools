@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
@@ -93,7 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.OriginalIntensity);
             sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile.Original_Total_isotopic_abundance);
+            sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             return sb.ToString();

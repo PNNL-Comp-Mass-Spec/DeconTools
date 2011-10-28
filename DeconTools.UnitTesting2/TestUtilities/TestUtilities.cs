@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2
                     resultList1[i].IsotopicProfile.MonoPeakMZ == resultList2[i].IsotopicProfile.MonoPeakMZ &&
                     resultList1[i].IsotopicProfile.MonoPlusTwoAbundance == resultList2[i].IsotopicProfile.MonoPlusTwoAbundance &&
                     //resultList1[i].IsotopicProfile.MostAbundantIsotopeMass == resultList2[i].IsotopicProfile.MostAbundantIsotopeMass &&
-                    resultList1[i].IsotopicProfile.Original_Total_isotopic_abundance == resultList2[i].IsotopicProfile.Original_Total_isotopic_abundance &&
+                    resultList1[i].IsotopicProfile.IsSaturated == resultList2[i].IsotopicProfile.IsSaturated &&
                     resultList1[i].IsotopicProfile.OriginalIntensity == resultList2[i].IsotopicProfile.OriginalIntensity &&
                     //resultList1[i].IsotopicProfile.Score == resultList2[i].IsotopicProfile.Score &&
                     resultList1[i].IsotopicProfile.GetNumOfIsotopesInProfile() == resultList2[i].IsotopicProfile.GetNumOfIsotopesInProfile() &&

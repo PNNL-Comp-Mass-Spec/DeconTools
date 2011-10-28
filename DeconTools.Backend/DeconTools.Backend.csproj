@@ -310,7 +310,7 @@
     <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\I_MSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
-    <Compile Include="ProcessingTasks\OriginalIntensitiesExtractor.cs" />
+    <Compile Include="ProcessingTasks\SaturationDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\IPeakDetector.cs" />
     <Compile Include="Core\Task.cs" />

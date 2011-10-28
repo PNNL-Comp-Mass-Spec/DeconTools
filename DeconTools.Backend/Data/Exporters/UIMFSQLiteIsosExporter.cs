@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Runtime.InteropServices;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
@@ -120,7 +115,7 @@ namespace DeconTools.Backend.Data
                 fp.mono_abundance = (uint)uimfResult.IsotopicProfile.GetMonoAbundance();
                 fp.mono_plus2_abundance = (uint)uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance();
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
-                fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.Original_Total_isotopic_abundance;
+                //fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.OriginalTotalIsotopicAbundance;
                 fp.ims_drift_time = (float)uimfResult.ScanSet.DriftTime;
                 records.Add(fp);
                 count++;

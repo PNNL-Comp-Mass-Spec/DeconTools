@@ -15,6 +15,24 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0805B2550ABD2832F9F2B6D46388D9AE"
+        "OwnerKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0805B2550ABD2832F9F2B6D46388D9AE"
+        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0805B2550ABD2832F9F2B6D46388D9AE"
+        "OwnerKey" = "8:_550CE4B9132840CE8976791DC8BA73E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
         "OwnerKey" = "8:_550CE4B9132840CE8976791DC8BA73E5"
         "MsmSig" = "8:_UNDEFINED"
@@ -22,13 +40,13 @@
         "Entry"
         {
         "MsmKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
-        "OwnerKey" = "8:_5519218D3CE954007A4CBE6C65594BE0"
+        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
-        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
+        "OwnerKey" = "8:_5519218D3CE954007A4CBE6C65594BE0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -231,30 +249,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6B1555FEBFC9A532AAC9532C209D79D4"
-        "OwnerKey" = "8:_9215FBE28AC0AEA692B669EDDD5975FE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6D2FB35213811DD1F1A510F0DBB1F4AF"
-        "OwnerKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6D2FB35213811DD1F1A510F0DBB1F4AF"
-        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6D2FB35213811DD1F1A510F0DBB1F4AF"
-        "OwnerKey" = "8:_550CE4B9132840CE8976791DC8BA73E5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7029BA354F6549B4B7E6CF1512758DDA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -305,24 +299,6 @@
         {
         "MsmKey" = "8:_7C3910051FC04F05AF06D3E60ACC1CC2"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9215FBE28AC0AEA692B669EDDD5975FE"
-        "OwnerKey" = "8:_1850D97CCC685BAAFF7594F7BBE5B6CC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9215FBE28AC0AEA692B669EDDD5975FE"
-        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9215FBE28AC0AEA692B669EDDD5975FE"
-        "OwnerKey" = "8:_550CE4B9132840CE8976791DC8BA73E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -526,7 +502,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D2FB35213811DD1F1A510F0DBB1F4AF"
+        "OwnerKey" = "8:_0805B2550ABD2832F9F2B6D46388D9AE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -557,12 +533,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4021E47E0D58B37B08058E4A143A01A7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9215FBE28AC0AEA692B669EDDD5975FE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -718,11 +688,42 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0805B2550ABD2832F9F2B6D46388D9AE"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:PNNLOmics, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_0805B2550ABD2832F9F2B6D46388D9AE"
+                    {
+                    "Name" = "8:PNNLOmics.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:PNNLOmics.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1850D97CCC685BAAFF7594F7BBE5B6CC"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4261.21633, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4307.20107, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_1850D97CCC685BAAFF7594F7BBE5B6CC"
@@ -948,7 +949,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4261.21634, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4307.20113, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_5519218D3CE954007A4CBE6C65594BE0"
@@ -1068,57 +1069,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B1555FEBFC9A532AAC9532C209D79D4"
-            {
-            "SourcePath" = "8:xrawfile2.dll"
-            "TargetName" = "8:xrawfile2.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D2FB35213811DD1F1A510F0DBB1F4AF"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_6D2FB35213811DD1F1A510F0DBB1F4AF"
-                    {
-                    "Name" = "8:ProteinCalc.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ProteinCalc.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7029BA354F6549B4B7E6CF1512758DDA"
             {
             "SourcePath" = "8:..\\Library\\sqlite3.dll"
@@ -1188,37 +1138,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9215FBE28AC0AEA692B669EDDD5975FE"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.XRAWFILE2Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_9215FBE28AC0AEA692B669EDDD5975FE"
-                    {
-                    "Name" = "8:Interop.XRAWFILE2Lib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Interop.XRAWFILE2Lib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A04151BF8C815DAB1FC74DF1869DF9BF"
@@ -1546,7 +1465,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
         "ProductCode" = "8:{EA9D2819-8D38-4531-80C5-B6504BC01BD6}"
-        "PackageCode" = "8:{BBB14C4B-537F-49EC-8D17-DB02892DBBBB}"
+        "PackageCode" = "8:{CA2C0744-E02F-44DC-8261-EF84EBC1EE9A}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1567,7 +1486,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:1"
+        "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
