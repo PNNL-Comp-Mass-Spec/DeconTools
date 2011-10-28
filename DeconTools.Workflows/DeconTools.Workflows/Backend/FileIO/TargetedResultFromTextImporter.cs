@@ -12,12 +12,12 @@ namespace DeconTools.Workflows.Backend.FileIO
         //note that case does not matter in the header
         protected string[] datasetHeaders = { "dataset" };
         protected string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis" };
-        protected string[] fitScoreHeaders = { "fitScore", "UMCAverageFit" };
-        protected string[] intensityRepHeaders = { "intensityRep", "intensity", "abundance", "UMCAbundance" };
+        protected string[] fitScoreHeaders = { "fitScore", "UMCAverageFit","iso1fit" };
+        protected string[] intensityRepHeaders = { "intensityRep", "intensity", "abundance", "UMCAbundance","AbundanceIso1" };
         protected string[] intensityI0Headers = { "intensityI0", "i0", "UMCAbundance" };
-        protected string[] iscoreHeaders = { "iscore" };
-        protected string[] targetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid" };
-        protected string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW" };
+        protected string[] iscoreHeaders = { "iscore", "iscore1" };
+        protected string[] targetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid", "mtid" };
+        protected string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
         protected string[] monomassCalibratedHeaders = { "MonoisotopicMassCalibrated" };
         protected string[] massErrorHeaders = { "MassErrorInPPM" };
 
@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] scanStartHeaders = { "scanStart", "scan_start" };
         protected string[] netHeaders = { "net", "NETClassRep" };
         protected string[] netErrorHeaders =  {"netError"};
-         protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol" };
+        protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol", "ChromPeaksWithinTol" };
         protected string[] numQualitychromPeaksWithinTolHeaders = { "NumQualityChromPeaksWithinTol" };
 
 
@@ -112,6 +112,25 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected virtual bool ValidateHeaders()
         {
             return true;    //TODO: actually do some validation
+        }
+
+
+        protected virtual void GetBasicResultDTOData(List<string> rowData, TargetedResultDTO result)
+        {
+            result.DatasetName = LookupData(rowData, datasetHeaders);
+            result.ChargeState = ParseIntField(LookupData(rowData, chargeStateHeaders));
+            result.FitScore = ParseFloatField(LookupData(rowData, fitScoreHeaders));
+            result.Intensity = ParseFloatField(LookupData(rowData, intensityRepHeaders));
+            result.IntensityI0 = ParseFloatField(LookupData(rowData, intensityI0Headers));
+            result.IScore = ParseFloatField(LookupData(rowData, iscoreHeaders));
+            result.TargetID = ParseLongField(LookupData(rowData, targetIDHeaders));
+            result.MonoMass = ParseDoubleField(LookupData(rowData, monomassHeaders));
+            result.MonoMZ = ParseDoubleField(LookupData(rowData, mzHeaders));
+            result.NET = ParseFloatField(LookupData(rowData, netHeaders));
+            result.NumChromPeaksWithinTol = ParseIntField(LookupData(rowData, numchromPeaksWithinTolHeaders));
+            result.ScanLC = ParseIntField(LookupData(rowData, scanHeaders));
+            result.ScanLCEnd = ParseIntField(LookupData(rowData, scanEndHeaders));
+            result.ScanLCStart = ParseIntField(LookupData(rowData, scanStartHeaders));
         }
 
 

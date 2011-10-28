@@ -116,9 +116,9 @@ namespace DeconTools.Workflows.Backend.Core
             Type t = this.GetType();
             foreach (System.Reflection.MemberInfo mi in t.GetMembers().OrderBy(p => p.Name))
             {
-                if (mi.MemberType == System.Reflection.MemberTypes.Property)
+                if (mi.MemberType == MemberTypes.Property)
                 {
-                    System.Reflection.PropertyInfo pi = (PropertyInfo)mi;
+                    PropertyInfo pi = (PropertyInfo)mi;
                     string propertyName = pi.Name;
 
    

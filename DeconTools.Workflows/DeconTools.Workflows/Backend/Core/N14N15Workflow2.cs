@@ -171,7 +171,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
-            this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
+            //this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 
             ValidateParameters();
 
@@ -206,7 +206,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             unlabelledProfilefinder = new BasicTFF(_workflowParameters.MSToleranceInPPM);
 
-            IterativeTFFParameters iterativeTFFParameters = new IterativeTFFParameters();
+            var iterativeTFFParameters = new IterativeTFFParameters();
             iterativeTFFParameters.ToleranceInPPM = _workflowParameters.TargetedFeatureFinderToleranceInPPM;
             iterativeTFFParameters.IsotopicProfileType = _workflowParameters.TargetedFeatureFinderIsotopicProfileTargetType;
             labelledProfileFinder = new IterativeTFF(iterativeTFFParameters);

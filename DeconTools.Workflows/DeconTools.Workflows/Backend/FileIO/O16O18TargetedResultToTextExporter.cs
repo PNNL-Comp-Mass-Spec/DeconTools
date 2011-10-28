@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected override string addAdditionalInfo(TargetedResultDTO result)
         {
 
-            O16O18TargetedResultDTO o16o18result = (O16O18TargetedResultDTO)result;
+            var o16o18result = (O16O18TargetedResultDTO)result;
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Delimiter);

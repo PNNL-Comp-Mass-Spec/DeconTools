@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
+  <ChromGenSourceDataPeakBR>3</ChromGenSourceDataPeakBR>
+  <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
+  <ChromNETTolerance>0.025</ChromNETTolerance>
+  <ChromNETToleranceN15>0.001</ChromNETToleranceN15>
+  <ChromPeakDetectorPeakBR>2</ChromPeakDetectorPeakBR>
+  <ChromPeakDetectorSigNoise>2</ChromPeakDetectorSigNoise>
+  <ChromSmootherNumPointsInSmooth>15</ChromSmootherNumPointsInSmooth>
+  <ChromToleranceInPPM>10</ChromToleranceInPPM>
+  <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
+  <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
+  <MSToleranceInPPM>10</MSToleranceInPPM>
+  <MultipleHighQualityMatchesAreAllowed>false</MultipleHighQualityMatchesAreAllowed>
+  <NumChromPeaksAllowedDuringSelection>0</NumChromPeaksAllowedDuringSelection>
+  <NumMSScansToSum>1</NumMSScansToSum>
+  <NumPeaksUsedInQuant>3</NumPeaksUsedInQuant>
+  <ResultType>N14N15_TARGETED_RESULT</ResultType>
+  <SmartChromSelectorPeakBR>5</SmartChromSelectorPeakBR>
+  <SmartChromSelectorPeakSigNoiseRatio>3</SmartChromSelectorPeakSigNoiseRatio>
+  <TargetedFeatureFinderIsotopicProfileTargetType>LABELLED</TargetedFeatureFinderIsotopicProfileTargetType>
+  <TargetedFeatureFinderToleranceInPPM>10</TargetedFeatureFinderToleranceInPPM>
+  <WorkflowType>N14N15Targeted1</WorkflowType>
+</WorkflowParameters>

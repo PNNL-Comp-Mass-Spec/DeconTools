@@ -1,23 +1,60 @@
 ﻿
+using DeconTools.Workflows.Backend.Results;
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public class N14N15TargetedResultFromTextImporter
+    public class N14N15TargetedResultFromTextImporter : TargetedResultFromTextImporter
     {
+        readonly string[] _scanN15Headers = { "scanN15" };
+        readonly string[] _scanN15StartHeaders = { "scanN15Start" };
+        readonly string[] _scanN15EndHeaders = { "scanN15End" };
+        readonly string[] _NETN15Headers = { "NETN15" };
+        readonly string[] _numChromPeaksWithinTolN15Headers = { "chromPeaksWithinTol", "NumChromPeaksWithinTol" };
+        readonly string[] _numQualityChromPeaksWithinTolN15Headers = { "NumQualityChromPeaksWithinTol" };
+        readonly string[] _monoMassN15Headers = { "MonoMassIso2" };
+        readonly string[] _monoMassN15CalibratedHeaders = { "MonoisotopicMassCalibratedN15" };
+        readonly string[] _monoMZN15Headers = { "MonoMZN15", "MZ2" };
+        readonly string[] _intensityN15Headers = { "AbundanceIso2" };
+        readonly string[] _fitscoreN15Headers = { "iso2Fit" };
+        readonly string[] _iScoreN15Headers = { "iscore2" };
+        readonly string[] _ratioContribN14Headers = { "iso1RatioContrib" };
+        readonly string[] _ratioContribN15Headers= { "iso2RatioContrib" };
+        readonly string[] _ratioHeaders = { "ratio" };
+
 
         #region Constructors
+        public N14N15TargetedResultFromTextImporter(string filename) : base(filename) { }
         #endregion
 
-        #region Properties
+        protected override Results.TargetedResultDTO ConvertTextToDataObject(System.Collections.Generic.List<string> processedData)
+        {
+            TargetedResultDTO result = new N14N15TargetedResultDTO();
 
-        #endregion
+            GetBasicResultDTOData(processedData, result);
 
-        #region Public Methods
+            var r = (N14N15TargetedResultDTO) result;
 
-        #endregion
+            r.ScanN15 = ParseIntField(LookupData(processedData, _scanN15Headers));
+            r.ScanN15Start = ParseIntField(LookupData(processedData, _scanN15StartHeaders));
+            r.ScanN15End = ParseIntField(LookupData(processedData, _scanN15EndHeaders));
+            r.NETN15 = ParseFloatField(LookupData(processedData, _NETN15Headers));
+            r.MonoMassN15 = ParseDoubleField(LookupData(processedData, _monoMassN15Headers));
+            r.MonoMZN15 = ParseDoubleField(LookupData(processedData, _monoMZN15Headers));
+            r.MonoMassCalibratedN15 = ParseDoubleField(LookupData(processedData, _monoMassN15CalibratedHeaders));
+            r.IntensityN15 = ParseFloatField(LookupData(processedData, _intensityN15Headers));
+            r.FitScoreN15 = ParseFloatField(LookupData(processedData, _fitscoreN15Headers));
+            r.IScoreN15 = ParseFloatField(LookupData(processedData, _iScoreN15Headers));
+            r.RatioContributionN14 = ParseFloatField(LookupData(processedData, _ratioContribN14Headers));
+            r.RatioContributionN15 = ParseFloatField(LookupData(processedData, _ratioContribN15Headers));
+            r.Ratio = ParseFloatField(LookupData(processedData, _ratioHeaders));
 
-        #region Private Methods
+            r.NumChromPeaksWithinTolN15 = ParseShortField(LookupData(processedData, _numChromPeaksWithinTolN15Headers));
+            r.NumQualityChromPeaksWithinTolN15 = ParseShortField(LookupData(processedData, _numQualityChromPeaksWithinTolN15Headers));
+     
+            return result;
 
-        #endregion
 
+        }
+
+       
     }
 }

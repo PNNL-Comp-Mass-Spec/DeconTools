@@ -67,6 +67,40 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void findSingleModifiedMassTagTest1()
+        {
+            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+
+            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            TargetCollection mtc = new TargetCollection();
+            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            mtc = mtimporter.Import();
+
+            int testMassTagID = 189685150;
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
+
+            Assert.AreEqual(true,run.CurrentMassTag.ContainsMods);
+
+            TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            workflow.Execute();
+
+            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            Assert.AreEqual(false, result.FailedResult);
+
+            result.DisplayToConsole();
+
+            Assert.IsNotNull(result.IsotopicProfile);
+            Assert.IsNotNull(result.ScanSet);
+            Assert.IsNotNull(result.ChromPeakSelected);
+            Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
+            Assert.AreEqual(959.48m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
+            Assert.AreEqual(6070, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+        }
+
 
         [Test]
         public void findSingleMassTag_checkAlignmentData_test1()

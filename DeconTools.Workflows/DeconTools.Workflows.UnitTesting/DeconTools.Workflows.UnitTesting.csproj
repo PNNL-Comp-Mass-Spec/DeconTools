@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend">
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
+    <Reference Include="DeconTools.Backend, Version=1.0.4302.40032, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="DeconTools.UnitTesting2, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -56,6 +57,7 @@
     <Compile Include="AlignmentTests\NETAndMassAlignerParameterTesting.cs" />
     <Compile Include="AlignmentTests\NETAndMassAlignerTests.cs" />
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
+    <Compile Include="FileIOTests\TargetedResultFileIOTests\N14N15TargetedResultFileIOTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +66,8 @@
     <Compile Include="WorkflowTests\ExecuteO16O18WorkflowTests.cs" />
     <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
+    <Compile Include="WorkflowTests\N14N15WorkflowParametersTests.cs" />
+    <Compile Include="WorkflowTests\N14N15WorkflowTests.cs" />
     <Compile Include="WorkflowTests\O16O18WorkflowTests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanBasedWorkflowTests.cs" />

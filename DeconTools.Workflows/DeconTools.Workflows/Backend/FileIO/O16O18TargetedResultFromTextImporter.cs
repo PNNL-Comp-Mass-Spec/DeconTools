@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
         #region Constructors
-        public O16O18TargetedResultFromTextImporter(string filename):base(filename){}
+        public O16O18TargetedResultFromTextImporter(string filename) : base(filename) { }
         #endregion
 
         protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
@@ -29,21 +29,8 @@ namespace DeconTools.Workflows.Backend.FileIO
                 result.DatasetName = TryGetDatasetNameFromFileName();
             }
 
-            result.ChargeState = ParseIntField(LookupData(processedData, chargeStateHeaders));
-            result.FitScore = ParseFloatField(LookupData(processedData, fitScoreHeaders));
-            result.Intensity = ParseFloatField(LookupData(processedData, intensityRepHeaders));
-            result.IntensityI0 = ParseFloatField(LookupData(processedData, intensityI0Headers));
+            GetBasicResultDTOData(processedData, result);
 
-            result.IScore = ParseFloatField(LookupData(processedData, iscoreHeaders));
-            result.TargetID = ParseLongField(LookupData(processedData, targetIDHeaders));
-            result.MonoMass = ParseDoubleField(LookupData(processedData, monomassHeaders));
-            result.MonoMZ = ParseDoubleField(LookupData(processedData, mzHeaders));
-            result.NET = ParseFloatField(LookupData(processedData, netHeaders));
-            result.NumChromPeaksWithinTol = ParseIntField(LookupData(processedData, numchromPeaksWithinTolHeaders));
-            result.ScanLC = ParseIntField(LookupData(processedData, scanHeaders));
-            result.ScanLCEnd = ParseIntField(LookupData(processedData, scanEndHeaders));
-            result.ScanLCStart = ParseIntField(LookupData(processedData, scanStartHeaders));
-            
             result.IntensityI2 = ParseFloatField(LookupData(processedData, intensityI2Headers));
             result.IntensityI4 = ParseFloatField(LookupData(processedData, intensityI4Headers));
             result.IntensityTheorI0 = ParseFloatField(LookupData(processedData, intensityTheorIOHeaders));
