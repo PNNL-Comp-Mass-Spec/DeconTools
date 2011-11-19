@@ -107,7 +107,7 @@ namespace DeconTools.Backend
             Check.Assert(m_run != null, "Processing aborted. Could not handle supplied File(s)");
             //Define ScansetCollection
 
-            if (outputFilepath == null || outputFilepath.Length == 0 || outputFilepath == String.Empty)
+            if (string.IsNullOrEmpty(outputFilepath))
             {
                 this.outputFilepath = m_run.DataSetPath;
             }
@@ -224,8 +224,8 @@ namespace DeconTools.Backend
 
             if (m_run is UIMFRun || m_run is IMFRun)
             {
-                Task originalIntensitiesExtractor = new SaturationDetector();
-                Project.getInstance().TaskCollection.TaskList.Add(originalIntensitiesExtractor);
+                Task saturationDetector = new SaturationDetector();
+                Project.getInstance().TaskCollection.TaskList.Add(saturationDetector);
             }
 
             Task scanResultUpdater = new ScanResultUpdater(Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);

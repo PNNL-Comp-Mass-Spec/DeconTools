@@ -76,7 +76,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
                     if (result.IsotopicProfile.IsSaturated )
                     {
-
                         //problem is that with these saturated profiles, they are often trucated because another
                         //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should 
                         //belong to the saturated profile. 
@@ -85,7 +84,6 @@ namespace DeconTools.Backend.ProcessingTasks
                         theorTarget.ChargeState = (short)result.IsotopicProfile.ChargeState;
                         theorTarget.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                         theorTarget.MZ = (theorTarget.MonoIsotopicMass / theorTarget.ChargeState) + Globals.PROTON_MASS;
-
 
                         var averagineFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
                         theorTarget.IsotopicProfile  = _tomIsotopicPatternGenerator.GetIsotopePattern(averagineFormula, _tomIsotopicPatternGenerator.aafIsos);

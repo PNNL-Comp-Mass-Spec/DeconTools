@@ -8,8 +8,8 @@ namespace DeconTools.Workflows.Backend.FileIO
         readonly string[] _scanN15StartHeaders = { "scanN15Start" };
         readonly string[] _scanN15EndHeaders = { "scanN15End" };
         readonly string[] _NETN15Headers = { "NETN15" };
-        readonly string[] _numChromPeaksWithinTolN15Headers = { "chromPeaksWithinTol", "NumChromPeaksWithinTol" };
-        readonly string[] _numQualityChromPeaksWithinTolN15Headers = { "NumQualityChromPeaksWithinTol" };
+        readonly string[] _numChromPeaksWithinTolN15Headers = { "chromPeaksWithinTolN15", "NumChromPeaksWithinTolN15" };
+        readonly string[] _numQualityChromPeaksWithinTolN15Headers = { "NumQualityChromPeaksWithinTolN15" };
         readonly string[] _monoMassN15Headers = { "MonoMassIso2" };
         readonly string[] _monoMassN15CalibratedHeaders = { "MonoisotopicMassCalibratedN15" };
         readonly string[] _monoMZN15Headers = { "MonoMZN15", "MZ2" };
@@ -19,6 +19,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         readonly string[] _ratioContribN14Headers = { "iso1RatioContrib" };
         readonly string[] _ratioContribN15Headers= { "iso2RatioContrib" };
         readonly string[] _ratioHeaders = { "ratio" };
+        readonly string[] _monoMZN14Headers = { "MZ1" };
 
 
         #region Constructors
@@ -38,6 +39,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             r.ScanN15End = ParseIntField(LookupData(processedData, _scanN15EndHeaders));
             r.NETN15 = ParseFloatField(LookupData(processedData, _NETN15Headers));
             r.MonoMassN15 = ParseDoubleField(LookupData(processedData, _monoMassN15Headers));
+            r.MonoMZ = ParseDoubleField(LookupData(processedData, _monoMZN14Headers));
             r.MonoMZN15 = ParseDoubleField(LookupData(processedData, _monoMZN15Headers));
             r.MonoMassCalibratedN15 = ParseDoubleField(LookupData(processedData, _monoMassN15CalibratedHeaders));
             r.IntensityN15 = ParseFloatField(LookupData(processedData, _intensityN15Headers));

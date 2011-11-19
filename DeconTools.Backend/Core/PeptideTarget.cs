@@ -18,21 +18,21 @@ namespace DeconTools.Backend.Core
 
 
 
-       
+
         /// <summary>
         /// the ID of the protein to which the peptide MassTag is linked
         /// </summary>
         public int RefID { get; set; }
         public string ProteinDescription { get; set; }
+        public string GeneReference { get; set; }
 
-        
         #endregion
 
 
 
         public override string GetEmpiricalFormulaFromTargetCode()
         {
-            return this.PeptideUtils.GetEmpiricalFormulaForPeptideSequence(this.Code);
+            return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(Code);
         }
 
 
@@ -51,7 +51,7 @@ namespace DeconTools.Backend.Core
 
 
 
-    
+
 
         public override string ToString()
         {

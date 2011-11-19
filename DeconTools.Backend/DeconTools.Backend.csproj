@@ -209,7 +209,7 @@
     <Compile Include="Core\IPeak.cs" />
     <Compile Include="Core\Results\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />
-    <Compile Include="Core\MassTag.cs" />
+    <Compile Include="Core\PeptideTarget.cs" />
     <Compile Include="Core\Results\TargetedResultBase.cs" />
     <Compile Include="Core\TargetCollection.cs" />
     <Compile Include="Core\Results\MassTagResult.cs" />

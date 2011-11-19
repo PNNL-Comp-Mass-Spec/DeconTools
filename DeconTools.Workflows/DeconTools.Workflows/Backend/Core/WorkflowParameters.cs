@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             Globals.TargetedWorkflowTypes workflowType;
 
-            bool successfulEnum = Enum.TryParse<Globals.TargetedWorkflowTypes>(parameterTableFromXML["WorkflowType"], out workflowType);
+            bool successfulEnum = Enum.TryParse(parameterTableFromXML["WorkflowType"], out workflowType);
 
             WorkflowParameters workflowParameters;
             if (successfulEnum)
@@ -91,8 +91,6 @@ namespace DeconTools.Workflows.Backend.Core
             return workflowParameters;
 
         }
-
-
   
         public virtual void LoadParameters(string xmlFilename)
         {
@@ -174,8 +172,6 @@ namespace DeconTools.Workflows.Backend.Core
                     );
 
             xml.Save(xmlFilename);
-
-
         }
 
 
