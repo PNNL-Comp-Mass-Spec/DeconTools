@@ -8,7 +8,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         string Name { get; set; }
 
-        protected I_MSGenerator MSGenerator { get; set; }
+        protected MSGenerator MSGenerator { get; set; }
 
         public abstract WorkflowParameters WorkflowParameters { get; set; }
 
@@ -21,31 +21,28 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void ExecuteTask(Task task)
         {
-            if (Result!=null && !Result.FailedResult)
+            if (Result != null && !Result.FailedResult)
             {
                 task.Execute(this.Run.ResultCollection);
             }
         }
 
-        
 
-     
+
+
 
         public virtual void InitializeRunRelatedTasks()
         {
             if (Run != null)
             {
+                MSGenerator = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
 
-                MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-                this.MSGenerator = msgenFactory.CreateMSGenerator(this.Run.MSFileType);
-
-                
             }
         }
 
 
         private Run _run;
-        public Run Run 
+        public Run Run
         {
             get
             {
@@ -72,7 +69,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         //}
 
-        
+
 
 
         #endregion

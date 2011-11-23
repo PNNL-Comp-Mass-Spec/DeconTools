@@ -35,13 +35,13 @@ namespace DeconTools.Workflows.Backend.Core
         public ChromatogramGenerator ChromGenerator { get; set; }
 
 
-        public I_MSGenerator msgen { get; set; }
+        public MSGenerator msgen { get; set; }
 
         public double DriftTimeProfileExtractionPPMTolerance { get; set; }
 
-        public I_MSGenerator MSgen { get; set; }
+        public MSGenerator MSgen { get; set; }
         public DeconToolsPeakDetector MSPeakDetector { get; set; }
-        public IDeconvolutor Deconvolutor { get; set; }
+        public Deconvolutor Deconvolutor { get; set; }
 
         public int NumMSScansToSumWhenBuildingMasterPeakList { get; set; }
 
@@ -84,8 +84,8 @@ namespace DeconTools.Workflows.Backend.Core
             MasterPeakListPeakDetector.IsDataThresholded = false;
             MasterPeakListPeakDetector.StorePeakData = true;
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            msgen = msgenFactory.CreateMSGenerator(DeconTools.Backend.Globals.MSFileType.PNNL_UIMF);
+            
+            msgen = MSGeneratorFactory.CreateMSGenerator(DeconTools.Backend.Globals.MSFileType.PNNL_UIMF);
 
 
 

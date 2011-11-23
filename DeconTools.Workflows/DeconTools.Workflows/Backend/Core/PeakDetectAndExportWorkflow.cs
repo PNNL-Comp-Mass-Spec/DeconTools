@@ -129,9 +129,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Run != null)
             {
-
-                MSGeneratorFactory msgenFact = new MSGeneratorFactory();
-                MSGenerator = msgenFact.CreateMSGenerator(Run.MSFileType);
+                MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
 
 
                 int minScan;

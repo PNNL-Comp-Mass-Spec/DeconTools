@@ -7,7 +7,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class ScanBasedWorkflow : TargetedWorkflow
     {
-       private I_MSGenerator msgen;
+       private MSGenerator msgen;
 
 
         #region Constructors
@@ -93,8 +93,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeRunRelatedTasks()
         {
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            msgen = msgenFactory.CreateMSGenerator(this.Run.MSFileType);
+           
+            msgen = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
         }
 
         public override WorkflowParameters WorkflowParameters

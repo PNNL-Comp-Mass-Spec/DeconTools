@@ -60,9 +60,9 @@ namespace DeconTools.Workflows.Backend.Core
         public ChromPeakDetector ChromPeakDetector { get; set; }
 
 
-        public I_MSGenerator MSgen { get; set; }
+        public MSGenerator MSgen { get; set; }
         public DeconToolsPeakDetector MSPeakDetector { get; set; }
-        public IDeconvolutor Deconvolutor { get; set; }
+        public Deconvolutor Deconvolutor { get; set; }
 
 
         DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic isosExporter;
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.Core
         public string Name { get; set; }
         public int MinScan { get; set; }
         public int MaxScan { get; set; }
-        
+
         //public override WorkflowParameters WorkflowParameters
         //{
         //    get
@@ -111,7 +111,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.Deconvolutor = new RapidDeconvolutor();
 
             Validator = new ResultValidatorTask();
-             
+
 
             isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic(m_isosResultFileName);
 
@@ -132,8 +132,7 @@ namespace DeconTools.Workflows.Backend.Core
             bool msGeneratorNeedsInitializing = (this.MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
-                MSGeneratorFactory factoryMSGen = new MSGeneratorFactory();
-                this.MSgen = factoryMSGen.CreateMSGenerator(this.Run.MSFileType);
+                this.MSgen = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
             }
 
 
@@ -336,8 +335,7 @@ namespace DeconTools.Workflows.Backend.Core
             bool msGeneratorNeedsInitializing = (this.MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
-                MSGeneratorFactory factoryMSGen = new MSGeneratorFactory();
-                this.MSgen = factoryMSGen.CreateMSGenerator(run.MSFileType);
+                this.MSgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             }
 
 
