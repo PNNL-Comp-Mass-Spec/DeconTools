@@ -22,8 +22,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.CurrentScanSet = scanSet;
 
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 

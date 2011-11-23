@@ -369,8 +369,8 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            MSGeneratorFactory fact = new MSGeneratorFactory();
-            Task msgen = fact.CreateMSGenerator(run.MSFileType);
+            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
 
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
             peakDet.PeakBackgroundRatio = 1.3;

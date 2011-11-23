@@ -7,7 +7,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public class HornDeconvolutor : IDeconvolutor
+    public class HornDeconvolutor : Deconvolutor
     {
         #region Member Variables
         private DeconToolsV2.Peaks.clsPeak[] mspeakList;

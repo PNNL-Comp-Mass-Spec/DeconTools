@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Workflows;
 
 namespace DeconConsole
 {
@@ -82,9 +81,8 @@ namespace DeconConsole
 
             try
             {
-                ProjectControllerFactory factory = new ProjectControllerFactory(controllerType);
-                runner = factory.CreateProjectController(filename, msFiletype, parameterFilename);
-                runner.Execute();
+                var workflow = ScanBasedWorkflow.CreateWorkflow(parameterFilename, filename);
+                workflow.Execute();
             }
             catch (Exception ex)
             {

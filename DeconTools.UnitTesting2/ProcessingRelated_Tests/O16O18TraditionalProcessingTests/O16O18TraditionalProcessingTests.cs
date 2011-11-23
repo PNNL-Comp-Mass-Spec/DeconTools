@@ -28,8 +28,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             run.CurrentScanSet = run.ScanSetCollection.ScanSetList[0];
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            var msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
             peakDet.PeakBackgroundRatio = 1.3;
@@ -39,8 +38,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
             decon.IsO16O18Data = true;
 
             O16O18PeakDataAppender appender = new O16O18PeakDataAppender();
-    
-            var exporter = new IsosExporterFactory().CreateIsosExporter(run.ResultCollection.ResultType, Backend.Globals.ExporterType.TEXT, exportedIsos);
+
+            var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Backend.Globals.ExporterType.TEXT, exportedIsos);
 
             msgen.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);

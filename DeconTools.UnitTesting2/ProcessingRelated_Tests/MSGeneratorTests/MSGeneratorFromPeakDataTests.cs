@@ -28,15 +28,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             ScanSet scan = new ScanSet(311);
             run.CurrentScanSet = scan;
 
-            Task msgen;
+            
             
             double peakWidthForAllPeaks = 0.001;
             DeconTools.Backend.ProcessingTasks.MSGenerators.SyntheticMSGeneratorFromPeakData synMSGen =
                 new DeconTools.Backend.ProcessingTasks.MSGenerators.SyntheticMSGeneratorFromPeakData();
 
 
-            MSGeneratorFactory msGenFactory = new MSGeneratorFactory();
-            msgen = msGenFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             msgen.Execute(run.ResultCollection);
             Assert.AreEqual(15226, run.XYData.Xvalues.Length);

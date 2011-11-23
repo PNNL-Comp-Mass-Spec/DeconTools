@@ -57,13 +57,13 @@ namespace DeconTools.Backend.Core
 
         public void LoadOldDecon2LSParameters(string parameterFilename)
         {
-            ParameterLoader loader = new ParameterLoader();
-            loader.LoadParametersFromFile(parameterFilename);
+            OldDecon2LSParameters oldDecon2LsParameters = new OldDecon2LSParameters();
+            oldDecon2LsParameters.Load(parameterFilename);
 
-            this.Parameters.OldDecon2LSParameters.HornTransformParameters = loader.TransformParameters;
-            this.Parameters.OldDecon2LSParameters.PeakProcessorParameters = loader.PeakParameters;
-            this.Parameters.OldDecon2LSParameters.FTICRPreProcessParameters = loader.FTICRPreprocessOptions;
-            this.Parameters.OldDecon2LSParameters.DTAGenerationParameters = loader.DTAParameters;
+            this.Parameters.OldDecon2LSParameters.HornTransformParameters = oldDecon2LsParameters.HornTransformParameters;
+            this.Parameters.OldDecon2LSParameters.PeakProcessorParameters = oldDecon2LsParameters.PeakProcessorParameters;
+            this.Parameters.OldDecon2LSParameters.FTICRPreProcessParameters = oldDecon2LsParameters.FTICRPreProcessParameters;
+            this.Parameters.OldDecon2LSParameters.DTAGenerationParameters = oldDecon2LsParameters.DTAGenerationParameters;
 
             if (this.Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance < 1)
             {

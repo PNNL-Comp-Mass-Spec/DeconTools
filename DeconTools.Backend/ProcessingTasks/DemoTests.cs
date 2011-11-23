@@ -24,8 +24,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             //Create the task
-            MSGeneratorFactory msfactory = new MSGeneratorFactory();
-            Task msgen = msfactory.CreateMSGenerator(run.MSFileType);
+            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             //Create the target scan list (MS1 scans from 6005 - 6020). 
@@ -59,8 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             //Create the task
-            MSGeneratorFactory msfactory = new MSGeneratorFactory();
-            Task msgen = msfactory.CreateMSGenerator(run.MSFileType);
+            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             int startScan = 6000;

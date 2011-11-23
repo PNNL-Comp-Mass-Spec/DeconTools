@@ -58,7 +58,7 @@ namespace DeconTools.Testing.ProblemCases
 
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            I_MSGenerator msgen= msgenFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen= msgenFactory.CreateMSGenerator(run.MSFileType);
             msgen.MinMZ = 0;
             msgen.MaxMZ = 50000;
 

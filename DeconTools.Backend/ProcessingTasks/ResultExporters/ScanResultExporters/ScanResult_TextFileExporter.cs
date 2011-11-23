@@ -3,7 +3,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public abstract class ScanResult_TextFileExporter : IScanResultExporter
+    public abstract class ScanResult_TextFileExporter : ScanResultExporter
     {
         protected string _filename;
 

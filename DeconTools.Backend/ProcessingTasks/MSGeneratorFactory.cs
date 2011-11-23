@@ -13,9 +13,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
         
-        public I_MSGenerator CreateMSGenerator(Globals.MSFileType filetype)
+        public static MSGenerator CreateMSGenerator(Globals.MSFileType filetype)
         {
-            I_MSGenerator msGenerator;
+            MSGenerator msGenerator;
             
             switch (filetype)
             {
@@ -68,9 +68,9 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        internal DeconTools.Backend.Core.Task CreateMSGenerator(Globals.MSFileType fileType, DeconTools.Backend.Core.OldDecon2LSParameters oldDecon2LSParameters)
+        internal Core.Task CreateMSGenerator(Globals.MSFileType fileType, DeconTools.Backend.Core.OldDecon2LSParameters oldDecon2LSParameters)
         {
-            I_MSGenerator msgenerator = CreateMSGenerator(fileType);
+            MSGenerator msgenerator = CreateMSGenerator(fileType);
 
             if (oldDecon2LSParameters.HornTransformParameters.UseMZRange)
             {

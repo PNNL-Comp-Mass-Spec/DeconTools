@@ -13,7 +13,7 @@ using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public class RapidDeconvolutor : IDeconvolutor
+    public class RapidDeconvolutor : Deconvolutor
     {
         RapidEngine.Decon2LS.Peaks.clsPeak[] rapidPeakList;
 

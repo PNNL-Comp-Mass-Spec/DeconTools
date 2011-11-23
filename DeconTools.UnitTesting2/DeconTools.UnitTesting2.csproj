@@ -147,6 +147,7 @@
     <Compile Include="TheoreticalIsotopicProfileTests\MercuryDistributionTesting.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilitiesTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
+    <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IMSCOMP.dll">
@@ -178,7 +179,9 @@
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

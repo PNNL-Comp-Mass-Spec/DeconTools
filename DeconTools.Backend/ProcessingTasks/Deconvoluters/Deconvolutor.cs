@@ -8,7 +8,7 @@ using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public abstract class IDeconvolutor : Task
+    public abstract class Deconvolutor : Task
     {
         public enum DeconResultComboMode
         {

@@ -6,7 +6,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
-    public abstract class ISmoother:Task
+    public abstract class Smoother:Task
     {
 
         public override void Execute(ResultCollection resultList)

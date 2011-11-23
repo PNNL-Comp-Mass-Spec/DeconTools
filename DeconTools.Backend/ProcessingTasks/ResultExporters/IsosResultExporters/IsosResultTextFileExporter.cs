@@ -9,7 +9,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public abstract class IsosResultTextFileExporter : IIsosResultExporter
+    public abstract class IsosResultTextFileExporter : IsosResultExporter
     {
 
 

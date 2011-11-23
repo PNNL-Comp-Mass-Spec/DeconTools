@@ -81,7 +81,7 @@ namespace DeconTools.Backend.Algorithms
         }
 
 
-        public void SmoothChromatograms(Dictionary<MSPeak, XYData> chromatograms, ISmoother smoother)
+        public void SmoothChromatograms(Dictionary<MSPeak, XYData> chromatograms, Smoother smoother)
         {
             foreach (MSPeak peak in chromatograms.Keys.ToList())
             {

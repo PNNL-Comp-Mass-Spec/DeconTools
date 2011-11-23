@@ -9,9 +9,9 @@ namespace DeconTools.Backend.ProcessingTasks
     public class DeconvolutorFactory
     {
 
-        public IDeconvolutor CreateDeconvolutor(OldDecon2LSParameters parameters)
+        public static Deconvolutor CreateDeconvolutor(OldDecon2LSParameters parameters)
         {
-            IDeconvolutor decon;
+            Deconvolutor decon;
 
             if (parameters.HornTransformParameters.DetectPeaksOnlyWithNoDeconvolution)
             {

@@ -15,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
     }
 
 
-    public class SyntheticMSGeneratorFromPeakData : I_MSGenerator
+    public class SyntheticMSGeneratorFromPeakData : MSGenerator
     {
         #region Constructors
         public SyntheticMSGeneratorFromPeakData()

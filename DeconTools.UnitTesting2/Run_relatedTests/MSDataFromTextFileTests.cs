@@ -52,13 +52,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void readInTextFileContainingMultipleSpaceDelimitersTest2()
         {
-            Run textfiledata = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_multipleDelimiters,' ');
+            Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_multipleDelimiters,' ');
 
-            MSGeneratorFactory fact = new MSGeneratorFactory();
-            Task msGen = fact.CreateMSGenerator(textfiledata.MSFileType);
-            msGen.Execute(textfiledata.ResultCollection);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            TestUtilities.DisplayXYValues(textfiledata.XYData);
+            msgen.Execute(run.ResultCollection);
+
+            TestUtilities.DisplayXYValues(run.XYData);
 
         }
 

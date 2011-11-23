@@ -90,10 +90,10 @@ namespace DeconTools.Backend.Core
 
 
 
-            Task isosResultExporter = new IsosExporterFactory(50000).CreateIsosExporter(resultType, Globals.ExporterType.TEXT, setIsosOutputFileName(Globals.ExporterType.TEXT));
+            Task isosResultExporter = IsosExporterFactory.CreateIsosExporter(resultType, Globals.ExporterType.TEXT, setIsosOutputFileName(Globals.ExporterType.TEXT));
             Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
 
-            Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, Globals.ExporterType.TEXT, setScansOutputFileName(Globals.ExporterType.TEXT));
+            Task scanResultExporter = ScansExporterFactory.CreateScansExporter(fileType, Globals.ExporterType.TEXT, setScansOutputFileName(Globals.ExporterType.TEXT));
             Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
 
 

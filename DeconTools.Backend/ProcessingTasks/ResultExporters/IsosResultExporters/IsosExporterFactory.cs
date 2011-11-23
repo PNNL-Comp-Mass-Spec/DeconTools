@@ -1,31 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 
 namespace DeconTools.Backend.Data
 {
     public class IsosExporterFactory
     {
-        
-        private int triggerToExportValue;
+        private const int TriggerToExportValue = 50000;
 
-        public IsosExporterFactory()
-            : this(10000)
+      
+        public static IsosResultExporter CreateIsosExporter(Globals.ResultType resultType, Globals.ExporterType exporterType, string outputFileName)
         {
-
-        }
-
-        public IsosExporterFactory(int triggerToExportValue)
-        {
-            this.triggerToExportValue = triggerToExportValue;
-
-        }
-
-        public Task CreateIsosExporter(Globals.ResultType resultType, DeconTools.Backend.Globals.ExporterType exporterType, string outputFileName)
-        {
-            Task isosExporter;
+            IsosResultExporter isosExporter;
 
             switch (resultType)
             {
@@ -33,13 +18,13 @@ namespace DeconTools.Backend.Data
                     switch (exporterType)
                     {
                         case Globals.ExporterType.TEXT:
-                            isosExporter = new BasicIsosResultTextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new BasicIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                         case Globals.ExporterType.SQLite:
-                            isosExporter = new BasicIsosResultSqliteExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new BasicIsosResultSqliteExporter(outputFileName, TriggerToExportValue);
                             break;
                         default:
-                            isosExporter = new BasicIsosResultTextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new BasicIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                     }
 
@@ -49,13 +34,13 @@ namespace DeconTools.Backend.Data
                     switch (exporterType)
                     {
                         case Globals.ExporterType.TEXT:
-                            isosExporter = new UIMFIsosResultTextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new UIMFIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                         case Globals.ExporterType.SQLite:
-                            isosExporter = new UIMFIsosResultSqliteExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new UIMFIsosResultSqliteExporter(outputFileName, TriggerToExportValue);
                             break;
                         default:
-                            isosExporter = new UIMFIsosResultTextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new UIMFIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                     }
 
@@ -64,13 +49,13 @@ namespace DeconTools.Backend.Data
                     switch (exporterType)
                     {
                         case Globals.ExporterType.TEXT:
-                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                         case Globals.ExporterType.SQLite:
                             throw new NotImplementedException();
                             
                         default:
-                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                     }
 
@@ -79,13 +64,13 @@ namespace DeconTools.Backend.Data
                     switch (exporterType)
                     {
                         case Globals.ExporterType.TEXT:
-                            isosExporter = new O16O18IsosResultTextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new O16O18IsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                         case Globals.ExporterType.SQLite:
                             throw new NotImplementedException();
                             
                         default:
-                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, triggerToExportValue);
+                            isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                     }
                     break;

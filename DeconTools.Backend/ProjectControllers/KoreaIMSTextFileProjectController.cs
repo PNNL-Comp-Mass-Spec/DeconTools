@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using System.ComponentModel;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters;
 using DeconTools.Utilities;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -69,8 +70,7 @@ namespace DeconTools.Backend.ProjectControllers
 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
-                DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory peakexporterFactory = new DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory();
-                Task peakListTextExporter = peakexporterFactory.Create(this.ExporterType, this.m_fileType, 50000, getPeakListFileName(this.ExporterType));
+                Task peakListTextExporter = PeakListExporterFactory.Create(this.ExporterType, this.m_fileType, 50000, getPeakListFileName(this.ExporterType));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
             }
 

@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
         TomTheorFeatureGenerator theorFeatureGen;
-        private I_MSGenerator _msgen;
+        private MSGenerator _msgen;
         private MassTagFitScoreCalculator _fitscoreCalc;
 
 
@@ -57,8 +57,8 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             basicChromPeakSelector = new ChromPeakSelector(1);
 
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            _msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+           
+            _msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             
             _tff = new IterativeTFF(new IterativeTFFParameters());
 

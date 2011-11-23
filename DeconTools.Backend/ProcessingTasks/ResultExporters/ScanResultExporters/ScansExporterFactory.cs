@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters;
+﻿using DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters;
 
 namespace DeconTools.Backend.Data
 {
     public class ScansExporterFactory
     {
-       
-        public Task CreateScansExporter(Globals.MSFileType fileType, Globals.ExporterType exporterType, string outputFileName)
+
+        public static ScanResultExporter CreateScansExporter(Globals.MSFileType fileType, Globals.ExporterType exporterType, string outputFileName)
         {
-            Task scansExporter;
+            ScanResultExporter scansExporter;
             switch (fileType)
             {
                 case Globals.MSFileType.PNNL_UIMF:

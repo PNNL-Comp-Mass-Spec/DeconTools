@@ -6,7 +6,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public abstract class IPeakDetector:Task
+    public abstract class PeakDetector:Task
     {
 
         public abstract List<IPeak> FindPeaks(XYData xydata, double minX, double maxX);

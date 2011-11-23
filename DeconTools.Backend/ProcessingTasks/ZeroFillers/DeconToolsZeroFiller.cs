@@ -5,7 +5,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 {
-    public class DeconToolsZeroFiller : IZeroFiller
+    public class DeconToolsZeroFiller : ZeroFiller
     {
 
         private int maxNumPointsToAdd;

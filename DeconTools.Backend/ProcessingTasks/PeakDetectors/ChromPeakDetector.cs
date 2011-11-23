@@ -5,7 +5,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
-    public class ChromPeakDetector:IPeakDetector
+    public class ChromPeakDetector:PeakDetector
     {
         DeconToolsV2.Peaks.clsPeakProcessorParameters oldPeakParameters;
 
@@ -26,6 +26,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             oldPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters(this.sigNoise, this.peakBackgroundRatio, false, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);
             peakProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();
+        }
+
+
+        public ChromPeakDetector(DeconToolsV2.Peaks.clsPeakProcessorParameters parameters)
+        {
+            this.PeakBackgroundRatio = parameters.PeakBackgroundRatio;
+            SigNoise = parameters.SignalToNoiseThreshold;
+            oldPeakParameters = parameters;
+
         }
 
         #endregion

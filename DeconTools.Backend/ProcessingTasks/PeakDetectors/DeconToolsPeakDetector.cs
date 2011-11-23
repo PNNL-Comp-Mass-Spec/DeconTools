@@ -10,7 +10,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public class DeconToolsPeakDetector : IPeakDetector
+    public class DeconToolsPeakDetector : PeakDetector
     {
         DeconToolsV2.Peaks.clsPeakProcessor peakProcessor;
 

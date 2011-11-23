@@ -8,13 +8,13 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
-   
+
 
 
     public abstract class SmartChromPeakSelectorBase : Task
     {
 
-        protected DeconTools.Backend.ProcessingTasks.I_MSGenerator msgen;
+        protected DeconTools.Backend.ProcessingTasks.MSGenerator msgen;
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
         protected MassTagFitScoreCalculator fitScoreCalc;
 
@@ -70,8 +70,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             if (msgen == null)
             {
-                MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-                msgen = msgenFactory.CreateMSGenerator(resultColl.Run.MSFileType);
+                msgen = MSGeneratorFactory.CreateMSGenerator(resultColl.Run.MSFileType);
                 msgen.IsTICRequested = false;
             }
 
@@ -193,7 +192,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 case SummingModeEnum.SUMMINGMODE_STATIC:
                     return scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
-                    
+
                 case SummingModeEnum.SUMMINGMODE_DYNAMIC:
                     double sigma = chromPeak.Width / 2.35;
 
@@ -201,7 +200,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     int closestLowerScan = run.GetClosestMSScan(lowerScan, Globals.ScanSelectionMode.CLOSEST);
 
                     int upperScan = (int)Math.Round(chromPeak.XValue + (this.Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
-                    int closestUpperScan = run.GetClosestMSScan(upperScan,Globals.ScanSelectionMode.CLOSEST);
+                    int closestUpperScan = run.GetClosestMSScan(upperScan, Globals.ScanSelectionMode.CLOSEST);
 
                     ScanSet scanset = scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
                     scansetFactory.TrimScans(scanset, this.Parameters.MaxScansSummedInDynamicSumming);
@@ -213,7 +212,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
 
-            
+
         }
 
         private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)
@@ -228,7 +227,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         }
 
-        
+
         //TODO: delete this if unused
         protected void SetDefaultMSPeakDetectorSettings(double peakBR, double signoiseRatio, Globals.PeakFitType peakFitType, bool isThresholded)
         {
@@ -314,6 +313,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
 
-        
+
     }
 }

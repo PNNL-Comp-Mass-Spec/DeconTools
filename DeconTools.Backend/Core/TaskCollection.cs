@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Core
         {
             foreach (Task task in taskList)
             {
-                if (task is IDeconvolutor) return task;
+                if (task is Deconvolutor) return task;
             }
             return null;    //didn't find deconvolutor        }
 

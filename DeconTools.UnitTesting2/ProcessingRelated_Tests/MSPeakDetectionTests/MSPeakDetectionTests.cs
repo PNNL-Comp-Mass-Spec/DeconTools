@@ -31,9 +31,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             sscc.Create();
 
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
-
-            MSGeneratorFactory msFactory = new MSGeneratorFactory();
-            Task msgen = msFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             
             
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);

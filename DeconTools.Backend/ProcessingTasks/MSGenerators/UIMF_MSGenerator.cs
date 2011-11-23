@@ -7,7 +7,7 @@ using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public class UIMF_MSGenerator : I_MSGenerator
+    public class UIMF_MSGenerator : MSGenerator
     {
 
         public UIMF_MSGenerator()

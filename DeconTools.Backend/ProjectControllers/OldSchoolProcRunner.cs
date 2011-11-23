@@ -5,6 +5,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
@@ -80,7 +81,7 @@ namespace DeconTools.Backend
             // Check.Require(validateFileExistance(paramFileName), "Could not process anything. Parameter file does not exist or is inaccessible");
 
 
-            
+
 
             Project.Reset();
             project = Project.getInstance();
@@ -89,7 +90,7 @@ namespace DeconTools.Backend
             this.paramFilename = paramFileName;
             this.project = Project.getInstance();
             Project.getInstance().LoadOldDecon2LSParameters(this.paramFilename);
-            this.IsosResultThreshold = 5000;       
+            this.IsosResultThreshold = 5000;
             this.exporterType = getExporterTypeFromOldParameters(Project.getInstance().Parameters.OldDecon2LSParameters);
 
             RunFactory runfactory = new RunFactory();
@@ -101,7 +102,7 @@ namespace DeconTools.Backend
             //Project.getInstance().RunCollection.Add(m_run);
 
 
-            m_run.ResultCollection.ResultType = GetResultType(m_run, Project.getInstance().Parameters.OldDecon2LSParameters); 
+            m_run.ResultCollection.ResultType = GetResultType(m_run, Project.getInstance().Parameters.OldDecon2LSParameters);
 
 
             Check.Assert(m_run != null, "Processing aborted. Could not handle supplied File(s)");
@@ -127,10 +128,10 @@ namespace DeconTools.Backend
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
-            
+
 
 
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(OldSchoolProcRunner)));
@@ -174,17 +175,14 @@ namespace DeconTools.Backend
             Task peakDetector = new DeconToolsPeakDetector(Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters);
             Project.getInstance().TaskCollection.TaskList.Add(peakDetector);
 
-
-            DeconvolutorFactory deconFactory = new DeconvolutorFactory();
-            Task deconvolutor = deconFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
+            Task deconvolutor = DeconvolutorFactory.CreateDeconvolutor(Project.getInstance().Parameters.OldDecon2LSParameters);
             Project.getInstance().TaskCollection.TaskList.Add(deconvolutor);
             Logger.Instance.AddEntry("Deconvolution_Algorithm = " + Project.getInstance().TaskCollection.GetDeconvolutorType(), Logger.Instance.OutputFilename);
 
             //for exporting peaks.  Also add a task for associating peaks with MSFeatures 
             if (Project.getInstance().Parameters.OldDecon2LSParameters.PeakProcessorParameters.WritePeaksToTextFile == true)
             {
-                DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory peakexporterFactory = new DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters.PeakListExporterFactory();
-                Task peakListTextExporter = peakexporterFactory.Create(this.exporterType, this.fileType, 10000, getPeakListFileName(this.exporterType));
+                Task peakListTextExporter = PeakListExporterFactory.Create(this.exporterType, this.fileType, 10000, getPeakListFileName(this.exporterType));
                 Project.getInstance().TaskCollection.TaskList.Add(peakListTextExporter);
 
                 Task peakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
@@ -231,16 +229,16 @@ namespace DeconTools.Backend
             Task scanResultUpdater = new ScanResultUpdater(Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
             Project.getInstance().TaskCollection.TaskList.Add(scanResultUpdater);
 
-            Task isosResultExporter = new IsosExporterFactory(this.IsosResultThreshold).CreateIsosExporter(m_run.ResultCollection.ResultType, this.ExporterType, setIsosOutputFileName(exporterType));
+            Task isosResultExporter = IsosExporterFactory.CreateIsosExporter(m_run.ResultCollection.ResultType, this.ExporterType, setIsosOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(isosResultExporter);
 
-            Task scanResultExporter = new DeconTools.Backend.Data.ScansExporterFactory().CreateScansExporter(fileType, this.ExporterType, setScansOutputFileName(exporterType));
+            Task scanResultExporter = ScansExporterFactory.CreateScansExporter(fileType, this.ExporterType, setScansOutputFileName(exporterType));
             Project.getInstance().TaskCollection.TaskList.Add(scanResultExporter);
 
 
         }
 
-     
+
 
         private void createTargetMassSpectra(Run m_run)
         {
@@ -376,11 +374,7 @@ namespace DeconTools.Backend
                 string formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}", overallProcessingTime.TotalHours, overallProcessingTime.Minutes, overallProcessingTime.Seconds);
 
                 Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
-
-                ProjectFacade pf = new ProjectFacade();
-
                 Logger.Instance.AddEntry("total features = " + m_run.ResultCollection.MSFeatureCounter);
-
                 Logger.Instance.WriteToFile(Logger.Instance.OutputFilename);
                 Logger.Instance.Close();
 
@@ -427,13 +421,13 @@ namespace DeconTools.Backend
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_scans.csv";
-                    
+
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_scans.sqlite";
-                    
+
                 default:
                     return baseFileName += "_scans.csv";
-                    
+
             }
         }
 
@@ -447,13 +441,13 @@ namespace DeconTools.Backend
             {
                 case Globals.ExporterType.TEXT:
                     return baseFileName += "_isos.csv";
-                    
+
                 case Globals.ExporterType.SQLite:
                     return baseFileName += "_isos.sqlite";
-                    
+
                 default:
                     return baseFileName += "_isos.csv";
-                    
+
             }
 
 

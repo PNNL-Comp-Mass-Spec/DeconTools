@@ -6,7 +6,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
-    public class DeconToolsSavitzkyGolaySmoother : ISmoother
+    public class DeconToolsSavitzkyGolaySmoother : Smoother
     {
         #region Properties
         private int rightParam;

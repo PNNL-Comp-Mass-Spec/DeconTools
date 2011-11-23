@@ -8,7 +8,7 @@ using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
-    public class GenericMSGenerator : I_MSGenerator
+    public class GenericMSGenerator : MSGenerator
     {
 
 

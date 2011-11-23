@@ -187,6 +187,7 @@
     <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
     <Compile Include="ProcessingTasks\O16O18PeakDataAppender.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectorFactory.cs" />
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\O16O18IsosResultTextFileExporter.cs" />
@@ -295,7 +296,7 @@
     <Compile Include="Parameters\GenericMSParameters.cs" />
     <Compile Include="ProcessingTasks\BasicTaskController.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\IDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\SimpleDecon.cs" />
     <Compile Include="ProcessingTasks\DeconvolutorFactory.cs" />
@@ -308,11 +309,11 @@
     <Compile Include="ProcessingTasks\I_TIC_Extractor.cs" />
     <Compile Include="ProcessingTasks\MSGeneratorFactory.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
-    <Compile Include="ProcessingTasks\MSGenerators\I_MSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\MSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
     <Compile Include="ProcessingTasks\SaturationDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
-    <Compile Include="ProcessingTasks\PeakDetectors\IPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\PeakDetector.cs" />
     <Compile Include="Core\Task.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\DeconEngine_MSParameters.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\IPeakListExporter.cs" />
@@ -322,7 +323,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultSqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResult_SqliteTable.cs" />
-    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IIsosResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IMFIsosResult_TextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultSqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultTextFileExporter.cs" />
@@ -332,7 +333,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteTable.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_TextFileExporter.cs" />
-    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\IScanResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResultExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_SqliteExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_TextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteExporter.cs" />
@@ -379,7 +380,7 @@
     <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\BasicZeroFiller.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
-    <Compile Include="ProcessingTasks\ZeroFillers\IZeroFiller.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\ZeroFiller.cs" />
     <Compile Include="Runs\BrukerRun.cs" />
     <Compile Include="Runs\ConcreteXYDataRun.cs" />
     <Compile Include="Runs\DeconToolsRun.cs" />
@@ -418,6 +419,11 @@
     <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\SaturationIMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\ScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\StandardIMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\TraditionalScanBasedWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />

@@ -57,6 +57,13 @@ namespace DeconTools.Backend
             ERROR
         }
 
+
+        public enum PeakDetectorType
+        {
+            DeconTools,
+            DeconToolsChromPeakDetector
+        }
+
         public enum DeconvolutionType
         {
             THRASH,
@@ -104,6 +111,14 @@ namespace DeconTools.Backend
             ASCENDING,
             DESCENDING,
             CLOSEST
+        }
+
+        public enum ScanBasedWorkflowType
+        {
+            Standard,
+            UIMFStandard,
+            UIMFSaturationWorkflow,
+
         }
 
 

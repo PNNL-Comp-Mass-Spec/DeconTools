@@ -5,7 +5,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
-    public class SimpleDecon : IDeconvolutor
+    public class SimpleDecon : Deconvolutor
     {
         private double mzVar;
 
@@ -30,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         public override void deconvolute(ResultCollection resultList)
         {
-            Task test = Project.getInstance().TaskCollection.GetTask(typeof(I_MSGenerator));
+            Task test = Project.getInstance().TaskCollection.GetTask(typeof(MSGenerator));
 
             List<IPeak> localPeaklist = new List<IPeak>(resultList.Run.PeakList);
 

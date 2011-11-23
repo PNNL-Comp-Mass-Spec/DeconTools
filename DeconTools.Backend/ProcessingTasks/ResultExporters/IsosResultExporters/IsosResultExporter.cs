@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public abstract class IIsosResultExporter : Task
+    public abstract class IsosResultExporter : Task
     {
         #region Constructors
         #endregion

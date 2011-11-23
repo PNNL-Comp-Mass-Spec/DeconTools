@@ -2,7 +2,7 @@
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public abstract class IScanResultExporter : Task
+    public abstract class ScanResultExporter : Task
     {
         #region Properties
         #endregion

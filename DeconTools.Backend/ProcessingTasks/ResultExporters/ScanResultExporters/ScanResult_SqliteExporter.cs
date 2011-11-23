@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public abstract class ScanResult_SqliteExporter : IScanResultExporter
+    public abstract class ScanResult_SqliteExporter : ScanResultExporter
     {
         protected DbConnection cnn;
 

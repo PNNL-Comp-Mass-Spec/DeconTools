@@ -5,7 +5,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public abstract class I_MSGenerator : Task
+    public abstract class MSGenerator : Task
     {
 
 

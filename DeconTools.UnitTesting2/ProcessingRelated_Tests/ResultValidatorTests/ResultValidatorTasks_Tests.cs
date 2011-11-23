@@ -21,8 +21,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             HornDeconvolutor decon = new HornDeconvolutor();
@@ -47,8 +46,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            I_MSGenerator msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+            
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             RapidDeconvolutor decon = new RapidDeconvolutor();
