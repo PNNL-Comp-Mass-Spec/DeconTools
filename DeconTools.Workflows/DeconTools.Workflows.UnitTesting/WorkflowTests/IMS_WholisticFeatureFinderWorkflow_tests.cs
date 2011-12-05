@@ -22,8 +22,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = new UIMFRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.sarcUIMFFile1);
 
 
-            IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
-            workflow.Execute();
+            //IMS_SmartFeatureFinderWorkflow workflow = new IMS_SmartFeatureFinderWorkflow(run, masterPeaksFilepath);
+            //workflow.Execute();
 
 
 
