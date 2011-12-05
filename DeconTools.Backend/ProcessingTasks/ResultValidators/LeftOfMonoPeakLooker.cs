@@ -36,7 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             if (currentResult.IsotopicProfile == null) return;
             MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
 
-            MSPeak peakToTheLeft = lookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
+            MSPeak peakToTheLeft = LookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
             if (peakToTheLeft == null) return;  // no peak found... so no problem.
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)    //if peak-to-the-left exceeds min Ratio, then flag it
@@ -50,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #endregion
 
         #region Private Methods
-        private MSPeak lookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<IPeak> peakList)
+        private MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<IPeak> peakList)
         {
             double mzTol = monoPeak.Width;
 

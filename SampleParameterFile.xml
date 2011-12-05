@@ -5,7 +5,7 @@
 		<PeakBackgroundRatio>1.3</PeakBackgroundRatio>
 		<SignalToNoiseThreshold>2</SignalToNoiseThreshold>
 		<PeakFitType>QUADRATIC</PeakFitType>
-	<WritePeaksToTextFile>False</WritePeaksToTextFile>
+		<WritePeaksToTextFile>False</WritePeaksToTextFile>
 	</PeakParameters>
 	<DTAGenerationParameters>
 		<MinScan>1</MinScan>
@@ -18,10 +18,10 @@
 		<CCMass>1.00727638</CCMass>
 		<WindowSizeToCheck>5</WindowSizeToCheck>
 		<ConsiderMultiplePrecursors>False</ConsiderMultiplePrecursors>
-	<IsolationWindowSize>3</IsolationWindowSize>
-	<OutputType>DTA</OutputType>
-	<IsProfileDataForMzXML>False</IsProfileDataForMzXML>
-	<IgnoreMSnScans>False</IgnoreMSnScans>
+		<IsolationWindowSize>3</IsolationWindowSize>
+		<OutputType>DTA</OutputType>
+		<IsProfileDataForMzXML>False</IsProfileDataForMzXML>
+		<IgnoreMSnScans>False</IgnoreMSnScans>
 	</DTAGenerationParameters>
 	<HornTransformParameters>
 		<TagFormula />
@@ -32,7 +32,7 @@
 		<MaxCharge>10</MaxCharge>
 		<MaxMW>10000</MaxMW>
 		<NumPeaksForShoulder>1</NumPeaksForShoulder>
-		<O16O18Media>False</O16O18Media>
+		<O16O18Media>True</O16O18Media>
 		<PeptideMinBackgroundRatio>1</PeptideMinBackgroundRatio>
 		<UseAbsolutePeptideIntensity>False</UseAbsolutePeptideIntensity>
 		<AbsolutePeptideIntensity>0</AbsolutePeptideIntensity>
@@ -42,37 +42,38 @@
 		<CCMass>1.00727649</CCMass>
 		<IsotopeFitType>AREA</IsotopeFitType>
 		<UseMercuryCaching>True</UseMercuryCaching>
-	<SumSpectra>False</SumSpectra>
-	<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
-	<NumberOfScansToSumOver>1</NumberOfScansToSumOver>
-	<NumberOfScansToAdvance>0</NumberOfScansToAdvance>
-	<SumSpectraAcrossFrameRange>True</SumSpectraAcrossFrameRange>
-	<NumberOfFramesToSumOver>3</NumberOfFramesToSumOver>
-	<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
-	<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
-	<RightFitStringencyFactor>1</RightFitStringencyFactor>
-	<UseRAPIDDeconvolution>False</UseRAPIDDeconvolution>
+		<SumSpectra>False</SumSpectra>
+		<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
+		<NumberOfScansToSumOver>0</NumberOfScansToSumOver>
+		<NumberOfScansToAdvance>0</NumberOfScansToAdvance>
+		<SumSpectraAcrossFrameRange>True</SumSpectraAcrossFrameRange>
+		<NumberOfFramesToSumOver>3</NumberOfFramesToSumOver>
+		<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
+		<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
+		<RightFitStringencyFactor>1</RightFitStringencyFactor>
+		<UseRAPIDDeconvolution>False</UseRAPIDDeconvolution>
 		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
 		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
-		</HornTransformParameters>
+	</HornTransformParameters>
 	<Miscellaneous>
 		<UseScanRange>False</UseScanRange>
 		<MinScan>-2147483648</MinScan>
 		<MaxScan>2147483647</MaxScan>
 		<UseMZRange>True</UseMZRange>
-		<MinMZ>200</MinMZ>
+		<MinMZ>100</MinMZ>
 		<MaxMZ>2000</MaxMZ>
 		<ApplySavitzkyGolay>False</ApplySavitzkyGolay>
 		<SGNumLeft>2</SGNumLeft>
 		<SGNumRight>2</SGNumRight>
 		<SGOrder>2</SGOrder>
-	<ZeroFillDiscontinousAreas>False</ZeroFillDiscontinousAreas>
+		<ZeroFillDiscontinousAreas>False</ZeroFillDiscontinousAreas>
 		<NumZerosToFill>3</NumZerosToFill>
 		<ProcessMSMS>False</ProcessMSMS>
 		<ExportFileType>TEXT</ExportFileType>
 		<DetectPeaksOnly_NoDeconvolution>False</DetectPeaksOnly_NoDeconvolution>
 		<Process_MS>True</Process_MS>
-		</Miscellaneous>
+		<ScanBasedWorkflowType>standard</ScanBasedWorkflowType>
+	</Miscellaneous>
 	<ElementIsotopes>
 		<NumElements>103</NumElements>
 		<Element>

@@ -42,20 +42,36 @@ namespace DeconTools.Backend.Workflows
 
             //TODO: update this so that FrameNum is changed to Frame_index
 
-            bool sumAcrossLCFrames = OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossFrameRange;
+           
+
+            int minFrame = 0;
+            int maxFrame = int.MaxValue;
 
             FrameSetCollectionCreator frameSetcreator;
-            if (sumAcrossLCFrames)
+
+            int numFramesSummed;
+
+            if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossFrameRange)
             {
-                frameSetcreator = new FrameSetCollectionCreator(Run, OldDecon2LsParameters.HornTransformParameters.MinScan,
-                    OldDecon2LsParameters.HornTransformParameters.MaxScan, OldDecon2LsParameters.HornTransformParameters.NumFramesToSumOver, 1);
+                numFramesSummed = OldDecon2LsParameters.HornTransformParameters.NumFramesToSumOver;
             }
             else
             {
-                int numSummed = 1;   // this means we will NOT sum across LC Frames
-                frameSetcreator = new FrameSetCollectionCreator(Run, OldDecon2LsParameters.HornTransformParameters.MinScan,
-                    OldDecon2LsParameters.HornTransformParameters.MaxScan, numSummed, 1);
+                numFramesSummed = 1;
             }
+            
+            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
+            {
+                    
+                frameSetcreator = new FrameSetCollectionCreator(Run, OldDecon2LsParameters.HornTransformParameters.MinScan,
+                        OldDecon2LsParameters.HornTransformParameters.MaxScan, numFramesSummed, 1);
+                
+            }
+            else
+            {
+                frameSetcreator = new FrameSetCollectionCreator(Run, numFramesSummed, 1);
+            }
+          
             frameSetcreator.Create();
 
 
@@ -64,14 +80,8 @@ namespace DeconTools.Backend.Workflows
             {
                 int centerScan = (Run.MinScan + Run.MaxScan + 1) / 2;
 
-                int numSummed = Run.MaxScan - Run.MinScan + 1;
-                if (numSummed % 2 != 0)
-                {
-                    numSummed++;
-                }
-
                 uimfRun.ScanSetCollection.ScanSetList.Clear();
-                ScanSet scanset = new ScanSet(centerScan, Run.MinScan, Run.MaxScan);
+                var scanset = new ScanSet(centerScan, Run.MinScan, Run.MaxScan);
                 uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
             }
             else
@@ -126,9 +136,11 @@ namespace DeconTools.Backend.Workflows
                 {
                     uimfRun.CurrentScanSet = scanset;
                     ExecuteProcessingTasks();
+
+                    ReportProgress();
                 }
 
-                ReportProgress();
+                
             }
         }
 
@@ -161,7 +173,7 @@ namespace DeconTools.Backend.Workflows
 
             string logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
-            int numScansBetweenProgress = 20;
+            int numScansBetweenProgress = 1;
 
 
             bool imsScanIsLastInFrame = Run.ScanSetCollection.GetLastScanSet() == Run.CurrentScanSet.PrimaryScanNumber;
@@ -171,7 +183,7 @@ namespace DeconTools.Backend.Workflows
                 Console.WriteLine(DateTime.Now + "\t" + logText);
             }
 
-            if (BackgroundWorker != null)
+            if (BackgroundWorker != null && scanNum%numScansBetweenProgress==0)
             {
 
                 BackgroundWorker.ReportProgress((int)percentDone, userstate);

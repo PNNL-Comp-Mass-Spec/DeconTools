@@ -3,28 +3,28 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Workflows;
 using GWSFileUtilities;
 
 namespace DeconToolsAutoProcessV1
 {
     public partial class Form1 : Form
     {
-        string[] inputFileList;
-        string parameterFileName;
-        string startingFolderPath;
-        Globals.MSFileType msFileType;
-        BackgroundWorker bw;
+        string[] _inputFileList;
+        string _parameterFileName;
+        string _startingFolderPath;
+        private string _outputPath;
+        BackgroundWorker _bw;
 
-        bool isRunMergingModeUsed;
-        bool m_createMSFeatureForEachPeak;
+        bool _isRunMergingModeUsed;
+        bool _createMSFeatureForEachPeak;
 
-        Globals.ProjectControllerType m_projectControllerType;
+        Globals.ProjectControllerType _projectControllerType;
 
 
 
@@ -32,64 +32,64 @@ namespace DeconToolsAutoProcessV1
         {
             InitializeComponent();
 
-            getSettings();
-            this.progressBar2.Maximum = 10;
-            this.Text = "DeconTools AutoProcessor_" + AssemblyInfoRetriever.GetVersion(typeof(Task),false);
+            GetSettings();
+            progressBar2.Maximum = 10;
+
+            this.Text = "DeconTools AutoProcessor_" + AssemblyInfoRetriever.GetVersion(typeof(Task), false);
         }
 
-        private void getSettings()
+       
+
+        private void GetSettings()
         {
             try
             {
-                startingFolderPath = Properties.Settings.Default.startingFolder;
+                _startingFolderPath = Properties.Settings.Default.startingFolder;
             }
             catch (Exception)
             {
 
-                startingFolderPath = "";
+                _startingFolderPath = "";
             }
 
-            this.m_createMSFeatureForEachPeak = Properties.Settings.Default.MSFeatureForEachPeak;
-            this.isRunMergingModeUsed = Properties.Settings.Default.MergeRuns; 
+            this._createMSFeatureForEachPeak = Properties.Settings.Default.MSFeatureForEachPeak;
+            this._isRunMergingModeUsed = Properties.Settings.Default.MergeRuns; 
             
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            inputFileList = getInputFilenames();
-            if (inputFileList == null) return;
+            _inputFileList = getInputFilenames();
+            if (_inputFileList == null) return;
 
-            parameterFileName = getParameterFileName();
-            if (parameterFileName == null) return;
-
-            msFileType = getMSFileType();
-            if (msFileType == Globals.MSFileType.Undefined) return;
+            _parameterFileName = getParameterFileName();
+            if (_parameterFileName == null) return;
         }
 
-        private Globals.MSFileType getMSFileType()
-        {
-            MSFileTypeSelectorForm form;
-            if (this.inputFileList != null && this.inputFileList.Length > 0)
-            {
-                form = new MSFileTypeSelectorForm(this.inputFileList[0]);
-            }
-            else
-            {
-                form = new MSFileTypeSelectorForm();
-            }
-            form.Location = Cursor.Position;
+        //private Globals.MSFileType getMSFileType()
+        //{
+        //    MSFileTypeSelectorForm form;
+        //    if (this._inputFileList != null && this._inputFileList.Length > 0)
+        //    {
+        //        form = new MSFileTypeSelectorForm(this._inputFileList[0]);
+        //    }
+        //    else
+        //    {
+        //        form = new MSFileTypeSelectorForm();
+        //    }
+        //    form.Location = Cursor.Position;
 
 
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                return form.SelectedFiletype;
-            }
-            else
-            {
-                return Globals.MSFileType.Undefined;
-            }
-        }
+        //    if (form.ShowDialog() == DialogResult.OK)
+        //    {
+        //        return form.SelectedFiletype;
+        //    }
+        //    else
+        //    {
+        //        return Globals.MSFileType.Undefined;
+        //    }
+        //}
 
         private string getParameterFileName()
         {
@@ -112,14 +112,14 @@ namespace DeconToolsAutoProcessV1
 
         private string[] getInputFilenames()
         {
-            MultiFileSelectionForm frm = new MultiFileSelectionForm(this.startingFolderPath,"*.*");
+            MultiFileSelectionForm frm = new MultiFileSelectionForm(this._startingFolderPath,"*.*");
             frm.Text = "Select files for processing...";
             frm.StartPosition = FormStartPosition.Manual;
             frm.Location = this.Location;
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                this.startingFolderPath = frm.StartingFolderPath;
-                if (this.startingFolderPath != null) Properties.Settings.Default.startingFolder = this.startingFolderPath;
+                this._startingFolderPath = frm.StartingFolderPath;
+                if (this._startingFolderPath != null) Properties.Settings.Default.startingFolder = this._startingFolderPath;
 
                 return frm.SelectedFileList.ToArray();
             }
@@ -136,13 +136,13 @@ namespace DeconToolsAutoProcessV1
 
         private void btnAutoProcess_Click(object sender, EventArgs e)
         {
-            if (bw != null && bw.IsBusy)
+            if (_bw != null && _bw.IsBusy)
             {
                 MessageBox.Show("Already processing...  please wait or click 'Abort'");
                 return;
             }
 
-            if (this.inputFileList == null || this.parameterFileName == null)
+            if (this._inputFileList == null || this._parameterFileName == null)
             {
                 MessageBox.Show("Please run the Setup Wizard first");
                 return;
@@ -150,15 +150,15 @@ namespace DeconToolsAutoProcessV1
 
             this.txtProcessingStatus.Text = "Working...";
 
-            bw = new BackgroundWorker();
+            _bw = new BackgroundWorker();
 
-            bw.WorkerReportsProgress = true;
-            bw.WorkerSupportsCancellation = true;
+            _bw.WorkerReportsProgress = true;
+            _bw.WorkerSupportsCancellation = true;
 
-            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-            bw.RunWorkerAsync();
+            _bw.DoWork += bw_DoWork;
+            _bw.ProgressChanged += bw_ProgressChanged;
+            _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            _bw.RunWorkerAsync();
 
 
             //for (int i = 0; i < inputFileList.Length; i++)
@@ -247,45 +247,32 @@ namespace DeconToolsAutoProcessV1
             BackgroundWorker bw = (BackgroundWorker)sender;
 
 
-            //TODO: finish this... re-think and re-organize
-            switch (m_projectControllerType)
-            {
-                case Globals.ProjectControllerType.UNDEFINED:
-                    break;
-                case Globals.ProjectControllerType.STANDARD:
-                    break;
-                case Globals.ProjectControllerType.BONES_CONTROLLER:
-                    break;
-                case Globals.ProjectControllerType.RUN_MERGER_CONTROLLER:
-                    break;
-                case Globals.ProjectControllerType.KOREA_IMS_PEAKSONLY_CONTROLLER:
-                    break;
-                default:
-                    break;
-            }
 
 
             try
             {
-                if (this.isRunMergingModeUsed)
+
+                for (int i = 0; i < _inputFileList.Length; i++)
                 {
-                    ProjectController runner = new RunMergingProjectController(inputFileList.ToList(), this.msFileType, this.parameterFileName,bw);
-                    runner.Execute();
+                    var workflow = ScanBasedWorkflow.CreateWorkflow(_inputFileList[i], _parameterFileName, _outputPath, bw);
+                    workflow.Execute();
                 }
-                else if (this.m_createMSFeatureForEachPeak)
-                {
-                    ProjectController runner = new BonesProjectController(inputFileList.ToList(), this.msFileType, this.parameterFileName,3, bw);
-                    runner.Execute();
-                }
-                else
-                {
-                    for (int i = 0; i < inputFileList.Length; i++)
-                    {
-                        OldSchoolProcRunner runner = new OldSchoolProcRunner(inputFileList[i], this.msFileType, this.parameterFileName, bw);
-                        runner.IsosResultThreshold = 25000;
-                        runner.Execute();
-                    }
-                }
+
+                //No longer supported. If collaborators still use, will need to create a new workflow and use that. 
+                //if (this._isRunMergingModeUsed)
+                //{
+                //    ProjectController runner = new RunMergingProjectController(_inputFileList.ToList(), this.msFileType, this._parameterFileName,bw);
+                //    runner.Execute();
+                //}
+                //else if (this._CreateMSFeatureForEachPeak)
+                //{
+                //    ProjectController runner = new BonesProjectController(_inputFileList.ToList(), this.msFileType, this._parameterFileName,3, bw);
+                //    runner.Execute();
+                //}
+                //else
+                //{
+                    
+                //}
             }
             catch (Exception ex)
             {
@@ -300,49 +287,6 @@ namespace DeconToolsAutoProcessV1
             }
         }
 
-        private void CALL_DeconConsole(string currentFilename)
-        {
-            string deconConsoleArgument = buildArgument(currentFilename, msFileType, parameterFileName);
-
-
-
-
-            System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            proc.EnableRaisingEvents = true;
-            proc.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\DeconConsole.exe";
-            proc.StartInfo.Arguments = deconConsoleArgument;
-
-            proc.Start();
-            proc.WaitForExit();
-        }
-
-        private string buildArgument(string currentFilename, Globals.MSFileType msFileType, string parameterFileName)
-        {
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(" ");
-            sb.Append("\"");
-            sb.Append(currentFilename);
-            sb.Append("\"");
-
-            sb.Append(" ");
-            sb.Append(msFileType.ToString());
-
-            sb.Append(" ");
-            sb.Append("\"");
-            sb.Append(parameterFileName);
-            sb.Append("\"");
-
-            string argument = sb.ToString();
-            Console.WriteLine(argument);
-            return argument;
-        }
-
-        private void CALL_DeconConsole()
-        {
-
-        }
 
         private void Cancel_Click(object sender, EventArgs e)
         {
@@ -351,9 +295,9 @@ namespace DeconToolsAutoProcessV1
 
         private void btnAbort_Click(object sender, EventArgs e)
         {
-            if (this.bw != null)
+            if (this._bw != null)
             {
-                bw.CancelAsync();
+                _bw.CancelAsync();
             }
 
             resetStatus();
@@ -374,9 +318,9 @@ namespace DeconToolsAutoProcessV1
         private void saveSettings()
         {
 
-            if (this.startingFolderPath != null) Properties.Settings.Default.startingFolder = this.startingFolderPath;
-            Properties.Settings.Default.MSFeatureForEachPeak = m_createMSFeatureForEachPeak;
-            Properties.Settings.Default.MergeRuns = isRunMergingModeUsed;
+            if (this._startingFolderPath != null) Properties.Settings.Default.startingFolder = this._startingFolderPath;
+            Properties.Settings.Default.MSFeatureForEachPeak = _createMSFeatureForEachPeak;
+            Properties.Settings.Default.MergeRuns = _isRunMergingModeUsed;
             
             Properties.Settings.Default.Save();
 
@@ -385,13 +329,13 @@ namespace DeconToolsAutoProcessV1
         private void btnShowOptionsForm_Click(object sender, EventArgs e)
         {
             //OptionsForm frm = new OptionsForm(this.m_projectControllerType);
-            OptionsForm frm = new OptionsForm(this.isRunMergingModeUsed, this.m_createMSFeatureForEachPeak);
+            OptionsForm frm = new OptionsForm(this._isRunMergingModeUsed, this._createMSFeatureForEachPeak);
             frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                this.m_projectControllerType = frm.ProjectControllerType;
-                this.isRunMergingModeUsed = frm.IsResultMergingModeUsed;
-                this.m_createMSFeatureForEachPeak = frm.CreateMSFeatureForEachPeakMode;
+                this._projectControllerType = frm.ProjectControllerType;
+                this._isRunMergingModeUsed = frm.IsResultMergingModeUsed;
+                this._createMSFeatureForEachPeak = frm.CreateMSFeatureForEachPeakMode;
             }
             else
             {
@@ -426,8 +370,8 @@ namespace DeconToolsAutoProcessV1
             string firstFile = droppedFiles.First();
 
 
-            bool isFile = !System.IO.Directory.Exists(firstFile) &&
-                         System.IO.File.Exists(firstFile);
+            bool isFile = !Directory.Exists(firstFile) &&
+                         File.Exists(firstFile);
 
 
 
@@ -438,17 +382,30 @@ namespace DeconToolsAutoProcessV1
 
             if (isDir)
             {
-                this.txtOutputPath.Text = firstFile;
+                txtOutputPath.Text = firstFile;
                 return;
             }
 
             if (isFile)
             {
-                this.txtOutputPath.Text = Path.GetDirectoryName(firstFile);
+                txtOutputPath.Text = Path.GetDirectoryName(firstFile);
             }
 
 
 
+        }
+
+        private void txtOutputPath_TextChanged(object sender, EventArgs e)
+        {
+              if (Directory.Exists(txtOutputPath.Text))
+              {
+                  _outputPath = txtOutputPath.Text;
+
+              }
+              else
+              {
+                  _outputPath = null;
+              }
         }
 
 

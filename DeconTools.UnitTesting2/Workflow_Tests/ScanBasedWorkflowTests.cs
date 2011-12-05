@@ -20,7 +20,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.PeakProcessorParameters.WritePeaksToTextFile = true;
 
 
-            var workflow = ScanBasedWorkflow.CreateWorkflow(parameters, run);
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
 
             
@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.PeakProcessorParameters.WritePeaksToTextFile = true;
             parameters.PeakProcessorParameters.PeakBackgroundRatio = 5;
 
-            var workflow = ScanBasedWorkflow.CreateWorkflow(parameters, run);
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
         }
 

@@ -24,21 +24,23 @@ namespace DeconTools.Backend.Core
             if (this.IsotopicProfile == null) 
                 return base.ToString();
 
+            string delim = "; ";
+
             StringBuilder sb = new StringBuilder();
             sb.Append(this.MSFeatureID);
-            sb.Append("\t");
+            sb.Append(delim);
             sb.Append(this.ScanSet.PrimaryScanNumber);
-            sb.Append("\t");
+            sb.Append(delim);
 
             sb.Append(this.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
-            sb.Append("\t");
+            sb.Append(delim);
             sb.Append(this.IsotopicProfile.ChargeState);
-            sb.Append("\t");
+            sb.Append(delim);
             sb.Append(this.IsotopicProfile.IntensityAggregate);
-            sb.Append("\t");
+            sb.Append(delim);
             sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));
-            sb.Append("\t");
-            sb.Append(this.InterferenceScore.ToString("0.0000") + "\n");
+            sb.Append(delim);
+            sb.Append(this.InterferenceScore.ToString("0.0000"));
 
             return sb.ToString();
         }

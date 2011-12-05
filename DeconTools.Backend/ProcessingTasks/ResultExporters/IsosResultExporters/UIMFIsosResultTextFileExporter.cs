@@ -10,6 +10,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         private int triggerVal;
         private char delimiter;
 
+ 
+
+
+
         #region Constructors
         public UIMFIsosResultTextFileExporter(string fileName)
             : this(fileName, 1000000)
@@ -55,17 +59,28 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #endregion
 
+
+
+
+
         protected override string buildIsosResultOutput(DeconTools.Backend.Core.IsosResult result)
         {
             Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
             UIMFIsosResult uimfResult = (UIMFIsosResult)result;
 
+            if (MSFeatureIDsWritten.Contains(result.MSFeatureID))   //this prevents duplicate IDs from being written
+            {
+                return string.Empty;
+            }
+
+            MSFeatureIDsWritten.Add(result.MSFeatureID);
+
             StringBuilder sb = new StringBuilder();
           
             //We wish to report the FrameNum Not the FrameIndex.   FrameNum is unique
+            sb.Append(uimfResult.MSFeatureID);
+            sb.Append(delimiter);
             sb.Append(UIMFLibraryAdapter.getInstance(result.Run.Filename).Datareader.GetFrameNumByIndex(uimfResult.FrameSet.PrimaryFrame));
-
-
             sb.Append(delimiter);
             sb.Append(uimfResult.ScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
             sb.Append(delimiter);
@@ -108,7 +123,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         protected override string buildHeaderLine()
         {
             StringBuilder sb = new StringBuilder();
-
+            sb.Append("msfeature_id");
+            sb.Append(Delimiter);
             sb.Append("frame_num");
             sb.Append(Delimiter);
             sb.Append("ims_scan_num");

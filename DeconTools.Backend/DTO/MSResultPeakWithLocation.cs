@@ -87,33 +87,33 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public override int CompareTo(object obj)
-        {
-            IPeak secondPeak = obj as IPeak;
-            if (secondPeak == null)
-            {
-                return -1;
-            }
-            else
-            {
+        //public override int CompareTo(object obj)
+        //{
+        //    IPeak secondPeak = obj as IPeak;
+        //    if (secondPeak == null)
+        //    {
+        //        return -1;
+        //    }
+        //    else
+        //    {
 
-                   //we need a system level global parameter that is the tolerance in PPM
-                   //TODO
-                    double toleranceInPPM = 20;
-                    double differenceInPPM = Math.Abs(1000000 * (secondPeak.XValue - this.XValue) / this.XValue);
+        //           //we need a system level global parameter that is the tolerance in PPM
+        //           //TODO
+        //            double toleranceInPPM = 20;
+        //            double differenceInPPM = Math.Abs(1000000 * (secondPeak.XValue - this.XValue) / this.XValue);
 
-                    if (differenceInPPM <= toleranceInPPM)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return this.XValue.CompareTo(secondPeak.XValue);
-                    }
+        //            if (differenceInPPM <= toleranceInPPM)
+        //            {
+        //                return 0;
+        //            }
+        //            else
+        //            {
+        //                return this.XValue.CompareTo(secondPeak.XValue);
+        //            }
 
-            }
+        //    }
 
-        }
+        //}
 
         /*
         public void updateFrameScansRange(BitArray2D frameScansFound)

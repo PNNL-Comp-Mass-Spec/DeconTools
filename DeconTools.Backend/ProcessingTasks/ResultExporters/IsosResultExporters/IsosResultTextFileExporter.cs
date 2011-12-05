@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using System.IO;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public abstract class IsosResultTextFileExporter : IsosResultExporter
     {
-
+       
 
         #region Properties
         public virtual char Delimiter { get; set; }
@@ -19,6 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public string FileName { get; set; }
 
         public override int TriggerToExport {get;set;}
+
        
 
         #endregion
@@ -32,7 +31,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 foreach (IsosResult result in isosResultList)
                 {
                     string isosResultOutput = buildIsosResultOutput(result);
-                    writer.WriteLine(isosResultOutput);
+                    
+                    if (!string.IsNullOrEmpty(isosResultOutput))
+                    {
+                        writer.WriteLine(isosResultOutput);   
+                    }
+
+                    
                 }
 
                 writer.Flush();

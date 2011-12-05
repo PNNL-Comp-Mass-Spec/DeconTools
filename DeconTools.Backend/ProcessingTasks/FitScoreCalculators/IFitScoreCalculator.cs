@@ -8,11 +8,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     public abstract class IFitScoreCalculator : Task
     {
-        public abstract void GetFitScores(ResultCollection resultColl);
+        public abstract void GetFitScores(IEnumerable<IsosResult> isosResults);
 
         public override void Execute(ResultCollection resultColl)
         {
-            GetFitScores(resultColl);
+            GetFitScores(resultColl.IsosResultBin);
         }
     }
 }

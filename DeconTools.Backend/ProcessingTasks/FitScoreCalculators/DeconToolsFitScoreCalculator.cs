@@ -1,8 +1,8 @@
-﻿using DeconTools.Backend.Core;
+﻿using System.Collections.Generic;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-using DeconTools.Utilities;
 
 
 
@@ -31,14 +31,10 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         }
 
 
-        public override void GetFitScores(ResultCollection resultList)
+        public override void GetFitScores(IEnumerable<IsosResult> isosResults)
         {
-            Check.Require(resultList != null, "FitScoreCalculator failed. ResultCollection is null");
-            Check.Require(resultList.Run != null, "FitScoreCalculator failed. Run is null");
-            Check.Require(resultList.Run.CurrentScanSet != null, "FitScoreCalculator failed. Current scanset has not been defined");
 
-
-            foreach (IsosResult result in resultList.IsosResultBin)
+            foreach (IsosResult result in isosResults)
             {
                 //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
                 PeptideTarget mt = new PeptideTarget();
@@ -67,7 +63,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 AreaFitter areafitter = new AreaFitter(theorXYData, result.Run.XYData, 0.1);
                 double fitval = areafitter.getFit();
 
-                if (fitval == double.NaN || fitval > 1) fitval = 1;
+                if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
 
                 result.IsotopicProfile.Score = fitval;
 

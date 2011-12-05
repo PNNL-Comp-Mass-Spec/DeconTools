@@ -60,8 +60,8 @@
             // 
             // btnSetupWizard
             // 
-            this.btnSetupWizard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetupWizard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSetupWizard.BackColor = System.Drawing.Color.GhostWhite;
             this.btnSetupWizard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetupWizard.Location = new System.Drawing.Point(8, 8);
@@ -86,8 +86,8 @@
             // 
             // Cancel
             // 
-            this.Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Cancel.BackColor = System.Drawing.Color.GhostWhite;
             this.Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Cancel.Location = new System.Drawing.Point(232, 277);
@@ -100,8 +100,8 @@
             // 
             // btnAbort
             // 
-            this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.BackColor = System.Drawing.Color.GhostWhite;
             this.btnAbort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbort.Location = new System.Drawing.Point(241, 48);
@@ -127,8 +127,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.progressBar2);
             this.groupBox1.Controls.Add(this.txtTotalFeatures);
             this.groupBox1.Controls.Add(this.txtProcessingStatus);
@@ -203,8 +203,8 @@
             // 
             // txtFile
             // 
-            this.txtFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFile.BackColor = System.Drawing.Color.GhostWhite;
             this.txtFile.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFile.Location = new System.Drawing.Point(37, 16);
@@ -305,8 +305,8 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(6, 55);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(317, 22);
@@ -314,8 +314,8 @@
             // 
             // btnShowOptionsForm
             // 
-            this.btnShowOptionsForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowOptionsForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowOptionsForm.BackColor = System.Drawing.Color.GhostWhite;
             this.btnShowOptionsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowOptionsForm.Location = new System.Drawing.Point(8, 277);
@@ -333,13 +333,14 @@
             this.txtOutputPath.Name = "txtOutputPath";
             this.txtOutputPath.Size = new System.Drawing.Size(284, 20);
             this.txtOutputPath.TabIndex = 6;
+            this.txtOutputPath.TextChanged += new System.EventHandler(this.txtOutputPath_TextChanged);
             this.txtOutputPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtOutputPath_DragDrop);
             this.txtOutputPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.basic_dragEnter);
             // 
             // btnSetOutputPath
             // 
-            this.btnSetOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSetOutputPath.BackColor = System.Drawing.Color.GhostWhite;
             this.btnSetOutputPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetOutputPath.Location = new System.Drawing.Point(298, 322);
@@ -361,6 +362,7 @@
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -380,8 +382,8 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DeconTools AutoProcessor V1.0";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

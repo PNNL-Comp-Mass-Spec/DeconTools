@@ -11,6 +11,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Properties
         public abstract int TriggerToExport { get; set; }
+
+        protected List<int> MSFeatureIDsWritten = new List<int>();
+
         #endregion
 
         #region Public Methods
@@ -43,6 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             if (resultColl.ResultList.Count >= TriggerToExport || isLastScan)
             {
                 ExportIsosResults(resultColl.ResultList);
+                MSFeatureIDsWritten.Clear();
                 resultColl.ResultList.Clear();
             }
 

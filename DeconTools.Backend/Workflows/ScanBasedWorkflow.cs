@@ -16,6 +16,7 @@ using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
+using DeconToolsV2.HornTransform;
 
 namespace DeconTools.Backend.Workflows
 {
@@ -66,38 +67,38 @@ namespace DeconTools.Backend.Workflows
 
 
         #region Factory methods
-        public static ScanBasedWorkflow CreateWorkflow(string parameterFile, string datasetFileName, Globals.ScanBasedWorkflowType workflowType = Globals.ScanBasedWorkflowType.Standard,
-            string outputFolderPath = null,
-            BackgroundWorker backgroundWorker = null)
+        public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
 
             var run = new RunFactory().CreateRun(datasetFileName);
             var parameters = new OldDecon2LSParameters();
             parameters.Load(parameterFile);
 
-            return CreateWorkflow(parameters, run, workflowType, outputFolderPath, backgroundWorker);
+            return CreateWorkflow(run, parameters, outputFolderPath, backgroundWorker);
 
         }
 
 
-        public static ScanBasedWorkflow CreateWorkflow(OldDecon2LSParameters parameters, Run run,
-            Globals.ScanBasedWorkflowType workflowType = Globals.ScanBasedWorkflowType.Standard,
-            string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public static ScanBasedWorkflow CreateWorkflow(Run run, OldDecon2LSParameters parameters, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
-            switch (workflowType)
+
+            switch (parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower())
             {
-                case Globals.ScanBasedWorkflowType.Standard:
+                case "uimf_saturation_repair":
+                    return new SaturationIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                
+                case "standard":
                     if (run is UIMFRun)
                     {
                         return new StandardIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
                     }
                     return new TraditionalScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
-
-                case Globals.ScanBasedWorkflowType.UIMFSaturationWorkflow:
-                    return new SaturationIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                    
                 default:
                     throw new ArgumentOutOfRangeException("workflowType");
             }
+
+          
         }
 
         #endregion
@@ -114,7 +115,7 @@ namespace DeconTools.Backend.Workflows
             InitializeWorkflow();
         }
 
- 
+
         #endregion
 
         #region Properties
@@ -131,6 +132,14 @@ namespace DeconTools.Backend.Workflows
 
         public Globals.ExporterType ExporterType { get; set; }
 
+        /// <summary>
+        /// Controls whether or not data is exported. This is useful if you want programmatic 
+        /// access to the IsosResults in the RunCollection (Exporters will clear the ResultCollection)
+        /// Default = TRUE
+        /// </summary>
+        public bool ExportData { get; set; }
+
+
         #endregion
 
         #region Public Methods
@@ -142,6 +151,8 @@ namespace DeconTools.Backend.Workflows
 
             Run.ResultCollection.ResultType = GetResultType();
             WorkflowStats = new WorkflowStats();
+
+            ExportData = true;
 
             InitializeParameters();
 
@@ -274,18 +285,21 @@ namespace DeconTools.Backend.Workflows
 
 
             //the following exporting tasks should be last
-            if (OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile)
+            if (ExportData)
             {
-                ExecuteTask(PeakToMSFeatureAssociator);
-                ExecuteTask(PeakListExporter);
+
+                if (OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile)
+                {
+                    ExecuteTask(PeakToMSFeatureAssociator);
+                    ExecuteTask(PeakListExporter);
+
+                }
+
+                ExecuteTask(IsosResultExporter);
+
+                ExecuteTask(ScanResultExporter);
 
             }
-
-            ExecuteTask(IsosResultExporter);
-
-            ExecuteTask(ScanResultExporter);
-
-
 
         }
 

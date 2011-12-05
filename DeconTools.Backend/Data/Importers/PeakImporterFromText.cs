@@ -42,26 +42,26 @@ namespace DeconTools.Backend.Data
 
         #region Public Methods
 
-        public void ImportUIMFPeaksIntoTree(Data.Structures.BinaryTree<IPeak> tree)
-        {
-            using (StreamReader reader = new StreamReader(filename))
-            {
-                reader.ReadLine();    //first line is the header line.   
+        //public void ImportUIMFPeaksIntoTree(Data.Structures.BinaryTree<IPeak> tree)
+        //{
+        //    using (StreamReader reader = new StreamReader(filename))
+        //    {
+        //        reader.ReadLine();    //first line is the header line.   
 
-                int progressCounter = 0;
-                while (reader.Peek() != -1)
-                {
-                    string line = reader.ReadLine();
-                    IPeak peak = convertTextToPeakUIMFResult(line);
-                    peak.SortOnKey = IPeak.SortKey.INTENSITY;
-                    tree.Add(peak);
-                    progressCounter++;
-                    reportProgress(progressCounter);
+        //        int progressCounter = 0;
+        //        while (reader.Peek() != -1)
+        //        {
+        //            string line = reader.ReadLine();
+        //            IPeak peak = convertTextToPeakUIMFResult(line);
+        //            //peak.SortOnKey = IPeak.SortKey.INTENSITY;
+        //            tree.Add(peak);
+        //            progressCounter++;
+        //            reportProgress(progressCounter);
 
-                }
-            }
+        //        }
+        //    }
 
-        }
+        //}
 
         public void ImportUIMFPeaks(List<IPeak> peakList)
         {
