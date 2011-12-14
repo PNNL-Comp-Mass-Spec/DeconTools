@@ -51,7 +51,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.btnShowOptionsForm = new System.Windows.Forms.Button();
             this.txtOutputPath = new System.Windows.Forms.TextBox();
             this.btnSetOutputPath = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -312,20 +311,6 @@
             this.progressBar1.Size = new System.Drawing.Size(317, 22);
             this.progressBar1.TabIndex = 0;
             // 
-            // btnShowOptionsForm
-            // 
-            this.btnShowOptionsForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowOptionsForm.BackColor = System.Drawing.Color.GhostWhite;
-            this.btnShowOptionsForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowOptionsForm.Location = new System.Drawing.Point(8, 277);
-            this.btnShowOptionsForm.Name = "btnShowOptionsForm";
-            this.btnShowOptionsForm.Size = new System.Drawing.Size(59, 27);
-            this.btnShowOptionsForm.TabIndex = 4;
-            this.btnShowOptionsForm.Text = "Options";
-            this.btnShowOptionsForm.UseVisualStyleBackColor = false;
-            this.btnShowOptionsForm.Click += new System.EventHandler(this.btnShowOptionsForm_Click);
-            // 
             // txtOutputPath
             // 
             this.txtOutputPath.AllowDrop = true;
@@ -366,11 +351,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(342, 356);
+            this.ClientSize = new System.Drawing.Size(342, 353);
             this.Controls.Add(this.txtOutputPath);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSetOutputPath);
-            this.Controls.Add(this.btnShowOptionsForm);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnAbort);
@@ -416,7 +400,6 @@
         private System.Windows.Forms.Label lblNumFeaturesInCurrentScan;
         private System.Windows.Forms.TextBox txtTotalFeatures;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button btnShowOptionsForm;
         private System.Windows.Forms.TextBox txtOutputPath;
         private System.Windows.Forms.Button btnSetOutputPath;
         private System.Windows.Forms.Label label8;

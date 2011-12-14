@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -20,13 +19,7 @@ namespace DeconToolsAutoProcessV1
         string _startingFolderPath;
         private string _outputPath;
         BackgroundWorker _bw;
-
         bool _isRunMergingModeUsed;
-        bool _createMSFeatureForEachPeak;
-
-        Globals.ProjectControllerType _projectControllerType;
-
-
 
         public Form1()
         {
@@ -52,7 +45,6 @@ namespace DeconToolsAutoProcessV1
                 _startingFolderPath = "";
             }
 
-            this._createMSFeatureForEachPeak = Properties.Settings.Default.MSFeatureForEachPeak;
             this._isRunMergingModeUsed = Properties.Settings.Default.MergeRuns; 
             
 
@@ -136,6 +128,10 @@ namespace DeconToolsAutoProcessV1
 
         private void btnAutoProcess_Click(object sender, EventArgs e)
         {
+            
+            
+            
+            
             if (_bw != null && _bw.IsBusy)
             {
                 MessageBox.Show("Already processing...  please wait or click 'Abort'");
@@ -147,6 +143,19 @@ namespace DeconToolsAutoProcessV1
                 MessageBox.Show("Please run the Setup Wizard first");
                 return;
             }
+
+            try
+            {
+                TrySetOutputFolder();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            
+
 
             this.txtProcessingStatus.Text = "Working...";
 
@@ -174,6 +183,8 @@ namespace DeconToolsAutoProcessV1
 
 
         }
+
+       
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -244,35 +255,30 @@ namespace DeconToolsAutoProcessV1
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker bw = (BackgroundWorker)sender;
-
-
-
+            var bw = (BackgroundWorker)sender;
 
             try
             {
+                var parameters = new OldDecon2LSParameters();
+                parameters.Load(_parameterFileName);
 
-                for (int i = 0; i < _inputFileList.Length; i++)
+                //This mode was requested by Julia Laskin. 
+                //This mode detects peaks in each dataset and merges the output
+                if (parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower() == "run_merging_with_peak_export")
                 {
-                    var workflow = ScanBasedWorkflow.CreateWorkflow(_inputFileList[i], _parameterFileName, _outputPath, bw);
+                    var workflow = new RunMergingPeakExportingWorkflow(parameters, _inputFileList, _outputPath, bw);
                     workflow.Execute();
                 }
-
-                //No longer supported. If collaborators still use, will need to create a new workflow and use that. 
-                //if (this._isRunMergingModeUsed)
-                //{
-                //    ProjectController runner = new RunMergingProjectController(_inputFileList.ToList(), this.msFileType, this._parameterFileName,bw);
-                //    runner.Execute();
-                //}
-                //else if (this._CreateMSFeatureForEachPeak)
-                //{
-                //    ProjectController runner = new BonesProjectController(_inputFileList.ToList(), this.msFileType, this._parameterFileName,3, bw);
-                //    runner.Execute();
-                //}
-                //else
-                //{
-                    
-                //}
+                else
+                {
+                    foreach (string file in _inputFileList)
+                    {
+                        var workflow = ScanBasedWorkflow.CreateWorkflow(file, _parameterFileName, _outputPath, bw);
+                        workflow.Execute();
+                    }
+                }
+                
+               
             }
             catch (Exception ex)
             {
@@ -319,7 +325,6 @@ namespace DeconToolsAutoProcessV1
         {
 
             if (this._startingFolderPath != null) Properties.Settings.Default.startingFolder = this._startingFolderPath;
-            Properties.Settings.Default.MSFeatureForEachPeak = _createMSFeatureForEachPeak;
             Properties.Settings.Default.MergeRuns = _isRunMergingModeUsed;
             
             Properties.Settings.Default.Save();
@@ -329,18 +334,14 @@ namespace DeconToolsAutoProcessV1
         private void btnShowOptionsForm_Click(object sender, EventArgs e)
         {
             //OptionsForm frm = new OptionsForm(this.m_projectControllerType);
-            OptionsForm frm = new OptionsForm(this._isRunMergingModeUsed, this._createMSFeatureForEachPeak);
-            frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
-            if (frm.ShowDialog() == DialogResult.OK)
-            {
-                this._projectControllerType = frm.ProjectControllerType;
-                this._isRunMergingModeUsed = frm.IsResultMergingModeUsed;
-                this._createMSFeatureForEachPeak = frm.CreateMSFeatureForEachPeakMode;
-            }
-            else
-            {
-
-            }
+            //var frm = new OptionsForm(_isRunMergingModeUsed);
+            //frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
+            //if (frm.ShowDialog() == DialogResult.OK)
+            //{
+            //    _isRunMergingModeUsed = frm.IsResultMergingModeUsed;
+                
+            //}
+           
 
 
         }
@@ -406,6 +407,34 @@ namespace DeconToolsAutoProcessV1
               {
                   _outputPath = null;
               }
+        }
+
+
+        private void TrySetOutputFolder()
+        {
+            if (String.IsNullOrEmpty(txtOutputPath.Text))
+            {
+                _outputPath = null;
+                return;
+            }
+
+            if (!Directory.Exists(txtOutputPath.Text))
+            {
+
+                try
+                {
+                    Directory.CreateDirectory(txtOutputPath.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Check your output directory. Something wrong there.", ex);
+
+                }
+            }
+       
+            _outputPath = txtOutputPath.Text;
+
+            return;
         }
 
 

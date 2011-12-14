@@ -66,6 +66,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeconEngineV2, Version=1.0.4353.30746, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
     <Reference Include="GWSFileUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\GWSFileUtilities.dll</HintPath>
