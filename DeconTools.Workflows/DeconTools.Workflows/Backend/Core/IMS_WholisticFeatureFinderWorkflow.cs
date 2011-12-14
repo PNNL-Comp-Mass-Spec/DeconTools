@@ -172,7 +172,9 @@ namespace DeconTools.Workflows.Backend.Core
 
                     // create drift profile from raw data
                     double driftTimeProfileMZTolerance = this.DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
-                    uimfRun.GetDriftTimeProfile(frame.PrimaryFrame, this.Run.MinScan, this.Run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
+                    
+                    //TODO: Fix this: update to use UIMF library and not DeconTools
+                    //uimfRun.GetDriftTimeProfile  (frame.PrimaryFrame, this.Run.MinScan, this.Run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
 
                     bool driftTimeProfileIsEmpty = (uimfRun.XYData.Xvalues == null);
                     if (driftTimeProfileIsEmpty)
