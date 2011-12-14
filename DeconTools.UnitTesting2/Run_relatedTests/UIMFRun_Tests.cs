@@ -577,5 +577,29 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         }
 
 
+        [Test]
+        public void GetMSLevelFromMSMSDatasetTest1()
+        {
+            string msmsDatafile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
+
+            UIMFRun uimfRun = new UIMFRun(msmsDatafile);
+
+            int numFrames =  uimfRun.GetNumFrames();
+
+            Console.WriteLine("NumFrames = "+numFrames);
+
+           
+            int testFrame = 10;
+
+            int  mslevel= uimfRun.GetMSLevel(testFrame);
+
+            Assert.AreEqual(2, mslevel);
+
+
+
+        }
+
+
     }
 }

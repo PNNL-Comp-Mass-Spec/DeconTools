@@ -147,6 +147,7 @@
     <Compile Include="TheoreticalIsotopicProfileTests\MercuryDistributionTesting.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilitiesTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
+    <Compile Include="Workflow_Tests\RunMergingPeakExportingWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\SaturationIMSWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />
   </ItemGroup>

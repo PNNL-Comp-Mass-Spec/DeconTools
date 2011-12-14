@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -41,26 +42,41 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = false;
 
-            workflow.Execute();
 
+            Stopwatch sw=new Stopwatch();
+            sw.Start();
+
+            workflow.Execute();
+           // return;
+
+            sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-
-            int minFrame = parameters.HornTransformParameters.MinScan;
+          int minFrame = parameters.HornTransformParameters.MinScan;
             int maxFrame = parameters.HornTransformParameters.MaxScan;
 
-            int minScan = 110;
+            int minScan = 102;
             int maxScan = 125;
 
             double targetMass = 860.3987;
             int chargestate = 2;
 
-            targetMass = 1444.748171;
-            chargestate = 3;
+            //targetMass = 1444.748171;
+            //chargestate = 3;
 
             targetMass = 1079.559447;
             chargestate = 2;
+
+           // targetMass= 1064.485;
+           // chargestate = 2;
+
+
+            //targetMass = 949.454723;
+            //chargestate = 1;
+            //minScan = 188;
+            //maxScan = 205;
+
 
 
             double tolerance = 0.3;
@@ -79,6 +95,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
+            Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
 
         }
 

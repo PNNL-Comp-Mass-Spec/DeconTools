@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
 using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -106,6 +103,30 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(Globals.MSFileType.Ascii, run.MSFileType);
 
         }
+
+        [Test]
+        [ExpectedException(typeof(ApplicationException))]
+        public void UnknownDatasetTypeTest1()
+        {
+            string testfile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Other_testFileTypes\sampleXYData.wiffer";
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(testfile);
+        }
+
+
+        // [Test]
+        //[ExpectedException(typeof(ApplicationException))]
+        //public void InvalidThermoDataTest1()
+        // {
+        //    string testfile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Other_testFileTypes\invalidRawData.raw";
+
+        //    RunFactory rf = new RunFactory();
+        //    Run run = rf.CreateRun(testfile);
+        //}
+
+
+        
 
     }
 }
