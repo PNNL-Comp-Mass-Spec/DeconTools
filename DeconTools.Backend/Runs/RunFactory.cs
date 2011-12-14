@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Text.RegularExpressions;
+using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
@@ -82,9 +81,10 @@ namespace DeconTools.Backend.Runs
                     break;
 
                 default:
-                    run = null;
-                    break;
+                    throw new ApplicationException("File type - "+ extension + " -  is not supported in DeconTools");
             }
+
+            Check.Require(run!=null,"Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's dlls, or 3) not supported by DeconTools");
             return run;
         }
         public Run CreateRun(Globals.MSFileType filetype, string f)

@@ -33,6 +33,9 @@ namespace DeconTools.Backend.Workflows
         #region Public Methods
         
 
+
+
+
         protected override void IterateOverScans()
         {
             _scanCounter = 1;
@@ -84,15 +87,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        protected override void CreateTargetMassSpectra()
-        {
-            var scanSetCollectionCreator = new ScanSetCollectionCreator(Run, OldDecon2LsParameters.HornTransformParameters.MinScan,
-                OldDecon2LsParameters.HornTransformParameters.MaxScan,
-                          OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1,
-                          OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
-                          OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
-            scanSetCollectionCreator.Create();
-        }
+      
 
 
         public override void ReportProgress()

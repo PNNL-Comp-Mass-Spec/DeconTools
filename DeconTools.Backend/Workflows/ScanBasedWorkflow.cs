@@ -16,7 +16,6 @@ using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
-using DeconToolsV2.HornTransform;
 
 namespace DeconTools.Backend.Workflows
 {
@@ -35,11 +34,11 @@ namespace DeconTools.Backend.Workflows
     {
         private const int PeakListExporterTriggerValue = 10000;
 
-        private string _peakListOutputFileName;
-        private string _isosOutputFileName;
-        private string _scansOutputFileName;
-        private string _logFileName;
-        private string _parameterFileName;
+        internal string PeakListOutputFileName;
+        internal string IsosOutputFileName;
+        internal string ScansOutputFileName;
+        internal string LogFileName;
+        internal string ParameterFileName;
 
         protected BackgroundWorker BackgroundWorker;
 
@@ -70,7 +69,27 @@ namespace DeconTools.Backend.Workflows
         public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
 
-            var run = new RunFactory().CreateRun(datasetFileName);
+            Run run;
+
+            try
+            {
+                run = new RunFactory().CreateRun(datasetFileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.OutputFilename = datasetFileName + "_BAD_ERROR_log.txt";
+                Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
+                Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
+                Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
+                Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
+                Logger.Instance.AddEntry("ERROR details:" + ex.Message + "\n" + ex.StackTrace);
+
+                return null;
+            }
+            
+
+
+
             var parameters = new OldDecon2LSParameters();
             parameters.Load(parameterFile);
 
@@ -94,6 +113,10 @@ namespace DeconTools.Backend.Workflows
                     }
                     return new TraditionalScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
                     
+                case "run_merging_with_peak_export":
+                    return new RunMergingPeakExportingWorkflow(parameters,null,outputFolderPath,backgroundWorker);
+                    
+                
                 default:
                     throw new ArgumentOutOfRangeException("workflowType");
             }
@@ -112,7 +135,7 @@ namespace DeconTools.Backend.Workflows
             OutputFolderPath = outputFolderPath;    //path is null unless specified
             BackgroundWorker = backgroundWorker;   //null unless specified
 
-            InitializeWorkflow();
+            
         }
 
 
@@ -144,14 +167,13 @@ namespace DeconTools.Backend.Workflows
 
         #region Public Methods
 
-        public void InitializeWorkflow()
+        public virtual void InitializeWorkflow()
         {
             Check.Assert(Run != null, "Cannot initialize workflow. Run is null");
             Check.Assert(OldDecon2LsParameters != null, "Cannot initialize workflow. Parameters are null");
 
             Run.ResultCollection.ResultType = GetResultType();
-            WorkflowStats = new WorkflowStats();
-
+       
             ExportData = true;
 
             InitializeParameters();
@@ -187,13 +209,13 @@ namespace DeconTools.Backend.Workflows
             ResultValidator = new ResultValidatorTask();
 
             IsosResultExporter = IsosExporterFactory.CreateIsosExporter(Run.ResultCollection.ResultType, ExporterType,
-                                                                  _isosOutputFileName);
+                                                                  IsosOutputFileName);
 
             ScanResultExporter = ScansExporterFactory.CreateScansExporter(Run.MSFileType, ExporterType,
-                                                                          _scansOutputFileName);
+                                                                          ScansOutputFileName);
 
             PeakListExporter = PeakListExporterFactory.Create(ExporterType, Run.MSFileType, PeakListExporterTriggerValue,
-                                                              _peakListOutputFileName);
+                                                              PeakListOutputFileName);
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
 
@@ -203,7 +225,20 @@ namespace DeconTools.Backend.Workflows
         /// <summary>
         /// Defines the scans that will be processed. 
         /// </summary>
-        protected abstract void CreateTargetMassSpectra();
+        protected virtual void CreateTargetMassSpectra()
+        {
+            int minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
+            int maxScan = Math.Min(Run.MaxScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
+
+            var scanSetCollectionCreator = new ScanSetCollectionCreator(Run, minScan, maxScan,
+                          OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1,
+                          OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
+                          OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
+            scanSetCollectionCreator.Create();
+        }
+
+
+
 
         /// <summary>
         /// A hook that allows derived classes to do something before main processing is executed. See 'Template Method' design pattern
@@ -217,6 +252,11 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void Execute()
         {
+           
+
+            InitializeWorkflow();
+
+            WorkflowStats = new WorkflowStats();
             WorkflowStats.TimeStarted = DateTime.Now;
 
 
@@ -362,7 +402,8 @@ namespace DeconTools.Backend.Workflows
             }
 
         }
-        private void WriteProcessingInfoToLog()
+
+        internal void WriteProcessingInfoToLog()
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
             Logger.Instance.AddEntry("ParameterFile = " + (OldDecon2LsParameters.ParameterFilename == null ? "[NONE]" : Path.GetFileName(OldDecon2LsParameters.ParameterFilename)));
@@ -371,7 +412,7 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
         }
 
-        private void CreateOutputFileNames()
+        internal virtual void CreateOutputFileNames()
         {
             string basefileName = GetBaseFileName(Run);
 
@@ -381,14 +422,14 @@ namespace DeconTools.Backend.Workflows
             switch (ExporterType)
             {
                 case Globals.ExporterType.TEXT:
-                    _isosOutputFileName = basefileName + "_isos.csv";
-                    _scansOutputFileName = basefileName + "_scans.csv";
-                    _peakListOutputFileName = basefileName + "_peaks.txt";
+                    IsosOutputFileName = basefileName + "_isos.csv";
+                    ScansOutputFileName = basefileName + "_scans.csv";
+                    PeakListOutputFileName = basefileName + "_peaks.txt";
                     break;
                 case Globals.ExporterType.SQLite:
-                    _isosOutputFileName = basefileName + "_isos.db3";
-                    _scansOutputFileName = basefileName + "_scans.db3";
-                    _peakListOutputFileName = basefileName + "_peaks.db3";
+                    IsosOutputFileName = basefileName + "_isos.db3";
+                    ScansOutputFileName = basefileName + "_scans.db3";
+                    PeakListOutputFileName = basefileName + "_peaks.db3";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -411,7 +452,7 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        private void InitializeParameters()
+        internal void InitializeParameters()
         {
             //set exporter type. This property wraps the OldDeconTools parameter
             switch (OldDecon2LsParameters.HornTransformParameters.ExportFileType)

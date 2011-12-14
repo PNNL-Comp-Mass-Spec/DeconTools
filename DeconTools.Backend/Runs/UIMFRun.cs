@@ -184,7 +184,7 @@ namespace DeconTools.Backend.Runs
                 int nonZeroLength = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(xvals, yvals, FrameTypeForMS1, frameLower, frameUpper, scanLower, scanUpper);
 
 
-                if (xvals == null || xvals.Length == 0 || yvals == null || yvals.Length == 0)
+                if (xvals.Length == 0 || yvals.Length == 0)
                 {
                     this.XYData.Xvalues = null;
                     this.XYData.Yvalues = null;
@@ -445,10 +445,10 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public int[][] GetFramesAndScanIntensitiesForAGivenMz(int startFrame, int endFrame, int frameType, int startScan, int endScan, double targetMz, double toleranceInMZ)
-        {
-            return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramesAndScanIntensitiesForAGivenMz(startFrame, endFrame, frameType, startScan, endScan, targetMz, toleranceInMZ);
-        }
+        //public int[][] GetFramesAndScanIntensitiesForAGivenMz(int startFrame, int endFrame, int frameType, int startScan, int endScan, double targetMz, double toleranceInMZ)
+        //{
+        //    return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramesAndScanIntensitiesForAGivenMz(startFrame, endFrame, frameType, startScan, endScan, targetMz, toleranceInMZ);
+        //}
 
 
         //for now I am converting this dictionary to a frame and scna list, only because the UIMF library already has that method
@@ -501,46 +501,46 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public void GetDriftTimeProfile(int frameStartIndex, int frameStopIndex, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
-        {
-            int[] scanValues = null;
-            int[] intensityVals = null;
+        //public void GetDriftTimeProfile(int frameStartIndex, int frameStopIndex, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
+        //{
+        //    int[] scanValues = null;
+        //    int[] intensityVals = null;
 
-            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameStartIndex, frameStopIndex, this.FrameTypeForMS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+        //    UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameStartIndex, frameStopIndex, this.FrameTypeForMS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
-            if (scanValues == null || scanValues.Length == 0)
-            {
-                this.XYData.Xvalues = null;
-                this.XYData.Yvalues = null;
-            }
-            else
-            {
-                this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
-                this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
-            }
+        //    if (scanValues == null || scanValues.Length == 0)
+        //    {
+        //        this.XYData.Xvalues = null;
+        //        this.XYData.Yvalues = null;
+        //    }
+        //    else
+        //    {
+        //        this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
+        //        this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
+        //    }
 
-        }
+        //}
         
         
-        public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
-        {
-            int[] scanValues = null;
-            int[] intensityVals = null;
+        //public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
+        //{
+        //    int[] scanValues = null;
+        //    int[] intensityVals = null;
 
-            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameNum, frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+        //    UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameNum, frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
-            if (scanValues == null || scanValues.Length == 0)
-            {
-                this.XYData.Xvalues = null;
-                this.XYData.Yvalues = null;
-            }
-            else
-            {
-                this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
-                this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
-            }
+        //    if (scanValues == null || scanValues.Length == 0)
+        //    {
+        //        this.XYData.Xvalues = null;
+        //        this.XYData.Yvalues = null;
+        //    }
+        //    else
+        //    {
+        //        this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
+        //        this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
+        //    }
 
-        }
+        //}
 
 
         internal int GetNumScansPerFrame()
@@ -583,9 +583,20 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override int GetMSLevelFromRawData(int scanNum)
+        public override int GetMSLevelFromRawData(int frameNum)
         {
             return 1;
+            
+            FrameParameters fp = null;
+            fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
+
+            if (fp.FrameType == 0)       // frametype of '0' is legacy. MS1 should have a frameType of '1'
+                return 1;
+
+            return fp.FrameType;
+
+
+
         }
 
         public override void Close()
