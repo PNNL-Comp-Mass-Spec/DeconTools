@@ -81,10 +81,12 @@ namespace DeconTools.Backend
 
         public enum PeakSelectorMode            //for selecting the best peak from a list of peaks
         {
-            CLOSEST_TO_TARGET,
-            MOST_INTENSE,
-            INTELLIGENT_MODE,
-            N15IntelligentMode
+            Smart,
+            ClosestToTarget,
+            MostIntense,
+            RelativeToOtherChromPeak,
+            N15IntelligentMode,
+            
         }
 
 
@@ -157,6 +159,14 @@ namespace DeconTools.Backend
             ITERATIVE
         }
 
+
+        public enum ElutionTimeUnit
+        {
+            NormalizedElutionTime,
+            ElutionTimeInSeconds,
+            ScanNum
+
+        }
 
 
 

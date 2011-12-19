@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
         ChromPeakDetector chromPeakDet;
 
-        ChromPeakSelector basicChromPeakSelector;
+        BasicChromPeakSelector basicChromPeakSelector;
         SmartChromPeakSelector smartChromPeakSelector;
 
 
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
             smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
-            basicChromPeakSelector = new ChromPeakSelector(1);
+            basicChromPeakSelector = new BasicChromPeakSelector(1);
 
 
            

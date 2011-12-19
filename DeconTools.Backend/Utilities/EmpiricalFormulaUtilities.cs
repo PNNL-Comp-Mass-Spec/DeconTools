@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using PNNLOmics.Data.Constants;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -23,6 +25,26 @@ namespace DeconTools.Backend.Utilities
         #region Private Methods
 
         #endregion
+
+
+        public static double GetMonoisotopicMassFromEmpiricalFormula(string empiricalFormula)
+        {
+            var formulaTable = ParseEmpiricalFormulaString(empiricalFormula);
+
+
+            double monomass = 0;
+            foreach (KeyValuePair<string, int> valuePair in formulaTable)
+            {
+                double elementMass = Constants.Elements[valuePair.Key].MassMonoIsotopic;
+                double elementCount = valuePair.Value;
+
+                monomass += elementMass*elementCount;
+            }
+
+            return monomass;
+
+        }
+
 
 
         public static string AddFormula(string baseFormula, string formulaToBeAdded)

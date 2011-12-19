@@ -20,7 +20,10 @@ namespace DeconTools.Workflows.Backend.Core
         private PeakChromatogramGenerator chromGen;
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
-        private SmartChromPeakSelector chromPeakSelector;
+
+        private ChromPeakSelectorBase chromPeakSelector;
+        
+        //private SmartChromPeakSelector chromPeakSelector;
 
 
         private DeconToolsPeakDetector msPeakDetector;
@@ -63,28 +66,27 @@ namespace DeconTools.Workflows.Backend.Core
 
             try
             {
+                Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+                Result.ResetResult();
 
-                this.Result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-                this.Result.ResetResult();
-               
 
                 ExecuteTask(theorFeatureGen);
                 ExecuteTask(chromGen);
                 ExecuteTask(chromSmoother);
-                updateChromDataXYValues(this.Run.XYData);
+                updateChromDataXYValues(Run.XYData);
 
                 ExecuteTask(chromPeakDetector);
-                updateChromDetectedPeaks(this.Run.PeakList);
+                updateChromDetectedPeaks(Run.PeakList);
 
                 ExecuteTask(chromPeakSelector);
-                this.ChromPeakSelected = this.Result.ChromPeakSelected;
+                ChromPeakSelected = Result.ChromPeakSelected;
 
-                
-                this.Result.ResetMassSpectrumRelatedInfo();
-                
+
+                Result.ResetMassSpectrumRelatedInfo();
+
 
                 ExecuteTask(MSGenerator);
-                updateMassSpectrumXYValues(this.Run.XYData);
+                updateMassSpectrumXYValues(Run.XYData);
 
                 ExecuteTask(o16o18FeatureFinder);
                 ExecuteTask(fitScoreCalc);
@@ -119,16 +121,9 @@ namespace DeconTools.Workflows.Backend.Core
             chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-            SmartChromPeakSelectorParameters smartchrompeakSelector = new SmartChromPeakSelectorParameters();
-            smartchrompeakSelector.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-            smartchrompeakSelector.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
-            smartchrompeakSelector.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
-            smartchrompeakSelector.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            smartchrompeakSelector.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
-            smartchrompeakSelector.NumScansToSum = _workflowParameters.NumMSScansToSum;
-            smartchrompeakSelector.NumChromPeaksAllowed = 10;
-            smartchrompeakSelector.MultipleHighQualityMatchesAreAllowed = _workflowParameters.MultipleHighQualityMatchesAreAllowed;
-            chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelector);
+
+            chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
+
 
             msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 

@@ -110,5 +110,21 @@ namespace DeconTools.UnitTesting2.Utilities
 
         }
 
+
+        [Test]
+        public void GetMonoisotopicMassFromEmpiricalFormulaTest1()
+        {
+            string testPeptide = "SAMPLER";
+            PeptideUtils peptideUtils = new PeptideUtils();
+            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+
+            double monomass= EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+
+            Assert.IsTrue(monomass > 0);
+            Console.WriteLine("SAMPLER monoisotopic mass= \t"+ monomass);
+
+            Assert.AreEqual(802.40072m, (decimal)Math.Round(monomass, 5));    //note that Peptide Util reports 802.40071, as does MacCoss's lab: http://proteome.gs.washington.edu/cgi-bin/aa_calc.pl
+        }
+
     }
 }

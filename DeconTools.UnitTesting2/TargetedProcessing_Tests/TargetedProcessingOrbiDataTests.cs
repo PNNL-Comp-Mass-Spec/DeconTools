@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
@@ -61,7 +62,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
     
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new BasicChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.ClosestToTarget);
 
 
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -123,7 +124,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            Task chromPeakSel = new DeconTools.Backend.ProcessingTasks.ChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.CLOSEST_TO_TARGET);
+            Task chromPeakSel = new BasicChromPeakSelector(1, 0.1, Globals.PeakSelectorMode.ClosestToTarget);
 
 
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);

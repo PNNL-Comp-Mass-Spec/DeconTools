@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
-namespace DeconTools.Backend.ProcessingTasks
+namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
-    public class ChromPeakSelector : Task
+    public class BasicChromPeakSelector : ChromPeakSelectorBase
     {
         #region Constructors
-        public ChromPeakSelector(int numLCScansToSum)
+        public BasicChromPeakSelector(int numLCScansToSum)
             : this(1, 0.05)
         {
 
         }
 
-        public ChromPeakSelector(int numLCScansToSum, double netTolerance)
-            : this(1, netTolerance, Globals.PeakSelectorMode.MOST_INTENSE)
+        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance)
+            : this(1, netTolerance, Globals.PeakSelectorMode.MostIntense)
         {
 
         }
 
-        public ChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode)
+        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode)
             : this(numLCScansToSum, netTolerance, peakSelectorMode, 0)
         {
 
         }
 
-        public ChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode, int scanOffSet)
+        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode, int scanOffSet)
         {
             this.NETTolerance = netTolerance;
             this.PeakSelectionMode = peakSelectorMode;
-            this.numScansToSum = numLCScansToSum;
+            this.NumScansToSum = numLCScansToSum;
             this.ScanOffSet = scanOffSet;
         }
 
@@ -56,10 +56,10 @@ namespace DeconTools.Backend.ProcessingTasks
         //TODO:   figure out what uses this and why!   Default is 0 - that's all I know
         public int ScanOffSet { get; set; }
 
-        public double NETValueForIntelligentMode { get; set; }
+        public double ReferenceNETValueForReferenceMode { get; set; }
 
 
-        public int numScansToSum { get; set; }       // this might be better elsewhere, but for now put it here...
+        public int NumScansToSum { get; set; }       // this might be better elsewhere, but for now put it here...
         #endregion
 
         #region Public Methods
@@ -76,8 +76,21 @@ namespace DeconTools.Backend.ProcessingTasks
 
             TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
+
+            float normalizedElutionTime;
+
+            if (result.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+            {
+                normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime/result.Run.GetNumMSScans();
+            }
+            else
+            {
+                normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
+            }
+
+
             int numPeaksWithinTolerance = 0;
-            ChromPeak bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, resultList.Run.CurrentMassTag.NormalizedElutionTime, this.NETTolerance, out numPeaksWithinTolerance);
+            var bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, normalizedElutionTime, this.NETTolerance, out numPeaksWithinTolerance);
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
 
@@ -114,7 +127,7 @@ namespace DeconTools.Backend.ProcessingTasks
             int bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
             bestScan = bestScan + scanOffset;
-            return new ScanSetFactory().CreateScanSet(run, bestScan, this.numScansToSum);
+            return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
         }
 
 
@@ -145,7 +158,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             switch (peakSelectorMode)
             {
-                case Globals.PeakSelectorMode.CLOSEST_TO_TARGET:
+                case Globals.PeakSelectorMode.ClosestToTarget:
                     double diff = double.MaxValue;
 
                     for (int i = 0; i < peaksWithinTol.Count; i++)
@@ -159,7 +172,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         }
                     }
                     break;
-                case Globals.PeakSelectorMode.MOST_INTENSE:
+                case Globals.PeakSelectorMode.MostIntense:
                     double max = -1;
                     for (int i = 0; i < peaksWithinTol.Count; i++)
                     {
@@ -172,16 +185,13 @@ namespace DeconTools.Backend.ProcessingTasks
                         }
                     }
                     break;
-                case Globals.PeakSelectorMode.INTELLIGENT_MODE:
+                case Globals.PeakSelectorMode.RelativeToOtherChromPeak:
                     diff = double.MaxValue;
-
-                   
-
 
 
                     for (int i = 0; i < peaksWithinTol.Count; i++)
                     {
-                        double currentDiff = Math.Abs(peaksWithinTol[i].NETValue - NETValueForIntelligentMode);
+                        double currentDiff = Math.Abs(peaksWithinTol[i].NETValue - ReferenceNETValueForReferenceMode);
 
                         if (currentDiff < diff)
                         {
@@ -202,7 +212,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     foreach (ChromPeak peak in chromPeakList)
                     {
 
-                        double currentDiff = NETValueForIntelligentMode - peak.NETValue;
+                        double currentDiff = ReferenceNETValueForReferenceMode - peak.NETValue;
 
                         if ((currentDiff) >= 0 && currentDiff <= netTolerance)     
                         {

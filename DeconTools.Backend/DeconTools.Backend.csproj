@@ -180,6 +180,7 @@
     <Compile Include="FileIO\SQLiteExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorParameters.cs" />
@@ -255,7 +256,7 @@
     <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelector.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\BasicChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\MassTagFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />

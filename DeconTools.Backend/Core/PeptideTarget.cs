@@ -1,8 +1,10 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 
 namespace DeconTools.Backend.Core
 {
+    [Serializable]
     public class PeptideTarget : TargetBase
     {
         #region Constructors
@@ -55,16 +57,18 @@ namespace DeconTools.Backend.Core
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(this.ID);
+            var sb = new StringBuilder();
+            sb.Append(ID);
             sb.Append("; ");
-            sb.Append(this.MZ.ToString("0.0000"));
+            sb.Append(MonoIsotopicMass.ToString("0.0000"));
             sb.Append("; ");
-            sb.Append(this.ChargeState);
+            sb.Append(MZ.ToString("0.0000"));
             sb.Append("; ");
-            sb.Append(this.NormalizedElutionTime);
+            sb.Append(ChargeState);
             sb.Append("; ");
-            sb.Append(this.Code);
+            sb.Append(NormalizedElutionTime);
+            sb.Append("; ");
+            sb.Append(Code);
 
             return sb.ToString();
         }

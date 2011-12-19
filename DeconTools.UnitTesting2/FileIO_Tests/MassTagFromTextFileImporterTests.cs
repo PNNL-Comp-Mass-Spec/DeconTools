@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Data.Importers;
 using DeconTools.Backend.FileIO;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.FileIO_Tests
 {
@@ -42,15 +38,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(75, testMassTag.ObsCount);
             Assert.AreEqual(4225609, testMassTag.ID);
 
-            
+
         }
 
         [Test]
         public void ImportPeptidesWithModsTest1()
         {
-             TargetCollection mtc = new TargetCollection();
+            var mtc = new TargetCollection();
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagsWithModsFile1);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagsWithModsFile1);
             mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
@@ -58,9 +54,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             PeptideTarget testMassTag = (PeptideTarget)mtc.TargetList[1021];
             Assert.AreEqual(testMassTag.EmpiricalFormula, "C56H82N10O13");
-            Assert.AreEqual(1,testMassTag.ModCount);
+            Assert.AreEqual(1, testMassTag.ModCount);
             Assert.AreEqual(testMassTag.ModDescription, "NH3_Loss:1");
-           
+
 
             //250663994	1102.60623	QFPILLDFK	2	C56H82N10O13	1	NH3_Loss:1
 
@@ -68,17 +64,43 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
         [Test]
+        public void ImportPeptidesContainingOnlySequenceInfo()
+        {
+            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_MinimalInfo1.txt";
+
+            var mtc = new TargetCollection();
+
+            var massTagImporter = new MassTagFromTextFileImporter(testfile);
+            mtc = massTagImporter.Import();
+
+            Assert.AreNotEqual(null, mtc.TargetList);
+            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            {
+                Console.WriteLine(peptideTarget);
+            }
+            Assert.AreEqual(111, mtc.TargetList.Count);
+
+            var testMassTag = (PeptideTarget)mtc.TargetList[0];
+            Assert.AreEqual("LFTFHADICTLPDTEK", testMassTag.Code);
+            Assert.AreEqual("C84H127N19O26S", testMassTag.EmpiricalFormula);
+
+            Assert.IsTrue(testMassTag.MonoIsotopicMass > 0);
+        }
+
+
+
+        [Test]
         public void importFromSQLManagmentStyleTextFile_test1()
         {
-            TargetCollection mtc = new TargetCollection();
+            var mtc = new TargetCollection();
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile2);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile2);
             mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(13, mtc.TargetList.Count);
 
-            PeptideTarget testMassTag = mtc.TargetList[0] as PeptideTarget;
+            var testMassTag = mtc.TargetList[0] as PeptideTarget;
 
 
             Assert.AreEqual("AVTTADQVQQEVER", testMassTag.Code);

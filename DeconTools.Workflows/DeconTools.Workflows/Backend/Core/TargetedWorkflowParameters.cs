@@ -21,6 +21,13 @@ namespace DeconTools.Workflows.Backend.Core
         public double MSToleranceInPPM { get; set; }
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
+        
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public DeconTools.Backend.Globals.PeakSelectorMode ChromPeakSelectorMode { get; set; }
+
 
 
 
@@ -41,7 +48,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         /// <summary>
         /// Number of chrom peaks allowed. For example if this is set to '5' 
-        /// and '6' peaks were found within the tolerance, then the selected best peak is set to
+        /// and 6 peaks were found within the tolerance, then the selected best peak is set to
         /// null indicating a failed execution
         /// </summary>
         public int NumChromPeaksAllowedDuringSelection { get; set; }

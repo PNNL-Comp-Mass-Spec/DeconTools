@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.Backend.Core
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
         private SmartChromPeakSelector chromPeakSelectorN14;
-        private ChromPeakSelector chromPeakSelectorN15;
+        private BasicChromPeakSelector chromPeakSelectorN15;
 
         private DeconToolsPeakDetector msPeakDetector;
 
@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExecuteTask(chromPeakSelectorN14);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;
-                chromPeakSelectorN15.NETValueForIntelligentMode = this.Result.GetNET();    //so that the NET value of the N14 result can be used to help find the N15 chrom peak
+                chromPeakSelectorN15.ReferenceNETValueForReferenceMode = this.Result.GetNET();    //so that the NET value of the N14 result can be used to help find the N15 chrom peak
 
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
@@ -200,7 +200,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             chromPeakSelectorN14 = new SmartChromPeakSelector(smartchrompeakSelectorParams);
 
-            chromPeakSelectorN15 = new ChromPeakSelector(_workflowParameters.NumMSScansToSum, _workflowParameters.ChromNETToleranceN15, DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode);
+            chromPeakSelectorN15 = new BasicChromPeakSelector(_workflowParameters.NumMSScansToSum, _workflowParameters.ChromNETToleranceN15, DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode);
 
             msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 

@@ -57,19 +57,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         #endregion
-
-
-        protected override TargetedResultToTextExporter createExporter(string outputFileName)
-        {
-            TargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
-            return exporter;
-        }
-
-
- 
-
-
-
         
     }
 }

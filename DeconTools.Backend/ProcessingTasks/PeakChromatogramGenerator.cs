@@ -110,18 +110,28 @@ namespace DeconTools.Backend.ProcessingTasks
             //the average time is 20ms. But if we are too restrictive, I have seen cases where the real chrom peak is never generated because
             //it fell outside the chrom generator window. 
 
+
+            float netElutionTime;
+            if (resultColl.Run.CurrentMassTag.ElutionTimeUnit== Globals.ElutionTimeUnit.ScanNum)
+            {
+                netElutionTime = resultColl.Run.CurrentMassTag.NormalizedElutionTime/resultColl.Run.GetNumMSScans();
+            }
+            else
+            {
+                netElutionTime = resultColl.Run.CurrentMassTag.NormalizedElutionTime;
+            }
+
             float minNetVal;
             float maxNetVal;
             if (resultColl.Run.NETIsAligned)
             {
-                minNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime - NETWindowWidthForAlignedData;
-                maxNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime + NETWindowWidthForAlignedData;  
+                minNetVal = netElutionTime - NETWindowWidthForAlignedData;
+                maxNetVal = netElutionTime + NETWindowWidthForAlignedData;  
             }
             else
             {
-                minNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime - NETWindowWidthForNonAlignedData;
-                maxNetVal = resultColl.Run.CurrentMassTag.NormalizedElutionTime + NETWindowWidthForNonAlignedData;  
-   
+                minNetVal = netElutionTime - NETWindowWidthForNonAlignedData;
+                maxNetVal = netElutionTime + NETWindowWidthForNonAlignedData;  
             }
           
             if (minNetVal < 0) minNetVal = 0;

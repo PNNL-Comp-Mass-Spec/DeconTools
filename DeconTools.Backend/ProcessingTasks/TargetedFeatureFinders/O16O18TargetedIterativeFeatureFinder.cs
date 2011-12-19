@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -49,15 +50,36 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.iterativelyFindMSFeature(resultColl.Run, o18TheorProfileDoubleLabel);
 
 
-            IsotopicProfile foundO16O18Profile = o16profile.CloneIsotopicProfile();
-           
+            IsotopicProfile foundO16O18Profile;
+
+            if (o16profile==null)
+            {
+                
+                if (o18TheorProfileDoubleLabel==null)
+                {
+                    result.IsotopicProfile = null;
+                    return;
+                }
+                
+                foundO16O18Profile = o18DoubleLabelProfile.CloneIsotopicProfile();
+                //lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16TheorFeature);
+                foundO16O18Profile.MonoIsotopicMass = o18DoubleLabelProfile.MonoIsotopicMass -
+                                                      4 * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS;
+
+                foundO16O18Profile.MonoPeakMZ = foundO16O18Profile.MonoIsotopicMass / foundO16O18Profile.ChargeState +
+                                                Globals.PROTON_MASS;
+            }
+            else
+            {
+                foundO16O18Profile = o16profile.CloneIsotopicProfile();
+            }
+
             //rebuild isotopic peak list
             addIsotopePeaks(foundO16O18Profile, o16profile, 2);
             addIsotopePeaks(foundO16O18Profile, o18SingleLabelProfile, 4);      // add the O18(1) and the O18(2) if present
             addIsotopePeaks(foundO16O18Profile, o18DoubleLabelProfile, 100);    // add as many peaks as possible
 
-
-            lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16profile);
+            lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16TheorFeature);
 
             result.IsotopicProfile = foundO16O18Profile;
 
@@ -125,6 +147,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
 
             }
+
+
+            foundO16O18Profile.Peaklist = foundO16O18Profile.Peaklist.OrderBy(p => p.XValue).ToList();
         }
 
 

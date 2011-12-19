@@ -11,7 +11,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
 
-    public abstract class SmartChromPeakSelectorBase : Task
+    public abstract class SmartChromPeakSelectorBase : ChromPeakSelectorBase
     {
 
         protected DeconTools.Backend.ProcessingTasks.MSGenerator msgen;
@@ -52,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #region Properties
 
-        public DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector MSPeakDetector { get; set; }
+        public DeconToolsPeakDetector MSPeakDetector { get; set; }
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         public TFFBase TargetedMSFeatureFinder { get; set; }

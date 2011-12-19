@@ -8,6 +8,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
+    [Serializable]
     public class PeptideUtils
     {
 
@@ -182,8 +183,6 @@ namespace DeconTools.Backend.Utilities
         {
 
             return EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
-
-
 
         }
 

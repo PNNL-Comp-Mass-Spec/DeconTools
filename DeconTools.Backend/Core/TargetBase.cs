@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using DeconTools.Utilities;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
 {
+    [Serializable]
     public abstract class TargetBase
     {
 
@@ -18,6 +15,8 @@ namespace DeconTools.Backend.Core
         public TargetBase()
         {
             this.ElementLookupTable = new Dictionary<string, int>();
+            ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
+            
         }
         #endregion
 
@@ -66,7 +65,7 @@ namespace DeconTools.Backend.Core
 
 
 
-
+        public Globals.ElutionTimeUnit ElutionTimeUnit { get; set; }
 
         public float NormalizedElutionTime { get; set; }
 

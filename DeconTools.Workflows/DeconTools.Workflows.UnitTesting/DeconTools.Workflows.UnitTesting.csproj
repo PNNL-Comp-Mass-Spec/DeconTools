@@ -71,6 +71,7 @@
     <Compile Include="WorkflowTests\O16O18WorkflowTests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanBasedWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\ScanUserProvidedTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />

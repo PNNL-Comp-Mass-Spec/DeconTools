@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using PNNLOmics.Data.Constants.Libraries;
 
 
 namespace DeconTools.Backend.FileIO
 {
     public class MassTagFromTextFileImporter : IMassTagImporter
     {
+        
+
         #region Constructors
 
         string m_filename;
@@ -20,7 +25,8 @@ namespace DeconTools.Backend.FileIO
             this.m_filename = filename;
             this.delimiter = '\t';
 
-
+            
+            
         }
 
 
@@ -36,9 +42,9 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-        public override DeconTools.Backend.Core.TargetCollection Import()
+        public override TargetCollection Import()
         {
-            DeconTools.Backend.Core.TargetCollection data = new TargetCollection();
+            var data = new TargetCollection();
 
             using (StreamReader reader = new StreamReader(m_filename))
             {
@@ -71,12 +77,70 @@ namespace DeconTools.Backend.FileIO
                         massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
                     }
 
-                    data.TargetList.Add(massTag);
+
+                    bool massTagMassInfoMissing = (Math.Abs(massTag.MonoIsotopicMass - 0) < double.Epsilon);
+
+                    if (massTagMassInfoMissing)
+                    {
+                        if (!String.IsNullOrEmpty(massTag.EmpiricalFormula))
+                        {
+                            massTag.MonoIsotopicMass =
+                                EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(
+                                    massTag.EmpiricalFormula);
+                        }
+                    }
+
+                    bool noChargeStateInfoAvailable = massTag.ChargeState == 0;
+                    if (noChargeStateInfoAvailable)
+                    {
+                        double minMZToConsider = 400;
+                        double maxMZToConsider = 1300;
+
+                        List<PeptideTarget> targetList = new List<PeptideTarget>();
+
+                        for (int chargeState = 1; chargeState < 50; chargeState++)
+                        {
+                            var calcMZ = massTag.MonoIsotopicMass/chargeState + Globals.PROTON_MASS;
+                            if (calcMZ>minMZToConsider && calcMZ<maxMZToConsider)
+                            {
+                                var copiedMassTag =   massTag.Clone();
+                                copiedMassTag.ChargeState = (short)chargeState;
+                                copiedMassTag.MZ = calcMZ;
+                                
+                                targetList.Add(copiedMassTag);
+                            }
+
+                        }
+
+                        data.TargetList.AddRange(targetList.Take(3));
+
+                    }
+                    else
+                    {
+                        data.TargetList.Add(massTag);
+                    }
+
+
+
+
 
                 }
 
 
             }
+
+            foreach (PeptideTarget peptideTarget in data.TargetList)
+            {
+                bool noNormalizedElutionTimeInfoAvailable = Math.Abs(peptideTarget.NormalizedElutionTime - -1) < Single.Epsilon;
+                if (noNormalizedElutionTimeInfoAvailable)
+                {
+                    peptideTarget.NormalizedElutionTime = 0.5f;
+                }   
+            }
+
+           
+
+
             return data;
         }
 
@@ -89,6 +153,21 @@ namespace DeconTools.Backend.FileIO
             mt.ID = parseIntField(getValue(new string[] { "id", "mass_tag_id", "massTagid" }, lineData, "-1"));
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
             mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
+
+
+
+
+            int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" }, lineData, "-1"));
+
+            bool useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
+            if (useScanNum)
+            {
+                mt.NormalizedElutionTime = scanNum;
+                mt.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
+            }
+
+
+
             mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
             mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
             mt.EmpiricalFormula = getValue(new string[] { "formula", "empirical_formula" }, lineData, "");
