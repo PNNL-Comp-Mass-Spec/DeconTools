@@ -27,8 +27,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             Run run = new XCaliburRun(testFile);
             
             //create list of target scansets
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6015, 1, 1);
-            sscc.Create();
+            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6015, 1, 1) ;
+            
 
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);

@@ -32,12 +32,9 @@ namespace DeconTools.Testing.ProblemCases
         {
             StringBuilder sb = new StringBuilder();
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run, startFrame, stopFrame, 1, 1);
-            fscc.Create();
-
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, startScan, stopScan, 1, 1);
-            sscc.Create();
-
+            run.FrameSetCollection = FrameSetCollection.Create(run, startFrame, stopFrame, 1, 1);
+            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, 1, 1);
+            
             UIMF_MSGenerator msgen = new UIMF_MSGenerator();
 
 

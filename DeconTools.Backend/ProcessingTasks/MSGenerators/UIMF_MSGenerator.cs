@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             if (requestScansAndFrames)
             {
-                uimfRun.GetMassSpectrum(uimfRun.CurrentScanSet, uimfRun.CurrentFrameSet, this.MinMZ, this.MaxMZ);
+                uimfRun.GetMassSpectrum(uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet, this.MinMZ, this.MaxMZ);
             }
             
             if (uimfRun.XYData.Xvalues == null || uimfRun.XYData.Xvalues.Length == 0)

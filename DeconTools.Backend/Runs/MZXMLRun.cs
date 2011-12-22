@@ -1,50 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
-    public class MZXMLRun : DeconToolsRun
+    public sealed class MZXMLRun : DeconToolsRun
     {
 
         #region Constructors
 
         public MZXMLRun()
         {
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
-            this.IsDataThresholded = false;      //TODO: check this
-            this.MSFileType = Globals.MSFileType.MZXML_Rawdata;
+            MSParameters = new Parameters.MSParameters();
+            IsDataThresholded = false;      //TODO: check this
+            MSFileType = Globals.MSFileType.MZXML_Rawdata;
         }
 
         public MZXMLRun(string filename)
             : this()
         {
-            this.Filename = filename;
-
+            Filename = filename;
 
             try
             {
 
-                this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.MZXMLRAWDATA);
+                RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.MZXMLRAWDATA);
             }
             catch (Exception ex)
             {
-
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            
+            MinScan = GetMinPossibleScanNum();        
+            MaxScan = GetMaxPossibleScanNum();
 
         }
 
         public MZXMLRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            MinScan = minScan;
+            MaxScan = maxScan;
         }
 
 
@@ -52,26 +48,29 @@ namespace DeconTools.Backend.Runs
 
         #region Public Methods
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
+        {
+            return 1;
+        }
+
+        public override int GetMaxPossibleScanNum()
         {
             return GetNumMSScans() - 1;      // this is tricky...  some mzXML files might be 1-based;  others might be 0-based. So I will play it safe and go zero-based
         }
-
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            int totScans = this.GetNumMSScans();
-
+            int totScans = GetNumMSScans();
 
             double[] xvals = new double[0];
             double[] yvals = new double[0];
 
             if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
+                RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
             }
             else
             {
@@ -80,7 +79,7 @@ namespace DeconTools.Backend.Runs
             }
 
 
-            this.XYData.SetXYValues(ref xvals, ref yvals);
+            XYData.SetXYValues(ref xvals, ref yvals);
         }
 
         #endregion

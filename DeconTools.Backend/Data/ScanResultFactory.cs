@@ -82,7 +82,7 @@ namespace DeconTools.Backend.Data
                 }
                 scanresult = new UIMFScanResult(frameSet);
 
-                scanresult.FrameNum = UIMFLibraryAdapter.getInstance(run.Filename).Datareader.GetFrameNumByIndex(frameSet.PrimaryFrame);
+                scanresult.FrameNum = frameSet.PrimaryFrame;
                 
 
                 scanresult.NumIsotopicProfiles = totIsotopicProfiles;

@@ -22,6 +22,8 @@ namespace DeconTools.Backend.ProcessingTasks
         private double _minRelIntTheorProfile = 0.3;
         private BasicTFF _basicFeatureFinder = new BasicTFF();
 
+        private MSGenerator _msGenerator;
+
 
         public SaturationDetector()
         {
@@ -40,6 +42,11 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(run != null, "SaturationDetector failed. Run is null");
             Check.Require(run.CurrentScanSet != null, "SaturationDetector failed. Current scanset has not been defined");
 
+            if (_msGenerator == null)
+            {
+                _msGenerator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            }
+
             if (run is UIMFRun)
             {
                 UIMFRun uimfRun = (UIMFRun)run;
@@ -50,15 +57,20 @@ namespace DeconTools.Backend.ProcessingTasks
                 ScanSet scanset = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
 
                 //get the mass spectrum +/- 5 da from the range of the isotopicProfile
-                uimfRun.GetMassSpectrum(scanset, frameset, run.MSParameters.MinMZ, run.MSParameters.MaxMZ);
+
+                uimfRun.CurrentFrameSet = frameset;
+                uimfRun.CurrentScanSet = scanset;
+                _msGenerator.Execute(run.ResultCollection);
+                //uimfRun.GetMassSpectrum(frameset, scanset, run.MSParameters.MinMZ, run.MSParameters.MaxMZ);
             }
             else
             {
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
                 ScanSet scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
 
-                //get the mass spectrum +/- 5 da from the range of the isotopicProfile
-                run.GetMassSpectrum(scanset, run.MSParameters.MinMZ, run.MSParameters.MaxMZ);
+                run.CurrentScanSet = scanset;
+
+                _msGenerator.Execute(run.ResultCollection);
             }
             foreach (IsosResult result in resultList)
             {

@@ -72,6 +72,12 @@ namespace DeconTools.Backend.Runs
             return numSpectra;
         }
 
+
+       
+
+
+
+
         public override double GetTime(int scanNum)
         {
             double RTForAGivenScan = 0;
@@ -80,7 +86,13 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
+        {
+            return 1;
+        }
+
+
+        public override int GetMaxPossibleScanNum()
         {
             int maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
             if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;

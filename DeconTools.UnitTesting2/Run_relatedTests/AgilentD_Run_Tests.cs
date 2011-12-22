@@ -23,7 +23,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void ConstructorTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
             Assert.AreEqual("BSA_TOF4", run.DatasetName);
             Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\AgilentD\\BSA_TOF4\\BSA_TOF4.D", run.DataSetPath);
@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getNumMSScansTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(62, run.GetNumMSScans());
 
         }
@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
             ScanSet scanset = new ScanSet(25);
 
@@ -58,14 +58,14 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getMSLevelTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(1, run.GetMSLevel(25)); 
         }
 
         [Test]
         public void getTimeTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(0.414033333333333m, (decimal)run.GetTime(25));
         }
 
@@ -73,7 +73,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void disposeTest1()
         {
-            Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentDataset1);
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
             using (Run disposedRun = run )
             {
@@ -96,7 +96,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1);
+                Run run = new DeconTools.Backend.Runs.AgilentDRun(wrongFileExample1);
             });
             Assert.That(ex.Message, Is.EqualTo("Dataset's inputted name refers to a file, but should refer to a Folder"));
         }
@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(wrongFileExample1 + ".txt");
+                Run run = new DeconTools.Backend.Runs.AgilentDRun(wrongFileExample1 + ".txt");
             });
             Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
         }
@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(@"J:\test");
+                Run run = new DeconTools.Backend.Runs.AgilentDRun(@"J:\test");
             });
             Assert.That(ex.Message, Is.EqualTo("Dataset not found."));
         }
@@ -131,7 +131,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
                 string agilentFileButMissingDotD = dirinfo.Parent.FullName;
 
-                Run run = new DeconTools.Backend.Runs.AgilentD_Run(agilentFileButMissingDotD);
+                Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentFileButMissingDotD);
             });
             Assert.That(ex.Message, Is.EqualTo("Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name."));
         }

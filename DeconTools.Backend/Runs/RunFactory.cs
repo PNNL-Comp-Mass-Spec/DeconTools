@@ -74,7 +74,7 @@ namespace DeconTools.Backend.Runs
                     break;
 
                 case ".d":
-                    run = new AgilentD_Run(fullfileName);
+                    run = new AgilentDRun(fullfileName);
                     break;
                 case ".yafms":
                     run = new YAFMSRun(fullfileName);
@@ -103,7 +103,7 @@ namespace DeconTools.Backend.Runs
                     break;
 
                 case Globals.MSFileType.Agilent_D:
-                    run = new AgilentD_Run(fileName);
+                    run = new AgilentDRun(fileName);
                     break;
                 case Globals.MSFileType.Ascii:
                     run = new MSScanFromTextFileRun(fileName);
@@ -167,11 +167,11 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.Agilent_D:
                     if (parameters.HornTransformParameters.UseScanRange)
                     {
-                        run = new AgilentD_Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
+                        run = new AgilentDRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
                     }
                     else
                     {
-                        run = new AgilentD_Run(filename);
+                        run = new AgilentDRun(filename);
                     }
                     break;
                 case Globals.MSFileType.Ascii:
@@ -249,24 +249,10 @@ namespace DeconTools.Backend.Runs
                         UIMFRun uimfrun = (UIMFRun)run;
 
 
-                        int minFrameIndex = uimfrun.MinFrame;
-                        int maxFrameIndex = uimfrun.MaxFrame;
+                        int minFrameIndex = parameters.HornTransformParameters.MinScan;
+                        int maxFrameIndex = parameters.HornTransformParameters.MaxScan;
 
-
-
-
-                        try
-                        {
-                            minFrameIndex = UIMFLibraryAdapter.getInstance(filename).Datareader.get_FrameIndex(parameters.HornTransformParameters.MinScan);
-                            maxFrameIndex = UIMFLibraryAdapter.getInstance(filename).Datareader.get_FrameIndex(parameters.HornTransformParameters.MaxScan);
-
-                        }
-                        catch (IndexOutOfRangeException ex)
-                        {
-
-                            throw new IndexOutOfRangeException("Error occurred when trying to define Min and Max frame of UIMF dataset. Details: " + ex.Message);
-                        }
-
+                     
                         if (minFrameIndex < uimfrun.MinFrame) minFrameIndex = uimfrun.MinFrame;
                         if (minFrameIndex > uimfrun.MaxFrame) minFrameIndex = uimfrun.MaxFrame;
 

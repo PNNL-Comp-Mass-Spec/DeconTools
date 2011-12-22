@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Xml;
-using DeconTools.Utilities;
+using System.Linq;
 using System.Xml.Linq;
-using DeconTools.Backend.Runs.CalibrationData;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs.CalibrationData;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
-    public class BrukerV2Run : Run
+    public sealed class BrukerV2Run : Run
     {
         FileInfo m_serFileInfo;
         FileInfo m_settingsfileInfo;
@@ -103,8 +101,8 @@ namespace DeconTools.Backend.Runs
             Check.Ensure(this.rawData != null, "Run initialization problem. Details:  Run was loaded but after FFT settings were applied, there was a problem.");
 
 
-            this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            this.MinScan = GetMinPossibleScanNum();        //  remember that DeconEngine is 1-based
+            this.MaxScan = GetMaxPossibleScanNum();
 
             Check.Ensure(this.MaxScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
 
@@ -290,10 +288,16 @@ namespace DeconTools.Backend.Runs
             return this.rawData.GetNumScans();
         }
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
         {
-            return this.GetNumMSScans();
+            return 1;
         }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans();
+        }
+
 
         public override int GetMSLevelFromRawData(int scanNum)
         {

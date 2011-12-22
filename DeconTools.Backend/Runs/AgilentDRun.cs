@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 using System.IO;
 using Agilent.MassSpectrometry.DataAnalysis;
+using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
-    public class AgilentD_Run : Run
+    public sealed class AgilentDRun : Run
     {
         #region Constructors
 
@@ -21,14 +18,14 @@ namespace DeconTools.Backend.Runs
         /// </summary>
         /// <param name="folderName">The name of the Agilent data folder. Folder has a '.d' suffix</param>
 
-        public AgilentD_Run()
+        public AgilentDRun()
         {
             this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.Agilent_D;
             this.ContainsMSMSData = true;    //not sure if it does, but setting it to 'true' ensures that each scan will be checked. 
         }
 
-        public AgilentD_Run(string dataFileName)
+        public AgilentDRun(string dataFileName)
             : this()
         {
             DirectoryInfo dirInfo = new DirectoryInfo(dataFileName);
@@ -40,24 +37,23 @@ namespace DeconTools.Backend.Runs
             Check.Require(dirInfo.FullName.EndsWith("d", StringComparison.OrdinalIgnoreCase), "Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name.");
 
 
-
-
-            this.Filename = dirInfo.FullName;
-            this.DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));    //get dataset name without .d extension
-            this.DataSetPath = dirInfo.FullName;
+            Filename = dirInfo.FullName;
+            DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));
+                //get dataset name without .d extension
+            DataSetPath = dirInfo.FullName;
 
             OpenDataset();
 
-            this.MinScan = 0;        // AgilentD files are 0-based. 
-            this.MaxScan = GetNumMSScans() - 1;   //
+            MinScan = GetMinPossibleScanNum();
+            MaxScan = GetMaxPossibleScanNum();
         }
 
 
-        public AgilentD_Run(string dataFileName, int minScan, int maxScan)
+        public AgilentDRun(string dataFileName, int minScan, int maxScan)
             : this(dataFileName)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            MinScan = minScan;
+            MaxScan = maxScan;
 
         }
 
@@ -80,6 +76,18 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
+        public override int GetMinPossibleScanNum()
+        {
+            // AgilentD files are 0-based.
+            return 0;
+        }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans() - 1;
+        }
+
+
         public override int GetNumMSScans()
         {
             //m_reader=new MassSpecDataReader();

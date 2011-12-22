@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using DeconTools.Backend.ProjectControllers;
+﻿using System.ComponentModel;
+
 
 namespace DeconTools.Backend.Core
 {
@@ -47,9 +43,9 @@ namespace DeconTools.Backend.Core
                 //    break;
                 //case Globals.ProjectControllerType.RUN_MERGER_CONTROLLER:
                 //    break;
-                case Globals.ProjectControllerType.KOREA_IMS_PEAKSONLY_CONTROLLER:
-                    projectController = new KoreaIMSTextFileProjectController(inputDataFilename, fileType, paramFileName, bw);
-                    break;
+                //case Globals.ProjectControllerType.KOREA_IMS_PEAKSONLY_CONTROLLER:
+                //    projectController = new KoreaIMSTextFileProjectController(inputDataFilename, fileType, paramFileName, bw);
+                //    break;
                 default:
                     projectController = new OldSchoolProcRunner(inputDataFilename, fileType, paramFileName, bw);
                     break;

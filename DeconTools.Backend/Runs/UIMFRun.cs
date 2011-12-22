@@ -1,41 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Utilities;
 using UIMFLibrary;
-using System.Linq;
-using System.IO;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
 
     [Serializable]
-    public class UIMFRun : DeconToolsRun
+    public sealed class UIMFRun : DeconToolsRun
     {
-        const double FRAME_PRESSURE_STANDARD = 4.00000d;   // 
+        const double FramePressureStandard = 4.00000d;   // 
 
-        private int FrameTypeForMS1;     // the frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
-
-
-        private int numBins;
-
-        private GlobalParameters m_globalParameters;
+        /// <summary>
+        /// The frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
+        /// </summary>
+        private DataReader.FrameType _frameTypeForMS1;
+        private GlobalParameters _globalParameters;
 
         //private UIMFLibrary.DataReader m_reader;
-        private Dictionary<int, double> framePressuresUnsmoothed;
+        private Dictionary<int, double> _framePressuresUnsmoothed;
 
         #region Constructors
         public UIMFRun()
         {
-            this.XYData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
-            this.MSFileType = Globals.MSFileType.PNNL_UIMF;
-            this.frameSetCollection = new FrameSetCollection();
-            this.ContainsMSMSData = false;
-            this.RawData = null;
-            this.framePressuresUnsmoothed = new Dictionary<int, double>();
+            XYData = new XYData();
+            MSParameters = new MSParameters();
+            MSFileType = Globals.MSFileType.PNNL_UIMF;
+            FrameSetCollection = new FrameSetCollection();
+            RawData = null;
+            _framePressuresUnsmoothed = new Dictionary<int, double>();
+            _frameTypeForMS1 = DataReader.FrameType.MS1;   //default is MS1
 
         }
 
@@ -44,34 +43,32 @@ namespace DeconTools.Backend.Runs
         {
 
             Check.Require(File.Exists(fileName), "UIMF file does not exist.");
-            this.Filename = fileName;
-
-            //m_reader = new DataReader();
-
-            SetGlobalParameters();
-
-            string baseFilename = Path.GetFileName(this.Filename);
-            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            this.DataSetPath = Path.GetDirectoryName(fileName);
-
-            this.MinFrame = 0;
-
-            this.MaxFrame = GetMaxPossibleFrameIndex();
-            this.MinScan = 0;
-            this.MaxScan = GetMaxPossibleScanIndex();
-            this.numBins = GetNumBins();
+            Filename = fileName;
 
 
-            this.FrameTypeForMS1 = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.CurrentFrameType;
+            _globalParameters = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetGlobalParameters();
 
-            
+            Check.Ensure(_globalParameters != null, "UIMF file's Global parameters could not be initialized. Check UIMF file to make sure it is a valid file.");
 
+            string baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(fileName);
+
+            MinFrame = GetMinPossibleFrameNumber(); // frame number is 1-based
+            MaxFrame = GetMaxPossibleFrameNumber();
+            MinScan = GetMinPossibleScanNum();
+            MaxScan = GetMaxPossibleScanNum();
+
+            ContainsMSMSData = CheckRunForMSMSData();
 
         }
 
-        private void SetGlobalParameters()
+        private bool CheckRunForMSMSData()
         {
-            m_globalParameters = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetGlobalParameters();
+            var msmsFrames= UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameNumbers(DataReader.FrameType.MS2);
+            if (msmsFrames == null || msmsFrames.Length == 0) return false;
+
+            return true;
         }
 
 
@@ -79,8 +76,8 @@ namespace DeconTools.Backend.Runs
         public UIMFRun(string fileName, int minFrame, int maxFrame)
             : this(fileName)
         {
-            this.minFrame = minFrame;
-            this.maxFrame = maxFrame;
+            this._minFrame = minFrame;
+            this.MaxFrame = maxFrame;
         }
 
         public UIMFRun(string fileName, int minFrame, int maxFrame, int minScan, int maxScan)
@@ -96,140 +93,219 @@ namespace DeconTools.Backend.Runs
 
         #region Properties
 
-        private FrameSetCollection frameSetCollection;
+        public FrameSetCollection FrameSetCollection { get; set; }
 
-        public FrameSetCollection FrameSetCollection
-        {
-            get { return frameSetCollection; }
-            set { frameSetCollection = value; }
-        }
-
-
-
-        private int minFrame;
-
+        private int _minFrame;
         public int MinFrame
         {
-            get { return minFrame; }
+            get { return _minFrame; }
             set
             {
-                Check.Require(value >= 0, "MinFrame must be an integer greater than or equal to 0");
-                minFrame = value;
+                Check.Require(value >= 1, "MinFrame must be an integer greater than or equal to 1");
+                _minFrame = value;
             }
         }
-        private int maxFrame;
 
-
-        public int MaxFrame
-        {
-            get { return maxFrame; }
-            set { maxFrame = value; }
-        }
-
-
-        private FrameSet currentFrameSet;
-      
-        public FrameSet CurrentFrameSet
-        {
-            get { return currentFrameSet; }
-            set { currentFrameSet = value; }
-        }
-
-
+        public int MaxFrame { get; set; }
+        
+        public FrameSet CurrentFrameSet { get; set; }
 
         #endregion
 
         #region Public Methods
+
+        public int GetNumFrames()
+        {
+            if (_globalParameters == null)
+            {
+                _globalParameters = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetGlobalParameters();
+            }
+            return _globalParameters.NumFrames;
+        }
+
+        public int GetNumBins()
+        {
+            return _globalParameters.Bins;
+        }
+
         public override int GetNumMSScans()
         {
-            int numFrames = m_globalParameters.NumFrames;
+            int numFrames = _globalParameters.NumFrames;
             int numScansPerFrame = 0;
 
-            FrameParameters frameParam = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(0);
+            FrameParameters frameParam = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(1);
             numScansPerFrame = frameParam.Scans;
 
             return (numScansPerFrame * numFrames);
         }
 
+        internal int GetMinPossibleFrameNumber()
+        {
+            return 1;    //one-based
+        }
 
+        internal int GetMaxPossibleFrameNumber()
+        {
+            int maxPossibleFrameNumber = _globalParameters.NumFrames;
+
+            int minPossibleFrameNumber = GetMinPossibleFrameNumber();
+            if (maxPossibleFrameNumber < minPossibleFrameNumber)
+            {
+                maxPossibleFrameNumber = minPossibleFrameNumber;
+            }
+
+            return maxPossibleFrameNumber;
+        }
+
+        internal int GetNumScansPerFrame()
+        {
+            //TODO:  check this and make sure it is correct
+            int minFrame = MinFrame;
+
+            int numScansPerFrame = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(minFrame).Scans;
+            return numScansPerFrame;
+
+        }
+
+        public override int GetMinPossibleScanNum()
+        {
+            return 0;
+        }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumScansPerFrame() - 1;
+            
+        }
+
+        public override int GetCurrentScanOrFrame()
+        {
+            return this.CurrentFrameSet.PrimaryFrame;
+        }
+
+        public override int GetMSLevelFromRawData(int frameNum)
+        {
+
+            FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
+
+            //TODO: keep an eye on this!
+            if (fp.FrameType == 0)       // frametype of '0' is legacy. MS1 should have a frameType of '1'
+                return 1;
+
+            return (int)fp.FrameType;
+
+
+
+        }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-
-            double[] xvals = new double[1];
-            double[] yvals = new double[1];
-
             throw new NotImplementedException("this 'GetMassSpectrum' method is no longer supported");
         }
 
-
-        //TODO: change the order of parameters so that frameset is first
-        public override void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
+        public override void GetMassSpectrum(FrameSet frameset, ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset.Count() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             Check.Require(frameset.Count() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");
 
-            int numBins = this.GetNumBins();
-            double[] xvals = new double[numBins];
-            int[] yvals = new int[numBins];
+            int frameLower = frameset.getLowestFrameNumber();
+            int frameUpper = frameset.getHighestFrameNumber();
+            int scanLower = scanset.getLowestScanNumber();
+            int scanUpper = scanset.getHighestScanNumber();
 
+            double[] xvals;
+            int[] yvals;
+            int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower, 
+                frameUpper, _frameTypeForMS1, scanLower, scanUpper, out xvals, out yvals);
 
-            try
+            if (xvals == null || xvals.Length == 0)
             {
-                int frameLower = frameset.getLowestFrameNumber();
-                int frameUpper = frameset.getHighestFrameNumber();
-                int scanLower = scanset.getLowestScanNumber();
-                int scanUpper = scanset.getHighestScanNumber();
-
-                int nonZeroLength = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(xvals, yvals, FrameTypeForMS1, frameLower, frameUpper, scanLower, scanUpper);
-
-
-                if (xvals.Length == 0 || yvals.Length == 0)
-                {
-                    this.XYData.Xvalues = null;
-                    this.XYData.Yvalues = null;
-                    return;
-                }
-
-                int intensityArrLength = yvals.Length;
-                int[] tempIntensities = yvals;
-                int zeros = 0;
-
-
-                for (int k = 0; k < intensityArrLength; k++)
-                {
-                    if (tempIntensities[k] != 0 && (minMZ <= xvals[k] && maxMZ >= xvals[k]))
-                    {
-                        xvals[k - zeros] = xvals[k];
-                        yvals[k - zeros] = tempIntensities[k];
-                    }
-                    else
-                    {
-                        zeros++;
-                    }
-                }
-                // resize arrays cutting off the zeroes at the end.
-                Array.Resize(ref xvals, intensityArrLength - zeros);
-                Array.Resize(ref yvals, intensityArrLength - zeros);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
+                this.XYData.Xvalues = null;
+                this.XYData.Yvalues = null;
+                return;
             }
 
+            XYData.Xvalues = xvals;
+            XYData.Yvalues = yvals.Select<int, double>(i => i).ToArray();
 
-            this.XYData.Xvalues = xvals;
-            this.XYData.Yvalues = yvals.Select<int, double>(i => i).ToArray();
+            if (XYData.Xvalues[0] < minMZ || XYData.Xvalues[XYData.Xvalues.Length-1]> maxMZ)
+            {
+                XYData = XYData.TrimData(minMZ, maxMZ);
+            }
+            
         }
 
+        public override double GetTime(int frameNum)
+        {
+            double time = 0;
+            time = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum).StartTime;
+            return time;
+
+        }
+        
+        public double GetDriftTime(FrameSet frame, int scanNum)
+        {
+            bool framePressureIsZero = (frame.FramePressure == 0 || double.IsNaN(frame.FramePressure));
+            if (framePressureIsZero)
+            {
+                return 0;
+            }
+
+            if (Double.IsNaN(frame.AvgTOFLength))
+            {
+                FrameParameters fp = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
+                Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
+
+                frame.AvgTOFLength = fp.AverageTOFLength;
+            }
+
+            if (Double.IsNaN(frame.FramePressure))
+            {
+                frame.FramePressure = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryFrame);
+            }
+
+            double driftTime = 0;
+            if (frame.AvgTOFLength > 0)
+            {
+                driftTime = frame.AvgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
+            }
+
+            driftTime = driftTime * (FramePressureStandard / frame.FramePressure);      // correct the drift time according to the pressure
+
+
+            return driftTime;
+
+        }
+        
+        public double GetDriftTime(int frameNum, int scanNum)
+        {
+            FrameParameters fp = null;
+            fp = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(frameNum);
+            double avgTOFLength = fp.AverageTOFLength;
+            double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
+
+            double frameBackpressure = fp.PressureBack;
+            if (frameBackpressure != 0)
+            {
+                driftTime = driftTime * (FramePressureStandard / frameBackpressure);  // correc
+            }
+
+            return driftTime;
+
+
+        }
+
+        
         public double GetFramePressure(int frameNum)
         {
-            return lookupFramePressure(frameNum);
-            
+            if (!this._framePressuresUnsmoothed.ContainsKey(frameNum))
+            {
+                double pressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frameNum);
+                this._framePressuresUnsmoothed.Add(frameNum, pressure);
+            }
+
+            return this._framePressuresUnsmoothed[frameNum];
+
         }
 
         public double GetFramePressureBack(int frameNum)
@@ -242,50 +318,10 @@ namespace DeconTools.Backend.Runs
         {
             double framepressureFront = -1;
 
-            framepressureFront = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum).PressureFront;
+            framepressureFront = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(frameNum).PressureFront;
 
             return framepressureFront;
         }
-
-
-
-        private double lookupFramePressure(int frameNum)
-        {
-            if (!this.framePressuresUnsmoothed.ContainsKey(frameNum))
-            {
-                double pressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frameNum);
-                this.framePressuresUnsmoothed.Add(frameNum, pressure);
-            }
-
-            return this.framePressuresUnsmoothed[frameNum];
-
-            
-        }
-
-     
-    
-
-        public int GetNumFrames()
-        {
-            if (m_globalParameters == null)
-            {
-                SetGlobalParameters();
-            }
-            return m_globalParameters.NumFrames;
-
-
-        }
-
-        public override double GetTime(int frameNum)
-        {
-            double time = 0;
-            time = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum).StartTime;
-            return time;
-
-        }
-
-
-        
 
         public void SmoothFramePressuresInFrameSets()
         {
@@ -298,15 +334,15 @@ namespace DeconTools.Backend.Runs
             int lowerFrameBoundary = (int)Math.Round(numPointsToSmooth / 2) - 1;    //zero-based
             int upperFrameBoundary = (int)Math.Round(numFrames - numPointsToSmooth / 2) - 1;   //zero-based
 
-            int maxFrame = this.GetMaxPossibleFrameIndex();
-            int minFrame = this.GetMinPossibleFrameIndex();
+            int maxFrame = _globalParameters.NumFrames;
+            int minFrame = GetMinPossibleFrameNumber();
 
 
             foreach (var frame in FrameSetCollection.FrameSetList)
             {
-                if (frame.FramePressure == Single.NaN)
+                if (double.IsNaN(frame.FramePressure))
                 {
-                    throw new System.ArgumentOutOfRangeException("Cannot smooth frame pressures.  You need to first populate frame pressures within the Frameset.");
+                    throw new ArgumentOutOfRangeException("Cannot smooth frame pressures.  You need to first populate frame pressures within the Frameset.");
                 }
 
                 int lowerFrame = -1;
@@ -321,7 +357,7 @@ namespace DeconTools.Backend.Runs
                 else if (frame.PrimaryFrame > upperFrameBoundary)
                 {
                     lowerFrame = maxFrame - (int)numPointsToSmooth + 1;
-                    upperFrame =maxFrame;
+                    upperFrame = maxFrame;
                 }
                 else
                 {
@@ -342,35 +378,16 @@ namespace DeconTools.Backend.Runs
 
 
 
-                frame.FramePressure = getAverageFramePressure(lowerFrame, upperFrame);
+                frame.FramePressure = GetAverageFramePressure(lowerFrame, upperFrame);
 
 
             }
 
         }
 
-        private double getAverageFramePressure(int lowerFrame, int upperFrame)
+        private double GetAverageFramePressure(int lowerFrame, int upperFrame)
         {
             List<double> framePressures = new List<double>();
-
-            //int actualLower = lowerFrame;
-            //int actualUpper = upperFrame;
-
-            //int minFrame = this.GetMinPossibleFrameIndex();
-            //int maxFrame = this.GetMaxPossibleFrameIndex();
-
-            //bool lowerFrameOutOfRange = lowerFrame < minFrame || lowerFrame>maxFrame;
-            //if (lowerFrameOutOfRange)
-            //{
-            //    actualLower = minFrame;
-            //}
-
-            //bool upperFrameOutOfRange = upperFrame < minFrame || upperFrame > maxFrame;
-            //if (upperFrameOutOfRange)
-            //{
-            //    actualUpper = maxFrame;
-            //}
-
 
             for (int i = lowerFrame; i <= upperFrame; i++)
             {
@@ -380,8 +397,8 @@ namespace DeconTools.Backend.Runs
                 {
                     framePressures.Add(framePressure);
                 }
-                
-                
+
+
             }
 
             if (framePressures.Count > 0)
@@ -394,7 +411,6 @@ namespace DeconTools.Backend.Runs
             }
         }
 
-    
         public void GetFrameDataAllFrameSets()
         {
             Check.Require(FrameSetCollection != null && FrameSetCollection.FrameSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
@@ -404,44 +420,8 @@ namespace DeconTools.Backend.Runs
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryFrame);
-                
+
             }
-
-        }
-
-        public double GetDriftTime(FrameSet frame, int scanNum)
-        {
-
-
-            bool framePressureIsZero = (frame.FramePressure == 0 || frame.FramePressure == Double.NaN);
-            if (framePressureIsZero)
-            {
-                return 0;
-            }
-
-            if (Double.IsNaN(frame.AvgTOFLength))
-            {
-                FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryFrame);
-                Check.Require(fp != null, "Could not get drift time - Frame parameters could not be accessed.");
-
-                frame.AvgTOFLength = fp.AverageTOFLength;
-            }
-
-            if (Double.IsNaN(frame.FramePressure))
-            {
-                frame.FramePressure = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryFrame);
-            }
-
-            double driftTime = 0;
-            if (frame.AvgTOFLength > 0)
-            {
-                driftTime = frame.AvgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
-            }
-
-            driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frame.FramePressure);      // correct the drift time according to the pressure
-
-
-            return driftTime;
 
         }
 
@@ -450,56 +430,39 @@ namespace DeconTools.Backend.Runs
         //    return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramesAndScanIntensitiesForAGivenMz(startFrame, endFrame, frameType, startScan, endScan, targetMz, toleranceInMZ);
         //}
 
-
+        ////Anuj added this
         //for now I am converting this dictionary to a frame and scna list, only because the UIMF library already has that method
-        public void GetMassSpectrum(Dictionary<ushort, List<ushort>> frameAndScans, double minMz, double MaxMz)
-        {
-            List<ushort> frameNumbers = frameAndScans.Keys.ToList<ushort>();
-            List<List<ushort>> scanNumbers = new List<List<ushort>>();
+        //public void GetMassSpectrum(Dictionary<ushort, List<ushort>> frameAndScans, double minMz, double MaxMz)
+        //{
+        //    List<ushort> frameNumbers = frameAndScans.Keys.ToList<ushort>();
+        //    List<List<ushort>> scanNumbers = new List<List<ushort>>();
 
-            foreach (ushort frameNum in frameNumbers)
-            {
-                List<ushort> scanList = frameAndScans[frameNum];
-                scanNumbers.Add(scanList);
-            }
+        //    foreach (ushort frameNum in frameNumbers)
+        //    {
+        //        List<ushort> scanList = frameAndScans[frameNum];
+        //        scanNumbers.Add(scanList);
+        //    }
 
-            GetMassSpectrum(frameNumbers, scanNumbers, minMz, MaxMz);
+        //    GetMassSpectrum(frameNumbers, scanNumbers, minMz, MaxMz);
 
-        }
+        //}
 
-        public void GetMassSpectrum(List<ushort> frameNumbers, List<List<ushort>> scanNumbersForFrameNumbers, double minMz, double maxMz)
-        {
-            List<double> mzList = new List<double>();
-            List<double> intensityList = new List<double>();
-            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(frameNumbers, scanNumbersForFrameNumbers, mzList, intensityList, minMz, maxMz);
-            this.XYData.Xvalues = mzList.ToArray();
-            this.XYData.Yvalues = intensityList.ToArray();
-        }
-
+        ////Anuj added this
+        //public void GetMassSpectrum(List<ushort> frameNumbers, List<List<ushort>> scanNumbersForFrameNumbers, double minMz, double maxMz)
+        //{
+        //    List<double> mzList = new List<double>();
+        //    List<double> intensityList = new List<double>();
+        //    UIMFLibraryAdapter.getInstance(this.Filename).Datareader.SumScansNonCached(frameNumbers, scanNumbersForFrameNumbers, mzList, intensityList, minMz, maxMz);
+        //    this.XYData.Xvalues = mzList.ToArray();
+        //    this.XYData.Yvalues = intensityList.ToArray();
+        //}
 
         public Stack<int[]> GetDescendingBpiValuesByFramesAndScans()
         {
-            return UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameAndScanListByDescendingIntensity();
+            return UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameAndScanListByDescendingIntensity();
         }
 
-        public double GetDriftTime(int frameNum, int scanNum)
-        {
-            FrameParameters fp = null;
-            fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
-            double avgTOFLength = fp.AverageTOFLength;
-            double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
-
-            double frameBackpressure = fp.PressureBack;
-            if (frameBackpressure != 0)
-            {
-                driftTime = driftTime * (FRAME_PRESSURE_STANDARD / frameBackpressure);  // correc
-            }
-
-            return driftTime;
-
-
-        }
-
+   
 
         //public void GetDriftTimeProfile(int frameStartIndex, int frameStopIndex, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         //{
@@ -520,8 +483,8 @@ namespace DeconTools.Backend.Runs
         //    }
 
         //}
-        
-        
+
+
         //public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         //{
         //    int[] scanValues = null;
@@ -543,61 +506,7 @@ namespace DeconTools.Backend.Runs
         //}
 
 
-        internal int GetNumScansPerFrame()
-        {
-            //TODO:  need to make this so it isn't hard coded to frame '0'.  We have an instance of a UIMF file starting at frame '400' and this doesn't work. 
-            int numScansPerFrame = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(0).Scans;
-            return numScansPerFrame;
-
-        }
-
-        internal override int GetMaxPossibleScanIndex()
-        {
-            int maxPossibleScanIndex = GetNumScansPerFrame() - 1;
-            if (maxPossibleScanIndex < 0) maxPossibleScanIndex = 0;
-            return maxPossibleScanIndex;
-        }
-
-
-        internal int GetMinPossibleFrameIndex()
-        {
-            return 0;    //zero-based
-        }
-
-
-        internal int GetMaxPossibleFrameIndex()
-        {
-            int maxPossibleFrameIndex = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameIndexMax();   
-
-            if (maxPossibleFrameIndex < 0) maxPossibleFrameIndex = 0;
-            return maxPossibleFrameIndex;
-        }
-        public int GetNumBins()
-        {
-            return m_globalParameters.Bins;
-        }
-
-        public override int GetCurrentScanOrFrame()
-        {
-            return this.CurrentFrameSet.PrimaryFrame;
-        }
-
-
-        public override int GetMSLevelFromRawData(int frameNum)
-        {
-            return 1;
-            
-            FrameParameters fp = null;
-            fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
-
-            if (fp.FrameType == 0)       // frametype of '0' is legacy. MS1 should have a frameType of '1'
-                return 1;
-
-            return fp.FrameType;
-
-
-
-        }
+        
 
         public override void Close()
         {
@@ -609,9 +518,36 @@ namespace DeconTools.Backend.Runs
             base.Close();
         }
 
+        public float GetTIC(FrameSet frameSet, ScanSet scanSet)
+        {
 
+            return (float)UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetTIC(frameSet.PrimaryFrame, scanSet.PrimaryScanNumber);
 
+        }
 
+        public void GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
+        {
+            double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
+            double lowerMZ = targetMZ - toleranceInMZ;
+            double upperMZ = targetMZ + toleranceInMZ;
+
+            List<double> frameVals = new List<double>();
+            List<double> intensityVals = new List<double>();
+
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                FrameSet frameset = new FrameSet(frame);
+                ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
+                this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
+
+                double sumIntensities = this.XYData.Yvalues.Sum();
+                frameVals.Add(frame);
+                intensityVals.Add(sumIntensities);
+            }
+
+            this.XYData.Xvalues = frameVals.ToArray();
+            this.XYData.Yvalues = intensityVals.ToArray();
+        }
 
         public override string GetCurrentScanOrFrameInfo()
         {
@@ -636,35 +572,6 @@ namespace DeconTools.Backend.Runs
         #endregion
 
 
-        public float GetTIC(FrameSet frameSet, ScanSet scanSet)
-        {
-
-            return (float)UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetTIC(frameSet.PrimaryFrame, scanSet.PrimaryScanNumber);
-
-        }
-
-        public void GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
-        {
-            double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
-            double lowerMZ = targetMZ - toleranceInMZ;
-            double upperMZ = targetMZ + toleranceInMZ;
-
-            List<double> frameVals = new List<double>();
-            List<double> intensityVals = new List<double>();
-
-            for (int frame = startFrame; frame <= stopFrame; frame++)
-            {
-                FrameSet frameset = new FrameSet(frame);
-                ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
-                this.GetMassSpectrum(scan, frameset, lowerMZ, upperMZ);
-
-                double sumIntensities = this.XYData.Yvalues.Sum();
-                frameVals.Add(frame);
-                intensityVals.Add(sumIntensities);
-            }
-
-            this.XYData.Xvalues = frameVals.ToArray();
-            this.XYData.Yvalues = intensityVals.ToArray();
-        }
+       
     }
 }

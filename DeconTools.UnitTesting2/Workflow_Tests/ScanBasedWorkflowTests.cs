@@ -43,5 +43,23 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.Execute();
         }
 
+
+        [Test]
+        public void UIMFWorkflowTest2()
+        {
+            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Frame_500-510.xml";
+
+            var parameters = new OldDecon2LSParameters();
+            parameters.Load(parameterFile);
+            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+           
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            workflow.Execute();
+        }
+
+
     }
 }

@@ -37,7 +37,7 @@ namespace DeconTools.Backend.DTO
                     ScanSet scanset = new ScanSet(uimfresult.ScanSet.PrimaryScanNumber);
                     
                     //get the mass spectrum +/- 5 da from the range of the isotopicProfile
-                    uimfRun.GetMassSpectrum(scanset, frameset, uimfresult.IsotopicProfile.getMonoPeak().XValue - 5, uimfresult.IsotopicProfile.Peaklist.Last().XValue + 5);
+                    uimfRun.GetMassSpectrum(frameset, scanset, uimfresult.IsotopicProfile.getMonoPeak().XValue - 5, uimfresult.IsotopicProfile.Peaklist.Last().XValue + 5);
                 }
                 else
                 {

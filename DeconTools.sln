@@ -17,8 +17,6 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DeconToolsAutoProcessor_Ins
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decon2LS.UI", "Decon2LS.UI\Decon2LS.UI.csproj", "{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconConsole.UnitTesting", "DeconConsole.UnitTesting\DeconConsole.UnitTesting.csproj", "{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.UnitTesting2", "DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj", "{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Testing.ProblemCases", "DeconTools.Testing.ProblemCases\DeconTools.Testing.ProblemCases.csproj", "{37066C05-2D23-473E-BDCB-0DAD0444FDE2}"
@@ -117,12 +115,6 @@ Global
 		{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}.Release|Mixed Platforms.Build.0 = Release|x64
 		{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}.Release|x86.ActiveCfg = Release|x86
 		{0C612C45-8D9A-4DE1-8BCE-E1FD703ED901}.Release|x86.Build.0 = Release|x86
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Debug|x86.ActiveCfg = Debug|x86
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Release|Mixed Platforms.Build.0 = Release|x64
-		{195A12DD-A4BD-49B9-99A5-F1B19D72C5FC}.Release|x86.ActiveCfg = Release|x86
 		{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
 		{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}.Debug|x86.ActiveCfg = Debug|x86

@@ -1,90 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
 using System.Diagnostics;
-using DeconTools.Backend.Utilities;
-using DeconTools.UnitTesting2;
 using System.IO;
-using DeconTools.Backend;
+using System.Linq;
+using System.Text;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
-
-namespace DeconTools.UnitTesting.Run_relatedTests
+namespace DeconTools.UnitTesting2.Run_relatedTests
 {
     [TestFixture]
     public class UIMFRun_Tests
     {
-        private string uimfFilepath = FileRefs.RawDataMSFiles.UIMFStdFile1;
-        private string uimfFileContainingMSMSScans = FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData;
-
-        [Test]
+       
+       [Test]
         public void getUIMFFileTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            string fileName = FileRefs.RawDataMSFiles.UIMFStdFile3;
 
-            Assert.AreEqual(0, uimfRun.MinFrame);
-            Assert.AreEqual(1949, uimfRun.MaxFrame);
+            UIMFRun uimfRun = new UIMFRun(fileName);
+
+            Assert.AreEqual(1, uimfRun.MinFrame);
+            Assert.AreEqual(1175, uimfRun.MaxFrame);
 
             Assert.AreEqual(0, uimfRun.MinScan);
-            Assert.AreEqual(499, uimfRun.MaxScan);
+            Assert.AreEqual(359, uimfRun.MaxScan);
 
-            Assert.AreEqual("35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000", uimfRun.DatasetName);
+            Assert.AreEqual("Sarc_MS2_90_6Apr11_Cheetah_11-02-19", uimfRun.DatasetName);
 
-            string currentUIMFFilePath = Path.GetDirectoryName(uimfFilepath);
+            string currentUIMFFilePath = Path.GetDirectoryName(fileName);
             Assert.AreEqual(currentUIMFFilePath, uimfRun.DataSetPath);
-            Assert.AreEqual(uimfFilepath, uimfRun.Filename);
-
-        }
-
-        [Test]
-        public void checkSummingOfMS1LevelData_inFileContainingMSMSData()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFileContainingMSMSScans);
-
-
-            //int[] frameArray = {1,5,9,13,17};
-
-
-            //FrameSet frameSet = new FrameSet(9, frameArray);
-            //ScanSet scanSet = new ScanSet(300, 100, 500);
-            //uimfRun.GetMassSpectrum(scanSet, frameSet, 0, 50000);
-
-
-            //UIMFLibrary.DataReader reader = new DataReader();
-            //reader.OpenUIMF(uimfFileContainingMSMSScans);
-
-            //GlobalParameters gp= reader.GetGlobalParameters();
-
-            //int numBins = gp.Bins;
-
-            //XYData xydata = new XYData();
-
-            //double[] xvals = new double[numBins];
-            //int[] yvals = new int[numBins];
-
-            //List<double> tempXvalues = new List<double>();
-            //List<double> tempYValues = new List<double>();
-
-            //reader.SumScansRange(xvals,yvals, 1, 9, 2, 100, 500);
-
-            //for (int i = 0; i < xvals.Length; i++)
-            //{
-            //    tempXvalues.Add(xvals[i]);
-            //    tempYValues.Add(yvals[i]);
-            //}
-
-            //xydata.Xvalues = tempXvalues.ToArray();
-            //xydata.Yvalues = tempYValues.ToArray();
-
-            //xydata.Display();
-
-
-
-
-
+            Assert.AreEqual(fileName, uimfRun.Filename);
 
         }
 
@@ -92,172 +39,103 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         public void GetNumberOfFramesTest()
         {
             UIMFRun test = new UIMFRun();
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
             int numframes = uimfRun.GetNumFrames();
             int numScans = uimfRun.GetNumMSScans();
 
 
             Console.WriteLine("Number of frames = " + numframes);
             Console.WriteLine("Number of scans = " + numScans);
-            Assert.AreEqual(1950, numframes);
-            Assert.AreEqual(975000, numScans);
+            Assert.AreEqual(1175, numframes);
+            Assert.AreEqual(423000, numScans);
 
 
-        }
-
-        
-     
-
-        [Test]
-        public void getNumMSScansTest1()
-        {
-            Run uimfRun = new UIMFRun(uimfFilepath);
-            int numScans = uimfRun.GetNumMSScans();
-
-            int numScans2 = uimfRun.GetNumMSScans();
-
-            Assert.AreEqual(975000, numScans);
-            Assert.AreEqual(975000, numScans2);
-        }
-
-        [Test]
-        public void getSummedFramesMSTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-
-            int frame = 1199;
-            int scan = 300;
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            uimfRun.GetMassSpectrum(new ScanSet(scan, scan-1, scan+1), new FrameSet(frame, frame - 1, frame + 1), 100, 2000);
-            sw.Stop();
-            
-            Console.WriteLine(uimfRun.XYData.Xvalues.Length);
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < uimfRun.XYData.Xvalues.Length; i++)
-            {
-                sb.Append(uimfRun.XYData.Xvalues[i]);
-                sb.Append("\t");
-                sb.Append(uimfRun.XYData.Yvalues[i]);
-                sb.Append(Environment.NewLine);
-            }
-            Console.WriteLine(sb.ToString());
-            Console.WriteLine("Time to get MS = " + sw.ElapsedMilliseconds);
-
-            Assert.AreEqual(2331, uimfRun.XYData.Xvalues.Length);
-            Assert.AreEqual(2331, uimfRun.XYData.Yvalues.Length);
         }
 
         [Test]
         public void getFrameStartTimeTest1()
         {
-            UIMFRun run = new UIMFRun(uimfFilepath);
+            UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            int frameNum = 0;
+            int frameNum = 162;
             double frametime1 = run.GetTime(frameNum);
 
-            Assert.AreEqual(35.48137, frametime1);
+            Assert.AreEqual(474.3, (decimal) Math.Round(frametime1, 1));
 
         }
 
+        [Test]
+        public void GetMassSpectrumNoSummingTest1()
+        {
+            UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+
+            FrameSet frame = new FrameSet(162);
+            ScanSet scan = new ScanSet(121);
+
+            run.GetMassSpectrum(frame, scan, 0, 50000);
+
+            double testMZ = 627.2655682;
+            int maxIntensityForTestMZ = 0;
+            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+            {
+
+                if (run.XYData.Xvalues[i] > (testMZ - 0.1) && run.XYData.Xvalues[i] < (testMZ + 0.1))
+                {
+                    if (run.XYData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)run.XYData.Yvalues[i];
+                }
+            }
+
+            Assert.AreEqual(35845, maxIntensityForTestMZ);
+            //TestUtilities.DisplayXYValues(run.XYData);
+        }
+
+        [Test]
+        public void GetMassSpectrumWithSummingTest1()
+        {
+            UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+
+            FrameSet frame = new FrameSet(163,162,164);
+            ScanSet scan = new ScanSet(121);
+
+            run.GetMassSpectrum(frame, scan, 0, 50000);
+
+            double testMZ = 627.2655682;
+            int maxIntensityForTestMZ = 0;
+            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+            {
+
+                if (run.XYData.Xvalues[i] > (testMZ - 0.1) && run.XYData.Xvalues[i] < (testMZ + 0.1))
+                {
+                    if (run.XYData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)run.XYData.Yvalues[i];
+                }
+            }
+
+            Assert.AreEqual(126568, maxIntensityForTestMZ);
+            
+        }
 
 
         [Test]
-        public void getOneFrameOneScanTest1()
+        public void InitializeUIMFContainingMSMSDataTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+           // var runContainsMSMS = new UIMFRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
+            var runNoMSMS = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            for (int i = 250; i < 251; i++)
-            {
-
-                ScanSet scan = new ScanSet(i, i - 2, i + 2);
-                FrameSet frame = new FrameSet(501);
-
-                uimfRun.GetMassSpectrum(scan, frame, 200, 2000);
-                //Console.WriteLine(uimfRun.XYData.Xvalues.Length);
-            }
-
-            //TestUtilities.DisplayXYValues(uimfRun.XYData);
-
-            double sumOfIntensities = uimfRun.XYData.Yvalues.Sum();
-
-            Console.WriteLine("intensity sum = " + sumOfIntensities);
-
-            Assert.AreEqual(440753, sumOfIntensities);
-
+            //Assert.IsTrue(runContainsMSMS.ContainsMSMSData);
+            Assert.IsFalse(runNoMSMS.ContainsMSMSData);
         }
 
-
-        public void getSummedFramesAndScansMSTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-
-            uimfRun.GetMassSpectrum(new ScanSet(300, 1, 599), new FrameSet(1200, 1199, 1201), 100, 2000);
-            Console.WriteLine(uimfRun.XYData.Xvalues.Length);
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < uimfRun.XYData.Xvalues.Length; i++)
-            {
-                sb.Append(uimfRun.XYData.Xvalues[i]);
-                sb.Append("\t");
-                sb.Append(uimfRun.XYData.Yvalues[i]);
-                sb.Append(Environment.NewLine);
-
-            }
-            //Console.WriteLine(sb.ToString());
-            Assert.AreEqual(32752, uimfRun.XYData.Xvalues.Length);
-            Assert.AreEqual(32752, uimfRun.XYData.Yvalues.Length);
-        }
 
         [Test]
         public void getFramePressureTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            double framePressure = uimfRun.GetFramePressure(1000);
+            int testFrame = 162;
+            double framePressure = uimfRun.GetFramePressure(testFrame);
 
             Assert.AreNotEqual(0, framePressure);
-            Assert.AreEqual(4.058m, (Decimal)framePressure);
-
-        }
-
-
-        //this is a useful test to help show memory issues when contantly using the UIMFLibrary
-        [Test]
-        public void memoryTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-
-            uimfRun.CurrentFrameSet = new FrameSet(800);
-
-            Process currentProcess = Process.GetCurrentProcess();
-            TestUtilities.DisplayInfoForProcess(currentProcess);
-
-            long privateMemorySizeBeforeProcessing = currentProcess.PrivateMemorySize64;
-
-
-            ScanSetCollectionCreator scanSetCreator = new ScanSetCollectionCreator(uimfRun, 1, 1);
-            scanSetCreator.Create();
-
-            foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
-            {
-                //uimfRun.GetMassSpectrum(scanset, uimfRun.CurrentFrameSet, 0, 2000);
-
-                uimfRun.GetFramePressureBack(uimfRun.CurrentFrameSet.PrimaryFrame);
-
-            }
-
-
-            currentProcess = Process.GetCurrentProcess();
-            long privateMemorySizeAfterProcessing = currentProcess.PrivateMemorySize64;
-
-            TestUtilities.DisplayInfoForProcess(currentProcess);
-
-            long numBytesAdded = privateMemorySizeAfterProcessing - privateMemorySizeBeforeProcessing;
-            Console.WriteLine("Number of bytes added by processing = " + numBytesAdded);
-
+            Assert.AreEqual(4.02672m, (Decimal)framePressure);
 
         }
 
@@ -265,14 +143,13 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void GetFrameParameters_Test1()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            int frameStart = 800;
-            int frameStop = 810;
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+            int frameStart = 162;
+            int frameStop = 172;
             int numFramesSummed = 3;
 
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, frameStart, frameStop, numFramesSummed, 1);
-            fscc.Create();
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesSummed, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
 
@@ -280,104 +157,50 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
 
 
-        [Test]
-        public void getDriftTimesTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-            int startScan = 0;
-            int stopScan = 599;
-
-            double[] driftTimes = new double[stopScan - startScan + 1];
-
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = startScan; i <= stopScan; i++)
-            {
-                driftTimes[i - startScan] = uimfRun.GetDriftTime(1300, i);
-                sb.Append(driftTimes[i - startScan]);
-                sb.Append(Environment.NewLine);
-
-            }
-
-
-            Assert.AreEqual(1.08005941278066m, (decimal)driftTimes[10]);
-
-
-            //Console.WriteLine(sb.ToString());
-        }
-
-     
-
+      
         [Test]
         public void getDriftTimeForScanZero()
         {
             //UIMF scan numbers are 0-based.  But first scan should have a drifttime above 0. 
 
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            double driftTime = uimfRun.GetDriftTime(1300, 0);
+            double driftTime = uimfRun.GetDriftTime(162, 0);
             Assert.Greater((decimal)driftTime, 0);
         }
 
         [Test]
         public void GetMSLevelTest1()
         {
-            Run run = new UIMFRun(uimfFilepath);
+            Run run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
             Assert.AreEqual(1, run.GetMSLevel(233));
             Assert.AreEqual(1, run.GetMSLevel(234));
-            Assert.AreEqual(1, run.GetMSLevel(2000));
+            Assert.AreEqual(1, run.GetMSLevel(1173));
         }
 
         [Test]
         public void GetNumBinsTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
             int numBins = uimfRun.GetNumBins();
-            Assert.AreEqual(92000, numBins);
+            Assert.AreEqual(148000, numBins);
         }
 
-
-        [Test]
-        public void GetFrameDataForUIMFRunTest1()
-        {
-            UIMFRun uimfRun = new UIMFRun(uimfFilepath);
-
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 500, 600, 3, 1);
-            fscc.Create();
-
-            uimfRun.GetFrameDataAllFrameSets();
-
-            StringBuilder sb = new StringBuilder();
-            foreach (var item in uimfRun.FrameSetCollection.FrameSetList)
-            {
-                sb.Append(item.PrimaryFrame);
-                sb.Append("\t");
-                sb.Append(item.FramePressure.ToString("0.######"));
-                sb.Append("\t");
-                sb.Append(item.AvgTOFLength.ToString("0.###"));
-                sb.Append(Environment.NewLine);
-            }
-
-            Console.Write(sb.ToString());
-
-        }
-
-
+        
         [Test]
         public void SimpleSpeedTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            int numFramesSummed = 3;
-            int numScansSummed = 9;
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+            int numFramesSummed = 1;
+            int numScansSummed = 7;
             double minMZ = 300;
             double maxMZ = 2000;
 
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, 500, 510, numFramesSummed, 1);
-            fscc.Create();
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, 300, 310, numFramesSummed, 1);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(uimfRun, 300, 310, numScansSummed, 1);
-            sscc.Create();
+            uimfRun.ScanSetCollection = ScanSetCollection.Create(uimfRun, 120, 125, numScansSummed, 1);
+
 
             List<long> times = new List<long>();
             Stopwatch sw = new Stopwatch();
@@ -390,7 +213,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
                 {
                     uimfRun.CurrentScanSet = scan;
                     sw.Start();
-                    uimfRun.GetMassSpectrum(scan, frame, minMZ, maxMZ);
+                    uimfRun.GetMassSpectrum(frame, scan, minMZ, maxMZ);
                     sw.Stop();
 
                     times.Add(sw.ElapsedMilliseconds);
@@ -412,14 +235,18 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getLCProfileTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            int startFrame = 370;
-            int stopFrame = 420;
-            double targetMZ = 713.86;
+            int startFrame = 155;
+            int stopFrame = 175;
+            int startScan = 122;
+            int stopScan = 122;
+
+
+            double targetMZ = 627.27;
             double toleranceInPPM = 25;
 
-            uimfRun.GetChromatogram(startFrame, stopFrame, uimfRun.MinScan, uimfRun.MaxScan, targetMZ, toleranceInPPM);
+            uimfRun.GetChromatogram(startFrame, stopFrame, startScan, stopScan, targetMZ, toleranceInPPM);
 
             uimfRun.XYData.Display();
         }
@@ -428,7 +255,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getPressureLastFrameTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
             int lastFrame = uimfRun.MaxFrame;
 
@@ -443,90 +270,43 @@ namespace DeconTools.UnitTesting.Run_relatedTests
         [Test]
         public void getSmoothedFramePressuresTest1()
         {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            int startFrame = 24;
-            int stopFrame = 699;
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+            int startFrame = 1000;
+            int stopFrame = 1175;
 
             List<double> pressuresBeforeAveraging = new List<double>();
-            for (int frame = 0; frame <= stopFrame; frame++)
+            for (int frame = startFrame; frame <= stopFrame; frame++)
             {
                 pressuresBeforeAveraging.Add(uimfRun.GetFramePressure(frame));
                 
             }
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
-            fscc.Create();
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
 
             uimfRun.SmoothFramePressuresInFrameSets();
 
-            //foreach (var item in pressuresBeforeAveraging)
-            //{
-            //    Console.WriteLine(item);
 
+            List<double> pressuresAfterAveraging = new List<double>();
+            for (int frame = startFrame; frame <= stopFrame; frame++)
+            {
+                pressuresAfterAveraging.Add(uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == frame).First().FramePressure);
+
+            }
+
+
+            //for (int i = 0; i < pressuresBeforeAveraging.Count; i++)
+            //{
+            //    Console.WriteLine(pressuresBeforeAveraging[i] + "\t" + pressuresAfterAveraging[i]);
             //}
 
-
-
-            double observedPressureFrame24 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 24).First().FramePressure;
-            double observedPressureFrame199 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 199).First().FramePressure;
-            double observedPressureFrame499 = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 499).First().FramePressure;
-
-            Assert.AreEqual(4.05438, (decimal)observedPressureFrame24);    //this number was manually validated! 
-            Assert.AreEqual(4.05599, (decimal)observedPressureFrame199);
-            Assert.AreEqual(4.05654, (decimal)observedPressureFrame499);
-
-
+            Assert.AreEqual(4.0091461, (decimal)uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 1079).First().FramePressure);
+            Assert.AreEqual(4.008275, (decimal)uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 1175).First().FramePressure);
 
         }
 
-        [Test]
-        public void getFramePressureDemultiplexedUIMF_Test1()
-        {
-            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-
-            int firstFrame = 0;
-
-            double pressure = uimfRun.GetFramePressure(firstFrame);
-            Assert.AreNotEqual(0, pressure);
-
-            //TODO: need to verify this number!!
-            Assert.AreEqual(4.0092m, (decimal)pressure);
-        }
-
-
-        
-        [Test]
-        public void getSmoothedFramePressuresTowardsEndOFUIMFFileTest1()
-        {
-             UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
-            int startFrame = 25;
-            int stopFrame = 500;
-
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
-            fscc.Create();
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            uimfRun.SmoothFramePressuresInFrameSets();
-            sw.Stop();
-
-            Console.WriteLine("time taken to smooth framepressures = " + sw.ElapsedMilliseconds);
-
-            sw.Reset();
-            sw.Start();
-            uimfRun.SmoothFramePressuresInFrameSets();
-            sw.Stop();
-            Console.WriteLine("time taken to smooth framepressures a second time = " + sw.ElapsedMilliseconds);
-
-
-            
-
-
-
-        }
-
+    
 
         [Test]
         public void getSmoothedFramePressuresTest2()
@@ -536,15 +316,14 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             int startFrame = uimfRun.MaxFrame - 200;
             int stopFrame = uimfRun.MaxFrame;
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(uimfRun, startFrame, stopFrame, 1, 1);
-            fscc.Create();
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             Dictionary<int, double> pressuresBeforeAveraging = new Dictionary<int, double>();
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
                 pressuresBeforeAveraging.Add(frame, uimfRun.GetFramePressure(frame));
             }
-
+            uimfRun.GetFrameDataAllFrameSets();
             uimfRun.SmoothFramePressuresInFrameSets();
 
 
@@ -569,7 +348,7 @@ namespace DeconTools.UnitTesting.Run_relatedTests
 
             //Console.WriteLine(sb.ToString());
 
-            Assert.AreEqual(4.0091229m, (decimal)pressuresAfterAveraging[1100]);
+            Assert.AreEqual(4.008936m, (decimal)pressuresAfterAveraging[1100]);
 
 
 
@@ -586,10 +365,6 @@ namespace DeconTools.UnitTesting.Run_relatedTests
             UIMFRun uimfRun = new UIMFRun(msmsDatafile);
 
             int numFrames =  uimfRun.GetNumFrames();
-
-            Console.WriteLine("NumFrames = "+numFrames);
-
-           
             int testFrame = 10;
 
             int  mslevel= uimfRun.GetMSLevel(testFrame);

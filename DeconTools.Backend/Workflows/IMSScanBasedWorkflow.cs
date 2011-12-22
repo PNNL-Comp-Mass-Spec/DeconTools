@@ -39,18 +39,8 @@ namespace DeconTools.Backend.Workflows
         protected override void CreateTargetMassSpectra()
         {
             UIMFRun uimfRun = (UIMFRun)Run;
-
-            //TODO: update this so that FrameNum is changed to Frame_index
-
-           
-
-            int minFrame = 0;
-            int maxFrame = int.MaxValue;
-
-            FrameSetCollectionCreator frameSetcreator;
-
+            
             int numFramesSummed;
-
             if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossFrameRange)
             {
                 numFramesSummed = OldDecon2LsParameters.HornTransformParameters.NumFramesToSumOver;
@@ -63,17 +53,16 @@ namespace DeconTools.Backend.Workflows
             if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
             {
                     
-                frameSetcreator = new FrameSetCollectionCreator(Run, OldDecon2LsParameters.HornTransformParameters.MinScan,
+               uimfRun.FrameSetCollection=  FrameSetCollection.Create(uimfRun, OldDecon2LsParameters.HornTransformParameters.MinScan,
                         OldDecon2LsParameters.HornTransformParameters.MaxScan, numFramesSummed, 1);
                 
             }
             else
             {
-                frameSetcreator = new FrameSetCollectionCreator(Run, numFramesSummed, 1);
+                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesSummed, 1);
             }
           
-            frameSetcreator.Create();
-
+           
 
             bool sumAllIMSScansInAFrame = (OldDecon2LsParameters.HornTransformParameters.SumSpectra);
             if (sumAllIMSScansInAFrame)
@@ -89,12 +78,11 @@ namespace DeconTools.Backend.Workflows
 
                 bool sumAcrossIMSScans = OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossScanRange;
 
-                ScanSetCollectionCreator scanSetCollectionCreator;
                 if (sumAcrossIMSScans)
                 {
                     int numIMSScanToSum = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //Old parameters report a +/- value for summing. But new code is different
 
-                    scanSetCollectionCreator = new ScanSetCollectionCreator(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
+                    Run.ScanSetCollection= ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
                     OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                     OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
 
@@ -103,14 +91,13 @@ namespace DeconTools.Backend.Workflows
                 {
                     int numIMSScanToSum = 1;      // this means there is no summing
 
-                    scanSetCollectionCreator = new ScanSetCollectionCreator(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
+                    Run.ScanSetCollection = ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
                     OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                     OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
 
 
                 }
-                scanSetCollectionCreator.Create();
-
+               
             }
 
 
@@ -130,14 +117,17 @@ namespace DeconTools.Backend.Workflows
 
             foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
             {
-                uimfRun.CurrentFrameSet = frameset;
+                
 
                 foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
                 {
+                    uimfRun.CurrentFrameSet = frameset;
                     uimfRun.CurrentScanSet = scanset;
+                    ReportProgress();
                     ExecuteProcessingTasks();
 
-                    ReportProgress();
+                    
+                    
                 }
 
                 

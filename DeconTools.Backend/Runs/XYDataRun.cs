@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using DeconTools.Backend.Core;
 
 
@@ -8,15 +6,11 @@ namespace DeconTools.Backend.Runs
 {
     public abstract class XYDataRun :Run
     {
-       
-     
-
-  
-
-        public XYDataRun()
+        
+        protected XYDataRun()
         {
-            this.xyData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
+            xyData = new XYData();
+            MSParameters = new Parameters.MSParameters();
         }
 
 
@@ -39,15 +33,21 @@ namespace DeconTools.Backend.Runs
         {
             if (xyData.Xvalues == null || xyData.Yvalues == null ||
                 xyData.Xvalues.Length == 0 || xyData.Yvalues.Length == 0) return 0;
-            else
-            {
-                return 1;      // there is only one MS scan in this type of Run
-            }
+            
+            return 1;      // there is only one MS scan in this type of Run
+            
         }
 
+        public override int GetMinPossibleScanNum()
+        {
+            return 1;
+        }
 
-
-
+        public override int GetMaxPossibleScanNum()
+        {
+            return 1;
+        }
+        
         public override double GetTime(int scanNum)
         {
             throw new NotImplementedException();

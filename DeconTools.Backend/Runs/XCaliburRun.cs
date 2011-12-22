@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DeconTools.Utilities;
-using DeconTools.Backend.Core;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class XCaliburRun : DeconToolsRun
+    public sealed class XCaliburRun : DeconToolsRun
     {
 
         public XCaliburRun()
@@ -48,8 +47,8 @@ namespace DeconTools.Backend.Runs
 
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            this.MinScan = GetMinPossibleScanNum();        //  remember that DeconEngine is 1-based
+            this.MaxScan = GetMaxPossibleScanNum();
 
 
         }
@@ -69,7 +68,11 @@ namespace DeconTools.Backend.Runs
 
         #region Methods
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
+        {
+            return 1;
+        }
+        public override int GetMaxPossibleScanNum()
         {
             return GetNumMSScans();        // xcalbur scans are 1-based
         }

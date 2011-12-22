@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
-    public class FrameSetCollectionCreator
+    public class FrameSetCollectionCreator_depreciated
     {
       
         
@@ -24,7 +21,7 @@ namespace DeconTools.Backend.Utilities
         ///// which primary Frames will be created. eg)  If starting at Frame 3. The first Frameset will 
         ///// have a Primary frame of 3. If the increment is 2. The next frameset will have an Primary Frame of 5. 
         ///// This is a way of controlling overlap between FrameSets.</param>
-        public FrameSetCollectionCreator(Run run, int start, int stop, int numFramesSummed, int increment)
+        public FrameSetCollectionCreator_depreciated(Run run, int start, int stop, int numFramesSummed, int increment)
         {
             this.run = run;
             this.startFrame = start;
@@ -34,33 +31,10 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public FrameSetCollectionCreator(Run run, int numFramesSummed, int increment)
-            : this(run, getFirstFrame(run), getLastFrame(run), numFramesSummed, increment)
+        public FrameSetCollectionCreator_depreciated(Run run, int numFramesSummed, int increment)
+            : this(run, ((UIMFRun)run).GetMinPossibleFrameNumber(), ((UIMFRun)run).GetMaxPossibleFrameNumber(), numFramesSummed, increment)
         {
 
-        }
-
-        private static int getLastFrame(Run run)
-        {
-            Check.Require(run != null, "Run is null");
-            Check.Require(run is UIMFRun, "FrameSet Collections can only be created for UIMF files");
-
-            UIMFRun uimfRun = (UIMFRun)run;
-            int maxFrameIndex = uimfRun.GetMaxPossibleFrameIndex();
-
-
-
-            if (maxFrameIndex > 0) return (maxFrameIndex);    //frame is 0-based
-            else
-            {
-                return 0;     //minimum frame value
-            }
-
-        }
-
-        private static int getFirstFrame(Run run)
-        {
-            return 0;        //minimum frame
         }
 
 
@@ -85,15 +59,15 @@ namespace DeconTools.Backend.Utilities
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            int maxFrame = uimfRun.GetMaxPossibleFrameIndex();    
+            int minFrame = uimfRun.GetMinPossibleFrameNumber();   
+            int maxFrame = uimfRun.GetMaxPossibleFrameNumber();    
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 
 
             uimfRun.FrameSetCollection = new FrameSetCollection();
 
-            int minFrame = 0;    //uimf frames are 0-based 
-
+            
             for (int i = startFrame; i <= stopFrame; i = i + increment)
             {
                 int lowerFrame = i - ((numFramesSummed - 1) / 2);

@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.HornTransformParameters.MaxFit = 0.6;
             parameters.HornTransformParameters.UseScanRange = true;
             parameters.HornTransformParameters.MinScan = 290;
-            parameters.HornTransformParameters.MaxScan = 310;
+            parameters.HornTransformParameters.MaxScan = 291;
             parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
             parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
             parameters.HornTransformParameters.NumFramesToSumOver = 1;
@@ -36,18 +36,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.HornTransformParameters.ZeroFill = true;
 
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
-
-
-
+            
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
-            workflow.ExportData = false;
-
-
-            Stopwatch sw=new Stopwatch();
+            //workflow.ExportData = false;
+            
+            var sw=new Stopwatch();
             sw.Start();
 
             workflow.Execute();
-           // return;
+            return;
 
             sw.Stop();
 

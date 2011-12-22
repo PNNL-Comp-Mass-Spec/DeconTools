@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
-namespace DeconTools.UnitTesting2
+namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 {
     [TestFixture]
     public class DemoTests
@@ -18,17 +13,16 @@ namespace DeconTools.UnitTesting2
         public void createRunAndReadMSSpectraTest1()
         {
             //Create the run
-            DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var runFactory = new RunFactory();
+            Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             //Create the task
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-
-
+            
             //Create the target scan list (MS1 scans from 6005 - 6020). 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6005, 6020, 1, 1);
-            sscc.Create();
+            run.ScanSetCollection = ScanSetCollection.Create(run, 6005, 6020, 1, 1);
+            
 
 
             //iterate over each scan in the target collection get the mass spectrum 

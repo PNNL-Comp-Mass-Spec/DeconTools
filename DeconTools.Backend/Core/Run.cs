@@ -152,7 +152,7 @@ namespace DeconTools.Backend.Core
 
 
 
-        public bool ContainsMSMSData { get; set; }
+        public virtual bool ContainsMSMSData { get; set; }
 
         private List<int> msLevelScanIndexList { get; set; }
 
@@ -227,7 +227,7 @@ namespace DeconTools.Backend.Core
 
         public TargetBase CurrentMassTag { get; set; }
 
-        public virtual void GetMassSpectrum(ScanSet scanset, FrameSet frameset, double minMZ, double maxMZ)
+        public virtual void GetMassSpectrum(FrameSet frameset, ScanSet scanset, double minMZ, double maxMZ)
         {
 
 
@@ -235,13 +235,16 @@ namespace DeconTools.Backend.Core
 
         #region Methods
 
-        internal virtual int GetMaxPossibleScanIndex()
-        {
-            int maxpossibleScanIndex = GetNumMSScans() - 1;           // IMF files are 1 based, so we don't subtract 1 here. 
-            if (maxpossibleScanIndex < 0) maxpossibleScanIndex = 0;
+        public abstract int GetMinPossibleScanNum();
+     
+        public abstract int GetMaxPossibleScanNum();
+        //{
+            ////default:  scan is zero-based
+            //int maxpossibleScanIndex = GetNumMSScans() - 1;           
+            //if (maxpossibleScanIndex < 0) maxpossibleScanIndex = 0;
 
-            return maxpossibleScanIndex;
-        }
+            //return maxpossibleScanIndex;
+        //}
 
         internal void ResetXYPoints()
         {

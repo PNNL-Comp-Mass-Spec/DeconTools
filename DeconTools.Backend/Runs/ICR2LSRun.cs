@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using DeconToolsV2.Readers;
 
 namespace DeconTools.Backend.Runs
 {
@@ -21,21 +22,18 @@ namespace DeconTools.Backend.Runs
         public ICR2LSRun(string filename)
             : this()
         {
-            this.Filename = filename;
-
+            Filename = filename;
 
             try
             {
-
-                this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.ICR2LSRAWDATA);
+                RawData = new clsRawData(filename, FileType.ICR2LSRAWDATA);
             }
             catch (Exception ex)
             {
-
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            MinScan = 1; //  remember that DeconEngine is 1-based
+            MaxScan = GetMaxPossibleScanNum();
 
 
         }
@@ -49,6 +47,18 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
+
+        public override int GetMinPossibleScanNum()
+        {
+            return 1;
+        }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans();
+        }
+
+
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");

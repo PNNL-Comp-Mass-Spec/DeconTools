@@ -26,10 +26,11 @@ namespace DeconTools.UnitTesting2
             public static string UIMFStdFile1 = FileRefs.RawDataBasePath + "\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
             public static string UIMFStdFile2 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";
             public static string UIMFStdFile3 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
-            
-   
-            
-            public static string UIMFFileContainingMSMSLevelData = FileRefs.RawDataBasePath + "\\QC_Shew_MSMS_500_100_fr1200_c2_Ek_0000.uimf";
+
+
+
+            public static string UIMFFileContainingMSMSLevelData =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
 
             
             public static string Bruker9TStandardFile1 = FileRefs.RawDataBasePath + "\\SWT_9t_TestDS216_Small";

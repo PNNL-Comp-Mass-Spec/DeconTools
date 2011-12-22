@@ -147,11 +147,9 @@ namespace DeconTools.Workflows.Backend.Core
                     maxScan = this._workflowParameters.ScanMax;
                 }
 
-                ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(Run, minScan, maxScan,
+                Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,
                     this._workflowParameters.Num_LC_TimePointsSummed, 1, this._workflowParameters.ProcessMSMS);
-                sscc.Create();
-
-
+                
             }
         }
 

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
-namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ScanSet_FrameSet_relatedTests
+namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 {
     [TestFixture]
     public class ScanSetFactory_tests

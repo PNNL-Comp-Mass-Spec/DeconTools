@@ -117,9 +117,9 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIMFLibrary, Version=1.3.4212.26489, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="UIMFLibrary, Version=2.0.4371.22851, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\x86\Debug\UIMFLibrary.dll</HintPath>
+      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\x86\Release\UIMFLibrary.dll</HintPath>
     </Reference>
     <Reference Include="YafmsLibrary, Version=1.0.3989.9960, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,7 +185,6 @@
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
-    <Compile Include="ProcessingTasks\DemoTests.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
     <Compile Include="ProcessingTasks\O16O18PeakDataAppender.cs" />
     <Compile Include="ProcessingTasks\PeakDetectorFactory.cs" />
@@ -203,7 +202,6 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\JoshTheorFeatureGenerator.cs" />
-    <Compile Include="ProjectControllers\BonesProjectController.cs" />
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
     <Compile Include="Core\FrameSet.cs" />
@@ -228,8 +226,6 @@
     <Compile Include="Core\Rapid.cs" />
     <Compile Include="Core\ResultCollection.cs" />
     <Compile Include="Core\ResultFlag.cs" />
-    <Compile Include="ProjectControllers\KoreaIMSTextFileProjectController.cs" />
-    <Compile Include="ProjectControllers\RunMergingProjectController.cs" />
     <Compile Include="Core\Results\ScanResult.cs" />
     <Compile Include="Core\ScanResultCollection.cs" />
     <Compile Include="Core\ScanSet.cs" />
@@ -299,7 +295,6 @@
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\SimpleDecon.cs" />
     <Compile Include="ProcessingTasks\DeconvolutorFactory.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\AreaFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\DeconToolsFitScoreCalculator.cs" />
@@ -350,8 +345,7 @@
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\ITheorFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\MercuryFeatureGenerator.cs" />
     <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
-    <Compile Include="ProjectControllers\UIMFMSOnlyProjectController.cs" />
-    <Compile Include="Runs\AgilentD_Run.cs" />
+    <Compile Include="Runs\AgilentDRun.cs" />
     <Compile Include="Runs\XCaliburRun2.cs" />
     <Compile Include="Runs\YAFMSRun.cs" />
     <Compile Include="Utilities\Converters\IntensityToImageConverter.cs" />
@@ -417,7 +411,6 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistributionCreator.cs" />
     <Compile Include="Utilities\MolecularFormula.cs" />
     <Compile Include="Utilities\PeakUtilities.cs" />
-    <Compile Include="Utilities\ScanSetCollectionCreator.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
     <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />

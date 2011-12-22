@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ResultValidators;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.UnitTesting2
 {
@@ -20,8 +16,7 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6050, 1, 1, false);
-            sscc.Create();
+            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6050, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
@@ -49,9 +44,7 @@ namespace DeconTools.UnitTesting2
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 6000, 6020, 1, 1, false);
-            sscc.Create();
+            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
             Task peakDetector = new DeconToolsPeakDetector();
@@ -77,11 +70,9 @@ namespace DeconTools.UnitTesting2
         {
             UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run, 500, 501, 3, 1);
-            fscc.Create();
+            run.FrameSetCollection = FrameSetCollection.Create(run, 500, 501, 3, 1);
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 250, 270, 9, 1);
-            sscc.Create();
+            run.ScanSetCollection = ScanSetCollection.Create(run, 250, 270, 9, 1);
 
             Task msgen = new UIMF_MSGenerator();
             Task peakDetector = new DeconToolsPeakDetector();

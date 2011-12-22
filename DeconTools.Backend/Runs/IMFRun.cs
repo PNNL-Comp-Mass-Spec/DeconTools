@@ -1,42 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Utilities;
-using DeconTools.Backend.Core;
 using System.IO;
+using DeconTools.Backend.Core;
+using DeconTools.Utilities;
+using DeconToolsV2.Readers;
 
 namespace DeconTools.Backend.Runs
 {
     [Serializable]
-    public class IMFRun : DeconToolsRun
+    public sealed class IMFRun : DeconToolsRun
     {
 
         public IMFRun()
         {
             this.XYData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
+            this.MSParameters = new Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.PNNL_IMS;
         }
 
         public IMFRun(string filename)
             : this()
         {
-            Check.Require(File.Exists(filename));
+            Check.Require(File.Exists(filename),"File does not exist");
 
-            this.Filename = filename;
+            Filename = filename;
 
+            string baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(filename);
 
-            string baseFilename = Path.GetFileName(this.Filename);
-
-            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-
-
-            this.DataSetPath = Path.GetDirectoryName(filename);
-
-
-            this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.PNNL_IMS);
-            this.MinScan = 0;        
-            this.MaxScan = GetMaxPossibleScanIndex();
+            RawData = new clsRawData(filename, FileType.PNNL_IMS);
+            MinScan = GetMinPossibleScanNum();
+            MaxScan = GetMaxPossibleScanNum();
         }
 
         public IMFRun(string filename, int minScan, int maxScan)
@@ -44,6 +38,17 @@ namespace DeconTools.Backend.Runs
         {
             this.MinScan = minScan;
             this.MaxScan = maxScan;
+        }
+
+
+        public override int GetMinPossibleScanNum()
+        {
+            return 0;
+        }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans() - 1;
         }
 
 

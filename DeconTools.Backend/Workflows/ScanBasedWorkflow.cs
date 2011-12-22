@@ -230,11 +230,11 @@ namespace DeconTools.Backend.Workflows
             int minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
             int maxScan = Math.Min(Run.MaxScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
 
-            var scanSetCollectionCreator = new ScanSetCollectionCreator(Run, minScan, maxScan,
+            Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,
                           OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1,
                           OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                           OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
-            scanSetCollectionCreator.Create();
+            
         }
 
 

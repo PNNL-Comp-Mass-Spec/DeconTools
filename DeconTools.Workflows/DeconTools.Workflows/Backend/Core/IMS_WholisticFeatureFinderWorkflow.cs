@@ -308,9 +308,8 @@ namespace DeconTools.Workflows.Backend.Core
                 uimfRun.ResultCollection.MSPeakResultList.Clear();
             }
 
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(uimfRun, numIMSScansToSum, 1);
-            sscc.Create();
-
+            uimfRun.ScanSetCollection= ScanSetCollection.Create(uimfRun, numIMSScansToSum, 1);
+            
             foreach (var scan in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.CurrentScanSet = scan;

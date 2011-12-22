@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+using System.Linq;
 using System.Xml.Linq;
-using DeconTools.Backend.Runs.CalibrationData;
+using BrukerDataReader;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
+using DeconTools.Backend.Parameters;
+using DeconTools.Backend.Runs.CalibrationData;
+using Check = DeconTools.Utilities.Check;
 
 namespace DeconTools.Backend.Runs
 {
-    public class BrukerV3Run : Run
+    public sealed class BrukerV3Run : Run
     {
         FileInfo m_serFileInfo;
         FileInfo m_settingsfileInfo;
@@ -30,11 +31,11 @@ namespace DeconTools.Backend.Runs
         #region Constructors
         public BrukerV3Run()
         {
-            this.xyData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
-            this.IsDataThresholded = true;
-            this.MSFileType = Globals.MSFileType.Bruker;
-            this.ContainsMSMSData = false;
+            xyData = new XYData();
+            MSParameters = new MSParameters();
+            IsDataThresholded = true;
+            MSFileType = Globals.MSFileType.Bruker;
+            ContainsMSMSData = false;
         }
 
         public BrukerV3Run(string folderName)
@@ -93,15 +94,16 @@ namespace DeconTools.Backend.Runs
             }
 
             //intantiate the BrukerDataReader and set parameters
-            m_rawDataReader = new BrukerDataReader.DataReader(filePathForRawDataReader);
-            m_rawDataReader.SetParameters(this.CalibrationData.ML1, this.CalibrationData.ML2, this.CalibrationData.SW_h, this.CalibrationData.TD);
+            m_rawDataReader = new DataReader(filePathForRawDataReader);
+            m_rawDataReader.SetParameters(CalibrationData.ML1, CalibrationData.ML2, CalibrationData.SW_h,
+                                          CalibrationData.TD);
 
-            this.DatasetName = getDatasetName(this.Filename);
-            this.DataSetPath = getDatasetfolderName(this.Filename);
+            DatasetName = getDatasetName(Filename);
+            DataSetPath = getDatasetfolderName(Filename);
 
 
-            this.MinScan = 0;        // zero-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            MinScan = GetMinPossibleScanNum(); 
+            MaxScan = GetMaxPossibleScanNum();
 
             Check.Ensure(m_rawDataReader != null, "BrukerRun could not be initialized. Failed to connect to raw data.");
 
@@ -153,7 +155,12 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
+        {
+            return 0;
+        }
+
+        public override int GetMaxPossibleScanNum()
         {
             return GetNumMSScans() - 1;
         }

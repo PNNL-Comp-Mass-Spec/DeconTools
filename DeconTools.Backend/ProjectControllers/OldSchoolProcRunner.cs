@@ -252,18 +252,22 @@ namespace DeconTools.Backend
                     UIMFRun uimfRun = (UIMFRun)m_run;
 
                     bool sumAcrossLCFrames = Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SumSpectraAcrossFrameRange;
-
-                    FrameSetCollectionCreator frameSetcreator;
                     if (sumAcrossLCFrames)
                     {
-                        frameSetcreator = new FrameSetCollectionCreator(m_run, uimfRun.MinFrame, uimfRun.MaxFrame, Project.getInstance().Parameters.NumFramesSummed, 1);
+
+                        uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, uimfRun.MinFrame,
+                                                                               uimfRun.MaxFrame,
+                                                                               Project.getInstance().Parameters.
+                                                                                   NumFramesSummed, 1);
+
                     }
                     else
                     {
                         int numSummed = 1;   // this means we will NOT sum across LC Frames
-                        frameSetcreator = new FrameSetCollectionCreator(m_run, uimfRun.MinFrame, uimfRun.MaxFrame, numSummed, 1);
+                        uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, uimfRun.MinFrame,
+                                                                               uimfRun.MaxFrame, numSummed, 1);
                     }
-                    frameSetcreator.Create();
+
 
 
                     bool sumAllIMSScansInAFrame = (Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SumSpectra == true);
@@ -286,12 +290,12 @@ namespace DeconTools.Backend
 
                         bool sumAcrossIMSScans = Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.SumSpectraAcrossScanRange;
 
-                        ScanSetCollectionCreator scanSetCollectionCreator;
+                       
                         if (sumAcrossIMSScans)
                         {
                             int numIMSScanToSum = Project.getInstance().Parameters.NumScansSummed;
 
-                            scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan, numIMSScanToSum,
+                            m_run.ScanSetCollection=ScanSetCollection.Create(m_run, m_run.MinScan, m_run.MaxScan, numIMSScanToSum,
                             Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
                             Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
 
@@ -300,13 +304,13 @@ namespace DeconTools.Backend
                         {
                             int numIMSScanToSum = 1;      // this means there is no summing
 
-                            scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan, numIMSScanToSum,
+                            m_run.ScanSetCollection=ScanSetCollection.Create(m_run, m_run.MinScan, m_run.MaxScan, numIMSScanToSum,
                             Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
                             Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
 
 
                         }
-                        scanSetCollectionCreator.Create();
+                        
 
                     }
 
@@ -315,11 +319,11 @@ namespace DeconTools.Backend
                 }
                 else     //not a UIMF
                 {
-                    ScanSetCollectionCreator scanSetCollectionCreator = new ScanSetCollectionCreator(m_run, m_run.MinScan, m_run.MaxScan,
+                    m_run.ScanSetCollection= ScanSetCollection.Create(m_run, m_run.MinScan, m_run.MaxScan,
                           Project.getInstance().Parameters.NumScansSummed,
                           Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.NumScansToAdvance,
                           Project.getInstance().Parameters.OldDecon2LSParameters.HornTransformParameters.ProcessMSMS);
-                    scanSetCollectionCreator.Create();
+                    
                 }
 
 

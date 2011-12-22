@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-                if (scanNum > this.GetMaxPossibleScanIndex())
+                if (scanNum > this.GetMaxPossibleScanNum())
                 {
                     throw new ArgumentOutOfRangeException("Failed to get MS level. Input scan was greater than dataset's max scan.");
 

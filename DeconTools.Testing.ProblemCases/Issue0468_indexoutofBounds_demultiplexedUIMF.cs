@@ -22,13 +22,8 @@ namespace DeconTools.Testing.ProblemCases
 
             UIMFRun run = new UIMFRun(uimfFile);
 
-            FrameSetCollectionCreator fscc = new FrameSetCollectionCreator(run,0,2, 1, 1);
-            fscc.Create();
-
-            ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(run, 7, 1);
-
-            sscc.Create();
-
+            run.FrameSetCollection = FrameSetCollection.Create(run,0,2, 1, 1);
+            run.ScanSetCollection=ScanSetCollection.Create(run, 7, 1);
 
             MSGeneratorFactory msgenfactory = new MSGeneratorFactory();
 

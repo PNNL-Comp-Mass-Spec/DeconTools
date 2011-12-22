@@ -9,7 +9,7 @@ using YafmsLibrary;
 
 namespace DeconTools.Backend.Runs
 {
-    public class YAFMSRun : DeconToolsRun
+    public sealed class YAFMSRun : DeconToolsRun
     {
         YafmsReader m_reader;
 
@@ -48,8 +48,8 @@ namespace DeconTools.Backend.Runs
                 throw ex;
             }
 
-            this.MinScan = 0;
-            this.MaxScan = GetMaxPossibleScanIndex();
+            this.MinScan = GetMinPossibleScanNum();
+            this.MaxScan = GetMaxPossibleScanNum();
         }
 
         public YAFMSRun(string fileName, int minScan, int maxScan)
@@ -75,6 +75,19 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
+
+        public override int GetMinPossibleScanNum()
+        {
+            
+            //TODO: YAFMS is a universal format. So sometimes the ScanNum might be 1-based (e.g. if created from XCalibur data)
+            return 0;
+        }
+
+        public override int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans();
+        }
+
 
         public override void GetMassSpectrum(ScanSet scanset)
         {
@@ -279,8 +292,6 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
-        #region Private Methods
-
-        #endregion
+     
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-using System.IO;
 
 namespace DeconTools.Backend.Runs
 {
@@ -41,7 +38,7 @@ namespace DeconTools.Backend.Runs
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
             this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanIndex();
+            this.MaxScan = GetMaxPossibleScanNum();
  
 
         }
@@ -53,90 +50,6 @@ namespace DeconTools.Backend.Runs
             this.MinScan = minScan;
             this.MaxScan = maxScan;
         }
-
-        private void validateFileNameAndFolderStructure()
-        {
-            //check if the datasetPath is the same as the FileName, if so, change the Filename, or else DeconEngine will fail
-            if (this.DataSetPath == this.Filename)
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(this.Filename);
-
-                DirectoryInfo[] childFolders = dirinfo.GetDirectories();
-
-                DirectoryInfo serFolder=null;
-
-                foreach (var folder in childFolders)
-                {
-                    if (folder.Name.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
-                    {
-                        serFolder=folder;
-                        break;
-                    }
-                }
-
-                if (serFolder!=null)
-                {
-                    this.Filename = serFolder.FullName;
-                    
-                }
-            }
-
-
-        }
-
-        private string getDataSetFolderName(string p)
-        {
-            string trimmedPath = p.TrimEnd('\\');
-
-            if (trimmedPath.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(p);
-                return dirinfo.Parent.FullName;
-            }
-            else if (trimmedPath.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(p);
-                return dirinfo.Parent.FullName;
-            }
-            else
-            {
-                return trimmedPath;
-            }
-        }
-
-        
-        //TODO:  need to finalize what to expect in an unzipped file structure...  things are inconsistant right now (Oct 2010)
-        private string getDataSetName(string filename)
-        {
-
-
-            string trimmedfilename = filename.TrimEnd(new char[] { '\\' });
-
-            if (trimmedfilename.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
-                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
-            }
-
-
-            if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
-            {
-                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
-                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
-            }
-
-           
-
-            int pathIndex = trimmedfilename.LastIndexOf('\\');
-            if (pathIndex == -1) return String.Empty;
-
-
-
-            return trimmedfilename.Substring((pathIndex+1), (trimmedfilename.Length - pathIndex-1));
-
-
-        }
-
 
 
         #region Properties
@@ -229,9 +142,14 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        internal override int GetMaxPossibleScanIndex()
+        public override int GetMinPossibleScanNum()
         {
-            return this.GetNumMSScans();
+            return 1;
+        }
+
+        public override sealed int GetMaxPossibleScanNum()
+        {
+            return GetNumMSScans();
         }
         #endregion
 
@@ -250,6 +168,93 @@ namespace DeconTools.Backend.Runs
  
             return mslevel;
         }
+
+
+
+        private void validateFileNameAndFolderStructure()
+        {
+            //check if the datasetPath is the same as the FileName, if so, change the Filename, or else DeconEngine will fail
+            if (this.DataSetPath == this.Filename)
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(this.Filename);
+
+                DirectoryInfo[] childFolders = dirinfo.GetDirectories();
+
+                DirectoryInfo serFolder = null;
+
+                foreach (var folder in childFolders)
+                {
+                    if (folder.Name.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+                    {
+                        serFolder = folder;
+                        break;
+                    }
+                }
+
+                if (serFolder != null)
+                {
+                    this.Filename = serFolder.FullName;
+
+                }
+            }
+
+
+        }
+
+        private string getDataSetFolderName(string p)
+        {
+            string trimmedPath = p.TrimEnd('\\');
+
+            if (trimmedPath.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                return dirinfo.Parent.FullName;
+            }
+            else if (trimmedPath.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                return dirinfo.Parent.FullName;
+            }
+            else
+            {
+                return trimmedPath;
+            }
+        }
+
+
+        //TODO:  need to finalize what to expect in an unzipped file structure...  things are inconsistant right now (Oct 2010)
+        private string getDataSetName(string filename)
+        {
+
+
+            string trimmedfilename = filename.TrimEnd(new char[] { '\\' });
+
+            if (trimmedfilename.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
+            }
+
+
+            if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
+            {
+                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
+            }
+
+
+
+            int pathIndex = trimmedfilename.LastIndexOf('\\');
+            if (pathIndex == -1) return String.Empty;
+
+
+
+            return trimmedfilename.Substring((pathIndex + 1), (trimmedfilename.Length - pathIndex - 1));
+
+
+        }
+
+
 
   
     }
