@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.Utilities
             string testSequence4 = "ARNDCEQGHILKMFPSTWYV";
 
             Assert.AreEqual("C33H58N10O11S", utils.GetEmpiricalFormulaForPeptideSequence(testSequence1));
-            Assert.AreEqual(802.40072m, (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence1), 5));
+            Assert.AreEqual(802.40071m, (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence1), 5));
             Assert.AreEqual(1194.59929m, (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence2), 5));
 
             Assert.AreEqual("C107H159N29O30S2", utils.GetEmpiricalFormulaForPeptideSequence(testSequence4));

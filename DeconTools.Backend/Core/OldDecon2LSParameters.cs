@@ -53,6 +53,12 @@ namespace DeconTools.Backend.Core
                         else if (rdr.Name == "HornTransformParameters")
                         {
                             HornTransformParameters.LoadV1HornTransformParameters(rdr);
+
+                            if (HornTransformParameters.NumScansToAdvance==0)
+                            {
+                                HornTransformParameters.NumScansToAdvance = 1;
+                            }
+
                         }
                         else if (rdr.Name == "Miscellaneous")
                         {

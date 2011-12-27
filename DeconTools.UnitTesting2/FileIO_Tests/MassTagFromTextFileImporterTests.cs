@@ -89,6 +89,11 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
 
+        /// <summary>
+        /// The header for this type of text file is:
+        /// mass_tag_id	mass	Avg_GANET	Peptide	obs	pmtQ	StD_GANET	Ref_ID	Description
+        /// So, only Monomass is given. Importer will assign charge states and calc MZ
+        /// </summary>
         [Test]
         public void importFromSQLManagmentStyleTextFile_test1()
         {
@@ -98,18 +103,18 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
-            Assert.AreEqual(13, mtc.TargetList.Count);
+            Assert.AreEqual(33, mtc.TargetList.Count);
 
             var testMassTag = mtc.TargetList[0] as PeptideTarget;
 
 
             Assert.AreEqual("AVTTADQVQQEVER", testMassTag.Code);
-            Assert.AreEqual(0, testMassTag.ChargeState);
+            Assert.AreEqual(2, testMassTag.ChargeState);
             Assert.AreEqual(0.2365603m, (decimal)testMassTag.NormalizedElutionTime);
             Assert.AreEqual("C64H108N20O26", testMassTag.EmpiricalFormula);
             Assert.AreEqual(137, testMassTag.RefID);
             Assert.AreEqual(1572.774283m, (decimal)testMassTag.MonoIsotopicMass);
-            Assert.AreEqual(0, (decimal)testMassTag.MZ);
+            Assert.AreEqual(787.39441799m, (decimal)testMassTag.MZ);
             Assert.AreEqual(6, testMassTag.ObsCount);
             Assert.AreEqual(354885422, testMassTag.ID);
         }

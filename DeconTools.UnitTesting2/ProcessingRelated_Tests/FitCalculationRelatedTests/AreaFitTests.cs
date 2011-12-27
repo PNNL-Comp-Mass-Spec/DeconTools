@@ -113,7 +113,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             XYData theorXYData = distcreator.Data;
 
-            theorXYData.Display();
+           // theorXYData.Display();
 
             AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
             double fitval = areafitter.getFit();
@@ -129,7 +129,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         [Test]
         public void fitterOnHornDataTest2()
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
@@ -172,7 +172,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
 
-            Console.WriteLine(sb.ToString());
+            //Console.WriteLine(sb.ToString());
 
             AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
             double fitval = areafitter.getFit();
@@ -180,7 +180,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
 
-            Assert.AreEqual(0.0704215577242672, (decimal)fitval);
+            Assert.AreEqual(0.0763818319332606m, (decimal)fitval);
 
         }
 
@@ -245,7 +245,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
                 sb.Append("\n");
             }
 
-            Console.Write(sb.ToString());
+            //Console.Write(sb.ToString());
         }
         
 

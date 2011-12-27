@@ -128,7 +128,6 @@
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15QuantificationTesting.cs" />
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
-    <Compile Include="ProjectControllerTests\OldSchoolsProcRunnerTests.cs" />
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />

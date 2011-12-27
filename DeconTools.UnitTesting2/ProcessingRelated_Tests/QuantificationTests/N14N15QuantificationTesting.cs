@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             Console.WriteLine("Ratio contrib Iso2 = " + ratioContribIso2);
             Console.WriteLine("--------------------------------");
 
-            Assert.AreEqual(1.458769m, (decimal)Math.Round(ratio, 6));      //see 'N14N15Quantification_manualValidation_of_algorithm.xls' for manual validation
+            Assert.AreEqual(1.458267m, (decimal)Math.Round(ratio, 6));      //see 'N14N15Quantification_manualValidation_of_algorithm.xls' for manual validation
 
 
         }

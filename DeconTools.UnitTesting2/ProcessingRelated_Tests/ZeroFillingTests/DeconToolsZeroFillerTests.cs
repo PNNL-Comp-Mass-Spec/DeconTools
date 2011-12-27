@@ -53,82 +53,43 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         public void zeroFillingWeirdness1()
         {
             Run run = new IMFRun(imfStrangeOneFilepath);
-            ResultCollection results = new ResultCollection(run);
-
+           
             run.ScanSetCollection=ScanSetCollection.Create(run, 238, 245,7,1);
             
 
             run.CurrentScanSet = run.ScanSetCollection.GetScanSet(239);
             Task msgen = new GenericMSGenerator(0,2000);
-            msgen.Execute(results);
+            msgen.Execute(run.ResultCollection);
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+            var detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
             detectorParams.PeakBackgroundRatio = 5;
             detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
             detectorParams.SignalToNoiseThreshold = 3;
             detectorParams.ThresholdedData = false;
 
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
-            peakdetector.Execute(results);
+            peakdetector.Execute(run.ResultCollection);
 
-            Assert.AreEqual(21, results.Run.PeakList.Count);
+            Assert.AreEqual(21, run.PeakList.Count);
             //Assert.AreEqual(1382, results.Run.XYData.Xvalues.Length);
 
-            StringBuilder sb = new StringBuilder();
-            TestUtilities.GetXYValuesToStringBuilder(sb, results.Run.XYData.Xvalues, results.Run.XYData.Yvalues);
+            var sb = new StringBuilder();
+            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
             //Console.Write(sb.ToString());
             Console.WriteLine();
             Console.WriteLine();
 
 
-            DeconToolsZeroFiller zerofiller = new DeconToolsZeroFiller(3);
-            zerofiller.Execute(results);
+            var zerofiller = new DeconToolsZeroFiller(3);
+            zerofiller.Execute(run.ResultCollection);
 
             sb = new StringBuilder();
-            TestUtilities.GetXYValuesToStringBuilder(sb, results.Run.XYData.Xvalues, results.Run.XYData.Yvalues);
-            Console.Write(sb.ToString());
+            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
+           // Console.Write(sb.ToString());
 
-            peakdetector.Execute(results);
-            Assert.AreEqual(21, results.Run.PeakList.Count);
-            Assert.AreEqual(3732, results.Run.XYData.Xvalues.Length);
-
-
-            
-            
-            
-            
-            
-            //run.CurrentScanSet = run.ScanSetCollection.GetScanSet(238);
-            //msgen = new GenericMSGenerator(0,2000);
-            //msgen.Execute(results);
-            
-            //peakdetector.Execute(results);
-
-            //Assert.AreEqual(31, results.Run.MSPeakList.Count);
-            //Assert.AreEqual(1389, results.Run.XYData.Xvalues.Length);
-           
-            //zerofiller.Execute(results);
-            
-            //peakdetector.Execute(results);
-            //Assert.AreEqual(31, results.Run.MSPeakList.Count);
-            //Assert.AreEqual(3794, results.Run.XYData.Xvalues.Length);
-
-
-            //run.CurrentScanSet = run.ScanSetCollection.GetScanSet(245);
-            //msgen = new GenericMSGenerator();
-            //msgen.Execute(results);
-
-            //peakdetector.Execute(results);
-
-            //Assert.AreEqual(31, results.Run.MSPeakList.Count);
-            //Assert.AreEqual(1389, results.Run.XYData.Xvalues.Length);
-
-            //zerofiller.Execute(results);
-
-            //peakdetector.Execute(results);
-            //Assert.AreEqual(31, results.Run.MSPeakList.Count);
-            //Assert.AreEqual(3794, results.Run.XYData.Xvalues.Length);
-
+            peakdetector.Execute(run.ResultCollection);
+            Assert.AreEqual(21, run.PeakList.Count);
+            Assert.AreEqual(3732, run.XYData.Xvalues.Length);
 
         }
 
@@ -144,17 +105,17 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             Task msgen;
             
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+            var detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
             detectorParams.PeakBackgroundRatio = 5;
             detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
             detectorParams.SignalToNoiseThreshold = 3;
             detectorParams.ThresholdedData = false;
 
             Task peakdetector = new DeconToolsPeakDetector(detectorParams);
-            DeconToolsZeroFiller zerofiller = new DeconToolsZeroFiller(3);
+            var zerofiller = new DeconToolsZeroFiller(3);
 
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             for (int i = 0; i < 1000; i++)
             {
@@ -173,7 +134,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
                 sb.Append("\n");
             }
 
-            Console.Write(sb.ToString());
+            //Console.Write(sb.ToString());
             
            
 

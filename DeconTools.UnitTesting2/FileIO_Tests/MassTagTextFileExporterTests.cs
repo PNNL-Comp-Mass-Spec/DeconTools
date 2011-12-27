@@ -40,7 +40,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             FileInfo fi = new FileInfo(testOutput1);
             Assert.IsTrue(fi.Exists);
 
-            Assert.AreEqual(11960, fi.Length);
+            Assert.AreEqual(13716, fi.Length);
 
         }
 

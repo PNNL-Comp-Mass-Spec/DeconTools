@@ -268,7 +268,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
         [Test]
         public void interference_allFeaturesInScan_test1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;

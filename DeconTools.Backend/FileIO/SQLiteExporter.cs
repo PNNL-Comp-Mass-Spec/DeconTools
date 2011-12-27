@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using DeconTools.Utilities;
@@ -75,7 +76,7 @@ namespace DeconTools.Backend.FileIO
 
             if (File.Exists(FileName)) File.Delete(FileName);
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            DbProviderFactory fact = new SQLiteFactory();
             this.m_dbConnection = fact.CreateConnection();
             m_dbConnection.ConnectionString = "Data Source=" + FileName;
 

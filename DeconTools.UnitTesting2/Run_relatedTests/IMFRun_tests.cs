@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using DeconTools.Backend;
@@ -7,7 +6,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 using System.IO;
 
-namespace DeconTools.UnitTesting2
+namespace DeconTools.UnitTesting2.Run_relatedTests
 {
     [TestFixture]
     public class IMFRun_tests

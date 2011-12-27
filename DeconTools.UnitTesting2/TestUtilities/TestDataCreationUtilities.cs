@@ -70,8 +70,9 @@ namespace DeconTools.UnitTesting2
         {
             UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
 
+            run.ResultCollection.ResultType = Globals.ResultType.UIMF_TRADITIONAL_RESULT;
             run.FrameSetCollection = FrameSetCollection.Create(run, 500, 501, 3, 1);
-
+            
             run.ScanSetCollection = ScanSetCollection.Create(run, 250, 270, 9, 1);
 
             Task msgen = new UIMF_MSGenerator();

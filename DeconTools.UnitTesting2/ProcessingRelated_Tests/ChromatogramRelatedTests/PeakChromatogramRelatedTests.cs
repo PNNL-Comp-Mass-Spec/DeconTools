@@ -73,7 +73,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double targetMZ = 831.48;
 
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -85,16 +85,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Assert.AreEqual(59, chrom.ChromSourceData.Count);
 
-            //for XCalibur data, zeros will be inserted for non-contiguous scans.  Since this dataset has MS/MS, there are many zeros inserted. 
-            //these zeros are removed in the PeakChromGenerator - which is coupled to the Run (and thus knows where the MS/MS scans are).  
-            //The ChromatogramGenerator is not coupled to the Dataset. 
-            Assert.AreEqual(1207, chrom.XYData.Xvalues.Length);
-
-
         }
-
-
-
 
 
         [Test]
@@ -219,181 +210,171 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             Console.WriteLine("Average time = " + speedResults.Average());
 
-
-
-
-
         }
 
+        //[Test]
+        //public void getPeakChromatogramsForManyPeaks_Test1()
+        //{
+        //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
+        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+        //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+        //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-        [Test]
-        public void getPeakChromatogramsForManyPeaks_Test1()
-        {
 
+        //    ChromatogramGenerator chromGen = new ChromatogramGenerator();
+        //    // PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(
 
 
-            Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
+        //    long timeForSort = 0;
+        //    Stopwatch sw = new Stopwatch();
+        //    sw.Start();
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        //    var sortedList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height);
+        //    sw.Stop();
+        //    timeForSort = sw.ElapsedMilliseconds;
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
-            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+        //    long timeToList = 0;
+        //    sw = new Stopwatch();
+        //    sw.Start();
 
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
-            // PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(
+        //    List<MSPeakResult> sortedMSPeakResultList = sortedList.ToList();
+        //    sw.Stop();
+        //    timeToList = sw.ElapsedMilliseconds;
 
 
-            long timeForSort = 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+        //    List<long> chromGenTimes = new List<long>();
 
-            var sortedList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height);
-            sw.Stop();
-            timeForSort = sw.ElapsedMilliseconds;
 
-            long timeToList = 0;
-            sw = new Stopwatch();
-            sw.Start();
 
 
-            List<MSPeakResult> sortedMSPeakResultList = sortedList.ToList();
-            sw.Stop();
-            timeToList = sw.ElapsedMilliseconds;
+        //    Stopwatch allChromsStopwatch = new Stopwatch();
+        //    allChromsStopwatch.Start();
 
+        //    Stopwatch chromGenStopwatch = new Stopwatch();
 
-            List<long> chromGenTimes = new List<long>();
+        //    //iterate over the MSPeakResults and pull out chromatograms
 
+        //    int counter = -1;
+        //    foreach (var peakResult in sortedMSPeakResultList)
+        //    {
+        //        counter++;
 
+        //        if (counter > 1000) break;
+        //        if (peakResult.ChromID != -1)
+        //        {
+        //            continue;
+        //        }
+        //        chromGenStopwatch.Reset();
+        //        chromGenStopwatch.Start();
+        //        run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, peakResult.MSPeak.XValue, 20, counter);
+        //        chromGenStopwatch.Stop();
+        //        chromGenTimes.Add(chromGenStopwatch.ElapsedMilliseconds);
 
 
-            Stopwatch allChromsStopwatch = new Stopwatch();
-            allChromsStopwatch.Start();
 
-            Stopwatch chromGenStopwatch = new Stopwatch();
 
-            //iterate over the MSPeakResults and pull out chromatograms
 
-            int counter = -1;
-            foreach (var peakResult in sortedMSPeakResultList)
-            {
-                counter++;
+        //    }
 
-                if (counter > 1000) break;
-                if (peakResult.ChromID != -1)
-                {
-                    continue;
-                }
-                chromGenStopwatch.Reset();
-                chromGenStopwatch.Start();
-                run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, peakResult.MSPeak.XValue, 20, counter);
-                chromGenStopwatch.Stop();
-                chromGenTimes.Add(chromGenStopwatch.ElapsedMilliseconds);
 
+        //    allChromsStopwatch.Stop();
 
 
 
+        //    Console.WriteLine("Original peaklist count = " + run.ResultCollection.MSPeakResultList.Count);
+        //    Console.WriteLine("Sort time = " + timeForSort);
+        //    Console.WriteLine("Conversion to List = " + timeToList);
+        //    Console.WriteLine("Number of times chrom generated = " + chromGenTimes.Count);
+        //    Console.WriteLine("Average chrom times = " + chromGenTimes.Average());
+        //    Console.WriteLine("Total chrom time in seconds = " + (double)allChromsStopwatch.ElapsedMilliseconds / 1000d);
 
-            }
 
+        //}
 
-            allChromsStopwatch.Stop();
 
+        //[Test]
+        //public void getPeakChromatogramsForManyPeaks_Test2()
+        //{
+        //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
+        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            Console.WriteLine("Original peaklist count = " + run.ResultCollection.MSPeakResultList.Count);
-            Console.WriteLine("Sort time = " + timeForSort);
-            Console.WriteLine("Conversion to List = " + timeToList);
-            Console.WriteLine("Number of times chrom generated = " + chromGenTimes.Count);
-            Console.WriteLine("Average chrom times = " + chromGenTimes.Average());
-            Console.WriteLine("Total chrom time in seconds = " + (double)allChromsStopwatch.ElapsedMilliseconds / 1000d);
+        //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+        //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
+        //    Stopwatch sw = new Stopwatch();
+        //    sw.Start();
 
-        }
 
+        //    List<int> indexArray = new List<int>();
 
-        [Test]
-        public void getPeakChromatogramsForManyPeaks_Test2()
-        {
-            Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
+        //    for (int i = 3000; i < 5000; i++)
+        //    {
+        //        IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
-            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+        //        //List<MSPeakResult> filteredResults = query.ToList();
+        //        var indexQuery = (from n in query select n.PeakID);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
 
 
-            List<int> indexArray = new List<int>();
+        //        foreach (var peak in query)
+        //        {
+        //        }
 
-            for (int i = 3000; i < 5000; i++)
-            {
-                IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
 
+        //    }
+        //    sw.Stop();
 
-                //List<MSPeakResult> filteredResults = query.ToList();
-                var indexQuery = (from n in query select n.PeakID);
+        //    Console.WriteLine("time = " + sw.ElapsedMilliseconds);
 
 
 
-                foreach (var peak in query)
-                {
-                }
+        //}
 
 
-            }
-            sw.Stop();
+        //[Test]
+        //public void getPeakChromatogramsForManyPeaks_Test3()
+        //{
+        //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
-            Console.WriteLine("time = " + sw.ElapsedMilliseconds);
+        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+        //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+        //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
+        //    Stopwatch sw = new Stopwatch();
+        //    sw.Start();
 
-        }
 
+        //    List<int> indexArray = new List<int>();
 
-        [Test]
-        public void getPeakChromatogramsForManyPeaks_Test3()
-        {
-            Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
+        //    for (int i = 3000; i < 5000; i++)
+        //    {
+        //        IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
-            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+        //        //List<MSPeakResult> filteredResults = query.ToList();
+        //        var indexQuery = (from n in query select n.PeakID);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
 
 
-            List<int> indexArray = new List<int>();
+        //        foreach (var peak in query)
+        //        {
+        //        }
 
-            for (int i = 3000; i < 5000; i++)
-            {
-                IEnumerable<MSPeakResult> query = (from n in run.ResultCollection.MSPeakResultList where n.Scan_num == i select n);
 
+        //    }
+        //    sw.Stop();
 
-                //List<MSPeakResult> filteredResults = query.ToList();
-                var indexQuery = (from n in query select n.PeakID);
+        //    Console.WriteLine("time = " + sw.ElapsedMilliseconds);
 
 
 
-                foreach (var peak in query)
-                {
-                }
-
-
-            }
-            sw.Stop();
-
-            Console.WriteLine("time = " + sw.ElapsedMilliseconds);
-
-
-
-        }
+        //}
 
 
 

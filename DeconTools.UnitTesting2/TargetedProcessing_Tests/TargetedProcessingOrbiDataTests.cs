@@ -25,19 +25,18 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
         private string xcaliburAllPeaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile1;
-        private XCaliburRun run;
-        private TargetCollection massTagColl;
+  
 
+     
 
-        [SetUp]
-        public void initialize_loadPeaks_and_massTags()
+        [Test]
+        public void find_targetMassTag_131959Test1()
         {
-            run = new XCaliburRun(xcaliburTestfile);
 
-            massTagColl = new TargetCollection();
+            Run run = new RunFactory().CreateRun(xcaliburTestfile);
 
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
-            massTagColl = masstagImporter.Import();
+            var massTagColl = masstagImporter.Import();
 
             Assert.AreEqual(2719, massTagColl.TargetList.Count);
 
@@ -46,13 +45,8 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
-        }
 
 
-
-        [Test]
-        public void find_targetMassTag_131959Test1()
-        {
             //int mtID = 635428;
             int mtID = 131959;
 
@@ -115,6 +109,21 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void find_targetMassTag_635428_wrong_ChromPeakSelected_Test1()
         {
+            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+
+            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            var massTagColl = masstagImporter.Import();
+
+            Assert.AreEqual(2719, massTagColl.TargetList.Count);
+
+            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            chromAligner.Execute(run);
+
+            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+
+
             int mtID = 635428;
             //int mtID = 131959;
 

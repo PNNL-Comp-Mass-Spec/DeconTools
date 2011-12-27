@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -28,7 +24,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(2984, run.GetNumMSScans());
             Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(2983, run.MaxScan);
+            Assert.AreEqual(2984, run.MaxScan);
         }
 
 

@@ -71,7 +71,8 @@ namespace DeconTools.UnitTesting2
 
         public class ParameterFiles
         {
-            public static string YAFMSParameterFileScans4000_4050 = FileRefs.RawDataBasePath + "\\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans4000-4050.xml";
+            public static string YAFMSParameterFileScans4000_4050 =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR5_PeptideBR1_Thrash_scans4000_4050.xml";
 
             public static string Bruker12TSolarixScans4_8ParamFile = FileRefs.RawDataBasePath + @"\ParameterFiles\Bruker_12T_Solarix_Scans4-8.xml";
 

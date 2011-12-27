@@ -14,7 +14,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
     [TestFixture]
     public class SaturationIMSWorkflowTests
     {
-        
+
         [Test]
         public void saturatedFixingTest1()
         {
@@ -36,11 +36,11 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.HornTransformParameters.ZeroFill = true;
 
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
-            
+
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             //workflow.ExportData = false;
-            
-            var sw=new Stopwatch();
+
+            var sw = new Stopwatch();
             sw.Start();
 
             workflow.Execute();
@@ -50,7 +50,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-          int minFrame = parameters.HornTransformParameters.MinScan;
+            int minFrame = parameters.HornTransformParameters.MinScan;
             int maxFrame = parameters.HornTransformParameters.MaxScan;
 
             int minScan = 102;
@@ -65,8 +65,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             targetMass = 1079.559447;
             chargestate = 2;
 
-           // targetMass= 1064.485;
-           // chargestate = 2;
+            // targetMass= 1064.485;
+            // chargestate = 2;
 
 
             //targetMass = 949.454723;
@@ -124,43 +124,39 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
         [Test]
-        public void frameSetCollectionCreatedOKTest1()
+        public void WorkflowTypeIsCorrectTest1()
         {
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
             OldDecon2LSParameters parameters = new OldDecon2LSParameters();
 
-            parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
-            parameters.PeakProcessorParameters.SignalToNoiseThreshold = 3;
-            parameters.HornTransformParameters.MaxFit = 0.6;
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 290;
-            parameters.HornTransformParameters.MaxScan = 310;
-            parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
-            parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
-            parameters.HornTransformParameters.NumFramesToSumOver = 1;
-            parameters.HornTransformParameters.NumScansToSumOver = 3;
-            parameters.HornTransformParameters.ZeroFill = true;
+            parameters.HornTransformParameters.ScanBasedWorkflowType = "standard";
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            Assert.IsTrue(workflow is IMSScanBasedWorkflow);
 
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            Assert.IsTrue(workflow is SaturationIMSScanBasedWorkflow);
 
 
 
+        }
+
+
+        [ExpectedException("System.ArgumentOutOfRangeException")]
+        [Test]
+        public void WorkflowTypeIsWrongTest1()
+        {
+            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+
+            Run run = new RunFactory().CreateRun(uimfFile);
+            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+
+
+            parameters.HornTransformParameters.ScanBasedWorkflowType = "incorrectTextProblem";
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
 
-
-            Assert.AreEqual(360, run.ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(21, ((UIMFRun)run).FrameSetCollection.FrameSetList.Count);
-
-
-            parameters.HornTransformParameters.UseScanRange = false;       //refers to LC Scan range (i.e. frame range)
-            workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
-
-            Assert.AreEqual(360, run.ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(1175, ((UIMFRun)run).FrameSetCollection.FrameSetList.Count);
-
-            
         }
 
 

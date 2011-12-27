@@ -162,7 +162,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleScanNum()
         {
-            return GetNumMSScans() - 1;
+            return GetNumMSScans() -1 ;
         }
 
 

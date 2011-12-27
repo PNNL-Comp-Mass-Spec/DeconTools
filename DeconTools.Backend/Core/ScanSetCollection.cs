@@ -15,6 +15,7 @@ namespace DeconTools.Backend.Core
 
         public static ScanSetCollection Create(Run run, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
+            Check.Require(run != null, "Cannot create target scans. Run is null");
             return Create(run, run.GetMinPossibleScanNum(), run.GetMaxPossibleScanNum(), numScansSummed, scanIncrement,
                           processMSMS);
 
@@ -41,7 +42,7 @@ namespace DeconTools.Backend.Core
             //For IMS data, 'scan' refers to IMS_Scan'. IMS_Scans are always of the same type. No intermixing of MS1 and MS2 scans. So no need to check MSLevel
             if (run is UIMFRun || run is IMFRun)
             {
-                scanSetCollection = CreateIMSScanSetCollection(run as UIMFRun, scanStart, scanStop, numScansSummed,
+                scanSetCollection = CreateScanSetCollectionMS1OnlyData(run, scanStart, scanStop, numScansSummed,
                                                                 scanIncrement);
             }
             else
@@ -53,10 +54,10 @@ namespace DeconTools.Backend.Core
             return scanSetCollection;
         }
 
-        private static ScanSetCollection CreateIMSScanSetCollection(UIMFRun uimfRun, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
+        private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
         {
-            int minPossibleScanIndex = uimfRun.GetMinPossibleScanNum();
-            int maxPossibleScanIndex = uimfRun.GetMaxPossibleScanNum();
+            int minPossibleScanIndex = run.GetMinPossibleScanNum();
+            int maxPossibleScanIndex = run.GetMaxPossibleScanNum();
 
             ScanSetCollection scanSetCollection = new ScanSetCollection();
 
@@ -199,7 +200,7 @@ namespace DeconTools.Backend.Core
             var scans = new List<int>();
 
             int scansCounter = 0;
-            int scanUppperLimit = run.GetNumMSScans();
+            int scanUppperLimit = run.GetMaxPossibleScanNum();
 
             while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
             {

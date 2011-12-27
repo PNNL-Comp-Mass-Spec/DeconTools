@@ -5,13 +5,13 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.NETAlignment;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 
 namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 {
@@ -20,26 +20,20 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
     {
         private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
-        private TargetCollection massTagColl;
-        private XCaliburRun run;
+       
+      
 
-        ChromPeakDetector chromPeakDet;
-
-        BasicChromPeakSelector basicChromPeakSelector;
-        SmartChromPeakSelector smartChromPeakSelector;
-
-
-        TomTheorFeatureGenerator theorFeatureGen;
-        private MSGenerator _msgen;
-        private MassTagFitScoreCalculator _fitscoreCalc;
-
-
-        [SetUp]
-        public void initializeTests()
+        [Test]
+        public void smartChromPeakSelectorTest_noSumming()
         {
-            run = new XCaliburRun(xcaliburTestfile);
 
-            massTagColl = new TargetCollection();
+            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+            run.Close();
+
+            run = new RunFactory().CreateRun(xcaliburTestfile);
+           
+
+            var massTagColl = new TargetCollection();
 
             MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             massTagColl = masstagImporter.Import();
@@ -47,30 +41,25 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
-            theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
-            chromPeakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
+            var chromPeakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
 
             SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
-            smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
+            var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
-            basicChromPeakSelector = new BasicChromPeakSelector(1);
-
-
-           
-            _msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            
-            _tff = new IterativeTFF(new IterativeTFFParameters());
-
-            _fitscoreCalc = new MassTagFitScoreCalculator();
-
-        }
+           var  basicChromPeakSelector = new BasicChromPeakSelector(1);
 
 
 
-        [Test]
-        public void smartChromPeakSelectorTest_noSumming()
-        {
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
+
+            var fitscoreCalc = new MassTagFitScoreCalculator();
+
+
+
             string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
             XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
@@ -99,9 +88,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            _msgen.Execute(run.ResultCollection);
-            _tff.Execute(run.ResultCollection);
-            _fitscoreCalc.Execute(run.ResultCollection);
+            msgen.Execute(run.ResultCollection);
+            iterativeTff.Execute(run.ResultCollection);
+            fitscoreCalc.Execute(run.ResultCollection);
 
         
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
@@ -113,6 +102,35 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void smartChromPeakSelectorTest_withDynamicSumming()
         {
+            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+
+            var massTagColl = new TargetCollection();
+
+            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            massTagColl = masstagImporter.Import();
+
+            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            chromAligner.Execute(run);
+
+            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+
+            var chromPeakDet = new ChromPeakDetector(0.5, 1);
+
+            SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
+            var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
+
+            var basicChromPeakSelector = new BasicChromPeakSelector(1);
+
+
+
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
+
+            var fitscoreCalc = new MassTagFitScoreCalculator();
+
+
+
             string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
             XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
@@ -149,9 +167,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            _msgen.Execute(run.ResultCollection);
-            _tff.Execute(run.ResultCollection);
-            _fitscoreCalc.Execute(run.ResultCollection);
+            msgen.Execute(run.ResultCollection);
+            iterativeTff.Execute(run.ResultCollection);
+            fitscoreCalc.Execute(run.ResultCollection);
 
             Assert.AreEqual(0.032m, (decimal)(Math.Round(result.Score, 4)));
             Assert.AreEqual("9575 {9575, 9582}", result.ScanSet.ToString());
@@ -167,9 +185,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            _msgen.Execute(run.ResultCollection);
-            _tff.Execute(run.ResultCollection);
-            _fitscoreCalc.Execute(run.ResultCollection);
+            msgen.Execute(run.ResultCollection);
+            iterativeTff.Execute(run.ResultCollection);
+            fitscoreCalc.Execute(run.ResultCollection);
 
             result.DisplayToConsole();
 
@@ -180,6 +198,6 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         }
 
 
-        public IterativeTFF _tff { get; set; }
+       
     }
 }
