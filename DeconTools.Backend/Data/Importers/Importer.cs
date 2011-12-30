@@ -13,7 +13,7 @@ namespace DeconTools.Backend.Data
         protected string lookup(List<string> data, List<string> headers, string targetHeader)
         {
             int columnIndex = getIndexForTableHeader(headers, targetHeader,false);
-            if (columnIndex == -1) return "null";
+            if (columnIndex == -1) return "";
 
             return data[columnIndex];
 

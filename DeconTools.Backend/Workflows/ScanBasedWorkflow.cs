@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Workflows
             OutputFolderPath = outputFolderPath;    //path is null unless specified
             BackgroundWorker = backgroundWorker;   //null unless specified
 
-            
+            ExportData = true;
         }
 
 
@@ -174,7 +174,7 @@ namespace DeconTools.Backend.Workflows
 
             Run.ResultCollection.ResultType = GetResultType();
        
-            ExportData = true;
+            
 
             InitializeParameters();
 

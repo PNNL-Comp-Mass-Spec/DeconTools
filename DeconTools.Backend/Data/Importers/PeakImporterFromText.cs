@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Data
 
         public PeakImporterFromText(string filename, BackgroundWorker bw)
         {
-            if (!File.Exists(filename)) throw new System.IO.IOException("PeakImporter failed. File doesn't exist.");
+            if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist.");
 
             FileInfo fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
@@ -63,30 +63,7 @@ namespace DeconTools.Backend.Data
 
         //}
 
-        public void ImportUIMFPeaks(List<IPeak> peakList)
-        {
-            using (StreamReader reader = new StreamReader(filename))
-            {
-                reader.ReadLine();    //first line is the header line.   
-
-                int progressCounter = 0;
-                while (reader.Peek() != -1)
-                {
-                    string line = reader.ReadLine();
-                    IPeak peak = convertTextToPeakUIMFResult(line);
-                    peakList.Add(peak);
-
-                    progressCounter++;
-                    reportProgress(progressCounter);
-
-                }
-            }
-
-        }
-
      
-        
-        
         public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
         {
             using (StreamReader reader = new StreamReader(filename))

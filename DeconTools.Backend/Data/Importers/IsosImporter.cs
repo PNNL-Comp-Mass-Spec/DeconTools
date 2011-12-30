@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
 using System.IO;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.Data
@@ -135,16 +133,17 @@ namespace DeconTools.Backend.Data
             }
             result.ScanSet = new ScanSet(scan_num);
 
-
-
             result.IsotopicProfile.ChargeState = parseIntField(lookup(processedData, headers, "charge"));
             result.IsotopicProfile.MonoIsotopicMass = parseDoubleField(lookup(processedData, headers, "monoisotopic_mw"));
             result.IsotopicProfile.Score = parseDoubleField(lookup(processedData, headers, "fit"));
             result.IsotopicProfile.IntensityAggregate = parseDoubleField(lookup(processedData, headers, "abundance"));
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
             result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
+            result.IsotopicProfile.OriginalIntensity = parseDoubleField(lookup(processedData, headers, "unsummed_intensity"));
             
-
+            string saturationFlagString = lookup(processedData, headers, "saturation_flag");
+            result.IsotopicProfile.IsSaturated = saturationFlagString == "1";
+            
 
             MSPeak peak = new MSPeak();
             peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));

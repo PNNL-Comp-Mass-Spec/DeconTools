@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Workflows
             _deconvolutor.MaxFitAllowed = 0.6;
 
 
-            IntensityThresholdForSaturation = 1E5;
+            IntensityThresholdForSaturation = 9E4;
 
             AdjustMonoIsotopicMasses = true;
 
@@ -109,6 +109,11 @@ namespace DeconTools.Backend.Workflows
 
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
+                    //if (frameset.PrimaryFrame >= 340 && scanset.PrimaryScanNumber >= 220)
+                    //{
+                    //    Console.WriteLine("here we go");
+                    //}
+
                     foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                     {
                         
@@ -137,6 +142,7 @@ namespace DeconTools.Backend.Workflows
                     uimfRun.CurrentFrameSet = frameset;
                     uimfRun.CurrentScanSet = scanset;
 
+                    
 
 
                     ExecuteTask(MSGenerator);
@@ -155,13 +161,19 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(Deconvolutor);
 
-
+                    //if (frameset.PrimaryFrame >= 340 && scanset.PrimaryScanNumber >= 220)
+                    //{
+                    //    Console.WriteLine("here we go");
+                    //}
 
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
 
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
                                                   IntensityThresholdForSaturation;
+
+
+
 
                         if (isPossiblySaturated)
                         {

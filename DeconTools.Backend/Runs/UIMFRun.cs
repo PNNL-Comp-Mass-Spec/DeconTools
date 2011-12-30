@@ -139,12 +139,12 @@ namespace DeconTools.Backend.Runs
             return (numScansPerFrame * numFrames);
         }
 
-        internal int GetMinPossibleFrameNumber()
+        public int GetMinPossibleFrameNumber()
         {
             return 1;    //one-based
         }
 
-        internal int GetMaxPossibleFrameNumber()
+        public int GetMaxPossibleFrameNumber()
         {
             int maxPossibleFrameNumber = _globalParameters.NumFrames;
 
