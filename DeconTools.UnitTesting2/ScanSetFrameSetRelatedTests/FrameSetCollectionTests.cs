@@ -48,6 +48,62 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
 
         [Test]
+        public void creatorTest_ensureOnlyMS1_test1()
+        {
+
+            //note that frame 26 is a calibration frame. So we don't want to have this if we are summing frames
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile4);    //Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf
+
+            int frameStart = 24;
+            int frameStop = 28;
+
+            int numFramesToSum = 3;
+
+            UIMFRun uimfRun = (UIMFRun)run;
+
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1);
+
+            Assert.AreEqual(4, uimfRun.FrameSetCollection.FrameSetList.Count);
+            Assert.AreEqual("24,25,27", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
+
+
+
+            //FrameSet testFrame0 = uimfRun.FrameSetCollection.FrameSetList[1];
+            //Assert.AreEqual(3, testFrame0.IndexValues.Count);
+            //Assert.AreEqual(1, testFrame0.IndexValues[0]);
+
+
+
+
+
+        }
+
+        [Test]
+        public void CreateFrameSetCollectionIncludeMSMSFrames()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);   
+
+            int frameStart = 1;
+            int frameStop = 10;
+
+            int numFramesToSum = 1;
+
+            UIMFRun uimfRun = (UIMFRun)run;
+
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1,true);
+
+            Assert.AreEqual(10, uimfRun.FrameSetCollection.FrameSetList.Count);
+            //Assert.AreEqual("24,25,27", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
+
+
+        }
+
+
+
+        [Test]
         public void creatorTest_sum7_test1()
         {
 

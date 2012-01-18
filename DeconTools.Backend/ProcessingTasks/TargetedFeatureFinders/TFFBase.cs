@@ -288,13 +288,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         protected IsotopicProfile createTargetIso(Run run)
         {
             IsotopicProfile iso;
+            Check.Require(run.CurrentMassTag!=null,"Run's 'CurrentMassTag' has not been declared");
+           
+
 
             switch (this.IsotopicProfileType)
             {
                 case IsotopicProfileType.UNLABELLED:
+                    Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
                 case IsotopicProfileType.LABELLED:
+                    Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
                     break;
                 default:

@@ -376,5 +376,42 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
+        [Test]
+        public void GetMSLevelInfoTest1()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile4);
+
+            Assert.IsTrue(uimfRun.MS1Frames.Count > 0);
+            Assert.AreEqual(1175, uimfRun.MS1Frames.Count);
+            Assert.IsTrue(!uimfRun.MS1Frames.Contains(26));    //frame 26 is FrameType 3 - calibration frame
+            Assert.IsTrue(uimfRun.MS2Frames.Count == 0);
+        }
+
+
+        [Test]
+        public void GetMassSpectrumFromMSMSDatasetTest1()
+        {
+            string msmsDatafile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
+
+            UIMFRun uimfRun = new UIMFRun(msmsDatafile);
+
+            int testFrame = 2;
+            int startScan = 1;
+            int stopScan = 300;
+
+            var frame = new FrameSet(testFrame);
+            var scanset = new ScanSet(150, startScan, stopScan);
+
+            uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);
+
+            Assert.IsNotNull(uimfRun.XYData);
+            Assert.IsNotNull(uimfRun.XYData.Xvalues);
+            TestUtilities.DisplayXYValues(uimfRun.XYData);
+
+
+        }
+
+
     }
 }

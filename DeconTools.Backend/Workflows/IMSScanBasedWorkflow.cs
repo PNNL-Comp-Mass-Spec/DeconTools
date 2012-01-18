@@ -52,14 +52,21 @@ namespace DeconTools.Backend.Workflows
             
             if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
             {
-                    
-               uimfRun.FrameSetCollection=  FrameSetCollection.Create(uimfRun, OldDecon2LsParameters.HornTransformParameters.MinScan,
-                        OldDecon2LsParameters.HornTransformParameters.MaxScan, numFramesSummed, 1);
-                
+
+                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun,
+                                                                       OldDecon2LsParameters.HornTransformParameters.
+                                                                           MinScan,
+                                                                       OldDecon2LsParameters.HornTransformParameters.
+                                                                           MaxScan, numFramesSummed, 1,
+                                                                       OldDecon2LsParameters.HornTransformParameters.
+                                                                           ProcessMSMS);
+
             }
             else
             {
-                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesSummed, 1);
+                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesSummed, 1,
+                                                                       OldDecon2LsParameters.HornTransformParameters.
+                                                                           ProcessMSMS);
             }
           
            

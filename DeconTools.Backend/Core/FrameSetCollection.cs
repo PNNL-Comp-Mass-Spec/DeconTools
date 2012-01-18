@@ -14,17 +14,17 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public static FrameSetCollection Create(UIMFRun uimfRun, int numFramesSummed, int increment)
+        public static FrameSetCollection Create(UIMFRun uimfRun, int numFramesSummed, int increment, bool processMSMS=false)
         {
 
             int minFrame = uimfRun.GetMinPossibleFrameNumber();
             int maxFrame = uimfRun.GetMaxPossibleFrameNumber();
 
-            return Create(uimfRun, minFrame, maxFrame, numFramesSummed, increment);
+            return Create(uimfRun, minFrame, maxFrame, numFramesSummed, increment,processMSMS);
         }
 
 
-        public static FrameSetCollection Create(UIMFRun uimfRun, int startFrame, int stopFrame, int numFramesSummed, int increment)
+        public static FrameSetCollection Create(UIMFRun uimfRun, int startFrame, int stopFrame, int numFramesSummed, int increment, bool processMSMS=false)
         {
             bool numFramesIsOdd = (numFramesSummed % 2 == 1 && numFramesSummed > 0);
             Check.Require(uimfRun != null, "Run is null");
@@ -38,6 +38,10 @@ namespace DeconTools.Backend.Core
             
             Check.Require(increment > 0, "Increment must be greater than 0");
             
+
+
+
+
             if (uimfRun.ContainsMSMSData)
             {
                 Check.Require(numFramesSummed==1, "DeconTools currently does not support summing across LC dimension (i.e. frames) when file contains MS2-level data");
@@ -47,25 +51,59 @@ namespace DeconTools.Backend.Core
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 
-            for (int i = startFrame; i <= stopFrame; i = i + increment)
+            for (int frame = startFrame; frame <= stopFrame; frame = frame + increment)
             {
-                int lowerFrame = i - ((numFramesSummed - 1)/2);
-                if (lowerFrame < minFrame)
+
+                int currentMSLevel = uimfRun.GetMSLevel(frame);
+
+
+                int indexOfCurrentFrame = uimfRun.MS1Frames.IndexOf(frame);
+                
+                int lowerIndex = indexOfCurrentFrame - 1;
+                int upperIndex = indexOfCurrentFrame + 1;
+
+                List<int> framesToSum = new List<int>();
+                int numLowerFramesToGet = (numFramesSummed - 1)/2;
+                int numUpperFramesToGet = (numFramesSummed - 1)/2;
+
+                //get lower frames. Note that only MS1 frames can be summed
+                int framesCounter = 0;
+                while (lowerIndex>=0 && numLowerFramesToGet>framesCounter && currentMSLevel==1)
                 {
-                    lowerFrame = minFrame; //no bounce effect... 
-                    if (lowerFrame > maxFrame) lowerFrame = maxFrame; //this will be a very rare condition
+                    framesToSum.Insert(0, uimfRun.MS1Frames[lowerIndex]);
+                    lowerIndex--;
+                    framesCounter++;
+                }
+
+                //get middle frame   note that frameTypes MS1 and MS2 can be added here
+                framesToSum.Add(frame);
+                
+                
+
+                //get upper frames   Note that only MS1 frames can be summed
+                framesCounter = 0;
+                int maxPossibleFrameIndex = uimfRun.MS1Frames.Count-1;
+                while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter && currentMSLevel == 1)
+                {
+                    framesToSum.Add(uimfRun.MS1Frames[upperIndex]);
+                    framesCounter++;
+                    upperIndex++;
                 }
 
 
-                int upperFrame = i + ((numFramesSummed - 1)/2);
-                if (upperFrame > maxFrame)
+                var frameset = new FrameSet(frame, framesToSum.ToArray());
+                if (currentMSLevel==1)
                 {
-                    upperFrame = upperFrame - (upperFrame - maxFrame);
-                    if (upperFrame < 0) upperFrame = 0; // rare condition
+                    frameSetCollection.FrameSetList.Add(frameset); 
                 }
+                else if (currentMSLevel==2 && processMSMS)
+                {
+                    frameSetCollection.FrameSetList.Add(frameset);
+                }
+                
+                
 
-                var frameSet = new FrameSet(i, lowerFrame, upperFrame);
-                frameSetCollection.FrameSetList.Add(frameSet);
+               
 
 
                 

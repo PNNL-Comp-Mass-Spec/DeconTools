@@ -27,13 +27,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.PeakProcessorParameters.SignalToNoiseThreshold = 3;
             parameters.HornTransformParameters.MaxFit = 0.6;
             parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 330;
-            parameters.HornTransformParameters.MaxScan = 344;
+            parameters.HornTransformParameters.MinScan = 180;
+            parameters.HornTransformParameters.MaxScan = 195;
             parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
             parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
             parameters.HornTransformParameters.NumFramesToSumOver = 1;
             parameters.HornTransformParameters.NumScansToSumOver = 3;
             parameters.HornTransformParameters.ZeroFill = true;
+            parameters.HornTransformParameters.DeleteIntensityThreshold = 10;
 
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
 
@@ -44,7 +45,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             sw.Start();
 
             workflow.Execute();
-            // return;
+            return;
 
             sw.Stop();
 
@@ -56,26 +57,27 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             int minScan = 102;
             int maxScan = 125;
 
+            //this one elutes ScanLC at 180 - 195
             double targetMass = 860.3987;
             int chargestate = 2;
 
-            targetMass = 1444.748171;
-            chargestate = 3;
+            //targetMass = 1444.748171;
+            //chargestate = 3;
 
-            targetMass = 1079.559447;
-            chargestate = 2;
+            //targetMass = 1079.559447;
+            //chargestate = 2;
 
-            targetMass = 1064.485;
-            chargestate = 2;
+            //targetMass = 1064.485;
+            //chargestate = 2;
 
-            targetMass = 1224.5497;
-            chargestate = 1;
+            //targetMass = 1224.5497;
+            //chargestate = 1;
 
 
             //targetMass = 949.454723;
             //chargestate = 1;
-            minScan = 220;
-            maxScan = 228;
+            //minScan = 220;
+            //maxScan = 228;
 
             double tolerance = 0.3;
             var featureData =
@@ -240,12 +242,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         private static void OutputFeatureIntensityData(List<UIMFIsosResult> featureData, int minFrame, int maxFrame, int maxScan, int minScan)
         {
 
-
+            
+                
 
             StringBuilder sb = new StringBuilder();
-            for (int frame = minFrame; frame <= maxFrame; frame++)
+            for (int scan = minScan; scan <= maxScan; scan++)
             {
-                for (int scan = minScan; scan <= maxScan; scan++)
+                for (int frame = minFrame; frame <= maxFrame; frame++)
                 {
                     var feature =
                         (from n in featureData

@@ -65,7 +65,29 @@ namespace DeconTools.Backend.Utilities
         #region Private Methods
         #endregion
 
+        public static void DisplayIsotopicProfileData(IsotopicProfile profile)
+        {
+            StringBuilder sb = new StringBuilder();
+            int counter = 0;
 
+            foreach (MSPeak peak in profile.Peaklist)
+            {
+                sb.Append(counter);
+                sb.Append("\t");
+                sb.Append(peak.XValue);
+                sb.Append("\t");
+                sb.Append(peak.Height);
+                sb.Append("\t");
+                sb.Append(peak.Width);
+                sb.Append("\t");
+                sb.Append(peak.SN);
+                sb.Append("\n");
+
+                counter++;
+            }
+
+            Console.Write(sb.ToString());
+        }
 
         public static MSPeak GetPeakAtGivenMZ(IsotopicProfile iso1, double targetMZ, double mzTolerance)
         {

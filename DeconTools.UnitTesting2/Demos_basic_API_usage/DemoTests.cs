@@ -46,17 +46,16 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         public void getMSMSDataTest1()
         {
             //Create the run
-            DeconTools.Backend.Runs.RunFactory runFactory = new RunFactory();
-            DeconTools.Backend.Core.Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-
+            RunFactory runFactory = new RunFactory();
+            Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             //Create the task
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
+            var peakdetector = new DeconToolsPeakDetector();
 
             int startScan = 6000;
             int stopScan = 7000;
-
 
             for (int i = startScan; i < stopScan; i++)
             {
@@ -65,20 +64,14 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
                     ScanSet scanset = new ScanSet(i);
                     run.CurrentScanSet = scanset;
                     msgen.Execute(run.ResultCollection);
+                    peakdetector.Execute(run.ResultCollection);
 
                     Console.Write("Working on Scan " + scanset.PrimaryScanNumber);
                     Console.WriteLine("; XYPair count = " + run.XYData.Xvalues.Length);
 
-
+                    Console.WriteLine("num peaks= "+ run.PeakList.Count);
                 }
-
-
-
             }
-
-
-
-
         }
 
 

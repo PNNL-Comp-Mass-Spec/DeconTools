@@ -107,6 +107,13 @@ namespace DeconTools.Backend.Workflows
 
                     _deconvolutor.deconvolute(uimfRun.ResultCollection);     //adds to IsosResultBin
 
+                    //Note: the deconvolutor automatically increases the MSFeatureCounter. 
+                    //Here, we don't want this, since this data is used only for saturation correction,
+                    //not for generating the official MSFeatures list. So we need to 
+                    //correct the MSFeatureCounter value. 
+                    Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
+                                                            Run.ResultCollection.IsosResultBin.Count;
+
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
                     //if (frameset.PrimaryFrame >= 340 && scanset.PrimaryScanNumber >= 220)
@@ -137,6 +144,8 @@ namespace DeconTools.Backend.Workflows
                 //now sum across IMSScans, deconvolute and adjust
                 foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
                 {
+                    uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
+
 
                     //get the summed isotopic profile
                     uimfRun.CurrentFrameSet = frameset;
@@ -170,7 +179,7 @@ namespace DeconTools.Backend.Workflows
                     {
 
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
-                                                  IntensityThresholdForSaturation;
+                                                      IntensityThresholdForSaturation;
 
 
 
@@ -221,7 +230,12 @@ namespace DeconTools.Backend.Workflows
                             }
                             else
                             {
+                                //here we have found a duplicate
                                 dup.MSFeatureID = minMSFeatureID;
+                                
+                                //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
+                                //happen when there are duplicates
+                                //Run.ResultCollection.MSFeatureCounter--;
                             }
 
                         }

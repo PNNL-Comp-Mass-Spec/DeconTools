@@ -206,6 +206,46 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         }
 
+        [Test]
+        public void processUIMFContainingMSMS()
+        {
+            string testFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
+
+            Run run = new RunFactory().CreateRun(testFile);
+
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            var parameters = new OldDecon2LSParameters();
+            parameters.HornTransformParameters.NumFramesToSumOver = 1;
+            parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
+            parameters.HornTransformParameters.ZeroFill = true;
+            parameters.HornTransformParameters.ProcessMSMS = true;
+            parameters.HornTransformParameters.UseScanRange = true;
+            parameters.HornTransformParameters.MinScan = 1;    //min frame
+            parameters.HornTransformParameters.MaxScan = 2;    //max frame
+
+           
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            workflow.Execute();
+
+            List<IsosResult> results = new List<IsosResult>();
+            Assert.That(File.Exists(expectedIsosOutput));
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
+            results = importer.Import();
+
+            //TestUtilities.DisplayMSFeatures(results);
+            Assert.AreEqual(554, results.Count);
+            Assert.AreEqual(3990436, (int)results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+
+
+        }
+
 
         [Test]
         public void ProcessBruker12TSolarixFile1()
