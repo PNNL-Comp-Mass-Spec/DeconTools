@@ -38,15 +38,6 @@ namespace DeconTools.Backend.Core
             
             Check.Require(increment > 0, "Increment must be greater than 0");
             
-
-
-
-
-            if (uimfRun.ContainsMSMSData)
-            {
-                Check.Require(numFramesSummed==1, "DeconTools currently does not support summing across LC dimension (i.e. frames) when file contains MS2-level data");
-            }
-
             var frameSetCollection = new FrameSetCollection();
 
             if (stopFrame > maxFrame) stopFrame = maxFrame;

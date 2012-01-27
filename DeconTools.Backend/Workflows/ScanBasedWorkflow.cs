@@ -180,13 +180,28 @@ namespace DeconTools.Backend.Workflows
 
             CreateOutputFileNames();
 
-            CreateTargetMassSpectra();
-
-            ExecutePreprocessHook();
-
-            InitializeProcessingTasks();
-
             WriteProcessingInfoToLog();
+
+            try
+            {
+                CreateTargetMassSpectra();
+
+                ExecutePreprocessHook();
+
+                InitializeProcessingTasks();
+
+            }
+            catch (Exception ex)
+            {
+                string errorDetails = ex.Message + "; STACKTRACE= " + ex.StackTrace;
+
+                Logger.Instance.AddEntry("Error - during workflow initialization", Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("Error details: " + errorDetails, Logger.Instance.OutputFilename);
+                throw;
+            }
+
+           
+            
 
         }
 
@@ -253,6 +268,7 @@ namespace DeconTools.Backend.Workflows
         public virtual void Execute()
         {
            
+
 
             InitializeWorkflow();
 

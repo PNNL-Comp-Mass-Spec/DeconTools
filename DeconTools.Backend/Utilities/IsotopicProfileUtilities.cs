@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -64,6 +65,28 @@ namespace DeconTools.Backend.Utilities
 
         #region Private Methods
         #endregion
+
+        /// <summary>
+        /// Returnsa normalized isotopic profile
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="intensityForNormalization"></param>
+        /// <returns></returns>
+        public static void NormalizeIsotopicProfile(IsotopicProfile profile, float intensityForNormalization = 1.0f)
+        {
+            Check.Require(profile != null, "Isotopic profile is null");
+            Check.Require(profile.Peaklist!=null, "Isotopic profile peaklist is null");
+
+            var maxIntensity = profile.getMostIntensePeak().Height;
+            
+            for (int i = 0; i < profile.Peaklist.Count; i++)
+            {
+                profile.Peaklist[i].Height = profile.Peaklist[i].Height/maxIntensity*intensityForNormalization;
+            }
+
+           
+        }
+
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
