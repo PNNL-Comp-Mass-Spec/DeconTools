@@ -73,6 +73,7 @@
 		<DetectPeaksOnly_NoDeconvolution>False</DetectPeaksOnly_NoDeconvolution>
 		<Process_MS>True</Process_MS>
 		<ScanBasedWorkflowType>standard</ScanBasedWorkflowType>
+		<SaturationThreshold>90000</SaturationThreshold>
 	</Miscellaneous>
 	<ElementIsotopes>
 		<NumElements>103</NumElements>

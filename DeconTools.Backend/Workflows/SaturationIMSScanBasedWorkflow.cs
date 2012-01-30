@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Workflows
             _deconvolutor.MaxFitAllowed = 0.6;
 
 
-            IntensityThresholdForSaturation = 9E4;
+            
 
             AdjustMonoIsotopicMasses = true;
 
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
 
-        public double IntensityThresholdForSaturation { get; set; }
+        
 
         public double PeakBRSaturatedPeakDetector { get; set; }
 
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Workflows
                     {
                         
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
-                                                   IntensityThresholdForSaturation;
+                                                   OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
                         if (isPossiblySaturated)
                         {
@@ -179,7 +179,7 @@ namespace DeconTools.Backend.Workflows
                     {
 
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
-                                                      IntensityThresholdForSaturation;
+                                                      OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
 
 
@@ -497,7 +497,7 @@ namespace DeconTools.Backend.Workflows
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                if (iso.Peaklist[i].Height > IntensityThresholdForSaturation)
+                if (iso.Peaklist[i].Height > OldDecon2LsParameters.HornTransformParameters.SaturationThreshold)
                 {
                     if (updatePeakIntensities)
                     {

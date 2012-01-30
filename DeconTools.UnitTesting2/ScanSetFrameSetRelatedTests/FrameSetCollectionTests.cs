@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 {
@@ -13,10 +13,10 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         public void creatorTest_sum3_test1()
         {
 
-            RunFactory rf=new RunFactory();
+            RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            int frameStart=1;
+            int frameStart = 1;
             int frameStop = 11;
 
             int numFramesToSum = 3;
@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             UIMFRun uimfRun = (UIMFRun)run;
 
             uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1);
-            
+
             Assert.AreEqual(11, uimfRun.FrameSetCollection.FrameSetList.Count);
 
 
@@ -84,7 +84,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         public void CreateFrameSetCollectionIncludeMSMSFrames()
         {
             RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);   
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
 
             int frameStart = 1;
             int frameStop = 10;
@@ -93,11 +93,36 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1,true);
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1, true);
 
             Assert.AreEqual(10, uimfRun.FrameSetCollection.FrameSetList.Count);
             //Assert.AreEqual("24,25,27", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
 
+
+        }
+
+
+        [Test]
+        public void CreateFrameSetCollectionFromMSMSFramesSumMS1_Only()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
+
+            int numFramesToSum = 3;
+
+            UIMFRun uimfRun = (UIMFRun)run;
+
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesToSum, 1, true);
+
+            Assert.AreEqual(15, uimfRun.FrameSetCollection.FrameSetList.Count);
+            //foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
+            //{
+            //    Console.WriteLine(frameset);
+
+
+            //}
+            Assert.AreEqual("5", uimfRun.FrameSetCollection.FrameSetList[4].ToString());
+            Assert.AreEqual("1,6,11", uimfRun.FrameSetCollection.FrameSetList[5].ToString());
 
         }
 
@@ -119,7 +144,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             UIMFRun uimfRun = (UIMFRun)run;
 
             uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1);
-           
+
             Assert.AreEqual(11, uimfRun.FrameSetCollection.FrameSetList.Count);
 
             foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
@@ -130,9 +155,9 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             }
 
             FrameSet testFrame0 = uimfRun.FrameSetCollection.FrameSetList[3];
-             Assert.AreEqual(1, testFrame0.IndexValues.First());
-             Assert.AreEqual(7, testFrame0.IndexValues.Count);
-             Assert.AreEqual(7, testFrame0.IndexValues.Last());
+            Assert.AreEqual(1, testFrame0.IndexValues.First());
+            Assert.AreEqual(7, testFrame0.IndexValues.Count);
+            Assert.AreEqual(7, testFrame0.IndexValues.Last());
 
         }
 
@@ -145,12 +170,12 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            
+
             int frameStop = ((UIMFRun)run).MaxFrame;
             int frameStart = frameStop - 10;
 
 
-         
+
             UIMFRun uimfrun = (UIMFRun)run;
             uimfrun.FrameSetCollection = FrameSetCollection.Create(uimfrun, frameStart, frameStop, 3, 1);
 
