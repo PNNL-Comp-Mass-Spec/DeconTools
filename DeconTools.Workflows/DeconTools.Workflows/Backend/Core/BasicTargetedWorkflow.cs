@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
         private PeakChromatogramGenerator chromGen;
         private DeconToolsSavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
-        private SmartChromPeakSelector chromPeakSelector;
+        private ChromPeakSelectorBase chromPeakSelector;
         private DeconToolsPeakDetector msPeakDetector;
         private IterativeTFF msfeatureFinder;
         private MassTagFitScoreCalculator fitScoreCalc;
@@ -95,17 +95,7 @@ namespace DeconTools.Workflows.Backend.Core
             chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-            SmartChromPeakSelectorParameters smartchrompeakSelector = new SmartChromPeakSelectorParameters();
-            smartchrompeakSelector.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-            smartchrompeakSelector.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
-            smartchrompeakSelector.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
-            smartchrompeakSelector.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            smartchrompeakSelector.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
-            smartchrompeakSelector.NumScansToSum = _workflowParameters.NumMSScansToSum;
-            smartchrompeakSelector.NumChromPeaksAllowed = 10;
-            smartchrompeakSelector.MultipleHighQualityMatchesAreAllowed = _workflowParameters.MultipleHighQualityMatchesAreAllowed;
-
-            chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelector);
+            chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 
 
             msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
