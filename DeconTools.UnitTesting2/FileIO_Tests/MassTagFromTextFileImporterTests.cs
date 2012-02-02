@@ -87,6 +87,44 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.IsTrue(testMassTag.MonoIsotopicMass > 0);
         }
 
+        [Test]
+        public void ImportTargetsContainingOnlyEmpiricalFormula()
+        {
+            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\QCShew_Bin10_Top10_empiricalFormula_NET_only.txt";
+
+            var mtc = new TargetCollection();
+
+            var massTagImporter = new MassTagFromTextFileImporter(testfile);
+            mtc = massTagImporter.Import();
+
+            Assert.AreNotEqual(null, mtc.TargetList);
+            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            {
+                Console.WriteLine(peptideTarget);
+            }
+
+        }
+
+        [Test]
+        public void ImportTargetsContainingEmpiricalFormulaAndScanNumber()
+        {
+
+            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_EmpiricalFormula_and_scans.txt";
+            var mtc = new TargetCollection();
+
+            var massTagImporter = new MassTagFromTextFileImporter(testfile);
+            mtc = massTagImporter.Import();
+
+            Assert.AreNotEqual(null, mtc.TargetList);
+            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            {
+                Console.WriteLine(peptideTarget);
+            }
+
+            
+
+        }
+
 
 
         /// <summary>

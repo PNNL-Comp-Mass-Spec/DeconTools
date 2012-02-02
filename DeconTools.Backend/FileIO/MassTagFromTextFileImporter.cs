@@ -80,6 +80,7 @@ namespace DeconTools.Backend.FileIO
 
                     bool massTagMassInfoMissing = (Math.Abs(massTag.MonoIsotopicMass - 0) < double.Epsilon);
 
+                    bool chargeStateInfoIsAvailable = massTag.ChargeState != 0;
                     if (massTagMassInfoMissing)
                     {
                         if (!String.IsNullOrEmpty(massTag.EmpiricalFormula))
@@ -87,11 +88,16 @@ namespace DeconTools.Backend.FileIO
                             massTag.MonoIsotopicMass =
                                 EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(
                                     massTag.EmpiricalFormula);
+
+                            if (chargeStateInfoIsAvailable)
+                            {
+                                massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
+                            }
                         }
                     }
 
-                    bool noChargeStateInfoAvailable = massTag.ChargeState == 0;
-                    if (noChargeStateInfoAvailable)
+                   
+                    if (!chargeStateInfoIsAvailable)
                     {
                         double minMZToConsider = 400;
                         double maxMZToConsider = 1300;
@@ -117,6 +123,7 @@ namespace DeconTools.Backend.FileIO
                     }
                     else
                     {
+
                         data.TargetList.Add(massTag);
                     }
 

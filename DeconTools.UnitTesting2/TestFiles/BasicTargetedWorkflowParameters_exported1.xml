@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
   <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
   <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
   <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
-  <ChromNETTolerance>0.025</ChromNETTolerance>
+  <ChromNETTolerance>0.2</ChromNETTolerance>
   <ChromPeakDetectorPeakBR>1</ChromPeakDetectorPeakBR>
   <ChromPeakDetectorSigNoise>1</ChromPeakDetectorSigNoise>
   <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
@@ -12,6 +12,6 @@
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
   <MSToleranceInPPM>10</MSToleranceInPPM>
   <NumMSScansToSum>1</NumMSScansToSum>
-  <ResultType>BASIC_MASSTAG_RESULT</ResultType>
+  <ResultType>BASIC_TARGETED_RESULT</ResultType>
   <WorkflowType>UnlabelledTargeted1</WorkflowType>
 </WorkflowParameters>

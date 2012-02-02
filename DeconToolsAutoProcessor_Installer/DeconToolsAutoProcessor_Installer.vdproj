@@ -705,7 +705,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4405.19023, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4412.21158, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_1850D97CCC685BAAFF7594F7BBE5B6CC"
@@ -931,7 +931,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4353.30746, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4408.30259, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_459D85A608A489F0A84B9FD1C6F37455"
@@ -962,7 +962,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4405.19025, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4412.21160, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_5519218D3CE954007A4CBE6C65594BE0"
@@ -993,7 +993,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4353.30746, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4408.30259, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_5EF084AAB8476C829969A8AD7F5FEEA7"
@@ -1447,7 +1447,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
         "ProductCode" = "8:{EA9D2819-8D38-4531-80C5-B6504BC01BD6}"
-        "PackageCode" = "8:{B5CC9C62-1FE9-4ADA-AE47-FD50D3023D5C}"
+        "PackageCode" = "8:{82790D92-3652-4C06-A55C-AE1C398EC06A}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1468,7 +1468,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
