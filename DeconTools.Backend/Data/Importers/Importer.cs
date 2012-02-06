@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Data
 {
@@ -63,6 +62,9 @@ namespace DeconTools.Backend.Data
 
         protected int parseIntField(string inputstring)
         {
+
+            if (String.IsNullOrEmpty(inputstring)) return -1;
+
             int result = 0;
             if (Int32.TryParse(inputstring, out result))
                 return result;
