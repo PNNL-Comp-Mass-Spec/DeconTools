@@ -39,7 +39,7 @@ namespace DeconTools.Testing.ProblemCases
 
             MSGeneratorFactory msfact = new MSGeneratorFactory();
 
-            var msgen = msfact.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             ScanSet scan = new ScanSet(1);
             run.CurrentScanSet = scan;

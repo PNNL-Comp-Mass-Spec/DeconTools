@@ -87,8 +87,8 @@ namespace DeconTools.Testing.ProblemCases
         {
             StringBuilder sb = new StringBuilder();
 
-            UIMFLibrary.DataReader dr = new DataReader();
-            dr.OpenUIMF(run.Filename);
+            UIMFLibrary.DataReader dr = new DataReader(run.Filename);
+            
 
 
             FrameParameters fp;

@@ -27,7 +27,7 @@ namespace DeconTools.Testing.ProblemCases
 
             MSGeneratorFactory msgenfactory = new MSGeneratorFactory();
 
-            var msgen =   msgenfactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
 

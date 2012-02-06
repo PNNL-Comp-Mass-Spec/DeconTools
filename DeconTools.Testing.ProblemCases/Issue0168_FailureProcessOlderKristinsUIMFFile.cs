@@ -67,32 +67,7 @@ namespace DeconTools.Testing.ProblemCases
         }
 
 
-        [Test]
-        public void isolatedProblem_Test2()
-        {
-            UIMFLibrary.DataReader dr = new UIMFLibrary.DataReader();
-            dr.OpenUIMF(testFile);
-
-            UIMFLibrary.GlobalParameters gp=dr.GetGlobalParameters();
-
-            int numBins= gp.Bins;
-
-            double[] mzs = new double[numBins];
-            int[]intensities = new int[numBins];
-
-            int startFrame = 6;
-            int stopFrame = 6;
-
-
-            //the following throws an error
-            dr.SumScansNonCached(mzs, intensities, 0, startFrame, stopFrame, 285, 285);
-
-            // tester.DisplayFrameParameters(run, startFrame, stopFrame);
-
-
-        }
-
-
+      
 
         [Test]
         public void displayFrameInfo()
@@ -185,7 +160,7 @@ namespace DeconTools.Testing.ProblemCases
             run.CurrentScanSet = scan;
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();
-            var msgen = msgenFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             msgen.Execute(run.ResultCollection);
 
