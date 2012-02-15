@@ -157,14 +157,25 @@ namespace DeconTools.Backend.Core
 
                 if (!processMSMS && currentMSLevel > 1) continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
 
-                List<int> lowerScansToSum = GetLowerScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
-                List<int> upperScansToSum = GetUpperScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
+                ScanSet scanSet;
+                if (currentMSLevel==1)
+                {
+                    List<int> lowerScansToSum = GetLowerScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
+                    List<int> upperScansToSum = GetUpperScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
 
-                List<int> scansToSum = lowerScansToSum;
-                scansToSum.Add(i);
-                scansToSum.AddRange(upperScansToSum);
+                    List<int> scansToSum = lowerScansToSum;
+                    scansToSum.Add(i);
+                    scansToSum.AddRange(upperScansToSum);
 
-                var scanSet = new ScanSet(i, scansToSum.ToArray());
+                    scanSet = new ScanSet(i, scansToSum.ToArray());
+                }
+                else
+                {
+                    scanSet = new ScanSet(i);
+
+                }
+
+                
                 scanSetCollection.ScanSetList.Add(scanSet);
 
                 i = i + scanIncrement - 1;   //  '-1' because we advance by +1 when the loop iterates. 

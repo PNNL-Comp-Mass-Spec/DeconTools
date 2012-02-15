@@ -160,7 +160,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         result.IsotopicProfile.MonoPlusTwoAbundance = result.IsotopicProfile.GetMonoPlusTwoAbundance();
                     }
 
-                    XYData theorXYData = TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
+                    XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
 
                     //offset the theor isotopic profile
                     offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);

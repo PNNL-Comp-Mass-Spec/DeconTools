@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double mzOffset = isoN15.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorIso.Peaklist[indexOfMostAbundantTheorPeak].XValue;
             double fwhm = isoN15.GetFWHM();
 
-            XYData theorXYData = TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(theorIso, isoN15.GetFWHM());
+            XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(theorIso, isoN15.GetFWHM());
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
 
             areafitter = new AreaFitter(theorXYData, rawXYData, 0.1);

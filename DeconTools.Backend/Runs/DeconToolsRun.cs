@@ -31,15 +31,15 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override string GetScanInfo(ScanSet scanSet)
+        public override string GetScanInfo(int scanNum)
         {
             if (RawData == null)
             {
-                return base.GetScanInfo(scanSet);
+                return base.GetScanInfo(scanNum);
             }
             else
             {
-                return this.RawData.GetScanDescription(scanSet.PrimaryScanNumber);
+                return this.RawData.GetScanDescription(scanNum);
             }
         }
 

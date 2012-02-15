@@ -220,7 +220,7 @@ namespace DeconTools.Backend.Workflows
                 OldDecon2LsParameters.HornTransformParameters.SGOrder);
 
             FitScoreCalculator = new DeconToolsFitScoreCalculator();
-            ScanResultUpdater = new ScanResultUpdater();
+            ScanResultUpdater = new ScanResultUpdater(OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
             ResultValidator = new ResultValidatorTask();
 
             IsosResultExporter = IsosExporterFactory.CreateIsosExporter(Run.ResultCollection.ResultType, ExporterType,
@@ -233,8 +233,6 @@ namespace DeconTools.Backend.Workflows
                                                               PeakListOutputFileName);
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
-
-
         }
 
         /// <summary>
@@ -242,18 +240,35 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         protected virtual void CreateTargetMassSpectra()
         {
-            int minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
-            int maxScan = Math.Min(Run.MaxScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
+            int minScan;
+            int maxScan;
+            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
+            {
+                minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
+                maxScan = Math.Min(Run.MaxScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
+            }
+            else
+            {
+                minScan = Run.MinScan;
+                maxScan = Run.MaxScan;
+            }
 
-            Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,
-                          OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1,
+
+            int numSummed;
+            if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossScanRange)
+            {
+                numSummed = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver*2 + 1;
+            }
+            else
+            {
+                numSummed = 1;
+            }
+            
+            Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,numSummed,
                           OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                           OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
             
         }
-
-
-
 
         /// <summary>
         /// A hook that allows derived classes to do something before main processing is executed. See 'Template Method' design pattern
@@ -267,9 +282,6 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void Execute()
         {
-           
-
-
             InitializeWorkflow();
 
             WorkflowStats = new WorkflowStats();
@@ -282,9 +294,6 @@ namespace DeconTools.Backend.Workflows
             WorkflowStats.NumFeatures = Run.ResultCollection.MSFeatureCounter;
 
             WriteOutSummaryToLogfile();
-
-
-
 
         }
 
@@ -403,7 +412,7 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
         #region Private Methods
-        protected Globals.ResultType GetResultType()
+        protected virtual Globals.ResultType GetResultType()
         {
             if (Run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
             if (Run is IMFRun) return Globals.ResultType.IMS_TRADITIONAL_RESULT;
@@ -419,7 +428,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        internal void WriteProcessingInfoToLog()
+        internal virtual void WriteProcessingInfoToLog()
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
             Logger.Instance.AddEntry("ParameterFile = " + (OldDecon2LsParameters.ParameterFilename == null ? "[NONE]" : Path.GetFileName(OldDecon2LsParameters.ParameterFilename)));

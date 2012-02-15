@@ -58,7 +58,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         }
 
 
-        public static XYData Get_Theoretical_IsotopicProfileXYData(IsotopicProfile isotopicProfile, double fwhm)
+        public static XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile isotopicProfile, double fwhm)
         {
             Check.Require(isotopicProfile != null && isotopicProfile.Peaklist != null &&
             isotopicProfile.Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
@@ -87,7 +87,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         #endregion
 
      
-        public static XYData Get_Theoretical_IsotopicProfileXYData(IsotopicProfile theorProfile, double fwhm, double mzOffset)
+        public static XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile theorProfile, double fwhm, double mzOffset)
         {
             throw new NotImplementedException();
         }

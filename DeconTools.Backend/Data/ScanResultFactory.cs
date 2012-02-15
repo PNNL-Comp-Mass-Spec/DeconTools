@@ -45,7 +45,7 @@ namespace DeconTools.Backend.Data
                 scanresult.NumIsotopicProfiles = scanSet.NumIsotopicProfiles;
                 scanresult.BasePeak = scanSet.BasePeak;
                 scanresult.TICValue = scanSet.TICValue;
-                scanresult.Description = run.GetScanInfo(scanSet);
+                scanresult.Description = run.GetScanInfo(scanSet.PrimaryScanNumber);
 
             
             return scanresult;

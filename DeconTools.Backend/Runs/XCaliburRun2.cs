@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -51,17 +53,6 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
 
         public override XYData XYData { get; set; }
 
@@ -72,12 +63,6 @@ namespace DeconTools.Backend.Runs
             return numSpectra;
         }
 
-
-       
-
-
-
-
         public override double GetTime(int scanNum)
         {
             double RTForAGivenScan = 0;
@@ -85,12 +70,10 @@ namespace DeconTools.Backend.Runs
             return RTForAGivenScan;
         }
 
-
         public override int GetMinPossibleScanNum()
         {
             return 1;
         }
-
 
         public override int GetMaxPossibleScanNum()
         {
@@ -100,12 +83,11 @@ namespace DeconTools.Backend.Runs
             return maxpossibleScanIndex;
         }
 
-      
         public override int GetMSLevelFromRawData(int scanNum)
         {
             //Thermo's API doesn't seem to expose an easy method for getting the MS Level
             //so we have to get it from the 'Filter' or scan description string
-            
+
             //example of MS1:
             //FTMS + p NSI Full ms [400.00-2000.00]
 
@@ -126,9 +108,9 @@ namespace DeconTools.Backend.Runs
             int indexOfMSReference = filter.IndexOf("ms");
             if (indexOfMSReference == -1)
             {
-                msLevel= 1;
+                msLevel = 1;
             }
-            else if (indexOfMSReference < filter.Length-2)  // ensure we aren't at the end of the filter string 
+            else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string 
             {
                 char mslevelFromFilter = filter[indexOfMSReference + 2];
 
@@ -152,7 +134,7 @@ namespace DeconTools.Backend.Runs
                     case '5':
                         msLevel = 5;
                         break;
-       
+
                     default:
                         msLevel = 1;
                         break;
@@ -161,7 +143,7 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                msLevel= 1;    //  the 'ms' was found right at the end of the scan description. Probably never happens.
+                msLevel = 1;    //  the 'ms' was found right at the end of the scan description. Probably never happens.
             }
 
             return msLevel;
@@ -225,7 +207,7 @@ namespace DeconTools.Backend.Runs
 
             }
 
-
+            if (vals == null) return;
 
             double[] xvals = new double[vals.GetLength(1)];
             double[] yvals = new double[vals.GetLength(1)];
@@ -249,16 +231,59 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override string GetScanInfo(ScanSet scanSet)
+        public override string GetScanInfo(int scanNum)
         {
             string filter = null;
-            xraw.GetFilterForScanNum(scanSet.PrimaryScanNumber, ref filter);
+            xraw.GetFilterForScanNum(scanNum, ref filter);
             return filter;
 
         }
 
+        public override int GetParentScan(int scanLC)
+        {
+            if (!ParentScanList.ContainsKey(scanLC))
+            {
+                int testScan = scanLC;
+                while (testScan>=MinScan)
+                {
+                    int currentMSLevel = GetMSLevel(testScan);
+
+                    if (currentMSLevel == 1)
+                    {
+                        ParentScanList.Add(scanLC, testScan);
+                        return testScan;
+                    }
+                    
+
+                    testScan--;
+                }
+
+                //we got to the MinScan and never found the parent scan
+                return -1;
 
 
+            }
+
+            return ParentScanList[scanLC];
+
+
+        }
+
+        private double getMZFromScanInfo(string scanInfo)
+        {
+
+            string pattern = @"(?<mz>[0-9.]+)@\w";
+            var match = Regex.Match(scanInfo, pattern);
+
+            double mzScanInfo = 0;
+            if (match.Success)
+            {
+                mzScanInfo = Convert.ToDouble(match.Groups["mz"].Value);
+            }
+
+            return mzScanInfo;
+
+        }
 
 
         public override void Close()

@@ -105,7 +105,8 @@ namespace DeconTools.Backend
             O16O18_TRADITIONAL_RESULT,
             BASIC_TARGETED_RESULT,
             O16O18_TARGETED_RESULT,
-            N14N15_TARGETED_RESULT
+            N14N15_TARGETED_RESULT,
+            DECON_MSN_RESULT
         }
 
         public enum ScanSelectionMode

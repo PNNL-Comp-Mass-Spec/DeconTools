@@ -70,6 +70,31 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
 
         [Test]
+        public void CreateScanSetsSummedMS1UnsummedMS2Test2()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            int startScan = 6000;
+            int stopScan = 6020;
+
+            int numSummed = 5;
+
+            bool processMSMS = true;
+            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, numSummed, 1, processMSMS);
+
+            Assert.AreEqual(21, run.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(6000, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
+            Assert.AreEqual(1, run.ScanSetCollection.ScanSetList[0].IndexValues.Count);
+            Assert.AreEqual(6005, run.ScanSetCollection.ScanSetList[5].PrimaryScanNumber);
+            Assert.AreEqual(5, run.ScanSetCollection.ScanSetList[5].IndexValues.Count);
+
+            //Console.WriteLine(run.ScanSetCollection.ScanSetList[0]);
+        }
+
+
+
+        [Test]
         public void createIMSScanSets1()
         {
             RunFactory factory=new RunFactory();

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using DeconTools.Utilities;
 
 
 namespace DeconTools.Backend.Utilities
@@ -161,6 +158,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+        
 
         public int GetNumAtomsForElement(string element, string empiricalFormula)
         {
@@ -191,7 +189,7 @@ namespace DeconTools.Backend.Utilities
 
         public bool ValidateSequence(string peptideSequence)
         {
-            if (peptideSequence == null || peptideSequence.Length == 0) return false;
+            if (string.IsNullOrEmpty(peptideSequence)) return false;
 
             foreach (var aminoAcid in peptideSequence)
             {

@@ -169,12 +169,12 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// Returns Scan information.
         /// </summary>
-        /// <param name="scanSet"></param>
+        /// <param name="scanNum"></param>
         /// <returns></returns>
-        public virtual string GetScanInfo(ScanSet scanSet)
+        public virtual string GetScanInfo(int scanNum)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(scanSet.ToString());
+            sb.Append(scanNum.ToString());
             return sb.ToString();
         }
 
@@ -459,6 +459,11 @@ namespace DeconTools.Backend.Core
         }
 
         protected SortedDictionary<int, byte> MSLevelList { get; set; }
+
+
+        protected SortedDictionary<int, int> ParentScanList { get; set; } 
+
+
 
         public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
         {
@@ -965,5 +970,10 @@ namespace DeconTools.Backend.Core
 
 
 
+
+        public virtual int GetParentScan(int scanLC)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

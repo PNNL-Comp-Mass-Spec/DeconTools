@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeconEngineV2, Version=1.0.4408.30259, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
@@ -52,9 +56,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIMFLibrary, Version=2.0.4399.23746, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="UIMFLibrary, Version=2.0.4419.21361, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\x86\Debug\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +71,8 @@
     <Compile Include="Issue0757_singleScanRAWFileProblem.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="OMCS_0135_UIMF_MS_indexOutOfRange.cs" />
+    <Compile Include="OMCS_0149_MSMSNoScans.cs" />
+    <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIMFRunTester.cs" />
   </ItemGroup>

@@ -51,7 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
-                XYData theorXYData = TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
+                XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
 
                 offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 

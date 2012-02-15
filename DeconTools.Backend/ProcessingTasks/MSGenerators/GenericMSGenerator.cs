@@ -55,16 +55,8 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 run.XYData = new XYData();
             }
 
-            bool isScan_MS_only = (run.GetMSLevel(run.CurrentScanSet.PrimaryScanNumber) == 1);
-            if (true)
-            {
-                run.GetMassSpectrum(run.CurrentScanSet, this.MinMZ, this.MaxMZ);
-
-            }
-            else
-            {
-
-            }
+          
+            run.GetMassSpectrum(run.CurrentScanSet, MinMZ, MaxMZ);
 
             if (run.XYData.Xvalues == null || run.XYData.Xvalues.Length == 0)
             {

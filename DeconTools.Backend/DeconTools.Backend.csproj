@@ -117,9 +117,9 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIMFLibrary, Version=2.0.4399.23746, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="UIMFLibrary, Version=2.0.4419.21361, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\UIMFLibrary\UIMFLibrary\bin\x86\Debug\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
     <Reference Include="YafmsLibrary, Version=1.0.3989.9960, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -411,6 +411,7 @@
     <Compile Include="Utilities\PeakUtilities.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Workflows\DeconMSnWorkflow.cs" />
     <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />
     <Compile Include="Workflows\RunMergingPeakExportingWorkflow.cs" />
     <Compile Include="Workflows\SaturationIMSScanBasedWorkflow.cs" />

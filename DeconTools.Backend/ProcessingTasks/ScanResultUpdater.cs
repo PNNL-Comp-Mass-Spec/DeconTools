@@ -15,9 +15,9 @@ namespace DeconTools.Backend.ProcessingTasks
             MS2_IsOutputted = false;
         }
 
-        public ScanResultUpdater(bool ms2_is_outputted)
+        public ScanResultUpdater(bool ms2IsOutputted)
         {
-            MS2_IsOutputted = ms2_is_outputted;
+            MS2_IsOutputted = ms2IsOutputted;
         }
 
 
