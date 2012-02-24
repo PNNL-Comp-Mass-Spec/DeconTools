@@ -121,11 +121,12 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int scanNum)
         {
             MSLevel level;
-            if (m_spec == null || m_spec.ScanId == scanNum)    // get fresh spectrum
-            {
-                getAgilentSpectrum(scanNum);      // this might be very slow
-            }
+            
+            //TODO: we need to find a better way of getting the MSLevel. We shouldn't have to
+            //get the entire mass spectrum to figure this out. 
 
+            getAgilentSpectrum(scanNum);      // this might be very slow
+            
             level = m_spec.MSLevelInfo;
 
 
