@@ -122,14 +122,10 @@ namespace DeconTools.Backend.Runs
         {
             MSLevel level;
             
-            //TODO: we need to find a better way of getting the MSLevel. We shouldn't have to
-            //get the entire mass spectrum to figure this out. 
-
-            getAgilentSpectrum(scanNum);      // this might be very slow
-            
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Peak);
             level = m_spec.MSLevelInfo;
 
-
+          
             if (level == MSLevel.MS)
                 return 1;
             else if (level == MSLevel.MSMS)
@@ -148,7 +144,7 @@ namespace DeconTools.Backend.Runs
 
             m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);
 
-
+            
         }
 
 
