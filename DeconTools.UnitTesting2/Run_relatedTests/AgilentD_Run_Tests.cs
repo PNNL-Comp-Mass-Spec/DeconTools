@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
+using System.Diagnostics;
+using System.IO;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
-using DeconTools.Backend;
-using System.IO;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -69,16 +68,47 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             string testfile =
                 @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
-            Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
+            Run run = new AgilentDRun(testfile);
 
-            for (int scan = 612; scan < 614; scan++)
+            int scanStart = 3000;
+            int scanStop = 3500;
+
+
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int scan = scanStart; scan <= scanStop; scan++)
             {
-                Console.WriteLine(scan + "\t" + run.GetMSLevel(scan));
-
+                int mslevel = run.GetMSLevel(scan);
             }
 
-            Assert.AreEqual(1, run.GetMSLevel(612)); 
+            stopwatch.Stop();
+            Console.WriteLine("Total time in milliseconds to get MSLevel for " + (scanStop - scanStart + 1) + " spectra = " +
+                              stopwatch.ElapsedMilliseconds);
+
+            Console.WriteLine("Average time (ms) to get MSLevel = " + (double)stopwatch.ElapsedMilliseconds/(scanStop-scanStart+1));
+
+
+            Assert.AreEqual(1, run.GetMSLevel(612));
             Assert.AreEqual(2, run.GetMSLevel(613)); 
+
+            //   IMsdrDataReader m_reader = new MassSpecDataReader();
+            // m_reader.OpenDataFile(testfile);
+
+            
+           
+          
+            //double scanTime = 30;
+
+
+
+
+            //Console.WriteLine(m_reader.MSScanFileInformation.MSLevel);
+
+            //m_reader.MSScanFileInformation.
+
+
+
         }
 
 
