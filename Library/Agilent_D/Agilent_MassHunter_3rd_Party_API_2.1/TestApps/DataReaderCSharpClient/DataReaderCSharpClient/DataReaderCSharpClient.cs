@@ -1,10 +1,7 @@
 using System;
 using System.Data;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Agilent.MassSpectrometry.DataAnalysis;
 
 namespace DataReaderCSharpClient
@@ -17,7 +14,7 @@ namespace DataReaderCSharpClient
     public class DataReaderCSharpClient
     {
         //Modify the path to point to a valid data file on your computer.
-        private string _dataFilename1 = @"F:\Gord\Data\AgilentD\BSA_TOF4.d";//centroid, MS2, ESI +
+        private string _dataFilename1 =@"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";//centroid, MS2, ESI +
         private string _NonMSdataFilename = "X:\\Data\\TOFsulfasMS4GHzDualMode+DADSpectra+UVSignal272.d";
 
         static void Main(string[] args)
@@ -66,6 +63,8 @@ namespace DataReaderCSharpClient
 
         private void GetMSLevels(IMsdrDataReader dataAccess)
         {
+
+
             long totalNumScans = dataAccess.MSScanFileInformation.TotalScansPresent;
             for (int i = 0; i < totalNumScans; i++)
             {
