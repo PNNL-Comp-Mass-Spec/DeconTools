@@ -62,6 +62,28 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(1, run.GetMSLevel(25)); 
         }
 
+
+        [Test]
+        public void GetMSLevelTest2()
+        {
+            string testfile =
+                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
+
+            for (int scan = 612; scan < 614; scan++)
+            {
+                Console.WriteLine(scan + "\t" + run.GetMSLevel(scan));
+
+            }
+
+            Assert.AreEqual(1, run.GetMSLevel(612)); 
+            Assert.AreEqual(2, run.GetMSLevel(613)); 
+        }
+
+
+
+
         [Test]
         public void getTimeTest1()
         {
