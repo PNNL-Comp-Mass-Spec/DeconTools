@@ -6,6 +6,7 @@ using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 using System.Diagnostics;
+using PNNLOmics.Data;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -162,6 +163,30 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         }
 
+        [Test]
+        public void GetPrecursorInfo()
+        {
+            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            
+            PrecursorInfo precursor;
+
+            precursor = run.GetPrecursorInfo(6005);
+
+            Assert.AreEqual(1, precursor.MSLevel);
+            Assert.AreEqual(-1, precursor.PrecursorCharge);
+            Assert.AreEqual(0, precursor.PrecursorIntensity);
+            Assert.AreEqual(-1, precursor.PrecursorMZ);
+            Assert.AreEqual(6005, precursor.PrecursorScan);
+
+            precursor = run.GetPrecursorInfo(6006);
+
+            Assert.AreEqual(2, precursor.MSLevel);
+            Assert.AreEqual(-1, precursor.PrecursorCharge);
+            Assert.AreEqual(0, precursor.PrecursorIntensity);
+            Assert.AreEqual(408.25, precursor.PrecursorMZ);
+            Assert.AreEqual(6005, precursor.PrecursorScan);
+        }
        
 
 

@@ -6,6 +6,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 using NUnit.Framework;
+using PNNLOmics.Data;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -73,8 +74,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             int scanStart = 3000;
             int scanStop = 3500;
 
-
-
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int scan = scanStart; scan <= scanStop; scan++)
@@ -95,20 +94,23 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //   IMsdrDataReader m_reader = new MassSpecDataReader();
             // m_reader.OpenDataFile(testfile);
 
-            
-           
-          
-            //double scanTime = 30;
+            PrecursorInfo precursor;
 
+            precursor = run.GetPrecursorInfo(612);
 
+            Assert.AreEqual(1, precursor.MSLevel);
+            Assert.AreEqual(-1, precursor.PrecursorCharge);
+            Assert.AreEqual(0, precursor.PrecursorIntensity);
+            Assert.AreEqual(0, precursor.PrecursorMZ);
+            Assert.AreEqual(612, precursor.PrecursorScan);
 
+            precursor = run.GetPrecursorInfo(613);
 
-            //Console.WriteLine(m_reader.MSScanFileInformation.MSLevel);
-
-            //m_reader.MSScanFileInformation.
-
-
-
+            Assert.AreEqual(2, precursor.MSLevel);
+            Assert.AreEqual(1, precursor.PrecursorCharge);
+            Assert.AreEqual(291638.781f, precursor.PrecursorIntensity);
+            Assert.AreEqual(534.26422119140625, precursor.PrecursorMZ);
+            Assert.AreEqual(612, precursor.PrecursorScan);
         }
 
 

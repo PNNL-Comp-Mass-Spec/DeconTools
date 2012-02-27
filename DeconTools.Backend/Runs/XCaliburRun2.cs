@@ -203,12 +203,48 @@ namespace DeconTools.Backend.Runs
             }
             precursor.MSLevel = msLevel;
 
-            precursor.PrecursorScan = scanNum;
+            //step back till the scan number = 1;
+            int stepBack = 0;
+            int testScanLevel = 0;
+            while(scanNum - stepBack > 0)
+            if (scanNum - stepBack > 0)
+            {
+                testScanLevel = GetMSLevelFromRawData(scanNum - stepBack);
+                stepBack++;
+                if (testScanLevel == 1)//the first precursor scan prior
+                {
+                    break;
+                }
+            }
+            precursor.PrecursorScan = scanNum-(stepBack-1);
 
+            string scanInfo = null;
+            xraw.GetFilterForScanNum(scanNum, ref scanInfo);
+
+            precursor.PrecursorMZ = ParseThermoScanInfo(scanInfo); ;
             //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
 
             return precursor;
+        }
+
+        private static double ParseThermoScanInfo(string scanInfo)
+        {
+            double precursorMass = 0;
+
+            string pattern = @"(?<mz>[0-9.]+)@cid";
+
+            var match = Regex.Match(scanInfo, pattern);
+
+            if (match.Success)
+            {
+                precursorMass = Convert.ToDouble(match.Groups["mz"].Value);
+            }
+            else
+            {
+                precursorMass = -1;
+            }
+            return precursorMass;
         }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
