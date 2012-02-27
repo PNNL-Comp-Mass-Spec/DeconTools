@@ -82,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.FrameSet.PrimaryFrame);
             sb.Append(delimiter);
-            sb.Append(uimfResult.ScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
+            sb.Append(uimfResult.ScanSet.PrimaryScanNumber);   
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.ChargeState);
             sb.Append(delimiter);
