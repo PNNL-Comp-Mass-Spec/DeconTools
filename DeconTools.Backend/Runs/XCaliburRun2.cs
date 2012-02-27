@@ -3,14 +3,14 @@ using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using DeconTools.Backend.Data;
+using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Runs
 {
     public class XCaliburRun2 : Run
     {
-
         XRAWFILE2Lib.XRawfile xraw = new XRAWFILE2Lib.XRawfile();
-
 
         #region Constructors
         public XCaliburRun2()
@@ -52,7 +52,6 @@ namespace DeconTools.Backend.Runs
         }
 
         #endregion
-
 
         public override XYData XYData { get; set; }
 
@@ -99,7 +98,6 @@ namespace DeconTools.Backend.Runs
 
             int msLevel = 1;
 
-
             if (filter == null)
             {
                 return 1;
@@ -139,7 +137,6 @@ namespace DeconTools.Backend.Runs
                         msLevel = 1;
                         break;
                 }
-
             }
             else
             {
@@ -147,16 +144,77 @@ namespace DeconTools.Backend.Runs
             }
 
             return msLevel;
+        }
 
+        public override PrecursorInfo GetPrecursorInfo(int scanNum)
+        {
+            PrecursorInfo precursor = new PrecursorInfo();
 
+            string filter = null;
+            xraw.GetFilterForScanNum(scanNum, ref filter);
+
+            int msLevel = 1;
+
+            if (filter == null)
+            {
+                precursor.MSLevel = 1;
+            }
+            else
+            {
+                int indexOfMSReference = filter.IndexOf("ms");
+                if (indexOfMSReference == -1)
+                {
+                    msLevel = 1;
+                }
+                else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string 
+                {
+                    char mslevelFromFilter = filter[indexOfMSReference + 2];
+
+                    switch (mslevelFromFilter)
+                    {
+                        case ' ':
+                            msLevel = 1;
+                            break;
+                        case '1':
+                            msLevel = 1;
+                            break;
+                        case '2':
+                            msLevel = 2;
+                            break;
+                        case '3':
+                            msLevel = 3;
+                            break;
+                        case '4':
+                            msLevel = 4;
+                            break;
+                        case '5':
+                            msLevel = 5;
+                            break;
+
+                        default:
+                            msLevel = 1;
+                            break;
+                    }
+                }
+                else
+                {
+                    msLevel = 1;    //  the 'ms' was found right at the end of the scan description. Probably never happens.
+                }
+            }
+            precursor.MSLevel = msLevel;
+
+            precursor.PrecursorScan = scanNum;
+
+            //TODO: we still need to get charge
+            //precursor.PrecursorCharge = 1;
+
+            return precursor;
         }
 
         public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
-
-
 
             double[,] vals;
 
@@ -184,8 +242,6 @@ namespace DeconTools.Backend.Runs
              filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
 
                 vals = (double[,])massList;
-
-
             }
             else
             {
@@ -204,7 +260,6 @@ namespace DeconTools.Backend.Runs
                 xraw.GetMassListFromScanNum(ref scanNum, filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
 
                 vals = (double[,])massList;
-
             }
 
             if (vals == null) return;
@@ -216,7 +271,6 @@ namespace DeconTools.Backend.Runs
             {
                 xvals[i] = vals[0, i];
                 yvals[i] = vals[1, i];
-
             }
 
             this.XYData.SetXYValues(ref xvals, ref yvals);
@@ -227,8 +281,6 @@ namespace DeconTools.Backend.Runs
             {
                 this.FilterXYPointsByMZRange(minMZ, maxMZ);
             }
-
-
         }
 
         public override string GetScanInfo(int scanNum)
@@ -236,7 +288,6 @@ namespace DeconTools.Backend.Runs
             string filter = null;
             xraw.GetFilterForScanNum(scanNum, ref filter);
             return filter;
-
         }
 
         public override int GetParentScan(int scanLC)
@@ -253,25 +304,16 @@ namespace DeconTools.Backend.Runs
                         ParentScanList.Add(scanLC, testScan);
                         return testScan;
                     }
-                    
-
                     testScan--;
                 }
-
                 //we got to the MinScan and never found the parent scan
                 return -1;
-
-
             }
-
             return ParentScanList[scanLC];
-
-
         }
 
         private double getMZFromScanInfo(string scanInfo)
         {
-
             string pattern = @"(?<mz>[0-9.]+)@\w";
             var match = Regex.Match(scanInfo, pattern);
 
@@ -280,11 +322,8 @@ namespace DeconTools.Backend.Runs
             {
                 mzScanInfo = Convert.ToDouble(match.Groups["mz"].Value);
             }
-
             return mzScanInfo;
-
         }
-
 
         public override void Close()
         {
@@ -292,6 +331,4 @@ namespace DeconTools.Backend.Runs
             base.Close();
         }
     }
-
-
 }

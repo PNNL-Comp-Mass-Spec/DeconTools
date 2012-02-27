@@ -3,6 +3,8 @@ using System.IO;
 using Agilent.MassSpectrometry.DataAnalysis;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+using DeconTools.Backend.Data;
+using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Runs
 {
@@ -87,13 +89,11 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans() - 1;
         }
 
-
         public override int GetNumMSScans()
         {
             //m_reader=new MassSpecDataReader();
             IBDAMSScanFileInformation msscan = m_reader.FileInformation.MSScanFileInformation;
             return (int)msscan.TotalScansPresent;
-
         }
 
         public override double GetTime(int scanNum)
@@ -105,7 +105,6 @@ namespace DeconTools.Backend.Runs
                 getAgilentSpectrum(scanNum);
             }
 
-
             if (m_spec == null) return -1;
 
             IRange[] timeRangeArr = m_spec.AcquiredTimeRange;
@@ -113,21 +112,18 @@ namespace DeconTools.Backend.Runs
             {
                 time = timeRangeArr[0].Start;
             }
-
             return time;
-
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            MSLevel level;
-            
             m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Peak);
-            level = m_spec.MSLevelInfo;
-
-          
+            
+            MSLevel level = m_spec.MSLevelInfo;
             if (level == MSLevel.MS)
+            {
                 return 1;
+            }
             else if (level == MSLevel.MSMS)
             {
                 return 2;
@@ -138,16 +134,70 @@ namespace DeconTools.Backend.Runs
             }
         }
 
-        private void getAgilentSpectrum(int scanNum)
+        public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Peak);
 
+            PrecursorInfo precursor = new PrecursorInfo();
 
-            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);
+            MSLevel level = m_spec.MSLevelInfo;
+            if (level == MSLevel.MS)
+            {
+                precursor.MSLevel = 1;
+            }
+            else if (level == MSLevel.MSMS)
+            {
+                precursor.MSLevel = 2;
+            }
+            else
+            {
+                precursor.MSLevel = 1;
+            }
 
-            
+            int precursorMassCount;
+            double precursorIntensity;
+            int precursorCharge;
+            bool getCharge;
+
+            //this returs a list of precursor masses (I don't know how ther can be more than one)
+            double[] precursorMZlist = m_spec.GetPrecursorIon(out precursorMassCount);
+
+            //if a mass is returned
+            if (precursorMassCount > 0)
+            {
+                //mass
+                precursor.PrecursorMZ = precursorMZlist[0];
+                
+                //intensity
+                m_spec.GetPrecursorIntensity(out precursorIntensity);
+                precursor.PrecursorIntensity = (float)precursorIntensity;
+
+                //charge
+                getCharge = m_spec.GetPrecursorCharge(out precursorCharge);
+                precursor.PrecursorCharge = precursorCharge;
+
+                //adjust scan number if needed
+                precursor.PrecursorScan = scanNum-1;
+                
+                if (precursorMZlist.Length > 1)
+                {
+                    throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectra");
+                }
+            }
+            else 
+            {
+                precursor.PrecursorMZ = 0;
+                precursor.PrecursorIntensity = 0;
+                precursor.PrecursorCharge = -1;
+                precursor.PrecursorScan = scanNum;
+            }
+            return precursor;
         }
 
-
+        private void getAgilentSpectrum(int scanNum)
+        {
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);      
+        }
 
         public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
@@ -165,16 +215,14 @@ namespace DeconTools.Backend.Runs
                 throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
             }
-
             this.XYData.SetXYValues(m_spec.XArray, m_spec.YArray);
-
-
         }
         #endregion
 
         #region Private Methods
 
         #endregion
+
         public override void Dispose()
         {
 
@@ -192,13 +240,7 @@ namespace DeconTools.Backend.Runs
                 }
 
             }
-
-
             base.Dispose();
-
         }
-
-
-
     }
 }

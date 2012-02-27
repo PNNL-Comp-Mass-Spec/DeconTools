@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Parameters;
+using DeconTools.Backend.Data;
+using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Core
 {
     [Serializable]
     public abstract class Run : IDisposable
     {
-
         public Run()
         {
             this.scanSetCollection = new ScanSetCollection();
@@ -17,7 +18,6 @@ namespace DeconTools.Backend.Core
             this.XYData = new XYData();
             this.MSLevelList = new SortedDictionary<int, byte>();
             this.ScanToNETAlignmentData = new SortedDictionary<int, float>();
-
         }
 
         #region Properties
@@ -62,8 +62,6 @@ namespace DeconTools.Backend.Core
                 }
             }
         }
-
-
 
         private Globals.MSFileType mSFileType;
         public Globals.MSFileType MSFileType
@@ -150,8 +148,6 @@ namespace DeconTools.Backend.Core
             }
         }
 
-
-
         public virtual bool ContainsMSMSData { get; set; }
 
         private List<int> msLevelScanIndexList { get; set; }
@@ -159,7 +155,6 @@ namespace DeconTools.Backend.Core
         public IList<int> MSLevelMappings { get; set; }
 
         #endregion
-
 
         public abstract XYData XYData { get; set; }
         public abstract int GetNumMSScans();
@@ -178,17 +173,13 @@ namespace DeconTools.Backend.Core
             return sb.ToString();
         }
 
-
-
         public virtual int GetMSLevel(int scanNum)
         {
-
             // check to see if we have a value already stored
             if (this.MSLevelList.ContainsKey(scanNum))
             {
                 return this.MSLevelList[scanNum];
             }
-
                 // if not, look up MSLevel from Raw data
             else
             {
@@ -197,8 +188,15 @@ namespace DeconTools.Backend.Core
                 this.MSLevelList.Add(scanNum, (byte)mslevel);
 
                 return mslevel;
-
             }
+        }
+
+        public virtual PrecursorInfo GetPrecursorInfo(int scanNum)
+        {
+            PrecursorInfo precursor = new PrecursorInfo();
+            precursor = GetPrecursorInfo(scanNum);
+           
+            return precursor;
         }
 
         public virtual void GetMassSpectrum(ScanSet scanset)
@@ -229,8 +227,6 @@ namespace DeconTools.Backend.Core
 
         public virtual void GetMassSpectrum(FrameSet frameset, ScanSet scanset, double minMZ, double maxMZ)
         {
-
-
         }
 
         #region Methods
@@ -274,11 +270,7 @@ namespace DeconTools.Backend.Core
                     {
                         break;
                     }
-
-
-
                 }
-
             }
 
             double[] xvals = new double[numPointsToAdd];
@@ -303,16 +295,12 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-
             //XYData.Xvalues = filteredXValues.ToArray();
             //XYData.Yvalues = filteredYValues.ToArray();
 
             XYData.Xvalues = xvals;
             XYData.Yvalues = yvals;
-
-
         }
-
 
         #endregion
 
@@ -329,7 +317,6 @@ namespace DeconTools.Backend.Core
         //        this.ScanSetCollection.ScanSetList.Add(new ScanSet(i));
         //    }
         //}
-
 
         public virtual int GetCurrentScanOrFrame()
         {
@@ -405,12 +392,9 @@ namespace DeconTools.Backend.Core
         /// <returns>
         /// List of Scan numbers pertaining to MS1-level scans only. 
         /// </returns>
-
-
         public List<int> GetMSLevelScanValues()
         {
             return GetMSLevelScanValues(this.MinScan, this.MaxScan);
-
         }
 
         public List<int> GetMSLevelScanValues(int minScan, int maxScan)
@@ -439,11 +423,7 @@ namespace DeconTools.Backend.Core
 
             }
             return this.msLevelScanIndexList;
-
         }
-
-
-
 
         protected void addToMSLevelData(int scanNum, int mslevel)
         {
@@ -460,20 +440,11 @@ namespace DeconTools.Backend.Core
 
         protected SortedDictionary<int, byte> MSLevelList { get; set; }
 
-
         protected SortedDictionary<int, int> ParentScanList { get; set; } 
-
-
 
         public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
         {
-
             return null;
-
-
-
-
-
         }
 
         public virtual void Close()
@@ -485,7 +456,6 @@ namespace DeconTools.Backend.Core
             }
             this.ResultCollection.ClearAllResults();
             this.XYData = null;
-
         }
 
         public virtual string GetCurrentScanOrFrameInfo()
@@ -498,7 +468,6 @@ namespace DeconTools.Backend.Core
             {
                 return "Scan = NULL";
             }
-
         }
 
         #region IDisposable Members
@@ -506,15 +475,9 @@ namespace DeconTools.Backend.Core
         public virtual void Dispose()
         {
             this.Close();
-
-
-
         }
 
         #endregion
-
-
-
 
         #region Mass and NET Alignment
         public virtual void CreateDefaultScanToNETAlignmentData()
@@ -967,9 +930,6 @@ namespace DeconTools.Backend.Core
 
 
         #endregion
-
-
-
 
         public virtual int GetParentScan(int scanLC)
         {
