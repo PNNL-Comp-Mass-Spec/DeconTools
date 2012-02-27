@@ -193,10 +193,7 @@ namespace DeconTools.Backend.Core
 
         public virtual PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-            PrecursorInfo precursor = new PrecursorInfo();
-            precursor = GetPrecursorInfo(scanNum);
-           
-            return precursor;
+            throw new System.NotImplementedException("GetPrecursorInfo is not available for this Run type.");
         }
 
         public virtual void GetMassSpectrum(ScanSet scanset)

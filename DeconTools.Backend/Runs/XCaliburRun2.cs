@@ -3,7 +3,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-using DeconTools.Backend.Data;
 using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Runs
@@ -228,10 +227,11 @@ namespace DeconTools.Backend.Runs
             return precursor;
         }
 
-        private static double ParseThermoScanInfo(string scanInfo)
+        private double ParseThermoScanInfo(string scanInfo)
         {
             double precursorMass = 0;
 
+            //TODO: we might need to improve this.  Seems to be geared towards CID only
             string pattern = @"(?<mz>[0-9.]+)@cid";
 
             var match = Regex.Match(scanInfo, pattern);

@@ -3,7 +3,6 @@ using System.IO;
 using Agilent.MassSpectrometry.DataAnalysis;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-using DeconTools.Backend.Data;
 using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Runs
@@ -41,7 +40,7 @@ namespace DeconTools.Backend.Runs
 
             Filename = dirInfo.FullName;
             DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));
-                //get dataset name without .d extension
+            //get dataset name without .d extension
             DataSetPath = dirInfo.FullName;
 
             OpenDataset();
@@ -117,8 +116,8 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Peak);
-            
+            m_spec = m_reader.GetSpectrum(scanNum, null, null);
+
             MSLevel level = m_spec.MSLevelInfo;
             if (level == MSLevel.MS)
             {
@@ -136,7 +135,7 @@ namespace DeconTools.Backend.Runs
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Peak);
+            m_spec = m_reader.GetSpectrum(scanNum, null, null);
 
             PrecursorInfo precursor = new PrecursorInfo();
 
@@ -159,15 +158,15 @@ namespace DeconTools.Backend.Runs
             int precursorCharge;
             bool getCharge;
 
-            //this returs a list of precursor masses (I don't know how ther can be more than one)
+            //this returns a list of precursor masses (not sure how there can be more than one)
             double[] precursorMZlist = m_spec.GetPrecursorIon(out precursorMassCount);
 
             //if a mass is returned
-            if (precursorMassCount > 0)
+            if (precursorMassCount == 1)
             {
                 //mass
                 precursor.PrecursorMZ = precursorMZlist[0];
-                
+
                 //intensity
                 m_spec.GetPrecursorIntensity(out precursorIntensity);
                 precursor.PrecursorIntensity = (float)precursorIntensity;
@@ -177,14 +176,17 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorCharge = precursorCharge;
 
                 //adjust scan number if needed
-                precursor.PrecursorScan = scanNum-1;
-                
-                if (precursorMZlist.Length > 1)
-                {
-                    throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectra");
-                }
+                precursor.PrecursorScan = scanNum - 1;
+
+
             }
-            else 
+            else if (precursorMassCount > 1)
+            {
+
+                throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectra");
+
+            }
+            else
             {
                 precursor.PrecursorMZ = 0;
                 precursor.PrecursorIntensity = 0;
@@ -196,7 +198,7 @@ namespace DeconTools.Backend.Runs
 
         private void getAgilentSpectrum(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);      
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);
         }
 
         public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
