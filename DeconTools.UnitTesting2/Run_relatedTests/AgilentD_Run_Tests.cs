@@ -110,7 +110,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(1, precursor.PrecursorCharge);
             Assert.AreEqual(291638.781f, precursor.PrecursorIntensity);
             Assert.AreEqual(534.26422119140625, precursor.PrecursorMZ);
-            Assert.AreEqual(612, precursor.PrecursorScan);
+            Assert.AreEqual(613, precursor.PrecursorScan);
         }
 
 
