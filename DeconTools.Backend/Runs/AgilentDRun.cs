@@ -176,7 +176,7 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorCharge = precursorCharge;
 
                 //adjust scan number if needed
-                precursor.PrecursorScan = scanNum - 1;
+                precursor.PrecursorScan = scanNum;
 
 
             }
