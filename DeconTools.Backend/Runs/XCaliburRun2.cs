@@ -220,8 +220,15 @@ namespace DeconTools.Backend.Runs
             string scanInfo = null;
             xraw.GetFilterForScanNum(scanNum, ref scanInfo);
 
-            precursor.PrecursorMZ = ParseThermoScanInfo(scanInfo); ;
-            //TODO: we still need to get charge
+            if (scanInfo != null)
+            {
+                precursor.PrecursorMZ = ParseThermoScanInfo(scanInfo);
+            }
+            else
+            {
+                precursor.PrecursorMZ = -1;
+            }
+                //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
 
             return precursor;
