@@ -106,6 +106,7 @@ namespace DeconTools.Backend
             BASIC_TARGETED_RESULT,
             O16O18_TARGETED_RESULT,
             N14N15_TARGETED_RESULT,
+            SIPPER_TARGETED_RESULT,
             DECON_MSN_RESULT
         }
 
@@ -150,7 +151,8 @@ namespace DeconTools.Backend
             CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES,
             MSPEAKS_NOT_DETECTED,
             MSFEATURE_NOT_FOUND,
-            TOO_MANY_HIGH_QUALITY_CHROMPEAKS
+            TOO_MANY_HIGH_QUALITY_CHROMPEAKS,
+            QUANTIFIER_FAILURE
 
         }
 

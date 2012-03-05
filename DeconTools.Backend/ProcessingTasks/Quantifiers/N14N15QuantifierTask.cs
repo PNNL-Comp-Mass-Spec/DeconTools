@@ -59,7 +59,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             TargetBase mt = resultColl.Run.CurrentMassTag;
             Check.Require(mt != null, "Current mass tag is not defined.");
 
-            TargetedResultBase currentResult = resultColl.GetTargetedResult(mt);
+            TargetedResultBase currentResult = resultColl.CurrentTargetedResult;
 
             Check.Require(currentResult != null, "Quantifier failed. Result doesn't exist for current mass tag.");
             Check.Require(currentResult is N14N15_TResult, "Quantifier failed. Result is not of the N14N15 type.");

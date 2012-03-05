@@ -54,10 +54,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="DeconEngineV2, Version=1.0.4279.18325, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -68,7 +71,7 @@
     </Reference>
     <Reference Include="PNNLOmics, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PNNLOmics\PNNLOmics\bin\x86\Release\PNNLOmics.dll</HintPath>
+      <HintPath>..\Library\PNNLOmics.dll</HintPath>
     </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -93,6 +96,7 @@
     <Compile Include="Demos_basic_API_usage\DemoTests.cs" />
     <Compile Include="FileIO_Tests\AcqusFileReaderTests.cs" />
     <Compile Include="FileIO_Tests\IsosImporterTests.cs" />
+    <Compile Include="FileIO_Tests\LcmsTargetFromFeatureTextImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagFromDBImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagFromTextFileImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagTextFileExporterTests.cs" />
@@ -102,6 +106,7 @@
     <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramCorrelatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
     <Compile Include="ProcessingRelated_Tests\IsotopicProfileQualityScoringTests\InterferenceScorerTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />

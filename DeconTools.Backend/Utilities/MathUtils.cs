@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DeconTools.Backend.Utilities
 {
@@ -60,6 +59,32 @@ namespace DeconTools.Backend.Utilities
             return System.Math.Sqrt((sum / (values.GetLength(0) - 1)));
 
         }
+
+
+
+
+        public static double GetMedian(List<double> values)
+        {
+            var sortedVals = values.OrderBy(d => d).ToList();
+
+            int middleIndex = sortedVals.Count/2;
+
+            double medianVal;
+
+            if (sortedVals.Count%2==0)
+            {
+                medianVal = (sortedVals[middleIndex] + sortedVals[middleIndex + 1]) / 2;
+            }
+            else
+            {
+                medianVal = sortedVals[middleIndex];
+            }
+
+            return medianVal;
+
+        }
+
+
 
 
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
@@ -164,6 +189,54 @@ namespace DeconTools.Backend.Utilities
             return -1;
 
 
+        }
+
+
+        public static void GetLinearRegression(double[] xvals, double[] yvals, out double slope, out double intercept, out double rsquaredVal)
+        {
+            double[,] inputData = new double[xvals.Length, 2];
+
+            for (int i = 0; i < xvals.Length; i++)
+            {
+                inputData[i, 0] = xvals[i];
+                inputData[i, 1] = yvals[i];
+            }
+
+            int numIndependentVariables = 1;
+            int numPoints = yvals.Length;
+
+            alglib.linearmodel linearModel;
+            int info;
+            alglib.lrreport regressionReport;
+            alglib.lrbuild(inputData, numPoints, numIndependentVariables, out info, out linearModel, out regressionReport);
+
+            double[] regressionLineInfo;
+            alglib.lrunpack(linearModel, out regressionLineInfo, out numIndependentVariables);
+
+            slope = regressionLineInfo[0];
+            intercept = regressionLineInfo[1];
+
+
+            List<double> squaredResiduals = new List<double>();
+            List<double> calculatedYVals = new List<double>();
+            List<double> squaredMeanResiduals = new List<double>();
+
+            double averageY = yvals.Average();
+
+
+            for (int i = 0; i < xvals.Length; i++)
+            {
+                double calcYVal = alglib.lrprocess(linearModel, new double[] { xvals[i] });
+                calculatedYVals.Add(calcYVal);
+
+                double residual = yvals[i] - calcYVal;
+                squaredResiduals.Add(residual * residual);
+
+                double meanResidual = yvals[i] - averageY;
+                squaredMeanResiduals.Add(meanResidual * meanResidual);
+            }
+
+            rsquaredVal = 1 - (squaredResiduals.Sum() / squaredMeanResiduals.Sum());
         }
 
 

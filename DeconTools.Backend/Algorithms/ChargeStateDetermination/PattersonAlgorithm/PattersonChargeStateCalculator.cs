@@ -114,7 +114,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            alglib.spline1d.spline1dbuildcubic(filteredXValues, filteredYValues, filteredXValues.Length, 1, +1, 1, -1, ref interpolant);
+            alglib.spline1d.spline1dbuildcubic(filteredXValues, filteredYValues, filteredXValues.Length, 1, +1, 1, -1, interpolant);
 
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
@@ -130,7 +130,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             for (int i = 0; i < numL; i++)
             {
                 double xval = (minMZ + ((maxMZ - minMZ) * i) / numL);
-                double yval = alglib.spline1d.spline1dcalc(ref interpolant, xval);
+                double yval = alglib.spline1d.spline1dcalc(interpolant, xval);
 
                 interpolatedXVals.Add(xval);
                 interpolatedYVals.Add(yval);

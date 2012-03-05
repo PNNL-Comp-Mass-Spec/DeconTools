@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
-using DeconTools.Utilities;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
@@ -41,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
-            Check.Require(mt.EmpiricalFormula != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
+            Check.Require(!String.IsNullOrEmpty(mt.EmpiricalFormula), "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
             switch (LabellingType)
             {

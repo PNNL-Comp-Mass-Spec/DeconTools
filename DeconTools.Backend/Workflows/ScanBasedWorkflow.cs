@@ -19,7 +19,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Workflows
 {
-    internal class WorkflowStats
+    public class WorkflowStats
     {
         public int NumFeatures;
         public int NumPeaks;
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal ScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public ScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
             OldDecon2LsParameters = parameters;
             Run = run;
@@ -428,7 +428,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        internal virtual void WriteProcessingInfoToLog()
+        protected virtual void WriteProcessingInfoToLog()
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
             Logger.Instance.AddEntry("ParameterFile = " + (OldDecon2LsParameters.ParameterFilename == null ? "[NONE]" : Path.GetFileName(OldDecon2LsParameters.ParameterFilename)));
@@ -437,7 +437,7 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
         }
 
-        internal virtual void CreateOutputFileNames()
+        protected virtual void CreateOutputFileNames()
         {
             string basefileName = GetBaseFileName(Run);
 
@@ -477,7 +477,7 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        internal void InitializeParameters()
+        protected void InitializeParameters()
         {
             //set exporter type. This property wraps the OldDeconTools parameter
             switch (OldDecon2LsParameters.HornTransformParameters.ExportFileType)

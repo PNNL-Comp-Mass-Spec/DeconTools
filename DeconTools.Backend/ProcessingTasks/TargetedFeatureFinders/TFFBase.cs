@@ -244,7 +244,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
 
             IsotopicProfile iso;
 
@@ -252,7 +252,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             this.RunIsAligned = resultColl.Run.MassIsAligned;
 
-            IsotopicProfile targetedIso = createTargetIso(resultColl.Run);
+            IsotopicProfile targetedIso = CreateTargetIso(resultColl.Run);
             iso = FindMSFeature(resultColl.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
 
@@ -285,7 +285,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
-        protected IsotopicProfile createTargetIso(Run run)
+        protected virtual IsotopicProfile CreateTargetIso(Run run)
         {
             IsotopicProfile iso;
             Check.Require(run.CurrentMassTag!=null,"Run's 'CurrentMassTag' has not been declared");

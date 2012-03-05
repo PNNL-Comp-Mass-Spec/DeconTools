@@ -93,9 +93,44 @@ namespace DeconTools.Backend.ProcessingTasks
 
         #region Public Methods
         
+        public void GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double toleranceInPPM)
+        {
 
-        
-        
+            var chromGen = new ChromatogramGenerator();
+            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop, targetMZ, toleranceInPPM);
+
+            if (run.XYData!=null)
+            {
+                FilterOutDataFromMSMSLevels(run); 
+            }
+            
+
+        }
+
+        private void FilterOutDataFromMSMSLevels(Run run)
+        {
+            if (run.ContainsMSMSData)
+            {
+                this.msScanList = run.GetMSLevelScanValues();
+
+                Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+
+                for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+                {
+                    int currentScanVal = (int) run.XYData.Xvalues[i];
+
+                    if (msScanList.Contains(currentScanVal))
+                    {
+                        filteredChromVals.Add(currentScanVal, run.XYData.Yvalues[i]);
+                    }
+                }
+
+                run.XYData.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
+                run.XYData.Yvalues = filteredChromVals.Values.ToArray();
+            }
+        }
+
+
         public override void Execute(ResultCollection resultColl)
         {
             Check.Require(resultColl.MSPeakResultList != null && resultColl.MSPeakResultList.Count>0, "PeakChromatogramGenerator failed. No peaks.");
@@ -114,7 +149,7 @@ namespace DeconTools.Backend.ProcessingTasks
             float netElutionTime;
             if (resultColl.Run.CurrentMassTag.ElutionTimeUnit== Globals.ElutionTimeUnit.ScanNum)
             {
-                netElutionTime = resultColl.Run.CurrentMassTag.NormalizedElutionTime/resultColl.Run.GetNumMSScans();
+                netElutionTime = resultColl.Run.CurrentMassTag.ScanLCTarget/(float)resultColl.Run.GetNumMSScans();
             }
             else
             {
@@ -197,7 +232,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
 
 
@@ -205,6 +240,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             resultColl.Run.XYData = chromValues;
+
+
 
             
 
@@ -223,29 +260,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
-
-
             // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
-            if (resultColl.Run.ContainsMSMSData)
-            {
-                this.msScanList = resultColl.Run.GetMSLevelScanValues();
+            FilterOutDataFromMSMSLevels(resultColl.Run);
 
-                Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
-
-                for (int i = 0; i < chromValues.Xvalues.Length; i++)
-                {
-                    int currentScanVal = (int)chromValues.Xvalues[i];
-
-                    if (msScanList.Contains(currentScanVal))
-                    {
-                        filteredChromVals.Add(currentScanVal, chromValues.Yvalues[i]);
-                    }
-                }
-
-                chromValues.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
-                chromValues.Yvalues = filteredChromVals.Values.ToArray();
-
-            }
+         
 
 
 

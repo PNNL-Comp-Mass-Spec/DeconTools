@@ -26,6 +26,7 @@ namespace DeconTools.Backend.Core
         public short ChargeState { get; set; }
         public double MZ { get; set; }
 
+        public List<int> ChargeStateTargets { get; set; }
 
 
         /// <summary>
@@ -67,6 +68,11 @@ namespace DeconTools.Backend.Core
 
         public Globals.ElutionTimeUnit ElutionTimeUnit { get; set; }
 
+        /// <summary>
+        /// In some workflows, the target LC scan might be known
+        /// </summary>
+        public int ScanLCTarget { get; set; }
+
         public float NormalizedElutionTime { get; set; }
 
         /// <summary>
@@ -106,6 +112,12 @@ namespace DeconTools.Backend.Core
             }
 
 
+        }
+
+
+        public override string ToString()
+        {
+            return ID + "; " + MonoIsotopicMass.ToString("0.000") + "; " + ChargeState;
         }
 
 

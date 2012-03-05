@@ -28,6 +28,7 @@ namespace DeconTools.Backend.Core
         public string ProteinDescription { get; set; }
         public string GeneReference { get; set; }
 
+        
         #endregion
 
 

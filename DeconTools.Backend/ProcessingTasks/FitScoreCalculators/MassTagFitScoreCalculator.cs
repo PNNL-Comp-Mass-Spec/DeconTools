@@ -16,7 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
             Check.Require(resultColl.Run.XYData != null && resultColl.Run.XYData.Xvalues != null && resultColl.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
 
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
             Check.Require(result != null, "No MassTagResult has been generated for CurrentMassTag");
 
             if (result.IsotopicProfile == null || result.IsotopicProfile.Peaklist == null || result.IsotopicProfile.Peaklist.Count == 0)

@@ -116,11 +116,8 @@ namespace DeconTools.Backend.Workflows
 
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
-                    //if (frameset.PrimaryFrame >= 340 && scanset.PrimaryScanNumber >= 220)
-                    //{
-                    //    Console.WriteLine("here we go");
-                    //}
-
+                   
+                    //iterate over unsummed MSFeatures and check for saturation
                     foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                     {
                         

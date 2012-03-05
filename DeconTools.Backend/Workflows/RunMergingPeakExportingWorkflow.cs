@@ -157,7 +157,7 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        internal override void CreateOutputFileNames()
+        protected override void CreateOutputFileNames()
         {
             base.CreateOutputFileNames();
 

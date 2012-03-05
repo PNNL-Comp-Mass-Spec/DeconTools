@@ -89,7 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             List<PeakQualityData> peakQualityList = new List<PeakQualityData>();
 
-            TargetedResultBase currentResult = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase currentResult = resultColl.CurrentTargetedResult;
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
             //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);

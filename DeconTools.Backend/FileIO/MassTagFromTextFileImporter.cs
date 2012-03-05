@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
-using PNNLOmics.Data.Constants.Libraries;
 
 
 namespace DeconTools.Backend.FileIO
@@ -109,7 +107,7 @@ namespace DeconTools.Backend.FileIO
                             var calcMZ = massTag.MonoIsotopicMass/chargeState + Globals.PROTON_MASS;
                             if (calcMZ>minMZToConsider && calcMZ<maxMZToConsider)
                             {
-                                var copiedMassTag =   massTag.Clone();
+                                var copiedMassTag =   massTag.Clone();            //NOTE: this is a very slow step
                                 copiedMassTag.ChargeState = (short)chargeState;
                                 copiedMassTag.MZ = calcMZ;
                                 

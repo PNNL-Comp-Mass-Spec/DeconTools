@@ -90,13 +90,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(1, run.GetMSLevel(612));
             Assert.AreEqual(2, run.GetMSLevel(613)); 
+        }
 
-            //   IMsdrDataReader m_reader = new MassSpecDataReader();
-            // m_reader.OpenDataFile(testfile);
 
-            PrecursorInfo precursor;
+        [Test]
+        public void GetPrecursorTest1()
+        {
+            string testfile =
+                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
-            precursor = run.GetPrecursorInfo(612);
+            Run run = new AgilentDRun(testfile);
+            
+            PrecursorInfo precursor = run.GetPrecursorInfo(612);
 
             Assert.AreEqual(1, precursor.MSLevel);
             Assert.AreEqual(-1, precursor.PrecursorCharge);
@@ -112,8 +117,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(534.26422119140625, precursor.PrecursorMZ);
             Assert.AreEqual(613, precursor.PrecursorScan);
         }
-
-
 
 
         [Test]

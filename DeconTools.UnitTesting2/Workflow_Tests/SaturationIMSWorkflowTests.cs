@@ -39,13 +39,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
-            //workflow.ExportData = false;
+            workflow.ExportData = false;
 
             var sw = new Stopwatch();
             sw.Start();
 
             workflow.Execute();
-            return;
+            //return;
 
             sw.Stop();
 
@@ -67,6 +67,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //targetMass = 1079.559447;
             //chargestate = 2;
 
+            //non-saturated feature:
             //targetMass = 1064.485;
             //chargestate = 2;
 

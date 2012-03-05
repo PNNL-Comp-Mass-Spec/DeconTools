@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using DeconTools.Backend.DTO;
-using DeconTools.Utilities;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Algorithms
 {
@@ -252,9 +250,9 @@ namespace DeconTools.Backend.Algorithms
                 List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
 
-                if (tempPeakList == null || tempPeakList.Count() == 0)
+                if (!tempPeakList.Any())
                 {
-
+                    
                 }
                 else
                 {

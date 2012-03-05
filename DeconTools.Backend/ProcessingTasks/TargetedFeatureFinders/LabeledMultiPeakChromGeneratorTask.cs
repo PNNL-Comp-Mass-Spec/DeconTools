@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.DTO;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Utilities;
 using DeconTools.Backend.Algorithms;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
@@ -54,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
                 NumPeaksForGeneratingChrom, ToleranceInPPM);
 
-            TargetedResultBase massTagresult = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase massTagresult = resultColl.CurrentTargetedResult;
 
             N14N15_TResult n14n15result;
 

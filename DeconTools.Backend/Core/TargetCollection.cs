@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -9,16 +11,16 @@ namespace DeconTools.Backend.Core
         public TargetCollection()
         {
             TargetList = new List<TargetBase>();
-            this.TargetIDList = new List<long>();
+            TargetIDList = new List<long>();
         }
         #endregion
 
         #region Properties
-        private List<TargetBase> massTagList;
+        private List<TargetBase> _targetList;
         public List<TargetBase> TargetList
         {
-            get { return massTagList; }
-            set { massTagList = value; }
+            get { return _targetList; }
+            set { _targetList = value; }
         }
 
         public List<long> TargetIDList;
@@ -95,6 +97,9 @@ namespace DeconTools.Backend.Core
 
 
         }
+        
+        
+        
         #endregion
 
         #region Private Methods
@@ -111,6 +116,31 @@ namespace DeconTools.Backend.Core
         }
         #endregion
 
+
+        /// <summary>
+        /// This updates LCMS targets with information from the source list. I.e. we use 
+        /// </summary>
+        /// <param name="targets"></param>
+        /// <param name="sourceList"></param>
+        public static void UpdateTargetsWithMassTagInfo(IEnumerable<TargetBase>targets, List<TargetBase>sourceList)
+        {
+
+            foreach (LcmsFeatureTarget lcmsFeatureTarget in targets)
+            {
+                var mt = sourceList.Where(p => p.ID == lcmsFeatureTarget.FeatureToMassTagID).FirstOrDefault();
+
+                if (mt!=null)
+                {
+                    lcmsFeatureTarget.Code = mt.Code;
+                    lcmsFeatureTarget.EmpiricalFormula = mt.EmpiricalFormula;
+                }
+             
+            }
+
+
+
+
+        }
 
 
 

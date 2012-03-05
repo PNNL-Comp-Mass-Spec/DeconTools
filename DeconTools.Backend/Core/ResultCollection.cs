@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DeconTools.Backend.Core.Results;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
@@ -106,15 +107,22 @@ namespace DeconTools.Backend.Core
             return totIsotopicProfiles;
         }
 
+
+        public TargetedResultBase CurrentTargetedResult { get; set; }
+
+
+
         public TargetedResultBase GetTargetedResult(TargetBase target)
         {
             if (MassTagResultList.ContainsKey(target))
             {
-                return MassTagResultList[target];
+                CurrentTargetedResult = MassTagResultList[target];
+                return CurrentTargetedResult;
             }
             else
             {
                 TargetedResultBase result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+                CurrentTargetedResult = result;
                 return result;
             }
         }
@@ -151,7 +159,9 @@ namespace DeconTools.Backend.Core
                 case Globals.ResultType.O16O18_TARGETED_RESULT:
                     result = new O16O18TargetedResultObject(massTag);
                     break;
-
+                case Globals.ResultType.SIPPER_TARGETED_RESULT:
+                    result = new SipperLcmsTargetedResult(massTag);
+                    break;
                 default:
                     result = new MassTagResult(massTag);
                     break;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Algorithms.Quantifiers;
+﻿using DeconTools.Backend.Algorithms.Quantifiers;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -28,7 +24,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public override void Execute(ResultCollection resultColl)
         {
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
 
             Check.Require(result is O16O18TargetedResultObject, "O16O18 quantifier failed. Result is not of the O16O18 type.");
 

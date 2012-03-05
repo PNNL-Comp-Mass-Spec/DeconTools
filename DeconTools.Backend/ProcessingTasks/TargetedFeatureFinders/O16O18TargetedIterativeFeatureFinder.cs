@@ -25,7 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
 
 
             if (resultColl.Run.XYData == null || resultColl.Run.XYData.Xvalues == null || resultColl.Run.XYData.Xvalues.Length < 4)
@@ -41,13 +41,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             resultColl.IsosResultBin.Clear();
 
             IsotopicProfile o16TheorFeature = resultColl.Run.CurrentMassTag.IsotopicProfile;
-            IsotopicProfile o16profile = _iterativeTFFStandard.iterativelyFindMSFeature(resultColl.Run, o16TheorFeature);
+            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o16TheorFeature);
 
             IsotopicProfile o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
-            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.iterativelyFindMSFeature(resultColl.Run, o18TheorProfileSingleLabel);
+            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o18TheorProfileSingleLabel);
 
             IsotopicProfile o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
-            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.iterativelyFindMSFeature(resultColl.Run, o18TheorProfileDoubleLabel);
+            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o18TheorProfileDoubleLabel);
 
 
             IsotopicProfile foundO16O18Profile;

@@ -74,14 +74,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
             Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
 
-            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            TargetedResultBase result = resultList.CurrentTargetedResult;
 
 
             float normalizedElutionTime;
 
             if (result.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
             {
-                normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime/result.Run.GetNumMSScans();
+                normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget/(float)result.Run.GetNumMSScans();
             }
             else
             {

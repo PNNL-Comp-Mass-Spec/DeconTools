@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Utilities;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
@@ -32,7 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             TargetBase mt = resultColl.Run.CurrentMassTag;
 
-            TargetedResultBase result = resultColl.GetTargetedResult(mt);
+            TargetedResultBase result = resultColl.CurrentTargetedResult;
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
             double fwhm = result.IsotopicProfile.GetFWHM();
