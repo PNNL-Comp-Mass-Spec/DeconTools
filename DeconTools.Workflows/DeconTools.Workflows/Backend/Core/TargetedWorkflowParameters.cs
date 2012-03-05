@@ -7,6 +7,27 @@ namespace DeconTools.Workflows.Backend.Core
     {
 
         #region Constructors
+        protected TargetedWorkflowParameters()
+        {
+            ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            ChromNETTolerance = 0.025;
+            ChromPeakDetectorPeakBR = 1;
+            ChromPeakDetectorSigNoise = 1;
+            ChromSmootherNumPointsInSmooth = 9;
+            ChromToleranceInPPM = 10;
+            MSPeakDetectorPeakBR = 2;
+            MSPeakDetectorSigNoise = 2;
+            MSToleranceInPPM = 10;
+            NumMSScansToSum = 1;
+            NumChromPeaksAllowedDuringSelection = 20;
+
+            MultipleHighQualityMatchesAreAllowed = true;
+            ChromGenSourceDataPeakBR = 2;
+            ChromGenSourceDataSigNoise = 3;
+
+            ChromPeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.Smart;
+
+        }
         #endregion
 
         #region Properties
@@ -61,14 +82,6 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public bool MultipleHighQualityMatchesAreAllowed { get; set; }
 
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
 

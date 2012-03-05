@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Workflows.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -14,24 +13,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         public N14N15Workflow2Parameters()
         {
-            this.ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
-            this.ChromNETTolerance = 0.025;
-            this.ChromNETToleranceN15 = 0.001;  //very low since it is found in relation to the N14 chrom peak
-            this.ChromPeakDetectorPeakBR = 2;
-            this.ChromPeakDetectorSigNoise = 2;
-            this.ChromSmootherNumPointsInSmooth = 15;
-            this.ChromToleranceInPPM = 10;
-            this.MSPeakDetectorPeakBR = 2;
-            this.MSPeakDetectorSigNoise = 2;
-            this.MSToleranceInPPM = 10;
-            this.NumMSScansToSum = 1;
-            this.NumPeaksUsedInQuant = 3;
-            this.TargetedFeatureFinderIsotopicProfileTargetType = IsotopicProfileType.LABELLED;
-            this.TargetedFeatureFinderToleranceInPPM = this.MSToleranceInPPM;
-            this.ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
+            ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
 
-            this.SmartChromSelectorPeakBR = 5;
-            this.SmartChromSelectorPeakSigNoiseRatio = 3;
+            ChromNETToleranceN15 = 0.001; //very low since it is found in relation to the N14 chrom peak
+            TargetedFeatureFinderIsotopicProfileTargetType = IsotopicProfileType.LABELLED;
+            TargetedFeatureFinderToleranceInPPM = MSToleranceInPPM;
+            ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
+
+            
+            SmartChromSelectorPeakBR = 5;
+            SmartChromSelectorPeakSigNoiseRatio = 3;
+ 
         }
 
         #region Properties
@@ -72,23 +64,27 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            this.ChromGeneratorMode = StringToEnum<ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
-            this.ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
-            this.ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
-            this.ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
-            this.ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
-            this.ChromToleranceInPPM = Convert.ToInt32(parameterTableFromXML["ChromToleranceInPPM"]);
-            this.MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
-            this.MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
-            this.MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
-            this.NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
+            ChromGeneratorMode = StringToEnum<ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
+            ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
+            ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
+            ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
+            ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
+            ChromToleranceInPPM = Convert.ToInt32(parameterTableFromXML["ChromToleranceInPPM"]);
+            MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
+            MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
+            MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
+            NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
 
-            this.NumPeaksUsedInQuant = Convert.ToInt32(parameterTableFromXML["NumPeaksUsedInQuant"]);
-            this.SmartChromSelectorPeakBR = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakBR"]);
-            this.SmartChromSelectorPeakSigNoiseRatio = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
+            NumPeaksUsedInQuant = Convert.ToInt32(parameterTableFromXML["NumPeaksUsedInQuant"]);
+            SmartChromSelectorPeakBR = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakBR"]);
+            SmartChromSelectorPeakSigNoiseRatio =
+                Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
 
-            this.TargetedFeatureFinderIsotopicProfileTargetType = StringToEnum<IsotopicProfileType>(parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
-            this.TargetedFeatureFinderToleranceInPPM = Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
+            TargetedFeatureFinderIsotopicProfileTargetType =
+                StringToEnum<IsotopicProfileType>(
+                    parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
+            TargetedFeatureFinderToleranceInPPM =
+                Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
         }
 
         public override Globals.TargetedWorkflowTypes WorkflowType

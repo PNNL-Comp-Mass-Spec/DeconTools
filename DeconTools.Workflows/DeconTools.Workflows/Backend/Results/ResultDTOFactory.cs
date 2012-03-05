@@ -1,11 +1,18 @@
 ﻿using System;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Core.Results;
 
 namespace DeconTools.Workflows.Backend.Results
 {
     public static class ResultDTOFactory
     {
 
+        public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight )
+        {
+            writeStandardInfoToResult(resultLight, result);
+
+        }
+        
         public static TargetedResultDTO CreateTargetedResult(TargetedResultBase result)
         {
             TargetedResultDTO tr;
@@ -27,6 +34,12 @@ namespace DeconTools.Workflows.Backend.Results
                 writeStandardInfoToResult(tr, result);
                 addAdditionalInfo(tr, result as N14N15_TResult);
             }
+            else if (result is SipperLcmsTargetedResult)
+            {
+                tr = new SipperLcmsFeatureTargetedResultDTO();
+                writeStandardInfoToResult(tr, result);
+                addAdditionalInfo(tr, result as SipperLcmsTargetedResult);
+            }
             else
             {
                 throw new NotImplementedException();
@@ -38,6 +51,21 @@ namespace DeconTools.Workflows.Backend.Results
             return tr;
             
 
+
+        }
+
+        private static void addAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
+        {
+            SipperLcmsFeatureTargetedResultDTO r = (SipperLcmsFeatureTargetedResultDTO) tr;
+            r.FeatureToMassTagID = ((LcmsFeatureTarget) result.Target).FeatureToMassTagID;
+            r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
+            r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
+            r.RSquaredValForRatioCurve =  result.RSquaredValForRatioCurve;
+
+            r.ChromCorrelationMin =   result.ChromCorrelationMin;
+            r.ChromCorrelationMax =   result.ChromCorrelationMax;
+            r.ChromCorrelationAverage =    result.ChromCorrelationAverage;
+            r.ChromCorrelationMedian =   result.ChromCorrelationMedian;
 
         }
 
@@ -82,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Results
         
 
 
-        private static void writeStandardInfoToResult(TargetedResultDTO tr, TargetedResultBase result)
+        public static void writeStandardInfoToResult(TargetedResultDTO tr, TargetedResultBase result)
         {
             if (result.Target == null)
             {

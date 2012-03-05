@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
 using DeconTools.Backend.FileIO;
-using DeconTools.Workflows.Backend.Results;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
@@ -25,6 +25,10 @@ namespace DeconTools.Workflows.Backend.FileIO
                 case Globals.TargetedWorkflowTypes.O16O18Targeted1:
                     exporter = new O16O18TargetedResultToTextExporter(outputFileName);
                     break;
+                case Globals.TargetedWorkflowTypes.SipperTargeted1:
+                    exporter = new SipperResultToLcmsFeatureExporter(outputFileName);
+                    break;
+
                 case Globals.TargetedWorkflowTypes.N14N15Targeted1:
                     throw new NotImplementedException("This hasn't been implemented for N14N15 data");
                     break;

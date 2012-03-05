@@ -42,16 +42,6 @@ namespace DeconTools.Workflows.Backend.Results
         }
 
 
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
-
-
         public void Clear()
         {
             this.Results.Clear();

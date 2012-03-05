@@ -139,26 +139,24 @@ namespace DeconTools.Workflows.Backend.Core
             try
             {
 
-                this.Result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-                this.Result.ResetResult();
-                
+                Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+                Result.ResetResult();
 
                 ExecuteTask(theorFeatureGen);
                 ExecuteTask(chromGen);
                 ExecuteTask(chromSmoother);
-                updateChromDataXYValues(this.Run.XYData);
+                updateChromDataXYValues(Run.XYData);
 
                 ExecuteTask(chromPeakDetector);
-                updateChromDetectedPeaks(this.Run.PeakList);
+                updateChromDetectedPeaks(Run.PeakList);
 
                 ExecuteTask(chromPeakSelector);
-                this.ChromPeakSelected = this.Result.ChromPeakSelected;
+                ChromPeakSelected = Result.ChromPeakSelected;
 
-                
-                this.Result.ResetMassSpectrumRelatedInfo();
-                
+                Result.ResetMassSpectrumRelatedInfo();
+
                 ExecuteTask(MSGenerator);
-                updateMassSpectrumXYValues(this.Run.XYData);
+                updateMassSpectrumXYValues(Run.XYData);
 
                 ExecuteTask(msfeatureFinder);
 

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
-using DeconTools.Workflows.Backend.Core;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using DeconTools.Workflows.Backend.Core;
 
 namespace TargetedWorkflowConsole
 {
@@ -37,10 +37,10 @@ namespace TargetedWorkflowConsole
                 }
                 else
                 {
-                    BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-                    executorParameters.LoadParameters(args[1]);
+                    var executorParameters=   WorkflowParameters.CreateParameters(args[1]);
 
-                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
+                    TargetedWorkflowExecutor executor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(executorParameters as WorkflowExecutorBaseParameters, datasetPath);
+                    
                     executor.Execute();
 
                 }

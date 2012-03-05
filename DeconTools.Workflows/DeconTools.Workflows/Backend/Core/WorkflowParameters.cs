@@ -70,9 +70,20 @@ namespace DeconTools.Workflows.Backend.Core
                     case Globals.TargetedWorkflowTypes.N14N15Targeted1:
                         workflowParameters = new N14N15Workflow2Parameters();
                         break;
+                    case Globals.TargetedWorkflowTypes.SipperTargeted1:
+                        workflowParameters = new SipperTargetedWorkflowParameters();
+                        break;
                     case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                         workflowParameters = new TargetedAlignerWorkflowParameters();
                         break;
+                    case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
+                        workflowParameters = new BasicTargetedWorkflowExecutorParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1:
+                        workflowParameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
+                        break;
+
+
                     default:
                         workflowParameters = new BasicTargetedWorkflowParameters();
                         break;

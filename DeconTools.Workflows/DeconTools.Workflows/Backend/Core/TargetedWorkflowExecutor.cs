@@ -20,6 +20,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string _loggingFileName;
         protected string _resultsFolder;
+        
+        
         protected WorkflowParameters _workflowParameters;
         private string _datasetPath;
 
@@ -39,7 +41,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
         public TargetCollection MassTagsForTargetedAlignment { get; set; }
 
-        public TargetCollection MassTagsToBeTargeted { get; set; }
+        public TargetCollection Targets { get; set; }
 
         public override WorkflowParameters WorkflowParameters
         {
@@ -60,6 +62,8 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedAlignerWorkflow TargetedAlignmentWorkflow { get; set; }
 
         public TargetedWorkflow targetedWorkflow { get; set; }
+
+        
 
 
         #endregion
@@ -152,12 +156,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             int mtCounter = 0;
 
-            foreach (var massTag in this.MassTagsToBeTargeted.TargetList)
+            foreach (var massTag in this.Targets.TargetList)
             {
                 mtCounter++;
                 if (mtCounter % 500 == 0)
                 {
-                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.MassTagsToBeTargeted.TargetList.Count);
+                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.Targets.TargetList.Count);
                 }
 
                 Run.CurrentMassTag = massTag;

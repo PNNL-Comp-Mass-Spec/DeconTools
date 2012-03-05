@@ -6,10 +6,10 @@
   <FolderPathForCopiedRawDataset>d:\temp\rawdata</FolderPathForCopiedRawDataset>
   <LoggingFolder>d:\temp\logs</LoggingFolder>
   <MassTagsForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</MassTagsForAlignmentFilePath>
-  <MassTagsToBeTargetedFilePath>d:\temp\MassTags\massTagsToBeTargeted.txt</MassTagsToBeTargetedFilePath>
   <ResultsFolder>d:\temp\results</ResultsFolder>
   <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>d:\temp\Parameters\targetedAlignmentParameters.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsFilePath>d:\temp\MassTags\massTagsToBeTargeted.txt</TargetsFilePath>
   <WorkflowParameterFile>d:\temp\Parameters\WorkflowParameters.xml</WorkflowParameterFile>
   <WorkflowType>BasicTargetedWorkflowExecutor1</WorkflowType>
 </WorkflowParameters>

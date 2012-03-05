@@ -1,5 +1,4 @@
 ﻿using DeconTools.Utilities;
-using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -7,15 +6,13 @@ namespace DeconTools.Workflows.Backend.Core
     {
 
         #region Constructors
-        public BasicTargetedWorkflowExecutor(BasicTargetedWorkflowExecutorParameters parameters, string datasetPath) : base(parameters,datasetPath) { }
+        public BasicTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters,datasetPath) { }
 
         #endregion
 
         #region Properties
         
-        /// <summary>
-        /// WorkflowExecutor parameters. Careful not to confuse it with the other workflow parameters used in processing in each massTag
-        /// </summary>
+      
         //public override WorkflowParameters WorkflowParameters
         //{
         //    get
@@ -38,19 +35,20 @@ namespace DeconTools.Workflows.Backend.Core
             //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
 
-            this.MassTagsForTargetedAlignment = getMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
-            this.MassTagsToBeTargeted = getMassTagTargets(ExecutorParameters.MassTagsToBeTargetedFilePath);
+            MassTagsForTargetedAlignment = getMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
+            Targets = getMassTagTargets(ExecutorParameters.TargetsFilePath);
 
-            Check.Ensure(this.MassTagsToBeTargeted != null && this.MassTagsToBeTargeted.TargetList.Count > 0, "Target massTags is empty. Check the path to the massTag data file.");
+            Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
+                         "Target massTags is empty. Check the path to the massTag data file.");
 
 
-            this._workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
-            this._workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
+            _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
+            _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
 
-            this.TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
-            this.TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
+            TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
+            TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
 
-            this.targetedWorkflow = TargetedWorkflow.CreateWorkflow(this._workflowParameters);
+            targetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
            
             
 

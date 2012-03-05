@@ -166,10 +166,9 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         #endregion
-
+        private ResultValidatorTask resultValidator;
 
         TargetedWorkflowParameters _workflowParameters;
-        private ResultValidatorTask resultValidator;
         public override WorkflowParameters WorkflowParameters
         {
             get

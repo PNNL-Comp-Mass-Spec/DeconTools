@@ -30,10 +30,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4373.28470, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconTools.Backend, Version=1.0.4412.31596, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -52,12 +72,17 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\N14N15Workflow2.cs" />
     <Compile Include="Backend\Core\N14N15Workflow2Parameters.cs" />
     <Compile Include="Backend\Core\NETAndMassAlignerParameters.cs" />
     <Compile Include="Backend\Core\O16O18Workflow.cs" />
     <Compile Include="Backend\Core\O16O18WorkflowParameters.cs" />
     <Compile Include="Backend\Core\ScanBasedWorkflow.cs" />
+    <Compile Include="Backend\Core\SipperTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\SipperTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutorFactory.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
@@ -77,6 +102,8 @@
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\SipperResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
@@ -87,6 +114,7 @@
     <Compile Include="Backend\Results\N14N15TargetedResultDTO.cs" />
     <Compile Include="Backend\Results\O16O18TargetedResultDTO.cs" />
     <Compile Include="Backend\Results\ResultDTOFactory.cs" />
+    <Compile Include="Backend\Results\SipperLcmsFeatureTargetedResultDTO.cs" />
     <Compile Include="Backend\Results\TargetedResultDTO.cs" />
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
     <Compile Include="Backend\Results\UnlabelledTargetedResultDTO.cs" />

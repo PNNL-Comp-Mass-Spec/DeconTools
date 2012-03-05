@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
   <AlignmentInfoFolder>d:\temp\AlignmentInfo</AlignmentInfoFolder>
   <CopyRawFileLocal>true</CopyRawFileLocal>
   <DeleteLocalDatasetAfterProcessing>true</DeleteLocalDatasetAfterProcessing>
-  <FileContainingDatasetPaths>d:\temp\fileContainingDatasetpaths.txt</FileContainingDatasetPaths>
   <FolderPathForCopiedRawDataset>d:\temp\rawdata</FolderPathForCopiedRawDataset>
   <LoggingFolder>d:\temp\logs</LoggingFolder>
   <MassTagsForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</MassTagsForAlignmentFilePath>
-  <TargetsFilePath>d:\temp\MassTags\massTagsToBeTargeted.txt</TargetsFilePath>
+  <MassTagsForReference>d:\temp\MassTags\MassTagsForReference.txt</MassTagsForReference>
   <ResultsFolder>d:\temp\results</ResultsFolder>
   <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>d:\temp\Parameters\targetedAlignmentParameters.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsFilePath>d:\temp\MassTags\targets.txt</TargetsFilePath>
   <WorkflowParameterFile>d:\temp\Parameters\WorkflowParameters.xml</WorkflowParameterFile>
-  <WorkflowType>BasicTargetedWorkflowExecutor</WorkflowType>
+  <WorkflowType>LcmsFeatureTargetedWorkflowExecutor1</WorkflowType>
 </WorkflowParameters>

@@ -13,6 +13,8 @@ namespace DeconTools.Workflows.Backend.Core
         }
         #endregion
 
+      
+
         #region Properties
 
         public bool CopyRawFileLocal { get; set; }
@@ -20,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Core
         public string FolderPathForCopiedRawDataset { get; set; }
         public string LoggingFolder { get; set; }
         public string MassTagsForAlignmentFilePath { get; set; }
-        public string MassTagsToBeTargetedFilePath { get; set; }
+        public string TargetsFilePath { get; set; }
         public string ResultsFolder { get; set; }
         public bool TargetedAlignmentIsPerformed { get; set; }
         public string TargetedAlignmentWorkflowParameterFile { get; set; }

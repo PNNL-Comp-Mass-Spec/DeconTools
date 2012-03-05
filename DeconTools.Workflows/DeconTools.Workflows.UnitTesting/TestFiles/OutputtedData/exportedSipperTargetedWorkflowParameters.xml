@@ -6,7 +6,7 @@
   <ChromNETTolerance>0.025</ChromNETTolerance>
   <ChromPeakDetectorPeakBR>1</ChromPeakDetectorPeakBR>
   <ChromPeakDetectorSigNoise>1</ChromPeakDetectorSigNoise>
-  <ChromPeakSelectorMode>Smart</ChromPeakSelectorMode>
+  <ChromPeakSelectorMode>ClosestToTarget</ChromPeakSelectorMode>
   <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
   <ChromToleranceInPPM>10</ChromToleranceInPPM>
   <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
@@ -15,6 +15,6 @@
   <MultipleHighQualityMatchesAreAllowed>true</MultipleHighQualityMatchesAreAllowed>
   <NumChromPeaksAllowedDuringSelection>20</NumChromPeaksAllowedDuringSelection>
   <NumMSScansToSum>1</NumMSScansToSum>
-  <ResultType>BASIC_TARGETED_RESULT</ResultType>
-  <WorkflowType>UnlabelledTargeted1</WorkflowType>
+  <ResultType>SIPPER_TARGETED_RESULT</ResultType>
+  <WorkflowType>SipperTargeted1</WorkflowType>
 </WorkflowParameters>

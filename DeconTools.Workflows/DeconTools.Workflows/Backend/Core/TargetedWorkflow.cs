@@ -136,6 +136,9 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.N14N15Targeted1:
                     wf = new N14N15Workflow2(workflowParameters as TargetedWorkflowParameters);
                     break;
+                case Globals.TargetedWorkflowTypes.SipperTargeted1:
+                    wf = new SipperTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     wf = new TargetedAlignerWorkflow(workflowParameters);
                     break;

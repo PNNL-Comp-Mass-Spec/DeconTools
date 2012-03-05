@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
 
 
@@ -30,12 +29,7 @@ namespace TargetedWorkflowManagerConsole
             {
                 string parameterFile = args[1];
                 string fileContainingDatasetNames = args[0];
-
-                BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-                executorParameters.LoadParameters(args[1]);
-
                 
-
                 using (StreamReader reader = new StreamReader(fileContainingDatasetNames))
                 {
                     int datasetCounter = 0;
