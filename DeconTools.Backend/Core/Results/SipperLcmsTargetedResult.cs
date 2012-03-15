@@ -35,7 +35,7 @@ namespace DeconTools.Backend.Core.Results
 
         public double ChromCorrelationAverage { get; set; }
 
-
+        public double AreaUnderRatioCurveRevised { get; set; }
 
         #endregion
 
@@ -47,6 +47,8 @@ namespace DeconTools.Backend.Core.Results
 
             sb.Append(this.Target.ID);
             sb.Append(delim);
+            sb.Append(((LcmsFeatureTarget)Target).FeatureToMassTagID);
+            sb.Append(delim);
             sb.Append(ScanSet == null ? "null" : ScanSet.PrimaryScanNumber.ToString());
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : IsotopicProfile.MonoIsotopicMass.ToString("0.000"));
@@ -55,9 +57,13 @@ namespace DeconTools.Backend.Core.Results
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : Score.ToString("0.000"));
             sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : InterferenceScore.ToString("0.000"));
+            sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : AreaUnderDifferenceCurve.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : AreaUnderRatioCurve.ToString("0.000"));
+            sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : AreaUnderRatioCurveRevised.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : RSquaredValForRatioCurve.ToString("0.000"));
             sb.Append(delim);

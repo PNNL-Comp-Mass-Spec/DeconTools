@@ -73,9 +73,9 @@ namespace DeconTools.Backend.FileIO
             DeconTools.Backend.Core.TargetCollection data = new TargetCollection();
             data.TargetList.Clear();
 
-            GetMassTagDataFromDB(data);
+            GetMassTagDataFromDB(data, MassTagsToBeRetrieved);
 
-            GetModDataFromDB(data);
+            GetModDataFromDB(data, MassTagsToBeRetrieved);
 
             CalculateEmpiricalFormulas(data);
 
@@ -110,10 +110,10 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-        private void GetModDataFromDB(TargetCollection data)
+        private void GetModDataFromDB(TargetCollection data, List<long> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            string queryString = createQueryString(this.ImporterMode);
+            string queryString = createQueryString(this.ImporterMode, massTagsToBeRetrivedList);
             //Console.WriteLine(queryString);
 
             var modContainingPeptides = (from n in data.TargetList where n.ModCount > 0 select n).ToList();
@@ -129,7 +129,7 @@ namespace DeconTools.Backend.FileIO
 
                 using (DbCommand command = cnn.CreateCommand())
                 {
-                    command.CommandText = getModDataQueryString(modContainingPeptides.Select(p=>p.ID).Distinct());
+                    command.CommandText = getModDataQueryString(modContainingPeptides.Select(p => p.ID).Distinct());
 
                     command.CommandTimeout = 60;
                     DbDataReader reader = command.ExecuteReader();
@@ -156,72 +156,99 @@ namespace DeconTools.Backend.FileIO
             }
 
 
-           
+
 
 
         }
 
 
 
-        private void GetMassTagDataFromDB(TargetCollection data)
+        private void GetMassTagDataFromDB(TargetCollection data, List<long> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            string queryString = createQueryString(this.ImporterMode);
-            //Console.WriteLine(queryString);
 
+
+            int currentListPos = 0;
+            int chunkSize = 5000;
 
             using (var cnn = fact.CreateConnection())
             {
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                int progressCounter = 0;
+                while (currentListPos < massTagsToBeRetrivedList.Count )
                 {
-                    command.CommandText = queryString;
-                    command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    List<long> nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(chunkSize).ToList();// GetRange(currentIndex, 5000);
+                    currentListPos += (chunkSize-1);
 
-                    int progressCounter = 0;
-                    while (reader.Read())
+                    string queryString = createQueryString(this.ImporterMode,nextGroupOfMassTagIDs);
+                    //Console.WriteLine(queryString);
+
+                    
+                    using (DbCommand command = cnn.CreateCommand())
                     {
-                        PeptideTarget massTag = new PeptideTarget();
+                        command.CommandText = queryString;
+                        command.CommandTimeout = 60;
+                        DbDataReader reader = command.ExecuteReader();
 
-                        progressCounter++;
-
-                        if (!reader["Mass_Tag_ID"].Equals(DBNull.Value)) massTag.ID = Convert.ToInt32(reader["Mass_Tag_ID"]);
-                        if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value))
-                            massTag.MonoIsotopicMass = Convert.ToDouble(reader["Monoisotopic_Mass"]);
-                        if (!reader["Peptide"].Equals(DBNull.Value)) massTag.Code = Convert.ToString(reader["Peptide"]);
-                        if (!reader["Charge_State"].Equals(DBNull.Value))
-                            massTag.ChargeState = Convert.ToInt16(reader["Charge_State"]);
-                        if (!reader["Mod_Count"].Equals(DBNull.Value)) massTag.ModCount = Convert.ToInt16(reader["Mod_Count"]);
-                        if (!reader["Mod_Description"].Equals(DBNull.Value))
-                            massTag.ModDescription = Convert.ToString(reader["Mod_Description"]);
-                        if (!reader["ObsCount"].Equals(DBNull.Value)) massTag.ObsCount = Convert.ToInt32(reader["ObsCount"]);
-                        if (massTag.ChargeState != 0)
+                        
+                        while (reader.Read())
                         {
-                            massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
+                            PeptideTarget massTag = new PeptideTarget();
+
+                            progressCounter++;
+
+                            if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
+                                massTag.ID = Convert.ToInt32(reader["Mass_Tag_ID"]);
+                            if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value))
+                                massTag.MonoIsotopicMass = Convert.ToDouble(reader["Monoisotopic_Mass"]);
+                            if (!reader["Peptide"].Equals(DBNull.Value))
+                                massTag.Code = Convert.ToString(reader["Peptide"]);
+                            if (!reader["Charge_State"].Equals(DBNull.Value))
+                                massTag.ChargeState = Convert.ToInt16(reader["Charge_State"]);
+                            if (!reader["Mod_Count"].Equals(DBNull.Value))
+                                massTag.ModCount = Convert.ToInt16(reader["Mod_Count"]);
+                            if (!reader["Mod_Description"].Equals(DBNull.Value))
+                                massTag.ModDescription = Convert.ToString(reader["Mod_Description"]);
+                            if (!reader["ObsCount"].Equals(DBNull.Value))
+                                massTag.ObsCount = Convert.ToInt32(reader["ObsCount"]);
+                            if (massTag.ChargeState != 0)
+                            {
+                                massTag.MZ = massTag.MonoIsotopicMass/massTag.ChargeState + Globals.PROTON_MASS;
+                            }
+
+                            if (!reader["Avg_GANET"].Equals(DBNull.Value))
+                                massTag.NormalizedElutionTime = Convert.ToSingle(reader["Avg_GANET"]);
+                            if (!reader["Ref_ID"].Equals(DBNull.Value))
+                                massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
+                            if (!reader["Description"].Equals(DBNull.Value))
+                                massTag.ProteinDescription = Convert.ToString(reader["Description"]);
+
+
+                            data.TargetList.Add(massTag);
+
+                            if (progressCounter%100 == 0)
+                                Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
                         }
-
-                        if (!reader["Avg_GANET"].Equals(DBNull.Value))
-                            massTag.NormalizedElutionTime = Convert.ToSingle(reader["Avg_GANET"]);
-                        if (!reader["Ref_ID"].Equals(DBNull.Value)) massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
-                        if (!reader["Description"].Equals(DBNull.Value))
-                            massTag.ProteinDescription = Convert.ToString(reader["Description"]);
-
-
-                        data.TargetList.Add(massTag);
-
-                        if (progressCounter % 100 == 0) Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
+                        reader.Close();
                     }
+
                 }
             }
+
+
+
+
+
+
+            
         }
 
 
-        private string getModDataQueryString(IEnumerable<int> massTagIDs )
+        private string getModDataQueryString(IEnumerable<int> massTagIDs)
         {
-            var sb=new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(
                 @"SELECT MTMI.Mass_Tag_ID,MTMI.Mod_Name,MTMI.Mod_Position,MCF.Empirical_Formula
@@ -240,7 +267,7 @@ namespace DeconTools.Backend.FileIO
 
         }
 
-        private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode)
+        private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode, List<long> massTagsToBeRetrieved)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(@"SELECT * FROM ( SELECT Mass_Tag_ID,
@@ -289,15 +316,15 @@ namespace DeconTools.Backend.FileIO
                 case Globals.MassTagDBImporterMode.Std_four_parameter_mode:
                     throw new NotImplementedException();
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
-                    Check.Require(this.MassTagsToBeRetrieved != null && this.MassTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
+                    Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
 
-                    for (int i = 0; i < this.MassTagsToBeRetrieved.Count; i++)
+                    for (int i = 0; i < massTagsToBeRetrieved.Count; i++)
                     {
-                        sb.Append(this.MassTagsToBeRetrieved[i]);    //Appends the mass_tag_id
+                        sb.Append(massTagsToBeRetrieved[i]);    //Appends the mass_tag_id
 
                         //if last one in list, then close parentheses. If not, just append a comma separator.
-                        if (i == this.MassTagsToBeRetrieved.Count - 1)
+                        if (i == massTagsToBeRetrieved.Count - 1)
                         {
                             //sb.Append(")) ORDER BY Mass_Tag_ID");
                             sb.Append("))");

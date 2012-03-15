@@ -67,7 +67,7 @@ namespace DeconTools.Backend.Utilities
         {
             var sortedVals = values.OrderBy(d => d).ToList();
 
-            int middleIndex = sortedVals.Count/2;
+            int middleIndex = (sortedVals.Count-1)/2;
 
             double medianVal;
 

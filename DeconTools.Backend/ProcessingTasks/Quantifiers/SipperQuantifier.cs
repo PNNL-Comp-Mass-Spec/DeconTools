@@ -23,6 +23,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         protected double ChromToleranceInPPM { get; set; }
 
 
+        public double MinimumRelativeIntensityForChromCorr { get; set; }
         public List<double> ChromatogramRSquaredVals { get; set; }
 
         #endregion
@@ -32,8 +33,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public SipperQuantifier()
         {
             MaximumFitScoreForFurtherProcessing = 0.1;
-            MinimumRatioAreaForFurtherProcessing = 10;
-
+            MinimumRatioAreaForFurtherProcessing = 5;
+            MinimumRelativeIntensityForChromCorr = 0.025;
 
             _chromatogramCorrelator = new ChromatogramCorrelator();
 
@@ -97,6 +98,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             subtractedIso.Peaklist = subtractedIso.Peaklist.Take(numTheoPeaks).ToList();
 
+
+            for (int i = 0; i < subtractedIso.Peaklist.Count; i++)
+            {
+                
+            }
+
+
+
+
+
             var xvals =
                 subtractedIso.Peaklist.Select((p, i) => new { peak = p, index = i }).Select(n => (double)n.index).ToList();
 
@@ -141,6 +152,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 basePeakChromXYData = basePeakChromXYData.TrimData(startScan, stopScan);
 
+                double minIntensity = result.IsotopicProfile.Peaklist[indexMostAbundantPeak].Height*
+                                     MinimumRelativeIntensityForChromCorr;
 
                 for (int i = 0; i < maxPeakNum; i++)
                 {
@@ -151,7 +164,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                         //the rsquared val for the max peak will 1.0 (since the max peak is the base peak for the comparison)
                         ChromatogramRSquaredVals.Add(1.0);
                     }
-                    else
+                    else if (result.IsotopicProfile.Peaklist[i].Height >= minIntensity)
                     {
                         _peakChromGen.GenerateChromatogram(resultColl.Run, startScan, stopScan, result.IsotopicProfile.Peaklist[i].XValue, ChromToleranceInPPM);
                         var chromPeakXYData = _smoother.Smooth(resultColl.Run.XYData);
@@ -177,6 +190,19 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                         }
 
                     }
+                    else
+                    {
+                        ChromatogramRSquaredVals.Add(0);
+                    }
+                }
+
+                //trim off zeros
+                for (int i = ChromatogramRSquaredVals.Count-1; i >= 0; i--)
+                {
+                    if (ChromatogramRSquaredVals[i]==0)
+                    {
+                        ChromatogramRSquaredVals.RemoveAt(i);
+                    }
                 }
 
                 result.ChromCorrelationMin = ChromatogramRSquaredVals.Min();
@@ -189,7 +215,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                     result.ChromCorrelationMedian = MathUtils.GetMedian(ChromatogramRSquaredVals);
                     result.ChromCorrelationAverage = ChromatogramRSquaredVals.Average();
-                    
+
+                    var revisedIsoPeaks =  subtractedIso.Peaklist.Take(ChromatogramRSquaredVals.Count).ToList();
+
+                    xvals = revisedIsoPeaks.Select((p, i) => new { peak = p, index = i }).Select(n => (double)n.index).ToList();
+
+                    yvals = revisedIsoPeaks.Select(p => (double)p.Height).ToList();
+
+                    result.AreaUnderRatioCurveRevised = CalculateAreaUnderCubicSplineFit(xvals, yvals);
+
 
                 }
                 else
@@ -197,11 +231,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.ChromCorrelationMax = 1;
                 }
 
-                Console.WriteLine();
-                foreach (var val in ChromatogramRSquaredVals)
-                {
-                    Console.WriteLine(val);
-                }
+                //Console.WriteLine();
+                //Console.WriteLine(result);
+                //foreach (var val in ChromatogramRSquaredVals)
+                //{
+                //    Console.WriteLine(val);
+                //}
                 
 
             }

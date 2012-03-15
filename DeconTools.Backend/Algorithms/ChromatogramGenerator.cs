@@ -303,6 +303,13 @@ namespace DeconTools.Backend.Algorithms
                 double intensity = p.MSPeak.Height;
 
                 //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
+                
+                if (!xyValues.ContainsKey(p.Scan_num))
+                {
+                    Console.WriteLine("ERRRRRRRRROOOOOOOOOOR");
+                }
+
+                
                 if (intensity > xyValues[p.Scan_num])
                 {
                     xyValues[p.Scan_num] = intensity;

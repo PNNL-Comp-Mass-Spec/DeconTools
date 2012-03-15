@@ -29,7 +29,7 @@ namespace DeconTools.Backend.Workflows
         private BasicTFF _basicFeatureFinder = new BasicTFF();
         private DeconToolsFitScoreCalculator _fitScoreCalculator = new DeconToolsFitScoreCalculator();
 
-        private DeconToolsZeroFiller _zeroFiller =new DeconToolsZeroFiller();
+        private DeconToolsZeroFiller _zeroFiller = new DeconToolsZeroFiller();
 
         #region Constructors
 
@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Workflows
         {
             Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
 
-            PeakBRSaturatedPeakDetector = parameters.PeakProcessorParameters.PeakBackgroundRatio * 0.75;  
+            PeakBRSaturatedPeakDetector = parameters.PeakProcessorParameters.PeakBackgroundRatio * 0.75;
 
             _msGenerator = new UIMF_MSGenerator();
             _peakDetector = new DeconToolsPeakDetector(PeakBRSaturatedPeakDetector, 3, Globals.PeakFitType.QUADRATIC,
@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Workflows
             _deconvolutor.MaxFitAllowed = 0.6;
 
 
-            
+
 
             AdjustMonoIsotopicMasses = true;
 
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
 
-        
+
 
         public double PeakBRSaturatedPeakDetector { get; set; }
 
@@ -116,14 +116,15 @@ namespace DeconTools.Backend.Workflows
 
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
-                   
+
                     //iterate over unsummed MSFeatures and check for saturation
                     foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                     {
-                        
+
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
                                                    OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
+                      
                         if (isPossiblySaturated)
                         {
                             var theorIso = new IsotopicProfile();
@@ -131,6 +132,7 @@ namespace DeconTools.Backend.Workflows
                             RebuildSaturatedIsotopicProfile(isosResult, uimfRun.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
                         }
+                        
 
                     }
                 }
@@ -148,7 +150,7 @@ namespace DeconTools.Backend.Workflows
                     uimfRun.CurrentFrameSet = frameset;
                     uimfRun.CurrentScanSet = scanset;
 
-                    
+
 
 
                     ExecuteTask(MSGenerator);
@@ -167,10 +169,6 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(Deconvolutor);
 
-                    //if (frameset.PrimaryFrame >= 340 && scanset.PrimaryScanNumber >= 220)
-                    //{
-                    //    Console.WriteLine("here we go");
-                    //}
 
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
@@ -178,8 +176,7 @@ namespace DeconTools.Backend.Workflows
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
                                                       OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
-
-
+                       
 
                         if (isPossiblySaturated)
                         {
@@ -193,8 +190,7 @@ namespace DeconTools.Backend.Workflows
                         {
 
                         }
-
-
+                        
                         if (isosResult.IsotopicProfile.IsSaturated)
                         {
                             GetRebuiltFitScore(isosResult);
@@ -229,7 +225,7 @@ namespace DeconTools.Backend.Workflows
                             {
                                 //here we have found a duplicate
                                 dup.MSFeatureID = minMSFeatureID;
-                                
+
                                 //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
                                 //happen when there are duplicates
                                 //Run.ResultCollection.MSFeatureCounter--;
@@ -370,6 +366,7 @@ namespace DeconTools.Backend.Workflows
                                                     ((UIMFIsosResult)n).FrameSet.PrimaryFrame <= maxFrame &&
                                                     n.ScanSet.PrimaryScanNumber >= minScan &&
                                                     n.ScanSet.PrimaryScanNumber <= maxScan &&
+                                                    n.IsotopicProfile.ChargeState == profile.IsotopicProfile.ChargeState &&
                                                     Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
                                                              profile.IsotopicProfile.MonoIsotopicMass) < massTolerance
                                               select n).ToList();
@@ -469,7 +466,7 @@ namespace DeconTools.Backend.Workflows
                 double idealRatioMin = 0.2;
                 double idealRatioMax = 0.8;
 
-                double peakRatio = currentPeak.Height/mostAbundantPeak.Height;
+                double peakRatio = currentPeak.Height / mostAbundantPeak.Height;
 
                 if (peakRatio < 1)
                 {

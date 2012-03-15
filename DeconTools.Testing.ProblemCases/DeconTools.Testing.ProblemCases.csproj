@@ -74,6 +74,7 @@
     <Compile Include="OMCS_0149_MSMSNoScans.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="saturationPossibleIssue.cs" />
     <Compile Include="UIMFRunTester.cs" />
   </ItemGroup>
   <ItemGroup>
