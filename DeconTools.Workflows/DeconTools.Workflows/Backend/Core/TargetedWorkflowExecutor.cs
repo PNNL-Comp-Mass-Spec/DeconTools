@@ -23,14 +23,14 @@ namespace DeconTools.Workflows.Backend.Core
         
         
         protected WorkflowParameters _workflowParameters;
-        private string _datasetPath;
+        protected string DatasetPath;
 
 
 
         #region Constructors
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath)
         {
-            this._datasetPath = datasetPath;
+            this.DatasetPath = datasetPath;
 
             this.WorkflowParameters = parameters;
             InitializeWorkflow();
@@ -71,17 +71,17 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
         public override void Execute()
         {
-            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(_datasetPath) + "_log.txt";
+            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
 
             reportProgress(DateTime.Now + "\tStarted processing");
-            reportProgress(DateTime.Now + "\t" + _datasetPath);
+            reportProgress(DateTime.Now + "\t" + DatasetPath);
             reportProgress("");
             reportProgress("Parameters:\n" + this._workflowParameters.ToStringWithDetails());
 
 
             try
             {
-                InitializeRun(_datasetPath);
+                InitializeRun(DatasetPath);
                 ProcessDataset();
             }
             catch (Exception ex)
@@ -438,6 +438,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void CopyAlignmentInfoIfExists()
         {
+            if (String.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder)) return;
+
             DirectoryInfo dirInfo = new DirectoryInfo(ExecutorParameters.AlignmentInfoFolder);
 
             if (dirInfo.Exists)

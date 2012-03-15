@@ -97,6 +97,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string peaksFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
 
+            peaksFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
+
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
 
 
@@ -131,8 +134,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //enriched
             testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
 
-           
-            //int[] testMassTags = { 355058604 };
+
+            testMassTags = new int[] { 355008295 };
 
             //co-elution peptides
             //testMassTags = new int[] {355034154, 355033668, 355154211, 355035781};

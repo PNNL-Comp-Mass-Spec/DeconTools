@@ -51,9 +51,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4302.40032, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconTools.Backend, Version=1.0.4442.22799, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="DeconTools.UnitTesting2, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -85,6 +85,7 @@
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilitiesTests\PeakMatchedResultUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ExecuteO16O18WorkflowTests.cs" />
@@ -97,11 +98,13 @@
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanBasedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanUserProvidedTargetedWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\SipperExecutorTests.cs" />
     <Compile Include="WorkflowTests\SipperWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflow_problemCases.cs" />
+    <Compile Include="WorkflowTests\UnitTestTemplate1.cs" />
     <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\WorkflowExecutorParametersTests.cs" />
   </ItemGroup>

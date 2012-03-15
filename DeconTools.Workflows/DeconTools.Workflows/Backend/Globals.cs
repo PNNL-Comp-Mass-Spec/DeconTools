@@ -15,7 +15,8 @@ namespace DeconTools.Workflows.Backend
             PeakDetectAndExportWorkflow1,
             SipperTargeted1,
             BasicTargetedWorkflowExecutor1,
-            LcmsFeatureTargetedWorkflowExecutor1
+            LcmsFeatureTargetedWorkflowExecutor1,
+            SipperWorkflowExecutor1
             
         }
 

@@ -13,8 +13,6 @@ namespace DeconTools.Workflows.Backend.Results
 
         public double AreaUnderDifferenceCurve { get; set; }
 
-        public int FeatureToMassTagID { get; set; }
-
         public double RSquaredValForRatioCurve { get; set; }
 
         public double ChromCorrelationMin { get; set; }
@@ -24,6 +22,8 @@ namespace DeconTools.Workflows.Backend.Results
         public double ChromCorrelationAverage { get; set; }
 
         public double ChromCorrelationMedian { get; set; }
+
+        public double AreaUnderRatioCurveRevised { get; set; }
 
         #endregion
 

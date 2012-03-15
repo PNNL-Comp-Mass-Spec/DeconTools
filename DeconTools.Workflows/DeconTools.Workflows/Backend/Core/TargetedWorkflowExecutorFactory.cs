@@ -16,6 +16,8 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1:
                     return new LcmsFeatureTargetedWorkflowExecutor(workflowParameters, datasetPath);
                     break;
+                case Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1:
+                    return new SipperWorkflowExecutor(workflowParameters, datasetPath);
                 default:
                     throw new System.ArgumentException("Workflow type: " + workflowParameters.WorkflowType +
                                                        " is not an executor type of workflow");

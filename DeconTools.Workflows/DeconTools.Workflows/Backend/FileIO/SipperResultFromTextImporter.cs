@@ -7,6 +7,8 @@ namespace DeconTools.Workflows.Backend.FileIO
     {
         private string[] _areaUnderDiffCurveHeaders ={"AreaDifferenceCurve"};
         private string[] _areaUnderRatioCurveHeaders = {"AreaRatioCurve"};
+        private string[] _areaUnderRatioRevisedHeaders = { "AreaRatioCurveRevised" };
+        private string[] _RSquaredForRatio = { "RSquared" };
         private string[] _featureToMassTagIDHeaders = { "MassTagID" };
         private string[] _chromCorrMinHeaders = {"ChromCorrMin"};
         private string[] _chromCorrMaxHeaders = { "ChromCorrMax" };
@@ -32,8 +34,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.AreaUnderDifferenceCurve = ParseDoubleField(LookupData(processedData, _areaUnderDiffCurveHeaders));
             
             result.AreaUnderRatioCurve = ParseDoubleField(LookupData(processedData, _areaUnderRatioCurveHeaders));
-            result.FeatureToMassTagID = ParseIntField(LookupData(processedData, _featureToMassTagIDHeaders));
-
+            result.AreaUnderRatioCurveRevised = ParseDoubleField(LookupData(processedData, _areaUnderRatioRevisedHeaders));
+            result.MatchedMassTagID = ParseIntField(LookupData(processedData, _featureToMassTagIDHeaders));
+            result.RSquaredValForRatioCurve = ParseDoubleField(LookupData(processedData, _RSquaredForRatio));
             result.ChromCorrelationMin = ParseDoubleField(LookupData(processedData, _chromCorrMinHeaders));
             result.ChromCorrelationMax = ParseDoubleField(LookupData(processedData, _chromCorrMaxHeaders));
             result.ChromCorrelationAverage = ParseDoubleField(LookupData(processedData, _chromCorrAverageHeaders));

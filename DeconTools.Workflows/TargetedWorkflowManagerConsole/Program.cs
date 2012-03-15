@@ -52,7 +52,7 @@ namespace TargetedWorkflowManagerConsole
 
                             currentDatasetPath = datasetutil.GetDatasetPath(datsetName) + "\\" + datsetName + ".raw";
 
-                            if (currentDatasetPath.Contains("purged"))
+                            if (currentDatasetPath.ToLower().Contains("purged"))
                             {
                                 currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
                             }
@@ -63,6 +63,9 @@ namespace TargetedWorkflowManagerConsole
 
                         processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
                         processStartInfo.Arguments = currentDatasetPath + " " + parameterFile;
+
+
+
 
                         try
                         {

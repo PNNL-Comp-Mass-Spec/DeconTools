@@ -51,9 +51,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4412.31596, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconTools.Backend, Version=1.0.4442.22799, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
+      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -82,6 +82,7 @@
     <Compile Include="Backend\Core\ScanBasedWorkflow.cs" />
     <Compile Include="Backend\Core\SipperTargetedWorkflow.cs" />
     <Compile Include="Backend\Core\SipperTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\SipperWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowExecutorFactory.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
@@ -121,7 +122,10 @@
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
+    <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
+    <Compile Include="Backend\Utilities\ResultUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Backend\Core\SipperWorkflowExecutorParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Backend\Parameters\" />

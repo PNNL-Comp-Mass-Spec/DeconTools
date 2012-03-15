@@ -68,5 +68,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void executeWorkflow3()
+        {
+            string executorParameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\workflowExecutor_parameters - Copy.xml";
+
+            WorkflowExecutorBaseParameters executorParameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+
+            string testDatasetPath = FileRefs.SipperRawDataFile;
+
+            TargetedWorkflowExecutor executor = new LcmsFeatureTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+            executor.Execute();
+
+
+
+        }
+
+
+
     }
 }

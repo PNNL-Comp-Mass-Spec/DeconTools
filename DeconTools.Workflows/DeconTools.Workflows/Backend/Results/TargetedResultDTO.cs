@@ -23,6 +23,9 @@ namespace DeconTools.Workflows.Backend.Results
 
         public string FailureType { get; set; }
 
+        public int MatchedMassTagID { get; set; }
+
+
         #endregion
 
         #region Public Methods

@@ -21,11 +21,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Delimiter);
-            sb.Append(sipperResult.FeatureToMassTagID);
+            sb.Append(sipperResult.MatchedMassTagID);
             sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderDifferenceCurve.ToString("0.000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderRatioCurve.ToString("0.000"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.AreaUnderRatioCurveRevised.ToString("0.000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.RSquaredValForRatioCurve.ToString("0.00000"));
             sb.Append(Delimiter);
@@ -54,6 +56,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("AreaRatioCurve");
             sb.Append(Delimiter);
+            sb.Append("AreaRatioCurveRevised");
+            sb.Append(Delimiter);
+            
             sb.Append("RSquared");
             sb.Append(Delimiter);
             sb.Append("ChromCorrMin");

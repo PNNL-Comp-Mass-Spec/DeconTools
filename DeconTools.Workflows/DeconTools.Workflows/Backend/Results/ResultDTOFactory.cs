@@ -57,9 +57,10 @@ namespace DeconTools.Workflows.Backend.Results
         private static void addAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
         {
             SipperLcmsFeatureTargetedResultDTO r = (SipperLcmsFeatureTargetedResultDTO) tr;
-            r.FeatureToMassTagID = ((LcmsFeatureTarget) result.Target).FeatureToMassTagID;
+            r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
             r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
+            r.AreaUnderRatioCurveRevised = result.AreaUnderRatioCurveRevised;
             r.RSquaredValForRatioCurve =  result.RSquaredValForRatioCurve;
 
             r.ChromCorrelationMin =   result.ChromCorrelationMin;

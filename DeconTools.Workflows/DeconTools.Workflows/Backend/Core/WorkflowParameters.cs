@@ -82,7 +82,9 @@ namespace DeconTools.Workflows.Backend.Core
                     case Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1:
                         workflowParameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
                         break;
-
+                    case Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1:
+                        workflowParameters = new SipperWorkflowExecutorParameters();
+                        break;
 
                     default:
                         workflowParameters = new BasicTargetedWorkflowParameters();
