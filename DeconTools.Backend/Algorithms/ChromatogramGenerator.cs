@@ -306,7 +306,13 @@ namespace DeconTools.Backend.Algorithms
                 
                 if (!xyValues.ContainsKey(p.Scan_num))
                 {
-                    Console.WriteLine("ERRRRRRRRROOOOOOOOOOR");
+                   
+                    string errorString = "Unexpected error in chromatogram generator!! Scan= " + p.Scan_num +
+                                         "; num filtered peaks = " + filteredPeakList.Count;
+
+                    Console.WriteLine(errorString);
+                    
+                    throw new InvalidProgramException(errorString);
                 }
 
                 

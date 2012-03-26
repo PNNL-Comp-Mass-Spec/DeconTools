@@ -3,7 +3,7 @@ using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
-    public class SmartChromPeakSelector : SmartChromPeakSelectorBase
+    public sealed class SmartChromPeakSelector : SmartChromPeakSelectorBase
     {
 
         #region Constructors

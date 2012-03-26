@@ -35,9 +35,6 @@ namespace DeconTools.Backend.Algorithms
             rsquaredVal = -1;
             
             MathUtils.GetLinearRegression(chromIntensities1,chromIntensities2, out slope, out intercept, out rsquaredVal);
-
-
-
         }
 
 

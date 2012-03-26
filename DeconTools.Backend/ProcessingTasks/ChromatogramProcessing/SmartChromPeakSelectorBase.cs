@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
         protected MassTagFitScoreCalculator fitScoreCalc;
 
-        ScanSetFactory scansetFactory = new ScanSetFactory();
+        
 
         protected class PeakQualityData
         {
@@ -57,7 +57,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public TFFBase TargetedMSFeatureFinder { get; set; }
 
-        public SmartChromPeakSelectorParameters Parameters { get; set; }
+        
+        private SmartChromPeakSelectorParameters _parameters;
+        public override ChromPeakSelectorParameters Parameters
+        {
+            get { return _parameters; }
+            set { _parameters = value as SmartChromPeakSelectorParameters; }
+        }
 
 
 
@@ -98,7 +104,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             currentResult.NumQualityChromPeaks = -1;
 
             ChromPeak bestChromPeak;
-            if (currentResult.NumChromPeaksWithinTolerance > this.Parameters.NumChromPeaksAllowed)
+            if (currentResult.NumChromPeaksWithinTolerance > _parameters.NumChromPeaksAllowed)
             {
                 bestChromPeak = null;
             }
@@ -143,7 +149,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
 
-            ScanSet bestScanset = createSummedScanSet(bestChromPeak, resultColl.Run);
+            ScanSet bestScanset = CreateSummedScanSet(bestChromPeak, resultColl.Run);
             resultColl.Run.CurrentScanSet = bestScanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
 
             currentResult.AddSelectedChromPeakAndScanSet(bestChromPeak, bestScanset);
@@ -181,39 +187,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
         }
 
-        private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run)
-        {
-            if (chromPeak == null || chromPeak.XValue == 0) return null;
-
-            int bestScan = (int)chromPeak.XValue;
-            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-
-            switch (this.Parameters.SummingMode)
-            {
-                case SummingModeEnum.SUMMINGMODE_STATIC:
-                    return scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
-
-                case SummingModeEnum.SUMMINGMODE_DYNAMIC:
-                    double sigma = chromPeak.Width / 2.35;
-
-                    int lowerScan = (int)Math.Round(chromPeak.XValue - (this.Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
-                    int closestLowerScan = run.GetClosestMSScan(lowerScan, Globals.ScanSelectionMode.CLOSEST);
-
-                    int upperScan = (int)Math.Round(chromPeak.XValue + (this.Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
-                    int closestUpperScan = run.GetClosestMSScan(upperScan, Globals.ScanSelectionMode.CLOSEST);
-
-                    ScanSet scanset = scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
-                    scansetFactory.TrimScans(scanset, this.Parameters.MaxScansSummedInDynamicSumming);
-
-                    return scanset;
-
-                default:
-                    return scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
-            }
-
-
-
-        }
+        
 
         private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)
         {
@@ -279,7 +253,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
                 {
-                    if (this.Parameters.MultipleHighQualityMatchesAreAllowed)
+                    if (_parameters.MultipleHighQualityMatchesAreAllowed)
                     {
 
                         if (filteredList1[0].abundance >= filteredList1[1].abundance)

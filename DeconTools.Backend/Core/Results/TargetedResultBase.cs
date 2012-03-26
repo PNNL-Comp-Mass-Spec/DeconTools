@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Core
         {
 
         }
-        
+
         public TargetedResultBase(TargetBase target)
         {
             this.Target = target;
@@ -27,6 +27,7 @@ namespace DeconTools.Backend.Core
 
         public int NumChromPeaksWithinTolerance { get; set; }
 
+        public int NumMSScansSummed { get; set; }
 
         public bool WasPreviouslyProcessed { get; set; }
 
@@ -204,8 +205,24 @@ namespace DeconTools.Backend.Core
         {
             this.ChromPeakSelected = bestPeak;
             this.ScanSet = scanset;
+
+
+            int numMSScansSummed = 0;
+            if (scanset==null || scanset.IndexValues==null || scanset.IndexValues.Count==0)
+            {
+                numMSScansSummed = 0;
+            }
+            else
+            {
+                numMSScansSummed = scanset.IndexValues.Count;
+                
+            }
+
+            this.NumMSScansSummed = numMSScansSummed;
             WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labelled (N15) data
         }
+
+
 
         public virtual void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
         {

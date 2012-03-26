@@ -184,6 +184,7 @@
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorParameters.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorParameters.cs" />

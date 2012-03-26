@@ -31,7 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 theorProfile.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 
 
-            if (result.IsotopicProfile.Peaklist.Count <= indexOfMostAbundantTheorPeak)      // most abundant peak isn't present in the actual theoretical profile... problem!
+            if (result.IsotopicProfile.Peaklist.Count <= indexOfMostAbundantTheorPeak || indexOfCorrespondingObservedPeak<0)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
                 result.Score = 1;
                 return;

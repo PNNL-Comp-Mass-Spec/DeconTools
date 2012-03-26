@@ -1,31 +1,27 @@
 ﻿
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
-    public enum SummingModeEnum
-    {
-        SUMMINGMODE_STATIC,     // mode in which the number of scans summed is always the same
-        SUMMINGMODE_DYNAMIC    // mode in which the number of scans summed is variable; depends on chromatograph peak dimensions
-
-    }
 
 
-    public class SmartChromPeakSelectorParameters
+    public class SmartChromPeakSelectorParameters : ChromPeakSelectorParameters
     {
 
         #region Constructors
+
         public SmartChromPeakSelectorParameters()
+            : this(new ChromPeakSelectorParameters())
         {
-            this.MSToleranceInPPM = 25;
-            this.NETTolerance = 0.025f;
-            this.MSFeatureFinderType = Globals.TargetedFeatureFinderType.ITERATIVE;
-            this.MSPeakDetectorPeakBR = 1.3;
-            this.MSPeakDetectorSigNoiseThresh = 2;
-            this.NumChromPeaksAllowed = 20;
-            this.NumScansToSum = 1;
-            this.MaxScansSummedInDynamicSumming = 21;
-            this.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
-            this.AreaOfPeakToSumInDynamicSumming = 1;
             
+        }
+
+        public SmartChromPeakSelectorParameters(ChromPeakSelectorParameters parameters)
+            : base(parameters)
+        {
+            MSToleranceInPPM = 25;
+            MSFeatureFinderType = Globals.TargetedFeatureFinderType.ITERATIVE;
+            MSPeakDetectorPeakBR = 1.3;
+            MSPeakDetectorSigNoiseThresh = 2;
+            NumChromPeaksAllowed = 20;
         }
         #endregion
 
@@ -34,10 +30,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public Globals.TargetedFeatureFinderType MSFeatureFinderType { get; set; }
 
-     
-        public float NETTolerance { get; set; }
-
-        public int NumScansToSum { get; set; }
 
         /// <summary>
         /// Number of chrom peaks allowed. For example if this is set to '5' 
@@ -59,29 +51,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public double MSPeakDetectorSigNoiseThresh { get; set; }
 
-        /// <summary>
-        /// Summing mode. Static indicates that the number of scans summed is always the same. Dynamic indicates that the number of scans summed is variable
-        /// </summary>
-        public SummingModeEnum SummingMode { get; set; }
 
-
-        public int MaxScansSummedInDynamicSumming { get; set; }
-
-        /// <summary>
-        /// Area of peak to sum, based on units of sigma. Eg a value of '2' means +/- 2 sigma; thus 4 sigma or ~ 95% of a gaussian peak will be summed
-        /// </summary>
-        public double AreaOfPeakToSumInDynamicSumming { get; set; }
 
 
         #endregion
 
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
 
     }
 }

@@ -22,6 +22,14 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
        
       
+        [Test]
+        public void SmartChromPeakSelectorParameterTest1()
+        {
+            SmartChromPeakSelectorParameters parameters = new SmartChromPeakSelectorParameters();
+            Assert.AreEqual(20, parameters.NumChromPeaksAllowed);
+            Assert.AreEqual(0.05m, (decimal)parameters.NETTolerance);
+        }
+
 
         [Test]
         public void smartChromPeakSelectorTest_noSumming()
@@ -43,12 +51,13 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
-            var chromPeakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
+            var chromPeakDet = new ChromPeakDetector(0.5, 1);
 
             SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
             var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
-           var  basicChromPeakSelector = new BasicChromPeakSelector(1);
+            ChromPeakSelectorParameters basicChromParam = new ChromPeakSelectorParameters();
+            var basicChromPeakSelector = new BasicChromPeakSelector(basicChromParam);
 
 
 
@@ -75,10 +84,10 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             theorFeatureGen.Execute(run.ResultCollection);
             chromPeakDet.Execute(run.ResultCollection);
 
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+
             //first run the standard peak selector
             basicChromPeakSelector.Execute(run.ResultCollection);
-
-            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
             Assert.AreEqual(10066, (int)Math.Round(result.ChromPeakSelected.XValue));
 
 
@@ -119,7 +128,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
             var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
-            var basicChromPeakSelector = new BasicChromPeakSelector(1);
+            var basicChromPeakSelector = new BasicChromPeakSelector(new ChromPeakSelectorParameters());
 
 
 

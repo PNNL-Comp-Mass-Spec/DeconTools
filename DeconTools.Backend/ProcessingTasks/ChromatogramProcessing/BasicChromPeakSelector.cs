@@ -5,68 +5,32 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
-    public class BasicChromPeakSelector : ChromPeakSelectorBase
+    public sealed class BasicChromPeakSelector : ChromPeakSelectorBase
     {
         #region Constructors
-        public BasicChromPeakSelector(int numLCScansToSum)
-            : this(1, 0.05)
+
+
+        public BasicChromPeakSelector(ChromPeakSelectorParameters parameters)
         {
-
+            Parameters = parameters;
         }
-
-        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance)
-            : this(1, netTolerance, Globals.PeakSelectorMode.MostIntense)
-        {
-
-        }
-
-        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode)
-            : this(numLCScansToSum, netTolerance, peakSelectorMode, 0)
-        {
-
-        }
-
-        public BasicChromPeakSelector(int numLCScansToSum, double netTolerance, Globals.PeakSelectorMode peakSelectorMode, int scanOffSet)
-        {
-            this.NETTolerance = netTolerance;
-            this.PeakSelectionMode = peakSelectorMode;
-            this.NumScansToSum = numLCScansToSum;
-            this.ScanOffSet = scanOffSet;
-        }
+       
 
         #endregion
 
         #region Properties
 
-        private DeconTools.Backend.Globals.PeakSelectorMode peakSelectionMode;
-
-        public DeconTools.Backend.Globals.PeakSelectorMode PeakSelectionMode
-        {
-            get { return peakSelectionMode; }
-            set { peakSelectionMode = value; }
-        }
-
-        private double tolerance;
-        public double NETTolerance
-        {
-            get { return tolerance; }
-            set { tolerance = value; }
-        }
-
+      
         //TODO:   figure out what uses this and why!   Default is 0 - that's all I know
         public int ScanOffSet { get; set; }
 
         public double ReferenceNETValueForReferenceMode { get; set; }
 
-
-        public int NumScansToSum { get; set; }       // this might be better elsewhere, but for now put it here...
+        public override ChromPeakSelectorParameters Parameters { get; set; }
+       
         #endregion
 
-        #region Public Methods
-        #endregion
-
-        #region Private Methods
-        #endregion
+  
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, "ChromPeakSelector failed. Mass Tag must be defined but it isn't.");
@@ -90,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
             int numPeaksWithinTolerance = 0;
-            var bestPeak = (ChromPeak)selectBestPeak(this.PeakSelectionMode, resultList.Run.PeakList, normalizedElutionTime, this.NETTolerance, out numPeaksWithinTolerance);
+            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode, resultList.Run.PeakList, normalizedElutionTime, Parameters.NETTolerance, out numPeaksWithinTolerance);
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
 
@@ -106,7 +70,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             //    result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run, this.ScanOffSet);
             //}
 
-            ScanSet scanset = createSummedScanSet(bestPeak, resultList.Run, this.ScanOffSet);
+            ScanSet scanset = CreateSummedScanSet(bestPeak, resultList.Run);
             resultList.Run.CurrentScanSet = scanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
 
             result.AddSelectedChromPeakAndScanSet(bestPeak, scanset);
@@ -120,21 +84,21 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         }
 
-        private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run, int scanOffset)
-        {
-            if (chromPeak == null || chromPeak.XValue == 0) return null;
+        //private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run, int scanOffset)
+        //{
+        //    if (chromPeak == null || chromPeak.XValue == 0) return null;
 
-            int bestScan = (int)chromPeak.XValue;
-            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-            bestScan = bestScan + scanOffset;
-            return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
-        }
+        //    int bestScan = (int)chromPeak.XValue;
+        //    bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
+        //    bestScan = bestScan + scanOffset;
+        //    return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
+        //}
 
 
         public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance)
         {
             int numPeaksWithinTolerance = 0;
-            return selectBestPeak(peakSelectionMode, chromPeakList, targetNET, netTolerance, out numPeaksWithinTolerance);
+            return selectBestPeak(peakSelectorMode, chromPeakList, targetNET, netTolerance, out numPeaksWithinTolerance);
         }
 
         public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
@@ -240,5 +204,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
 
+       
     }
 }
