@@ -4,7 +4,6 @@ using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -98,6 +97,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
+            Run.ResultCollection.MSPeakResultList.Clear();
 
         }
 

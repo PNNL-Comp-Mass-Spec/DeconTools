@@ -184,19 +184,23 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void copyToLocalTest1()
         {
 
-            string executorParameterFile = @"\\protoapps\UserData\Slysz\Data\WorkflowExecutor_Parameters\basicTargetedWorkflowExecutorParameters_CopyToLocalTestCase2.xml";
-            string resultsFolderLocation = @"D:\Temp\results";
+            string executorParameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\basicTargetedWorkflowExecutorParameters_CopyToLocalTestCase2.xml";
             string datasetPath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+           
+
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+
+
+
+            string expectedResultsFilename = executorParameters.ResultsFolder + "\\" + testDatasetName + "_results.txt";
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
             }
-
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.LoadParameters(executorParameterFile);
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
             executor.Execute();
@@ -208,11 +212,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10, repository.Results.Count);
 
-            TargetedResultDTO result1 = repository.Results[0];
+            TargetedResultDTO result1 = repository.Results[2];
+
 
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
+
 
 
 

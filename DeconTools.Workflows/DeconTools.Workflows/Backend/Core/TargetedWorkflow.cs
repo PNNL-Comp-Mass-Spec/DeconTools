@@ -166,42 +166,32 @@ namespace DeconTools.Workflows.Backend.Core
         protected static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
+            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
+            chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
+            chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;
+            chromPeakSelectorParameters.SummingMode = workflowParameters.SummingMode;
+            chromPeakSelectorParameters.AreaOfPeakToSumInDynamicSumming = workflowParameters.AreaOfPeakToSumInDynamicSumming;
+            chromPeakSelectorParameters.MaxScansSummedInDynamicSumming = workflowParameters.MaxScansSummedInDynamicSumming;
+
+
 
             switch (workflowParameters.ChromPeakSelectorMode)
             {
                 case DeconTools.Backend.Globals.PeakSelectorMode.ClosestToTarget:
-                    chromPeakSelector = new BasicChromPeakSelector(workflowParameters.NumMSScansToSum,
-                                                                   workflowParameters.ChromNETTolerance,
-                                                                   DeconTools.Backend.Globals.PeakSelectorMode.
-                                                                       ClosestToTarget);
-                    break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.MostIntense:
-                    chromPeakSelector = new BasicChromPeakSelector(workflowParameters.NumMSScansToSum,
-                                                                   workflowParameters.ChromNETTolerance,
-                                                                   DeconTools.Backend.Globals.PeakSelectorMode.
-                                                                       MostIntense);
-                    break;
-                case DeconTools.Backend.Globals.PeakSelectorMode.RelativeToOtherChromPeak:
-                    chromPeakSelector = new BasicChromPeakSelector(workflowParameters.NumMSScansToSum,
-                                                                   workflowParameters.ChromNETTolerance,
-                                                                   DeconTools.Backend.Globals.PeakSelectorMode.
-                                                                       RelativeToOtherChromPeak);
-                    break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode:
-                    chromPeakSelector = new BasicChromPeakSelector(workflowParameters.NumMSScansToSum,
-                                                                   workflowParameters.ChromNETTolerance,
-                                                                   DeconTools.Backend.Globals.PeakSelectorMode.
-                                                                       N15IntelligentMode);
+                case DeconTools.Backend.Globals.PeakSelectorMode.RelativeToOtherChromPeak:
+                    chromPeakSelector = new BasicChromPeakSelector(chromPeakSelectorParameters);
                     break;
+
                 case DeconTools.Backend.Globals.PeakSelectorMode.Smart:
 
-                    var smartchrompeakSelectorParameters = new SmartChromPeakSelectorParameters();
+                    var smartchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
                     smartchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
                     smartchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
                     smartchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
                     smartchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-                    smartchrompeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
-                    smartchrompeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
                     smartchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
                     smartchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
 

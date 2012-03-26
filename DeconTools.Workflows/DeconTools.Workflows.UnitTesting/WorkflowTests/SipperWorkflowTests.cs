@@ -132,10 +132,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //testMassTags = new int[] { 355057553, 355058671, 355084418 };
 
             //enriched
-            testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
+            //testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
 
 
-            testMassTags = new int[] { 355008295 };
+            //testMassTags = new int[] { 355008295 };
 
             //co-elution peptides
             //testMassTags = new int[] {355034154, 355033668, 355154211, 355035781};

@@ -127,6 +127,7 @@ namespace DeconTools.Workflows.Backend.Results
             tr.DatasetName = result.Run.DatasetName;
             tr.TargetID = result.Target.ID;
             tr.ChargeState = result.Target.ChargeState;
+            tr.NumMSScansSummed = result.NumMSScansSummed;
 
             tr.IndexOfMostAbundantPeak = result.IsotopicProfile == null ? (short)0 : (short)result.IsotopicProfile.GetIndexOfMostIntensePeak();
             tr.Intensity = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.IntensityAggregate;
@@ -157,6 +158,7 @@ namespace DeconTools.Workflows.Backend.Results
             if (result.FailedResult)
             {
                 tr.FailureType = result.FailureType.ToString();
+                tr.ErrorDescription = result.ErrorDescription;
             }
 
         }

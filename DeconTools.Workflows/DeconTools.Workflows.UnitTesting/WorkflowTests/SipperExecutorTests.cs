@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
@@ -47,9 +44,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.FolderPathForCopiedRawDataset = @"D:\Data\Temp";
+            parameters.ResultsFolder = @"D:\data\Temp\Results";
 
             string testDataset =
-                @"\\proto-9\VOrbiETD01\2010_1\Yellow_C13_103_26Mar10_Griffin_10-01-26\Yellow_C13_103_26Mar10_Griffin_10-01-26.raw";
+               @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
             SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
 

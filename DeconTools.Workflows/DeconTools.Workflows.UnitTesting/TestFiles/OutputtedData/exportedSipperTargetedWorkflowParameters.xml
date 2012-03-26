@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
+  <AreaOfPeakToSumInDynamicSumming>2</AreaOfPeakToSumInDynamicSumming>
   <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
   <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
   <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
@@ -9,6 +10,7 @@
   <ChromPeakSelectorMode>ClosestToTarget</ChromPeakSelectorMode>
   <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
   <ChromToleranceInPPM>10</ChromToleranceInPPM>
+  <MaxScansSummedInDynamicSumming>100</MaxScansSummedInDynamicSumming>
   <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
   <MSToleranceInPPM>10</MSToleranceInPPM>
@@ -16,5 +18,6 @@
   <NumChromPeaksAllowedDuringSelection>20</NumChromPeaksAllowedDuringSelection>
   <NumMSScansToSum>1</NumMSScansToSum>
   <ResultType>SIPPER_TARGETED_RESULT</ResultType>
+  <SummingMode>SUMMINGMODE_STATIC</SummingMode>
   <WorkflowType>SipperTargeted1</WorkflowType>
 </WorkflowParameters>

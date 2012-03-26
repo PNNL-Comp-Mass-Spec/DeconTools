@@ -17,11 +17,16 @@ namespace DeconTools.Workflows.Backend.Results
 
         public float NET { get; set; }
         public float NETError { get; set; }
+
+        public int NumMSScansSummed { get; set; }
      
         public int NumChromPeaksWithinTol { get; set; }
         public int NumQualityChromPeaksWithinTol { get; set; }
 
         public string FailureType { get; set; }
+
+        public string ErrorDescription { get; set; }
+
 
         public int MatchedMassTagID { get; set; }
 

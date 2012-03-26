@@ -60,18 +60,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
-
+   
         protected override string buildResultOutput(TargetedResultDTO result)
         {
             StringBuilder sb = new StringBuilder();
@@ -105,6 +94,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.ScanLCEnd);
             sb.Append(Delimiter);
+            sb.Append(result.NumMSScansSummed);
+            sb.Append(Delimiter);
             sb.Append(result.NET.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(result.NETError.ToString("0.000000"));
@@ -128,6 +119,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(result.IScore.ToString("0.0000"));
             sb.Append(Delimiter);
             sb.Append(result.FailureType);
+            sb.Append(Delimiter);
+            sb.Append(result.ErrorDescription);
 
             
             return sb.ToString();
@@ -148,6 +141,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("ScanStart");
             sb.Append(Delimiter);
             sb.Append("ScanEnd");
+            sb.Append(Delimiter);
+            sb.Append("NumMSSummed");
             sb.Append(Delimiter);
             sb.Append("NET");
             sb.Append(Delimiter);
@@ -172,6 +167,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("IScore");
             sb.Append(Delimiter);
             sb.Append("FailureType");
+            sb.Append(Delimiter);
+            sb.Append("ErrorDescription");
 
             return sb.ToString();
         }

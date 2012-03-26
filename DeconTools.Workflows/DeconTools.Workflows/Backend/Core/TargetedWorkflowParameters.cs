@@ -1,5 +1,6 @@
 ﻿using System;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -26,6 +27,10 @@ namespace DeconTools.Workflows.Backend.Core
             ChromGenSourceDataSigNoise = 3;
 
             ChromPeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.Smart;
+            SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+            AreaOfPeakToSumInDynamicSumming = 2;
+            MaxScansSummedInDynamicSumming = 100;
+
 
         }
         #endregion
@@ -82,6 +87,23 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public bool MultipleHighQualityMatchesAreAllowed { get; set; }
 
+        /// <summary>
+        /// Static or dynamic summing across an elution peak. E.g. in static mode the same number of scans are summed. 
+        /// In dynamic, the number of scans summed depends on the width of the peak
+        /// </summary>
+        public SummingModeEnum SummingMode { get; set; }
+
+        /// <summary>
+        /// In dynamic summing we sum across a certain peak width. The setting guides how much of the peak to sum across. The unit is 'variance' or sigma,
+        /// such that a value of 2 means 2 sigma, which means the peak is summed across 4 sigma, or ~ 95%. (Following a normal distribution).
+        /// </summary>
+        public double AreaOfPeakToSumInDynamicSumming { get; set; }
+
+        /// <summary>
+        /// In dynamic summing we sum across an elution peak. Some peaks are huge and we might not want to sum that much. So we can use this value to set the max. 
+        /// 
+        /// </summary>
+        public int MaxScansSummedInDynamicSumming { get; set; }
 
         #endregion
 

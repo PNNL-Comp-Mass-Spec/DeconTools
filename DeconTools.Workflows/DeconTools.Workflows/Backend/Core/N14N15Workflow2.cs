@@ -200,7 +200,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             chromPeakSelectorN14 = new SmartChromPeakSelector(smartchrompeakSelectorParams);
 
-            chromPeakSelectorN15 = new BasicChromPeakSelector(_workflowParameters.NumMSScansToSum, _workflowParameters.ChromNETToleranceN15, DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode);
+
+            ChromPeakSelectorParameters chromPeakSelectorParameters=new ChromPeakSelectorParameters();
+            chromPeakSelectorParameters.NumScansToSum = _workflowParameters.NumMSScansToSum;
+            chromPeakSelectorParameters.NETTolerance =(float)_workflowParameters.ChromNETTolerance;
+            chromPeakSelectorParameters.PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode;
+
+            chromPeakSelectorN15 = new BasicChromPeakSelector(chromPeakSelectorParameters);
 
             msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 

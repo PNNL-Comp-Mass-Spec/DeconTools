@@ -109,6 +109,7 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecuteTask(_chromPeakSelector);
                 ChromPeakSelected = Result.ChromPeakSelected;
 
+                //Console.WriteLine("ChromPeak width = \t" + ChromPeakSelected.Width);
 
                 Result.ResetMassSpectrumRelatedInfo();
 
@@ -136,7 +137,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 TargetedResultBase result = Run.ResultCollection.CurrentTargetedResult;
                 result.FailedResult = true;
-                result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
+                result.ErrorDescription = ex.Message;
                 Console.WriteLine(((LcmsFeatureTarget)result.Target).FeatureToMassTagID + "; "+ result.ErrorDescription);
 
                 return;

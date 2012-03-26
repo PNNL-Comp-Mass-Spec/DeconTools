@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -178,10 +177,8 @@ namespace DeconTools.Workflows.Backend.Core
 
                     throw;
                 }
-
-
-
             }
+
             reportProgress(DateTime.Now + "\t---- PROCESSING COMPLETE    ------------------------------------");
 
             string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
@@ -419,10 +416,10 @@ namespace DeconTools.Workflows.Backend.Core
             if (File.Exists(possibleFilename1))
             {
                 //create background worker so that updates don't go out to console.
-                BackgroundWorker bw = new BackgroundWorker();
-                bw.WorkerSupportsCancellation = true;
-                bw.WorkerReportsProgress = true;
-                PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(possibleFilename1, bw);
+                //BackgroundWorker bw = new BackgroundWorker();
+                //bw.WorkerSupportsCancellation = true;
+                //bw.WorkerReportsProgress = true;
+                PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(possibleFilename1);
                 peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
             }
             else

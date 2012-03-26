@@ -181,7 +181,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     queryString =
                         @"SELECT * FROM " + table + " where Dataset = '" +
-                        datasetName + "'";
+                        datasetName + "' ORDER BY UMC_Ind";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;

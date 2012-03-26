@@ -9,7 +9,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _areaUnderRatioCurveHeaders = {"AreaRatioCurve"};
         private string[] _areaUnderRatioRevisedHeaders = { "AreaRatioCurveRevised" };
         private string[] _RSquaredForRatio = { "RSquared" };
-        private string[] _featureToMassTagIDHeaders = { "MassTagID" };
+        private string[] _featureToMassTagIDHeaders = { "MatchedMassTagID" };
         private string[] _chromCorrMinHeaders = {"ChromCorrMin"};
         private string[] _chromCorrMaxHeaders = { "ChromCorrMax" };
         private string[] _chromCorrAverageHeaders = { "ChromCorrAverage" };

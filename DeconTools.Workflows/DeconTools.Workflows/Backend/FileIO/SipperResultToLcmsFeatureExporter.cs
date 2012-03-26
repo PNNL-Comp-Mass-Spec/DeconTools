@@ -50,7 +50,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             sb.Append(base.buildHeaderLine());
             sb.Append(Delimiter);
-            sb.Append("MassTagID");
+            sb.Append("MatchedMassTagID");
             sb.Append(Delimiter);
             sb.Append("AreaDifferenceCurve");
             sb.Append(Delimiter);
