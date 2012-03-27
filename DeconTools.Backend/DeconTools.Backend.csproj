@@ -116,7 +116,7 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIMFLibrary, Version=2.0.4419.21361, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="UIMFLibrary, Version=2.0.4419.21472, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
