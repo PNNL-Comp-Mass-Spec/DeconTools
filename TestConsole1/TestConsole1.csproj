@@ -70,10 +70,6 @@
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows\DeconTools.Workflows.csproj">
-      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
-      <Name>DeconTools.Workflows</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PNNLOmicsElementData.xml">
