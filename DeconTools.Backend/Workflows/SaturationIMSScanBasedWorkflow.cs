@@ -124,7 +124,15 @@ namespace DeconTools.Backend.Workflows
                         bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
                                                    OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
-                      
+
+                        //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
+
+                        //if (tempIsosResult.FrameSet.PrimaryFrame==202 && tempIsosResult.ScanSet.PrimaryScanNumber==108)
+                        //{
+                        //    Console.WriteLine(tempIsosResult + "\t being processed!");
+                        //}
+
+
                         if (isPossiblySaturated)
                         {
                             var theorIso = new IsotopicProfile();
@@ -459,7 +467,10 @@ namespace DeconTools.Backend.Workflows
             int indexOfPeakUsedInExtrapolation = 0;
             var mostAbundantPeak = iso.Peaklist[indexOfObsMostAbundantPeak];
 
-            for (int i = indexOfObsMostAbundantPeak; i < iso.Peaklist.Count; i++)
+
+
+
+            for (int i = 0; i < iso.Peaklist.Count; i++)
             {
                 var currentPeak = iso.Peaklist[i];
 
@@ -468,15 +479,13 @@ namespace DeconTools.Backend.Workflows
 
                 double peakRatio = currentPeak.Height / mostAbundantPeak.Height;
 
-                if (peakRatio < 1)
+                if (currentPeak.Height < OldDecon2LsParameters.HornTransformParameters.SaturationThreshold)
                 {
                     indexOfPeakUsedInExtrapolation = i;
-
-                    if (peakRatio >= idealRatioMin && peakRatio <= idealRatioMax)
-                    {
-                        break;
-                    }
+                    break;
                 }
+
+               
             }
 
             //ensure targetPeak is within range
@@ -495,9 +504,19 @@ namespace DeconTools.Backend.Workflows
                 {
                     if (updatePeakIntensities)
                     {
-                        iso.Peaklist[i].Height = theorIsotopicProfile.Peaklist[i].Height *
+                        
+                        if (i>=theorIsotopicProfile.Peaklist.Count)
+                        {
+                            iso.Peaklist[i].Height = 0;
+
+                        }
+                        else
+                        {
+                            iso.Peaklist[i].Height = theorIsotopicProfile.Peaklist[i].Height *
                                                  intensityObsPeakForExtrapolation /
                                                  intensityTheorPeakForExtrapolation;
+                        }
+                        
 
                         iso.Peaklist[i].Width = iso.Peaklist[indexOfPeakUsedInExtrapolation].Width;    //repair the width too, because it can get huge. Width can be used in determining tolerances.
 
@@ -646,6 +665,8 @@ namespace DeconTools.Backend.Workflows
                                                                                          _tomIsotopicPatternGenerator.aafIsos);
             theorTarget.EmpiricalFormula = averagineFormula;
             theorTarget.CalculateMassesForIsotopicProfile(saturatedFeature.IsotopicProfile.ChargeState);
+
+            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.01);
 
             return theorTarget.IsotopicProfile;
         }
