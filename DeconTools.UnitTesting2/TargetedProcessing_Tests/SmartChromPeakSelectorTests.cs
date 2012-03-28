@@ -158,6 +158,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             chromPeakDet.Execute(run.ResultCollection);
 
             //first run the standard peak selector
+
+
+
             basicChromPeakSelector.Execute(run.ResultCollection);
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
@@ -203,6 +206,8 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
             Assert.AreEqual(0.0249m, (decimal)(Math.Round(result.Score,4)));
             Assert.AreEqual("9575 {9568, 9575, 9582, 9589}", result.ScanSet.ToString());
+
+            //TODO: update test - currently peak width is not being properly reported. It is always 4 or 5 scans wide it seems
 
         }
 

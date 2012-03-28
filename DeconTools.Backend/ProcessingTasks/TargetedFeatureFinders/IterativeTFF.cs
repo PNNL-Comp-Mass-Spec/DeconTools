@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
 
             IsotopicProfile theorFeature = CreateTargetIso(resultColl.Run);
             resultColl.IsosResultBin.Clear();

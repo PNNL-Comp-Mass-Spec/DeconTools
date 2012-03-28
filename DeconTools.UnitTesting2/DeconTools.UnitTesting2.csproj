@@ -56,6 +56,9 @@
   <ItemGroup>
     <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="BaseTof">
+      <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
+    </Reference>
     <Reference Include="DeconEngineV2, Version=1.0.4279.18325, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>

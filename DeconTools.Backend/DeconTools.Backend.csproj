@@ -62,6 +62,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Agilent_D\BaseDataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="BaseTof, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
+    </Reference>
     <Reference Include="BrukerDataReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\BrukerDataReader.dll</HintPath>
