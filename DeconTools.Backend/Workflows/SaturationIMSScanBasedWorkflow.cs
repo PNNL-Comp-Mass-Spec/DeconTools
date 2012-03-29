@@ -679,7 +679,7 @@ namespace DeconTools.Backend.Workflows
             //is used to correct the intensity of our target peptide. 
             //A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
             //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide. 
-            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.001);    
+            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.01);    
 
             return theorTarget.IsotopicProfile;
         }
