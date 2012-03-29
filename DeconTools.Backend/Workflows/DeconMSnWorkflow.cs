@@ -10,7 +10,7 @@ using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDis
 
 namespace DeconTools.Backend.Workflows
 {
-    public class DeconMSnWorkflow:ScanBasedWorkflow
+    public class DeconMSnWorkflow : ScanBasedWorkflow
     {
         private List<IsosResult> _currentMSFeatures = new List<IsosResult>();
         private int _currentMS1Scan;
@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal DeconMSnWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public DeconMSnWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             _currentMS1Scan = -1;
@@ -39,7 +39,7 @@ namespace DeconTools.Backend.Workflows
             _zeroFiller = new DeconToolsZeroFiller();
 
             _deconvolutor = DeconvolutorFactory.CreateDeconvolutor(parameters);
-           
+
             Run.PeakList = new List<IPeak>();
 
         }
@@ -69,17 +69,17 @@ namespace DeconTools.Backend.Workflows
 
                 int currentMSLevel = Run.GetMSLevel(scanSet.PrimaryScanNumber);
 
-                if (currentMSLevel==1)
+                if (currentMSLevel == 1)
                 {
                     _currentMSFeatures.Clear();
 
                 }
-                else if (currentMSLevel==2)
+                else if (currentMSLevel == 2)
                 {
                     //TODO: create FragmentIonInfo class 
                     int parentScan = Run.GetParentScan(scanSet.PrimaryScanNumber);
-                    
-                    if (parentScan!=_currentMS1Scan)
+
+                    if (parentScan != _currentMS1Scan)
                     {
                         _currentMS1Scan = parentScan;
                         GetMSPeaksAndMSFeatures();
@@ -103,20 +103,20 @@ namespace DeconTools.Backend.Workflows
 
 
 
-                
+
             }
 
         }
 
-        
+
 
 
 
         private void GetMSPeaksAndMSFeatures()
         {
             //TODO: fill this in
-            
-            
+
+
 
         }
 

@@ -212,18 +212,23 @@ namespace DeconTools.Backend.Workflows
                     //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
-                        double massTolForDuplicate = 0.0001;
+                        double ppmToleranceForDuplicate = 20;
+                        double massTolForDuplicate = ppmToleranceForDuplicate*
+                                                     isosResult.IsotopicProfile.MonoIsotopicMass/1e6;
+
+                        
 
                         var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
                                                     where
                                                         Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
                                                                  isosResult.IsotopicProfile.MonoIsotopicMass) <
-                                                        massTolForDuplicate
+                                                        massTolForDuplicate && n.IsotopicProfile.ChargeState== isosResult.IsotopicProfile.ChargeState
                                                     select n);
 
                         int minMSFeatureID = int.MaxValue;
                         foreach (var dup in duplicateIsosResults)
                         {
+                          
                             if (dup.MSFeatureID < minMSFeatureID)
                             {
 
@@ -485,7 +490,9 @@ namespace DeconTools.Backend.Workflows
                     break;
                 }
 
-               
+                //if none are below the saturation threshold, use the last peak
+                indexOfPeakUsedInExtrapolation = iso.Peaklist.Count - 1;
+
             }
 
             //ensure targetPeak is within range
@@ -666,7 +673,13 @@ namespace DeconTools.Backend.Workflows
             theorTarget.EmpiricalFormula = averagineFormula;
             theorTarget.CalculateMassesForIsotopicProfile(saturatedFeature.IsotopicProfile.ChargeState);
 
-            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.01);
+            //NOTE: This is critical to choosing the optimum peak of the observed isotopic profile
+            //A value of 0.001 will leave more peaks in the theor profile. This
+            //can be bad with co-eluting peptides, so that a peak of the interfering peptide
+            //is used to correct the intensity of our target peptide. 
+            //A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
+            //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide. 
+            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.001);    
 
             return theorTarget.IsotopicProfile;
         }
