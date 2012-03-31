@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -23,13 +24,15 @@ namespace DeconTools.Workflows.Backend.Core
         
         protected WorkflowParameters _workflowParameters;
         protected string DatasetPath;
-
-
+        private BackgroundWorker _backgroundWorker;
+        private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
         #region Constructors
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath)
+        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
+
+            _backgroundWorker = backgroundWorker;
 
             this.WorkflowParameters = parameters;
             InitializeWorkflow();
@@ -60,7 +63,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetedAlignerWorkflow TargetedAlignmentWorkflow { get; set; }
 
-        public TargetedWorkflow targetedWorkflow { get; set; }
+        public TargetedWorkflow TargetedWorkflow { get; set; }
 
         
 
@@ -72,40 +75,42 @@ namespace DeconTools.Workflows.Backend.Core
         {
             _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
 
-            reportProgress(DateTime.Now + "\tStarted processing");
-            reportProgress(DateTime.Now + "\t" + DatasetPath);
-            reportProgress("");
-            reportProgress("Parameters:\n" + this._workflowParameters.ToStringWithDetails());
+            ReportGeneralProgress("Started Processing....");
+            ReportGeneralProgress("Dataset = " + DatasetPath);
+            ReportGeneralProgress("Parameters:" + "\n"+  _workflowParameters.ToStringWithDetails());
 
 
             try
             {
                 InitializeRun(DatasetPath);
+                return;
+                
                 ProcessDataset();
             }
             catch (Exception ex)
             {
-                reportProgress("--------------------------------------------------------------");
-                reportProgress("-------------------   ERROR    -------------------------------");
-                reportProgress("--------------------------------------------------------------");
+                ReportGeneralProgress("--------------------------------------------------------------");
+                ReportGeneralProgress("-------------------   ERROR    -------------------------------");
+                ReportGeneralProgress("--------------------------------------------------------------");
 
                 try
                 {
                     finalizeRun();
 
                 }
-                catch (Exception)
+                catch
                 {
                 }
 
-                reportProgress(ex.Message);
-                reportProgress(ex.StackTrace);
-                reportProgress("");
-                reportProgress("");
+                ReportGeneralProgress(ex.Message);
+                ReportGeneralProgress(ex.StackTrace);
+                
 
             }
 
         }
+
+      
 
         private void ProcessDataset()
         {
@@ -122,64 +127,60 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
-                reportProgress(DateTime.Now + "\tPerforming TargetedAlignment using mass tags from file: " + this.ExecutorParameters.MassTagsForAlignmentFilePath);
-                reportProgress(DateTime.Now + "\tTotal mass tags to be aligned = " + this.MassTagsForTargetedAlignment.TargetList.Count);
+                ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + this.ExecutorParameters.MassTagsForAlignmentFilePath);
+                ReportGeneralProgress("Total mass tags to be aligned = " + this.MassTagsForTargetedAlignment.TargetList.Count);
 
                 this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(this.TargetedAlignmentWorkflowParameters);
                 this.TargetedAlignmentWorkflow.SetMassTags(this.MassTagsForTargetedAlignment.TargetList);
                 this.TargetedAlignmentWorkflow.Run = Run;
                 this.TargetedAlignmentWorkflow.Execute();
 
-                reportProgress(DateTime.Now + "\tTargeted Alignment COMPLETE.");
-                reportProgress("Targeted Alignment Report: ");
-                reportProgress(this.TargetedAlignmentWorkflow.GetAlignmentReport1());
+                ReportGeneralProgress("Targeted Alignment COMPLETE.");
+                ReportGeneralProgress("Targeted Alignment Report: ");
+                ReportGeneralProgress(this.TargetedAlignmentWorkflow.GetAlignmentReport1());
 
                 performAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
-                reportProgress("");
-                reportProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
-                reportProgress("MassStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassStDev.ToString("0.00000"));
-                reportProgress("NETAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETAverage.ToString("0.00000"));
-                reportProgress("NETStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETStDev.ToString("0.00000"));
-                reportProgress("---------------- END OF Alignment info -------------");
-
-
-
+                ReportGeneralProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
+                ReportGeneralProgress("MassStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassStDev.ToString("0.00000"));
+                ReportGeneralProgress("NETAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETAverage.ToString("0.00000"));
+                ReportGeneralProgress("NETStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETStDev.ToString("0.00000"));
+                ReportGeneralProgress("---------------- END OF Alignment info -------------");
             }
 
-
-
-            this.targetedWorkflow.Run = Run;
+            this.TargetedWorkflow.Run = Run;
 
             TargetedResultRepository resultRepository = new TargetedResultRepository();
 
             int mtCounter = 0;
-
+            int totalTargets = Targets.TargetList.Count;
             foreach (var massTag in this.Targets.TargetList)
             {
                 mtCounter++;
-                if (mtCounter % 500 == 0)
-                {
-                    reportProgress(DateTime.Now + "\t\t MassTag " + mtCounter + " of " + this.Targets.TargetList.Count);
-                }
-
+                
                 Run.CurrentMassTag = massTag;
                 try
                 {
-                    this.targetedWorkflow.Execute();
-                    resultRepository.AddResult(this.targetedWorkflow.Result);
+                    this.TargetedWorkflow.Execute();
+                    resultRepository.AddResult(this.TargetedWorkflow.Result);
 
                 }
                 catch (Exception ex)
                 {
                     string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
-                    reportProgress(errorString);
+                    ReportProcessingProgress(errorString,mtCounter);
 
                     throw;
                 }
+
+                string progressString = "Target " + mtCounter + " of " + totalTargets;
+
+                ReportProcessingProgress(progressString, mtCounter);
+
+
             }
 
-            reportProgress(DateTime.Now + "\t---- PROCESSING COMPLETE    ------------------------------------");
+            ReportGeneralProgress("---- PROCESSING COMPLETE    ------------------------------------", 100);
 
             string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
@@ -253,11 +254,53 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected void reportProgress(string reportString)
+        private void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
         {
-            Console.WriteLine(reportString);
+            if (_backgroundWorker==null)
+            {
+                Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
+            }
+            else
+            {
+                _progressInfo.ProgressInfoString = generalProgressString;
+                _progressInfo.IsGeneralProgress = true;
+                _backgroundWorker.ReportProgress(progressPercent, _progressInfo);
+            }
 
-            writeToLogFile(reportString);
+            writeToLogFile(DateTime.Now + "\t" + generalProgressString);
+        }
+
+
+        protected void ReportProcessingProgress(string reportString, int progressCounter)
+        {
+            
+            if (_backgroundWorker == null)
+            {
+                if (progressCounter % 500==0)
+                {
+                    Console.WriteLine(DateTime.Now + "\t" + reportString);
+                }
+                
+            }
+            else
+            {
+                int progressPercent = (int) (progressCounter*100/(double) Targets.TargetList.Count);
+
+                _progressInfo.ProgressInfoString = reportString;
+                _progressInfo.IsGeneralProgress = false;
+                _progressInfo.Result = TargetedWorkflow.Result;
+                _progressInfo.Time = DateTime.Now;
+                _progressInfo.ChromatogramXYData = TargetedWorkflow.ChromatogramXYData;
+                _progressInfo.MassSpectrumXYData = TargetedWorkflow.MassSpectrumXYData;
+               
+                _backgroundWorker.ReportProgress(progressPercent, _progressInfo);
+            }
+
+            if (progressCounter % 500 == 0)
+            {
+                writeToLogFile(DateTime.Now + "\t" + reportString);
+            }
+           
         }
 
         protected void writeToLogFile(string stringToWrite)
@@ -323,14 +366,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void InitializeRun(string dataset)
+        protected void InitializeRun(string dataset)
         {
             string runFilename;
 
 
             if (this.ExecutorParameters.CopyRawFileLocal)
             {
-                reportProgress(DateTime.Now + "\tStarted copying raw data to local folder: " + this.ExecutorParameters.FolderPathForCopiedRawDataset);
+                ReportGeneralProgress("Started copying raw data to local folder: " + this.ExecutorParameters.FolderPathForCopiedRawDataset);
 
                 FileAttributes attr = File.GetAttributes(dataset);
 
@@ -342,7 +385,7 @@ namespace DeconTools.Workflows.Backend.Core
                     runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + sourceDirInfo.Name;
                     targetDirInfo = new DirectoryInfo(runFilename);
                     FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
-                    reportProgress(DateTime.Now + "\tCopying complete.");
+                    ReportGeneralProgress("Copying complete.");
                 }
                 else
                 {
@@ -355,11 +398,11 @@ namespace DeconTools.Workflows.Backend.Core
                     if (!File.Exists(runFilename))
                     {
                         FileUtilities.CopyAll(fileinfo, targetDirInfo);
-                        reportProgress(DateTime.Now + "\tCopying complete.");
+                        ReportGeneralProgress("Copying complete.");
                     }
                     else
                     {
-                        reportProgress(DateTime.Now + "\tDatafile already exists on local drive. Using existing datafile.");
+                        ReportGeneralProgress("Datafile already exists on local drive. Using existing datafile.");
 
                     }
 
@@ -378,12 +421,12 @@ namespace DeconTools.Workflows.Backend.Core
             bool runInstantiationFailed = (Run == null);
             if (runInstantiationFailed)
             {
-                reportProgress(DateTime.Now + "\tRun initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
+                ReportGeneralProgress("Run initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
                 return;
             }
             else
             {
-                reportProgress(DateTime.Now + "\tRun initialized successfully.");
+                ReportGeneralProgress("Run initialized successfully.");
             }
 
 
@@ -397,15 +440,15 @@ namespace DeconTools.Workflows.Backend.Core
             bool peaksFileExists = checkForPeaksFile();
             if (!peaksFileExists)
             {
-                reportProgress(DateTime.Now + "\tCreating extracted ion chromatogram (XIC) source data... takes 1-5 minutes.. only needs to be done once.");
+                ReportGeneralProgress("Creating extracted ion chromatogram (XIC) source data... takes 1-5 minutes.. only needs to be done once.");
 
                 CreatePeaksForChromSourceData();
-                reportProgress(DateTime.Now + "\tDone creating XIC source data.");
+                ReportGeneralProgress("Done creating XIC source data.");
             }
 
 
 
-            reportProgress(DateTime.Now + "\tPeak loading started...");
+            ReportGeneralProgress("Peak loading started...");
 
 
             string baseFileName;
@@ -419,17 +462,20 @@ namespace DeconTools.Workflows.Backend.Core
                 //BackgroundWorker bw = new BackgroundWorker();
                 //bw.WorkerSupportsCancellation = true;
                 //bw.WorkerReportsProgress = true;
-                PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(possibleFilename1);
+                
+                //TODO: keep an eye on errors connected to background worker here.
+                PeakImporterFromText peakImporter = new PeakImporterFromText(possibleFilename1,_backgroundWorker);
+
                 peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
             }
             else
             {
-                reportProgress(DateTime.Now + "\tCRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
+                ReportGeneralProgress(DateTime.Now + "\tCRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
                 return;
             }
 
 
-            reportProgress(DateTime.Now + "\tPeak Loading complete.");
+            ReportGeneralProgress(DateTime.Now + "\tPeak Loading complete.");
             return;
         }
 
@@ -468,20 +514,20 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (Run.MassIsAligned)
             {
-                reportProgress(DateTime.Now + "\tRun has been mass aligned using info in _MZAlignment.txt file");
+                ReportGeneralProgress("Run has been mass aligned using info in _MZAlignment.txt file");
             }
             else
             {
-                reportProgress(DateTime.Now + "\tFYI - Run has NOT been mass aligned.");
+                ReportGeneralProgress("FYI - Run has NOT been mass aligned.");
             }
 
             if (Run.NETIsAligned)
             {
-                reportProgress(DateTime.Now + "\tRun has been NET aligned using info in either the _NETAlignment.txt file or the _UMCs.txt file");
+                ReportGeneralProgress("Run has been NET aligned using info in either the _NETAlignment.txt file or the _UMCs.txt file");
             }
             else
             {
-                reportProgress(DateTime.Now + "\tWarning - Run has NOT been NET aligned.");
+                ReportGeneralProgress("Warning - Run has NOT been NET aligned.");
             }
         }
 
@@ -493,7 +539,7 @@ namespace DeconTools.Workflows.Backend.Core
             parameters.PeakBR = deconParam.ChromGenSourceDataPeakBR;
             parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
             parameters.SigNoiseThreshold = deconParam.ChromGenSourceDataSigNoise;
-            PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, null);
+            PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
         }
 

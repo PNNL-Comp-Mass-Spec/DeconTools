@@ -48,7 +48,7 @@ namespace DeconTools.Workflows.Backend.Core
             TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
             TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
 
-            targetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+            TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
            
             
 

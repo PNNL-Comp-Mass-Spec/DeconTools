@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        public SipperWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath)
-            : base(parameters, datasetPath)
+        public SipperWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+            : base(parameters, datasetPath, backgroundWorker)
         {
 
 
@@ -53,6 +54,10 @@ namespace DeconTools.Workflows.Backend.Core
             List<int> massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters) WorkflowParameters).MassTagsToFilterOn).Distinct().ToList();
 
+            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
+            InitializeRun(DatasetPath);
+            return;
+
             Targets = LoadResultsForDataset(RunUtilities.GetDatasetName(DatasetPath));
 
            
@@ -67,7 +72,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             var massTagIDList = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).ToList();
-            
 
             MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, massTagIDList);
             MassTagsForReference = mtImporter.Import();
@@ -124,7 +128,7 @@ namespace DeconTools.Workflows.Backend.Core
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
             _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
 
-            targetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+            TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
         }
 
         private List<int> GetMassTagsToFilterOn(string fileRefForMassTagsToFilterOn)

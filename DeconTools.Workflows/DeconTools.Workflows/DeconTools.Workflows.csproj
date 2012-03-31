@@ -84,6 +84,7 @@
     <Compile Include="Backend\Core\SipperTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\SipperWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowExecutorFactory.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutorProgressInfo.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />

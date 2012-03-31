@@ -1,7 +1,7 @@
-﻿using DeconTools.Backend.Core;
+﻿using System.Linq;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Utilities;
-using System.Linq;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -64,7 +64,7 @@ namespace DeconTools.Workflows.Backend.Core
             //TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
             //TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
 
-            targetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+            TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
         }
 
         private void UpdateTargetsWithMassTagInfo(TargetCollection targets, TargetCollection massTagsForReference)
