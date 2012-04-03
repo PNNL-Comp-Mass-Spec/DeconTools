@@ -15,7 +15,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     {
 
 
-        string agilentDataset1 = FileRefs.RawDataMSFiles.AgilentDFile1; 
+        string agilentDataset1 = FileRefs.RawDataMSFiles.AgilentDFile1;
 
         string wrongFileExample1 = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
@@ -38,7 +38,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(62, run.GetNumMSScans());
-
         }
 
         [Test]
@@ -54,6 +53,85 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(156721, run.XYData.Xvalues.Length);
         }
 
+        [Test]
+        ///checks the length of a non-summed and summed spectra
+        public void GetSummedSpectrumTest1()
+        {
+            string testfile =
+               @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
+
+            ScanSet scanset = new ScanSet(25);
+
+            run.GetMassSpectrum(scanset, 0, 6000);
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+
+            ScanSet scansetSum = new ScanSet(25,24,26);
+
+            run.GetMassSpectrum(scansetSum, 0, 6000);
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+        }
+
+        [Test]
+        ///  Writes three spectra files to disk so that the data can be compared before and after summing
+        public void GetSummedSpectrumTestWriteToDisk()
+        {
+            string testfile =
+               @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
+
+            int primaryScan = 10000;
+            //Scan A
+            ScanSet scansetA = new ScanSet(primaryScan-1);
+
+            run.GetMassSpectrum(scansetA, 0, 6000);
+
+            TestUtilities.WriteToFile(run.XYData,@"P:\ScanA.txt");
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+
+            //Scan B
+            ScanSet scansetB = new ScanSet(primaryScan);
+
+            run.GetMassSpectrum(scansetB, 0, 6000);
+
+            TestUtilities.WriteToFile(run.XYData, @"P:\ScanB.txt");
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+
+            //Scan C
+            ScanSet scansetC = new ScanSet(primaryScan+1);
+
+            run.GetMassSpectrum(scansetC, 0, 6000);
+
+            TestUtilities.WriteToFile(run.XYData, @"P:\ScanC.txt");
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+
+            //Scan ABC summed
+            ScanSet scansetSum = new ScanSet(primaryScan, primaryScan-1, primaryScan+1);//primary, min, max
+
+            run.GetMassSpectrum(scansetSum, 0, 6000);
+
+            TestUtilities.WriteToFile(run.XYData, @"P:\ScanABC.txt");
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+        }
+
        
         [Test]
         public void getMSLevelTest1()
@@ -61,7 +139,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(1, run.GetMSLevel(25)); 
         }
-
 
         [Test]
         public void GetMSLevelTest2()
@@ -92,7 +169,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(2, run.GetMSLevel(613)); 
         }
 
-
         [Test]
         public void GetPrecursorTest1()
         {
@@ -118,14 +194,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(613, precursor.PrecursorScan);
         }
 
-
         [Test]
         public void getTimeTest1()
         {
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
             Assert.AreEqual(0.414033333333333m, (decimal)run.GetTime(25));
         }
-
 
         [Test]
         public void disposeTest1()
@@ -135,11 +209,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             using (Run disposedRun = run )
             {
                 Assert.AreEqual(62, disposedRun.GetNumMSScans());
-            }
-
-
-
-            
+            }  
         }
 
        
@@ -192,12 +262,5 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             });
             Assert.That(ex.Message, Is.EqualTo("Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name."));
         }
-
-
-
-  
-
-
-
     }
 }

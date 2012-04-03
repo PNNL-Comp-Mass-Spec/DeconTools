@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Agilent.MassSpectrometry.DataAnalysis;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
+using System.Collections.Generic;
 
 namespace DeconTools.Backend.Runs
 {
@@ -211,15 +213,78 @@ namespace DeconTools.Backend.Runs
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
+                this.XYData.SetXYValues(m_spec.XArray, m_spec.YArray);
             }
             else
             {
-                throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
+                //throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
+                //this is an implementation of Anuj's summing algorithm 4-2-2012.  
+                double[] xvals = null;
+                float[] yvals = null;
+                getSummedSpectrum(scanSet, ref xvals, ref yvals);
+                this.XYData.SetXYValues(xvals, yvals);
             }
-            this.XYData.SetXYValues(m_spec.XArray, m_spec.YArray);
+            
         }
         #endregion
+
+        #region scott
+
+        public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals)
+        {
+            // [gord] idea borrowed from Anuj! Jan 2010 [scott] brought back for agilent data that is evenly spaced
+
+            //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
+            //the integer is added to a dictionary generic list (sorted)
+            //
+
+            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
+            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            double[] tempXvals = new double[0];
+            float[] tempYvals = new float[0];
+
+            //long minXLong = (long)(minX * precision + 0.5);
+            //long maxXLong = (long)(maxX * precision + 0.5);
+            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            {
+                //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                //m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                getAgilentSpectrum(scanSet.IndexValues[0] + scanCounter);
+                tempXvals = m_spec.XArray;
+                tempYvals = m_spec.YArray;
+
+                for (int i = 0; i < tempXvals.Length; i++)
+                {
+                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    //if (tempmz < minXLong || tempmz > maxXLong) continue;
+
+                    if (mz_intensityPair.ContainsKey(tempmz))
+                    {
+                        mz_intensityPair[tempmz] += tempYvals[i];
+                    }
+                    else
+                    {
+                        mz_intensityPair.Add(tempmz, tempYvals[i]);
+                    }
+                }
+            }
+
+            if (mz_intensityPair.Count == 0) return;
+
+            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+            xvals = new double[summedXVals.Count];
+
+            yvals = mz_intensityPair.Values.ToArray();
+            
+            for (int i = 0; i < summedXVals.Count; i++)
+            {
+                xvals[i] = summedXVals[i] / precision;
+            }
+        }
+
+        #endregion
+
 
         #region Private Methods
 
