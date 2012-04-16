@@ -60,21 +60,83 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             string testfile =
                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
+            Stopwatch stopWatch = new Stopwatch();
+            
+
             Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
 
             ScanSet scanset = new ScanSet(25);
 
-            run.GetMassSpectrum(scanset, 0, 6000);
+            stopWatch.Start();
+
+            run.GetMassSpectrum(scanset);
+
+            stopWatch.Stop();
+            TimeSpan singleSpectraLoadTime = stopWatch.Elapsed;
+
             TestUtilities.DisplayXYValues(run.XYData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+
 
             ScanSet scansetSum = new ScanSet(25,24,26);
 
-            run.GetMassSpectrum(scansetSum, 0, 6000);
+            stopWatch.Start();
+
+            run.GetMassSpectrum(scansetSum);
+
+            stopWatch.Stop();
+            TimeSpan threeScanSumSpectraLoadTime = stopWatch.Elapsed;
+
+
             TestUtilities.DisplayXYValues(run.XYData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Console.WriteLine("This took " + singleSpectraLoadTime + " seconds to load one scan");
+            Console.WriteLine("This took " + threeScanSumSpectraLoadTime + " seconds to load and sum three scans");
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
+        }
+
+        [Test]
+        ///checks the length of a non-summed and summed spectra and restrict the mass range to 100Da
+        public void GetSummedSpectrumTest2()
+        {
+            string testfile =
+               @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+
+            Stopwatch stopWatch = new Stopwatch();
+
+
+            Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
+
+            ScanSet scanset = new ScanSet(25);
+
+            stopWatch.Start();
+
+            run.GetMassSpectrum(scanset, 1000,1100);
+
+            stopWatch.Stop();
+            TimeSpan singleSpectraLoadTime = stopWatch.Elapsed;
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Assert.AreEqual(8926, run.XYData.Xvalues.Length);
+
+
+            ScanSet scansetSum = new ScanSet(25, 24, 26);
+
+            stopWatch.Start();
+
+            run.GetMassSpectrum(scansetSum, 1000,1100);
+
+            stopWatch.Stop();
+            TimeSpan threeScanSumSpectraLoadTime = stopWatch.Elapsed;
+
+
+            TestUtilities.DisplayXYValues(run.XYData);
+            Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
+            Console.WriteLine("This took " + singleSpectraLoadTime + " seconds to load one scan");
+            Console.WriteLine("This took " + threeScanSumSpectraLoadTime + " seconds to load and sum three scans");
+            Assert.AreEqual(8926, run.XYData.Xvalues.Length);
         }
 
         [Test]
