@@ -7,6 +7,7 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -14,12 +15,13 @@ namespace DeconTools.Workflows.Backend.Core
     public sealed class SipperWorkflowExecutor : TargetedWorkflowExecutor
     {
 
-        #region Constructors
-        #endregion
-
+        IsotopicDistributionCalculator _isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
+   
         #region Properties
 
         public TargetCollection MassTagsForReference { get; set; }
+
+        public bool TargetsAreFromPeakMatchingDataBase { get; set; }
 
         #endregion
 
@@ -55,26 +57,45 @@ namespace DeconTools.Workflows.Backend.Core
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters) WorkflowParameters).MassTagsToFilterOn).Distinct().ToList();
 
             _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
-            InitializeRun(DatasetPath);
-            return;
+            
 
-            Targets = LoadResultsForDataset(RunUtilities.GetDatasetName(DatasetPath));
+            TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
 
-           
+            if (TargetsAreFromPeakMatchingDataBase)
+            {
+                Targets = LoadTargetsFromPeakMatchingResultsForGivenDataset(RunUtilities.GetDatasetName(DatasetPath));
+            }
+            else
+            {
+                Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
+            }
+
+            Check.Ensure(Targets!=null && Targets.TargetList.Count>0,"Failed to initialize - Target list is empty. Please check parameter file.");
+
+
             if (massTagIDsForFiltering.Count > 0)
             {
 
                 Targets.TargetList =
                     (from n in Targets.TargetList
-                     where massTagIDsForFiltering.Contains(((LcmsFeatureTarget) n).FeatureToMassTagID)
+                     where massTagIDsForFiltering.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
                      select n).ToList();
-                
+
             }
+
+
 
             var massTagIDList = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).ToList();
 
-            MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, massTagIDList);
-            MassTagsForReference = mtImporter.Import();
+            if (TargetsAreFromPeakMatchingDataBase)
+            {
+                MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, massTagIDList);
+                MassTagsForReference = mtImporter.Import();
+            }
+            else
+            {
+                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).MassTagsForReference);
+            }
 
             MassTagsForReference.TargetList = (from n in MassTagsForReference.TargetList
                                                group n by new
@@ -85,44 +106,15 @@ namespace DeconTools.Workflows.Backend.Core
                                                    into grp
                                                    select grp.First()).ToList();
 
-           
-
-            //Targets.TargetList = Targets.TargetList.Take(10).ToList();
 
 
-            //Update Targets using MassTag info  (targets are LCMSFeatures. We need to grab empirical formulas, etc. from the MassTag info)
-            foreach (LcmsFeatureTarget target in Targets.TargetList)
-            {
 
-                if (massTagIDList.Contains(target.FeatureToMassTagID))
-                {
-                    var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
-                    
-                    //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
-                    //  see:   \\gigasax\DMS_Parameter_Files\Sequest\sequest_ETD_N14_NE.params
-                    //To create the theoretical isotopic profile, we will change the 'X' to 'L'
-                    if (mt.Code.Contains("X"))
-                    {
 
-                       mt.Code= mt.Code.Replace('X', 'L');
-                       mt.EmpiricalFormula=  mt.GetEmpiricalFormulaFromTargetCode();
-                    }
-                    
-                    target.Code = mt.Code;
-                    target.EmpiricalFormula = mt.EmpiricalFormula;
-                }
-                else
-                {
-
-                }
-
-            }
+            UpdateTargetMissingEmpiricalFormulas(massTagIDList);
+            
 
 
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
-
-            Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
-                         "Target massTags is empty. Check the path to the massTag data file.");
 
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
@@ -130,6 +122,41 @@ namespace DeconTools.Workflows.Backend.Core
 
             TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
         }
+
+        private void UpdateTargetMissingEmpiricalFormulas(List<long> massTagIDList)
+        {
+            bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
+
+            foreach (LcmsFeatureTarget target in Targets.TargetList)
+            {
+                if (String.IsNullOrEmpty(target.EmpiricalFormula))
+                {
+                    if (massTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
+                    {
+                        var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
+
+                        //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
+                        //  see:   \\gigasax\DMS_Parameter_Files\Sequest\sequest_ETD_N14_NE.params
+                        //To create the theoretical isotopic profile, we will change the 'X' to 'L'
+                        if (mt.Code.Contains("X"))
+                        {
+                            mt.Code = mt.Code.Replace('X', 'L');
+                            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
+                        }
+
+                        target.Code = mt.Code;
+                        target.EmpiricalFormula = mt.EmpiricalFormula;
+                    }
+                    else
+                    {
+                        target.Code = "AVERAGINE";
+                        target.EmpiricalFormula =
+                            _isotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
+                    }
+                }
+            }
+        }
+
 
         private List<int> GetMassTagsToFilterOn(string fileRefForMassTagsToFilterOn)
         {
@@ -162,7 +189,7 @@ namespace DeconTools.Workflows.Backend.Core
             return masstagList;
         }
 
-        private TargetCollection LoadResultsForDataset(string datasetName)
+        private TargetCollection LoadTargetsFromPeakMatchingResultsForGivenDataset(string datasetName)
         {
             string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 

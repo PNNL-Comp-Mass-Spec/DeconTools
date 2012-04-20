@@ -159,6 +159,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 }
                 else
                 {
+                    //get target's code + empirical formula based on averagine model
 
                 }
 

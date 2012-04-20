@@ -17,7 +17,7 @@
         /// This empty if you want to analyze all Targets
         /// </summary>
         public string MassTagsToFilterOn { get; set; }
-
+        public string MassTagsForReference { get; set; }
 
         #endregion
 

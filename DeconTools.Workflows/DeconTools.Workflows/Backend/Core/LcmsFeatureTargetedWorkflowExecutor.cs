@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.FileIO;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -43,11 +42,11 @@ namespace DeconTools.Workflows.Backend.Core
             //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
             
-            Targets = getLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
+            Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
 
             
 
-            MassTagsForReference = getMassTagTargets(executorParams.MassTagsForReference);
+            MassTagsForReference = GetMassTagTargets(executorParams.MassTagsForReference);
 
             UpdateTargetsWithMassTagInfo(Targets, MassTagsForReference);
 
@@ -88,14 +87,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private TargetCollection getLcmsFeatureTargets(string targetsFilePath)
-        {
-            LcmsTargetFromFeaturesFileImporter importer =
-               new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
-
-            var lcmsTargetCollection = importer.Import();
-            return lcmsTargetCollection;
-        }
+      
 
         #endregion
 

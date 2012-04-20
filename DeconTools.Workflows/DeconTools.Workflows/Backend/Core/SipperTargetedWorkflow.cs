@@ -46,7 +46,7 @@ namespace DeconTools.Workflows.Backend.Core
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-
+            ChromCorrelationRSquaredVals = new XYData();
         }
 
 
@@ -115,21 +115,26 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 ExecuteTask(MSGenerator);
-                updateMassSpectrumXYValues(Run.XYData);
+               
 
                 double minMZ = Run.CurrentMassTag.MZ - 3;
                 double maxMz = Run.CurrentMassTag.MZ + 20;
 
-                if (Run.XYData!=null)
+                if (Run.XYData!=null)   
                 {
                     Run.XYData = Run.XYData.TrimData(minMZ, maxMz);
                 }
+
+
+                updateMassSpectrumXYValues(Run.XYData);
                 
                 ExecuteTask(_iterativeMSFeatureFinder);
                 ExecuteTask(_fitScoreCalc);
                 ExecuteTask(_resultValidator);
 
                 ExecuteTask(_quantifier);
+
+                UpdateRSquaredXYVals(_quantifier.ChromatogramRSquaredVals);
 
 
             }
@@ -144,9 +149,25 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
+        private void UpdateRSquaredXYVals(IEnumerable<double> chromatogramRSquaredVals)
+        {
+            var peakNumList = new List<double>();
+            var rsquaredvalList = new List<double>();
 
-       
+            int counter = 1;
+            foreach (var val in chromatogramRSquaredVals)
+            {
+                peakNumList.Add(counter);
+                rsquaredvalList.Add(val);
 
+                counter++;
+            }
+
+            ChromCorrelationRSquaredVals.Xvalues = peakNumList.ToArray();
+            ChromCorrelationRSquaredVals.Yvalues = rsquaredvalList.ToArray();
+
+
+        }
 
         #endregion
 
@@ -163,6 +184,11 @@ namespace DeconTools.Workflows.Backend.Core
                 _workflowParameters = value as TargetedWorkflowParameters;
             }
         }
+
+
+        public XYData ChromCorrelationRSquaredVals { get; set; }
+
+
 
         #endregion
 

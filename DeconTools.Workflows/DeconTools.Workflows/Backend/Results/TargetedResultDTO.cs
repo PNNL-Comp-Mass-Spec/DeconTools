@@ -30,6 +30,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         public int MatchedMassTagID { get; set; }
 
+        public string EmpiricalFormula { get; set; }
 
         #endregion
 

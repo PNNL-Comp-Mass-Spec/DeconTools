@@ -86,8 +86,12 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.TargetID);
             sb.Append(Delimiter);
+            sb.Append(result.EmpiricalFormula);
+            sb.Append(Delimiter);
             sb.Append(result.ChargeState);
             sb.Append(Delimiter);
+            
+            
             sb.Append(result.ScanLC);
             sb.Append(Delimiter);
             sb.Append(result.ScanLCStart);
@@ -132,7 +136,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             StringBuilder sb = new StringBuilder();
             sb.Append("Dataset");
             sb.Append(Delimiter);
-            sb.Append("MassTagID");
+            sb.Append("TargetID");
+            sb.Append(Delimiter);
+            sb.Append("EmpiricalFormula");
             sb.Append(Delimiter);
             sb.Append("ChargeState");
             sb.Append(Delimiter);

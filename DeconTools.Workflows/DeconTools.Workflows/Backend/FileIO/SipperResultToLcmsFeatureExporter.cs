@@ -38,7 +38,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(sipperResult.ChromCorrelationAverage.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.ChromCorrelationMedian.ToString("0.00000"));
-
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.ChromCorrelationStdev.ToString("0.00000"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
             return sb.ToString();
 
         }
@@ -68,6 +71,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("ChromCorrAverage");
             sb.Append(Delimiter);
             sb.Append("ChromCorrMedian");
+            sb.Append(Delimiter);
+            sb.Append("ChromCorrStdev");
+            sb.Append(Delimiter);
+            sb.Append("ValidationCode");
             
 
 

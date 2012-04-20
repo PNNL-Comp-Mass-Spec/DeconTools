@@ -35,8 +35,8 @@ namespace DeconTools.Workflows.Backend.Core
             //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
 
-            MassTagsForTargetedAlignment = getMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
-            Targets = getMassTagTargets(ExecutorParameters.TargetsFilePath);
+            MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.MassTagsForAlignmentFilePath);
+            Targets = GetMassTagTargets(ExecutorParameters.TargetsFilePath);
 
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
                          "Target massTags is empty. Check the path to the massTag data file.");

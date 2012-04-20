@@ -25,6 +25,8 @@ namespace DeconTools.Workflows.Backend.Results
 
         public double AreaUnderRatioCurveRevised { get; set; }
 
+        public double ChromCorrelationStdev { get; set; }
+
         #endregion
 
          

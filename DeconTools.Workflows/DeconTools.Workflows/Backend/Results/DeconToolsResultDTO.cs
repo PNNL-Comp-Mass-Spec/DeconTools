@@ -47,6 +47,8 @@ namespace DeconTools.Workflows.Backend.Results
         /// </summary>
         public short IndexOfMostAbundantPeak { get; set; }
 
+        public ValidationCode ValidationCode { get; set; }
+
         #endregion
 
 

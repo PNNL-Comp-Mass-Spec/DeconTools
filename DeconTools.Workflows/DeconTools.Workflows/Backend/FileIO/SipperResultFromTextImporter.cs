@@ -14,6 +14,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _chromCorrMaxHeaders = { "ChromCorrMax" };
         private string[] _chromCorrAverageHeaders = { "ChromCorrAverage" };
         private string[] _chromCorrMedianHeaders = { "ChromCorrMedian" };
+        private string[] _chromCorrStdevHeaders = { "ChromCorrStdev" };
 
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
@@ -41,6 +42,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ChromCorrelationMax = ParseDoubleField(LookupData(processedData, _chromCorrMaxHeaders));
             result.ChromCorrelationAverage = ParseDoubleField(LookupData(processedData, _chromCorrAverageHeaders));
             result.ChromCorrelationMedian = ParseDoubleField(LookupData(processedData, _chromCorrMedianHeaders));
+            result.ChromCorrelationStdev = ParseDoubleField(LookupData(processedData, _chromCorrStdevHeaders));
             return result;
 
         }

@@ -1,6 +1,15 @@
 ﻿
 namespace DeconTools.Workflows.Backend
 {
+
+    public enum ValidationCode
+    {
+        None,
+        Yes,
+        No,
+        Maybe
+    }
+    
     public class Globals
     {
 
@@ -21,7 +30,7 @@ namespace DeconTools.Workflows.Backend
         }
 
 
-
+       
 
 
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
@@ -20,10 +21,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string _loggingFileName;
         protected string _resultsFolder;
-        
-        
+
+
         protected WorkflowParameters _workflowParameters;
-        protected string DatasetPath;
+
         private BackgroundWorker _backgroundWorker;
         private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
@@ -38,9 +39,26 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
+
+        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
+        {
+            Run = run;
+
+            if (Run != null) DatasetPath = Run.DataSetPath;
+
+            _backgroundWorker = backgroundWorker;
+
+            this.WorkflowParameters = parameters;
+            InitializeWorkflow();
+        }
+
+
         #endregion
 
         #region Properties
+
+        public string DatasetPath { get; set; }
+
         public TargetCollection MassTagsForTargetedAlignment { get; set; }
 
         public TargetCollection Targets { get; set; }
@@ -65,7 +83,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetedWorkflow TargetedWorkflow { get; set; }
 
-        
+
 
 
         #endregion
@@ -77,14 +95,16 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("Started Processing....");
             ReportGeneralProgress("Dataset = " + DatasetPath);
-            ReportGeneralProgress("Parameters:" + "\n"+  _workflowParameters.ToStringWithDetails());
+            ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
 
 
             try
             {
-                InitializeRun(DatasetPath);
-                return;
-                
+                if (!RunIsInitialized)
+                {
+                    InitializeRun(DatasetPath);
+                }
+
                 ProcessDataset();
             }
             catch (Exception ex)
@@ -104,13 +124,33 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ReportGeneralProgress(ex.Message);
                 ReportGeneralProgress(ex.StackTrace);
-                
+
 
             }
 
         }
 
-      
+        private bool _runIsInitialized;
+        public bool RunIsInitialized
+        {
+            get
+            {
+                if (Run == null || Run.ResultCollection.MSPeakResultList.Count == 0)
+                {
+                    return false;
+                }
+
+                if (DatasetPath!= Run.DataSetPath)
+                {
+                    return false;
+                }
+
+                return true;
+
+            }
+
+        }
+
 
         private void ProcessDataset()
         {
@@ -154,10 +194,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             int mtCounter = 0;
             int totalTargets = Targets.TargetList.Count;
+
+            ReportGeneralProgress("Processing...", 0);
+
             foreach (var massTag in this.Targets.TargetList)
             {
                 mtCounter++;
-                
+
                 Run.CurrentMassTag = massTag;
                 try
                 {
@@ -168,24 +211,33 @@ namespace DeconTools.Workflows.Backend.Core
                 catch (Exception ex)
                 {
                     string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
-                    ReportProcessingProgress(errorString,mtCounter);
+                    ReportProcessingProgress(errorString, mtCounter);
 
                     throw;
                 }
 
                 string progressString = "Target " + mtCounter + " of " + totalTargets;
 
+
+                if (_backgroundWorker != null)
+                {
+                    if (_backgroundWorker.CancellationPending)
+                    {
+                        return;
+                    }
+                }
+
                 ReportProcessingProgress(progressString, mtCounter);
 
 
             }
 
-            ReportGeneralProgress("---- PROCESSING COMPLETE    ------------------------------------", 100);
+            ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
 
             string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
-            TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters,outputFileName);
+            TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
             exporter.ExportResults(resultRepository.Results);
 
             HandleAlignmentInfoFiles();
@@ -208,13 +260,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected TargetCollection getMassTagTargets(string massTagFileName)
+        protected TargetCollection GetMassTagTargets(string massTagFileName)
         {
-            if (!File.Exists(massTagFileName))
+            if (String.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
             {
-
+                return new TargetCollection();
             }
-
 
             MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
             return importer.Import();
@@ -256,7 +307,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
         {
-            if (_backgroundWorker==null)
+            if (_backgroundWorker == null)
             {
                 Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
             }
@@ -273,26 +324,32 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void ReportProcessingProgress(string reportString, int progressCounter)
         {
-            
+
             if (_backgroundWorker == null)
             {
-                if (progressCounter % 500==0)
+                if (progressCounter % 500 == 0)
                 {
                     Console.WriteLine(DateTime.Now + "\t" + reportString);
                 }
-                
+
             }
             else
             {
-                int progressPercent = (int) (progressCounter*100/(double) Targets.TargetList.Count);
+                int progressPercent = (int)(progressCounter * 100 / (double)Targets.TargetList.Count);
 
                 _progressInfo.ProgressInfoString = reportString;
                 _progressInfo.IsGeneralProgress = false;
                 _progressInfo.Result = TargetedWorkflow.Result;
                 _progressInfo.Time = DateTime.Now;
-                _progressInfo.ChromatogramXYData = TargetedWorkflow.ChromatogramXYData;
-                _progressInfo.MassSpectrumXYData = TargetedWorkflow.MassSpectrumXYData;
-               
+
+                _progressInfo.ChromatogramXYData = new XYData();
+                _progressInfo.ChromatogramXYData.Xvalues = TargetedWorkflow.ChromatogramXYData.Xvalues;
+                _progressInfo.ChromatogramXYData.Yvalues = TargetedWorkflow.ChromatogramXYData.Yvalues;
+
+                _progressInfo.MassSpectrumXYData = new XYData();
+                _progressInfo.MassSpectrumXYData.Xvalues = TargetedWorkflow.MassSpectrumXYData.Xvalues;
+                _progressInfo.MassSpectrumXYData.Yvalues = TargetedWorkflow.MassSpectrumXYData.Yvalues;
+
                 _backgroundWorker.ReportProgress(progressPercent, _progressInfo);
             }
 
@@ -300,7 +357,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 writeToLogFile(DateTime.Now + "\t" + reportString);
             }
-           
+
         }
 
         protected void writeToLogFile(string stringToWrite)
@@ -366,7 +423,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected void InitializeRun(string dataset)
+        public void InitializeRun(string dataset)
         {
             string runFilename;
 
@@ -462,9 +519,9 @@ namespace DeconTools.Workflows.Backend.Core
                 //BackgroundWorker bw = new BackgroundWorker();
                 //bw.WorkerSupportsCancellation = true;
                 //bw.WorkerReportsProgress = true;
-                
+
                 //TODO: keep an eye on errors connected to background worker here.
-                PeakImporterFromText peakImporter = new PeakImporterFromText(possibleFilename1,_backgroundWorker);
+                PeakImporterFromText peakImporter = new PeakImporterFromText(possibleFilename1, _backgroundWorker);
 
                 peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
             }
@@ -561,6 +618,14 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        protected TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
+        {
+            LcmsTargetFromFeaturesFileImporter importer =
+               new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
+
+            var lcmsTargetCollection = importer.Import();
+            return lcmsTargetCollection;
+        }
 
         protected virtual TargetedResultToTextExporter createExporter(string outputFileName)
         {

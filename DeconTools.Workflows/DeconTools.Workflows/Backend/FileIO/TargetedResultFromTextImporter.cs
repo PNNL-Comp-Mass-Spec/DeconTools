@@ -12,6 +12,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         //note that case does not matter in the header
         protected string[] datasetHeaders = { "dataset" };
         protected string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis" };
+        protected string[] empiricalFormulaHeaders = { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
         protected string[] fitScoreHeaders = { "fitScore", "UMCAverageFit","iso1fit" };
         protected string[] intensityRepHeaders = { "intensityRep", "intensity", "abundance", "UMCAbundance","AbundanceIso1" };
         protected string[] intensityI0Headers = { "intensityI0", "i0", "UMCAbundance" };
@@ -30,6 +31,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] numchromPeaksWithinTolHeaders = { "NumChromPeaksWithinTol", "ChromPeaksWithinTol" };
         protected string[] numQualitychromPeaksWithinTolHeaders = { "NumQualityChromPeaksWithinTol" };
 
+        protected string[] validationCodeHeaders = {"ValidationCode"};
 
         protected string _filename { get; set; }
 
@@ -41,8 +43,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         }
 
         #endregion
-
-    
 
         public override TargetedResultRepository Import()
         {
@@ -131,6 +131,29 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ScanLC = ParseIntField(LookupData(rowData, scanHeaders));
             result.ScanLCEnd = ParseIntField(LookupData(rowData, scanEndHeaders));
             result.ScanLCStart = ParseIntField(LookupData(rowData, scanStartHeaders));
+
+            result.EmpiricalFormula = LookupData(rowData, empiricalFormulaHeaders);
+
+            string validationCode = LookupData(rowData, validationCodeHeaders);
+            if (String.IsNullOrEmpty(validationCode))
+            {
+                result.ValidationCode = ValidationCode.None;
+                
+            }
+            else
+            {
+                if (Enum.IsDefined(typeof(ValidationCode),validationCode))
+                {
+                    result.ValidationCode = (ValidationCode)Enum.Parse(typeof (ValidationCode), validationCode, true);
+
+                }
+                else
+                {
+                    result.ValidationCode = ValidationCode.None;
+                }
+            }
+
+            
         }
 
 
