@@ -200,9 +200,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// </summary>
         /// <param name="inputMass">mass</param>
         /// <returns></returns>
-        public IsotopicProfile GetAvnPattern(double inputMass)
+        public IsotopicProfile GetAveraginePattern(double inputMass)
         {
-            Dictionary<string, int> formula = GetClosestAvnFormula(inputMass);
+            Dictionary<string, int> formula = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
             IsotopicProfile profile = GetIsotopePattern(formula);
             return profile;
 
@@ -219,6 +219,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns>Averagine formula</returns>
         private Dictionary<string, double> GetAveragineDictionary()
         {
+            //NOTE: these averagine values are the standard ones used
+            //in the DMS standard workflow for Orbi data
+            //see "\\gigasax\DMS_Parameter_Files\Decon2LS\LTQ_Orb_O18_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml"
+
             Dictionary<string, double> averagineDict = new Dictionary<string, double>();
             averagineDict.Add("C", 4.9384);
             averagineDict.Add("H", 7.7583);
@@ -247,11 +251,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         }
 
         /// <summary>
-        /// Gets the formula that is closest to the values for each element of averagine
+        /// Outputs the formula for averagine in Dictionary format. Values rounded to nearest integer.
         /// </summary>
         /// <param name="inputMass">mass</param>
         /// <returns>Averagine formula</returns>
-        private Dictionary<string, int> GetClosestAvnFormula(double inputMass)
+        public Dictionary<string, int> GetAveragineFormulaAsTableRoundedToInteger(double inputMass)
         {
             Dictionary<string, double> averagineDict = GetAveragineDictionary();
             double averagineUnitMass = GetBasePeakMass(averagineDict);
@@ -265,6 +269,45 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
             return formula;
         }
+
+        public Dictionary<string, double> GetAveragineFormulaAsTable(double inputMass)
+        {
+            Dictionary<string, double> averagineDict = GetAveragineDictionary();
+            double averagineUnitMass = GetBasePeakMass(averagineDict);
+            // get closest pattern to mass 
+            double numberOfAveraginesInInput = inputMass / averagineUnitMass;
+            Dictionary<string, double> formula = new Dictionary<string, double>();
+            foreach (string element in averagineDict.Keys)
+            {
+                formula.Add(element, averagineDict[element] * numberOfAveraginesInInput);
+            }
+
+            return formula;
+        }
+
+
+
+
+        public string GetAveragineFormulaAsString(double inputMass, bool roundToIntegers=true)
+        {
+            
+            if (roundToIntegers)
+            {
+                var formulaTable = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
+                return EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaTable);
+            }
+            else
+            {
+                var formulaTable = GetAveragineFormulaAsTable(inputMass);
+                return EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaTable);
+            }
+
+            
+            
+
+        }
+
+
 
         /// <summary>
         /// Comparison method to sort the isotopes by natural abundance

@@ -9,6 +9,7 @@ namespace DeconTools.Backend.FileIO
     public class LcmsTargetFromFeaturesFileImporter : ImporterBase<TargetCollection>
     {
         private string _fileName;
+
         public LcmsTargetFromFeaturesFileImporter(string fileName)
         {
             _fileName = fileName;
@@ -17,11 +18,11 @@ namespace DeconTools.Backend.FileIO
 
         private string[] datasetHeaders = {"dataset"};
         private string[] chargeStateHeaders = {"chargestate", "z", "charge_state", "ClassStatsChargeBasis"};
-        private string[] chargeStateLowerHeaders = { "ChargeStateMin" };
-        private string[] chargeStateUpperHeaders = { "ChargeStateMax" };
-        private string[] targetIDHeaders = {"UMCIndex"};
-        private string[] featureToMassTagIDHeaders = {"MassTagID"};
-
+        private string[] chargeStateLowerHeaders = {"ChargeStateMin"};
+        private string[] chargeStateUpperHeaders = {"ChargeStateMax"};
+        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID"};
+        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID" };
+        private string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
         private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
        
         private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
@@ -29,6 +30,7 @@ namespace DeconTools.Backend.FileIO
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
         private string[] scanStartHeaders = {"scanStart", "scan_start"};
         private string[] netHeaders = {"net", "NETClassRep"};
+        private string[] peptideSequenceHeaders = {"peptide", "peptidesequence"};
 
         public override TargetCollection Import()
         {
@@ -128,6 +130,8 @@ namespace DeconTools.Backend.FileIO
             target.MZ = target.MonoIsotopicMass/target.ChargeState + Globals.PROTON_MASS;
 
             target.FeatureToMassTagID = ParseIntField(LookupData(processedData, featureToMassTagIDHeaders));
+            target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders,String.Empty);
+            target.Code = LookupData(processedData, peptideSequenceHeaders,String.Empty);
             
             //UMCIndex	ScanStart	ScanEnd	ScanClassRep	
             //NETClassRep	UMCMonoMW	UMCMWStDev	UMCMWMin	

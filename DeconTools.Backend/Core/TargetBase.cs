@@ -16,7 +16,7 @@ namespace DeconTools.Backend.Core
         {
             this.ElementLookupTable = new Dictionary<string, int>();
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
-            
+            ChargeStateTargets = new List<int>();
         }
         #endregion
 

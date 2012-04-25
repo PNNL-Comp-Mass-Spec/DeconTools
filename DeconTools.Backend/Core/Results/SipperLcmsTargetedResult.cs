@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Core.Results
         public SipperLcmsTargetedResult(TargetBase target)
             : base(target)
         {
-
+            ChromCorrelationStdev = -1;
         }
 
         #endregion
@@ -36,6 +36,8 @@ namespace DeconTools.Backend.Core.Results
         public double ChromCorrelationAverage { get; set; }
 
         public double AreaUnderRatioCurveRevised { get; set; }
+
+        public double ChromCorrelationStdev { get; set; }
 
         #endregion
 

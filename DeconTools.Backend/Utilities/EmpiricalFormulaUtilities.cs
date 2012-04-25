@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using PNNLOmics.Data.Constants;
 
@@ -95,6 +94,31 @@ namespace DeconTools.Backend.Utilities
             return sb.ToString();
 
         }
+
+
+        public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, double> elementTable)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in elementTable)
+            {
+                if (item.Value == 1)
+                {
+                    sb.Append(item.Key);
+
+                }
+                else
+                {
+                    sb.Append(item.Key);
+                    sb.Append(item.Value);
+                }
+
+            }
+            return sb.ToString();
+
+        }
+
+
 
 
         public static Dictionary<string, int> ParseEmpiricalFormulaString(string empiricalFormula, bool formulaIsUniModFormat = false)

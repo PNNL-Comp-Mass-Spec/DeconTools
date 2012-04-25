@@ -216,6 +216,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.ChromCorrelationMedian = MathUtils.GetMedian(ChromatogramRSquaredVals);
                     result.ChromCorrelationAverage = ChromatogramRSquaredVals.Average();
 
+                    if (ChromatogramRSquaredVals.Count>2)
+                    {
+                        result.ChromCorrelationStdev = MathUtils.GetStDev(ChromatogramRSquaredVals);
+                    }
+                    else
+                    {
+                        result.ChromCorrelationStdev = -1;
+                    }
+
                     var revisedIsoPeaks =  subtractedIso.Peaklist.Take(ChromatogramRSquaredVals.Count).ToList();
 
                     xvals = revisedIsoPeaks.Select((p, i) => new { peak = p, index = i }).Select(n => (double)n.index).ToList();

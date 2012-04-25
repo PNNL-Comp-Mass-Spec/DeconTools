@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         {
             IsotopicDistributionCalculator myPatterner = IsotopicDistributionCalculator.Instance;
             Assert.IsFalse(myPatterner.IsSetToLabeled);
-            myPatterner.GetAvnPattern(2000);
+            myPatterner.GetAveraginePattern(2000);
         }
 
 
@@ -160,7 +160,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         {
             bool isIt = isotopicDistributionCalculator.IsSetToLabeled;
             isotopicDistributionCalculator.SetLabeling("N", 14, .02, 15, .98);
-            IsotopicProfile cluster = isotopicDistributionCalculator.GetAvnPattern(1979);
+            IsotopicProfile cluster = isotopicDistributionCalculator.GetAveraginePattern(1979);
             isotopicDistributionCalculator.ResetToUnlabeled();
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
@@ -187,7 +187,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         {
             bool isIt = isotopicDistributionCalculator.IsSetToLabeled;
             //		isotopicDistributionCalculator.SetLabeling("N", 14, .02, 15, .98);
-            IsotopicProfile cluster = isotopicDistributionCalculator.GetAvnPattern(1979);
+            IsotopicProfile cluster = isotopicDistributionCalculator.GetAveraginePattern(1979);
             //		isotopicDistributionCalculator.ResetToUnlabled();
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
@@ -207,6 +207,22 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             Console.WriteLine(sb.ToString());
         }
+
+
+
+        [Test]
+        public void GetAveragineFormulaForGivenMass()
+        {
+            var averagineEmpiricalFormula= isotopicDistributionCalculator.GetAveragineFormulaAsString(1979,true);
+
+            Console.WriteLine(averagineEmpiricalFormula);
+
+            averagineEmpiricalFormula = isotopicDistributionCalculator.GetAveragineFormulaAsString(1979, false);
+
+            Console.WriteLine(averagineEmpiricalFormula);
+
+        }
+
 
 
         [Test]

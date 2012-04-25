@@ -45,6 +45,29 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+        public static string GetDatasetParentFolder(string datasetPath)
+        {
+            string datasetFolderPath;
+
+            FileAttributes attr = File.GetAttributes(datasetPath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                DirectoryInfo sourceDirInfo;
+                sourceDirInfo = new DirectoryInfo(datasetPath);
+                datasetFolderPath = sourceDirInfo.FullName;
+            }
+            else
+            {
+                datasetFolderPath = Path.GetDirectoryName(datasetPath);
+            }
+
+            return datasetFolderPath;
+
+        }
+
+
+
         public static Run CreateAndAlignRun(string filename)
         {
             return CreateAndAlignRun(filename, null);

@@ -68,6 +68,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             try
             {
+                //empirical formula may contain non-integer values for 
+
+
                 
                 iso = _isotopicDistCalculator.GetIsotopePattern(mt.EmpiricalFormula);
             }
