@@ -65,7 +65,7 @@
             this.btnSetupWizard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetupWizard.Location = new System.Drawing.Point(8, 8);
             this.btnSetupWizard.Name = "btnSetupWizard";
-            this.btnSetupWizard.Size = new System.Drawing.Size(327, 34);
+            this.btnSetupWizard.Size = new System.Drawing.Size(373, 34);
             this.btnSetupWizard.TabIndex = 0;
             this.btnSetupWizard.Text = "Setup Wizard";
             this.btnSetupWizard.UseVisualStyleBackColor = false;
@@ -91,7 +91,7 @@
             this.Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Cancel.Location = new System.Drawing.Point(232, 277);
             this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(103, 27);
+            this.Cancel.Size = new System.Drawing.Size(149, 27);
             this.Cancel.TabIndex = 4;
             this.Cancel.Text = "Quit";
             this.Cancel.UseVisualStyleBackColor = false;
@@ -105,7 +105,7 @@
             this.btnAbort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbort.Location = new System.Drawing.Point(241, 48);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(94, 54);
+            this.btnAbort.Size = new System.Drawing.Size(140, 54);
             this.btnAbort.TabIndex = 2;
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = false;
@@ -148,7 +148,7 @@
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox1.Location = new System.Drawing.Point(8, 124);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(327, 147);
+            this.groupBox1.Size = new System.Drawing.Size(373, 147);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Status";
@@ -208,7 +208,7 @@
             this.txtFile.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFile.Location = new System.Drawing.Point(37, 16);
             this.txtFile.Name = "txtFile";
-            this.txtFile.Size = new System.Drawing.Size(283, 13);
+            this.txtFile.Size = new System.Drawing.Size(329, 13);
             this.txtFile.TabIndex = 2;
             this.txtFile.TabStop = false;
             // 
@@ -308,7 +308,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(6, 55);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(317, 22);
+            this.progressBar1.Size = new System.Drawing.Size(363, 22);
             this.progressBar1.TabIndex = 0;
             // 
             // txtOutputPath
@@ -330,7 +330,7 @@
             this.btnSetOutputPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetOutputPath.Location = new System.Drawing.Point(298, 322);
             this.btnSetOutputPath.Name = "btnSetOutputPath";
-            this.btnSetOutputPath.Size = new System.Drawing.Size(37, 23);
+            this.btnSetOutputPath.Size = new System.Drawing.Size(83, 23);
             this.btnSetOutputPath.TabIndex = 4;
             this.btnSetOutputPath.Text = "set";
             this.btnSetOutputPath.UseVisualStyleBackColor = false;
@@ -351,7 +351,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(342, 353);
+            this.ClientSize = new System.Drawing.Size(388, 362);
             this.Controls.Add(this.txtOutputPath);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSetOutputPath);

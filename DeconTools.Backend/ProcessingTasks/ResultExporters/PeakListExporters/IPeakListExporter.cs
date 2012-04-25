@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using System.IO;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.DTO;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
@@ -40,13 +36,24 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
 
-            //Write out results if exceeds trigger value or is last scan
-            if (resultList.MSPeakResultList.Count >= TriggerToWriteValue || isLastScan)
+            
+            //write out peaks for every frame and scan. No peaks are saved up in buffer. Things like uimf saturation correction might affect the buffer. 
+            if (resultList.Run is UIMFRun)  
             {
                 WriteOutPeaks(resultList.MSPeakResultList);
-               resultList.MSPeakResultList.Clear();
-
+                resultList.MSPeakResultList.Clear();
             }
+            else
+            {
+                //Write out results if exceeds trigger value or is last scan
+                if (resultList.MSPeakResultList.Count >= TriggerToWriteValue || isLastScan)
+                {
+                    WriteOutPeaks(resultList.MSPeakResultList);
+                    resultList.MSPeakResultList.Clear();
+                }
+            }
+            
+           
         }
 
 
