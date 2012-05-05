@@ -453,6 +453,8 @@ namespace DeconTools.Backend.Core
             }
             this.ResultCollection.ClearAllResults();
             this.XYData = null;
+
+            GC.Collect();
         }
 
         public virtual string GetCurrentScanOrFrameInfo()

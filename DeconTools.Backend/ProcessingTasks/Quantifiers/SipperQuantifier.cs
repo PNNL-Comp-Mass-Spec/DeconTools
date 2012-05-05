@@ -26,6 +26,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public double MinimumRelativeIntensityForChromCorr { get; set; }
         public List<double> ChromatogramRSquaredVals { get; set; }
 
+        public XYData RatioVals { get; set; }
+
+        public XYData RatioLogVals { get; set; } 
+
         #endregion
 
 
@@ -46,6 +50,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             ChromToleranceInPPM = 25;
             ChromatogramRSquaredVals = new List<double>();
+            RatioLogVals = new XYData();
+            RatioVals = new XYData();
 
         }
 
@@ -67,6 +73,13 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             
             ChromatogramRSquaredVals.Clear();
+
+            RatioVals.Xvalues = new double[]{1,2,3,4,5,6,7};
+            RatioVals.Yvalues = new double[] { 0, 0, 0, 0, 0, 0, 0 };
+
+            RatioLogVals.Xvalues = new double[] { 1, 2, 3, 4, 5, 6, 7 };
+            RatioLogVals.Yvalues = new double[] { 0, 0, 0, 0, 0, 0, 0 };
+
 
             Check.Require(result != null, "No MassTagResult has been generated for CurrentMassTag");
 
@@ -121,6 +134,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
 
             yvals = subtractedIso.Peaklist.Select(p => (double)p.Height).ToList();
+           
 
             result.AreaUnderRatioCurve = CalculateAreaUnderCubicSplineFit(xvals, yvals);
 
@@ -231,6 +245,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                     yvals = revisedIsoPeaks.Select(p => (double)p.Height).ToList();
 
+
+                    RatioVals.Xvalues = xvals.ToArray();
+                    RatioVals.Yvalues = yvals.ToArray();
+
+
                     result.AreaUnderRatioCurveRevised = CalculateAreaUnderCubicSplineFit(xvals, yvals);
 
 
@@ -276,11 +295,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             double intercept = -9999;
             double rsquaredVal = -1;
 
+
+            RatioLogVals.Xvalues = logRatioXVals.ToArray();
+            RatioLogVals.Yvalues = logRatioYVals.ToArray();
+
+
             if (logRatioYVals.Count > 2)
             {
                 try
                 {
-                    MathUtils.GetLinearRegression(logRatioXVals.ToArray(), logRatioYVals.ToArray(), out slope, out intercept,
+                    MathUtils.GetLinearRegression(RatioLogVals.Xvalues, RatioLogVals.Yvalues, out slope, out intercept,
                                                   out rsquaredVal);
                 }
                 catch (Exception)
