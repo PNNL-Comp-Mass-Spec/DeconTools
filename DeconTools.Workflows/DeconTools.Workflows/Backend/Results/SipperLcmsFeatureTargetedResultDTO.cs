@@ -27,6 +27,8 @@ namespace DeconTools.Workflows.Backend.Results
 
         public double ChromCorrelationStdev { get; set; }
 
+        public bool PassesFilter { get; set; }
+
         #endregion
 
          

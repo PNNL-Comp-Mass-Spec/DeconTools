@@ -69,6 +69,34 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void loadLCMSFeaturesNotIdentifiedAndProcess2()
+        {
+            string paramFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams_importedFeaturesWithEmpFormula.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+
+            parameters.MassTagsToFilterOn = String.Empty;
+
+            parameters.TargetsFilePath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_select_unidentified_LCMSFeatures.txt";
+
+            parameters.MassTagsForReference = String.Empty;
+
+            string testDataset =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+
+            Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
+                          Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
+
+            executor.Execute();
+        }
+
+
 
 
 

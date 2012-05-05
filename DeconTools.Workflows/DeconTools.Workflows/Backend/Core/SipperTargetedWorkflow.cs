@@ -14,7 +14,7 @@ using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class SipperTargetedWorkflow:TargetedWorkflow
+    public class SipperTargetedWorkflow : TargetedWorkflow
     {
 
         private JoshTheorFeatureGenerator _theorFeatureGen;
@@ -40,13 +40,14 @@ namespace DeconTools.Workflows.Backend.Core
 
             Run = run;
             InitializeWorkflow();
-                
+
         }
 
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-            ChromCorrelationRSquaredVals = new XYData();
+            
+            
         }
 
 
@@ -74,7 +75,7 @@ namespace DeconTools.Workflows.Backend.Core
             iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
 
             _iterativeMSFeatureFinder = new SipperIterativeMSFeatureFinder(iterativeTFFParameters);
-           // _iterativeMSFeatureFinder = new IterativeTFF(iterativeTFFParameters);
+            // _iterativeMSFeatureFinder = new IterativeTFF(iterativeTFFParameters);
 
             _quantifier = new SipperQuantifier();
             _fitScoreCalc = new MassTagFitScoreCalculator();
@@ -82,7 +83,10 @@ namespace DeconTools.Workflows.Backend.Core
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
+            RatioVals = new XYData();
+            RatioLogVals = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
+            ChromCorrelationRSquaredVals = new XYData();
         }
 
 
@@ -115,19 +119,19 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 ExecuteTask(MSGenerator);
-               
+
 
                 double minMZ = Run.CurrentMassTag.MZ - 3;
                 double maxMz = Run.CurrentMassTag.MZ + 20;
 
-                if (Run.XYData!=null)   
+                if (Run.XYData != null)
                 {
                     Run.XYData = Run.XYData.TrimData(minMZ, maxMz);
                 }
 
 
                 updateMassSpectrumXYValues(Run.XYData);
-                
+
                 ExecuteTask(_iterativeMSFeatureFinder);
                 ExecuteTask(_fitScoreCalc);
                 ExecuteTask(_resultValidator);
@@ -136,6 +140,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 UpdateRSquaredXYVals(_quantifier.ChromatogramRSquaredVals);
 
+                UpdateRatioVals();
 
             }
             catch (Exception ex)
@@ -143,10 +148,21 @@ namespace DeconTools.Workflows.Backend.Core
                 TargetedResultBase result = Run.ResultCollection.CurrentTargetedResult;
                 result.FailedResult = true;
                 result.ErrorDescription = ex.Message;
-                Console.WriteLine(((LcmsFeatureTarget)result.Target).FeatureToMassTagID + "; "+ result.ErrorDescription);
+                Console.WriteLine(((LcmsFeatureTarget)result.Target).FeatureToMassTagID + "; " + result.ErrorDescription);
 
                 return;
             }
+        }
+
+        private void UpdateRatioVals()
+        {
+
+            RatioVals.Xvalues = _quantifier.RatioVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioVals.Xvalues;
+            RatioVals.Yvalues = _quantifier.RatioVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioVals.Yvalues;
+
+            RatioLogVals.Xvalues = _quantifier.RatioLogVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioLogVals.Xvalues;
+            RatioLogVals.Yvalues = _quantifier.RatioLogVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioLogVals.Yvalues;
+
         }
 
         private void UpdateRSquaredXYVals(IEnumerable<double> chromatogramRSquaredVals)
@@ -187,6 +203,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         public XYData ChromCorrelationRSquaredVals { get; set; }
+
+        public XYData RatioVals { get; set; }
+
+        public XYData RatioLogVals { get; set; }
 
 
 

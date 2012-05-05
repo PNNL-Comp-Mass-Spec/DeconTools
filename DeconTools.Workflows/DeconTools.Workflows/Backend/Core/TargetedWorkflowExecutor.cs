@@ -21,6 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string _loggingFileName;
         protected string _resultsFolder;
+        protected TargetedResultRepository ResultRepository;
 
 
         protected WorkflowParameters _workflowParameters;
@@ -36,6 +37,8 @@ namespace DeconTools.Workflows.Backend.Core
             _backgroundWorker = backgroundWorker;
 
             this.WorkflowParameters = parameters;
+
+            ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
 
@@ -49,6 +52,8 @@ namespace DeconTools.Workflows.Backend.Core
             _backgroundWorker = backgroundWorker;
 
             this.WorkflowParameters = parameters;
+
+            ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
 
@@ -130,6 +135,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
+
+        public List<TargetedResultDTO> GetResults()
+        {
+            return ResultRepository.Results;
+        }
+
+
         private bool _runIsInitialized;
         public bool RunIsInitialized
         {
@@ -190,7 +202,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.TargetedWorkflow.Run = Run;
 
-            TargetedResultRepository resultRepository = new TargetedResultRepository();
+            
+            ResultRepository.Results.Clear();
 
             int mtCounter = 0;
             int totalTargets = Targets.TargetList.Count;
@@ -205,7 +218,7 @@ namespace DeconTools.Workflows.Backend.Core
                 try
                 {
                     this.TargetedWorkflow.Execute();
-                    resultRepository.AddResult(this.TargetedWorkflow.Result);
+                    ResultRepository.AddResult(this.TargetedWorkflow.Result);
 
                 }
                 catch (Exception ex)
@@ -238,7 +251,7 @@ namespace DeconTools.Workflows.Backend.Core
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
             TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
-            exporter.ExportResults(resultRepository.Results);
+            exporter.ExportResults(ResultRepository.Results);
 
             HandleAlignmentInfoFiles();
             finalizeRun();
