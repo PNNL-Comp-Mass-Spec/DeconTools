@@ -338,6 +338,7 @@ namespace DeconTools.Backend.Runs
 
             FileInfo serFileInfo = findSerFile(folderName);
             FileInfo fidFileInfo = findFIDFile(folderName);
+            
 
             FileInfo apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
             List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
@@ -349,6 +350,17 @@ namespace DeconTools.Backend.Runs
             {
                 run = new BrukerV3Run(folderName);
             }
+            else
+            {
+                FileInfo analysisBafFileInfo = findAnalysisBafFile(folderName);
+                FileInfo maxAcquisitionFileInfo = findMaxAcquisitionMethodFile(folderName);
+
+                if (analysisBafFileInfo!=null && maxAcquisitionFileInfo!=null)
+                {
+                    run = new BrukerTOF(folderName);
+                }
+
+            }
 
             return run;
 
@@ -358,6 +370,50 @@ namespace DeconTools.Backend.Runs
 
 
 
+        }
+
+        private FileInfo findMaxAcquisitionMethodFile(string folderName)
+        {
+            string[] dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
+
+            if (dotMethodFiles == null || dotMethodFiles.Length == 0)
+            {
+                return null;
+            }
+
+            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("Acquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (acquistionMethodFiles.Count == 0)
+            {
+                return null;
+            }
+            else if (acquistionMethodFiles.Count == 1)
+            {
+                return new FileInfo(acquistionMethodFiles[0]);
+            }
+            else
+            {
+                throw new NotImplementedException("Run initialization failed. Multiple 'Acquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
+            }
+        }
+
+        private FileInfo findAnalysisBafFile(string folderName)
+        {
+            string[] analysisBafFiles = Directory.GetFiles(folderName, "analysis.baf", SearchOption.TopDirectoryOnly);
+
+            if (analysisBafFiles.Length == 0)
+            {
+                return null;
+            }
+            else if (analysisBafFiles.Length == 1)
+            {
+                FileInfo fileInfo = new FileInfo(analysisBafFiles[0]);
+                return fileInfo;
+            }
+            else
+            {
+                throw new NotSupportedException("Multiple analysis.baf files were found within the dataset folder structure. This is not yet supported.");
+            }
         }
 
         private FileInfo findFIDFile(string folderName)

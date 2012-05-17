@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
@@ -67,7 +66,7 @@ namespace DeconTools.Backend.Utilities
         #endregion
 
         /// <summary>
-        /// Returnsa normalized isotopic profile
+        /// Returns a normalized isotopic profile
         /// </summary>
         /// <param name="profile"></param>
         /// <param name="intensityForNormalization"></param>
@@ -86,6 +85,47 @@ namespace DeconTools.Backend.Utilities
 
            
         }
+
+        /// <summary>
+        /// Aligns an isotopic profile based on a source isotopic profile.
+        /// </summary>
+        /// <param name="iso1">Source isotopic profile</param>
+        /// <param name="iso2">isotopic profile to be offset</param>
+        public static void AlignTwoIsotopicProfiles(IsotopicProfile iso1, IsotopicProfile iso2 )
+        {
+            double offset = 0;
+            if (iso2 == null || iso2.Peaklist == null || iso2.Peaklist.Count == 0) return;
+
+            MSPeak mostIntensePeak = iso2.getMostIntensePeak();
+            int indexOfMostIntensePeak = iso2.Peaklist.IndexOf(mostIntensePeak);
+
+            if (iso1.Peaklist == null || iso1.Peaklist.Count == 0) return;
+
+            bool enoughPeaksInTarget = (indexOfMostIntensePeak <= iso1.Peaklist.Count - 1);
+
+            if (enoughPeaksInTarget)
+            {
+                MSPeak targetPeak = iso1.Peaklist[indexOfMostIntensePeak];
+                offset = targetPeak.XValue - mostIntensePeak.XValue;
+                //offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
+
+            }
+            else
+            {
+                offset = iso1.Peaklist[0].XValue - iso2.Peaklist[0].XValue;
+            }
+            
+
+            foreach (var peak in iso2.Peaklist)
+            {
+                peak.XValue = peak.XValue + offset;
+
+            }
+
+
+        }
+
+
 
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)

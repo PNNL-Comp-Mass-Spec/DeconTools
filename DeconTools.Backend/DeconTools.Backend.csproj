@@ -105,6 +105,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\ProteinCalc.dll</HintPath>
     </Reference>
+    <Reference Include="ProteowizardWrapper">
+      <HintPath>..\Library\ProteowizardWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="pwiz_bindings_cli, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\pwiz_bindings_cli.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -142,6 +149,8 @@
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />
+    <Compile Include="Core\ChromCorrelationData.cs" />
+    <Compile Include="Core\ChromCorrelationDataItem.cs" />
     <Compile Include="Core\LcmsFeatureTarget.cs" />
     <Compile Include="Core\MassAlignmentDataItem.cs" />
     <Compile Include="Core\O16O18IsosResult.cs" />
@@ -187,6 +196,7 @@
     <Compile Include="FileIO\SQLiteExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorTask.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorParameters.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
@@ -271,6 +281,7 @@
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />
     <Compile Include="Data\IsosResultDeSerializer.cs" />
+    <Compile Include="Runs\BrukerTOF.cs" />
     <Compile Include="Runs\BrukerV2Run.cs" />
     <Compile Include="Runs\BrukerV3Run.cs" />
     <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
@@ -422,6 +433,7 @@
     <Compile Include="Utilities\PeakUtilities.cs" />
     <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
     <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Utilities\XYDataUtilities.cs" />
     <Compile Include="Workflows\DeconMSnWorkflow.cs" />
     <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />
     <Compile Include="Workflows\RunMergingPeakExportingWorkflow.cs" />
@@ -468,6 +480,15 @@
     <Folder Include="FileIO\TargetedResultFileIO\" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="EDAL">
+      <Guid>{8E79B9A2-107E-4E91-A0FF-01F2591103F3}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="XRAWFILE2Lib">
       <Guid>{5FE970A2-29C3-11D3-811D-00104B304896}</Guid>
       <VersionMajor>1</VersionMajor>

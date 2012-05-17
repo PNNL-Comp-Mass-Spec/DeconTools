@@ -4,6 +4,7 @@ using System.Linq;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Core.Results;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -12,11 +13,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class SipperQuantifier : Task
     {
-        private ChromatogramCorrelator _chromatogramCorrelator;
+        
         private DeconToolsSavitzkyGolaySmoother _smoother;
         private PeakChromatogramGenerator _peakChromGen;
         private double _chromScanWindowWidth;
 
+        private ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
         #region Properties
         protected double MaximumFitScoreForFurtherProcessing { get; set; }
         protected double MinimumRatioAreaForFurtherProcessing { get; set; }
@@ -40,7 +42,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             MinimumRatioAreaForFurtherProcessing = 5;
             MinimumRelativeIntensityForChromCorr = 0.025;
 
-            _chromatogramCorrelator = new ChromatogramCorrelator();
+            
+            _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
+            _chromatogramCorrelatorTask.ChromToleranceInPPM = 25;
 
             _smoother = new DeconToolsSavitzkyGolaySmoother(1, 1, 2);
 
@@ -48,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _peakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM);
 
 
-            ChromToleranceInPPM = 25;
+            
             ChromatogramRSquaredVals = new List<double>();
             RatioLogVals = new XYData();
             RatioVals = new XYData();
@@ -72,8 +76,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             result.AreaUnderRatioCurve = -9999;
 
             
-            ChromatogramRSquaredVals.Clear();
-
+          
             RatioVals.Xvalues = new double[]{1,2,3,4,5,6,7};
             RatioVals.Yvalues = new double[] { 0, 0, 0, 0, 0, 0, 0 };
 
@@ -146,69 +149,17 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             if (resultPassesMinimalCriteria)
             {
-                int indexMostAbundantPeak = unlabeledIso.GetIndexOfMostIntensePeak();
-                int maxPeakNum = Math.Min(numTheoPeaks, result.IsotopicProfile.Peaklist.Count);
 
-                double baseMZValue = result.IsotopicProfile.Peaklist[indexMostAbundantPeak].XValue;
-
-                _chromScanWindowWidth = result.ChromPeakSelected.Width *2 ;
+                _chromScanWindowWidth = result.ChromPeakSelected.Width * 2;
 
                 int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
                 int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
 
-                _peakChromGen.GenerateChromatogram(resultColl.Run, startScan, stopScan, baseMZValue, ChromToleranceInPPM);
+                ChromCorrelationData chromCorrelationData=   _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultColl.Run, unlabeledIso, startScan,
+                                                                                stopScan);
 
-
-                var basePeakChromXYData = _smoother.Smooth(resultColl.Run.XYData);
-
-                bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
-                                     basePeakChromXYData.Xvalues.Length > 3;
-
-                basePeakChromXYData = basePeakChromXYData.TrimData(startScan, stopScan);
-
-                double minIntensity = result.IsotopicProfile.Peaklist[indexMostAbundantPeak].Height*
-                                     MinimumRelativeIntensityForChromCorr;
-
-                for (int i = 0; i < maxPeakNum; i++)
-                {
-                    if (!baseChromDataIsOK) break;
-
-                    if (i == indexMostAbundantPeak)
-                    {
-                        //the rsquared val for the max peak will 1.0 (since the max peak is the base peak for the comparison)
-                        ChromatogramRSquaredVals.Add(1.0);
-                    }
-                    else if (result.IsotopicProfile.Peaklist[i].Height >= minIntensity)
-                    {
-                        _peakChromGen.GenerateChromatogram(resultColl.Run, startScan, stopScan, result.IsotopicProfile.Peaklist[i].XValue, ChromToleranceInPPM);
-                        var chromPeakXYData = _smoother.Smooth(resultColl.Run.XYData);
-
-                        var  chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null &&
-                                     chromPeakXYData.Xvalues.Length > 3;
-
-                        if (chromDataIsOK)
-                        {
-                            chromPeakXYData = chromPeakXYData.TrimData(startScan, stopScan);
-
-                            double slope;
-                            double intercept;
-                            double rsquaredVal;
-                            _chromatogramCorrelator.GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
-                                                                              out slope, out intercept, out rsquaredVal);
-
-                            ChromatogramRSquaredVals.Add(rsquaredVal);
-                        }
-                        else
-                        {
-                            ChromatogramRSquaredVals.Add(0);
-                        }
-
-                    }
-                    else
-                    {
-                        ChromatogramRSquaredVals.Add(0);
-                    }
-                }
+                ChromatogramRSquaredVals.Clear();
+                ChromatogramRSquaredVals.AddRange(chromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).ToList());
 
                 //trim off zeros
                 for (int i = ChromatogramRSquaredVals.Count-1; i >= 0; i--)

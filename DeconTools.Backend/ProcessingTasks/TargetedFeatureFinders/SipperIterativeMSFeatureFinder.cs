@@ -114,6 +114,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     combineIsotopicProfiles(foundIso, iso);
                 }
 
+                //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
+
                 bool isoIsGoodEnough = (foundIso != null && foundIso.Peaklist.Count>=_maxPeaksToInclude );
 
                 if (isoIsGoodEnough)

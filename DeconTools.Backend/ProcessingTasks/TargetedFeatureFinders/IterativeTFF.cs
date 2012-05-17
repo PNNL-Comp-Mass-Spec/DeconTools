@@ -127,6 +127,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 bool isoIsGoodEnough = (iso != null && iso.Peaklist.Count > 1);
 
+                //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
+                //See the SIPPER TFF
+
+
                 if (isoIsGoodEnough)
                 {
                     break;

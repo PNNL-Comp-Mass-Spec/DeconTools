@@ -46,6 +46,8 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public bool FailedResult { get; set; }
 
+        public ChromCorrelationData ChromCorrelationData { get; set; }
+
         /// <summary>
         /// Type of failure during targeted processing
         /// </summary>
