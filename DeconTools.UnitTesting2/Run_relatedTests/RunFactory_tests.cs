@@ -105,6 +105,20 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
+        public void CreateBrukerTOFRunTest1()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
+            RunFactory rf = new RunFactory();
+
+            Run run = rf.CreateRun(testfile);
+
+            Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
+            Assert.IsTrue(run is BrukerTOF);
+            Assert.AreEqual(1131, run.GetNumMSScans());
+        }
+
+        [Test]
         [ExpectedException(typeof(ApplicationException))]
         public void UnknownDatasetTypeTest1()
         {

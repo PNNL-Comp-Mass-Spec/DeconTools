@@ -118,6 +118,7 @@
     <Compile Include="ProcessingRelated_Tests\Post_MSFeatureDetectionTests\PeakToMSFeatureAssociatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ResultValidatorTests\ResultValidatorTasks_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\SaturationDetectorTests.cs" />
+    <Compile Include="Run_relatedTests\BrukerMaxisRun_Tests.cs" />
     <Compile Include="ScanSetFrameSetRelatedTests\FrameSetCollectionTests.cs" />
     <Compile Include="ScanSetFrameSetRelatedTests\ScanSetCollectionTests.cs" />
     <Compile Include="ScanSetFrameSetRelatedTests\ScanSetFactory_tests.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="TheoreticalIsotopicProfileTests\MercuryDistributionTesting.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilitiesTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
+    <Compile Include="Utilities\XYDataUtilitiesTests.cs" />
     <Compile Include="Workflow_Tests\RunMergingPeakExportingWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\SaturationIMSWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />

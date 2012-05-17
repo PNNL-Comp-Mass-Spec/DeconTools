@@ -73,6 +73,7 @@
     <Compile Include="OMCS_0135_UIMF_MS_indexOutOfRange.cs" />
     <Compile Include="OMCS_0149_MSMSNoScans.cs" />
     <Compile Include="OMCS_0274_failingOnShawnasDatasets.cs" />
+    <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="saturationPossibleIssue.cs" />
