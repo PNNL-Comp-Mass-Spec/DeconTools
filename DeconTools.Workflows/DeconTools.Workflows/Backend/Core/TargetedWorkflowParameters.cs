@@ -31,8 +31,12 @@ namespace DeconTools.Workflows.Backend.Core
             AreaOfPeakToSumInDynamicSumming = 2;
             MaxScansSummedInDynamicSumming = 100;
 
+            ChromatogramCorrelationIsPerformed = false;
+
 
         }
+
+        
         #endregion
 
         #region Properties
@@ -47,7 +51,8 @@ namespace DeconTools.Workflows.Backend.Core
         public double MSToleranceInPPM { get; set; }
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
-        
+        public bool ChromatogramCorrelationIsPerformed { get; set; }
+
         
         /// <summary>
         /// 

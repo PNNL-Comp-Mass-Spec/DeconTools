@@ -26,6 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         private IterativeTFF msfeatureFinder;
         private MassTagFitScoreCalculator fitScoreCalc;
         private ResultValidatorTask resultValidator;
+        private ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
 
 
         #region Constructors
@@ -109,10 +110,16 @@ namespace DeconTools.Workflows.Backend.Core
 
             resultValidator = new ResultValidatorTask();
 
+            _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
+            _chromatogramCorrelatorTask.ChromToleranceInPPM = _workflowParameters.ChromToleranceInPPM;
+
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
+
+
+
         }
 
         private void ValidateParameters()
@@ -162,6 +169,19 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExecuteTask(fitScoreCalc);
                 ExecuteTask(resultValidator);
+
+                if (_workflowParameters.ChromatogramCorrelationIsPerformed)
+                {
+                    ExecuteTask(_chromatogramCorrelatorTask);
+
+                    Console.WriteLine(Result);
+                    foreach (var item in Result.ChromCorrelationData.CorrelationDataItems)
+                    {
+                        Console.WriteLine(item);
+                    }
+                }
+
+
 
                 //updateMassAndNETCalibrationValues
 

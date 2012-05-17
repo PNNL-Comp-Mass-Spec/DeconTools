@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             string lcmsfeaturesFile =
-             @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
             // load LCMSFeatures as targets
             LcmsTargetFromFeaturesFileImporter importer =
@@ -115,7 +115,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             // load MassTags
             string massTagFile1 =
-                @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
             MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();

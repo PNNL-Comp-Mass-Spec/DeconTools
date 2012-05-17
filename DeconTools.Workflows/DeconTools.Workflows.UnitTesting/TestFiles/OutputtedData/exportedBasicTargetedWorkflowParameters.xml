@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
   <AreaOfPeakToSumInDynamicSumming>2</AreaOfPeakToSumInDynamicSumming>
+  <ChromatogramCorrelationIsPerformed>false</ChromatogramCorrelationIsPerformed>
   <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
   <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
   <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>

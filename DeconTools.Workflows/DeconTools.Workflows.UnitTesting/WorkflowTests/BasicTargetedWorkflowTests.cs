@@ -41,6 +41,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
+            parameters.ChromatogramCorrelationIsPerformed = true;
+
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
@@ -64,6 +66,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
             Assert.AreEqual(718.41m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+
+            Assert.IsNotNull(result.ChromCorrelationData);
+
+            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            {
+                Console.WriteLine(dataItem);
+            }
+
+
         }
 
 
@@ -85,6 +96,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(true,run.CurrentMassTag.ContainsMods);
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            parameters.ChromatogramCorrelationIsPerformed = true;
+
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
@@ -99,6 +112,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
             Assert.AreEqual(959.48m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             Assert.AreEqual(6070, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+
+            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            {
+                Console.WriteLine(dataItem);
+            }
+
         }
 
 
@@ -213,6 +232,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
             parameters.MSToleranceInPPM = 25;
+            parameters.ChromatogramCorrelationIsPerformed = true;
 
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
@@ -230,6 +250,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
            // Assert.AreEqual(610.81m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             //Assert.AreEqual(6483, (decimal)Math.Round(result.ChromPeakSelected.XValue));
 
+            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            {
+                Console.WriteLine(dataItem);
+            }
 
         }
 
