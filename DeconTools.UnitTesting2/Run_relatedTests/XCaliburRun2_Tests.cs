@@ -82,7 +82,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             run.GetMassSpectrum(new Backend.Core.ScanSet(6005));
 
-            //TestUtilities.DisplayXYValues(run.XYData);
+            TestUtilities.DisplayXYValues(run.XYData);
 
         }
 

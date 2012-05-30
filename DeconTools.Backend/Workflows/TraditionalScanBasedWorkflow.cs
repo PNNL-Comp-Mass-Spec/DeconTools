@@ -94,7 +94,7 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            UserState userstate = new UserState(Run, Run.CurrentScanSet, null);
+            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
 
             float percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;

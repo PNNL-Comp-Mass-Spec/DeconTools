@@ -62,9 +62,14 @@ namespace DeconTools.Backend.Runs
                     run = new MSScanFromTextFileRun(fullfileName);
                     break;
                 case ".mzxml":
-                    run = new MZXMLRun(fullfileName);
+                    run = new MzRun(fullfileName);
                     break;
-
+                case ".mz5":
+                    run = new MzRun(fullfileName);
+                    break;
+                case ".mzml":
+                    run = new MzRun(fullfileName);
+                    break;
                 case ".uimf":
                     run = new UIMFRun(fullfileName);
                     break;
@@ -147,160 +152,6 @@ namespace DeconTools.Backend.Runs
                     break;
             }
 
-            return run;
-        }
-        public Run CreateRun(Globals.MSFileType fileType, string f, OldDecon2LSParameters parameters)
-        {
-            Run run;
-
-            string filename = getFullPath(f);
-
-            switch (fileType)
-            {
-                case Globals.MSFileType.Undefined:
-                    run = null;
-                    break;
-                case Globals.MSFileType.Agilent_WIFF:
-                    run = null;
-                    break;
-
-                case Globals.MSFileType.Agilent_D:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new AgilentDRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new AgilentDRun(filename);
-                    }
-                    break;
-                case Globals.MSFileType.Ascii:
-                    run = new DeconTools.Backend.Runs.MSScanFromTextFileRun(filename);
-                    break;
-                case Globals.MSFileType.Bruker:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new BrukerV3Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new BrukerV3Run(filename);
-                    }
-                    break;
-
-
-                case Globals.MSFileType.Bruker_Ascii:
-                    run = null;
-                    break;
-                case Globals.MSFileType.Finnigan:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new XCaliburRun2(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new XCaliburRun2(filename);
-                    }
-                    break;
-                case Globals.MSFileType.ICR2LS_Rawdata:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new ICR2LSRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new ICR2LSRun(filename);
-                    }
-                    break;
-                case Globals.MSFileType.Micromass_Rawdata:
-                    run = null;
-                    break;
-                case Globals.MSFileType.MZXML_Rawdata:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new MZXMLRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new MZXMLRun(filename);
-                    }
-                    break;
-                case Globals.MSFileType.PNNL_IMS:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new IMFRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new IMFRun(filename);
-                    }
-                    break;
-                case Globals.MSFileType.PNNL_UIMF:
-                    if (parameters.HornTransformParameters.UseScanRange)  //TODO: add UseFrameRange here...
-                    {
-                        //note! I am (temporarily?) using the 'MinScan' property from the Decon2LS parameter file in the MinFrame property of the UIMFRun
-                        //We might want to add separate MinFrame and MaxFrame (and UseFrameRange) parameters to the XML file. 
-
-                        //parameter file refers to 'FrameNum';  but during processing UIMFRun refers to 'frame_index'
-
-
-                        run = new UIMFRun(filename);
-
-                        UIMFRun uimfrun = (UIMFRun)run;
-
-
-                        int minFrameIndex = parameters.HornTransformParameters.MinScan;
-                        int maxFrameIndex = parameters.HornTransformParameters.MaxScan;
-
-                     
-                        if (minFrameIndex < uimfrun.MinFrame) minFrameIndex = uimfrun.MinFrame;
-                        if (minFrameIndex > uimfrun.MaxFrame) minFrameIndex = uimfrun.MaxFrame;
-
-                        if (maxFrameIndex < uimfrun.MinFrame) maxFrameIndex = uimfrun.MinFrame;
-                        if (maxFrameIndex > uimfrun.MaxFrame) maxFrameIndex = uimfrun.MaxFrame;
-
-                        if (minFrameIndex > maxFrameIndex) minFrameIndex = maxFrameIndex;
-
-                        uimfrun.MinFrame = minFrameIndex;
-                        uimfrun.MaxFrame = maxFrameIndex;
-
-
-                    }
-                    else
-                    {
-                        run = new UIMFRun(filename);
-                    }
-                    break;
-                case Globals.MSFileType.SUNEXTREL:
-                    run = null;
-                    break;
-                case Globals.MSFileType.YAFMS:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new YAFMSRun(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new YAFMSRun(filename);
-                    }
-                    break;
-
-                case Globals.MSFileType.Bruker_V2:
-                    if (parameters.HornTransformParameters.UseScanRange)
-                    {
-                        run = new BrukerV2Run(filename, parameters.HornTransformParameters.MinScan, parameters.HornTransformParameters.MaxScan);
-                    }
-                    else
-                    {
-                        run = new BrukerV2Run(filename);
-                    }
-                    break;
-
-
-                default:
-                    run = null;
-                    break;
-            }
             return run;
         }
 

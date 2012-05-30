@@ -89,6 +89,8 @@ namespace DeconTools.Backend.Utilities
 
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
         {
+            if (data.Length == 0) return -1;
+
             int binarySearchIndex = BinarySearchWithTolerance(data, targetVal, 0, data.Length - 1, tolerance);
             if (binarySearchIndex == -1) binarySearchIndex = 0;
 

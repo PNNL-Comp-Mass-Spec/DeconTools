@@ -154,7 +154,7 @@ namespace DeconTools.Backend.Workflows
             UIMFRun uimfRun = (UIMFRun)Run;
             if (uimfRun.FrameSetCollection == null || uimfRun.FrameSetCollection.FrameSetList.Count == 0) return;
 
-            UserState userstate = new UserState(Run, Run.CurrentScanSet, uimfRun.CurrentFrameSet);
+            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, uimfRun.CurrentFrameSet);
             int framenum = uimfRun.FrameSetCollection.FrameSetList.IndexOf(uimfRun.CurrentFrameSet);
 
             int scanNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(Run.CurrentScanSet);

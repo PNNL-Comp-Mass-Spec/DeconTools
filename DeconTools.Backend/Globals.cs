@@ -25,12 +25,13 @@ namespace DeconTools.Backend
             ICR2LS_Rawdata,
             Micromass_Rawdata,
             MZXML_Rawdata,
+            MZ5,
+            MZML,
             PNNL_IMS,
             PNNL_UIMF,
             SUNEXTREL,
             YAFMS,
             Bruker_V2
-
         }
 
         public enum PeakFitType

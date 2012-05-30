@@ -8,9 +8,9 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public class UIMF_TICExtractor : I_TIC_Extractor
+    public class UIMF_TICExtractor : TICExtractor
     {
-        public override void getTIC(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void GetTIC(DeconTools.Backend.Core.ResultCollection resultList)
         {
             Check.Require(resultList.Run is UIMFRun, "UIMF_TIC_Extractor only works on UIMF files");
 

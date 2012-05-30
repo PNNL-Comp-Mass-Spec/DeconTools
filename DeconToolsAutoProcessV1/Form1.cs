@@ -207,7 +207,7 @@ namespace DeconToolsAutoProcessV1
             this.progressBar1.Value = e.ProgressPercentage;
 
 
-            UserState currentState = (UserState)(e.UserState);
+            ScanBasedProgressInfo currentState = (ScanBasedProgressInfo)(e.UserState);
 
             this.txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
 

@@ -219,7 +219,7 @@ namespace DeconTools.Backend.Data
             Run run;
             try
             {
-                run = factory.CreateRun(filetype, runFilename);
+                run = factory.CreateRun(runFilename);
 
 
             }

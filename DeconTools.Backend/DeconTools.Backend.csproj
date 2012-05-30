@@ -33,6 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -108,8 +109,7 @@
     <Reference Include="ProteowizardWrapper">
       <HintPath>..\Library\ProteowizardWrapper.dll</HintPath>
     </Reference>
-    <Reference Include="pwiz_bindings_cli, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="pwiz_bindings_cli">
       <HintPath>..\Library\pwiz_bindings_cli.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -160,7 +160,6 @@
     <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
     <Compile Include="Core\Results\LcmsFeatureTargetedResult.cs" />
     <Compile Include="Core\Results\O16O18TargetedResultObject.cs" />
-    <Compile Include="Core\ProjectControllerFactory.cs" />
     <Compile Include="Core\Results\SipperLcmsTargetedResult.cs" />
     <Compile Include="Core\ScanNETPair.cs" />
     <Compile Include="Core\TargetBase.cs" />
@@ -238,10 +237,6 @@
     <Compile Include="Core\OldDecon2LSParameters.cs" />
     <Compile Include="Core\OldDeconFormatResult.cs" />
     <Compile Include="Core\PeakToTheLeftResultFlag.cs" />
-    <Compile Include="Core\Project.cs" />
-    <Compile Include="Core\ProjectController.cs" />
-    <Compile Include="Core\ProjectFacade.cs" />
-    <Compile Include="Core\ProjectParameters.cs" />
     <Compile Include="Core\Rapid.cs" />
     <Compile Include="Core\ResultCollection.cs" />
     <Compile Include="Core\ResultFlag.cs" />
@@ -252,8 +247,6 @@
     <Compile Include="Core\ScanSetFactory.cs" />
     <Compile Include="Core\Results\StandardIsosResult.cs" />
     <Compile Include="Core\Results\StandardScanResult.cs" />
-    <Compile Include="Core\TaskCollection.cs" />
-    <Compile Include="Core\TaskController.cs" />
     <Compile Include="Core\Results\UIMFIsosResult.cs" />
     <Compile Include="Core\UIMFLibraryAdapter.cs" />
     <Compile Include="Core\UMC.cs" />
@@ -286,6 +279,8 @@
     <Compile Include="Runs\BrukerV3Run.cs" />
     <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
     <Compile Include="Runs\CalibrationData\CalibrationDataBase.cs" />
+    <Compile Include="Runs\MzRun.cs" />
+    <Compile Include="Runs\MzxmlV2Run.cs" />
     <Compile Include="Runs\RunFactory.cs" />
     <Compile Include="Data\ScanResultFactory.cs" />
     <Compile Include="Data\Exporters\ScansExporter.cs" />
@@ -294,7 +289,6 @@
     <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\IMassTagResultExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListExporterFactory.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScansExporterFactory.cs" />
-    <Compile Include="Data\TaskControllerFactory.cs" />
     <Compile Include="Data\Exporters\UIMFIsosExporter.cs" />
     <Compile Include="Data\Exporters\UIMFIsosOrigIntensitiesExporter.cs" />
     <Compile Include="Data\UIMFScanSet.cs" />
@@ -308,10 +302,8 @@
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
     <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
-    <Compile Include="ProjectControllers\OldSchoolProcRunner.cs" />
     <Compile Include="Parameters\Class1.cs" />
     <Compile Include="Parameters\GenericMSParameters.cs" />
-    <Compile Include="ProcessingTasks\BasicTaskController.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
@@ -322,7 +314,7 @@
     <Compile Include="ProcessingTasks\IsosMergerExporters\BasicIsosMergerExporter.cs" />
     <Compile Include="ProcessingTasks\IsosMergerExporters\BasicScansMergerExporter.cs" />
     <Compile Include="ProcessingTasks\IsosMergerExporters\IIsosMergerExporter.cs" />
-    <Compile Include="ProcessingTasks\I_TIC_Extractor.cs" />
+    <Compile Include="ProcessingTasks\TICExtractor.cs" />
     <Compile Include="ProcessingTasks\MSGeneratorFactory.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\MSGenerator.cs" />
@@ -389,9 +381,7 @@
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
     <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
     <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />
-    <Compile Include="ProcessingTasks\TaskCleaner.cs" />
     <Compile Include="ProcessingTasks\UIMFDriftTimeExtractor.cs" />
-    <Compile Include="ProcessingTasks\UIMF_TaskController.cs" />
     <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\BasicZeroFiller.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
@@ -438,9 +428,11 @@
     <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />
     <Compile Include="Workflows\RunMergingPeakExportingWorkflow.cs" />
     <Compile Include="Workflows\SaturationIMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\ScanBasedProgressInfo.cs" />
     <Compile Include="Workflows\ScanBasedWorkflow.cs" />
     <Compile Include="Workflows\StandardIMSScanBasedWorkflow.cs" />
     <Compile Include="Workflows\TraditionalScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\WorkflowStats.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />
@@ -461,6 +453,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="IMSCOMP.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MassLynxRaw.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PNNLOmicsElementData.xml">

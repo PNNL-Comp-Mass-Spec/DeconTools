@@ -16,6 +16,7 @@ namespace DeconTools.Backend.Core
             this.scanSetCollection = new ScanSetCollection();
             this.ResultCollection = new ResultCollection(this);
             this.XYData = new XYData();
+            MSParameters = new MSParameters();
             this.MSLevelList = new SortedDictionary<int, byte>();
             this.ScanToNETAlignmentData = new SortedDictionary<int, float>();
         }
