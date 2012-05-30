@@ -450,6 +450,15 @@
     <None Include="ClassDiagrams\TaskControllerDetailsClassDiagram.cd" />
     <None Include="ClassDiagrams\TaskSampleClassDiagram.cd" />
     <None Include="Core\MassTagResultClassDiagram.cd" />
+    <None Include="Interop.EDAL.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Interop.HSREADWRITELib.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MSFileReader.XRawfile2.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="IMSCOMP.dll">

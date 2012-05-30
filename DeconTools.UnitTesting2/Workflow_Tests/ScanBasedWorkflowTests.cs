@@ -314,6 +314,49 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //Assert.That(File.Exists(expectedIsosOutput));
         }
 
+        [Test]
+        public void ProcessMZ5File()
+        {
+
+
+            string testFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+            string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
+
+            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+
+            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+
+
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            if (File.Exists(expectedPeaksFileOutput))
+            {
+                File.Delete(expectedPeaksFileOutput);
+            }
+
+            var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
+            workflow.Execute();
+
+            Assert.That(File.Exists(expectedIsosOutput));
+            Assert.That(File.Exists(expectedPeaksFileOutput));
+
+
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+
+            List<IsosResult> results = new List<IsosResult>();
+            results = importer.Import();
+
+            TestUtilities.DisplayMSFeatures(results);
+
+            Assert.AreEqual(1340, results.Count);
+            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+        }
+
 
 
     }

@@ -52,6 +52,11 @@ namespace DeconTools.Backend.Runs
             }
 
             Filename = fileName;
+            string baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(Filename);
+
+
             _reader = new MSDataFileReader(fileName);
 
             MinScan = GetMinPossibleScanNum();

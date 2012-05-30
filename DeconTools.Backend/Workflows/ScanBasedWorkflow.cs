@@ -71,7 +71,8 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
                 Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
                 Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
-                Logger.Instance.AddEntry("ERROR details:" + ex.Message + "\n" + ex.StackTrace);
+                Logger.Instance.AddEntry("ERROR details:" + ex.Message + "\n" + ex.StackTrace,
+                                         Logger.Instance.OutputFilename);
 
                 return null;
             }

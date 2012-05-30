@@ -69,7 +69,47 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
-   
+        [Test]
+        public void CreateMZMLRunTest1()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(testfile);
+
+            Assert.AreEqual(Globals.MSFileType.MZML, run.MSFileType);
+            Assert.AreEqual(18504, run.MaxScan);
+        }
+
+
+        [Test]
+        public void CreateMZXMLRunTest1()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(testfile);
+
+            Assert.AreEqual(Globals.MSFileType.MZXML_Rawdata, run.MSFileType);
+            Assert.AreEqual(18504, run.MaxScan);
+        }
+
+
+        [Test]
+        public void CreateMZ5RunTest1()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(testfile);
+
+            Assert.AreEqual(Globals.MSFileType.MZ5, run.MSFileType);
+            Assert.AreEqual(18504, run.MaxScan);
+        }
+
 
 
         [Test]
