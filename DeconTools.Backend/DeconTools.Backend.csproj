@@ -491,7 +491,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="XRAWFILE2Lib">
       <Guid>{5FE970A2-29C3-11D3-811D-00104B304896}</Guid>
