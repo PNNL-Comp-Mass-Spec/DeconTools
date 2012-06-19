@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <parameters>
 	<version>1.0</version>
 	<PeakParameters>
-		<PeakBackgroundRatio>1.3</PeakBackgroundRatio>
+		<PeakBackgroundRatio>3</PeakBackgroundRatio>
 		<SignalToNoiseThreshold>2</SignalToNoiseThreshold>
 		<PeakFitType>QUADRATIC</PeakFitType>
 		<WritePeaksToTextFile>False</WritePeaksToTextFile>
@@ -32,7 +32,7 @@
 		<MaxCharge>10</MaxCharge>
 		<MaxMW>10000</MaxMW>
 		<NumPeaksForShoulder>1</NumPeaksForShoulder>
-		<O16O18Media>True</O16O18Media>
+		<O16O18Media>False</O16O18Media>
 		<PeptideMinBackgroundRatio>1</PeptideMinBackgroundRatio>
 		<UseAbsolutePeptideIntensity>False</UseAbsolutePeptideIntensity>
 		<AbsolutePeptideIntensity>0</AbsolutePeptideIntensity>
@@ -44,10 +44,12 @@
 		<UseMercuryCaching>True</UseMercuryCaching>
 		<SumSpectra>False</SumSpectra>
 		<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
-		<NumberOfScansToSumOver>0</NumberOfScansToSumOver>
-		<NumberOfScansToAdvance>0</NumberOfScansToAdvance>
-		<SumSpectraAcrossFrameRange>True</SumSpectraAcrossFrameRange>
-		<NumberOfFramesToSumOver>3</NumberOfFramesToSumOver>
+	<!-- This means to sum +/-1 scans around a center scan, giving a total of 3 scans summed -->
+		<NumberOfScansToSumOver>1</NumberOfScansToSumOver>
+		<NumberOfScansToAdvance>1</NumberOfScansToAdvance>
+		<SumSpectraAcrossFrameRange>False</SumSpectraAcrossFrameRange>
+	<!-- This means to sum across 3 LC frames -->
+		<NumberOfFramesToSumOver>1</NumberOfFramesToSumOver>
 		<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
 		<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
 		<RightFitStringencyFactor>1</RightFitStringencyFactor>
