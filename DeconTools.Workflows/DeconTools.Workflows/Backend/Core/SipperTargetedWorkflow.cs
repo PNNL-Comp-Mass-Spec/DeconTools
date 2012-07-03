@@ -56,7 +56,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             ValidateParameters();
 
-            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.0001);
+            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE,0.00000001);
 
             _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             _chromGen.TopNPeaksLowerCutOff = 0.333;

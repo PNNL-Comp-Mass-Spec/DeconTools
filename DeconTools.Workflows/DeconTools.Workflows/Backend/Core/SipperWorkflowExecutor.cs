@@ -15,11 +15,11 @@ namespace DeconTools.Workflows.Backend.Core
     public sealed class SipperWorkflowExecutor : TargetedWorkflowExecutor
     {
 
-        IsotopicDistributionCalculator _isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
-   
+        
+
         #region Properties
 
-        public TargetCollection MassTagsForReference { get; set; }
+        
 
         public bool TargetsAreFromPeakMatchingDataBase { get; set; }
 
@@ -54,12 +54,15 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             List<int> massTagIDsForFiltering =
-                GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters) WorkflowParameters).MassTagsToFilterOn).Distinct().ToList();
+                GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
             _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
-            
+
 
             TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
+
+            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
@@ -67,10 +70,29 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
+                if (targetsFilePathIsEmpty)
+                {
+                    string currentTargetsFilePath = TryFindTargetsForCurrentDataset();     //check for a _targets file specifically associated with dataset
+
+                    if (String.IsNullOrEmpty(currentTargetsFilePath))
+                    {
+                        Targets = null;
+                    }
+                    else
+                    {
+                        Targets = GetLcmsFeatureTargets(currentTargetsFilePath);
+                    }
+
+                }
+                else
+                {
+                    Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
+                }
+
+
             }
 
-            Check.Ensure(Targets!=null && Targets.TargetList.Count>0,"Failed to initialize - Target list is empty. Please check parameter file.");
+            Check.Ensure(Targets != null && Targets.TargetList.Count > 0, "Failed to initialize - Target list is empty. Please check parameter file.");
 
 
             if (massTagIDsForFiltering.Count > 0)
@@ -94,7 +116,9 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).MassTagsForReference);
+
+
+                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, massTagIDList.Select(p => (int)p).ToList());
             }
 
             MassTagsForReference.TargetList = (from n in MassTagsForReference.TargetList
@@ -110,8 +134,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            UpdateTargetMissingEmpiricalFormulas(massTagIDList);
-            
+            UpdateTargetMissingInfo(massTagIDList);
 
 
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
@@ -123,12 +146,19 @@ namespace DeconTools.Workflows.Backend.Core
             TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
         }
 
-        private void UpdateTargetMissingEmpiricalFormulas(List<long> massTagIDList)
+        private void UpdateTargetMissingMonoisotopicMass()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UpdateTargetMissingInfo(List<long> massTagIDList)
         {
             bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
 
             foreach (LcmsFeatureTarget target in Targets.TargetList)
             {
+                bool isMissingMonoMass = target.MonoIsotopicMass <= 0 ;
+
                 if (String.IsNullOrEmpty(target.EmpiricalFormula))
                 {
                     if (massTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
@@ -149,11 +179,28 @@ namespace DeconTools.Workflows.Backend.Core
                     }
                     else
                     {
+                        if (isMissingMonoMass)
+                        {
+                            throw new ApplicationException(
+                                "Trying to prepare target list, but Target is missing both the 'Code' and the Monoisotopic Mass. One or the other is needed.");
+                        }
                         target.Code = "AVERAGINE";
                         target.EmpiricalFormula =
-                            _isotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
+                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
                     }
                 }
+
+                
+                if (isMissingMonoMass)
+                {
+                    target.MonoIsotopicMass =
+                        EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
+
+                    target.MZ = target.MonoIsotopicMass/target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
+                }
+
+
+
             }
         }
 
@@ -168,7 +215,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 using (StreamReader reader = new StreamReader(fileRefForMassTagsToFilterOn))
                 {
-                    while (reader.Peek()!=-1)
+                    while (reader.Peek() != -1)
                     {
                         string line = reader.ReadLine();
                         int mtid = -1;
@@ -230,10 +277,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         }
-        
 
-        
-        
+
+
+
         private string buildConnectionString()
         {
             string db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
@@ -327,7 +374,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-      
+
 
 
     }

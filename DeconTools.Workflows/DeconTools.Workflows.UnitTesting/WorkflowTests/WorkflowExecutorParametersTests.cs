@@ -16,11 +16,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
             parameters.LoggingFolder = @"d:\temp\logs";
-            parameters.MassTagsForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
+            parameters.TargetsUsedForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
             parameters.TargetsFilePath = @"d:\temp\MassTags\massTagsToBeTargeted.txt";
+            parameters.TargetsBaseFolder = @"d:\temp";
+  
             parameters.ResultsFolder = @"d:\temp\results";
             parameters.TargetedAlignmentWorkflowParameterFile = @"d:\temp\Parameters\targetedAlignmentParameters.xml";
             parameters.WorkflowParameterFile = @"d:\temp\Parameters\WorkflowParameters.xml";
+            parameters.TargetsBaseFolder = @"d:\temp";
 
             parameters.AlignmentInfoFolder = @"d:\temp\AlignmentInfo";
 
@@ -39,8 +42,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
             parameters.LoggingFolder = @"d:\temp\logs";
-            parameters.MassTagsForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
+            parameters.TargetsUsedForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
             parameters.TargetsFilePath = @"d:\temp\MassTags\targets.txt";
+            parameters.TargetsBaseFolder = @"d:\temp";
+            
             parameters.MassTagsForReference = @"d:\temp\MassTags\MassTagsForReference.txt";
             parameters.ResultsFolder = @"d:\temp\results";
             parameters.TargetedAlignmentWorkflowParameterFile = @"d:\temp\Parameters\targetedAlignmentParameters.xml";
@@ -66,12 +71,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(@"d:\temp\rawdata", parameters.FolderPathForCopiedRawDataset);
             Assert.AreEqual(@"d:\temp\logs", parameters.LoggingFolder);
-            Assert.AreEqual(@"d:\temp\MassTags\massTagsForAlignment.txt", parameters.MassTagsForAlignmentFilePath);
+            Assert.AreEqual(@"d:\temp\MassTags\massTagsForAlignment.txt", parameters.TargetsUsedForAlignmentFilePath);
             Assert.AreEqual(@"d:\temp\MassTags\massTagsToBeTargeted.txt", parameters.TargetsFilePath);
             Assert.AreEqual(@"d:\temp\results", parameters.ResultsFolder);
             Assert.AreEqual(@"d:\temp\Parameters\targetedAlignmentParameters.xml", parameters.TargetedAlignmentWorkflowParameterFile);
             Assert.AreEqual(@"d:\temp\Parameters\WorkflowParameters.xml", parameters.WorkflowParameterFile);
-
+            Assert.AreEqual(@"d:\temp", parameters.TargetsBaseFolder);
         }
 
 

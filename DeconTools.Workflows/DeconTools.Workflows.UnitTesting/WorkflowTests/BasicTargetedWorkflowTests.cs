@@ -250,9 +250,27 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
            // Assert.AreEqual(610.81m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             //Assert.AreEqual(6483, (decimal)Math.Round(result.ChromPeakSelected.XValue));
 
-            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+
+            double maxIntensity = result.IsotopicProfile.Peaklist.Max(p => p.Height);
+
+            for (int i = 0; i < result.IsotopicProfile.Peaklist.Count; i++)
             {
-                Console.WriteLine(dataItem);
+                
+                double correctedRatio;
+                if (i<result.ChromCorrelationData.CorrelationDataItems.Count)
+                {
+                    correctedRatio = result.ChromCorrelationData.CorrelationDataItems[i].CorrelationSlope;
+                }
+                else
+                {
+                    correctedRatio = 0;
+                }
+
+                double observedRelIntensity = result.IsotopicProfile.Peaklist[i].Height/maxIntensity;
+
+                Console.WriteLine(i + "\t" + observedRelIntensity + "\t" + correctedRatio);
+
+
             }
 
         }

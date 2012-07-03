@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
         protected string[] monomassCalibratedHeaders = { "MonoisotopicMassCalibrated" };
         protected string[] massErrorHeaders = { "MassErrorInPPM" };
-
+        protected string[] matchedMassTagIDHeaders = { "MatchedMassTagID" };
         protected string[] mzHeaders = { "MonoMZ", "UMCMZForChargeBasis" };
         protected string[] scanHeaders = { "scan", "scanClassRep" };
         protected string[] scanEndHeaders = { "scanEnd", "scan_end" };
@@ -128,6 +128,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.MonoMZ = ParseDoubleField(LookupData(rowData, mzHeaders));
             result.NET = ParseFloatField(LookupData(rowData, netHeaders));
             result.NumChromPeaksWithinTol = ParseIntField(LookupData(rowData, numchromPeaksWithinTolHeaders));
+            result.NumQualityChromPeaksWithinTol = ParseIntField(LookupData(rowData, numQualitychromPeaksWithinTolHeaders));
             result.ScanLC = ParseIntField(LookupData(rowData, scanHeaders));
             result.ScanLCEnd = ParseIntField(LookupData(rowData, scanEndHeaders));
             result.ScanLCStart = ParseIntField(LookupData(rowData, scanStartHeaders));

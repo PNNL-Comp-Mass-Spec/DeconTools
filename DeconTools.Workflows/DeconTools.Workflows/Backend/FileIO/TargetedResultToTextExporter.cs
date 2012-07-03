@@ -31,16 +31,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 case Globals.TargetedWorkflowTypes.N14N15Targeted1:
                     throw new NotImplementedException("This hasn't been implemented for N14N15 data");
-                    break;
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");
-                    break;
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");
-                    break;
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");
-                    break;
                 default:
                     exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
                     break;

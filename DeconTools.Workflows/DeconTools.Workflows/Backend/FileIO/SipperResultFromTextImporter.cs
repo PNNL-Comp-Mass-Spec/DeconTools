@@ -9,13 +9,14 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _areaUnderRatioCurveHeaders = {"AreaRatioCurve"};
         private string[] _areaUnderRatioRevisedHeaders = { "AreaRatioCurveRevised" };
         private string[] _RSquaredForRatio = { "RSquared" };
-        private string[] _featureToMassTagIDHeaders = { "MatchedMassTagID" };
         private string[] _chromCorrMinHeaders = {"ChromCorrMin"};
         private string[] _chromCorrMaxHeaders = { "ChromCorrMax" };
         private string[] _chromCorrAverageHeaders = { "ChromCorrAverage" };
         private string[] _chromCorrMedianHeaders = { "ChromCorrMedian" };
         private string[] _chromCorrStdevHeaders = { "ChromCorrStdev" };
-
+        private string[] _amountC13LabellingHeaders = {"AmountLabelling"};
+        private string[] _fractionLabellingHeaders = {"FractionLabel"};
+        private string[] _numHQProfilePeaksHeaders = { "NumHQProfilePeaks" };
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
@@ -36,13 +37,16 @@ namespace DeconTools.Workflows.Backend.FileIO
             
             result.AreaUnderRatioCurve = ParseDoubleField(LookupData(processedData, _areaUnderRatioCurveHeaders));
             result.AreaUnderRatioCurveRevised = ParseDoubleField(LookupData(processedData, _areaUnderRatioRevisedHeaders));
-            result.MatchedMassTagID = ParseIntField(LookupData(processedData, _featureToMassTagIDHeaders));
+            result.MatchedMassTagID = ParseIntField(LookupData(processedData, matchedMassTagIDHeaders));
             result.RSquaredValForRatioCurve = ParseDoubleField(LookupData(processedData, _RSquaredForRatio));
             result.ChromCorrelationMin = ParseDoubleField(LookupData(processedData, _chromCorrMinHeaders));
             result.ChromCorrelationMax = ParseDoubleField(LookupData(processedData, _chromCorrMaxHeaders));
             result.ChromCorrelationAverage = ParseDoubleField(LookupData(processedData, _chromCorrAverageHeaders));
             result.ChromCorrelationMedian = ParseDoubleField(LookupData(processedData, _chromCorrMedianHeaders));
             result.ChromCorrelationStdev = ParseDoubleField(LookupData(processedData, _chromCorrStdevHeaders));
+            result.FractionLabelled = ParseDoubleField(LookupData(processedData, _fractionLabellingHeaders));
+            result.AmountC13Labelling = ParseDoubleField(LookupData(processedData, _amountC13LabellingHeaders));
+            result.NumHighQualityProfilePeaks = ParseIntField(LookupData(processedData, _numHQProfilePeaksHeaders));
             return result;
 
         }

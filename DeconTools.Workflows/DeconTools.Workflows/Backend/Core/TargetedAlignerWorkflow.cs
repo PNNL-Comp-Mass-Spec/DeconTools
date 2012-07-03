@@ -46,6 +46,8 @@ namespace DeconTools.Workflows.Backend.Core
             NumSuccessesPerNETGrouping = new List<int>();
             NumFailuresPerNETGrouping = new List<int>();
 
+            outputToConsole = true;
+
 
         }
 
@@ -65,9 +67,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-
         public NETAndMassAligner Aligner { get; set; }
-
 
         public override WorkflowParameters WorkflowParameters
         {

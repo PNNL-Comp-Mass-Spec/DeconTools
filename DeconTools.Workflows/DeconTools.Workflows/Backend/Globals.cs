@@ -30,6 +30,13 @@ namespace DeconTools.Workflows.Backend
         }
 
 
+        public enum TargetType
+        {
+            LcmsFeature,
+            DatabaseTarget
+        }
+
+
        
 
 

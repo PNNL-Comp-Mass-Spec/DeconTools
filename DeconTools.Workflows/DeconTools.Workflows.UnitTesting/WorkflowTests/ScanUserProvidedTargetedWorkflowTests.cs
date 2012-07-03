@@ -43,6 +43,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             O16O18Workflow workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
+            Assert.IsTrue(workflow.Result.Target.ScanLCTarget > 0);
             Assert.IsNotNull(workflow.ChromPeakSelected);
 
             Assert.AreEqual(10622, (int)workflow.ChromPeakSelected.XValue);

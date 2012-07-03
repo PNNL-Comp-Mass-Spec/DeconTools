@@ -27,6 +27,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderRatioCurve.ToString("0.000"));
             sb.Append(Delimiter);
+            sb.Append(sipperResult.NumHighQualityProfilePeaks.ToString("0"));
+            sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderRatioCurveRevised.ToString("0.000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.RSquaredValForRatioCurve.ToString("0.00000"));
@@ -41,6 +43,11 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.ChromCorrelationStdev.ToString("0.00000"));
             sb.Append(Delimiter);
+            sb.Append(sipperResult.AmountC13Labelling.ToString("0.000"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.FractionLabelled.ToString("0.000"));
+            sb.Append(Delimiter);
+            
             sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
             return sb.ToString();
 
@@ -59,6 +66,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("AreaRatioCurve");
             sb.Append(Delimiter);
+            sb.Append("NumHQProfilePeaks");
+            sb.Append(Delimiter);
             sb.Append("AreaRatioCurveRevised");
             sb.Append(Delimiter);
             
@@ -73,6 +82,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("ChromCorrMedian");
             sb.Append(Delimiter);
             sb.Append("ChromCorrStdev");
+            sb.Append(Delimiter);
+            sb.Append("AmountLabelling");
+            sb.Append(Delimiter);
+            sb.Append("FractionLabel");
             sb.Append(Delimiter);
             sb.Append("ValidationCode");
             

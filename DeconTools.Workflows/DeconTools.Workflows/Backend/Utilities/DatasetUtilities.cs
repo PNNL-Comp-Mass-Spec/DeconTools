@@ -54,7 +54,6 @@ namespace DeconTools.Workflows.Backend.Utilities
                     command.CommandTimeout = 60;
                     DbDataReader reader = command.ExecuteReader();
 
-                    int progressCounter = 0;
                     while (reader.Read())
                     {
 

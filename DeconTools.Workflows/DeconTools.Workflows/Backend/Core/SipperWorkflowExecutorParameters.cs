@@ -16,8 +16,8 @@
         /// File path reference to file containing list of MassTags IDs which are used when filtering. Leave
         /// This empty if you want to analyze all Targets
         /// </summary>
-        public string MassTagsToFilterOn { get; set; }
-        public string MassTagsForReference { get; set; }
+        public string TargetsToFilterOn { get; set; }
+        public string ReferenceDataForTargets { get; set; }
 
         #endregion
 

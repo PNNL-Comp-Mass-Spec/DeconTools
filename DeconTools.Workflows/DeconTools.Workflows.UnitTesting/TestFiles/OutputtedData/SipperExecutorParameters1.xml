@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <CopyRawFileLocal>false</CopyRawFileLocal>
+  <DeleteLocalDatasetAfterProcessing>false</DeleteLocalDatasetAfterProcessing>
+  <FolderPathForCopiedRawDataset></FolderPathForCopiedRawDataset>
+  <LoggingFolder>C:\Sipper\SipperDemo\SipperOutputs</LoggingFolder>
+  <ReferenceDataForTargets>C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt</ReferenceDataForTargets>
+  <ResultsFolder>C:\Sipper\SipperDemo\SipperOutputs</ResultsFolder>
+  <TargetsBaseFolder>C:\Sipper\SipperDemo\SipperInputs\Targets</TargetsBaseFolder>
+  <TargetsFilePath>C:\Sipper\SipperDemo\SipperInputs\Targets\sample_targets.txt</TargetsFilePath>
+  <TargetsToFilterOn></TargetsToFilterOn>
+  <WorkflowParameterFile>C:\Sipper\SipperDemo\SipperInputs\SipperWorkflowParameters.xml</WorkflowParameterFile>
+  <WorkflowType>SipperWorkflowExecutor1</WorkflowType>
+</WorkflowParameters>

@@ -22,6 +22,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 result.DatasetName = TryGetDatasetNameFromFileName();
             }
 
+
             result.ChargeState = ParseIntField(LookupData(processedData, chargeStateHeaders));
             result.FitScore = ParseFloatField(LookupData(processedData, fitScoreHeaders));
             result.Intensity = ParseFloatField(LookupData(processedData, intensityRepHeaders));
@@ -43,7 +44,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ScanLCEnd = ParseIntField(LookupData(processedData, scanEndHeaders));
             result.ScanLCStart = ParseIntField(LookupData(processedData, scanStartHeaders));
 
-
+            result.MatchedMassTagID = ParseIntField(LookupData(processedData, matchedMassTagIDHeaders,"-1"));
 
 
             return result;

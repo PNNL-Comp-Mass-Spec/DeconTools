@@ -5,11 +5,13 @@
   <DeleteLocalDatasetAfterProcessing>true</DeleteLocalDatasetAfterProcessing>
   <FolderPathForCopiedRawDataset>d:\temp\rawdata</FolderPathForCopiedRawDataset>
   <LoggingFolder>d:\temp\logs</LoggingFolder>
-  <MassTagsForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</MassTagsForAlignmentFilePath>
   <ResultsFolder>d:\temp\results</ResultsFolder>
   <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>d:\temp\Parameters\targetedAlignmentParameters.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsBaseFolder>d:\temp</TargetsBaseFolder>
   <TargetsFilePath>d:\temp\MassTags\massTagsToBeTargeted.txt</TargetsFilePath>
+  <TargetsUsedForAlignmentFilePath>d:\temp\MassTags\massTagsForAlignment.txt</TargetsUsedForAlignmentFilePath>
+  <TargetType>DatabaseTarget</TargetType>
   <WorkflowParameterFile>d:\temp\Parameters\WorkflowParameters.xml</WorkflowParameterFile>
   <WorkflowType>BasicTargetedWorkflowExecutor1</WorkflowType>
 </WorkflowParameters>

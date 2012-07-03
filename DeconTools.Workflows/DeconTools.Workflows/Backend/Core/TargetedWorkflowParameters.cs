@@ -52,6 +52,7 @@ namespace DeconTools.Workflows.Backend.Core
         public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
         public bool ChromatogramCorrelationIsPerformed { get; set; }
+        
 
         
         /// <summary>

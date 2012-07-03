@@ -68,7 +68,9 @@ namespace DeconTools.Workflows.Backend.Results
             r.ChromCorrelationAverage =    result.ChromCorrelationAverage;
             r.ChromCorrelationMedian =   result.ChromCorrelationMedian;
             r.ChromCorrelationStdev= result.ChromCorrelationStdev;
-
+            r.AmountC13Labelling = result.AmountC13Labelling;
+            r.FractionLabelled = result.FractionLabelled;
+            r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
         }
 
 
@@ -159,8 +161,11 @@ namespace DeconTools.Workflows.Backend.Results
             if (result.FailedResult)
             {
                 tr.FailureType = result.FailureType.ToString();
-                tr.ErrorDescription = result.ErrorDescription;
+                
             }
+
+            tr.ErrorDescription = result.ErrorDescription ?? "";
+
 
         }
 

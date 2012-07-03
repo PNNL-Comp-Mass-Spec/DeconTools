@@ -10,6 +10,7 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
@@ -18,15 +19,19 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class TargetedWorkflowExecutor : WorkflowBase
     {
+        protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
+
 
         protected string _loggingFileName;
         protected string _resultsFolder;
         protected TargetedResultRepository ResultRepository;
 
 
+        protected List<long> ReferenceMassTagIDList = new List<long>(); 
+
         protected WorkflowParameters _workflowParameters;
 
-        private BackgroundWorker _backgroundWorker;
+        protected BackgroundWorker _backgroundWorker;
         private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
         #region Constructors
@@ -56,6 +61,68 @@ namespace DeconTools.Workflows.Backend.Core
             ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
+
+
+        public override void InitializeWorkflow()
+        {
+            if (string.IsNullOrEmpty(ExecutorParameters.ResultsFolder))
+            {
+                _resultsFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
+            }
+            else
+            {
+                _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
+            }
+
+
+            MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
+
+
+            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+
+            string currentTargetsFilePath;
+
+            if (targetsFilePathIsEmpty)
+            {
+                currentTargetsFilePath = TryFindTargetsForCurrentDataset();   //check for a _targets file specifically associated with dataset
+            }
+            else
+            {
+                currentTargetsFilePath = ExecutorParameters.TargetsFilePath;
+            }
+
+            Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
+
+            Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
+                         "Target massTags is empty. Check the path to the massTag data file.");
+
+
+            if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
+            {
+                UpdateTargetMissingInfo();
+            }
+
+
+            _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
+            _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
+
+            if (ExecutorParameters.TargetedAlignmentIsPerformed)
+            {
+                if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
+                {
+                    throw new FileNotFoundException(
+                        "Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
+                }
+
+
+                TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
+                TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
+
+            }
+
+            TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+        }
+
 
 
         #endregion
@@ -88,12 +155,93 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetedWorkflow TargetedWorkflow { get; set; }
 
-
+        /// <summary>
+        /// These are database targets that are used for lookup when working on peak-matched LcmsFeatures
+        /// </summary>
+        public TargetCollection MassTagsForReference { get; set; }
 
 
         #endregion
 
+        private void UpdateTargetMissingInfo()
+        {
+            bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
+
+            foreach (LcmsFeatureTarget target in Targets.TargetList)
+            {
+                bool isMissingMonoMass = target.MonoIsotopicMass <= 0;
+
+                if (String.IsNullOrEmpty(target.EmpiricalFormula))
+                {
+                    if (ReferenceMassTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
+                    {
+                        var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
+
+                        //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
+                        //  see:   \\gigasax\DMS_Parameter_Files\Sequest\sequest_ETD_N14_NE.params
+                        //To create the theoretical isotopic profile, we will change the 'X' to 'L'
+                        if (mt.Code.Contains("X"))
+                        {
+                            mt.Code = mt.Code.Replace('X', 'L');
+                            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
+                        }
+
+                        target.Code = mt.Code;
+                        target.EmpiricalFormula = mt.EmpiricalFormula;
+                    }
+                    else if (!String.IsNullOrEmpty(target.Code))
+                    {
+                        //Create empirical formula based on code. Assume it is an unmodified peptide
+                        target.EmpiricalFormula = new PeptideUtils().GetEmpiricalFormulaForPeptideSequence(target.Code);
+
+                    }
+                    else
+                    {
+                        if (isMissingMonoMass)
+                        {
+                            throw new ApplicationException(
+                                "Trying to prepare target list, but Target is missing both the 'Code' and the Monoisotopic Mass. One or the other is needed.");
+                        }
+                        target.Code = "AVERAGINE";
+                        target.EmpiricalFormula =
+                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
+                    }
+                }
+
+
+                if (isMissingMonoMass)
+                {
+                    target.MonoIsotopicMass =
+                        EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
+
+                    target.MZ = target.MonoIsotopicMass / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
+                }
+
+
+
+            }
+        }
+
+
         #region Public Methods
+
+        protected string TryFindTargetsForCurrentDataset()
+        {
+            string expectedTargetsFile = ExecutorParameters.TargetsBaseFolder + Path.DirectorySeparatorChar +
+                                         RunUtilities.GetDatasetName(DatasetPath) + "_targets.txt";
+
+            if (File.Exists(expectedTargetsFile))
+            {
+                return expectedTargetsFile;
+            }
+            else
+            {
+                return String.Empty;
+            }
+
+        }
+
+
         public override void Execute()
         {
             _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
@@ -179,7 +327,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
-                ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + this.ExecutorParameters.MassTagsForAlignmentFilePath);
+                ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + this.ExecutorParameters.TargetsUsedForAlignmentFilePath);
                 ReportGeneralProgress("Total mass tags to be aligned = " + this.MassTagsForTargetedAlignment.TargetList.Count);
 
                 this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(this.TargetedAlignmentWorkflowParameters);
@@ -275,13 +423,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected TargetCollection GetMassTagTargets(string massTagFileName)
         {
+            return GetMassTagTargets(massTagFileName, new List<int>());
+        }
+
+        protected TargetCollection GetMassTagTargets(string massTagFileName, List<int>targetIDsToFilterOn)
+        {
             if (String.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
             {
                 return new TargetCollection();
             }
 
             MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
-            return importer.Import();
+            return importer.Import(targetIDsToFilterOn);
         }
 
         protected string getLogFileName(string folderPath)
@@ -627,6 +780,23 @@ namespace DeconTools.Workflows.Backend.Core
             else
             {
                 return false;
+            }
+        }
+
+        protected TargetCollection CreateTargets(Globals.TargetType targetType,string targetFilePath)
+        {
+            if (string.IsNullOrEmpty(targetFilePath)) return null;
+
+            switch (targetType)
+            {
+                case Globals.TargetType.LcmsFeature:
+                    return GetLcmsFeatureTargets(targetFilePath);
+                    break;
+                case Globals.TargetType.DatabaseTarget:
+                    return GetMassTagTargets(targetFilePath);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("targetType");
             }
         }
 

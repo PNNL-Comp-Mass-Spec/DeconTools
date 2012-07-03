@@ -173,12 +173,6 @@ namespace DeconTools.Workflows.Backend.Core
                 if (_workflowParameters.ChromatogramCorrelationIsPerformed)
                 {
                     ExecuteTask(_chromatogramCorrelatorTask);
-
-                    Console.WriteLine(Result);
-                    foreach (var item in Result.ChromCorrelationData.CorrelationDataItems)
-                    {
-                        Console.WriteLine(item);
-                    }
                 }
 
 

@@ -12,10 +12,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
                     return new BasicTargetedWorkflowExecutor(workflowParameters, datasetPath);
-                    break;
                 case Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1:
                     return new LcmsFeatureTargetedWorkflowExecutor(workflowParameters, datasetPath);
-                    break;
                 case Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1:
                     return new SipperWorkflowExecutor(workflowParameters, datasetPath);
                 default:

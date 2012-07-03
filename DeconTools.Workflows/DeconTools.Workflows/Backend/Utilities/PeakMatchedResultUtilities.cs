@@ -77,7 +77,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         private void ReadResultsFromDB(List<TargetedResultDTO> results, DbDataReader reader)
         {
-            int progressCounter = 0;
             while (reader.Read())
             {
                 TargetedResultDTO result = new TargetedResultDTO();

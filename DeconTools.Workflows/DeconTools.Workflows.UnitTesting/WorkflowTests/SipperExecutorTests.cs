@@ -15,31 +15,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class SipperExecutorTests
     {
-        [Test]
-        public void loadLCMSFeaturesContainingEmpiricalFormulasAndProcess()
-        {
-            string paramFile =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams_importedFeaturesWithEmpFormula.xml";
-
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
-            parameters.LoadParameters(paramFile);
-
-            //string exportedParameterFile =
-            //    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
-            //parameters.SaveParametersToXML(exportedParameterFile);
-
-            string testDataset =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
-
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
-
-            Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
-                          Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
-
-            executor.Execute();
-        }
-
-
+      
 
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess()
@@ -50,12 +26,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
-            parameters.MassTagsToFilterOn = String.Empty;
+            parameters.TargetsToFilterOn = String.Empty;
 
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_select_unidentified_LCMSFeatures.txt";
 
-            parameters.MassTagsForReference = String.Empty;
+            parameters.ReferenceDataForTargets = String.Empty;
 
             string testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -78,12 +54,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
-            parameters.MassTagsToFilterOn = String.Empty;
+            parameters.TargetsToFilterOn = String.Empty;
 
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_select_unidentified_LCMSFeatures.txt";
 
-            parameters.MassTagsForReference = String.Empty;
+            parameters.ReferenceDataForTargets = String.Empty;
 
             string testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -278,6 +254,92 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine(path);
 
         }
+
+
+        [Test]
+        public void ExecuteSipper_FindAssociatedTargetsFile()
+        {
+            string paramFile =
+                @"\\protoapps\UserData\Slysz\Data\Yellowstone\SIPPER\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+            parameters.DbName = String.Empty;
+            parameters.DbServer = String.Empty;
+            parameters.DbTableName = String.Empty;
+
+            parameters.CopyRawFileLocal = false;
+
+            parameters.ReferenceDataForTargets = @"\\protoapps\DataPkgs\Public\2012\548_YSIP_C12_C13_data_analysis\massTag_reference_file.txt";
+
+            parameters.TargetsBaseFolder =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets";
+
+
+            string testDataset =
+               @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            executor.Execute();
+
+
+        }
+
+
+        [Test]
+        public void ExecuteSipper_UsingSpecifiedTargets()
+        {
+            string paramFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+            parameters.DbName = String.Empty;
+            parameters.DbServer = String.Empty;
+            parameters.DbTableName = String.Empty;
+
+            parameters.CopyRawFileLocal = false;
+
+            parameters.ReferenceDataForTargets = @"\\protoapps\DataPkgs\Public\2012\548_YSIP_C12_C13_data_analysis\massTag_reference_file.txt";
+          
+            parameters.TargetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets.txt";
+
+            string testDataset = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            executor.Execute();
+
+
+        }
+
+
+        [Test]
+        public void ExecuteSipper_UsingTargetsWithEmpiricalFormulaOnly()
+        {
+            string paramFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+            parameters.DbName = String.Empty;
+            parameters.DbServer = String.Empty;
+            parameters.DbTableName = String.Empty;
+
+            parameters.CopyRawFileLocal = false;
+
+            parameters.TargetsFilePath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets_empFormula_noMonoMass.txt";
+
+            
+            string testDataset =
+               @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            executor.Execute();
+
+
+        }
+
 
 
     }

@@ -48,7 +48,6 @@ namespace DeconTools.Workflows.Backend.Core
         private ScanSet CreateScanSet(int scanNum)
         {
             ScanSetFactory ssf = new ScanSetFactory();
-            int desiredMSLevel = 1;
             int closestScanNum =   Run.GetClosestMSScan(scanNum, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
             return ssf.CreateScanSet(this.Run, closestScanNum, this.NumScansSummed);
         }

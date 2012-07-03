@@ -10,6 +10,7 @@
   <ResultsFolder>d:\temp\results</ResultsFolder>
   <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
   <TargetedAlignmentWorkflowParameterFile>d:\temp\Parameters\targetedAlignmentParameters.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsBaseFolder>d:\temp</TargetsBaseFolder>
   <TargetsFilePath>d:\temp\MassTags\targets.txt</TargetsFilePath>
   <WorkflowParameterFile>d:\temp\Parameters\WorkflowParameters.xml</WorkflowParameterFile>
   <WorkflowType>LcmsFeatureTargetedWorkflowExecutor1</WorkflowType>

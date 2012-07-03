@@ -51,10 +51,6 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4493.18135, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Release\DeconTools.Backend.dll</HintPath>
-    </Reference>
     <Reference Include="DeconTools.UnitTesting2, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconTools.UnitTesting2.dll</HintPath>
@@ -88,7 +84,7 @@
     <Compile Include="UtilitiesTests\PeakMatchedResultUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
-    <Compile Include="WorkflowTests\ExecuteO16O18WorkflowTests.cs" />
+    <Compile Include="WorkflowTests\O16O18ExecutorTests.cs" />
     <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />
     <Compile Include="WorkflowTests\IMS_WholisticFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\LcmsTargetedWorkflowExecutorTests.cs" />
@@ -98,6 +94,7 @@
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanBasedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanUserProvidedTargetedWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\SipperExecutorParameterTests.cs" />
     <Compile Include="WorkflowTests\SipperExecutorTests.cs" />
     <Compile Include="WorkflowTests\SipperWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
@@ -120,6 +117,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>

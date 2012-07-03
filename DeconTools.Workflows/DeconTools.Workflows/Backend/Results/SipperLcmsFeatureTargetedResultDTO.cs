@@ -27,7 +27,13 @@ namespace DeconTools.Workflows.Backend.Results
 
         public double ChromCorrelationStdev { get; set; }
 
+        public double FractionLabelled { get; set; }
+
+        public double AmountC13Labelling { get; set; }
+
         public bool PassesFilter { get; set; }
+
+        public int NumHighQualityProfilePeaks { get; set; }
 
         #endregion
 

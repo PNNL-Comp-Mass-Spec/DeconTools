@@ -12,6 +12,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         string[] intensityTheorI2Headers = { "intensityTheorI2", "i2theor" };
         string[] intensityTheorI4Headers = { "intensityTheorI4", "i4theor" };
         string[] intensityI4AdjustedHeaders = { "intensityI4Adjusted" };
+        string[] ratioHeaders = {"ratio"};
 
 
         #region Constructors
@@ -37,6 +38,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IntensityTheorI2 = ParseFloatField(LookupData(processedData, intensityTheorI2Headers));
             result.IntensityTheorI4 = ParseFloatField(LookupData(processedData, intensityTheorI4Headers));
             result.IntensityI4Adjusted = ParseFloatField(LookupData(processedData, intensityI4AdjustedHeaders));
+            result.Ratio = ParseFloatField(LookupData(processedData, ratioHeaders));
 
             return result;
         }

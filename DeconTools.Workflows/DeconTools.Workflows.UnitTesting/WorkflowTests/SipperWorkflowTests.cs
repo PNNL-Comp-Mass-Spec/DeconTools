@@ -128,6 +128,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             int[] testMassTags = { 344540889, 344540889, 344972415, 354881152, 355157363, 355162540, 355315129, 355054192, 355160150};
 
+           // testMassTags = new[] {344540889};
+            
+
+
             //no enrichment peptides:
             //testMassTags = new int[] { 355057553, 355058671, 355084418 };
 
@@ -142,6 +146,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //testMassTags = new int[] { 355033668 };
 
+
+            testMassTags = new int[]{355157492};
 
             var filteredLcmsFeatureTargets = (from n in lcmsTargetCollection.TargetList
                                               where testMassTags.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
