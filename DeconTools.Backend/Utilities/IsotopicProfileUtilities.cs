@@ -86,6 +86,28 @@ namespace DeconTools.Backend.Utilities
            
         }
 
+
+        public static void NormalizeIsotopicProfileToSpecificPeak(IsotopicProfile profile, int indexOfPeakUsedForNormalization, float intensityForNormalization = 1.0f)
+        {
+            Check.Require(profile != null, "Isotopic profile is null");
+            Check.Require(profile.Peaklist != null, "Isotopic profile peaklist is null");
+            Check.Require(indexOfPeakUsedForNormalization < profile.Peaklist.Count, "Cannot normalize. Requested index exceeds array bounds.");
+
+            if (indexOfPeakUsedForNormalization>=profile.Peaklist.Count)
+            {
+                return;
+            }
+
+            var intensityTargetPeak = profile.Peaklist[indexOfPeakUsedForNormalization].Height;
+
+            for (int i = 0; i < profile.Peaklist.Count; i++)
+            {
+                profile.Peaklist[i].Height = profile.Peaklist[i].Height/intensityTargetPeak*intensityForNormalization;
+            }
+
+        }
+
+
         /// <summary>
         /// Aligns an isotopic profile based on a source isotopic profile.
         /// </summary>

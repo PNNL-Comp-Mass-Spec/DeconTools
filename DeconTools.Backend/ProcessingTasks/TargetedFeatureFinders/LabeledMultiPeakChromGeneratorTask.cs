@@ -38,19 +38,19 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #region Private Methods
         #endregion
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. Mass tags haven't been defined.", this.Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. Mass tags haven't been defined.", this.Name));
 
-            resultColl.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
+            resultList.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
-            featureGenerator.GenerateTheorFeature(resultColl.Run.CurrentMassTag);   //generate theor profile for unlabeled feature
-            IsotopicProfile labeledProfile = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(resultColl.Run.CurrentMassTag, 0.005);
+            featureGenerator.GenerateTheorFeature(resultList.Run.CurrentMassTag);   //generate theor profile for unlabeled feature
+            IsotopicProfile labeledProfile = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(resultList.Run.CurrentMassTag, 0.005);
 
             IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
                 NumPeaksForGeneratingChrom, ToleranceInPPM);
 
-            TargetedResultBase massTagresult = resultColl.CurrentTargetedResult;
+            TargetedResultBase massTagresult = resultList.CurrentTargetedResult;
 
             N14N15_TResult n14n15result;
 
@@ -63,8 +63,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 throw new InvalidOperationException(String.Format("{0} failed. There was a problem with the Result type.", this.Name));
             }
 
-            n14n15result.UnlabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultColl.MSPeakResultList, resultColl.Run.CurrentMassTag.IsotopicProfile);
-            n14n15result.LabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultColl.MSPeakResultList, labeledProfile);
+            n14n15result.UnlabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultList.MSPeakResultList, resultList.Run.CurrentMassTag.IsotopicProfile);
+            n14n15result.LabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultList.MSPeakResultList, labeledProfile);
 
 
 

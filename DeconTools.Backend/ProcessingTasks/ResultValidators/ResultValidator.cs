@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
@@ -21,9 +17,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Private Methods
         #endregion
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            ValidateResult(resultColl, this.CurrentResult);
+            ValidateResult(resultList, this.CurrentResult);
         }
     }
 }

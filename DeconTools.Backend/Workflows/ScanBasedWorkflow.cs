@@ -76,9 +76,6 @@ namespace DeconTools.Backend.Workflows
 
                 return null;
             }
-            
-
-
 
             var parameters = new OldDecon2LSParameters();
             parameters.Load(parameterFile);
@@ -106,7 +103,6 @@ namespace DeconTools.Backend.Workflows
                 case "run_merging_with_peak_export":
                     return new RunMergingPeakExportingWorkflow(parameters,null,outputFolderPath,backgroundWorker);
                     
-                
                 default:
                     throw new ArgumentOutOfRangeException("workflowType");
             }
@@ -232,6 +228,14 @@ namespace DeconTools.Backend.Workflows
         {
             int minScan;
             int maxScan;
+
+            if (OldDecon2LsParameters.HornTransformParameters.SumSpectra)
+            {
+                Run.ScanSetCollection = ScanSetCollection.Create(Run, true, false);
+                return;
+            }
+
+
             if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
             {
                 minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);

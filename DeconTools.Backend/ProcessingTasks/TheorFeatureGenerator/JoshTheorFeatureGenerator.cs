@@ -81,6 +81,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
+
+         
             if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
 
             return iso;
@@ -94,6 +96,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
         {
             if (iso == null || iso.Peaklist == null) return;
+
+            
 
 
 

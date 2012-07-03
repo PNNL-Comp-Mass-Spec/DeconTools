@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using System.Text;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
@@ -23,51 +23,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #endregion
 
         #region Public Methods
-        #endregion
-
-        #region Private Methods
-
-
-        private List<double> ACss(List<double> inData)
-        {
-            List<double> outData = new List<double>();
-
-            double sum = 0;
-            double average = 0;
-
-            for (int i = 0; i < inData.Count; i++)
-            {
-                sum += inData[i];
-
-            }
-            average = sum / inData.Count;
-
-            sum = 0;
-            for (int i = 0; i < inData.Count; i++)
-            {
-                sum = 0;
-                int j;
-                for (j = 0; j < (inData.Count - i - 1); j++)
-                {
-                    sum += ((inData[i] - average) * (inData[i + j] - average));
-                }
-
-                if (j > 0)
-                {
-                    outData.Add(sum / inData.Count);
-                }
-                else
-                {
-                    outData.Add(0);
-                }
-
-
-            }
-
-            return outData;
-
-        }
-
         public int GetChargeState(XYData rawData, List<IPeak> peakList, MSPeak peak)
         {
 
@@ -155,7 +110,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             double bestAutoCorrScore = -1;
             int bestChargeState = -1;
 
-            
+
             GetHighestChargeStatePeak(minMZ, maxMZ, startingIndex, autoCorrScores, _maxCharge, ref bestAutoCorrScore, ref bestChargeState);
 
             if (bestChargeState == -1) return -1;
@@ -176,7 +131,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                         skip = true;
                         break;
                     }
-                    
+
                 }
 
                 if (skip) continue;
@@ -205,7 +160,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
                     }
-                   
+
 
                 }
 
@@ -221,7 +176,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //{
             //    sb.Append(item.Key + "\t" + item.Value + "\n");
 
-                
+
             //}
             //Console.WriteLine(sb.ToString());
 
@@ -249,6 +204,52 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
         }
 
+        #endregion
+
+        #region Private Methods
+
+
+        private List<double> ACss(List<double> inData)
+        {
+            List<double> outData = new List<double>();
+
+            double sum = 0;
+            double average = 0;
+
+            for (int i = 0; i < inData.Count; i++)
+            {
+                sum += inData[i];
+
+            }
+            average = sum / inData.Count;
+
+            sum = 0;
+            for (int i = 0; i < inData.Count; i++)
+            {
+                sum = 0;
+                int j;
+                for (j = 0; j < (inData.Count - i - 1); j++)
+                {
+                    sum += ((inData[i] - average) * (inData[i + j] - average));
+                }
+
+                if (j > 0)
+                {
+                    outData.Add(sum / inData.Count);
+                }
+                else
+                {
+                    outData.Add(0);
+                }
+
+
+            }
+
+            return outData;
+
+        }
+
+    
         private void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, List<double> autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
         {
             bool goingUp = false;

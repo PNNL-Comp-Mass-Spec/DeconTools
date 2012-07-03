@@ -239,21 +239,21 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            TargetedResultBase result = resultList.CurrentTargetedResult;
 
             IsotopicProfile iso;
 
-            resultColl.IsosResultBin.Clear();
+            resultList.IsosResultBin.Clear();
 
-            this.RunIsAligned = resultColl.Run.MassIsAligned;
+            this.RunIsAligned = resultList.Run.MassIsAligned;
 
-            IsotopicProfile targetedIso = CreateTargetIso(resultColl.Run);
-            iso = FindMSFeature(resultColl.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
+            IsotopicProfile targetedIso = CreateTargetIso(resultList.Run);
+            iso = FindMSFeature(resultList.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
 
 
@@ -281,7 +281,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 result.FailureType = Globals.TargetedResultFailureType.MSFEATURE_NOT_FOUND;
             }
 
-            resultColl.IsosResultBin.Add(result);
+            resultList.IsosResultBin.Add(result);
 
         }
 

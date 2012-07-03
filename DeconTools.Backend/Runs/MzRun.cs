@@ -21,11 +21,19 @@ namespace DeconTools.Backend.Runs
         public MzRun()
             : base()
         {
-
+            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
+            this.IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
+            this.MSFileType = Globals.MSFileType.Finnigan;
+            this.ContainsMSMSData = true;
+            XYData = new XYData();
         }
 
         public MzRun(string fileName)
+            : this()
         {
+
+            
+            
 
             FileInfo fileInfo = new FileInfo(fileName);
 
@@ -55,6 +63,8 @@ namespace DeconTools.Backend.Runs
             string baseFilename = Path.GetFileName(Filename);
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(Filename);
+
+            
 
 
             _reader = new MSDataFileReader(fileName);
@@ -129,7 +139,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-      
+
 
 
         public override void GetMassSpectrum(ScanSet scanset)
@@ -175,7 +185,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleScanNum()
         {
-            return GetNumMSScans()-1;    // mzRun files are 0-based
+            return GetNumMSScans() - 1;    // mzRun files are 0-based
         }
     }
 }

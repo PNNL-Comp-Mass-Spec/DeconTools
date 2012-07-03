@@ -10,13 +10,13 @@ namespace DeconTools.Backend.ProcessingTasks
         
         const double MASSUNIT_BETWEEN_ISO = 1.002125;
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            if (resultColl.IsosResultBin == null || resultColl.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
 
-            if (resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0) return;
+            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
 
-            AppendO16O18PeakInfo(resultColl.Run.PeakList, resultColl.IsosResultBin as List<IsosResult>);
+            AppendO16O18PeakInfo(resultList.Run.PeakList, resultList.IsosResultBin as List<IsosResult>);
         }
 
 

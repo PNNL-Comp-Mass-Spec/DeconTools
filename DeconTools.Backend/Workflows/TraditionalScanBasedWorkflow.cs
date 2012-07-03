@@ -17,7 +17,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal TraditionalScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public TraditionalScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
 

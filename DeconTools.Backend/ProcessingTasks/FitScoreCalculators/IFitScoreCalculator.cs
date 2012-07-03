@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
@@ -10,9 +7,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     {
         public abstract void GetFitScores(IEnumerable<IsosResult> isosResults);
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            GetFitScores(resultColl.IsosResultBin);
+            GetFitScores(resultList.IsosResultBin);
         }
     }
 }

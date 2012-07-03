@@ -39,6 +39,12 @@ namespace DeconTools.Backend.Core.Results
 
         public double ChromCorrelationStdev { get; set; }
 
+        public double FractionLabelled { get; set; }
+
+        public double AmountC13Labelling { get; set; }
+
+        public int NumHighQualityProfilePeaks { get; set; }
+
         #endregion
 
         public override string ToString()
@@ -77,6 +83,13 @@ namespace DeconTools.Backend.Core.Results
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMedian.ToString("0.000"));
             sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : AmountC13Labelling.ToString("0.000"));
+            sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : FractionLabelled.ToString("0.000"));
+            sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : NumHighQualityProfilePeaks.ToString("0"));
+            sb.Append(delim);
+
             sb.Append(IsotopicProfile == null ? ErrorDescription : "");
 
             return sb.ToString();

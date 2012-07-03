@@ -222,6 +222,8 @@ namespace DeconTools.Backend.FileIO
                                 massTag.NormalizedElutionTime = Convert.ToSingle(reader["Avg_GANET"]);
                             if (!reader["Ref_ID"].Equals(DBNull.Value))
                                 massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
+                            if (!reader["Reference"].Equals(DBNull.Value))
+                                massTag.GeneReference = Convert.ToString(reader["Reference"]);
                             if (!reader["Description"].Equals(DBNull.Value))
                                 massTag.ProteinDescription = Convert.ToString(reader["Description"]);
 
@@ -280,7 +282,8 @@ namespace DeconTools.Backend.FileIO
               ObsCount,
               Monoisotopic_Mass/Charge_State+1.00727649 as mz,
               Avg_GANET,                            
-              Ref_ID,              
+              Ref_ID,
+              Reference,
               Description,
               Row_Number() OVER ( PARTITION BY mass_tag_id ORDER BY ObsCount DESC ) AS ObsRank
               
@@ -293,6 +296,7 @@ namespace DeconTools.Backend.FileIO
                      T_Peptides.Charge_State,
                      T_Mass_Tags_NET.Avg_GANET,
                      T_Mass_Tag_to_Protein_Map.Ref_ID,
+                     T_Proteins.Reference,   
                      T_Proteins.Description,
                      COUNT(*) AS ObsCount
               FROM T_Mass_Tags
@@ -306,7 +310,8 @@ namespace DeconTools.Backend.FileIO
                      ON T_Mass_Tag_to_Protein_Map.Ref_ID=T_Proteins.Ref_ID
               WHERE pmt_quality_score >= 2
               GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Mass_Tags.PeptideEx,
-              T_Mass_Tags.Mod_Count,T_Mass_Tags.Mod_Description,T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID, T_Proteins.Description
+              T_Mass_Tags.Mod_Count,T_Mass_Tags.Mod_Description,T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID,
+              T_Proteins.Reference, T_Proteins.Description
              ) LookupQ 
       ) OuterQ ");
 

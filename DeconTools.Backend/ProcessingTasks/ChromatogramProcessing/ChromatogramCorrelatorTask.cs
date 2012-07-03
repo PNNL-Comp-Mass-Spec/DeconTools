@@ -47,25 +47,25 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #endregion
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
-            Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
-            Check.Require(resultColl.CurrentTargetedResult != null, this.Name + " failed; CurrentTargetedResult is empty.");
-            Check.Require(resultColl.CurrentTargetedResult.ChromPeakSelected != null, this.Name + " failed; ChromPeak was never selected.");
-            Check.Require(resultColl.CurrentTargetedResult.IsotopicProfile != null, this.Name + " failed; Isotopic profile is null.");
+            Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
+            Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
+            Check.Require(resultList.CurrentTargetedResult != null, this.Name + " failed; CurrentTargetedResult is empty.");
+            Check.Require(resultList.CurrentTargetedResult.ChromPeakSelected != null, this.Name + " failed; ChromPeak was never selected.");
+            Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, this.Name + " failed; Isotopic profile is null.");
 
 
-            int scan = resultColl.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
+            int scan = resultList.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
 
-            var chromScanWindowWidth = resultColl.CurrentTargetedResult.ChromPeakSelected.Width * 2;
+            var chromScanWindowWidth = resultList.CurrentTargetedResult.ChromPeakSelected.Width * 2;
 
             int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
             int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
 
-            resultColl.CurrentTargetedResult.ChromCorrelationData = CorrelatePeaksWithinIsotopicProfile(resultColl.Run, 
-                resultColl.CurrentTargetedResult.IsotopicProfile, startScan, stopScan);
+            resultList.CurrentTargetedResult.ChromCorrelationData = CorrelatePeaksWithinIsotopicProfile(resultList.Run, 
+                resultList.CurrentTargetedResult.IsotopicProfile, startScan, stopScan);
 
 
         }

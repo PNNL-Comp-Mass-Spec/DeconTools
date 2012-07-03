@@ -22,9 +22,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
       
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            TargetedResultBase result = resultList.CurrentTargetedResult;
 
             Check.Require(result is O16O18TargetedResultObject, "O16O18 quantifier failed. Result is not of the O16O18 type.");
 

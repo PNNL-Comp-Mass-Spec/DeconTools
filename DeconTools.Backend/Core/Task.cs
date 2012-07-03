@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend.Core
 {
     public abstract class Task
     {
 
-        public abstract void Execute(ResultCollection resultColl);
+        public abstract void Execute(ResultCollection resultList);
 
         public virtual string Name {get;set;}
         

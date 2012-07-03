@@ -17,11 +17,11 @@ namespace DeconTools.Backend.FileIO
 
 
         private string[] datasetHeaders = {"dataset"};
-        private string[] chargeStateHeaders = {"chargestate", "z", "charge_state", "ClassStatsChargeBasis"};
+        private string[] chargeStateHeaders = {"chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge"};
         private string[] chargeStateLowerHeaders = {"ChargeStateMin"};
         private string[] chargeStateUpperHeaders = {"ChargeStateMax"};
-        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID"};
-        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID" };
+        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID"};
+        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID" };
         private string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
         private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
        
@@ -30,7 +30,7 @@ namespace DeconTools.Backend.FileIO
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
         private string[] scanStartHeaders = {"scanStart", "scan_start"};
         private string[] netHeaders = {"net", "NETClassRep"};
-        private string[] peptideSequenceHeaders = {"peptide", "peptidesequence"};
+        private string[] peptideSequenceHeaders = {"peptide", "peptidesequence", "sequence", "code"};
 
         public override TargetCollection Import()
         {

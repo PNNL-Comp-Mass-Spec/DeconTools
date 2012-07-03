@@ -6,7 +6,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public class SipperIterativeMSFeatureFinder : IterativeTFF
     {
-        private int _maxPeaksToInclude = 30;
         private float _valueForAppendedTheorPeaks = 0.0001f;
 
         #region Constructors
@@ -52,7 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
 
-            for (int i = 0; i < _maxPeaksToInclude; i++)
+            for (int i = 0; i < MaxPeaksToInclude; i++)
             {
                 if (i >= iso.Peaklist.Count)
                 {
@@ -116,7 +115,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
 
-                bool isoIsGoodEnough = (foundIso != null && foundIso.Peaklist.Count>=_maxPeaksToInclude );
+                bool isoIsGoodEnough = (foundIso != null && foundIso.Peaklist.Count>=MaxPeaksToInclude );
 
                 if (isoIsGoodEnough)
                 {

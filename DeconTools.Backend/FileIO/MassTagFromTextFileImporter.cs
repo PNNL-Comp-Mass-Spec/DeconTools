@@ -42,6 +42,15 @@ namespace DeconTools.Backend.FileIO
         #endregion
         public override TargetCollection Import()
         {
+            return Import(new List<int>());
+
+        }
+
+        public TargetCollection Import(List<int>TargetIDsToFilterOn)
+        {
+
+            bool filterOnTargetIDs = TargetIDsToFilterOn != null && TargetIDsToFilterOn.Count > 0;
+
             var data = new TargetCollection();
 
             using (StreamReader reader = new StreamReader(m_filename))
@@ -56,12 +65,26 @@ namespace DeconTools.Backend.FileIO
                     string line = reader.ReadLine();
                     lineCounter++;
 
+
+
                     List<string> lineData = processLine(line);
 
                     PeptideTarget massTag;
                     try
                     {
                         massTag = convertTextToMassTag(lineData);
+
+
+                        if (filterOnTargetIDs)
+                        {
+                            if (!TargetIDsToFilterOn.Contains(massTag.ID))
+                            {
+                                continue;
+
+                            }
+                        }
+
+
                     }
                     catch (Exception ex)
                     {
@@ -94,7 +117,7 @@ namespace DeconTools.Backend.FileIO
                         }
                     }
 
-                   
+
                     if (!chargeStateInfoIsAvailable)
                     {
                         double minMZToConsider = 400;
@@ -104,13 +127,13 @@ namespace DeconTools.Backend.FileIO
 
                         for (int chargeState = 1; chargeState < 50; chargeState++)
                         {
-                            var calcMZ = massTag.MonoIsotopicMass/chargeState + Globals.PROTON_MASS;
-                            if (calcMZ>minMZToConsider && calcMZ<maxMZToConsider)
+                            var calcMZ = massTag.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
+                            if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)
                             {
-                                var copiedMassTag =   massTag.Clone();            //NOTE: this is a very slow step
+                                var copiedMassTag = new PeptideTarget(massTag);    //we need to create multiple mass tags 
                                 copiedMassTag.ChargeState = (short)chargeState;
                                 copiedMassTag.MZ = calcMZ;
-                                
+
                                 targetList.Add(copiedMassTag);
                             }
 
@@ -136,14 +159,14 @@ namespace DeconTools.Backend.FileIO
 
             foreach (PeptideTarget peptideTarget in data.TargetList)
             {
-                bool noNormalizedElutionTimeInfoAvailable = Math.Abs(peptideTarget.NormalizedElutionTime - -1) < Single.Epsilon;
-                if (noNormalizedElutionTimeInfoAvailable)
-                {
-                    peptideTarget.NormalizedElutionTime = 0.5f;
-                }   
+                //bool noNormalizedElutionTimeInfoAvailable = Math.Abs(peptideTarget.NormalizedElutionTime - -1) < Single.Epsilon;
+                //if (noNormalizedElutionTimeInfoAvailable)
+                //{
+                //    peptideTarget.NormalizedElutionTime = 0.5f;
+                //}   
             }
 
-           
+
 
 
             return data;
@@ -167,7 +190,8 @@ namespace DeconTools.Backend.FileIO
             bool useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
             if (useScanNum)
             {
-                mt.NormalizedElutionTime = scanNum;
+                mt.ScanLCTarget = scanNum;
+                //mt.NormalizedElutionTime = scanNum / ;
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
             }
 
@@ -190,6 +214,8 @@ namespace DeconTools.Backend.FileIO
                     mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
                 }
             }
+
+            mt.GeneReference = getValue(new string[] {"reference"}, lineData, "");
 
             mt.RefID = parseIntField(getValue(new string[] { "ref_id" }, lineData, "-1"));
             mt.ProteinDescription = getValue(new string[] { "description" }, lineData, "");

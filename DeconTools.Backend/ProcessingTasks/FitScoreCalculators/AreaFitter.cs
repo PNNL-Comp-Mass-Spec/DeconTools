@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Utilities;
 
 using DeconTools.Utilities;
@@ -13,35 +12,21 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     /// </summary>
     public class AreaFitter
     {
-
-        private XYData theorXYData;
-        private XYData observedXYData;
-        private double minIntensityForScore;
-
-        public AreaFitter(XYData theorXYData, XYData observedXYData, double minIntensityForScore)
+        public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
         {
-            Check.Require(theorXYData != null && theorXYData.Xvalues != null && theorXYData.Yvalues != null, 
-                "AreaFitter failed. Theoretical XY data is null");
+            Check.Require(theorXYData != null && theorXYData.Xvalues != null && theorXYData.Yvalues != null,
+               "AreaFitter failed. Theoretical XY data is null");
 
-            Check.Require(observedXYData != null & observedXYData.Xvalues != null && observedXYData.Yvalues != null, 
+            Check.Require(observedXYData != null & observedXYData.Xvalues != null && observedXYData.Yvalues != null,
                 "AreaFitter failed. Observed XY data is null");
-
             //Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
 
 
-            this.theorXYData = theorXYData;
-            this.observedXYData = observedXYData;
-            this.minIntensityForScore = minIntensityForScore;
-        }
 
-
-
-        public double getFit()
-        {
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
-            double xmin = theorXYData.Xvalues[0];
-            double xmax = theorXYData.Xvalues.Max();
+            double xmin = theorXYData.Xvalues[0] + offset;
+            double xmax = theorXYData.Xvalues.Max() + offset;
 
             XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
 
@@ -55,15 +40,16 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             for (int i = 0; i < theorXYData.Xvalues.Length; i++)
             {
 
-                if (theorXYData.Yvalues[i] >= this.minIntensityForScore)
+                if (theorXYData.Yvalues[i] >= minIntensityForScore)
                 {
-                    double currentTheorMZ = theorXYData.Xvalues[i];
+                    double currentTheorMZ = theorXYData.Xvalues[i] + offset;
 
                     int indexOfClosest = trimmedObservedXYData.GetClosestXVal(currentTheorMZ);
 
                     if (indexOfClosest == -1)
                     {
                         Console.WriteLine(i + "\t" + currentTheorMZ);
+                        return 1;
                     }
 
                     //findout if closest is above or below

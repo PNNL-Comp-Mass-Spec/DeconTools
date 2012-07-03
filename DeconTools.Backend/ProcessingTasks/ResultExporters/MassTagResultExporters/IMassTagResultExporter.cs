@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExporters
 {
@@ -23,9 +19,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
 
         #region Private Methods
         #endregion
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            ExportMassTagResults(resultColl);
+            ExportMassTagResults(resultList);
         }
 
         protected abstract void addResults(ResultCollection resultColl);

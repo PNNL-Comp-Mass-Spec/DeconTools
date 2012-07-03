@@ -488,7 +488,7 @@ namespace DeconTools.Backend.Core
 
             for (int i = this.MinScan; i <= this.MaxScan; i++)
             {
-                ScanNETPair snp = new ScanNETPair((float)this.MinScan, i / (float)this.MaxScan);
+                ScanNETPair snp = new ScanNETPair((float)i, i / (float)this.MaxScan);
                 scanNETList.Add(snp);
             }
 
@@ -618,6 +618,12 @@ namespace DeconTools.Backend.Core
 
             }
 
+
+            if (upperScan<=lowerScan)    //this happens at the MinScan
+            {
+
+                return lowerScan;
+            }
 
             float slope = (upperNET - lowerNET) / (upperScan - lowerScan);
             float yintercept = (upperNET - slope * upperScan);
@@ -850,15 +856,16 @@ namespace DeconTools.Backend.Core
 
                 float mzForGettingAlignmentInfo = (float)theorMZ;
 
+                //check if mz is less than lower limit
                 if (mzForGettingAlignmentInfo < AlignmentInfo.marrMassFncMZInput[0])
                 {
                     mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[0];
                 }
-                else if (mzForGettingAlignmentInfo < AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1])
+                else if (mzForGettingAlignmentInfo > AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1])   //check if mz is greater than upper limit
                 {
                     mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1];
                 }
-                else
+                else  //mz is within limits
                 {
                     mzForGettingAlignmentInfo = (float)theorMZ;
 

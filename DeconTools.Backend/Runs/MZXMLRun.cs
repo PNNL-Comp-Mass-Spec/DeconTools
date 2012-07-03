@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Runs
         public MZXMLRun()
         {
             MSParameters = new Parameters.MSParameters();
-            IsDataThresholded = false;      //TODO: check this
+            IsDataThresholded = true;      //TODO:   We should not hard-code this. Needs to be put in parameter file. Peak detector uses this info.
             MSFileType = Globals.MSFileType.MZXML_Rawdata;
         }
 

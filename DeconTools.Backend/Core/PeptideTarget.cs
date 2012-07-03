@@ -9,9 +9,20 @@ namespace DeconTools.Backend.Core
     {
         #region Constructors
         public PeptideTarget()
+            : base()
         {
 
         }
+
+
+        public PeptideTarget(PeptideTarget copiedTarget)
+            : base(copiedTarget)
+        {
+            this.ProteinDescription = copiedTarget.ProteinDescription;
+            this.GeneReference = copiedTarget.GeneReference;
+            this.RefID = copiedTarget.RefID;
+        }
+
         #endregion
 
         #region Properties
@@ -28,7 +39,7 @@ namespace DeconTools.Backend.Core
         public string ProteinDescription { get; set; }
         public string GeneReference { get; set; }
 
-        
+
         #endregion
 
 

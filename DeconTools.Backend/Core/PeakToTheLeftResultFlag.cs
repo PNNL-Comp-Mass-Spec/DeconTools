@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend.Core
 {
     public class PeakToTheLeftResultFlag : ResultFlag
@@ -11,6 +7,9 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
+
+
+
         #endregion
 
         #region Public Methods
@@ -18,5 +17,10 @@ namespace DeconTools.Backend.Core
 
         #region Private Methods
         #endregion
+
+        public override string Description
+        {
+            get { return "PeakToTheLeftFlag"; }
+        }
     }
 }

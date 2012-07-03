@@ -21,14 +21,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            TargetedResultBase result = resultList.CurrentTargetedResult;
 
 
-            if (resultColl.Run.XYData == null || resultColl.Run.XYData.Xvalues == null || resultColl.Run.XYData.Xvalues.Length < 4)
+            if (resultList.Run.XYData == null || resultList.Run.XYData.Xvalues == null || resultList.Run.XYData.Xvalues.Length < 4)
             {
                 result.IsotopicProfile = null;
                 return;
@@ -36,18 +36,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             //TODO: decide whether not to trim or not. Trimming XYData may help with speed. 
             double mzwindowForPeakDetection = 20;
-            resultColl.Run.XYData = resultColl.Run.XYData.TrimData(resultColl.Run.CurrentMassTag.MZ - mzwindowForPeakDetection / 2, resultColl.Run.CurrentMassTag.MZ + mzwindowForPeakDetection / 2);
+            resultList.Run.XYData = resultList.Run.XYData.TrimData(resultList.Run.CurrentMassTag.MZ - mzwindowForPeakDetection / 2, resultList.Run.CurrentMassTag.MZ + mzwindowForPeakDetection / 2);
 
-            resultColl.IsosResultBin.Clear();
+            resultList.IsosResultBin.Clear();
 
-            IsotopicProfile o16TheorFeature = resultColl.Run.CurrentMassTag.IsotopicProfile;
-            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o16TheorFeature);
+            IsotopicProfile o16TheorFeature = resultList.Run.CurrentMassTag.IsotopicProfile;
+            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o16TheorFeature);
 
             IsotopicProfile o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
-            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o18TheorProfileSingleLabel);
+            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o18TheorProfileSingleLabel);
 
             IsotopicProfile o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
-            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultColl.Run, o18TheorProfileDoubleLabel);
+            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o18TheorProfileDoubleLabel);
 
 
             IsotopicProfile foundO16O18Profile;
@@ -83,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             result.IsotopicProfile = foundO16O18Profile;
 
-            resultColl.IsosResultBin.Add(result);
+            resultList.IsosResultBin.Add(result);
 
 
         }

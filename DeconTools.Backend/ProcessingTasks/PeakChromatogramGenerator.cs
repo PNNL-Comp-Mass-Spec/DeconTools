@@ -13,6 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
     public enum ChromatogramGeneratorMode
     {
+        MZ_BASED,
         MONOISOTOPIC_PEAK,
         MOST_ABUNDANT_PEAK,
         TOP_N_PEAKS,
@@ -131,13 +132,13 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl.MSPeakResultList != null && resultColl.MSPeakResultList.Count>0, "PeakChromatogramGenerator failed. No peaks.");
-            Check.Require(resultColl.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
-            Check.Require(resultColl.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
+            Check.Require(resultList.MSPeakResultList != null && resultList.MSPeakResultList.Count>0, "PeakChromatogramGenerator failed. No peaks.");
+            Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
+            Check.Require(resultList.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
 
-            Check.Require(resultColl.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
+            Check.Require(resultList.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
 
             //[gord] restricting the scan range from which the chromatogram is generated greatly improves speed. e.g) on an Orbitrap file
@@ -147,18 +148,18 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             float netElutionTime;
-            if (resultColl.Run.CurrentMassTag.ElutionTimeUnit== Globals.ElutionTimeUnit.ScanNum)
+            if (resultList.Run.CurrentMassTag.ElutionTimeUnit== Globals.ElutionTimeUnit.ScanNum)
             {
-                netElutionTime = resultColl.Run.CurrentMassTag.ScanLCTarget/(float)resultColl.Run.GetNumMSScans();
+                netElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget/(float)resultList.Run.GetNumMSScans();
             }
             else
             {
-                netElutionTime = resultColl.Run.CurrentMassTag.NormalizedElutionTime;
+                netElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
             }
 
             float minNetVal;
             float maxNetVal;
-            if (resultColl.Run.NETIsAligned)
+            if (resultList.Run.NETIsAligned)
             {
                 minNetVal = netElutionTime - NETWindowWidthForAlignedData;
                 maxNetVal = netElutionTime + NETWindowWidthForAlignedData;  
@@ -172,74 +173,88 @@ namespace DeconTools.Backend.ProcessingTasks
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
-            int lowerScan = resultColl.Run.GetScanValueForNET(minNetVal);
-            if (lowerScan == -1) lowerScan = resultColl.Run.MinScan;
+            int lowerScan = resultList.Run.GetScanValueForNET(minNetVal);
+            if (lowerScan == -1) lowerScan = resultList.Run.MinScan;
 
-            int upperScan = resultColl.Run.GetScanValueForNET(maxNetVal);
-            if (upperScan == -1) upperScan = resultColl.Run.MaxScan;
+            int upperScan = resultList.Run.GetScanValueForNET(maxNetVal);
+            if (upperScan == -1) upperScan = resultList.Run.MaxScan;
 
 
             XYData chromValues;
 
-            if (ChromatogramGeneratorMode == ChromatogramGeneratorMode.TOP_N_PEAKS)
+            if (ChromatogramGeneratorMode==ChromatogramGeneratorMode.MZ_BASED)
             {
-                List<double> targetMZList = getTargetMZListForTopNPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
+                double targetMZ = resultList.Run.CurrentMassTag.MZ;
 
-                if (resultColl.Run.MassIsAligned)
+                //if we have alignment information, we can adjust the targetMZ...
+                if (resultList.Run.MassIsAligned)
+                {
+                    targetMZ = getAlignedMZValue(targetMZ, resultList.Run);
+                }
+
+                ChromatogramGenerator chromGen = new ChromatogramGenerator();
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
+                
+            }
+            else if (ChromatogramGeneratorMode == ChromatogramGeneratorMode.TOP_N_PEAKS)
+            {
+                List<double> targetMZList = getTargetMZListForTopNPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
+
+                if (resultList.Run.MassIsAligned)
                 {
                     //if we have alignment information, we can adjust the targetMZ...
                     for (int i = 0; i < targetMZList.Count; i++)
                     {
-                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultColl.Run);
+                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
                     }
                    
                 }
 
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
 
             }
             else if (ChromatogramGeneratorMode== ProcessingTasks.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
             {
-                List<double> targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(resultColl.Run.CurrentMassTag, this.IsotopicProfileTarget);
+                List<double> targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
 
-                if (resultColl.Run.MassIsAligned)
+                if (resultList.Run.MassIsAligned)
                 {
                     for (int i = 0; i < targetMZList.Count; i++)
                     {
-                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultColl.Run);
+                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
                     }
 
                 }
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
             }
             else
             {
-                double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultColl.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
+                double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultList.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
 
                 //if we have alignment information, we can adjust the targetMZ...
-                if (resultColl.Run.MassIsAligned)
+                if (resultList.Run.MassIsAligned)
                 {
-                    targetMZ = getAlignedMZValue(targetMZ, resultColl.Run);
+                    targetMZ = getAlignedMZValue(targetMZ, resultList.Run);
                 }
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultColl.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
             }
 
 
 
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            TargetedResultBase result = resultList.CurrentTargetedResult;
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
 
 
 
 
 
-            resultColl.Run.XYData = chromValues;
+            resultList.Run.XYData = chromValues;
 
 
 
@@ -261,7 +276,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             // zeros were inserted wherever discontiguous scans were found.   For some files, MS/MS scans having a 0 should be removed so that we can have a continuous elution peak
-            FilterOutDataFromMSMSLevels(resultColl.Run);
+            FilterOutDataFromMSMSLevels(resultList.Run);
 
          
 
@@ -366,6 +381,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private double getTargetMZBasedOnChromGeneratorMode(TargetBase target, ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
         {
+
+            if (chromatogramGeneratorMode==ChromatogramGeneratorMode.MZ_BASED)
+            {
+                return target.MZ;
+            }
+
+
+
+
             IsotopicProfile iso = new IsotopicProfile();
             switch (isotopicProfileTarget)
             {

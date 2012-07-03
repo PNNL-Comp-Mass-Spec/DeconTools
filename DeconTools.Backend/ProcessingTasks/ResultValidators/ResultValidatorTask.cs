@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
@@ -33,19 +29,19 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Private Methods
         #endregion
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            if (resultColl.IsosResultBin == null || resultColl.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
 
             //iterate over each ms feature
-            foreach (var msFeature in resultColl.IsosResultBin)
+            foreach (var msFeature in resultList.IsosResultBin)
             {
 
                 //execute each validator
                 foreach (var validator in ResultValidatorColl)
                 {
                     validator.CurrentResult = msFeature;
-                    validator.Execute(resultColl);
+                    validator.Execute(resultList);
 
                 }
 

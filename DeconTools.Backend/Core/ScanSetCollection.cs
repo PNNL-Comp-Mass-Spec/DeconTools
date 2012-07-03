@@ -22,6 +22,9 @@ namespace DeconTools.Backend.Core
         }
 
 
+
+
+
         public static ScanSetCollection Create(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
             ScanSetCollection scanSetCollection;
@@ -53,6 +56,75 @@ namespace DeconTools.Backend.Core
 
             return scanSetCollection;
         }
+
+
+        public static ScanSetCollection Create(Run run, bool sumAllScans = true, bool processMSMS= true)
+        {
+            ScanSetCollection scanSetCollection=new ScanSetCollection();
+
+
+            int minScan = run.MinScan;
+            int maxScan = run.MaxScan;
+
+
+            if (sumAllScans)
+            {
+                //find first MS1 scan
+
+                int firstMS1Scan = -1;
+                for (int i = minScan; i <=maxScan; i++)
+                {
+                    if (run.GetMSLevel(i)==1)
+                    {
+                        firstMS1Scan = i;
+                        break;
+                        
+                    }
+                }
+
+                if (firstMS1Scan==-1)   //never found a single MS1 scan in the whole dataset
+                {
+                    
+                }
+                else
+                {
+                    ScanSetFactory scanSetFactory = new ScanSetFactory();
+                    var scanset = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
+
+                    
+                    scanSetCollection.ScanSetList.Add(scanset);
+
+                }
+                
+
+            }
+            else
+            {
+                
+                for (int i = minScan; i <= maxScan; i++)
+                {
+                    var mslevel = run.GetMSLevel(i);
+
+                    if (mslevel==1 || processMSMS)
+                    {
+                        scanSetCollection.ScanSetList.Add(new ScanSet(i));
+                    }
+                }
+                
+            }
+
+            return scanSetCollection;
+
+
+
+
+
+        }
+
+
+
+
+
 
         private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
         {
@@ -123,6 +195,12 @@ namespace DeconTools.Backend.Core
 
 
         }
+
+
+
+
+
+
 
         private static ScanSetCollection CreateStandardScanSetCollection(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
         {

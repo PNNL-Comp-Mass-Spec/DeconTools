@@ -165,8 +165,8 @@ namespace DeconTools.Backend.ProcessingTasks
                     //offset the theor isotopic profile
                     offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
-                    AreaFitter areafitter = new AreaFitter(theorXYData, result.Run.XYData, 0.1);
-                    double fitval = areafitter.getFit();
+                    AreaFitter areafitter = new AreaFitter();
+                    double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1);
 
                     if (fitval == double.NaN || fitval > 1) fitval = 1;
 

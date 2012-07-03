@@ -76,8 +76,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(theorIso, isoN15.GetFWHM());
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
 
-            areafitter = new AreaFitter(theorXYData, rawXYData, 0.1);
-            double fitval = areafitter.getFit();
+            areafitter = new AreaFitter();
+            double fitval = areafitter.GetFit(theorXYData, rawXYData, 0.1);
 
             if (fitval == double.NaN || fitval > 1) fitval = 1;
             return fitval;

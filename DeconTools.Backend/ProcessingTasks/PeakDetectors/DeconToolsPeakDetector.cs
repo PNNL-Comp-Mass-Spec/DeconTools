@@ -255,6 +255,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void addPeakRelatedData(Run run)
         {
+            Check.Require(run.CurrentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+
             run.CurrentScanSet.BackgroundIntensity = m_backgroundIntensity;
             run.CurrentScanSet.NumPeaks = run.PeakList.Count;    //used in ScanResult
             run.CurrentScanSet.BasePeak = getBasePeak(run.PeakList);     //Used in ScanResult

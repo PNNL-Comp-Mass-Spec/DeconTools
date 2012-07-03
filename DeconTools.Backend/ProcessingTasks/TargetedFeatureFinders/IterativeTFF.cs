@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -8,7 +9,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
     public class IterativeTFF : TFFBase
     {
 
-
+       
         
         private bool _peakDetectorIsDataThresholded;
         private double _peakDetectorSigNoiseRatioThreshold;
@@ -24,6 +25,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             PeakDetectorPeakBR = parameters.PeakDetectorPeakBR;
             _peakDetectorPeakFitType = parameters.PeakDetectorPeakFitType;
             PeakBRMin = 0.5;
+
+            MaxPeaksToInclude = 30;
+            MinRelIntensityForPeakInclusion = 0.02;
+
 
             this.NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;
             this.ToleranceInPPM = parameters.ToleranceInPPM;
@@ -45,21 +50,32 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public double PeakBRMin { get; set; }
         public double PeakBRStep { get; set; }
 
+        /// <summary>
+        /// When finding peaks in the isotopic profile, this number represents the maximum number of peaks added
+        /// </summary>
+        public int MaxPeaksToInclude { get; set; }
+
+        /// <summary>
+        /// When finding peaks in the isotopic profile, this number represents the minimum relative intensity of peaks to be added. Ranges between 0 and 1
+        /// </summary>
+        public double MinRelIntensityForPeakInclusion { get; set; }
+
+
         #endregion
 
         #region Public Methods
-        public override void Execute(Core.ResultCollection resultColl)
+        public override void Execute(Core.ResultCollection resultList)
         {
 
-            Check.Require(resultColl != null && resultColl.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultColl.GetTargetedResult(resultColl.Run.CurrentMassTag);
+            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
-            IsotopicProfile theorFeature = CreateTargetIso(resultColl.Run);
-            resultColl.IsosResultBin.Clear();
+            IsotopicProfile theorFeature = CreateTargetIso(resultList.Run);
+            resultList.IsosResultBin.Clear();
 
-            IsotopicProfile iso = IterativelyFindMSFeature(resultColl.Run, theorFeature);
+            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run, theorFeature);
 
 
             AddFeatureToResult(result, iso);
@@ -71,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
             }
 
-            resultColl.IsosResultBin.Add(result);
+            resultList.IsosResultBin.Add(result);
 
 
         }
@@ -112,6 +128,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile iso = null;
 
+
+
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
             for (double d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
@@ -120,16 +138,33 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 this.MSPeakDetector.PeakBackgroundRatio = d;
                 this.MSPeakDetector.Execute(run.ResultCollection);
 
-                //Console.WriteLine("PeakBR= " + d + "; NumPeaks= " + run.PeakList.Count);
-
-
                 iso = FindMSFeature(run.PeakList, theorIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
-                bool isoIsGoodEnough = (iso != null && iso.Peaklist.Count > 1);
+                bool isoIsGoodEnough;
 
-                //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
-                //See the SIPPER TFF
+                if (iso==null)
+                {
+                    isoIsGoodEnough = false;
+                }
+                else if (iso.Peaklist.Count<2)
+                {
+                    isoIsGoodEnough = false;
+                }
+                else
+                {
+                    double maxIntensity = iso.getMostIntensePeak().Height;
+                    double minIntensityPeak = iso.Peaklist.Min(p => p.Height);
 
+                    if (minIntensityPeak/maxIntensity< MinRelIntensityForPeakInclusion)
+                    {
+                        isoIsGoodEnough = true;
+                    }
+                    else
+                    {
+                        isoIsGoodEnough = false;
+                    }
+
+                }
 
                 if (isoIsGoodEnough)
                 {

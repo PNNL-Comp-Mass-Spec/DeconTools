@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -27,16 +22,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
         #endregion
 
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
             //don't do anything if there aren't any MSFeatures
-            if (resultColl.IsosResultBin == null || resultColl.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
 
             //don't do anything if there aren't any peaks
-            if (resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0) return;
+            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
 
 
-            foreach (var msfeature in resultColl.IsosResultBin)
+            foreach (var msfeature in resultList.IsosResultBin)
             {
 
                 foreach (var peak in msfeature.IsotopicProfile.Peaklist)
@@ -47,10 +42,10 @@ namespace DeconTools.Backend.ProcessingTasks
                     double toleranceInMZ = toleranceInPPM * targetMZ / 1e6;
 
                     //binary search to find peak
-                    int indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultColl.Run.PeakList, targetMZ, 0, resultColl.Run.PeakList.Count - 1, toleranceInMZ);
+                    int indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultList.Run.PeakList, targetMZ, 0, resultList.Run.PeakList.Count - 1, toleranceInMZ);
                     if (indexOfPeak != -1)
                     {
-                        IPeak foundpeak = resultColl.Run.PeakList[indexOfPeak];
+                        IPeak foundpeak = resultList.Run.PeakList[indexOfPeak];
 
                         if (foundpeak is MSPeak)
                         {

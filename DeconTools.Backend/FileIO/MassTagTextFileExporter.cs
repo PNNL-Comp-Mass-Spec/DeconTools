@@ -43,6 +43,8 @@ namespace DeconTools.Backend.FileIO
             sb.Append(this.Delimiter);
             sb.Append(result.RefID);
             sb.Append(this.Delimiter);
+            sb.Append(result.GeneReference);
+            sb.Append(Delimiter);
             sb.Append(result.ProteinDescription);
 
             return sb.ToString();
@@ -50,7 +52,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            return "ID\tMonoisotopic_Mass\tSequence\tZ\tFormula\tModCount\tMod\tObsCount\tMZ\tNET\tRef_ID\tDescription";
+            return "ID\tMonoisotopic_Mass\tSequence\tZ\tFormula\tModCount\tMod\tObsCount\tMZ\tNET\tRef_ID\tReference\tDescription";
         }
     }
 }

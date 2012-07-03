@@ -18,6 +18,33 @@ namespace DeconTools.Backend.Core
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
             ChargeStateTargets = new List<int>();
         }
+
+
+        protected TargetBase(TargetBase copiedTarget)
+        {
+
+            this.ChargeState = copiedTarget.ChargeState;
+            this.ChargeStateTargets = new List<int>(copiedTarget.ChargeStateTargets);
+            this.Code = copiedTarget.Code;
+            this.ElutionTimeUnit = copiedTarget.ElutionTimeUnit;
+            this.EmpiricalFormula = copiedTarget.EmpiricalFormula;
+            this.ID = copiedTarget.ID;
+            this.IsotopicProfile = copiedTarget.IsotopicProfile == null ? null : copiedTarget.IsotopicProfile.CloneIsotopicProfile();
+            this.IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled == null ? null : copiedTarget.IsotopicProfileLabelled.CloneIsotopicProfile();
+            this.MZ = copiedTarget.MZ;
+            this.ModCount = copiedTarget.ModCount;
+            this.ModDescription = copiedTarget.ModDescription;
+            this.MonoIsotopicMass = copiedTarget.MonoIsotopicMass;
+            this.NormalizedElutionTime = copiedTarget.NormalizedElutionTime;
+            this.ObsCount = copiedTarget.ObsCount;
+            this.ScanLCTarget = copiedTarget.ScanLCTarget;
+            
+
+        }
+
+
+
+
         #endregion
 
         #region Properties
@@ -115,6 +142,8 @@ namespace DeconTools.Backend.Core
         }
 
 
+        
+
         public override string ToString()
         {
             return ID + "; " + MonoIsotopicMass.ToString("0.000") + "; " + ChargeState;
@@ -133,7 +162,7 @@ namespace DeconTools.Backend.Core
 
 
 
-       
+
 
 
         #endregion

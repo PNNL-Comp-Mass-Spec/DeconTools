@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
@@ -22,13 +18,13 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Private Methods
         #endregion
-        public override void Execute(ResultCollection results)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(results.Run.CurrentMassTag != null, "Theoretical feature generator failed. No target mass tag was provided");
+            Check.Require(resultList.Run.CurrentMassTag != null, "Theoretical feature generator failed. No target mass tag was provided");
 
-            LoadRunRelatedInfo(results);
+            LoadRunRelatedInfo(resultList);
             
-            GenerateTheorFeature(results.Run.CurrentMassTag);
+            GenerateTheorFeature(resultList.Run.CurrentMassTag);
         }
     }
 }

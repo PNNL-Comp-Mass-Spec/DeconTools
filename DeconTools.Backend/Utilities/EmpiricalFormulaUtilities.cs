@@ -10,21 +10,7 @@ namespace DeconTools.Backend.Utilities
     public class EmpiricalFormulaUtilities
     {
 
-        #region Constructors
-        #endregion
-
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
-
+  
 
         public static double GetMonoisotopicMassFromEmpiricalFormula(string empiricalFormula)
         {

@@ -54,12 +54,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         #region Private Methods
         #endregion
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            TargetBase mt = resultColl.Run.CurrentMassTag;
+            TargetBase mt = resultList.Run.CurrentMassTag;
             Check.Require(mt != null, "Current mass tag is not defined.");
 
-            TargetedResultBase currentResult = resultColl.CurrentTargetedResult;
+            TargetedResultBase currentResult = resultList.CurrentTargetedResult;
 
             Check.Require(currentResult != null, "Quantifier failed. Result doesn't exist for current mass tag.");
             Check.Require(currentResult is N14N15_TResult, "Quantifier failed. Result is not of the N14N15 type.");

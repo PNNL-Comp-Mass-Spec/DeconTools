@@ -70,23 +70,40 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
         #region Public Methods
-        public override void Execute(ResultCollection resultColl)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
+            Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
+
+
+            TargetedResultBase currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
             if (msgen == null)
             {
-                msgen = MSGeneratorFactory.CreateMSGenerator(resultColl.Run.MSFileType);
+                msgen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
                 msgen.IsTICRequested = false;
             }
 
-            TargetBase mt = resultColl.Run.CurrentMassTag;
+            TargetBase mt = resultList.Run.CurrentMassTag;
+
+
+            float normalizedElutionTime;
+
+            if (currentResult.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+            {
+                normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)currentResult.Run.GetNumMSScans();
+            }
+            else
+            {
+                normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
+            }
+
+
 
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
-            foreach (ChromPeak peak in resultColl.Run.PeakList)
+            foreach (ChromPeak peak in resultList.Run.PeakList)
             {
-                if (Math.Abs(peak.NETValue - mt.NormalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
                 }
@@ -95,7 +112,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             List<PeakQualityData> peakQualityList = new List<PeakQualityData>();
 
-            TargetedResultBase currentResult = resultColl.CurrentTargetedResult;
+            
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
             //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
@@ -112,29 +129,29 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 foreach (var peak in peaksWithinTol)
                 {
-                    ScanSet scanset = createNonSummedScanSet(peak, resultColl.Run);
+                    ScanSet scanset = createNonSummedScanSet(peak, resultList.Run);
                     PeakQualityData pq = new PeakQualityData(peak);
                     peakQualityList.Add(pq);
 
-                    resultColl.Run.CurrentScanSet = scanset;
+                    resultList.Run.CurrentScanSet = scanset;
 
                     //This resets the flags and the scores on a given result
                     currentResult.ResetResult();
 
                     //generate a mass spectrum
-                    msgen.Execute(resultColl);
+                    msgen.Execute(resultList);
 
                     //detect peaks
-                    MSPeakDetector.Execute(resultColl);
+                    MSPeakDetector.Execute(resultList);
 
                     //find isotopic profile
-                    TargetedMSFeatureFinder.Execute(resultColl);
+                    TargetedMSFeatureFinder.Execute(resultList);
 
                     //get fit score
-                    fitScoreCalc.Execute(resultColl);
+                    fitScoreCalc.Execute(resultList);
 
                     //get i_score
-                    resultValidator.Execute(resultColl);
+                    resultValidator.Execute(resultList);
 
                     //collect the results together
                     addScoresToPeakQualityData(pq, currentResult);
@@ -149,8 +166,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
 
-            ScanSet bestScanset = CreateSummedScanSet(bestChromPeak, resultColl.Run);
-            resultColl.Run.CurrentScanSet = bestScanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
+            ScanSet bestScanset = CreateSummedScanSet(bestChromPeak, resultList.Run);
+            resultList.Run.CurrentScanSet = bestScanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
 
             currentResult.AddSelectedChromPeakAndScanSet(bestChromPeak, bestScanset);
 

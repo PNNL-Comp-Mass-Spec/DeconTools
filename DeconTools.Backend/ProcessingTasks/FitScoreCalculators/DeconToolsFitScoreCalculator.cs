@@ -60,8 +60,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 //distributionCreator.OffsetDistribution(result.IsotopicProfile);
                 //XYData theorXYData = distributionCreator.Data;
 
-                AreaFitter areafitter = new AreaFitter(theorXYData, result.Run.XYData, 0.1);
-                double fitval = areafitter.getFit();
+                AreaFitter areafitter = new AreaFitter();
+                double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1);
 
                 if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
 

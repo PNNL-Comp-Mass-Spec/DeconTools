@@ -11,6 +11,10 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public int FeatureToMassTagID { get; set; }
 
+        /// <summary>
+        /// LCMS targets are usually associated with a specific dataset
+        /// </summary>
+        public string DatabaseName { get; set; }
 
         public override string ToString()
         {
