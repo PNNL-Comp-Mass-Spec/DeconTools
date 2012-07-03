@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -87,6 +89,122 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(1961.65, (decimal)run.GetTime(6004));
 
         }
+
+
+        [Test]
+        public void ValidateDataTest1()    //purpose is to compare 
+        {
+
+            string testMz5File = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+            string testThermoFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+
+            Run mz5run = new RunFactory().CreateRun(testMz5File);
+
+            Run thermoRun = new RunFactory().CreateRun(testThermoFile);
+
+            int testScanMz5 = 6004;
+            int testScanThermo = 6005;
+
+            ScanSet testScanSet1 = new ScanSet(testScanMz5);
+            ScanSet testScanSetThermo = new ScanSet(testScanThermo);
+
+            mz5run.CurrentScanSet = testScanSet1;
+            thermoRun.CurrentScanSet = testScanSetThermo;
+
+
+            mz5run.GetMassSpectrum(testScanSet1);
+            thermoRun.GetMassSpectrum(testScanSetThermo);
+
+
+            Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
+
+            for (int i = 0; i < mz5run.XYData.Xvalues.Length; i++)
+            {
+                Assert.AreEqual(mz5run.XYData.Xvalues[i], thermoRun.XYData.Xvalues[i]);
+            }
+
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            peakDetector.PeakBackgroundRatio = 3;
+            peakDetector.SigNoiseThreshold = 2;
+
+
+
+
+            //peakDetector.Execute(mz5run.ResultCollection);
+
+            peakDetector.Execute(thermoRun.ResultCollection);
+
+
+            //TestUtilities.DisplayPeaks(mz5run.PeakList);
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            TestUtilities.DisplayPeaks(thermoRun.PeakList);
+
+
+        }
+
+
+        [Test]
+        public void ValidateDataTest_temp()    //purpose is to compare 
+        {
+
+            string testMz5File = @"C:\Sipper\SipperDemo\RawDataFiles\Yellow_C13_070_23Mar10_Griffin_10-01-28.mz5";
+            string testThermoFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            Run mz5run = new RunFactory().CreateRun(testMz5File);
+            mz5run.IsDataThresholded = true;
+
+            Run thermoRun = new RunFactory().CreateRun(testThermoFile);
+
+            int testScanMz5 = 6010;
+            int testScanThermo = 6011;
+
+            ScanSet testScanSet1 = new ScanSet(testScanMz5);
+            ScanSet testScanSetThermo = new ScanSet(testScanThermo);
+
+            mz5run.CurrentScanSet = testScanSet1;
+            thermoRun.CurrentScanSet = testScanSetThermo;
+
+
+            mz5run.GetMassSpectrum(testScanSet1);
+            thermoRun.GetMassSpectrum(testScanSetThermo);
+
+
+            Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
+
+            for (int i = 0; i < mz5run.XYData.Xvalues.Length; i++)
+            {
+                Assert.AreEqual(mz5run.XYData.Xvalues[i], thermoRun.XYData.Xvalues[i]);
+            }
+
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            peakDetector.PeakBackgroundRatio = 3;
+            peakDetector.SigNoiseThreshold = 2;
+
+
+
+
+            peakDetector.Execute(mz5run.ResultCollection);
+
+            //peakDetector.Execute(thermoRun.ResultCollection);
+
+
+            TestUtilities.DisplayPeaks(mz5run.PeakList);
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+           // TestUtilities.DisplayPeaks(thermoRun.PeakList);
+
+
+        }
+
+
+
+
 
 
         [Test]

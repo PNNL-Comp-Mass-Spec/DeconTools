@@ -169,7 +169,26 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.That(run.XYData.Xvalues != null);
             Assert.That(run.XYData.Xvalues.Length > 0);
             Assert.AreEqual(209817, run.XYData.Xvalues.Length);
+
+            Assert.AreEqual(28962756691,(long)run.XYData.Yvalues.Sum());
         }
+
+
+        [Test]
+        public void GetSpectrum_Bruker15T_SummedMS_Test1()
+        {
+            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
+
+            ScanSet scanSet = new ScanSet(2,1,3);
+            run.GetMassSpectrum(scanSet);
+            Assert.That(run.XYData.Xvalues != null);
+            Assert.That(run.XYData.Xvalues.Length > 0);
+            Assert.AreEqual(209817, run.XYData.Xvalues.Length);
+
+            Assert.AreEqual(86318972269, (long)run.XYData.Yvalues.Sum());
+
+        }
+
 
 
     }

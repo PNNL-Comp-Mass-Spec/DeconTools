@@ -270,6 +270,35 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.That(File.Exists(expectedIsosOutput));
         }
 
+        [Test]
+        public void ProcessBruker15TSolarixFile1_sumAllScans()
+        {
+            string testFile = FileRefs.RawDataMSFiles.Bruker15TFile1;
+
+            DirectoryInfo dirInfo = new DirectoryInfo(testFile);
+            string datasetName = dirInfo.Name;
+
+            string expectedIsosOutput = FileRefs.RawDataMSFiles.Bruker15TFile1 + Path.DirectorySeparatorChar + datasetName + "_isos.csv";
+
+            if (File.Exists(expectedIsosOutput))
+            {
+                File.Delete(expectedIsosOutput);
+            }
+
+            Run run = new RunFactory().CreateRun(testFile);
+
+            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            parameters.HornTransformParameters.SumSpectra = true;
+            parameters.PeakProcessorParameters.PeakBackgroundRatio = 15;
+
+            var workflow = new TraditionalScanBasedWorkflow(parameters, run);
+            workflow.Execute();
+
+            Assert.That(File.Exists(expectedIsosOutput));
+        }
+
+
+
 
         [Test]
         public void ProcessBruker9T()

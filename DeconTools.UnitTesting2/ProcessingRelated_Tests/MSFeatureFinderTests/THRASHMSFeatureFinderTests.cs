@@ -42,9 +42,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Assert.AreEqual(481.775412188198m, (decimal)testIso.IsotopicProfile.Peaklist[1].XValue);
             Assert.AreEqual(482.276820274024m, (decimal)testIso.IsotopicProfile.Peaklist[2].XValue);
 
-            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+           // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            TestUtilities.DisplayPeaks(run.PeakList);
 
-          
 
 
         }

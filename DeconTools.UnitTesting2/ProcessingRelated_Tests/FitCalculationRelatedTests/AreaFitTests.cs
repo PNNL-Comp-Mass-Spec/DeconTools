@@ -65,8 +65,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             //Console.WriteLine(sb.ToString());
 
-            AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
-            double fitval = areafitter.getFit();
+            AreaFitter areafitter = new AreaFitter();
+            double fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
 
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score);
@@ -115,8 +115,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
            // theorXYData.Display();
 
-            AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
-            double fitval = areafitter.getFit();
+            AreaFitter areafitter = new AreaFitter();
+            double fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
 
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
@@ -174,8 +174,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             //Console.WriteLine(sb.ToString());
 
-            AreaFitter areafitter = new AreaFitter(theorXYData, run.XYData, 10);
-            double fitval = areafitter.getFit();
+            AreaFitter areafitter = new AreaFitter();
+            double fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
 
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
@@ -221,8 +221,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             StringBuilder sb = new StringBuilder();
 
-            AreaFitter areafitter = new AreaFitter(distcreator.Data, run.XYData, 10);
-            double fitval = areafitter.getFit();
+            AreaFitter areafitter = new AreaFitter();
+            double fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
 
             sb.Append(resolution);
             sb.Append("\t");
@@ -236,8 +236,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
                 distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
                 distcreator.OffsetDistribution(result1.IsotopicProfile);
-                areafitter = new AreaFitter(distcreator.Data, run.XYData, 10);
-                fitval = areafitter.getFit();
+                areafitter = new AreaFitter();
+                fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
 
                 sb.Append(resolution);
                 sb.Append("\t");

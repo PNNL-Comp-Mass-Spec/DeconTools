@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             MSPeak testPeak5 = (MSPeak)run.PeakList[455];
             MSPeak testPeak6 = (MSPeak)run.PeakList[4];
 
-            //TestUtilities.DisplayPeaks(run.PeakList);
+            TestUtilities.DisplayPeaks(run.PeakList);
 
             PattersonChargeStateCalculator chargeCalc = new PattersonChargeStateCalculator();
             int testpeak1CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak1);
