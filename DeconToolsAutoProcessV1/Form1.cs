@@ -20,6 +20,8 @@ namespace DeconToolsAutoProcessV1
         BackgroundWorker _bw;
         bool _isRunMergingModeUsed;
 
+        OldDecon2LSParameters _parameters;
+
         public Form1()
         {
             InitializeComponent();
@@ -128,7 +130,11 @@ namespace DeconToolsAutoProcessV1
         private void btnAutoProcess_Click(object sender, EventArgs e)
         {
             
-            
+            if (!File.Exists(_parameterFileName))
+            {
+                MessageBox.Show("File not found error - Parameter file does not exist.");
+                return;
+            }
             
             
             if (_bw != null && _bw.IsBusy)
@@ -146,13 +152,28 @@ namespace DeconToolsAutoProcessV1
             try
             {
                 TrySetOutputFolder();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return;
             }
+
+            try
+            {
+
+                _parameters = new OldDecon2LSParameters();
+                _parameters.Load(_parameterFileName);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Tried to load parameters. Serious error occurred. Error message: " + ex.Message +
+                                "\n\n" + ex.StackTrace);
+                return;
+            }
+
+           
             
 
 
@@ -256,16 +277,18 @@ namespace DeconToolsAutoProcessV1
         {
             var bw = (BackgroundWorker)sender;
 
+            
             try
             {
-                var parameters = new OldDecon2LSParameters();
-                parameters.Load(_parameterFileName);
+ 
 
                 //This mode was requested by Julia Laskin. 
                 //This mode detects peaks in each dataset and merges the output
-                if (parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower() == "run_merging_with_peak_export")
+                if (_parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower() == "run_merging_with_peak_export")
                 {
-                    var workflow = new RunMergingPeakExportingWorkflow(parameters, _inputFileList, _outputPath, bw);
+                    
+
+                    var workflow = new RunMergingPeakExportingWorkflow(_parameters, _inputFileList, _outputPath, bw);
                     workflow.Execute();
                 }
                 else
