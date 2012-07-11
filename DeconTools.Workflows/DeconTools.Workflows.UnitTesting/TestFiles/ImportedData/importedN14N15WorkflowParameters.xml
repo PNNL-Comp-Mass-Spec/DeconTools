@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
+  <AreaOfPeakToSumInDynamicSumming>2</AreaOfPeakToSumInDynamicSumming>
+  <ChromatogramCorrelationIsPerformed>false</ChromatogramCorrelationIsPerformed>
   <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
   <ChromGenSourceDataPeakBR>3</ChromGenSourceDataPeakBR>
   <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
@@ -7,8 +9,10 @@
   <ChromNETToleranceN15>0.001</ChromNETToleranceN15>
   <ChromPeakDetectorPeakBR>2</ChromPeakDetectorPeakBR>
   <ChromPeakDetectorSigNoise>2</ChromPeakDetectorSigNoise>
+  <ChromPeakSelectorMode>Smart</ChromPeakSelectorMode>
   <ChromSmootherNumPointsInSmooth>15</ChromSmootherNumPointsInSmooth>
   <ChromToleranceInPPM>10</ChromToleranceInPPM>
+  <MaxScansSummedInDynamicSumming>100</MaxScansSummedInDynamicSumming>
   <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
   <MSToleranceInPPM>10</MSToleranceInPPM>
@@ -19,6 +23,7 @@
   <ResultType>N14N15_TARGETED_RESULT</ResultType>
   <SmartChromSelectorPeakBR>5</SmartChromSelectorPeakBR>
   <SmartChromSelectorPeakSigNoiseRatio>3</SmartChromSelectorPeakSigNoiseRatio>
+  <SummingMode>SUMMINGMODE_STATIC</SummingMode>
   <TargetedFeatureFinderIsotopicProfileTargetType>LABELLED</TargetedFeatureFinderIsotopicProfileTargetType>
   <TargetedFeatureFinderToleranceInPPM>10</TargetedFeatureFinderToleranceInPPM>
   <WorkflowType>N14N15Targeted1</WorkflowType>

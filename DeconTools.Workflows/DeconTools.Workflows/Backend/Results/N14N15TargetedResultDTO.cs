@@ -26,11 +26,6 @@ namespace DeconTools.Workflows.Backend.Results
         public float Ratio { get; set; }
 
 
-
-
-
-
-
         #endregion
 
 

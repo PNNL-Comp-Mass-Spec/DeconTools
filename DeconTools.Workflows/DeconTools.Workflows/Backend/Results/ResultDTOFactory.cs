@@ -7,12 +7,12 @@ namespace DeconTools.Workflows.Backend.Results
     public static class ResultDTOFactory
     {
 
-        public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight )
+        public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
         {
             writeStandardInfoToResult(resultLight, result);
 
         }
-        
+
         public static TargetedResultDTO CreateTargetedResult(TargetedResultBase result)
         {
             TargetedResultDTO tr;
@@ -45,29 +45,29 @@ namespace DeconTools.Workflows.Backend.Results
                 throw new NotImplementedException();
             }
 
-       
+
 
 
             return tr;
-            
+
 
 
         }
 
         private static void addAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
         {
-            SipperLcmsFeatureTargetedResultDTO r = (SipperLcmsFeatureTargetedResultDTO) tr;
+            SipperLcmsFeatureTargetedResultDTO r = (SipperLcmsFeatureTargetedResultDTO)tr;
             r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
             r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
             r.AreaUnderRatioCurveRevised = result.AreaUnderRatioCurveRevised;
-            r.RSquaredValForRatioCurve =  result.RSquaredValForRatioCurve;
+            r.RSquaredValForRatioCurve = result.RSquaredValForRatioCurve;
 
-            r.ChromCorrelationMin =   result.ChromCorrelationMin;
-            r.ChromCorrelationMax =   result.ChromCorrelationMax;
-            r.ChromCorrelationAverage =    result.ChromCorrelationAverage;
-            r.ChromCorrelationMedian =   result.ChromCorrelationMedian;
-            r.ChromCorrelationStdev= result.ChromCorrelationStdev;
+            r.ChromCorrelationMin = result.ChromCorrelationMin;
+            r.ChromCorrelationMax = result.ChromCorrelationMax;
+            r.ChromCorrelationAverage = result.ChromCorrelationAverage;
+            r.ChromCorrelationMedian = result.ChromCorrelationMedian;
+            r.ChromCorrelationStdev = result.ChromCorrelationStdev;
             r.AmountC13Labelling = result.AmountC13Labelling;
             r.FractionLabelled = result.FractionLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
@@ -79,9 +79,35 @@ namespace DeconTools.Workflows.Backend.Results
             // no other info needed now
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult n14N15_TResult)
+        private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {
-            throw new NotImplementedException();
+            N14N15TargetedResultDTO r = tr as N14N15TargetedResultDTO;
+            r.FitScoreN15 = (float)result.ScoreN15;
+            r.IScoreN15 = (float)result.InterferenceScoreN15;
+            r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IsotopicProfileLabeled.IntensityAggregate;
+            r.MonoMZN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoPeakMZ;
+            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) - 
+                result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
+            r.MonoMassN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoIsotopicMass;
+           
+            r.NETN15 = (float) result.GetNETN15();
+            r.NumChromPeaksWithinTolN15 = (short) result.NumChromPeaksWithinToleranceForN15Profile;
+            r.NumQualityChromPeaksWithinTolN15 = (short) result.NumChromPeaksWithinToleranceForN15Profile;
+            r.Ratio = (float) result.RatioN14N15;
+            r.RatioContributionN14 = (float) result.RatioContributionN14;
+            r.RatioContributionN15 = (float) result.RatioContributionN15;
+            r.ScanN15 = result.GetScanNumN15();
+
+            if (result.ChromPeakSelectedN15 != null)
+            {
+                double sigma = result.ChromPeakSelectedN15.Width / 2.35;
+                r.ScanN15Start = (int)Math.Round(result.ChromPeakSelectedN15.XValue - sigma);
+                r.ScanN15End = (int)Math.Round(result.ChromPeakSelectedN15.XValue + sigma);
+            }
+
+            
+
+
         }
 
         private static void addAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
@@ -111,7 +137,7 @@ namespace DeconTools.Workflows.Backend.Results
             }
         }
 
-        
+
 
 
         public static void writeStandardInfoToResult(TargetedResultDTO tr, TargetedResultBase result)
@@ -137,20 +163,20 @@ namespace DeconTools.Workflows.Backend.Results
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();
             tr.IntensityMostAbundantPeak = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.getMostIntensePeak().Height;
             tr.IScore = (float)result.InterferenceScore;
-            tr.MonoMass = result.IsotopicProfile == null ? 0d: result.IsotopicProfile.MonoIsotopicMass;
+            tr.MonoMass = result.IsotopicProfile == null ? 0d : result.IsotopicProfile.MonoIsotopicMass;
             tr.MonoMZ = result.IsotopicProfile == null ? 0d : result.IsotopicProfile.MonoPeakMZ;
-            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d: result.GetMassAlignmentErrorInPPM();
+            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d : result.GetMassAlignmentErrorInPPM();
             tr.MonoMassCalibrated = result.IsotopicProfile == null ? 0d : -1 * ((result.Target.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) - result.Target.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
 
             tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();
             tr.NETError = result.Target.NormalizedElutionTime - tr.NET;
-            
-            
+
+
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
             tr.NumQualityChromPeaksWithinTol = result.NumQualityChromPeaks;
             tr.FitScore = (float)result.Score;
-            
+
             if (result.ChromPeakSelected != null)
             {
                 double sigma = result.ChromPeakSelected.Width / 2.35;
@@ -161,7 +187,7 @@ namespace DeconTools.Workflows.Backend.Results
             if (result.FailedResult)
             {
                 tr.FailureType = result.FailureType.ToString();
-                
+
             }
 
             tr.ErrorDescription = result.ErrorDescription ?? "";
@@ -169,7 +195,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         }
 
-       
+
 
     }
 }

@@ -28,9 +28,10 @@ namespace DeconTools.Workflows.Backend.FileIO
                 case Globals.TargetedWorkflowTypes.SipperTargeted1:
                     exporter = new SipperResultToLcmsFeatureExporter(outputFileName);
                     break;
-
                 case Globals.TargetedWorkflowTypes.N14N15Targeted1:
-                    throw new NotImplementedException("This hasn't been implemented for N14N15 data");
+                    exporter = new N14N15TargetedResultToTextExporter(outputFileName);
+                    break;
+
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:

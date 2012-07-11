@@ -19,12 +19,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         #region Private Methods
         protected override string addAdditionalInfo(TargetedResultDTO result)
         {
-
             var n14result = (N14N15TargetedResultDTO)result;
-
-
-            //TODO: finish this!!
-
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Delimiter);
@@ -36,9 +31,15 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(n14result.NETN15);
             sb.Append(Delimiter);
+            sb.Append(n14result.NumChromPeaksWithinTolN15);
+            sb.Append(Delimiter);
+            sb.Append(n14result.NumQualityChromPeaksWithinTolN15);
+            sb.Append(Delimiter);
             sb.Append(n14result.MonoMassN15);
             sb.Append(Delimiter);
             sb.Append(n14result.MonoMassCalibratedN15);
+            sb.Append(Delimiter);
+            sb.Append(n14result.MonoMZN15);
             sb.Append(Delimiter);
             sb.Append(n14result.IntensityN15);
             sb.Append(Delimiter);
@@ -46,9 +47,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(n14result.IScoreN15);
             sb.Append(Delimiter);
+            sb.Append(n14result.RatioContributionN14);
+            sb.Append(Delimiter);
             sb.Append(n14result.RatioContributionN15);
             sb.Append(Delimiter);
-            
             sb.Append(n14result.Ratio);
 
 
@@ -64,23 +66,37 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             sb.Append(base.buildHeaderLine());
 
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityTheorI0");
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityTheorI2");
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityTheorI4");
-            //sb.Append(Delimiter);
+            sb.Append(Delimiter);
+            sb.Append("ScanN15");
+            sb.Append(Delimiter);
+            sb.Append("ScanN15Start");
+            sb.Append(Delimiter);
+            sb.Append("ScanN15End");
+            sb.Append(Delimiter);
 
-            //sb.Append("IntensityI0");
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityI2");
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityI4");
-            //sb.Append(Delimiter);
-            //sb.Append("IntensityI4Adjusted");
-            //sb.Append(Delimiter);
-            //sb.Append("Ratio");
+            sb.Append("NETN15");
+            sb.Append(Delimiter);
+            sb.Append("ChromPeaksWithinTolN15");
+            sb.Append(Delimiter);
+            sb.Append("NumQualityChromPeaksWithinTolN15");
+            sb.Append(Delimiter);
+            sb.Append("MonoisotopicMassN15");
+            sb.Append(Delimiter);
+            sb.Append("MonoisotopicMassCalibratedN15");
+            sb.Append(Delimiter);
+            sb.Append("MonoMZN15");
+            sb.Append(Delimiter);
+            sb.Append("IntensityN15");
+            sb.Append(Delimiter);
+            sb.Append("FitScoreN15");
+            sb.Append(Delimiter);
+            sb.Append("IScoreN15");
+            sb.Append(Delimiter);
+            sb.Append("RatioContribN14");
+            sb.Append(Delimiter);
+            sb.Append("RatioContribN15");
+            sb.Append(Delimiter);
+            sb.Append("Ratio");
 
             return sb.ToString();
 

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -320,7 +319,7 @@ namespace DeconTools.Workflows.Backend.Core
             performAlignment();
 
 
-            bool runIsNotAligned = (!Run.MassIsAligned || !Run.NETIsAligned);
+            bool runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
 
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
             if (runIsNotAligned && this.ExecutorParameters.TargetedAlignmentIsPerformed)
@@ -358,9 +357,20 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("Processing...", 0);
 
+
+
+
+
             foreach (var massTag in this.Targets.TargetList)
             {
                 mtCounter++;
+
+#if DEBUG
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+#endif
+
 
                 Run.CurrentMassTag = massTag;
                 try
@@ -377,7 +387,14 @@ namespace DeconTools.Workflows.Backend.Core
                     throw;
                 }
 
-                string progressString = "Target " + mtCounter + " of " + totalTargets;
+#if DEBUG
+                stopwatch.Stop();
+                Console.WriteLine(massTag.ID + "\tprocessing time = " + stopwatch.ElapsedMilliseconds);
+
+#endif
+
+
+                string progressString = "Percent complete = " + ((double)mtCounter/totalTargets).ToString("0.0") +  "\tTarget " + mtCounter + " of " + totalTargets;
 
 
                 if (_backgroundWorker != null)
@@ -493,7 +510,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (_backgroundWorker == null)
             {
-                if (progressCounter % 500 == 0)
+                if (progressCounter % 100 == 0)
                 {
                     Console.WriteLine(DateTime.Now + "\t" + reportString);
                 }
@@ -519,7 +536,7 @@ namespace DeconTools.Workflows.Backend.Core
                 _backgroundWorker.ReportProgress(progressPercent, _progressInfo);
             }
 
-            if (progressCounter % 500 == 0)
+            if (progressCounter % 100 == 0)
             {
                 writeToLogFile(DateTime.Now + "\t" + reportString);
             }
@@ -733,7 +750,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void performAlignment()
         {
-            RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run);
+            if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+            {
+                RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run);
+            }
+            else
+            {
+                RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run, ExecutorParameters.AlignmentInfoFolder);
+            }
+
+
+
+            
 
             if (Run.MassIsAligned)
             {

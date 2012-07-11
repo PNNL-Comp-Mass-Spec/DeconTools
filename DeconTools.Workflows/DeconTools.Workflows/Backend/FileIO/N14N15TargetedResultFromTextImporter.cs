@@ -4,22 +4,22 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class N14N15TargetedResultFromTextImporter : TargetedResultFromTextImporter
     {
-        readonly string[] _scanN15Headers = { "scanN15" };
+        readonly string[] _scanN15Headers = { "ScanN15" };
         readonly string[] _scanN15StartHeaders = { "scanN15Start" };
-        readonly string[] _scanN15EndHeaders = { "scanN15End" };
+        readonly string[] _scanN15EndHeaders = { "ScanN15End" };
         readonly string[] _NETN15Headers = { "NETN15" };
-        readonly string[] _numChromPeaksWithinTolN15Headers = { "chromPeaksWithinTolN15", "NumChromPeaksWithinTolN15" };
+        readonly string[] _numChromPeaksWithinTolN15Headers = { "ChromPeaksWithinTolN15", "NumChromPeaksWithinTolN15" };
         readonly string[] _numQualityChromPeaksWithinTolN15Headers = { "NumQualityChromPeaksWithinTolN15" };
-        readonly string[] _monoMassN15Headers = { "MonoMassIso2" };
+        readonly string[] _monoMassN15Headers = { "MonoMassIso2", "MonoisotopicMassN15" };
         readonly string[] _monoMassN15CalibratedHeaders = { "MonoisotopicMassCalibratedN15" };
         readonly string[] _monoMZN15Headers = { "MonoMZN15", "MZ2" };
-        readonly string[] _intensityN15Headers = { "AbundanceIso2" };
-        readonly string[] _fitscoreN15Headers = { "iso2Fit" };
-        readonly string[] _iScoreN15Headers = { "iscore2" };
-        readonly string[] _ratioContribN14Headers = { "iso1RatioContrib" };
-        readonly string[] _ratioContribN15Headers= { "iso2RatioContrib" };
+        readonly string[] _intensityN15Headers = { "AbundanceIso2", "IntensityN15" };
+        readonly string[] _fitscoreN15Headers = { "iso2Fit" ,"FitScoreN15" };
+        readonly string[] _iScoreN15Headers = { "iscore2" , "IScoreN15" };
+        readonly string[] _ratioContribN14Headers = { "iso1RatioContrib" , "RatioContribN14" };
+        readonly string[] _ratioContribN15Headers= { "iso2RatioContrib" , "RatioContribN15" };
         readonly string[] _ratioHeaders = { "ratio" };
-        readonly string[] _monoMZN14Headers = { "MZ1" };
+        readonly string[] _monoMZN14Headers = { "MZ1" , "MonoMZ" };
 
 
         #region Constructors

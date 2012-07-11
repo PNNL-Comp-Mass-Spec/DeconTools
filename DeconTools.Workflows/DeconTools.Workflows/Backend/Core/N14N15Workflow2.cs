@@ -11,11 +11,10 @@ using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class N14N15Workflow2 : TargetedWorkflow
+    public sealed class N14N15Workflow2 : TargetedWorkflow
     {
         private JoshTheorFeatureGenerator theorFeatureGen;
         private JoshTheorFeatureGenerator theorN15FeatureGen;
@@ -45,12 +44,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         public N14N15Workflow2(Run run, TargetedWorkflowParameters parameters)
         {
-            Check.Require(parameters is N14N15Workflow2Parameters, "Cannot instantiate workflow. Parameters must be of type" + _workflowParameters.GetType());
-
             this.WorkflowParameters = parameters;
             this.Run = run;
 
             InitializeWorkflow();
+        
         }
 
         public N14N15Workflow2(TargetedWorkflowParameters parameters)
@@ -88,6 +86,11 @@ namespace DeconTools.Workflows.Backend.Core
         #region Workflow Members
         public override void Execute()
         {
+            if (this.Run.CurrentMassTag==null)
+            {
+                throw new NullReferenceException("Cannot execute workflow. Current target is null.");
+            }
+
             ResetStoredData();
 
             try
@@ -148,6 +151,14 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecuteTask(MSGenerator);
                 updateMassSpectrumXYValues(this.Run.XYData);
 
+                if (Run.XYData!=null)
+                {
+                    Run.XYData = Run.XYData.TrimData(n14n15result.Target.MZ - 5,
+                                     n14n15result.Target.IsotopicProfileLabelled.MonoPeakMZ + 5);
+ 
+                }
+
+                
                 ExecuteTask(msPeakDetector);
                 ExecuteTask(labelledProfileFinder);
 
@@ -161,7 +172,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                N14N15_TResult result = (N14N15_TResult)this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
+                var result = Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
                 result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
 
                 return;
@@ -193,9 +204,10 @@ namespace DeconTools.Workflows.Backend.Core
             smartchrompeakSelectorParams.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
             smartchrompeakSelectorParams.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
             smartchrompeakSelectorParams.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            smartchrompeakSelectorParams.NETTolerance = _workflowParameters.ChromToleranceInPPM;
+            smartchrompeakSelectorParams.NETTolerance = (float) _workflowParameters.ChromNETTolerance;
             smartchrompeakSelectorParams.NumScansToSum = _workflowParameters.NumMSScansToSum;
             smartchrompeakSelectorParams.NumChromPeaksAllowed = 10;
+            smartchrompeakSelectorParams.IterativeTffMinRelIntensityForPeakInclusion = 0.5;
 
 
             chromPeakSelectorN14 = new SmartChromPeakSelector(smartchrompeakSelectorParams);
@@ -215,15 +227,17 @@ namespace DeconTools.Workflows.Backend.Core
             var iterativeTFFParameters = new IterativeTFFParameters();
             iterativeTFFParameters.ToleranceInPPM = _workflowParameters.TargetedFeatureFinderToleranceInPPM;
             iterativeTFFParameters.IsotopicProfileType = _workflowParameters.TargetedFeatureFinderIsotopicProfileTargetType;
+            iterativeTFFParameters.MinimumRelIntensityForForPeakInclusion = 0.33;
             labelledProfileFinder = new IterativeTFF(iterativeTFFParameters);
 
             quantifier = new N14N15QuantifierTask(_workflowParameters.NumPeaksUsedInQuant, _workflowParameters.MSToleranceInPPM);
 
             fitScoreCalc = new MassTagFitScoreCalculator();
 
-            resultValidatorN14 = new ResultValidatorTask();
+            double minRelativeIntensityForScore = 0.2;
+            resultValidatorN14 = new ResultValidatorTask(minRelativeIntensityForScore, true);
 
-            resultValidatorN15 = new LabelledIsotopicProfileScorer();
+            resultValidatorN15 = new LabelledIsotopicProfileScorer(minRelativeIntensityForScore);
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
