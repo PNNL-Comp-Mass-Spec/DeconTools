@@ -198,10 +198,7 @@ namespace DeconTools.Backend.Runs
             return precursor;
         }
 
-        private void getAgilentSpectrum(int scanNum)
-        {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.Profile);
-        }
+
 
         public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
@@ -286,6 +283,7 @@ namespace DeconTools.Backend.Runs
             }
 
         }
+
         #endregion
 
         #region scott
@@ -346,6 +344,13 @@ namespace DeconTools.Backend.Runs
 
 
         #region Private Methods
+        private void getAgilentSpectrum(int scanNum)
+        {
+            m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.ProfileElsePeak);
+        }
+
+
+
 
         #endregion
 
