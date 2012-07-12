@@ -106,6 +106,7 @@
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflow_problemCases.cs" />
+    <Compile Include="WorkflowTests\TopDownTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\UnitTestTemplate1.cs" />
     <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />
     <Compile Include="WorkflowTests\WorkflowExecutorParametersTests.cs" />

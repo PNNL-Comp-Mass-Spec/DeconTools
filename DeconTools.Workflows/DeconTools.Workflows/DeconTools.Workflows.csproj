@@ -97,11 +97,16 @@
     <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedWorkflow.cs" />
     <Compile Include="Backend\Core\tempTestworkflow.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutorParameters.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\WorkflowBase.cs" />
     <Compile Include="Backend\Core\TargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\WorkflowExecutorBaseParameters.cs" />
     <Compile Include="Backend\Core\WorkflowParameters.cs" />
+    <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />

@@ -142,6 +142,9 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     wf = new TargetedAlignerWorkflow(workflowParameters);
                     break;
+				case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
+					wf = new TopDownTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+            		break;
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
                     throw new System.NotImplementedException("Cannot create this workflow type here.");
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
