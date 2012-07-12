@@ -46,21 +46,27 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
             int numPoints = rightIndex - leftIndex + 1;
-            int numL = numPoints;
+            
+            int desiredNumPoints = 256;
+
+            int pointMultiplier =(int)Math.Ceiling(desiredNumPoints/(double)numPoints);
 
             if (numPoints < 5)
                 return -1;
 
-            if (numPoints < 256)
-                numL = 10 * numPoints;
+            int numL;
+            if (numPoints < desiredNumPoints)
+            {
+                numL = pointMultiplier * numPoints;
+            }
+            else
+            {
+                numL = numPoints;
+            }
+                
 
 
-            XYData xydata = new XYData();
-            double[] filteredXValues = getFilteredXYData(rawData.Xvalues, leftIndex, rightIndex);
-            double[] filteredYValues = getFilteredXYData(rawData.Yvalues, leftIndex, rightIndex);
-
-            xydata.Xvalues = filteredXValues;
-            xydata.Yvalues = filteredYValues;
+            XYData filteredXYData = getFilteredXYData(rawData, leftIndex, rightIndex);
 
             //DisplayXYVals(xydata);
 
@@ -69,38 +75,39 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            alglib.spline1d.spline1dbuildcubic(filteredXValues, filteredYValues, filteredXValues.Length, 1, +1, 1, -1, interpolant);
+            alglib.spline1d.spline1dbuildcubic(filteredXYData.Xvalues, filteredXYData.Yvalues, filteredXYData.Xvalues.Length, 1, +1, 1, -1, interpolant);
 
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
 
-            double minMZ = filteredXValues[0];
-            double maxMZ = filteredXValues[filteredXValues.Length - 1];
+            double minMZ = filteredXYData.Xvalues[0];
+            double maxMZ = filteredXYData.Xvalues[filteredXYData.Xvalues.Length - 1];
 
 
-
-            List<double> interpolatedYVals = new List<double>();
-            List<double> interpolatedXVals = new List<double>();
+            XYData evenlySpacedXYData = new XYData();
+            evenlySpacedXYData.Xvalues = new double[numL];
+            evenlySpacedXYData.Yvalues = new double[numL];
 
             for (int i = 0; i < numL; i++)
             {
                 double xval = (minMZ + ((maxMZ - minMZ) * i) / numL);
                 double yval = alglib.spline1d.spline1dcalc(interpolant, xval);
 
-                interpolatedXVals.Add(xval);
-                interpolatedYVals.Add(yval);
-
+                evenlySpacedXYData.Xvalues[i] = xval;
+                evenlySpacedXYData.Yvalues[i] = yval;
             }
 
-            xydata.Xvalues = interpolatedXVals.ToArray();
-            xydata.Yvalues = interpolatedYVals.ToArray();
+
+            
 
             //Console.WriteLine();
             //DisplayXYVals(xydata);
 
 
-            List<double> autoCorrScores = ACss(interpolatedYVals);
 
+            double[] autoCorrScores = ACss(evenlySpacedXYData.Yvalues);
+
+            
             int startingIndex = 0;
             while (startingIndex < numL - 1 && autoCorrScores[startingIndex] > autoCorrScores[startingIndex + 1])
             {
@@ -209,38 +216,44 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #region Private Methods
 
 
-        private List<double> ACss(List<double> inData)
+        private double[] ACss(double[] inData)
         {
-            List<double> outData = new List<double>();
+            
+
+            int numPoints = inData.Length;
+            double[] outData = new double[numPoints];
+
 
             double sum = 0;
             double average = 0;
 
-            for (int i = 0; i < inData.Count; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 sum += inData[i];
 
             }
-            average = sum / inData.Count;
+
+            average = sum / numPoints;
 
             sum = 0;
-            for (int i = 0; i < inData.Count; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 sum = 0;
+
+                double currentValue = (inData[i] - average);
+
                 int j;
-                for (j = 0; j < (inData.Count - i - 1); j++)
+                for (j = 0; j < (numPoints - i - 1); j++)
                 {
-                    sum += ((inData[i] - average) * (inData[i + j] - average));
+                    sum += (currentValue) * (inData[i + j] - average);
+                    //sum += (inData[i] - average) * (inData[i + j] - average);
                 }
 
                 if (j > 0)
                 {
-                    outData.Add(sum / inData.Count);
+                    outData[i] = (sum / numPoints);
                 }
-                else
-                {
-                    outData.Add(0);
-                }
+                
 
 
             }
@@ -250,13 +263,13 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         }
 
     
-        private void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, List<double> autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
+        private void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, double[] autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
         {
             bool goingUp = false;
             bool wasGoingUp = false;
 
             int chargeState = -1;
-            int numPoints = autoCorrScores.Count;
+            int numPoints = autoCorrScores.Length;
 
             for (int i = startingIndex; i < numPoints; i++)
             {
@@ -283,12 +296,12 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
 
-        private void GetHighestChargeStatePeak(double minMZ, double maxMZ, int startingIndex, List<double> autoCorrelationScores, int maxChargeState, ref double bestAutoCorrectionScore, ref int bestChargeState)
+        private void GetHighestChargeStatePeak(double minMZ, double maxMZ, int startingIndex, double[] autoCorrelationScores, int maxChargeState, ref double bestAutoCorrectionScore, ref int bestChargeState)
         {
             bool goingUp = false;
             bool wasGoingUp = false;
 
-            int numPoints = autoCorrelationScores.Count;
+            int numPoints = autoCorrelationScores.Length;
 
             int chargeState;
             for (int i = startingIndex; i < numPoints; i++)
@@ -332,20 +345,24 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             Console.WriteLine(sb.ToString());
         }
 
-        private double[] getFilteredXYData(double[] inputVals, int leftIndex, int rightIndex)
+        private XYData getFilteredXYData(XYData inputXYData, int leftIndex, int rightIndex)
         {
             int numPoints = rightIndex - leftIndex + 1;
 
-            double[] outputVals = new double[numPoints];
+            XYData outputXYData = new XYData();
 
+
+            outputXYData.Xvalues = new double[numPoints];
+            outputXYData.Yvalues = new double[numPoints];
 
             for (int i = 0; i < numPoints; i++)
             {
-                outputVals[i] = inputVals[leftIndex + i];
+                outputXYData.Xvalues[i] = inputXYData.Xvalues[leftIndex + i];
+                outputXYData.Yvalues[i] = inputXYData.Yvalues[leftIndex + i];
 
             }
 
-            return outputVals;
+            return outputXYData;
         }
 
 

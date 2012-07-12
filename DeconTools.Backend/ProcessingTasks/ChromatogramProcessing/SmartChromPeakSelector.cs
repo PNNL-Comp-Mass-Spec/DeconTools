@@ -15,6 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             var iterativeTFFParams = new IterativeTFFParameters();
             iterativeTFFParams.ToleranceInPPM = parameters.MSToleranceInPPM;
+            iterativeTFFParams.MinimumRelIntensityForForPeakInclusion = parameters.IterativeTffMinRelIntensityForPeakInclusion;
 
             if (parameters.MSFeatureFinderType == Globals.TargetedFeatureFinderType.BASIC)
             {

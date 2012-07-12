@@ -63,6 +63,9 @@ namespace DeconTools.Backend.Utilities
 
         public double GetMonoIsotopicMassForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
         {
+
+            peptideSequence = CleanUpPeptideSequence(peptideSequence);
+
             bool sequenceIsValid = ValidateSequence(peptideSequence);
             if (!sequenceIsValid)
             {
@@ -88,14 +91,19 @@ namespace DeconTools.Backend.Utilities
             return outputMonoisotopicMass;
         }
 
-
-
-
         public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
         {
 
+
+            peptideSequence = CleanUpPeptideSequence(peptideSequence);
+
+
             bool sequenceIsValid = ValidateSequence(peptideSequence);
             if (!sequenceIsValid) return string.Empty;
+
+
+
+
 
 
             string outputEmpiricalFormula = "";
@@ -119,17 +127,43 @@ namespace DeconTools.Backend.Utilities
             return outputEmpiricalFormula;
         }
 
-    
+        private string CleanUpPeptideSequence(string peptideSequence)
+        {
+            if (peptideSequence.Contains("."))
+            {
+                int numberDotChars = peptideSequence.Count(p => p == '.');
 
+                if (numberDotChars == 1)
+                {
+                    throw new FormatException("There is a problem with peptide sequence " + peptideSequence +
+                                              ";  it contains only one '.'. It should contain two.");
+                }
+                else if (numberDotChars == 2)
+                {
+                    int indexFirstDot = peptideSequence.IndexOf('.');
+                    int indexSecondDot = peptideSequence.LastIndexOf('.');
 
+                    peptideSequence = peptideSequence.Substring(indexFirstDot+1, indexSecondDot - indexFirstDot-1);
+                }
+                else
+                {
+                    throw new FormatException("There is a problem with peptide sequence " + peptideSequence +
+                                              ";  it contains more than two '.' characters");
+                }
+            }
 
+            if (peptideSequence.Contains('*'))
+            {
+                peptideSequence = peptideSequence.Replace("*", String.Empty);
+            }
+            return peptideSequence;
+        }
 
-
-
-     
 
         private double GetMonoisotopicMassForAminoAcidResidue(char aminoAcidCode)
         {
+
+
             if (!aminoAcidSingleLetterCodes.Contains(aminoAcidCode))
             {
                 throw new ArgumentException("Amino acid code is invalid. Inputted code= " + aminoAcidCode);

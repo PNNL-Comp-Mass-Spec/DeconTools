@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
@@ -26,8 +22,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             this.NumPeaksUsedInAbundance = 1;
             this.RequiresMonoIsotopicPeak = false;
             this.ToleranceInPPM = 25;
-            
-            
+            MinimumRelIntensityForForPeakInclusion = 0.02;
+
+
         }
 
 
@@ -58,6 +55,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public int NumPeaksUsedInAbundance { get; set; }
         public bool RequiresMonoIsotopicPeak { get; set; }
 
+        /// <summary>
+        /// Iterator loops until the quality of the isotopic profile passes a certain level. This parameter 
+        /// tells the iterator to loop until you have peaks that have a relative intensity
+        /// below this threshold. Then iterator stops.
+        /// </summary>
+        public double MinimumRelIntensityForForPeakInclusion { get; set; }
 
         #endregion
 

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
@@ -14,9 +10,17 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
     {
 
         #region Constructors
+
+        public InterferenceScorer(double minRelativeIntensity = 0.025)
+        {
+            MinRelativeIntensity = minRelativeIntensity;
+
+        }
+
         #endregion
 
         #region Properties
+        public double MinRelativeIntensity { get; set; }
 
         #endregion
 
@@ -99,20 +103,39 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double sumAllPeakIntensities = 0;
             double sumTargetPeakIntensities = 0;
 
+            MSPeak maxPeak = GetMaxPeak(targetPeaks);
+ 
+            if (maxPeak == null) return -1;
+
+
             for (int i = 0; i < allPeaks.Count; i++)
             {
-                if (allPeaks[i].XValue > leftBoundary && allPeaks[i].XValue < rightBoundary)
+                var currentPeak = allPeaks[i];
+
+                if (currentPeak.XValue > leftBoundary && currentPeak.XValue < rightBoundary)
                 {
-                    sumAllPeakIntensities += allPeaks[i].Height;
+                    var currentRelIntensity = currentPeak.Height/maxPeak.Height;
+                    if (currentRelIntensity >= MinRelativeIntensity)
+                    {
+                        sumAllPeakIntensities += currentPeak.Height; 
+                    }
+                    
+                    
                 }
                 
             }
 
             foreach (var peak in targetPeaks)
             {
+
                 if (peak.XValue > leftBoundary && peak.XValue < rightBoundary)
                 {
-                    sumTargetPeakIntensities += peak.Height;
+                    var currentRelIntensity = peak.Height / maxPeak.Height;
+                    if (currentRelIntensity >= MinRelativeIntensity)
+                    {
+                        sumTargetPeakIntensities += peak.Height;
+                    }
+                    
                 }
                 
             }
@@ -121,9 +144,38 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             return interferenceScore;
         }
 
+       
         #endregion
 
         #region Private Methods
+
+        private MSPeak GetMaxPeak (IEnumerable<MSPeak>mspeakList)
+        {
+
+            MSPeak maxMsPeak=null;
+            
+            double maxIntensity = double.MinValue;
+
+            foreach (var msPeak in mspeakList)
+            {
+                if (maxMsPeak==null)
+                {
+                    maxMsPeak = msPeak;
+                    continue;
+                    
+                }
+
+                if (msPeak.Height>maxMsPeak.Height)
+                {
+                    maxMsPeak = msPeak;
+                }
+            }
+
+            return maxMsPeak;
+
+
+
+        }
 
         #endregion
 

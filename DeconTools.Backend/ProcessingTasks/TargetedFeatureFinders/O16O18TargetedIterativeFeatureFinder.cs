@@ -54,8 +54,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             if (o16profile==null)
             {
-                
-                if (o18TheorProfileDoubleLabel==null)
+
+                if (o18DoubleLabelProfile == null)
                 {
                     result.IsotopicProfile = null;
                     return;

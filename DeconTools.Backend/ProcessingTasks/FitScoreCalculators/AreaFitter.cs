@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Utilities;
 
@@ -28,6 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             double xmin = theorXYData.Xvalues[0] + offset;
             double xmax = theorXYData.Xvalues.Max() + offset;
 
+
             XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
 
             //trimmedObservedXYData.Display();
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                     if (indexOfClosest == -1)
                     {
-                        Console.WriteLine(i + "\t" + currentTheorMZ);
+                        //Console.WriteLine(i + "\t" + currentTheorMZ);
                         return 1;
                     }
 

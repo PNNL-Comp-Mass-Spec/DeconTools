@@ -7,12 +7,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
     {
         #region Constructors
 
-        public ResultValidatorTask()
+        public ResultValidatorTask(double minRelIntensityForScore = 0.025, bool usePeakBasedInterferenceValue = true)
         {
             //create a default collection
             ResultValidatorColl = new List<ResultValidator>();
             ResultValidatorColl.Add(new LeftOfMonoPeakLooker());
-            ResultValidatorColl.Add(new IsotopicProfileInterferenceScorer());
+            ResultValidatorColl.Add(new IsotopicProfileInterferenceScorer(minRelIntensityForScore,usePeakBasedInterferenceValue));
 
 
         }
@@ -21,6 +21,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #region Properties
 
         IList<ResultValidator> ResultValidatorColl { get; set; }
+
+        
+
 
         #endregion
 

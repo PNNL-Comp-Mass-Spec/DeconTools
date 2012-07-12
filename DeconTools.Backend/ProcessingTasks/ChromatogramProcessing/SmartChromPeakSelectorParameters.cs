@@ -22,6 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             MSPeakDetectorPeakBR = 1.3;
             MSPeakDetectorSigNoiseThresh = 2;
             NumChromPeaksAllowed = 20;
+            IterativeTffMinRelIntensityForPeakInclusion = 0.25;
         }
         #endregion
 
@@ -51,7 +52,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public double MSPeakDetectorSigNoiseThresh { get; set; }
 
-
+        /// <summary>
+        /// Iterative targeted feature finding has this parameter. So must be captured here
+        /// </summary>
+        public double IterativeTffMinRelIntensityForPeakInclusion { get; set; }
 
 
         #endregion

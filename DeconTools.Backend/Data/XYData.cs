@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend
 {
@@ -56,7 +57,7 @@ namespace DeconTools.Backend
 
         public void SetXYValues(ref float[] xvals, ref float[] yvals)
         {
-            if (xvals == null || yvals==null)
+            if (xvals == null || yvals == null)
             {
                 this.Xvalues = null;
                 this.Yvalues = null;
@@ -92,7 +93,7 @@ namespace DeconTools.Backend
                 return;
             }
 
-            
+
             this.xvalues = xvals;
             this.yvalues = new double[yvals.Length];
             for (int i = 0; i < yvals.Length; i++)
@@ -217,21 +218,25 @@ namespace DeconTools.Backend
             if (xvalues == null || yvalues == null) return this;
 
             XYData data = new XYData();
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
 
-            for (int i = 0; i < xvalues.Length; i++)
+
+
+            int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin);
+
+            int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax);
+
+            int numPoints = indexClosestXValMax - indexClosestXValMin + 1;
+
+            data.Xvalues = new double[numPoints];
+            data.Yvalues = new double[numPoints];
+
+            for (int i = indexClosestXValMin; i <= indexClosestXValMax; i++)
             {
-                if (xvalues[i] >= xmin && xvalues[i] <= xmax)
-                {
-                    xvals.Add(xvalues[i]);
-                    yvals.Add(yvalues[i]);
-                }
+
+                data.Xvalues[i - indexClosestXValMin] = xvalues[i];
+                data.Yvalues[i - indexClosestXValMin] = yvalues[i];
 
             }
-
-            data.Xvalues = xvals.ToArray();
-            data.Yvalues = yvals.ToArray();
 
             return data;
 
@@ -312,7 +317,7 @@ namespace DeconTools.Backend
                 {
 
                 }
-                
+
             }
 
             if (xvals.Count == 0) return null;
@@ -346,6 +351,6 @@ namespace DeconTools.Backend
             Console.Write(sb.ToString());
         }
 
-  
+
     }
 }

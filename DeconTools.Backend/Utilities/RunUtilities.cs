@@ -89,14 +89,34 @@ namespace DeconTools.Backend.Utilities
 
         #endregion
 
-        public static bool AlignRunUsingAlignmentInfoInFiles(Run run)
+        public static bool AlignRunUsingAlignmentInfoInFiles(Run run, string alignmentDataFolder="")
         {
             bool alignmentSuccessful = false;
 
-            string basePath = run.DataSetPath;
 
-            string expectedMZAlignmentFile = run.DataSetPath + "\\" + run.DatasetName + "_MZAlignment.txt";
-            string expectedNETAlignmentFile = run.DataSetPath + "\\" + run.DatasetName + "_NETAlignment.txt";
+            string basePath;
+            if (string.IsNullOrEmpty(alignmentDataFolder))
+            {
+                basePath= run.DataSetPath;
+            }
+            else
+            {
+                if (Directory.Exists(alignmentDataFolder))
+                {
+                    basePath = alignmentDataFolder;
+                }
+                else
+                {
+                    throw new DirectoryNotFoundException(
+                        "Cannot align dataset. Source alignment folder does not exist. Alignment folder = " +
+                        alignmentDataFolder);
+                }
+            }
+
+            
+
+            string expectedMZAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_MZAlignment.txt";
+            string expectedNETAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_NETAlignment.txt";
 
             //first will try to load the multiAlign alignment info
             if (File.Exists(expectedMZAlignmentFile))
@@ -127,15 +147,17 @@ namespace DeconTools.Backend.Utilities
             }
             else
             {
-                DirectoryInfo datasetDirInfo = new DirectoryInfo(basePath);
-                FileInfo[] umcFileInfo = datasetDirInfo.GetFiles("*_umcs.txt");
+                DirectoryInfo alignmentDirInfo = new DirectoryInfo(basePath);
+                FileInfo[] umcFileInfo = alignmentDirInfo.GetFiles("*_umcs.txt");
 
-                if (umcFileInfo.Count() > 0)
+                int umcFileCount = umcFileInfo.Count();
+
+                if (umcFileCount == 1)
                 {
-                    string targetUMCFileName = umcFileInfo.First().FullName;
+                    string targetUmcFileName = umcFileInfo.First().FullName;
 
                     UMCCollection umcs = new UMCCollection();
-                    UMCFileImporter importer = new UMCFileImporter(targetUMCFileName, '\t');
+                    UMCFileImporter importer = new UMCFileImporter(targetUmcFileName, '\t');
                     umcs = importer.Import();
 
                     List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
@@ -144,6 +166,30 @@ namespace DeconTools.Backend.Utilities
                    
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
+                }
+                else if (umcFileCount>1)
+                {
+                    string expectedUMCName = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_UMCs.txt";
+
+                    if (File.Exists(expectedUMCName))
+                    {
+                        UMCCollection umcs = new UMCCollection();
+                        UMCFileImporter importer = new UMCFileImporter(expectedUMCName, '\t');
+                        umcs = importer.Import();
+
+                        List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
+                        run.SetScanToNETAlignmentData(scannetPairs);
+
+                        Console.WriteLine(run.DatasetName + " NET aligned using UMC file: " + expectedUMCName);
+
+                        alignmentSuccessful = true;
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("Trying to align dataset: " + run.DatasetName +
+                                                        " but UMC file not found.");
+                    }
+
 
                 }
                 else

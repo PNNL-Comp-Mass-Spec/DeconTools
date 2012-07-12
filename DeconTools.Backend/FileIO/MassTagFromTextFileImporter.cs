@@ -22,8 +22,6 @@ namespace DeconTools.Backend.FileIO
             if (!File.Exists(filename)) throw new System.IO.IOException("MassTagImporter failed. File doesn't exist.");
             this.m_filename = filename;
             this.delimiter = '\t';
-
-            
             
         }
 
@@ -125,7 +123,7 @@ namespace DeconTools.Backend.FileIO
 
                         List<PeptideTarget> targetList = new List<PeptideTarget>();
 
-                        for (int chargeState = 1; chargeState < 50; chargeState++)
+                        for (int chargeState = 1; chargeState < 100; chargeState++)
                         {
                             var calcMZ = massTag.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
                             if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)

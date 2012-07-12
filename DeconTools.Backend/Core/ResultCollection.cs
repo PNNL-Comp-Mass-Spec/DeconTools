@@ -114,6 +114,11 @@ namespace DeconTools.Backend.Core
 
         public TargetedResultBase GetTargetedResult(TargetBase target)
         {
+            if (target==null)
+            {
+                throw new NullReferenceException("Tried to get the TargetResult, but Target is null");
+            }
+
             if (MassTagResultList.ContainsKey(target))
             {
                 CurrentTargetedResult = MassTagResultList[target];

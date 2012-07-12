@@ -2,9 +2,15 @@
 
 namespace DeconTools.Backend.Core
 {
-    public class LcmsFeatureTarget:TargetBase
+    public class LcmsFeatureTarget : TargetBase
     {
 
+        public LcmsFeatureTarget(LcmsFeatureTarget target) : base(target) { }
+
+        public LcmsFeatureTarget()
+        {
+            
+        }
 
         /// <summary>
         /// ID of the massTag to which the Feature was matched.

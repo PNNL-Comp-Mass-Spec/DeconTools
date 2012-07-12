@@ -27,7 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             PeakBRMin = 0.5;
 
             MaxPeaksToInclude = 30;
-            MinRelIntensityForPeakInclusion = 0.02;
+            MinRelIntensityForPeakInclusion = parameters.MinimumRelIntensityForForPeakInclusion;
 
 
             this.NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;

@@ -15,9 +15,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         private AreaFitter areafitter;
 
         #region Constructors
-        public LabelledIsotopicProfileScorer()
+        public LabelledIsotopicProfileScorer(double minRelativeIntensityForScore = 0.2)
         {
-            iscorer = new InterferenceScorer();
+
+
+            iscorer = new InterferenceScorer(minRelativeIntensityForScore);
 
         }
         #endregion
