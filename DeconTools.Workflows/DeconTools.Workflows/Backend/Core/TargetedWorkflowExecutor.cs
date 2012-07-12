@@ -214,6 +214,8 @@ namespace DeconTools.Workflows.Backend.Core
                     target.MonoIsotopicMass =
                         EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
 
+                    
+
                     target.MZ = target.MonoIsotopicMass / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
                 }
 

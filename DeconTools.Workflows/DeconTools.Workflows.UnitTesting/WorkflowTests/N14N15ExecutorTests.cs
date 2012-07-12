@@ -91,10 +91,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         [Test]
-        public void executorTest3()
+        public void executorTest3_NewDatasets_lowN15Label()
         {
             string testfile =
-                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\RawData\RSPH_Ponly_28_A_8May12_Earth_12-03-11.raw";
+                @"\\proto-7\VOrbi05\2012_2\RSPH_Ponly_25_A_9May12_Earth_12-03-13\RSPH_Ponly_25_A_9May12_Earth_12-03-13.raw";
             string parameterFile =
                 @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1 - forTesting.xml";
 
@@ -112,6 +112,107 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             }
 
         }
+
+
+        [Test]
+        public void executorTest4_OldDatasets_lowN15Label()
+        {
+            string testfile = @"\\protoapps\UserData\Slysz\Data\N14N15\RawData\RSPH_Ponly_25_run1_20Jan08_Raptor_07-11-11";
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\ExecutorParameters1 - forTesting.xml";
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(parameterFile);
+
+            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
+            executor.Execute();
+
+            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+
+            foreach (var chromPeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
+            }
+
+        }
+
+
+        [Test]
+        public void executorTest5_NewDatasets_lowN15Label()
+        {
+            string testfile =
+                @"\\proto-7\VOrbi05\2012_2\RSPH_Ponly_24_A_8May12_Earth_12-03-13\RSPH_Ponly_24_A_8May12_Earth_12-03-13.raw";
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1 - forTesting.xml";
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(parameterFile);
+
+            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
+            executor.Execute();
+
+            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+
+            foreach (var chromPeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
+            }
+
+        }
+
+
+        [Test]
+        public void executorTest6_OldDatasets_lowN15Label()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\RawData\RSPH_Ponly_24_run1_30Jan08_Raptor_07-11-11";
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\ExecutorParameters1 - forTesting.xml";
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(parameterFile);
+
+            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
+            executor.Execute();
+
+            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+
+            foreach (var chromPeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
+            }
+
+        }
+
+        [Test]
+        public void managerTest1()
+        {
+            string datasetList =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Dataset_info\pub70_cpu1_p1.txt";
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1 - forTesting.xml";
+
+            string[] args = {datasetList, parameterFile};
+
+            TargetedWorkflowManagerConsole.Program.Main(args);
+
+        }
+
+
+        [Test]
+        public void managerTest2()
+        {
+            string datasetList =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Dataset_info\pub70_cpu1_p1.txt";
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1 - forTesting.xml";
+
+            string[] args = { datasetList, parameterFile };
+
+            TargetedWorkflowManagerConsole.Program.Main(args);
+
+        }
+
 
 
     }

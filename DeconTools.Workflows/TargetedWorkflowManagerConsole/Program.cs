@@ -7,14 +7,14 @@ using DeconTools.Workflows.Backend.Utilities;
 
 namespace TargetedWorkflowManagerConsole
 {
-    class Program
+    public class Program
     {
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
             SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);     // sets it so that keyboard use does not interrupt things.
@@ -58,13 +58,22 @@ namespace TargetedWorkflowManagerConsole
                             }
                         }
 
+                        
+                        if (!File.Exists(currentDatasetPath))
+                        {
+                            Console.WriteLine("Dataset not found! Dataset path = " + currentDatasetPath);
+                        }
+
+
                         ProcessStartInfo processStartInfo = new ProcessStartInfo();
                         //processStartInfo.UseShellExecute = false;
 
                         processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
-                        processStartInfo.Arguments = currentDatasetPath + " " + parameterFile;
 
+                        string argString = "\"" + currentDatasetPath + "\"" + " " + "\"" + parameterFile + "\"";
+                        processStartInfo.Arguments = argString;
 
+                        Console.WriteLine("Argument line= " + argString);
 
 
                         try
