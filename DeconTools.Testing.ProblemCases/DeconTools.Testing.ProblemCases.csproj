@@ -63,21 +63,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="InferferenceScorePeakBase_issue.cs" />
     <Compile Include="Issue0168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
     <Compile Include="Issue0468_indexoutofBounds_demultiplexedUIMF.cs" />
     <Compile Include="Issue0531_FPGAUIMF_IndexingError.cs" />
-    <Compile Include="Issue0757_singleScanRAWFileProblem.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="OMCS_0135_UIMF_MS_indexOutOfRange.cs" />
     <Compile Include="OMCS_0149_MSMSNoScans.cs" />
     <Compile Include="OMCS_0274_failingOnShawnasDatasets.cs" />
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
+    <Compile Include="OMCS_0437_AgilentTOFFileReadingProblem.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="saturationPossibleIssue.cs" />
     <Compile Include="UIMFRunTester.cs" />
+    <Compile Include="UnitTestTemplate1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">

@@ -58,9 +58,9 @@ namespace DeconTools.Testing.ProblemCases
             string uimfFile = @"\\pnl\projects\MSSHARE\MonroeM\Sarc_MS2_UIMF_Test\Sarc_MS2_77_21Feb11_Cheetah_11-01-10_0000.uimf";
             string paramFile = @"\\pnl\projects\MSSHARE\MonroeM\Sarc_MS2_UIMF_Test\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Thrash_2011-02-09.xml";
 
-            OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile, Globals.MSFileType.PNNL_UIMF, paramFile);
+            //OldSchoolProcRunner runner = new OldSchoolProcRunner(uimfFile, Globals.MSFileType.PNNL_UIMF, paramFile);
 
-            runner.Execute();
+            //runner.Execute();
 
 
 

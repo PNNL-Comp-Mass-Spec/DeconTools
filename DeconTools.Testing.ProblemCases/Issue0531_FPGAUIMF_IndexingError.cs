@@ -63,8 +63,8 @@ namespace DeconTools.Testing.ProblemCases
             RunFactory rf = new RunFactory();
             UIMFRun run = (UIMFRun)rf.CreateRun(testFile);
 
-            OldSchoolProcRunner proc = new OldSchoolProcRunner(testFile, run.MSFileType, paramFile);
-            proc.Execute();
+            //OldSchoolProcRunner proc = new OldSchoolProcRunner(testFile, run.MSFileType, paramFile);
+            //proc.Execute();
 
         }
 
