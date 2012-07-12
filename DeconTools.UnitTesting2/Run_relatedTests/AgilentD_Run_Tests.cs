@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 using NUnit.Framework;
@@ -324,5 +325,39 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             });
             Assert.That(ex.Message, Is.EqualTo("Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name."));
         }
+
+
+        [Test]
+        public void Test1()
+        {
+            string testfile = @"\\protoapps\UserData\Nikola\DDD_Milk\D6.1.forExpRepAnal_3.14.2012.d";
+
+            Run run = new RunFactory().CreateRun(testfile);
+            Assert.IsNotNull(run);
+            string info = TestUtilities.DisplayRunInformation(run);
+
+            Console.WriteLine(info);
+
+
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            var scanSet = new ScanSet(1000);
+
+            run.CurrentScanSet = scanSet;
+
+            msgen.Execute(run.ResultCollection);
+
+
+            TestUtilities.DisplayXYValues(run.XYData);
+
+
+
+
+
+
+        }
+
+
+
     }
 }

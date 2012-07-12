@@ -39,7 +39,25 @@ namespace DeconTools.UnitTesting2.Utilities
             //note: masses were also confirmed at MacCoss's site: http://proteome.gs.washington.edu/cgi-bin/aa_calc.pl
         }
 
+        [Test]
+        public void GetEmpiricalFormulaForPeptideSequenceTest2()
+        {
+            PeptideUtils utils = new PeptideUtils();
 
+            string testSequence1 = "IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR";
+
+            string testSequence2 = "K.IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR*.V";
+
+
+            string empiricalFormula1 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence1);
+
+            string empiricalFormula2 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence2);
+
+
+            Assert.AreEqual(empiricalFormula1, empiricalFormula2);
+            Assert.AreEqual((decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence1), 5), (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence2), 5));
+        
+        }
 
 
 
