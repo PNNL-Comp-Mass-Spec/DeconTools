@@ -6,7 +6,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
-    public class MSPeakResult:IPeak
+    public class MSPeakResult:Peak
     {
         public MSPeakResult()
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Core
 {
-    public class ChromPeak:IPeak
+    public class ChromPeak:Peak
     {
         #region Constructors
         #endregion

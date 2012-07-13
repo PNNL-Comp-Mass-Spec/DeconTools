@@ -100,8 +100,8 @@ namespace DeconTools.Backend.Core
         }
 
         [field: NonSerialized]
-        private List<IPeak> peakList;
-        public List<IPeak> PeakList
+        private List<Peak> peakList;
+        public List<Peak> PeakList
         {
             get { return peakList; }
             set { peakList = value; }

@@ -50,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #endregion
 
         #region Private Methods
-        private MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<IPeak> peakList)
+        private MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<Peak> peakList)
         {
             double mzTol = monoPeak.Width;
 

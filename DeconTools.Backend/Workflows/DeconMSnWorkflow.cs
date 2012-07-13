@@ -40,7 +40,7 @@ namespace DeconTools.Backend.Workflows
 
             _deconvolutor = DeconvolutorFactory.CreateDeconvolutor(parameters);
 
-            Run.PeakList = new List<IPeak>();
+            Run.PeakList = new List<Peak>();
 
         }
 

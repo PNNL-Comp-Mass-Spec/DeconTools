@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #endregion
 
         #region Public Methods
-        public int GetChargeState(XYData rawData, List<IPeak> peakList, MSPeak peak)
+        public int GetChargeState(XYData rawData, List<Peak> peakList, MSPeak peak)
         {
 
             //look in rawData to the left (-0.1) and right (+1.1) of peak

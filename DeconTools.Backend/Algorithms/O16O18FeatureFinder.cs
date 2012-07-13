@@ -17,7 +17,7 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public IsotopicProfile FindFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
+        public IsotopicProfile FindFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
         {
 
             BasicMSFeatureFinder basicFeatureFinder = new BasicMSFeatureFinder();

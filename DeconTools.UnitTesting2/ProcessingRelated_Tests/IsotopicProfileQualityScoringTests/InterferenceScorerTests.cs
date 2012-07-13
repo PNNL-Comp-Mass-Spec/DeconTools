@@ -144,7 +144,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            List<MSPeak> scanPeaks = run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            List<MSPeak> scanPeaks = run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
             double interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
     lastPeak.XValue + lastPeak.Width);
             stopwatch.Stop();
@@ -190,7 +190,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            List<MSPeak> scanPeaks = run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            List<MSPeak> scanPeaks = run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
             double interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
     lastPeak.XValue + lastPeak.Width); 
             stopwatch.Stop();
@@ -252,7 +252,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            List<MSPeak> scanPeaks = run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            List<MSPeak> scanPeaks = run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
             double interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
     lastPeak.XValue + lastPeak.Width);
             stopwatch.Stop();

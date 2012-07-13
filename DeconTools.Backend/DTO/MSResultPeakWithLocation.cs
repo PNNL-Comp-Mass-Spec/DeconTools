@@ -7,7 +7,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
-    public class MSResultPeakWithLocation : IPeak
+    public class MSResultPeakWithLocation : Peak
     {
 
         private ushort frameNumber;
@@ -222,7 +222,7 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public int containsPeak(IPeak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange )
+        public int containsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange )
         {
             if (peak == null)
             {

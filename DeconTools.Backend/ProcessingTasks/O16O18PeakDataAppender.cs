@@ -21,7 +21,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-        public void AppendO16O18PeakInfo(List<IPeak> peakList, List<IsosResult> resultList)
+        public void AppendO16O18PeakInfo(List<Peak> peakList, List<IsosResult> resultList)
         {
             //iterate over each ms feature
             foreach (O16O18IsosResult msFeature in resultList)
@@ -46,10 +46,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-                IPeak fourDaltonsMinusPeak = GetBestPeak(minusPeaksWithinTol, mzMinusDaltons);
-                IPeak fourDaltonsPlusPeak = GetBestPeak(plusPeaksWithinTol, mzPlusDaltons);
+                Peak fourDaltonsMinusPeak = GetBestPeak(minusPeaksWithinTol, mzMinusDaltons);
+                Peak fourDaltonsPlusPeak = GetBestPeak(plusPeaksWithinTol, mzPlusDaltons);
 
-                IPeak twoDaltonsPlusPeak = GetBestPeak(twoDaltonsPlusPeaksWithinTol, mzPlusTwoDaltons);
+                Peak twoDaltonsPlusPeak = GetBestPeak(twoDaltonsPlusPeaksWithinTol, mzPlusTwoDaltons);
 
                 if (fourDaltonsMinusPeak!=null)
                 {
@@ -88,7 +88,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private IPeak GetBestPeak(List<IPeak> peaksWithinTol, double targetMZ)
+        private Peak GetBestPeak(List<Peak> peaksWithinTol, double targetMZ)
         {
             if (peaksWithinTol.Count == 0) return null;
 
@@ -96,7 +96,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             double diff = double.MaxValue;
-            IPeak bestPeak = null;
+            Peak bestPeak = null;
 
             foreach (var peak in peaksWithinTol)
             {

@@ -172,9 +172,9 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private List<DeconTools.Backend.Core.IPeak> ConvertDeconEnginePeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
+        private List<DeconTools.Backend.Core.Peak> ConvertDeconEnginePeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
         {
-            List<IPeak> returnedList = new List<IPeak>();
+            List<Peak> returnedList = new List<Peak>();
 
             for (int i = 0; i < peaklist.Length; i++)
             {
@@ -203,12 +203,12 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns></returns>
-        public override List<IPeak> FindPeaks(XYData xydata, double minX, double maxX)
+        public override List<Peak> FindPeaks(XYData xydata, double minX, double maxX)
         {
             if (xydata == null || xydata.Xvalues == null || xydata.Xvalues.Length == 0) return null;
 
 
-            List<IPeak> peakList = new List<IPeak>();
+            List<Peak> peakList = new List<Peak>();
 
             //initialize DeconEngine's peakFinding class
             peakProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();

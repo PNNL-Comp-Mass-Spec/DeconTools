@@ -108,12 +108,12 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// Peaks from this chromatogram can be stored here
         /// </summary>
-        public List<IPeak> PeakList { get; set; }
+        public List<Peak> PeakList { get; set; }
 
         #endregion
 
         #region Public Methods
-        public List<MSPeakResult> GetMSPeakMembersForGivenChromPeak(IPeak chromPeak, double scanTolerance)
+        public List<MSPeakResult> GetMSPeakMembersForGivenChromPeak(Peak chromPeak, double scanTolerance)
         {
             bool msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
             if (msPeakDataIsEmpty) return null;
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Core
             return filteredMSPeaks;
         }
 
-        public List<MSPeakResult> GetMSPeakMembersForGivenChromPeakAndAssignChromID(IPeak chromPeak, double scanTolerance, int id)
+        public List<MSPeakResult> GetMSPeakMembersForGivenChromPeakAndAssignChromID(Peak chromPeak, double scanTolerance, int id)
         {
             List<MSPeakResult> peaksToBeAssignedID = GetMSPeakMembersForGivenChromPeak(chromPeak, scanTolerance);
             foreach (var peak in peaksToBeAssignedID)
@@ -145,7 +145,7 @@ namespace DeconTools.Backend.Core
         #endregion
 
 
-        public IPeak GetChromPeakForGivenSource(MSPeakResult peakResult)
+        public Peak GetChromPeakForGivenSource(MSPeakResult peakResult)
         {
             if (this.PeakDataIsNullOrEmpty) return null;
 
@@ -159,7 +159,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public IPeak GetChromPeakForGivenSource(MSPeakResult peakResult, double scanTolerance)
+        public Peak GetChromPeakForGivenSource(MSPeakResult peakResult, double scanTolerance)
         {
 
             if (this.PeakDataIsNullOrEmpty) return null;

@@ -64,7 +64,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-        public List<IsosResult> PerformThrash(XYData originalXYData, List<IPeak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0)
+        public List<IsosResult> PerformThrash(XYData originalXYData, List<Peak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0)
         {
             if (_averagineProfileLookupTable==null)
             {
@@ -80,11 +80,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             xyData.Yvalues = originalXYData.Yvalues;
 
 
-            Dictionary<IPeak, bool> peaksThatWereProcessedInfo = new Dictionary<IPeak, bool>();
+            Dictionary<Peak, bool> peaksThatWereProcessedInfo = new Dictionary<Peak, bool>();
 
-            List<IPeak> sortedPeaklist = new List<IPeak>(mspeakList).OrderByDescending(p => p.Height).ToList();
+            List<Peak> sortedPeaklist = new List<Peak>(mspeakList).OrderByDescending(p => p.Height).ToList();
 
-            List<IPeak> peaksAlreadyProcessed = new List<IPeak>();
+            List<Peak> peaksAlreadyProcessed = new List<Peak>();
 
 
 

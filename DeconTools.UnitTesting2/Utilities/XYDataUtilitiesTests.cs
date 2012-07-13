@@ -40,7 +40,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
             //get ms peaks
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            List<IPeak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
             BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
             IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);

@@ -15,11 +15,11 @@ namespace DeconTools.Backend.Utilities.Converters
         #endregion
 
         #region Public Methods
-        public static List<MSPeak> ConvertToMSPeaks(List<IPeak> peakList)
+        public static List<MSPeak> ConvertToMSPeaks(List<Peak> peakList)
         {
             List<MSPeak> mspeakList = new List<MSPeak>();
 
-            foreach (IPeak peak in peakList)
+            foreach (Peak peak in peakList)
             {
                 if (peak is MSPeak)
                 {

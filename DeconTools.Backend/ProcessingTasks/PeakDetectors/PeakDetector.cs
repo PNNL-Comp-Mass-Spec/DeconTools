@@ -9,23 +9,23 @@ namespace DeconTools.Backend.ProcessingTasks
     public abstract class PeakDetector:Task
     {
 
-        public abstract List<IPeak> FindPeaks(XYData xydata, double minX, double maxX);
+        public abstract List<Peak> FindPeaks(XYData xydata, double minX, double maxX);
 
 
         public abstract void applyRunRelatedSettings(Run run);
 
         public abstract void addPeakRelatedData(Run run);
 
-        protected MSPeak getBasePeak(List<IPeak> peakList)
+        protected MSPeak getBasePeak(List<Peak> peakList)
         {
             if (peakList == null || peakList.Count == 0) return new MSPeak();
 
-            IPeak maxPeak;
+            Peak maxPeak;
             if (!(peakList[0] is MSPeak)) return null;
             maxPeak = peakList[0];
           
 
-            foreach (IPeak peak in peakList)
+            foreach (Peak peak in peakList)
             {
                 if (peak.Height >= maxPeak.Height)
                 {

@@ -52,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             IsotopicProfile isoN15 = n14n15result.IsotopicProfileLabeled;
 
 
-            List<MSPeak> scanPeaks = resultColl.Run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+            List<MSPeak> scanPeaks = resultColl.Run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
 
             // get i_score
             n14n15result.InterferenceScoreN15 = getIScore(scanPeaks, isoN15);

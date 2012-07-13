@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Algorithms
 
         public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult> peakList, IsotopicProfile theorIso, bool filterOutMSMSScans, List<int> ms1LevelScanTable)
         {
-            IList<IPeak> topTheorIsoPeaks = getTopPeaks(theorIso, m_numPeaks);
+            IList<Peak> topTheorIsoPeaks = getTopPeaks(theorIso, m_numPeaks);
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
 
             Dictionary<MSPeak, XYData> chromatogramsForIsotopicProfiles = new Dictionary<MSPeak, XYData>();
@@ -94,12 +94,12 @@ namespace DeconTools.Backend.Algorithms
         #endregion
 
         #region Private Methods
-        private IList<IPeak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
+        private IList<Peak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
         {
 
-            IPeak peak = theorIso1.Peaklist[0];
+            Peak peak = theorIso1.Peaklist[0];
 
-            IList<IPeak> sortedList = new List<IPeak>();
+            IList<Peak> sortedList = new List<Peak>();
             sortedList.Add(theorIso1.Peaklist[0]);
 
             for (int i = 1; i < theorIso1.Peaklist.Count; i++)

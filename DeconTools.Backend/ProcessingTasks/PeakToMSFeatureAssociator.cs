@@ -45,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     int indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultList.Run.PeakList, targetMZ, 0, resultList.Run.PeakList.Count - 1, toleranceInMZ);
                     if (indexOfPeak != -1)
                     {
-                        IPeak foundpeak = resultList.Run.PeakList[indexOfPeak];
+                        Peak foundpeak = resultList.Run.PeakList[indexOfPeak];
 
                         if (foundpeak is MSPeak)
                         {

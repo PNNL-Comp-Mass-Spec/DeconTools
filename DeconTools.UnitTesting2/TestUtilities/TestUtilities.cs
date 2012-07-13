@@ -110,14 +110,14 @@ namespace DeconTools.UnitTesting2
 
         }
 
-        public static void DisplayPeaks(List<IPeak> peakList)
+        public static void DisplayPeaks(List<Peak> peakList)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("--------- Peaks found -----------------\n");
             sb.Append("x_value\ty_value\twidth\n");
 
 
-            foreach (IPeak peak in peakList)
+            foreach (Peak peak in peakList)
             {
                 sb.Append(peak.XValue);
                 sb.Append("\t");
@@ -364,7 +364,7 @@ namespace DeconTools.UnitTesting2
 
         }
 
-        public static List<IPeak> GeneratePeakList(ScanSet scanSet)
+        public static List<Peak> GeneratePeakList(ScanSet scanSet)
         {
             Run run = new XCaliburRun(xcaliburTestfile);
 

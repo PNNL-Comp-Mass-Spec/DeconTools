@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
@@ -16,6 +15,34 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #endregion
 
         #region Public Methods
+
+
+        public List<Peak> FindPeaks (XYData xydata, double minXValue, double maxXValue)
+        {
+            
+            //Get background intensity
+
+
+            //Find start index in raw data
+
+
+
+            //Find stop index in raw data
+
+            //iterate over xypoints
+
+            //get three intensities - last, current, next.  If current is the apex
+
+
+
+
+
+
+
+        }
+
+
+
 
         #endregion
 

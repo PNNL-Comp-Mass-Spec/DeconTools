@@ -5,7 +5,7 @@ using System.Text;
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public class MSPeak : IPeak
+    public class MSPeak : Peak
     {
 
         public MSPeak()
@@ -52,10 +52,7 @@ namespace DeconTools.Backend.Core
             set { sN = value; }
         }
 
-        /// <summary>
-        /// The index of the raw xy data from which the peak originates. 
-        /// </summary>
-        public int DataIndex { get; set; }
+       
         /// <summary>
         /// The MSFeatureID to which this peak has been assigned
         /// </summary>

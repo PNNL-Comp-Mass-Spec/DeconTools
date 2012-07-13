@@ -326,7 +326,7 @@ namespace DeconTools.Backend.Data.Structures
 
             }
 
-            public bool FindPeakWithinFeatures(IPeak value, int frameNum, int scanNum, int toleranceInPPM, int netTolRange, int driftTolRange)
+            public bool FindPeakWithinFeatures(Peak value, int frameNum, int scanNum, int toleranceInPPM, int netTolRange, int driftTolRange)
             {
                 BinaryTreeNode<T> node = this.head;
                 while (node != null)
@@ -388,8 +388,8 @@ namespace DeconTools.Backend.Data.Structures
                 {
                     try
                     {
-                        IPeak msPeak1 = node.Value as IPeak;
-                        IPeak msPeak2 = value as IPeak;
+                        Peak msPeak1 = node.Value as Peak;
+                        Peak msPeak2 = value as Peak;
 
                         double ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
                         double absolutePPMDifference = Math.Abs(ppmDifference);

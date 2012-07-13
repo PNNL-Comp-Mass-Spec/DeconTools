@@ -38,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Public Methods
-        public virtual IsotopicProfile FindMSFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool needMonoIsotopicPeak)
+        public virtual IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool needMonoIsotopicPeak)
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
@@ -63,7 +63,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
                 //find experimental peak(s) within range
-                List<IPeak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
+                List<Peak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
 
                 if (i == indexOfMaxTheorPeak)
                 {
@@ -138,7 +138,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //------------------------- look right -------------------------------------------
             for (int i = indexOfMaxTheorPeak + 1; i < theorFeature.Peaklist.Count; i++)     //start one peak to the right of the max intense theor peak
             {
-                List<IPeak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
+                List<Peak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
                 if (peaksWithinTol.Count == 0)
                 {
                     if (i == indexOfMaxTheorPeak + 1)  // first peak to the right of the max peak.  We need this one or we declare it to be a failure (= null)
@@ -335,10 +335,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 iso.IntensityAggregate = iso.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
             }
         }
-        private IPeak findMostIntensePeak(List<IPeak> peaksWithinTol, double targetMZ)
+        private Peak findMostIntensePeak(List<Peak> peaksWithinTol, double targetMZ)
         {
             double maxIntensity = 0;
-            IPeak mostIntensePeak = null;
+            Peak mostIntensePeak = null;
 
             for (int i = 0; i < peaksWithinTol.Count; i++)
             {
@@ -358,10 +358,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             throw new NotImplementedException();
         }
 
-        private IPeak findClosestToXValue(List<IPeak> peaksWithinTol, double targetVal)
+        private Peak findClosestToXValue(List<Peak> peaksWithinTol, double targetVal)
         {
             double diff = double.MaxValue;
-            IPeak closestPeak = null;
+            Peak closestPeak = null;
 
             for (int i = 0; i < peaksWithinTol.Count; i++)
             {

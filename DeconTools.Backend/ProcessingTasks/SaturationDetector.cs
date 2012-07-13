@@ -206,7 +206,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-        private void AssignMissingPeaksToSaturatedProfile(List<IPeak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
+        private void AssignMissingPeaksToSaturatedProfile(List<Peak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
         {
             double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(isotopicProfile);
 

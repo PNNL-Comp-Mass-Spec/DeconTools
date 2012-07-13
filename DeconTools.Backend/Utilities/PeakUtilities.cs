@@ -80,9 +80,9 @@ namespace DeconTools.Backend.Utilities
             return outputList;
         }
 
-        public static List<IPeak> CreatePeakDataFromXYData(XYData xydata, double peakWidth)
+        public static List<Peak> CreatePeakDataFromXYData(XYData xydata, double peakWidth)
         {
-            List<IPeak> mspeakList = new List<IPeak>();
+            List<Peak> mspeakList = new List<Peak>();
 
             for (int i = 0; i < xydata.Xvalues.Length; i++)
             {
@@ -96,13 +96,13 @@ namespace DeconTools.Backend.Utilities
 
 
 
-        public static List<IPeak> GetPeaksWithinTolerance(List<IPeak> inputList, double targetVal, double toleranceInMZ)
+        public static List<Peak> GetPeaksWithinTolerance(List<Peak> inputList, double targetVal, double toleranceInMZ)
         {
             // assuming peaklist is in order 
 
             // find a peak within the tolerance using a binary search method
 
-            List<IPeak> outputList = new List<IPeak>();
+            List<Peak> outputList = new List<Peak>();
 
 
             int targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
@@ -146,7 +146,7 @@ namespace DeconTools.Backend.Utilities
 
 
        
-        public static int getIndexOfClosestValue(List<IPeak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
+        public static int getIndexOfClosestValue(List<Peak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
             {
@@ -263,7 +263,7 @@ namespace DeconTools.Backend.Utilities
 
 
 
-        public static double GetSumOfIntensities(IList<IPeak> inputPeaks, double backgroundIntensity)
+        public static double GetSumOfIntensities(IList<Peak> inputPeaks, double backgroundIntensity)
         {
             double sum = 0;
 

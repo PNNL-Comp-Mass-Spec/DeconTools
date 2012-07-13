@@ -364,7 +364,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        private void GetIsotopicProfilePeaks(List<IPeak> peakList, int chargeState, double monoMSZ, ref IsotopicProfile profile)
+        private void GetIsotopicProfilePeaks(List<Peak> peakList, int chargeState, double monoMSZ, ref IsotopicProfile profile)
         {
             BasicTFF ff = new BasicTFF(20);
 

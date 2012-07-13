@@ -56,7 +56,7 @@ namespace DeconTools.Backend.Workflows
 
             AdjustMonoIsotopicMasses = true;
 
-            Run.PeakList = new List<IPeak>();
+            Run.PeakList = new List<Peak>();
 
 
 
@@ -572,7 +572,7 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
         }
 
-        private void RebuildSaturatedIsotopicProfile(IsosResult saturatedFeature, List<IPeak> peakList, out IsotopicProfile theorIso)
+        private void RebuildSaturatedIsotopicProfile(IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIso)
         {
             //check for peak to the left
 
@@ -620,7 +620,7 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        private void AssignMissingPeaksToSaturatedProfile(List<IPeak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
+        private void AssignMissingPeaksToSaturatedProfile(List<Peak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
         {
             double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(isotopicProfile);
 
@@ -684,7 +684,7 @@ namespace DeconTools.Backend.Workflows
             return theorTarget.IsotopicProfile;
         }
 
-        private MSPeak GetPeakToTheLeftIfExists(IsotopicProfile isotopicProfile, IEnumerable<IPeak> peakList)
+        private MSPeak GetPeakToTheLeftIfExists(IsotopicProfile isotopicProfile, IEnumerable<Peak> peakList)
         {
             if (isotopicProfile == null) return null;
             MSPeak monoPeak = isotopicProfile.getMonoPeak();

@@ -1,22 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public abstract class IPeak
+    public class Peak
     {
         #region Constructors
+
         #endregion
      
 
         #region Properties
         
-        public abstract double XValue { get; set; }
-        public abstract float Height { get; set; }
-        public abstract float Width { get; set; }
+        public virtual double XValue { get; set; }
+        public virtual float Height { get; set; }
+        public virtual float Width { get; set; }
+
+        /// <summary>
+        /// The index of the raw xy data from which the peak originates. 
+        /// </summary>
+        public int DataIndex { get; set; }
         #endregion
 
         #region Public Methods

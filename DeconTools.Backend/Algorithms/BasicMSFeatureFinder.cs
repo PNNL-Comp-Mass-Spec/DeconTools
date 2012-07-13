@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public IsotopicProfile FindMSFeature(List<IPeak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
+        public IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
         {
             return null;
 
@@ -26,10 +26,10 @@ namespace DeconTools.Backend.Algorithms
 
         }
 
-        private IPeak findMostIntensePeak(List<IPeak> peaksWithinTol, double targetMZ)
+        private Peak findMostIntensePeak(List<Peak> peaksWithinTol, double targetMZ)
         {
             double maxIntensity = 0;
-            IPeak mostIntensePeak = null;
+            Peak mostIntensePeak = null;
 
             for (int i = 0; i < peaksWithinTol.Count; i++)
             {
@@ -44,10 +44,10 @@ namespace DeconTools.Backend.Algorithms
         }
 
 
-        private IPeak findClosestToXValue(List<IPeak> peaksWithinTol, double targetVal)
+        private Peak findClosestToXValue(List<Peak> peaksWithinTol, double targetVal)
         {
             double diff = double.MaxValue;
-            IPeak closestPeak = null;
+            Peak closestPeak = null;
 
             for (int i = 0; i < peaksWithinTol.Count; i++)
             {

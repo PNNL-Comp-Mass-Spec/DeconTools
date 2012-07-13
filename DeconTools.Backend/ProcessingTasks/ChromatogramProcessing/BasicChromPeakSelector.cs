@@ -95,13 +95,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         //}
 
 
-        public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance)
+        public Peak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance)
         {
             int numPeaksWithinTolerance = 0;
             return selectBestPeak(peakSelectorMode, chromPeakList, targetNET, netTolerance, out numPeaksWithinTolerance);
         }
 
-        public IPeak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<IPeak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
+        public Peak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
         {
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
 

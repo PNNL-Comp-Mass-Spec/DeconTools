@@ -40,7 +40,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
             //get ms peaks
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            List<IPeak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
             //TestUtilities.DisplayPeaks(msPeakList);
 
@@ -126,7 +126,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
             //get ms peaks
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            List<IPeak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
 
 

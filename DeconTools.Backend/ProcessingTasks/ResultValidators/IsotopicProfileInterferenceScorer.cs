@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double interferenceVal = -1;
             if (UsePeakBasedInterferenceValue)
             {
-                List<MSPeak> scanPeaks = resultColl.Run.PeakList.Select<IPeak, MSPeak>(i => (MSPeak)i).ToList();
+                List<MSPeak> scanPeaks = resultColl.Run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
                 interferenceVal = m_scorer.GetInterferenceScore(scanPeaks, currentResult.IsotopicProfile.Peaklist, leftMZBoundary, rightMZBoundary);
             }
             else

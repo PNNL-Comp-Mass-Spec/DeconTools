@@ -11,12 +11,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
     {
         #region Public Methods
 
-        public static XYData GetTheorPeakData(IPeak peak, double fwhm)
+        public static XYData GetTheorPeakData(Peak peak, double fwhm)
         {
             return GetTheorPeakData(peak, fwhm, 101);
         }
 
-        public static XYData GetTheorPeakData(IPeak peak, double fwhm, int numPointsPerPeak)
+        public static XYData GetTheorPeakData(Peak peak, double fwhm, int numPointsPerPeak)
         {
             return GetTheorPeakData(peak.XValue, peak.Height, fwhm, numPointsPerPeak);
         }

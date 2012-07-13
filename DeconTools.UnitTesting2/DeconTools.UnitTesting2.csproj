@@ -59,9 +59,9 @@
     <Reference Include="BaseTof">
       <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.4572.41048, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2, Version=1.0.4408.30259, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>..\..\DeconEngineV2\Debug\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
