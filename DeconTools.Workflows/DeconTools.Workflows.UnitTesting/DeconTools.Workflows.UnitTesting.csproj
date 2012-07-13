@@ -127,6 +127,10 @@
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TargetedWorkflowConsole\TargetedWorkflowConsole.csproj">
+      <Project>{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}</Project>
+      <Name>TargetedWorkflowConsole</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj">
       <Project>{E47D0F42-F72F-4030-95D4-B2D136583595}</Project>
       <Name>TargetedWorkflowManagerConsole</Name>

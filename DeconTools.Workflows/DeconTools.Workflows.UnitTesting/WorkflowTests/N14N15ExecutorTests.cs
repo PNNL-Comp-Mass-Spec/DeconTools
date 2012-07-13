@@ -143,7 +143,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string testfile =
                 @"\\proto-7\VOrbi05\2012_2\RSPH_Ponly_24_A_8May12_Earth_12-03-13\RSPH_Ponly_24_A_8May12_Earth_12-03-13.raw";
             string parameterFile =
-                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1 - forTesting.xml";
+                @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Parameters\ExecutorParameters1.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(parameterFile);
