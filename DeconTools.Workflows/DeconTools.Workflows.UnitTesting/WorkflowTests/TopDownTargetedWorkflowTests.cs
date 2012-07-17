@@ -16,13 +16,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 		[Test]
 		public void TestTargetedWorkflowExecutor()
 		{
-			const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test1params.xml";
+			const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test2params.xml";
 			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
 			executorParameters.LoadParameters(executorParameterFile);
 
 			string resultsFolderLocation = executorParameters.ResultsFolder;
-			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test1\BW_20_1_111104210637.raw";
-			const string testDatasetName = "BW_20_1_111104210637";
+			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
+			const string testDatasetName = "Proteus_Peri_intact_ETD";
 
 			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
 			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
@@ -35,67 +35,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
 			TargetedResultRepository repository = importer.Import();
 
-			Assert.AreEqual(10, repository.Results.Count);
+			Assert.AreEqual(6, repository.Results.Count);
 
-			TargetedResultDTO result1 = repository.Results[2];
+			TargetedResultDTO result1 = repository.Results[0];
+			TargetedResultDTO result2 = repository.Results[3];
+			
+			// result1 should have a selected chrompeak
+			Assert.AreEqual(1, result1.TargetID);
+			Assert.AreEqual(20, result1.ChargeState);
+			Assert.AreEqual(2422, result1.ScanLC);
 
-			Assert.AreEqual(24702, result1.TargetID);
-			Assert.AreEqual(3, result1.ChargeState);
-			Assert.AreEqual(8119, result1.ScanLC);
-			Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
-			Assert.AreEqual(0.002534m, (decimal)Math.Round(result1.NETError, 6));
-			//Assert.AreEqual(2920.53082m, (decimal)Math.Round(result1.MonoMass, 5));
-			//Assert.AreEqual(2920.53733m, (decimal)Math.Round(result1.MonoMassCalibrated, 5));
-			//Assert.AreEqual(-1.83m, (decimal)Math.Round(result1.MassErrorInPPM, 2));
-		}
-
-		[Test]
-		public void TestFindSingleMassTag()
-		{
-			const string testFile = @"\\protoapps\UserData\Kaipo\TopDown\test1\BW_20_1_111104210637.raw";
-			const string massTagFile = @"\\protoapps\UserData\Kaipo\TopDown\test1\BW_20_1_111104210637_MSAlign_ResultTable.txt";
-
-			var runFactory = new RunFactory();
-			Run run = runFactory.CreateRun(testFile);
-
-			var mtimporter = new MassTagFromMSAlignFileImporter(massTagFile);
-			TargetCollection mtc = mtimporter.Import();
-
-			Console.Write(mtc.TargetList.Count + "..\n");
-
-			const int testMassTagID = 5;
-			run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID select n).First();
-
-			TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-			parameters.ChromatogramCorrelationIsPerformed = true;
-
-			var workflow = new TopDownTargetedWorkflow(run, parameters);
-			workflow.Execute();
-
-			var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
-
-			if (result.FailedResult)
-			{
-				Console.WriteLine(result.ErrorDescription);
-			}
-
-			Assert.IsFalse(result.FailedResult);
-
-			result.DisplayToConsole();
-
-			Assert.IsNotNull(result.IsotopicProfile);
-			Assert.IsNotNull(result.ScanSet);
-			Assert.IsNotNull(result.ChromPeakSelected);
-			Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
-			Assert.AreEqual(718.41m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
-			Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
-
-			Assert.IsNotNull(result.ChromCorrelationData);
-
-			foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
-			{
-				Console.WriteLine(dataItem);
-			}
+			// result2 should not have a selected chrompeak
+			Assert.AreEqual(4, result2.TargetID);
+			Assert.AreEqual(23, result2.ChargeState);
+			Assert.AreEqual(-1, result2.ScanLC);
 		}
 	}
 }

@@ -107,6 +107,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 					var target = new LcmsFeatureTarget
 						{
+							ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum,
 							ID = ++idCounter,
 							ScanLCTarget = scanLcTarget,
 							ChargeState = chargeState,
