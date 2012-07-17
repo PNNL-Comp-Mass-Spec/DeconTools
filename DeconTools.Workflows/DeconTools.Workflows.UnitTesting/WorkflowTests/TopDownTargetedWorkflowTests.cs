@@ -29,6 +29,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 			executor.Execute();
+
+			// Output chrom data
+			var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
+			Console.Write("***** chrom data *****\n");
+			foreach (var resultData in wf.TargetResults)
+			{
+				int id = resultData.Key;
+				TargetedResultBase result = resultData.Value;
+				double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
+
+				Console.Write("TargetID=" + id + "\n");
+				Console.Write("ChromPeakSelected=" + chromPeakSelected + "\n");
+				for (int i = 0; i < result.ChromValues.Xvalues.Length; i++)
+				{
+					Console.Write(result.ChromValues.Xvalues[i] + "\t" + result.ChromValues.Yvalues[i] + "\n");
+				}
+				Console.Write("\n");
+			}
+			Console.Write("**********************\n");
 			
 			Assert.IsTrue(File.Exists(expectedResultsFilename));
 

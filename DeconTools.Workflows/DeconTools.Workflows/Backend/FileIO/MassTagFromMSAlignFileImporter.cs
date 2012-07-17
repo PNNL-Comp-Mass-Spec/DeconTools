@@ -17,6 +17,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 		private const string NUM_PEAKS_HEADER = "#peaks";
 		private const string CHARGE_HEADER = "Charge";
 		private const string PRECURSOR_MASS_HEADER = "Precursor_mass";
+		private const string ADJUSTED_PRECURSOR_MASS_HEADER = "Adjusted_precursor_mass";
+		private const string PROTEIN_ID_HEADER = "Protein_ID";
 		private const string PROTEIN_NAME_HEADER = "Protein_name";
 		private const string PROTEIN_MASS_HEADER = "Protein_mass";
 		private const string FIRST_RESIDUE_HEADER = "First_residue";

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -18,6 +16,8 @@ namespace DeconTools.Workflows.Backend.Core
 {
 	public class TopDownTargetedWorkflow : TargetedWorkflow
 	{
+		public Dictionary<int, TargetedResultBase> TargetResults { get; set; }
+
 		private TargetedWorkflowParameters _workflowParameters;
 		private JoshTheorFeatureGenerator _theorFeatureGen;
 		private PeakChromatogramGenerator _chromGen;
@@ -58,6 +58,8 @@ namespace DeconTools.Workflows.Backend.Core
 		public override void InitializeWorkflow()
 		{
 			ValidateParameters();
+
+			TargetResults = new Dictionary<int, TargetedResultBase>();
 
 			_theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
@@ -141,6 +143,9 @@ namespace DeconTools.Workflows.Backend.Core
 					ExecuteTask(_chromatogramCorrelatorTask);
 				}
 
+				// Save targeted result data
+				Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};
+				TargetResults.Add(Run.CurrentMassTag.ID, Result);
 			}
 			catch (Exception ex)
 			{

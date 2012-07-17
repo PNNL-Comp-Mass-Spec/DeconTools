@@ -119,7 +119,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 			}
 
-			TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+			TargetedWorkflow = TopDownTargetedWorkflow.CreateWorkflow(_workflowParameters);
 		}
 
 
