@@ -104,51 +104,33 @@ namespace DeconTools.Workflows.Backend.FileIO
 					
 					// Get monoisotopic mass
 					double monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-
-					var target = new LcmsFeatureTarget
+					
+					// Create base for targets in charge range
+					var targetBase = new LcmsFeatureTarget
 						{
 							ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum,
-							ID = ++idCounter,
 							ScanLCTarget = scanLcTarget,
-							ChargeState = chargeState,
 							Code = code,
 							EmpiricalFormula = empiricalFormula,
 							MonoIsotopicMass = monoisotopicMass,
-							MZ = monoisotopicMass / chargeState + DeconTools.Backend.Globals.PROTON_MASS
 						};
-					// Add target
-					targets.TargetIDList.Add(idCounter);
-					targets.TargetList.Add(target);
 
-					// Copy for charge range
-					for (short offset = 1; offset <= 1; offset++)
+					// Create range
+					const int maxOffset = 1;
+
+					for (short offset = -maxOffset; offset <= maxOffset; offset++)
 					{
-						// Charge range upside
+						// Create new target
 						var newCharge = (short) (chargeState + offset);
-						var targetCopy = new LcmsFeatureTarget(target)
+						var targetCopy = new LcmsFeatureTarget(targetBase)
 						{
 							ID = ++idCounter,
 							ChargeState = newCharge,
-							MZ = target.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
+							MZ = targetBase.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
 						};
 						// Add target
 						targets.TargetIDList.Add(idCounter);
 						targets.TargetList.Add(targetCopy);
-
-						// Charge range downside
-						newCharge = (short) (chargeState - offset);
-						if (newCharge >= 0)
-						{
-							targetCopy = new LcmsFeatureTarget(target)
-							{
-								ID = ++idCounter,
-								ChargeState = newCharge,
-								MZ = target.MonoIsotopicMass/newCharge + DeconTools.Backend.Globals.PROTON_MASS
-							};
-							// Add target
-							targets.TargetIDList.Add(idCounter);
-							targets.TargetList.Add(targetCopy);
-						}
 					}
 
 					/*

@@ -38,15 +38,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			Assert.AreEqual(6, repository.Results.Count);
 
 			TargetedResultDTO result1 = repository.Results[0];
-			TargetedResultDTO result2 = repository.Results[3];
+			TargetedResultDTO result2 = repository.Results[4];
 			
 			// result1 should have a selected chrompeak
 			Assert.AreEqual(1, result1.TargetID);
-			Assert.AreEqual(20, result1.ChargeState);
+			Assert.AreEqual(19, result1.ChargeState);
 			Assert.AreEqual(2422, result1.ScanLC);
 
 			// result2 should not have a selected chrompeak
-			Assert.AreEqual(4, result2.TargetID);
+			Assert.AreEqual(5, result2.TargetID);
 			Assert.AreEqual(23, result2.ChargeState);
 			Assert.AreEqual(-1, result2.ScanLC);
 		}
