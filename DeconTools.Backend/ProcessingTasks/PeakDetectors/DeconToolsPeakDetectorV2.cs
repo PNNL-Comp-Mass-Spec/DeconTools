@@ -188,17 +188,39 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             return secondAverage;
         }
 
+
+        /// <summary>
+        /// Calculate full width half maximum of a peak
+        /// </summary>
+        /// <param name="xvalues"></param>
+        /// <param name="yvalues"></param>
+        /// <param name="index">index of point in array that is the apex or max of the peak</param>
+        /// <param name="signalToNoise"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <returns></returns>
         private double CalculateFWHM(double[] xvalues, double[] yvalues, int index, double signalToNoise)
         {
+
+            int numPoints = xvalues.Length;
+            if (index>=numPoints || index <0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "Trying to calculate peak width, but index of peak apex was out of range.");
+            }
+
+            
             double peakApexIntensity = yvalues[index];
             double halfHeightIntensity = peakApexIntensity / 2;
 
             double x1, x2, y1, y2;
 
+            
+
 
             double interpolatedX1 = 0;
             double interpolatedX2 = 0;
 
+            //Moving to the left of the peak apex, 
             //will find the first point whose intensity is below the peakHalf
             for (int i = index; i >= 0; i--)
             {
@@ -220,7 +242,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
             }
 
-            int numPoints = xvalues.Length;
+            //moving to the right of the peak apex
             for (int i = index; i < numPoints; i++)
             {
                 y2 = yvalues[i];
@@ -244,9 +266,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             }
 
-            double width = interpolatedX2 - interpolatedX1;
-
-            return width;
+            return interpolatedX2 - interpolatedX1;   //return the width
         }
 
         private double CalculateFittedValue(double[] xvalues, double[] yvalues, int index)

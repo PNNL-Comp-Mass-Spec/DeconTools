@@ -172,6 +172,15 @@ namespace DeconTools.Backend
 
         }
 
+        /// <summary>
+        /// raw ms data usually comes in these formats
+        /// </summary>
+        public enum RawDataType
+        {
+            Profile,
+            Centroided
+        }
+
 
 
 
