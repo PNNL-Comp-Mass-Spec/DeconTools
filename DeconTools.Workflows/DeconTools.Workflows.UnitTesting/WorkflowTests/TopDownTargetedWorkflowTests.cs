@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
@@ -99,40 +98,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			result.DisplayToConsole();
 		}
-
-        [Test]
-        public void TestFindMassTag_byGord()
-        {
-            const string testFile = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
-            const string peaksTestFile = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD_peaks.txt";
-            const string massTagFile = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD_MSAlign_ResultTable.txt";
-
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
-
-            var mtc = new TargetCollection();
-            var mtimporter = new MassTagFromMSAlignFileImporter(massTagFile);
-            mtc = mtimporter.Import();
-
-            const int testMassTagID = 14;
-            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID select n).First();
-
-            TargetedWorkflowParameters parameters = new TopDownTargetedWorkflowParameters();
-
-            var workflow = new TopDownTargetedWorkflow(run, parameters);
-            workflow.Execute();
-
-
-            TestUtilities.DisplayPeaks(workflow.ChromPeaksDetected.Select(p => (Peak)p).ToList());
-
-
-            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
-
-            if (result.FailedResult) Console.WriteLine(result.ErrorDescription);
-
-            //Assert.IsFalse(result.FailedResult);
-
-            result.DisplayToConsole();
-        }
-
+        
 	}
 }
