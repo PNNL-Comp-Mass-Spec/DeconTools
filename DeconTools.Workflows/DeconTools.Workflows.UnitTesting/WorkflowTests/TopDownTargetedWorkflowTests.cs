@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -53,20 +54,34 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
 			TargetedResultRepository repository = importer.Import();
 
-			Assert.AreEqual(6, repository.Results.Count);
+			Assert.AreEqual(15, repository.Results.Count);
 
-			TargetedResultDTO result1 = repository.Results[0];
-			TargetedResultDTO result2 = repository.Results[4];
-			
-			// result1 should have a selected chrompeak
-			Assert.AreEqual(1, result1.TargetID);
-			Assert.AreEqual(19, result1.ChargeState);
-			Assert.AreEqual(2422, result1.ScanLC);
+			// expected results as tuples in format: <target id, charge state, scan lc>
+			var expectedResults = new HashSet<Tuple<long, int, int>>
+			{
+				new Tuple<long, int, int>(1, 7, 1583),
+				new Tuple<long, int, int>(2, 8, 1583),
+				new Tuple<long, int, int>(3, 9, 1583),
+				new Tuple<long, int, int>(4, 22, 2643),
+				new Tuple<long, int, int>(5, 23, 2643),
+				new Tuple<long, int, int>(6, 24, 2652),
+				new Tuple<long, int, int>(7, 20, 1853),
+				new Tuple<long, int, int>(8, 21, 1853),
+				new Tuple<long, int, int>(9, 22, 1853),
+				new Tuple<long, int, int>(10, 13, 2303),
+				new Tuple<long, int, int>(11, 14, 2303),
+				new Tuple<long, int, int>(12, 15, 2312),
+				new Tuple<long, int, int>(13, 16, 2348),
+				new Tuple<long, int, int>(14, 17, 2339),
+				new Tuple<long, int, int>(15, 18, 2348)
+			};
 
-			// result2 should not have a selected chrompeak
-			Assert.AreEqual(5, result2.TargetID);
-			Assert.AreEqual(23, result2.ChargeState);
-			Assert.AreEqual(-1, result2.ScanLC);
+			foreach (TargetedResultDTO result in repository.Results)
+			{
+				expectedResults.Remove(new Tuple<long, int, int>(result.TargetID, result.ChargeState, result.ScanLC));
+			}
+
+			Assert.IsEmpty(expectedResults);
 		}
 
 		[Test]
