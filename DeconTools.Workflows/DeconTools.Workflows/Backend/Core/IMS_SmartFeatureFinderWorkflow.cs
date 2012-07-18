@@ -134,14 +134,14 @@ namespace DeconTools.Workflows.Backend.Core
     //        hornConvolutor = new HornDeconvolutor();
     //    }
 
-    //    private bool peakPresent(IPeak peak, ScanSet scanSet, UIMFRun run)
+    //    private bool peakPresent(Peak peak, ScanSet scanSet, UIMFRun run)
     //    {
     //        bool found = false;
     //        //basically we have to check if the peak is present in the given scan set
     //        //so we have to detect the peak
     //        run.CurrentScanSet = scanSet;
     //        msgen.Execute(run.ResultCollection);
-    //        List<IPeak> peaks = peakDetector.FindPeaks(run.XYData, 0, 5000);
+    //        List<Peak> peaks = peakDetector.FindPeaks(run.XYData, 0, 5000);
 
     //        if (peaks.Count > 0)
     //        {
@@ -161,9 +161,9 @@ namespace DeconTools.Workflows.Backend.Core
     //    }
 
 
-    //    private IPeak getMaxPeak(List<IPeak> peakList)
+    //    private Peak getMaxPeak(List<Peak> peakList)
     //    {
-    //        IPeak maxPeak = null;
+    //        Peak maxPeak = null;
     //        if (peakList.Count != 0)
     //        {
     //            maxPeak = peakList[0];
@@ -615,7 +615,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
     //    }
-    //    private List<MSPeak> findPeakListClosestIsotopicDistribution(IPeak mostIntensePeak, IList<IsosResult> isosResults, out int isosResultIndex)
+    //    private List<MSPeak> findPeakListClosestIsotopicDistribution(Peak mostIntensePeak, IList<IsosResult> isosResults, out int isosResultIndex)
     //    {
     //        double minMzDistance = Double.MaxValue;
     //        int index = 0;
@@ -646,7 +646,7 @@ namespace DeconTools.Workflows.Backend.Core
     //        }
     //    }
 
-    //    //private void addPeakListToTree(BinaryTree<IPeak> peakTree, List<IPeak> peakList)
+    //    //private void addPeakListToTree(BinaryTree<Peak> peakTree, List<Peak> peakList)
     //    //{
     //    //    for (int i = 0; i < peakList.Count; i++)
     //    //    {
@@ -755,7 +755,7 @@ namespace DeconTools.Workflows.Backend.Core
     //                }
 
     //                // find which drift profile peak,  if any, the source peak is a member of
-    //                IPeak chromPeak = chrom.GetChromPeakForGivenSource(peak);
+    //                Peak chromPeak = chrom.GetChromPeakForGivenSource(peak);
     //                if (chromPeak == null)
     //                {
     //                    addPeakToProcessedPeakList(peak);
@@ -967,7 +967,7 @@ for (int i = 0; i < uimfRun.ScanSetCollection.ScanSetList.Count; i++)
 
     msgen.Execute(uimfRun.ResultCollection);
    // uimfRun.GetMassSpectrum(uimfRun.CurrentScanSet);
-    List<IPeak> peaks = peakDetector.FindPeaks(uimfRun.XYData, 0, 5000);
+    List<Peak> peaks = peakDetector.FindPeaks(uimfRun.XYData, 0, 5000);
     
     //let's say we need at least 3 peaks in a spectrum to even consider summing
     //or deisotooping it
@@ -979,14 +979,14 @@ for (int i = 0; i < uimfRun.ScanSetCollection.ScanSetList.Count; i++)
 
         //start with the highest peak in the spectrum
         //first sort the data based on intensity
-        //peaks.Sort(delegate(DeconTools.Backend.Core.IPeak peak1, DeconTools.Backend.Core.IPeak peak2)
+        //peaks.Sort(delegate(DeconTools.Backend.Core.Peak peak1, DeconTools.Backend.Core.Peak peak2)
         //{
           //  return peak2.Height.CompareTo(peak1.Height);
        // });
 
 
         //we might have to iterate through all the peaks here. TBD
-        IPeak mzPeak = peaks[0];
+        Peak mzPeak = peaks[0];
                     
         //advance the scan set till we don't see this peak, 
         if (i < uimfRun.ScanSetCollection.ScanSetList.Count - 1)

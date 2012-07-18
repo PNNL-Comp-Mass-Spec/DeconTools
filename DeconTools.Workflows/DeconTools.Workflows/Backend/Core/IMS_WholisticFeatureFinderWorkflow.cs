@@ -206,7 +206,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     // find which drift profile peak,  if any, the source peak is a member of
-                    IPeak chromPeak = chrom.GetChromPeakForGivenSource(peak);
+                    Peak chromPeak = chrom.GetChromPeakForGivenSource(peak);
                     if (chromPeak == null)
                     {
                         addPeakToProcessedPeakList(peak);

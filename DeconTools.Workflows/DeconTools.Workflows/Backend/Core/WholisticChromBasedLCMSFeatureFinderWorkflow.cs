@@ -224,7 +224,7 @@ namespace DeconTools.Workflows.Backend.Core
                         chromatogram = this.ChromSmoother.Smooth(chromatogram);
 
                         //detect peaks in chromatogram
-                        List<IPeak> chromPeakList = this.ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
+                        List<Peak> chromPeakList = this.ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
 
                         //sort chrompeak list so it is decending.
                         chromPeakList = chromPeakList.OrderByDescending(p => p.Height).ToList();
@@ -455,7 +455,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                         if (!chrom.PeakDataIsNullOrEmpty)
                         {
-                            IPeak chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
+                            Peak chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
                             if (chromPeak == null)
                             {
                                 continue;
@@ -780,7 +780,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private ScanSet createScanSetFromChromatogramPeak(Run run, IPeak chromPeak)
+        private ScanSet createScanSetFromChromatogramPeak(Run run, Peak chromPeak)
         {
             double sigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
             double centerXVal = chromPeak.XValue;

@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-        protected void updateChromDetectedPeaks(List<IPeak> list)
+        protected void updateChromDetectedPeaks(List<Peak> list)
         {
             foreach (ChromPeak chrompeak in list)
             {
@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.ResetStoredXYData(this.MassSpectrumXYData);
 
             this.Run.XYData = null;
-            this.Run.PeakList = new List<IPeak>();
+            this.Run.PeakList = new List<Peak>();
 
             this.ChromPeaksDetected.Clear();
             this.ChromPeakSelected = null;
