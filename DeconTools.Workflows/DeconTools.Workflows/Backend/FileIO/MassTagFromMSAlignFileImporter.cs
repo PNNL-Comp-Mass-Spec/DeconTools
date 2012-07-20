@@ -51,6 +51,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			var targets = new TargetCollection();
 
+			// Group LcmsFeatureTargets by their code
+			var proteinSpeciesGroups = new Dictionary<string, List<LcmsFeatureTarget>>();
+
 			using (StreamReader sr = reader)
 			{
 				if (sr.Peek() == -1)
@@ -64,8 +67,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 				var peptideUtils = new PeptideUtils();
 				
 				int lineCounter = 0;   //used for tracking which line is being processed.
-
-				int idCounter = 0;
 
 				//read and process each line of the file
 				while (sr.Peek() > -1)
@@ -107,68 +108,111 @@ namespace DeconTools.Workflows.Backend.FileIO
 					// Get monoisotopic mass
 					double monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 					
-					// Create base for targets in charge range
-					var targetBase = new LcmsFeatureTarget
+					// Create target
+					var target = new LcmsFeatureTarget
 						{
+							ID = -1,
 							ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum,
 							ScanLCTarget = scanLcTarget,
 							Code = code,
 							EmpiricalFormula = empiricalFormula,
 							MonoIsotopicMass = monoisotopicMass,
+							ChargeState = chargeState,
+							MZ = monoisotopicMass / chargeState + DeconTools.Backend.Globals.PROTON_MASS,
 						};
 
+					if (!proteinSpeciesGroups.ContainsKey(code)) proteinSpeciesGroups.Add(code, new List<LcmsFeatureTarget>());
+					proteinSpeciesGroups[code].Add(target);
+
+					/*
 					// Create range
-					const int maxOffset = 1;
+					const int maxOffset = 0;
 
 					for (short offset = -maxOffset; offset <= maxOffset; offset++)
 					{
 						// Create new target
 						var newCharge = (short) (chargeState + offset);
-						var targetCopy = new LcmsFeatureTarget(targetBase)
+						var targetCopy = new LcmsFeatureTarget(target)
 						{
 							ID = ++idCounter,
 							ChargeState = newCharge,
-							MZ = targetBase.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
+							MZ = target.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
 						};
 						// Add target
 						targets.TargetIDList.Add(idCounter);
 						targets.TargetList.Add(targetCopy);
-					}
-
-					/*
-					if (!chargeStateInfoIsAvailable)
-					{
-						const double minMZToConsider = 400;
-						const double maxMZToConsider = 1300;
-
-						var targetList = new List<LcmsFeatureTarget>();
-
-						for (int chargeState = 1; chargeState < 100; chargeState++)
-						{
-							double calcMZ = target.MonoIsotopicMass / chargeState + DeconTools.Backend.Globals.PROTON_MASS;
-							if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)
-							{
-								var copiedMassTag = new LcmsFeatureTarget(target)
-									{
-										ChargeState = (short) chargeState,
-										MZ = calcMZ
-									};
-									//we need to create multiple mass tags 
-
-								targetList.Add(copiedMassTag);
-							}
-						}
-						targets.TargetList.AddRange(targetList.Take(3));
-					}
-					else
-					{
-						targets.TargetList.Add(target);
 					}
 					*/
 				}
 				sr.Close();
 			}
 
+			// Loop through each protein species group and add in the missing charge states
+			int idCounter = 0;
+			foreach (var group in proteinSpeciesGroups)
+			{
+				IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(group.Value, 0);
+				
+				// Add all targets in group and IDs to list
+				foreach (LcmsFeatureTarget target in targetGroup)
+				{
+					target.ID = ++idCounter;
+					targets.TargetList.Add(target);
+					targets.TargetIDList.Add(idCounter);
+				}
+			}
+
+			return targets;
+		}
+
+		private IEnumerable<LcmsFeatureTarget> AddChargeStates(List<LcmsFeatureTarget> targets, int offsetMax)
+		{
+			if (targets == null || targets.Count == 0) return new List<LcmsFeatureTarget>();
+
+			LcmsFeatureTarget minChargeTarget = targets[0];
+			LcmsFeatureTarget maxChargeTarget = targets[0];
+
+			foreach (var target in targets)
+			{
+				if (target.ChargeState < minChargeTarget.ChargeState) minChargeTarget = target;
+				if (target.ChargeState > maxChargeTarget.ChargeState) maxChargeTarget = target;
+			}
+
+			// Extend charge range
+			for (int i = 1; i <= offsetMax; i++)
+			{
+				var newCharge = (short) (minChargeTarget.ChargeState - i);
+				targets.Add(new LcmsFeatureTarget(minChargeTarget)
+				{
+					ChargeState = newCharge,
+					MZ = minChargeTarget.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
+				});
+				newCharge = (short)(maxChargeTarget.ChargeState + i);
+				targets.Add(new LcmsFeatureTarget(maxChargeTarget)
+				{
+					ChargeState = newCharge,
+					MZ = maxChargeTarget.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
+				});
+			}
+
+			// Fill in gaps
+			targets = targets.OrderBy(target => target.ChargeState).ToList();
+			for (int i = 1; i < targets.Count; i++)
+			{
+				LcmsFeatureTarget prevTarget = targets[i - 1];
+				var expectedCharge = (short) (prevTarget.ChargeState + 1);
+				if (targets[i].ChargeState > expectedCharge)
+				{
+					// Create and insert new target to fill gap
+					targets.Insert(i, new LcmsFeatureTarget(prevTarget)
+						{
+							ChargeState = expectedCharge,
+							MZ = prevTarget.MonoIsotopicMass / expectedCharge + DeconTools.Backend.Globals.PROTON_MASS
+						});
+				}
+			}
+
+			// Return
 			return targets;
 		}
 
