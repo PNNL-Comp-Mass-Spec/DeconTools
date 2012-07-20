@@ -145,6 +145,29 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+        public Peak GetBasePeak(List<Peak> peakList)
+        {
+            if (peakList == null || peakList.Count == 0) return new Peak();
+
+            Peak maxPeak;
+            if (!(peakList[0] is MSPeak)) return null;
+            maxPeak = peakList[0];
+
+
+            foreach (Peak peak in peakList)
+            {
+                if (peak.Height >= maxPeak.Height)
+                {
+                    maxPeak = peak;
+                }
+
+            }
+            return maxPeak;
+
+        }
+
+
+
        
         public static int getIndexOfClosestValue(List<Peak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {

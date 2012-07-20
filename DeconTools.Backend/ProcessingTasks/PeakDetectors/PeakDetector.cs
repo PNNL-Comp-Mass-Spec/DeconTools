@@ -9,33 +9,17 @@ namespace DeconTools.Backend.ProcessingTasks
     public abstract class PeakDetector:Task
     {
 
+     
         public abstract List<Peak> FindPeaks(XYData xydata, double minX, double maxX);
 
+        
+        public double MinX { get; set; }
 
-        public abstract void applyRunRelatedSettings(Run run);
+        public double MaxX { get; set; }
 
-        public abstract void addPeakRelatedData(Run run);
+        public bool PeaksAreStored { get; set; }
 
-        protected MSPeak getBasePeak(List<Peak> peakList)
-        {
-            if (peakList == null || peakList.Count == 0) return new MSPeak();
-
-            Peak maxPeak;
-            if (!(peakList[0] is MSPeak)) return null;
-            maxPeak = peakList[0];
-          
-
-            foreach (Peak peak in peakList)
-            {
-                if (peak.Height >= maxPeak.Height)
-                {
-                    maxPeak = peak;
-                }
-               
-            }
-            return (MSPeak)maxPeak;
-
-        }
+        public double BackgroundIntensity { get; set; }
 
 
         public override void Execute(ResultCollection resultList)
@@ -50,10 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
             }
-            applyRunRelatedSettings(resultList.Run);
-
-
-
+           
             bool isSuccess = false;
 
             int counter = 1;
@@ -65,8 +46,11 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 try
                 {
-                    resultList.Run.PeakList = FindPeaks(resultList.Run.XYData, resultList.Run.MSParameters.MinMZ, resultList.Run.MSParameters.MaxMZ);
+                    resultList.Run.PeakList = FindPeaks(resultList.Run.XYData, MinX, MaxX);
                     isSuccess = true;
+
+
+                    
                 }
                 catch (Exception ex)
                 {
@@ -85,16 +69,21 @@ namespace DeconTools.Backend.ProcessingTasks
                     sb.Append("; ");
                     sb.Append(ex.StackTrace);
 
-                    Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
+                    if (Logger.Instance.OutputFilename==null)
+                    {
+                        Console.WriteLine(sb.ToString());
+                    }
+                    else
+                    {
+                        Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
+                    }
+                    
 
                 }
 
                 counter++;
 
             }
-        
-            
-            addPeakRelatedData(resultList.Run);
             
         }
     }

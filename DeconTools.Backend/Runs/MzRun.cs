@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Runs
         public MzRun()
             : base()
         {
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
             this.MSFileType = Globals.MSFileType.Finnigan;
             this.ContainsMSMSData = true;

@@ -17,10 +17,10 @@ namespace DeconTools.Backend.Data
                 case Globals.ResultType.BASIC_TRADITIONAL_RESULT:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             isosExporter = new BasicIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             isosExporter = new BasicIsosResultSqliteExporter(outputFileName, TriggerToExportValue);
                             break;
                         default:
@@ -33,10 +33,10 @@ namespace DeconTools.Backend.Data
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             isosExporter = new UIMFIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             isosExporter = new UIMFIsosResultSqliteExporter(outputFileName, TriggerToExportValue);
                             break;
                         default:
@@ -48,10 +48,10 @@ namespace DeconTools.Backend.Data
                 case Globals.ResultType.IMS_TRADITIONAL_RESULT:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             throw new NotImplementedException();
                             
                         default:
@@ -63,10 +63,10 @@ namespace DeconTools.Backend.Data
                 case Globals.ResultType.O16O18_TRADITIONAL_RESULT:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             isosExporter = new O16O18IsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             throw new NotImplementedException();
                             
                         default:

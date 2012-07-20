@@ -11,7 +11,6 @@ namespace DeconTools.Backend.Runs
         public BrukerRun()
         {
             this.xyData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = true;
             this.MSFileType = Globals.MSFileType.Bruker;
             this.ContainsMSMSData = false;

@@ -31,7 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 theorProfile.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 
 
-            if (result.IsotopicProfile.Peaklist.Count <= indexOfMostAbundantTheorPeak || indexOfCorrespondingObservedPeak<0)      // most abundant peak isn't present in the actual theoretical profile... problem!
+            if (indexOfCorrespondingObservedPeak<0)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
                 result.Score = 1;
                 return;
@@ -39,8 +39,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
             double mzOffset = result.IsotopicProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
-
-            double fwhm = result.IsotopicProfile.GetFWHM();
 
             XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(theorProfile, result.IsotopicProfile.GetFWHM());
             //theorXYData.Display();
@@ -54,12 +52,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             if (fitval == double.NaN || fitval > 1) fitval = 1;
             result.Score = fitval;
-
-
-
-
-
-
 
         }
         #endregion

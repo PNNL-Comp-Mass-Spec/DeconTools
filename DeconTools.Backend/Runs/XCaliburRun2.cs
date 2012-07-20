@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Runs
         #region Constructors
         public XCaliburRun2()
         {
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = true;
             this.MSFileType = Globals.MSFileType.Finnigan;
             this.ContainsMSMSData = true;

@@ -10,7 +10,7 @@ namespace DeconTools.Backend.Runs
         protected XYDataRun()
         {
             xyData = new XYData();
-            MSParameters = new Parameters.MSParameters();
+            
         }
 
 

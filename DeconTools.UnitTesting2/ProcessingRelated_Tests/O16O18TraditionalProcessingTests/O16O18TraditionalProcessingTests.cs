@@ -2,8 +2,8 @@
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProcessingTests
@@ -31,15 +31,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
-            peakDet.PeakBackgroundRatio = 1.3;
-            peakDet.SigNoiseThreshold = 2;
+            peakDet.PeakToBackgroundRatio = 1.3;
+            peakDet.SignalToNoiseThreshold = 2;
 
             HornDeconvolutor decon = new HornDeconvolutor();
             decon.IsO16O18Data = true;
 
             O16O18PeakDataAppender appender = new O16O18PeakDataAppender();
 
-            var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Backend.Globals.ExporterType.TEXT, exportedIsos);
+            var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Backend.Globals.ExporterType.Text, exportedIsos);
 
             msgen.Execute(run.ResultCollection);
             peakDet.Execute(run.ResultCollection);

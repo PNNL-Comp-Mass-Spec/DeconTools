@@ -28,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             StringBuilder sb = new StringBuilder();
 
-            UIMFScanResult uimfScanResult = (UIMFScanResult)result;
+            UimfScanResult uimfScanResult = (UimfScanResult)result;
 
 
             //sb.Append(uimfScanResult.Frameset.PrimaryFrame);

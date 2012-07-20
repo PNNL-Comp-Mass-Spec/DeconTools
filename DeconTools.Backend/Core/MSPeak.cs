@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -8,7 +6,7 @@ namespace DeconTools.Backend.Core
     public class MSPeak : Peak
     {
 
-        public MSPeak()
+        public MSPeak():base()
         {
             this.DataIndex = -1;
             this.MSFeatureID = -1;
@@ -17,33 +15,14 @@ namespace DeconTools.Backend.Core
 
         public MSPeak(double mz, float intensity, float fwhm, float sn)
         {
-            this.mZ = mz;
-            this.intensity = intensity;
+            this.XValue = mz;
+            this.Height = intensity;
             this.Width = fwhm;
             this.SN = sn;
         }
 
-        private double mZ;
-
-        public override double XValue
-        {
-            get { return mZ; }
-            set { mZ = value; }
-        }
-        private float intensity;
-
-        public override float Height
-        {
-            get { return intensity; }
-            set { intensity = value; }
-        }
-        private float fWHM;
-
-        public override float Width
-        {
-            get { return fWHM; }
-            set { fWHM = value; }
-        }
+       
+      
         private float sN;
 
         public float SN

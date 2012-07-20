@@ -81,9 +81,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             run.XYData.Yvalues = yvals.ToArray();
         }
 
-        protected override void createNewScanResult(DeconTools.Backend.Core.ResultCollection resultList, DeconTools.Backend.Core.ScanSet scanSet)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

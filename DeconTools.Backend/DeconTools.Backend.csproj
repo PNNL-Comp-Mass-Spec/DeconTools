@@ -166,6 +166,7 @@
     <Compile Include="Data\AVLTree.cs" />
     <Compile Include="Data\BinarySearchTree.cs" />
     <Compile Include="Data\BitArray2D.cs" />
+    <Compile Include="FileIO\DeconToolsParameterFileReader.cs" />
     <Compile Include="FileIO\MassTagFromTextFileImporter.cs" />
     <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
@@ -195,6 +196,10 @@
     <Compile Include="FileIO\SQLiteExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="Parameters\MiscMSProcessingParameters.cs" />
+    <Compile Include="Parameters\MSParameters.cs" />
+    <Compile Include="Parameters\PeakDetectorParameters.cs" />
+    <Compile Include="Parameters\ScanBasedWorkflowParameters.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorTask.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorParameters.cs" />
@@ -304,8 +309,6 @@
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
     <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
-    <Compile Include="Parameters\Class1.cs" />
-    <Compile Include="Parameters\GenericMSParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
@@ -325,7 +328,6 @@
     <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\PeakDetector.cs" />
     <Compile Include="Core\Task.cs" />
-    <Compile Include="ProcessingTasks\MSGenerators\DeconEngine_MSParameters.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\IPeakListExporter.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\MSPeakTable.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListTextExporter.cs" />
@@ -399,10 +401,7 @@
     <Compile Include="FileLoader.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Runs\IMFRun.cs" />
-    <Compile Include="ProcessingTasks\MSGenerators\MSParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs" />
-    <Compile Include="Parameters\ParameterLoader.cs" />
-    <Compile Include="Parameters\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Run.cs" />
     <Compile Include="Data\XYData.cs" />

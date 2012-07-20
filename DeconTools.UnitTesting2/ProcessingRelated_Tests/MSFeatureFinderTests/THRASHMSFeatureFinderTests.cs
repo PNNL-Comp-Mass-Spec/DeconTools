@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 {
@@ -42,8 +41,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Assert.AreEqual(481.775412188198m, (decimal)testIso.IsotopicProfile.Peaklist[1].XValue);
             Assert.AreEqual(482.276820274024m, (decimal)testIso.IsotopicProfile.Peaklist[2].XValue);
 
-           // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-            TestUtilities.DisplayPeaks(run.PeakList);
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+           // TestUtilities.DisplayPeaks(run.PeakList);
 
 
 

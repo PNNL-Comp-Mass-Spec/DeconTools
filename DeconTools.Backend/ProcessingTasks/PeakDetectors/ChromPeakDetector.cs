@@ -14,10 +14,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         DeconToolsV2.Peaks.clsPeak[] deconEnginePeaklist;
 
         #region Constructors
-        public ChromPeakDetector():this(2,2)
-        {
-
-        }
+        public ChromPeakDetector():base() { }
 
         public ChromPeakDetector(double peakBackgroundRatio, double sigNoise)
         {
@@ -55,6 +52,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #endregion
 
         #region Public Methods
+
+        //TODO: remove code duplication (see DeconToolsPeakDetector)
         public override List<Peak> FindPeaks(XYData xydata, double xMin, double xMax)
         {
             List<Peak> peakList = new List<Peak>();
@@ -96,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 ChromPeak chromPeak = new ChromPeak();      
                 chromPeak.XValue = peak.mdbl_mz;          // here,  mz is actually the scan / or NET 
                 chromPeak.Height =(float)peak.mdbl_intensity;     
-                chromPeak.SigNoise = (float)peak.mdbl_SN;     
+                chromPeak.SignalToNoise = (float)peak.mdbl_SN;     
                 chromPeak.Width = (float)peak.mdbl_FWHM;
 
                 peakList.Add(chromPeak);
@@ -110,38 +109,31 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
       
 
-        public override void addPeakRelatedData(Run run)
-        {
+        //public override void AddPeakRelatedData(Run run)
+        //{
 
-            if (run.PeakList == null || run.PeakList.Count == 0)
-            {
-                bool workflowIsTargeted = (run.CurrentMassTag != null);
-                if (workflowIsTargeted)
-                {
-                    TargetedResultBase result = run.ResultCollection.CurrentTargetedResult;
-                    result.FailedResult = true;
-                    result.FailureType = Globals.TargetedResultFailureType.CHROM_PEAKS_NOT_DETECTED;
-                }
-            }
+        //    if (run.PeakList == null || run.PeakList.Count == 0)
+        //    {
+        //        bool workflowIsTargeted = (run.CurrentMassTag != null);
+        //        if (workflowIsTargeted)
+        //        {
+        //            TargetedResultBase result = run.ResultCollection.CurrentTargetedResult;
+        //            result.FailedResult = true;
+        //            result.FailureType = Globals.TargetedResultFailureType.CHROM_PEAKS_NOT_DETECTED;
+        //        }
+        //    }
             
 
-            foreach (ChromPeak peak in run.PeakList)
-            {
-                peak.NETValue = run.GetNETValueForScan((int)peak.XValue);
-            }
+        //    foreach (ChromPeak peak in run.PeakList)
+        //    {
+        //        peak.NETValue = run.GetNETValueForScan((int)peak.XValue);
+        //    }
 
 
 
-        }
+        //}
         #endregion
 
-        #region Private Methods
-        #endregion
-
-
-        public override void applyRunRelatedSettings(Run run)
-        {
-            // don't do anything
-        }
+      
     }
 }

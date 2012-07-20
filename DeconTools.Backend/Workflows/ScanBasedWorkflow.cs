@@ -6,6 +6,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters;
@@ -52,6 +53,7 @@ namespace DeconTools.Backend.Workflows
 
         public OldDecon2LSParameters OldDecon2LsParameters { get; set; }
 
+        private PeakUtilities _peakUtilities = new PeakUtilities();
 
 
         #region Factory methods
@@ -196,6 +198,12 @@ namespace DeconTools.Backend.Workflows
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(OldDecon2LsParameters);
+            
+            if (PeakDetector is DeconToolsPeakDetector)
+            {
+                ((DeconToolsPeakDetector) PeakDetector).IsDataThresholded = true;
+            }
+            
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(OldDecon2LsParameters);
 
 
@@ -328,6 +336,8 @@ namespace DeconTools.Backend.Workflows
 
             ExecuteTask(PeakDetector);
 
+            GatherPeakStatistics();
+
             ExecuteTask(Deconvolutor);
 
             ExecuteTask(ResultValidator);
@@ -360,6 +370,33 @@ namespace DeconTools.Backend.Workflows
 
             }
 
+        }
+
+        private void GatherPeakStatistics()
+        {
+            Check.Require(Run.CurrentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+
+            Run.CurrentScanSet.BackgroundIntensity = this.PeakDetector.BackgroundIntensity;
+            Run.CurrentScanSet.NumPeaks = Run.PeakList.Count;    //used in ScanResult
+            Run.CurrentScanSet.BasePeak = _peakUtilities.GetBasePeak(Run.PeakList);     //Used in ScanResult
+
+            //TODO: remove this when C# thrash is ready
+            Run.DeconToolsPeakList = ((DeconToolsPeakDetector)PeakDetector).DeconEnginePeakList;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
+
+
+            //if (run.CurrentScanSet.PrimaryScanNumber == 142)
+            //{
+            //    foreach (var peak in run.PeakList)
+            //    {
+            //        Console.WriteLine(peak.XValue + "\t" + peak.Height);
+
+            //    }
+            //}
+
+            if (PeakDetector.PeaksAreStored)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
+            {
+                Run.ResultCollection.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
+            }
         }
 
         protected virtual void ExecuteOtherTasksHook() { }
@@ -440,12 +477,12 @@ namespace DeconTools.Backend.Workflows
 
             switch (ExporterType)
             {
-                case Globals.ExporterType.TEXT:
+                case Globals.ExporterType.Text:
                     IsosOutputFileName = basefileName + "_isos.csv";
                     ScansOutputFileName = basefileName + "_scans.csv";
                     PeakListOutputFileName = basefileName + "_peaks.txt";
                     break;
-                case Globals.ExporterType.SQLite:
+                case Globals.ExporterType.Sqlite:
                     IsosOutputFileName = basefileName + "_isos.db3";
                     ScansOutputFileName = basefileName + "_scans.db3";
                     PeakListOutputFileName = basefileName + "_peaks.db3";
@@ -477,13 +514,13 @@ namespace DeconTools.Backend.Workflows
             switch (OldDecon2LsParameters.HornTransformParameters.ExportFileType)
             {
                 case DeconToolsV2.HornTransform.enmExportFileType.SQLITE:
-                    ExporterType = Globals.ExporterType.SQLite;
+                    ExporterType = Globals.ExporterType.Sqlite;
                     break;
                 case DeconToolsV2.HornTransform.enmExportFileType.TEXT:
-                    ExporterType = Globals.ExporterType.TEXT;
+                    ExporterType = Globals.ExporterType.Text;
                     break;
                 default:
-                    ExporterType = Globals.ExporterType.TEXT;
+                    ExporterType = Globals.ExporterType.Text;
                     break;
             }
 

@@ -43,8 +43,8 @@ namespace DeconTools.Backend.Data
             int count = 0;
             foreach (ScanResult result in results.ScanResultList)
             {
-                Check.Require(result is UIMFScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
-                UIMFScanResult uimfResult = (UIMFScanResult)result;
+                Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
+                UimfScanResult uimfResult = (UimfScanResult)result;
 
                 IMS_Frames fp = new IMS_Frames();
                 fp.frame_num = (ushort)uimfResult.Frameset.PrimaryFrame;

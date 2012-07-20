@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Utilities;
 
@@ -14,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
     public abstract class SmartChromPeakSelectorBase : ChromPeakSelectorBase
     {
 
-        protected DeconTools.Backend.ProcessingTasks.MSGenerator msgen;
+        protected MSGenerator msgen;
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
         protected MassTagFitScoreCalculator fitScoreCalc;
 
@@ -219,14 +220,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
 
-        //TODO: delete this if unused
-        protected void SetDefaultMSPeakDetectorSettings(double peakBR, double signoiseRatio, Globals.PeakFitType peakFitType, bool isThresholded)
-        {
-            MSPeakDetector.PeakBackgroundRatio = peakBR;
-            MSPeakDetector.SigNoiseThreshold = signoiseRatio;
-            MSPeakDetector.PeakFitType = peakFitType;
-            MSPeakDetector.IsDataThresholded = isThresholded;
-        }
+      
 
         //TODO: delete this if unused
         protected void SetDefaultTargetedFeatureFinderSettings(double toleranceInPPM)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
@@ -13,7 +9,7 @@ namespace DeconTools.Backend.DTO
             this.ChromID = -1;
             this.PeakID = -1;
             this.Scan_num = -1;
-            this.Frame_num = -1;
+            this.FrameNum = -1;
             this.MSPeak = null;
 
         }
@@ -28,7 +24,7 @@ namespace DeconTools.Backend.DTO
         public MSPeakResult(int peakID, int frameNum, int scanNum, MSPeak peak)
             : this(peakID, scanNum, peak)
         {
-            this.Frame_num = frameNum;
+            this.FrameNum = frameNum;
         }
 
         public override float Width
@@ -62,7 +58,7 @@ namespace DeconTools.Backend.DTO
         /// </summary>
         public int ChromID { get; set; }
 
-        public int Frame_num { get; set; }
+        public int FrameNum { get; set; }
 
 
         public MSPeak MSPeak { get; set; }

@@ -124,8 +124,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
 
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
-            peakDetector.PeakBackgroundRatio = 3;
-            peakDetector.SigNoiseThreshold = 2;
+            peakDetector.PeakToBackgroundRatio = 3;
+            peakDetector.SignalToNoiseThreshold = 2;
 
 
 
@@ -181,8 +181,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
 
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
-            peakDetector.PeakBackgroundRatio = 3;
-            peakDetector.SigNoiseThreshold = 2;
+            peakDetector.PeakToBackgroundRatio = 3;
+            peakDetector.SignalToNoiseThreshold = 2;
 
 
 

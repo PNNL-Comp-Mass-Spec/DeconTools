@@ -18,7 +18,6 @@ namespace DeconTools.Backend.Runs
         public YAFMSRun()
         {
             this.XYData = new XYData();
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.YAFMS;
             this.ContainsMSMSData = false;
 

@@ -38,8 +38,8 @@ namespace DeconTools.Backend.Data
 
             foreach (ScanResult result in results.ScanResultList)
             {
-                Check.Require(result is UIMFScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
-                UIMFScanResult uimfResult = (UIMFScanResult)result;
+                Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
+                UimfScanResult uimfResult = (UimfScanResult)result;
                 sb = new StringBuilder();
                 sb.Append(uimfResult.Frameset.PrimaryFrame);
                 sb.Append(delimiter);

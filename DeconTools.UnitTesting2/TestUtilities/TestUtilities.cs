@@ -372,8 +372,8 @@ namespace DeconTools.UnitTesting2
 
 
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
-            peakDet.PeakBackgroundRatio = 1.3;
-            peakDet.SigNoiseThreshold = 2;
+            peakDet.PeakToBackgroundRatio = 1.3;
+            peakDet.SignalToNoiseThreshold = 2;
             peakDet.IsDataThresholded = true;
 
             run.CurrentScanSet = scanSet;
@@ -447,7 +447,7 @@ namespace DeconTools.UnitTesting2
             {
                 sb.Append(peak.PeakID);
                 sb.Append("\t");
-                sb.Append(peak.Frame_num);
+                sb.Append(peak.FrameNum);
                 sb.Append("\t");
                 sb.Append(peak.Scan_num);
                 sb.Append("\t");

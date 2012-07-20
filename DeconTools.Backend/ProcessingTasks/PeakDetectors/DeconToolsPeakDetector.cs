@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Utilities;
-using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Parameters;
+using DeconToolsV2.Peaks;
 
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -14,60 +12,10 @@ namespace DeconTools.Backend.ProcessingTasks
     {
         DeconToolsV2.Peaks.clsPeakProcessor peakProcessor;
 
-        double m_backgroundIntensity;
-        DeconToolsV2.Peaks.clsPeak[] m_deconEnginePeaklist = new DeconToolsV2.Peaks.clsPeak[0];
-
-
+        
 
         #region Properties
-        private double peakBackgroundRatio;
 
-        public double PeakBackgroundRatio
-        {
-            get { return peakBackgroundRatio; }
-            set { peakBackgroundRatio = value; }
-        }
-
-
-        public double BackGroundIntensity
-        {
-            get { return m_backgroundIntensity; }
-            set { m_backgroundIntensity = value; }
-        }
-
-
-
-        private double sigNoiseThreshold;
-
-        public double SigNoiseThreshold
-        {
-            get { return sigNoiseThreshold; }
-            set { sigNoiseThreshold = value; }
-        }
-
-        private DeconTools.Backend.Globals.PeakFitType peakFitType;
-        public DeconTools.Backend.Globals.PeakFitType PeakFitType
-        {
-            get { return peakFitType; }
-            set { peakFitType = value; }
-        }
-
-
-
-        private bool isDataThresholded;
-
-        public bool IsDataThresholded
-        {
-            get { return isDataThresholded; }
-            set { isDataThresholded = value; }
-        }
-
-        private bool storePeakData;
-        public bool StorePeakData
-        {
-            get { return storePeakData; }
-            set { storePeakData = value; }
-        }
 
         DeconToolsV2.Peaks.clsPeakProcessorParameters deconEngineParameters;
 
@@ -77,23 +25,16 @@ namespace DeconTools.Backend.ProcessingTasks
             internal set { deconEngineParameters = value; }
         }
 
+        public clsPeak[] DeconEnginePeakList { get; set; }
+
 
         #endregion
 
         #region Constructors
         public DeconToolsPeakDetector()
+            : base()
         {
             this.DeconEngineParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            this.setDefaults();
-        }
-
-        private void setDefaults()
-        {
-            this.peakFitType = Globals.PeakFitType.QUADRATIC;
-            this.peakBackgroundRatio = 1.3;
-            this.sigNoiseThreshold = 2;
-            this.isDataThresholded = false;
-            this.StorePeakData = false;
 
         }
 
@@ -104,28 +45,51 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        public DeconToolsPeakDetector(double peakToBackgroundRatio, double signalToNoiseRatio, Globals.PeakFitType peakFitType, bool isDataThresholded)
+        public DeconToolsPeakDetector(PeakDetectorParameters parameters)
+        {
+            IsDataThresholded = parameters.IsDataThresholded;
+            PeakFitType = parameters.PeakFitType;
+            SignalToNoiseThreshold = parameters.SignalToNoiseThreshold;
+            PeakToBackgroundRatio = parameters.PeakToBackgroundRatio;
+            PeaksAreStored= parameters.PeaksAreStored;
+            MinX = parameters.MinX;
+            MaxX = parameters.MaxX;
+        }
+
+        
+
+
+        public DeconToolsPeakDetector(double peakToBackgroundRatio, double signalToNoiseRatio, Globals.PeakFitType peakFitType, bool isDataThresholded, double minX = 0, double maxX = double.MaxValue)
             : this()
         {
-            this.peakBackgroundRatio = peakToBackgroundRatio;
-            this.sigNoiseThreshold = signalToNoiseRatio;
-            this.peakFitType = peakFitType;
-            this.IsDataThresholded = IsDataThresholded;
-
+            PeakToBackgroundRatio = peakToBackgroundRatio;
+            SignalToNoiseThreshold = signalToNoiseRatio;
+            PeakFitType = peakFitType;
+            IsDataThresholded = isDataThresholded;
+            MaxX = maxX;
+            MinX = minX;
 
         }
 
+        public bool IsDataThresholded { get; set; }
 
+        public Globals.PeakFitType PeakFitType { get; set; }
+
+        public double SignalToNoiseThreshold { get; set; }
+
+        public double PeakToBackgroundRatio { get; set; }
+
+        
         #endregion
 
         #region Private Methods
         private void updateDeconEngineParameters()
         {
-            this.DeconEngineParameters.PeakBackgroundRatio = this.peakBackgroundRatio;
-            this.DeconEngineParameters.SignalToNoiseThreshold = this.sigNoiseThreshold;
-            this.DeconEngineParameters.PeakFitType = getDeconPeakFitType(this.peakFitType);
-            this.DeconEngineParameters.ThresholdedData = this.isDataThresholded;
-            this.DeconEngineParameters.WritePeaksToTextFile = this.StorePeakData;
+            this.DeconEngineParameters.PeakBackgroundRatio = PeakToBackgroundRatio;
+            this.DeconEngineParameters.SignalToNoiseThreshold = SignalToNoiseThreshold;
+            this.DeconEngineParameters.PeakFitType = getDeconPeakFitType(PeakFitType);
+            this.DeconEngineParameters.ThresholdedData = IsDataThresholded;
+            this.DeconEngineParameters.WritePeaksToTextFile = PeaksAreStored;
 
         }
 
@@ -150,10 +114,12 @@ namespace DeconTools.Backend.ProcessingTasks
         {
 
             //this.isDataThresholded = parameters.ThresholdedData;     //IsDataThresholded will now be extracted from the Run class
-            this.peakBackgroundRatio = parameters.PeakBackgroundRatio;
-            this.peakFitType = getPeakFitType(parameters.PeakFitType);
-            this.sigNoiseThreshold = parameters.SignalToNoiseThreshold;
-            this.StorePeakData = parameters.WritePeaksToTextFile;
+
+            PeakToBackgroundRatio = parameters.PeakBackgroundRatio;
+            SignalToNoiseThreshold = parameters.SignalToNoiseThreshold; 
+            PeakFitType = getPeakFitType(parameters.PeakFitType);
+            PeaksAreStored = parameters.WritePeaksToTextFile;
+            
 
         }
 
@@ -195,7 +161,7 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
 
         #region Public Methods
-        
+
         /// <summary>
         /// Finds peaks in XY Data within the specified range of X values. Optionally, to use all XY data points, enter 0 for both min and max values
         /// </summary>
@@ -214,7 +180,7 @@ namespace DeconTools.Backend.ProcessingTasks
             peakProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();
 
             //initialize options
-            
+
             //this.isDataThresholded = resultList.Run.IsDataThresholded;   [commented out:  2010_04_05 by gord]
             updateDeconEngineParameters();
             peakProcessor.SetOptions(this.deconEngineParameters);
@@ -231,19 +197,20 @@ namespace DeconTools.Backend.ProcessingTasks
                 maxX = xydata.Xvalues.Last();
             }
 
+            clsPeak[] deconEnginePeakList = null;
             try
             {
-                peakProcessor.DiscoverPeaks(ref xvals, ref yvals, ref m_deconEnginePeaklist, (float)(minX), (float)(maxX));
-
+                peakProcessor.DiscoverPeaks(ref xvals, ref yvals, ref deconEnginePeakList, (float)(minX), (float)(maxX));
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
 
-            this.m_backgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
+            BackgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
+            DeconEnginePeakList = deconEnginePeakList;
 
-            peakList = ConvertDeconEnginePeakList(m_deconEnginePeaklist);   
+            peakList = ConvertDeconEnginePeakList(DeconEnginePeakList);
             return peakList;
         }
 
@@ -251,49 +218,22 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
 
 
-
-
-        public override void addPeakRelatedData(Run run)
+        public override void Execute(ResultCollection resultList)
         {
-            Check.Require(run.CurrentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+            base.Execute(resultList);
 
-            run.CurrentScanSet.BackgroundIntensity = m_backgroundIntensity;
-            run.CurrentScanSet.NumPeaks = run.PeakList.Count;    //used in ScanResult
-            run.CurrentScanSet.BasePeak = getBasePeak(run.PeakList);     //Used in ScanResult
+            resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
 
-            run.DeconToolsPeakList = m_deconEnginePeaklist;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
-
-
-            //if (run.CurrentScanSet.PrimaryScanNumber == 142)
-            //{
-            //    foreach (var peak in run.PeakList)
-            //    {
-            //        Console.WriteLine(peak.XValue + "\t" + peak.Height);
-
-            //    }
-            //}
-
-            if (this.StorePeakData)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
-            {
-                run.ResultCollection.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
-            }
-
-
+            resultList.Run.CurrentBackgroundIntensity = BackgroundIntensity;
         }
 
-
+        
         public override void Cleanup()
         {
             base.Cleanup();
-            m_deconEnginePeaklist = null;
-            
+            DeconEnginePeakList = null;
+
         }
 
-
-
-        public override void applyRunRelatedSettings(Run run)
-        {
-            this.isDataThresholded = run.IsDataThresholded;
-        }
     }
 }

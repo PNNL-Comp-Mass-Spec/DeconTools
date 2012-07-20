@@ -16,7 +16,6 @@ namespace DeconTools.Backend.Core
             this.scanSetCollection = new ScanSetCollection();
             this.ResultCollection = new ResultCollection(this);
             this.XYData = new XYData();
-            MSParameters = new MSParameters();
             this.MSLevelList = new SortedDictionary<int, byte>();
             this.ScanToNETAlignmentData = new SortedDictionary<int, float>();
         }
@@ -69,13 +68,6 @@ namespace DeconTools.Backend.Core
         {
             get { return mSFileType; }
             set { mSFileType = value; }
-        }
-
-        private MSParameters msParameters;
-        public MSParameters MSParameters            //this probably should move to a 'Project' level since each run doesn't need to have individual parameters, i think
-        {
-            get { return msParameters; }
-            set { msParameters = value; }
         }
 
         private int minScan;
@@ -934,7 +926,7 @@ namespace DeconTools.Backend.Core
 
         public bool NETIsAligned { get; set; }
 
-
+        public double CurrentBackgroundIntensity { get; set; }
 
         #endregion
 

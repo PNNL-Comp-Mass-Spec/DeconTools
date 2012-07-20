@@ -16,10 +16,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters
 
             switch (exporterType)
             {
-                case Globals.ExporterType.TEXT:
+                case Globals.ExporterType.Text:
                     exporter = new PeakListTextExporter(fileType, triggerValue, outputFileName);
                     break;
-                case Globals.ExporterType.SQLite:
+                case Globals.ExporterType.Sqlite:
                     exporter = new PeakListSQLiteExporter(triggerValue, outputFileName);
                     break;
                 default:

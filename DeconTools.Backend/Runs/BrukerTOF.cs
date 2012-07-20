@@ -18,7 +18,6 @@ namespace DeconTools.Backend.Runs
         public BrukerTOF()
         {
             XYData = new XYData();
-            MSParameters = new MSParameters();
             IsDataThresholded = true;
             MSFileType = Globals.MSFileType.Bruker;
             ContainsMSMSData = false;

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -77,23 +75,23 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        protected override void createNewScanResult(DeconTools.Backend.Core.ResultCollection resultList, DeconTools.Backend.Core.ScanSet scanSet)
-        {
-            Check.Require(resultList.Run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
-            Check.Require(resultList.Run.ScanSetCollection != null && resultList.Run.ScanSetCollection.ScanSetList.Count > 0, "MS Generator failed...ScanSetCollection is empty");
-            UIMFRun uimfRun = (UIMFRun)(resultList.Run);
+        //protected override void createNewScanResult(DeconTools.Backend.Core.ResultCollection resultList, DeconTools.Backend.Core.ScanSet scanSet)
+        //{
+        //    Check.Require(resultList.Run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
+        //    Check.Require(resultList.Run.ScanSetCollection != null && resultList.Run.ScanSetCollection.ScanSetList.Count > 0, "MS Generator failed...ScanSetCollection is empty");
+        //    UIMFRun uimfRun = (UIMFRun)(resultList.Run);
 
-            if (uimfRun.CurrentScanSet == uimfRun.ScanSetCollection.ScanSetList[0])    //only one scanResult is created per frame
-            {
-                resultList.ScanResultList.Add(new UIMFScanResult(uimfRun.CurrentFrameSet));
-                UIMFScanResult scanresult = (UIMFScanResult)(resultList.GetCurrentScanResult());
+        //    if (uimfRun.CurrentScanSet == uimfRun.ScanSetCollection.ScanSetList[0])    //only one scanResult is created per frame
+        //    {
+        //        resultList.ScanResultList.Add(new UIMFScanResult(uimfRun.CurrentFrameSet));
+        //        UIMFScanResult scanresult = (UIMFScanResult)(resultList.GetCurrentScanResult());
 
-                scanresult.ScanTime = resultList.Run.GetTime(uimfRun.CurrentFrameSet.PrimaryFrame);
-                resultList.GetCurrentScanResult().SpectrumType = resultList.Run.GetMSLevel(scanSet.PrimaryScanNumber);  //TODO: need to find out if this is 'ims_scan_number'(0-599) or the absolute scan num (0-1439999);
+        //        scanresult.ScanTime = resultList.Run.GetTime(uimfRun.CurrentFrameSet.PrimaryFrame);
+        //        resultList.GetCurrentScanResult().SpectrumType = resultList.Run.GetMSLevel(scanSet.PrimaryScanNumber);  //TODO: need to find out if this is 'ims_scan_number'(0-599) or the absolute scan num (0-1439999);
 
-                scanresult.FramePressureFront = uimfRun.GetFramePressureFront(uimfRun.CurrentFrameSet.PrimaryFrame);
-                scanresult.FramePressureBack = uimfRun.GetFramePressureBack(uimfRun.CurrentFrameSet.PrimaryFrame);
-            }
-        }
+        //        scanresult.FramePressureFront = uimfRun.GetFramePressureFront(uimfRun.CurrentFrameSet.PrimaryFrame);
+        //        scanresult.FramePressureBack = uimfRun.GetFramePressureBack(uimfRun.CurrentFrameSet.PrimaryFrame);
+        //    }
+        //}
     }
 }

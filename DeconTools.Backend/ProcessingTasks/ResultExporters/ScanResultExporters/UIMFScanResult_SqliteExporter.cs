@@ -88,7 +88,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
                     for (int n = 0; n < rc.ScanResultList.Count; n++)
                     {
-                        UIMFScanResult r = (UIMFScanResult)rc.ScanResultList[n];
+                        UimfScanResult r = (UimfScanResult)rc.ScanResultList[n];
 
                         frameNumParam.Value = r.FrameNum;
                         frameTimeParam.Value = r.ScanTime;

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -319,8 +316,8 @@ namespace DeconTools.Backend.ProcessingTasks
         public override void deconvolute(ResultCollection resultList)
         {
 
-            float backgroundIntensity = (float)resultList.Run.CurrentScanSet.BackgroundIntensity;
-            float minPeptideIntensity = (float)(resultList.Run.CurrentScanSet.BackgroundIntensity * this.MinPeptideBackgroundRatio);
+            float backgroundIntensity = (float)resultList.Run.CurrentBackgroundIntensity;
+            float minPeptideIntensity = (float)(resultList.Run.CurrentBackgroundIntensity * this.MinPeptideBackgroundRatio);
 
             float[] xvals = new float[1];
             float[] yvals = new float[1];

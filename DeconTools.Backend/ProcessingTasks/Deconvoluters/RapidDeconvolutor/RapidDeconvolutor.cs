@@ -1,15 +1,13 @@
 ﻿extern alias RapidEngine;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using DeconTools.Utilities;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -110,7 +108,7 @@ namespace DeconTools.Backend.ProcessingTasks
             rapidPeakList = ConvertPeakListToRapidPeakList(resultList.Run.DeconToolsPeakList);
             if (rapidPeakList == null || rapidPeakList.Length == 0) return;
 
-            double rapidsBackgroundIntensityParameter = (resultList.Run.CurrentScanSet.BackgroundIntensity * minPeptideToBackgroundRatio);
+            double rapidsBackgroundIntensityParameter = (resultList.Run.CurrentBackgroundIntensity * minPeptideToBackgroundRatio);
 
             Transformer.PerformTransform_cluster(Convert.ToSingle(rapidsBackgroundIntensityParameter),
                 ref xvals, ref yvals, ref rapidPeakList, ref chargeResults,

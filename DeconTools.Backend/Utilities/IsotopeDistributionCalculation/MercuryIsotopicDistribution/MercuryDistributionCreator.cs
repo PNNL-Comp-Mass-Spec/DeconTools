@@ -85,8 +85,8 @@ namespace DeconTools.Backend.Utilities
             run.CurrentScanSet = new ScanSet(0);
 
             ResultCollection tempResults = new ResultCollection(run);
-            peakDetector.PeakBackgroundRatio = 0.5;
-            peakDetector.SigNoiseThreshold = 1;
+            peakDetector.PeakToBackgroundRatio = 0.5;
+            peakDetector.SignalToNoiseThreshold = 1;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
             peakDetector.IsDataThresholded = true;
             peakDetector.Execute(run.ResultCollection);

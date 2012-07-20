@@ -30,7 +30,6 @@ namespace DeconTools.Backend.Runs
         public UIMFRun()
         {
             XYData = new XYData();
-            MSParameters = new MSParameters();
             MSFileType = Globals.MSFileType.PNNL_UIMF;
             FrameSetCollection = new FrameSetCollection();
             RawData = null;

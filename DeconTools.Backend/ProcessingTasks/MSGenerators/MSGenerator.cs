@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 
-namespace DeconTools.Backend.ProcessingTasks
+namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
     public abstract class MSGenerator : Task
     {
@@ -32,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public abstract void GenerateMS(Run run);
 
-        protected abstract void createNewScanResult(ResultCollection resultList, ScanSet scanSet);
+        //protected abstract void createNewScanResult(ResultCollection resultList, ScanSet scanSet);
 
         public override void Execute(ResultCollection resultList)
         {

@@ -7,6 +7,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
@@ -42,7 +43,9 @@ namespace DeconTools.Backend.Workflows
 
             _msGenerator = new UIMF_MSGenerator();
             _peakDetector = new DeconToolsPeakDetector(PeakBRSaturatedPeakDetector, 3, Globals.PeakFitType.QUADRATIC,
-                                                       false);
+                                                       run.IsDataThresholded);
+
+
 
             _zeroFiller = new DeconToolsZeroFiller();
 
@@ -343,7 +346,7 @@ namespace DeconTools.Backend.Workflows
 
             foreach (var msPeakResult in list)
             {
-                sb.Append(msPeakResult.Frame_num + "\t" + msPeakResult.Scan_num + "\t" +
+                sb.Append(msPeakResult.FrameNum + "\t" + msPeakResult.Scan_num + "\t" +
                           msPeakResult.MSPeak.XValue.ToString("0.0000") + "\t" + msPeakResult.MSPeak.Height + "\n");
 
 

@@ -1,19 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using NUnit.Framework;
+using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
-using System.Collections;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 {
     [TestFixture]
     public class MSPeakDetectionTests
     {
+
+        [Test]
+        public void DetectPeaksTest1()
+        {
+            double peakBR = 1.3;
+            double sigNoise = 2;
+            bool isThresholded = true;
+            DeconTools.Backend.Globals.PeakFitType peakfitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
+
+            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+
+            Run run = new XCaliburRun(testFile);
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            run.CurrentScanSet = new ScanSet(6005);
+
+            msgen.Execute(run.ResultCollection);
+
+            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);
+            peakDet.PeaksAreStored = true;
+
+            var peakList=  peakDet.FindPeaks(run.XYData, 0, 50000);
+
+            TestUtilities.DisplayPeaks(peakList);
+
+        }
+
+
+
+
         [Test]
         public void DetectPeaksInOrbitrapData()
         {
@@ -25,17 +55,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun(testFile);
-            
+
             //create list of target scansets
-            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6015, 1, 1) ;
-            
+            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6015, 1, 1);
+
 
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            
-            
+
+
             DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);
-            peakDet.StorePeakData = true;
+            peakDet.PeaksAreStored = true;
 
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
@@ -49,54 +79,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             }
-
-            StringBuilder sb = new StringBuilder();
-
-            //this shows how to retrieve the peak data... 
-            foreach (var peak in run.ResultCollection.MSPeakResultList)
-            {
-                sb.Append(peak.PeakID);
-                sb.Append("\t");
-                sb.Append(peak.Scan_num);
-                sb.Append("\t");
-                sb.Append(peak.MSPeak.XValue);
-                sb.Append("\t");
-                sb.Append(peak.MSPeak.Height);
-                sb.Append("\t");
-                sb.Append(peak.MSPeak.DataIndex);
-                sb.Append(Environment.NewLine);
-
-                
-            }
-
-
-            //IEnumerable<double> mzValues = (from n in run.ResultCollection.MSPeakResultList select n.MSPeak.XValue);
-
-            //pull out mz values
-            List<double> mzValues = (from n in run.ResultCollection.MSPeakResultList select n.MSPeak.XValue).ToList();
-
-            //pull out all peaks within an mz range
-            var query = (from n in run.ResultCollection.MSPeakResultList where n.MSPeak.XValue > 800 && n.MSPeak.XValue<850 select n);
-
-            //get max of filtered peaks from above
-            var max = query.Max(p => p.MSPeak.Height);
-
-            //sort the list
-            var sortedList = run.ResultCollection.MSPeakResultList.OrderBy(p => p.MSPeak.XValue);
-
-
-            foreach (var item in mzValues)
-            {
-                //Console.Write(item);
-                //Console.Write('\n');
-            }
-            
-
-
-            Console.WriteLine(sb.ToString());
-
-
-
 
         }
 

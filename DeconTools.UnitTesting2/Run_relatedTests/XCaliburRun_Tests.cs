@@ -1,12 +1,13 @@
 ﻿#define includeLargeTests
 
 using System;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
 using System.Diagnostics;
+using System.Text;
+using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -58,9 +59,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-
-            run.MSParameters = new DeconEngine_MSParameters(6067, 1);
-
+            
             run.GetMassSpectrum(new ScanSet(6067), 200, 2000);
 
             int numscans = run.GetNumMSScans();

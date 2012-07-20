@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Parameters;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
@@ -19,6 +15,9 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             
         }
 
+
+
+        
         public GenericMSGenerator(double minMZ, double maxMZ)
         {
             this.MinMZ = minMZ;
@@ -27,13 +26,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             this.IsTICRequested = true;
 
         }
-
-        public GenericMSGenerator(double minMZ, double maxMZ, bool getTIC)
-            : this(minMZ, maxMZ)
-        {
-            this.IsTICRequested = getTIC;
-        }
-
 
 
         /// <summary>
@@ -45,10 +37,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             Check.Require(run != null, "MS_Generator failed;  'Run' has not yet been defined");
             Check.Require(!(run is UIMFRun), "MS Generator failed; You tried to use the 'Generic_MS_Generator.' Try using the 'UIMF_MSGenerator' instead");
             Check.Assert(run.CurrentScanSet != null, "MS Generator failed; Reason: run.CurrentScanSet is null");
-
-            run.MSParameters.MinMZ = this.MinMZ;
-            run.MSParameters.MaxMZ = this.MaxMZ;
-
 
             if (run.XYData == null)
             {
@@ -70,12 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             }
         }
 
-        protected override void createNewScanResult(ResultCollection resultList, ScanSet scanSet)
-        {
-            //resultList.ScanResultList.Add(new StandardScanResult(scanSet));
-            //resultList.GetCurrentScanResult().ScanTime = resultList.Run.GetTime(scanSet.PrimaryScanNumber);
-            //resultList.GetCurrentScanResult().SpectrumType = resultList.Run.GetMSLevel(scanSet.PrimaryScanNumber);
-        }
+    
 
     }
 }

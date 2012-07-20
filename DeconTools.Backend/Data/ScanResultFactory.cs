@@ -57,12 +57,12 @@ namespace DeconTools.Backend.Data
             Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
             Check.Require(((UIMFRun)run).FrameSetCollection != null && ((UIMFRun)run).FrameSetCollection.FrameSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
 
-            UIMFScanResult scanresult;
+            UimfScanResult scanresult;
 
             int totPeaks = 0;
             int totIsotopicProfiles = 0;
             float tic = 0;
-            MSPeak basepeak = new MSPeak();
+            Peak basepeak = new MSPeak();
 
             bool currentScanListIsLastOne = (scanSet == run.ScanSetCollection.ScanSetList[run.ScanSetCollection.ScanSetList.Count - 1]);
 
@@ -80,11 +80,9 @@ namespace DeconTools.Backend.Data
                         basepeak = s.BasePeak;
                     }
                 }
-                scanresult = new UIMFScanResult(frameSet);
+                scanresult = new UimfScanResult(frameSet);
 
                 scanresult.FrameNum = frameSet.PrimaryFrame;
-                
-
                 scanresult.NumIsotopicProfiles = totIsotopicProfiles;
                 scanresult.NumPeaks = totPeaks;
                 scanresult.BasePeak = basepeak;

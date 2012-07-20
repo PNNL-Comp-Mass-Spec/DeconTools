@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.DTO;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
@@ -40,7 +39,7 @@ namespace DeconTools.Backend.Utilities
             int minScan = scanSetCollection.ScanSetList[0].PrimaryScanNumber;
             int maxScan = scanSetCollection.ScanSetList.Last().PrimaryScanNumber;
 
-            List<MSPeakResult> filteredPeakList = run.ResultCollection.MSPeakResultList.Where(p => p.Frame_num == frameSet.PrimaryFrame)
+            List<MSPeakResult> filteredPeakList = run.ResultCollection.MSPeakResultList.Where(p => p.FrameNum == frameSet.PrimaryFrame)
                 .Where(p => p.Scan_num >= minScan && p.Scan_num <= maxScan).ToList();
 
 

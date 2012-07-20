@@ -135,7 +135,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
 
 
-                this.MSPeakDetector.PeakBackgroundRatio = d;
+                this.MSPeakDetector.PeakToBackgroundRatio = d;
                 this.MSPeakDetector.Execute(run.ResultCollection);
 
                 iso = FindMSFeature(run.PeakList, theorIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);

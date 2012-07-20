@@ -7,7 +7,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
-    public class DeconToolsPeakDetectorV2
+    public class DeconToolsPeakDetectorV2:PeakDetector
     {
         private double _intensityThreshold;
 
@@ -19,6 +19,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             SignalToNoiseThreshold = 2.0;
             PeakToBackgroundRatio = 2.0;
             PeakFitType = Globals.PeakFitType.QUADRATIC;
+            PeaksAreStored = false;
             _intensityThreshold = 0;
         }
 
@@ -31,15 +32,25 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         public Globals.RawDataType RawDataType { get; set; }
 
         public bool IsDataThresholded { get; set; }
-        public double SignalToNoiseThreshold { get; set; }
-        public double PeakToBackgroundRatio { get; set; }
 
         public Globals.PeakFitType PeakFitType { get; set; }
+
+        public double SignalToNoiseThreshold { get; set; }
+
+        public double PeakToBackgroundRatio { get; set; }
+
+       
+
 
         #endregion
 
         #region Public Methods
+        public override List<Peak> FindPeaks(XYData xydata, double minX, double maxX)
+        {
+            if (xydata == null) return new List<Peak>();
 
+            return  FindPeaks(xydata.Xvalues, xydata.Yvalues, minX, maxX);
+        }
 
         public List<Peak> FindPeaks(double[] xvalues, double[] yvalues, double minXValue, double maxXValue)
         {
@@ -338,8 +349,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             return backgroundIntensity / numPointsUsed;
         }
 
-
-
         private double CalculateSignalToNoise(double[] yvalues, int index)
         {
             throw new NotImplementedException();
@@ -347,9 +356,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         #endregion
 
-        #region Private Methods
-
-        #endregion
+     
 
     }
 }

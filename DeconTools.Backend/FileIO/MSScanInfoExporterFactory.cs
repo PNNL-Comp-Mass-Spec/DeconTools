@@ -26,7 +26,7 @@ namespace DeconTools.Backend.FileIO
 
             switch (exporterType)
             {
-                case Globals.ExporterType.TEXT:
+                case Globals.ExporterType.Text:
 
                     switch (msFileType)
                     {
@@ -39,7 +39,7 @@ namespace DeconTools.Backend.FileIO
                     }
 
                     break;
-                case Globals.ExporterType.SQLite:
+                case Globals.ExporterType.Sqlite:
 
                     switch (msFileType)
                     {

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
 using System.IO;
-using DeconTools.Utilities;
-using DeconTools.Backend.Utilities;
+using System.Text;
 using DeconTools.Backend.DTO;
+using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
@@ -129,7 +126,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             {
                 
                 //TODO:  do we want to export 'frame_index' or 'frameNum' ??   arggh   I don't want to look it up everytime I write the peak!
-                sb.Append(peak.Frame_num);
+                sb.Append(peak.FrameNum);
                 sb.Append(m_delimiter);
             }
             else

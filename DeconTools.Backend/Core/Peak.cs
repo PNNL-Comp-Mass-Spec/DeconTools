@@ -7,12 +7,17 @@ namespace DeconTools.Backend.Core
     {
         #region Constructors
 
+        public Peak()
+        {
+           
+        }
+
         #endregion
      
 
         #region Properties
         
-        public virtual double XValue { get; set; }
+        public virtual  double XValue { get; set; }
         public virtual float Height { get; set; }
         public virtual float Width { get; set; }
 

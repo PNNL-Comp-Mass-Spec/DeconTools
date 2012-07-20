@@ -20,7 +20,7 @@ namespace DeconTools.UnitTesting2
 
             Task msgen = new GenericMSGenerator();
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
-            peakDetector.StorePeakData = true;
+            peakDetector.PeaksAreStored = true;
 
             Task decon = new HornDeconvolutor();
             Task msScanInfoCreator = new ScanResultUpdater();

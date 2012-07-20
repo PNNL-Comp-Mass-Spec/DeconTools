@@ -63,16 +63,16 @@ namespace DeconTools.Backend.FileIO
 
         protected override void AddResults(System.Data.Common.DbParameterCollection dbParameters, ScanResult result)
         {
-            dbParameters[0].Value = ((UIMFScanResult)result).Frameset.PrimaryFrame;
-            dbParameters[1].Value = ((UIMFScanResult)result).ScanTime;
+            dbParameters[0].Value = ((UimfScanResult)result).Frameset.PrimaryFrame;
+            dbParameters[1].Value = ((UimfScanResult)result).ScanTime;
             dbParameters[2].Value = result.SpectrumType;
             dbParameters[3].Value = result.BasePeak.Height;
             dbParameters[4].Value = result.BasePeak.XValue;
             dbParameters[5].Value = result.TICValue;
             dbParameters[6].Value = result.NumPeaks;
             dbParameters[7].Value = result.NumIsotopicProfiles;
-            dbParameters[8].Value = ((UIMFScanResult)result).FramePressureFront;
-            dbParameters[9].Value = ((UIMFScanResult)result).FramePressureBack;
+            dbParameters[8].Value = ((UimfScanResult)result).FramePressureFront;
+            dbParameters[9].Value = ((UimfScanResult)result).FramePressureBack;
         }
         #endregion
    

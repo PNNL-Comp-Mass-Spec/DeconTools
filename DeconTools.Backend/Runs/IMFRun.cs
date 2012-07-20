@@ -13,7 +13,6 @@ namespace DeconTools.Backend.Runs
         public IMFRun()
         {
             this.XYData = new XYData();
-            this.MSParameters = new Parameters.MSParameters();
             this.MSFileType = Globals.MSFileType.PNNL_IMS;
         }
 

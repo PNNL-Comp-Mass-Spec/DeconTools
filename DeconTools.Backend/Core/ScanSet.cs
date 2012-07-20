@@ -16,10 +16,10 @@ namespace DeconTools.Backend.Core
         }
         public ScanSet(int primaryScanNum)
         {
-            this.primaryScanNumber = primaryScanNum;
-            this.IndexValues = new List<int>();
-            this.IndexValues.Add(primaryScanNum);
-            this.basePeak = new MSPeak();
+            PrimaryScanNumber = primaryScanNum;
+            IndexValues = new List<int>();
+            IndexValues.Add(primaryScanNum);
+            BasePeak = new MSPeak();
 
         }
 
@@ -37,7 +37,7 @@ namespace DeconTools.Backend.Core
         {
             Check.Require(lowerScan <= upperScan, "Lower scan number must be less than or equal to the upper scan number");
             this.IndexValues = new List<int>();
-            this.primaryScanNumber = primaryScanNum;
+            this.PrimaryScanNumber = primaryScanNum;
 
             for (int i = lowerScan; i <= upperScan; i++)
             {
@@ -48,38 +48,15 @@ namespace DeconTools.Backend.Core
 
 
         #endregion
-  
-        private int numPeaks;
 
-        public int NumPeaks
-        {
-            get { return numPeaks; }
-            set { numPeaks = value; }
-        }
+        public int NumPeaks { get; set; }
 
-        private int numIsotopicProfiles;
+        public int NumIsotopicProfiles { get; set; }
 
-        public int NumIsotopicProfiles
-        {
-            get { return numIsotopicProfiles; }
-            set { numIsotopicProfiles = value; }
-        }
 
-        private MSPeak basePeak;
+        public Peak BasePeak { get; set; }
 
-        public MSPeak BasePeak
-        {
-            get { return basePeak; }
-            set { basePeak = value; }
-        }
-
-        private float tICValue;
-
-        public float TICValue
-        {
-            get { return tICValue; }
-            set { tICValue = value; }
-        }
+        public float TICValue { get; set; }
 
         public float NETValue { get; set; }
 
@@ -91,16 +68,7 @@ namespace DeconTools.Backend.Core
             set { indexValues = value; }
         }
 
-        private int primaryScanNumber;
-
-        public int PrimaryScanNumber
-        {
-            get { return primaryScanNumber; }
-            set { primaryScanNumber = value; }
-        }
-
-
-        private double backgroundIntensity;
+        public int PrimaryScanNumber { get; set; }
 
 
         public void AddScan(int scanNumber)
@@ -115,20 +83,10 @@ namespace DeconTools.Backend.Core
                 indexValues.Add(scanNumber);
             }
         }
-        
-        public double BackgroundIntensity
-        {
-            get { return backgroundIntensity; }
-            set { backgroundIntensity = value; }
-        }
 
-        private double driftTime;          //TODO:    in the future, want to put this in 'UIMFScanSet'; but will keep it simple for now
+        public double BackgroundIntensity { get; set; }
 
-        public double DriftTime
-        {
-            get { return driftTime; }
-            set { driftTime = value; }
-        }
+        public double DriftTime { get; set; }
 
         //private List<int> m_MSPeakResultPeakListIndex;       //TODO:  SK ScanSet property added 9-16-10
 
@@ -164,7 +122,7 @@ namespace DeconTools.Backend.Core
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(primaryScanNumber);
+            sb.Append(PrimaryScanNumber);
 
             if (indexValues.Count > 1)    //if there is summing, will show these scans in the string
             {

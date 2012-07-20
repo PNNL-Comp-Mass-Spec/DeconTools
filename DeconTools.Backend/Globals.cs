@@ -67,16 +67,16 @@ namespace DeconTools.Backend
 
         public enum DeconvolutionType
         {
-            THRASH,
-            RAPID,
-            THRASH_then_RAPID
+            Thrash,
+            Rapid,
+            ThrashThenRapid
         }
 
 
         public enum ExporterType
         {
-            TEXT,
-            SQLite
+            Text,
+            Sqlite
         }
 
 
@@ -161,6 +161,12 @@ namespace DeconTools.Backend
         {
             BASIC,
             ITERATIVE
+        }
+
+
+        public enum SmoothingType
+        {
+            SavitzkyGolay
         }
 
 

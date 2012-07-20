@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Runs
         #region Constructors
         public ICR2LSRun()
         {
-            this.MSParameters = new DeconTools.Backend.Parameters.MSParameters();
             this.IsDataThresholded = false;   //TODO: check this
 
         }

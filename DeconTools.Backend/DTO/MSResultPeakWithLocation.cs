@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using DeconTools.Backend.Data.Structures;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
@@ -17,7 +15,7 @@ namespace DeconTools.Backend.DTO
         public MSResultPeakWithLocation(MSPeakResult peak)
         {
             this.XValue = peak.MSPeak.XValue;
-            this.frameNumber = (ushort) peak.Frame_num;
+            this.frameNumber = (ushort) peak.FrameNum;
             this.scanNumber = (ushort) peak.Scan_num;
             frameAndScansRange = new Dictionary<ushort, List<ushort>>();
             List<ushort> numbers = new List<ushort>();

@@ -88,11 +88,11 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             double ratioContribIso2;
             double ratio;
             
-            quant.GetRatioBasedOnTopPeaks(n14Profile, n15Profile, mt23140708.IsotopicProfile, theorN15Profile, peakDet.BackGroundIntensity, 
+            quant.GetRatioBasedOnTopPeaks(n14Profile, n15Profile, mt23140708.IsotopicProfile, theorN15Profile, peakDet.BackgroundIntensity, 
                 numPeaksUsedInQuant, out ratio, out ratioContribIso1, out ratioContribIso2);
 
             Console.WriteLine("--------------------------------");
-            Console.WriteLine("Background intensity = " + peakDet.BackGroundIntensity);
+            Console.WriteLine("Background intensity = " + peakDet.BackgroundIntensity);
 
             Console.WriteLine("--------------------------------");
             Console.WriteLine("Ratio = " + ratio);
@@ -166,7 +166,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             double ratioContribIso1;
             double ratioContribIso2;
             double ratio;
-            quant.GetRatioBasedOnTopPeaks(n14Profile, n15Profile, mt23140708.IsotopicProfile, theorN15Profile, peakDet.BackGroundIntensity, numPeaksUsedInQuant,
+            quant.GetRatioBasedOnTopPeaks(n14Profile, n15Profile, mt23140708.IsotopicProfile, theorN15Profile, peakDet.BackgroundIntensity, numPeaksUsedInQuant,
                 out ratio, out ratioContribIso1, out ratioContribIso2);
 
             Console.WriteLine("--------------------------------");
@@ -174,7 +174,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             Console.WriteLine("Ratio contrib Iso1 = " + ratioContribIso1);
             Console.WriteLine("Ratio contrib Iso2 = " + ratioContribIso2);
 
-            Console.WriteLine("Background intensity = " + peakDet.BackGroundIntensity);
+            Console.WriteLine("Background intensity = " + peakDet.BackgroundIntensity);
             
 
         }

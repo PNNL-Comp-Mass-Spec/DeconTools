@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
+﻿using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 {

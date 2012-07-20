@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 using System.IO;
 using DeconTools.Backend.DTO;
-using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Data
 {
@@ -146,7 +143,7 @@ namespace DeconTools.Backend.Data
             }
 
             peakresult.PeakID = Convert.ToInt32(processedLine[0]);
-            peakresult.Frame_num = Convert.ToInt32(processedLine[1]);
+            peakresult.FrameNum = Convert.ToInt32(processedLine[1]);
             peakresult.Scan_num = Convert.ToInt32(processedLine[2]);
             peakresult.MSPeak = new DeconTools.Backend.Core.MSPeak();
             peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[3]);

@@ -14,10 +14,10 @@ namespace DeconTools.Backend.Data
 
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             scansExporter = new UIMFScanResult_TextFileExporter(outputFileName);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             scansExporter = new UIMFScanResult_SqliteExporter(outputFileName);
                             break;
                         default:
@@ -28,10 +28,10 @@ namespace DeconTools.Backend.Data
                 default:
                     switch (exporterType)
                     {
-                        case Globals.ExporterType.TEXT:
+                        case Globals.ExporterType.Text:
                             scansExporter = new BasicScanResult_TextFileExporter(outputFileName);
                             break;
-                        case Globals.ExporterType.SQLite:
+                        case Globals.ExporterType.Sqlite:
                             scansExporter = new BasicScanResult_SqliteExporter(outputFileName);
                             break;
                         default:

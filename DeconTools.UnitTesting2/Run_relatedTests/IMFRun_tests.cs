@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
 using System.IO;
+using System.Text;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -25,8 +25,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
 
             Run run = new IMFRun(FileRefs.RawDataMSFiles.IMFStdFile1);
-
-            run.MSParameters = new DeconEngine_MSParameters(233, 1);
 
             run.GetMassSpectrum(new ScanSet(233), 200, 2000);
 
@@ -59,7 +57,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void GetMassSpectrumAndSumAllTest()
         {
             Run run = new IMFRun(FileRefs.RawDataMSFiles.IMFStdFile1);
-            run.MSParameters = new DeconEngine_MSParameters(200, 1000000);
             run.GetMassSpectrum(new ScanSet(10000, 1, 20000), 200, 2000);     // this will sum scans 1 through 20000 (if <20000 scans, then will sum all available)
 
             int numscans = run.GetNumMSScans();

@@ -21,7 +21,7 @@ namespace DeconTools.Backend.FileIO
         {
             StringBuilder sb = new StringBuilder();
 
-            UIMFScanResult uimfScanResult = (UIMFScanResult)result;
+            UimfScanResult uimfScanResult = (UimfScanResult)result;
             sb.Append(uimfScanResult.Frameset.PrimaryFrame);
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.ScanTime.ToString("0.###"));

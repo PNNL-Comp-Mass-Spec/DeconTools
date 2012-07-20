@@ -34,7 +34,7 @@ namespace DeconTools.Backend.FileIO
 
             switch (exporterType)
             {
-                case Globals.ExporterType.TEXT:
+                case Globals.ExporterType.Text:
 
                     //IMS and UIMF filetypes have their own special export formats. All others will use a standard format. 
                     switch (msFileType)
@@ -51,7 +51,7 @@ namespace DeconTools.Backend.FileIO
                     }
                     break;
 
-                case Globals.ExporterType.SQLite:
+                case Globals.ExporterType.Sqlite:
                     switch (msFileType)
                     {
                         case Globals.MSFileType.PNNL_UIMF:
