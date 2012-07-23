@@ -80,6 +80,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DeconEngineV2\Debug\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Agilent_D\MassSpecDataReader.dll</HintPath>
@@ -196,10 +200,13 @@
     <Compile Include="FileIO\SQLiteExporter.cs" />
     <Compile Include="FileIO\TextFileExporter.cs" />
     <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="Parameters\DeconToolsParameters.cs" />
     <Compile Include="Parameters\MiscMSProcessingParameters.cs" />
-    <Compile Include="Parameters\MSParameters.cs" />
+    <Compile Include="Parameters\MSGeneratorParameters.cs" />
+    <Compile Include="Parameters\ParametersBase.cs" />
     <Compile Include="Parameters\PeakDetectorParameters.cs" />
     <Compile Include="Parameters\ScanBasedWorkflowParameters.cs" />
+    <Compile Include="Parameters\ThrashParameters.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorTask.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorParameters.cs" />

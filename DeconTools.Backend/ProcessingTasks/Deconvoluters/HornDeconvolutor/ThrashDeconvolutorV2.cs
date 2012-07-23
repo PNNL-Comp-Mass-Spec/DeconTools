@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
@@ -22,23 +23,97 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private Dictionary<int, IsotopicProfile> _averagineProfileLookupTable = null;
 
-            #region Constructors
+        #region Constructors
+        public ThrashDeconvolutorV2(ThrashParameters parameters)
+        {
+            TagFormula = parameters.TagFormula;
+            AveragineFormula = parameters.AveragineFormula;
+            MinMSFeatureToBackgroundRatio = parameters.MinMSFeatureToBackgroundRatio;
+            MaxFit = parameters.MaxFit;
+            MinIntensityForScore = parameters.MinIntensityForScore;
+            MaxCharge = parameters.MaxCharge;
+            MaxMass = parameters.MaxMass;
+            NumPeaksForShoulder = parameters.NumPeaksForShoulder;
+            IsO16O18Data = parameters.IsO16O18Data;
+            UseAbsoluteIntensity = parameters.UseAbsoluteIntensity;
+            AbsolutePeptideIntensity = AbsolutePeptideIntensity;
+            IsThrashUsed = parameters.IsThrashUsed;
+            CheckAllPatternsAgainstChargeState1 = parameters.CheckAllPatternsAgainstChargeState1;
+            CompleteFit = parameters.CompleteFit;
+            ChargeCarrierMass = parameters.ChargeCarrierMass;
+            IsotopicProfileFitType = parameters.IsotopicProfileFitType;
+            UseMercuryCaching = parameters.UseMercuryCaching;
+            LeftFitStringencyFactor = parameters.LeftFitStringencyFactor;
+            RightFitStringencyFactor = parameters.RightFitStringencyFactor;
+            NumPeaksUsedInAbundance = parameters.NumPeaksUsedInAbundance;
+        }
+
+        public ThrashDeconvolutorV2()
+            : this(new ThrashParameters())
+        {
+
+        }
+
+
         #endregion
 
         #region Properties
+
+        public string TagFormula { get; set; }
+
+        //TODO: adjust IsotopicDistributionCalculator so that averagine isn't hard-coded
+        public string AveragineFormula { get; set; }
+
+        public double MinMSFeatureToBackgroundRatio { get; set; }
+
+        public double MaxFit { get; set; }
+
+        public double MinIntensityForScore { get; set; }
+
+        public int MaxCharge { get; set; }
+
+        public double MaxMass { get; set; }
+
+        public int NumPeaksForShoulder { get; set; }
+
+        public bool IsO16O18Data { get; set; }
+
+        public bool UseAbsoluteIntensity { get; set; }
+
+        public double AbsolutePeptideIntensity { get; set; }
+
+        public bool IsThrashUsed { get; set; }
+
+        public bool CheckAllPatternsAgainstChargeState1 { get; set; }
+
+        public bool CompleteFit { get; set; }
+
+        public double ChargeCarrierMass { get; set; }
+
+        public Globals.IsotopicProfileFitType IsotopicProfileFitType { get; set; }
+
+        public bool UseMercuryCaching { get; set; }
+
+        public double LeftFitStringencyFactor { get; set; }
+
+        public double RightFitStringencyFactor { get; set; }
+
+        public int NumPeaksUsedInAbundance { get; set; }
+
+
 
         #endregion
 
         #region Public Methods
 
-        public Dictionary<int,IsotopicProfile>CreateTheoreticalProfilesForMassRange(int startMass=400, int stopMass=5000)
+        public Dictionary<int, IsotopicProfile> CreateTheoreticalProfilesForMassRange(int startMass = 400, int stopMass = 5000)
         {
 
             Dictionary<int, IsotopicProfile> isotopicProfileDictionary = new Dictionary<int, IsotopicProfile>();
 
             for (int i = startMass; i <= stopMass; i++)
             {
-                IsotopicProfile profile=  _isotopicDistCalculator.GetAveraginePattern(startMass);
+                IsotopicProfile profile = _isotopicDistCalculator.GetAveraginePattern(startMass);
 
                 isotopicProfileDictionary.Add(i, profile);
 
@@ -66,7 +141,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         public List<IsosResult> PerformThrash(XYData originalXYData, List<Peak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0)
         {
-            if (_averagineProfileLookupTable==null)
+            if (_averagineProfileLookupTable == null)
             {
                 _averagineProfileLookupTable = CreateTheoreticalProfilesForMassRange();
             }
@@ -97,7 +172,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 if (peaksAlreadyProcessed.Contains(msPeak))
                 {
                     continue;
-                    
+
                 }
 
 
@@ -129,10 +204,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     }
                     else
                     {
-                        theorIso= _isotopicDistCalculator.GetAveraginePattern(obsPeakMass);
+                        theorIso = _isotopicDistCalculator.GetAveraginePattern(obsPeakMass);
+                        _averagineProfileLookupTable.Add(massUsedForLookup, theorIso);
                     }
-                    
-                     
+
+
                     theorIso.ChargeState = chargeState;
                     theorIso.MostAbundantIsotopeMass = obsPeakMass;
 
@@ -145,7 +221,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, 10, false);
 
                     string reportstring;
-                    if (msFeature!=null)
+                    if (msFeature != null)
                     {
                         peaksAlreadyProcessed.AddRange(msFeature.Peaklist);
                         msFeature.Score = bestFitVal;
@@ -174,7 +250,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 }
 
-                
+
             }
 
             Console.WriteLine(stringBuilder.ToString());
@@ -185,7 +261,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private void PerformIterativeFittingAndGetAlignedProfile(XYData xyData, XYData theorXYData, int chargeState, ref IsotopicProfile theorIso, ref double bestFitVal)
         {
-            if (xyData==null || xyData.Xvalues.Length==0)
+            if (xyData == null || xyData.Xvalues.Length == 0)
             {
                 bestFitVal = 1;
                 return;
@@ -212,11 +288,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 fitval = _areafitter.GetFit(theorXYData, xyData, 0.1, offsetForTheorProfile);
 
-                if (fitval > bestFitVal || fitval>=1)
+                if (fitval > bestFitVal || fitval >= 1)
                 {
                     break;
                 }
-                
+
                 bestFitVal = fitval;
                 bestOffsetForTheorProfile = offsetForTheorProfile;
             }
@@ -226,7 +302,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             {
                 double offsetForTheorProfile = numPeaksToTheRight * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
 
-                
+
 
                 fitval = _areafitter.GetFit(theorXYData, xyData, 0.1, offsetForTheorProfile);
 
@@ -234,7 +310,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     break;
                 }
-                
+
                 bestFitVal = fitval;
                 bestOffsetForTheorProfile = offsetForTheorProfile;
             }

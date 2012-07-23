@@ -1,7 +1,10 @@
 ﻿
+using System;
+using System.Xml.Linq;
+
 namespace DeconTools.Backend.Parameters
 {
-    public class ScanBasedWorkflowParameters
+    public class ScanBasedWorkflowParameters:ParametersBase
     {
 
         #region Constructors
@@ -11,9 +14,13 @@ namespace DeconTools.Backend.Parameters
             ProcessMS1 = true;
             ProcessMS2 = false;
 
+            ExportPeakData = false;
             ExportFileType = Globals.ExporterType.Text;
             ScanBasedWorkflowType = Globals.ScanBasedWorkflowType.Standard;
             DeconvolutionType = Globals.DeconvolutionType.Thrash;
+
+            IsRefittingPerformed = true;
+
         }
 
         #endregion
@@ -23,21 +30,43 @@ namespace DeconTools.Backend.Parameters
         public bool ProcessMS1 { get; set; }
         public bool ProcessMS2 { get; set; }
 
+        public bool ExportPeakData { get; set; }
+
+        /// <summary>
+        /// Least-squares fitting is performed on MS feature. This is standard for profiles found Thrash, but not standard for other deconvolution algorithms (e.g. RAPID)
+        /// </summary>
+        public bool IsRefittingPerformed { get; set; }
+
         public Globals.ExporterType ExportFileType { get; set; }
         public Globals.ScanBasedWorkflowType ScanBasedWorkflowType { get; set; }
 
         public Globals.DeconvolutionType DeconvolutionType { get; set; }
 
+        [Obsolete("UseRAPIDDeconvolution is deprecated, use DeconvolutionType instead.")]
+        public bool UseRAPIDDeconvolution { get; set; }
       
         #endregion
 
         #region Public Methods
+        public override void LoadParameters(XElement xElement)
+        {
+            ProcessMS1 = GetBoolVal(xElement, "Process_MS", ProcessMS1);
+            ProcessMS2 = GetBoolVal(xElement, "ProcessMSMS", ProcessMS2);
 
+            ExportFileType = (Globals.ExporterType)GetEnum(xElement, "ExportFileType", ExportFileType.GetType(), ExportFileType);
+            ScanBasedWorkflowType = (Globals.ScanBasedWorkflowType)GetEnum(xElement, "ScanBasedWorkflowType", ScanBasedWorkflowType.GetType(), ScanBasedWorkflowType);
+            DeconvolutionType = (Globals.DeconvolutionType)GetEnum(xElement, "DeconvolutionType", DeconvolutionType.GetType(), DeconvolutionType);
+
+            UseRAPIDDeconvolution = GetBoolVal(xElement, "UseRAPIDDeconvolution", UseRAPIDDeconvolution);
+
+            IsRefittingPerformed = GetBoolVal(xElement, "ReplaceRAPIDScoreWithHornFitScore", IsRefittingPerformed);
+
+            ExportPeakData = GetBoolVal(xElement, "WritePeaksToTextFile", ExportPeakData);
+
+
+        }
         #endregion
 
-        #region Private Methods
-
-        #endregion
-
+ 
     }
 }

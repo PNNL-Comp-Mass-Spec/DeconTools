@@ -1,7 +1,9 @@
 ﻿
+using System.Xml.Linq;
+
 namespace DeconTools.Backend.Parameters
 {
-    public class PeakDetectorParameters
+    public class PeakDetectorParameters: ParametersBase
     {
 
         #region Constructors
@@ -36,7 +38,12 @@ namespace DeconTools.Backend.Parameters
 
         #endregion
 
-   
-
+        public override void LoadParameters(XElement xElement)
+        {
+            PeakToBackgroundRatio = GetDoubleValue(xElement, "PeakBackgroundRatio", PeakToBackgroundRatio);
+            SignalToNoiseThreshold = GetDoubleValue(xElement, "SignalToNoiseThreshold", SignalToNoiseThreshold);
+            IsDataThresholded = GetBoolVal(xElement, "DataIsThresholded", IsDataThresholded);
+            PeakFitType = (Globals.PeakFitType) GetEnum(xElement, "PeakFitType", PeakFitType.GetType(),PeakFitType);
+        }
     }
 }
