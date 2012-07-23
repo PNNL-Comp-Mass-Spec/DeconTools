@@ -4,8 +4,8 @@
 	<PeakParameters>
 		<PeakBackgroundRatio>3</PeakBackgroundRatio>
 		<SignalToNoiseThreshold>2</SignalToNoiseThreshold>
-		<PeakFitType>QUADRATIC</PeakFitType>
-		<WritePeaksToTextFile>False</WritePeaksToTextFile>
+		<PeakFitType>Hello</PeakFitType>
+		<WritePeaksToTextFile>True</WritePeaksToTextFile>
 	</PeakParameters>
 	<DTAGenerationParameters>
 		<MinScan>1</MinScan>

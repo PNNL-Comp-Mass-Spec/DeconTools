@@ -98,6 +98,7 @@
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="Demos_basic_API_usage\DemoTests.cs" />
     <Compile Include="FileIO_Tests\AcqusFileReaderTests.cs" />
+    <Compile Include="FileIO_Tests\DeconToolsParameterTests.cs" />
     <Compile Include="FileIO_Tests\IsosImporterTests.cs" />
     <Compile Include="FileIO_Tests\LcmsTargetFromFeatureTextImporterTests.cs" />
     <Compile Include="FileIO_Tests\MassTagFromDBImporterTests.cs" />
@@ -186,6 +187,9 @@
   <ItemGroup>
     <Folder Include="NewFolder1\" />
     <Folder Include="ProcessingRelated_Tests\ScanSet_FrameSet_relatedTests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
