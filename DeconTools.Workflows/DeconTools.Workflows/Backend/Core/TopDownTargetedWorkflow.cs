@@ -11,6 +11,7 @@ using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Utilities;
+using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -108,7 +109,7 @@ namespace DeconTools.Workflows.Backend.Core
 		{
 			Check.Require(Run != null, "Run has not been defined.");
 			
-			Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+			Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
 
 			ResetStoredData();
 

@@ -61,7 +61,7 @@ namespace DeconTools.Workflows.Backend.Core
             _peakDetector = new DeconToolsPeakDetector(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
                 this._workflowParameters.PeakFitType, this._workflowParameters.IsDataThresholded);
 
-            _peakDetector.StorePeakData = true;
+            _peakDetector.PeaksAreStored = true;
 
 
         }

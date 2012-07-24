@@ -6,6 +6,7 @@ using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -79,10 +80,10 @@ namespace DeconTools.Workflows.Backend.Core
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
 
             MasterPeakListPeakDetector = new DeconToolsPeakDetector();
-            MasterPeakListPeakDetector.PeakBackgroundRatio = 4;
-            MasterPeakListPeakDetector.SigNoiseThreshold = 3;
+            MasterPeakListPeakDetector.PeakToBackgroundRatio = 4;
+            MasterPeakListPeakDetector.SignalToNoiseThreshold = 3;
             MasterPeakListPeakDetector.IsDataThresholded = false;
-            MasterPeakListPeakDetector.StorePeakData = true;
+            MasterPeakListPeakDetector.PeaksAreStored = true;
 
             
             msgen = MSGeneratorFactory.CreateMSGenerator(DeconTools.Backend.Globals.MSFileType.PNNL_UIMF);

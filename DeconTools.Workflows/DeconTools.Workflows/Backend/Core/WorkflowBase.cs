@@ -1,5 +1,6 @@
 ﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 
 namespace DeconTools.Workflows.Backend.Core
 {
