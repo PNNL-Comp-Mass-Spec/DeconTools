@@ -165,6 +165,7 @@
     <Compile Include="Core\Results\LcmsFeatureTargetedResult.cs" />
     <Compile Include="Core\Results\O16O18TargetedResultObject.cs" />
     <Compile Include="Core\Results\SipperLcmsTargetedResult.cs" />
+    <Compile Include="Core\Results\TopDownTargetedResult.cs" />
     <Compile Include="Core\ScanNETPair.cs" />
     <Compile Include="Core\TargetBase.cs" />
     <Compile Include="Data\AVLTree.cs" />
@@ -463,15 +464,6 @@
     <Folder Include="FileIO\TargetedResultFileIO\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="EDAL">
-      <Guid>{8E79B9A2-107E-4E91-A0FF-01F2591103F3}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="XRAWFILE2Lib">
       <Guid>{5FE970A2-29C3-11D3-811D-00104B304896}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -481,6 +473,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

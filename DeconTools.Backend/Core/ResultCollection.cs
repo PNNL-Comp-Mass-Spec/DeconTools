@@ -167,6 +167,9 @@ namespace DeconTools.Backend.Core
                 case Globals.ResultType.SIPPER_TARGETED_RESULT:
                     result = new SipperLcmsTargetedResult(massTag);
                     break;
+				case Globals.ResultType.TOPDOWN_TARGETED_RESULT:
+					result = new TopDownTargetedResult(massTag);
+            		break;
                 default:
                     result = new MassTagResult(massTag);
                     break;
