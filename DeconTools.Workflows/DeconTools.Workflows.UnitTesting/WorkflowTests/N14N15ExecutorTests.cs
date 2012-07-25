@@ -194,7 +194,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string[] args = {datasetList, parameterFile};
 
-            TargetedWorkflowManagerConsole.Program.Main(args);
+            //TargetedWorkflowManagerConsole.Program.Main(args);
 
         }
 
@@ -209,7 +209,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string[] args = { datasetList, parameterFile };
 
-            TargetedWorkflowManagerConsole.Program.Main(args);
+            //TargetedWorkflowManagerConsole.Program.Main(args);
 
         }
 
