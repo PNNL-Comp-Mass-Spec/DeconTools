@@ -115,6 +115,7 @@
     <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\TopDownTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Backend\Results\SipperLcmsFeatureTargetedResultDTO.cs" />
     <Compile Include="Backend\Results\TargetedResultDTO.cs" />
     <Compile Include="Backend\Results\TargetedResultRepository.cs" />
+    <Compile Include="Backend\Results\TopDownTargetedResultDTO.cs" />
     <Compile Include="Backend\Results\UnlabelledTargetedResultDTO.cs" />
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />

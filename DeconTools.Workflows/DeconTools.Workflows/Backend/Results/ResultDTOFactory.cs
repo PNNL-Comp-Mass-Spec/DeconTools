@@ -8,7 +8,7 @@ namespace DeconTools.Workflows.Backend.Results
     {
 
         public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
-        {
+		{
             writeStandardInfoToResult(resultLight, result);
 
         }
@@ -40,6 +40,12 @@ namespace DeconTools.Workflows.Backend.Results
                 writeStandardInfoToResult(tr, result);
                 addAdditionalInfo(tr, result as SipperLcmsTargetedResult);
             }
+			else if (result is TopDownTargetedResult)
+			{
+				tr = new TopDownTargetedResultDTO();
+				writeStandardInfoToResult(tr, result);
+				addAdditionalInfo(tr, result as TopDownTargetedResult);
+			}
             else
             {
                 throw new NotImplementedException();
@@ -78,6 +84,21 @@ namespace DeconTools.Workflows.Backend.Results
         {
             // no other info needed now
         }
+
+		private static void addAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
+		{
+			var r = (TopDownTargetedResultDTO)tr;
+
+			r.PrsmList = null;
+			r.ChargeList = null;
+			r.Quantitation = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+			
+			r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
+			//r.ProteinName = "";
+			//r.ProteinMass = 0.0;
+			r.PeptideSequence = result.Target.Code;
+			r.ChromPeakSelectedHeight = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+		}
 
         private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {

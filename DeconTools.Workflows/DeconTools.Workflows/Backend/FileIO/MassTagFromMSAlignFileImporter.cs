@@ -8,6 +8,13 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
+	public struct PrsmData
+	{
+		public string ProteinName;
+		public double ProteinMass;
+		public float EValue;
+	}
+
 	public class MassTagFromMSAlignFileImporter
 	{
 		private const string PRSM_ID_HEADER = "Prsm_ID";
@@ -38,7 +45,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 		public TargetCollection Import()
 		{
+			Dictionary<int, PrsmData> garbage;
+			return Import(out garbage);
+		}
+
+		public TargetCollection Import(out Dictionary<int, PrsmData> prsmData)
+		{
 			StreamReader reader;
+			prsmData = new Dictionary<int, PrsmData>();
 
 			try
 			{
@@ -81,6 +95,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 						throw new InvalidDataException("Data in row #" + lineCounter.ToString(CultureInfo.InvariantCulture) + "is invalid - \nThe number of columns does not match that of the header line");
 					}
 
+					// Get Prsm_ID
+					int prsmId;
+					if (!int.TryParse(processedData[columnMapping[PRSM_ID_HEADER]], out prsmId))
+					{
+						throw new InvalidDataException("Could not parse Prsm ID.");
+					}
+
 					// Get scan
 					int scanLcTarget;
 					if (!int.TryParse(processedData[columnMapping[SCAN_HEADER]], out scanLcTarget))
@@ -107,10 +128,31 @@ namespace DeconTools.Workflows.Backend.FileIO
 					
 					// Get monoisotopic mass
 					double monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+
+					// Get Protein_mass
+					double proteinMass;
+					if (!double.TryParse(processedData[columnMapping[PROTEIN_MASS_HEADER]], out proteinMass))
+					{
+						throw new InvalidDataException("Could not parse protein mass.");
+					}
+
+					// Get protein name
+					string proteinName = processedData[columnMapping[PROTEIN_NAME_HEADER]];
+
+					// Get score
+					float eValue;
+					if (!float.TryParse(processedData[columnMapping[E_VALUE_HEADER]], out eValue))
+					{
+						throw new InvalidDataException("Could not parse e-value.");
+					}
+
+					// Make Prsm
+					prsmData.Add(prsmId, new PrsmData { ProteinMass = proteinMass, ProteinName = proteinName, EValue = eValue });
 					
 					// Create target
 					var target = new LcmsFeatureTarget
 						{
+							FeatureToMassTagID = prsmId,
 							ID = -1,
 							ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum,
 							ScanLCTarget = scanLcTarget,
@@ -184,12 +226,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 				var newCharge = (short) (minChargeTarget.ChargeState - i);
 				targets.Add(new LcmsFeatureTarget(minChargeTarget)
 				{
+					FeatureToMassTagID = -1,
 					ChargeState = newCharge,
 					MZ = minChargeTarget.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
 				});
 				newCharge = (short)(maxChargeTarget.ChargeState + i);
 				targets.Add(new LcmsFeatureTarget(maxChargeTarget)
 				{
+					FeatureToMassTagID = -1,
 					ChargeState = newCharge,
 					MZ = maxChargeTarget.MonoIsotopicMass / newCharge + DeconTools.Backend.Globals.PROTON_MASS
 				});
@@ -205,10 +249,11 @@ namespace DeconTools.Workflows.Backend.FileIO
 				{
 					// Create and insert new target to fill gap
 					targets.Insert(i, new LcmsFeatureTarget(prevTarget)
-						{
-							ChargeState = expectedCharge,
-							MZ = prevTarget.MonoIsotopicMass / expectedCharge + DeconTools.Backend.Globals.PROTON_MASS
-						});
+					{
+						FeatureToMassTagID = -1,
+						ChargeState = expectedCharge,
+						MZ = prevTarget.MonoIsotopicMass / expectedCharge + DeconTools.Backend.Globals.PROTON_MASS
+					});
 				}
 			}
 

@@ -19,6 +19,8 @@ namespace DeconTools.Workflows.Backend.Core
 {
 	public class TopDownTargetedWorkflowExecutor : WorkflowBase
 	{
+		private Dictionary<int, PrsmData> _prsmData;
+
 		protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
 
@@ -412,8 +414,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 			ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
 
-			string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
+			string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_quant.txt";
 			backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
+
+			// Collapse + process results
+			ProcessResults(ResultRepository.Results);
 
 			TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
 			exporter.ExportResults(ResultRepository.Results);
@@ -425,6 +430,55 @@ namespace DeconTools.Workflows.Backend.Core
 		#endregion
 
 		#region Private Methods
+		private void ProcessResults(List<TargetedResultDTO> results)
+		{
+			for (int i = 0; i < results.Count; i++)
+			{
+				var result = (TopDownTargetedResultDTO) results[i];
+				result.PrsmList = new List<int> {result.MatchedMassTagID};
+				result.ChargeList = new List<int> {result.ChargeState};
+
+				bool havePrsmData = false;
+				if (_prsmData.ContainsKey(result.MatchedMassTagID))
+				{
+					havePrsmData = true;
+					result.ProteinName = _prsmData[result.MatchedMassTagID].ProteinName;
+					result.ProteinMass = _prsmData[result.MatchedMassTagID].ProteinMass;
+				}
+
+				// Find other results with same target code
+				for (int j = i + 1; j < results.Count; j++)
+				{
+					var otherResult = (TopDownTargetedResultDTO) results[j];
+
+					if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
+					{
+						if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
+						if (otherResult.ChromPeakSelectedHeight > 0)
+						{
+							result.ChargeList.Add(otherResult.ChargeState);
+							result.Quantitation += otherResult.ChromPeakSelectedHeight;
+						}
+
+						if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+						{
+							result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;
+							result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
+						}
+
+						// If this spectrum is better than the current one, update Prsm_ID
+						if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
+							_prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
+						{
+							result.MatchedMassTagID = otherResult.MatchedMassTagID;
+						}
+
+						results.RemoveAt(j--);
+					}
+				}
+			}
+		}
+
 		protected string getResultsFolder(string folder)
 		{
 			DirectoryInfo dirinfo = new DirectoryInfo(folder);
@@ -462,7 +516,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			var importer = new MassTagFromMSAlignFileImporter(massTagFileName);
-			return importer.Import();
+			return importer.Import(out _prsmData);
 		}
 
 		protected string getLogFileName(string folderPath)

@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
 			const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
 			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -47,34 +47,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
 			TargetedResultRepository repository = importer.Import();
 
-			Assert.AreEqual(15, repository.Results.Count);
-
-			// expected results as tuples in format: <target id, charge state, scan lc>
-			var expectedResults = new HashSet<Tuple<long, int, int>>
-			{
-				new Tuple<long, int, int>(1, 7, 1583),
-				new Tuple<long, int, int>(2, 8, 1583),
-				new Tuple<long, int, int>(3, 9, 1583),
-				new Tuple<long, int, int>(4, 22, 2643),
-				new Tuple<long, int, int>(5, 23, 2643),
-				new Tuple<long, int, int>(6, 24, 2652),
-				new Tuple<long, int, int>(7, 20, 1853),
-				new Tuple<long, int, int>(8, 21, 1853),
-				new Tuple<long, int, int>(9, 22, 1853),
-				new Tuple<long, int, int>(10, 13, 2303),
-				new Tuple<long, int, int>(11, 14, 2303),
-				new Tuple<long, int, int>(12, 15, 2312),
-				new Tuple<long, int, int>(13, 16, 2348),
-				new Tuple<long, int, int>(14, 17, 2339),
-				new Tuple<long, int, int>(15, 18, 2348)
-			};
-
-			foreach (TargetedResultDTO result in repository.Results)
-			{
-				expectedResults.Remove(new Tuple<long, int, int>(result.TargetID, result.ChargeState, result.ScanLC));
-			}
-
-			Assert.IsEmpty(expectedResults);
+			Assert.AreEqual(478, repository.Results.Count);
 		}
 
 		[Test]
@@ -88,13 +61,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
 			const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
 			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 			executor.Execute();
-
-			/* Output chrom data
+			
+			// Output chrom data
 			var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
 			Console.Write("***** chrom data *****\n");
 			foreach (var resultData in wf.TargetResults)
@@ -103,18 +76,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 				TargetedResultBase result = resultData.Value;
 				double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
 
-				if (chromPeakSelected == -1) continue;
-
-				Console.Write("TargetID=" + id + "\n");
-				Console.Write("ChromPeakSelected=" + chromPeakSelected + "\n");
+				Console.Write("TargetID=" + id + "; ChromPeakSelected=" + chromPeakSelected + "\n");
 				for (int i = 0; i < result.ChromValues.Xvalues.Length; i++)
 				{
-					Console.Write(result.ChromValues.Xvalues[i] + "\t" + result.ChromValues.Yvalues[i] + "\n");
+					//Console.Write(result.ChromValues.Xvalues[i] + "\t" + result.ChromValues.Yvalues[i] + "\n");
 				}
-				Console.Write("\n");
+				//Console.Write("\n");
 			}
 			Console.Write("**********************\n");
-			 */
 			
 			Assert.IsTrue(File.Exists(expectedResultsFilename));
 
@@ -131,7 +100,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 				new Tuple<long, int, int>(3, 21, 1853),
 				new Tuple<long, int, int>(4, 14, 2303),
 				new Tuple<long, int, int>(5, 17, 2339),
-				new Tuple<long, int, int>(6, 26, 4594),
+				new Tuple<long, int, int>(6, 26, 4630),
 				new Tuple<long, int, int>(7, 26, 3583),
 				new Tuple<long, int, int>(8, 7, 3709),
 				new Tuple<long, int, int>(9, 42, 3439),
