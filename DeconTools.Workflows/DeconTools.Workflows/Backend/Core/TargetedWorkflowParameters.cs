@@ -10,7 +10,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         protected TargetedWorkflowParameters()
         {
-            ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             ChromNETTolerance = 0.025;
             ChromPeakDetectorPeakBR = 1;
             ChromPeakDetectorSigNoise = 1;
@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.Backend.Core
         public double MSPeakDetectorPeakBR { get; set; }
         public double MSPeakDetectorSigNoise { get; set; }
         public double MSToleranceInPPM { get; set; }
-        public ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
+        public DeconTools.Backend.Globals.ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
         public bool ChromatogramCorrelationIsPerformed { get; set; }
         

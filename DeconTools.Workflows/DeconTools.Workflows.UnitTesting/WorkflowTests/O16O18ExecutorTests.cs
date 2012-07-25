@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string outputtedParameterFile =
                 @"\\protoapps\DataPkgs\Public\2012\573_O16O18_Data_analysis_of_ubiquintated_peptides\Parameters\ExecutorParameters1.xml";
 
-            executorParameters.SaveParametersToXML(outputtedParameterFile);
+            //executorParameters.SaveParametersToXML(outputtedParameterFile);
 
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);

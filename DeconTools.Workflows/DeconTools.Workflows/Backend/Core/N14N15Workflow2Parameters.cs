@@ -13,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public N14N15Workflow2Parameters()
         {
-            ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
 
             ChromNETToleranceN15 = 0.001; //very low since it is found in relation to the N14 chrom peak
             TargetedFeatureFinderIsotopicProfileTargetType = IsotopicProfileType.LABELLED;
@@ -64,7 +64,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            ChromGeneratorMode = StringToEnum<ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
+            ChromGeneratorMode = StringToEnum<DeconTools.Backend.Globals.ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
             ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
             ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
             ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);

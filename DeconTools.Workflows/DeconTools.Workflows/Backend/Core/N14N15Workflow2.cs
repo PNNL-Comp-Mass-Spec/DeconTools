@@ -192,7 +192,7 @@ namespace DeconTools.Workflows.Backend.Core
             chromGenN14 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             chromGenN14.TopNPeaksLowerCutOff = 0.333;
 
-            chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, IsotopicProfileType.LABELLED);
+            chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, IsotopicProfileType.LABELLED);
             chromGenN15.TopNPeaksLowerCutOff = 0.333;
 
             int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;

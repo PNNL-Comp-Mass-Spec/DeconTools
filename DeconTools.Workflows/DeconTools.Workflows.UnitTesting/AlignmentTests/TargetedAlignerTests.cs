@@ -1,4 +1,5 @@
 ﻿using System;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
@@ -39,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
             parameters.ChromToleranceInPPM = 25;
-            parameters.ChromGeneratorMode = ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             parameters.ChromPeakDetectorPeakBR = 2;
             parameters.ChromPeakDetectorSigNoise = 2;
             parameters.MSToleranceInPPM = 25;

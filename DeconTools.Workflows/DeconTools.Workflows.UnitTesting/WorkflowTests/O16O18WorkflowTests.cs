@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
@@ -79,7 +80,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
             parameters.ChromNETTolerance = 0.1;
             parameters.MSToleranceInPPM = 10;
-            parameters.ChromGeneratorMode = DeconTools.Backend.ProcessingTasks.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
+            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromPeakDetectorPeakBR = 1;
 
 
@@ -116,7 +117,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
             parameters.ChromNETTolerance = 0.1;
             parameters.MSToleranceInPPM = 10;
-            parameters.ChromGeneratorMode = DeconTools.Backend.ProcessingTasks.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
+            parameters.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromPeakDetectorPeakBR = 1;
 
 
@@ -136,7 +137,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //} 
            // TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
 
-            parameters.ChromGeneratorMode = DeconTools.Backend.ProcessingTasks.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 

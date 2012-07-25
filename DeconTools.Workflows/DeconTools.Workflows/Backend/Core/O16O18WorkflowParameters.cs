@@ -8,7 +8,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public O16O18WorkflowParameters()
         {
-            ChromGeneratorMode = ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
+            ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
 
             ResultType = DeconTools.Backend.Globals.ResultType.O16O18_TARGETED_RESULT;
 

@@ -37,7 +37,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromNETTolerance = 0.2;
             parameters.MSToleranceInPPM = 10;
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.MostIntense;
-            parameters.ChromGeneratorMode = ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
+            parameters.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromSmootherNumPointsInSmooth = 31;
 
             O16O18Workflow workflow = new O16O18Workflow(run, parameters);

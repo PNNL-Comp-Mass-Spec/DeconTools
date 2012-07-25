@@ -7,7 +7,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public TargetedAlignerWorkflowParameters()
         {
-            this.ChromGeneratorMode = DeconTools.Backend.ProcessingTasks.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            this.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             this.ChromNETTolerance = 0.2;    //wide NET tolerance
             this.ChromPeakDetectorPeakBR = 2;
             this.ChromPeakDetectorSigNoise = 2;
