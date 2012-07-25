@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using DeconTools.Workflows.Backend.Utilities;
 
 
@@ -25,7 +26,9 @@ namespace TargetedWorkflowManagerConsole
                 ReportSyntax();
             }
 
-            if (args.Length == 2)
+        	string targetFile = GetTargetFile(args);
+
+            if (args.Length == 2 || !String.IsNullOrEmpty(targetFile))
             {
                 string parameterFile = args[1];
                 string fileContainingDatasetNames = args[0];
@@ -70,8 +73,17 @@ namespace TargetedWorkflowManagerConsole
 
                         processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
 
-                        string argString = "\"" + currentDatasetPath + "\"" + " " + "\"" + parameterFile + "\"";
-                        processStartInfo.Arguments = argString;
+						var argString = new StringBuilder();
+                    	argString.Append("\"" + currentDatasetPath + "\"");
+                    	argString.Append(" ");
+						argString.Append("\"" + parameterFile + "\"");
+						if (!String.IsNullOrEmpty(targetFile))
+						{
+							argString.Append(" ");
+							argString.Append(targetFile);
+						}
+
+                        processStartInfo.Arguments = argString.ToString();
 
                         Console.WriteLine("Argument line= " + argString);
 
@@ -101,6 +113,11 @@ namespace TargetedWorkflowManagerConsole
             }
 
         }
+
+		private static string GetTargetFile(string[] args)
+		{
+			return (args.Length == 4 && args[2].Equals("-targets")) ? args[3] : String.Empty;
+		}
 
         private static void reportFileProblem(string p)
         {

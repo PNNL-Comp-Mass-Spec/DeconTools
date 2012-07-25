@@ -24,7 +24,7 @@ namespace TargetedWorkflowConsole
                 ReportSyntax();
             }
 
-            if (args.Length == 2)
+            if (args.Length == 2 || args.Length == 3)
             {
 
                 string datasetPath = args[0];
@@ -37,9 +37,12 @@ namespace TargetedWorkflowConsole
                 }
                 else
                 {
-                    var executorParameters=   WorkflowParameters.CreateParameters(args[1]);
+                    var executorParameters=   WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
+					
+					// 3 arguments, overriding targets path
+					if (args.Length == 3) executorParameters.TargetsFilePath = args[2];
 
-                    TargetedWorkflowExecutor executor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(executorParameters as WorkflowExecutorBaseParameters, datasetPath);
+                    TargetedWorkflowExecutor executor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(executorParameters, datasetPath);
                     
                     executor.Execute();
 
