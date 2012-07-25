@@ -142,7 +142,7 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     wf = new TargetedAlignerWorkflow(workflowParameters);
                     break;
-				case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
+				case Globals.TargetedWorkflowTypes.TopDownTargeted1:
 					wf = new TopDownTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
             		break;
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:

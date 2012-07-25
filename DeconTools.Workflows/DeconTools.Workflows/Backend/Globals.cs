@@ -26,6 +26,7 @@ namespace DeconTools.Workflows.Backend
             BasicTargetedWorkflowExecutor1,
             LcmsFeatureTargetedWorkflowExecutor1,
             SipperWorkflowExecutor1,
+			TopDownTargeted1,
 			TopDownTargetedWorkflowExecutor1
             
         }

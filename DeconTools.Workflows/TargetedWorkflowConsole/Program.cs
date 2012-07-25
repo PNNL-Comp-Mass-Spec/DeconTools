@@ -37,7 +37,7 @@ namespace TargetedWorkflowConsole
                 }
                 else
                 {
-                    var executorParameters=   WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
+                	var executorParameters = WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
 					
 					// 3 arguments, overriding targets path
 					if (args.Length == 3) executorParameters.TargetsFilePath = args[2];

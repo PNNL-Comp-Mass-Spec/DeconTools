@@ -4,14 +4,14 @@
 	{
 		public TopDownTargetedWorkflowParameters()
 		{
-			ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+			ResultType = DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
 		}
 
 		public override Globals.TargetedWorkflowTypes WorkflowType
 		{
 			get
 			{
-				return Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1;
+				return Globals.TargetedWorkflowTypes.TopDownTargeted1;
 			}
 		}
 	}

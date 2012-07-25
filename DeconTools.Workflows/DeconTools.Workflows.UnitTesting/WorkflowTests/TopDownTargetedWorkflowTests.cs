@@ -135,7 +135,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var workflow = new TopDownTargetedWorkflow(run, parameters);
 			workflow.Execute();
 
-			var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+			var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
 			if (result.FailedResult) Console.WriteLine(result.ErrorDescription);
 

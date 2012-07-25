@@ -17,53 +17,17 @@ using DeconTools.Workflows.Backend.Results;
 using DeconTools.Workflows.Backend.Utilities;
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class TopDownTargetedWorkflowExecutor : WorkflowBase
+	public class TopDownTargetedWorkflowExecutor : TargetedWorkflowExecutor
 	{
 		private Dictionary<int, PrsmData> _prsmData;
 
-		protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
-
-
-		protected string _loggingFileName;
-		protected string _resultsFolder;
-		protected TargetedResultRepository ResultRepository;
-
-
-		protected List<long> ReferenceMassTagIDList = new List<long>();
-
-		protected WorkflowParameters _workflowParameters;
-
-		protected BackgroundWorker _backgroundWorker;
 		private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
 		#region Constructors
 		public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+            : base(parameters, datasetPath, backgroundWorker)
 		{
-			this.DatasetPath = datasetPath;
-
-			_backgroundWorker = backgroundWorker;
-
-			this.WorkflowParameters = parameters;
-
-			ResultRepository = new TargetedResultRepository();
-			InitializeWorkflow();
 		}
-
-
-		public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
-		{
-			Run = run;
-
-			if (Run != null) DatasetPath = Run.DataSetPath;
-
-			_backgroundWorker = backgroundWorker;
-
-			this.WorkflowParameters = parameters;
-
-			ResultRepository = new TargetedResultRepository();
-			InitializeWorkflow();
-		}
-
 
 		public override void InitializeWorkflow()
 		{
@@ -130,12 +94,6 @@ namespace DeconTools.Workflows.Backend.Core
 
 		#region Properties
 
-		public string DatasetPath { get; set; }
-
-		public TargetCollection MassTagsForTargetedAlignment { get; set; }
-
-		public TargetCollection Targets { get; set; }
-
 		public override WorkflowParameters WorkflowParameters
 		{
 			get
@@ -147,19 +105,6 @@ namespace DeconTools.Workflows.Backend.Core
 				ExecutorParameters = value as WorkflowExecutorBaseParameters;
 			}
 		}
-
-		public WorkflowExecutorBaseParameters ExecutorParameters { get; set; }
-
-		public TargetedAlignerWorkflowParameters TargetedAlignmentWorkflowParameters { get; set; }
-
-		public TargetedAlignerWorkflow TargetedAlignmentWorkflow { get; set; }
-
-		public TargetedWorkflow TargetedWorkflow { get; set; }
-
-		/// <summary>
-		/// These are database targets that are used for lookup when working on peak-matched LcmsFeatures
-		/// </summary>
-		public TargetCollection MassTagsForReference { get; set; }
 
 
 		#endregion
@@ -226,23 +171,6 @@ namespace DeconTools.Workflows.Backend.Core
 
 		#region Public Methods
 
-		protected string TryFindTargetsForCurrentDataset()
-		{
-			string expectedTargetsFile = ExecutorParameters.TargetsBaseFolder + Path.DirectorySeparatorChar +
-										 RunUtilities.GetDatasetName(DatasetPath) + "_targets.txt";
-
-			if (File.Exists(expectedTargetsFile))
-			{
-				return expectedTargetsFile;
-			}
-			else
-			{
-				return String.Empty;
-			}
-
-		}
-
-
 		public override void Execute()
 		{
 			_loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
@@ -283,36 +211,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 		}
-
-
-		public List<TargetedResultDTO> GetResults()
-		{
-			return ResultRepository.Results;
-		}
-
-
-		private bool _runIsInitialized;
-		public bool RunIsInitialized
-		{
-			get
-			{
-				if (Run == null || Run.ResultCollection.MSPeakResultList.Count == 0)
-				{
-					return false;
-				}
-
-				if (DatasetPath != Run.DataSetPath)
-				{
-					return false;
-				}
-
-				return true;
-
-			}
-
-		}
-
-
+		
 		private void ProcessDataset()
 		{
 
@@ -479,35 +378,6 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
-		protected string getResultsFolder(string folder)
-		{
-			DirectoryInfo dirinfo = new DirectoryInfo(folder);
-
-			if (!dirinfo.Exists)
-			{
-				dirinfo.Create();
-			}
-
-			return dirinfo.FullName;
-
-		}
-
-		protected TargetCollection GetMassTagTargets(string massTagFileName)
-		{
-			return GetMassTagTargets(massTagFileName, new List<int>());
-		}
-
-		protected TargetCollection GetMassTagTargets(string massTagFileName, List<int> targetIDsToFilterOn)
-		{
-			if (String.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
-			{
-				return new TargetCollection();
-			}
-
-			MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
-			return importer.Import(targetIDsToFilterOn);
-		}
-
 		protected TargetCollection GetMSAlignTargets(string massTagFileName)
 		{
 			if (string.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
@@ -517,40 +387,6 @@ namespace DeconTools.Workflows.Backend.Core
 
 			var importer = new MassTagFromMSAlignFileImporter(massTagFileName);
 			return importer.Import(out _prsmData);
-		}
-
-		protected string getLogFileName(string folderPath)
-		{
-			string logfilename = "";
-
-			DirectoryInfo logfolderPath = new DirectoryInfo(folderPath);
-
-			if (!logfolderPath.Exists) logfolderPath.Create();
-
-			logfilename = logfolderPath.FullName + Path.DirectorySeparatorChar + "logfile_" + DateTime.Now.Year.ToString() + "_" +
-				DateTime.Now.Month.ToString().PadLeft(2, '0') + "_" + DateTime.Now.Day.ToString().PadLeft(2, '0') + "_" + DateTime.Now.Ticks.ToString() + ".txt";
-
-			return logfilename;
-
-		}
-
-		protected List<string> getListDatasetPaths(string fileContainingDatasetPaths)
-		{
-			List<string> datasetPathList = new List<string>();
-
-			using (StreamReader sr = new StreamReader(fileContainingDatasetPaths))
-			{
-
-				while (sr.Peek() != -1)
-				{
-					datasetPathList.Add(sr.ReadLine());
-
-				}
-				sr.Close();
-			}
-
-			return datasetPathList;
-
 		}
 
 		private void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
@@ -567,59 +403,6 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			writeToLogFile(DateTime.Now + "\t" + generalProgressString);
-		}
-
-
-		protected void ReportProcessingProgress(string reportString, int progressCounter)
-		{
-
-			if (_backgroundWorker == null)
-			{
-				if (progressCounter % 100 == 0)
-				{
-					Console.WriteLine(DateTime.Now + "\t" + reportString);
-				}
-
-			}
-			else
-			{
-				int progressPercent = (int)(progressCounter * 100 / (double)Targets.TargetList.Count);
-
-				_progressInfo.ProgressInfoString = reportString;
-				_progressInfo.IsGeneralProgress = false;
-				_progressInfo.Result = TargetedWorkflow.Result;
-				_progressInfo.Time = DateTime.Now;
-
-				_progressInfo.ChromatogramXYData = new XYData();
-				_progressInfo.ChromatogramXYData.Xvalues = TargetedWorkflow.ChromatogramXYData.Xvalues;
-				_progressInfo.ChromatogramXYData.Yvalues = TargetedWorkflow.ChromatogramXYData.Yvalues;
-
-				_progressInfo.MassSpectrumXYData = new XYData();
-				_progressInfo.MassSpectrumXYData.Xvalues = TargetedWorkflow.MassSpectrumXYData.Xvalues;
-				_progressInfo.MassSpectrumXYData.Yvalues = TargetedWorkflow.MassSpectrumXYData.Yvalues;
-
-				_backgroundWorker.ReportProgress(progressPercent, _progressInfo);
-			}
-
-			if (progressCounter % 100 == 0)
-			{
-				writeToLogFile(DateTime.Now + "\t" + reportString);
-			}
-
-		}
-
-		protected void writeToLogFile(string stringToWrite)
-		{
-
-			using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
-						  System.IO.FileAccess.Write, System.IO.FileShare.Read)))
-			{
-				sw.AutoFlush = true;
-				sw.WriteLine(stringToWrite);
-				sw.Flush();
-
-			}
-
 		}
 
 		private void HandleAlignmentInfoFiles()
@@ -669,119 +452,6 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 
-		}
-
-		public void InitializeRun(string dataset)
-		{
-			string runFilename;
-
-
-			if (this.ExecutorParameters.CopyRawFileLocal)
-			{
-				ReportGeneralProgress("Started copying raw data to local folder: " + this.ExecutorParameters.FolderPathForCopiedRawDataset);
-
-				FileAttributes attr = File.GetAttributes(dataset);
-
-				DirectoryInfo sourceDirInfo;
-				DirectoryInfo targetDirInfo;
-				if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-				{
-					sourceDirInfo = new DirectoryInfo(dataset);
-					runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + sourceDirInfo.Name;
-					targetDirInfo = new DirectoryInfo(runFilename);
-					FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
-					ReportGeneralProgress("Copying complete.");
-				}
-				else
-				{
-					FileInfo fileinfo = new FileInfo(dataset);
-					sourceDirInfo = fileinfo.Directory;
-					runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + Path.GetFileName(dataset);
-
-					targetDirInfo = new DirectoryInfo(this.ExecutorParameters.FolderPathForCopiedRawDataset);
-
-					if (!File.Exists(runFilename))
-					{
-						FileUtilities.CopyAll(fileinfo, targetDirInfo);
-						ReportGeneralProgress("Copying complete.");
-					}
-					else
-					{
-						ReportGeneralProgress("Datafile already exists on local drive. Using existing datafile.");
-
-					}
-
-				}
-
-			}
-			else
-			{
-				runFilename = dataset;
-			}
-
-			//create Run
-			RunFactory rf = new RunFactory();
-			Run = rf.CreateRun(runFilename);
-
-			bool runInstantiationFailed = (Run == null);
-			if (runInstantiationFailed)
-			{
-				ReportGeneralProgress("Run initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
-				return;
-			}
-			else
-			{
-				ReportGeneralProgress("Run initialized successfully.");
-			}
-
-
-			//Retrieve alignment data if it exists
-			CopyAlignmentInfoIfExists();
-
-
-
-
-			//check and load chrom source data (_peaks.txt)
-			bool peaksFileExists = checkForPeaksFile();
-			if (!peaksFileExists)
-			{
-				ReportGeneralProgress("Creating extracted ion chromatogram (XIC) source data... takes 1-5 minutes.. only needs to be done once.");
-
-				CreatePeaksForChromSourceData();
-				ReportGeneralProgress("Done creating XIC source data.");
-			}
-
-
-
-			ReportGeneralProgress("Peak loading started...");
-
-
-			string baseFileName;
-			baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
-
-			string possibleFilename1 = baseFileName + "_peaks.txt";
-
-			if (File.Exists(possibleFilename1))
-			{
-				//create background worker so that updates don't go out to console.
-				//BackgroundWorker bw = new BackgroundWorker();
-				//bw.WorkerSupportsCancellation = true;
-				//bw.WorkerReportsProgress = true;
-
-				//TODO: keep an eye on errors connected to background worker here.
-				PeakImporterFromText peakImporter = new PeakImporterFromText(possibleFilename1, _backgroundWorker);
-
-				peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
-			}
-			else
-			{
-				ReportGeneralProgress(DateTime.Now + "\tCRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
-				return;
-			}
-
-
-			ReportGeneralProgress(DateTime.Now + "\tPeak Loading complete.");
-			return;
 		}
 
 		private void CopyAlignmentInfoIfExists()
@@ -876,7 +546,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
-		protected TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
+		protected new TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
 		{
 			if (string.IsNullOrEmpty(targetFilePath)) return null;
 
@@ -884,26 +554,14 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				case Globals.TargetType.LcmsFeature:
 					return GetMSAlignTargets(targetFilePath);
-					break;
 				case Globals.TargetType.DatabaseTarget:
 					return GetMassTagTargets(targetFilePath);
-					break;
 				default:
 					throw new ArgumentOutOfRangeException("targetType");
 			}
 		}
 
-
-		protected TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
-		{
-			LcmsTargetFromFeaturesFileImporter importer =
-			   new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
-
-			var lcmsTargetCollection = importer.Import();
-			return lcmsTargetCollection;
-		}
-
-		protected virtual TargetedResultToTextExporter createExporter(string outputFileName)
+		protected override TargetedResultToTextExporter createExporter(string outputFileName)
 		{
 			throw new NotImplementedException();
 		}
@@ -912,96 +570,6 @@ namespace DeconTools.Workflows.Backend.Core
 		private void cleanUpLocalFiles()
 		{
 			throw new NotImplementedException();
-		}
-
-		protected void finalizeRun()
-		{
-
-			string runfileName = Run.Filename;
-			string datasetName = Run.DatasetName;
-
-			Run.Close();
-			Run = null;
-			GC.Collect();
-
-
-
-			if (this.ExecutorParameters.CopyRawFileLocal && this.ExecutorParameters.DeleteLocalDatasetAfterProcessing)
-			{
-				FileAttributes attr = File.GetAttributes(runfileName);
-
-				if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-				{
-					DirectoryInfo dirInfo = new DirectoryInfo(runfileName);
-					dirInfo.Delete(true);
-				}
-				else
-				{
-					FileInfo fileinfo = new FileInfo(runfileName);
-
-					string fileSuffix = fileinfo.Extension;
-
-					DirectoryInfo dirInfo = fileinfo.Directory;
-
-					string expectedPeaksFile = dirInfo.FullName + Path.DirectorySeparatorChar + datasetName + "_peaks.txt";
-
-					if (File.Exists(expectedPeaksFile))
-					{
-						//File.Delete(expectedPeaksFile);
-					}
-
-					FileInfo[] allRawDataFiles = dirInfo.GetFiles("*" + fileSuffix);
-					if (allRawDataFiles.Count() > 35)
-					{
-						foreach (var file in allRawDataFiles)
-						{
-							try
-							{
-								file.Delete();
-							}
-							catch (Exception)
-							{
-
-							}
-
-
-						}
-					}
-
-
-				}
-
-
-
-
-			}
-
-
-
-
-		}
-
-		protected void backupResultsFileIfNecessary(string datasetName, string outputFileName)
-		{
-			FileInfo outputFileInfo = new FileInfo(outputFileName);
-
-
-			if (outputFileInfo.Exists)
-			{
-				string backupFolder = this._resultsFolder + Path.DirectorySeparatorChar + "Backup";
-				DirectoryInfo backupFolderInfo = new DirectoryInfo(backupFolder);
-
-				if (!backupFolderInfo.Exists)
-				{
-					backupFolderInfo.Create();
-				}
-
-				string backupFilename = backupFolderInfo.FullName + Path.DirectorySeparatorChar + datasetName + "_results.txt";
-				outputFileInfo.CopyTo(backupFilename, true);
-
-				outputFileInfo.Delete();
-
-			}
 		}
 		#endregion
 

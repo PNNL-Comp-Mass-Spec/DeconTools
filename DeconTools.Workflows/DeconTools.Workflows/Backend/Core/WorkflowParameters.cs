@@ -85,8 +85,11 @@ namespace DeconTools.Workflows.Backend.Core
                     case Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1:
                         workflowParameters = new SipperWorkflowExecutorParameters();
                         break;
+					case Globals.TargetedWorkflowTypes.TopDownTargeted1:
+						workflowParameters = new TopDownTargetedWorkflowParameters();
+                		break;
 					case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
-                		workflowParameters = new TopDownTargetedWorkflowParameters();
+                		workflowParameters = new TopDownTargetedWorkflowExecutorParameters();
                 		break;
 
                     default:
