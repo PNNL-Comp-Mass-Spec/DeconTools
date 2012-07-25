@@ -126,5 +126,27 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(802.40072m, (decimal)Math.Round(monomass, 5));    //note that Peptide Util reports 802.40071, as does MacCoss's lab: http://proteome.gs.washington.edu/cgi-bin/aa_calc.pl
         }
 
+
+        [Test]
+        public void AddAcetylationTest1()
+        {
+            string testPeptide = "SAMPLER";
+            PeptideUtils peptideUtils = new PeptideUtils();
+            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+
+            string acetylationFormula = "C2H2O";
+
+           string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, acetylationFormula);
+
+            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+
+           Console.WriteLine(formula + "\t" + massUnmodified);
+           Console.WriteLine(empiricalFormula + "\t" + massModified);
+
+            Console.WriteLine("diff= " + (massModified - massUnmodified));
+
+        }
+
     }
 }
