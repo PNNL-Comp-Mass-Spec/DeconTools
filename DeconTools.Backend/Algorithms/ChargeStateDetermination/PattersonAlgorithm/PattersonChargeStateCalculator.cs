@@ -202,13 +202,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //then extract Autocorrelation scores (ACss)
 
             //determine highest charge state peak (?)
-
-
-
-
-
-            return 0;
-
+            
         }
 
         #endregion

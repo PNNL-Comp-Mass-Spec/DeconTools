@@ -137,7 +137,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             var ratioData = normalizedIso.CloneIsotopicProfile();
             for (int i = 0; i < normalizedIso.Peaklist.Count; i++)
             {
-                double ratio = 0;
+                
                 if (i < theorUnlabelledIso.Peaklist.Count && theorUnlabelledIso.Peaklist[i].Height > MinimumRelativeIntensityForRatioCalc)
                 {
                     ratioData.Peaklist[i].Height = (normalizedIso.Peaklist[i].Height / theorUnlabelledIso.Peaklist[i].Height);

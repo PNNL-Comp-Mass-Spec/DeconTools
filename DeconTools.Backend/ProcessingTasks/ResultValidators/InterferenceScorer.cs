@@ -154,8 +154,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             MSPeak maxMsPeak=null;
             
-            double maxIntensity = double.MinValue;
-
             foreach (var msPeak in mspeakList)
             {
                 if (maxMsPeak==null)

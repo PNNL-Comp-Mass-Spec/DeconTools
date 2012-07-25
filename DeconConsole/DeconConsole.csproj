@@ -81,15 +81,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using PNNLOmics.Data.Constants;
@@ -142,7 +141,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
         private void Apodize(MercuryApodizationType apodizationType, int numPoints, double averageMass, int chargeState, ref double[] frequencyData)
         {
-            long i;
             double apodizationVal;
             double expDenominator;
 

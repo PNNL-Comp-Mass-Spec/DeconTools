@@ -21,8 +21,6 @@ namespace DeconTools.Backend.Workflows
     {
 
         List<IsosResult> _unsummedMSFeatures = new List<IsosResult>();
-        private int _peakCounter = 0;
-
         private MSGenerator _msGenerator;
         private DeconToolsPeakDetector _peakDetector;
         private HornDeconvolutor _deconvolutor;
@@ -468,24 +466,19 @@ namespace DeconTools.Backend.Workflows
 
         public void AdjustSaturatedIsotopicProfile(IsotopicProfile iso, IsotopicProfile theorIsotopicProfile, bool updatePeakMasses = true, bool updatePeakIntensities = true)
         {
-            const double minRelIntensityForExtrapolation = 1.0;
-            int indexOfObsMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
-
+            
             //get index of suitable peak on which to base the intensity adjustment
             int indexOfPeakUsedInExtrapolation = 0;
-            var mostAbundantPeak = iso.Peaklist[indexOfObsMostAbundantPeak];
-
-
-
+            
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
                 var currentPeak = iso.Peaklist[i];
 
-                double idealRatioMin = 0.2;
-                double idealRatioMax = 0.8;
+                //double idealRatioMin = 0.2;
+                //double idealRatioMax = 0.8;
 
-                double peakRatio = currentPeak.Height / mostAbundantPeak.Height;
+                //double peakRatio = currentPeak.Height / mostAbundantPeak.Height;
 
                 if (currentPeak.Height < OldDecon2LsParameters.HornTransformParameters.SaturationThreshold)
                 {

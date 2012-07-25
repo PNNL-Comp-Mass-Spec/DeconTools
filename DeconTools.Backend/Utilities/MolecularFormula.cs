@@ -384,5 +384,9 @@ namespace DeconTools.Backend.Utilities
 			return true;
 		}
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 	}
 }

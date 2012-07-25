@@ -27,8 +27,8 @@ namespace DeconTools.Backend.Workflows
         internal string PeakListOutputFileName;
         internal string IsosOutputFileName;
         internal string ScansOutputFileName;
-        internal string LogFileName;
-        internal string ParameterFileName;
+        //internal string LogFileName;
+        //internal string ParameterFileName;
 
         protected BackgroundWorker BackgroundWorker;
 

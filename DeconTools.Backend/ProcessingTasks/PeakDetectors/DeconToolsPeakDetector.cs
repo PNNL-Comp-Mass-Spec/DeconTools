@@ -35,6 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks
             : base()
         {
             this.DeconEngineParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+            convertDeconEngineParameters(this.DeconEngineParameters);
 
         }
 

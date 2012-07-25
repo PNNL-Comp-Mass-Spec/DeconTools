@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Parameters;
 using EDAL;
 
 namespace DeconTools.Backend.Runs
@@ -10,9 +9,6 @@ namespace DeconTools.Backend.Runs
     {
         
         private EDAL.IMSAnalysis _msAnalysis;
-
-        private double[] _scanTimes;
-        private byte[] _msLevels;
         private MSSpectrumCollection _spectrumCollection;
 
         public BrukerTOF()

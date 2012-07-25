@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Runs
         /// <summary>
         /// The frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
         /// </summary>
-        private DataReader.FrameType _frameTypeForMS1;
+       // private DataReader.FrameType _frameTypeForMS1;
         private GlobalParameters _globalParameters;
 
 
@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Runs
             FrameSetCollection = new FrameSetCollection();
             RawData = null;
             _framePressuresUnsmoothed = new Dictionary<int, double>();
-            _frameTypeForMS1 = DataReader.FrameType.MS1;   //default is MS1
+            //_frameTypeForMS1 = DataReader.FrameType.MS1;   //default is MS1
 
         }
 

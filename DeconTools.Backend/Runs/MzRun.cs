@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Runs
 
         private double[] _pwizScanTimes;
 
-        private double[] _pwizScans;
+        //private double[] _pwizScans;
 
         private byte[] _pwizScanLevels;
 

@@ -107,7 +107,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             for (int index = startIndex; index <= stopIndex; index++)
             {
-                double fwhm = -1;
+               // double fwhm = -1;
                 double currentIntensity = yvalues[index];
                 double lastIntensity = yvalues[index - 1];
                 double nextIntensity = yvalues[index + 1];
@@ -286,19 +286,19 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             {
                 case Globals.PeakFitType.Undefined:
                     throw new NotImplementedException();
-                    break;
+                    
                 case Globals.PeakFitType.APEX:
                     throw new NotImplementedException();
-                    break;
+                    
                 case Globals.PeakFitType.LORENTZIAN:
                     throw new NotImplementedException();
 
-                    break;
+                    
                 case Globals.PeakFitType.QUADRATIC:
 
                     return CalculateQuadraticFittedValue(xvalues, yvalues, index);
 
-                    break;
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }
