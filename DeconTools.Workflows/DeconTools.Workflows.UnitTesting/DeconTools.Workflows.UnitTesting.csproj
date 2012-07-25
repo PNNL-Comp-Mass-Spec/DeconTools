@@ -60,20 +60,20 @@
       <HintPath>..\Library\DeconTools.UnitTesting2.dll</HintPath>
     </Reference>
     <Reference Include="GWSGraphLibrary">
-      <HintPath>..\..\GWSGraphLibrary\GWSGraphLibrary\bin\Debug\GWSGraphLibrary.dll</HintPath>
+      <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="MultiAlignEngine">
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Library\nunit.framework.dll</HintPath>
+      <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Scinet">
-      <HintPath>..\..\GWSGraphLibrary\GWSGraphLibrary\bin\Debug\Scinet.dll</HintPath>
+      <HintPath>..\Library\Scinet.dll</HintPath>
     </Reference>
     <Reference Include="Scinet.ChartControl">
-      <HintPath>..\..\GWSGraphLibrary\GWSGraphLibrary\bin\Debug\Scinet.ChartControl.dll</HintPath>
+      <HintPath>..\Library\Scinet.ChartControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,7 +84,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
-      <HintPath>..\..\GWSGraphLibrary\GWSGraphLibrary\bin\Debug\ZedGraph.dll</HintPath>
+      <HintPath>..\Library\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
