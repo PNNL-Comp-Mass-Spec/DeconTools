@@ -51,10 +51,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append(topDownResult.MostAbundantChargeState);
 			sb.Append(Delimiter);
 			sb.Append(topDownResult.ScanLC);
-			sb.Append(Delimiter);
-			sb.Append(topDownResult.FailureType);
-			sb.Append(Delimiter);
-			sb.Append(topDownResult.ErrorDescription);
 			
 			return sb.ToString();
 		}
@@ -83,10 +79,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append("Most_abundant_charge");
 			sb.Append(Delimiter);
 			sb.Append("Most_abundant_charge_apex_scan");
-			sb.Append(Delimiter);
-			sb.Append("Failure_type");
-			sb.Append(Delimiter);
-			sb.Append("Error_description");
 
 			return sb.ToString();
 

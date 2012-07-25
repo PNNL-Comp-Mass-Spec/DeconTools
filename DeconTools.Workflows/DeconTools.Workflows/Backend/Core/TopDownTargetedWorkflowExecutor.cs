@@ -334,8 +334,11 @@ namespace DeconTools.Workflows.Backend.Core
 			for (int i = 0; i < results.Count; i++)
 			{
 				var result = (TopDownTargetedResultDTO) results[i];
-				result.PrsmList = new List<int> {result.MatchedMassTagID};
-				result.ChargeStateList = new List<int> {result.ChargeState};
+				result.PrsmList = new List<int>();
+				if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
+
+				result.ChargeStateList = new List<int>();
+				if (result.ChromPeakSelectedHeight > 0) result.ChargeStateList.Add(result.ChargeState);
 
 				bool havePrsmData = false;
 				if (_prsmData.ContainsKey(result.MatchedMassTagID))
@@ -376,7 +379,12 @@ namespace DeconTools.Workflows.Backend.Core
 							result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
 						}
 
-						// If this spectrum is better than the current one, update Prsm_ID
+						// Update Prsm_ID if it doesn't exist
+						if (result.MatchedMassTagID < 0 && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+						{
+							result.MatchedMassTagID = otherResult.MatchedMassTagID;
+						}
+						// Or if this spectrum is better than the current one, update Prsm_ID
 						if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
 							_prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
 						{
