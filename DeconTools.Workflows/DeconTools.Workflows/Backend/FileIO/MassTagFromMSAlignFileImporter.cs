@@ -17,6 +17,11 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 	public class MassTagFromMSAlignFileImporter
 	{
+		/********** Magic number, how much to extend charge range by **********/
+		/* For example, if this value is 3, charge range [5,8] becomes [2,11] */
+		private const int EXTEND_CHARGE_RANGE = 3;
+		/**********************************************************************/
+
 		private const string PRSM_ID_HEADER = "Prsm_ID";
 		private const string SPECTRUM_ID_HEADER = "Spectrum_ID";
 		private const string PROTEIN_SEQ_ID_HEADER = "Protein_Sequence_ID";
@@ -193,7 +198,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 			int idCounter = 0;
 			foreach (var group in proteinSpeciesGroups)
 			{
-				IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(group.Value, 0);
+				IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(group.Value, EXTEND_CHARGE_RANGE);
 				
 				// Add all targets in group and IDs to list
 				foreach (LcmsFeatureTarget target in targetGroup)
