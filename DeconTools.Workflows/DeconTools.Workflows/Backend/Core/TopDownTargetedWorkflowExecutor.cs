@@ -335,7 +335,7 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				var result = (TopDownTargetedResultDTO) results[i];
 				result.PrsmList = new List<int> {result.MatchedMassTagID};
-				result.ChargeList = new List<int> {result.ChargeState};
+				result.ChargeStateList = new List<int> {result.ChargeState};
 
 				bool havePrsmData = false;
 				if (_prsmData.ContainsKey(result.MatchedMassTagID))
@@ -352,13 +352,24 @@ namespace DeconTools.Workflows.Backend.Core
 
 					if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
 					{
+						// Add other Prsm
 						if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
+
+						// Add other charge state to list and chrom peak to quantitation
 						if (otherResult.ChromPeakSelectedHeight > 0)
 						{
-							result.ChargeList.Add(otherResult.ChargeState);
+							result.ChargeStateList.Add(otherResult.ChargeState);
 							result.Quantitation += otherResult.ChromPeakSelectedHeight;
 						}
 
+						// Update most abundant charge state & scan apex
+						if (otherResult.ChromPeakSelectedHeight > result.ChromPeakSelectedHeight)
+						{
+							result.MostAbundantChargeState = otherResult.ChargeState;
+							result.ScanLC = otherResult.ScanLC;
+						}
+
+						// Add name and mass if we don't have already
 						if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
 						{
 							result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;

@@ -90,13 +90,14 @@ namespace DeconTools.Workflows.Backend.Results
 			var r = (TopDownTargetedResultDTO)tr;
 
 			r.PrsmList = null;
-			r.ChargeList = null;
+			r.ChargeStateList = null;
 			r.Quantitation = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
 			
 			r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
 			//r.ProteinName = "";
 			//r.ProteinMass = 0.0;
 			r.PeptideSequence = result.Target.Code;
+			r.MostAbundantChargeState = r.ChargeState;
 			r.ChromPeakSelectedHeight = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
 		}
 

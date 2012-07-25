@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 				prsmList.Append(prsm);
 			}
 			var chargeList = new StringBuilder();
-			foreach (var charge in topDownResult.ChargeList)
+			foreach (var charge in topDownResult.ChargeStateList)
 			{
 				if (chargeList.Length > 0) chargeList.Append(", ");
 				chargeList.Append(charge);
@@ -47,6 +47,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append(topDownResult.EmpiricalFormula);
 			sb.Append(Delimiter);
 			sb.Append(topDownResult.Quantitation);
+			sb.Append(Delimiter);
+			sb.Append(topDownResult.MostAbundantChargeState);
 			sb.Append(Delimiter);
 			sb.Append(topDownResult.ScanLC);
 			sb.Append(Delimiter);
@@ -77,6 +79,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append("Empirical_formula");
 			sb.Append(Delimiter);
 			sb.Append("Quantitation");
+			sb.Append(Delimiter);
+			sb.Append("Most_abundant_charge");
 			sb.Append(Delimiter);
 			sb.Append("Most_abundant_charge_apex_scan");
 			sb.Append(Delimiter);
