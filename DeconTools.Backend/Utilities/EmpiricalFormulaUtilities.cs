@@ -59,6 +59,27 @@ namespace DeconTools.Backend.Utilities
 
         }
 
+		public static string SubtractFormula(string baseFormula, string formulaToBeSubtracted)
+		{
+			var baseElementTable = ParseEmpiricalFormulaString(baseFormula);
+			var subtractedTable = ParseEmpiricalFormulaString(formulaToBeSubtracted, true);
+
+			foreach (var item in subtractedTable)
+			{
+				if (baseElementTable.ContainsKey(item.Key))
+				{
+					baseElementTable[item.Key] = baseElementTable[item.Key] - item.Value;
+				}
+				else
+				{
+					baseElementTable.Add(item.Key, item.Value);
+				}
+
+			}
+
+			return GetEmpiricalFormulaFromElementTable(baseElementTable);
+		}
+
         public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
         {
 
