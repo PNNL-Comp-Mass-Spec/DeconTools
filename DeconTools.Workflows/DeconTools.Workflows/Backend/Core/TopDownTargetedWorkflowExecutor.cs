@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend;
@@ -295,7 +296,7 @@ namespace DeconTools.Workflows.Backend.Core
 #endif
 
 
-				string progressString = "Percent complete = " + ((double)mtCounter / totalTargets).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
+				string progressString = "Percent complete = " + Math.Round((double)mtCounter / totalTargets * 100, 0, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture) + "%\tTarget " + mtCounter + " of " + totalTargets;
 
 
 				if (_backgroundWorker != null)
