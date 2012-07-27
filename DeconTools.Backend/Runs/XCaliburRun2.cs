@@ -3,20 +3,24 @@ using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-
 using PNNLOmics.Data;
+
 
 
 namespace DeconTools.Backend.Runs
 {
     public class XCaliburRun2 : Run
     {
-        XRAWFILE2Lib.XRawfile xraw = new XRAWFILE2Lib.XRawfile();
-
         
+        private MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
+
+
         #region Constructors
         public XCaliburRun2()
         {
+            _msfileReader = new MSFileReaderLib.MSFileReader_XRawfile();
+
+
             this.IsDataThresholded = true;
             this.MSFileType = Globals.MSFileType.Finnigan;
             this.ContainsMSMSData = true;
@@ -34,9 +38,8 @@ namespace DeconTools.Backend.Runs
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(filename);
 
-            xraw.Open(this.Filename);
-
-            xraw.SetCurrentController(0, 1);
+            _msfileReader.Open(Filename);
+            _msfileReader.SetCurrentController(0, 1);
 
             this.MinScan = 1;
             this.MaxScan = this.GetNumMSScans();
@@ -59,14 +62,15 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             int numSpectra = 0;
-            xraw.GetNumSpectra(ref numSpectra);
+
+            _msfileReader.GetNumSpectra(ref numSpectra);
             return numSpectra;
         }
 
         public override double GetTime(int scanNum)
         {
             double RTForAGivenScan = 0;
-            xraw.RTFromScanNum(scanNum, ref RTForAGivenScan);
+            _msfileReader.RTFromScanNum(scanNum, ref RTForAGivenScan);
             return RTForAGivenScan;
         }
 
@@ -95,7 +99,7 @@ namespace DeconTools.Backend.Runs
             //ITMS + c NSI d Full ms2 408.25@cid35.00 [100.00-420.00]
 
             string filter = null;
-            xraw.GetFilterForScanNum(scanNum, ref filter);
+            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
 
             int msLevel = 1;
 
@@ -152,7 +156,7 @@ namespace DeconTools.Backend.Runs
             PrecursorInfo precursor = new PrecursorInfo();
 
             string filter = null;
-            xraw.GetFilterForScanNum(scanNum, ref filter);
+            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
 
             int msLevel = 1;
 
@@ -207,20 +211,20 @@ namespace DeconTools.Backend.Runs
             //step back till the scan number = 1;
             int stepBack = 0;
             int testScanLevel = 0;
-            while(scanNum - stepBack > 0)
-            if (scanNum - stepBack > 0)
-            {
-                testScanLevel = GetMSLevelFromRawData(scanNum - stepBack);
-                stepBack++;
-                if (testScanLevel == 1)//the first precursor scan prior
+            while (scanNum - stepBack > 0)
+                if (scanNum - stepBack > 0)
                 {
-                    break;
+                    testScanLevel = GetMSLevelFromRawData(scanNum - stepBack);
+                    stepBack++;
+                    if (testScanLevel == 1)//the first precursor scan prior
+                    {
+                        break;
+                    }
                 }
-            }
-            precursor.PrecursorScan = scanNum-(stepBack-1);
+            precursor.PrecursorScan = scanNum - (stepBack - 1);
 
             string scanInfo = null;
-            xraw.GetFilterForScanNum(scanNum, ref scanInfo);
+            _msfileReader.GetFilterForScanNum(scanNum, ref scanInfo);
 
             if (scanInfo != null)
             {
@@ -230,7 +234,7 @@ namespace DeconTools.Backend.Runs
             {
                 precursor.PrecursorMZ = -1;
             }
-                //TODO: we still need to get charge
+            //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
 
             return precursor;
@@ -283,7 +287,7 @@ namespace DeconTools.Backend.Runs
                 object peakFlags = null;
                 int arraySize = 0;
 
-                xraw.GetAverageMassList(ref scanNumFirst, ref scanNumLast, ref backgroundScan1First, ref backgroundScan1Last, ref backgroundScan2First, ref backgroundScan2Last,
+                _msfileReader.GetAverageMassList(ref scanNumFirst, ref scanNumLast, ref backgroundScan1First, ref backgroundScan1Last, ref backgroundScan2First, ref backgroundScan2Last,
              filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
 
                 vals = (double[,])massList;
@@ -302,7 +306,7 @@ namespace DeconTools.Backend.Runs
                 object peakFlags = null;
                 int arraySize = 0;
 
-                xraw.GetMassListFromScanNum(ref scanNum, filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
+                _msfileReader.GetMassListFromScanNum(ref scanNum, filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
 
                 vals = (double[,])massList;
             }
@@ -331,7 +335,7 @@ namespace DeconTools.Backend.Runs
         public override string GetScanInfo(int scanNum)
         {
             string filter = null;
-            xraw.GetFilterForScanNum(scanNum, ref filter);
+            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
             return filter;
         }
 
@@ -340,7 +344,7 @@ namespace DeconTools.Backend.Runs
             if (!ParentScanList.ContainsKey(scanLC))
             {
                 int testScan = scanLC;
-                while (testScan>=MinScan)
+                while (testScan >= MinScan)
                 {
                     int currentMSLevel = GetMSLevel(testScan);
 
@@ -372,7 +376,7 @@ namespace DeconTools.Backend.Runs
 
         public override void Close()
         {
-            xraw.Close();
+            _msfileReader.Close();
             base.Close();
         }
     }

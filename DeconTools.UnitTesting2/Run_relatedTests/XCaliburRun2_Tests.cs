@@ -27,6 +27,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
+        public void checkVersion_2pt2_xcalibur_dll_test1()
+        {
+            var run = new XCaliburRun2(@"\\proto-7\VOrbiETD01\2012_3\QC_Shew_12_02_Run-03_26Jul12_Roc_12-04-08\QC_Shew_12_02_Run-03_26Jul12_Roc_12-04-08.raw");
+
+            Assert.AreEqual(8904, run.GetNumMSScans());
+
+            Assert.IsNotNull(run);
+        }
+
+
+
+        [Test]
         public void ConstructorTest2()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
