@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 
@@ -21,6 +22,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 		/* For example, if this value is 3, charge range [5,8] becomes [2,11] */
 		private const int EXTEND_CHARGE_RANGE = 3;
 		/**********************************************************************/
+
+		private readonly Regex _modPyroglutamate = new Regex(@"^(?<prefix>[A-Z]?\.)\((?<modified>Q[A-Z]*)\)\[-17\.[0-9]*\](?<suffix>.*)");
+		private readonly Regex _modAcetylation = new Regex(@"^(?<prefix>[A-Z]?\.)\((?<modified>[A-Z]*)\)\[42\.[0-9]*\](?<suffix>.*)");
+		private readonly Regex _modPhosphorylation = new Regex(@"^(?<prefix>[A-Z]?\.[A-Z0-9\(\)\[\]\.]*)\((?<modified>[A-Z]*[ST][A-Z]*)\)\[(?:79|80)\.[0-9]*\](?<suffix>.*)");
+
+		private readonly PeptideUtils _peptideUtils = new PeptideUtils();
 
 		private const string PRSM_ID_HEADER = "Prsm_ID";
 		private const string SPECTRUM_ID_HEADER = "Spectrum_ID";
@@ -83,7 +90,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 				List<string> columnHeaders = sr.ReadLine().Split('\t').ToList();
 				Dictionary<string, int> columnMapping = GetColumnMapping(columnHeaders);
-				var peptideUtils = new PeptideUtils();
 				
 				int lineCounter = 0;   //used for tracking which line is being processed.
 
@@ -124,12 +130,18 @@ namespace DeconTools.Workflows.Backend.FileIO
 					// Get code
 					string code = processedData[columnMapping[PEPTIDE_HEADER]];
 
-					/***** skip modified species *****/
-					if (code.Contains("(")) continue;
-					/*********************************/
-
-					// Get empirical formula
-					string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
+					string empiricalFormula;
+					// Modified species, try to get empirical formula
+					if (code.Contains("("))
+					{
+						empiricalFormula = GetEmpiricalFormulaForSequenceWithMods(code);
+						// Unknown modification in sequence, skip
+						if (String.IsNullOrEmpty(empiricalFormula)) continue;
+					}
+					else
+					{
+						empiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
+					}
 					
 					// Get monoisotopic mass
 					double monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
@@ -264,6 +276,52 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			// Return
 			return targets;
+		}
+
+		public string GetEmpiricalFormulaForSequenceWithMods(string code)
+		{
+			// Check for pyroglutamate modification
+			bool containsPyroglutamateMod = false;
+			if (_modPyroglutamate.IsMatch(code))
+			{
+				containsPyroglutamateMod = true;
+				// Remove the modification from the string
+				GroupCollection pieces = _modPyroglutamate.Match(code).Groups;
+				code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
+			}
+
+			// Check for acetylation modification
+			bool containsAcetylationMod = false;
+			if (_modAcetylation.IsMatch(code))
+			{
+				containsAcetylationMod = true;
+				// Remove the modification from the string
+				GroupCollection pieces = _modAcetylation.Match(code).Groups;
+				code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
+			}
+
+			// Check for phosphorylation modification
+			// TODO: this function does not account for the fact that phosphorylation could occur multiple times
+			bool containsPhosphorylationMod = false;
+			if (_modPhosphorylation.IsMatch(code))
+			{
+				containsPhosphorylationMod = true;
+				// Remove the modification from the string
+				GroupCollection pieces = _modPhosphorylation.Match(code).Groups;
+				code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
+			}
+
+			// If the peptide sequence still has modifications, we can't get the empirical formula
+			if (code.Contains("(")) return String.Empty;
+
+			// Get the empirical formula as if the peptide sequence was unmodified
+			string empiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
+			// Apply modifications to empirical formula
+			if (containsPyroglutamateMod) empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(empiricalFormula, "H3N1");
+			if (containsAcetylationMod) empiricalFormula = EmpiricalFormulaUtilities.AddFormula(empiricalFormula, "C2H2O");
+			if (containsPhosphorylationMod) empiricalFormula = EmpiricalFormulaUtilities.AddFormula(empiricalFormula, "HPO3");
+
+			return empiricalFormula;
 		}
 
 		private Dictionary<string, int> GetColumnMapping(List<string> columnHeaders)
