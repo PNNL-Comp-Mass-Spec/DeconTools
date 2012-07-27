@@ -54,11 +54,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.WorkflowParameterFile = baseFolder + Path.DirectorySeparatorChar + "Parameters" + Path.DirectorySeparatorChar + "O16O18WorkflowParameters_2011_08_23_sum5.xml";
 
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
-            executorParameters.ResultsFolder = baseFolder + Path.DirectorySeparatorChar + "Results";
+            executorParameters.ResultsFolder = baseFolder + Path.DirectorySeparatorChar + "Results\\Testing";
             executorParameters.LoggingFolder = baseFolder + Path.DirectorySeparatorChar + "Logs";
 
-            string testDatasetPath = @"\\protoapps\UserData\Slysz\Data\O16O18\Ernesto\PSI_URW_1to1_01A_18Jun12_Falcon_12-03-37.RAW";
-
+            string testDatasetPath = @"\\protoapps\UserData\Slysz\Data\O16O18\Ernesto\PSI_LRW_18O_02A_18Jun12_Falcon_12-03-34.RAW";
+            testDatasetPath = @"D:\Data\O16O18\Ernesto\PSI_LRW_1to1_03A_6Jul12_Falcon_12-06-04.raw";
 
             string outputtedParameterFile =
                 @"\\protoapps\DataPkgs\Public\2012\573_O16O18_Data_analysis_of_ubiquintated_peptides\Parameters\ExecutorParameters1.xml";

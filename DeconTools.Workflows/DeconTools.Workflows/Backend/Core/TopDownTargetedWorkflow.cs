@@ -81,6 +81,8 @@ namespace DeconTools.Workflows.Backend.Core
 			_msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
 			var iterativeTffParameters = new IterativeTFFParameters {ToleranceInPPM = _workflowParameters.MSToleranceInPPM};
+		    iterativeTffParameters.MinimumRelIntensityForForPeakInclusion = 0.4;
+
 
 			_msfeatureFinder = new IterativeTFF(iterativeTffParameters);
 
