@@ -189,6 +189,16 @@ namespace DeconTools.Backend
         }
 
 
+        public enum ChromatogramGeneratorMode
+        {
+            MZ_BASED,
+            MONOISOTOPIC_PEAK,
+            MOST_ABUNDANT_PEAK,
+            TOP_N_PEAKS,
+            O16O18_THREE_MONOPEAKS
+        }
+
+
 
 
 

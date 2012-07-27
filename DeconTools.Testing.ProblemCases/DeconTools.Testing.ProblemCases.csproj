@@ -74,6 +74,7 @@
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
     <Compile Include="OMCS_0437_AgilentTOFFileReadingProblem.cs" />
     <Compile Include="OMCS_0471_readingRawFile.cs" />
+    <Compile Include="OMCS_477_OrbiReadingProblem.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="saturationPossibleIssue.cs" />

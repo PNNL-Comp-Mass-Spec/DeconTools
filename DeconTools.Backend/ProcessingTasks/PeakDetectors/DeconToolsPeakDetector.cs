@@ -226,6 +226,11 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
 
             resultList.Run.CurrentBackgroundIntensity = BackgroundIntensity;
+
+            if (PeaksAreStored)
+            {
+                resultList.FillMSPeakResults();
+            }
         }
 
         

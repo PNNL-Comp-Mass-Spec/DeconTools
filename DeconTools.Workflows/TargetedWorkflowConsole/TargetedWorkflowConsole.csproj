@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeconTools.Workflows, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\DeconTools.Workflows.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,16 +49,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
-      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
-      <Name>DeconTools.Workflows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj">
-      <Project>{E47D0F42-F72F-4030-95D4-B2D136583595}</Project>
-      <Name>TargetedWorkflowManagerConsole</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -71,6 +65,12 @@
     <Content Include="xerces-c_2_7D.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj">
+      <Project>{E47D0F42-F72F-4030-95D4-B2D136583595}</Project>
+      <Name>TargetedWorkflowManagerConsole</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

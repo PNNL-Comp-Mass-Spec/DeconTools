@@ -143,7 +143,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     msgen.Execute(resultList);
 
                     //detect peaks
-                    MSPeakDetector.Execute(resultList);
+                    //MSPeakDetector.MinX = currentResult.Target.MZ - 10;
+                    //MSPeakDetector.MaxX = currentResult.Target.MZ + 20;
+                    //MSPeakDetector.Execute(resultList);
 
                     //find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);

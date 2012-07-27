@@ -9,17 +9,6 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-
-
-    public enum ChromatogramGeneratorMode
-    {
-        MZ_BASED,
-        MONOISOTOPIC_PEAK,
-        MOST_ABUNDANT_PEAK,
-        TOP_N_PEAKS,
-        O16O18_THREE_MONOPEAKS
-    }
-
     public enum IsotopicProfileType
     {
         UNLABELLED,
@@ -41,18 +30,18 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         public PeakChromatogramGenerator(double ppmTol)
-            : this(ppmTol, ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
+            : this(ppmTol, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
         {
 
         }
 
-        public PeakChromatogramGenerator(double ppmTolerance, ChromatogramGeneratorMode chromMode)
+        public PeakChromatogramGenerator(double ppmTolerance, Globals.ChromatogramGeneratorMode chromMode)
             : this(ppmTolerance, chromMode, IsotopicProfileType.UNLABELLED)
         {
 
         }
 
-        public PeakChromatogramGenerator(double ppmTolerance, ChromatogramGeneratorMode chromMode, IsotopicProfileType isotopicProfileTarget)
+        public PeakChromatogramGenerator(double ppmTolerance, Globals.ChromatogramGeneratorMode chromMode, IsotopicProfileType isotopicProfileTarget)
         {
             this.PPMTolerance = ppmTolerance;
             this.ChromatogramGeneratorMode = chromMode;
@@ -69,7 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks
         #region Properties
         public IsotopicProfileType IsotopicProfileTarget { get; set; }
 
-        public ChromatogramGeneratorMode ChromatogramGeneratorMode { get; set; }
+        public Globals.ChromatogramGeneratorMode ChromatogramGeneratorMode { get; set; }
 
         public double PPMTolerance { get; set; }
 
@@ -182,7 +171,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             XYData chromValues;
 
-            if (ChromatogramGeneratorMode==ChromatogramGeneratorMode.MZ_BASED)
+            if (ChromatogramGeneratorMode==Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
                 double targetMZ = resultList.Run.CurrentMassTag.MZ;
 
@@ -196,7 +185,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
                 
             }
-            else if (ChromatogramGeneratorMode == ChromatogramGeneratorMode.TOP_N_PEAKS)
+            else if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.TOP_N_PEAKS)
             {
                 List<double> targetMZList = getTargetMZListForTopNPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
 
@@ -215,7 +204,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
 
             }
-            else if (ChromatogramGeneratorMode== ProcessingTasks.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
+            else if (ChromatogramGeneratorMode== Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
             {
                 List<double> targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
 
@@ -379,10 +368,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        private double getTargetMZBasedOnChromGeneratorMode(TargetBase target, ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
+        private double getTargetMZBasedOnChromGeneratorMode(TargetBase target, Globals.ChromatogramGeneratorMode chromatogramGeneratorMode, IsotopicProfileType isotopicProfileTarget)
         {
 
-            if (chromatogramGeneratorMode==ChromatogramGeneratorMode.MZ_BASED)
+            if (chromatogramGeneratorMode==Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
                 return target.MZ;
             }
@@ -411,13 +400,13 @@ namespace DeconTools.Backend.ProcessingTasks
             switch (chromatogramGeneratorMode)
             {
 
-                case ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
+                case Globals.ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
                     msPeak = iso.getMonoPeak();
                     break;
-                case ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
+                case Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
                     msPeak = iso.getMostIntensePeak();
                     break;
-                case ChromatogramGeneratorMode.TOP_N_PEAKS:
+                case Globals.ChromatogramGeneratorMode.TOP_N_PEAKS:
                     throw new NotSupportedException();
                 default:
                     msPeak = iso.getMostIntensePeak();

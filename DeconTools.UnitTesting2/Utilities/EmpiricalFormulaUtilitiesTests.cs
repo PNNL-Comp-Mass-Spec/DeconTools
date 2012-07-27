@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
@@ -18,13 +15,13 @@ namespace DeconTools.UnitTesting2.Utilities
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula, true);
 
 
-            Assert.AreEqual(-3,formulaDictionary["H"]);
+            Assert.AreEqual(-3, formulaDictionary["H"]);
             Assert.AreEqual(-1, formulaDictionary["N"]);
 
 
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
 
-            
+
 
         }
 
@@ -79,17 +76,17 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             string testPeptide = "SAMPLER";
 
-            PeptideUtils peptideUtils=new PeptideUtils();
+            PeptideUtils peptideUtils = new PeptideUtils();
             string baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
             string mod = "H3 C2 N O";
             var modFormula = EmpiricalFormulaUtilities.AddFormula(baseFormula, mod);
 
-            Console.WriteLine("Unmodified peptide= "+ baseFormula);
+            Console.WriteLine("Unmodified peptide= " + baseFormula);
             Console.WriteLine("Modified peptide= " + modFormula);
 
-            Assert.AreEqual("C35H61N11O12S",modFormula);
-           
+            Assert.AreEqual("C35H61N11O12S", modFormula);
+
         }
 
         [Test]
@@ -118,10 +115,10 @@ namespace DeconTools.UnitTesting2.Utilities
             PeptideUtils peptideUtils = new PeptideUtils();
             string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-            double monomass= EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            double monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
 
             Assert.IsTrue(monomass > 0);
-            Console.WriteLine("SAMPLER monoisotopic mass= \t"+ monomass);
+            Console.WriteLine("SAMPLER monoisotopic mass= \t" + monomass);
 
             Assert.AreEqual(802.40072m, (decimal)Math.Round(monomass, 5));    //note that Peptide Util reports 802.40071, as does MacCoss's lab: http://proteome.gs.washington.edu/cgi-bin/aa_calc.pl
         }
@@ -136,14 +133,14 @@ namespace DeconTools.UnitTesting2.Utilities
 
             string acetylationFormula = "C2H2O";
 
-           string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, acetylationFormula);
+            string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, acetylationFormula);
 
             double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
             double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 			double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
-           Console.WriteLine(formula + "\t" + massUnmodified);
-           Console.WriteLine(empiricalFormula + "\t" + massModified);
+            Console.WriteLine(formula + "\t" + massUnmodified);
+            Console.WriteLine(empiricalFormula + "\t" + massModified);
 
             Console.WriteLine("diff= " + diff);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
@@ -37,8 +38,17 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             this.IsotopicProfileType = parameters.IsotopicProfileType;
 
 
+
+
             this.MSPeakDetector = new DeconToolsPeakDetector(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
                  _peakDetectorPeakFitType, _peakDetectorIsDataThresholded);
+
+            //this.MSPeakDetector = new DeconToolsPeakDetectorV2();
+            //this.MSPeakDetector.PeakToBackgroundRatio = PeakDetectorPeakBR;
+            //this.MSPeakDetector.SignalToNoiseThreshold = _peakDetectorSigNoiseRatioThreshold;
+            //this.MSPeakDetector.IsDataThresholded = _peakDetectorIsDataThresholded;
+            //this.MSPeakDetector.PeakFitType = _peakDetectorPeakFitType;
+
         }
 
 
@@ -128,6 +138,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile iso = null;
 
+            this.MSPeakDetector.MinX = theorIso.MonoPeakMZ - 10;
+            this.MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
 
 
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 

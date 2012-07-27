@@ -3,7 +3,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+
 using PNNLOmics.Data;
+
 
 namespace DeconTools.Backend.Runs
 {
@@ -11,6 +13,7 @@ namespace DeconTools.Backend.Runs
     {
         XRAWFILE2Lib.XRawfile xraw = new XRAWFILE2Lib.XRawfile();
 
+        
         #region Constructors
         public XCaliburRun2()
         {

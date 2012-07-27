@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
@@ -103,7 +104,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
-            PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(10, ChromatogramGeneratorMode.TOP_N_PEAKS);
+            PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(10, Globals.ChromatogramGeneratorMode.TOP_N_PEAKS);
             peakChromGen.TopNPeaksLowerCutOff = 0.4;
             peakChromGen.Execute(run.ResultCollection);
 
