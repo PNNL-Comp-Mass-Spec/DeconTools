@@ -62,7 +62,7 @@ namespace DeconTools.Backend.Data
             int totPeaks = 0;
             int totIsotopicProfiles = 0;
             float tic = 0;
-            Peak basepeak = new MSPeak();
+            Peak basepeak = new Peak();
 
             bool currentScanListIsLastOne = (scanSet == run.ScanSetCollection.ScanSetList[run.ScanSetCollection.ScanSetList.Count - 1]);
 

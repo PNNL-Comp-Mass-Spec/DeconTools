@@ -201,9 +201,21 @@ namespace DeconTools.Backend.Workflows
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(OldDecon2LsParameters);
             
+            //TODO: new Peak detector will read this parameter from parameter file. 
             if (PeakDetector is DeconToolsPeakDetector)
             {
-                ((DeconToolsPeakDetector) PeakDetector).IsDataThresholded = true;
+                var fileType = Run.MSFileType;
+
+                switch (fileType)
+                {
+                    case Globals.MSFileType.Finnigan:
+                        ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = true;
+                        break;
+                   
+                    default:
+                        ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = false;
+                        break;
+                }
             }
             
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(OldDecon2LsParameters);
@@ -374,7 +386,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private void GatherPeakStatistics()
+        protected void GatherPeakStatistics()
         {
             Check.Require(Run.CurrentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
 

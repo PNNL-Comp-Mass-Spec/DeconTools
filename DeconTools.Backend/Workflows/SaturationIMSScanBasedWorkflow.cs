@@ -176,6 +176,8 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(PeakDetector);
 
+                    GatherPeakStatistics();
+
                     ExecuteTask(Deconvolutor);
 
 
