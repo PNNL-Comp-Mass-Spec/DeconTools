@@ -396,8 +396,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 #endif
 
-
-                string progressString = "Percent complete = " + ((double)mtCounter/totalTargets).ToString("0.0") +  "\tTarget " + mtCounter + " of " + totalTargets;
+                string progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") +  "\tTarget " + mtCounter + " of " + totalTargets;
 
 
                 if (_backgroundWorker != null)
@@ -713,12 +712,12 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                ReportGeneralProgress(DateTime.Now + "\tCRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
+                ReportGeneralProgress("CRITICAL FAILURE. Chrom source data (_peaks.txt) file not loaded.");
                 return;
             }
 
 
-            ReportGeneralProgress(DateTime.Now + "\tPeak Loading complete.");
+            ReportGeneralProgress("Peak Loading complete.");
             return;
         }
 
