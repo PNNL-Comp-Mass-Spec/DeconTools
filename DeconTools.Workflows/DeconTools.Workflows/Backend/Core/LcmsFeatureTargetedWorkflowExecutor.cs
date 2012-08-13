@@ -28,10 +28,7 @@ namespace DeconTools.Workflows.Backend.Core
                 ExecutorParameters = value as WorkflowExecutorBaseParameters;
             }
         }
-
-
-        public TargetCollection MassTagsForReference { get; set; }
-
+        
         #endregion
 
         #region Public Methods

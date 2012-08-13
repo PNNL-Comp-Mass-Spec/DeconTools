@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
 
 namespace DeconTools.Workflows.Backend.Utilities
@@ -94,7 +91,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                     command.CommandTimeout = 60;
                     DbDataReader reader = command.ExecuteReader();
 
-                    int progressCounter = 0;
+                   
                     while (reader.Read())
                     {
 
@@ -136,7 +133,6 @@ namespace DeconTools.Workflows.Backend.Utilities
                     command.CommandTimeout = 60;
                     DbDataReader reader = command.ExecuteReader();
 
-                    int progressCounter = 0;
                     while (reader.Read())
                     {
 

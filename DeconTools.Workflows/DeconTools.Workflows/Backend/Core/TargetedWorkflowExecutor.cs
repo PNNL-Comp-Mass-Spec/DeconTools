@@ -292,7 +292,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        private bool _runIsInitialized;
+       
         public bool RunIsInitialized
         {
             get
@@ -822,10 +822,10 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 case Globals.TargetType.LcmsFeature:
                     return GetLcmsFeatureTargets(targetFilePath);
-                    break;
+                    
                 case Globals.TargetType.DatabaseTarget:
                     return GetMassTagTargets(targetFilePath);
-                    break;
+                    
                 default:
                     throw new ArgumentOutOfRangeException("targetType");
             }

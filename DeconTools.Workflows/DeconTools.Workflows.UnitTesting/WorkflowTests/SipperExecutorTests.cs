@@ -90,8 +90,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Results\Yellow_C13_070_23Mar10_Griffin_10-01-28_copy_results.txt";
 
-            
-
             //string exportedParameterFile =
             //    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
             //parameters.SaveParametersToXML(exportedParameterFile);
@@ -219,9 +217,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-            parameters.FolderPathForCopiedRawDataset = @"D:\Data\Temp";
-            parameters.ResultsFolder = @"D:\data\Temp\Results";
-
+           
             string testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
@@ -260,7 +256,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void ExecuteSipper_FindAssociatedTargetsFile()
         {
             string paramFile =
-                @"\\protoapps\UserData\Slysz\Data\Yellowstone\SIPPER\SipperExecutorParams1.xml";
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
 
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
@@ -270,14 +266,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             parameters.CopyRawFileLocal = false;
 
-            parameters.ReferenceDataForTargets = @"\\protoapps\DataPkgs\Public\2012\548_YSIP_C12_C13_data_analysis\massTag_reference_file.txt";
+            //parameters.ReferenceDataForTargets =
+            //    @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Targets\massTag_reference_file.txt";
 
             parameters.TargetsBaseFolder =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets";
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Targets";
 
 
             string testDataset =
-               @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+
+            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            parameters.SaveParametersToXML(outputParameterFile);
+
 
             SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
@@ -333,6 +336,33 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             
             string testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            executor.Execute();
+
+
+        }
+
+        [Test]
+        public void temp_ExecuteSipper()
+        {
+            string paramFile =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+
+            parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+
+
+            string testDataset =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+
+            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            parameters.SaveParametersToXML(outputParameterFile);
+
 
             SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();

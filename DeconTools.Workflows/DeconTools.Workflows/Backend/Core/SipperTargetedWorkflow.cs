@@ -138,9 +138,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExecuteTask(_quantifier);
 
-                UpdateRSquaredXYVals(_quantifier.ChromatogramRSquaredVals);
-
-                UpdateRatioVals();
+                GetDataFromQuantifier();
 
             }
             catch (Exception ex)
@@ -154,24 +152,21 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private void UpdateRatioVals()
-        {
 
+        private void GetDataFromQuantifier()
+        {
             RatioVals.Xvalues = _quantifier.RatioVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioVals.Xvalues;
             RatioVals.Yvalues = _quantifier.RatioVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioVals.Yvalues;
 
             RatioLogVals.Xvalues = _quantifier.RatioLogVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioLogVals.Xvalues;
             RatioLogVals.Yvalues = _quantifier.RatioLogVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioLogVals.Yvalues;
 
-        }
-
-        private void UpdateRSquaredXYVals(IEnumerable<double> chromatogramRSquaredVals)
-        {
             var peakNumList = new List<double>();
             var rsquaredvalList = new List<double>();
 
-            int counter = 1;
-            foreach (var val in chromatogramRSquaredVals)
+            
+            int counter = 0;
+            foreach (var val in _quantifier.ChromatogramRSquaredVals)
             {
                 peakNumList.Add(counter);
                 rsquaredvalList.Add(val);
@@ -183,7 +178,19 @@ namespace DeconTools.Workflows.Backend.Core
             ChromCorrelationRSquaredVals.Yvalues = rsquaredvalList.ToArray();
 
 
+            NormalizedIso = _quantifier.NormalizedIso;
+            NormalizedAdjustedIso = _quantifier.NormalizedAdjustedIso;
+
+            SubtractedIso = _quantifier.HighQualitySubtractedProfile;
+
         }
+
+        public IsotopicProfile SubtractedIso { get; set; }
+
+        public IsotopicProfile NormalizedIso { get; set; }
+
+        public IsotopicProfile NormalizedAdjustedIso { get; set; }
+
 
         #endregion
 

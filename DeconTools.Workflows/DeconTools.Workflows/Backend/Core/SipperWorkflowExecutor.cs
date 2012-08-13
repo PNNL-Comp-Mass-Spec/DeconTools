@@ -349,7 +349,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ReadResultsFromDB(TargetCollection targetCollection, DbDataReader reader)
         {
-            int progressCounter = 0;
+            
             while (reader.Read())
             {
                 LcmsFeatureTarget result = new LcmsFeatureTarget();

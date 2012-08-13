@@ -74,8 +74,9 @@ namespace DeconTools.Workflows.Backend.Results
             r.ChromCorrelationAverage = result.ChromCorrelationAverage;
             r.ChromCorrelationMedian = result.ChromCorrelationMedian;
             r.ChromCorrelationStdev = result.ChromCorrelationStdev;
-            r.AmountC13Labelling = result.AmountC13Labelling;
-            r.FractionLabelled = result.FractionLabelled;
+            r.NumCarbonsLabelled = result.NumCarbonsLabelled;
+            r.PercentPeptideLabelled = result.PercentPeptideLabelled;
+            r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
         }
 
@@ -180,6 +181,8 @@ namespace DeconTools.Workflows.Backend.Results
             tr.ChargeState = result.Target.ChargeState;
             tr.NumMSScansSummed = result.NumMSScansSummed;
             tr.EmpiricalFormula = result.Target.EmpiricalFormula;
+            tr.Code = result.Target.Code;
+
             tr.IndexOfMostAbundantPeak = result.IsotopicProfile == null ? (short)0 : (short)result.IsotopicProfile.GetIndexOfMostIntensePeak();
             tr.Intensity = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.IntensityAggregate;
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();

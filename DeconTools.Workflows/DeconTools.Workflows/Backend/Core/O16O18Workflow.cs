@@ -90,7 +90,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExecuteTask(o16o18FeatureFinder);
                 ExecuteTask(fitScoreCalc);
-                ExecuteTask(resultValidator);
+                //ExecuteTask(resultValidator);
 
                 ExecuteTask(quant);
 

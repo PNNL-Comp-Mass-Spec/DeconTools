@@ -1,14 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowParameters>
+  <AlignmentInfoFolder />
   <CopyRawFileLocal>false</CopyRawFileLocal>
+  <DbName />
+  <DbServer />
+  <DbTableName />
   <DeleteLocalDatasetAfterProcessing>false</DeleteLocalDatasetAfterProcessing>
   <FolderPathForCopiedRawDataset></FolderPathForCopiedRawDataset>
   <LoggingFolder>C:\Sipper\SipperDemo\SipperOutputs</LoggingFolder>
   <ReferenceDataForTargets>C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt</ReferenceDataForTargets>
   <ResultsFolder>C:\Sipper\SipperDemo\SipperOutputs</ResultsFolder>
+  <TargetedAlignmentIsPerformed>false</TargetedAlignmentIsPerformed>
+  <TargetedAlignmentWorkflowParameterFile></TargetedAlignmentWorkflowParameterFile>
   <TargetsBaseFolder>C:\Sipper\SipperDemo\SipperInputs\Targets</TargetsBaseFolder>
   <TargetsFilePath>C:\Sipper\SipperDemo\SipperInputs\Targets\sample_targets.txt</TargetsFilePath>
   <TargetsToFilterOn></TargetsToFilterOn>
+  <TargetsUsedForAlignmentFilePath></TargetsUsedForAlignmentFilePath>
+  <TargetType>DatabaseTarget</TargetType>
   <WorkflowParameterFile>C:\Sipper\SipperDemo\SipperInputs\SipperWorkflowParameters.xml</WorkflowParameterFile>
   <WorkflowType>SipperWorkflowExecutor1</WorkflowType>
 </WorkflowParameters>

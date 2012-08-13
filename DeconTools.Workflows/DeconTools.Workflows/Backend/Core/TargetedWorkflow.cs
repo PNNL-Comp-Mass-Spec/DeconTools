@@ -12,9 +12,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         #endregion
 
-        private TargetedWorkflowParameters _workflowParameters;
-
-
+       
         #region Properties
         public virtual IList<ChromPeak> ChromPeaksDetected { get; set; }
 

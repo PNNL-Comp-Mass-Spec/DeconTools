@@ -43,11 +43,14 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.ChromCorrelationStdev.ToString("0.00000"));
             sb.Append(Delimiter);
-            sb.Append(sipperResult.AmountC13Labelling.ToString("0.000"));
+            sb.Append(sipperResult.NumCarbonsLabelled.ToString("0.000"));
             sb.Append(Delimiter);
-            sb.Append(sipperResult.FractionLabelled.ToString("0.000"));
+            sb.Append(sipperResult.PercentCarbonsLabelled.ToString("0.00"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.PercentPeptideLabelled.ToString("0.00"));
             sb.Append(Delimiter);
             
+
             sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
             return sb.ToString();
 
@@ -83,9 +86,11 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("ChromCorrStdev");
             sb.Append(Delimiter);
-            sb.Append("AmountLabelling");
+            sb.Append("NumCarbonsLabelled");
             sb.Append(Delimiter);
-            sb.Append("FractionLabel");
+            sb.Append("PercentCarbonsLabelled");
+            sb.Append(Delimiter);
+            sb.Append("PercentPeptidesLabelled");
             sb.Append(Delimiter);
             sb.Append("ValidationCode");
             

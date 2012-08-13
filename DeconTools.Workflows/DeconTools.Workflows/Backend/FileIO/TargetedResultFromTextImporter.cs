@@ -13,6 +13,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] datasetHeaders = { "dataset" };
         protected string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis" };
         protected string[] empiricalFormulaHeaders = { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
+        protected string[] codeHeaders = { "code", "sequence" };
         protected string[] fitScoreHeaders = { "fitScore", "UMCAverageFit","iso1fit" };
         protected string[] intensityRepHeaders = { "intensityRep", "intensity", "abundance", "UMCAbundance","AbundanceIso1" };
         protected string[] intensityI0Headers = { "intensityI0", "i0", "UMCAbundance" };
@@ -134,6 +135,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ScanLCStart = ParseIntField(LookupData(rowData, scanStartHeaders));
 
             result.EmpiricalFormula = LookupData(rowData, empiricalFormulaHeaders);
+            result.Code = LookupData(rowData, codeHeaders);
+            
+
 
             string validationCode = LookupData(rowData, validationCodeHeaders);
             if (String.IsNullOrEmpty(validationCode))

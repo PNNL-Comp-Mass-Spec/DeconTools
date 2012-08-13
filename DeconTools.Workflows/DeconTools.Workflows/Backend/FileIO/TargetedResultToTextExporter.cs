@@ -86,6 +86,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.TargetID);
             sb.Append(Delimiter);
+            sb.Append(result.Code);
+            sb.Append(Delimiter);
             sb.Append(result.EmpiricalFormula);
             sb.Append(Delimiter);
             sb.Append(result.ChargeState);
@@ -137,6 +139,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("Dataset");
             sb.Append(Delimiter);
             sb.Append("TargetID");
+            sb.Append(Delimiter);
+            sb.Append("Code");
             sb.Append(Delimiter);
             sb.Append("EmpiricalFormula");
             sb.Append(Delimiter);

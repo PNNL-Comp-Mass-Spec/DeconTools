@@ -14,8 +14,10 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _chromCorrAverageHeaders = { "ChromCorrAverage" };
         private string[] _chromCorrMedianHeaders = { "ChromCorrMedian" };
         private string[] _chromCorrStdevHeaders = { "ChromCorrStdev" };
-        private string[] _amountC13LabellingHeaders = {"AmountLabelling"};
-        private string[] _fractionLabellingHeaders = {"FractionLabel"};
+        private string[] _numCarbonsLabelledHeaders = {"NumCarbonsLabelled" , "AmountLabelling"};
+        private string[] _percentPeptidesLabelledHeaders = { "PercentPeptidesLabelled", "FractionLabel" };
+        private string[] _percentCarbonsLabelledHeaders = { "PercentCarbonsLabelled"};
+        
         private string[] _numHQProfilePeaksHeaders = { "NumHQProfilePeaks" };
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
@@ -44,9 +46,12 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ChromCorrelationAverage = ParseDoubleField(LookupData(processedData, _chromCorrAverageHeaders));
             result.ChromCorrelationMedian = ParseDoubleField(LookupData(processedData, _chromCorrMedianHeaders));
             result.ChromCorrelationStdev = ParseDoubleField(LookupData(processedData, _chromCorrStdevHeaders));
-            result.FractionLabelled = ParseDoubleField(LookupData(processedData, _fractionLabellingHeaders));
-            result.AmountC13Labelling = ParseDoubleField(LookupData(processedData, _amountC13LabellingHeaders));
+            result.PercentPeptideLabelled = ParseDoubleField(LookupData(processedData, _percentPeptidesLabelledHeaders));
+            result.NumCarbonsLabelled = ParseDoubleField(LookupData(processedData, _numCarbonsLabelledHeaders));
+            result.PercentCarbonsLabelled = ParseDoubleField(LookupData(processedData, _percentCarbonsLabelledHeaders));
             result.NumHighQualityProfilePeaks = ParseIntField(LookupData(processedData, _numHQProfilePeaksHeaders));
+           
+            
             return result;
 
         }

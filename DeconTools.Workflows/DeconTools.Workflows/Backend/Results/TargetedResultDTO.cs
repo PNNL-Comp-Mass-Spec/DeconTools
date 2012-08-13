@@ -32,6 +32,12 @@ namespace DeconTools.Workflows.Backend.Results
 
         public string EmpiricalFormula { get; set; }
 
+        /// <summary>
+        /// Target's code. For peptides this is the amino acid sequence. 
+        /// </summary>
+        public string Code { get; set; }
+
+
         #endregion
 
         #region Public Methods
