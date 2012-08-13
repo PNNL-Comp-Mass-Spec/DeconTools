@@ -7,9 +7,9 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public ChromCorrelationDataItem()
         {
-            CorrelationIntercept = -9999;
-            CorrelationSlope = -9999;
-            CorrelationRSquaredVal = -1;
+            CorrelationIntercept = new double?();
+            CorrelationSlope = new double?();
+            CorrelationRSquaredVal = new double?();
         }
 
         public ChromCorrelationDataItem(double correlationSlope, double correlationIntercept, double correlationRSquaredVal)
@@ -24,17 +24,17 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-        public double CorrelationSlope { get; set; }
-        public double CorrelationIntercept { get; set; }
-        public double CorrelationRSquaredVal { get; set; }  
+        public double? CorrelationSlope { get; set; }
+        public double? CorrelationIntercept { get; set; }
+        public double? CorrelationRSquaredVal { get; set; }  
 
         #endregion
 
 
         public override string ToString()
         {
-            return CorrelationSlope.ToString("0.0000") + "; "+ CorrelationIntercept.ToString("0.0") + "; "+
-                   CorrelationRSquaredVal.ToString("0.000");
+            return CorrelationSlope.ToString() + "; "+ CorrelationIntercept.ToString() + "; "+
+                   CorrelationRSquaredVal.ToString();
         }
 
     }

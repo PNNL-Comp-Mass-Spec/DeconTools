@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace DeconTools.Testing.ProblemCases
 {
     [TestFixture]
-    public class OMCS_477_OrbiReadingProblem
+    public class OMCS_0477_OrbiReadingProblem
     {
 
         //testing for issue:   https://jira.pnnl.gov/jira/browse/OMCS-477

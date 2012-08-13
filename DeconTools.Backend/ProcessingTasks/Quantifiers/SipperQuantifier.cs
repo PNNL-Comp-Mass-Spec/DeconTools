@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Core.Results;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
-using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 
@@ -12,9 +12,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class SipperQuantifier : Task
     {
+        private const double LabeldistCalcIntensityThreshold = 0.1;
 
-        private DeconToolsSavitzkyGolaySmoother _smoother;
-        private PeakChromatogramGenerator _peakChromGen;
+        private LabelingDistributionCalculator _labelingDistributionCalculator;
         private double _chromScanWindowWidth;
 
         private ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
@@ -27,9 +27,27 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public double MinimumRelativeIntensityForChromCorr { get; set; }
         public List<double> ChromatogramRSquaredVals { get; set; }
 
+        public IsotopicProfile NormalizedIso { get; set; }
+
+
+
+
+        /// <summary>
+        /// Normalized Isotopic profile but intensities adjusted using ChromatogramCorrelationData
+        /// </summary>
+        public IsotopicProfile NormalizedAdjustedIso { get; set; }
+
         public XYData RatioVals { get; set; }
 
         public XYData RatioLogVals { get; set; }
+
+        protected double MinimumRSquaredValForQuant { get; set; }
+
+        protected double MinimumRelativeIntensityForRatioCalc { get; set; }
+
+
+
+       
 
         #endregion
 
@@ -45,16 +63,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
             _chromatogramCorrelatorTask.ChromToleranceInPPM = 25;
 
-            _smoother = new DeconToolsSavitzkyGolaySmoother(1, 1, 2);
-
-
-            _peakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM);
-
-
-
             ChromatogramRSquaredVals = new List<double>();
             RatioLogVals = new XYData();
             RatioVals = new XYData();
+
+            _labelingDistributionCalculator = new LabelingDistributionCalculator();
 
         }
 
@@ -105,82 +118,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             int indexMostAbundantTheorPeak = theorUnlabelledIso.GetIndexOfMostIntensePeak();
 
-            var normalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
-            IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(normalizedIso, indexMostAbundantTheorPeak);
+            NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
+            IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexMostAbundantTheorPeak);
 
 
 
-            //------------- subtract unlabelled profile from normalized profile ----------------------
-            var subtractedIsoData = normalizedIso.CloneIsotopicProfile();
-            for (int i = 0; i < subtractedIsoData.Peaklist.Count; i++)
-            {
-                float intensityTheorPeak = 0;
-                if (i < theorUnlabelledIso.Peaklist.Count)
-                {
-                    intensityTheorPeak = theorUnlabelledIso.Peaklist[i].Height;
-                }
-
-
-                float subtractedIntensity = subtractedIsoData.Peaklist[i].Height - intensityTheorPeak;
-                if (subtractedIntensity < 0)
-                {
-                    subtractedIntensity = 0;
-                }
-
-                subtractedIsoData.Peaklist[i].Height = subtractedIntensity;
-            }
-
-            result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
-
-
-            //----------------- create ratio data -------------------------------------------------------
-            var ratioData = normalizedIso.CloneIsotopicProfile();
-            for (int i = 0; i < normalizedIso.Peaklist.Count; i++)
-            {
-                
-                if (i < theorUnlabelledIso.Peaklist.Count && theorUnlabelledIso.Peaklist[i].Height > MinimumRelativeIntensityForRatioCalc)
-                {
-                    ratioData.Peaklist[i].Height = (normalizedIso.Peaklist[i].Height / theorUnlabelledIso.Peaklist[i].Height);
-                }
-                else
-                {
-                    ratioData.Peaklist[i].Height = 0;
-                }
-
-            }
-
-            //trim off zeros from ratio data
-            for (int i = ratioData.Peaklist.Count - 1; i >= 0; i--)
-            {
-                if (ratioData.Peaklist[i].Height == 0)
-                {
-                    ratioData.Peaklist.RemoveAt(i);
-                }
-                else
-                {
-                    break;
-                }
-
-            }
-
-            var xvals = ratioData.Peaklist.Select((p, i) => new { peak = p, index = i }).Select(n => (double)n.index).ToList();
-            var yvals = ratioData.Peaklist.Select(p => (double)p.Height).ToList();
-            result.AreaUnderRatioCurve = yvals.Sum();
-
-            RatioVals.Xvalues = xvals.ToArray();
-            RatioVals.Yvalues = yvals.ToArray();
-
-
-            GetLinearRegressionData(result, xvals, yvals);
-
-
-            //------------------------------------- Get chromatogramCorrelation data -------------------------------
-
-            //bool resultPassesMinimalCriteria = (result.Score < MaximumFitScoreForFurtherProcessing &&
-            //                                    result.AreaUnderRatioCurve > MinimumRatioAreaForFurtherProcessing);
-
-
-            if (result.Flags.Count>0)
+            if (result.Flags.Count > 0)
             {
 
                 string flagstring = "";
@@ -194,10 +137,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
 
 
-           bool resultPassesMinimalCriteria = (result.Score < MaximumFitScoreForFurtherProcessing && result.Flags.Count==0 );
+            bool resultPassesMinimalCriteria = (result.Score < MaximumFitScoreForFurtherProcessing && result.Flags.Count == 0);
 
 
-            
+
+            //------------------------------------- Get chromatogramCorrelation data -------------------------------
+
             if (resultPassesMinimalCriteria)
             {
 
@@ -206,10 +151,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
                 int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
 
-                ChromCorrelationData chromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultList.Run, normalizedIso, startScan,
+                ChromCorrelationData chromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultList.Run, NormalizedIso, startScan,
                                                                                 stopScan);
 
-                ChromatogramRSquaredVals.AddRange(chromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).ToList());
+                ChromatogramRSquaredVals.AddRange(chromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
 
                 //trim off zeros
                 for (int i = ChromatogramRSquaredVals.Count - 1; i >= 0; i--)
@@ -253,56 +198,149 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
 
 
+                NormalizedAdjustedIso = NormalizedIso.CloneIsotopicProfile();
+
+                UpdateIsoIntensitiesUsingChromCorrData(chromCorrelationData, NormalizedAdjustedIso);
+
+
+                //----------------- create ratio data -------------------------------------------------------
+                var ratioData = NormalizedAdjustedIso.CloneIsotopicProfile();
+                for (int i = 0; i < NormalizedIso.Peaklist.Count; i++)
+                {
+
+                    if (i < theorUnlabelledIso.Peaklist.Count && theorUnlabelledIso.Peaklist[i].Height > MinimumRelativeIntensityForRatioCalc)
+                    {
+                        ratioData.Peaklist[i].Height = (NormalizedIso.Peaklist[i].Height / theorUnlabelledIso.Peaklist[i].Height);
+                    }
+                    else
+                    {
+                        ratioData.Peaklist[i].Height = 0;
+                    }
+
+                }
+
+                //trim off zeros from ratio data
+                for (int i = ratioData.Peaklist.Count - 1; i >= 0; i--)
+                {
+                    if (ratioData.Peaklist[i].Height == 0)
+                    {
+                        ratioData.Peaklist.RemoveAt(i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+
+                var xvals = ratioData.Peaklist.Select((p, i) => new { peak = p, index = i }).Select(n => (double)n.index).ToList();
+                var yvals = ratioData.Peaklist.Select(p => (double)p.Height).ToList();
+                result.AreaUnderRatioCurve = yvals.Sum();
+
+                RatioVals.Xvalues = xvals.ToArray();
+                RatioVals.Yvalues = yvals.ToArray();
+
+
+                GetLinearRegressionData(result, xvals, yvals);
+
+
+
+                //------------- subtract unlabelled profile from normalized profile ----------------------
+                var subtractedIsoData = NormalizedAdjustedIso.CloneIsotopicProfile();
+                for (int i = 0; i < subtractedIsoData.Peaklist.Count; i++)
+                {
+                    float intensityTheorPeak = 0;
+                    if (i < theorUnlabelledIso.Peaklist.Count)
+                    {
+                        intensityTheorPeak = theorUnlabelledIso.Peaklist[i].Height;
+                    }
+
+
+                    float subtractedIntensity = subtractedIsoData.Peaklist[i].Height - intensityTheorPeak;
+                    if (subtractedIntensity < 0)
+                    {
+                        subtractedIntensity = 0;
+                    }
+
+                    subtractedIsoData.Peaklist[i].Height = subtractedIntensity;
+                }
+
+                result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
+
+
+
+                //-------------- calculate Label Distribution ------------------------------------------------
+                double[] numLabelVals;
+                double[] labelDistributionVals;
+
+                var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double) p.Height).ToList();
+                var normalizedCorrectedIntensityVals = NormalizedAdjustedIso.Peaklist.Select(p => (double)p.Height).ToList();
+
+                _labelingDistributionCalculator.CalculateLabelingDistribution(theorIntensityVals, normalizedCorrectedIntensityVals,
+                                                                              LabeldistCalcIntensityThreshold,
+                                                                              LabeldistCalcIntensityThreshold,
+                                                                              out numLabelVals,
+                                                                              out labelDistributionVals);
+
+
+
+                result.LabelDistributionVals = AdjustLabelDistributionVals(labelDistributionVals);
+
+
+                double distFractionUnlabelled, distFractionLabelled, distAverageLabelsIncorporated;
+                _labelingDistributionCalculator.OutputLabelingInfo(result.LabelDistributionVals, out distFractionUnlabelled,
+                                                                   out distFractionLabelled,
+                                                                   out distAverageLabelsIncorporated);
+
+
+
 
                 //-------------- make calculations using inputs from chrom correlation data -------------------
 
 
 
-                IsotopicProfile highQualitySubtractedProfile =   GetIsoDataPassingChromCorrelation(chromCorrelationData, subtractedIsoData);
+                HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(chromCorrelationData, subtractedIsoData);
 
-                IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(chromCorrelationData,ratioData);
+                IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(chromCorrelationData, ratioData);
 
-                if (highQualityRatioProfileData.Peaklist!=null && highQualityRatioProfileData.Peaklist.Count>0)
+                if (highQualityRatioProfileData.Peaklist != null && highQualityRatioProfileData.Peaklist.Count > 0)
                 {
-                    result.AreaUnderDifferenceCurve = highQualitySubtractedProfile.Peaklist.Select(p => p.Height).Sum();    
+                    result.AreaUnderDifferenceCurve = HighQualitySubtractedProfile.Peaklist.Select(p => p.Height).Sum();
                 }
                 else
                 {
                     result.AreaUnderDifferenceCurve = 0;
                 }
 
-                if (highQualitySubtractedProfile.Peaklist!=null && highQualitySubtractedProfile.Peaklist.Count>0)
+                if (HighQualitySubtractedProfile.Peaklist != null && HighQualitySubtractedProfile.Peaklist.Count > 0)
                 {
-                    result.AreaUnderRatioCurveRevised = highQualityRatioProfileData.Peaklist.Select(p => p.Height).Sum();    
+                    result.AreaUnderRatioCurveRevised = highQualityRatioProfileData.Peaklist.Select(p => p.Height).Sum();
                 }
                 else
                 {
                     result.AreaUnderRatioCurveRevised = 0;
                 }
+
+
+                double numCarbonsLabelled = GetNumCarbonsLabelledUsingAverageMassDifferences(theorUnlabelledIso,
+                                                                                             HighQualitySubtractedProfile);
+
+
+                result.NumCarbonsLabelled = distAverageLabelsIncorporated;
+
+                int numCarbons = result.Target.GetAtomCountForElement("C");
+
+                result.PercentCarbonsLabelled = (result.NumCarbonsLabelled / numCarbons) * 100;
+                result.PercentPeptideLabelled = distFractionLabelled*100;
                 
-                double averageMassTheor = GetAverageMassIso(theorUnlabelledIso);
-
-                double averageMassLabelled = GetAverageMassIso(highQualitySubtractedProfile);
-
-                if (double.IsNaN(averageMassLabelled))
-                {
-                    result.AmountC13Labelling = 0;
-                }
-                else
-                {
-                    result.AmountC13Labelling = averageMassLabelled - averageMassTheor;
-                }
-
-                
-
-                if (highQualitySubtractedProfile.Peaklist!=null && highQualitySubtractedProfile.Peaklist.Count>0)
-                {
-                    result.FractionLabelled = highQualitySubtractedProfile.Peaklist.Max(p => p.Height);    
-                }
-                else
-                {
-                    result.FractionLabelled = 0;
-                }
+                //if (HighQualitySubtractedProfile.Peaklist != null && HighQualitySubtractedProfile.Peaklist.Count > 0)
+                //{
+                //    result.PercentPeptideLabelled = HighQualitySubtractedProfile.Peaklist.Max(p => p.Height) * 100;
+                //}
+                //else
+                //{
+                //    result.PercentPeptideLabelled = 0;
+                //}
 
                 result.NumHighQualityProfilePeaks = highQualityRatioProfileData.Peaklist != null
                                                         ? highQualityRatioProfileData.Peaklist.Count
@@ -317,32 +355,110 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
             }
-      
+
 
 
 
 
         }
 
+        private double GetNumCarbonsLabelledUsingAverageMassDifferences(IsotopicProfile theorUnlabelledIso, IsotopicProfile highQualitySubtractedProfile)
+        {
+            double averageMassTheor = GetAverageMassIso(theorUnlabelledIso);
+
+            double averageMassLabelled = GetAverageMassIso(HighQualitySubtractedProfile);
+
+            if (double.IsNaN(averageMassLabelled))
+            {
+                return 0;
+            }
+            
+            return averageMassLabelled - averageMassTheor;
+        }
+
+
+        private List<double> AdjustLabelDistributionVals(double[] labelDistributionVals)
+        {
+            
+            //first, will set the negative values to zero. (cannot have a negative label distribution)
+            for (int i = 0; i < labelDistributionVals.Length; i++)
+            {
+                if (labelDistributionVals[i]<0)
+                {
+                    labelDistributionVals[i] = 0;
+                }
+                
+            }
+
+
+            //because values were zeroed, the distribution now adds up to greater than 1. We need to adjust things so the distribution adds up to 1
+
+            double sumVals = labelDistributionVals.Sum();
+
+            //re-normalize.  
+            for (int i = 0; i < labelDistributionVals.Length; i++)
+            {
+                labelDistributionVals[i] = labelDistributionVals[i]/sumVals;
+            }
+
+            return labelDistributionVals.ToList();
+
+
+        }
+
+        public IsotopicProfile HighQualitySubtractedProfile { get; set; }
+
+        private void UpdateIsoIntensitiesUsingChromCorrData(ChromCorrelationData chromCorrelationData, IsotopicProfile iso)
+        {
+            int totalChromCorrDataItems = chromCorrelationData.CorrelationDataItems.Count;
+
+            double heightMaxPeak = iso.getMostIntensePeak().Height;
+
+            for (int i = 0; i < iso.Peaklist.Count; i++)
+            {
+                if (i < totalChromCorrDataItems)
+                {
+
+                    var correctedRelIntensity = chromCorrelationData.CorrelationDataItems[i].CorrelationSlope;
+
+                    if (correctedRelIntensity.HasValue)
+                    {
+                        iso.Peaklist[i].Height = (float)(heightMaxPeak * correctedRelIntensity);
+                    }
+
+
+
+                }
+
+            }
+
+
+        }
+
+
         public float FractionLabelled { get; set; }
 
         public double AmountC13Labelling { get; set; }
-        
+
         private double GetAverageMassIso(IsotopicProfile isotopicProfile)
         {
-            if (isotopicProfile.Peaklist==null || isotopicProfile.Peaklist.Count==0)
+            if (isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
             {
                 return 0;
             }
 
             double sumIntensities = isotopicProfile.Peaklist.Sum(p => p.Height);
 
-            double averageMass = 0;
+            double averageMZ = 0;
 
             for (int i = 0; i < isotopicProfile.Peaklist.Count; i++)
             {
-                averageMass += isotopicProfile.Peaklist[i].XValue*isotopicProfile.Peaklist[i].Height/sumIntensities;
+                averageMZ += isotopicProfile.Peaklist[i].XValue * isotopicProfile.Peaklist[i].Height / sumIntensities;
             }
+
+
+            double averageMass = (averageMZ - Globals.PROTON_MASS) * isotopicProfile.ChargeState;
+
 
             return averageMass;
 
@@ -370,7 +486,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                         break;
                     }
                 }
-                
+
             }
 
             return returnedIso;
@@ -378,9 +494,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
-        protected double MinimumRSquaredValForQuant { get; set; }
-
-        protected double MinimumRelativeIntensityForRatioCalc { get; set; }
 
 
         private void GetLinearRegressionData(SipperLcmsTargetedResult result, List<double> xvals, List<double> yvals)

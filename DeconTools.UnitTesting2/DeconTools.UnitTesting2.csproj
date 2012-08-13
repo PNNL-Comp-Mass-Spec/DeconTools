@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -59,7 +59,7 @@
     <Reference Include="BaseTof">
       <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
     </Reference>
-  <Reference Include="DeconEngineV2, Version=1.0.4408.30259">
+    <Reference Include="DeconEngineV2, Version=1.0.4408.30259">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm_tests\LabelingDistributionCalculatorTests.cs" />
     <Compile Include="Algorithm_tests\PattersonAlgorithmTests.cs" />
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="Demos_basic_API_usage\DemoTests.cs" />

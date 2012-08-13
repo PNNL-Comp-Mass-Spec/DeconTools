@@ -80,9 +80,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\log4net.dll</HintPath>
+    <Reference Include="Mapack">
+      <HintPath>..\Library\Mapack.dll</HintPath>
     </Reference>
     <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -147,6 +146,7 @@
     <Compile Include="Algorithms\ChromatogramCorrelator.cs" />
     <Compile Include="Algorithms\ChromatogramGenerator.cs" />
     <Compile Include="Algorithms\IsotopicProfileMultiChromatogramExtractor.cs" />
+    <Compile Include="Algorithms\LabelingDistributionCalculator.cs" />
     <Compile Include="Algorithms\O16O18FeatureFinder.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
@@ -223,6 +223,7 @@
     <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetectorV2.cs" />
     <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\SipperQuantifier2.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\SipperQuantifier.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\O16O18IsosResultTextFileExporter.cs" />
     <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Xml.Linq;
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+//[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace DeconTools.Backend.Parameters
 {
     public abstract class ParametersBase
     {
 
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly log4net.ILog Log = log4net.LogManager.GetLogger (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #region Constructors
         #endregion
@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Parameters
 
             if (!Enum.IsDefined(enumType,parameter.Value))
             {
-                Log.Warn("Trying to load Enum using an illegal value. Enum= " + enumType + "; Value= " + parameter.Value);
+                //Log.Warn("Trying to load Enum using an illegal value. Enum= " + enumType + "; Value= " + parameter.Value);
                 return defaultVal;
             }
 

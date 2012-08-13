@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DeconTools.Utilities;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.Text.RegularExpressions;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
@@ -66,13 +65,6 @@ namespace DeconTools.Backend.Runs
                 string line = sr.ReadLine();
 
 
-
-
-
-                if (foundStartOfXYData)
-                {
-
-                }
 
                 if (!foundStartOfXYData)     //contains header, but haven't found start of numerical data
                 {

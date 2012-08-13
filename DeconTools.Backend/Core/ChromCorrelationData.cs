@@ -20,39 +20,45 @@ namespace DeconTools.Backend.Core
 
         public List<ChromCorrelationDataItem> CorrelationDataItems { get; set; }
 
-        public double RSquaredValsMedian
+        public double? RSquaredValsMedian
         {
             get
             {
-                if (CorrelationDataItems.Count>0)
+                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
+
+                if (validItems.Any())
                 {
-                    return MathUtils.GetMedian(CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).ToList());  
+                    return MathUtils.GetMedian(validItems.Select(r=>r.GetValueOrDefault()).ToList());  
                 }
-                return -1;
+                return null;
             }
         }
         
-        public double RSquaredValsAverage
+        public double? RSquaredValsAverage
         {
             get
             {
-                if (CorrelationDataItems.Count>0)
+                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
+
+                if (validItems.Any())
                 {
-                    return CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Average();  
+                    return validItems.Average(p=>p.Value);  
                 }
-                return -1;
+                return null;
             }
         }
 
-        public double RSquaredValsStDev
+        public double? RSquaredValsStDev
         {
             get
             {
-                if (CorrelationDataItems.Count>2)
+                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue).ToList();
+
+                if (validItems.Count > 2)
                 {
-                    return MathUtils.GetStDev(CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).ToList()); 
+                    return MathUtils.GetStDev(validItems.Select(p=>p.GetValueOrDefault()).ToList()); 
                 }
-                return -1;
+                return null;
             }
         }
 

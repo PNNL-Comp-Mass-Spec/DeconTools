@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Text;
 
 namespace DeconTools.Backend.Core.Results
@@ -39,11 +40,18 @@ namespace DeconTools.Backend.Core.Results
 
         public double ChromCorrelationStdev { get; set; }
 
-        public double FractionLabelled { get; set; }
+        public double PercentPeptideLabelled { get; set; }
 
-        public double AmountC13Labelling { get; set; }
+        public double NumCarbonsLabelled { get; set; }
 
         public int NumHighQualityProfilePeaks { get; set; }
+
+        /// <summary>
+        /// Number of labeled carbons as a percent of the total number of carbons
+        /// </summary>
+        public double PercentCarbonsLabelled { get; set; }
+
+        public List<double> LabelDistributionVals { get; set; }
 
         #endregion
 
@@ -83,12 +91,15 @@ namespace DeconTools.Backend.Core.Results
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMedian.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : AmountC13Labelling.ToString("0.000"));
+            sb.Append(IsotopicProfile == null ? "null" : NumCarbonsLabelled.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : FractionLabelled.ToString("0.000"));
+            sb.Append(IsotopicProfile == null ? "null" : PercentPeptideLabelled.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : NumHighQualityProfilePeaks.ToString("0"));
             sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : PercentCarbonsLabelled.ToString("0.000"));
+            sb.Append(delim);
+
 
             sb.Append(IsotopicProfile == null ? ErrorDescription : "");
 

@@ -758,7 +758,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4591.25959, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.4594.19882, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_1850D97CCC685BAAFF7594F7BBE5B6CC"
@@ -1024,7 +1024,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4591.26537, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconConsole, Version=1.0.4594.19896, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_5519218D3CE954007A4CBE6C65594BE0"
@@ -1653,7 +1653,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
         "ProductCode" = "8:{EA9D2819-8D38-4531-80C5-B6504BC01BD6}"
-        "PackageCode" = "8:{59ADB6C7-CCFC-48CA-89E3-00AB9311B72A}"
+        "PackageCode" = "8:{7791D993-F9B9-4ABB-B0C8-F46FF57574B9}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

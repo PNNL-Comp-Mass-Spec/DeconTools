@@ -74,7 +74,8 @@
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
     <Compile Include="OMCS_0437_AgilentTOFFileReadingProblem.cs" />
     <Compile Include="OMCS_0471_readingRawFile.cs" />
-    <Compile Include="OMCS_477_OrbiReadingProblem.cs" />
+    <Compile Include="OMCS_0477_OrbiReadingProblem.cs" />
+    <Compile Include="OMCS_0482_UIMFScanResultProblem.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="saturationPossibleIssue.cs" />
@@ -90,6 +91,14 @@
       <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
       <Name>DeconTools.UnitTesting2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="xerces-c_2_7.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="xerces-c_2_7D.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

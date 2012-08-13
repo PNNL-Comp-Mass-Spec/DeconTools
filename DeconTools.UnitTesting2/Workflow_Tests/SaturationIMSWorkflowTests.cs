@@ -39,13 +39,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
-            workflow.ExportData = false;
+            workflow.ExportData = true;
 
             var sw = new Stopwatch();
             sw.Start();
 
             workflow.Execute();
-            //return;
+            return;
 
             sw.Stop();
 

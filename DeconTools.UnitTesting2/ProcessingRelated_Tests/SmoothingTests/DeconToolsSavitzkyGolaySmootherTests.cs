@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingTasksTests
 {
@@ -37,5 +37,38 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         }
 
 
+
+        [Test]
+        public void SmoothWithOldDeconToolsSmootherTest1()
+        {
+            string sampleXYDataFile = FileRefs.TestFileBasePath + "\\" + "sampleXYData1.txt";
+
+            Assert.IsTrue(File.Exists(sampleXYDataFile));
+
+            DeconToolsSavitzkyGolaySmoother smoother = new DeconToolsSavitzkyGolaySmoother(3, 3, 1);
+
+            var xydata =TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
+            var smoothedXYData = smoother.Smooth(xydata);
+
+
+            Assert.AreEqual(xydata.Xvalues.Length , smoothedXYData.Xvalues.Length);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            {
+
+                sb.Append(xydata.Xvalues[i] + "\t" + xydata.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);
+
+            }
+
+            Console.WriteLine(sb.ToString());
+
+
+
+        }
+
+       
     }
 }
