@@ -74,7 +74,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append(Delimiter);
 			sb.Append("Empirical_formula");
 			sb.Append(Delimiter);
-			sb.Append("Quantitation");
+			sb.Append("Abundance");
 			sb.Append(Delimiter);
 			sb.Append("Most_abundant_charge");
 			sb.Append(Delimiter);
