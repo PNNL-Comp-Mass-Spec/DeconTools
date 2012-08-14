@@ -14,7 +14,7 @@ namespace TargetedWorkflowConsole
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
             SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);     // sets it so that keyboard use does not interrupt things.
@@ -23,6 +23,7 @@ namespace TargetedWorkflowConsole
             if (args == null || args.Length == 0)
             {
                 ReportSyntax();
+				return -1;
             }
 
             if (args.Length == 2 || args.Length == 3)
@@ -34,7 +35,7 @@ namespace TargetedWorkflowConsole
                 if (!parametersFileInfo.Exists)
                 {
 					ReportError("Parameter file does not exist: " + parametersFileInfo.FullName);
-                    return;
+                    return -5;
                 }
                 else
                 {
@@ -53,6 +54,7 @@ namespace TargetedWorkflowConsole
 					catch (Exception Ex)
 					{
 						ReportError(Ex);
+						return Ex.GetHashCode();
 					}
 
                 }
@@ -60,7 +62,10 @@ namespace TargetedWorkflowConsole
             else
             {
                 ReportSyntax();
+				return -1;
             }
+
+			return 0;
 
         }
 
