@@ -140,7 +140,9 @@
     <Folder Include="Backend\Parameters\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PNNLOmicsElementData.xml" />
+    <Content Include="PNNLOmicsElementData.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

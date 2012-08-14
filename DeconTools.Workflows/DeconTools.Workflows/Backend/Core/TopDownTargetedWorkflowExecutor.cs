@@ -60,8 +60,13 @@ namespace DeconTools.Workflows.Backend.Core
 
 			Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
 
-			Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
-						 "Target massTags is empty. Check the path to the massTag data file.");
+			Check.Ensure(Targets != null,
+						 "Target massTags list is null. Assure the targets file exists and has valid data: " + currentTargetsFilePath);
+
+			Check.Ensure(Targets.TargetList.Count > 0,
+						 "Target massTags is empty. Assure the targets file has valid data: " + currentTargetsFilePath);
+
+			
 
 			if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
 			{
@@ -400,13 +405,35 @@ namespace DeconTools.Workflows.Backend.Core
 
 		protected TargetCollection GetMSAlignTargets(string massTagFileName)
 		{
-			if (string.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
+			if (string.IsNullOrEmpty(massTagFileName))
 			{
+				ReportGeneralProgress("Warning: massTagFileName is empty; nothing to load");
+				return new TargetCollection();
+			}
+
+			if (!File.Exists(massTagFileName))
+			{
+				ReportGeneralProgress("Warning: mass tags file does not exist; nothing to load: " + massTagFileName);
 				return new TargetCollection();
 			}
 
 			var importer = new MassTagFromMSAlignFileImporter(massTagFileName);
-			return importer.Import(out _prsmData);
+
+			var targets = importer.Import(out _prsmData);
+
+			if (importer.DataRowsProcessed == 0)
+			{
+				ReportGeneralProgress("Error: mass tags file was empty; cannot continue; see " + massTagFileName);
+			}
+			else
+			{
+				if (importer.DataRowsProcessed == importer.DataRowsSkippedUnknownMods)
+				{
+					ReportGeneralProgress("Error: every peptide in the mass tags file had an unknown modification; cannot continue; see " + massTagFileName);
+				}
+			}
+
+			return targets;
 		}
 
 		private void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)

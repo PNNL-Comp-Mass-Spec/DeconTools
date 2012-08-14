@@ -49,6 +49,18 @@ namespace DeconTools.Workflows.Backend.FileIO
 		private const string E_VALUE_HEADER = "E-value";
 
 		private readonly string _filename;
+		private int _dataRowsProcessed = 0;
+		private int _dataRowsSkippedUnknownMods = 0;
+
+		public int DataRowsProcessed
+		{
+			get { return _dataRowsProcessed; }
+		}
+
+		public int DataRowsSkippedUnknownMods
+		{
+			get { return _dataRowsSkippedUnknownMods;}
+		}
 
 		public MassTagFromMSAlignFileImporter(string filename)
 		{
@@ -65,6 +77,11 @@ namespace DeconTools.Workflows.Backend.FileIO
 		{
 			StreamReader reader;
 			prsmData = new Dictionary<int, PrsmData>();
+
+			if (!System.IO.File.Exists(_filename))
+			{
+				throw new System.IO.FileNotFoundException("Input file not found: " + _filename);
+			}
 
 			try
 			{
@@ -97,6 +114,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 				while (sr.Peek() > -1)
 				{
 					++lineCounter;
+					_dataRowsProcessed = lineCounter;
 
 					List<string> processedData = sr.ReadLine().Split('\t').ToList();
 
@@ -136,7 +154,11 @@ namespace DeconTools.Workflows.Backend.FileIO
 					{
 						empiricalFormula = GetEmpiricalFormulaForSequenceWithMods(code);
 						// Unknown modification in sequence, skip
-						if (String.IsNullOrEmpty(empiricalFormula)) continue;
+						if (String.IsNullOrEmpty(empiricalFormula))
+						{
+							++_dataRowsSkippedUnknownMods;
+							continue;
+						}
 					}
 					else
 					{
@@ -157,11 +179,20 @@ namespace DeconTools.Workflows.Backend.FileIO
 					string proteinName = processedData[columnMapping[PROTEIN_NAME_HEADER]];
 
 					// Get score
-					float eValue;
-					if (!float.TryParse(processedData[columnMapping[E_VALUE_HEADER]], out eValue))
+					double eValueDbl;
+					if (!double.TryParse(processedData[columnMapping[E_VALUE_HEADER]], out eValueDbl))
 					{
-						throw new InvalidDataException("Could not parse e-value.");
+						if (processedData[columnMapping[E_VALUE_HEADER]].ToLower() == "Infinity")
+							eValueDbl = float.MaxValue;
+						else
+							throw new InvalidDataException("Could not parse e-value.");
 					}
+
+					float eValue;
+					if (eValueDbl > float.MaxValue)
+						eValue = float.MaxValue;
+					else
+						eValue = (float)eValueDbl;
 
 					// Make Prsm
 					prsmData.Add(prsmId, new PrsmData { ProteinMass = proteinMass, ProteinName = proteinName, EValue = eValue });

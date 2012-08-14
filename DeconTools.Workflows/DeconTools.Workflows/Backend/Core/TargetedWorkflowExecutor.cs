@@ -548,14 +548,17 @@ namespace DeconTools.Workflows.Backend.Core
         protected void writeToLogFile(string stringToWrite)
         {
 
-            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
-                          System.IO.FileAccess.Write, System.IO.FileShare.Read)))
-            {
-                sw.AutoFlush = true;
-                sw.WriteLine(stringToWrite);
-                sw.Flush();
+			if (!string.IsNullOrEmpty(this._loggingFileName))
+			{
+				using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
+							  System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+				{
+					sw.AutoFlush = true;
+					sw.WriteLine(stringToWrite);
+					sw.Flush();
 
-            }
+				}
+			}
 
         }
 
@@ -680,14 +683,17 @@ namespace DeconTools.Workflows.Backend.Core
 
             //check and load chrom source data (_peaks.txt)
             bool peaksFileExists = checkForPeaksFile();
-            if (!peaksFileExists)
-            {
-                ReportGeneralProgress("Creating extracted ion chromatogram (XIC) source data... takes 1-5 minutes.. only needs to be done once.");
+			if (!peaksFileExists)
+			{
+				ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
 
-                CreatePeaksForChromSourceData();
-                ReportGeneralProgress("Done creating XIC source data.");
-            }
-
+				CreatePeaksForChromSourceData();
+				ReportGeneralProgress("Done creating _Peaks.txt file");
+			}
+			else
+			{
+				ReportGeneralProgress("Using existing _Peaks.txt file");
+			}
 
 
             ReportGeneralProgress("Peak loading started...");

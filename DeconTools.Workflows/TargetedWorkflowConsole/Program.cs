@@ -33,19 +33,27 @@ namespace TargetedWorkflowConsole
                 FileInfo parametersFileInfo = new FileInfo(args[1]);
                 if (!parametersFileInfo.Exists)
                 {
-                    reportFileProblem(parametersFileInfo.FullName);
+					ReportError("Parameter file does not exist: " + parametersFileInfo.FullName);
                     return;
                 }
                 else
                 {
-                	var executorParameters = WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
-					
-					// 3 arguments, overriding targets path
-					if (args.Length == 3) executorParameters.TargetsFilePath = args[2];
+					try
+					{
+						var executorParameters = WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
 
-                    TargetedWorkflowExecutor executor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(executorParameters, datasetPath);
-                    
-                    executor.Execute();
+						// 3 arguments, overriding targets path
+						if (args.Length == 3)
+							executorParameters.TargetsFilePath = args[2];
+
+						TargetedWorkflowExecutor executor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(executorParameters, datasetPath);
+
+						executor.Execute();
+					}
+					catch (Exception Ex)
+					{
+						ReportError(Ex);
+					}
 
                 }
             }
@@ -56,10 +64,26 @@ namespace TargetedWorkflowConsole
 
         }
 
-        private static void reportFileProblem(string p)
-        {
-            Console.WriteLine("ERROR. Inputted parameter filename does not exist. Inputted file name = " + p);
-        }
+		private static void ReportError(string message)
+		{
+			Console.WriteLine();
+			Console.WriteLine("=======================================================");
+			Console.WriteLine("Error: " + message);
+			Console.WriteLine("=======================================================");
+			Console.WriteLine();
+		}
+
+		private static void ReportError(Exception ex)
+		{
+			Console.WriteLine();
+			Console.WriteLine("=======================================================");
+			Console.WriteLine("Error: " + ex.Message);
+			Console.WriteLine();
+			Console.WriteLine("Stack trace:");
+			Console.WriteLine(ex.StackTrace);
+			Console.WriteLine("=======================================================");
+			Console.WriteLine();
+		}
 
         private static void ReportSyntax()
         {
