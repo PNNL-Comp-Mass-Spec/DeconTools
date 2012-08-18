@@ -92,7 +92,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("In File: " + Path.GetFileName(_filename)+   "; Data in row # " + lineCounter.ToString() + " is NOT valid - \nThe number of columns does not match that of the header line");
                     }
 
                     TargetedResultDTO result = ConvertTextToDataObject(processedData);
@@ -126,8 +126,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IScore = ParseFloatField(LookupData(rowData, iscoreHeaders));
             result.TargetID = ParseLongField(LookupData(rowData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(rowData, monomassHeaders));
+            result.MassErrorInPPM = ParseDoubleField(LookupData(rowData, massErrorHeaders));
             result.MonoMZ = ParseDoubleField(LookupData(rowData, mzHeaders));
             result.NET = ParseFloatField(LookupData(rowData, netHeaders));
+            result.NETError = ParseFloatField(LookupData(rowData, netErrorHeaders));
             result.NumChromPeaksWithinTol = ParseIntField(LookupData(rowData, numchromPeaksWithinTolHeaders));
             result.NumQualityChromPeaksWithinTol = ParseIntField(LookupData(rowData, numQualitychromPeaksWithinTolHeaders));
             result.ScanLC = ParseIntField(LookupData(rowData, scanHeaders));

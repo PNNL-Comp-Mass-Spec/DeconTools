@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowConsole", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowManagerConsole", "DeconTools.Workflows\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj", "{E47D0F42-F72F-4030-95D4-B2D136583595}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.ProblemTesting", "DeconTools.Workflows\DeconTools.Workflows.ProblemTesting\DeconTools.Workflows.ProblemTesting.csproj", "{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -470,6 +472,36 @@ Global
 		{E47D0F42-F72F-4030-95D4-B2D136583595}.SingleImage|x64.ActiveCfg = Release|x86
 		{E47D0F42-F72F-4030-95D4-B2D136583595}.SingleImage|x86.ActiveCfg = Release|x86
 		{E47D0F42-F72F-4030-95D4-B2D136583595}.SingleImage|x86.Build.0 = Release|x86
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|x64.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.SingleImage|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

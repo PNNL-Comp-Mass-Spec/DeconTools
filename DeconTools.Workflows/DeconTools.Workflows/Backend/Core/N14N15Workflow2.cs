@@ -173,7 +173,7 @@ namespace DeconTools.Workflows.Backend.Core
             catch (Exception ex)
             {
                 var result = Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-                result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
+                result.ErrorDescription = ex.Message;
 
                 return;
             }
