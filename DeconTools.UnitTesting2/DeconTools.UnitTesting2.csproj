@@ -28,6 +28,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <WarningLevel>2</WarningLevel>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -59,8 +60,7 @@
     <Reference Include="BaseTof">
       <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.4408.30259">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DeconEngineV2">
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL" />
@@ -180,12 +180,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
-      <Name>DeconTools.Backend</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="NewFolder1\" />
     <Folder Include="ProcessingRelated_Tests\ScanSet_FrameSet_relatedTests\" />
   </ItemGroup>
@@ -193,6 +187,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

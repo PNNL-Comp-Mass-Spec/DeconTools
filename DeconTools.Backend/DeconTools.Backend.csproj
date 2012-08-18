@@ -80,6 +80,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.EDAL">
+      <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Mapack">
       <HintPath>..\Library\Mapack.dll</HintPath>
     </Reference>
@@ -461,20 +465,14 @@
     <None Include="ClassDiagrams\TaskControllerDetailsClassDiagram.cd" />
     <None Include="ClassDiagrams\TaskSampleClassDiagram.cd" />
     <None Include="Core\MassTagResultClassDiagram.cd" />
+    <None Include="Interop.EDAL.SxS.manifest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FileIO\TargetedResultFileIO\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="EDAL">
-      <Guid>{8E79B9A2-107E-4E91-A0FF-01F2591103F3}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="MSFileReaderLib">
       <Guid>{F0C5F3E3-4F2A-443E-A74D-0AABE3237494}</Guid>
       <VersionMajor>1</VersionMajor>
