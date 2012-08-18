@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
-using DeconTools.Workflows.Backend.Results;
-using NUnit.Framework;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
