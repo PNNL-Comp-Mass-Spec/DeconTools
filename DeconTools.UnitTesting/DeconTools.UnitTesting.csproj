@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DeconTools.UnitTesting</RootNamespace>
     <AssemblyName>DeconTools.UnitTesting</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -39,8 +39,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.3734.21881, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DeconEngineV2">
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="DMSDeconToolsV2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

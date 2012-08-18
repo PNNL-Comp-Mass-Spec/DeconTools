@@ -50,7 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2, Version=1.0.4408.30259">
+    <Reference Include="DeconEngineV2, Version=1.0.4588.24277, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
