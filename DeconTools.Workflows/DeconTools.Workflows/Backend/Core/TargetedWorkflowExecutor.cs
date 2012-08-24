@@ -360,10 +360,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("Processing...", 0);
 
-
-
-
-
             foreach (var massTag in this.Targets.TargetList)
             {
                 mtCounter++;
@@ -417,12 +413,22 @@ namespace DeconTools.Workflows.Backend.Core
             string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
+
+
+            ExecutePostProcessingHook();
+
             TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
             exporter.ExportResults(ResultRepository.Results);
 
             HandleAlignmentInfoFiles();
             finalizeRun();
         }
+
+        /// <summary>
+        /// This hook allows inheriting class to execute post processing methods. e.g. see TopDownTargetedWorkflowExecutor
+        /// </summary>
+        protected virtual void ExecutePostProcessingHook() {}
+        
 
         #endregion
 
@@ -490,7 +496,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
+        protected void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
         {
             if (_backgroundWorker == null)
             {
@@ -756,7 +762,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private void performAlignment()
+        protected void performAlignment()
         {
             if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
             {
@@ -837,7 +843,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        protected TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
+        protected virtual TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
             LcmsTargetFromFeaturesFileImporter importer =
                new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
