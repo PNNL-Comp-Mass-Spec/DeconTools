@@ -11,7 +11,6 @@ using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Utilities;
-using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -147,7 +146,8 @@ namespace DeconTools.Workflows.Backend.Core
 				}
 
 				// Save targeted result data
-				Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};
+				//Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};
+
 				TargetResults.Add(Run.CurrentMassTag.ID, Result);
 			}
 			catch (Exception ex)
