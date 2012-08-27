@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution;
-using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
+using Globals = DeconTools.Workflows.Backend.Globals;
 
 namespace TestConsole1
 {
