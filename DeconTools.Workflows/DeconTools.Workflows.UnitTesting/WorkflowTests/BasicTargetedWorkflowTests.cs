@@ -256,10 +256,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             for (int i = 0; i < result.IsotopicProfile.Peaklist.Count; i++)
             {
                 
-                double correctedRatio;
+                double correctedRatio=0;
                 if (i<result.ChromCorrelationData.CorrelationDataItems.Count)
                 {
-                    correctedRatio = (double) result.ChromCorrelationData.CorrelationDataItems[i].CorrelationSlope;
+                    var correlationSlope = result.ChromCorrelationData.CorrelationDataItems[i].CorrelationSlope;
+                    if (correlationSlope != null)
+                        correctedRatio = (double) correlationSlope;
                 }
                 else
                 {

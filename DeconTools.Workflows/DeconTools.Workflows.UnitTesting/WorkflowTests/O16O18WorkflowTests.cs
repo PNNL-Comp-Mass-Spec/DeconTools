@@ -13,6 +13,52 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class O16O18WorkflowTests
     {
+
+
+        [Test]
+        public void testVladsData()
+        {
+            string testFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
+
+            string massTagFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
+
+            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
+
+            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
+
+
+            TargetCollection mtc = new TargetCollection();
+            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            mtc = mtimporter.Import();
+
+            int testMassTagID = 24653;
+            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
+
+            TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
+            parameters.ChromNETTolerance = 0.2;
+            parameters.MSToleranceInPPM = 10;
+            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
+            parameters.ChromPeakDetectorPeakBR = 1;
+
+
+            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
+            workflow.Execute();
+
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+
+            result.DisplayToConsole();
+
+
+        }
+
+
+
+
+
+
+
         [Test]
         public void findSingleMassTag_test1()
         {
@@ -56,43 +102,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-        [Test]
-        public void testVladsData()
-        {
-            string testFile =
-                @"\\protoapps\UserData\Slysz\Data\O16O18\Vlad_O16O18\RawData\Alz_P01_D12_144_26Apr12_Roc_12-03-18.RAW";
-
-            string massTagFile =
-                @"\\protoapps\UserData\Slysz\Data\O16O18\Vlad_O16O18\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
-
-            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
-
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
-
-
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
-            mtc = mtimporter.Import();
-
-            int testMassTagID = 20746149;
-            run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
-
-            TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
-            parameters.ChromNETTolerance = 0.1;
-            parameters.MSToleranceInPPM = 10;
-            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
-            parameters.ChromPeakDetectorPeakBR = 1;
-
-
-            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
-            workflow.Execute();
-
-            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
-
-            result.DisplayToConsole();
-
-            
-        }
+      
 
 
         [Test]

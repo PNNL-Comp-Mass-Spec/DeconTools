@@ -127,10 +127,6 @@
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TargetedWorkflowConsole\TargetedWorkflowConsole.csproj">
-      <Project>{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}</Project>
-      <Name>TargetedWorkflowConsole</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

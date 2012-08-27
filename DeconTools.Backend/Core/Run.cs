@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeconTools.Backend.Parameters;
 
 using PNNLOmics.Data;
 
@@ -792,9 +791,21 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public double GetTargetMZAligned(double theorMZ)
         {
-            if (this.AlignmentInfo == null) return theorMZ;
+            
+            bool alignmentInfoContainsMZInfo = (AlignmentInfo != null && AlignmentInfo.marrMassFncMZInput != null && AlignmentInfo.marrMassFncMZInput.Length > 0);
+            if (!alignmentInfoContainsMZInfo) return theorMZ;
 
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)theorMZ);
+
+            double minMZ = AlignmentInfo.marrMassFncMZInput.First();
+            double maxMZ = AlignmentInfo.marrMassFncMZInput.Last();
+
+            double mzForLookup = theorMZ;
+
+            if (theorMZ < minMZ) mzForLookup = minMZ;
+            if (theorMZ > maxMZ) mzForLookup = maxMZ;
+
+
+            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)mzForLookup);
 
             double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
             return alignedMZ;

@@ -75,7 +75,6 @@
     <Compile Include="Backend\Core\TargetedAlignerWorkflow.cs" />
     <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedWorkflow.cs" />
-    <Compile Include="Backend\Core\tempTestworkflow.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflow.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutorParameters.cs" />
