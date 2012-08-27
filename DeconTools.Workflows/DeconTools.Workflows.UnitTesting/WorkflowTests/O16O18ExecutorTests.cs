@@ -93,10 +93,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
         [Test]
-        public void VladAlzTestTargetedAlignment()
+        public void StandardO16O18Testing_VladAlz()
         {
-            string baseFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz";
-
             string executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
@@ -105,7 +103,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
-
 
             int testTarget = 24653;
 
@@ -131,31 +128,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
-        //[Test]
-        //public void Test2()
-        //{
-        //    string executorParameterFile =
-        //        @"\\protoapps\UserData\Slysz\Data\O16O18\Vlad_O16O18\Workflow_Parameters\workflow_executor - copy.xml";
-        //    BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-        //    executorParameters.LoadParameters(executorParameterFile);
-
-        //    string resultsFolderLocation = executorParameters.ResultsFolder;
-        //    string testDatasetPath =
-        //        @"\\protoapps\UserData\Slysz\Data\O16O18\Vlad_O16O18\RawData\Alz_P01_D12_144_26Apr12_Roc_12-03-18.RAW";
-        //    string testDatasetName = Path.GetFileName(testDatasetPath).Replace(".RAW", "");
-
-        //    string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
-        //    if (File.Exists(expectedResultsFilename))
-        //    {
-        //        File.Delete(expectedResultsFilename);
-        //    }
-
-
-
-        //    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
-        //    executor.Execute();
-
-        //}
 
 
     }
