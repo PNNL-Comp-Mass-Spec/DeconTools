@@ -410,12 +410,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
 
-            string outputFileName = this._resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
-            backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
-
+            
 
 
             ExecutePostProcessingHook();
+
+            string outputFileName = GetOutputFileName();
+            backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
             TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
             exporter.ExportResults(ResultRepository.Results);
@@ -429,6 +430,10 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         protected virtual void ExecutePostProcessingHook() {}
         
+        protected virtual string GetOutputFileName()
+        {
+            return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
+        }
 
         #endregion
 

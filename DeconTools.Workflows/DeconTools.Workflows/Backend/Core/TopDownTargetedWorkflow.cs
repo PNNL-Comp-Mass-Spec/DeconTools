@@ -147,8 +147,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 				// Save targeted result data
 				//Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};
-
-				TargetResults.Add(Run.CurrentMassTag.ID, Result);
+				//TargetResults.Add(Run.CurrentMassTag.ID, Result);
 			}
 			catch (Exception ex)
 			{

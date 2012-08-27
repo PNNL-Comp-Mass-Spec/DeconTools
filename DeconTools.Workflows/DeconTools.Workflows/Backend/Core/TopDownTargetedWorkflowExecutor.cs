@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
-using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 namespace DeconTools.Workflows.Backend.Core
@@ -40,6 +33,11 @@ namespace DeconTools.Workflows.Backend.Core
         protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
             return GetMSAlignTargets(targetsFilePath);
+        }
+
+        protected override string GetOutputFileName()
+        {
+            return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_quant.txt";
         }
 
 		#endregion
@@ -78,6 +76,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             return targets;
         }
+
+
+
 
 
 		private void PostProcessResults(List<TargetedResultDTO> results)
