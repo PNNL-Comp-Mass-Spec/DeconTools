@@ -13,108 +13,83 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
 	public class TopDownTargetedWorkflowTests
 	{
-		[Test]
-		public void TestGetEmpiricalFormulaForModifiedPeptideSequences()
-		{
-			var pyroglutamateCodes = new Dictionary<string, string>
-			{
-				{
-					"M.QVYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P",
-					"M.(Q)[-17.03]VYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P"
-				},
-				{
-					".QFHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N",
-				   	".(Q)[-17.03]FHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N"
-				},
-				{
-					".QRFKLWVFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L",
-					".(QRFKLW)[-17.03]VFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L"
-				}
-			};
 
-			var acetylationCodes = new Dictionary<string, string>
-			{
-				{
-					"M.SVYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P",
-					"M.(S)[42.01]VYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P"
-				},
-				{
-					".MFHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N",
-				   	".(M)[42.01]FHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N"
-				},
-				{
-					".MRFKLWVFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L",
-					".(MRFKLW)[42.01]VFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L"
-				}
-			};
+        [Test]
+        public void TopDownWorkflowTest1()
+        {
+            
+        }
 
-			var msAlignImporter = new MassTagFromMSAlignFileImporter(String.Empty);
-			var peptideUtils = new PeptideUtils();
 
-			Console.WriteLine("pyroglutamate");
-			foreach (var pair in pyroglutamateCodes)
-			{
-				string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(pair.Key);
-				string empiricalFormulaWithMod = msAlignImporter.GetEmpiricalFormulaForSequenceWithMods(pair.Value);
 
-				double monoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-				double monoMassWithMod = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormulaWithMod);
-				double diff = monoMassWithMod - monoMass;
-				
-				Console.WriteLine(empiricalFormula + "(" + monoMass + ")\t" + empiricalFormulaWithMod + "(" + monoMassWithMod + "); diff=" + diff);
-				Assert.AreEqual(-17, Math.Round(diff, 0, MidpointRounding.AwayFromZero));
-			}
+        [Test]
+        public void TestTargetedWorkflowExecutor()
+        {
+            const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test2params.xml";
+            var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
 
-			Console.WriteLine("acetylation");
-			foreach (var pair in acetylationCodes)
-			{
-				string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(pair.Key);
-				string empiricalFormulaWithMod = msAlignImporter.GetEmpiricalFormulaForSequenceWithMods(pair.Value);
+            string resultsFolderLocation = executorParameters.ResultsFolder;
+            const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
+            const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-				double monoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-				double monoMassWithMod = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormulaWithMod);
-				double diff = monoMassWithMod - monoMass;
+            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
-				Console.WriteLine(empiricalFormula + "(" + monoMass + ")\t" + empiricalFormulaWithMod + "(" + monoMassWithMod + "); diff=" + diff);
-				Assert.AreEqual(42, Math.Round(diff, 0, MidpointRounding.AwayFromZero));
-			}
-		}
+            var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 
-		[Test]
-		public void TestTargetedWorkflowExecutorFullDataset()
-		{
-			const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test2paramsfulldataset.xml";
-			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
-			executorParameters.LoadParameters(executorParameterFile);
+            string proteinSeq =
+                @"A.VDKTNPYALMEDAAQKTFDKLKTEQPEIRKNPELLREIVQQELLPYVHIKYAGALVLGPYYRNATPAQRDAYFAAFKDYLAQVYGQALAMYEGQEYRIEPAKPFADKSNLTIRVTIIDKNGRPPVRLDFQWRKNSKTGEWQAYDMIAEGVSMITTKQNEWSDILSAKGVDGLTKQLEISAKTPITLDEKK.";
 
-			string resultsFolderLocation = executorParameters.ResultsFolder;
-			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
-			const string testDatasetName = "Proteus_Peri_intact_ETD";
+            executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.Code == proteinSeq).ToList();
+            executor.Execute();
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
-			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            // Output chrom data
+            //var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
+            //Console.Write("***** chrom data *****\n");
+            //foreach (var resultData in wf.TargetResults)
+            //{
+            //    int id = resultData.Key;
+            //    TargetedResultBase result = resultData.Value;
+            //    double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
 
-			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
-			executor.Execute();
-			
-			// Output chrom data
-			var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
-			foreach (var resultData in wf.TargetResults)
-			{
-				int id = resultData.Key;
-				TargetedResultBase result = resultData.Value;
-				double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
+            //    Console.Write("TargetID=" + id + "; ChromPeakSelected=" + chromPeakSelected + "\n");
+            //    for (int i = 0; i < result.ChromValues.Xvalues.Length; i++)
+            //    {
+            //        //Console.Write(result.ChromValues.Xvalues[i] + "\t" + result.ChromValues.Yvalues[i] + "\n");
+            //    }
+            //    //Console.Write("\n");
+            //}
+            Console.Write("**********************\n");
 
-				Console.Write("TargetID=" + id + "; ChromPeakSelected=" + chromPeakSelected + "\n");
-			}
-			
-			Assert.IsTrue(File.Exists(expectedResultsFilename));
+            Assert.IsTrue(File.Exists(expectedResultsFilename));
 
-			var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
-			TargetedResultRepository repository = importer.Import();
+            var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+            TargetedResultRepository repository = importer.Import();
 
-			Assert.AreEqual(478, repository.Results.Count);
-		}
+            Assert.AreEqual(1, repository.Results.Count);
+
+            //// expected results as tuples in format: <target id, charge state, scan lc>
+            //var expectedResults = new HashSet<Tuple<long, int, int>>
+            //{
+            //    new Tuple<long, int, int>(1, 8, 1583),
+            //    new Tuple<long, int, int>(2, 23, 2643),
+            //    new Tuple<long, int, int>(3, 21, 1853),
+            //    new Tuple<long, int, int>(4, 14, 2303),
+            //    new Tuple<long, int, int>(5, 17, 2339),
+            //    new Tuple<long, int, int>(6, 26, 4630),
+            //    new Tuple<long, int, int>(7, 26, 3583),
+            //    new Tuple<long, int, int>(8, 7, 3709),
+            //    new Tuple<long, int, int>(9, 42, 3439),
+            //};
+
+            //foreach (TargetedResultDTO result in repository.Results)
+            //{
+            //    expectedResults.Remove(new Tuple<long, int, int>(result.TargetID, result.ChargeState, result.ScanLC));
+            //}
+
+            //Assert.IsEmpty(expectedResults);
+        }	
 
 		[Test]
 		public void TestTargetedWorkflowExecutorMod()
@@ -159,69 +134,76 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			Assert.AreEqual(9, repository.Results.Count);
 		}
 
-		[Test]
-		public void TestTargetedWorkflowExecutor()
-		{
-			const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test2params.xml";
-			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
-			executorParameters.LoadParameters(executorParameterFile);
 
-			string resultsFolderLocation = executorParameters.ResultsFolder;
-			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
-			const string testDatasetName = "Proteus_Peri_intact_ETD";
-
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
-			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-
-			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
-			executor.Execute();
-			
-			// Output chrom data
-			var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
-			Console.Write("***** chrom data *****\n");
-			foreach (var resultData in wf.TargetResults)
+        [Test]
+        public void TestGetEmpiricalFormulaForModifiedPeptideSequences()
+        {
+            var pyroglutamateCodes = new Dictionary<string, string>
 			{
-				int id = resultData.Key;
-				TargetedResultBase result = resultData.Value;
-				double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
-
-				Console.Write("TargetID=" + id + "; ChromPeakSelected=" + chromPeakSelected + "\n");
-				for (int i = 0; i < result.ChromValues.Xvalues.Length; i++)
 				{
-					//Console.Write(result.ChromValues.Xvalues[i] + "\t" + result.ChromValues.Yvalues[i] + "\n");
+					"M.QVYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P",
+					"M.(Q)[-17.03]VYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P"
+				},
+				{
+					".QFHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N",
+				   	".(Q)[-17.03]FHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N"
+				},
+				{
+					".QRFKLWVFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L",
+					".(QRFKLW)[-17.03]VFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L"
 				}
-				//Console.Write("\n");
-			}
-			Console.Write("**********************\n");
-			
-			Assert.IsTrue(File.Exists(expectedResultsFilename));
+			};
 
-			var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
-			TargetedResultRepository repository = importer.Import();
+            var acetylationCodes = new Dictionary<string, string>
+			{
+				{
+					"M.SVYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P",
+					"M.(S)[42.01]VYAMRRLKQWLVGSYQTDNSAFVPYDRTLLWFTFGLAVVGFVMVTSASMPVGQRLAEDPFLFAKRDGIYMIVALCLALVTMRVPMAVWQRYSSLMLFGSILLLLVVLAVGSSVNGASRWIAFGPLRIQPAELSKLALFCYLSSYLVRKVEEVRNNFWGFCKPMGVMLILAVLLLLQPDLGTVVVLFVTTLALLFLAGAKIWQFLAIIGTGIAAVVMLIIVEPYRVRRITSFLEPWEDPFGSGYQLTQSLMAFGRGDLLGQGLGNSVQKLEYLPEAHTDFIFSILAEELGYIGVVLVLLMVFFIAFRAMQIGRRALLLDQRFSGFLACSIGIWFTFQTLVNVGAAAGML.P"
+				},
+				{
+					".MFHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N",
+				   	".(M)[42.01]FHIYHSNQLSLLKSLMVHFMQNRPLSSPFEQEVILVQSPGMSQWLQIQLAESLGIAANIRYPLPATFIWEMFTRVLSGIPKESAFSKDAMTWKLMALLPNYLDDPAFKPLRHYLKDDEDKRKLHQLAGRVADLFDQYLVYRPDWLSAWENDQLIDGLSDNQYWQKTLWLALQRYTEDLAQPKWHRANLYQQFISTLNDAPVGALAHCFPSRIFICGISALPQVYLQALQAIGRHTEIYLLFTNPCRYYWGDIQDPKFLARLNSRKPRHYQQLHELPWFKDEQNASTLFNEEGEQNVGNPLLASWGKLGKDNLYFLSELEYSDVLDAFVDIPRD.N"
+				},
+				{
+					".MRFKLWVFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L",
+					".(MRFKLW)[42.01]VFISLCLHASLVAAAILYVVEDKPIAPEPISIQMLAFAADEPVGEPEPVVEEVTPPEPEPVVEPEPEPEPEPIPDVKPVIEKPIEKKPEPKPKPKPKPVEKPKPPVERPQQQPLA.L"
+				}
+			};
 
-			Assert.AreEqual(9, repository.Results.Count);
+            var msAlignImporter = new MassTagFromMSAlignFileImporter(String.Empty);
+            var peptideUtils = new PeptideUtils();
 
-            //// expected results as tuples in format: <target id, charge state, scan lc>
-            //var expectedResults = new HashSet<Tuple<long, int, int>>
-            //{
-            //    new Tuple<long, int, int>(1, 8, 1583),
-            //    new Tuple<long, int, int>(2, 23, 2643),
-            //    new Tuple<long, int, int>(3, 21, 1853),
-            //    new Tuple<long, int, int>(4, 14, 2303),
-            //    new Tuple<long, int, int>(5, 17, 2339),
-            //    new Tuple<long, int, int>(6, 26, 4630),
-            //    new Tuple<long, int, int>(7, 26, 3583),
-            //    new Tuple<long, int, int>(8, 7, 3709),
-            //    new Tuple<long, int, int>(9, 42, 3439),
-            //};
+            Console.WriteLine("pyroglutamate");
+            foreach (var pair in pyroglutamateCodes)
+            {
+                string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(pair.Key);
+                string empiricalFormulaWithMod = msAlignImporter.GetEmpiricalFormulaForSequenceWithMods(pair.Value);
 
-            //foreach (TargetedResultDTO result in repository.Results)
-            //{
-            //    expectedResults.Remove(new Tuple<long, int, int>(result.TargetID, result.ChargeState, result.ScanLC));
-            //}
+                double monoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+                double monoMassWithMod = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormulaWithMod);
+                double diff = monoMassWithMod - monoMass;
 
-            //Assert.IsEmpty(expectedResults);
-		}
+                Console.WriteLine(empiricalFormula + "(" + monoMass + ")\t" + empiricalFormulaWithMod + "(" + monoMassWithMod + "); diff=" + diff);
+                Assert.AreEqual(-17, Math.Round(diff, 0, MidpointRounding.AwayFromZero));
+            }
+
+            Console.WriteLine("acetylation");
+            foreach (var pair in acetylationCodes)
+            {
+                string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(pair.Key);
+                string empiricalFormulaWithMod = msAlignImporter.GetEmpiricalFormulaForSequenceWithMods(pair.Value);
+
+                double monoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+                double monoMassWithMod = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormulaWithMod);
+                double diff = monoMassWithMod - monoMass;
+
+                Console.WriteLine(empiricalFormula + "(" + monoMass + ")\t" + empiricalFormulaWithMod + "(" + monoMassWithMod + "); diff=" + diff);
+                Assert.AreEqual(42, Math.Round(diff, 0, MidpointRounding.AwayFromZero));
+            }
+        }
+
+
+	
 
 		[Test]
 		public void TestFindMassTag()
@@ -232,7 +214,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
-			var mtc = new TargetCollection();
+			TargetCollection mtc = new TargetCollection();
 			var mtimporter = new MassTagFromMSAlignFileImporter(massTagFile);
 			mtc = mtimporter.Import();
 
@@ -252,6 +234,43 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			result.DisplayToConsole();
 		}
+
+        //[Test]
+        //public void TestTargetedWorkflowExecutorFullDataset()
+        //{
+        //    const string executorParameterFile = @"\\protoapps\UserData\Kaipo\TopDown\test2paramsfulldataset.xml";
+        //    var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+        //    executorParameters.LoadParameters(executorParameterFile);
+
+        //    string resultsFolderLocation = executorParameters.ResultsFolder;
+        //    const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
+        //    const string testDatasetName = "Proteus_Peri_intact_ETD";
+
+        //    string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+        //    if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+
+        //    var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+        //    executor.Execute();
+
+        //    // Output chrom data
+        //    var wf = executor.TargetedWorkflow as TopDownTargetedWorkflow;
+        //    foreach (var resultData in wf.TargetResults)
+        //    {
+        //        int id = resultData.Key;
+        //        TargetedResultBase result = resultData.Value;
+        //        double chromPeakSelected = (result.ChromPeakSelected != null) ? result.ChromPeakSelected.XValue : -1;
+
+        //        Console.Write("TargetID=" + id + "; ChromPeakSelected=" + chromPeakSelected + "\n");
+        //    }
+
+        //    Assert.IsTrue(File.Exists(expectedResultsFilename));
+
+        //    var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+        //    TargetedResultRepository repository = importer.Import();
+
+        //    Assert.AreEqual(478, repository.Results.Count);
+        //}
+
         
 	}
 }
