@@ -1,0 +1,2 @@
+java -jar "dist\MzidParsers.jar" Omssa2mzid src\resources\55merge_omssa.omx 55merge_omssa_include_fragmentation.mzid -outputFragmentation -decoyRegex "Rnd"
+java -jar "dist\MzidParsers.jar" Omssa2mzid src\resources\55merge_omssa.omx 55merge_omssa.mzid  -decoyRegex "Rnd"

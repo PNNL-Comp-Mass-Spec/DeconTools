@@ -1,0 +1,15 @@
+﻿Build started 7/25/2012 5:01:41 PM.
+     1>Project "C:\cygwin\home\kims336\Developments\pwiz\pwiz.vcxproj" on node 2 (clean target(s)).
+     1>CoreClean:
+         cd C:\cygwin\home\kims336\Developments\pwiz\\build
+         bjam debug clean
+         The system cannot find the path specified.
+         'bjam' is not recognized as an internal or external command,
+         operable program or batch file.
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.MakeFile.Targets(33,5): error MSB3073: The command "cd C:\cygwin\home\kims336\Developments\pwiz\\build
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.MakeFile.Targets(33,5): error MSB3073: bjam debug clean" exited with code 9009.
+     1>Done Building Project "C:\cygwin\home\kims336\Developments\pwiz\pwiz.vcxproj" (clean target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.00

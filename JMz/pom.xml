@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>uk.ac.ebi.pride.tools</groupId>
+	<artifactId>jmzreader-library</artifactId>
+	<version>1.1</version>
+	<packaging>pom</packaging>
+
+	<name>jmzreader-library</name>
+	<description>The jmzReader library is a collection of parsers to process the most commonly used Mass Spectrometry text and xml based file formats using a single interface.</description>
+	<url>http://code.google.com/p/jmzreader/</url>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>jgriss</id>
+			<name>Johannes Griss</name>
+			<email>jgriss@ebi.ac.uk</email>
+			<organization>Proteomics Services Team - EBI</organization>
+			<organizationUrl>http://www.ebi.ac.uk/proteomics</organizationUrl>
+			<timezone>0</timezone>
+		</developer>
+	</developers>
+	<organization>
+		<name>European Bioinformatics Institute, EBI</name>
+		<url>http://www.ebi.ac.uk/</url>
+	</organization>
+
+	<modules>
+		<module>braf</module>
+		<module>jmzreader</module>
+		<module>dta-parser</module>
+		<module>mgf-parser</module>
+		<module>ms2-parser</module>
+		<module>mzdata-parser</module>
+		<module>mzml-wrapper</module>
+		<module>mzxml-parser</module>
+		<module>pkl-parser</module>
+		<module>jmzreader-gui</module>
+        <module>pride-wrapper</module>
+    </modules>
+
+</project>

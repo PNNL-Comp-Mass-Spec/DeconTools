@@ -1,0 +1,41 @@
+1343867681881	Rename local variable 'specMap'
+1344015221146	Delete element
+1344015235961	Delete element
+1344015844583	Delete element
+1344015888176	Delete element
+1344016077176	Rename package 'psi'
+1344016139832	Rename package 'fdr'
+1344016161351	Rename package 'jmzparser'
+1344016173774	Rename package 'misc'
+1344016185650	Rename package 'msdbsearch'
+1344016216522	Rename package 'msdbsearch.test'
+1344016228370	Rename package 'msdictionary'
+1344016239794	Rename package 'msgf'
+1344016248228	Rename package 'msgf2d'
+1344016252900	Rename package 'mslibsearch'
+1344016260030	Rename package 'msscorer'
+1344016266513	Rename package 'mstag'
+1344016277468	Rename package 'msutil'
+1344016290717	Rename package 'params'
+1344016300579	Rename package 'parser'
+1344016316520	Rename package 'scripts'
+1344016323588	Rename package 'sequences'
+1344016329847	Rename package 'suffixarray'
+1344016339539	Rename package 'ui'
+1344016374797	Rename package 'resources.ionstat'
+1344027108143	Delete element
+1344027517096	Copy package
+1344027539645	Delete element
+1344027553785	Rename package 'java.edu.ucsd.msgf.jmzparser'
+1344027568641	Rename package 'java.edu.ucsd.msgf.misc'
+1344027688070	Rename package 'edu.ucsd.msgf.msdbsearch'
+1344027694844	Rename package 'edu.ucsd.msgf.misc'
+1344027701319	Rename package 'edu.ucsd.msgf.jmzparser'
+1344027709548	Rename package 'edu.ucsd.msgf.fdr'
+1344027924395	Delete element
+1344027927388	Delete element
+1344027992207	Delete element
+1344028327446	Delete element
+1344028595450	Rename package 'edu.ucsd.msgf'
+1344028938086	Delete elements
+1344028966604	Delete element

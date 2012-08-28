@@ -1,0 +1,128 @@
+<!--
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+<jxb:bindings version="2.1"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              schemaLocation="mzdata.xsd"
+              node="/xs:schema">
+    <!-- 
+    The following functions were added to ParamType:
+    
+    public List<CvParam> getCvParams() {
+    	if (cvParamOrUserParam == null)
+    		return Collections.emptyList();
+    	
+    	List<CvParam> cvParams = new ArrayList<CvParam>();
+    	
+    	for (MzDataObject param : cvParamOrUserParam) {
+    		if (param instanceof CvParam) {
+    			cvParams.add((CvParam) param);
+    		}
+    	}
+    	
+    	return cvParams;
+    }
+    
+    public List<UserParam> getUserParams() {
+    	if (cvParamOrUserParam == null)
+    		return Collections.emptyList();
+    	
+    	List<UserParam> userParams = new ArrayList<UserParam>();
+    	
+    	for (MzDataObject param : cvParamOrUserParam) {
+    		if (param instanceof UserParam) {
+    			userParams.add((UserParam) param);
+    		}
+    	}
+    	
+    	return userParams;
+    }
+    
+     -->
+
+	<jxb:globalBindings choiceContentProperty="true">
+        <!-- the serializable uid should reflect the version number 1.0.0 -->
+        <jxb:serializable uid="105"/>
+        <!-- this interface will be used to ensure type safety in generified methods -->
+        <xjc:superInterface name="uk.ac.ebi.pride.tools.mzdata_parser.mzdata.model.MzDataObject"/>
+        <xjc:javaType name="Long" xmlType="xs:nonNegativeInteger"
+                      adapter="uk.ac.ebi.pride.tools.mzdata_parser.mzdata.xml.util.NonNegativeIntegerAdapter"/>
+    </jxb:globalBindings>
+    
+    <jxb:schemaBindings>
+        <jxb:package name="uk.ac.ebi.pride.tools.mzdata_parser.mzdata.model"/>
+    </jxb:schemaBindings>
+    
+    <jxb:bindings node="//xs:complexType[@name='adminType']">
+        <jxb:class name="Admin"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='cvLookupType']">
+        <jxb:class name="CvLookup"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='cvParamType']">
+        <jxb:class name="CvParam"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='dataProcessingType']">
+        <jxb:class name="DataProcessing"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='descriptionType']">
+        <jxb:class name="Description"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='instrumentDescriptionType']">
+        <jxb:class name="InstrumentDescription"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='paramType']">
+        <jxb:class name="Param"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='peakListBinaryType']">
+        <jxb:class name="PeakListBinary"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='personType']">
+        <jxb:class name="Person"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='precursorType']">
+        <jxb:class name="Precursor"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='softwareType']">
+        <jxb:class name="Software"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='sourceFileType']">
+        <jxb:class name="SourceFile"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='spectrumDescType']">
+        <jxb:class name="SpectrumDesc"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='spectrumSettingsType']">
+        <jxb:class name="SpectrumSettings"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='spectrumType']">
+        <jxb:class name="Spectrum"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='supDataBinaryType']">
+        <jxb:class name="SupDataBinary"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='supDataType']">
+        <jxb:class name="SupData"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='supDescType']">
+        <jxb:class name="SupDesc"/>
+    </jxb:bindings>
+    <jxb:bindings node="//xs:complexType[@name='userParamType']">
+        <jxb:class name="UserParam"/>
+    </jxb:bindings>
+
+</jxb:bindings>
+

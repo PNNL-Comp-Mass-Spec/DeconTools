@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommitComments>	<CommitComment>Implementing mzIdentML export (has errors)</CommitComment>
+	<CommitComment>MS-GFDB works (supporting mzML).</CommitComment>
+	<CommitComment>MS-GFDB works (directory change for Maven)</CommitComment>
+	<CommitComment>MS-GFDB works</CommitComment>
+	<CommitComment>MS-GFDB is working (directory structure change for Maven)</CommitComment>
+	<CommitComment>MS-GFDB supports MzML</CommitComment>
+	<CommitComment>MS-GFDB supports MzML (must resolve jmzml warning)</CommitComment>
+</CommitComments>

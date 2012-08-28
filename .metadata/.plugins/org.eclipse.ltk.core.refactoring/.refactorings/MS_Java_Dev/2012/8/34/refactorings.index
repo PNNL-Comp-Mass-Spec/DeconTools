@@ -1,0 +1,10 @@
+1345661425345	Delete element
+1345673262824	Rename method 'computeSpecProb'
+1345673281521	Rename method 'computeSpecProb'
+1345674413258	Rename local variable 'score'
+1345675113782	Rename local variable 'isNTerm'
+1345675158828	Rename local variable 'sumIonCurrent'
+1345675410517	Rename method 'extractFeatures'
+1345675740907	Rename local variable 'prm'
+1345676337735	Rename field 'sumIonCurrent'
+1345747869505	Rename package 'edu.ucsd.msjava.jmzparser'

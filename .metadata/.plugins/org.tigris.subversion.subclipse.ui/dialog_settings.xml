@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="538" key="RevertDialog.location.x"/>
+	<item value="500" key="CommitDialog.weights.0"/>
+	<item value="500" key="CommitDialog.weights.1"/>
+	<item value="168" key="CommitDialog.location.y"/>
+	<item value="292" key="RevertDialog.location.y"/>
+	<item value="219" key="CommitDialog.location.x"/>
+	<item value="525" key="RevertDialog.size.x"/>
+	<item value="433" key="RevertDialog.size.y"/>
+	<item value="1163" key="CommitDialog.size.x"/>
+	<item value="619" key="CommitDialog.size.y"/>
+	<section name="CommitWizard">
+		<item value="false" key="ShowCompare"/>
+		<item value="500" key="VWeight2"/>
+		<item value="500" key="VWeight1"/>
+	</section>
+</section>

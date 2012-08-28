@@ -1,0 +1,1 @@
+java -jar "dist\MzidParsers.jar" Tandem2mzid src/resources/55merge_tandem.xml 55merge_tandem.mzid "Rnd"

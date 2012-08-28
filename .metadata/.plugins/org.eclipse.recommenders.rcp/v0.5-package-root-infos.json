@@ -1,0 +1,756 @@
+[
+  {
+    "symbolicName": "jrap_StAX_v5.2",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "d0f006214befa965b32211b3b0daaa9c3f702400",
+    "jarFileModificationDate": "2012-08-01T15:15:24.584-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\MS_Java_Dev\\extlib\\jrap_StAX_v5.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "commons-codec-1.3",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "fd32786786e2adb664d5ecc965da47629dca14ba",
+    "jarFileModificationDate": "2012-08-01T15:16:07.985-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\commons-codec\\commons-codec\\1.3\\commons-codec-1.3.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.jmzreader",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b47ca9bedbcc8924a43f8a566eab0843143c0fb1",
+    "jarFileModificationDate": "2012-08-01T15:16:04.208-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\jmzreader\\1.2.0\\jmzreader-1.2.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.jboss.jsfunit.jboss-jsfunit-richfaces",
+    "version": {
+      "major": 1,
+      "minor": 3,
+      "micro": 0,
+      "qualifier": "Final"
+    },
+    "jarFileFingerprint": "5af71cbc5310a27d74370ab7c23fc50f3f4d6a5c",
+    "jarFileModificationDate": "2012-08-01T15:16:24.652-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\jboss\\jsfunit\\jboss-jsfunit-microdeployer\\1.3.0.Final\\jboss-jsfunit-microdeployer-1.3.0.Final.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "28fafc73ef666d5332ae38bca27093e989fbf4e9",
+    "jarFileModificationDate": "2012-07-11T13:54:20.029-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\zipfs.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "4f34f82e2bfa92ac372bbaf25dc41679fd7d58d2",
+    "jarFileModificationDate": "2012-07-11T13:54:23.088-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\localedata.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.mzxml-parser",
+    "version": {
+      "major": 1,
+      "minor": 3,
+      "micro": 3,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b2e9a6ce5221a86d5d1d91826f0dd2471ba2b2eb",
+    "jarFileModificationDate": "2012-08-01T15:16:05.051-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\mzxml-parser\\1.3.3\\mzxml-parser-1.3.3.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.org.apache.commons.io",
+    "version": {
+      "major": 1,
+      "minor": 4,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "51097cd000ec88214ff181c9f059947de1cf4a35",
+    "jarFileModificationDate": "2012-08-15T14:16:12.890-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\com.springsource.org.apache.commons.io-1.4.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "log4j-1.2.13",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "8b1b85d04eea979c33109ea42808b7d3f6d355ab",
+    "jarFileModificationDate": "2012-08-15T14:16:12.783-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\log4j-1.2.13.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.jmzidml.jmzidentml",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 3,
+      "qualifier": "SNAPSHOT"
+    },
+    "jarFileFingerprint": "95ec9726b275af8d51234767fa10c535b963aac4",
+    "jarFileModificationDate": "2012-08-15T14:16:12.684-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\jmzidentml-1.1.3-SNAPSHOT.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "slf4j.log4j12",
+    "version": {
+      "major": 1,
+      "minor": 6,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "bd245d6746cdd4e6203e976e21d597a46f115802",
+    "jarFileModificationDate": "2012-08-01T15:16:07.938-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\slf4j\\slf4j-log4j12\\1.6.1\\slf4j-log4j12-1.6.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "ececf755ad0be59e88e5cbd67f333420e0cea3a7",
+    "jarFileModificationDate": "2012-07-11T13:54:20.012-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\sunjce_provider.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "chardet-1.0",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "f7c063ce9ef5c742bebdd1712be9180d618fb559",
+    "jarFileModificationDate": "2012-08-01T15:16:04.708-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\mozilla\\intl\\chardet\\1.0\\chardet-1.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.mgf-parser",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 2,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "3a379e9c342fb8440a441019b848e1f79c8ea043",
+    "jarFileModificationDate": "2012-08-01T15:16:04.692-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\mgf-parser\\1.2.2\\mgf-parser-1.2.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.mzdata-parser",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "1ceaffd3ba1f01eee312e0a7199949e20f94f941",
+    "jarFileModificationDate": "2012-08-01T15:16:05.113-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\mzdata-parser\\1.2.1\\mzdata-parser-1.2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.jmzidml.jmzidentml",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 3,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "868be327402da7e87dde39d582bd54685268076d",
+    "jarFileModificationDate": "2012-08-01T15:16:05.894-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\jmzidml\\jmzidentml\\1.1.3\\jmzidentml-1.1.3.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jaxb-xjc-2.1.7",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "11158463551315974014d1956fe431b7c0591d80",
+    "jarFileModificationDate": "2012-08-01T15:16:08.515-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\com\\sun\\xml\\bind\\jaxb-xjc\\2.1.7\\jaxb-xjc-2.1.7.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "9c65be66b7d064aa969eed550ce6bca0c930fd4c",
+    "jarFileModificationDate": "2012-07-11T13:54:20.108-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\jce.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "junit",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "f7cf82c2c188e805e53a5525e2c1e055237770c6",
+    "jarFileModificationDate": "2012-07-11T13:45:46.574-07:00",
+    "location": "C:\\Program Files\\Eclipse\\plugins\\org.junit_4.10.0.v4_10_0_v20120426-0900\\junit.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "cpdetector-1.0.7",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "11016bbc57141221d8833bab16da23651d67c949",
+    "jarFileModificationDate": "2012-08-01T15:16:04.942-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\cpdetector\\cpdetector\\1.0.7\\cpdetector-1.0.7.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "stax-api-1.0-2",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "d6337b0de8b25e53e81b922352fbea9f9f57ba0b",
+    "jarFileModificationDate": "2012-08-01T15:16:27.446-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\javax\\xml\\stream\\stax-api\\1.0-2\\stax-api-1.0-2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "70020954a878f151d863091253774186b91b4ac2",
+    "jarFileModificationDate": "2012-07-11T13:54:20.027-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\sunmscapi.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jaxb-api-2.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "d68570e722cffe2000358ce9c661a0b0bf1ebe11",
+    "jarFileModificationDate": "2012-08-01T15:16:27.446-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\javax\\xml\\bind\\jaxb-api\\2.1\\jaxb-api-2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "de.proteinms.omxparser.omssa-parser",
+    "version": {
+      "major": 1,
+      "minor": 4,
+      "micro": 5,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "f7e8489be2df118da5148d7e97278145da29fbdc",
+    "jarFileModificationDate": "2012-08-15T14:16:12.854-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\omssa-parser-1.4.5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "de.proteinms.xtandemparser.xtandem-parser",
+    "version": {
+      "major": 1,
+      "minor": 4,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "96f691395201926546efa9dbe33a8cfd6edfb922",
+    "jarFileModificationDate": "2012-08-15T14:16:12.755-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\xtandem-parser-1.4.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "log4j-1.2.13",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "8b1b85d04eea979c33109ea42808b7d3f6d355ab",
+    "jarFileModificationDate": "2012-08-01T15:16:08.032-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\log4j\\log4j\\1.2.13\\log4j-1.2.13.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jargs-1.0",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "fc2f2fb720a8b136cf12fdd1d481137b103bf100",
+    "jarFileModificationDate": "2012-08-01T15:16:04.395-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\jargs\\jargs\\1.0\\jargs-1.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "7adcbf61d1fc48b618ed0ec0220636b3da758b9a",
+    "jarFileModificationDate": "2012-07-11T13:54:20.162-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\resources.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.pride-wrapper",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "0d003dcf31e636c2c6dab0b5a35675dbbdf45092",
+    "jarFileModificationDate": "2012-08-01T15:16:04.364-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\pride-wrapper\\1.2.0\\pride-wrapper-1.2.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.org.apache.commons.logging",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "7657caf2c78e1d79c74d36f2ae128a115f7cc180",
+    "jarFileModificationDate": "2012-08-15T14:16:13-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\com.springsource.org.apache.commons.logging-1.1.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "junit-4.8.2",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "c94f54227b08100974c36170dcb53329435fe5ad",
+    "jarFileModificationDate": "2012-08-01T16:04:36.193-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\junit\\junit\\4.8.2\\junit-4.8.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "424a40c7501175ae679c1ad6dc15bb89a97b5f4d",
+    "jarFileModificationDate": "2012-07-11T13:54:23.059-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\jsse.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "uk.ac.ebi.jmzml.jmzml",
+    "version": {
+      "major": 1,
+      "minor": 6,
+      "micro": 6,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "ff4862a42a59bca9bea453f4d24dbdfe9c1678cf",
+    "jarFileModificationDate": "2012-08-01T17:14:53.870-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\jmzml\\jmzml\\1.6.6\\jmzml-1.6.6.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.dta-parser",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "64c491a633df24d877edae137e54bd7772f5de8d",
+    "jarFileModificationDate": "2012-08-01T15:16:04.505-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\dta-parser\\1.2.1\\dta-parser-1.2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.mzml-wrapper",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "7075c3dbe6985705e823705a9bbef96c20babe28",
+    "jarFileModificationDate": "2012-08-01T15:16:04.427-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\mzml-wrapper\\1.2\\mzml-wrapper-1.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "9883b0d59e88984bb0ce603e0d1dd329b379c508",
+    "jarFileModificationDate": "2012-07-11T13:54:19.984-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\dnsns.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.apache.commons.collections",
+    "version": {
+      "major": 3,
+      "minor": 2,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "761ea405b9b37ced573d2df0d1e3a4e0f9edc668",
+    "jarFileModificationDate": "2012-08-01T15:16:08.157-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\commons-collections\\commons-collections\\3.2.1\\commons-collections-3.2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "psidev.psi.tools.xxindex",
+    "version": {
+      "major": 0,
+      "minor": 11,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e485ef60cd13cb15431e1949fa08d288247d8db5",
+    "jarFileModificationDate": "2012-08-15T14:16:12.679-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\Developments\\mzidentml-parsers\\lib\\xxindex-0.11.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.braf",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b2be215682ca1630c8d7d509fa29092d6b9d4dc4",
+    "jarFileModificationDate": "2012-08-01T15:16:04.005-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\braf\\1.0.1\\braf-1.0.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "activation-1.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e6cb541461c2834bdea3eb920f1884d1eb508b50",
+    "jarFileModificationDate": "2012-08-01T15:16:07.969-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\javax\\activation\\activation\\1.1\\activation-1.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.hamcrest.core",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 0,
+      "qualifier": "v20090501071000"
+    },
+    "jarFileFingerprint": "254c9660266e1177c94b1a9ba05f6f757e7fb85a",
+    "jarFileModificationDate": "2012-07-11T13:45:04.445-07:00",
+    "location": "C:\\Program Files\\Eclipse\\plugins\\org.hamcrest.core_1.1.0.v20090501071000.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e13fa744c80238d7b92b4707308d3aec1d65062f",
+    "jarFileModificationDate": "2012-07-11T13:54:20.110-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\jfr.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.ms2-parser",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "d0abf475b61c2c869e3c317f325a84e1d18f57f9",
+    "jarFileModificationDate": "2012-08-01T15:16:04.349-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\ms2-parser\\1.2.1\\ms2-parser-1.2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.org.apache.commons.io",
+    "version": {
+      "major": 1,
+      "minor": 4,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "51097cd000ec88214ff181c9f059947de1cf4a35",
+    "jarFileModificationDate": "2012-08-01T15:16:09.858-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\apache\\commons\\com.springsource.org.apache.commons.io\\1.4.0\\com.springsource.org.apache.commons.io-1.4.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.pkl-parser",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b9dabf8f3b4315508d39cbcc875da0c0d98eaab7",
+    "jarFileModificationDate": "2012-08-01T15:16:04.177-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\pkl-parser\\1.2.1\\pkl-parser-1.2.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "slf4j.api",
+    "version": {
+      "major": 1,
+      "minor": 6,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "6f3b8a24bf970f17289b234284c94f43eb42f0e4",
+    "jarFileModificationDate": "2012-08-01T15:16:07.954-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\slf4j\\slf4j-api\\1.6.1\\slf4j-api-1.6.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.org.apache.commons.logging",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "7657caf2c78e1d79c74d36f2ae128a115f7cc180",
+    "jarFileModificationDate": "2012-08-01T15:16:09.858-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\apache\\commons\\com.springsource.org.apache.commons.logging\\1.1.1\\com.springsource.org.apache.commons.logging-1.1.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "junit-3.8.1",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "99129f16442844f6a4a11ae22fbbee40b14d774f",
+    "jarFileModificationDate": "2012-08-01T15:16:26.353-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\junit\\junit\\3.8.1\\junit-3.8.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.jmzml.jmzml",
+    "version": {
+      "major": 1,
+      "minor": 6,
+      "micro": 8,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "52159698d7327912d8778f5dde900e73510e5e69",
+    "jarFileModificationDate": "2012-08-01T15:16:05.363-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\jmzml\\jmzml\\1.6.8\\jmzml-1.6.8.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.jaxb.pride-jaxb",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 8,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "fb5dc6361a97310636908961f830982a4677689e",
+    "jarFileModificationDate": "2012-08-01T15:16:05.223-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\jaxb\\pride-jaxb\\1.0.8\\pride-jaxb-1.0.8.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "f56383db77ae9502e6ca617e57d55ee73d631c46",
+    "jarFileModificationDate": "2012-07-11T13:54:19.995-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\ext\\sunec.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "psidev.psi.tools.xxindex",
+    "version": {
+      "major": 0,
+      "minor": 11,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e485ef60cd13cb15431e1949fa08d288247d8db5",
+    "jarFileModificationDate": "2012-08-01T15:16:06.549-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\psidev\\psi\\tools\\xxindex\\0.11\\xxindex-0.11.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.antlr",
+    "version": {
+      "major": 2,
+      "minor": 7,
+      "micro": 7,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "597f2905b2ac79ac7d94a5c6bdd5e9a2bdbfe66f",
+    "jarFileModificationDate": "2012-08-01T15:16:10.154-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\antlr\\com.springsource.antlr\\2.7.7\\com.springsource.antlr-2.7.7.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.springsource.org.apache.log4j",
+    "version": {
+      "major": 1,
+      "minor": 2,
+      "micro": 15,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "c506424c00adc6df9a367632c45351fb48e52216",
+    "jarFileModificationDate": "2012-08-01T15:16:10.123-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\org\\apache\\log4j\\com.springsource.org.apache.log4j\\1.2.15\\com.springsource.org.apache.log4j-1.2.15.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "882ffd7cd444d677d1c238584f73437b5f545337",
+    "jarFileModificationDate": "2012-07-11T13:54:22.712-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\charsets.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jaxb-impl-2.1.7",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "923680ab18e09563a3d733f314b4d446541b2aba",
+    "jarFileModificationDate": "2012-08-01T15:51:49.177-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\com\\sun\\xml\\bind\\jaxb-impl\\2.1.7\\jaxb-impl-2.1.7.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "uk.ac.ebi.pride.tools.jmzreader",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "5c1f077f836897bc94eedbe292a10b07ce9997b5",
+    "jarFileModificationDate": "2012-08-01T17:14:53.137-07:00",
+    "location": "C:\\cygwin\\home\\kims336\\.m2\\repository\\uk\\ac\\ebi\\pride\\tools\\jmzreader\\1.1\\jmzreader-1.1.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "6637b95c6a176dd4c3cef55838294771512bcf17",
+    "jarFileModificationDate": "2012-07-11T13:54:22.655-07:00",
+    "location": "C:\\Program Files\\Java\\jre7\\lib\\rt.jar",
+    "javaRuntime": true
+  }
+]
