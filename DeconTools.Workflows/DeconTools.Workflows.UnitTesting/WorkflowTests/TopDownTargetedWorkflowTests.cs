@@ -17,7 +17,57 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void TopDownWorkflowTest1()
         {
-            
+
+            //see https://jira.pnnl.gov/jira/browse/OMCR-98
+
+            string baseFolder =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact";
+
+            const string executorParameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\Parameters\topdownExecutorParameters1.xml";
+            var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+
+            const string testDatasetPath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+            string resultsFolderLocation = executorParameters.ResultsFolder;
+
+            string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
+
+            var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+
+            string proteinSeq =
+                @"A.VDKTNPYALMEDAAQKTFDKLKTEQPEIRKNPELLREIVQQELLPYVHIKYAGALVLGPYYRNATPAQRDAYFAAFKDYLAQVYGQALAMYEGQEYRIEPAKPFADKSNLTIRVTIIDKNGRPPVRLDFQWRKNSKTGEWQAYDMIAEGVSMITTKQNEWSDILSAKGVDGLTKQLEISAKTPITLDEKK.";
+
+            executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.Code == proteinSeq).ToList();
+            executor.Execute();
+
+            Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+
+            //TODO: fix _quant.txt output column headers
+            TopDownTargetedResultFromTextImporter importer = new TopDownTargetedResultFromTextImporter(expectedResultsFilename);
+
+            var results=   importer.Import();
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.HasResults);
+            Assert.AreEqual(1, results.Results.Count);
+
+            //foreach (var r in results.Results)
+            //{
+            //    Console.WriteLine(r.TargetID + "\t" + r.ScanLC + "\t" + r.Intensity);
+            //}
+
+
         }
 
 
