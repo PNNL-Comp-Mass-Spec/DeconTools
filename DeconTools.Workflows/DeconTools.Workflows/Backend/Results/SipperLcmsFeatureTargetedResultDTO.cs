@@ -35,6 +35,9 @@ namespace DeconTools.Workflows.Backend.Results
 
         public int NumHighQualityProfilePeaks { get; set; }
 
+        public double[] LabelDistributionVals { get; set; }
+
+
         /// <summary>
         /// Number of labeled carbons as a percent of the total number of carbons
         /// </summary>

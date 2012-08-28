@@ -49,10 +49,27 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.PercentPeptideLabelled.ToString("0.00"));
             sb.Append(Delimiter);
-            
-
+            sb.Append(GetLabelDistributionDataAsString(sipperResult));
+            sb.Append(Delimiter);
             sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
             return sb.ToString();
+
+        }
+
+        private string GetLabelDistributionDataAsString(SipperLcmsFeatureTargetedResultDTO sipperResult)
+        {
+            if (sipperResult.LabelDistributionVals == null || sipperResult.LabelDistributionVals.Length == 0)
+                return string.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            char delim = ',';
+            foreach (var labelDistributionVal in sipperResult.LabelDistributionVals)
+            {
+                sb.Append(labelDistributionVal.ToString("0.#####"));
+                sb.Append(delim);
+            }
+
+            return sb.ToString().TrimEnd(delim);
 
         }
 
@@ -91,6 +108,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("PercentCarbonsLabelled");
             sb.Append(Delimiter);
             sb.Append("PercentPeptidesLabelled");
+            sb.Append(Delimiter);
+            sb.Append("LabelDistributionData");
             sb.Append(Delimiter);
             sb.Append("ValidationCode");
             

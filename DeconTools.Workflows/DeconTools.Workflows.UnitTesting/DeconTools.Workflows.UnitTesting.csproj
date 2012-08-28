@@ -74,6 +74,7 @@
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\N14N15TargetedResultFileIOTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\SipperResultToLcmsFeatureExporterTests.cs" />
+    <Compile Include="FileIOTests\TargetedResultFileIOTests\SipperTargetedResultFromTextImporterTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

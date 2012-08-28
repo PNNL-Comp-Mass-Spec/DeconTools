@@ -55,7 +55,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //TODO: fix _quant.txt output column headers
             TopDownTargetedResultFromTextImporter importer = new TopDownTargetedResultFromTextImporter(expectedResultsFilename);
-
             var results=   importer.Import();
 
             Assert.IsNotNull(results);

@@ -17,8 +17,8 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _numCarbonsLabelledHeaders = {"NumCarbonsLabelled" , "AmountLabelling"};
         private string[] _percentPeptidesLabelledHeaders = { "PercentPeptidesLabelled", "FractionLabel" };
         private string[] _percentCarbonsLabelledHeaders = { "PercentCarbonsLabelled"};
-        
         private string[] _numHQProfilePeaksHeaders = { "NumHQProfilePeaks" };
+        private string[] _labelDistribHeaders = { "LabelDistributionData" };
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
@@ -50,9 +50,40 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.NumCarbonsLabelled = ParseDoubleField(LookupData(processedData, _numCarbonsLabelledHeaders));
             result.PercentCarbonsLabelled = ParseDoubleField(LookupData(processedData, _percentCarbonsLabelledHeaders));
             result.NumHighQualityProfilePeaks = ParseIntField(LookupData(processedData, _numHQProfilePeaksHeaders));
-           
+
+            result.LabelDistributionVals = ConvertLabelDistStringToArray(LookupData(processedData, _labelDistribHeaders));
             
             return result;
+
+        }
+
+        private double[] ConvertLabelDistStringToArray(string labelDistString)
+        {
+            if (string.IsNullOrEmpty(labelDistString))return null;
+
+            char delim = ',';
+            var parsedLabelDistString = labelDistString.Split(delim);
+
+            List<double> labelDistVals = new List<double>();
+
+            foreach (var s in parsedLabelDistString)
+            {
+                double val;
+                var parsedOk = double.TryParse(s, out val);
+
+                if (parsedOk)
+                {
+                    labelDistVals.Add(val);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+
+            return labelDistVals.ToArray();
 
         }
     }

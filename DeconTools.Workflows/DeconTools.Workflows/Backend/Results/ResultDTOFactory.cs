@@ -78,6 +78,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.PercentPeptideLabelled = result.PercentPeptideLabelled;
             r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
+            r.LabelDistributionVals = result.LabelDistributionVals.ToArray();
         }
 
 

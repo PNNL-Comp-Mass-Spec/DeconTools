@@ -51,6 +51,11 @@ namespace DeconTools.Workflows.Backend.FileIO
 
               StreamReader reader;
 
+            if (!File.Exists(_filename))
+            {
+                throw new System.IO.IOException("Cannot import. File does not exist.");
+            }
+
             try
             {
                 reader = new StreamReader(this._filename);

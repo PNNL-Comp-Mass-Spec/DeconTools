@@ -183,6 +183,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             SubtractedIso = _quantifier.HighQualitySubtractedProfile;
 
+            
+            
         }
 
         public IsotopicProfile SubtractedIso { get; set; }
