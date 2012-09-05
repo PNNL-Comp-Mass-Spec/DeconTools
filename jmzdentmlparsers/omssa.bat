@@ -1,1 +1,0 @@
-java -jar "dist\MzidParsers.jar" Omssa2mzid src\resources\55merge_omssa.omx test/55merge_omssa.mzid

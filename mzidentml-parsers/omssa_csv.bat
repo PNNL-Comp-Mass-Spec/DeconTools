@@ -1,1 +1,0 @@
-java -jar "dist\MzidParsers.jar" Csv2mzid src/resources/Toxo_1D_Slice43_omssa.csv Toxo_1D_Slice43_omssa.mzid src/resources/toxo_omssa_params.csv  "Rnd"
