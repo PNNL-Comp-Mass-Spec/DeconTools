@@ -200,7 +200,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 NormalizedAdjustedIso = NormalizedIso.CloneIsotopicProfile();
 
-                UpdateIsoIntensitiesUsingChromCorrData(chromCorrelationData, NormalizedAdjustedIso);
+                //this is experimental!!  it attempts to correct the problems caused by Orbitraps on isotopic profile intensities
+                //UpdateIsoIntensitiesUsingChromCorrData(chromCorrelationData, NormalizedAdjustedIso);
 
 
                 //----------------- create ratio data -------------------------------------------------------
@@ -379,6 +380,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private List<double> AdjustLabelDistributionVals(double[] labelDistributionVals)
         {
+            if (labelDistributionVals == null || labelDistributionVals.Length == 0) return new List<double>();
             
             //first, will set the negative values to zero. (cannot have a negative label distribution)
             for (int i = 0; i < labelDistributionVals.Length; i++)
