@@ -94,6 +94,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeRunRelatedTasks()
         {
+            if (Run == null) return;
+
             base.InitializeRunRelatedTasks();
 
             if (this.WorkflowParameters is TargetedWorkflowParameters)

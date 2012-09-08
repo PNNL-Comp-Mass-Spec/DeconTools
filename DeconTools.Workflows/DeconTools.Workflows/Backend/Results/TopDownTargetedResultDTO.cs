@@ -7,7 +7,7 @@ namespace DeconTools.Workflows.Backend.Results
 {
 	public class TopDownTargetedResultDTO : UnlabelledTargetedResultDTO
 	{
-		public List<int> PrsmList { get; set; }
+		public HashSet<int> PrsmList { get; set; }
 		public List<int> ChargeStateList { get; set; }
 		public float Quantitation { get; set; }
 

@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Core.Results;
+using DeconTools.Workflows.Backend.Data;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
+using GWSGraphLibrary.GraphGenerator;
+
 namespace DeconTools.Workflows.Backend.Core
 {
 	public class TopDownTargetedWorkflowExecutor : TargetedWorkflowExecutor
@@ -24,13 +31,190 @@ namespace DeconTools.Workflows.Backend.Core
 		
 		#region Public Methods
 
-        protected override void ExecutePostProcessingHook()
+        protected override void ExecutePreProcessingHook()
         {
-            // Collapse + process results
-            PostProcessResults(ResultRepository.Results);
+            if (ExecutorParameters is TopDownTargetedWorkflowExecutorParameters)
+            {
+                //If user wants to save to Excel, we need to make sure that the underlying parameters supports saving chromatogram data
+                if (((TopDownTargetedWorkflowExecutorParameters)ExecutorParameters).ExportChromatogramData)
+                {
+                     if (TargetedWorkflow is TopDownTargetedWorkflow && TargetedWorkflow.WorkflowParameters is TopDownTargetedWorkflowParameters)
+                     {
+                         ((TopDownTargetedWorkflowParameters)TargetedWorkflow.WorkflowParameters).SaveChromatogramData=true;
+                     }
+                }
+            }
         }
 
-        protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
+
+        protected override void ExecutePostProcessingHook()
+        {
+
+
+            var topDownTargetedWorkflowExecutorParameters = ExecutorParameters as TopDownTargetedWorkflowExecutorParameters;
+            if (topDownTargetedWorkflowExecutorParameters != null)
+            {
+                if ((topDownTargetedWorkflowExecutorParameters).ExportChromatogramData)
+                {
+                    ExportChromatogramDataForEachProtein();
+                }
+
+
+            }
+
+            
+            // Collapse + process results
+            PostProcessResults(ResultRepository.Results);
+
+          
+
+            
+
+
+        }
+
+	    private void ExportChromatogramDataForEachProtein()
+	    {
+	        var allResults = TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
+
+	        var proteoformList = allResults.Select(p => p.Target.Code).Distinct();
+
+
+	        int counter = 0;
+            foreach (var proteoform in proteoformList)
+            {
+                counter++;
+
+                var resultsForProtein = allResults.Where(p => p.Target.Code == proteoform).ToList();
+
+	            
+
+
+                StringBuilder sb = new StringBuilder();
+                char delimiter = '\t';
+
+                sb.Append("Unique identifier= \t" + proteoform);
+                sb.Append(Environment.NewLine);
+                sb.Append("MSAlign row= " + counter);
+                sb.Append(Environment.NewLine);
+                sb.Append(Environment.NewLine);
+
+	            string tableHeader = "z\tmz\tscan\tscore\tintensity";
+	            sb.Append(tableHeader);
+	            sb.Append(Environment.NewLine);
+
+	            foreach (TopDownTargetedResult result in resultsForProtein)
+	            {
+                    
+
+                    sb.Append(result.Target.ChargeState);
+	                sb.Append(delimiter);
+	                sb.Append(result.Target.MZ);
+	                sb.Append(delimiter);
+	                
+	                sb.Append(result.ChromPeakSelected == null ? 0 : result.ChromPeakSelected.XValue);
+	                sb.Append(delimiter);
+	                sb.Append(result.Score);
+	                sb.Append(delimiter);
+	                sb.Append(result.IsotopicProfile == null ? 0 : result.IsotopicProfile.IntensityAggregate);
+
+	                sb.Append(Environment.NewLine);
+
+	            }
+
+	            sb.Append(Environment.NewLine);
+
+
+	            TopdownChromData topdownChromData = new TopdownChromData();
+                
+
+                foreach (TopDownTargetedResult result in resultsForProtein)
+	            {
+                    if (result.ChromValues!=null)
+                    {
+                        topdownChromData.AddChromDataItem(result.ChromValues);
+                    }
+	                
+	            }
+
+	            var allChromVals = topdownChromData.GetChromData();
+
+	            int lengthOfScanArray = allChromVals.First().Xvalues.Length;
+
+
+
+                //add headers
+	            for (int i = 0; i < resultsForProtein.Count; i++)
+	            {
+	                if (i==0)
+	                {
+	                    sb.Append("Scan");
+	                    sb.Append(delimiter);
+	                }
+
+	                sb.Append(resultsForProtein[i].Target.ChargeState.ToString("0") + "+");
+	                sb.Append(delimiter);
+
+	            }
+
+	            sb.Append(Environment.NewLine);
+
+
+
+                //add data from multiple chrom data arrays
+                for (int i = 0; i < lengthOfScanArray; i++)
+                {
+                    bool isFirstIteration = true;
+                    foreach (var val in allChromVals)
+                    {
+                        if (isFirstIteration)
+                        {
+                            sb.Append(val.Xvalues[i]);
+                            sb.Append(delimiter);
+
+                            isFirstIteration = false;
+
+                        }
+                        sb.Append(val.Yvalues[i]);
+                        sb.Append(delimiter);
+
+
+                    }
+                    sb.Append(Environment.NewLine);
+
+                }
+
+                string outputDebugFolder = ExecutorParameters.ResultsFolder + Path.DirectorySeparatorChar + "Testing";
+                if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
+
+                string chromDataFilename = outputDebugFolder + Path.DirectorySeparatorChar+ "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt";
+
+                using (StreamWriter writer = new StreamWriter(chromDataFilename))
+                {
+                    writer.Write(sb.ToString());
+                    writer.Close();
+
+                }
+
+                //output graph image
+
+                ChromatogramGraphGenerator graphGenerator = new ChromatogramGraphGenerator();
+                
+
+
+
+
+
+
+            }
+
+	        
+
+
+
+	    }
+
+	    protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
             return GetMSAlignTargets(targetsFilePath);
         }
@@ -86,7 +270,7 @@ namespace DeconTools.Workflows.Backend.Core
 			for (int i = 0; i < results.Count; i++)
 			{
 				var result = (TopDownTargetedResultDTO) results[i];
-				result.PrsmList = new List<int>();
+				result.PrsmList = new HashSet<int>();
 				if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
 
 				result.ChargeStateList = new List<int>();

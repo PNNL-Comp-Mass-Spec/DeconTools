@@ -163,19 +163,35 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (massTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
                     {
-                        var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
+                        var mt = MassTagsForReference.TargetList.FirstOrDefault(p => p.ID == target.FeatureToMassTagID);
 
-                        //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
+                        if (mt==null)
+                        {
+                            if (isMissingMonoMass)
+                            {
+                                throw new ApplicationException(
+                                    "Trying to prepare target list, but Target is missing both the 'Code' and the Monoisotopic Mass. One or the other is needed.");
+                            }
+                            target.Code = "AVERAGINE";
+                            target.EmpiricalFormula =
+                                IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
+                        }
+                             //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
                         //  see:   \\gigasax\DMS_Parameter_Files\Sequest\sequest_ETD_N14_NE.params
                         //To create the theoretical isotopic profile, we will change the 'X' to 'L'
-                        if (mt.Code.Contains("X"))
+                        else if (mt.Code.Contains("X"))
                         {
                             mt.Code = mt.Code.Replace('X', 'L');
                             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
                         }
+                        else
+                        {
+                            target.Code = mt.Code;
+                            target.EmpiricalFormula = mt.EmpiricalFormula;
+                        }
+                        
 
-                        target.Code = mt.Code;
-                        target.EmpiricalFormula = mt.EmpiricalFormula;
+                        
                     }
                     else
                     {

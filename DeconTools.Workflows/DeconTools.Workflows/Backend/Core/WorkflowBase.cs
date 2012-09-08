@@ -54,7 +54,12 @@ namespace DeconTools.Workflows.Backend.Core
                 if (_run != value)
                 {
                     _run = value;
-                    InitializeRunRelatedTasks();
+
+                    if (_run!=null)
+                    {
+                        InitializeRunRelatedTasks(); 
+                    }
+                    
                 }
 
             }

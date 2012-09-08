@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.FileIO
@@ -16,6 +17,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 		protected override string addBasicTargetedResult(TargetedResultDTO result)
 		{
 			var topDownResult = (TopDownTargetedResultDTO)result;
+
+            if (topDownResult.PrsmList==null)
+            {
+                throw new NullReferenceException(
+                    "Top down exporter failed when trying to process a result. The 'PrsmList' object is null.");
+            }
+
 
 			var sb = new StringBuilder();
 

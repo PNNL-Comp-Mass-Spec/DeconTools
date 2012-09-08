@@ -145,8 +145,11 @@ namespace DeconTools.Workflows.Backend.Core
 					ExecuteTask(_chromatogramCorrelatorTask);
 				}
 
-				// Save targeted result data
-				//Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};
+                if (((TopDownTargetedWorkflowParameters)_workflowParameters).SaveChromatogramData)
+                {
+                    Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};    
+                }
+				
 				//TargetResults.Add(Run.CurrentMassTag.ID, Result);
 			}
 			catch (Exception ex)

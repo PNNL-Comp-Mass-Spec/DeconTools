@@ -8,7 +8,7 @@ namespace DeconTools.Workflows.Backend.Results
     {
 
         public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
-		{
+        {
             writeStandardInfoToResult(resultLight, result);
 
         }
@@ -40,12 +40,12 @@ namespace DeconTools.Workflows.Backend.Results
                 writeStandardInfoToResult(tr, result);
                 addAdditionalInfo(tr, result as SipperLcmsTargetedResult);
             }
-			else if (result is TopDownTargetedResult)
-			{
-				tr = new TopDownTargetedResultDTO();
-				writeStandardInfoToResult(tr, result);
-				addAdditionalInfo(tr, result as TopDownTargetedResult);
-			}
+            else if (result is TopDownTargetedResult)
+            {
+                tr = new TopDownTargetedResultDTO();
+                writeStandardInfoToResult(tr, result);
+                addAdditionalInfo(tr, result as TopDownTargetedResult);
+            }
             else
             {
                 throw new NotImplementedException();
@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.PercentPeptideLabelled = result.PercentPeptideLabelled;
             r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
-            r.LabelDistributionVals = result.LabelDistributionVals.ToArray();
+            r.LabelDistributionVals = result.LabelDistributionVals == null ? null : result.LabelDistributionVals.ToArray();
         }
 
 
@@ -87,21 +87,21 @@ namespace DeconTools.Workflows.Backend.Results
             // no other info needed now
         }
 
-		private static void addAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
-		{
-			var r = (TopDownTargetedResultDTO)tr;
+        private static void addAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
+        {
+            var r = (TopDownTargetedResultDTO)tr;
 
-			r.PrsmList = null;
-			r.ChargeStateList = null;
-			r.Quantitation = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
-			
-			r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
-			//r.ProteinName = "";
-			//r.ProteinMass = 0.0;
-			r.PeptideSequence = result.Target.Code;
-			r.MostAbundantChargeState = r.ChargeState;
-			r.ChromPeakSelectedHeight = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
-		}
+            r.PrsmList = null;
+            r.ChargeStateList = null;
+            r.Quantitation = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+
+            r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
+            //r.ProteinName = "";
+            //r.ProteinMass = 0.0;
+            r.PeptideSequence = result.Target.Code;
+            r.MostAbundantChargeState = r.ChargeState;
+            r.ChromPeakSelectedHeight = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+        }
 
         private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {
@@ -110,16 +110,16 @@ namespace DeconTools.Workflows.Backend.Results
             r.IScoreN15 = (float)result.InterferenceScoreN15;
             r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IsotopicProfileLabeled.IntensityAggregate;
             r.MonoMZN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoPeakMZ;
-            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) - 
+            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) -
                 result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
             r.MonoMassN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoIsotopicMass;
-           
-            r.NETN15 = (float) result.GetNETN15();
-            r.NumChromPeaksWithinTolN15 = (short) result.NumChromPeaksWithinToleranceForN15Profile;
-            r.NumQualityChromPeaksWithinTolN15 = (short) result.NumChromPeaksWithinToleranceForN15Profile;
-            r.Ratio = (float) result.RatioN14N15;
-            r.RatioContributionN14 = (float) result.RatioContributionN14;
-            r.RatioContributionN15 = (float) result.RatioContributionN15;
+
+            r.NETN15 = (float)result.GetNETN15();
+            r.NumChromPeaksWithinTolN15 = (short)result.NumChromPeaksWithinToleranceForN15Profile;
+            r.NumQualityChromPeaksWithinTolN15 = (short)result.NumChromPeaksWithinToleranceForN15Profile;
+            r.Ratio = (float)result.RatioN14N15;
+            r.RatioContributionN14 = (float)result.RatioContributionN14;
+            r.RatioContributionN15 = (float)result.RatioContributionN15;
             r.ScanN15 = result.GetScanNumN15();
 
             if (result.ChromPeakSelectedN15 != null)
@@ -129,7 +129,7 @@ namespace DeconTools.Workflows.Backend.Results
                 r.ScanN15End = (int)Math.Round(result.ChromPeakSelectedN15.XValue + sigma);
             }
 
-            
+
 
 
         }

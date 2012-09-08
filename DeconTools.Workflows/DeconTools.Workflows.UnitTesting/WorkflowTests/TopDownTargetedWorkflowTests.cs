@@ -27,6 +27,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\Parameters\topdownExecutorParameters1.xml";
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
+            executorParameters.ExportChromatogramData = true;
 
             const string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\RawData\Proteus_Peri_intact_ETD.raw";
@@ -50,6 +51,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.Code == proteinSeq).ToList();
             executor.Execute();
 
+            Assert.IsNotNull(executor.TargetedWorkflow.Run);
+
+            Console.WriteLine("Num targetedResults in Run = " + executor.TargetedWorkflow.Run.ResultCollection.MassTagResultList.Count);
+
             Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
 
 
@@ -71,6 +76,57 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         //TODO: add simple unit test for various mods
+
+
+        [Test]
+        public void WorkflowExecutorParametersTest()
+        {
+            const string executorParameterFile =
+               @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\Parameters\topdownExecutorParameters1.xml";
+            var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+
+            Assert.AreEqual(false, executorParameters.ExportChromatogramData);
+
+            executorParameters.ExportChromatogramData = true;
+
+            string exportedParameterFile = executorParameterFile.Replace("1.xml", "_exportTest1.xml");
+            executorParameters.SaveParametersToXML(exportedParameterFile);
+
+            Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist");
+
+            var executorParameters2 = new TopDownTargetedWorkflowExecutorParameters();
+            executorParameters2.LoadParameters(exportedParameterFile);
+
+            Assert.AreEqual(true, executorParameters2.ExportChromatogramData);
+
+
+        }
+
+        [Test]
+        public void WorkflowParametersTest()
+        {
+            const string executorParameterFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Topdown_standard_testing\Test1_MSAlign_ProteusPeriIntact\Parameters\topdownWorkflowParameters1.xml";
+            var workflowParameters = new TopDownTargetedWorkflowParameters();
+            workflowParameters.LoadParameters(executorParameterFile);
+
+            Assert.AreEqual(false, workflowParameters.SaveChromatogramData);
+
+            workflowParameters.SaveChromatogramData = true;
+
+            string exportedParameterFile = executorParameterFile.Replace("1.xml", "_exportTest1.xml");
+            workflowParameters.SaveParametersToXML(exportedParameterFile);
+
+            Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist");
+
+            var executorParameters2 = new TopDownTargetedWorkflowParameters();
+            executorParameters2.LoadParameters(exportedParameterFile);
+
+            Assert.AreEqual(true, executorParameters2.SaveChromatogramData);
+
+
+        }
 
 
 
@@ -142,6 +198,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //Assert.IsEmpty(expectedResults);
         }	
+
+      
 
 		[Test]
 		public void TestTargetedWorkflowExecutorMod()

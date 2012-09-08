@@ -7,6 +7,9 @@
 			ResultType = DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
 		}
 
+        public bool SaveChromatogramData { get; set; }
+
+
 		public override Globals.TargetedWorkflowTypes WorkflowType
 		{
 			get

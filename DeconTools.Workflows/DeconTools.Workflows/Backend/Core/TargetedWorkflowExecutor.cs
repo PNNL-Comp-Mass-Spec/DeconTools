@@ -229,38 +229,58 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string TryFindTargetsForCurrentDataset()
         {
-            string expectedTargetsFile = ExecutorParameters.TargetsBaseFolder + Path.DirectorySeparatorChar +
-                                         RunUtilities.GetDatasetName(DatasetPath) + "_targets.txt";
+            string expectedTargetsFileBase = ExecutorParameters.TargetsBaseFolder + Path.DirectorySeparatorChar +
+                                             RunUtilities.GetDatasetName(DatasetPath);
 
-            if (File.Exists(expectedTargetsFile))
-            {
-                return expectedTargetsFile;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            string expectedTargetsFile1 = expectedTargetsFileBase + "_targets.txt";
+            string expectedTargetsFile2 = expectedTargetsFileBase + "_LCMSFeatures.txt";
 
+
+            if (File.Exists(expectedTargetsFile1))
+            {
+                return expectedTargetsFile1;
+            }
+            
+            if (File.Exists(expectedTargetsFile2))
+            {
+                return expectedTargetsFile2;
+            }
+            
+            return String.Empty;
         }
 
 
         public override void Execute()
         {
-            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
-
-            ReportGeneralProgress("Started Processing....");
-            ReportGeneralProgress("Dataset = " + DatasetPath);
-            ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
-
-
             try
             {
+                SetupLogging();
+
+                ReportGeneralProgress("Started Processing....");
+                ReportGeneralProgress("Dataset = " + DatasetPath);
+                ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
+                
+
                 if (!RunIsInitialized)
                 {
                     InitializeRun(DatasetPath);
                 }
-
+                
+                ExecutePreProcessingHook();
+                
                 ProcessDataset();
+
+                ExecutePostProcessingHook();
+
+                ExportData();
+
+                
+
+                HandleAlignmentInfoFiles();
+                finalizeRun();
+
+                
+
             }
             catch (Exception ex)
             {
@@ -283,6 +303,21 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
+        }
+
+        protected virtual void SetupLogging()
+        {
+            if (string.IsNullOrEmpty(ExecutorParameters.LoggingFolder))
+            {
+                ExecutorParameters.LoggingFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
+            }
+
+            if (!Directory.Exists(ExecutorParameters.LoggingFolder))
+            {
+                Directory.CreateDirectory(ExecutorParameters.LoggingFolder);
+            }
+
+            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
         }
 
 
@@ -410,26 +445,35 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
 
+           
+           
+
             
+        }
 
 
-            ExecutePostProcessingHook();
-
+        protected virtual void ExportData()
+        {
             string outputFileName = GetOutputFileName();
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
             TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
             exporter.ExportResults(ResultRepository.Results);
-
-            HandleAlignmentInfoFiles();
-            finalizeRun();
         }
+
+
 
         /// <summary>
         /// This hook allows inheriting class to execute post processing methods. e.g. see TopDownTargetedWorkflowExecutor
         /// </summary>
         protected virtual void ExecutePostProcessingHook() {}
         
+        /// <summary>
+        /// This hook allows inheriting class to execute pre processing methods.
+        /// </summary>
+        protected virtual void ExecutePreProcessingHook(){}
+
+
         protected virtual string GetOutputFileName()
         {
             return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
