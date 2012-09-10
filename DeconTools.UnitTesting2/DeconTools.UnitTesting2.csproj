@@ -118,7 +118,6 @@
     <Compile Include="Run_relatedTests\BrukerV3Tests.cs" />
     <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
     <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
-    <Compile Include="Run_relatedTests\MZXMLRun_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorFromPeakDataTests.cs" />

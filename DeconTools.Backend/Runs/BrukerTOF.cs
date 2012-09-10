@@ -74,7 +74,9 @@ namespace DeconTools.Backend.Runs
 
             var spectrum = _spectrumCollection[scanNum];
 
-            return spectrum.RetentionTime;
+
+            //NOTE: retention time is reported in seconds. DeconTools normally reports in Minutes. So need to change this.
+            return spectrum.RetentionTime/60;
 
 
 

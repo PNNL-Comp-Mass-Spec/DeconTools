@@ -91,7 +91,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             //}
 
-            Assert.AreEqual(32.328, (decimal)run.GetTime(478));
+            Assert.AreEqual(0.5388m, (decimal)run.GetTime(478));
 
 
         }

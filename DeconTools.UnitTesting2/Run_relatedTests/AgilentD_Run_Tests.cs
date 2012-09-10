@@ -207,7 +207,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void GetMSLevelTest2()
         {
             string testfile =
-                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+                @"\\proto-7\AgQTOF03\2012_3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
             Run run = new AgilentDRun(testfile);
 
@@ -236,7 +236,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void GetPrecursorTest1()
         {
             string testfile =
-                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
+                @"\\proto-7\AgQTOF03\2012_3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
             Run run = new AgilentDRun(testfile);
             

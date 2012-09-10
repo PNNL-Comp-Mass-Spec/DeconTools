@@ -297,9 +297,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.That(File.Exists(expectedIsosOutput));
         }
 
-
-
-
         [Test]
         public void ProcessBruker9T()
         {
