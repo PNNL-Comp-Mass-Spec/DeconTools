@@ -252,7 +252,7 @@ namespace DeconTools.Backend.Algorithms
 
                 if (!tempPeakList.Any())
                 {
-                    
+                    //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
                 }
                 else
                 {

@@ -238,7 +238,19 @@ namespace DeconTools.Backend.Utilities
                 squaredMeanResiduals.Add(meanResidual * meanResidual);
             }
 
-            rsquaredVal = 1 - (squaredResiduals.Sum() / squaredMeanResiduals.Sum());
+            var sumSquaredMeanResiduals = squaredMeanResiduals.Sum();
+            
+            //check for sum=0 
+            if (sumSquaredMeanResiduals==0)
+            {
+                rsquaredVal = 0;
+            }
+            else
+            {
+                rsquaredVal = 1 - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
+            }
+            
+            
         }
 
 

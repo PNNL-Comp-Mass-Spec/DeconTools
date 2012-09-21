@@ -112,7 +112,20 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 else if (iso1.Peaklist[i].Height >= minIntensity)
                 {
                     _peakChromGen.GenerateChromatogram(run, startScan, stopScan, iso1.Peaklist[i].XValue, ChromToleranceInPPM);
-                    var chromPeakXYData = _smoother.Smooth(run.XYData);
+
+                    XYData chromPeakXYData;
+                    if (run.XYData==null || run.XYData.Xvalues.Length==0)
+                    {
+                        chromPeakXYData = new XYData();
+                        chromPeakXYData.Xvalues = basePeakChromXYData.Xvalues;
+                        chromPeakXYData.Yvalues = new double[basePeakChromXYData.Xvalues.Length];
+                    }
+                    else
+                    {
+                        chromPeakXYData = _smoother.Smooth(run.XYData);
+                    }
+
+                    
 
                     var chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null &&
                                  chromPeakXYData.Xvalues.Length > 3;

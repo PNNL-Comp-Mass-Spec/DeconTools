@@ -243,6 +243,12 @@ namespace DeconTools.Backend.Utilities
             return run;
         }
 
+        public static Run CreateAndLoadPeaks(string rawdataFilename)
+        {
+            return CreateAndLoadPeaks(rawdataFilename, string.Empty);
+        }
+
+
         public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile)
         {
             RunFactory rf = new RunFactory();

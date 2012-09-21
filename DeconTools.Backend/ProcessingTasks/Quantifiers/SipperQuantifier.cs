@@ -13,18 +13,35 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     public class SipperQuantifier : Task
     {
         private const double LabeldistCalcIntensityThreshold = 0.1;
-
-        private LabelingDistributionCalculator _labelingDistributionCalculator;
         private double _chromScanWindowWidth;
 
-        private ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
+        private readonly LabelingDistributionCalculator _labelingDistributionCalculator;
+        private readonly ChromatogramCorrelatorTask _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
+
         #region Properties
         protected double MaximumFitScoreForFurtherProcessing { get; set; }
         protected double MinimumRatioAreaForFurtherProcessing { get; set; }
-        protected double ChromToleranceInPPM { get; set; }
+
+        protected double ChromToleranceInPPM
+        {
+            get
+            {
+                return _chromatogramCorrelatorTask.ChromToleranceInPPM;
+            }
+            set
+            {
+                _chromatogramCorrelatorTask.ChromToleranceInPPM = value;
+            }
+        }
 
 
-        public double MinimumRelativeIntensityForChromCorr { get; set; }
+        public double MinimumRelativeIntensityForChromCorr
+        {
+            get { return _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr; }
+            set { _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr = value; }
+        }
+
+
         public List<double> ChromatogramRSquaredVals { get; set; }
 
         public IsotopicProfile NormalizedIso { get; set; }
@@ -47,7 +64,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-       
+
 
         #endregion
 
@@ -55,13 +72,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         #region Constructors
         public SipperQuantifier()
         {
-            MaximumFitScoreForFurtherProcessing = 0.15;
+            MaximumFitScoreForFurtherProcessing = 0.50;
             MinimumRatioAreaForFurtherProcessing = 5;
-            MinimumRelativeIntensityForChromCorr = 0.025;
+
             MinimumRSquaredValForQuant = 0.75;
 
-            _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
-            _chromatogramCorrelatorTask.ChromToleranceInPPM = 25;
+            MinimumRelativeIntensityForChromCorr = 0.0001;
+            ChromToleranceInPPM = 25;
+
 
             ChromatogramRSquaredVals = new List<double>();
             RatioLogVals = new XYData();
@@ -134,10 +152,21 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
 
                 result.ErrorDescription = flagstring.TrimEnd(';');
+                result.FailedResult = true;
+                if (flagstring.Contains("PeakToTheLeft"))
+                {
+                    result.FailureType = Globals.TargetedResultFailureType.DeisotopingProblemDetected;
+                }
+                else
+                {
+                    result.FailureType = Globals.TargetedResultFailureType.QuantifierFailure;
+                }
+
             }
 
 
             bool resultPassesMinimalCriteria = (result.Score < MaximumFitScoreForFurtherProcessing && result.Flags.Count == 0);
+
 
 
 
@@ -151,10 +180,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
                 int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
 
-                ChromCorrelationData chromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultList.Run, NormalizedIso, startScan,
+                result.ChromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultList.Run, NormalizedIso, startScan,
                                                                                 stopScan);
 
-                ChromatogramRSquaredVals.AddRange(chromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
+                ChromatogramRSquaredVals.AddRange(result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
 
                 //trim off zeros
                 for (int i = ChromatogramRSquaredVals.Count - 1; i >= 0; i--)
@@ -201,7 +230,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 NormalizedAdjustedIso = NormalizedIso.CloneIsotopicProfile();
 
                 //this is experimental!!  it attempts to correct the problems caused by Orbitraps on isotopic profile intensities
-                //UpdateIsoIntensitiesUsingChromCorrData(chromCorrelationData, NormalizedAdjustedIso);
+                //UpdateIsoIntensitiesUsingChromCorrData(result.ChromCorrelationData, NormalizedAdjustedIso);
 
 
                 //----------------- create ratio data -------------------------------------------------------
@@ -274,7 +303,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 double[] numLabelVals;
                 double[] labelDistributionVals;
 
-                var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double) p.Height).ToList();
+                var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double)p.Height).ToList();
                 var normalizedCorrectedIntensityVals = NormalizedAdjustedIso.Peaklist.Select(p => (double)p.Height).ToList();
 
                 _labelingDistributionCalculator.CalculateLabelingDistribution(theorIntensityVals, normalizedCorrectedIntensityVals,
@@ -284,7 +313,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                               out labelDistributionVals);
 
 
-
+                //negative distribution values are zeroed out. And, then the remaining values are adjusted such that they add up to 1. 
                 result.LabelDistributionVals = AdjustLabelDistributionVals(labelDistributionVals);
 
 
@@ -300,9 +329,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-                HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(chromCorrelationData, subtractedIsoData);
+                HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, subtractedIsoData);
 
-                IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(chromCorrelationData, ratioData);
+                IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, ratioData);
 
                 if (highQualityRatioProfileData.Peaklist != null && highQualityRatioProfileData.Peaklist.Count > 0)
                 {
@@ -332,8 +361,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 int numCarbons = result.Target.GetAtomCountForElement("C");
 
                 result.PercentCarbonsLabelled = (result.NumCarbonsLabelled / numCarbons) * 100;
-                result.PercentPeptideLabelled = distFractionLabelled*100;
-                
+                result.PercentPeptideLabelled = distFractionLabelled * 100;
+
                 //if (HighQualitySubtractedProfile.Peaklist != null && HighQualitySubtractedProfile.Peaklist.Count > 0)
                 //{
                 //    result.PercentPeptideLabelled = HighQualitySubtractedProfile.Peaklist.Max(p => p.Height) * 100;
@@ -356,6 +385,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
             }
+            else
+            {
+                result.FailedResult = true;
+
+                if (result.FailureType == Globals.TargetedResultFailureType.None)
+                {
+                    result.FailureType = Globals.TargetedResultFailureType.MinimalCriteriaNotMet;
+                }
+
+            }
 
 
 
@@ -373,7 +412,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             {
                 return 0;
             }
-            
+
             return averageMassLabelled - averageMassTheor;
         }
 
@@ -381,15 +420,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private List<double> AdjustLabelDistributionVals(double[] labelDistributionVals)
         {
             if (labelDistributionVals == null || labelDistributionVals.Length == 0) return new List<double>();
-            
+
             //first, will set the negative values to zero. (cannot have a negative label distribution)
             for (int i = 0; i < labelDistributionVals.Length; i++)
             {
-                if (labelDistributionVals[i]<0)
+                if (labelDistributionVals[i] < 0)
                 {
                     labelDistributionVals[i] = 0;
                 }
-                
+
             }
 
 
@@ -400,7 +439,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             //re-normalize.  
             for (int i = 0; i < labelDistributionVals.Length; i++)
             {
-                labelDistributionVals[i] = labelDistributionVals[i]/sumVals;
+                labelDistributionVals[i] = labelDistributionVals[i] / sumVals;
             }
 
             return labelDistributionVals.ToList();

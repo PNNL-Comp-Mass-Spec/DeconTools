@@ -96,7 +96,10 @@ namespace DeconTools.Backend.Core
 
         public int GetScanNum()
         {
-            if (ScanSet == null) return -1;
+            if (ScanSet == null)
+            {
+                return Target.ScanLCTarget;
+            }
             else
             {
                 return ScanSet.PrimaryScanNumber;
@@ -241,7 +244,7 @@ namespace DeconTools.Backend.Core
             this.IsotopicProfile = null;
             this.ChromPeakSelected = null;
             this.FailedResult = false;
-            this.FailureType = Globals.TargetedResultFailureType.NONE;
+            this.FailureType = Globals.TargetedResultFailureType.None;
         }
 
         public virtual void ResetMassSpectrumRelatedInfo()

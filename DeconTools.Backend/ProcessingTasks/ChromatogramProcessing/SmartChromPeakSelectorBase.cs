@@ -178,7 +178,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             if (failedChromPeakSelection)
             {
                 currentResult.FailedResult = true;
-                currentResult.FailureType = Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES;
+                currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
 
         }
@@ -248,7 +248,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 bestpeak = null;
                 currentResult.FailedResult = true;
-                currentResult.FailureType = Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES;
+                currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
             else if (filteredList1.Count == 1)
             {
@@ -284,7 +284,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     {
                         bestpeak = null;
                         currentResult.FailedResult = true;
-                        currentResult.FailureType = Globals.TargetedResultFailureType.TOO_MANY_HIGH_QUALITY_CHROMPEAKS;
+                        currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
                     }
                 }
                 else

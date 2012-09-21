@@ -278,7 +278,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             else
             {
                 result.FailedResult = true;     //note: for labelled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing 
-                result.FailureType = Globals.TargetedResultFailureType.MSFEATURE_NOT_FOUND;
+                result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
             }
 
             resultList.IsosResultBin.Add(result);

@@ -372,6 +372,7 @@
     <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryIsoDistCreator2.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
+    <Compile Include="Utilities\IsotopicProfileElutionExtractor.cs" />
     <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\ObjectCopier.cs" />
     <Compile Include="Utilities\PeptideUtils.cs" />

@@ -254,7 +254,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (result != null)
                 {
                     result.FailedResult = true;
-                    result.FailureType = Globals.TargetedResultFailureType.CHROM_XYDATA_NOT_FOUND;
+                    result.FailureType = Globals.TargetedResultFailureType.ChromDataNotFound;
                     
                     result.Flags.Add(new ChromPeakNotFoundResultFlag());
                 }

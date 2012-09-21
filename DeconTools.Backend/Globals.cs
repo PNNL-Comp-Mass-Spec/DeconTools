@@ -147,15 +147,16 @@ namespace DeconTools.Backend
 
         public enum TargetedResultFailureType
         {
-            NONE,
-            CHROM_XYDATA_NOT_FOUND,
-            CHROM_PEAKS_NOT_DETECTED,
-            CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES,
-            MSPEAKS_NOT_DETECTED,
-            MSFEATURE_NOT_FOUND,
-            TOO_MANY_HIGH_QUALITY_CHROMPEAKS,
-            QUANTIFIER_FAILURE
-
+            None,
+            ChromDataNotFound,
+            ChromPeaksNotDetected,
+            ChrompeakNotFoundWithinTolerances,
+            MspeaksNotDetected,
+            MsfeatureNotFound,
+            TooManyHighQualityChrompeaks,
+            QuantifierFailure,
+            DeisotopingProblemDetected,
+            MinimalCriteriaNotMet
         }
 
         public enum TargetedFeatureFinderType

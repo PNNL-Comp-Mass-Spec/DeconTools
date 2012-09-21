@@ -79,7 +79,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             if (failedChromPeakSelection)
             {
                 result.FailedResult = true;
-                result.FailureType = Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES;
+                result.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
 
         }
