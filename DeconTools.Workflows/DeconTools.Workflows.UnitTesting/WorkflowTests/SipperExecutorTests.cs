@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Core.Results;
 using DeconTools.Backend.FileIO;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
@@ -15,7 +16,52 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class SipperExecutorTests
     {
-      
+
+        [Test]
+        public void ExecuteSipper()
+        {
+            string paramFile =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+
+            parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+
+
+            string testDataset =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+
+            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            parameters.SaveParametersToXML(outputParameterFile);
+
+
+            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+
+
+            int[] targetsOfInterest = new int[]{5555, 11985};
+
+            executor.Targets.TargetList =
+                (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
+
+            executor.Execute();
+
+            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+
+            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+
+            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            {
+                Console.WriteLine(dataItem.CorrelationRSquaredVal);
+            }
+            
+
+        }
+
+
+
 
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess()

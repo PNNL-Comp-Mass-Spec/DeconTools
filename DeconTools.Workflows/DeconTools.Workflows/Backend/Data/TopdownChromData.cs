@@ -8,11 +8,7 @@ namespace DeconTools.Workflows.Backend.Data
     {
 
         private List<TopdownChromDataItem> _chromDataItems;
-        private int _minScan = int.MaxValue;
-        private int _maxScan = int.MinValue;
-
-
-
+       
         public TopdownChromData()
         {
             _chromDataItems = new List<TopdownChromDataItem>();

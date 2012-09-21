@@ -202,7 +202,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNull(result.ChromPeakSelected);
 
             Assert.IsTrue(result.FailedResult);
-            Assert.AreEqual(DeconTools.Backend.Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES, result.FailureType);
+            Assert.AreEqual(DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances, result.FailureType);
 
           
         }

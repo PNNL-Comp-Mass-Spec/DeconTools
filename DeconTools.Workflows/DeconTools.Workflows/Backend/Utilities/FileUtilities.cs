@@ -1,9 +1,39 @@
 ﻿
+using System.Collections.Generic;
 using System.IO;
 namespace DeconTools.Workflows.Backend.Utilities
 {
     public class FileUtilities
     {
+
+        public static List<string> LoadStringsFromFile(string filename, bool containsHeader=false)
+        {
+            var list = new List<string>();
+
+            using (var reader = new StreamReader(filename))
+            {
+                int counter = 0;
+                while (reader.Peek() != -1)
+                {
+                    if (containsHeader)
+                    {
+                        //skip the header
+                        reader.ReadLine();
+                    }
+
+                    counter++;
+                    string line = reader.ReadLine();
+                    list.Add(line);
+                }
+
+                reader.Close();
+            }
+
+            return list;
+
+        }
+
+
 
         public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
         {

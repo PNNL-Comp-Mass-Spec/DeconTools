@@ -143,7 +143,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (n14n15result.ScanSetForN15Profile == null)
                     {
                         this.Result.FailedResult = true;
-                        this.Result.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.CHROMPEAK_NOT_FOUND_WITHIN_TOLERANCES;
+                        this.Result.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
                     }
                 }
 

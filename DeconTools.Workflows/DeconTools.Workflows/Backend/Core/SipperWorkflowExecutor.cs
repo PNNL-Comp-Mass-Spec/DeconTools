@@ -7,7 +7,6 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -15,11 +14,11 @@ namespace DeconTools.Workflows.Backend.Core
     public sealed class SipperWorkflowExecutor : TargetedWorkflowExecutor
     {
 
-        
+
 
         #region Properties
 
-        
+
 
         public bool TargetsAreFromPeakMatchingDataBase { get; set; }
 
@@ -107,18 +106,18 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            var massTagIDList = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).ToList();
+            MassTagIDsinTargets = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).Where(n => n > 0).ToList();
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
-                MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, massTagIDList);
+                MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, MassTagIDsinTargets);
                 MassTagsForReference = mtImporter.Import();
             }
             else
             {
 
 
-                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, massTagIDList.Select(p => (int)p).ToList());
+                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, MassTagIDsinTargets.Select(p => (int)p).ToList());
             }
 
             MassTagsForReference.TargetList = (from n in MassTagsForReference.TargetList
@@ -134,7 +133,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            UpdateTargetMissingInfo(massTagIDList);
+            UpdateTargetMissingInfo();
 
 
             _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
@@ -150,76 +149,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             throw new NotImplementedException();
         }
-
-        private void UpdateTargetMissingInfo(List<long> massTagIDList)
-        {
-            bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
-
-            foreach (LcmsFeatureTarget target in Targets.TargetList)
-            {
-                bool isMissingMonoMass = target.MonoIsotopicMass <= 0 ;
-
-                if (String.IsNullOrEmpty(target.EmpiricalFormula))
-                {
-                    if (massTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
-                    {
-                        var mt = MassTagsForReference.TargetList.FirstOrDefault(p => p.ID == target.FeatureToMassTagID);
-
-                        if (mt==null)
-                        {
-                            if (isMissingMonoMass)
-                            {
-                                throw new ApplicationException(
-                                    "Trying to prepare target list, but Target is missing both the 'Code' and the Monoisotopic Mass. One or the other is needed.");
-                            }
-                            target.Code = "AVERAGINE";
-                            target.EmpiricalFormula =
-                                IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
-                        }
-                             //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
-                        //  see:   \\gigasax\DMS_Parameter_Files\Sequest\sequest_ETD_N14_NE.params
-                        //To create the theoretical isotopic profile, we will change the 'X' to 'L'
-                        else if (mt.Code.Contains("X"))
-                        {
-                            mt.Code = mt.Code.Replace('X', 'L');
-                            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
-                        }
-                        else
-                        {
-                            target.Code = mt.Code;
-                            target.EmpiricalFormula = mt.EmpiricalFormula;
-                        }
-                        
-
-                        
-                    }
-                    else
-                    {
-                        if (isMissingMonoMass)
-                        {
-                            throw new ApplicationException(
-                                "Trying to prepare target list, but Target is missing both the 'Code' and the Monoisotopic Mass. One or the other is needed.");
-                        }
-                        target.Code = "AVERAGINE";
-                        target.EmpiricalFormula =
-                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
-                    }
-                }
-
-                
-                if (isMissingMonoMass)
-                {
-                    target.MonoIsotopicMass =
-                        EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
-
-                    target.MZ = target.MonoIsotopicMass/target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
-                }
-
-
-
-            }
-        }
-
 
         private List<int> GetMassTagsToFilterOn(string fileRefForMassTagsToFilterOn)
         {
@@ -365,7 +294,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ReadResultsFromDB(TargetCollection targetCollection, DbDataReader reader)
         {
-            
+
             while (reader.Read())
             {
                 LcmsFeatureTarget result = new LcmsFeatureTarget();

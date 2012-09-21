@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected TargetedResultRepository ResultRepository;
 
 
-        protected List<long> ReferenceMassTagIDList = new List<long>(); 
+        protected List<long> MassTagIDsinTargets = new List<long>(); 
 
         protected WorkflowParameters _workflowParameters;
 
@@ -163,9 +163,20 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        private void UpdateTargetMissingInfo()
+        protected virtual void UpdateTargetMissingInfo()
         {
+            
             bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
+
+            List<int> massTagIDsAvailableForLookup = new List<int>();
+
+            if (canUseReferenceMassTags)
+            {
+                massTagIDsAvailableForLookup = MassTagsForReference.TargetList.Select(p => p.ID).ToList();    
+            }
+
+            
+
 
             foreach (LcmsFeatureTarget target in Targets.TargetList)
             {
@@ -173,8 +184,9 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (String.IsNullOrEmpty(target.EmpiricalFormula))
                 {
-                    if (ReferenceMassTagIDList.Contains(target.FeatureToMassTagID) && canUseReferenceMassTags)
+                    if (canUseReferenceMassTags &&  massTagIDsAvailableForLookup.Contains(target.FeatureToMassTagID))
                     {
+
                         var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
 
                         //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
@@ -349,7 +361,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        private void ProcessDataset()
+        public void ProcessDataset()
         {
 
 
