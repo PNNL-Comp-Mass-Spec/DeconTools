@@ -4,6 +4,7 @@ using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Workflows;
 using NUnit.Framework;
@@ -17,6 +18,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void TraditionalWorkflowTest1()
         {
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
+            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
+            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+
+            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
+            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
 
             var parameters=new OldDecon2LSParameters();
             parameters.HornTransformParameters.UseScanRange = true;
@@ -28,7 +37,32 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
 
-            
+
+            Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
+            Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
+            Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
+
+
+
+            IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
+            var isos = isosImporter.Import();
+
+            Assert.AreEqual(56, isos.Count);
+
+            PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
+
+            List<MSPeakResult> peaklist = new List<MSPeakResult>();
+            peakImporter.ImportPeaks(peaklist);
+
+            Assert.AreEqual(186, peaklist.Count);
+
+
+            var sumIntensities = isos.Select(p => p.IsotopicProfile.IntensityAggregate).Sum();
+            Assert.AreEqual(172780815, sumIntensities);
+
+            var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
+            Assert.AreEqual(387426719, sumPeakIntensities);
+
         }
 
 

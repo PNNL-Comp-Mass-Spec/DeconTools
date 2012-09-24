@@ -396,21 +396,8 @@ namespace DeconTools.Backend.Workflows
 
             //TODO: remove this when C# thrash is ready
             Run.DeconToolsPeakList = ((DeconToolsPeakDetector)PeakDetector).DeconEnginePeakList;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
-
-
-            //if (run.CurrentScanSet.PrimaryScanNumber == 142)
-            //{
-            //    foreach (var peak in run.PeakList)
-            //    {
-            //        Console.WriteLine(peak.XValue + "\t" + peak.Height);
-
-            //    }
-            //}
-
-            if (PeakDetector.PeaksAreStored)    //store all peak data;   (Exporters are triggered to access this and export info and clear the MSPeakResults)
-            {
-                Run.ResultCollection.FillMSPeakResults();    //data from the MSPeakList is transferred to 'MSPeakResults'
-            }
+            
+          
         }
 
         protected virtual void ExecuteOtherTasksHook() { }
