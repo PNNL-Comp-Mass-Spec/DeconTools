@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using DeconTools.Backend;
@@ -68,6 +69,55 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
 
         }
+
+
+        [Test]
+        public void SmoothWithNewDeconToolsSmootherTest1()
+        {
+            string sampleXYDataFile = FileRefs.TestFileBasePath + "\\" + "sampleXYData1.txt";
+
+            Assert.IsTrue(File.Exists(sampleXYDataFile));
+
+            var smoother = new SavitzkyGolaySmoother(7, 2);
+
+            var xydata = TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
+
+            int numSmooths = 2000;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+
+            XYData smoothedXYData=new XYData(); 
+            for (int i = 0; i < numSmooths; i++ )
+            {
+                smoothedXYData = smoother.Smooth(xydata);
+            }
+
+            stopwatch.Stop();
+
+
+            Console.WriteLine("Average time for smoothing = " + stopwatch.ElapsedMilliseconds/(double)numSmooths);
+
+            Assert.AreEqual(xydata.Xvalues.Length, smoothedXYData.Xvalues.Length);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            {
+
+                sb.Append(xydata.Xvalues[i] + "\t" + xydata.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);
+
+            }
+
+            Console.WriteLine(sb.ToString());
+
+
+
+        }
+
+
 
        
     }
