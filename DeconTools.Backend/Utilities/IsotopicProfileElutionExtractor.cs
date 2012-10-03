@@ -113,7 +113,12 @@ namespace DeconTools.Backend.Utilities
                 foreach (var msPeakResult in peaksForScan)
                 {
                     int targetBin = (int)Math.Round((msPeakResult.XValue - firstBinMZ) / binWidth);
-                    intensitiesForScan[targetBin] += (int)Math.Round(msPeakResult.Height);
+                    
+                    if (targetBin < intensitiesForScan.Length)
+                    {
+                        intensitiesForScan[targetBin] += (int)Math.Round(msPeakResult.Height); 
+                    }
+                    
 
 
                 }

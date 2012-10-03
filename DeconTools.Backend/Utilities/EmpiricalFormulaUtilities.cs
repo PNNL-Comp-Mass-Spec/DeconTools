@@ -149,7 +149,7 @@ namespace DeconTools.Backend.Utilities
                         int numAtoms = Int32.Parse(elementCountString);
 
                         bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                        Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
+                        Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
                         parsedFormula.Add(elementSymbol, numAtoms);
                     }
@@ -177,7 +177,7 @@ namespace DeconTools.Backend.Utilities
                             }
 
                             bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                            Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
+                            Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
                             parsedFormula.Add(elementSymbol, numAtoms);
 
@@ -213,7 +213,7 @@ namespace DeconTools.Backend.Utilities
                     }
 
                     bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                    Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements.");
+                    Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
                     parsedFormula.Add(elementSymbol, numAtoms);
 

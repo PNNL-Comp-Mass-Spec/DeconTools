@@ -33,6 +33,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] numQualitychromPeaksWithinTolHeaders = { "NumQualityChromPeaksWithinTol" };
 
         protected string[] validationCodeHeaders = {"ValidationCode"};
+        protected string[] failureTypeHeaders = {"FailureType"};
 
         protected string _filename { get; set; }
 
@@ -140,7 +141,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ScanLC = ParseIntField(LookupData(rowData, scanHeaders));
             result.ScanLCEnd = ParseIntField(LookupData(rowData, scanEndHeaders));
             result.ScanLCStart = ParseIntField(LookupData(rowData, scanStartHeaders));
-
+            result.ErrorDescription = LookupData(rowData, failureTypeHeaders);
             result.EmpiricalFormula = LookupData(rowData, empiricalFormulaHeaders);
             result.Code = LookupData(rowData, codeHeaders);
             

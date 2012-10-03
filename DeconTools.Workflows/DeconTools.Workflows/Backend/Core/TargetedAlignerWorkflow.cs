@@ -249,7 +249,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var filteredMasstags = (from n in this.MassTagList
                                     where n.NormalizedElutionTime >= netgrouping1.Lower && n.NormalizedElutionTime < netgrouping1.Upper
-                                    select n);
+                                    orderby n.ObsCount descending select n);
 
             int numPassingMassTagsInGrouping = 0;
             int numFailingMassTagsInGrouping = 0;
@@ -326,6 +326,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var filteredMasstags = (from n in this.MassTagList
                                         where n.NormalizedElutionTime >= netGrouping.Lower && n.NormalizedElutionTime < netGrouping.Upper
+                                        orderby n.ObsCount descending
                                         select n);
 
                 int numPassingMassTagsInGrouping = 0;

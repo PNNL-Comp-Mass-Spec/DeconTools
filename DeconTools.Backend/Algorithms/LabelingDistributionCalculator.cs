@@ -112,14 +112,17 @@ namespace DeconTools.Backend.Algorithms
                 dotProducts.Add(numLabels*distributionData[numLabels]);
             }
 
-            if (fractionLabelled>0)
-            {
-                averageLabelsIncorporated = dotProducts.Sum() / fractionLabelled;
-            }
-            else
-            {
-                averageLabelsIncorporated = 0;
-            }
+
+            averageLabelsIncorporated = dotProducts.Sum() / 1;
+
+            //if (fractionLabelled>0)
+            //{
+            //    averageLabelsIncorporated = dotProducts.Sum() / 1;
+            //}
+            //else
+            //{
+            //    averageLabelsIncorporated = 0;
+            //}
 
             
 

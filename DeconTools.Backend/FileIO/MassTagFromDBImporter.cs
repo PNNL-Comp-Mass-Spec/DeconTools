@@ -17,10 +17,11 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MassTagFromSqlDBImporter()
         {
-            this.DbUsername = "mtuser";
-            this.DbUserPassWord = "mt4fun";
-            this.ImporterMode = Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode;
-            this.ChargeStateFilterThreshold = 0.1;
+            DbUsername = "mtuser";
+            DbUserPassWord = "mt4fun";
+            ImporterMode = Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode;
+            ChunkSize = 500;
+            ChargeStateFilterThreshold = 0.1;
         }
 
 
@@ -40,6 +41,11 @@ namespace DeconTools.Backend.FileIO
         public string DbServerName { get; set; }
         public string DbUserPassWord { get; set; }
         public string DbName { get; set; }
+
+
+        public int ChunkSize { get; set; }
+
+
         public DeconTools.Backend.Globals.MassTagDBImporterMode ImporterMode { get; set; }
 
         /// <summary>
@@ -150,7 +156,20 @@ namespace DeconTools.Backend.FileIO
                             empiricalFormula = Convert.ToString(reader["Empirical_Formula"]);
 
                         var rowData = Tuple.Create(mtid, modName, modPosition, empiricalFormula);
-                        _massTagModData.Add(rowData);
+
+                        
+
+                        if (rowData.Item2.Contains("O18"))
+                        {
+                            Console.WriteLine("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
+                            //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled 
+                        }
+                        else
+                        {
+                            _massTagModData.Add(rowData); 
+                        }
+
+                        
                     }
                 }
             }
@@ -169,7 +188,7 @@ namespace DeconTools.Backend.FileIO
 
 
             int currentListPos = 0;
-            int chunkSize = 5000;
+            
 
             using (var cnn = fact.CreateConnection())
             {
@@ -179,8 +198,8 @@ namespace DeconTools.Backend.FileIO
                 int progressCounter = 0;
                 while (currentListPos < massTagsToBeRetrivedList.Count )
                 {
-                    List<long> nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(chunkSize).ToList();// GetRange(currentIndex, 5000);
-                    currentListPos += (chunkSize-1);
+                    List<long> nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
+                    currentListPos += (ChunkSize-1);
 
                     string queryString = createQueryString(this.ImporterMode,nextGroupOfMassTagIDs);
                     //Console.WriteLine(queryString);
@@ -189,7 +208,7 @@ namespace DeconTools.Backend.FileIO
                     using (DbCommand command = cnn.CreateCommand())
                     {
                         command.CommandText = queryString;
-                        command.CommandTimeout = 60;
+                        command.CommandTimeout = 120;
                         DbDataReader reader = command.ExecuteReader();
 
                         
