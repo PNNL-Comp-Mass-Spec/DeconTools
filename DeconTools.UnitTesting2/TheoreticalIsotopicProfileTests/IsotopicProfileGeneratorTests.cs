@@ -2,6 +2,7 @@
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
 
@@ -10,6 +11,22 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
     [TestFixture]
     public class IsotopicProfileGeneratorTests
     {
+        [Test]
+        public void GenerateIsotopicProfileTest1()
+        {
+            PeptideUtils peptideUtils = new PeptideUtils();
+
+
+            string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
+
+
+            JoshTheorFeatureGenerator featureGenerator = new JoshTheorFeatureGenerator();
+            
+
+        }
+
+
+
         [Test]
         public void TomGenerateTheorProfileTest1()
         {

@@ -191,8 +191,8 @@ namespace DeconTools.Workflows.Backend.Results
             tr.IScore = (float)result.InterferenceScore;
             tr.MonoMass = result.IsotopicProfile == null ? result.Target.MonoIsotopicMass : result.IsotopicProfile.MonoIsotopicMass;
             tr.MonoMZ = result.IsotopicProfile == null ? result.Target.MZ : result.IsotopicProfile.MonoPeakMZ;
-            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d : result.GetMassAlignmentErrorInPPM();
-            tr.MonoMassCalibrated = result.IsotopicProfile == null ? 0d : -1 * ((result.Target.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) - result.Target.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
+            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d : result.GetMassErrorBeforeAlignmentInPPM();
+            tr.MonoMassCalibrated = result.GetCalibratedMonoisotopicMass();
 
             tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();

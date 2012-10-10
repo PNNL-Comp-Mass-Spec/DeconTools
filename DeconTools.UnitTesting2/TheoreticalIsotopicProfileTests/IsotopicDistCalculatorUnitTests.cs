@@ -21,6 +21,24 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
         [Test]
+        public void GetIsotopicProfileTest1()
+        {
+            PeptideUtils peptideUtils = new PeptideUtils();
+            var empFormula=  peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
+
+            IsotopicDistributionCalculator isoCalc = IsotopicDistributionCalculator.Instance;
+            IsotopicProfile iso=  isoCalc.GetIsotopePattern(empFormula);
+            
+
+            TestUtilities.DisplayIsotopicProfileData(iso);
+
+
+
+
+        }
+
+
+        [Test]
         public void TestSingletonPattern()
         {
             IsotopicDistributionCalculator myPatterner = IsotopicDistributionCalculator.Instance;

@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
+            Run run = RunUtilities.CreateAndAlignRun(testFile, peakTestFile);
 
 
             TargetCollection mtc = new TargetCollection();
@@ -49,6 +49,30 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             result.DisplayToConsole();
+
+            Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
+            Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
+
+            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
+
+            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
+
+
+            var calibratedMass = -1* ((result.Target.MonoIsotopicMass*result.GetMassErrorAfterAlignmentInPPM()/1e6) -
+                                  result.Target.MonoIsotopicMass);
+
+
+            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
+
+
+            Console.WriteLine("calibrated mass= \t" + calibratedMass);
+            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
+
+            var errorInMZ = result.GetMassErrorAfterAlignmentInPPM()*result.Target.MonoIsotopicMass/1e6;
+            var calcTheorMonoMass = calibratedMass + errorInMZ;
+
+
+            Console.WriteLine("Theor monomass=" + calcTheorMonoMass);
 
 
         }

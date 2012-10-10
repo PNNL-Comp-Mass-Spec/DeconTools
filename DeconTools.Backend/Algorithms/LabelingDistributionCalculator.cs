@@ -107,22 +107,30 @@ namespace DeconTools.Backend.Algorithms
             fractionUnlabelled = distributionData[0];
             fractionLabelled = 1 - fractionUnlabelled;
 
-            for (int numLabels = 0; numLabels < distributionData.Count; numLabels++)
+            //for (int numLabels = 0; numLabels < distributionData.Count; numLabels++)
+            //{
+            //    dotProducts.Add(numLabels*distributionData[numLabels]);
+            //}
+
+
+            //averageLabelsIncorporated = dotProducts.Sum() / 1;
+
+            if (fractionLabelled > 0)
             {
-                dotProducts.Add(numLabels*distributionData[numLabels]);
+                double sum = 0;
+                for (int numLabels = 1; numLabels < distributionData.Count; numLabels++)
+                {
+                    sum += distributionData[numLabels];
+                    dotProducts.Add(numLabels * distributionData[numLabels]);
+                }
+
+
+                averageLabelsIncorporated = dotProducts.Sum() / sum;
             }
-
-
-            averageLabelsIncorporated = dotProducts.Sum() / 1;
-
-            //if (fractionLabelled>0)
-            //{
-            //    averageLabelsIncorporated = dotProducts.Sum() / 1;
-            //}
-            //else
-            //{
-            //    averageLabelsIncorporated = 0;
-            //}
+            else
+            {
+                averageLabelsIncorporated = 0;
+            }
 
             
 

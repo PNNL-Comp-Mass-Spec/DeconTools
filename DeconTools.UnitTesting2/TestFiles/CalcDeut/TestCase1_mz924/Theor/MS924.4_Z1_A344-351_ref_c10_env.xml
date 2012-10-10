@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsExperiemnt localdate='2005-10-3' localtime='09:25:55'>
+  <Information>
+    <DataSrc source='MS924.4_Z1_A344-351_peaks.xml'/>
+    <SrcProgram source='/home/j1/Tubulin/CalcDeut/CollectPeaks.py' ub_z='1' cutoff='10.0' sort_key='centroid' lb_z='1' mz_err='0.03' cutoff_key='Y'/>
+  </Information>
+  <EnvList entries='1'>
+    <Envelope max_deut='2' Z='1'>
+      <Y content_type='numlist' entries='3'>
+      100.0
+      53.019
+      20.6161
+      </Y>
+      <centroid content_type='numlist' entries='3'>
+      924.39202
+      925.39495
+      926.39553
+      </centroid>
+    </Envelope>
+  </EnvList>
+</MsExperiemnt>

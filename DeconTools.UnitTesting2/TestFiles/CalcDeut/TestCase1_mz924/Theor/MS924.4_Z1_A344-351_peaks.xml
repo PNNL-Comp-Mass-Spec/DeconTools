@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsExperiemnt localdate='2005-10-2' localtime='23:37:41'>
+  <Information>
+    <DataSrc source='MS924.4_Z1_A344-351.txt' type='PeakList' format='Simple'/>
+    <SrcProgram source='/home/j1/Tubulin/CalcDeut/ms2xml.py'/>
+  </Information>
+  <PeakList>
+    <Y content_type='numlist' entries='5'>
+    100.0000
+    53.0190
+    20.6161
+    5.9286
+    1.3694
+    </Y>
+    <centroid content_type='numlist' entries='5'>
+    924.39202
+    925.39495
+    926.39553
+    927.39655
+    928.39781
+    </centroid>
+  </PeakList>
+</MsExperiemnt>

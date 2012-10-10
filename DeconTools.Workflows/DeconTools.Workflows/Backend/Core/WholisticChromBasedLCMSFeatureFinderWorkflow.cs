@@ -257,7 +257,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                                 //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
                                 this.Run.ResultCollection.IsosResultBin.Clear();
-                                this.Deconvolutor.deconvolute(this.Run.ResultCollection);
+                                this.Deconvolutor.Deconvolute(this.Run.ResultCollection);
 
                                 this.Validator.Execute(this.Run.ResultCollection);
 
@@ -491,7 +491,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                             //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
                             run.ResultCollection.IsosResultBin.Clear();
-                            this.Deconvolutor.deconvolute(run.ResultCollection);
+                            this.Deconvolutor.Deconvolute(run.ResultCollection);
 
                             this.Validator.Execute(run.ResultCollection);
 

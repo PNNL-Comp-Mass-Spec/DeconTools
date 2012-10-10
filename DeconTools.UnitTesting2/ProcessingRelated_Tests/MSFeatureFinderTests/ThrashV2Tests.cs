@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
@@ -16,18 +17,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void ThrashV2Test1()
         {
-             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            var scansetCollection=  ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var scansetCollection = ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
-
-
-            
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             ThrashDeconvolutorV2 deconvolutor = new ThrashDeconvolutorV2();
 
 
-            List<IsosResult> isosResults=new List<IsosResult>();
+            List<IsosResult> isosResults = new List<IsosResult>();
             foreach (var scanSet in scansetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
@@ -50,7 +48,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             }
 
-            
+
 
             IsosResult testResult = isosResults[0];
 
@@ -110,6 +108,42 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
             //TestUtilities.DisplayPeaks(run.PeakList);
+
+        }
+
+        [Test]
+        public void OldDeconvolutorTest_temp1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            string paramFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_MaxFit1.xml";
+            parameters.Load(paramFile);
+
+            ScanSet scanSet = new ScanSetFactory().CreateScanSet(run, 5509, 1);
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(0.33, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var deconvolutor = new HornDeconvolutor(parameters.HornTransformParameters);
+            run.CurrentScanSet = scanSet;
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+            deconvolutor.Execute(run.ResultCollection);
+
+            run.ResultCollection.ResultList = run.ResultCollection.ResultList.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).ToList();
+
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            //IsosResult testIso = run.ResultCollection.ResultList[0];
+
+            //TestUtilities.DisplayIsotopicProfileData(testIso.IsotopicProfile);
+
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            //TestUtilities.DisplayPeaks(run.PeakList);
+
+
 
         }
     }

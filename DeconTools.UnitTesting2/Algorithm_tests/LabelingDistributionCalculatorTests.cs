@@ -13,8 +13,87 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
     [TestFixture]
     public class LabelingDistributionCalculatorTests
     {
+
         [Test]
         public void CalculateLabelingDistributionTest1()
+        {
+            // LabelDistribution calculation is based on John Chik's work
+            // He provided a standard set of data here:  http://people.ucalgary.ca/~dschriem/CalcDeut/CalcDeut/
+            // We will use his test values and pass it through our implementation
+            /*
+             *#<<<Isotope Calculation Result >>>
+                #Formula: ISO:|VDWCPTGF| H2O + (H)1
+                #Resolution: 10000 resolving power
+                #Threshold (%): 1.0000
+                #Isotope List - 5 Mass(es)
+                # 
+                #Isotope Mass   Relative Intensity
+                   924.39202        100.0000
+                   925.39495         53.0190
+                   926.39553         20.6161
+                   927.39655          5.9286
+                   928.39781          1.3694
+                             */
+            //observed: (from J. Chik's data)          118.8932 73.8074 34.413 14.4563 6.3169
+
+            /*
+            *  Output Data from 'CalcDeut' testing from Dave Schriemer's data (see link above)
+            *  File: MS924.3_Z1_10.0-10.2_A344-351_dist.xml
+            * 
+            *    <DeutDist startdeut='-0.0' chisq='5.80293903626e-05' content_type='numlist' distsum='1.00331024913' entries='5'>
+                     0.832945525577
+                     0.0747772118716
+                     0.0305125766799
+                     0.0704222225599
+                     -0.00534728755986
+                 </DeutDist>
+            * 
+            * 
+            */
+            var theorIntensities = new List<double>(new[] {1, 0.530190, 0.206161, 0.059286, 0.013694});
+            var obsIntensities = new List<double>(new[] { 118.8932, 73.8074, 34.413, 14.4563, 6.3169 });
+
+            var labelDistCalc = new LabelingDistributionCalculator();
+            double[] solvedXVals;
+            double[] solvedYvals;
+
+            var intensityThreshold = 0.01;
+            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, intensityThreshold, intensityThreshold, out solvedXVals, out solvedYvals, 
+                                                        truncateTheorBasedOnRelIntensity: false, 
+                                                        truncateObservedBasedOnRelIntensity: false, 
+                                                        leftPadding: 0, 
+                                                        rightPadding: 2, 
+                                                        numPeaksForAbsoluteTheorList: 3, 
+                                                        numPeaksForAbsoluteObsList: 5);
+
+            Assert.AreEqual(0.8329455, Math.Round(solvedYvals[0]), 7);
+            Assert.AreEqual(0.0747772, Math.Round(solvedYvals[1]), 7);
+            Assert.AreEqual(0.0305126, Math.Round(solvedYvals[2]), 7);
+            Assert.AreEqual(0.0704222, Math.Round(solvedYvals[3]), 7);
+            Assert.AreEqual(-0.0053473, Math.Round(solvedYvals[4]), 7);
+         
+            XYData xydata = new XYData();
+            xydata.Xvalues = solvedXVals;
+            xydata.Yvalues = solvedYvals;
+
+            Console.WriteLine();
+            xydata.Display();
+
+            double fractionUnlabelled, fractionLabelled, averageLabelsIncorporated;
+            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out fractionUnlabelled, out fractionLabelled,
+                                             out averageLabelsIncorporated);
+
+            Console.WriteLine();
+            Console.WriteLine("fractionUnlabelled= " + fractionUnlabelled);
+            Console.WriteLine("fractionLabelled= " + fractionLabelled);
+            Console.WriteLine("averageAmountLabelIncorp= " + averageLabelsIncorporated);
+
+
+        }
+
+
+        [Test]
+        public void CalculateLabelingDistributionTest2()
         {
             //mass_tag_id	monoisotopic_mass	NET	obs	mod_count	mod_description	pmt	peptide	peptideex
             //355176429	1538.8166126	0.42422	1	0		2.00000	LFLASACLYGAALAGV	R.LFLASACLYGAALAGV.C
@@ -91,7 +170,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             xydata.Yvalues = solvedYvals;
 
             Console.WriteLine();
-            Console.WriteLine("theshold= " + d);
+            Console.WriteLine("threshold= " + d);
             xydata.Display();
 
 

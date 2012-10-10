@@ -1,0 +1,12 @@
+#<<<Isotope Calculation Result >>>
+#Formula: ISO:|VDWCPTGF| H2O + (H)1
+#Resolution: 10000 resolving power
+#Threshold (%): 1.0000
+#Isotope List - 5 Mass(es)
+# 
+#Isotope Mass   Relative Intensity
+   924.39202        100.0000
+   925.39495         53.0190
+   926.39553         20.6161
+   927.39655          5.9286
+   928.39781          1.3694

@@ -154,13 +154,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
 
 
-            Assert.AreEqual(5.91, (decimal)(Math.Round(result.GetMassAlignmentErrorInPPM(),2)));
+            Assert.AreEqual(5.91, (decimal)(Math.Round(result.GetMassErrorAfterAlignmentInPPM(),2)));
             Assert.AreEqual(0.0001585m, (decimal)(Math.Round(result.GetNETAlignmentError(), 7)));
 
             RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
             //these might change due to unit tests elsewhere. Need a better way of doing this
-            //Assert.AreEqual(1.99290383722318m, (decimal)result.GetMassAlignmentErrorInPPM());
+            //Assert.AreEqual(1.99290383722318m, (decimal)result.GetMassErrorAfterAlignmentInPPM());
             //Assert.AreEqual(0.00076708197593689m, (decimal)result.GetNETAlignmentError());
 
         }

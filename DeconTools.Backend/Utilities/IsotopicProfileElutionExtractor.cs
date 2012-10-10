@@ -21,11 +21,11 @@ namespace DeconTools.Backend.Utilities
 
         public double[] MzBins { get; set; }
 
-        public int[] Intensities { get; set; }
+        public float[] Intensities { get; set; }
 
 
-        private int[,] _intensities2D;
-        public int[,] Intensities2D
+        private float[,] _intensities2D;
+        public float[,] Intensities2D
         {
             get
             {
@@ -43,8 +43,10 @@ namespace DeconTools.Backend.Utilities
         #region Public Methods
 
 
+       
 
-        public void Get3DElutionProfile(Run run, int minScan, int maxScan, double minMZ, double maxMZ, out int[] scans, out double[] mzBins, out int[] intensities, double binWidth = 0.01)
+
+        public void Get3DElutionProfile(Run run, int minScan, int maxScan, double minMZ, double maxMZ, out int[] scans, out double[] mzBins, out float[] intensities, double binWidth = 0.01, bool applyLogTransform = false)
         {
             List<MSPeakResult> msPeakList = run.ResultCollection.MSPeakResultList;
             Check.Require(msPeakList != null && msPeakList.Count > 0, "Run is missing peaks. Elution profile is based on peak-level info");
@@ -53,11 +55,6 @@ namespace DeconTools.Backend.Utilities
 
 
             ScanSetCollection scanSetCollection = ScanSetCollection.Create(run, minScan, maxScan, 1, 1, false);
-
-            
-
-
-           
 
 
             //create bins
@@ -73,7 +70,7 @@ namespace DeconTools.Backend.Utilities
 
             //iterate over scans and collected MzIntensityArray for each scan
 
-            List<int> intensityList = new List<int>();
+            List<float> intensityList = new List<float>();
 
 
 
@@ -108,7 +105,7 @@ namespace DeconTools.Backend.Utilities
             {
                 var peaksForScan = filteredPeakList.Where(n => n.Scan_num == scan).ToList();
 
-                int[] intensitiesForScan = new int[numBins];
+                float[] intensitiesForScan = new float[numBins];
 
                 foreach (var msPeakResult in peaksForScan)
                 {
@@ -116,7 +113,7 @@ namespace DeconTools.Backend.Utilities
                     
                     if (targetBin < intensitiesForScan.Length)
                     {
-                        intensitiesForScan[targetBin] += (int)Math.Round(msPeakResult.Height); 
+                        intensitiesForScan[targetBin] += (float)Math.Round(msPeakResult.Height); 
                     }
                     
 
@@ -126,22 +123,28 @@ namespace DeconTools.Backend.Utilities
                 intensityList.AddRange(intensitiesForScan);
             }
 
-            intensities = intensityList.ToArray();
-
-
+            if (applyLogTransform)
+            {
+                intensities = intensityList.Select(p => (float)Math.Log(p)).ToArray();  
+            }
+            else
+            {
+                intensities = intensityList.ToArray();
+            }
+            
             Scans = scans;
             Intensities = intensities;
             MzBins = mzBins;
         }
 
-        public int[,] GetIntensitiesAs2DArray()
+        public float[,] GetIntensitiesAs2DArray()
         {
             if (Intensities == null || Intensities.Length == 0 || Scans == null || Scans.Length == 0 || MzBins == null || MzBins.Length == 0)
             {
-                return new int[0, 0];
+                return new float[0, 0];
             }
             
-            int[,] twoDimensionalIntensityArray = new int[Scans.Length, MzBins.Length];
+            float[,] twoDimensionalIntensityArray = new float[Scans.Length, MzBins.Length];
 
             int counter = 0;
             for (int scan = 0; scan < Scans.Length; scan++)
@@ -158,7 +161,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public string OutputElutionProfileAsString(char delimiter = '\t', bool outputZeroValues=true)
+        public string OutputElutionProfileAsString(char delimiter = '\t', bool outputZeroValues=true, int numDecimals=0)
         {
             if (Intensities == null || Intensities.Length == 0 || Scans == null || Scans.Length == 0 || MzBins == null || MzBins.Length == 0)
             {
@@ -178,12 +181,28 @@ namespace DeconTools.Backend.Utilities
                 for (int j = 0; j < scanArrayLength; j++)
                 {
 
-                    int currentVal = Intensities2D[j, i];
+                    float currentVal = Intensities2D[j, i];
 
                     
-                    if (outputZeroValues || currentVal >0)
+                    if (outputZeroValues || currentVal >0 )
                     {
-                        sb.Append(currentVal);
+                        if (!float.IsInfinity(currentVal))
+                        {
+                            string formatString = "0";
+                            if (numDecimals > 0)
+                            {
+                                formatString = "0.".PadRight(numDecimals + 3, '0');     // making a format string based on number of decimals wanted. Clunky but works!
+                            }
+
+                            sb.Append(currentVal.ToString(formatString));
+                            
+                        }
+                        else
+                        {
+                            sb.Append(0);    //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value. 
+                        }
+
+                       
                     }
                    
 

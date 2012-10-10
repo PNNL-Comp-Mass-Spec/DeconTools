@@ -26,7 +26,7 @@ namespace DeconTools.UnitTesting2.Utilities
             double maxMZ = 754;
 
             int[] scans;
-            int[] intensities;
+            float[] intensities;
             double[] mzBinVals;
 
 

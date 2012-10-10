@@ -296,7 +296,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
 
                 result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
-
+                result.NumCarbonsLabelled = calculateNumCarbonsFromSubtractedProfile(subtractedIsoData);
 
 
                 //-------------- calculate Label Distribution ------------------------------------------------
@@ -306,11 +306,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double)p.Height).ToList();
                 var normalizedCorrectedIntensityVals = NormalizedAdjustedIso.Peaklist.Select(p => (double)p.Height).ToList();
 
+                int numRightPads = 3;
                 _labelingDistributionCalculator.CalculateLabelingDistribution(theorIntensityVals, normalizedCorrectedIntensityVals,
                                                                               LabeldistCalcIntensityThreshold,
                                                                               LabeldistCalcIntensityThreshold,
                                                                               out numLabelVals,
-                                                                              out labelDistributionVals);
+                                                                              out labelDistributionVals,true,true,0,numRightPads,0,0);
 
 
                 //negative distribution values are zeroed out. And, then the remaining values are adjusted such that they add up to 1. 
@@ -356,6 +357,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                                              HighQualitySubtractedProfile);
 
 
+               
+                //result.NumCarbonsLabelled = numCarbonsLabelled;
                 result.NumCarbonsLabelled = distAverageLabelsIncorporated;
 
                 int numCarbons = result.Target.GetAtomCountForElement("C");
@@ -400,6 +403,22 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
+        }
+
+        private double calculateNumCarbonsFromSubtractedProfile(IsotopicProfile subtractedIsoData)
+        {
+            var intensityVals = subtractedIsoData.Peaklist.Select(p => p.Height).ToList();
+
+            var sumIntensities = intensityVals.Sum();
+
+            double sumDotProducts = 0;
+            for (int peakNum = 0; peakNum < intensityVals.Count; peakNum++)
+            {
+                var dotProduct = intensityVals[peakNum]*peakNum;
+                sumDotProducts += dotProduct;
+            }
+
+            return sumDotProducts/sumIntensities;
         }
 
         private double GetNumCarbonsLabelledUsingAverageMassDifferences(IsotopicProfile theorUnlabelledIso, IsotopicProfile highQualitySubtractedProfile)

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsExperiemnt localdate='2006-2-20' localtime='14:01:06'>
+  <Information>
+    <DataSrc source='QSTAR/HD20060206b/MS924.3_Z1_10.0-10.2_A344-351_peaks.xml'/>
+    <SrcProgram cutoff='2.0' ub_z='1' sort_key='centroid' source='./CollectPeaks.py' lb_z='1' focus_mz='924.3' mz_err='0.1' cutoff_key='rel_height'/>
+  </Information>
+  <EnvList entries='1'>
+    <Envelope Z='1'>
+      <mz_ub content_type='numlist' entries='5'>
+      924.6008
+      925.6301
+      926.6193
+      927.6227
+      928.613
+      </mz_ub>
+      <rel_height content_type='numlist' entries='5'>
+      67.9899
+      39.4967
+      18.0373
+      7.7498
+      3.2747
+      </rel_height>
+      <area content_type='numlist' entries='5'>
+      118.8932
+      73.8074
+      34.413
+      14.4563
+      6.3169
+      </area>
+      <height content_type='numlist' entries='5'>
+      538.0833
+      312.5833
+      142.75
+      61.3333
+      25.9167
+      </height>
+      <width content_type='numlist' entries='5'>
+      0.1972
+      0.2077
+      0.2206
+      0.2197
+      0.2546
+      </width>
+      <centroid content_type='numlist' entries='5'>
+      924.3316
+      925.3422
+      926.3484
+      927.3524
+      928.3649
+      </centroid>
+      <mz_lb content_type='numlist' entries='5'>
+      924.0999
+      925.1018
+      926.1043
+      927.0938
+      928.1381
+      </mz_lb>
+      <resolution content_type='numlist' entries='5'>
+      4686.6137
+      4454.1426
+      4200.0063
+      4220.8144
+      3646.6887
+      </resolution>
+      <mz content_type='numlist' entries='5'>
+      924.33
+      925.3185
+      926.3889
+      927.3786
+      928.3823
+      </mz>
+    </Envelope>
+  </EnvList>
+</MsExperiemnt>

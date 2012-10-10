@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsExperiemnt localdate='2006-2-20' localtime='14:02:11'>
+  <Information>
+    <DataSrc source='QSTAR/HD20060206b/MS924.3_Z1_10.0-10.2_A344-351_env.xml' ykey='area' xkey='centroid'/>
+    <SrcProgram rpad='2' reference='Ref/MS924.4_Z1_A344-351_ref_c10_env.xml' mz_criteria='0.2' ave_constraint='0' cali_slope='0.0' source='./CalcDist.py' ykey='Y' cali_intercept='0.0' lpad='0' xkey='centroid'/>
+  </Information>
+  <DeutAnalysis>
+    <Envelope Z='1' input_ref='924.3316' ref_mono='924.39202'>
+      <Result avedeut_cent='0.255290439114' avedeut_dist='0.324605358068'/>
+      <DeutDist startdeut='-0.0' chisq='5.80293903626e-05' content_type='numlist' distsum='1.00331024913' entries='5'>
+      0.832945525577
+      0.0747772118716
+      0.0305125766799
+      0.0704222225599
+      -0.00534728755986
+      </DeutDist>
+      <DiffEnv DiffSum='-0.00331024912817' content_type='numlist' entries='7'>
+      -8.33472466766e-05
+      0.000343043051811
+      -0.000477931077959
+      -0.000434848364084
+      0.00343655362611
+      -0.00672861502876
+      0.000634895911384
+      </DiffEnv>
+      <InputEnv>
+        <centroid content_type='numlist' entries='5'>
+        924.3316
+        925.3422
+        926.3484
+        927.3524
+        928.3649
+        </centroid>
+        <area content_type='numlist' entries='5'>
+        118.8932
+        73.8074
+        34.413
+        14.4563
+        6.3169
+        </area>
+      </InputEnv>
+      <RefEnv>
+        <centroid content_type='numlist' entries='3'>
+        924.39202
+        925.39495
+        926.39553
+        </centroid>
+        <Y content_type='numlist' entries='3'>
+        100.0
+        53.019
+        20.6161
+        </Y>
+      </RefEnv>
+    </Envelope>
+  </DeutAnalysis>
+</MsExperiemnt>
