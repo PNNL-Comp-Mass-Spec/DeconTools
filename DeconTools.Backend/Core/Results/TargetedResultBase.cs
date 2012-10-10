@@ -131,7 +131,26 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public virtual double GetMassAlignmentErrorInPPM()
+        public virtual double GetMassErrorBeforeAlignmentInPPM()
+        {
+            double massErrorInPPM = 0;
+            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+            double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+
+            int scan = GetScanNum();
+            if (scan == -1)
+            {
+                return 0;
+            }
+            
+            massErrorInPPM = (theorMZ - observedMZ) / theorMZ * 1e6;
+            
+            return massErrorInPPM;
+            
+        }
+
+
+        public virtual double GetMassErrorAfterAlignmentInPPM()
         {
             double massErrorInPPM = 0;
             double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
@@ -155,6 +174,22 @@ namespace DeconTools.Backend.Core
             }
             return massErrorInPPM;
         }
+
+        /// <summary>
+        /// Gets the monoisotopic mass after calibration
+        /// </summary>
+        /// <returns></returns>
+        public virtual double GetCalibratedMonoisotopicMass()
+        {
+
+            var massErrorInPPMAfterAlignment= GetMassErrorAfterAlignmentInPPM();
+
+            var calibratedMass = Target.MonoIsotopicMass - (Target.MonoIsotopicMass * massErrorInPPMAfterAlignment / 1e6);
+            return calibratedMass;
+
+        }
+
+
 
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()

@@ -132,7 +132,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         #endregion
 
-        public override void deconvolute(ResultCollection resultList)
+        public override void Deconvolute(ResultCollection resultList)
         {
             throw new NotImplementedException();
         }

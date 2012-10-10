@@ -89,7 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
         #region Public Methods
-        public override void deconvolute(ResultCollection resultList)
+        public override void Deconvolute(ResultCollection resultList)
         {
             float[] xvals = new float[1];
             float[] yvals = new float[1];

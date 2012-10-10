@@ -106,7 +106,7 @@ namespace DeconTools.Backend.Workflows
 
                     _peakDetector.Execute(Run.ResultCollection);
 
-                    _deconvolutor.deconvolute(uimfRun.ResultCollection);     //adds to IsosResultBin
+                    _deconvolutor.Deconvolute(uimfRun.ResultCollection);     //adds to IsosResultBin
 
                     //Note: the deconvolutor automatically increases the MSFeatureCounter. 
                     //Here, we don't want this, since this data is used only for saturation correction,

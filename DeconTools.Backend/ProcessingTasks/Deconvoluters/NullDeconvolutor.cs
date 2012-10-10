@@ -20,7 +20,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         #region Private Methods
         #endregion
-        public override void deconvolute(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void Deconvolute(DeconTools.Backend.Core.ResultCollection resultList)
         {
             //do nothing
            

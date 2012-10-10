@@ -313,7 +313,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
         #region Public Methods
-        public override void deconvolute(ResultCollection resultList)
+        public override void Deconvolute(ResultCollection resultList)
         {
 
             float backgroundIntensity = (float)resultList.Run.CurrentBackgroundIntensity;

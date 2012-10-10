@@ -17,14 +17,14 @@ namespace DeconTools.Backend.ProcessingTasks
             addAndReplaceIfOneDaltonErrorDetected
         }
 
-        public abstract void deconvolute(ResultCollection resultList);
+        public abstract void Deconvolute(ResultCollection resultList);
 
 
         public override void Execute(ResultCollection resultList)
         {
             clearCurrentScanIsosResultBin(resultList);   //TODO:   this does not clear
             
-            deconvolute(resultList);
+            Deconvolute(resultList);
 
             associatePeaksToMSFeatureID(resultList);
 
