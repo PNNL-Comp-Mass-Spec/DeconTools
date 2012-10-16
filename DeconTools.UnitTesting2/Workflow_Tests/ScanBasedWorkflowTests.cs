@@ -420,13 +420,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void ProcessAgilentCentroidedFile()
         {
-            string testFile =
-             @"\\protoapps\UserData\Nikola\DDD_Milk\D6.1.forExpRepAnal_3.14.2012.d";
-            string parameterFile = @"\\protoapps\UserData\Nikola\DDD_Milk\agilTOF_Normal_SavGolSmooth_2007-08-16_DEFAULT.xml";
+            //string testFile =
+            // @"\\protoapps\UserData\Nikola\DDD_Milk\D6.1.forExpRepAnal_3.14.2012.d";
+            //string parameterFile = @"\\protoapps\UserData\Nikola\DDD_Milk\agilTOF_Normal_SavGolSmooth_2007-08-16_DEFAULT.xml";
 
           
-            var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
-            workflow.Execute();
+            //var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
+            //workflow.Execute();
 
 
             //IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);

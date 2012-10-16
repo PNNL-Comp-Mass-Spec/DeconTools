@@ -39,6 +39,26 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
         [Test]
+        public void GetIsotopicProfileTest2()
+        {
+            PeptideUtils peptideUtils = new PeptideUtils();
+            var empFormula = "S3";
+
+            IsotopicDistributionCalculator isoCalc = IsotopicDistributionCalculator.Instance;
+            IsotopicProfile iso = isoCalc.GetIsotopePattern(empFormula);
+
+
+            TestUtilities.DisplayIsotopicProfileData(iso);
+
+
+
+
+        }
+
+
+
+
+        [Test]
         public void TestSingletonPattern()
         {
             IsotopicDistributionCalculator myPatterner = IsotopicDistributionCalculator.Instance;
@@ -131,7 +151,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             IsotopicProfile cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -148,7 +168,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -162,7 +182,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             IsotopicProfile cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -182,7 +202,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             isotopicDistributionCalculator.ResetToUnlabeled();
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -194,7 +214,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster2);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
 
             Console.WriteLine(sb.ToString());
         }
@@ -209,7 +229,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             //		isotopicDistributionCalculator.ResetToUnlabled();
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -221,7 +241,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster2);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
 
             Console.WriteLine(sb.ToString());
         }
@@ -337,11 +357,11 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             Assert.AreEqual(8, distcreator.IsotopicProfile.GetNumOfIsotopesInProfile());
 
             StringBuilder sb = new StringBuilder();
-            TestUtilities.ReportIsotopicProfileData(sb, distcreator.IsotopicProfile);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, distcreator.IsotopicProfile);
 
             IsotopicProfile cluster = _tomIsotopicPatternGenerator.GetAvnPattern(monoMass, false);
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
             Console.Write(sb.ToString());
 
@@ -356,14 +376,14 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             IsotopicProfile cluster = _tomIsotopicPatternGenerator.GetIsotopePattern("C5H9N1O2", _tomIsotopicPatternGenerator.aafIsos);
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
 
 
             Dictionary<string, int> testAgain = formBuild.ConvertToMolecularFormula("P");
             IsotopicProfile cluster2 = isotopicDistributionCalculator.GetIsotopePattern(testAgain);
             sb.Append(Environment.NewLine);
-            TestUtilities.ReportIsotopicProfileData(sb, cluster2);
+            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
 
             Console.Write(sb.ToString());
         }

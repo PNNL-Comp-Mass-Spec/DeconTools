@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting2.Utilities
             double[] mzBinVals;
 
 
-            extractor.Get3DElutionProfile(run, minScan, maxScan, minMZ, maxMZ, out scans, out mzBinVals, out intensities);
+            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out scans, out mzBinVals, out intensities);
 
             var intensities2D = extractor.GetIntensitiesAs2DArray();
             Console.WriteLine(extractor.OutputElutionProfileAsString());

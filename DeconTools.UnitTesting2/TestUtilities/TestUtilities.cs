@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2
 
         }
 
-        public static void ReportIsotopicProfileData(StringBuilder sb, IsotopicProfile profile)
+        public static void IsotopicProfileDataToStringBuilder(StringBuilder sb, IsotopicProfile profile)
         {
             int counter = 0;
 
