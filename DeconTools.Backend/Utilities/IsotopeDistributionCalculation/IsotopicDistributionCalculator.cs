@@ -428,8 +428,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         private double LogFactorial(int n)
         {
             //log n! = 0.5log(2.pi) + 0.5logn + nlog(n/e) + log(1 + 1/(12n))
-            return (double)0.5 * (
-                System.Math.Log10(2 * System.Math.PI * n))
+            return (double)0.5 * (System.Math.Log10(2 * System.Math.PI * n))
                 + n * (System.Math.Log10(n / System.Math.E))
                 + (System.Math.Log10(1.0 + 1.0 / (12 * n)));
         }

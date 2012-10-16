@@ -22,6 +22,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         protected double MaximumFitScoreForFurtherProcessing { get; set; }
         protected double MinimumRatioAreaForFurtherProcessing { get; set; }
 
+        public bool IsChromatogramCorrelationPerformed { get; set; }
+
         protected double ChromToleranceInPPM
         {
             get
@@ -72,6 +74,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         #region Constructors
         public SipperQuantifier()
         {
+            IsChromatogramCorrelationPerformed = true;
             MaximumFitScoreForFurtherProcessing = 0.50;
             MinimumRatioAreaForFurtherProcessing = 5;
 
@@ -169,62 +172,17 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-
-            //------------------------------------- Get chromatogramCorrelation data -------------------------------
-
+            
             if (resultPassesMinimalCriteria)
             {
+                //------------------------------------- Get chromatogramCorrelation data -------------------------------
 
-                _chromScanWindowWidth = result.ChromPeakSelected.Width * 2;
-
-                int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
-                int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
-
-                result.ChromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(resultList.Run, NormalizedIso, startScan,
-                                                                                stopScan);
-
-                ChromatogramRSquaredVals.AddRange(result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
-
-                //trim off zeros
-                for (int i = ChromatogramRSquaredVals.Count - 1; i >= 0; i--)
+                if (IsChromatogramCorrelationPerformed)
                 {
-                    if (ChromatogramRSquaredVals[i] <= 0)
-                    {
-                        ChromatogramRSquaredVals.RemoveAt(i);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    GetChromatogramCorrelationData(result);
                 }
 
-                result.ChromCorrelationMin = ChromatogramRSquaredVals.Min();
-
-                if (ChromatogramRSquaredVals.Count > 1)
-                {
-                    //get the best rsquared value other than the base peak's rsquared value (which is always 1)
-                    result.ChromCorrelationMax =
-                        (from n in ChromatogramRSquaredVals orderby n descending select n).ToList().ElementAt(1);
-
-                    result.ChromCorrelationMedian = MathUtils.GetMedian(ChromatogramRSquaredVals);
-                    result.ChromCorrelationAverage = ChromatogramRSquaredVals.Average();
-
-                    if (ChromatogramRSquaredVals.Count > 2)
-                    {
-                        result.ChromCorrelationStdev = MathUtils.GetStDev(ChromatogramRSquaredVals);
-                    }
-                    else
-                    {
-                        result.ChromCorrelationStdev = -1;
-                    }
-
-
-
-                }
-                else
-                {
-                    result.ChromCorrelationMax = 1;
-                }
+                
 
 
                 NormalizedAdjustedIso = NormalizedIso.CloneIsotopicProfile();
@@ -403,6 +361,63 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
+        }
+
+        
+
+        private void GetChromatogramCorrelationData(SipperLcmsTargetedResult result)
+        {
+            _chromScanWindowWidth = result.ChromPeakSelected.Width*2;
+
+            int startScan = result.ScanSet.PrimaryScanNumber - (int) Math.Round(_chromScanWindowWidth/2, 0);
+            int stopScan = result.ScanSet.PrimaryScanNumber + (int) Math.Round(_chromScanWindowWidth/2, 0);
+
+            result.ChromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(result.Run,
+                                                                                                          NormalizedIso,
+                                                                                                          startScan,
+                                                                                                          stopScan);
+
+            ChromatogramRSquaredVals.AddRange(
+                result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).
+                    ToList());
+
+            //trim off zeros
+            for (int i = ChromatogramRSquaredVals.Count - 1; i >= 0; i--)
+            {
+                if (ChromatogramRSquaredVals[i] <= 0)
+                {
+                    ChromatogramRSquaredVals.RemoveAt(i);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            result.ChromCorrelationMin = ChromatogramRSquaredVals.Min();
+
+            if (ChromatogramRSquaredVals.Count > 1)
+            {
+                //get the best rsquared value other than the base peak's rsquared value (which is always 1)
+                result.ChromCorrelationMax =
+                    (from n in ChromatogramRSquaredVals orderby n descending select n).ToList().ElementAt(1);
+
+                result.ChromCorrelationMedian = MathUtils.GetMedian(ChromatogramRSquaredVals);
+                result.ChromCorrelationAverage = ChromatogramRSquaredVals.Average();
+
+                if (ChromatogramRSquaredVals.Count > 2)
+                {
+                    result.ChromCorrelationStdev = MathUtils.GetStDev(ChromatogramRSquaredVals);
+                }
+                else
+                {
+                    result.ChromCorrelationStdev = -1;
+                }
+            }
+            else
+            {
+                result.ChromCorrelationMax = 1;
+            }
         }
 
         private double calculateNumCarbonsFromSubtractedProfile(IsotopicProfile subtractedIsoData)
