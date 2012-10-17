@@ -86,24 +86,23 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
 
-            int frameStart = 1;
-            int frameStop = 10;
-
-            int numFramesToSum = 1;
+            int numFramesToSum = 3;
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesToSum, 1, true);
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesToSum, 1, true);
 
-            Assert.AreEqual(10, uimfRun.FrameSetCollection.FrameSetList.Count);
-            //Assert.AreEqual("24,25,27", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
-
-
+            Assert.AreEqual(15, uimfRun.FrameSetCollection.FrameSetList.Count);
+            Assert.AreEqual("1,6", uimfRun.FrameSetCollection.FrameSetList[0].ToString());
+			Assert.AreEqual("2,7", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
+			Assert.AreEqual("1,6,11", uimfRun.FrameSetCollection.FrameSetList[5].ToString());
+			Assert.AreEqual("3,8,13", uimfRun.FrameSetCollection.FrameSetList[7].ToString());
+			Assert.AreEqual("6,11", uimfRun.FrameSetCollection.FrameSetList[10].ToString());
+			Assert.AreEqual("10,15", uimfRun.FrameSetCollection.FrameSetList[14].ToString());
         }
 
-
         [Test]
-        public void CreateFrameSetCollectionFromMSMSFramesSumMS1_Only()
+        public void CreateFrameSetCollectionProcessMS1_Only()
         {
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
@@ -112,21 +111,13 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             UIMFRun uimfRun = (UIMFRun)run;
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesToSum, 1, true);
+            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesToSum, 1, false);
 
-            Assert.AreEqual(15, uimfRun.FrameSetCollection.FrameSetList.Count);
-            //foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
-            //{
-            //    Console.WriteLine(frameset);
-
-
-            //}
-            Assert.AreEqual("5", uimfRun.FrameSetCollection.FrameSetList[4].ToString());
-            Assert.AreEqual("1,6,11", uimfRun.FrameSetCollection.FrameSetList[5].ToString());
-
+            Assert.AreEqual(3, uimfRun.FrameSetCollection.FrameSetList.Count);
+            Assert.AreEqual("1,6", uimfRun.FrameSetCollection.FrameSetList[0].ToString());
+            Assert.AreEqual("1,6,11", uimfRun.FrameSetCollection.FrameSetList[1].ToString());
+			Assert.AreEqual("6,11", uimfRun.FrameSetCollection.FrameSetList[2].ToString());
         }
-
-
 
         [Test]
         public void creatorTest_sum7_test1()

@@ -26,6 +26,9 @@ namespace DeconTools.Backend.Runs
         //private UIMFLibrary.DataReader m_reader;
         private Dictionary<int, double> _framePressuresUnsmoothed;
 
+		// In IMS experiments that are a set number of MS2 frames with different collision energies that are run after each MS1 frame. This number will be the same for all MS1 frames.
+		private int _numOfConsecutiveMs2Frames;
+
         #region Constructors
         public UIMFRun()
         {
@@ -83,6 +86,21 @@ namespace DeconTools.Backend.Runs
             {
                 MS2Frames = ms2Frames.ToList();
             }
+
+			// Figure out the number of consecutive MS2 frames associated with each MS1 frame
+			_numOfConsecutiveMs2Frames = 0;
+			int numMs1Frames = MS1Frames.Count;
+			int numMs2Frames = MS2Frames.Count;
+
+			if(numMs2Frames > 0)
+			{
+				if(numMs2Frames % numMs1Frames != 0)
+				{
+					throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
+				}
+
+				_numOfConsecutiveMs2Frames = numMs2Frames / numMs1Frames;
+			}
         }
 
         private bool CheckRunForMSMSData()
@@ -266,6 +284,11 @@ namespace DeconTools.Backend.Runs
             return time;
 
         }
+
+		public int GetNumberOfConsecutiveMs2Frames()
+		{
+			return _numOfConsecutiveMs2Frames;
+		}
 
         public double GetDriftTime(FrameSet frame, int scanNum)
         {

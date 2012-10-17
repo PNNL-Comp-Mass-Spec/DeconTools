@@ -40,64 +40,68 @@ namespace DeconTools.Backend.Core
             
             var frameSetCollection = new FrameSetCollection();
 
+			List<int> ms1Frames = uimfRun.MS1Frames;
+			List<int> ms2Frames = uimfRun.MS2Frames;
+			int numOfConsecutiveMs2Frames = uimfRun.GetNumberOfConsecutiveMs2Frames();
+
             if (stopFrame > maxFrame) stopFrame = maxFrame;
 
             for (int frame = startFrame; frame <= stopFrame; frame = frame + increment)
             {
-
                 int currentMSLevel = uimfRun.GetMSLevel(frame);
 
+				int numberOfFrameIndexesToSkip = 1;
+				List<int> currentFrames = ms1Frames;
 
-                int indexOfCurrentFrame = uimfRun.MS1Frames.IndexOf(frame);
-                
-                int lowerIndex = indexOfCurrentFrame - 1;
-                int upperIndex = indexOfCurrentFrame + 1;
+				// Handle MS/MS data
+				if(currentMSLevel == 2)
+				{
+					// If we do not want to process MS2 frames, then just skip this frame
+					if (!processMSMS) continue;
 
-                List<int> framesToSum = new List<int>();
-                int numLowerFramesToGet = (numFramesSummed - 1)/2;
-                int numUpperFramesToGet = (numFramesSummed - 1)/2;
+					// Set the number of frames to skip to be the number of consecutive MS2 frames per MS1 frame
+					numberOfFrameIndexesToSkip = numOfConsecutiveMs2Frames;
 
-                //get lower frames. Note that only MS1 frames can be summed
-                int framesCounter = 0;
-                while (lowerIndex>=0 && numLowerFramesToGet>framesCounter && currentMSLevel==1)
-                {
-                    framesToSum.Insert(0, uimfRun.MS1Frames[lowerIndex]);
-                    lowerIndex--;
-                    framesCounter++;
-                }
+					// Use MS2 frames instead of MS1 frames
+					currentFrames = ms2Frames;
+				}
 
-                //get middle frame   note that frameTypes MS1 and MS2 can be added here
-                framesToSum.Add(frame);
-                
-                
+				int indexOfCurrentFrame = currentFrames.IndexOf(frame);
 
-                //get upper frames   Note that only MS1 frames can be summed
-                framesCounter = 0;
-                int maxPossibleFrameIndex = uimfRun.MS1Frames.Count-1;
-                while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter && currentMSLevel == 1)
-                {
-                    framesToSum.Add(uimfRun.MS1Frames[upperIndex]);
-                    framesCounter++;
-                    upperIndex++;
-                }
+				// If we could not find the frame number, then it is a frame we want to ignore. For example, this would happen for Calibration frames.
+				if (indexOfCurrentFrame < 0) continue;
 
+				int lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
+				int upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
 
-                var frameset = new FrameSet(frame, framesToSum.ToArray());
-                if (currentMSLevel==1)
-                {
-                    frameSetCollection.FrameSetList.Add(frameset); 
-                }
-                else if (currentMSLevel==2 && processMSMS)
-                {
-                    frameSetCollection.FrameSetList.Add(frameset);
-                }
-                
-                
+				List<int> framesToSum = new List<int>();
+				int numLowerFramesToGet = (numFramesSummed - 1) / 2;
+				int numUpperFramesToGet = (numFramesSummed - 1) / 2;
 
-               
+				//get lower frames
+				int framesCounter = 0;
+				while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
+				{
+					framesToSum.Insert(0, currentFrames[lowerIndex]);
+					lowerIndex -= numberOfFrameIndexesToSkip;
+					framesCounter++;
+				}
 
+				//get middle frame
+				framesToSum.Add(frame);
 
-                
+				//get upper frames
+				framesCounter = 0;
+				int maxPossibleFrameIndex = currentFrames.Count - 1;
+				while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
+				{
+					framesToSum.Add(currentFrames[upperIndex]);
+					upperIndex += numberOfFrameIndexesToSkip;
+					framesCounter++;
+				}
+
+				var frameset = new FrameSet(frame, framesToSum.ToArray());
+				frameSetCollection.FrameSetList.Add(frameset);
             }
 
             return frameSetCollection;
