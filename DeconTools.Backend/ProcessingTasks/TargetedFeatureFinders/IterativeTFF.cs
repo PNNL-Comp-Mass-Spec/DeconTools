@@ -25,7 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             _peakDetectorSigNoiseRatioThreshold = parameters.PeakDetectorSigNoiseRatioThreshold;
             PeakDetectorPeakBR = parameters.PeakDetectorPeakBR;
             _peakDetectorPeakFitType = parameters.PeakDetectorPeakFitType;
-            PeakBRMin = 0.5;
+            PeakBRMin = parameters.PeakDetectorMinimumPeakBR;
 
             MaxPeaksToInclude = 30;
             MinRelIntensityForPeakInclusion = parameters.MinimumRelIntensityForForPeakInclusion;

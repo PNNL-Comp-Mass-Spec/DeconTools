@@ -12,6 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             this.PeakDetectorPeakBR = 5;
             this.PeakBRStep = 0.5;
+            PeakDetectorMinimumPeakBR = 0.5d;
             
 
             this.PeakDetectorSigNoiseRatioThreshold = 3;
@@ -27,10 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
-
        
-
-
         #endregion
 
         #region Properties
@@ -39,15 +37,22 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// The is the initial PeakBR the peakDetector starts with. Then iteratively, the PeakBR is stepped down.
         /// </summary>
         public double PeakDetectorPeakBR { get; set; }
-        public double PeakDetectorSigNoiseRatioThreshold { get; set; }
-        public DeconTools.Backend.Globals.PeakFitType PeakDetectorPeakFitType { get; set; }
-        public bool PeakDetectorIsDataThresholded { get; set; }
-
+        
+        
+        
+        public double PeakDetectorMinimumPeakBR { get; set; }
 
         /// <summary>
         /// The PeakBR is stepped down by this value, in an effort to find lower intensity peaks, if not found on first iterations.
         /// </summary>
         public double PeakBRStep { get; set; }
+        
+        public double PeakDetectorSigNoiseRatioThreshold { get; set; }
+        public DeconTools.Backend.Globals.PeakFitType PeakDetectorPeakFitType { get; set; }
+        public bool PeakDetectorIsDataThresholded { get; set; }
+
+
+       
 
         
         public double ToleranceInPPM { get; set; }
