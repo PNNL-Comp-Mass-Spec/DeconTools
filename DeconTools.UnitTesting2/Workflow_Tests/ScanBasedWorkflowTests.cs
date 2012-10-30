@@ -400,6 +400,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             }
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
+           
             workflow.Execute();
 
             Assert.That(File.Exists(expectedIsosOutput));

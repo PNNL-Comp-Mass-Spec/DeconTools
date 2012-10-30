@@ -39,8 +39,27 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="agtsampleinforw, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\agtsampleinforw.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseCommon">
+      <HintPath>..\Library\Agilent_D\BaseCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseDataAccess">
+      <HintPath>..\Library\Agilent_D\BaseDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseError">
+      <HintPath>..\Library\Agilent_D\BaseError.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseTof">
+      <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
+    </Reference>
     <Reference Include="DeconEngineV2">
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+    </Reference>
+    <Reference Include="MassSpecDataReader">
+      <HintPath>..\Library\Agilent_D\MassSpecDataReader.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +98,7 @@
     <Compile Include="OMCS_0477_OrbiReadingProblem.cs" />
     <Compile Include="OMCS_0482_UIMFScanResultProblem.cs" />
     <Compile Include="OMCS_0532_RetentionTimeWrong_Bruker.cs" />
+    <Compile Include="OMCS_0592_AgilentD_readingProblem.cs" />
     <Compile Include="OMICS_0142_Orbi_MSMSProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="saturationPossibleIssue.cs" />

@@ -1,4 +1,14 @@
-﻿
+﻿// Written by Navdeep Jaitly and Gordon Slysz.  
+// Copyright 2012, Battelle Memorial Institute for the Department of Energy (PNNL, Richland, WA)
+// E-mail: gordon.slysz@pnl.gov
+// Website: http://panomics.pnnl.gov/software/
+// -------------------------------------------------------------------------------
+// 
+// Licensed under the Apache License, Version 2.0; you may not use this file except
+// in compliance with the License.  You may obtain a copy of the License at 
+// http://www.apache.org/licenses/LICENSE-2.0
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

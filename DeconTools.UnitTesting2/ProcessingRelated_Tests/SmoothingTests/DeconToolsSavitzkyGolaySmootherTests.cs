@@ -97,7 +97,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             stopwatch.Stop();
 
 
-            Console.WriteLine("Average time for smoothing = " + stopwatch.ElapsedMilliseconds/(double)numSmooths);
+            Console.WriteLine("Average time for smoothing (milliseconds) = " + stopwatch.ElapsedMilliseconds/(double)numSmooths);
 
             Assert.AreEqual(xydata.Xvalues.Length, smoothedXYData.Xvalues.Length);
 
@@ -111,7 +111,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             }
 
-            Console.WriteLine(sb.ToString());
+           // Console.WriteLine(sb.ToString());
 
 
 
