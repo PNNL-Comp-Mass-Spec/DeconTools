@@ -17,19 +17,19 @@ namespace DeconTools.Backend.FileIO
 
 
         private string[] datasetHeaders = {"dataset"};
-        private string[] chargeStateHeaders = {"chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge"};
+        private string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge", "Class_Stats_Charge_Basis" };
         private string[] chargeStateLowerHeaders = {"ChargeStateMin"};
         private string[] chargeStateUpperHeaders = {"ChargeStateMax"};
-        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID"};
-        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID" };
+        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID", "UMC_Ind"};
+        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID", "Mass_Tag_ID" };
         private string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
         private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
        
         private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
-        private string[] scanHeaders = {"scan", "scanClassRep"};
+        private string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance" };
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
         private string[] scanStartHeaders = {"scanStart", "scan_start"};
-        private string[] netHeaders = {"net", "NETClassRep"};
+        private string[] netHeaders = {"net", "NETClassRep", "ElutionTime"};
         private string[] peptideSequenceHeaders = {"peptide", "peptidesequence", "sequence", "code"};
 
         public override TargetCollection Import()
@@ -104,6 +104,7 @@ namespace DeconTools.Backend.FileIO
         private TargetBase ConvertTextToDataObject(List<string> processedData)
         {
             LcmsFeatureTarget target = new LcmsFeatureTarget();
+            target.DatabaseName = LookupData(processedData, datasetHeaders);
             target.ID = ParseIntField(LookupData(processedData, targetIDHeaders));
             target.ChargeState = (short)ParseIntField(LookupData(processedData, chargeStateHeaders));
             target.ChargeStateTargets = new List<int>();
