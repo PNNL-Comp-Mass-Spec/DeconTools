@@ -28,12 +28,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 File.Delete(expectedResultsFilename);
             }
 
-           
-
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
-
-            
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
 
@@ -41,7 +37,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Backend.Results.TargetedResultRepository repository= importer.Import();
 
             Assert.AreEqual(10, repository.Results.Count);
-
             TargetedResultDTO result1 = repository.Results[2];
 
             Assert.AreEqual(24702, result1.TargetID);
@@ -52,11 +47,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //Assert.AreEqual(2920.53082m, (decimal)Math.Round(result1.MonoMass, 5));
             //Assert.AreEqual(2920.53733m, (decimal)Math.Round(result1.MonoMassCalibrated, 5));
             //Assert.AreEqual(-1.83m, (decimal)Math.Round(result1.MassErrorInPPM, 2));
-
-
-
-
-         
 
 
                 //Dataset	MassTagID	ChargeState	Scan	ScanStart	ScanEnd	NET	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoMZ	IntensityRep	FitScore	IScore	FailureType
@@ -116,8 +106,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8119, result1.ScanLC);
-            //Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
+            Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
            // Assert.AreEqual(0.002534m, (decimal)Math.Round(result1.NETError, 6));
+            Assert.AreEqual(974.52068m, (decimal) Math.Round(result1.MonoMZ, 5));
             Assert.AreEqual(2920.53082m, (decimal)Math.Round(result1.MonoMass, 5));
             //Assert.AreEqual(2920.53733m, (decimal)Math.Round(result1.MonoMassCalibrated, 5));
             //Assert.AreEqual(-1.83m, (decimal)Math.Round(result1.MassErrorInPPM, 2));

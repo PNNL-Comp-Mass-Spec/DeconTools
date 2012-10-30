@@ -181,7 +181,48 @@ namespace DeconTools.Workflows.Backend.Core
             return masstagList;
         }
 
-        private TargetCollection LoadTargetsFromPeakMatchingResultsForGivenDataset(string datasetName)
+
+        public TargetCollection LoadAllTargetsFromPeakMatchingResults()
+        {
+            string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
+
+
+            TargetCollection targetCollection = new TargetCollection();
+
+
+
+
+            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            using (DbConnection cnn = fact.CreateConnection())
+            {
+
+                cnn.ConnectionString = buildConnectionString();
+                cnn.Open();
+
+                using (DbCommand command = cnn.CreateCommand())
+                {
+                    string queryString;
+
+                    queryString =
+                        @"SELECT * FROM " + table + " ORDER BY Dataset,UMC_Ind";
+
+                    command.CommandText = queryString;
+                    command.CommandTimeout = 60;
+                    DbDataReader reader = command.ExecuteReader();
+
+                    ReadResultsFromDB(targetCollection, reader);
+
+
+                }
+
+
+            }
+
+            return targetCollection;
+        }
+
+
+        public TargetCollection LoadTargetsFromPeakMatchingResultsForGivenDataset(string datasetName)
         {
             string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 

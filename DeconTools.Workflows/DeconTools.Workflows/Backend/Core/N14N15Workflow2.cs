@@ -105,7 +105,7 @@ namespace DeconTools.Workflows.Backend.Core
                 updateChromDataXYValues(this.Run.XYData);
 
                 ExecuteTask(chromPeakDetector);
-                updateChromDetectedPeaks(this.Run.PeakList);
+                UpdateChromDetectedPeaks(this.Run.PeakList);
 
                 ExecuteTask(chromPeakSelectorN14);
                 this.ChromPeakSelected = this.Result.ChromPeakSelected;

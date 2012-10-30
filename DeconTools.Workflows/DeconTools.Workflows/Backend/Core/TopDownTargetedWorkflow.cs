@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
-using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconTools.Backend.ProcessingTasks.ResultValidators;
-using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -18,18 +11,7 @@ namespace DeconTools.Workflows.Backend.Core
 	{
 		public Dictionary<int, TargetedResultBase> TargetResults { get; set; }
 
-		private TargetedWorkflowParameters _workflowParameters;
-		private JoshTheorFeatureGenerator _theorFeatureGen;
-		private PeakChromatogramGenerator _chromGen;
-		private DeconToolsSavitzkyGolaySmoother _chromSmoother;
-		private ChromPeakDetector _chromPeakDetector;
-		private ChromPeakSelectorBase _chromPeakSelector;
-		private DeconToolsPeakDetector _msPeakDetector;
-		private IterativeTFF _msfeatureFinder;
-		private MassTagFitScoreCalculator _fitScoreCalc;
-		private ResultValidatorTask _resultValidator;
-		private ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
-
+		
 		public TopDownTargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
 		{
 			Run = run;
@@ -43,68 +25,18 @@ namespace DeconTools.Workflows.Backend.Core
 
 		}
 
-		public override WorkflowParameters WorkflowParameters
-		{
-			get
-			{
-				return _workflowParameters;
-			}
-			set
-			{
-				_workflowParameters = value as TargetedWorkflowParameters;
-			}
-		}
+        protected override void DoPostInitialization()
+        {
+            base.DoPostInitialization();
+            _iterativeTFFParameters = new IterativeTFFParameters
+            {
+                ToleranceInPPM = _workflowParameters.MSToleranceInPPM
+            };
 
-		public override void InitializeWorkflow()
-		{
-			ValidateParameters();
-
-			TargetResults = new Dictionary<int, TargetedResultBase>();
-
-			_theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
-
-			_chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM,
-			                                          _workflowParameters.ChromGeneratorMode)
-			            	{
-			            		TopNPeaksLowerCutOff = 0.333,
-			            		NETWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2
-			            	};
-			//only
-
-			int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;   // adding 0.5 prevents rounding problems
-			_chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
-			_chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
-
-			_chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
-
-			_msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
-
-			var iterativeTffParameters = new IterativeTFFParameters {ToleranceInPPM = _workflowParameters.MSToleranceInPPM};
-		    iterativeTffParameters.MinimumRelIntensityForForPeakInclusion = 0.4;
-
-
-			_msfeatureFinder = new IterativeTFF(iterativeTffParameters);
-
-			_fitScoreCalc = new MassTagFitScoreCalculator();
-
-			_resultValidator = new ResultValidatorTask();
-
-			_chromatogramCorrelatorTask = new ChromatogramCorrelatorTask
-			                              	{ChromToleranceInPPM = _workflowParameters.ChromToleranceInPPM};
-
-			ChromatogramXYData = new XYData();
-			MassSpectrumXYData = new XYData();
-			ChromPeaksDetected = new List<ChromPeak>();
-		}
-
-		private void ValidateParameters()
-		{
-			bool pointsInSmoothIsEvenNumber = (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
-			if (pointsInSmoothIsEvenNumber)
-			{
-				throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
-			}
-		}
+            _iterativeTFFParameters.MinimumRelIntensityForForPeakInclusion = 0.4;   //TODO: add comment why we need this
+            _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
+        }
+		
 
 		public override void Execute()
 		{
@@ -125,7 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 				updateChromDataXYValues(Run.XYData);
 
 				ExecuteTask(_chromPeakDetector);
-				updateChromDetectedPeaks(Run.PeakList);
+				UpdateChromDetectedPeaks(Run.PeakList);
 
 				ExecuteTask(_chromPeakSelector);
 				ChromPeakSelected = Result.ChromPeakSelected;

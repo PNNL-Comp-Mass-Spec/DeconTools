@@ -2,12 +2,33 @@
 using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
+using DeconTools.Backend.ProcessingTasks.Smoothers;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class TargetedWorkflow : WorkflowBase
     {
+        protected TargetedWorkflowParameters _workflowParameters;
+        protected JoshTheorFeatureGenerator _theorFeatureGen;
+        protected PeakChromatogramGenerator _chromGen;
+        protected DeconToolsSavitzkyGolaySmoother _chromSmoother;
+        protected ChromPeakDetector _chromPeakDetector;
+        protected ChromPeakSelectorBase _chromPeakSelector;
+        protected IterativeTFF _msfeatureFinder;
+        protected MassTagFitScoreCalculator _fitScoreCalc;
+        protected ResultValidatorTask _resultValidator;
+        protected ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
+
+        protected IterativeTFFParameters _iterativeTFFParameters = new IterativeTFFParameters();
+
 
         #region Constructors
         #endregion
@@ -24,7 +45,7 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-        protected void updateChromDetectedPeaks(List<Peak> list)
+        protected void UpdateChromDetectedPeaks(List<Peak> list)
         {
             foreach (ChromPeak chrompeak in list)
             {
@@ -33,6 +54,17 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
+        }
+
+        protected  virtual void ValidateParameters()
+        {
+            Check.Require(_workflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
+
+            bool pointsInSmoothIsEvenNumber = (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
+            if (pointsInSmoothIsEvenNumber)
+            {
+                throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
+            }
         }
 
         protected void updateChromDataXYValues(XYData xydata)
@@ -70,6 +102,49 @@ namespace DeconTools.Workflows.Backend.Core
                 this.MassSpectrumXYData.Xvalues = xydata.Xvalues;
                 this.MassSpectrumXYData.Yvalues = xydata.Yvalues;
             }
+        }
+
+        public override void InitializeWorkflow()
+        {
+            DoPreInitialization();
+
+            DoMainInitialization();
+
+            DoPostInitialization();
+
+        }
+
+        protected virtual void DoPreInitialization(){}
+        
+        protected  virtual  void DoPostInitialization(){}
+
+        protected  virtual void DoMainInitialization()
+        {
+            ValidateParameters();
+
+            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
+            _chromGen.TopNPeaksLowerCutOff = 0.333;
+            _chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
+
+            int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;   // adding 0.5 prevents rounding problems
+            _chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
+            _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
+            _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
+
+            _iterativeTFFParameters = new IterativeTFFParameters();
+            _iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
+            
+            _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
+            _fitScoreCalc = new MassTagFitScoreCalculator();
+            _resultValidator = new ResultValidatorTask();
+            _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
+            _chromatogramCorrelatorTask.ChromToleranceInPPM = _workflowParameters.ChromToleranceInPPM;
+
+            ChromatogramXYData = new XYData();
+            MassSpectrumXYData = new XYData();
+            ChromPeaksDetected = new List<ChromPeak>();
+
         }
 
 
@@ -207,6 +282,18 @@ namespace DeconTools.Workflows.Backend.Core
             return chromPeakSelector;
 
 
+        }
+
+        public override WorkflowParameters WorkflowParameters
+        {
+            get
+            {
+                return _workflowParameters;
+            }
+            set
+            {
+                _workflowParameters = value as TargetedWorkflowParameters;
+            }
         }
     }
 }
