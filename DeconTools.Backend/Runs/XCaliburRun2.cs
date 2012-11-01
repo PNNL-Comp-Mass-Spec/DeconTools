@@ -245,9 +245,9 @@ namespace DeconTools.Backend.Runs
             double precursorMass = 0;
 
             //TODO: we might need to improve this.  Seems to be geared towards CID only
-            string pattern = @"(?<mz>[0-9.]+)@cid";
+            string patternCid = @"(?<mz>[0-9.]+)@cid";
 
-            var match = Regex.Match(scanInfo, pattern);
+            var match = Regex.Match(scanInfo, patternCid);
 
             if (match.Success)
             {
@@ -256,6 +256,22 @@ namespace DeconTools.Backend.Runs
             else
             {
                 precursorMass = -1;
+            }
+
+            if(precursorMass<0)//if still -1, check for hcd
+            {
+                string patternHcd = @"(?<mz>[0-9.]+)@hcd";
+
+                var matchHcd = Regex.Match(scanInfo, patternHcd);
+
+                if (matchHcd.Success)
+                {
+                    precursorMass = Convert.ToDouble(matchHcd.Groups["mz"].Value);
+                }
+                else
+                {
+                    precursorMass = -1;
+                }
             }
             return precursorMass;
         }
