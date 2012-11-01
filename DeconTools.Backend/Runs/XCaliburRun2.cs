@@ -247,18 +247,18 @@ namespace DeconTools.Backend.Runs
             //TODO: we might need to improve this.  Seems to be geared towards CID only
             string patternCid = @"(?<mz>[0-9.]+)@cid";
 
-            var match = Regex.Match(scanInfo, patternCid);
+            var matchCid = Regex.Match(scanInfo, patternCid);
 
-            if (match.Success)
+            if (matchCid.Success)
             {
-                precursorMass = Convert.ToDouble(match.Groups["mz"].Value);
+                precursorMass = Convert.ToDouble(matchCid.Groups["mz"].Value);
             }
             else
             {
                 precursorMass = -1;
             }
 
-            if(precursorMass<0)//if still -1, check for hcd
+            if(precursorMass < 0)//if still -1, check for hcd
             {
                 string patternHcd = @"(?<mz>[0-9.]+)@hcd";
 
