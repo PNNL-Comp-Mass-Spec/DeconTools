@@ -243,23 +243,9 @@ namespace DeconTools.Backend.Core
 
         public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
         {
-            this.ChromPeakSelected = bestPeak;
-            this.ScanSet = scanset;
+            throw new NotSupportedException("This method is no longer used!! - Things were moved to the ChromPeakSelector");
 
 
-            int numMSScansSummed = 0;
-            if (scanset==null || scanset.IndexValues==null || scanset.IndexValues.Count==0)
-            {
-                numMSScansSummed = 0;
-            }
-            else
-            {
-                numMSScansSummed = scanset.IndexValues.Count;
-                
-            }
-
-            this.NumMSScansSummed = numMSScansSummed;
-            WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labelled (N15) data
         }
 
 

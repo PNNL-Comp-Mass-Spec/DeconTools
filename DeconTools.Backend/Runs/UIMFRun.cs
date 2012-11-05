@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Runs
         /// <summary>
         /// The frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
         /// </summary>
-       // private DataReader.FrameType _frameTypeForMS1;
+        // private DataReader.FrameType _frameTypeForMS1;
         private GlobalParameters _globalParameters;
 
 
@@ -618,7 +618,36 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
+        public int GetClosestMS1Frame(int lcScan)
+        {
+            if (MS1Frames == null || MS1Frames.Count == 0)
+            {
+                throw new ApplicationException("Cannot get closest MS1 frames. MSFrame list is empty");
+            }
+
+            if (MS1Frames.Contains(lcScan))
+            {
+                return lcScan;
+            }
+
+            int closestLCScan = MinFrame;
+            int smallestDiff = Int32.MaxValue;
+
+            foreach (int t in MS1Frames)
+            {
+                int currentDiff = Math.Abs(t - lcScan);
+                if (currentDiff < smallestDiff)
+                {
+                    closestLCScan = t;
+                    smallestDiff = currentDiff;
+                }
+            }
+
+            return closestLCScan;
 
 
+
+
+        }
     }
 }

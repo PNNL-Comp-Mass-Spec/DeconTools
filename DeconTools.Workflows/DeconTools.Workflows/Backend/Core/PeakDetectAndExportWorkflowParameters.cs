@@ -16,13 +16,13 @@ namespace DeconTools.Workflows.Backend.Core
             //and empty OutputFolder
             this.OutputFolder = String.Empty;
 
-            this.FrameMax = -1;
-            this.FrameMin = -1;
-            this.ScanMin = -1;
-            this.ScanMax = -1;
+            this.IMSScanMax = -1;
+            this.IMSScanMin = -1;
+            this.LCScanMin = -1;
+            this.LCScanMax = -1;
 
             this.Num_LC_TimePointsSummed = 1;
-
+            NumIMSScansSummed = -1;
         }
 
         #endregion
@@ -42,27 +42,31 @@ namespace DeconTools.Workflows.Backend.Core
 
         public int Num_LC_TimePointsSummed { get; set; }
 
+        /// <summary>
+        /// Number of IMS Scans summed. -1 means all IMSScans are summed in a single Frame
+        /// </summary>
+        public int NumIMSScansSummed { get; set; }
 
 
         /// <summary>
-        /// Minimum scan to process. A value of -1 is interpreted as 'all scans'
+        /// Minimum LC scan to process. A value of -1 is interpreted as 'all LC scans'
         /// </summary>
-        public int ScanMin { get; set; }
+        public int LCScanMin { get; set; }
 
         /// <summary>
-        /// Maximum scan to process. A value of -1 is interpreted as 'all scans'
+        /// Maximum LC scan to process. A value of -1 is interpreted as 'all LC scans'
         /// </summary>
-        public int ScanMax { get; set; }
+        public int LCScanMax { get; set; }
 
         /// <summary>
-        /// Minimum frame to process. A value of -1 is interpreted as 'all frames'
+        /// Minimum IMSScan to process. A value of -1 is interpreted as 'all frames'
         /// </summary>
-        public int FrameMin { get; set; }
+        public int IMSScanMin { get; set; }
 
         /// <summary>
-        /// Maximum frame to process. A value of -1 is interpreted as 'all frames'
+        /// Maximum IMSScan to process. A value of -1 is interpreted as 'all frames'
         /// </summary>
-        public int FrameMax { get; set; }
+        public int IMSScanMax { get; set; }
 
         public bool ProcessMSMS { get; set; }
 

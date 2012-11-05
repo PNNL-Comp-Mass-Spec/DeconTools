@@ -412,6 +412,23 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         }
 
+        [Test]
+        public void GetClosestMS1SpectrumTest1()
+        {
+
+            string msmsDatafile =
+               @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
+
+            UIMFRun uimfRun = new UIMFRun(msmsDatafile);
+
+            int testFrame = 5;
+            int closestMS1=  uimfRun.GetClosestMS1Frame(testFrame);
+
+            Assert.AreEqual(6, closestMS1);
+
+
+        }
+
 
     }
 }

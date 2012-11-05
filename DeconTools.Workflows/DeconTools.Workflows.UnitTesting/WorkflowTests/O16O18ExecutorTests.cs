@@ -42,7 +42,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //}
 
-
             executor.Execute();
         }
 

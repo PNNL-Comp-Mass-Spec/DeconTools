@@ -1,4 +1,6 @@
-﻿using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+﻿using System;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
@@ -33,8 +35,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #endregion
 
-
-
-        
+    
     }
 }

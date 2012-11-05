@@ -50,7 +50,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
 
+
+
             SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ChromCorrelationData);
+            Assert.IsNotNull(result.ChromCorrelationData.CorrelationDataItems);
+
+            Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
+
 
             foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
             {

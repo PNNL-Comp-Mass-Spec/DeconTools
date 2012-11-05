@@ -4,6 +4,7 @@ using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -28,6 +29,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             this.WorkflowParameters = parameters;
             this.Run = run;
+
+
 
             InitializeWorkflow();
 
@@ -74,28 +77,66 @@ namespace DeconTools.Workflows.Backend.Core
             peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFileName);
 
             int numTotalScans = Run.ScanSetCollection.ScanSetList.Count;
-
             int scanCounter = 0;
-            foreach (var scan in Run.ScanSetCollection.ScanSetList)
+
+            if (Run.MSFileType==DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
             {
-                scanCounter++;
+                var uimfrun = Run as UIMFRun;
 
-                Run.CurrentScanSet = scan;
+                int numTotalFrames = uimfrun.FrameSetCollection.FrameSetList.Count;
+                int frameCounter = 0;
 
-                Run.ResultCollection.MSPeakResultList.Clear();
-
-                MSGenerator.Execute(Run.ResultCollection);
-                this._peakDetector.Execute(Run.ResultCollection);
-
-                peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
-
-                if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
+                foreach (var frameSet in uimfrun.FrameSetCollection.FrameSetList)
                 {
-                    double percentProgress = scanCounter * 100 / numTotalScans;
-                    reportProgress(percentProgress);
+                    frameCounter++;
+                    uimfrun.CurrentFrameSet = frameSet;
+                    uimfrun.ResultCollection.MSPeakResultList.Clear();
+
+                    foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
+                    {
+                        Run.CurrentScanSet = scanSet;
+                        MSGenerator.Execute(Run.ResultCollection);
+                        this._peakDetector.Execute(Run.ResultCollection);
+                        
+                    }
+                    peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
+
+                    if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
+                    {
+                        double percentProgress = frameCounter * 100 / numTotalFrames;
+                        reportProgress(percentProgress);
+                    }
+
                 }
 
             }
+            else
+            {
+                foreach (var scan in Run.ScanSetCollection.ScanSetList)
+                {
+                    scanCounter++;
+
+                    Run.CurrentScanSet = scan;
+
+                    Run.ResultCollection.MSPeakResultList.Clear();
+
+                    MSGenerator.Execute(Run.ResultCollection);
+                    this._peakDetector.Execute(Run.ResultCollection);
+
+                    peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
+
+                    if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
+                    {
+                        double percentProgress = scanCounter * 100 / numTotalScans;
+                        reportProgress(percentProgress);
+                    }
+
+                }
+            }
+
+
+            
+           
 
             Run.ResultCollection.MSPeakResultList.Clear();
 
@@ -130,26 +171,68 @@ namespace DeconTools.Workflows.Backend.Core
             if (Run != null)
             {
                 MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
+                int minLCScan;
+                int maxLCScan;
 
-
-                int minScan;
-                int maxScan;
-
-                if (this._workflowParameters.ScanMax == -1 || this._workflowParameters.ScanMin == -1)
+                if (this._workflowParameters.LCScanMax == -1 || this._workflowParameters.LCScanMin == -1)
                 {
-                    minScan = Run.MinScan;
-                    maxScan = Run.MaxScan;
+                    if (Run is UIMFRun)
+                    {
+                        minLCScan = ((UIMFRun)Run).MinFrame;
+                        maxLCScan = ((UIMFRun)Run).MaxFrame;
+                    }
+                    else
+                    {
+                        minLCScan = Run.MinScan;
+                        maxLCScan = Run.MaxScan;
+                    }
+
+
 
                 }
                 else
                 {
-                    minScan = this._workflowParameters.ScanMin;
-                    maxScan = this._workflowParameters.ScanMax;
+                    minLCScan = this._workflowParameters.LCScanMin;
+                    maxLCScan = this._workflowParameters.LCScanMax;
                 }
 
-                Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,
-                    this._workflowParameters.Num_LC_TimePointsSummed, 1, this._workflowParameters.ProcessMSMS);
-                
+                if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+                {
+                    var uimfRun = Run as UIMFRun;
+
+                    uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, minLCScan, maxLCScan,
+                                                                       _workflowParameters.Num_LC_TimePointsSummed, 1,
+                                                                       _workflowParameters.ProcessMSMS);
+
+
+                    bool sumAllScans = (_workflowParameters.NumIMSScansSummed == -1 ||
+                                        _workflowParameters.NumIMSScansSummed > uimfRun.MaxScan);
+
+                    if (sumAllScans)
+                    {
+                        int primaryIMSScan = Run.MinScan;
+
+                        uimfRun.ScanSetCollection.ScanSetList.Clear();
+                        var scanset = new ScanSet(primaryIMSScan, Run.MinScan, Run.MaxScan);
+                        uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
+                    }
+                    else
+                    {
+                        Run.ScanSetCollection = ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan,
+                                                                         _workflowParameters.NumIMSScansSummed, 1, false);
+                    }
+
+
+
+                }
+                else
+                {
+                    Run.ScanSetCollection = ScanSetCollection.Create(Run, minLCScan, maxLCScan,
+                   this._workflowParameters.Num_LC_TimePointsSummed, 1, this._workflowParameters.ProcessMSMS);
+
+                }
+
+
             }
         }
 

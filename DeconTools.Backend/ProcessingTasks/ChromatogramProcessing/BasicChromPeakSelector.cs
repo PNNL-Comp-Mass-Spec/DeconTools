@@ -70,11 +70,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             //    result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run, this.ScanOffSet);
             //}
 
-            ScanSet scanset = CreateSummedScanSet(bestPeak, resultList.Run);
-            resultList.Run.CurrentScanSet = scanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
 
-            result.AddSelectedChromPeakAndScanSet(bestPeak, scanset);
+            SetScansForMSGenerator(bestPeak, resultList.Run, true);
 
+            UpdateResultWithChromPeakAndLCScanInfo(result, bestPeak);
+            
             bool failedChromPeakSelection = (result.ChromPeakSelected == null || result.ChromPeakSelected.XValue == 0);
             if (failedChromPeakSelection)
             {
@@ -83,6 +83,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
         }
+
+        
 
         //private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run, int scanOffset)
         //{

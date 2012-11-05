@@ -1,6 +1,6 @@
-﻿using DeconTools.Backend.Core;
+﻿using System.IO;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -17,28 +17,43 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.ScanMin = 5500;
-            parameters.ScanMax = 6500;
+            parameters.LCScanMin = 5500;
+            parameters.LCScanMax = 6500;
 
             PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run,parameters);
             workflow.Execute();
 
 
         }
-        #region Constructors
-        #endregion
 
-        #region Properties
 
-        #endregion
+        [Test]
+        public void UIMFTest1()
+        {
 
-        #region Public Methods
+            string uimffile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            RunFactory rf = new RunFactory();
 
-        #endregion
+            Run run = rf.CreateRun(uimffile);
 
-        #region Private Methods
+            string expectedPeaksFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31_peaks.txt";
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
-        #endregion
+            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
+            parameters.LCScanMin = 500;
+            parameters.LCScanMax = 510;
+            parameters.NumIMSScansSummed = -1;
 
+            PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
+            workflow.Execute();
+
+            Assert.IsTrue(File.Exists(expectedPeaksFile));
+        }
+    
     }
 }

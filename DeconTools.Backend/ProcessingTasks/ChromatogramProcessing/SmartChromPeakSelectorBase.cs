@@ -128,25 +128,21 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                foreach (var peak in peaksWithinTol)
+                foreach (var chromPeak in peaksWithinTol)
                 {
-                    ScanSet scanset = createNonSummedScanSet(peak, resultList.Run);
-                    PeakQualityData pq = new PeakQualityData(peak);
+
+                    PeakQualityData pq = new PeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
-                    resultList.Run.CurrentScanSet = scanset;
+                    bool sumLCScans = false;
+                    SetScansForMSGenerator(chromPeak, resultList.Run, sumLCScans);
 
                     //This resets the flags and the scores on a given result
                     currentResult.ResetResult();
 
                     //generate a mass spectrum
                     msgen.Execute(resultList);
-
-                    //detect peaks
-                    //MSPeakDetector.MinX = currentResult.Target.MZ - 10;
-                    //MSPeakDetector.MaxX = currentResult.Target.MZ + 20;
-                    //MSPeakDetector.Execute(resultList);
-
+    
                     //find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
 
@@ -163,17 +159,16 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                 }
 
-
                 //run a algorithm that decides, based on fit score mostly. 
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 
 
-            ScanSet bestScanset = CreateSummedScanSet(bestChromPeak, resultList.Run);
-            resultList.Run.CurrentScanSet = bestScanset;   // maybe good to set this here so that the MSGenerator can operate on it...  
+            SetScansForMSGenerator(bestChromPeak, resultList.Run, true);
 
-            currentResult.AddSelectedChromPeakAndScanSet(bestChromPeak, bestScanset);
-
+            UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
+            
+           
             bool failedChromPeakSelection = (currentResult.ChromPeakSelected == null || currentResult.ChromPeakSelected.XValue == 0);
             if (failedChromPeakSelection)
             {
@@ -182,6 +177,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
         }
+
+        
 
         #endregion
 
@@ -208,21 +205,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
         
-
-        private ScanSet createNonSummedScanSet(ChromPeak chromPeak, Run run)
-        {
-            if (chromPeak == null || chromPeak.XValue == 0) return null;
-
-            int bestScan = (int)chromPeak.XValue;
-            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-
-            int numScansToSum = 1;
-            return new ScanSetFactory().CreateScanSet(run, bestScan, numScansToSum);
-
-        }
-
-
-      
 
         //TODO: delete this if unused
         protected void SetDefaultTargetedFeatureFinderSettings(double toleranceInPPM)
