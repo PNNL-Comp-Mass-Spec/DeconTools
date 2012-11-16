@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
@@ -16,8 +12,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker9T_test1()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(599, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(599, run.MaxLCScan);
             Assert.AreEqual("SWT_9t_TestDS216_Small", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.Bruker9TStandardFile1, run.DataSetPath);
         }
@@ -26,8 +22,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker9T_test2()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(4274, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(4274, run.MaxLCScan);
             Assert.AreEqual("RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.Bruker9TStandardFile2, run.DataSetPath);
         }
@@ -36,8 +32,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker12T_ser_Test1()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(7, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(7, run.MaxLCScan);
             Assert.AreEqual(8, run.GetNumMSScans());
             Assert.AreEqual("12Ttest_000003", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1, run.DataSetPath);
@@ -47,8 +43,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker12T_fid_Test1()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(0, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(0, run.MaxLCScan);
             Assert.AreEqual(1, run.GetNumMSScans());
             Assert.AreEqual("HVY_000001", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1, run.DataSetPath);
@@ -58,8 +54,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker12T_dotD_Test1()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_dotD_File1);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(0, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(0, run.MaxLCScan);
             Assert.AreEqual(1, run.GetNumMSScans());
             Assert.AreEqual("BSA_10082010_000003", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.BrukerSolarix12T_dotD_File1, run.DataSetPath);
@@ -69,8 +65,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void runInitiation_Bruker15T_Test1()
         {
             BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(17, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(17, run.MaxLCScan);
             Assert.AreEqual(18, run.GetNumMSScans());
             Assert.AreEqual("092410_ubiquitin_AutoCID_000004", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataMSFiles.Bruker15TFile1, run.DataSetPath);

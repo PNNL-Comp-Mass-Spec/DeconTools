@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using UIMFLibrary;
@@ -18,10 +15,10 @@ namespace DeconTools.Testing.ProblemCases
             sb.Append("field\tvalue\n");
             sb.Append("filename\t" + run.Filename + "\n");
             sb.Append("filetype\t" + run.MSFileType + "\n");
-            sb.Append("minFrame\t" + run.MinFrame + "\n");
-            sb.Append("maxFrame\t" + run.MaxFrame + "\n");
-            sb.Append("minScan\t" + run.MinScan + "\n");
-            sb.Append("maxScan\t" + run.MaxScan + "\n");
+            sb.Append("minFrame\t" + run.MinLCScan + "\n");
+            sb.Append("maxFrame\t" + run.MaxLCScan + "\n");
+            sb.Append("minScan\t" + run.MinIMSScan + "\n");
+            sb.Append("maxScan\t" + run.MaxIMSScan + "\n");
             Console.WriteLine(sb.ToString());
 
         }

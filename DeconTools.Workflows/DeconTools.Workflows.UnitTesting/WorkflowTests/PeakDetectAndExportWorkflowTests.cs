@@ -9,7 +9,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     public class PeakDetectAndExportWorkflowTests
     {
         [Test]
-        public void test1()
+        public void peakexporterTest1()
         {
 
             RunFactory rf = new RunFactory();
@@ -20,10 +20,36 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.LCScanMin = 5500;
             parameters.LCScanMax = 6500;
 
+
+            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+
             PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run,parameters);
             workflow.Execute();
 
+            var fileinfo = new FileInfo(expectedPeaksFile);
+            Assert.IsTrue(fileinfo.Exists);
+            Assert.IsTrue(fileinfo.Length > 1000000);
 
+        }
+
+        [Test]
+        public void peakExporterTest2()
+        {
+            RunFactory rf = new RunFactory();
+
+            string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
+
+            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
+            parameters.LCScanMin = 5500;
+            parameters.LCScanMax = 6500;
+            parameters.OutputFolder = outputFolder;
+
+            PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
+            workflow.Execute();
         }
 
 

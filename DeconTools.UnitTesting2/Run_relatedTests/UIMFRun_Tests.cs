@@ -21,11 +21,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             UIMFRun uimfRun = new UIMFRun(fileName);
 
-            Assert.AreEqual(1, uimfRun.MinFrame);
-            Assert.AreEqual(1175, uimfRun.MaxFrame);
+            Assert.AreEqual(1, uimfRun.MinLCScan);
+            Assert.AreEqual(1175, uimfRun.MaxLCScan);
 
-            Assert.AreEqual(0, uimfRun.MinScan);
-            Assert.AreEqual(359, uimfRun.MaxScan);
+            Assert.AreEqual(0, uimfRun.MinIMSScan);
+            Assert.AreEqual(359, uimfRun.MaxIMSScan);
 
             Assert.AreEqual("Sarc_MS2_90_6Apr11_Cheetah_11-02-19", uimfRun.DatasetName);
 
@@ -257,7 +257,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            int lastFrame = uimfRun.MaxFrame;
+            int lastFrame = uimfRun.MaxLCScan;
 
             double pressureLastFrame = uimfRun.GetFramePressure(lastFrame);
 
@@ -313,8 +313,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
            
-            int startFrame = uimfRun.MaxFrame - 200;
-            int stopFrame = uimfRun.MaxFrame;
+            int startFrame = uimfRun.MaxLCScan - 200;
+            int stopFrame = uimfRun.MaxLCScan;
 
             uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
 

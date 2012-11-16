@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -27,8 +23,8 @@ namespace DeconTools.Testing.ProblemCases
 
             UIMFRunTester tester = new UIMFRunTester();
 
-            int startScan = run.MinScan;
-            int stopScan = run.MaxScan;
+            int startScan = run.MinLCScan;
+            int stopScan = run.MaxLCScan;
 
             int startFrame = 6;
             int stopFrame = 6;
@@ -78,8 +74,8 @@ namespace DeconTools.Testing.ProblemCases
 
             UIMFRunTester tester = new UIMFRunTester();
 
-            int startScan = run.MinScan;
-            int stopScan = run.MaxScan;
+            int startScan = run.MinLCScan;
+            int stopScan = run.MaxLCScan;
 
             int startFrame = 1;
             int stopFrame = 7;
@@ -102,8 +98,8 @@ namespace DeconTools.Testing.ProblemCases
 
             UIMFRunTester tester = new UIMFRunTester();
 
-            int startScan = run.MinScan;
-            int stopScan = run.MaxScan;
+            int startScan = run.MinLCScan;
+            int stopScan = run.MaxLCScan;
 
             int startFrame = 1;
             int stopFrame = 10;
@@ -127,8 +123,8 @@ namespace DeconTools.Testing.ProblemCases
 
             UIMFRunTester tester = new UIMFRunTester();
 
-            int startScan = run.MinScan;
-            int stopScan = run.MaxScan;
+            int startScan = run.MinLCScan;
+            int stopScan = run.MaxLCScan;
 
             int startFrame = 0;
             int stopFrame = 9;

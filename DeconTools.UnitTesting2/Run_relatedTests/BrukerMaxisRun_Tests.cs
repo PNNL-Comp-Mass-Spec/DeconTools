@@ -47,8 +47,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             run.GetMassSpectrum(new ScanSet(run.GetNumMSScans()));
 
-            Assert.AreEqual(1, run.GetMinPossibleScanNum());
-            Assert.AreEqual(1131, run.GetMaxPossibleScanNum());
+            Assert.AreEqual(1, run.GetMinPossibleLCScanNum());
+            Assert.AreEqual(1131, run.GetMaxPossibleLCScanNum());
 
         }
 

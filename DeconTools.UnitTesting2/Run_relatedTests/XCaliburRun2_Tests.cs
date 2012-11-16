@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
 using System.Diagnostics;
+using System.Linq;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 using PNNLOmics.Data;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
@@ -20,8 +19,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             using (Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
 
-                Assert.AreEqual(1, run.MinScan);
-                Assert.AreEqual(18505, run.MaxScan);
+                Assert.AreEqual(1, run.MinLCScan);
+                Assert.AreEqual(18505, run.MaxLCScan);
             }
             
         }
@@ -43,8 +42,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
 
-            Assert.AreEqual(6000, run.MinScan);
-            Assert.AreEqual(7000, run.MaxScan);
+            Assert.AreEqual(6000, run.MinLCScan);
+            Assert.AreEqual(7000, run.MaxLCScan);
 
             run = null;
         }
@@ -56,8 +55,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             int numScans= run.GetNumMSScans();
             Assert.AreEqual(18505, numScans);
-            Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(18505, run.MaxScan);
+            Assert.AreEqual(1, run.MinLCScan);
+            Assert.AreEqual(18505, run.MaxLCScan);
 
             //TestUtilities.DisplayXYValues(run.XYData);
 
@@ -80,8 +79,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Run run = new XCaliburRun2(testFile);
 
-            Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(17773, run.MaxScan);
+            Assert.AreEqual(1, run.MinLCScan);
+            Assert.AreEqual(17773, run.MaxLCScan);
 
         }
 

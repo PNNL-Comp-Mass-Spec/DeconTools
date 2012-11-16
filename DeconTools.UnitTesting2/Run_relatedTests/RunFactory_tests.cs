@@ -18,7 +18,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.Bruker15TFile1);
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(17, run.MaxScan);
+            Assert.AreEqual(17, run.MaxLCScan);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.IsNotNull(run);
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(0, run.MaxScan);
+            Assert.AreEqual(0, run.MaxLCScan);
         }
 
 
@@ -41,7 +41,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(7, run.MaxScan);
+            Assert.AreEqual(7, run.MaxLCScan);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(599, run.MaxScan);
+            Assert.AreEqual(599, run.MaxLCScan);
         }
 
 
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
-            Assert.AreEqual(7, run.MaxScan);
+            Assert.AreEqual(7, run.MaxLCScan);
 
         }
 
@@ -79,7 +79,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(testfile);
 
             Assert.AreEqual(Globals.MSFileType.MZML, run.MSFileType);
-            Assert.AreEqual(18504, run.MaxScan);
+            Assert.AreEqual(18504, run.MaxLCScan);
         }
 
 
@@ -93,7 +93,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(testfile);
 
             Assert.AreEqual(Globals.MSFileType.MZXML_Rawdata, run.MSFileType);
-            Assert.AreEqual(18504, run.MaxScan);
+            Assert.AreEqual(18504, run.MaxLCScan);
         }
 
 
@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = rf.CreateRun(testfile);
 
             Assert.AreEqual(Globals.MSFileType.MZ5, run.MSFileType);
-            Assert.AreEqual(18504, run.MaxScan);
+            Assert.AreEqual(18504, run.MaxLCScan);
         }
 
 

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 {
@@ -20,7 +17,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             StringBuilder sb = new StringBuilder();
             sb.Append("scan\tRT\n");
 
-            for (int i = run.MinScan; i <= run.MaxScan; i++)
+            for (int i = run.MinLCScan; i <= run.MaxLCScan; i++)
             {
                 double retentionTime = run.GetTime(i);
                 sb.Append(i);

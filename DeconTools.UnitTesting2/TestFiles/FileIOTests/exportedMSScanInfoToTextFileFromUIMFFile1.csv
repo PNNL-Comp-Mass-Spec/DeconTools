@@ -1,3 +1,3 @@
 frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_front,frame_pressure_back
-500,44.121,1,31004,595.29107,1300070,6828,706,4.03,NaN
-501,44.138,1,30615,595.28896,1297435,6720,688,4.03,NaN
+500,44.121,1,0,0,1300070,0,204,4.03,NaN
+501,44.138,1,0,0,1297435,0,231,4.03,NaN

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Core;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.DTO;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.FileIO_Tests
 {
@@ -24,29 +19,30 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             
         }
 
-        //[Test]
-        //public void importPeaksFromUIMFFileTest1()
-        //{
-        //    string testPeakFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000_Frame800_802_peaks.txt";
+        [Test]
+        public void importPeaksFromUIMFFileTest1()     //NOTE:  2012_11_15 - The importer imports UIMF peaks as if they were orbi peaks.  All IMS scan info is ignored
+        {
+            string testPeakFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_O16O18Testing\RawData\Alz_O18_Run03_7Sep12_Cheetah_11-12-23_peaks.txt";
 
-        //    List<MSPeakResult> mspeaks = new List<MSPeakResult>();
-        //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(testPeakFile);
-        //    peakImporter.ImportUIMFPeaks(mspeaks);
+            List<MSPeakResult> mspeaks = new List<MSPeakResult>();
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(testPeakFile);
+            peakImporter.ImportPeaks(mspeaks);
 
-        //    Assert.AreEqual(16787, mspeaks.Count);
+            Assert.AreEqual(202928, mspeaks.Count);
 
-        //    MSPeakResult testResult = mspeaks[42];
-        //    Assert.AreEqual(43, testResult.PeakID);
-        //    Assert.AreEqual(800, testResult.Frame_num);
-        //    Assert.AreEqual(213, testResult.Scan_num);
-        //    Assert.AreEqual(357.38662, (decimal)testResult.MSPeak.XValue);
-        //    Assert.AreEqual(1528, testResult.MSPeak.Height);
-        //    Assert.AreEqual(100, testResult.MSPeak.SN);
-        //    Assert.AreEqual(16, testResult.MSPeak.MSFeatureID);
-                
-        //        //43	800	213	357.38662	1528	0.071	100	16
+            MSPeakResult testResult = mspeaks[0];
+            Assert.AreEqual(1, testResult.PeakID);
+            Assert.AreEqual(-1, testResult.FrameNum);
+            Assert.AreEqual(1, testResult.Scan_num);
+            Assert.AreEqual(386.74464, (decimal)testResult.MSPeak.XValue);
+            Assert.AreEqual(49599, testResult.MSPeak.Height);
+            Assert.AreEqual(199.19, (decimal)testResult.MSPeak.SN);
+            Assert.AreEqual(-1, testResult.MSPeak.MSFeatureID);
 
-        //}
+           // 43	800	213	357.38662	1528	0.071	100	16
+
+        }
 
 
     }

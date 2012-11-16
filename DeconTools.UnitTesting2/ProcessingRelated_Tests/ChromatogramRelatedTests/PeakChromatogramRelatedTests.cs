@@ -59,7 +59,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
-            List<MSPeakResult> filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
+            List<MSPeakResult> filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
 
             //Assert.AreEqual(56, filteredMSPeaks.Count);
 
@@ -82,7 +82,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
 
             PeakChrom chrom = new BasicPeakChrom();
-            chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, chromToleranceInPPM);
+            chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
 
             Assert.AreEqual(59, chrom.ChromSourceData.Count);
 
@@ -129,7 +129,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             ChromatogramGenerator chromGen = new ChromatogramGenerator();
-            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinScan, run.MaxScan, targetMZ, toleranceInPPM, 1);
+            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, toleranceInPPM, 1);
 
             for (int i = 0; i < run.XYData.Xvalues.Length; i++)
             {

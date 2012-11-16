@@ -26,12 +26,12 @@ namespace DeconTools.Testing.ProblemCases
 
             //UIMFLibrary.DataReader dr = new UIMFLibrary.DataReader();
             //dr.OpenUIMF(testFile);
-            tester.DisplayFrameParameters(run, run.MinFrame, run.MaxFrame);
+            tester.DisplayFrameParameters(run, run.MinLCScan, run.MaxLCScan);
 
             
 
 
-            //tester.DisplayFrameParameters(run, 0, run.MaxFrame);
+            //tester.DisplayFrameParameters(run, 0, run.MaxLCScan);
         }
 
 
@@ -48,7 +48,7 @@ namespace DeconTools.Testing.ProblemCases
 
             //UIMFLibrary.DataReader dr = new UIMFLibrary.DataReader();
             //dr.OpenUIMF(testFile);
-            tester.DisplayFrameParameters(run, run.MinFrame, run.MaxFrame);
+            tester.DisplayFrameParameters(run, run.MinLCScan, run.MaxLCScan);
 
         }
 

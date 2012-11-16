@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
@@ -23,7 +20,7 @@ namespace DeconTools.Testing.ProblemCases
             int startFrame = 163;
             int stopFrame = 165;
 
-            run.ScanSetCollection= ScanSetCollection.Create(run, run.MinScan, run.MaxScan, 7, 1);
+            run.ScanSetCollection= ScanSetCollection.Create(run, run.MinLCScan, run.MaxLCScan, 7, 1);
 
             run.FrameSetCollection = FrameSetCollection.Create(run, startFrame, stopFrame, 1, 1);
 

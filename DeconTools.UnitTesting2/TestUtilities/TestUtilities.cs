@@ -234,9 +234,9 @@ namespace DeconTools.UnitTesting2
             sb.Append(delim);
             sb.Append("Datatset path = " + run.DataSetPath);
             sb.Append(delim);
-            sb.Append("MinScan = " + run.MinScan);
+            sb.Append("MinScan = " + run.MinLCScan);
             sb.Append(delim);
-            sb.Append("MaxScan = " + run.MaxScan);
+            sb.Append("MaxScan = " + run.MaxLCScan);
             sb.Append(delim);
             sb.Append("FileType = " + run.MSFileType);
             sb.Append(delim);
@@ -314,7 +314,7 @@ namespace DeconTools.UnitTesting2
             StringBuilder sb = new StringBuilder();
             sb.Append("scan\tMSLevel\n");
 
-            for (int i = run.MinScan; i <= run.MaxScan; i++)
+            for (int i = run.MinLCScan; i <= run.MaxLCScan; i++)
             {
                 sb.Append(i);
                 sb.Append("\t");

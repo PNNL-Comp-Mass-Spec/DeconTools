@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
@@ -12,7 +13,6 @@ using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
-using DeconTools.Backend;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -210,7 +210,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (peakFate == "CHROM")
                     {
                         //generate chromatogram & tag MSPeakResults
-                        XYData chromatogram = this.ChromGenerator.GenerateChromatogram(this.Run.ResultCollection.MSPeakResultList, this.Run.MinScan, this.Run.MaxScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
+                        XYData chromatogram = this.ChromGenerator.GenerateChromatogram(this.Run.ResultCollection.MSPeakResultList, this.Run.MinLCScan, this.Run.MaxLCScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
 
                         if (chromatogram == null) continue;
 
@@ -416,15 +416,15 @@ namespace DeconTools.Workflows.Backend.Core
                         //generate chromatogram & tag MSPeakResults
 
                         int minScanForChrom = peakResult.Scan_num - (int)scanTolerance;
-                        if (minScanForChrom < run.MinScan)
+                        if (minScanForChrom < run.MinLCScan)
                         {
-                            minScanForChrom = run.MinScan;
+                            minScanForChrom = run.MinLCScan;
                         }
 
                         int maxScanForChrom = peakResult.Scan_num + (int)scanTolerance;
-                        if (maxScanForChrom > run.MaxScan)
+                        if (maxScanForChrom > run.MaxLCScan)
                         {
-                            maxScanForChrom = run.MaxScan;
+                            maxScanForChrom = run.MaxLCScan;
                         }
 
                         PeakChrom chrom = new BasicPeakChrom();
@@ -865,7 +865,7 @@ namespace DeconTools.Workflows.Backend.Core
             for (int i = 0; i < chromatogram.Xvalues.Length; i++)
             {
                 int currentScanVal = (int)chromatogram.Xvalues[i];
-                if (currentScanVal > run.MaxScan)
+                if (currentScanVal > run.MaxLCScan)
                 {
                     break;
                 }

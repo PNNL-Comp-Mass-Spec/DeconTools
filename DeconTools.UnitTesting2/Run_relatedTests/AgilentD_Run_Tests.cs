@@ -29,8 +29,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual("BSA_TOF4", run.DatasetName);
             Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\AgilentD\\BSA_TOF4\\BSA_TOF4.D", run.DataSetPath);
            
-            Assert.AreEqual(61, run.MaxScan);
-            Assert.AreEqual(0, run.MinScan);
+            Assert.AreEqual(61, run.MaxLCScan);
+            Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
         }
 

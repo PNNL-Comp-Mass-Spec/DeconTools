@@ -23,8 +23,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = new YAFMSRun(targetFile);
 
             Assert.AreEqual(2984, run.GetNumMSScans());
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(2984, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(2984, run.MaxLCScan);
         }
 
 

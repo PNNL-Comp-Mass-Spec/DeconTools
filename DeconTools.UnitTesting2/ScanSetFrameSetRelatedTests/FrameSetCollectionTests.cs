@@ -162,7 +162,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
 
-            int frameStop = ((UIMFRun)run).MaxFrame;
+            int frameStop = ((UIMFRun)run).MaxLCScan;
             int frameStart = frameStop - 10;
 
 

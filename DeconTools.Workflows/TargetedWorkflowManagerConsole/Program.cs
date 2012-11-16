@@ -57,7 +57,11 @@ namespace TargetedWorkflowManagerConsole
 
                             if (currentDatasetPath.ToLower().Contains("purged"))
                             {
-                                currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
+                                string tempPathWhileArchiveIsDown = @"\\protoapps\UserData\Slysz\Data\Yellowstone\RawData";
+
+                                currentDatasetPath = tempPathWhileArchiveIsDown + "\\" + datsetName + ".raw";
+
+                                //currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
                             }
                         }
 

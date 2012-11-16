@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
@@ -47,7 +44,7 @@ namespace DeconTools.Testing.ProblemCases
             msGen.Execute(run.ResultCollection);
 
             Console.WriteLine("scan\tmsLevel");
-            for (int i = run.MinScan; i < run.MaxScan; i++)
+            for (int i = run.MinLCScan; i < run.MaxLCScan; i++)
             {
                 Console.WriteLine(i + "\t" + run.GetMSLevel(i));
             }

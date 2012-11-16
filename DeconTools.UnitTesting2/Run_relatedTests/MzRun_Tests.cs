@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
@@ -23,8 +22,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(Backend.Globals.MSFileType.MZXML_Rawdata, run.MSFileType);
             Assert.AreEqual(18505, run.GetNumMSScans());
 
-            Assert.AreEqual(0, run.MinScan);
-            Assert.AreEqual(18504, run.MaxScan);
+            Assert.AreEqual(0, run.MinLCScan);
+            Assert.AreEqual(18504, run.MaxLCScan);
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
             Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML", run.DataSetPath);

@@ -30,10 +30,6 @@ namespace DeconTools.Workflows.Backend.Core
             this.WorkflowParameters = parameters;
             this.Run = run;
 
-
-
-            InitializeWorkflow();
-
         }
 
         public PeakDetectAndExportWorkflow(Run run, PeakDetectAndExportWorkflowParameters parameters, BackgroundWorker bw)
@@ -46,18 +42,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        #region Properties
-
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
 
         public override void InitializeWorkflow()
         {
@@ -71,6 +55,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
+            InitializeWorkflow();
+
+            PrepareOutputFolder();
 
             string outputPeaksFileName = getOutputPeaksFilename();
 
@@ -79,7 +66,7 @@ namespace DeconTools.Workflows.Backend.Core
             int numTotalScans = Run.ScanSetCollection.ScanSetList.Count;
             int scanCounter = 0;
 
-            if (Run.MSFileType==DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+            if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
             {
                 var uimfrun = Run as UIMFRun;
 
@@ -97,7 +84,7 @@ namespace DeconTools.Workflows.Backend.Core
                         Run.CurrentScanSet = scanSet;
                         MSGenerator.Execute(Run.ResultCollection);
                         this._peakDetector.Execute(Run.ResultCollection);
-                        
+
                     }
                     peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
 
@@ -135,10 +122,33 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            
-           
+
+
 
             Run.ResultCollection.MSPeakResultList.Clear();
+
+        }
+
+        private void PrepareOutputFolder()
+        {
+            if (string.IsNullOrEmpty(_workflowParameters.OutputFolder))
+            {
+                return;
+            }
+
+            if (!Directory.Exists(_workflowParameters.OutputFolder))
+            {
+                try
+                {
+                    Directory.CreateDirectory(_workflowParameters.OutputFolder);
+                }
+                catch (Exception ex)
+                {
+
+                    throw new DirectoryNotFoundException("PeakExporter cannot create output folder.\n\nDetails: " + ex.Message + "\n" + ex.StackTrace, ex);
+
+                }
+            }
 
         }
 
@@ -178,13 +188,13 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (Run is UIMFRun)
                     {
-                        minLCScan = ((UIMFRun)Run).MinFrame;
-                        maxLCScan = ((UIMFRun)Run).MaxFrame;
+                        minLCScan = ((UIMFRun)Run).MinLCScan;
+                        maxLCScan = ((UIMFRun)Run).MaxLCScan;
                     }
                     else
                     {
-                        minLCScan = Run.MinScan;
-                        maxLCScan = Run.MaxScan;
+                        minLCScan = Run.MinLCScan;
+                        maxLCScan = Run.MaxLCScan;
                     }
 
 
@@ -206,19 +216,19 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                     bool sumAllScans = (_workflowParameters.NumIMSScansSummed == -1 ||
-                                        _workflowParameters.NumIMSScansSummed > uimfRun.MaxScan);
+                                        _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan);
 
                     if (sumAllScans)
                     {
-                        int primaryIMSScan = Run.MinScan;
+                        int primaryIMSScan = Run.MinLCScan;
 
                         uimfRun.ScanSetCollection.ScanSetList.Clear();
-                        var scanset = new ScanSet(primaryIMSScan, Run.MinScan, Run.MaxScan);
+                        var scanset = new ScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
                         uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
                     }
                     else
                     {
-                        Run.ScanSetCollection = ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan,
+                        Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
                                                                          _workflowParameters.NumIMSScansSummed, 1, false);
                     }
 

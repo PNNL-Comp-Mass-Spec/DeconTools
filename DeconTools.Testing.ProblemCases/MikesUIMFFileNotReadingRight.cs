@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
 using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -21,8 +18,8 @@ namespace DeconTools.Testing.ProblemCases
             Console.WriteLine("numframe = " + run.GetNumFrames());
 
 
-            Console.WriteLine("minScan = "+run.MinScan);
-            Console.WriteLine("maxScan = " + run.MaxScan);
+            Console.WriteLine("minScan = "+run.MinLCScan);
+            Console.WriteLine("maxScan = " + run.MaxLCScan);
 
 
 

@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -34,8 +33,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Run run = new XCaliburRun(testFile);
 
-            Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(18505, run.MaxScan);
+            Assert.AreEqual(1, run.MinLCScan);
+            Assert.AreEqual(18505, run.MaxLCScan);
         }
 
 
@@ -46,8 +45,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Run run = new XCaliburRun(testFile);
 
-            Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(17773, run.MaxScan);
+            Assert.AreEqual(1, run.MinLCScan);
+            Assert.AreEqual(17773, run.MaxLCScan);
 
         }
 
@@ -233,8 +232,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            Assert.AreEqual(1, run.MinScan);
-            Assert.AreEqual(18505, run.MaxScan);
+            Assert.AreEqual(1, run.MinLCScan);
+            Assert.AreEqual(18505, run.MaxLCScan);
 
             run = null;
         }
@@ -244,8 +243,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
 
-            Assert.AreEqual(6000, run.MinScan);
-            Assert.AreEqual(7000, run.MaxScan);
+            Assert.AreEqual(6000, run.MinLCScan);
+            Assert.AreEqual(7000, run.MaxLCScan);
 
             run = null;
         }
@@ -320,8 +319,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.DESCENDING));
             Assert.AreEqual(1, run.GetClosestMSScan(1, Globals.ScanSelectionMode.CLOSEST));
 
-            Assert.AreEqual(18505, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.ASCENDING));
-            Assert.AreEqual(18499, run.GetClosestMSScan(run.MaxScan, Globals.ScanSelectionMode.DESCENDING));
+            Assert.AreEqual(18505, run.GetClosestMSScan(run.MaxLCScan, Globals.ScanSelectionMode.ASCENDING));
+            Assert.AreEqual(18499, run.GetClosestMSScan(run.MaxLCScan, Globals.ScanSelectionMode.DESCENDING));
 
 
         }
