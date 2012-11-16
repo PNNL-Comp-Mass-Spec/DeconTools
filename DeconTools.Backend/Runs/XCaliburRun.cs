@@ -46,8 +46,8 @@ namespace DeconTools.Backend.Runs
 
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            this.MinScan = GetMinPossibleScanNum();        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanNum();
+            this.MinLCScan = GetMinPossibleLCScanNum();        //  remember that DeconEngine is 1-based
+            this.MaxLCScan = GetMaxPossibleLCScanNum();
 
 
         }
@@ -55,8 +55,8 @@ namespace DeconTools.Backend.Runs
         public XCaliburRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
         #region Properties
@@ -67,11 +67,11 @@ namespace DeconTools.Backend.Runs
 
         #region Methods
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();        // xcalbur scans are 1-based
         }

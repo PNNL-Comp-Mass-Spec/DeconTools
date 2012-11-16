@@ -12,18 +12,20 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public ScanSet()
         {
-
+            BasePeak = new MSPeak();
         }
         public ScanSet(int primaryScanNum)
+            : this()
         {
             PrimaryScanNumber = primaryScanNum;
             IndexValues = new List<int>();
             IndexValues.Add(primaryScanNum);
-            BasePeak = new MSPeak();
+
 
         }
 
         public ScanSet(int primaryScanNum, int[] indexArray)
+            : this()
         {
             this.IndexValues = new List<int>();
             this.PrimaryScanNumber = primaryScanNum;
@@ -34,6 +36,7 @@ namespace DeconTools.Backend.Core
         }
 
         public ScanSet(int primaryScanNum, int lowerScan, int upperScan)
+            : this()
         {
             Check.Require(lowerScan <= upperScan, "Lower scan number must be less than or equal to the upper scan number");
             this.IndexValues = new List<int>();
@@ -142,7 +145,7 @@ namespace DeconTools.Backend.Core
                 }
             }
             return sb.ToString();
- 
+
         }
 
 
@@ -152,6 +155,6 @@ namespace DeconTools.Backend.Core
             return this.indexValues.Count;
         }
 
-        
+
     }
 }

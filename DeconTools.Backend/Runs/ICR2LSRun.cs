@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconToolsV2.Readers;
@@ -31,8 +28,8 @@ namespace DeconTools.Backend.Runs
             {
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            MinScan = 1; //  remember that DeconEngine is 1-based
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = 1; //  remember that DeconEngine is 1-based
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
 
         }
@@ -47,12 +44,12 @@ namespace DeconTools.Backend.Runs
 
         #region Public Methods
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

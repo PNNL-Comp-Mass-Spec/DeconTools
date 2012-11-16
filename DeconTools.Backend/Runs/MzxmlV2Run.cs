@@ -23,8 +23,8 @@ namespace DeconTools.Backend.Runs
             Filename = fileName;
 
 
-            MinScan = GetMinPossibleScanNum();
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
         }
 
@@ -69,12 +69,12 @@ namespace DeconTools.Backend.Runs
             throw new NotImplementedException();
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 0;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

@@ -41,8 +41,8 @@ namespace DeconTools.Backend.Runs
             _msfileReader.Open(Filename);
             _msfileReader.SetCurrentController(0, 1);
 
-            this.MinScan = 1;
-            this.MaxScan = this.GetNumMSScans();
+            this.MinLCScan = 1;
+            this.MaxLCScan = this.GetNumMSScans();
 
 
 
@@ -51,8 +51,8 @@ namespace DeconTools.Backend.Runs
         public XCaliburRun2(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
         #endregion
@@ -74,12 +74,12 @@ namespace DeconTools.Backend.Runs
             return RTForAGivenScan;
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             int maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
             if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;
@@ -360,7 +360,7 @@ namespace DeconTools.Backend.Runs
             if (!ParentScanList.ContainsKey(scanLC))
             {
                 int testScan = scanLC;
-                while (testScan >= MinScan)
+                while (testScan >= MinLCScan)
                 {
                     int currentMSLevel = GetMSLevel(testScan);
 

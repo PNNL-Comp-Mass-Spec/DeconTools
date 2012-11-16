@@ -30,16 +30,16 @@ namespace DeconTools.Backend.Runs
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
             
-            MinScan = GetMinPossibleScanNum();        
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();        
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
         }
 
         public MZXMLRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            MinScan = minScan;
-            MaxScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
 
@@ -47,12 +47,12 @@ namespace DeconTools.Backend.Runs
 
         #region Public Methods
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans() - 1;      // this is tricky...  some mzXML files might be 1-based;  others might be 0-based. So I will play it safe and go zero-based
         }

@@ -308,7 +308,6 @@
     <Compile Include="DTO\IsosResultUtilities.cs" />
     <Compile Include="DTO\MSPeakResult.cs" />
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
-    <Compile Include="DTO\OriginalIntensitiesExtractor.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
@@ -369,7 +368,6 @@
     <Compile Include="Utilities\Converters\PeakDatFileConverter.cs" />
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
-    <Compile Include="Utilities\DriftTimeProfileExtractor.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\IsotopicDistributionCalculator.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryIsoDistCreator2.cs" />
@@ -412,7 +410,6 @@
     <Compile Include="Utilities\AssemblyInfoRetriever.cs" />
     <Compile Include="Utilities\Converters\FileTypeConverter.cs" />
     <Compile Include="Utilities\DesignByContract.cs" />
-    <Compile Include="Utilities\FrameSetCollectionCreator.cs" />
     <Compile Include="Utilities\IsosResultSerializer.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\TomIsotopicPattern.cs" />
     <Compile Include="Utilities\Logger.cs" />

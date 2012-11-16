@@ -69,19 +69,8 @@ namespace DeconTools.Backend.Core
             set { mSFileType = value; }
         }
 
-        private int minScan;
-        public int MinScan
-        {
-            get { return minScan; }
-            set { minScan = value; }
-        }
-
-        private int maxScan;
-        public int MaxScan
-        {
-            get { return maxScan; }
-            set { maxScan = value; }
-        }
+        public int MinLCScan { get; set; }
+        public int MaxLCScan { get; set; }
 
         private bool areRunResultsSerialized;   //this is a flag to indicate whether or not Run's results were written to disk
         public bool AreRunResultsSerialized
@@ -220,9 +209,9 @@ namespace DeconTools.Backend.Core
 
         #region Methods
 
-        public abstract int GetMinPossibleScanNum();
+        public abstract int GetMinPossibleLCScanNum();
      
-        public abstract int GetMaxPossibleScanNum();
+        public abstract int GetMaxPossibleLCScanNum();
         //{
             ////default:  scan is zero-based
             //int maxpossibleScanIndex = GetNumMSScans() - 1;           
@@ -319,7 +308,7 @@ namespace DeconTools.Backend.Core
             switch (scanSelectionMode)
             {
                 case Globals.ScanSelectionMode.ASCENDING:
-                    for (int i = inputScan; i <= this.MaxScan; i++)     // MaxScan is an index value
+                    for (int i = inputScan; i <= this.MaxLCScan; i++)     // MaxScan is an index value
                     {
                         if (this.GetMSLevel(i) == 1) return i;
                     }
@@ -327,7 +316,7 @@ namespace DeconTools.Backend.Core
                     return inputScan;
 
                 case Globals.ScanSelectionMode.DESCENDING:
-                    for (int i = inputScan; i >= this.MinScan; i--)
+                    for (int i = inputScan; i >= this.MinLCScan; i--)
                     {
                         if (this.GetMSLevel(i) == 1) return i;
                     }
@@ -338,7 +327,7 @@ namespace DeconTools.Backend.Core
                     int upperScan = -1;
                     int lowerScan = -1;
                     if (this.GetMSLevel(inputScan) == 1) return inputScan;
-                    for (int i = inputScan; i <= this.MaxScan; i++)
+                    for (int i = inputScan; i <= this.MaxLCScan; i++)
                     {
                         if (this.GetMSLevel(i) == 1)
                         {
@@ -346,7 +335,7 @@ namespace DeconTools.Backend.Core
                             break;
                         }
                     }
-                    for (int i = inputScan; i >= this.MinScan; i--)
+                    for (int i = inputScan; i >= this.MinLCScan; i--)
                     {
                         if (this.GetMSLevel(i) == 1)
                         {
@@ -383,7 +372,7 @@ namespace DeconTools.Backend.Core
         /// </returns>
         public List<int> GetMSLevelScanValues()
         {
-            return GetMSLevelScanValues(this.MinScan, this.MaxScan);
+            return GetMSLevelScanValues(this.MinLCScan, this.MaxLCScan);
         }
 
         public List<int> GetMSLevelScanValues(int minScan, int maxScan)
@@ -477,9 +466,9 @@ namespace DeconTools.Backend.Core
 
             List<ScanNETPair> scanNETList = new List<ScanNETPair>();
 
-            for (int i = this.MinScan; i <= this.MaxScan; i++)
+            for (int i = this.MinLCScan; i <= this.MaxLCScan; i++)
             {
-                ScanNETPair snp = new ScanNETPair((float)i, i / (float)this.MaxScan);
+                ScanNETPair snp = new ScanNETPair((float)i, i / (float)this.MaxLCScan);
                 scanNETList.Add(snp);
             }
 
@@ -528,14 +517,15 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-            return (int)calculateScanForNET(netVal);
+            return (int)CalculateScanForNET(netVal);
 
 
 
         }
 
+        
 
-        private float calculateScanForNET(float net)
+        protected  virtual float CalculateScanForNET(float net)
         {
             //need to find the two (scan,net) pairs that are the lower and upper boundaries of the input NET
             //then do an intersect
@@ -543,8 +533,8 @@ namespace DeconTools.Backend.Core
             KeyValuePair<int, float> closestNETPair = new KeyValuePair<int, float>();
 
 
-            int lowerScan = this.MinScan;
-            int upperScan = this.MaxScan;
+            int lowerScan = this.MinLCScan;
+            int upperScan = this.MaxLCScan;
 
             float lowerNET = 0;
             float upperNET = 1;
@@ -573,7 +563,7 @@ namespace DeconTools.Backend.Core
 
                 bool found = false;
                 int currentScan = lowerScan + 1; //add one and then start looking for next higher scan
-                while (!found && currentScan <= maxScan)
+                while (!found && currentScan <= MaxLCScan)
                 {
                     currentScan++;
                     if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
@@ -595,7 +585,7 @@ namespace DeconTools.Backend.Core
                 bool found = false;
                 int currentScan = upperScan - 1;
 
-                while (!found && currentScan > this.MinScan)
+                while (!found && currentScan > this.MinLCScan)
                 {
                     currentScan--;
                     if (this.ScanToNETAlignmentData.ContainsKey(currentScan))
@@ -621,14 +611,14 @@ namespace DeconTools.Backend.Core
 
             float xvalue = (net - yintercept) / slope;
 
-            if (xvalue < this.minScan)
+            if (xvalue < this.MinLCScan)
             {
-                xvalue = this.MinScan;
+                xvalue = this.MinLCScan;
             }
 
-            if (xvalue > this.MaxScan)
+            if (xvalue > this.MaxLCScan)
             {
-                xvalue = this.MaxScan;
+                xvalue = this.MaxLCScan;
             }
 
             return xvalue;
@@ -641,7 +631,7 @@ namespace DeconTools.Backend.Core
         private float calculateNET(int scanNum)
         {
             if (scanNum < 2) return 0;
-            int maxScan = this.MaxScan;
+            int maxScan = this.MaxLCScan;
 
 
             double lowerNET = 0;

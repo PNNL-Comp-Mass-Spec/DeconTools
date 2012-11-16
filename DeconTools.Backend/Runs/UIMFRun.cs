@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Parameters;
 using DeconTools.Utilities;
 using UIMFLibrary;
 
@@ -26,8 +25,8 @@ namespace DeconTools.Backend.Runs
         //private UIMFLibrary.DataReader m_reader;
         private Dictionary<int, double> _framePressuresUnsmoothed;
 
-		// In IMS experiments that are a set number of MS2 frames with different collision energies that are run after each MS1 frame. This number will be the same for all MS1 frames.
-		private int _numOfConsecutiveMs2Frames;
+        // In IMS experiments that are a set number of MS2 frames with different collision energies that are run after each MS1 frame. This number will be the same for all MS1 frames.
+        private int _numOfConsecutiveMs2Frames;
 
         #region Constructors
         public UIMFRun()
@@ -57,10 +56,11 @@ namespace DeconTools.Backend.Runs
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(fileName);
 
-            MinFrame = GetMinPossibleFrameNumber(); // frame number is 1-based
-            MaxFrame = GetMaxPossibleFrameNumber();
-            MinScan = GetMinPossibleScanNum();
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
+
+            MinIMSScan = GetMinPossibleIMSScanNum();
+            MaxIMSScan = GetMaxPossibleIMSScanNum();
 
             GetMSLevelInfo();
             ContainsMSMSData = CheckRunForMSMSData();
@@ -87,20 +87,20 @@ namespace DeconTools.Backend.Runs
                 MS2Frames = ms2Frames.ToList();
             }
 
-			// Figure out the number of consecutive MS2 frames associated with each MS1 frame
-			_numOfConsecutiveMs2Frames = 0;
-			int numMs1Frames = MS1Frames.Count;
-			int numMs2Frames = MS2Frames.Count;
+            // Figure out the number of consecutive MS2 frames associated with each MS1 frame
+            _numOfConsecutiveMs2Frames = 0;
+            int numMs1Frames = MS1Frames.Count;
+            int numMs2Frames = MS2Frames.Count;
 
-			if(numMs2Frames > 0)
-			{
-				if(numMs2Frames % numMs1Frames != 0)
-				{
-					throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
-				}
+            if (numMs2Frames > 0)
+            {
+                if (numMs2Frames % numMs1Frames != 0)
+                {
+                    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
+                }
 
-				_numOfConsecutiveMs2Frames = numMs2Frames / numMs1Frames;
-			}
+                _numOfConsecutiveMs2Frames = numMs2Frames / numMs1Frames;
+            }
         }
 
         private bool CheckRunForMSMSData()
@@ -116,15 +116,15 @@ namespace DeconTools.Backend.Runs
         public UIMFRun(string fileName, int minFrame, int maxFrame)
             : this(fileName)
         {
-            this._minFrame = minFrame;
-            this.MaxFrame = maxFrame;
+            MinLCScan = minFrame;
+            MaxLCScan = maxFrame;
         }
 
         public UIMFRun(string fileName, int minFrame, int maxFrame, int minScan, int maxScan)
             : this(fileName, minFrame, maxFrame)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
 
         }
 
@@ -135,18 +135,9 @@ namespace DeconTools.Backend.Runs
 
         public FrameSetCollection FrameSetCollection { get; set; }
 
-        private int _minFrame;
-        public int MinFrame
-        {
-            get { return _minFrame; }
-            set
-            {
-                Check.Require(value >= 1, "MinFrame must be an integer greater than or equal to 1");
-                _minFrame = value;
-            }
-        }
+        public int MinIMSScan { get; set; }
+        public int MaxIMSScan { get; set; }
 
-        public int MaxFrame { get; set; }
 
         public FrameSet CurrentFrameSet { get; set; }
 
@@ -183,16 +174,25 @@ namespace DeconTools.Backend.Runs
             return (numScansPerFrame * numFrames);
         }
 
-        public int GetMinPossibleFrameNumber()
+        internal int GetNumScansPerFrame()
         {
-            return 1;    //one-based
+            //TODO:  check this and make sure it is correct
+            int minFrame = MinLCScan;
+
+            int numScansPerFrame = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(minFrame).Scans;
+            return numScansPerFrame;
+
         }
 
-        public int GetMaxPossibleFrameNumber()
+        public override int GetMinPossibleLCScanNum()
+        {
+            return 1;    //one-based frame num
+        }
+
+        public override int GetMaxPossibleLCScanNum()
         {
             int maxPossibleFrameNumber = _globalParameters.NumFrames;
-
-            int minPossibleFrameNumber = GetMinPossibleFrameNumber();
+            int minPossibleFrameNumber = GetMinPossibleLCScanNum();
             if (maxPossibleFrameNumber < minPossibleFrameNumber)
             {
                 maxPossibleFrameNumber = minPossibleFrameNumber;
@@ -201,26 +201,19 @@ namespace DeconTools.Backend.Runs
             return maxPossibleFrameNumber;
         }
 
-        internal int GetNumScansPerFrame()
-        {
-            //TODO:  check this and make sure it is correct
-            int minFrame = MinFrame;
 
-            int numScansPerFrame = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParameters(minFrame).Scans;
-            return numScansPerFrame;
-
-        }
-
-        public override int GetMinPossibleScanNum()
+        public int GetMinPossibleIMSScanNum()
         {
             return 0;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public int GetMaxPossibleIMSScanNum()
         {
             return GetNumScansPerFrame() - 1;
-
         }
+
+
+
 
         public override int GetCurrentScanOrFrame()
         {
@@ -285,10 +278,10 @@ namespace DeconTools.Backend.Runs
 
         }
 
-		public int GetNumberOfConsecutiveMs2Frames()
-		{
-			return _numOfConsecutiveMs2Frames;
-		}
+        public int GetNumberOfConsecutiveMs2Frames()
+        {
+            return _numOfConsecutiveMs2Frames;
+        }
 
         public double GetDriftTime(FrameSet frame, int scanNum)
         {
@@ -382,7 +375,7 @@ namespace DeconTools.Backend.Runs
             int upperFrameBoundary = (int)Math.Round(numFrames - numPointsToSmooth / 2) - 1;   //zero-based
 
             int maxFrame = _globalParameters.NumFrames;
-            int minFrame = GetMinPossibleFrameNumber();
+            int minFrame = GetMinPossibleLCScanNum();
 
 
             foreach (var frame in FrameSetCollection.FrameSetList)
@@ -616,6 +609,12 @@ namespace DeconTools.Backend.Runs
             return sb.ToString();
         }
 
+
+        protected override float CalculateScanForNET(float net)
+        {
+            return base.CalculateScanForNET(net);
+        }
+
         #endregion
 
         public int GetClosestMS1Frame(int lcScan)
@@ -630,7 +629,7 @@ namespace DeconTools.Backend.Runs
                 return lcScan;
             }
 
-            int closestLCScan = MinFrame;
+            int closestLCScan = MinLCScan;
             int smallestDiff = Int32.MaxValue;
 
             foreach (int t in MS1Frames)

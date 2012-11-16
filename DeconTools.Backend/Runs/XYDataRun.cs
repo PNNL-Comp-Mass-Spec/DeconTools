@@ -38,12 +38,12 @@ namespace DeconTools.Backend.Runs
             
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return 1;
         }

@@ -68,8 +68,8 @@ namespace DeconTools.Backend.Runs
 
             _reader = new MSDataFileReader(fileName);
 
-            MinScan = GetMinPossibleScanNum();
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
         }
 
@@ -147,14 +147,14 @@ namespace DeconTools.Backend.Runs
             double[] yvals;
 
 
-            if (scanset.PrimaryScanNumber > MaxScan)
+            if (scanset.PrimaryScanNumber > MaxLCScan)
             {
-                throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded max scan (which = " + MaxScan + ")");
+                throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded max scan (which = " + MaxLCScan + ")");
             }
 
-            if (scanset.PrimaryScanNumber < MinScan)
+            if (scanset.PrimaryScanNumber < MinLCScan)
             {
-                throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded min scan (which = " + MinScan + ")");
+                throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded min scan (which = " + MinLCScan + ")");
             }
 
 
@@ -177,12 +177,12 @@ namespace DeconTools.Backend.Runs
             }
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 0;                   // mzRun files are 0-based
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans() - 1;    // mzRun files are 0-based
         }

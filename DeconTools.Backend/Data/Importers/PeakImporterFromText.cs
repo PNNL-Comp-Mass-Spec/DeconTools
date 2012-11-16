@@ -6,10 +6,15 @@ using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Data
 {
+
+    //NOTE:  2012_11_15 - The importer imports UIMF peaks as if they were orbi peaks.  All IMS scan info is ignored
     public class PeakImporterFromText : IPeakImporter
     {
         private string filename;
         private char delimiter;
+        private string _header;
+        private bool _peaksAreFromUIMF;
+        private bool _containsMSFeatureIDColumn;
 
         #region Constructors
         public PeakImporterFromText(string filename)
@@ -65,7 +70,11 @@ namespace DeconTools.Backend.Data
         {
             using (StreamReader reader = new StreamReader(filename))
             {
-                reader.ReadLine();    //first line is the header line.   
+                _header =reader.ReadLine();    //first line is the header line.  
+
+                _peaksAreFromUIMF = _header != null && _header.Contains("frame");
+
+                _containsMSFeatureIDColumn = _header != null && _header.Contains("MSFeatureID");
 
                 int progressCounter = 0;
                 while (reader.Peek() != -1)
@@ -106,23 +115,37 @@ namespace DeconTools.Backend.Data
             }
         }
 
+        //TODO: make this so that it works with UIMF data
+        //TODO: use column header lookup instead of hard coded values
         private MSPeakResult convertTextToPeakResult(string line)
         {
             MSPeakResult peakresult = new MSPeakResult();
 
+            int columnCounter = 0;
+
             List<string> processedLine = processLine(line);
-            peakresult.PeakID = Convert.ToInt32(processedLine[0]);
-            peakresult.Scan_num = Convert.ToInt32(processedLine[1]);
+            peakresult.PeakID = Convert.ToInt32(processedLine[columnCounter]);
+            
+            
+            //NOTE - for UIMF data the frame column is loaded into the 'Scan_num' property.  This is kind of ugly since there is
+            //already a FrameNum property. I'm doing this so that we can process UIMF files in IQ.  We need to fix this later. 
+            peakresult.Scan_num = Convert.ToInt32(processedLine[++columnCounter]);
+            
+            
             peakresult.MSPeak = new DeconTools.Backend.Core.MSPeak();
-            peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[2]);
-            peakresult.MSPeak.Height = Convert.ToSingle(processedLine[3]);
-            peakresult.MSPeak.Width = Convert.ToSingle(processedLine[4]);
-            peakresult.MSPeak.SN = Convert.ToSingle(processedLine[5]);
+
+            //UIMF peak data contains an extra column
+            if (_peaksAreFromUIMF) ++columnCounter;
+
+            peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[++columnCounter]);
+            peakresult.MSPeak.Height = Convert.ToSingle(processedLine[++columnCounter]);
+            peakresult.MSPeak.Width = Convert.ToSingle(processedLine[++columnCounter]);
+            peakresult.MSPeak.SN = Convert.ToSingle(processedLine[++columnCounter]);
 
 
-            if (processedLine.Count > 6)
+            if (_containsMSFeatureIDColumn)
             {
-                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[6]);
+                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[++columnCounter]);
             }
 
 

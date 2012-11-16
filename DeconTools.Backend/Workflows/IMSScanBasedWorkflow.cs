@@ -74,10 +74,11 @@ namespace DeconTools.Backend.Workflows
             bool sumAllIMSScansInAFrame = (OldDecon2LsParameters.HornTransformParameters.SumSpectra);
             if (sumAllIMSScansInAFrame)
             {
-                int centerScan = (Run.MinScan + Run.MaxScan + 1) / 2;
+
+                int centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
 
                 uimfRun.ScanSetCollection.ScanSetList.Clear();
-                var scanset = new ScanSet(centerScan, Run.MinScan, Run.MaxScan);
+                var scanset = new ScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
                 uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
             }
             else
@@ -89,7 +90,7 @@ namespace DeconTools.Backend.Workflows
                 {
                     int numIMSScanToSum = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //Old parameters report a +/- value for summing. But new code is different
 
-                    Run.ScanSetCollection= ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
+                    Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan, numIMSScanToSum,
                     OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                     OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
 
@@ -98,7 +99,7 @@ namespace DeconTools.Backend.Workflows
                 {
                     int numIMSScanToSum = 1;      // this means there is no summing
 
-                    Run.ScanSetCollection = ScanSetCollection.Create(Run, Run.MinScan, Run.MaxScan, numIMSScanToSum,
+                    Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan, numIMSScanToSum,
                     OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                     OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
 

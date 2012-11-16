@@ -39,6 +39,11 @@ namespace DeconTools.Backend.Core
         public string ProteinDescription { get; set; }
         public string GeneReference { get; set; }
 
+        /// <summary>
+        /// Number of multiple proteins matching peptide. '0' means it is a unique peptide matching only one protein. 
+        /// This is awkward, but designed to match how this is done in the DMS database. 
+        /// </summary>
+        public int MultipleProteinCount { get; set; }
 
         #endregion
 

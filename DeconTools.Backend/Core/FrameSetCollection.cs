@@ -17,8 +17,8 @@ namespace DeconTools.Backend.Core
         public static FrameSetCollection Create(UIMFRun uimfRun, int numFramesSummed, int increment, bool processMSMS=false)
         {
 
-            int minFrame = uimfRun.GetMinPossibleFrameNumber();
-            int maxFrame = uimfRun.GetMaxPossibleFrameNumber();
+            int minFrame = uimfRun.GetMinPossibleLCScanNum();
+            int maxFrame = uimfRun.GetMaxPossibleLCScanNum();
 
             return Create(uimfRun, minFrame, maxFrame, numFramesSummed, increment,processMSMS);
         }
@@ -31,8 +31,8 @@ namespace DeconTools.Backend.Core
             Check.Require(numFramesIsOdd, "Number of frames summed together must be an odd number");
             Check.Require(startFrame <= stopFrame, "Stop frame must be greater than or equal to the Start frame");
 
-            int minFrame = uimfRun.GetMinPossibleFrameNumber();
-            int maxFrame = uimfRun.GetMaxPossibleFrameNumber();
+            int minFrame = uimfRun.GetMinPossibleLCScanNum();
+            int maxFrame = uimfRun.GetMaxPossibleLCScanNum();
 
             Check.Require(startFrame >= minFrame, "Start frame must be greater than or equal to " + minFrame);
             

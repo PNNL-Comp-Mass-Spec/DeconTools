@@ -576,12 +576,25 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             List<double> logRatioXVals = new List<double>();
             List<double> logRatioYVals = new List<double>();
 
+            bool foundYvalAboveZero = false;
             for (int i = 0; i < xvals.Count; i++)
             {
+               
                 if (yvals[i] > 0)
                 {
+                    foundYvalAboveZero = true;
                     logRatioXVals.Add(xvals[i]);
                     logRatioYVals.Add(Math.Log(yvals[i]));
+                }
+                else
+                {
+                    //if we have already found a yval above 0, and then we found one below 0, this
+                    //indicates a problem which we will penalize. 
+                    //if (foundYvalAboveZero)
+                    //{
+                    //    logRatioXVals.Add(xvals[i]);
+                    //    logRatioYVals.Add(0);
+                    //}
                 }
             }
 

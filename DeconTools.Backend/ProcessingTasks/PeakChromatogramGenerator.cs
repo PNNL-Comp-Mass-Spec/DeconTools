@@ -127,7 +127,7 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
             Check.Require(resultList.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
 
-            Check.Require(resultList.Run.MaxScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
+            Check.Require(resultList.Run.MaxLCScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
 
             //[gord] restricting the scan range from which the chromatogram is generated greatly improves speed. e.g) on an Orbitrap file
@@ -163,10 +163,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (maxNetVal > 1) maxNetVal = 1;
 
             int lowerScan = resultList.Run.GetScanValueForNET(minNetVal);
-            if (lowerScan == -1) lowerScan = resultList.Run.MinScan;
+            if (lowerScan == -1) lowerScan = resultList.Run.MinLCScan;
 
             int upperScan = resultList.Run.GetScanValueForNET(maxNetVal);
-            if (upperScan == -1) upperScan = resultList.Run.MaxScan;
+            if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
 
 
             XYData chromValues;
@@ -570,8 +570,8 @@ namespace DeconTools.Backend.ProcessingTasks
             peakListMinScan = peakListMinScan - leftZeroPadding;
             peakListMaxScan = peakListMaxScan + rightZeroPadding;
 
-            if (peakListMinScan < run.MinScan) peakListMinScan = run.MinScan;
-            if (peakListMaxScan > run.MaxScan) peakListMaxScan = run.MaxScan;
+            if (peakListMinScan < run.MinLCScan) peakListMinScan = run.MinLCScan;
+            if (peakListMaxScan > run.MaxLCScan) peakListMaxScan = run.MaxLCScan;
 
             //populate array with zero intensities.
             SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
@@ -698,11 +698,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
         #endregion
 
-        /// <summary>
-        /// Recursive binary search algorithm for searching through MSPeakResults
-        /// </summary>
-
-
+    
         
     }
 }

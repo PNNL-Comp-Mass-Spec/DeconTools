@@ -260,13 +260,13 @@ namespace DeconTools.Backend.Workflows
 
             if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
             {
-                minScan = Math.Max(Run.MinScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
-                maxScan = Math.Min(Run.MaxScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
+                minScan = Math.Max(Run.MinLCScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
+                maxScan = Math.Min(Run.MaxLCScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
             }
             else
             {
-                minScan = Run.MinScan;
-                maxScan = Run.MaxScan;
+                minScan = Run.MinLCScan;
+                maxScan = Run.MaxLCScan;
             }
 
 

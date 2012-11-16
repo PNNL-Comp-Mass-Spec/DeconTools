@@ -36,8 +36,8 @@ namespace DeconTools.Backend.Runs
 
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
-            this.MinScan = 1;        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanNum();
+            this.MinLCScan = 1;        //  remember that DeconEngine is 1-based
+            this.MaxLCScan = GetMaxPossibleLCScanNum();
  
 
         }
@@ -46,8 +46,8 @@ namespace DeconTools.Backend.Runs
         public BrukerRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
 
@@ -141,12 +141,12 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override sealed int GetMaxPossibleScanNum()
+        public override sealed int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

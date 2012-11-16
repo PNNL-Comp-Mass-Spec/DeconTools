@@ -100,10 +100,10 @@ namespace DeconTools.Backend.Runs
             Check.Ensure(this.rawData != null, "Run initialization problem. Details:  Run was loaded but after FFT settings were applied, there was a problem.");
 
 
-            this.MinScan = GetMinPossibleScanNum();        //  remember that DeconEngine is 1-based
-            this.MaxScan = GetMaxPossibleScanNum();
+            this.MinLCScan = GetMinPossibleLCScanNum();        //  remember that DeconEngine is 1-based
+            this.MaxLCScan = GetMaxPossibleLCScanNum();
 
-            Check.Ensure(this.MaxScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
+            Check.Ensure(this.MaxLCScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
 
 
         }
@@ -111,8 +111,8 @@ namespace DeconTools.Backend.Runs
         public BrukerV2Run(string fileName, int minScan, int maxScan)
             : this(fileName)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
         private FileInfo findFIDFile()
@@ -287,12 +287,12 @@ namespace DeconTools.Backend.Runs
             return this.rawData.GetNumScans();
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

@@ -16,9 +16,17 @@ namespace DeconTools.Backend.Core
         public static ScanSetCollection Create(Run run, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
             Check.Require(run != null, "Cannot create target scans. Run is null");
-            return Create(run, run.GetMinPossibleScanNum(), run.GetMaxPossibleScanNum(), numScansSummed, scanIncrement,
-                          processMSMS);
+            
+            if (run.MSFileType == Globals.MSFileType.PNNL_UIMF)
+            {
+                UIMFRun uimfrun = run as UIMFRun;
 
+                return Create(run, uimfrun.GetMinPossibleIMSScanNum(), uimfrun.GetMaxPossibleIMSScanNum(), numScansSummed, scanIncrement,
+                             processMSMS);   
+            }
+            
+            return Create(run, run.GetMinPossibleLCScanNum(), run.GetMaxPossibleLCScanNum(), numScansSummed, scanIncrement,
+                          processMSMS);
         }
 
 
@@ -63,8 +71,8 @@ namespace DeconTools.Backend.Core
             ScanSetCollection scanSetCollection=new ScanSetCollection();
 
 
-            int minScan = run.MinScan;
-            int maxScan = run.MaxScan;
+            int minScan = run.MinLCScan;
+            int maxScan = run.MaxLCScan;
 
 
             if (sumAllScans)
@@ -123,13 +131,32 @@ namespace DeconTools.Backend.Core
 
 
 
+        private static int getMinScan(Run run)
+        {
+            if (run is UIMFRun)
+            {
+                return ((UIMFRun) run).GetMinPossibleIMSScanNum();
+            }
+            
+            return run.GetMinPossibleLCScanNum();
+        }
+
+        private static int getMaxScan(Run run)
+        {
+            if (run is UIMFRun)
+            {
+                return ((UIMFRun)run).GetMaxPossibleIMSScanNum();
+            }
+
+            return run.GetMaxPossibleLCScanNum();
+        }
 
 
 
         private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
         {
-            int minPossibleScanIndex = run.GetMinPossibleScanNum();
-            int maxPossibleScanIndex = run.GetMaxPossibleScanNum();
+            int minPossibleScanIndex = getMinScan(run);
+            int maxPossibleScanIndex = getMaxScan(run);
 
             ScanSetCollection scanSetCollection = new ScanSetCollection();
 
@@ -196,16 +223,10 @@ namespace DeconTools.Backend.Core
 
         }
 
-
-
-
-
-
-
         private static ScanSetCollection CreateStandardScanSetCollection(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
         {
-            int minPossibleScanIndex = run.GetMinPossibleScanNum();
-            int maxPossibleScanIndex = run.GetMaxPossibleScanNum();
+            int minPossibleScanIndex = getMinScan(run);
+            int maxPossibleScanIndex = getMaxScan(run);
 
             if (scanStart < minPossibleScanIndex)
             {
@@ -289,7 +310,7 @@ namespace DeconTools.Backend.Core
             var scans = new List<int>();
 
             int scansCounter = 0;
-            int scanUppperLimit = run.GetMaxPossibleScanNum();
+            int scanUppperLimit = run.GetMaxPossibleLCScanNum();
 
             while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
             {

@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Agilent.MassSpectrometry.DataAnalysis;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
-using System.Collections.Generic;
 
 namespace DeconTools.Backend.Runs
 {
@@ -46,16 +46,16 @@ namespace DeconTools.Backend.Runs
 
             OpenDataset();
 
-            MinScan = GetMinPossibleScanNum();
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
         }
 
 
         public AgilentDRun(string dataFileName, int minScan, int maxScan)
             : this(dataFileName)
         {
-            MinScan = minScan;
-            MaxScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
 
         }
 
@@ -78,13 +78,13 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Public Methods
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             // AgilentD files are 0-based.
             return 0;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans() - 1;
         }

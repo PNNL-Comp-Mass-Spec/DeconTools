@@ -1,9 +1,8 @@
 ﻿using System;//SK
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
 using System.IO;
+using System.Linq;
+using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using YafmsLibrary;
 
@@ -47,8 +46,8 @@ namespace DeconTools.Backend.Runs
                 throw ex;
             }
 
-            this.MinScan = GetMinPossibleScanNum();
-            this.MaxScan = GetMaxPossibleScanNum();
+            this.MinLCScan = GetMinPossibleLCScanNum();
+            this.MaxLCScan = GetMaxPossibleLCScanNum();
         }
 
         public YAFMSRun(string fileName, int minScan, int maxScan)
@@ -56,11 +55,11 @@ namespace DeconTools.Backend.Runs
         {
             //MinScan has been already defined by the alternate constructor. The inputted parameters must be within the base MinScan and MaxScan. 
 
-            Check.Require(minScan >= MinScan, "Cannot initialize YAFMS run. Inputted minScan is lower than the minimum possible scan number.");
-            Check.Require(maxScan <= MaxScan, "Cannot initialize YAFMS run. Inputted MaxScan is greater than the maximum possible scan number.");
+            Check.Require(minScan >= MinLCScan, "Cannot initialize YAFMS run. Inputted minScan is lower than the minimum possible scan number.");
+            Check.Require(maxScan <= MaxLCScan, "Cannot initialize YAFMS run. Inputted MaxScan is greater than the maximum possible scan number.");
 
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
         #endregion
@@ -75,14 +74,14 @@ namespace DeconTools.Backend.Runs
 
         #region Public Methods
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             
             //TODO: YAFMS is a universal format. So sometimes the ScanNum might be 1-based (e.g. if created from XCalibur data)
             return 0;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using BrukerDataReader;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
-using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs.CalibrationData;
 using Check = DeconTools.Utilities.Check;
 
@@ -101,8 +100,8 @@ namespace DeconTools.Backend.Runs
             DataSetPath = getDatasetfolderName(Filename);
 
 
-            MinScan = GetMinPossibleScanNum(); 
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum(); 
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
             Check.Ensure(m_rawDataReader != null, "BrukerRun could not be initialized. Failed to connect to raw data.");
 
@@ -114,8 +113,8 @@ namespace DeconTools.Backend.Runs
         public BrukerV3Run(string fileName, int minScan, int maxScan)
             : this(fileName)
         {
-            this.MinScan = minScan;
-            this.MaxScan = maxScan;
+            this.MinLCScan = minScan;
+            this.MaxLCScan = maxScan;
         }
 
 
@@ -154,12 +153,12 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 0;
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans() -1 ;
         }

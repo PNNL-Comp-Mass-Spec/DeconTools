@@ -55,8 +55,8 @@ namespace DeconTools.Backend.Runs
             DatasetName = getDatasetName(Filename);
             DataSetPath = getDatasetfolderName(Filename);
 
-            MinScan = GetMinPossibleScanNum();
-            MaxScan = GetMaxPossibleScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
         }
 
@@ -119,12 +119,12 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override int GetMinPossibleScanNum()
+        public override int GetMinPossibleLCScanNum()
         {
             return 1;     //one-based
         }
 
-        public override int GetMaxPossibleScanNum()
+        public override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }

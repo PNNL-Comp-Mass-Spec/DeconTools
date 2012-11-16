@@ -58,6 +58,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 if (o18DoubleLabelProfile == null)
                 {
                     result.IsotopicProfile = null;
+                    result.FailedResult = true;
+                    result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
                     return;
                 }
                 

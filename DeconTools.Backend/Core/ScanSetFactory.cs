@@ -84,55 +84,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-
-      
-
-        public FrameSet CreateFrameSet(Run run, int frame, int framesSummed)
-        {
-            Check.Require(run is UIMFRun, "Cannot create frameset on a Run other than a UIMFRun.");
-
-            List<int> lowerFramesToSum = getLowerFrames(run, frame, (framesSummed - 1) / 2);
-            List<int> upperFramesToSum = getUpperFrames(run, frame, (framesSummed - 1) / 2);
-            List<int> framesToSum = lowerFramesToSum;
-            framesToSum.Add(frame);
-            framesToSum.AddRange(upperFramesToSum);
-            return new FrameSet(frame, framesToSum.ToArray());
-
-        }
-
-        private List<int> getLowerFrames(Run run, int frame, int numLowerScansToGet)
-        {
-            int currentFrame = frame - 1;
-            List<int> lowerFrames = new List<int>();
-
-            int framesCounter = 0;
-            while (currentFrame >= 1 && numLowerScansToGet > framesCounter)
-            {
-                lowerFrames.Add(currentFrame);
-                framesCounter++;
-                currentFrame--;
-            }
-
-            return lowerFrames;
-        }
-
-        private List<int> getUpperFrames(Run run, int frame, int numUpperFramesToGet)
-        {
-            int currentFrame = frame + 1;
-            List<int> frames = new List<int>();
-
-            int framecounter = 0;
-            int frameUpperLimit = ((UIMFRun)run).GetNumFrames();
-
-            while (currentFrame <= frameUpperLimit && numUpperFramesToGet > framecounter)
-            {
-                frames.Add(currentFrame);
-                framecounter++;
-                currentFrame++;
-            }
-            return frames;
-        }
-
+  
         #endregion
 
 

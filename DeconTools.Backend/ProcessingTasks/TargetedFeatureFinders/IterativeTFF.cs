@@ -96,6 +96,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
             }
+            else
+            {
+                result.FailedResult = true;
+                result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
+            }
 
             resultList.IsosResultBin.Add(result);
 
@@ -208,6 +213,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     result.IsotopicProfile = iso;
                     break;
             }
+
+            
         }
 
         #endregion
