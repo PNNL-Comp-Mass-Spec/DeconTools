@@ -5,11 +5,16 @@ namespace DeconTools.Backend.Workflows
 {
     public class ScanBasedProgressInfo
     {
-        public ScanBasedProgressInfo(Run currentRun, ScanSet scanSet, FrameSet frameset)
+        public ScanBasedProgressInfo(Run currentRun, ScanSet scanSet, IMSScanSet imsScanSet)
         {
             this.currentRun = currentRun;
             this.currentScanSet = scanSet;
-            this.currentFrameSet = frameset;
+            
+            if (currentRun is UIMFRun)
+            {
+                ((UIMFRun) currentRun).CurrentIMSScanSet = imsScanSet;
+            }
+
 
         }
 

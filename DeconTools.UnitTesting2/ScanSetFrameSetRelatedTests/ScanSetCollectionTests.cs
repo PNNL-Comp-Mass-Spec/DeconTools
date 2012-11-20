@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             bool processMSMS = true;
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, 1, 1, processMSMS);
+            run.ScanSetCollection .Create(run, startScan, stopScan, 1, 1, processMSMS);
 
             Assert.AreEqual(21, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6000, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
@@ -37,7 +37,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             bool processMSMS = false;
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, 1, 1, processMSMS);
+            run.ScanSetCollection .Create(run, startScan, stopScan, 1, 1, processMSMS);
 
             Assert.AreEqual(3, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6005, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
@@ -56,7 +56,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             int numSummed = 5;
 
             bool processMSMS = false;
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, numSummed, 1, processMSMS);
+            run.ScanSetCollection .Create(run, startScan, stopScan, numSummed, 1, processMSMS);
 
             Assert.AreEqual(3, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6005, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
@@ -80,7 +80,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             int numSummed = 5;
 
             bool processMSMS = true;
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, numSummed, 1, processMSMS);
+            run.ScanSetCollection .Create(run, startScan, stopScan, numSummed, 1, processMSMS);
 
             Assert.AreEqual(21, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6000, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);
@@ -97,7 +97,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, true, true);
+            run.ScanSetCollection .Create(run, true, true);
 
             Console.WriteLine(run.ScanSetCollection.ScanSetList[0]);
 
@@ -107,47 +107,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
 
 
-        [Test]
-        public void createIMSScanSets1()
-        {
-            RunFactory factory = new RunFactory();
-            Run run = factory.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-
-            int startScan = 120;
-            int stopScan = 200;
-
-            int numScansSummed = 7;
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, numScansSummed, 1);
-
-            Assert.IsNotNull(run.ScanSetCollection);
-            Assert.AreEqual(81, run.ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(7, run.ScanSetCollection.ScanSetList[0].IndexValues.Count);
-            Assert.AreEqual(117, run.ScanSetCollection.ScanSetList[0].IndexValues[0]);
-            Assert.AreEqual(123, run.ScanSetCollection.ScanSetList[0].IndexValues[6]);
-
-        }
-
-
-        [Test]
-        public void createIMSScanSets2()
-        {
-            RunFactory factory = new RunFactory();
-            Run run = factory.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-
-
-            int numScansSummed = 7;
-            run.ScanSetCollection = ScanSetCollection.Create(run, numScansSummed, 1);
-
-
-            Assert.IsNotNull(run.ScanSetCollection);
-
-            //tests the lowest ims_scans
-            Assert.AreEqual(360, run.ScanSetCollection.ScanSetList.Count);
-            Assert.AreEqual(4, run.ScanSetCollection.ScanSetList[0].IndexValues.Count);
-            Assert.AreEqual(0, run.ScanSetCollection.ScanSetList[0].IndexValues[0]);
-            Assert.AreEqual(3, run.ScanSetCollection.ScanSetList[0].IndexValues[3]);
-
-        }
+   
 
 
     }

@@ -89,7 +89,7 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun(xcaliburTestfile);
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6020, 1, 1);
+            run.ScanSetCollection .Create(run, 6000, 6020, 1, 1);
             
             Task msgen = new GenericMSGenerator();
             Task peakDet = new DeconToolsPeakDetector();

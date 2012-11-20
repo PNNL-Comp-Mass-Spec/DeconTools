@@ -27,13 +27,15 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             bool isLastScan;
             if (resultList.Run is UIMFRun)
             {
-                List<FrameSet> uimfFrameSet = ((UIMFRun)resultList.Run).FrameSetCollection.FrameSetList;
+                var uimfRun = (UIMFRun) resultList.Run;
 
-                int lastFrameNum = uimfFrameSet[uimfFrameSet.Count - 1].PrimaryFrame;
-                int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+                var lcScanSet = resultList.Run.ScanSetCollection.ScanSetList;
 
-                isLastScan = (((UIMFRun)resultList.Run).CurrentFrameSet.PrimaryFrame == lastFrameNum &&
-                    resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
+                int lastFrameNum = lcScanSet[lcScanSet.Count - 1].PrimaryScanNumber;
+                int lastIMSScanNum = uimfRun.IMSScanSetCollection.ScanSetList[uimfRun.IMSScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+
+                isLastScan = uimfRun.CurrentFrameSet.PrimaryScanNumber == lastFrameNum &&
+                    uimfRun.CurrentIMSScanSet.PrimaryScanNumber == lastIMSScanNum;
             }
             else
             {

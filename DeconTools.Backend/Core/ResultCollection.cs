@@ -238,10 +238,13 @@ namespace DeconTools.Backend.Core
         {
             if (this.Run is UIMFRun)
             {
+                var uimfrun = (UIMFRun) Run;
+
                 foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, ((UIMFRun)this.Run).CurrentFrameSet.PrimaryFrame, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, uimfrun.CurrentFrameSet.PrimaryScanNumber, 
+                        uimfrun.CurrentIMSScanSet.PrimaryScanNumber, peak);
                     this.MSPeakResultList.Add(peakResult);
                 }
             }
@@ -273,7 +276,7 @@ namespace DeconTools.Backend.Core
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
                     Check.Require(this.Run is UIMFRun, "Tried to create an IMS_TRADITIONAL_RESULT but the Dataset is not a UIMF file.");
                     UIMFRun uimfRun = (UIMFRun)run;
-                    result = new UIMFIsosResult(this.Run, uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
+                    result = new UIMFIsosResult(this.Run, uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet);  
                     break;
                 case Globals.ResultType.O16O18_TRADITIONAL_RESULT:
                     result = new O16O18IsosResult(this.Run, this.Run.CurrentScanSet);

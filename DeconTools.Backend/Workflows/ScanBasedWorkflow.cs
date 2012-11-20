@@ -253,7 +253,7 @@ namespace DeconTools.Backend.Workflows
 
             if (OldDecon2LsParameters.HornTransformParameters.SumSpectra)
             {
-                Run.ScanSetCollection = ScanSetCollection.Create(Run, true, false);
+                Run.ScanSetCollection.Create(Run, true, false);
                 return;
             }
 
@@ -280,8 +280,7 @@ namespace DeconTools.Backend.Workflows
                 numSummed = 1;
             }
             
-            Run.ScanSetCollection = ScanSetCollection.Create(Run, minScan, maxScan,numSummed,
-                          OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
+            Run.ScanSetCollection.Create(Run, minScan, maxScan,numSummed, OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
                           OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
             
         }
@@ -388,11 +387,23 @@ namespace DeconTools.Backend.Workflows
 
         protected void GatherPeakStatistics()
         {
-            Check.Require(Run.CurrentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
 
-            Run.CurrentScanSet.BackgroundIntensity = this.PeakDetector.BackgroundIntensity;
-            Run.CurrentScanSet.NumPeaks = Run.PeakList.Count;    //used in ScanResult
-            Run.CurrentScanSet.BasePeak = _peakUtilities.GetBasePeak(Run.PeakList);     //Used in ScanResult
+            ScanSet currentScanset;
+
+            if (Run is UIMFRun)
+            {
+                currentScanset = ((UIMFRun) Run).CurrentIMSScanSet;
+            }
+            else
+            {
+                currentScanset = Run.CurrentScanSet;
+            }
+
+            Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+
+            currentScanset.BackgroundIntensity = this.PeakDetector.BackgroundIntensity;
+            currentScanset.NumPeaks = Run.PeakList.Count;    //used in ScanResult
+            currentScanset.BasePeak = _peakUtilities.GetBasePeak(Run.PeakList);     //Used in ScanResult
 
             //TODO: remove this when C# thrash is ready
             Run.DeconToolsPeakList = ((DeconToolsPeakDetector)PeakDetector).DeconEnginePeakList;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 

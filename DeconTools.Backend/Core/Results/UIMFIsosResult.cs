@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -13,32 +11,16 @@ namespace DeconTools.Backend.Core
 
         }
         
-        public UIMFIsosResult(Run run, FrameSet frameset, ScanSet scanset)
+        public UIMFIsosResult(Run run, ScanSet lcScanset, IMSScanSet scanset)
         {
             this.Run = run;
-            this.FrameSet = frameset;
-            this.ScanSet = scanset;
+            this.ScanSet = lcScanset;
+            this.IMSScanSet = scanset;
             
         }
 
-    
-        private FrameSet frameSet;
-
-        public FrameSet FrameSet
-        {
-            get { return frameSet; }
-            set { frameSet = value; }
-        }
-
-        private double driftTime;
-
-        public double DriftTime
-        {
-            get { return driftTime; }
-            set { driftTime = value; }
-        }
-
+        public IMSScanSet IMSScanSet { get; set; }
         
-
+        public double DriftTime { get; set; }
     }
 }

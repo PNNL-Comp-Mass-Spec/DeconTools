@@ -99,9 +99,9 @@ namespace DeconTools.Backend.Data
                 OriginalIntensitiesDTO originalIntensitiesDataObject = origIntensitiesCollection[counter];
 
                 sb = new StringBuilder();
-                sb.Append(uimfResult.FrameSet.PrimaryFrame);
+                sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append(delimiter);
-                sb.Append(getScanNumber(uimfResult.ScanSet.PrimaryScanNumber));    //calls a method that adds 1 to PrimaryScanNumber (which is 0-based)
+                sb.Append(uimfResult.IMSScanSet.PrimaryScanNumber);    
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
@@ -131,9 +131,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(origIntensitiesCollection[counter].totIsotopicOrginalIntens);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.ScanSet.DriftTime.ToString("0.###"));
+                sb.Append(uimfResult.IMSScanSet.DriftTime.ToString("0.###"));
                 sb.Append(delimiter);
-                sb.Append((uimfResult.ScanSet.DriftTime * (uimfResult.FrameSet.PrimaryFrame + 1)).ToString("0.##"));     //PrimaryFrame is 0-based; so need to add one for calculation to be correct.
+                sb.Append((uimfResult.IMSScanSet.DriftTime * (uimfResult.ScanSet.PrimaryScanNumber + 1)).ToString("0.##"));     //PrimaryFrame is 0-based; so need to add one for calculation to be correct.
 
                 sw.WriteLine(sb.ToString());
 

@@ -149,7 +149,7 @@ namespace DeconTools.Testing.ProblemCases
             UIMFRun run = (UIMFRun)runfactory.CreateRun(problemFile);
 
 
-            FrameSet frame = new FrameSet(1);
+            ScanSet frame = new ScanSet(1);
             ScanSet scan = new ScanSet(200);
 
             run.CurrentFrameSet = frame;

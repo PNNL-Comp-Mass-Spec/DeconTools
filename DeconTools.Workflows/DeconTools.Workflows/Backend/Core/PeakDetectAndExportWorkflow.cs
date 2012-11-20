@@ -70,10 +70,10 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 var uimfrun = Run as UIMFRun;
 
-                int numTotalFrames = uimfrun.FrameSetCollection.FrameSetList.Count;
+                int numTotalFrames = uimfrun.ScanSetCollection.ScanSetList.Count;
                 int frameCounter = 0;
 
-                foreach (var frameSet in uimfrun.FrameSetCollection.FrameSetList)
+                foreach (var frameSet in uimfrun.ScanSetCollection.ScanSetList)
                 {
                     frameCounter++;
                     uimfrun.CurrentFrameSet = frameSet;
@@ -210,26 +210,26 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     var uimfRun = Run as UIMFRun;
 
-                    uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, minLCScan, maxLCScan,
+                    uimfRun.ScanSetCollection .Create(uimfRun, minLCScan, maxLCScan,
                                                                        _workflowParameters.Num_LC_TimePointsSummed, 1,
                                                                        _workflowParameters.ProcessMSMS);
 
 
-                    bool sumAllScans = (_workflowParameters.NumIMSScansSummed == -1 ||
+                    bool sumAllIMSScans = (_workflowParameters.NumIMSScansSummed == -1 ||
                                         _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan);
 
-                    if (sumAllScans)
+                    if (sumAllIMSScans)
                     {
                         int primaryIMSScan = Run.MinLCScan;
 
-                        uimfRun.ScanSetCollection.ScanSetList.Clear();
-                        var scanset = new ScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
-                        uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
+                        uimfRun.IMSScanSetCollection.ScanSetList.Clear();
+                        var imsScanset = new IMSScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
+                        uimfRun.IMSScanSetCollection.ScanSetList.Add(imsScanset);
                     }
                     else
                     {
-                        Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
-                                                                         _workflowParameters.NumIMSScansSummed, 1, false);
+                        uimfRun.IMSScanSetCollection .Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
+                                                                         _workflowParameters.NumIMSScansSummed, 1);
                     }
 
 
@@ -237,7 +237,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 else
                 {
-                    Run.ScanSetCollection = ScanSetCollection.Create(Run, minLCScan, maxLCScan,
+                    Run.ScanSetCollection .Create(Run, minLCScan, maxLCScan,
                    this._workflowParameters.Num_LC_TimePointsSummed, 1, this._workflowParameters.ProcessMSMS);
 
                 }

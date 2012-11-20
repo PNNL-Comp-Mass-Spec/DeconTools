@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6050, 1, 1, false);
+            run.ScanSetCollection .Create(run, 6000, 6050, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting2
 
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
             Task peakDetector = new DeconToolsPeakDetector();
@@ -71,9 +71,9 @@ namespace DeconTools.UnitTesting2
             UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
 
             run.ResultCollection.ResultType = Globals.ResultType.UIMF_TRADITIONAL_RESULT;
-            run.FrameSetCollection = FrameSetCollection.Create(run, 500, 501, 3, 1);
-            
-            run.ScanSetCollection = ScanSetCollection.Create(run, 250, 270, 9, 1);
+            run.ScanSetCollection .Create(run, 500, 501, 3, 1);
+
+            run.IMSScanSetCollection.Create(run, 250, 270, 9, 1);
 
             Task msgen = new UIMF_MSGenerator();
             Task peakDetector = new DeconToolsPeakDetector();
@@ -85,7 +85,7 @@ namespace DeconTools.UnitTesting2
             Task driftTimeextractor = new UIMFDriftTimeExtractor();
 
 
-            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentFrameSet = frame;
 
@@ -101,7 +101,7 @@ namespace DeconTools.UnitTesting2
                     msScanInfoCreator.Execute(run.ResultCollection);
                     ticExtractor.Execute(run.ResultCollection);
                 }
-                
+
             }
 
             return run;
@@ -122,7 +122,7 @@ namespace DeconTools.UnitTesting2
             mt1.MZ = mt1.MonoIsotopicMass / mt1.ChargeState + Globals.PROTON_MASS;
             mt1.Code = "AIHQPAPTFAEQSTTSEILVTGIK";
             mt1.EmpiricalFormula = mt1.GetEmpiricalFormulaFromTargetCode();
-          
+
             mtList.Add(mt1);
 
 

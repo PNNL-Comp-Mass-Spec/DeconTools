@@ -8,14 +8,11 @@
 // in compliance with the License.  You may obtain a copy of the License at 
 // http://www.apache.org/licenses/LICENSE-2.0
 
+using System;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using PNNL.Controls;
-using System.Reflection;
-using System.Threading;
-using System;
 
 namespace Decon2LS
 {
@@ -105,7 +102,7 @@ namespace Decon2LS
         // The mediator for this form
         private clsMediator mMediator;
 
-        //Gord:  these don't seemed to be used anywhere.
+        //NOTE: these don't seemed to be used anywhere.
         //		private bool mbln_overlap_mode = false ; 
         //		private bool mbln_summation_mode = false ; 
         //private bool mbln_tic_view = true ; 
@@ -800,7 +797,7 @@ namespace Decon2LS
         }
 
 
-        //Gord deleted the Toolbar containing four buttons; two of which didn't do anything see below for more notes
+        // deleted the Toolbar containing four buttons; two of which didn't do anything see below for more notes
         private void mtlb_spectra_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
 

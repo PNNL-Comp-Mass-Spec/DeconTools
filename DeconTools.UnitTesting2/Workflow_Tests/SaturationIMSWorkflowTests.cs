@@ -432,7 +432,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 {
                     var feature =
                         (from n in featureData
-                         where n.ScanSet.PrimaryScanNumber == scan && n.FrameSet.PrimaryFrame == frame
+                         where n.IMSScanSet.PrimaryScanNumber == scan && n.ScanSet.PrimaryScanNumber == frame
                          select n).FirstOrDefault();
 
                     double intensity;

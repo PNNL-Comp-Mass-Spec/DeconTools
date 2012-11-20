@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             
             //Create the target scan list (MS1 scans from 6005 - 6020). 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 6005, 6020, 1, 1);
+            run.ScanSetCollection .Create(run, 6005, 6020, 1, 1);
             
 
 

@@ -72,12 +72,12 @@ namespace DeconTools.Backend.Data
                 }
 
                 IsosResult result = convertTextToIsosResult(processedData, headers);
-                if (result is UIMFIsosResult)
+                if (result is UIMFIsosResult)   //GORD:  see if I can remove this conditional
                 {
-                    if (((UIMFIsosResult)result).FrameSet.PrimaryFrame >= minVal )
+                    if (result.ScanSet.PrimaryScanNumber >= minVal)
                     {
                         results.Add(result);
-                        if (((UIMFIsosResult)result).FrameSet.PrimaryFrame > maxVal)
+                        if (result.ScanSet.PrimaryScanNumber > maxVal)
                         {
                             break;
                         }
@@ -122,16 +122,18 @@ namespace DeconTools.Backend.Data
             int scan_num = 0;
             if (this.fileType == Globals.MSFileType.PNNL_UIMF)
             {
-                scan_num = parseIntField(lookup(processedData, headers, "ims_scan_num"));
+                int imsScanNum = parseIntField(lookup(processedData, headers, "ims_scan_num"));
                 int frame_num = parseIntField(lookup(processedData, headers, "frame_num"));
                 ((UIMFIsosResult)result).DriftTime = parseDoubleField(lookup(processedData, headers, "drift_time"));
-                ((UIMFIsosResult)result).FrameSet = new FrameSet(frame_num);
+                result.ScanSet = new LCScanSetIMS(frame_num);
+                ((UIMFIsosResult) result).IMSScanSet = new IMSScanSet(imsScanNum);
             }
             else
             {
                 scan_num = parseIntField(lookup(processedData, headers, "scan_num"));
+                result.ScanSet = new ScanSet(scan_num);
             }
-            result.ScanSet = new ScanSet(scan_num);
+            
 
             result.IsotopicProfile.ChargeState = parseIntField(lookup(processedData, headers, "charge"));
             result.IsotopicProfile.MonoIsotopicMass = parseDoubleField(lookup(processedData, headers, "monoisotopic_mw"));

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using MSDBLibrary;
@@ -47,7 +43,7 @@ namespace DeconTools.Backend.Data
                 UimfScanResult uimfResult = (UimfScanResult)result;
 
                 IMS_Frames fp = new IMS_Frames();
-                fp.frame_num = (ushort)uimfResult.Frameset.PrimaryFrame;
+                fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
                 fp.frame_time = (float)uimfResult.ScanTime;
                 fp.type = (ushort)uimfResult.SpectrumType;
                 fp.bpi = uimfResult.BasePeak.Height;

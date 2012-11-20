@@ -81,24 +81,24 @@ namespace DeconTools.Backend.Workflows
         {
             var uimfRun = (UIMFRun)Run;
 
-            foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
+            foreach (var lcScanSet in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.ResultCollection.MSPeakResultList.Clear();
                 _unsummedMSFeatures.Clear();
 
 
-                FrameSet unsummedFrameSet = new FrameSet(frameset.PrimaryFrame);
+                ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                 //get saturated MSFeatures for unsummed data
                 uimfRun.CurrentFrameSet = unsummedFrameSet;
 
 
 
-                foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
+                foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
-                    ScanSet unsummedScanset = new ScanSet(scanset.PrimaryScanNumber);
-                    uimfRun.CurrentScanSet = unsummedScanset;
+                    var unsummedScanset = new IMSScanSet(scanset.PrimaryScanNumber);
+                    uimfRun.CurrentIMSScanSet = unsummedScanset;
 
                     _msGenerator.Execute(Run.ResultCollection);
 
@@ -150,14 +150,14 @@ namespace DeconTools.Backend.Workflows
                 //DisplayMSFeatures(_unsummedMSFeatures);
 
                 //now sum across IMSScans, deconvolute and adjust
-                foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
+                foreach (IMSScanSet scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
 
                     //get the summed isotopic profile
-                    uimfRun.CurrentFrameSet = frameset;
-                    uimfRun.CurrentScanSet = scanset;
+                    uimfRun.CurrentFrameSet = lcScanSet;
+                    uimfRun.CurrentIMSScanSet = scanset;
 
 
 
@@ -195,7 +195,7 @@ namespace DeconTools.Backend.Workflows
 
                             RebuildSaturatedIsotopicProfile(isosResult, Run.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
-                            UpdateReportedSummedPeakIntensities(isosResult, frameset, scanset);
+                            UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, scanset);
                         }
                         else
                         {
@@ -284,19 +284,19 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private void DisplayMSFeatures(List<IsosResult> msfeatures)
-        {
-            var sb = new StringBuilder();
-            foreach (UIMFIsosResult uimfIsosResult in msfeatures)
-            {
-                sb.Append(uimfIsosResult.FrameSet.PrimaryFrame + "\t" + uimfIsosResult.ScanSet.PrimaryScanNumber + "\t" +
-                          uimfIsosResult.IsotopicProfile.MonoIsotopicMass.ToString("0.000") + "\t" +
-                          uimfIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" +
-                          uimfIsosResult.IsotopicProfile.IntensityAggregate + "\n");
+        //private void DisplayMSFeatures(List<IsosResult> msfeatures)
+        //{
+        //    var sb = new StringBuilder();
+        //    foreach (UIMFIsosResult uimfIsosResult in msfeatures)
+        //    {
+        //        sb.Append(uimfIsosResult.FrameSet.PrimaryFrame + "\t" + uimfIsosResult.ScanSet.PrimaryScanNumber + "\t" +
+        //                  uimfIsosResult.IsotopicProfile.MonoIsotopicMass.ToString("0.000") + "\t" +
+        //                  uimfIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" +
+        //                  uimfIsosResult.IsotopicProfile.IntensityAggregate + "\n");
 
-            }
-            Console.WriteLine(sb.ToString());
-        }
+        //    }
+        //    Console.WriteLine(sb.ToString());
+        //}
 
         private void GetRebuiltFitScore(IsosResult isosResult)
         {
@@ -364,22 +364,22 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        private void UpdateReportedSummedPeakIntensities(IsosResult profile, FrameSet frameSet, ScanSet scanSet)
+        private void UpdateReportedSummedPeakIntensities(IsosResult profile, ScanSet lcScanSet, ScanSet imsScanSet)
         {
 
             UIMFIsosResult uimfIsosResult = (UIMFIsosResult)profile;
 
-            int minFrame = frameSet.getLowestFrameNumber();
-            int maxFrame = frameSet.getHighestFrameNumber();
+            int minFrame = lcScanSet.getLowestScanNumber();
+            int maxFrame = lcScanSet.getHighestScanNumber();
 
-            int minScan = scanSet.getLowestScanNumber();
-            int maxScan = scanSet.getHighestScanNumber();
+            int minScan = imsScanSet.getLowestScanNumber();
+            int maxScan = imsScanSet.getHighestScanNumber();
 
             double massTolerance = 0.2;
 
             var filteredUnsummedMSFeatures = (from n in _unsummedMSFeatures
-                                              where ((UIMFIsosResult)n).FrameSet.PrimaryFrame >= minFrame &&
-                                                    ((UIMFIsosResult)n).FrameSet.PrimaryFrame <= maxFrame &&
+                                              where ((UIMFIsosResult)n).ScanSet.PrimaryScanNumber >= minFrame &&
+                                                    ((UIMFIsosResult)n).ScanSet.PrimaryScanNumber <= maxFrame &&
                                                     n.ScanSet.PrimaryScanNumber >= minScan &&
                                                     n.ScanSet.PrimaryScanNumber <= maxScan &&
                                                     n.IsotopicProfile.ChargeState == profile.IsotopicProfile.ChargeState &&
@@ -425,8 +425,8 @@ namespace DeconTools.Backend.Workflows
 
             var unsummedAdjustedMSFeature = (from n in filteredUnsummedMSFeatures
                                              where
-                                                 ((UIMFIsosResult)n).FrameSet.PrimaryFrame == frameSet.PrimaryFrame &&
-                                                 n.ScanSet.PrimaryScanNumber == scanSet.PrimaryScanNumber
+                                                 n.ScanSet.PrimaryScanNumber == lcScanSet.PrimaryScanNumber &&
+                                                 n.ScanSet.PrimaryScanNumber == imsScanSet.PrimaryScanNumber
                                              select n).FirstOrDefault();
 
 
@@ -554,7 +554,7 @@ namespace DeconTools.Backend.Workflows
             StringBuilder sb = new StringBuilder();
 
             sb.Append(Environment.NewLine);
-            sb.Append(uimfFeature.MSFeatureID + "\t" + uimfFeature.FrameSet.PrimaryFrame + "\t" + uimfFeature.ScanSet.PrimaryScanNumber + "\t" +
+            sb.Append(uimfFeature.MSFeatureID + "\t" + uimfFeature.ScanSet.PrimaryScanNumber + "\t" + uimfFeature.IMSScanSet.PrimaryScanNumber + "\t" +
                       uimfFeature.IsotopicProfile.MonoIsotopicMass.ToString("0.000") + "\t" +
                       uimfFeature.IsotopicProfile.ChargeState);
 

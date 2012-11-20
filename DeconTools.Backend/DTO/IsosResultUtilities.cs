@@ -120,7 +120,7 @@ namespace DeconTools.Backend.DTO
             foreach (IsosResult result in inputList)
             {
                 UIMFIsosResult uimfResult = (UIMFIsosResult)result;
-                if (uimfResult.FrameSet.PrimaryFrame >= minFrame && uimfResult.FrameSet.PrimaryFrame <= maxFrame)
+                if (uimfResult.ScanSet.PrimaryScanNumber >= minFrame && uimfResult.ScanSet.PrimaryScanNumber <= maxFrame)
                 {
                     returnedResults.Add(uimfResult);
                 }
@@ -187,7 +187,7 @@ namespace DeconTools.Backend.DTO
             foreach (IsosResult result in list)
             {
                 UIMFIsosResult uimfResult = new UIMFIsosResult();
-                uimfResult.FrameSet = new FrameSet(currentFrame);
+                uimfResult.ScanSet = new LCScanSetIMS(currentFrame);
                 uimfResult.IsotopicProfile = result.IsotopicProfile;
                 uimfResult.Run = result.Run;
                 uimfResult.ScanSet = result.ScanSet;
@@ -508,17 +508,17 @@ namespace DeconTools.Backend.DTO
         {
             foreach (IsosResult result in list)
             {
-                if (result is UIMFIsosResult)
-                {
-                    sb.Append(((UIMFIsosResult)result).FrameSet.PrimaryFrame);
-                    sb.Append("\t");
-                }
-                else
-                {
-
-                }
                 sb.Append(result.ScanSet.PrimaryScanNumber);
                 sb.Append("\t");
+
+                if (result is UIMFIsosResult)
+                {
+                    var uimfResult = result as UIMFIsosResult;
+
+                    sb.Append(  uimfResult.IMSScanSet.PrimaryScanNumber);
+                    sb.Append("\t");
+                }
+               
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.MonoPeakMZ);

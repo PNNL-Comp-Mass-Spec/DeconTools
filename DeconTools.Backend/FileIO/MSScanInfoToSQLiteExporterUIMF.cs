@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities.SqliteUtils;
 
@@ -63,7 +60,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override void AddResults(System.Data.Common.DbParameterCollection dbParameters, ScanResult result)
         {
-            dbParameters[0].Value = ((UimfScanResult)result).Frameset.PrimaryFrame;
+            dbParameters[0].Value = ((UimfScanResult)result).ScanSet.PrimaryScanNumber;
             dbParameters[1].Value = ((UimfScanResult)result).ScanTime;
             dbParameters[2].Value = result.SpectrumType;
             dbParameters[3].Value = result.BasePeak.Height;

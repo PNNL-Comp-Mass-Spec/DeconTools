@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -412,7 +413,18 @@ namespace DeconTools.Backend.ProcessingTasks
         private void GenerateResults(DeconToolsV2.HornTransform.clsHornTransformResults[] transformResults,
        DeconToolsV2.Peaks.clsPeak[] mspeakList, ResultCollection resultList)
         {
-            resultList.Run.CurrentScanSet.NumIsotopicProfiles = 0;   //reset to 0;
+
+            ScanSet currentScanset;
+            if (resultList.Run is UIMFRun)
+            {
+                currentScanset = ((UIMFRun) resultList.Run).CurrentIMSScanSet;
+            }
+            else
+            {
+                currentScanset = resultList.Run.CurrentScanSet;
+            }
+
+            currentScanset.NumIsotopicProfiles = 0;   //reset to 0;
 
 
             foreach (DeconToolsV2.HornTransform.clsHornTransformResults hornResult in transformResults)
@@ -445,7 +457,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 this.CombineDeconResults(resultList, result, DeconResultComboMode.simplyAddIt);
                 //resultList.ResultList.Add(result);
-                resultList.Run.CurrentScanSet.NumIsotopicProfiles++;
+                currentScanset.NumIsotopicProfiles++;
             }
         }
 

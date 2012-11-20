@@ -26,17 +26,7 @@ namespace DeconTools.Testing.ProblemCases
             run.CurrentScanSet = new ScanSet(20000);
             msGen.Execute(run.ResultCollection);
 
-            ScanSetCollection scansetcollection = ScanSetCollection.Create(run,10000,11000, 1, 1, true);
-
-            Console.WriteLine("scan\tz\tinfo");
-            foreach (var scanSet in scansetcollection.ScanSetList)
-            {
-                run.CurrentScanSet = scanSet;
-
-                Console.WriteLine(scanSet.PrimaryScanNumber + "\t"+ run.GetMSLevel(scanSet.PrimaryScanNumber) + "\t"+  run.GetScanInfo(scanSet.PrimaryScanNumber) );
-            }
-
-           // TestUtilities.DisplayXYValues(run.XYData);
+           
 
         }
 

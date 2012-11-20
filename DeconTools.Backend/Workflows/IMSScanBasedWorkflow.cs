@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Workflows
         protected UIMFDriftTimeExtractor UimfDriftTimeExtractor;
         protected UIMF_TICExtractor UimfTicExtractor;
         protected SaturationDetector SaturationDetector;
-       
+
         #region Constructors
 
         internal IMSScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
@@ -24,10 +24,10 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-     
+
 
         #endregion
-       
+
         protected override void InitializeProcessingTasks()
         {
             base.InitializeProcessingTasks();
@@ -38,8 +38,14 @@ namespace DeconTools.Backend.Workflows
 
         protected override void CreateTargetMassSpectra()
         {
+           
+
+
             UIMFRun uimfRun = (UIMFRun)Run;
-            
+            uimfRun.ScanSetCollection = new ScanSetCollection();
+            uimfRun.IMSScanSetCollection = new IMSScanSetCollection();
+
+
             int numFramesSummed;
             if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossFrameRange)
             {
@@ -49,27 +55,19 @@ namespace DeconTools.Backend.Workflows
             {
                 numFramesSummed = 1;
             }
-            
-            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
-            {
 
-                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun,
-                                                                       OldDecon2LsParameters.HornTransformParameters.
-                                                                           MinScan,
-                                                                       OldDecon2LsParameters.HornTransformParameters.
-                                                                           MaxScan, numFramesSummed, 1,
-                                                                       OldDecon2LsParameters.HornTransformParameters.
-                                                                           ProcessMSMS);
+            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)   //Defines whether or not to use all LC time points, or a restricted range
+            {
+                uimfRun.ScanSetCollection.Create(uimfRun, OldDecon2LsParameters.HornTransformParameters.MinScan,
+                    OldDecon2LsParameters.HornTransformParameters.MaxScan, numFramesSummed, 1, OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
 
             }
             else
             {
-                uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, numFramesSummed, 1,
-                                                                       OldDecon2LsParameters.HornTransformParameters.
-                                                                           ProcessMSMS);
+                uimfRun.ScanSetCollection.Create(uimfRun, numFramesSummed, 1);
             }
-          
-           
+
+
 
             bool sumAllIMSScansInAFrame = (OldDecon2LsParameters.HornTransformParameters.SumSpectra);
             if (sumAllIMSScansInAFrame)
@@ -77,35 +75,27 @@ namespace DeconTools.Backend.Workflows
 
                 int centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
 
-                uimfRun.ScanSetCollection.ScanSetList.Clear();
-                var scanset = new ScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
-                uimfRun.ScanSetCollection.ScanSetList.Add(scanset);
+                uimfRun.IMSScanSetCollection.ScanSetList.Clear();
+                var scanset = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
+                uimfRun.IMSScanSetCollection.ScanSetList.Add(scanset);
             }
             else
             {
 
                 bool sumAcrossIMSScans = OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossScanRange;
 
+                int numIMSScanToSum;
                 if (sumAcrossIMSScans)
                 {
-                    int numIMSScanToSum = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //Old parameters report a +/- value for summing. But new code is different
-
-                    Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan, numIMSScanToSum,
-                    OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
-                    OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
-
+                    numIMSScanToSum = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //Old parameters report a +/- value for summing. But new code is different
                 }
                 else
                 {
-                    int numIMSScanToSum = 1;      // this means there is no summing
-
-                    Run.ScanSetCollection = ScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan, numIMSScanToSum,
-                    OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
-                    OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
-
-
+                    numIMSScanToSum = 1;
                 }
-               
+
+                uimfRun.IMSScanSetCollection.Create(Run,uimfRun.MinIMSScan,uimfRun.MaxIMSScan,numIMSScanToSum,OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance);
+
             }
 
 
@@ -123,22 +113,15 @@ namespace DeconTools.Backend.Workflows
         {
             var uimfRun = (UIMFRun)Run;
 
-            foreach (var frameset in uimfRun.FrameSetCollection.FrameSetList)
+            foreach (var frameset in uimfRun.ScanSetCollection.ScanSetList)
             {
-                
-
-                foreach (var scanset in uimfRun.ScanSetCollection.ScanSetList)
+                foreach (IMSScanSet imsScanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
                     uimfRun.CurrentFrameSet = frameset;
-                    uimfRun.CurrentScanSet = scanset;
+                    uimfRun.CurrentIMSScanSet = imsScanSet;
                     ReportProgress();
                     ExecuteProcessingTasks();
-
-                    
-                    
                 }
-
-                
             }
         }
 
@@ -153,15 +136,15 @@ namespace DeconTools.Backend.Workflows
         public override void ReportProgress()
         {
             UIMFRun uimfRun = (UIMFRun)Run;
-            if (uimfRun.FrameSetCollection == null || uimfRun.FrameSetCollection.FrameSetList.Count == 0) return;
+            if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, uimfRun.CurrentFrameSet);
-            int framenum = uimfRun.FrameSetCollection.FrameSetList.IndexOf(uimfRun.CurrentFrameSet);
+            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet);
+            int framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentFrameSet);
 
-            int scanNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(Run.CurrentScanSet);
-            int scanTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
+            int scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
+            int scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
 
-            int frameTotal = uimfRun.FrameSetCollection.FrameSetList.Count;
+            int frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
 
 
 
@@ -173,15 +156,14 @@ namespace DeconTools.Backend.Workflows
 
             int numScansBetweenProgress = 1;
 
-
-            bool imsScanIsLastInFrame = Run.ScanSetCollection.GetLastScanSet() == Run.CurrentScanSet.PrimaryScanNumber;
+            bool imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
             if (imsScanIsLastInFrame)
             {
                 Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
                 Console.WriteLine(DateTime.Now + "\t" + logText);
             }
 
-            if (BackgroundWorker != null && scanNum%numScansBetweenProgress==0)
+            if (BackgroundWorker != null && scanNum % numScansBetweenProgress == 0)
             {
 
                 BackgroundWorker.ReportProgress((int)percentDone, userstate);

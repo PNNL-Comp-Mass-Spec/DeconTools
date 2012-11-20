@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -28,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public SaturationDetector()
         {
-            SaturationThreshold = 1e5;   // gord: this is geared for the IMS4 detector that saturates at 1e5
+            SaturationThreshold = 1e5;   //NOTE: this is geared for the IMS4 detector that saturates at 1e5
         }
 
 
@@ -41,8 +42,6 @@ namespace DeconTools.Backend.ProcessingTasks
         public void GetUnsummedIntensitiesAndDetectSaturation(Run run, IEnumerable<IsosResult> resultList)
         {
             Check.Require(run != null, "SaturationDetector failed. Run is null");
-            Check.Require(run.CurrentScanSet != null, "SaturationDetector failed. Current scanset has not been defined");
-
             if (_msGenerator == null)
             {
                 _msGenerator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -51,21 +50,27 @@ namespace DeconTools.Backend.ProcessingTasks
             if (run is UIMFRun)
             {
                 UIMFRun uimfRun = (UIMFRun)run;
+
+                if (uimfRun.CurrentFrameSet == null) throw new NullReferenceException("CurrentFrameSet is null. You need to set it.");
+                if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
+
                 //this creates a Frameset containing only the primary frame.  Therefore no summing will occur
-                FrameSet frameset = new FrameSet(uimfRun.CurrentFrameSet.PrimaryFrame);
+                var lcScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryScanNumber);
 
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
-                ScanSet scanset = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
+                var imsScanSet = new IMSScanSet(uimfRun.CurrentIMSScanSet.PrimaryScanNumber);
 
                 //get the mass spectrum +/- 5 da from the range of the isotopicProfile
 
-                uimfRun.CurrentFrameSet = frameset;
-                uimfRun.CurrentScanSet = scanset;
+                uimfRun.CurrentFrameSet = lcScanSet;
+                uimfRun.CurrentIMSScanSet = imsScanSet;
                 _msGenerator.Execute(run.ResultCollection);
-                //uimfRun.GetMassSpectrum(frameset, scanset, run.MSParameters.MinMZ, run.MSParameters.MaxMZ);
+                
             }
             else
             {
+                if (run.CurrentScanSet == null)throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
+
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
                 ScanSet scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
 

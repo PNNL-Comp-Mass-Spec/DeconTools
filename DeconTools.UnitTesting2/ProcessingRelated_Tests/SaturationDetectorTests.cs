@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
             for (int i = startScan; i < stopScan; i++)
             {
 
-                FrameSet frame = new FrameSet(500);
+                var frame = new ScanSet(500);
 
                 int primaryScan = i;
 

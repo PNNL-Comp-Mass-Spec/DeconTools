@@ -20,14 +20,14 @@ namespace DeconTools.Testing.ProblemCases
             int startFrame = 163;
             int stopFrame = 165;
 
-            run.ScanSetCollection= ScanSetCollection.Create(run, run.MinLCScan, run.MaxLCScan, 7, 1);
+            run.ScanSetCollection.Create(run, run.MinLCScan, run.MaxLCScan, 7, 1);
 
             run.FrameSetCollection = FrameSetCollection.Create(run, startFrame, stopFrame, 1, 1);
 
             var msgen= MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            foreach (var frameSet in run.FrameSetCollection.FrameSetList)
+            foreach (var frameSet in run.ScanSetCollection.ScanSetList)
             {
                 Console.WriteLine("-------------------- Frame = "+ frameSet);
 

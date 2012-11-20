@@ -69,8 +69,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            FrameSet frame = new FrameSet(162);
-            ScanSet scan = new ScanSet(121);
+            ScanSet frame = new ScanSet(162);
+            IMSScanSet scan = new IMSScanSet(121);
 
             run.GetMassSpectrum(frame, scan, 0, 50000);
 
@@ -94,8 +94,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            FrameSet frame = new FrameSet(163,162,164);
-            ScanSet scan = new ScanSet(121);
+            var frame = new ScanSet(163,162,164);
+            var scan = new IMSScanSet(121);
 
             run.GetMassSpectrum(frame, scan, 0, 50000);
 
@@ -149,7 +149,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             int numFramesSummed = 3;
 
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, frameStart, frameStop, numFramesSummed, 1);
+            uimfRun.ScanSetCollection .Create(uimfRun, frameStart, frameStop, numFramesSummed, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
 
@@ -197,21 +197,21 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double maxMZ = 2000;
 
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, 300, 310, numFramesSummed, 1);
+            uimfRun.ScanSetCollection.Create(uimfRun, 300, 310, numFramesSummed, 1);
 
-            uimfRun.ScanSetCollection = ScanSetCollection.Create(uimfRun, 120, 125, numScansSummed, 1);
+            uimfRun.IMSScanSetCollection.Create(uimfRun, 120, 125, numScansSummed, 1);
 
 
             List<long> times = new List<long>();
             Stopwatch sw = new Stopwatch();
 
 
-            foreach (var frame in uimfRun.FrameSetCollection.FrameSetList)
+            foreach (var frame in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.CurrentFrameSet = frame;
-                foreach (var scan in uimfRun.ScanSetCollection.ScanSetList)
+                foreach (IMSScanSet scan in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
-                    uimfRun.CurrentScanSet = scan;
+                    uimfRun.CurrentIMSScanSet = scan;
                     sw.Start();
                     uimfRun.GetMassSpectrum(frame, scan, minMZ, maxMZ);
                     sw.Stop();
@@ -281,7 +281,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 
             }
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
+            uimfRun.ScanSetCollection .Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
 
@@ -291,7 +291,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             List<double> pressuresAfterAveraging = new List<double>();
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
-                pressuresAfterAveraging.Add(uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == frame).First().FramePressure);
+
+                LCScanSetIMS lcScanset = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
+
+                pressuresAfterAveraging.Add(lcScanset.FramePressureFront);
 
             }
 
@@ -301,8 +304,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //    Console.WriteLine(pressuresBeforeAveraging[i] + "\t" + pressuresAfterAveraging[i]);
             //}
 
-            Assert.AreEqual(4.0091461, (decimal)uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 1079).First().FramePressure);
-            Assert.AreEqual(4.008275, (decimal)uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == 1175).First().FramePressure);
+            var testScanset1 = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1079);
+
+            var testScanset2 =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1175);
+
+            Assert.AreEqual(4.0091461, (decimal)testScanset1.FramePressureFront);
+            Assert.AreEqual(4.008275, (decimal)testScanset2.FramePressureFront);
 
         }
 
@@ -316,7 +323,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             int startFrame = uimfRun.MaxLCScan - 200;
             int stopFrame = uimfRun.MaxLCScan;
 
-            uimfRun.FrameSetCollection = FrameSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
+            uimfRun.ScanSetCollection .Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             Dictionary<int, double> pressuresBeforeAveraging = new Dictionary<int, double>();
             for (int frame = startFrame; frame <= stopFrame; frame++)
@@ -330,7 +337,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Dictionary<int, double> pressuresAfterAveraging = new Dictionary<int, double>();
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
-                double pressure = uimfRun.FrameSetCollection.FrameSetList.Where(p => p.PrimaryFrame == frame).First().FramePressure;
+                LCScanSetIMS scanset =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
+
+                double pressure = scanset.FramePressureFront;
 
                 pressuresAfterAveraging.Add(frame, pressure);
             }
@@ -400,7 +409,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             int startScan = 1;
             int stopScan = 300;
 
-            var frame = new FrameSet(testFrame);
+            var frame = new ScanSet(testFrame);
             var scanset = new ScanSet(150, startScan, stopScan);
 
             uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);

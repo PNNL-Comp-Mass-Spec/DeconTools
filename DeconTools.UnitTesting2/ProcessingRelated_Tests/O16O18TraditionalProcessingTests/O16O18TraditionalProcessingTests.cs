@@ -23,7 +23,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             run.ResultCollection.ResultType = Backend.Globals.ResultType.O16O18_TRADITIONAL_RESULT;
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 5000, 5000, 1, 1);
+            run.ScanSetCollection .Create(run, 5000, 5000, 1, 1);
             
 
             run.CurrentScanSet = run.ScanSetCollection.ScanSetList[0];

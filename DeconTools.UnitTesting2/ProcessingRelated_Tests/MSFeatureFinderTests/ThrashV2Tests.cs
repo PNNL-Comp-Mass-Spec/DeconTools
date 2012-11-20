@@ -18,7 +18,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void ThrashV2Test1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            var scansetCollection = ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
@@ -26,7 +26,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
             List<IsosResult> isosResults = new List<IsosResult>();
-            foreach (var scanSet in scansetCollection.ScanSetList)
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
                 msgen.Execute(run.ResultCollection);
@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void OldDeconvolutorTest1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            var scansetCollection = ScanSetCollection.Create(run, 6005, 6050, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6005, 6050, 1, 1, false);
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -77,7 +77,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             HornDeconvolutor deconvolutor = new HornDeconvolutor();
 
-            foreach (var scanSet in scansetCollection.ScanSetList)
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
                 msgen.Execute(run.ResultCollection);

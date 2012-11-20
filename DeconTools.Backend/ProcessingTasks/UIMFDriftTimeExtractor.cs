@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -28,12 +25,12 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (result is UIMFIsosResult)
                 {
                     UIMFIsosResult uimfResult = (UIMFIsosResult)result;
-                    uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.FrameSet, uimfResult.ScanSet.PrimaryScanNumber);
+                    uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.ScanSet.PrimaryScanNumber, uimfResult.IMSScanSet.PrimaryScanNumber);
                 }
             }
 
 
-            // = uimfRun.GetDriftTime(uimfRun.CurrentFrameSet.PrimaryFrame, uimfRun.CurrentScanSet.PrimaryScanNumber);
+            // = uimfRun.GetDriftTime(uimfRun.CurrentFrameSet.PrimaryScanNumber, uimfRun.CurrentScanSet.PrimaryScanNumber);
 
         }
     }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Utilities.SqliteUtils;
 using System.Data.Common;
-using System.IO;
-using DeconTools.Backend.Utilities;
 using System.Data.SQLite;
+using System.IO;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
+using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
@@ -90,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     {
                         UimfScanResult r = (UimfScanResult)rc.ScanResultList[n];
 
-                        frameNumParam.Value = r.FrameNum;
+                        frameNumParam.Value = r.LCScanNum;
                         frameTimeParam.Value = r.ScanTime;
                         typeParam.Value = r.SpectrumType;
                         bpiParam.Value = r.BasePeak.Height;

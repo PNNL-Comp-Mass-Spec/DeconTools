@@ -12,11 +12,11 @@ namespace DeconTools.Backend.Core
     {
         public Run()
         {
-            this.scanSetCollection = new ScanSetCollection();
-            this.ResultCollection = new ResultCollection(this);
-            this.XYData = new XYData();
-            this.MSLevelList = new SortedDictionary<int, byte>();
-            this.ScanToNETAlignmentData = new SortedDictionary<int, float>();
+            ScanSetCollection = new ScanSetCollection();
+            ResultCollection = new ResultCollection(this);
+            XYData = new XYData();
+            MSLevelList = new SortedDictionary<int, byte>();
+            ScanToNETAlignmentData = new SortedDictionary<int, float>();
         }
 
         #region Properties
@@ -87,12 +87,7 @@ namespace DeconTools.Backend.Core
             set { peakList = value; }
         }
 
-        private ScanSetCollection scanSetCollection;
-        public ScanSetCollection ScanSetCollection
-        {
-            get { return scanSetCollection; }
-            set { scanSetCollection = value; }
-        }
+        public ScanSetCollection ScanSetCollection { get; set; }
 
         private ResultCollection resultCollection;
         public ResultCollection ResultCollection
@@ -102,7 +97,7 @@ namespace DeconTools.Backend.Core
         }
 
         private ScanSet currentScanSet;
-        public ScanSet CurrentScanSet
+        public virtual ScanSet CurrentScanSet
         {
             get { return currentScanSet; }
             set { currentScanSet = value; }
@@ -203,7 +198,7 @@ namespace DeconTools.Backend.Core
 
         public TargetBase CurrentMassTag { get; set; }
 
-        public virtual void GetMassSpectrum(FrameSet frameset, ScanSet scanset, double minMZ, double maxMZ)
+        public virtual void GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
         {
         }
 

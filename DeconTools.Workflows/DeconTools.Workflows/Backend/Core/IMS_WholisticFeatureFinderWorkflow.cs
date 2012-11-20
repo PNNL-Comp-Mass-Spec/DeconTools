@@ -9,7 +9,6 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -112,7 +111,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //for each frame
 
-            foreach (var frame in uimfRun.FrameSetCollection.FrameSetList)
+            foreach (var frame in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.CurrentFrameSet = frame;
 
@@ -309,7 +308,7 @@ namespace DeconTools.Workflows.Backend.Core
                 uimfRun.ResultCollection.MSPeakResultList.Clear();
             }
 
-            uimfRun.ScanSetCollection= ScanSetCollection.Create(uimfRun, numIMSScansToSum, 1);
+            uimfRun.ScanSetCollection.Create(uimfRun, numIMSScansToSum, 1);
             
             foreach (var scan in uimfRun.ScanSetCollection.ScanSetList)
             {

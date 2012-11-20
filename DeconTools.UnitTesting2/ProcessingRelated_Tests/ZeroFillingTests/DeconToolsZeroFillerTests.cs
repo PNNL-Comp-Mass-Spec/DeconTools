@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         {
             Run run = new IMFRun(imfStrangeOneFilepath);
            
-            run.ScanSetCollection=ScanSetCollection.Create(run, 238, 245,7,1);
+            run.ScanSetCollection.Create(run, 238, 245,7,1);
             
 
             run.CurrentScanSet = run.ScanSetCollection.GetScanSet(239);
@@ -99,7 +99,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             Run run = new IMFRun(imfStrangeOneFilepath);
             ResultCollection results = new ResultCollection(run);
 
-            run.ScanSetCollection=ScanSetCollection.Create(run, 238, 245, 7, 1);
+            run.ScanSetCollection.Create(run, 238, 245, 7, 1);
             
             run.CurrentScanSet = run.ScanSetCollection.GetScanSet(239);
 
@@ -146,7 +146,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         {
             Run run = new IMFRun(imfStrangeOneFilepath);
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 0, 599, 7, 1);
+            run.ScanSetCollection .Create(run, 0, 599, 7, 1);
             
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
             detectorParams.PeakBackgroundRatio = 5;

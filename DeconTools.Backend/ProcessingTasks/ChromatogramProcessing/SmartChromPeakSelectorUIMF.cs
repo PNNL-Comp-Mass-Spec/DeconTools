@@ -35,8 +35,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                var frameset = new FrameSet(bestLCScan);
-                uimfrun.CurrentFrameSet = frameset;
+                var lcscanset = new ScanSet(bestLCScan);
+                uimfrun.CurrentScanSet = lcscanset;
             }
             
         }
@@ -47,10 +47,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             result.ChromPeakSelected = bestPeak;
 
-            //HACK: we are calling the 'FrameSet' a ScanSet here. 
-            //We don't use the ScanSet alot, except for reporting the LCScan
-
-            result.ScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryFrame);
+            result.ScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryScanNumber);
 
 
             

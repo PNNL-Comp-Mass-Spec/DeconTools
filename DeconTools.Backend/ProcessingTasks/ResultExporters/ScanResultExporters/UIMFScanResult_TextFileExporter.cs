@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using DeconTools.Backend.Core;
-using System.IO;
-using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
@@ -34,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             //sb.Append(uimfScanResult.Frameset.PrimaryFrame);
 
             //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
-            sb.Append(uimfScanResult.FrameNum);
+            sb.Append(uimfScanResult.LCScanNum);
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.ScanTime.ToString("0.###"));
             sb.Append(Delimiter);

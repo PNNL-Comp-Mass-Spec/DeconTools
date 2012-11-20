@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
@@ -251,7 +252,17 @@ namespace DeconTools.Backend.ProcessingTasks
             ref double[] avgmassResults, ref double[] massResults,
             ref double[] mostAbundantMassResults, DeconResultComboMode comboMode)
         {
-            resultList.Run.CurrentScanSet.NumIsotopicProfiles = 0;   //reset to 0;
+            ScanSet currentScanset;
+            if (resultList.Run is UIMFRun)
+            {
+                currentScanset = ((UIMFRun)resultList.Run).CurrentIMSScanSet;
+            }
+            else
+            {
+                currentScanset = resultList.Run.CurrentScanSet;
+            }
+
+            currentScanset.NumIsotopicProfiles = 0;   //reset to 0;
 
             for (int i = 0; i < chargeResults.Length; i++)
             {
@@ -305,7 +316,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 //resultList.ResultList.Add(result);
                 this.CombineDeconResults(resultList, result, comboMode);
 
-                resultList.Run.CurrentScanSet.NumIsotopicProfiles++;
+                currentScanset.NumIsotopicProfiles++;
             }
 
         }

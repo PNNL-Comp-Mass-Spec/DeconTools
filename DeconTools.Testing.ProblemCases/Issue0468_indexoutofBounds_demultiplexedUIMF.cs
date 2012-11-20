@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.Core;
-using DeconTools.Backend;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -31,7 +25,7 @@ namespace DeconTools.Testing.ProblemCases
 
 
 
-            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentFrameSet = frame;
 

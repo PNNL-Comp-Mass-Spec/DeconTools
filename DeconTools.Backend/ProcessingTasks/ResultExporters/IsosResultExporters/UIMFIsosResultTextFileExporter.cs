@@ -80,9 +80,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             //We wish to report the FrameNum Not the FrameIndex.   FrameNum is unique
             sb.Append(uimfResult.MSFeatureID);
             sb.Append(delimiter);
-            sb.Append(uimfResult.FrameSet.PrimaryFrame);
+            sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
             sb.Append(delimiter);
-            sb.Append(uimfResult.ScanSet.PrimaryScanNumber);   
+            sb.Append(uimfResult.IMSScanSet.PrimaryScanNumber);   
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.ChargeState);
             sb.Append(delimiter);

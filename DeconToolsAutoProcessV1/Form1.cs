@@ -261,7 +261,7 @@ namespace DeconToolsAutoProcessV1
             }
             if (currentState.CurrentRun is UIMFRun)
             {
-                this.txtFrame.Text = currentState.CurrentFrameSet.PrimaryFrame.ToString();
+                this.txtFrame.Text = currentState.CurrentScanSet.PrimaryScanNumber.ToString();
 
             }
             else

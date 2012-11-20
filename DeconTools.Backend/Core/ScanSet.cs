@@ -13,25 +13,22 @@ namespace DeconTools.Backend.Core
         public ScanSet()
         {
             BasePeak = new MSPeak();
+            IndexValues = new List<int>();
         }
         public ScanSet(int primaryScanNum)
             : this()
         {
             PrimaryScanNumber = primaryScanNum;
-            IndexValues = new List<int>();
             IndexValues.Add(primaryScanNum);
-
-
         }
 
-        public ScanSet(int primaryScanNum, int[] indexArray)
+        public ScanSet(int primaryScanNum, IEnumerable<int> indexArray)
             : this()
         {
-            this.IndexValues = new List<int>();
-            this.PrimaryScanNumber = primaryScanNum;
+            PrimaryScanNumber = primaryScanNum;
             foreach (int indexItem in indexArray)
             {
-                this.IndexValues.Add(indexItem);
+                IndexValues.Add(indexItem);
             }
         }
 
@@ -39,7 +36,6 @@ namespace DeconTools.Backend.Core
             : this()
         {
             Check.Require(lowerScan <= upperScan, "Lower scan number must be less than or equal to the upper scan number");
-            this.IndexValues = new List<int>();
             this.PrimaryScanNumber = primaryScanNum;
 
             for (int i = lowerScan; i <= upperScan; i++)
@@ -55,7 +51,6 @@ namespace DeconTools.Backend.Core
         public int NumPeaks { get; set; }
 
         public int NumIsotopicProfiles { get; set; }
-
 
         public Peak BasePeak { get; set; }
 
@@ -89,7 +84,6 @@ namespace DeconTools.Backend.Core
 
         public double BackgroundIntensity { get; set; }
 
-        public double DriftTime { get; set; }
 
         //private List<int> m_MSPeakResultPeakListIndex;       //TODO:  SK ScanSet property added 9-16-10
 
@@ -149,7 +143,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-        internal int Count()
+        internal int GetScanCount()
         {
             if (this.indexValues == null || this.indexValues.Count == 0) return 0;
             return this.indexValues.Count;

@@ -15,13 +15,27 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-       
-     
+
+
+
+        public ScanSet CreateScanSet(Run run, int primaryScan, IEnumerable<int> scansToSum)
+        {
+            if (run is UIMFRun)
+            {
+                return new LCScanSetIMS(primaryScan, scansToSum);
+            }
+            else
+            {
+                return new ScanSet(primaryScan, scansToSum);
+            }
+        }
+
+
         public ScanSet CreateScanSet(Run run, int primaryScan, int startScan, int stopScan)
         {
             int currentLevel = run.GetMSLevel(primaryScan);
 
-            List<int> scansToSum = new List<int>();
+            var scansToSum = new List<int>();
 
             for (int i = startScan; i <= stopScan; i++)
             {
@@ -29,10 +43,11 @@ namespace DeconTools.Backend.Core
                 {
                     scansToSum.Add(i);
                 }
-                
-            }
 
-            return new ScanSet(primaryScan, scansToSum.ToArray());
+            }
+            return CreateScanSet(run, primaryScan, scansToSum);
+
+            //return new ScanSet(primaryScan, scansToSum.ToArray());
 
         }
 
@@ -49,7 +64,8 @@ namespace DeconTools.Backend.Core
             scansToSum.AddRange(upperScansToSum);
             //scansToSum.Sort();
 
-            return new ScanSet(scan, scansToSum.ToArray());
+            return CreateScanSet(run, scan, scansToSum);
+            //return new ScanSet(scan, scansToSum.ToArray());
 
         }
 
@@ -58,18 +74,18 @@ namespace DeconTools.Backend.Core
         {
             Check.Require(maxScansAllowed > 0, "Scans cannot be trimmed to fewer than one");
 
-            
+
 
             if (scanset.IndexValues.Count > maxScansAllowed)
             {
-                int numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed+1)/2;
+                int numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed + 1) / 2;
 
                 List<int> newScans = new List<int>();
 
-                for (int i = numScansToBeRemoved; i < (scanset.IndexValues.Count-numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
+                for (int i = numScansToBeRemoved; i < (scanset.IndexValues.Count - numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
                 {
                     newScans.Add(scanset.IndexValues[i]);
-                    
+
                 }
 
                 scanset.IndexValues = newScans;
@@ -84,7 +100,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-  
+
         #endregion
 
 
@@ -99,7 +115,7 @@ namespace DeconTools.Backend.Core
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
                 {
-                    lowerScans.Insert(0,currentScan);
+                    lowerScans.Insert(0, currentScan);
                     scansCounter++;
                 }
                 currentScan--;

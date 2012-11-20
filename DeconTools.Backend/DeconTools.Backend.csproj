@@ -140,6 +140,9 @@
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
+    <Compile Include="Core\IMSScanSet.cs" />
+    <Compile Include="Core\IMSScanSetCollection.cs" />
+    <Compile Include="Core\LCScanSetIMS.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorUIMF.cs" />
     <Compile Include="ProcessingTasks\Smoothers\SavitzkyGolaySmoother.cs" />
@@ -232,7 +235,6 @@
     <Compile Include="Core\ChromPeak.cs" />
     <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
     <Compile Include="Core\FrameSet.cs" />
-    <Compile Include="Core\FrameSetCollection.cs" />
     <Compile Include="Core\Peak.cs" />
     <Compile Include="Core\Results\IsosResult.cs" />
     <Compile Include="Core\IsotopicProfile.cs" />

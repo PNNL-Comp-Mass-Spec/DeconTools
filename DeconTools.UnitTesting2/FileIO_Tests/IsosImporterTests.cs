@@ -49,8 +49,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             UIMFIsosResult testResult = (UIMFIsosResult)results[0];
 
-            Assert.AreEqual(800, testResult.FrameSet.PrimaryFrame);
-            Assert.AreEqual(207, testResult.ScanSet.PrimaryScanNumber);
+            Assert.AreEqual(800, testResult.ScanSet.PrimaryScanNumber);
+            Assert.AreEqual(207, testResult.IMSScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
             Assert.AreEqual(1318, testResult.IsotopicProfile.IntensityAggregate);
             Assert.AreEqual(402.731689453125m, (decimal)testResult.IsotopicProfile.GetMZ());
@@ -77,8 +77,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             UIMFIsosResult testResult = (UIMFIsosResult)results[0];
 
-            Assert.AreEqual(801, testResult.FrameSet.PrimaryFrame);
-            Assert.AreEqual(208, testResult.ScanSet.PrimaryScanNumber);
+            Assert.AreEqual(801, testResult.ScanSet.PrimaryScanNumber);
+            Assert.AreEqual(208, testResult.IMSScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
             Assert.AreEqual(2135, testResult.IsotopicProfile.IntensityAggregate);
             Assert.AreEqual(402.220489501953m, (decimal)testResult.IsotopicProfile.GetMZ());

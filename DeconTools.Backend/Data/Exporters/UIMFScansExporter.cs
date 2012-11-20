@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -41,7 +40,7 @@ namespace DeconTools.Backend.Data
                 Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
                 UimfScanResult uimfResult = (UimfScanResult)result;
                 sb = new StringBuilder();
-                sb.Append(uimfResult.Frameset.PrimaryFrame);
+                sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append(delimiter);
                 sb.Append(uimfResult.ScanTime.ToString("0.###"));
                 sb.Append(delimiter);

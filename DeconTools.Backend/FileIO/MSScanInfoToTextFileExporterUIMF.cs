@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
@@ -22,7 +19,7 @@ namespace DeconTools.Backend.FileIO
             StringBuilder sb = new StringBuilder();
 
             UimfScanResult uimfScanResult = (UimfScanResult)result;
-            sb.Append(uimfScanResult.Frameset.PrimaryFrame);
+            sb.Append(uimfScanResult.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.ScanTime.ToString("0.###"));
             sb.Append(Delimiter);

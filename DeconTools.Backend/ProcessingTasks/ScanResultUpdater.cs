@@ -1,5 +1,6 @@
 ﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 
 
@@ -25,10 +26,20 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(resultList != null, "ResultCollection is null");
             Check.Require(resultList.Run != null, "Run is null");
-
-
-            bool scanIsMS2 = (resultList.Run.GetMSLevel(resultList.Run.CurrentScanSet.PrimaryScanNumber) == 2);
-
+            
+            bool scanIsMS2;
+            
+            if (resultList.Run is UIMFRun)
+            {
+                var uimfrun = (UIMFRun) resultList.Run;
+                scanIsMS2 = (resultList.Run.GetMSLevel(uimfrun.CurrentFrameSet.PrimaryScanNumber) == 2);       //GORD:  update this when you rename 'currentFrameSet'
+            }
+            else
+            {
+                scanIsMS2 = (resultList.Run.GetMSLevel(resultList.Run.CurrentScanSet.PrimaryScanNumber) == 2);    
+            }
+            
+            
 
 
             if (!MS2_IsOutputted && scanIsMS2)

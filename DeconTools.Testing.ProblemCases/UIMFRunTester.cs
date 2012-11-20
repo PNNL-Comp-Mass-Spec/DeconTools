@@ -35,7 +35,7 @@ namespace DeconTools.Testing.ProblemCases
             UIMF_MSGenerator msgen = new UIMF_MSGenerator();
 
 
-            foreach (var frame in run.FrameSetCollection.FrameSetList)
+            foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
 
                 run.CurrentFrameSet = frame;
@@ -44,7 +44,7 @@ namespace DeconTools.Testing.ProblemCases
                 {
                     run.CurrentScanSet = scan;
 
-                    sb.Append(frame.PrimaryFrame);
+                    sb.Append(frame.PrimaryScanNumber);
                     sb.Append("\t");
 
                     sb.Append(scan.PrimaryScanNumber);

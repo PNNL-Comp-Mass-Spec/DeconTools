@@ -105,9 +105,9 @@ namespace DeconTools.Backend.Data
                 UIMFIsosResult uimfResult = (UIMFIsosResult)result;
 
                 sb = new StringBuilder();
-                sb.Append(uimfResult.FrameSet.PrimaryFrame);
+                sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append(delimiter);
-                sb.Append(getScanNumber(uimfResult.ScanSet.PrimaryScanNumber));    //calls a method that adds 1 to PrimaryScanNumber (which is 0-based)
+                sb.Append(getScanNumber(uimfResult.IMSScanSet.PrimaryScanNumber));    //calls a method that adds 1 to PrimaryScanNumber (which is 0-based)
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.ScanSet.DriftTime.ToString("0.###"));
+                sb.Append(uimfResult.IMSScanSet.DriftTime.ToString("0.###"));
                 sw.WriteLine(sb.ToString());
             }
         }

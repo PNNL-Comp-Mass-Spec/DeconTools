@@ -20,9 +20,9 @@ namespace DeconTools.Backend.FileIO
             UIMFIsosResult uimfResult = (UIMFIsosResult)result;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(uimfResult.FrameSet.PrimaryFrame);
+            sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
-            sb.Append(uimfResult.ScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
+            sb.Append(uimfResult.IMSScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
             sb.Append(Delimiter);
             sb.Append(uimfResult.IsotopicProfile.ChargeState);
             sb.Append(Delimiter);

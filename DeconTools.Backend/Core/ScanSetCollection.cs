@@ -8,35 +8,22 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public class ScanSetCollection
     {
+        protected ScanSetFactory ScanSetFactory = new ScanSetFactory();
+
         public ScanSetCollection()
         {
             this.ScanSetList = new List<ScanSet>();
         }
 
-        public static ScanSetCollection Create(Run run, int numScansSummed, int scanIncrement, bool processMSMS = true)
+        public void Create(Run run, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
             Check.Require(run != null, "Cannot create target scans. Run is null");
-            
-            if (run.MSFileType == Globals.MSFileType.PNNL_UIMF)
-            {
-                UIMFRun uimfrun = run as UIMFRun;
 
-                return Create(run, uimfrun.GetMinPossibleIMSScanNum(), uimfrun.GetMaxPossibleIMSScanNum(), numScansSummed, scanIncrement,
-                             processMSMS);   
-            }
-            
-            return Create(run, run.GetMinPossibleLCScanNum(), run.GetMaxPossibleLCScanNum(), numScansSummed, scanIncrement,
-                          processMSMS);
+            Create(run, GetMinScan(run), GetMaxScan(run), numScansSummed, scanIncrement, processMSMS);
         }
 
-
-
-
-
-        public static ScanSetCollection Create(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = true)
+        public void Create(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
-            ScanSetCollection scanSetCollection;
-
             bool isNumScansOdd = (numScansSummed % 2 == 1 && numScansSummed > 0);
 
             if (scanStop < scanStart)
@@ -48,31 +35,19 @@ namespace DeconTools.Backend.Core
             Check.Require(isNumScansOdd, "Number of scans summed must be an odd number");
             Check.Require(scanIncrement > 0, "Scan Increment must be greater than 0");
 
+            CreateScansets(run, scanStart, scanStop, numScansSummed,
+                                                                                  scanIncrement, processMSMS);
 
-
-            //For IMS data, 'scan' refers to IMS_Scan'. IMS_Scans are always of the same type. No intermixing of MS1 and MS2 scans. So no need to check MSLevel
-            if (run is UIMFRun || run is IMFRun)
-            {
-                scanSetCollection = CreateScanSetCollectionMS1OnlyData(run, scanStart, scanStop, numScansSummed,
-                                                                scanIncrement);
-            }
-            else
-            {
-                scanSetCollection = CreateStandardScanSetCollection(run, scanStart, scanStop, numScansSummed,
-                                                                    scanIncrement, processMSMS);
-            }
-
-            return scanSetCollection;
         }
 
-
-        public static ScanSetCollection Create(Run run, bool sumAllScans = true, bool processMSMS= true)
+        public void Create(Run run, bool sumAllScans = true, bool processMSMS = true)
         {
-            ScanSetCollection scanSetCollection=new ScanSetCollection();
+
+            ScanSetList = new List<ScanSet>();
 
 
-            int minScan = run.MinLCScan;
-            int maxScan = run.MaxLCScan;
+            int minScan = GetMinScan(run);
+            int maxScan = GetMaxScan(run);
 
 
             if (sumAllScans)
@@ -80,86 +55,142 @@ namespace DeconTools.Backend.Core
                 //find first MS1 scan
 
                 int firstMS1Scan = -1;
-                for (int i = minScan; i <=maxScan; i++)
+                for (int i = minScan; i <= maxScan; i++)
                 {
-                    if (run.GetMSLevel(i)==1)
+                    if (run.GetMSLevel(i) == 1)
                     {
                         firstMS1Scan = i;
                         break;
-                        
+
                     }
                 }
 
-                if (firstMS1Scan==-1)   //never found a single MS1 scan in the whole dataset
+                if (firstMS1Scan == -1)   //never found a single MS1 scan in the whole dataset
                 {
-                    
+
                 }
                 else
                 {
-                    ScanSetFactory scanSetFactory = new ScanSetFactory();
+                    var scanSetFactory = new ScanSetFactory();
                     var scanset = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
 
-                    
-                    scanSetCollection.ScanSetList.Add(scanset);
-
+                    ScanSetList.Add(scanset);
                 }
-                
 
             }
             else
             {
-                
+
                 for (int i = minScan; i <= maxScan; i++)
                 {
                     var mslevel = run.GetMSLevel(i);
 
-                    if (mslevel==1 || processMSMS)
+                    if (mslevel == 1 || processMSMS)
                     {
-                        scanSetCollection.ScanSetList.Add(new ScanSet(i));
+                        ScanSetList.Add(new ScanSet(i));
                     }
                 }
-                
+
             }
-
-            return scanSetCollection;
-
-
-
 
 
         }
 
+        #region Properties
 
+        public List<ScanSet> ScanSetList { get; set; }
 
-        private static int getMinScan(Run run)
+        #endregion
+
+        protected virtual int GetMinScan(Run run)
         {
-            if (run is UIMFRun)
-            {
-                return ((UIMFRun) run).GetMinPossibleIMSScanNum();
-            }
-            
             return run.GetMinPossibleLCScanNum();
         }
 
-        private static int getMaxScan(Run run)
+        protected virtual int GetMaxScan(Run run)
         {
-            if (run is UIMFRun)
-            {
-                return ((UIMFRun)run).GetMaxPossibleIMSScanNum();
-            }
-
             return run.GetMaxPossibleLCScanNum();
         }
 
 
 
-        private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
+        //private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
+        //{
+        //    int minPossibleScanIndex = getMinScan(run);
+        //    int maxPossibleScanIndex = getMaxScan(run);
+
+        //    ScanSetCollection scanSetCollection = new ScanSetCollection();
+
+
+        //    if (scanStart < minPossibleScanIndex)
+        //    {
+        //        scanStart = minPossibleScanIndex;
+        //    }
+
+        //    if (scanStart > maxPossibleScanIndex)
+        //    {
+        //        scanStart = maxPossibleScanIndex;
+        //    }
+
+        //    if (scanStop < minPossibleScanIndex)
+        //    {
+        //        scanStop = minPossibleScanIndex;
+        //    }
+
+        //    if (scanStop > maxPossibleScanIndex)
+        //    {
+        //        scanStop = maxPossibleScanIndex;
+        //    }
+
+
+        //    int numLowerScansToGet = (numScansSummed - 1) / 2;
+        //    int numUpperScansToGet = (numScansSummed - 1) / 2;
+
+        //    for (int currentScan = scanStart; currentScan <= scanStop; currentScan++)
+        //    {
+        //        //add lower scans
+        //        int lowerScan = currentScan - 1;
+        //        List<int> scansToSum = new List<int>();
+        //        int scansCounter = 0;
+        //        while (lowerScan >= minPossibleScanIndex && numLowerScansToGet > scansCounter)
+        //        {
+        //            scansToSum.Insert(0, lowerScan);
+        //            scansCounter++;
+
+        //            lowerScan--;
+        //        }
+
+        //        //add middle scan
+        //        scansToSum.Add(currentScan);
+
+
+        //        //add upper scans
+        //        scansCounter = 0;
+        //        int upperScan = currentScan + 1;
+        //        while (upperScan <= maxPossibleScanIndex && numUpperScansToGet > scansCounter)
+        //        {
+        //            scansToSum.Add(upperScan);
+        //            scansCounter++;
+        //            upperScan++;
+        //        }
+
+        //        var scanSet = new ScanSet(currentScan, scansToSum.ToArray());
+        //        scanSetCollection.ScanSetList.Add(scanSet);
+        //    }
+
+        //    return scanSetCollection;
+
+
+
+        //}
+
+        protected virtual void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
         {
-            int minPossibleScanIndex = getMinScan(run);
-            int maxPossibleScanIndex = getMaxScan(run);
 
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
+            ScanSetList = new List<ScanSet>();
 
+            int minPossibleScanIndex = GetMinScan(run);
+            int maxPossibleScanIndex = GetMaxScan(run);
 
             if (scanStart < minPossibleScanIndex)
             {
@@ -182,74 +213,6 @@ namespace DeconTools.Backend.Core
             }
 
 
-            int numLowerScansToGet = (numScansSummed - 1) / 2;
-            int numUpperScansToGet = (numScansSummed - 1) / 2;
-
-            for (int currentScan = scanStart; currentScan <= scanStop; currentScan++)
-            {
-                //add lower scans
-                int lowerScan = currentScan - 1;
-                List<int> scansToSum = new List<int>();
-                int scansCounter = 0;
-                while (lowerScan >= minPossibleScanIndex && numLowerScansToGet > scansCounter)
-                {
-                    scansToSum.Insert(0, lowerScan);
-                    scansCounter++;
-
-                    lowerScan--;
-                }
-
-                //add middle scan
-                scansToSum.Add(currentScan);
-
-
-                //add upper scans
-                scansCounter = 0;
-                int upperScan = currentScan + 1;
-                while (upperScan <= maxPossibleScanIndex && numUpperScansToGet > scansCounter)
-                {
-                    scansToSum.Add(upperScan);
-                    scansCounter++;
-                    upperScan++;
-                }
-
-                var scanSet = new ScanSet(currentScan, scansToSum.ToArray());
-                scanSetCollection.ScanSetList.Add(scanSet);
-            }
-
-            return scanSetCollection;
-
-
-
-        }
-
-        private static ScanSetCollection CreateStandardScanSetCollection(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
-        {
-            int minPossibleScanIndex = getMinScan(run);
-            int maxPossibleScanIndex = getMaxScan(run);
-
-            if (scanStart < minPossibleScanIndex)
-            {
-                scanStart = minPossibleScanIndex;
-            }
-
-            if (scanStart > maxPossibleScanIndex)
-            {
-                scanStart = maxPossibleScanIndex;
-            }
-
-            if (scanStop < minPossibleScanIndex)
-            {
-                scanStop = minPossibleScanIndex;
-            }
-
-            if (scanStop > maxPossibleScanIndex)
-            {
-                scanStop = maxPossibleScanIndex;
-            }
-
-
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
             for (int i = scanStart; i <= scanStop; i++)
             {
                 int currentMSLevel = run.GetMSLevel(i);
@@ -257,7 +220,7 @@ namespace DeconTools.Backend.Core
                 if (!processMSMS && currentMSLevel > 1) continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
 
                 ScanSet scanSet;
-                if (currentMSLevel==1)
+                if (currentMSLevel == 1)
                 {
                     List<int> lowerScansToSum = GetLowerScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
                     List<int> upperScansToSum = GetUpperScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
@@ -266,22 +229,67 @@ namespace DeconTools.Backend.Core
                     scansToSum.Add(i);
                     scansToSum.AddRange(upperScansToSum);
 
-                    scanSet = new ScanSet(i, scansToSum.ToArray());
+                    scanSet = ScanSetFactory.CreateScanSet(run, i, scansToSum);
+
+
                 }
                 else
                 {
-                    scanSet = new ScanSet(i);
+                    //NOTE: we wish to sum non-adjacent UIMF MS/MS frames. I.e. Frame 2 and 7 were both fully fragmented using the same voltage. We wish to sum these together
+                    //NOTE: we may want to abstract this section out somehow. 
+                    if (run is UIMFRun)
+                    {
+                        var uimfrun = (UIMFRun) run;
 
+                        var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames();
+
+                        int indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
+
+                        if (indexOfCurrentFrame < 0) continue;
+
+                        int lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
+                        int upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
+
+                        List<int> framesToSum = new List<int>();
+                        int numLowerFramesToGet = (numScansSummed - 1) / 2;
+                        int numUpperFramesToGet = (numScansSummed - 1) / 2;
+
+                        //get lower frames
+                        int framesCounter = 0;
+                        while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
+                        {
+                            framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
+                            lowerIndex -= numberOfFrameIndexesToSkip;
+                            framesCounter++;
+                        }
+
+                        //get middle frame
+                        framesToSum.Add(i);
+
+                        //get upper frames
+                        framesCounter = 0;
+                        int maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
+                        while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
+                        {
+                            framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
+                            upperIndex += numberOfFrameIndexesToSkip;
+                            framesCounter++;
+                        }
+
+                        scanSet = ScanSetFactory.CreateScanSet(run,i, framesToSum.ToArray());
+                        
+                    }
+                    else
+                    {
+                        scanSet = ScanSetFactory.CreateScanSet(run, i, 1);    
+                    }
                 }
-
-                
-                scanSetCollection.ScanSetList.Add(scanSet);
+                ScanSetList.Add(scanSet);
 
                 i = i + scanIncrement - 1;   //  '-1' because we advance by +1 when the loop iterates. 
 
             }
 
-            return scanSetCollection;
         }
 
         private static List<int> GetLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
@@ -294,7 +302,7 @@ namespace DeconTools.Backend.Core
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
                 {
-                    lowerScans.Insert(0,currentScan);
+                    lowerScans.Insert(0, currentScan);
                     scansCounter++;
                 }
                 currentScan--;
@@ -327,7 +335,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public List<ScanSet> ScanSetList { get; set; }
+
 
         public ScanSet GetScanSet(int primaryNum)
         {

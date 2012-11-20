@@ -1,20 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using DeconTools.Backend.Algorithms;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Data.Structures;
-using DeconTools.Backend.DTO;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.Converters;
-
+﻿
 //using CenterSpace.NMath.Matrix;
 //using CenterSpace.NMath.Analysis;
 //using CenterSpace.NMath.Core;
@@ -953,7 +937,7 @@ sscc.Create();
 peakDetector = new DeconToolsPeakDetector(4, 3, Globals.PeakFitType.QUADRATIC, true);
             
 int startScan = 0;
-int startFrame = uimfRun.CurrentFrameSet.PrimaryFrame;
+int startFrame = uimfRun.CurrentFrameSet.PrimaryScanNumber;
 int endScan = 0;
 int endFrame = 0;
 
@@ -1033,7 +1017,7 @@ for (int i = 0; i < uimfRun.ScanSetCollection.ScanSetList.Count; i++)
                 ++frameSetIndex];
             }
 
-            endFrame = uimfRun.CurrentFrameSet.PrimaryFrame - 1;
+            endFrame = uimfRun.CurrentFrameSet.PrimaryScanNumber - 1;
 
 
             //now we've got the endFrame for this feature

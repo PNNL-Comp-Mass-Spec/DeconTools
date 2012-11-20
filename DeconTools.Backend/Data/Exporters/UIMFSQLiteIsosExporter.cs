@@ -101,8 +101,8 @@ namespace DeconTools.Backend.Data
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
                 UIMFIsosResult uimfResult = (UIMFIsosResult)result;
                 MS_Features fp = new MS_Features();
-                fp.frame_num = (ushort)uimfResult.FrameSet.PrimaryFrame;
-                fp.ims_scan_num = (ushort)getScanNumber(uimfResult.ScanSet.PrimaryScanNumber);
+                fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
+                fp.ims_scan_num = (ushort)uimfResult.IMSScanSet.PrimaryScanNumber;
                 fp.charge = (byte)uimfResult.IsotopicProfile.ChargeState;
                 fp.abundance = (uint)uimfResult.IsotopicProfile.GetAbundance();
                 fp.mz = uimfResult.IsotopicProfile.GetMZ();
@@ -116,7 +116,7 @@ namespace DeconTools.Backend.Data
                 fp.mono_plus2_abundance = (uint)uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance();
                 fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
                 //fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.OriginalTotalIsotopicAbundance;
-                fp.ims_drift_time = (float)uimfResult.ScanSet.DriftTime;
+                fp.ims_drift_time = (float)uimfResult.IMSScanSet.DriftTime;
                 records.Add(fp);
                 count++;
                 if (count == 500)

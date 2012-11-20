@@ -15,8 +15,8 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.Run is UIMFRun, "UIMF_TIC_Extractor only works on UIMF files");
 
             UIMFRun uimfRun = (UIMFRun)resultList.Run;
-            float ticValue = uimfRun.GetTIC(uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
-            resultList.Run.CurrentScanSet.TICValue = (float)ticValue;
+            float ticValue = uimfRun.GetTIC(uimfRun.CurrentFrameSet.PrimaryScanNumber, uimfRun.CurrentIMSScanSet.PrimaryScanNumber);
+            uimfRun.CurrentIMSScanSet.TICValue = (float)ticValue;
         }
     }
 }

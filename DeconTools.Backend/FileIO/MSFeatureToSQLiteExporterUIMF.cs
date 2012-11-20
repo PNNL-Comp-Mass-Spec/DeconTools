@@ -50,8 +50,8 @@ namespace DeconTools.Backend.FileIO
         protected override void AddResults(System.Data.Common.DbParameterCollection dbParameters, IsosResult result)
         {
             dbParameters[0].Value = result.MSFeatureID;
-            dbParameters[1].Value = ((UIMFIsosResult)result).FrameSet.PrimaryFrame;
-            dbParameters[2].Value = result.ScanSet.PrimaryScanNumber;
+            dbParameters[1].Value = ((UIMFIsosResult)result).ScanSet.PrimaryScanNumber;
+            dbParameters[2].Value = ((UIMFIsosResult)result).IMSScanSet.PrimaryScanNumber;
             dbParameters[3].Value = result.IsotopicProfile.ChargeState;
             dbParameters[4].Value = result.IsotopicProfile.GetAbundance();
             dbParameters[5].Value = result.IsotopicProfile.GetMZ();

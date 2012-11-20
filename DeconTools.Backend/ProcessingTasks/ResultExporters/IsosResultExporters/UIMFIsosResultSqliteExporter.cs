@@ -117,8 +117,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     for (n = 0; n < isosResultList.Count; n++)
                     {
                         featureIDParam.Value = isosResultList[n].MSFeatureID;
-                        frameNumParam.Value = (((UIMFIsosResult)isosResultList[n]).FrameSet.PrimaryFrame);
-                        scanNumParam.Value = isosResultList[n].ScanSet.PrimaryScanNumber;
+                        frameNumParam.Value = (isosResultList[n].ScanSet.PrimaryScanNumber);
+                        scanNumParam.Value = ((UIMFIsosResult)isosResultList[n]).IMSScanSet.PrimaryScanNumber;
                         chargeParam.Value = isosResultList[n].IsotopicProfile.ChargeState;
                         abundanceParam.Value = isosResultList[n].IsotopicProfile.GetAbundance();
                         mzParam.Value = isosResultList[n].IsotopicProfile.GetMZ();

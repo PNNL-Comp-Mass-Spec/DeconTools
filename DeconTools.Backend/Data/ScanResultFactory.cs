@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Data
             if (run is UIMFRun)
             {
                 UIMFRun uimfRun = (UIMFRun)run;
-                scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentFrameSet, uimfRun.CurrentScanSet);
+                scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet);
             }
             else
             {
@@ -51,11 +51,11 @@ namespace DeconTools.Backend.Data
             return scanresult;
         }
 
-        private ScanResult createUIMFScanResult(UIMFRun run, FrameSet frameSet, ScanSet scanSet)
+        private ScanResult createUIMFScanResult(UIMFRun run, ScanSet lcScanset, ScanSet scanSet)
         {
             Check.Require(run is UIMFRun, "UIMFScanResults can only be created from UIMF files");
-            Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
-            Check.Require(((UIMFRun)run).FrameSetCollection != null && ((UIMFRun)run).FrameSetCollection.FrameSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
+            Check.Require(run.IMSScanSetCollection != null && run.IMSScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
+            Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
 
             UimfScanResult scanresult;
 
@@ -64,33 +64,33 @@ namespace DeconTools.Backend.Data
             float tic = 0;
             Peak basepeak = new Peak();
 
-            bool currentScanListIsLastOne = (scanSet == run.ScanSetCollection.ScanSetList[run.ScanSetCollection.ScanSetList.Count - 1]);
+            bool currentScanListIsLastOne = (scanSet == run.IMSScanSetCollection.ScanSetList[run.IMSScanSetCollection.ScanSetList.Count - 1]);
 
             if (currentScanListIsLastOne)
             {
-                foreach (ScanSet s in run.ScanSetCollection.ScanSetList)
+                foreach (IMSScanSet imsScanset in run.IMSScanSetCollection.ScanSetList)
                 {
-                    totPeaks += s.NumPeaks;
-                    totIsotopicProfiles += s.NumIsotopicProfiles;
+                    totPeaks += imsScanset.NumPeaks;
+                    totIsotopicProfiles += imsScanset.NumIsotopicProfiles;
 
-                    tic += s.TICValue;
+                    tic += imsScanset.TICValue;
 
-                    if (s.BasePeak.Height > basepeak.Height)
+                    if (imsScanset.BasePeak.Height > basepeak.Height)
                     {
-                        basepeak = s.BasePeak;
+                        basepeak = imsScanset.BasePeak;
                     }
                 }
-                scanresult = new UimfScanResult(frameSet);
+                scanresult = new UimfScanResult(lcScanset);
 
-                scanresult.FrameNum = frameSet.PrimaryFrame;
+                scanresult.LCScanNum = lcScanset.PrimaryScanNumber;
                 scanresult.NumIsotopicProfiles = totIsotopicProfiles;
                 scanresult.NumPeaks = totPeaks;
                 scanresult.BasePeak = basepeak;
                 scanresult.TICValue = tic;
-                scanresult.ScanTime = run.GetTime(frameSet.PrimaryFrame);
-                scanresult.SpectrumType = run.GetMSLevel(frameSet.PrimaryFrame);
-                scanresult.FramePressureBack = frameSet.FramePressure;
-                scanresult.FramePressureFront = run.GetFramePressureFront(frameSet.PrimaryFrame);
+                scanresult.ScanTime = run.GetTime(lcScanset.PrimaryScanNumber);
+                scanresult.SpectrumType = run.GetMSLevel(lcScanset.PrimaryScanNumber);
+                scanresult.FramePressureBack = run.GetFramePressureBack(lcScanset.PrimaryScanNumber);
+                scanresult.FramePressureFront = run.GetFramePressureFront(lcScanset.PrimaryScanNumber);
 
             }
             else
