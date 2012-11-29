@@ -94,12 +94,22 @@ namespace DeconTools.Backend.Runs
 
             if (numMs2Frames > 0)
             {
-                if (numMs2Frames % numMs1Frames != 0)
-                {
-                    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
-                }
+				if (numMs1Frames == 1)
+				{
+					// If there is only 1 MS1 frame, then there is only 1 set of MS2 frames, so we use the count of MS2 frames
+					_numOfConsecutiveMs2Frames = numMs2Frames;
+				}
+				else
+				{
+					// Subtract the frame numbers of the first 2 MS1 frames to figure out how many MS2 frame are in between
+					_numOfConsecutiveMs2Frames = MS1Frames[1] - MS1Frames[0] - 1;
+				}
 
-                _numOfConsecutiveMs2Frames = numMs2Frames / numMs1Frames;
+				// Commenting this out since they are currently creating UIMF files that do not have the correct number of MS/MS scans at the end of the run
+				//if (numMs2Frames % numMs1Frames != 0)
+				//{
+				//    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
+				//}
             }
         }
 
