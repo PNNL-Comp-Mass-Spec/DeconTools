@@ -57,6 +57,8 @@ namespace DeconTools.Backend.Data
             Check.Require(run.IMSScanSetCollection != null && run.IMSScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
             Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
 
+            var lcscansetUIMF = (LCScanSetIMS) lcScanset;
+
             UimfScanResult scanresult;
 
             int totPeaks = 0;
@@ -89,8 +91,8 @@ namespace DeconTools.Backend.Data
                 scanresult.TICValue = tic;
                 scanresult.ScanTime = run.GetTime(lcScanset.PrimaryScanNumber);
                 scanresult.SpectrumType = run.GetMSLevel(lcScanset.PrimaryScanNumber);
-                scanresult.FramePressureBack = run.GetFramePressureBack(lcScanset.PrimaryScanNumber);
-                scanresult.FramePressureFront = run.GetFramePressureFront(lcScanset.PrimaryScanNumber);
+                scanresult.FramePressureSmoothed = lcscansetUIMF.FramePressureSmoothed;
+                scanresult.FramePressureUnsmoothed = run.GetFramePressure(lcScanset.PrimaryScanNumber);
 
             }
             else

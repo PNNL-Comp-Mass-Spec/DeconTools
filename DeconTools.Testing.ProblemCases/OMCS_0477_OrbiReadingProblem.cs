@@ -31,10 +31,10 @@ namespace DeconTools.Testing.ProblemCases
             run.CurrentScanSet = new ScanSet(20000);
            
 
-            ScanSetCollection scansetcollection = ScanSetCollection.Create(run, 3000, 3010, 1, 1, true);
+            run.ScanSetCollection.Create(run, 3000, 3010, 1, 1, true);
 
             Console.WriteLine("scan\tz\tinfo");
-            foreach (var scanSet in scansetcollection.ScanSetList)
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
                 msGen.Execute(run.ResultCollection);

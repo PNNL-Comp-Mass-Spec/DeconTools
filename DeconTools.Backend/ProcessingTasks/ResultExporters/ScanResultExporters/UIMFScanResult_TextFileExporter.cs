@@ -45,9 +45,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.NumIsotopicProfiles);
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.FramePressureFront.ToString("0.#####"));
+            sb.Append(uimfScanResult.FramePressureUnsmoothed.ToString("0.#####"));
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.FramePressureBack.ToString("0.#####"));
+            sb.Append(uimfScanResult.FramePressureSmoothed.ToString("0.#####"));
 
             return sb.ToString();
 
@@ -73,9 +73,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(Delimiter);
             sb.Append("num_deisotoped");
             sb.Append(Delimiter);
-            sb.Append("frame_pressure_front");
+            sb.Append("FramePressureUnsmoothed");
             sb.Append(Delimiter);
-            sb.Append("frame_pressure_back");
+            sb.Append("FramePressureSmoothed");
            
 
             return sb.ToString();

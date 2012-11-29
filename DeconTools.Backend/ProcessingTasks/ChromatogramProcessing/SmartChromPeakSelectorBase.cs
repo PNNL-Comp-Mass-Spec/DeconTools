@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -102,6 +104,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
+      
+
+
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
                 if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
@@ -116,7 +121,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
-            //Console.WriteLine("MT= " + currentResult.MassTag.ID + ";z= " + currentResult.MassTag.ChargeState + "; mz= " + currentResult.MassTag.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+#if DEBUG
+            int tempMinScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime - Parameters.NETTolerance);
+            int tempMaxScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime + Parameters.NETTolerance);
+            int tempCenterTol = resultList.Run.GetScanValueForNET(normalizedElutionTime);
+
+
+            Console.WriteLine("SmartPeakSelector --> NETTolerance= "+ Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
+                              "\t" + tempMaxScanWithinTol);
+            Console.WriteLine("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+
+#endif
+
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
             currentResult.NumQualityChromPeaks = -1;
@@ -155,7 +171,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     //collect the results together
                     addScoresToPeakQualityData(pq, currentResult);
 
-                    //pq.Display();
+
+#if DEBUG
+
+                    pq.Display();
+#endif
 
                 }
 

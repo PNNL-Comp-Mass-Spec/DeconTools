@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Data
 
         public UIMFScansExporter(string fileName)
         {
-            this.headerLine = "frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_front,frame_pressure_back";
+            this.headerLine = "frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_unsmoothed,frame_pressure_unsmoothed";
             this.delimiter = ',';
             this.fileName = fileName;
         }
@@ -56,9 +56,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(uimfResult.NumIsotopicProfiles);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.FramePressureFront.ToString("0.####"));
+                sb.Append(uimfResult.FramePressureUnsmoothed.ToString("0.####"));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.FramePressureBack.ToString("0.####"));
+                sb.Append(uimfResult.FramePressureSmoothed.ToString("0.####"));
                 
                 sw.WriteLine(sb.ToString());
             }

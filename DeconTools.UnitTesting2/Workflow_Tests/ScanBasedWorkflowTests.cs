@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend;
@@ -89,21 +91,41 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             }
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
-            workflow.Execute();
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            workflow.Execute();
+            stopwatch.Stop();
+
+            double typicalTimeInSeconds = 11.0;
+            double currentTimeInSeconds = Math.Round(stopwatch.ElapsedMilliseconds/(double) 1000, 1);
+
+            Console.WriteLine("Typical processing time (sec)= "+ typicalTimeInSeconds);
+            Console.WriteLine("Current Processing time (sec) = " + currentTimeInSeconds);
+
+            double percentDiff = (currentTimeInSeconds - typicalTimeInSeconds)/typicalTimeInSeconds*100;
+
+            Assert.IsTrue(percentDiff < 20, "Processing failed time test. Too slow.");
             Assert.That(File.Exists(expectedIsosOutput));
             Assert.That(File.Exists(expectedPeaksFileOutput));
 
+            Console.WriteLine(percentDiff);
+            
+
+           
 
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
 
             List<IsosResult> results = new List<IsosResult>();
             results = importer.Import();
 
-            TestUtilities.DisplayMSFeatures(results);
+            //TestUtilities.DisplayMSFeatures(results);
 
             Assert.AreEqual(1340, results.Count);
             Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+
+           
+
 
         }
 
@@ -208,6 +230,11 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.AreEqual(2, scansFileLineCounter);
             Assert.AreEqual(1573, results.Count);
             Assert.AreEqual(109217766, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+
+            var testResult1 = results[0] as UIMFIsosResult;
+
+            Assert.AreEqual(9.476, (decimal)testResult1.DriftTime);
+
 
         }
 

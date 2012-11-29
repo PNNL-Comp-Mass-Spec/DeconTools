@@ -291,25 +291,16 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             List<double> pressuresAfterAveraging = new List<double>();
             for (int frame = startFrame; frame <= stopFrame; frame++)
             {
-
                 LCScanSetIMS lcScanset = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
-
-                pressuresAfterAveraging.Add(lcScanset.FramePressureFront);
-
+                pressuresAfterAveraging.Add(lcScanset.FramePressureSmoothed);
             }
-
-
-            //for (int i = 0; i < pressuresBeforeAveraging.Count; i++)
-            //{
-            //    Console.WriteLine(pressuresBeforeAveraging[i] + "\t" + pressuresAfterAveraging[i]);
-            //}
 
             var testScanset1 = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1079);
 
             var testScanset2 =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1175);
 
-            Assert.AreEqual(4.0091461, (decimal)testScanset1.FramePressureFront);
-            Assert.AreEqual(4.008275, (decimal)testScanset2.FramePressureFront);
+            Assert.AreEqual(4.0091461, (decimal)testScanset1.FramePressureSmoothed);
+            Assert.AreEqual(4.008275, (decimal)testScanset2.FramePressureSmoothed);
 
         }
 
@@ -339,7 +330,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             {
                 LCScanSetIMS scanset =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
 
-                double pressure = scanset.FramePressureFront;
+                double pressure = scanset.FramePressureSmoothed;
 
                 pressuresAfterAveraging.Add(frame, pressure);
             }

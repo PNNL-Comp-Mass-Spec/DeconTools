@@ -29,8 +29,8 @@ namespace DeconTools.Testing.ProblemCases
         {
             StringBuilder sb = new StringBuilder();
 
-            run.FrameSetCollection = FrameSetCollection.Create(run, startFrame, stopFrame, 1, 1);
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, 1, 1);
+            run.ScanSetCollection.Create(run, startFrame, stopFrame, 1, 1);
+            run.IMSScanSetCollection.Create(run, startScan, stopScan, 1, 1);
             
             UIMF_MSGenerator msgen = new UIMF_MSGenerator();
 

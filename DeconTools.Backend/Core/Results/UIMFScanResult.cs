@@ -12,9 +12,9 @@ namespace DeconTools.Backend.Core
         
         public int LCScanNum { get; set; }
 
-       public double FramePressureFront { get; set; }
+       public double FramePressureUnsmoothed { get; set; }
 
-        public double FramePressureBack { get; set; }
+        public double FramePressureSmoothed { get; set; }
 
       
     }

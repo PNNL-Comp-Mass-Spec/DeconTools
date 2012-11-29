@@ -31,9 +31,8 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-        public  double FramePressureFront { get; set; }
-
-        public double FramePressureBack { get; set; }
+        public  double FramePressureSmoothed { get; set; }
+        public double FramePressureUnsmoothed { get; set; }
 
         public double AvgTOFLength { get; set; }
 

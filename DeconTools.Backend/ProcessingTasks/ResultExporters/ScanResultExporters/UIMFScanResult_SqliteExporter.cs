@@ -66,11 +66,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     SQLiteParameter ticParam = new SQLiteParameter();
                     SQLiteParameter num_peaksParam = new SQLiteParameter();
                     SQLiteParameter num_deisotopedParam = new SQLiteParameter();
-                    SQLiteParameter frame_pressure_front = new SQLiteParameter();
-                    SQLiteParameter frame_pressure_back = new SQLiteParameter();
+                    SQLiteParameter framePressureUnsmoothed = new SQLiteParameter();
+                    SQLiteParameter framePressureSmoothed = new SQLiteParameter();
 
 
-                    mycommand.CommandText = "INSERT INTO T_IMS_Frames ([frame_num],[frame_time],[type],[bpi],[bpi_mz],[tic],[num_peaks],[num_deisotoped],[frame_pressure_front],[frame_pressure_back]) VALUES(?,?,?,?,?,?,?,?,?,?)";
+                    mycommand.CommandText = "INSERT INTO T_IMS_Frames ([frame_num],[frame_time],[type],[bpi],[bpi_mz],[tic],[num_peaks],[num_deisotoped],[frame_pressure_unsmoothed],[frame_pressure_smoothed]) VALUES(?,?,?,?,?,?,?,?,?,?)";
                     mycommand.Parameters.Add(frameNumParam);
                     mycommand.Parameters.Add(frameTimeParam);
                     mycommand.Parameters.Add(typeParam);
@@ -79,8 +79,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(ticParam);
                     mycommand.Parameters.Add(num_peaksParam);
                     mycommand.Parameters.Add(num_deisotopedParam);
-                    mycommand.Parameters.Add(frame_pressure_front);
-                    mycommand.Parameters.Add(frame_pressure_back);
+                    mycommand.Parameters.Add(framePressureUnsmoothed);
+                    mycommand.Parameters.Add(framePressureSmoothed);
 
 
                     for (int n = 0; n < rc.ScanResultList.Count; n++)
@@ -95,8 +95,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                         ticParam.Value = r.TICValue;
                         num_peaksParam.Value = r.NumPeaks;
                         num_deisotopedParam.Value = r.NumIsotopicProfiles;
-                        frame_pressure_front.Value = r.FramePressureFront;
-                        frame_pressure_back.Value = r.FramePressureBack;
+                        framePressureUnsmoothed.Value = r.FramePressureUnsmoothed;
+                        framePressureSmoothed.Value = r.FramePressureSmoothed;
 
                         mycommand.ExecuteNonQuery();
                     }

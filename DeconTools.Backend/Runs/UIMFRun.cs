@@ -319,10 +319,11 @@ namespace DeconTools.Backend.Runs
             double avgTOFLength = fp.AverageTOFLength;
             double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
-            double frameBackpressure = fp.PressureBack;
-            if (frameBackpressure != 0)
+            var framePressure = GetFramePressure(frameNum);
+            
+            if (framePressure != 0)
             {
-                driftTime = driftTime * (FramePressureStandard / frameBackpressure);  // correc
+                driftTime = driftTime * (FramePressureStandard / framePressure);  // correc
             }
 
             return driftTime;
@@ -374,7 +375,7 @@ namespace DeconTools.Backend.Runs
 
             foreach (LCScanSetIMS frame in ScanSetCollection.ScanSetList)
             {
-                if (double.IsNaN(frame.FramePressureFront))
+                if (double.IsNaN(frame.FramePressureSmoothed))
                 {
                     throw new ArgumentOutOfRangeException("Cannot smooth frame pressures.  You need to first populate frame pressures within the Frameset.");
                 }
@@ -412,7 +413,7 @@ namespace DeconTools.Backend.Runs
 
 
 
-                frame.FramePressureFront = GetAverageFramePressure(lowerFrame, upperFrame);
+                frame.FramePressureSmoothed = GetAverageFramePressure(lowerFrame, upperFrame);
 
 
             }
@@ -453,7 +454,7 @@ namespace DeconTools.Backend.Runs
             {
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryScanNumber);
                 frame.AvgTOFLength = fp.AverageTOFLength;
-                frame.FramePressureFront = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
+                frame.FramePressureUnsmoothed = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
 
             }
 

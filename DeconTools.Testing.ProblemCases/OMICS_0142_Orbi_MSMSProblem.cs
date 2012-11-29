@@ -21,7 +21,7 @@ namespace DeconTools.Testing.ProblemCases
             int stopScan = 10;
 
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, startScan, stopScan, 1, 1, true);
+            run.ScanSetCollection.Create(run, startScan, stopScan, 1, 1, true);
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
@@ -75,7 +75,7 @@ namespace DeconTools.Testing.ProblemCases
 
 
 
-            run.ScanSetCollection = ScanSetCollection.Create(run, 1, 10,
+            run.ScanSetCollection.Create(run, 1, 10,
                           parameters.HornTransformParameters.NumScansToSumOver * 2 + 1,
                           parameters.HornTransformParameters.NumScansToAdvance,
                           parameters.HornTransformParameters.ProcessMSMS);

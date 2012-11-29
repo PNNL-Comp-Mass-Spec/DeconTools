@@ -52,8 +52,8 @@ namespace DeconTools.Backend.FileIO
             fieldList.Add(new Field("tic", "FLOAT"));
             fieldList.Add(new Field("num_peaks", "UINT"));
             fieldList.Add(new Field("num_deisotoped", "UINT"));
-            fieldList.Add(new Field("frame_pressure_front", "FLOAT"));
-            fieldList.Add(new Field("frame_pressure_back", "FLOAT"));
+            fieldList.Add(new Field("frame_pressure_unsmoothed", "FLOAT"));
+            fieldList.Add(new Field("frame_pressure_smoothed", "FLOAT"));
 
             return fieldList;
         }
@@ -68,8 +68,8 @@ namespace DeconTools.Backend.FileIO
             dbParameters[5].Value = result.TICValue;
             dbParameters[6].Value = result.NumPeaks;
             dbParameters[7].Value = result.NumIsotopicProfiles;
-            dbParameters[8].Value = ((UimfScanResult)result).FramePressureFront;
-            dbParameters[9].Value = ((UimfScanResult)result).FramePressureBack;
+            dbParameters[8].Value = ((UimfScanResult)result).FramePressureUnsmoothed;
+            dbParameters[9].Value = ((UimfScanResult)result).FramePressureSmoothed;
         }
         #endregion
    

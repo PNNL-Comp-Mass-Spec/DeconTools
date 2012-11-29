@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
@@ -24,8 +21,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             this.FieldList.Add(new Field("tic", "FLOAT"));
             this.FieldList.Add(new Field("num_peaks", "UINT"));
             this.FieldList.Add(new Field("num_deisotoped", "UINT"));
-            this.FieldList.Add(new Field("frame_pressure_front", "FLOAT"));
-            this.FieldList.Add(new Field("frame_pressure_back", "FLOAT"));
+            this.FieldList.Add(new Field("frame_pressure_unsmoothed", "FLOAT"));
+            this.FieldList.Add(new Field("frame_pressure_smoothed", "FLOAT"));
 
         }
         #endregion

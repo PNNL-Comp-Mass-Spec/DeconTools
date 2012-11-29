@@ -51,8 +51,8 @@ namespace DeconTools.Backend.Data
                 fp.tic = uimfResult.TICValue;
                 fp.num_peaks = (uint)uimfResult.NumPeaks;
                 fp.num_deisotoped = (uint)uimfResult.NumIsotopicProfiles;
-                fp.frame_pressure_front = (float)uimfResult.FramePressureFront;
-                fp.frame_pressure_back = (float)uimfResult.FramePressureBack;
+                fp.frame_pressure_front = (float)uimfResult.FramePressureUnsmoothed;
+                fp.frame_pressure_back = (float)uimfResult.FramePressureSmoothed;
                 records.Add(fp);
                 count++;
                 if (count == 500)

@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             bool processMSMS = true;
 
-            run.ScanSetCollection .Create(run, startScan, stopScan, 1, 1, processMSMS);
+            run.ScanSetCollection.Create(run, startScan, stopScan, 1, 1, processMSMS);
 
             Assert.AreEqual(21, run.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(6000, run.ScanSetCollection.ScanSetList[0].PrimaryScanNumber);

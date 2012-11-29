@@ -97,8 +97,8 @@ namespace DeconTools.Backend.Workflows
                 {
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
-                    var unsummedScanset = new IMSScanSet(scanset.PrimaryScanNumber);
-                    uimfRun.CurrentIMSScanSet = unsummedScanset;
+                    var unsummedIMSScanset = new IMSScanSet(scanset.PrimaryScanNumber);
+                    uimfRun.CurrentIMSScanSet = unsummedIMSScanset;
 
                     _msGenerator.Execute(Run.ResultCollection);
 
@@ -372,16 +372,16 @@ namespace DeconTools.Backend.Workflows
             int minFrame = lcScanSet.getLowestScanNumber();
             int maxFrame = lcScanSet.getHighestScanNumber();
 
-            int minScan = imsScanSet.getLowestScanNumber();
-            int maxScan = imsScanSet.getHighestScanNumber();
+            int minIMSScan = imsScanSet.getLowestScanNumber();
+            int maxIMSScan = imsScanSet.getHighestScanNumber();
 
             double massTolerance = 0.2;
 
             var filteredUnsummedMSFeatures = (from n in _unsummedMSFeatures
-                                              where ((UIMFIsosResult)n).ScanSet.PrimaryScanNumber >= minFrame &&
-                                                    ((UIMFIsosResult)n).ScanSet.PrimaryScanNumber <= maxFrame &&
-                                                    n.ScanSet.PrimaryScanNumber >= minScan &&
-                                                    n.ScanSet.PrimaryScanNumber <= maxScan &&
+                                              where n.ScanSet.PrimaryScanNumber >= minFrame &&
+                                                    n.ScanSet.PrimaryScanNumber <= maxFrame &&
+                                                    ((UIMFIsosResult)n).IMSScanSet.PrimaryScanNumber >= minIMSScan &&
+                                                    ((UIMFIsosResult)n).IMSScanSet.PrimaryScanNumber <= maxIMSScan &&
                                                     n.IsotopicProfile.ChargeState == profile.IsotopicProfile.ChargeState &&
                                                     Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
                                                              profile.IsotopicProfile.MonoIsotopicMass) < massTolerance
@@ -426,7 +426,7 @@ namespace DeconTools.Backend.Workflows
             var unsummedAdjustedMSFeature = (from n in filteredUnsummedMSFeatures
                                              where
                                                  n.ScanSet.PrimaryScanNumber == lcScanSet.PrimaryScanNumber &&
-                                                 n.ScanSet.PrimaryScanNumber == imsScanSet.PrimaryScanNumber
+                                                 ((UIMFIsosResult)n).IMSScanSet.PrimaryScanNumber == imsScanSet.PrimaryScanNumber
                                              select n).FirstOrDefault();
 
 

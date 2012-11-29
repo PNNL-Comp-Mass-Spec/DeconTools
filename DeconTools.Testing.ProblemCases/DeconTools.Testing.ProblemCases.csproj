@@ -86,10 +86,8 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Issue0168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
-    <Compile Include="Issue0468_indexoutofBounds_demultiplexedUIMF.cs" />
     <Compile Include="Issue0531_FPGAUIMF_IndexingError.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
-    <Compile Include="OMCS_0135_UIMF_MS_indexOutOfRange.cs" />
     <Compile Include="OMCS_0149_MSMSNoScans.cs" />
     <Compile Include="OMCS_0274_failingOnShawnasDatasets.cs" />
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />

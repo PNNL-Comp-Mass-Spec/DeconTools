@@ -61,6 +61,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             correlator.GetElutionCorrelationData(chromdata1, chromdata2, out slope, out intercept, out rsquaredVal);
 
+            Console.WriteLine(mt);
+
             Console.WriteLine("slope = \t" + slope);
             Console.WriteLine("intercept = \t" + intercept);
             Console.WriteLine("rsquared = \t" + rsquaredVal);
@@ -68,7 +70,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             for (int i = 0; i < chromdata1.Xvalues.Length; i++)
             {
-                Console.WriteLine(chromdata1.Yvalues[i] + "\t" + chromdata2.Yvalues[i]);
+                Console.WriteLine(chromdata1.Xvalues[i] + "\t" + chromdata1.Yvalues[i] + "\t" + chromdata2.Yvalues[i]);
             }
 
 

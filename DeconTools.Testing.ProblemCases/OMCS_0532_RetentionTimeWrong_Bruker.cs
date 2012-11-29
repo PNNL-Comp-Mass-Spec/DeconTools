@@ -22,9 +22,9 @@ namespace DeconTools.Testing.ProblemCases
 
             var run = new RunFactory().CreateRun(dataset);
 
-            var scansetCollection = ScanSetCollection.Create(run, 1, 1, true);
+            run.ScanSetCollection.Create(run, 1, 1, true);
 
-            foreach (var scanSet in scansetCollection.ScanSetList)
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
 
