@@ -31,8 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowManagerCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.ProblemTesting", "DeconTools.Workflows\DeconTools.Workflows.ProblemTesting\DeconTools.Workflows.ProblemTesting.csproj", "{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowDemoProject", "..\SPIKES_Svn\TargetedWorkflowDemoProject\TargetedWorkflowDemoProject\TargetedWorkflowDemoProject.csproj", "{FE86153B-47F3-4998-87A1-6B23732E6FCD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
