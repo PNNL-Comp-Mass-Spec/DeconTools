@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
         [Test]
-        public void executorTest1()
+        public void Bruker9T_N14N15_executorTest1()
         {
             string testfile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\RawData\RSPH_PtoA_L_28_rep1_28Feb08_Raptor_08-01-01";
             string parameterFile =
@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         [Test]
-        public void executorTest2()
+        public void orbitrap_N14N15_executorTest2()
         {
             string testfile =
                 @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\RawData\RSPH_Ponly_28_A_8May12_Earth_12-03-11.raw";

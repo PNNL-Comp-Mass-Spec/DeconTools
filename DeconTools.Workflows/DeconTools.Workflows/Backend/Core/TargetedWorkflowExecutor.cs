@@ -268,6 +268,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 SetupLogging();
 
+                SetupAlignment();
+
                 ReportGeneralProgress("Started Processing....");
                 ReportGeneralProgress("Dataset = " + DatasetPath);
                 ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
@@ -316,6 +318,21 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
         }
+
+        private void SetupAlignment()
+        {
+            if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+            {
+                //
+                return;
+            }
+
+            if (!Directory.Exists(ExecutorParameters.AlignmentInfoFolder))
+            {
+                Directory.CreateDirectory(ExecutorParameters.AlignmentInfoFolder);
+            }
+        }
+
 
         protected virtual void SetupLogging()
         {

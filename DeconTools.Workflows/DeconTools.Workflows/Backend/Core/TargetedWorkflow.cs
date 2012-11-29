@@ -239,7 +239,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         /// <param name="workflowParameters"></param>
         /// <returns></returns>
-        protected static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
+        public static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
             ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
