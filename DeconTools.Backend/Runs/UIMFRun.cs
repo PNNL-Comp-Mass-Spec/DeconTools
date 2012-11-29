@@ -105,13 +105,26 @@ namespace DeconTools.Backend.Runs
 					_numOfConsecutiveMs2Frames = MS1Frames[1] - MS1Frames[0] - 1;
 				}
 
-				// Commenting this out since they are currently creating UIMF files that do not have the correct number of MS/MS scans at the end of the run
-				//if (numMs2Frames % numMs1Frames != 0)
-				//{
-				//    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: The number of MS2 frames (" + numMs2Frames + ") is not divisible by the number of MS1 frames (" + numMs1Frames + ").");
-				//}
+            	ValidateMSMSConsistency(MS1Frames);
             }
         }
+
+		/// <summary>
+		/// This method will verify that the number of MS/MS frame in between each MS1 frame stays constant throughout the UIMF file.
+		/// </summary>
+		/// <returns>True if the MS/MS data is valid. Otherwise, an exception is thrown.</returns>
+		private bool ValidateMSMSConsistency(IList<int> ms1Frames)
+		{
+			for(int i = 1; i < ms1Frames.Count; i++)
+			{
+				if(ms1Frames[i] - ms1Frames[i-1] - 1 != _numOfConsecutiveMs2Frames)
+				{
+					throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: An incorrect number of MS/MS frames were detected between MS1 Frame #s " + ms1Frames[i-1] + " and " + ms1Frames[i] + ".");
+				}
+			}
+
+			return true;
+		}
 
         private bool CheckRunForMSMSData()
         {
