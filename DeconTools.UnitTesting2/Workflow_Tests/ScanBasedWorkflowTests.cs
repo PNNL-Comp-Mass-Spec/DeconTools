@@ -283,13 +283,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             }
 
             var parameters = new OldDecon2LSParameters();
-            parameters.HornTransformParameters.NumFramesToSumOver = 1;
+            parameters.HornTransformParameters.NumFramesToSumOver = 3;
+			parameters.HornTransformParameters.NumScansToSumOver = 4;
             parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
             parameters.HornTransformParameters.ZeroFill = true;
             parameters.HornTransformParameters.ProcessMSMS = true;
             parameters.HornTransformParameters.UseScanRange = true;
+        	parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
             parameters.HornTransformParameters.MinScan = 1;    //min frame
-            parameters.HornTransformParameters.MaxScan = 2;    //max frame
+            parameters.HornTransformParameters.MaxScan = 15;    //max frame
 
            
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -301,10 +303,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             results = importer.Import();
 
             //TestUtilities.DisplayMSFeatures(results);
-            Assert.AreEqual(554, results.Count);
-            Assert.AreEqual(3990436, (int)results.Sum(p => p.IsotopicProfile.IntensityAggregate));
-
-
+			Assert.AreEqual(36078, results.Count);
+			Assert.AreEqual(1224247916, (int)results.Sum(p => p.IsotopicProfile.IntensityAggregate));
         }
 
 
