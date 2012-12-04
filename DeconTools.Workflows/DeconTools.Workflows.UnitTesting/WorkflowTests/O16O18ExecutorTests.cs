@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.FileIO;
+using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
@@ -14,6 +17,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void StandardO16O18Testing_VladAlz()
         {
+
+            //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
+
+
             string executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
@@ -23,11 +30,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-            int testTarget = 24653;
 
+            string autoSavedExecutorParametersFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
+            executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
+
+        
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
-            executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
+            //executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
+            int testTarget = 9282;
+            executor.Targets.TargetList =
+                executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
+
+            
             //executor.InitializeRun(testDatasetPath);
             //executor.TargetedWorkflow.Run = executor.Run;
 
@@ -43,6 +59,24 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //}
 
             executor.Execute();
+
+            string expectedResultsFilename = executorParameters.ResultsFolder + "\\" +
+                                             executor.TargetedWorkflow.Run.DatasetName + "_results.txt";
+
+            var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
+            Backend.Results.TargetedResultRepository repository = importer.Import();
+
+            Assert.AreEqual(3, repository.Results.Count);
+            var result1 = repository.Results[1] as O16O18TargetedResultDTO;
+
+            Assert.AreEqual(9282, result1.TargetID);
+            Assert.AreEqual(2, result1.ChargeState);
+            Assert.AreEqual(4541, result1.ScanLC);
+            Assert.AreEqual(0.32525m, (decimal)Math.Round(result1.NET, 5));
+            Assert.AreEqual(-0.001781m, (decimal)Math.Round(result1.NETError, 6));
+
+            Assert.AreEqual(0.283m, (decimal)Math.Round(result1.Ratio,3));
+
         }
 
 
