@@ -95,6 +95,7 @@
     <Compile Include="WorkflowTests\SipperExecutorParameterTests.cs" />
     <Compile Include="WorkflowTests\SipperExecutorTests.cs" />
     <Compile Include="WorkflowTests\SipperWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\SpecialOrNewCasesWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />

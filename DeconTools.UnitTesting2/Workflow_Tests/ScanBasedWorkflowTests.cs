@@ -189,6 +189,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
             string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
 
+            string expectedPeaksOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+
+
+
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -200,8 +204,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 File.Delete(expectedScansOutput);
             }
 
+            if (File.Exists(expectedPeaksOutput))
+            {
+                File.Delete(expectedPeaksOutput);
+            }
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
+            workflow.OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile = true;
             workflow.Execute();
 
 
@@ -209,6 +218,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             Assert.That(File.Exists(expectedIsosOutput));
             Assert.That(File.Exists(expectedScansOutput));
+            Assert.That(File.Exists(expectedPeaksOutput));
+
 
             IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.PNNL_UIMF);
             results = importer.Import();
