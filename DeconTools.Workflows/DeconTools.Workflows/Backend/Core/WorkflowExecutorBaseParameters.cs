@@ -7,11 +7,14 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public WorkflowExecutorBaseParameters()
         {
-            this.CopyRawFileLocal = false;
-            this.DeleteLocalDatasetAfterProcessing = false;
-            this.TargetedAlignmentIsPerformed = false;
+            CopyRawFileLocal = false;
+            DeleteLocalDatasetAfterProcessing = false;
+            TargetedAlignmentIsPerformed = false;
             TargetType = Globals.TargetType.DatabaseTarget;
-            
+
+
+            AlignmentInfoIsExported = true;
+            AlignmentFeaturesAreSavedToTextFile = true;
         }
         #endregion
 
@@ -31,8 +34,11 @@ namespace DeconTools.Workflows.Backend.Core
         public bool TargetedAlignmentIsPerformed { get; set; }
         public string TargetedAlignmentWorkflowParameterFile { get; set; }
         public string WorkflowParameterFile { get; set; }
+        public bool AlignmentInfoIsExported { get; set; }
+        public bool AlignmentFeaturesAreSavedToTextFile { get; set; }
         public string AlignmentInfoFolder { get; set; }
 
+        //public string ExportAlignmentFolder { get; set; }
 
         
         #endregion

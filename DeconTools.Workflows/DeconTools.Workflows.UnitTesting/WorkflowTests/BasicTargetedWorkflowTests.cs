@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
@@ -21,6 +22,35 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             
             //workflow.Execute();
         }
+
+
+        [Test]
+        public void parameterFileTest1()
+        {
+            var parameters = new BasicTargetedWorkflowParameters();
+
+            parameters.ChromGenSourceDataPeakBR = 2;
+            parameters.ChromGenSourceDataSigNoise = 3;
+            parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            parameters.ChromNETTolerance = 0.025;
+            parameters.ChromPeakDetectorPeakBR = 1;
+            parameters.ChromPeakDetectorSigNoise = 1;
+            parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.Smart;
+            parameters.ChromSmootherNumPointsInSmooth = 9;
+            parameters.ChromToleranceInPPM = 10;
+            parameters.ChromatogramCorrelationIsPerformed = true;
+            parameters.MSPeakDetectorPeakBR = 1.3;
+            parameters.MSPeakDetectorSigNoise = 3;
+            parameters.MSToleranceInPPM = 10;
+            parameters.NumMSScansToSum = 5;
+
+
+            string exportedParameterFilename =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\BasicTargetedWorkflowParameters1_autoexported.xml";
+            parameters.SaveParametersToXML(exportedParameterFilename);
+
+        }
+
 
 
 

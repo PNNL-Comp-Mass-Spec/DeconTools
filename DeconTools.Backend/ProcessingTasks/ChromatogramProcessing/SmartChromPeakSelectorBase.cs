@@ -1,5 +1,4 @@
-﻿#define DEBUG
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             internal void Display()
             {
-                Console.WriteLine(peak.XValue.ToString("0.00") + "\t" + peak.NETValue.ToString("0.0000") + "\t" + abundance + "\t" + fitScore.ToString("0.0000") + "\t" + i_score.ToString("0.000"));
+                Console.WriteLine(peak.XValue.ToString("0.00") + "\t" + peak.NETValue.ToString("0.0000") + "\t" + abundance + "\t" + fitScore.ToString("0.0000") + "\t" + i_score.ToString("0.000") + "\t"+ isIsotopicProfileFlagged);
             }
         }
 
@@ -150,6 +149,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     PeakQualityData pq = new PeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
+                    //GORD: someday we need to examine this and see how much summing will help. It will definitely hurt the speed.
                     bool sumLCScans = false;
                     SetScansForMSGenerator(chromPeak, resultList.Run, sumLCScans);
 

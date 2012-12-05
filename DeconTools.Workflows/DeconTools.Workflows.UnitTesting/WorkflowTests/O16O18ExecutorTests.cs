@@ -17,9 +17,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void StandardO16O18Testing_VladAlz()
         {
-
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
-
 
             string executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
@@ -30,14 +28,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-
             string autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
 
-        
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
-            //executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
             int testTarget = 9282;
             executor.Targets.TargetList =

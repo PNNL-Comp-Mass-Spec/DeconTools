@@ -23,8 +23,6 @@ namespace DeconTools.Workflows.Backend.Core
             this.ChromGenSourceDataSigNoise = 3;
 
 
-            this.AlignmentInfoIsExported = true;
-            this.FeaturesAreSavedToTextFile = true;
 
             this.NumDesiredMassTagsPerNETGrouping = 25;
             this.NumMaxAttemptsPerNETGrouping = 200;
@@ -54,11 +52,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public int NumMaxAttemptsPerNETGrouping { get; set; }
 
-        public bool AlignmentInfoIsExported { get; set; }
+      
 
-        public bool FeaturesAreSavedToTextFile { get; set; }
-
-        public string ExportAlignmentFolder { get; set; }
+        
 
         public string ImportedFeaturesFilename { get; set; }
 

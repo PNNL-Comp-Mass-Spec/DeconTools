@@ -519,7 +519,7 @@ namespace DeconTools.Backend.Core
         }
 
         
-
+        //GORD: look carefully here for any scan/NET skewing 
         protected  virtual float CalculateScanForNET(float net)
         {
             //need to find the two (scan,net) pairs that are the lower and upper boundaries of the input NET

@@ -123,15 +123,15 @@ namespace DeconTools.Workflows.Backend.Core
                 List<TargetedResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
                 firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
 
-                     List<double> ppmErrors = getMassErrors(firstPassResults);
-            List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
+                List<double> ppmErrors = getMassErrors(firstPassResults);
+                List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
 
                 bool canUseNarrowTolerances = executeDecisionOnUsingTightTolerances(filteredUsingGrubbsPPMErrors);
 
-              
-               
-               
+
+
+
 
                 if (canUseNarrowTolerances)
                 {
@@ -147,7 +147,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     progressString = "NOTE: using the new PPMTolerance=  " + this._parameters.ChromToleranceInPPM;
                     reportProgess(0, progressString);
-                    
+
                     _workflow = new BasicTargetedWorkflow(Run, _parameters);
 
                 }
@@ -165,22 +165,19 @@ namespace DeconTools.Workflows.Backend.Core
 
                     string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     reportProgess(0, progressString);
-                    
+
                     progressString = "Cannot use narrow ppm tolerances during NET/Mass alignment. Either the massError was too high or couldn't find enough strict matches.";
                     reportProgess(0, progressString);
 
                     // find a way to work with datasets with masses way off but low stdev
                 }
 
-                
+
                 resultsPassingCriteria = FindTargetsThatPassCriteria();
 
                 _targetedResultRepository.AddResults(resultsPassingCriteria);
 
-                if (_parameters.FeaturesAreSavedToTextFile)
-                {
-                    saveFeaturesToTextfile();
-                }
+
 
             }
 
@@ -189,12 +186,6 @@ namespace DeconTools.Workflows.Backend.Core
             if (canDoAlignment)
             {
                 doAlignment();
-
-                if (Run.AlignmentInfo != null)
-                {
-                    saveAlignmentData();
-                }
-
             }
 
         }
@@ -249,7 +240,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             var filteredMasstags = (from n in this.MassTagList
                                     where n.NormalizedElutionTime >= netgrouping1.Lower && n.NormalizedElutionTime < netgrouping1.Upper
-                                    orderby n.ObsCount descending select n);
+                                    orderby n.ObsCount descending
+                                    select n);
 
             int numPassingMassTagsInGrouping = 0;
             int numFailingMassTagsInGrouping = 0;
@@ -410,55 +402,25 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Private Methods
 
-        private void saveFeaturesToTextfile()
+        public void SaveFeaturesToTextfile(string outputFolder)
         {
-            string outputfolder;
-
-            if (_parameters.ExportAlignmentFolder == null || _parameters.ExportAlignmentFolder.Length == 0)
-            {
-                outputfolder = Run.DataSetPath;
-            }
-            else
-            {
-                outputfolder = _parameters.ExportAlignmentFolder;
-            }
-
-
-            string exportTargetedFeaturesFile = outputfolder + "\\" + Run.DatasetName + "_alignedFeatures.txt";
+            string exportTargetedFeaturesFile = outputFolder + "\\" + Run.DatasetName + "_alignedFeatures.txt";
 
             UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
         }
 
-        private void saveAlignmentData()
+        public void SaveAlignmentData(string outputFolder)
         {
-            if (_parameters.AlignmentInfoIsExported)
-            {
-                string outputfolder;
 
-                if (_parameters.ExportAlignmentFolder == null || _parameters.ExportAlignmentFolder.Length == 0)
-                {
-                    outputfolder = Run.DataSetPath;
-                }
-                else
-                {
-                    outputfolder = _parameters.ExportAlignmentFolder;
-                }
+            string exportNETAlignmentFilename = outputFolder + "\\" + Run.DatasetName + "_NETAlignment.txt";
+            string exportMZAlignmentFilename = outputFolder + "\\" + Run.DatasetName + "_MZAlignment.txt";
 
-                string exportNETAlignmentFilename = outputfolder + "\\" + Run.DatasetName + "_NETAlignment.txt";
-                string exportMZAlignmentFilename = outputfolder + "\\" + Run.DatasetName + "_MZAlignment.txt";
+            MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
+            mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
-                MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
-                mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
-
-                NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
-                netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
-
-
-                // AlignmentInfoToTextExporter
-
-
-            }
+            NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
+            netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
         }
 
         private void doAlignment()

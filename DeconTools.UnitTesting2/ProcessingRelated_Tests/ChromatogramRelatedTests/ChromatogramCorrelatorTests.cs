@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             XYData chromdata1 = run.XYData.TrimData(startScan, stopScan);
 
 
-            peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[1].XValue, chromToleranceInPPM);
+            peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[3].XValue, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
             
             XYData chromdata2 = run.XYData.TrimData(startScan, stopScan);
@@ -75,6 +75,68 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
         }
+
+
+        [Test]
+        public void BadCorrelationTest1()
+        {
+            string dataset =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
+
+            Run run = new RunFactory().CreateRun(dataset);
+
+            string peaksDataFile = dataset.ToLower().Replace(".raw", "_peaks.txt");
+            PeakImporterFromText peakImporter = new PeakImporterFromText(peaksDataFile);
+            peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+
+            double chromToleranceInPPM = 10;
+            int startScan = 2340;
+            int stopScan = 2440;
+
+            SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(9, 2);
+
+            double testMZVal1 = 719.80349;
+
+            PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(chromToleranceInPPM);
+            peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal1, chromToleranceInPPM);
+            run.XYData = smoother.Smooth(run.XYData);
+
+            XYData chromdata1 = run.XYData.TrimData(startScan, stopScan);
+
+            double testMZVal2 = 722.325;
+            peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal2, chromToleranceInPPM);
+            run.XYData = smoother.Smooth(run.XYData);
+
+            XYData chromdata2 = run.XYData.TrimData(startScan, stopScan);
+
+
+
+            //chromdata1.Display();
+            //Console.WriteLine();
+            //chromdata2.Display();
+
+            ChromatogramCorrelator correlator = new ChromatogramCorrelator();
+            double slope = 0;
+            double intercept = 0;
+            double rsquaredVal = 0;
+
+            correlator.GetElutionCorrelationData(chromdata1, chromdata2, out slope, out intercept, out rsquaredVal);
+
+           
+            Console.WriteLine("slope = \t" + slope);
+            Console.WriteLine("intercept = \t" + intercept);
+            Console.WriteLine("rsquared = \t" + rsquaredVal);
+
+
+            for (int i = 0; i < chromdata1.Xvalues.Length; i++)
+            {
+                Console.WriteLine(chromdata1.Xvalues[i] + "\t" + chromdata1.Yvalues[i] + "\t" + chromdata2.Yvalues[i]);
+            }
+
+
+        }
+
 
     }
 }

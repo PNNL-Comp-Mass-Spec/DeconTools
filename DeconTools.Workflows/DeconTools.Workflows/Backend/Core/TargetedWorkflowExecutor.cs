@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected TargetedResultRepository ResultRepository;
 
 
-        protected List<long> MassTagIDsinTargets = new List<long>(); 
+        protected List<long> MassTagIDsinTargets = new List<long>();
 
         protected WorkflowParameters _workflowParameters;
 
@@ -165,17 +165,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void UpdateTargetMissingInfo()
         {
-            
+
             bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
 
             List<int> massTagIDsAvailableForLookup = new List<int>();
 
             if (canUseReferenceMassTags)
             {
-                massTagIDsAvailableForLookup = MassTagsForReference.TargetList.Select(p => p.ID).ToList();    
+                massTagIDsAvailableForLookup = MassTagsForReference.TargetList.Select(p => p.ID).ToList();
             }
 
-            
+
 
 
             foreach (LcmsFeatureTarget target in Targets.TargetList)
@@ -184,7 +184,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (String.IsNullOrEmpty(target.EmpiricalFormula))
                 {
-                    if (canUseReferenceMassTags &&  massTagIDsAvailableForLookup.Contains(target.FeatureToMassTagID))
+                    if (canUseReferenceMassTags && massTagIDsAvailableForLookup.Contains(target.FeatureToMassTagID))
                     {
 
                         var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
@@ -226,7 +226,7 @@ namespace DeconTools.Workflows.Backend.Core
                     target.MonoIsotopicMass =
                         EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
 
-                    
+
 
                     target.MZ = target.MonoIsotopicMass / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
                 }
@@ -252,12 +252,12 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return expectedTargetsFile1;
             }
-            
+
             if (File.Exists(expectedTargetsFile2))
             {
                 return expectedTargetsFile2;
             }
-            
+
             return String.Empty;
         }
 
@@ -273,27 +273,27 @@ namespace DeconTools.Workflows.Backend.Core
                 ReportGeneralProgress("Started Processing....");
                 ReportGeneralProgress("Dataset = " + DatasetPath);
                 ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
-                
+
 
                 if (!RunIsInitialized)
                 {
                     InitializeRun(DatasetPath);
                 }
-                
+
                 ExecutePreProcessingHook();
-                
+
                 ProcessDataset();
 
                 ExecutePostProcessingHook();
 
                 ExportData();
 
-                
+
 
                 HandleAlignmentInfoFiles();
                 finalizeRun();
 
-                
+
 
             }
             catch (Exception ex)
@@ -356,7 +356,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-       
+
         public bool RunIsInitialized
         {
             get
@@ -366,7 +366,7 @@ namespace DeconTools.Workflows.Backend.Core
                     return false;
                 }
 
-                if (DatasetPath!= Run.DataSetPath)
+                if (DatasetPath != Run.DataSetPath)
                 {
                     return false;
                 }
@@ -407,6 +407,49 @@ namespace DeconTools.Workflows.Backend.Core
 
                 performAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
+
+                string outputFolderForAlignmentData;
+                if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+                {
+                    outputFolderForAlignmentData = Run.DataSetPath;
+                }
+                else
+                {
+                    outputFolderForAlignmentData = ExecutorParameters.AlignmentInfoFolder;
+                }
+
+                try
+                {
+                    if (!Directory.Exists(outputFolderForAlignmentData))
+                    {
+                        Directory.CreateDirectory(outputFolderForAlignmentData);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw new System.IO.IOException("Trying to create folder for saving alignment info, but experienced an error.\nError details:\n" + 
+                        ex.Message + "\nStackTrace: " + ex.StackTrace, ex);
+                }
+
+
+                if (ExecutorParameters.AlignmentFeaturesAreSavedToTextFile)
+                {
+
+                    TargetedAlignmentWorkflow.SaveFeaturesToTextfile(outputFolderForAlignmentData);
+                }
+
+                if (ExecutorParameters.AlignmentInfoIsExported)
+                {
+                    if (Run.AlignmentInfo != null)
+                    {
+                        TargetedAlignmentWorkflow.SaveAlignmentData(outputFolderForAlignmentData);
+                    }
+
+
+                }
+
+
                 ReportGeneralProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
                 ReportGeneralProgress("MassStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassStDev.ToString("0.00000"));
                 ReportGeneralProgress("NETAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.NETAverage.ToString("0.00000"));
@@ -416,7 +459,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.TargetedWorkflow.Run = Run;
 
-            
+
             ResultRepository.Results.Clear();
 
             int mtCounter = 0;
@@ -456,7 +499,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 #endif
 
-                string progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") +  "\tTarget " + mtCounter + " of " + totalTargets;
+                string progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
 
 
                 if (_backgroundWorker != null)
@@ -474,10 +517,10 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
 
-           
-           
 
-            
+
+
+
         }
 
 
@@ -495,12 +538,12 @@ namespace DeconTools.Workflows.Backend.Core
         /// <summary>
         /// This hook allows inheriting class to execute post processing methods. e.g. see TopDownTargetedWorkflowExecutor
         /// </summary>
-        protected virtual void ExecutePostProcessingHook() {}
-        
+        protected virtual void ExecutePostProcessingHook() { }
+
         /// <summary>
         /// This hook allows inheriting class to execute pre processing methods.
         /// </summary>
-        protected virtual void ExecutePreProcessingHook(){}
+        protected virtual void ExecutePreProcessingHook() { }
 
 
         protected virtual string GetOutputFileName()
@@ -513,7 +556,19 @@ namespace DeconTools.Workflows.Backend.Core
         #region Private Methods
         protected string getResultsFolder(string folder)
         {
-            DirectoryInfo dirinfo = new DirectoryInfo(folder);
+            string outputFolder;
+
+            if (string.IsNullOrEmpty(folder))
+            {
+                outputFolder = DatasetPath + Path.DirectorySeparatorChar + "Results";
+            }
+            else
+            {
+                outputFolder = folder;
+            }
+
+
+            DirectoryInfo dirinfo = new DirectoryInfo(outputFolder);
 
             if (!dirinfo.Exists)
             {
@@ -529,7 +584,7 @@ namespace DeconTools.Workflows.Backend.Core
             return GetMassTagTargets(massTagFileName, new List<int>());
         }
 
-        protected TargetCollection GetMassTagTargets(string massTagFileName, List<int>targetIDsToFilterOn)
+        protected TargetCollection GetMassTagTargets(string massTagFileName, List<int> targetIDsToFilterOn)
         {
             if (String.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
             {
@@ -632,17 +687,17 @@ namespace DeconTools.Workflows.Backend.Core
         protected void writeToLogFile(string stringToWrite)
         {
 
-			if (!string.IsNullOrEmpty(this._loggingFileName))
-			{
-				using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
-							  System.IO.FileAccess.Write, System.IO.FileShare.Read)))
-				{
-					sw.AutoFlush = true;
-					sw.WriteLine(stringToWrite);
-					sw.Flush();
+            if (!string.IsNullOrEmpty(this._loggingFileName))
+            {
+                using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
+                              System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+                {
+                    sw.AutoFlush = true;
+                    sw.WriteLine(stringToWrite);
+                    sw.Flush();
 
-				}
-			}
+                }
+            }
 
         }
 
@@ -767,17 +822,17 @@ namespace DeconTools.Workflows.Backend.Core
 
             //check and load chrom source data (_peaks.txt)
             bool peaksFileExists = checkForPeaksFile();
-			if (!peaksFileExists)
-			{
-				ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
+            if (!peaksFileExists)
+            {
+                ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
 
-				CreatePeaksForChromSourceData();
-				ReportGeneralProgress("Done creating _Peaks.txt file");
-			}
-			else
-			{
-				ReportGeneralProgress("Using existing _Peaks.txt file");
-			}
+                CreatePeaksForChromSourceData();
+                ReportGeneralProgress("Done creating _Peaks.txt file");
+            }
+            else
+            {
+                ReportGeneralProgress("Using existing _Peaks.txt file");
+            }
 
 
             ReportGeneralProgress("Peak loading started...");
@@ -853,7 +908,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            
+
 
             if (Run.MassIsAligned)
             {
@@ -903,7 +958,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        protected TargetCollection CreateTargets(Globals.TargetType targetType,string targetFilePath)
+        protected TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
         {
             if (string.IsNullOrEmpty(targetFilePath)) return null;
 
@@ -911,10 +966,10 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 case Globals.TargetType.LcmsFeature:
                     return GetLcmsFeatureTargets(targetFilePath);
-                    
+
                 case Globals.TargetType.DatabaseTarget:
                     return GetMassTagTargets(targetFilePath);
-                    
+
                 default:
                     throw new ArgumentOutOfRangeException("targetType");
             }
