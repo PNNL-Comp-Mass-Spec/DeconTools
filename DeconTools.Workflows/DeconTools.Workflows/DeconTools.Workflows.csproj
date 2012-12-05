@@ -55,6 +55,7 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\N14N15Workflow2.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\UIMFTargetedWorkflow1.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\UIMFWorkflowExecutor1.cs" />
     <Compile Include="Backend\Core\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\WorkflowBase.cs" />
