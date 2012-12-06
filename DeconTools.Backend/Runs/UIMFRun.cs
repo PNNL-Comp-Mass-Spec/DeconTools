@@ -267,8 +267,8 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int frameNum)
         {
-            if (MS1Frames.Contains(frameNum)) return 1;
-            if (MS2Frames.Contains(frameNum)) return 2;
+			if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
+			if (MS2Frames.BinarySearch(frameNum) >= 0) return 2;
 
             FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
             return (int)fp.FrameType;
@@ -296,6 +296,8 @@ namespace DeconTools.Backend.Runs
             int frameUpper = lcScanset.getHighestScanNumber();
             int scanLower = imsScanset.getLowestScanNumber();
             int scanUpper = imsScanset.getHighestScanNumber();
+
+			// TODO: If lowest and highest scan numbers are both 0, should we be summing the mass spectrum?
 
             double[] xvals = null;
             int[] yvals = null;

@@ -109,7 +109,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 {
                     int currentScanVal = (int) run.XYData.Xvalues[i];
 
-                    if (msScanList.Contains(currentScanVal))
+                    if (msScanList.BinarySearch(currentScanVal) >= 0)
                     {
                         filteredChromVals.Add(currentScanVal, run.XYData.Yvalues[i]);
                     }
