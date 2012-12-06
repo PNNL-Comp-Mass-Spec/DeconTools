@@ -1,5 +1,6 @@
 ﻿using System;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
@@ -49,69 +50,52 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         }
 
-        protected virtual void SetScansForMSGenerator(ChromPeak chromPeak, Run run, bool sumLCScans)
+        protected virtual void SetScansForMSGenerator(ChromPeak chromPeak, Run run, int numLCScansToSum)
         {
-            if (sumLCScans)
+			ScanSet scanset;
+
+            if (chromPeak == null || chromPeak.XValue == 0)
             {
-                if (chromPeak == null || chromPeak.XValue == 0)
-                {
-                    return;
-                    //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
-                }
-
-                var bestScan = (int)chromPeak.XValue;
-                bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-
-                ScanSet scanset;
-                switch (Parameters.SummingMode)
-                {
-                    case SummingModeEnum.SUMMINGMODE_STATIC:
-                        scanset = _scansetFactory.CreateScanSet(run, bestScan, Parameters.NumScansToSum);
-                        break;
-                    case SummingModeEnum.SUMMINGMODE_DYNAMIC:
-                        double sigma = chromPeak.Width / 2.35;
-
-                        int lowerScan = (int)Math.Round(chromPeak.XValue - (Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
-                        int closestLowerScan = run.GetClosestMSScan(lowerScan, Globals.ScanSelectionMode.CLOSEST);
-
-                        int upperScan = (int)Math.Round(chromPeak.XValue + (Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
-                        int closestUpperScan = run.GetClosestMSScan(upperScan, Globals.ScanSelectionMode.CLOSEST);
-
-                        scanset = _scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
-                        _scansetFactory.TrimScans(scanset, this.Parameters.MaxScansSummedInDynamicSumming);
-
-                        break;
-
-
-                    default:
-                        scanset = _scansetFactory.CreateScanSet(run, bestScan, this.Parameters.NumScansToSum);
-                        break;
-                }
-
-                run.CurrentScanSet = scanset;
-
-            }
-            else
-            {
-                if (chromPeak == null || chromPeak.XValue == 0)
-                {
-                    throw new ApplicationException("Trying to use chromPeak to create target scans for MSGenerator, but chromPeak is null");
-                }
-
-                int bestScan = (int)chromPeak.XValue;
-                bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-
-                int numScansToSum = 1;
-                var scanset = new ScanSetFactory().CreateScanSet(run, bestScan, numScansToSum);
-
-
-                run.CurrentScanSet = scanset;
-                
+                return;
+                //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
             }
 
+            var bestScan = (int)chromPeak.XValue;
+            bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
 
+            switch (Parameters.SummingMode)
+            {
+                case SummingModeEnum.SUMMINGMODE_STATIC:
+					scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
+                    break;
+                case SummingModeEnum.SUMMINGMODE_DYNAMIC:
+                    double sigma = chromPeak.Width / 2.35;
+
+                    int lowerScan = (int)Math.Round(chromPeak.XValue - (Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
+                    int closestLowerScan = run.GetClosestMSScan(lowerScan, Globals.ScanSelectionMode.CLOSEST);
+
+                    int upperScan = (int)Math.Round(chromPeak.XValue + (Parameters.AreaOfPeakToSumInDynamicSumming * sigma));
+                    int closestUpperScan = run.GetClosestMSScan(upperScan, Globals.ScanSelectionMode.CLOSEST);
+
+                    scanset = _scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
+                    _scansetFactory.TrimScans(scanset, this.Parameters.MaxScansSummedInDynamicSumming);
+
+                    break;
+
+
+                default:
+					scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
+                    break;
+            }
+
+			if (run.MSFileType == Globals.MSFileType.PNNL_UIMF)
+			{
+				// GORD: Update this when fixing CurrentFrameSet
+				throw new NotSupportedException("UIMF worflows should use a UIMF specific peak selector.");
+			}
+			
+			run.CurrentScanSet = scanset;
         }
-
 
         protected virtual void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {

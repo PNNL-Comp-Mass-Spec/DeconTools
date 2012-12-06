@@ -132,7 +132,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 #endif
 
-
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
             currentResult.NumQualityChromPeaks = -1;
 
@@ -145,13 +144,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 foreach (var chromPeak in peaksWithinTol)
                 {
-
                     PeakQualityData pq = new PeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
-                    //GORD: someday we need to examine this and see how much summing will help. It will definitely hurt the speed.
-                    bool sumLCScans = false;
-                    SetScansForMSGenerator(chromPeak, resultList.Run, sumLCScans);
+					// TODO: Currently hard-coded to sum only 1 scan
+                    SetScansForMSGenerator(chromPeak, resultList.Run, 1);
 
                     //This resets the flags and the scores on a given result
                     currentResult.ResetResult();
@@ -171,20 +168,17 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     //collect the results together
                     addScoresToPeakQualityData(pq, currentResult);
 
-
 #if DEBUG
 
                     pq.Display();
 #endif
-
                 }
 
                 //run a algorithm that decides, based on fit score mostly. 
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 
-
-            SetScansForMSGenerator(bestChromPeak, resultList.Run, true);
+            SetScansForMSGenerator(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
 
             UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
             
@@ -195,10 +189,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 currentResult.FailedResult = true;
                 currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
-
         }
-
-        
 
         #endregion
 

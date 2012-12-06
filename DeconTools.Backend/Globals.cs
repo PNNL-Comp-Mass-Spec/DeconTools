@@ -87,7 +87,7 @@ namespace DeconTools.Backend
             MostIntense,
             RelativeToOtherChromPeak,
             N15IntelligentMode,
-            
+            SmartUIMF
         }
 
 

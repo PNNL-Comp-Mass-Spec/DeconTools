@@ -71,7 +71,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             //}
 
 
-            SetScansForMSGenerator(bestPeak, resultList.Run, true);
+            SetScansForMSGenerator(bestPeak, resultList.Run, Parameters.NumScansToSum);
 
             UpdateResultWithChromPeakAndLCScanInfo(result, bestPeak);
             
