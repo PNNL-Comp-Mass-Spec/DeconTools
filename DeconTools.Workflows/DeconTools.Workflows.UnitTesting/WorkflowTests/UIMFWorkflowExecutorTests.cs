@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -39,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 		[Test]
-		public void TestUIMFTargetedMSMSWorkflow()
+		public void TestUIMFTargetedMSMSWorkflowSingleTarget()
 		{
 			string datasetPath = uimfMsMsFile;
 
@@ -50,8 +51,26 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			executorParameters.LoadParameters(executorParameterFilename);
 
 			var executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
-
 			executor.Execute();
+
+			//TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+		}
+
+		[Test]
+		public void TestUIMFTargetedMSMSWorkflow()
+		{
+			string datasetPath = uimfMsMsFile;
+
+			string executorParameterFilename =
+				@"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Parameters\UIMFTargetedMSMSWorkflowExecutorParametersMostConfidentMassTags.xml";
+
+			var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+			executorParameters.LoadParameters(executorParameterFilename);
+
+			var executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
+			executor.Execute();
+
+			//TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
 		}
 
     }

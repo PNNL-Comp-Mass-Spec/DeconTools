@@ -91,7 +91,9 @@ namespace DeconTools.Workflows.Backend.Core
 					case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
                 		workflowParameters = new TopDownTargetedWorkflowExecutorParameters();
                 		break;
-
+					case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
+						workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();
+                		break;
                     default:
                         workflowParameters = new BasicTargetedWorkflowParameters();
                         break;

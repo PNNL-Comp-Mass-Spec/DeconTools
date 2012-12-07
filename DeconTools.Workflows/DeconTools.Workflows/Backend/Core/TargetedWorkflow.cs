@@ -224,6 +224,9 @@ namespace DeconTools.Workflows.Backend.Core
                     throw new System.NotImplementedException("Cannot create this workflow type here.");
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
                     throw new System.NotImplementedException("Cannot create this workflow type here.");
+				case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
+					wf = new UIMFTargetedMSMSWorkflowCollapseIMS(workflowParameters as TargetedWorkflowParameters);
+            		break;
                 default:
                     wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;

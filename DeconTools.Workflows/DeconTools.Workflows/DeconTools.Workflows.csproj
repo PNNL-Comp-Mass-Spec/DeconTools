@@ -84,6 +84,7 @@
     <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\TopDownTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMSParameters.cs" />
     <Compile Include="Backend\Core\UIMFTargetedWorkflow1.cs" />
     <Compile Include="Backend\Core\UIMFTargetedWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\UIMFWorkflowExecutor1.cs" />
