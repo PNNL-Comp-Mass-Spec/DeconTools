@@ -305,7 +305,7 @@ namespace DeconTools.Backend.Runs
             var frameType = (DataReader.FrameType)GetMSLevel(lcScanset.PrimaryScanNumber);
 
             int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower,
-                frameUpper, frameType, scanLower, scanUpper, out xvals, out yvals);
+                frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
 
             if (xvals == null || xvals.Length == 0)
             {

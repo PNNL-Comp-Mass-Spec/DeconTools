@@ -46,8 +46,12 @@ namespace DeconTools.Backend.ProcessingTasks
             UIMFRun uimfRun = (UIMFRun)(run);
             Check.Require(uimfRun.CurrentFrameSet != null, "Cannot generate MS. Target FrameSet ('CurrentFrameSet') has not been assigned to the Run");
             Check.Require(uimfRun.CurrentIMSScanSet != null, "Cannot generate MS. Target ScanSet ('CurrentScanSet') has not been assigned to the Run");
-            
-            uimfRun.GetMassSpectrum(uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet, this.MinMZ, this.MaxMZ);
+
+			TargetedResultBase targetResult = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+			double targetMz = targetResult.Target.MZ;
+
+			// TODO: Kevin 10 is hard-coded. Is there a good m/z search range around the target m/z to look for to guarantee the entire isotopic profile will be extracted?
+			uimfRun.GetMassSpectrum(uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet, targetMz - 10, targetMz + 10);
 
             if (uimfRun.XYData.Xvalues == null || uimfRun.XYData.Xvalues.Length == 0)
             {
