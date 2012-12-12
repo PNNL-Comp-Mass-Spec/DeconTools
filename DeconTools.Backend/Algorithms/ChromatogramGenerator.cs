@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
+using PNNLOmics.Generic;
 
 namespace DeconTools.Backend.Algorithms
 {
@@ -223,8 +225,6 @@ namespace DeconTools.Backend.Algorithms
         {
             Check.Require(msPeakList != null && msPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
 
-
-
             int scanTolerance = 5;     // TODO:   keep an eye on this
 
             int indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
@@ -245,32 +245,25 @@ namespace DeconTools.Backend.Algorithms
                 double lowerMZ = targetMZ - toleranceInPPM * targetMZ / 1e6;
                 double upperMZ = targetMZ + toleranceInPPM * targetMZ / 1e6;
 
-
-
                 List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
-
-                if (!tempPeakList.Any())
+            	if (!tempPeakList.Any())
                 {
                     //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
                 }
                 else
                 {
                     XYData currentChromdata = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
-
                     chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromdata);
                 }
-
             }
 
             return chromData;
         }
 
-
-
-
         private XYData getChromDataAndFillInZerosAndAssignChromID(List<MSPeakResult> filteredPeakList, int chromID)
         {
+			int filteredPeakListCount = filteredPeakList.Count;
 
             int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
             int rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
@@ -293,36 +286,34 @@ namespace DeconTools.Backend.Algorithms
             }
 
             //iterate over the peaklist, assign chromID,  and extract intensity values
-            for (int i = 0; i < filteredPeakList.Count; i++)
+			for (int i = 0; i < filteredPeakListCount; i++)
             {
-                MSPeakResult p = filteredPeakList[i];
+                MSPeakResult peakResult = filteredPeakList[i];
 
                 //NOTE:   we assign the chromID here. 
-                p.ChromID = chromID;
+                peakResult.ChromID = chromID;
 
-                double intensity = p.MSPeak.Height;
+                double intensity = peakResult.MSPeak.Height;
+            	int scanNumber = peakResult.Scan_num;
 
                 //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
                 
-                if (!xyValues.ContainsKey(p.Scan_num))
+                if (!xyValues.ContainsKey(scanNumber))
                 {
-                   
-                    string errorString = "Unexpected error in chromatogram generator!! Scan= " + p.Scan_num +
-                                         "; num filtered peaks = " + filteredPeakList.Count;
+
+					string errorString = "Unexpected error in chromatogram generator!! Scan= " + scanNumber +
+										 "; num filtered peaks = " + filteredPeakListCount;
 
                     Console.WriteLine(errorString);
                     
                     throw new InvalidProgramException(errorString);
                 }
 
-                
-                if (intensity > xyValues[p.Scan_num])
+				if (intensity > xyValues[scanNumber])
                 {
-                    xyValues[p.Scan_num] = intensity;
+					xyValues[scanNumber] = intensity;
                 }
-
             }
-
 
             XYData outputXYData = new XYData();
 
@@ -330,8 +321,6 @@ namespace DeconTools.Backend.Algorithms
             outputXYData.Yvalues = xyValues.Values.ToArray();
 
             return outputXYData;
-
-
         }
 
         private XYData AddCurrentXYDataToBaseXYData(XYData baseData, XYData newdata)
