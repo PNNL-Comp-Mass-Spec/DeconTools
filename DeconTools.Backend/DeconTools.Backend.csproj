@@ -140,6 +140,7 @@
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
+    <Compile Include="Core\ChromPeakQualityData.cs" />
     <Compile Include="Core\IMSScanSet.cs" />
     <Compile Include="Core\IMSScanSetCollection.cs" />
     <Compile Include="Core\LCScanSetIMS.cs" />

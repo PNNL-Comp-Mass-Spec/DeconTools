@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
@@ -10,20 +11,21 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public TargetedResultBase()
         {
-
+			this.ChromPeakQualityList = new List<ChromPeakQualityData>();
         }
 
         public TargetedResultBase(TargetBase target)
         {
             this.Target = target;
             this.IsotopicProfile = new IsotopicProfile();
+			this.ChromPeakQualityList = new List<ChromPeakQualityData>();
         }
 
         #endregion
 
         #region Properties
 
-        public IList<ChromPeak> ChromPeaks { get; set; }
+		public IList<ChromPeakQualityData> ChromPeakQualityList { get; set; }
 
         public int NumChromPeaksWithinTolerance { get; set; }
 

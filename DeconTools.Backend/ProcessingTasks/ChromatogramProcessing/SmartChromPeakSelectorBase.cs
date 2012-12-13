@@ -20,35 +20,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
         protected MassTagFitScoreCalculator fitScoreCalc;
 
-        
-
-        protected class PeakQualityData
-        {
-
-            internal PeakQualityData(ChromPeak peak)
-            {
-                this.i_score = 1;     // worst possible
-                this.fitScore = 1;   // worst possible
-                this.abundance = 0;
-                this.peak = peak;
-                this.isotopicProfileFound = false;
-            }
-
-            internal ChromPeak peak;
-            internal bool isotopicProfileFound;
-            internal double fitScore;
-            internal double i_score;
-            internal double abundance;
-
-            internal bool isIsotopicProfileFlagged;
-
-
-            internal void Display()
-            {
-                Console.WriteLine(peak.XValue.ToString("0.00") + "\t" + peak.NETValue.ToString("0.0000") + "\t" + abundance + "\t" + fitScore.ToString("0.0000") + "\t" + i_score.ToString("0.000") + "\t"+ isIsotopicProfileFlagged);
-            }
-        }
-
         #region Constructors
         #endregion
 
@@ -58,7 +29,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         public TFFBase TargetedMSFeatureFinder { get; set; }
-
         
         private SmartChromPeakSelectorParameters _parameters;
         public override ChromPeakSelectorParameters Parameters
@@ -66,16 +36,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             get { return _parameters; }
             set { _parameters = value as SmartChromPeakSelectorParameters; }
         }
-
-
-
         #endregion
 
         #region Public Methods
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
-
 
             TargetedResultBase currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
@@ -86,7 +52,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
             TargetBase mt = resultList.Run.CurrentMassTag;
-
 
             float normalizedElutionTime;
 
@@ -99,12 +64,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
             }
 
-
-
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
-      
-
 
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
@@ -114,10 +75,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 }
             }
 
-
-            List<PeakQualityData> peakQualityList = new List<PeakQualityData>();
-
-            
+			List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
@@ -129,7 +87,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             Console.WriteLine("SmartPeakSelector --> NETTolerance= "+ Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
             Console.WriteLine("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
-
 #endif
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
@@ -144,7 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 foreach (var chromPeak in peaksWithinTol)
                 {
-                    PeakQualityData pq = new PeakQualityData(chromPeak);
+					ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
 					// TODO: Currently hard-coded to sum only 1 scan
@@ -169,7 +126,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     addScoresToPeakQualityData(pq, currentResult);
 
 #if DEBUG
-
                     pq.Display();
 #endif
                 }
@@ -177,6 +133,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 //run a algorithm that decides, based on fit score mostly. 
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
+
+			currentResult.ChromPeakQualityList = peakQualityList;
 
             SetScansForMSGenerator(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
 
@@ -196,22 +154,22 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #region Private Methods
 
 
-        private void addScoresToPeakQualityData(PeakQualityData pq, TargetedResultBase currentResult)
+		private void addScoresToPeakQualityData(ChromPeakQualityData pq, TargetedResultBase currentResult)
         {
             if (currentResult.IsotopicProfile == null)
             {
-                pq.isotopicProfileFound = false;
+                pq.IsotopicProfileFound = false;
                 return;
             }
             else
             {
-                pq.isotopicProfileFound = true;
-                pq.abundance = currentResult.IsotopicProfile.IntensityAggregate;
-                pq.fitScore = currentResult.Score;
-                pq.i_score = currentResult.InterferenceScore;
+                pq.IsotopicProfileFound = true;
+                pq.Abundance = currentResult.IsotopicProfile.IntensityAggregate;
+                pq.FitScore = currentResult.Score;
+                pq.InterferenceScore = currentResult.InterferenceScore;
 
                 bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
-                pq.isIsotopicProfileFlagged = resultHasFlags;
+                pq.IsIsotopicProfileFlagged = resultHasFlags;
             }
         }
 
@@ -225,12 +183,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
 
-        protected virtual ChromPeak determineBestChromPeak(List<PeakQualityData> peakQualityList, TargetedResultBase currentResult)
+		protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
         {
             var filteredList1 = (from n in peakQualityList
-                                 where n.isotopicProfileFound == true &&
-                                 n.fitScore < 1 && n.i_score < 1 &&
-                                 n.isIsotopicProfileFlagged == false
+                                 where n.IsotopicProfileFound == true &&
+                                 n.FitScore < 1 && n.InterferenceScore < 1 &&
+                                 n.IsIsotopicProfileFlagged == false
                                  select n).ToList();
 
             ChromPeak bestpeak;
@@ -245,16 +203,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else if (filteredList1.Count == 1)
             {
-                bestpeak = filteredList1[0].peak;
+                bestpeak = filteredList1[0].Peak;
             }
             else
             {
+                filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
-                filteredList1 = filteredList1.OrderBy(p => p.fitScore).ToList();
-
-
-
-                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].fitScore - filteredList1[1].fitScore);
+                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
                 bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
@@ -262,16 +217,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)
                     {
 
-                        if (filteredList1[0].abundance >= filteredList1[1].abundance)
+                        if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
                         {
-                            bestpeak = filteredList1[0].peak;
+                            bestpeak = filteredList1[0].Peak;
                         }
                         else
                         {
-                            bestpeak = filteredList1[1].peak;
+                            bestpeak = filteredList1[1].Peak;
                         }
-
-
                     }
                     else
                     {
@@ -282,17 +235,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 }
                 else
                 {
-                    bestpeak = filteredList1[0].peak;
+                    bestpeak = filteredList1[0].Peak;
                 }
-
-
-
             }
 
             return bestpeak;
         }
-
-
-
     }
 }
