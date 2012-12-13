@@ -89,7 +89,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
 
-
             bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
             string currentTargetsFilePath;
@@ -333,7 +332,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void SetupAlignment()
+        protected void SetupAlignment()
         {
             if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
             {
@@ -380,15 +379,13 @@ namespace DeconTools.Workflows.Backend.Core
                     return false;
                 }
 
-                if (DatasetPath != Run.DataSetPath)
+                if (!DatasetPath.Contains(Run.DataSetPath))
                 {
                     return false;
                 }
 
                 return true;
-
             }
-
         }
 
 
@@ -715,7 +712,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void HandleAlignmentInfoFiles()
+        protected void HandleAlignmentInfoFiles()
         {
             FileAttributes attr = File.GetAttributes(Run.Filename);
 
