@@ -47,6 +47,18 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
+		public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+		{
+			this.DatasetPath = datasetPath;
+
+			_backgroundWorker = backgroundWorker;
+
+			this.WorkflowParameters = workflowExecutorParameters;
+			_workflowParameters = workflowParameters;
+
+			ResultRepository = new TargetedResultRepository();
+			InitializeWorkflow();
+		}
 
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
         {
@@ -102,11 +114,13 @@ namespace DeconTools.Workflows.Backend.Core
                 UpdateTargetMissingInfo();
             }
 
+			if (_workflowParameters == null)
+			{
+				_workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
+				_workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
+			}
 
-            _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
-            _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
-
-            if (ExecutorParameters.TargetedAlignmentIsPerformed)
+        	if (ExecutorParameters.TargetedAlignmentIsPerformed)
             {
                 if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
                 {
