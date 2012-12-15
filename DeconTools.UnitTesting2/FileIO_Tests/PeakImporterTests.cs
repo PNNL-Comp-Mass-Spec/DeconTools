@@ -37,7 +37,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(1, testResult.Scan_num);
             Assert.AreEqual(386.74464, (decimal)testResult.MSPeak.XValue);
             Assert.AreEqual(49599, testResult.MSPeak.Height);
-            Assert.AreEqual(199.19, (decimal)testResult.MSPeak.SN);
+            Assert.AreEqual(199.19, (decimal)testResult.MSPeak.SignalToNoise);
             Assert.AreEqual(-1, testResult.MSPeak.MSFeatureID);
 
            // 43	800	213	357.38662	1528	0.071	100	16

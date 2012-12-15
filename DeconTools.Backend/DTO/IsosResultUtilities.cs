@@ -219,7 +219,7 @@ namespace DeconTools.Backend.DTO
         {
             foreach (IsosResult result in isosResults)
             {
-                result.IsotopicProfile.IntensityAggregate = result.IsotopicProfile.GetMonoAbundance();
+                result.IntensityAggregate = result.IsotopicProfile.GetMonoAbundance();
             }
         }
 
@@ -481,19 +481,19 @@ namespace DeconTools.Backend.DTO
             sb.Append("\n");
 
 
-            sb.Append("intensity 0 - 200000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate < 200000));
+            sb.Append("intensity 0 - 200000 \t" + inputList.Count(p => p.IntensityAggregate < 200000));
             sb.Append("\n");
-            sb.Append("intensity 200000 - 500000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate >= 200000 && p.IsotopicProfile.IntensityAggregate < 5e5));
+            sb.Append("intensity 200000 - 500000 \t" + inputList.Count(p => p.IntensityAggregate >= 200000 && p.IntensityAggregate < 5e5));
             sb.Append("\n");
-            sb.Append("intensity 500000 - 1000000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate >= 500000 && p.IsotopicProfile.IntensityAggregate < 1e6));
+            sb.Append("intensity 500000 - 1000000 \t" + inputList.Count(p => p.IntensityAggregate >= 500000 && p.IntensityAggregate < 1e6));
             sb.Append("\n");
-            sb.Append("intensity 1000000 - 2000000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate >= 1e6 && p.IsotopicProfile.IntensityAggregate < 2e6));
+            sb.Append("intensity 1000000 - 2000000 \t" + inputList.Count(p => p.IntensityAggregate >= 1e6 && p.IntensityAggregate < 2e6));
             sb.Append("\n");
-            sb.Append("intensity 2000000 - 4000000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate >= 2e6 && p.IsotopicProfile.IntensityAggregate < 4e6));
+            sb.Append("intensity 2000000 - 4000000 \t" + inputList.Count(p => p.IntensityAggregate >= 2e6 && p.IntensityAggregate < 4e6));
             sb.Append("\n");
-            sb.Append("intensity 4000000 - 8000000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate >= 4e6 && p.IsotopicProfile.IntensityAggregate < 8e6));
+            sb.Append("intensity 4000000 - 8000000 \t" + inputList.Count(p => p.IntensityAggregate >= 4e6 && p.IntensityAggregate < 8e6));
             sb.Append("\n");
-            sb.Append("intensity > 8000000 \t" + inputList.Count(p => p.IsotopicProfile.IntensityAggregate > 8e6));
+            sb.Append("intensity > 8000000 \t" + inputList.Count(p => p.IntensityAggregate > 8e6));
             sb.Append("\n");
 
 
@@ -523,7 +523,7 @@ namespace DeconTools.Backend.DTO
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.MonoPeakMZ);
                 sb.Append("\t");
-                sb.Append(result.IsotopicProfile.IntensityAggregate);
+                sb.Append(result.IntensityAggregate);
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.OriginalIntensity);
                 sb.Append("\t");

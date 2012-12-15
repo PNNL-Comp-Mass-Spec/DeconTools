@@ -7,6 +7,7 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters;
@@ -223,9 +224,8 @@ namespace DeconTools.Backend.Workflows
 
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(OldDecon2LsParameters.HornTransformParameters.NumZerosToFill);
-            Smoother = new DeconToolsSavitzkyGolaySmoother(OldDecon2LsParameters.HornTransformParameters.SGNumLeft,
-                OldDecon2LsParameters.HornTransformParameters.SGNumRight,
-                OldDecon2LsParameters.HornTransformParameters.SGOrder);
+            Smoother = new SavitzkyGolaySmoother(OldDecon2LsParameters.HornTransformParameters.SGNumLeft+
+                OldDecon2LsParameters.HornTransformParameters.SGNumRight +1, OldDecon2LsParameters.HornTransformParameters.SGOrder);
 
             FitScoreCalculator = new DeconToolsFitScoreCalculator();
             ScanResultUpdater = new ScanResultUpdater(OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);

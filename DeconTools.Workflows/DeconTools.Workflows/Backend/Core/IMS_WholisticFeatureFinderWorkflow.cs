@@ -8,6 +8,7 @@ using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Runs;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -29,7 +30,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         DeconToolsPeakDetector MasterPeakListPeakDetector { get; set; }
 
-        public DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother ChromSmoother { get; set; }
+        public SavitzkyGolaySmoother ChromSmoother { get; set; }
         public ChromPeakDetector ChromPeakDetector { get; set; }
 
         public ChromatogramGenerator ChromGenerator { get; set; }
@@ -91,11 +92,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.DriftTimeProfileExtractionPPMTolerance = 15;
 
-            this.ChromSmoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother();
-            this.ChromSmoother.LeftParam = 11;
-            this.ChromSmoother.RightParam = 11;
-            this.ChromSmoother.Order = 2;
-
+            this.ChromSmoother = new SavitzkyGolaySmoother(23,2);
             this.ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
 
 

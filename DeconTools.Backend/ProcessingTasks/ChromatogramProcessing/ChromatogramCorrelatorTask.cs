@@ -9,7 +9,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
     public class ChromatogramCorrelatorTask : Task
     {
         private ChromatogramCorrelator _chromatogramCorrelator = new ChromatogramCorrelator();
-        private DeconToolsSavitzkyGolaySmoother _smoother;
+        private SavitzkyGolaySmoother _smoother;
         private PeakChromatogramGenerator _peakChromGen;
         
         #region Constructors
@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             _chromatogramCorrelator = new ChromatogramCorrelator();
 
-            _smoother = new DeconToolsSavitzkyGolaySmoother(1, 1, 2);
+            _smoother = new SavitzkyGolaySmoother(3, 2);
 
             ChromToleranceInPPM = 20;
 

@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             double mzOffset = result.IsotopicProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-            XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(theorProfile, result.IsotopicProfile.GetFWHM());
+            XYData theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(result.IsotopicProfile.GetFWHM());
             //theorXYData.Display();
 
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp

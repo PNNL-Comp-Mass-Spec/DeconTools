@@ -1,4 +1,5 @@
 ﻿using System;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
@@ -100,12 +101,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
             executor.Execute();
 
-            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+            TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
 
-            foreach (var chromPeak in executor.TargetedWorkflow.ChromPeaksDetected)
-            {
-                Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
-            }
+            //foreach (var chromPeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            //{
+            //    Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
+            //}
 
         }
 

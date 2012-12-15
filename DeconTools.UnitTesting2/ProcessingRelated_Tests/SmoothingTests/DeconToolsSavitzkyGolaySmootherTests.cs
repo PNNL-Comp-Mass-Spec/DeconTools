@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             Assert.AreEqual(82, run.PeakList.Count);
 
-            Task smoother = new DeconToolsSavitzkyGolaySmoother(3, 3, 2);
+            Task smoother = new SavitzkyGolaySmoother(7, 2);
             smoother.Execute(run.ResultCollection);
 
             peakdetector.Execute(run.ResultCollection);

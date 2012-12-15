@@ -273,7 +273,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             bool isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
-                iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+                //GORD: check this later
+                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
             }
             else
             {
@@ -332,7 +333,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 iso.ChargeState = mt.ChargeState;
                 iso.MonoIsotopicMass = (iso.GetMZ() - Globals.PROTON_MASS) * mt.ChargeState;
-                iso.IntensityAggregate = iso.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
+                iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
             }
         }
         private Peak findMostIntensePeak(List<Peak> peaksWithinTol, double targetMZ)

@@ -122,7 +122,7 @@ namespace DeconTools.Backend.Workflows
                     foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                     {
 
-                        bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
+                        bool isPossiblySaturated = isosResult.IntensityAggregate >
                                                    OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
 
@@ -184,7 +184,7 @@ namespace DeconTools.Backend.Workflows
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
 
-                        bool isPossiblySaturated = isosResult.IsotopicProfile.IntensityAggregate >
+                        bool isPossiblySaturated = isosResult.IntensityAggregate >
                                                       OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
 
                        
@@ -292,7 +292,7 @@ namespace DeconTools.Backend.Workflows
         //        sb.Append(uimfIsosResult.FrameSet.PrimaryFrame + "\t" + uimfIsosResult.ScanSet.PrimaryScanNumber + "\t" +
         //                  uimfIsosResult.IsotopicProfile.MonoIsotopicMass.ToString("0.000") + "\t" +
         //                  uimfIsosResult.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" +
-        //                  uimfIsosResult.IsotopicProfile.IntensityAggregate + "\n");
+        //                  uimfIsosResult.IntensityAggregate + "\n");
 
         //    }
         //    Console.WriteLine(sb.ToString());
@@ -395,7 +395,7 @@ namespace DeconTools.Backend.Workflows
             //if (filteredUnsummedMSFeatures.Count > 2)
             //{
             //    var higherAbundanceFeatures =
-            //        (from n in filteredUnsummedMSFeatures where n.IsotopicProfile.IntensityAggregate > 100000 select n).
+            //        (from n in filteredUnsummedMSFeatures where n.IntensityAggregate > 100000 select n).
             //            ToList();
 
             //    if (higherAbundanceFeatures.Count>0)
@@ -433,27 +433,27 @@ namespace DeconTools.Backend.Workflows
 
             profile.IsotopicProfile.OriginalIntensity = unsummedAdjustedMSFeature == null
                                                             ? 0
-                                                            : unsummedAdjustedMSFeature.IsotopicProfile.
+                                                            : unsummedAdjustedMSFeature.
                                                                   IntensityAggregate;
 
 
 
-            var adjustedIntensity = filteredUnsummedMSFeatures.Sum(p => p.IsotopicProfile.IntensityAggregate);
+            var adjustedIntensity = filteredUnsummedMSFeatures.Sum(p => p.IntensityAggregate);
 
             //TODO: remove this debug code later
             //if (unsummedAdjustedMSFeature == null)
             //{
-            //    Console.WriteLine(profile.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" + profile.IsotopicProfile.ChargeState + "\t" + frameSet.PrimaryFrame + "\t" + scanSet.PrimaryScanNumber + "\t" + profile.IsotopicProfile.IntensityAggregate + "\t" + adjustedIntensity + "\t" +  "0");
+            //    Console.WriteLine(profile.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" + profile.IsotopicProfile.ChargeState + "\t" + frameSet.PrimaryFrame + "\t" + scanSet.PrimaryScanNumber + "\t" + profile.IntensityAggregate + "\t" + adjustedIntensity + "\t" +  "0");
             //}
             //else
             //{
-            //    Console.WriteLine(profile.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" + profile.IsotopicProfile.ChargeState + "\t" + frameSet.PrimaryFrame + "\t" + scanSet.PrimaryScanNumber + "\t" + profile.IsotopicProfile.IntensityAggregate + "\t" + adjustedIntensity +"\t" + unsummedAdjustedMSFeature.IsotopicProfile.IntensityAggregate);
+            //    Console.WriteLine(profile.IsotopicProfile.MonoPeakMZ.ToString("0.000") + "\t" + profile.IsotopicProfile.ChargeState + "\t" + frameSet.PrimaryFrame + "\t" + scanSet.PrimaryScanNumber + "\t" + profile.IntensityAggregate + "\t" + adjustedIntensity +"\t" + unsummedAdjustedMSFeature.IntensityAggregate);
             //}
 
-            if (adjustedIntensity > profile.IsotopicProfile.IntensityAggregate)
+            if (adjustedIntensity > profile.IntensityAggregate)
             {
                 profile.IsotopicProfile.IsSaturated = true;
-                profile.IsotopicProfile.IntensityAggregate = adjustedIntensity;
+                profile.IntensityAggregate = adjustedIntensity;
 
                 if (filteredUnsummedMSFeatures.Count > 0)
                 {
@@ -539,7 +539,7 @@ namespace DeconTools.Backend.Workflows
                 }
             }
 
-            iso.IntensityAggregate = iso.getMostIntensePeak().Height;
+            iso.IntensityMostAbundant= iso.getMostIntensePeak().Height;
 
             UpdateMonoisotopicMassData(iso);
 

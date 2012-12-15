@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
-using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
@@ -44,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.ChargeState);
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetAbundance());
+            sb.Append(result.IntensityAggregate);
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.GetMZofMostAbundantPeak().ToString("0.#####"));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(Delimiter);

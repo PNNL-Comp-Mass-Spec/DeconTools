@@ -176,7 +176,7 @@ namespace DeconTools.Backend.FileIO
             PeptideTarget mt = new PeptideTarget();
             mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" }, lineData, "0"));
 
-            mt.ID = parseIntField(getValue(new string[] { "id", "mass_tag_id", "massTagid" }, lineData, "-1"));
+            mt.ID = parseIntField(getValue(new string[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1"));
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
             mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
 
@@ -193,11 +193,9 @@ namespace DeconTools.Backend.FileIO
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
             }
 
-
-
             mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
             mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
-            mt.EmpiricalFormula = getValue(new string[] { "formula", "empirical_formula" }, lineData, "");
+            mt.EmpiricalFormula = getValue(new string[] { "formula", "empirical_formula", "empiricalformula"}, lineData, "");
             mt.ModCount = parseShortField(getValue(new string[] { "modCount", "mod_count" }, lineData, "0"));
             mt.ModDescription = getValue(new string[] { "mod", "mod_description" }, lineData, "");
             if (mt.ChargeState == 0)

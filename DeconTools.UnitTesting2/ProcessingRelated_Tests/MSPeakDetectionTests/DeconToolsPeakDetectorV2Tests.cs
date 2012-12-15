@@ -168,28 +168,35 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             Console.WriteLine(sb.ToString());
 
 
-            //Assert.AreEqual(oldPeaks.Count, peaks.Count);
+            Assert.AreEqual(oldPeaks.Count, peaks.Count);
 
-            //for (int i = 0; i < oldPeaks.Count; i++)
-            //{
-            //    var oldpeakMz = (decimal)Math.Round(oldPeaks[i].XValue, 4);
-            //    var newPeakMz = (decimal)Math.Round(peaks[i].XValue, 4);
+            for (int i = 0; i < oldPeaks.Count; i++)
+            {
+                var oldpeakMz = (decimal)Math.Round(oldPeaks[i].XValue, 4);
+                var newPeakMz = (decimal)Math.Round(peaks[i].XValue, 4);
 
-            //    var oldPeakIntensity = (decimal)Math.Round(oldPeaks[i].Height, 0);
-            //    var newPeakIntensity = (decimal)Math.Round(peaks[i].Height, 0);
+                var oldPeakIntensity = (decimal)Math.Round(oldPeaks[i].Height, 0);
+                var newPeakIntensity = (decimal)Math.Round(peaks[i].Height, 0);
 
-            //    var oldPeakWidth = (decimal)Math.Round(oldPeaks[i].Width, 4);
-            //    var newPeakWidth = (decimal)Math.Round(peaks[i].Width, 4);
+                var oldPeakWidth = (decimal)Math.Round(oldPeaks[i].Width, 4);
+                var newPeakWidth = (decimal)Math.Round(peaks[i].Width, 4);
 
-            //    var oldPeakMaxIndex = oldPeaks[i].DataIndex;
-            //    var newPeakMaxIndex = peaks[i].DataIndex;
+                var oldPeakMaxIndex = oldPeaks[i].DataIndex;
+                var newPeakMaxIndex = peaks[i].DataIndex;
 
 
-            //    Assert.AreEqual(oldpeakMz, newPeakMz);
-            //    Assert.AreEqual(oldPeakIntensity, newPeakIntensity);
-            //    Assert.AreEqual(oldPeakWidth, newPeakWidth);
-            //    Assert.AreEqual(oldPeakMaxIndex, newPeakMaxIndex);
-            //}
+                var percentDiffBetweenIntensities =
+                    Math.Abs((oldPeakIntensity - newPeakIntensity)/newPeakIntensity*100);
+
+                var mzDiffBetweenOldAndNew = Math.Abs(oldpeakMz - newPeakMz);
+                ;
+
+
+                Assert.IsTrue(mzDiffBetweenOldAndNew<0.0002m);
+                Assert.IsTrue(percentDiffBetweenIntensities<0.01m);
+                //Assert.AreEqual(oldPeakWidth, newPeakWidth);
+                Assert.AreEqual(oldPeakMaxIndex, newPeakMaxIndex);
+            }
 
 
             //TestUtilities.DisplayPeaks(peaks);
@@ -199,6 +206,61 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             //TestUtilities.DisplayXYValues(run.XYData);
+        }
+
+
+        public void NewPeakDetectorExecuteTest1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSet scan = new ScanSet(6005);
+
+
+
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            peakDetector.PeakToBackgroundRatio = 1.3;
+            peakDetector.SignalToNoiseThreshold = 2;
+            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
+            peakDetector.IsDataThresholded = true;
+
+            run.CurrentScanSet = scan;
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+
+            Assert.IsTrue(run.CurrentBackgroundIntensity > 0);
+            Assert.AreEqual(run.CurrentBackgroundIntensity, peakDetector.BackgroundIntensity);
+
+        }
+
+
+        public void CheckBackgroundIntensityTest1()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSet scan = new ScanSet(6005);
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            peakDetector.PeakToBackgroundRatio = 1.3;
+            peakDetector.SignalToNoiseThreshold = 2;
+            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
+            peakDetector.IsDataThresholded = true;
+
+
+            DeconToolsPeakDetector oldPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            peakDetector.IsDataThresholded = true;
+
+            run.CurrentScanSet = scan;
+            msgen.Execute(run.ResultCollection);
+
+            peakDetector.Execute(run.ResultCollection);
+            oldPeakDetector.Execute(run.ResultCollection);
+
+            //Assert.AreEqual(peakDetector.BackgroundIntensity, oldPeakDetector.BackgroundIntensity);
+
         }
 
 

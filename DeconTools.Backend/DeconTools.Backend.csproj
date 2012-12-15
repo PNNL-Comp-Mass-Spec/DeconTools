@@ -60,7 +60,7 @@
       <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.4588.24277, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2, Version=1.0.4408.30259, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
@@ -146,6 +146,7 @@
     <Compile Include="Core\LCScanSetIMS.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorUIMF.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
     <Compile Include="ProcessingTasks\Smoothers\SavitzkyGolaySmoother.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />
     <Compile Include="Core\ChromCorrelationData.cs" />
@@ -280,7 +281,7 @@
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
     <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />
-    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetectorOld.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\N14N15QuantifierTask.cs" />
     <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
     <Compile Include="Data\Importers\IsosImporter.cs" />

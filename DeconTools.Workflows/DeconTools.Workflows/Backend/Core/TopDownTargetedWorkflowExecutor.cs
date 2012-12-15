@@ -116,7 +116,7 @@ namespace DeconTools.Workflows.Backend.Core
 	                sb.Append(delimiter);
 	                sb.Append(result.Score);
 	                sb.Append(delimiter);
-	                sb.Append(result.IsotopicProfile == null ? 0 : result.IsotopicProfile.IntensityAggregate);
+	                sb.Append(result.IsotopicProfile == null ? 0 : result.IntensityAggregate);
 
 	                sb.Append(Environment.NewLine);
 

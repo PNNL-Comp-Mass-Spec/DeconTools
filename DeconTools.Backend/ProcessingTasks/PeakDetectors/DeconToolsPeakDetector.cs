@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconToolsV2.Peaks;
 
 
@@ -148,7 +149,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 MSPeak peak = new MSPeak();
                 peak.XValue = peaklist[i].mdbl_mz;
                 peak.Height = (int)peaklist[i].mdbl_intensity;
-                peak.SN = (float)peaklist[i].mdbl_SN;
+                peak.SignalToNoise = (float)peaklist[i].mdbl_SN;
                 peak.Width = (float)peaklist[i].mdbl_FWHM;
 
                 peak.DataIndex = peaklist[i].mint_data_index;      // this points to the index value of the raw xy values - I think
@@ -225,12 +226,19 @@ namespace DeconTools.Backend.ProcessingTasks
 
             resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
 
-            resultList.Run.CurrentBackgroundIntensity = BackgroundIntensity;
+            
+        }
+
+
+        protected override void ExecutePostProcessingHook(Run run)
+        {
+            base.ExecutePostProcessingHook(run);
 
             if (PeaksAreStored)
             {
-                resultList.FillMSPeakResults();
+                run.ResultCollection.FillMSPeakResults();
             }
+
         }
 
         

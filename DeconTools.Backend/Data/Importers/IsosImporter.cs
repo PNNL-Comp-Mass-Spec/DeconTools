@@ -138,7 +138,12 @@ namespace DeconTools.Backend.Data
             result.IsotopicProfile.ChargeState = parseIntField(lookup(processedData, headers, "charge"));
             result.IsotopicProfile.MonoIsotopicMass = parseDoubleField(lookup(processedData, headers, "monoisotopic_mw"));
             result.IsotopicProfile.Score = parseDoubleField(lookup(processedData, headers, "fit"));
-            result.IsotopicProfile.IntensityAggregate = parseDoubleField(lookup(processedData, headers, "abundance"));
+            result.IntensityAggregate = parseFloatField(lookup(processedData, headers, "abundance"));
+
+            //result.IsotopicProfile.IntensityMostAbundant = parseFloatField(lookup(processedData, headers, "abundance"));
+            
+
+
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
             result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
             result.IsotopicProfile.OriginalIntensity = parseDoubleField(lookup(processedData, headers, "unsummed_intensity"));
@@ -151,7 +156,7 @@ namespace DeconTools.Backend.Data
             peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));
             peak.Width = parseFloatField(lookup(processedData, headers, "fwhm"));
             peak.XValue = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
-            peak.SN = parseFloatField(lookup(processedData, headers, "signal_noise"));
+            peak.SignalToNoise = parseFloatField(lookup(processedData, headers, "signal_noise"));
 
             string flagString= lookup(processedData, headers, "flag");
 

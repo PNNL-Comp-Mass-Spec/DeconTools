@@ -165,7 +165,7 @@ namespace DeconTools.Backend.Utilities
                 sb.Append("\t");
                 sb.Append(peak.Width);
                 sb.Append("\t");
-                sb.Append(peak.SN);
+                sb.Append(peak.SignalToNoise);
                 sb.Append("\n");
 
                 counter++;

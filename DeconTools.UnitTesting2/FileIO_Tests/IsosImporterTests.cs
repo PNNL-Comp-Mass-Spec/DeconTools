@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(6005, testResult.ScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
-            Assert.AreEqual(13084442, testResult.IsotopicProfile.IntensityAggregate);
+            Assert.AreEqual(13084442, testResult.IntensityAggregate);
             Assert.AreEqual(481.274108886719m, (decimal)testResult.IsotopicProfile.GetMZ());
             Assert.AreEqual(0.0101m, (decimal)testResult.IsotopicProfile.Score);
             Assert.AreEqual(0.10352m, (decimal)testResult.InterferenceScore);
@@ -52,7 +52,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(800, testResult.ScanSet.PrimaryScanNumber);
             Assert.AreEqual(207, testResult.IMSScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
-            Assert.AreEqual(1318, testResult.IsotopicProfile.IntensityAggregate);
+            Assert.AreEqual(1318, testResult.IntensityAggregate);
             Assert.AreEqual(402.731689453125m, (decimal)testResult.IsotopicProfile.GetMZ());
             Assert.AreEqual(0.0735m, (decimal)testResult.IsotopicProfile.Score);
             Assert.AreEqual(0.66701m, (decimal)testResult.InterferenceScore);
@@ -80,7 +80,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(801, testResult.ScanSet.PrimaryScanNumber);
             Assert.AreEqual(208, testResult.IMSScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
-            Assert.AreEqual(2135, testResult.IsotopicProfile.IntensityAggregate);
+            Assert.AreEqual(2135, testResult.IntensityAggregate);
             Assert.AreEqual(402.220489501953m, (decimal)testResult.IsotopicProfile.GetMZ());
             Assert.AreEqual(0.0619m, (decimal)testResult.IsotopicProfile.Score);
             Assert.AreEqual(0.38938m, (decimal)testResult.InterferenceScore);

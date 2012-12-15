@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowManagerCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.ProblemTesting", "DeconTools.Workflows\DeconTools.Workflows.ProblemTesting\DeconTools.Workflows.ProblemTesting.csproj", "{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowDemoProject", "..\SPIKES_Svn\TargetedWorkflowDemoProject\TargetedWorkflowDemoProject\TargetedWorkflowDemoProject.csproj", "{FE86153B-47F3-4998-87A1-6B23732E6FCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE90075-DA17-4B3A-BF55-EB490CE08B33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +91,10 @@ Global
 		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Debug|x86.ActiveCfg = Debug|x86
 		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|x86.ActiveCfg = Release|x86
 		{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}.Release|x86.Build.0 = Release|x86
-		{FE86153B-47F3-4998-87A1-6B23732E6FCD}.Debug|x86.ActiveCfg = Debug|x86
-		{FE86153B-47F3-4998-87A1-6B23732E6FCD}.Debug|x86.Build.0 = Debug|x86
-		{FE86153B-47F3-4998-87A1-6B23732E6FCD}.Release|x86.ActiveCfg = Release|x86
-		{FE86153B-47F3-4998-87A1-6B23732E6FCD}.Release|x86.Build.0 = Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x86.ActiveCfg = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x86.Build.0 = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.ActiveCfg = Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

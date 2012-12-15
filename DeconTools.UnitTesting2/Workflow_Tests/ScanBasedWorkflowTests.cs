@@ -30,14 +30,29 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
             var parameters=new OldDecon2LSParameters();
+            parameters.Load(@"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\Standard_Testing\DeconTools\Orbitrap\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scan6000-9000.xml");
+            
             parameters.HornTransformParameters.UseScanRange = true;
             parameters.HornTransformParameters.MinScan = 6005;
             parameters.HornTransformParameters.MaxScan = 6005;
             parameters.PeakProcessorParameters.WritePeaksToTextFile = true;
 
 
+
+            //parameters.HornTransformParameters.UseMZRange = true;
+            //parameters.HornTransformParameters.MinMZ = 500;
+            //parameters.HornTransformParameters.MaxMZ = 505;
+
+            //parameters.PeakProcessorParameters.PeakBackgroundRatio = 0.1;
+            //parameters.PeakProcessorParameters.SignalToNoiseThreshold = 0.1;
+            //parameters.PeakProcessorParameters.ThresholdedData = true;
+
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            //workflow.ExportData = false;
             workflow.Execute();
+
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            
 
 
             Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
@@ -49,21 +64,21 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
             var isos = isosImporter.Import();
 
-            Assert.AreEqual(56, isos.Count);
+            Assert.AreEqual(187, isos.Count);
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
 
             List<MSPeakResult> peaklist = new List<MSPeakResult>();
             peakImporter.ImportPeaks(peaklist);
 
-            Assert.AreEqual(186, peaklist.Count);
+            Assert.AreEqual(809, peaklist.Count);
 
 
-            var sumIntensities = isos.Select(p => p.IsotopicProfile.IntensityAggregate).Sum();
-            Assert.AreEqual(172780815, sumIntensities);
+            var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
+            Assert.AreEqual(266571118.0d, sumIntensities);
 
             var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
-            Assert.AreEqual(387426719, sumPeakIntensities);
+            Assert.AreEqual(605170112.0f, sumPeakIntensities);
 
         }
 
@@ -122,7 +137,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //TestUtilities.DisplayMSFeatures(results);
 
             Assert.AreEqual(1340, results.Count);
-            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
 
            
 
@@ -176,7 +191,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             TestUtilities.DisplayMSFeatures(results);
 
             Assert.AreEqual(1340, results.Count);
-            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
         }
 
         
@@ -240,7 +255,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             Assert.AreEqual(2, scansFileLineCounter);
             Assert.AreEqual(1573, results.Count);
-            Assert.AreEqual(109217766, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(109217766, results.Sum(p => p.IntensityAggregate));
 
             var testResult1 = results[0] as UIMFIsosResult;
 
@@ -274,7 +289,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             //TestUtilities.DisplayMSFeatures(results);
             Assert.AreEqual(189, results.Count);
-            Assert.AreEqual(62294623, (int)results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(62294623, (int)results.Sum(p => p.IntensityAggregate));
 
         }
 
@@ -315,7 +330,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             //TestUtilities.DisplayMSFeatures(results);
 			Assert.AreEqual(36078, results.Count);
-			Assert.AreEqual(1224247916, (int)results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+			Assert.AreEqual(1224247916, (int)results.Sum(p => p.IntensityAggregate));
         }
 
 
@@ -453,7 +468,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             TestUtilities.DisplayMSFeatures(results);
 
             Assert.AreEqual(1340, results.Count);
-            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
         }
 
         [Test]

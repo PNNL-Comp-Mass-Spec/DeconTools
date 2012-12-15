@@ -34,7 +34,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             int startScan = 5460;
             int stopScan = 5755;
 
-            DeconToolsSavitzkyGolaySmoother smoother = new DeconToolsSavitzkyGolaySmoother(1, 1, 2);
+            SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 2);
             
             PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(chromToleranceInPPM);
             peakChromGen.GenerateChromatogram(run,startScan,stopScan,mt.IsotopicProfile.Peaklist[0].XValue,chromToleranceInPPM);

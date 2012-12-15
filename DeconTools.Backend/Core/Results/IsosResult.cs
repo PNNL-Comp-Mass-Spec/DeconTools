@@ -18,6 +18,8 @@ namespace DeconTools.Backend.Core
 
         public double InterferenceScore { get; set; }
 
+        public double IntensityAggregate { get; set; }
+
 
         public override string ToString()
         {
@@ -36,7 +38,7 @@ namespace DeconTools.Backend.Core
             sb.Append(delim);
             sb.Append(this.IsotopicProfile.ChargeState);
             sb.Append(delim);
-            sb.Append(this.IsotopicProfile.IntensityAggregate);
+            sb.Append(this.IntensityAggregate);
             sb.Append(delim);
             sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));
             sb.Append(delim);

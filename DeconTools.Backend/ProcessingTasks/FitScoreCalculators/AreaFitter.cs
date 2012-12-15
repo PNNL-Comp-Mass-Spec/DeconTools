@@ -29,7 +29,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
             XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
-
+            //XYData trimmedObservedXYData = observedXYData;
+            
             //trimmedObservedXYData.Display();
             //theorXYData.Display();
 
@@ -44,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 {
                     double currentTheorMZ = theorXYData.Xvalues[i] + offset;
 
-                    int indexOfClosest = trimmedObservedXYData.GetClosestXVal(currentTheorMZ);
+                    int indexOfClosest = MathUtils.GetClosest(trimmedObservedXYData.Xvalues, currentTheorMZ, 0.1);
 
                     if (indexOfClosest == -1)
                     {

@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Algorithms
 
             foreach (var theorpeak in theorFeature.Peaklist)
             {
-                MSPeak peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SN);
+                MSPeak peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SignalToNoise);
 
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 

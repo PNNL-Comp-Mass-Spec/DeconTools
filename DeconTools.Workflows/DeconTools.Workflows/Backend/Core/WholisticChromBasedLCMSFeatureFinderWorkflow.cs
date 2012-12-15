@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         public ChromatogramGenerator ChromGenerator { get; set; }
-        public DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother ChromSmoother { get; set; }
+        public DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother ChromSmoother { get; set; }
         public ChromPeakDetector ChromPeakDetector { get; set; }
 
 
@@ -103,9 +103,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.ChromGenerator = new ChromatogramGenerator();
 
-            this.ChromSmoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
+            this.ChromSmoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
 
-            this.ChromPeakDetector = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 0.5);
+            this.ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
 
             this.MSPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
@@ -662,7 +662,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                return isosResultPossiblyContainingSourcePeak.Keys.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).First();
+                return isosResultPossiblyContainingSourcePeak.Keys.OrderByDescending(p => p.IntensityAggregate).First();
             }
 
 

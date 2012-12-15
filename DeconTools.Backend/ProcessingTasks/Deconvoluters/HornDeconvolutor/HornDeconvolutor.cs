@@ -440,14 +440,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 GetIsotopicProfile(hornResult.marr_isotope_peak_indices, mspeakList, ref profile);
 
-
+                profile.IntensityMostAbundant = hornResult.mint_abundance;
                 if (NumPeaksUsedInAbundance == 1)  // fyi... this is typical
                 {
-                    profile.IntensityAggregate = hornResult.mint_abundance;
+                    result.IntensityAggregate = profile.IntensityMostAbundant;
+
                 }
                 else
                 {
-                    profile.IntensityAggregate = sumPeaks(profile, NumPeaksUsedInAbundance, hornResult.mint_abundance);
+                    result.IntensityAggregate = sumPeaks(profile, NumPeaksUsedInAbundance, hornResult.mint_abundance);
                 }
 
                 profile.MonoPlusTwoAbundance = profile.GetMonoPlusTwoAbundance();
@@ -525,7 +526,7 @@ namespace DeconTools.Backend.ProcessingTasks
             MSPeak peak = new MSPeak();
             peak.XValue = deconPeak.mdbl_mz;
             peak.Width = (float)deconPeak.mdbl_FWHM;
-            peak.SN = (float)deconPeak.mdbl_SN;
+            peak.SignalToNoise = (float)deconPeak.mdbl_SN;
             peak.Height = (int)deconPeak.mdbl_intensity;
 
             return peak;

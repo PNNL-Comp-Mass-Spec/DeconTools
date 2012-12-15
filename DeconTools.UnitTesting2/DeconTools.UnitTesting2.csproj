@@ -12,8 +12,7 @@
     <AssemblyName>DeconTools.UnitTesting2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
+    <FileUpgradeFlags></FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
@@ -44,7 +43,7 @@
     <Reference Include="BaseTof">
       <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngineV2, Version=1.0.4588.24277, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2, Version=1.0.4724.25548, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
@@ -102,6 +101,7 @@
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\THRASHMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\ThrashV2Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\ChromPeakDetectorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\DeconToolsPeakDetectorV2Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\O16O18TraditionalProcessingTests\O16O18TraditionalProcessingTests.cs" />
     <Compile Include="ProcessingRelated_Tests\Post_MSFeatureDetectionTests\PeakToMSFeatureAssociatorTests.cs" />
@@ -142,6 +142,7 @@
     <Compile Include="TheoreticalIsotopicProfileTests\IsotopicDistCalculatorUnitTests.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\IsotopicProfileGeneratorTests.cs" />
     <Compile Include="TheoreticalIsotopicProfileTests\MercuryDistributionTesting.cs" />
+    <Compile Include="Utilities\DllTests.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilitiesTests.cs" />
     <Compile Include="Utilities\IsotopicProfileElutionExtractorTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />

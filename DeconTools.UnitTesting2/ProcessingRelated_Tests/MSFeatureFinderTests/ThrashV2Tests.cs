@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
@@ -18,14 +19,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void ThrashV2Test1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6005, 6050, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             ThrashDeconvolutorV2 deconvolutor = new ThrashDeconvolutorV2();
+            deconvolutor.MinMSFeatureToBackgroundRatio = 3;
 
-
-            List<IsosResult> isosResults = new List<IsosResult>();
+            List<IsotopicProfile> isotopicprofiles = new List<IsotopicProfile>();
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
@@ -33,28 +34,38 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
                 //TestUtilities.DisplayXYValues(run.XYData);
 
+                //run.XYData= run.XYData.TrimData(579.5, 580.5);
+
 
                 peakDetector.Execute(run.ResultCollection);
 
-
-
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                isosResults = deconvolutor.PerformThrash(run.XYData, run.PeakList, scanSet.BackgroundIntensity,
-                                                         scanSet.BackgroundIntensity);
+                isotopicprofiles = deconvolutor.PerformThrash(run.XYData, run.PeakList, run.CurrentBackgroundIntensity,0);
                 stopwatch.Stop();
 
-                //Console.WriteLine("Time for decon= " + stopwatch.ElapsedMilliseconds);
+                Console.WriteLine("Time for decon= " + stopwatch.ElapsedMilliseconds);
 
             }
 
 
 
-            IsosResult testResult = isosResults[0];
+            IsotopicProfile testResult = isotopicprofiles[0];
 
-            TestUtilities.DisplayIsotopicProfileData(testResult.IsotopicProfile);
+            StringBuilder sb = new StringBuilder();
+            foreach (var isotopicProfile in isotopicprofiles)
+            {
+                sb.Append(isotopicProfile.MonoPeakMZ + "\t" + isotopicProfile.ChargeState + "\t" +
+                          isotopicProfile.MonoIsotopicMass + "\t" + isotopicProfile.IntensityMostAbundant + "\t" +
+                          isotopicProfile.Score);
+                sb.Append(Environment.NewLine);
+            }
 
-            //TestUtilities.DisplayMSFeatures(isosResults);
+            Console.WriteLine(sb.ToString());
+
+            //TestUtilities.DisplayIsotopicProfileData(testResult);
+
+            // TestUtilities.DisplayMSFeatures(isosResults);
 
             //Assert.AreEqual(13084442, testResult.IsotopicProfile.IntensityAggregate);
             //Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
@@ -121,10 +132,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_MaxFit1.xml";
             parameters.Load(paramFile);
 
-            ScanSet scanSet = new ScanSetFactory().CreateScanSet(run, 5509, 1);
+            ScanSet scanSet = new ScanSetFactory().CreateScanSet(run, 6005, 1);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(0.33, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var deconvolutor = new HornDeconvolutor(parameters.HornTransformParameters);
             run.CurrentScanSet = scanSet;
@@ -132,7 +143,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             peakDetector.Execute(run.ResultCollection);
             deconvolutor.Execute(run.ResultCollection);
 
-            run.ResultCollection.ResultList = run.ResultCollection.ResultList.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).ToList();
+            run.ResultCollection.ResultList = run.ResultCollection.ResultList.OrderByDescending(p => p.IntensityAggregate).ToList();
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 

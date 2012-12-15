@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected TargetedWorkflowParameters _workflowParameters;
         protected JoshTheorFeatureGenerator _theorFeatureGen;
         protected PeakChromatogramGenerator _chromGen;
-        protected DeconToolsSavitzkyGolaySmoother _chromSmoother;
+        protected SavitzkyGolaySmoother _chromSmoother;
         protected ChromPeakDetector _chromPeakDetector;
         protected ChromPeakSelectorBase _chromPeakSelector;
         protected IterativeTFF _msfeatureFinder;
@@ -127,8 +127,7 @@ namespace DeconTools.Workflows.Backend.Core
             _chromGen.TopNPeaksLowerCutOff = 0.333;
             _chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
 
-            int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;   // adding 0.5 prevents rounding problems
-            _chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
+            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 

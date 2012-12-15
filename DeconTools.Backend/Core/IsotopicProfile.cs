@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -11,7 +12,7 @@ namespace DeconTools.Backend.Core
         {
             _peaklist = new List<MSPeak>();
         }
-        
+
         private List<MSPeak> _peaklist;
         public List<MSPeak> Peaklist
         {
@@ -36,12 +37,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-        private double _intensityAggregate;   //    a way of storing an overall intensity for the whole profile
-        public double IntensityAggregate
-        {
-            get { return _intensityAggregate; }
-            set { _intensityAggregate = value; }
-        }
+
 
         /// <summary>
         /// The adjusted intensity of the isotopic profile. Currently used for correcting saturated profiles in IMS workflows
@@ -93,12 +89,17 @@ namespace DeconTools.Backend.Core
             set { _monoPlusTwoAbundance = value; }
         }
 
-        private double _averageMass; 
+        private double _averageMass;
         public double AverageMass
         {
             get { return _averageMass; }
             set { _averageMass = value; }
         }
+
+        public double MonoPeakMZ { get; set; }
+
+        public float IntensityMostAbundant { get; set; }
+
 
         public int GetNumOfIsotopesInProfile()
         {
@@ -130,7 +131,7 @@ namespace DeconTools.Backend.Core
 
             int indexOfMaxPeak = -1;
             float maxIntensity = 0;
-            
+
             for (int i = 0; i < _peaklist.Count; i++)
             {
                 if (_peaklist[i].Height > maxIntensity)
@@ -166,13 +167,13 @@ namespace DeconTools.Backend.Core
             if (mostIntensePeak == null)
             {
                 return -1;
-            } 
-            return mostIntensePeak.SN;
+            }
+            return mostIntensePeak.SignalToNoise;
         }
 
         public double GetMonoAbundance()
         {
-            if (_peaklist == null||Peaklist.Count==0) return 0;
+            if (_peaklist == null || Peaklist.Count == 0) return 0;
             return _peaklist[0].Height;
         }
 
@@ -184,18 +185,15 @@ namespace DeconTools.Backend.Core
 
         public double GetMZ()
         {
-            if (_peaklist == null || Peaklist.Count==0) return -1;
+            if (_peaklist == null || Peaklist.Count == 0) return -1;
             return _peaklist[0].XValue;
         }
 
-        public double MonoPeakMZ { get; set; }
+
 
         public double GetAbundance()
         {
-            //MSPeak mostIntensePeak = getMostIntensePeak(peaklist);
-            //return mostIntensePeak.Intensity;
-
-            return IntensityAggregate;
+            return getMostIntensePeak().Height;
         }
 
         public double GetScore()
@@ -205,7 +203,7 @@ namespace DeconTools.Backend.Core
 
         public MSPeak getMonoPeak()
         {
-            if (_peaklist != null && _peaklist.Count>0 )
+            if (_peaklist != null && _peaklist.Count > 0)
             {
                 return _peaklist[0];
             }
@@ -233,7 +231,7 @@ namespace DeconTools.Backend.Core
             IsotopicProfile iso = new IsotopicProfile();
             iso.AverageMass = AverageMass;
             iso.ChargeState = ChargeState;
-            iso.IntensityAggregate = IntensityAggregate;
+            iso.IntensityMostAbundant = IntensityMostAbundant;
             iso.MonoIsotopicMass = MonoIsotopicMass;
             iso.MonoIsotopicPeakIndex = MonoIsotopicPeakIndex;
             iso.MonoPeakMZ = MonoPeakMZ;
@@ -245,7 +243,7 @@ namespace DeconTools.Backend.Core
 
             foreach (var mspeak in Peaklist)
             {
-                MSPeak peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SN);
+                MSPeak peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SignalToNoise);
                 iso.Peaklist.Add(peak);
             }
 
@@ -256,5 +254,33 @@ namespace DeconTools.Backend.Core
         }
 
 
+        public XYData GetTheoreticalIsotopicProfileXYData(double fwhm)
+        {
+            Check.Require(this != null && Peaklist != null &&
+                          Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
+
+            XYData xydata = new XYData();
+            List<double> xvals = new List<double>();
+            List<double> yvals = new List<double>();
+
+            for (int i = 0; i < Peaklist.Count; i++)
+            {
+                XYData tempXYData = Peaklist[i].GetTheorPeakData(fwhm);
+                xvals.AddRange(tempXYData.Xvalues);
+                yvals.AddRange(tempXYData.Yvalues);
+
+            }
+            xydata.Xvalues = xvals.ToArray();
+            xydata.Yvalues = yvals.ToArray();
+
+
+
+            return xydata;
+        }
+
+        public XYData GetTheoreticalIsotopicProfileXYData(double fwhm, double mzOffset)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

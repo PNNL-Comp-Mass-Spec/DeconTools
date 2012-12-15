@@ -55,7 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 result.IsotopicProfile.ChargeState = result.Target.ChargeState;
                 result.IsotopicProfile.MonoIsotopicMass = (result.IsotopicProfile.GetMZ() - Globals.PROTON_MASS) * result.Target.ChargeState;
-                result.IsotopicProfile.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
+                result.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
             }
 
             ((O16O18TargetedResultObject)result).RatioO16O18 = m_quantifier.GetAdjusted_I0_I4_YeoRatio(result.IsotopicProfile, result.Target.IsotopicProfile);

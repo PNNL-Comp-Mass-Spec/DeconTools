@@ -21,12 +21,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         private PeakChromatogramGenerator chromGenN14;
         private PeakChromatogramGenerator chromGenN15;
-        private DeconToolsSavitzkyGolaySmoother chromSmoother;
+        private SavitzkyGolaySmoother chromSmoother;
         private ChromPeakDetector chromPeakDetector;
         private SmartChromPeakSelector chromPeakSelectorN14;
         private BasicChromPeakSelector chromPeakSelectorN15;
 
-        private DeconToolsPeakDetector msPeakDetector;
+        private DeconToolsPeakDetectorV2 msPeakDetector;
 
         private IterativeTFF labelledProfileFinder;
         private BasicTFF unlabelledProfilefinder;
@@ -196,7 +196,7 @@ namespace DeconTools.Workflows.Backend.Core
             chromGenN15.TopNPeaksLowerCutOff = 0.333;
 
             int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;
-            chromSmoother = new DeconToolsSavitzkyGolaySmoother(pointsToSmooth, pointsToSmooth, 2);
+            chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
             SmartChromPeakSelectorParameters smartchrompeakSelectorParams = new SmartChromPeakSelectorParameters();
@@ -220,7 +220,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             chromPeakSelectorN15 = new BasicChromPeakSelector(chromPeakSelectorParameters);
 
-            msPeakDetector = new DeconToolsPeakDetector(_workflowParameters.MSPeakDetectorPeakBR, _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
+            msPeakDetector = new DeconToolsPeakDetectorV2(_workflowParameters.MSPeakDetectorPeakBR, 
+                _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
             unlabelledProfilefinder = new BasicTFF(_workflowParameters.MSToleranceInPPM);
 

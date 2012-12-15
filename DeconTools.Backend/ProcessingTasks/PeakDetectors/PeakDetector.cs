@@ -4,7 +4,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 
-namespace DeconTools.Backend.ProcessingTasks
+namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public abstract class PeakDetector:Task
     {
@@ -21,6 +21,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public double BackgroundIntensity { get; set; }
 
+        public bool UseNewPeakDetector { get; set; }
 
         public override void Execute(ResultCollection resultList)
         {
@@ -30,9 +31,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 resultList.Run.XYData.Xvalues.Length == 0 ||
                 resultList.Run.XYData.Yvalues.Length == 0)
             {
-                //resultList.AddLog("Peak Detector aborted; XY data is empty; Scan = " + resultList.Run.CurrentScanSet.PrimaryScanNumber.ToString());
-
-
+                resultList.Run.PeakList = new List<Peak>();
+                return;
             }
            
             bool isSuccess = false;
@@ -81,10 +81,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 }
 
+                ExecutePostProcessingHook(resultList.Run);
                 counter++;
 
             }
             
+        }
+
+        protected virtual void ExecutePostProcessingHook(Run run)
+        {
+            run.CurrentBackgroundIntensity = BackgroundIntensity;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace DeconTools.UnitTesting2.Utilities
             BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
             IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
 
-            XYData theorXYData=   TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(mt23140708.IsotopicProfile, n14Profile.GetFWHM());
+            XYData theorXYData=   mt23140708.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(n14Profile.GetFWHM());
 
 
             double theorMaxY = theorXYData.Yvalues.Max();

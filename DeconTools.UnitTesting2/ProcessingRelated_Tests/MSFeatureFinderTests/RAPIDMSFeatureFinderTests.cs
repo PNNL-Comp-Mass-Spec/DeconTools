@@ -34,10 +34,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Assert.AreEqual(190, run.ResultCollection.ResultList.Count);
 
             //order and get the most intense msfeature
-            run.ResultCollection.ResultList=  run.ResultCollection.ResultList.OrderByDescending(p => p.IsotopicProfile.IntensityAggregate).ToList();
+            run.ResultCollection.ResultList=  run.ResultCollection.ResultList.OrderByDescending(p => p.IntensityAggregate).ToList();
             IsosResult testIso = run.ResultCollection.ResultList[0];
 
-            Assert.AreEqual(20986588.375, testIso.IsotopicProfile.IntensityAggregate);
+            Assert.AreEqual(20986588.375, testIso.IntensityAggregate);
             Assert.AreEqual(2, testIso.IsotopicProfile.ChargeState);
             Assert.AreEqual(0.00548633562231413m, (decimal)testIso.IsotopicProfile.Score);
             Assert.AreEqual(3, testIso.IsotopicProfile.Peaklist.Count);

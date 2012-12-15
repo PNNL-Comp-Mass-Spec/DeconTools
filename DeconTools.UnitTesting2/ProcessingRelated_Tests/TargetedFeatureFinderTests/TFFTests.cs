@@ -125,7 +125,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
 
             Assert.IsNotNull(result.IsotopicProfileLabeled);
-            Assert.AreEqual(82280, (int)result.IsotopicProfileLabeled.IntensityAggregate);
+            Assert.AreEqual(82280, (int)result.IntensityAggregate);
             Assert.AreEqual(3, result.IsotopicProfileLabeled.MonoIsotopicPeakIndex);
 
             TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfileLabeled);

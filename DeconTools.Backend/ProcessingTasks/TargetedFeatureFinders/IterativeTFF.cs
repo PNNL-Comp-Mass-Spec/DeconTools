@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
-            this.MSPeakDetector = new DeconToolsPeakDetector(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
+            this.MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
                  _peakDetectorPeakFitType, _peakDetectorIsDataThresholded);
 
             //this.MSPeakDetector = new DeconToolsPeakDetectorV2();
@@ -56,7 +56,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         #region Properties
         public double PeakDetectorPeakBR { get; set; }
-        public DeconToolsPeakDetector MSPeakDetector { get; set; }
+        public DeconToolsPeakDetectorV2 MSPeakDetector { get; set; }
         public double PeakBRMin { get; set; }
         public double PeakBRStep { get; set; }
 
@@ -94,7 +94,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             bool isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
-                iso.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+                //GORD: check here if there is an error in IQ intensities
+                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
             }
             else
             {

@@ -114,8 +114,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(1519.83389m, (decimal)Math.Round(resultOutput.IsotopicProfile.MonoPeakMZ, 5));
             Assert.AreEqual(1535.80025m, (decimal)Math.Round(resultOutput.IsotopicProfileLabeled.MonoPeakMZ, 5));
 
-            Assert.AreEqual(3901522, resultOutput.IsotopicProfile.IntensityAggregate);
-            Assert.AreEqual(3083117, resultOutput.IsotopicProfileLabeled.IntensityAggregate);
+            Assert.AreEqual(3901522, resultOutput.IntensityAggregate);
+            Assert.AreEqual(3083117, resultOutput.IntensityAggregate);
 
             Assert.AreEqual(0.04m, (decimal)Math.Round(resultOutput.Score, 3));
             Assert.AreEqual(0.074m, (decimal)Math.Round(resultOutput.ScoreN15, 3));

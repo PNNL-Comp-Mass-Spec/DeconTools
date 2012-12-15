@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         public TFFBase TargetedMSFeatureFinder { get; set; }
-        
+
         protected SmartChromPeakSelectorParameters _parameters;
         public override ChromPeakSelectorParameters Parameters
         {
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
-
+      
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
                 if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
@@ -116,11 +116,22 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     //find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
 
-                    //get fit score
-                    fitScoreCalc.Execute(resultList);
+                    try
+                    {
+                        //get fit score
+                        fitScoreCalc.Execute(resultList);
 
-                    //get i_score
-                    resultValidator.Execute(resultList);
+                        //get i_score
+                        resultValidator.Execute(resultList);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        currentResult.FailedResult = true;
+
+                    }
+
+                    
 
                     //collect the results together
                     AddScoresToPeakQualityData(pq, currentResult);
@@ -147,6 +158,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 currentResult.FailedResult = true;
                 currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
+            else
+            {
+                currentResult.FailedResult = false;
+                currentResult.FailureType = Globals.TargetedResultFailureType.None;
+            }
         }
 
         #endregion
@@ -163,7 +179,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             else
             {
                 pq.IsotopicProfileFound = true;
-                pq.Abundance = currentResult.IsotopicProfile.IntensityAggregate;
+                pq.Abundance = currentResult.IntensityAggregate;
                 pq.FitScore = currentResult.Score;
                 pq.InterferenceScore = currentResult.InterferenceScore;
             	pq.IsotopicProfile = currentResult.IsotopicProfile;

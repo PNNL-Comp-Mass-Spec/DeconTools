@@ -108,7 +108,7 @@ namespace DeconTools.Workflows.Backend.Results
             N14N15TargetedResultDTO r = tr as N14N15TargetedResultDTO;
             r.FitScoreN15 = (float)result.ScoreN15;
             r.IScoreN15 = (float)result.InterferenceScoreN15;
-            r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IsotopicProfileLabeled.IntensityAggregate;
+            r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IntensityAggregate;
             r.MonoMZN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoPeakMZ;
             r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) -
                 result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
@@ -185,7 +185,7 @@ namespace DeconTools.Workflows.Backend.Results
             tr.Code = result.Target.Code;
 
             tr.IndexOfMostAbundantPeak = result.IsotopicProfile == null ? (short)0 : (short)result.IsotopicProfile.GetIndexOfMostIntensePeak();
-            tr.Intensity = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.IntensityAggregate;
+            tr.Intensity = result.IsotopicProfile == null ? 0f : (float)result.IntensityAggregate;
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();
             tr.IntensityMostAbundantPeak = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.getMostIntensePeak().Height;
             tr.IScore = (float)result.InterferenceScore;

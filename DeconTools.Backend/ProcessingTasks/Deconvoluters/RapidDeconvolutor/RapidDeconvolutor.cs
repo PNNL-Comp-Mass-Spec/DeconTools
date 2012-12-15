@@ -159,7 +159,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         result.IsotopicProfile.MonoPlusTwoAbundance = result.IsotopicProfile.GetMonoPlusTwoAbundance();
                     }
 
-                    XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(mt.IsotopicProfile, result.IsotopicProfile.GetFWHM());
+                    XYData theorXYData = mt.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(result.IsotopicProfile.GetFWHM());
 
                     //offset the theor isotopic profile
                     offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
@@ -272,14 +272,15 @@ namespace DeconTools.Backend.ProcessingTasks
                 if ((float)rapidScore == 0.9999999999999f) continue;   // this is an oddity about the Rapid results. For very poor or immeasurable scores, it will give a score of 1.000000000; 
 
                 IsosResult result = resultList.CreateIsosResult();
-
+                result.IntensityAggregate = intensityResults[i];
+                
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
-                profile.IntensityAggregate = intensityResults[i];
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
                 monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
-
+                
+                
 
                 //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found. 
                 GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.XValue, ref profile);
@@ -332,7 +333,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (chargeResults[i] == 0) continue;
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
-                profile.IntensityAggregate = intensityResults[i];
+                profile.IntensityMostAbundant = (float) intensityResults[i];
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
                 monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
@@ -410,7 +411,7 @@ namespace DeconTools.Backend.ProcessingTasks
             MSPeak peak = new MSPeak();
             peak.XValue = monoPeak.mdbl_mz;
             peak.Width = (float)monoPeak.mdbl_FWHM;
-            peak.SN = (float)monoPeak.mdbl_SN;
+            peak.SignalToNoise = (float)monoPeak.mdbl_SN;
             peak.Height = (int)monoPeak.mdbl_intensity;
 
             return peak;

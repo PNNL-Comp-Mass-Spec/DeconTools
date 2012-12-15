@@ -86,7 +86,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.ChargeState);
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetAbundance());
+            sb.Append(uimfResult.IntensityAggregate);
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.GetMZ().ToString("0.#####"));
             sb.Append(delimiter);

@@ -140,7 +140,7 @@ namespace DeconTools.Backend.Data
             peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[++columnCounter]);
             peakresult.MSPeak.Height = Convert.ToSingle(processedLine[++columnCounter]);
             peakresult.MSPeak.Width = Convert.ToSingle(processedLine[++columnCounter]);
-            peakresult.MSPeak.SN = Convert.ToSingle(processedLine[++columnCounter]);
+            peakresult.MSPeak.SignalToNoise = Convert.ToSingle(processedLine[++columnCounter]);
 
 
             if (_containsMSFeatureIDColumn)
@@ -172,7 +172,7 @@ namespace DeconTools.Backend.Data
             peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[3]);
             peakresult.MSPeak.Height = Convert.ToSingle(processedLine[4]);
             peakresult.MSPeak.Width = Convert.ToSingle(processedLine[5]);
-            peakresult.MSPeak.SN = Convert.ToSingle(processedLine[6]);
+            peakresult.MSPeak.SignalToNoise = Convert.ToSingle(processedLine[6]);
 
             if (processedLine.Count > 7)
             {

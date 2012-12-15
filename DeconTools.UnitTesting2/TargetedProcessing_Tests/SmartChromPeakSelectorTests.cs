@@ -173,7 +173,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             run.XYData.Yvalues = xydata.Yvalues;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
-            smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 11;
+            smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 51;
             smartChromPeakSelector.Parameters.SummingMode = SummingModeEnum.SUMMINGMODE_DYNAMIC;
             smartChromPeakSelector.Parameters.AreaOfPeakToSumInDynamicSumming = 1;
 
@@ -183,15 +183,18 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             iterativeTff.Execute(run.ResultCollection);
             fitscoreCalc.Execute(run.ResultCollection);
 
-            Assert.AreEqual(0.032m, (decimal)(Math.Round(result.Score, 4)));
-            Assert.AreEqual("9575 {9575, 9582}", result.ScanSet.ToString());
+
+            Console.WriteLine(result.ScanSet);
+            Assert.AreEqual(14, result.ScanSet.IndexValues.Count);
+            Assert.AreEqual(0.0104m, (decimal)Math.Round(result.Score, 4));
+            Assert.AreEqual("9575 {9534, 9540, 9547, 9554, 9561, 9568, 9575, 9582, 9589, 9596, 9603, 9610, 9617, 9624}", result.ScanSet.ToString());
 
             run.XYData = new XYData();
             run.XYData.Xvalues = xydata.Xvalues;
             run.XYData.Yvalues = xydata.Yvalues;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
-            smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 11;
+            smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 51;
             smartChromPeakSelector.Parameters.SummingMode = SummingModeEnum.SUMMINGMODE_DYNAMIC;
             smartChromPeakSelector.Parameters.AreaOfPeakToSumInDynamicSumming = 2;
 
@@ -204,11 +207,12 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             result.DisplayToConsole();
 
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
-            Assert.AreEqual(0.0249m, (decimal)(Math.Round(result.Score,4)));
-            Assert.AreEqual("9575 {9568, 9575, 9582, 9589}", result.ScanSet.ToString());
+            Assert.AreEqual(0.0251m, (decimal)(Math.Round(result.Score,4)));
+            //Console.WriteLine(result.ScanSet);
+            Assert.AreEqual(26, result.ScanSet.IndexValues.Count);
+            Assert.AreEqual("9575 {9493, 9500, 9506, 9513, 9520, 9527, 9534, 9540, 9547, 9554, 9561, 9568, 9575, 9582, 9589, 9596, 9603, 9610, 9617, 9624, 9631, 9638, 9645, 9652, 9658, 9665}", result.ScanSet.ToString());
 
-            //TODO: update test - currently peak width is not being properly reported. It is always 4 or 5 scans wide it seems
-
+           
         }
 
 

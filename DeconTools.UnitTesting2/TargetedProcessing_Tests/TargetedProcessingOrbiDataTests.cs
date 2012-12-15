@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             int mtID = 131959;
 
             Task peakChromGen = new PeakChromatogramGenerator(20);
-            Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
+            Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
             Task zeroFill = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
@@ -127,7 +127,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             //int mtID = 131959;
 
             Task peakChromGen = new PeakChromatogramGenerator(20);
-            Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(11, 11, 2);
+            Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
             Task zeroFill = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);

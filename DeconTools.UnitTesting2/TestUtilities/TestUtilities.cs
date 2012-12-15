@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2
             for (int i = 0; i < resultList1.Count; i++)
             {
                 bool resultIsTheSame = (resultList1[i].IsotopicProfile.ChargeState == resultList2[i].IsotopicProfile.ChargeState &&
-                    resultList1[i].IsotopicProfile.IntensityAggregate == resultList2[i].IsotopicProfile.IntensityAggregate &&
+                    resultList1[i].IntensityAggregate == resultList2[i].IntensityAggregate &&
                     //resultList1[i].IsotopicProfile.MonoIsotopicMass == resultList2[i].IsotopicProfile.MonoIsotopicMass &&
                     resultList1[i].IsotopicProfile.MonoPeakMZ == resultList2[i].IsotopicProfile.MonoPeakMZ &&
                     resultList1[i].IsotopicProfile.MonoPlusTwoAbundance == resultList2[i].IsotopicProfile.MonoPlusTwoAbundance &&
@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(peak.Width);
                 sb.Append("\t");
-                sb.Append(peak.SN);
+                sb.Append(peak.SignalToNoise);
                 sb.Append("\n");
 
                 counter++;
@@ -183,7 +183,7 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(peak.Width);
                 sb.Append("\t");
-                sb.Append(peak.SN);
+                sb.Append(peak.SignalToNoise);
                 sb.Append("\n");
 
                 counter++;
@@ -210,7 +210,7 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.ChargeState);
                 sb.Append("\t");
-                sb.Append(item.IsotopicProfile.IntensityAggregate);
+                sb.Append(item.IntensityAggregate);
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.Score.ToString("0.000"));
                 sb.Append("\t");

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using DeconTools.Backend;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.Algorithms;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Backend.Algorithms.Quantifiers;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
+using NUnit.Framework;
 
 
 namespace DeconTools.UnitTesting2.QuantificationTests
@@ -30,7 +28,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             XYData massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
 
 
-            DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(1, 1, 2);
+           var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(3, 2);
             massSpectrum = smoother.Smooth(massSpectrum); 
             
 
@@ -120,7 +118,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z2();
 
 
-            DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.DeconToolsSavitzkyGolaySmoother(1, 1, 2);
+            var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(3, 2);
             massSpectrum = smoother.Smooth(massSpectrum);
 
 

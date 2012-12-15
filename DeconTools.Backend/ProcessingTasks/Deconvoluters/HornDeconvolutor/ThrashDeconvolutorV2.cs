@@ -8,6 +8,7 @@ using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
@@ -23,6 +24,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private Dictionary<int, IsotopicProfile> _averagineProfileLookupTable = null;
 
+        private const int NumPointsPerTheorPeak = 20;
+
+
         #region Constructors
         public ThrashDeconvolutorV2(ThrashParameters parameters)
         {
@@ -36,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             NumPeaksForShoulder = parameters.NumPeaksForShoulder;
             IsO16O18Data = parameters.IsO16O18Data;
             UseAbsoluteIntensity = parameters.UseAbsoluteIntensity;
-            AbsolutePeptideIntensity = AbsolutePeptideIntensity;
+            AbsolutePeptideIntensity = parameters.AbsolutePeptideIntensity;
             IsThrashUsed = parameters.IsThrashUsed;
             CheckAllPatternsAgainstChargeState1 = parameters.CheckAllPatternsAgainstChargeState1;
             CompleteFit = parameters.CompleteFit;
@@ -134,21 +138,38 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         public override void Deconvolute(ResultCollection resultList)
         {
-            throw new NotImplementedException();
+            Check.Require(resultList.Run != null, "Cannot deconvolute. Run is null");
+            Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
+            Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
+
+            if (resultList.Run.PeakList.Count<2)
+            {
+                return;
+            }
+
+
+            var msFeatures = PerformThrash(resultList.Run.XYData, resultList.Run.PeakList,
+                                           resultList.Run.CurrentScanSet.BackgroundIntensity,
+                                           this.MinMSFeatureToBackgroundRatio);
+
+
+
         }
 
 
 
-        public List<IsosResult> PerformThrash(XYData originalXYData, List<Peak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0)
+        public List<IsotopicProfile> PerformThrash(XYData originalXYData, List<Peak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0)
         {
+
+            List<IsotopicProfile> isotopicProfiles = new List<IsotopicProfile>();
+            
             if (_averagineProfileLookupTable == null)
             {
                 _averagineProfileLookupTable = CreateTheoreticalProfilesForMassRange();
             }
 
-
-            List<IsosResult> isosResults = new List<IsosResult>();
-
+            double minMSFeatureIntensity = backgroundIntensity*MinMSFeatureToBackgroundRatio;
+           
 
             XYData xyData = new XYData();
             xyData.Xvalues = originalXYData.Xvalues;
@@ -174,6 +195,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     continue;
 
                 }
+
+                bool peakIsBelowIntensityThreshold = (msPeak.Height < minMSFeatureIntensity);
+                if (peakIsBelowIntensityThreshold) break;
 
 
 
@@ -208,28 +232,29 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         _averagineProfileLookupTable.Add(massUsedForLookup, theorIso);
                     }
 
-
                     theorIso.ChargeState = chargeState;
                     theorIso.MostAbundantIsotopeMass = obsPeakMass;
 
-
+                    //PeakUtilities.TrimIsotopicProfile(theorIso, 0.05);
+                   
                     CalculateMassesForIsotopicProfile(theorIso);
-                    XYData theorXYData = TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
+                    XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
 
                     PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
 
-                    var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, 10, false);
+                    //TODO: ppm tolerance is hard-coded
+                    var ppmTolerance = 10;
+                    var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, ppmTolerance, false);
 
                     string reportstring;
                     if (msFeature != null)
                     {
                         peaksAlreadyProcessed.AddRange(msFeature.Peaklist);
                         msFeature.Score = bestFitVal;
-
-                        IsosResult isosResult = new StandardIsosResult();
-                        isosResult.IsotopicProfile = msFeature;
-
-                        isosResults.Add(isosResult);
+                        msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
+                       
+                        
+                        isotopicProfiles.Add(msFeature);
 
                         reportstring = msPeak.XValue.ToString("0.00000") + "\t" +
                                        msFeature.MonoIsotopicMass.ToString("0.0000") + "\t" +
@@ -253,9 +278,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             }
 
-            Console.WriteLine(stringBuilder.ToString());
+            //Console.WriteLine(stringBuilder.ToString());
 
-            return isosResults;
+            return isotopicProfiles;
 
         }
 
@@ -267,11 +292,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 return;
             }
 
+            double relIntensityUseForFitting = 0;
 
 
 
-
-            double fitval = _areafitter.GetFit(theorXYData, xyData, 0.1);
+            double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting);
 
             if (fitval < bestFitVal)
             {
@@ -286,9 +311,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 double offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 //negative offset
 
-                fitval = _areafitter.GetFit(theorXYData, xyData, 0.1, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, offsetForTheorProfile);
 
-                if (fitval > bestFitVal || fitval >= 1)
+                if (fitval > bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {
                     break;
                 }
@@ -304,9 +329,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-                fitval = _areafitter.GetFit(theorXYData, xyData, 0.1, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, offsetForTheorProfile);
 
-                if (fitval >= bestFitVal || fitval >= 1)
+                if (fitval >= bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {
                     break;
                 }
@@ -339,19 +364,19 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             double mzMostAbundantPeak = iso.MostAbundantIsotopeMass / iso.ChargeState + Globals.PROTON_MASS;
 
-            //start with most abundant peak and move to the left and calculate m/z values
+            //start with most abundant peak and move to the LEFT and calculate m/z values
             for (int peakIndex = indexMostAbundantPeak; peakIndex >= 0; peakIndex--)
             {
 
                 int numPeaksToLeft = indexMostAbundantPeak - peakIndex;
-                double calcMZ = mzMostAbundantPeak + numPeaksToLeft * 1.00235 / iso.ChargeState;
+                double calcMZ = mzMostAbundantPeak - numPeaksToLeft * 1.00235 / iso.ChargeState;
 
                 iso.Peaklist[peakIndex].XValue = calcMZ;
 
             }
 
 
-            //move to the right and calculate m/z values
+            //move to the RIGHT and calculate m/z values
             for (int peakIndex = indexMostAbundantPeak + 1; peakIndex < iso.Peaklist.Count; peakIndex++)
             {
 
@@ -369,5 +394,59 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
         }
+
+        private XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile iso, double fwhm, double minRelIntensity = 0.1)
+        {
+            
+            var xydata = new XYData();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
+
+
+            List<MSPeak> mspeaks = new List<MSPeak>(iso.Peaklist);
+
+            MSPeak zeroIntensityPeakToTheLeft = new MSPeak();
+            zeroIntensityPeakToTheLeft.XValue = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
+            zeroIntensityPeakToTheLeft.Height = 0;
+
+            mspeaks.Insert(0, zeroIntensityPeakToTheLeft);
+
+            //TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData()
+
+
+            for (int peakIndex = 0; peakIndex < mspeaks.Count; peakIndex++)
+            {
+                MSPeak msPeak = mspeaks[peakIndex];
+                XYData tempXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(msPeak, fwhm,NumPointsPerTheorPeak);
+
+                for (int j = 0; j < tempXYData.Xvalues.Length; j++)
+                {
+                    //First peak is a zero-intensity peak. We always want to add that one. For the others,
+                    //add intensity points that are above a certain intensity
+                    if (peakIndex>0)
+                    {
+                        if (tempXYData.Yvalues[j] >= minRelIntensity)
+                        {
+                            xvals.Add(tempXYData.Xvalues[j]);
+                            yvals.Add(tempXYData.Yvalues[j]);
+                        }
+                        
+                    }
+                    else
+                    {
+                        xvals.Add(tempXYData.Xvalues[j]);
+                        yvals.Add(tempXYData.Yvalues[j]);
+                    }
+                    
+                }
+            }
+            xydata.Xvalues = xvals.ToArray();
+            xydata.Yvalues = yvals.ToArray();
+
+
+
+            return xydata;
+        }
+
     }
 }

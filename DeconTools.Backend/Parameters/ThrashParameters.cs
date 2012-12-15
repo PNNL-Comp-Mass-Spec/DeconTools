@@ -46,7 +46,8 @@ namespace DeconTools.Backend.Parameters
         public string AveragineFormula { get; set; }
 
         /// <summary>
-        /// 
+        /// When thrash is processing peaks, it will stop when it hits a peak whose
+        /// intensity falls below this value
         /// </summary>
         public double MinMSFeatureToBackgroundRatio { get; set; }
 

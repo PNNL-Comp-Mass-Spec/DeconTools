@@ -81,7 +81,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
                  {
                      Console.WriteLine(result.ScanSet.PrimaryScanNumber +"\t" +
                                        result.IsotopicProfile.MonoPeakMZ.ToString("0.0000") + "\t" +
-                                       result.IsotopicProfile.IntensityAggregate + "\t" +
+                                       result.IntensityAggregate + "\t" +
                                        result.IsotopicProfile.IntensityAggregateAdjusted);
                  }
             }
