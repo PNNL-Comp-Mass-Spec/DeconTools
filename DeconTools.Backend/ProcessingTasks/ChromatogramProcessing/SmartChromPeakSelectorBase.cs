@@ -30,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public TFFBase TargetedMSFeatureFinder { get; set; }
         
-        private SmartChromPeakSelectorParameters _parameters;
+        protected SmartChromPeakSelectorParameters _parameters;
         public override ChromPeakSelectorParameters Parameters
         {
             get { return _parameters; }
@@ -123,7 +123,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     resultValidator.Execute(resultList);
 
                     //collect the results together
-                    addScoresToPeakQualityData(pq, currentResult);
+                    AddScoresToPeakQualityData(pq, currentResult);
 
 #if DEBUG
                     pq.Display();
@@ -153,8 +153,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #region Private Methods
 
-
-		private void addScoresToPeakQualityData(ChromPeakQualityData pq, TargetedResultBase currentResult)
+		protected void AddScoresToPeakQualityData(ChromPeakQualityData pq, TargetedResultBase currentResult)
         {
             if (currentResult.IsotopicProfile == null)
             {
@@ -167,13 +166,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 pq.Abundance = currentResult.IsotopicProfile.IntensityAggregate;
                 pq.FitScore = currentResult.Score;
                 pq.InterferenceScore = currentResult.InterferenceScore;
-
+            	pq.IsotopicProfile = currentResult.IsotopicProfile;
                 bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
                 pq.IsIsotopicProfileFlagged = resultHasFlags;
             }
         }
-
-        
 
         //TODO: delete this if unused
         protected void SetDefaultTargetedFeatureFinderSettings(double toleranceInPPM)

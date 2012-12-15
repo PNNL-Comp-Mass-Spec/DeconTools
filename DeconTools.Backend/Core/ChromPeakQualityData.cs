@@ -13,6 +13,7 @@ namespace DeconTools.Backend.Core
 		public double FitScore { get; set; }
 		public double InterferenceScore { get; set; }
 		public double Abundance { get; set; }
+		public IsotopicProfile IsotopicProfile { get; set; }
 
 		public ChromPeakQualityData(ChromPeak peak)
 		{

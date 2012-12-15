@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
@@ -53,7 +55,119 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             result.ScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryScanNumber);
         }
 
+		public override void Execute(ResultCollection resultList)
+		{
+			Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
 
+			TargetedResultBase currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+
+			if (msgen == null)
+			{
+				msgen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
+				msgen.IsTICRequested = false;
+			}
+
+			TargetBase currentTarget = resultList.Run.CurrentMassTag;
+
+			// Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
+			msgen.MinMZ = currentTarget.MZ - 10;
+			msgen.MaxMZ = currentTarget.MZ - 10;
+
+			float normalizedElutionTime;
+
+			if (currentResult.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+			{
+				normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)currentResult.Run.GetNumMSScans();
+			}
+			else
+			{
+				normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
+			}
+
+			//collect Chrom peaks that fall within the NET tolerance
+			List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
+
+			foreach (ChromPeak peak in resultList.Run.PeakList)
+			{
+				if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+				{
+					peaksWithinTol.Add(peak);
+				}
+			}
+
+			List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
+
+			//iterate over peaks within tolerance and score each peak according to MSFeature quality
+#if DEBUG
+            int tempMinScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime - Parameters.NETTolerance);
+            int tempMaxScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime + Parameters.NETTolerance);
+            int tempCenterTol = resultList.Run.GetScanValueForNET(normalizedElutionTime);
+
+
+            Console.WriteLine("SmartPeakSelector --> NETTolerance= "+ Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
+                              "\t" + tempMaxScanWithinTol);
+            Console.WriteLine("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+#endif
+
+			currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
+			currentResult.NumQualityChromPeaks = -1;
+
+			ChromPeak bestChromPeak;
+			if (currentResult.NumChromPeaksWithinTolerance > _parameters.NumChromPeaksAllowed)
+			{
+				bestChromPeak = null;
+			}
+			else
+			{
+				foreach (var chromPeak in peaksWithinTol)
+				{
+					ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
+					peakQualityList.Add(pq);
+
+					// TODO: Currently hard-coded to sum only 1 scan
+					SetScansForMSGenerator(chromPeak, resultList.Run, 1);
+
+					//This resets the flags and the scores on a given result
+					currentResult.ResetResult();
+
+					//generate a mass spectrum
+					msgen.Execute(resultList);
+
+					//find isotopic profile
+					TargetedMSFeatureFinder.Execute(resultList);
+
+					//get fit score
+					fitScoreCalc.Execute(resultList);
+
+					//get i_score
+					resultValidator.Execute(resultList);
+
+					//collect the results together
+					AddScoresToPeakQualityData(pq, currentResult);
+
+#if DEBUG
+                    pq.Display();
+#endif
+				}
+
+				//run a algorithm that decides, based on fit score mostly. 
+				bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
+			}
+
+			currentResult.ChromPeakQualityList = peakQualityList;
+
+			SetScansForMSGenerator(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
+
+			UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
+
+
+			bool failedChromPeakSelection = (currentResult.ChromPeakSelected == null || currentResult.ChromPeakSelected.XValue == 0);
+			if (failedChromPeakSelection)
+			{
+				currentResult.FailedResult = true;
+				currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+			}
+		}
 
     }
 }
