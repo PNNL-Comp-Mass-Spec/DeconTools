@@ -117,7 +117,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             for (int i = startMass; i <= stopMass; i++)
             {
-                IsotopicProfile profile = _isotopicDistCalculator.GetAveraginePattern(startMass);
+                IsotopicProfile profile = _isotopicDistCalculator.GetAveraginePattern(i);
 
                 isotopicProfileDictionary.Add(i, profile);
 
@@ -152,7 +152,43 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                            resultList.Run.CurrentScanSet.BackgroundIntensity,
                                            this.MinMSFeatureToBackgroundRatio);
 
+            foreach (IsotopicProfile isotopicProfile in msFeatures)
+            {
+                IsosResult result = new StandardIsosResult(resultList.Run,resultList.Run.CurrentScanSet);
+                result.IsotopicProfile = isotopicProfile;
+                result.IntensityAggregate = GetReportedAbundance(isotopicProfile, NumPeaksUsedInAbundance);
+                
+                if (isotopicProfile.Score<=MaxFit)
+                {
+                    AddDeconResult(resultList, result);    
+                }
+                
+                
+            }
 
+        }
+
+        private double GetReportedAbundance(IsotopicProfile profile, int numPeaksUsedInAbundance = 1, int defaultVal = 0)
+        {
+            if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
+
+            Check.Require(numPeaksUsedInAbundance > 0, "NumPeaksUsedInAbundance must greater than 0. Currently it is = " + numPeaksUsedInAbundance);
+
+            List<float> peakListIntensities = (from n in profile.Peaklist orderby n.Height descending select n.Height).ToList();
+
+            double summedIntensities = 0;
+
+            for (int i = 0; i < peakListIntensities.Count; i++)
+            {
+                if (i < numPeaksUsedInAbundance)
+                {
+                    summedIntensities += peakListIntensities[i];
+                }
+
+
+            }
+
+            return summedIntensities;
 
         }
 
@@ -162,14 +198,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         {
 
             List<IsotopicProfile> isotopicProfiles = new List<IsotopicProfile>();
-            
+
             if (_averagineProfileLookupTable == null)
             {
                 _averagineProfileLookupTable = CreateTheoreticalProfilesForMassRange();
             }
 
-            double minMSFeatureIntensity = backgroundIntensity*MinMSFeatureToBackgroundRatio;
-           
+
+            double minMSFeatureIntensity = backgroundIntensity * MinMSFeatureToBackgroundRatio;
+
 
             XYData xyData = new XYData();
             xyData.Xvalues = originalXYData.Xvalues;
@@ -196,7 +233,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 }
 
-                bool peakIsBelowIntensityThreshold = (msPeak.Height < minMSFeatureIntensity);
+                var peakIsBelowIntensityThreshold = (msPeak.Height < minMSFeatureIntensity);
                 if (peakIsBelowIntensityThreshold) break;
 
 
@@ -236,7 +273,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     theorIso.MostAbundantIsotopeMass = obsPeakMass;
 
                     //PeakUtilities.TrimIsotopicProfile(theorIso, 0.05);
-                   
+
                     CalculateMassesForIsotopicProfile(theorIso);
                     XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
 
@@ -252,8 +289,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         peaksAlreadyProcessed.AddRange(msFeature.Peaklist);
                         msFeature.Score = bestFitVal;
                         msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
-                       
-                        
+
+
                         isotopicProfiles.Add(msFeature);
 
                         reportstring = msPeak.XValue.ToString("0.00000") + "\t" +
@@ -397,7 +434,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile iso, double fwhm, double minRelIntensity = 0.1)
         {
-            
+
             var xydata = new XYData();
             var xvals = new List<double>();
             var yvals = new List<double>();
@@ -417,27 +454,27 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             for (int peakIndex = 0; peakIndex < mspeaks.Count; peakIndex++)
             {
                 MSPeak msPeak = mspeaks[peakIndex];
-                XYData tempXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(msPeak, fwhm,NumPointsPerTheorPeak);
+                XYData tempXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(msPeak, fwhm, NumPointsPerTheorPeak);
 
                 for (int j = 0; j < tempXYData.Xvalues.Length; j++)
                 {
                     //First peak is a zero-intensity peak. We always want to add that one. For the others,
                     //add intensity points that are above a certain intensity
-                    if (peakIndex>0)
+                    if (peakIndex > 0)
                     {
                         if (tempXYData.Yvalues[j] >= minRelIntensity)
                         {
                             xvals.Add(tempXYData.Xvalues[j]);
                             yvals.Add(tempXYData.Yvalues[j]);
                         }
-                        
+
                     }
                     else
                     {
                         xvals.Add(tempXYData.Xvalues[j]);
                         yvals.Add(tempXYData.Yvalues[j]);
                     }
-                    
+
                 }
             }
             xydata.Xvalues = xvals.ToArray();

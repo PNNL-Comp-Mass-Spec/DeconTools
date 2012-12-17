@@ -85,7 +85,7 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.ResultList.AddRange(resultList.IsosResultBin);
         }
 
-        public void CombineDeconResults(ResultCollection baseResultList, IsosResult addedResult, DeconResultComboMode comboMode)
+        protected void AddDeconResult(ResultCollection baseResultList, IsosResult addedResult, DeconResultComboMode comboMode= DeconResultComboMode.simplyAddIt)
         {
             Check.Require(baseResultList != null, "Deconvolutor problem. Can't combine results. Base resultList is null.");
             Check.Require(addedResult != null, "Deconvolutor problem. Can't combine results. Added IsosResult is null.");

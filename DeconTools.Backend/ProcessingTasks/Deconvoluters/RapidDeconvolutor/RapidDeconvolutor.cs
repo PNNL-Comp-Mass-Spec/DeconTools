@@ -315,7 +315,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
                 //resultList.ResultList.Add(result);
-                this.CombineDeconResults(resultList, result, comboMode);
+                this.AddDeconResult(resultList, result, comboMode);
 
                 currentScanset.NumIsotopicProfiles++;
             }

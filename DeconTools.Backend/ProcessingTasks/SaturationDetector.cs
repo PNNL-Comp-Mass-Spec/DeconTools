@@ -85,10 +85,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 double mzOfMostAbundant = result.IsotopicProfile.Peaklist[indexOfObsMostAbundant].XValue;
 
-                int indexOfUnsummedMostAbundantMZ = result.Run.XYData.GetClosestXVal(mzOfMostAbundant);
+                int indexOfUnsummedMostAbundantMZ = run.XYData.GetClosestXVal(mzOfMostAbundant);
                 if (indexOfUnsummedMostAbundantMZ >= 0)
                 {
-                    result.IsotopicProfile.OriginalIntensity = result.Run.XYData.Yvalues[indexOfUnsummedMostAbundantMZ];
+                    result.IsotopicProfile.OriginalIntensity = run.XYData.Yvalues[indexOfUnsummedMostAbundantMZ];
                     result.IsotopicProfile.IsSaturated = (result.IsotopicProfile.OriginalIntensity >=
                                                           SaturationThreshold);
 
@@ -119,9 +119,9 @@ namespace DeconTools.Backend.ProcessingTasks
                         {
 
 
-                            int indexUnsummedData = result.Run.XYData.GetClosestXVal(result.IsotopicProfile.Peaklist[i].XValue);
+                            int indexUnsummedData = run.XYData.GetClosestXVal(result.IsotopicProfile.Peaklist[i].XValue);
 
-                            var unsummedIntensity = result.Run.XYData.Yvalues[indexUnsummedData];
+                            var unsummedIntensity = run.XYData.Yvalues[indexUnsummedData];
 
 
                             if (unsummedIntensity < _minRelIntTheorProfile*SaturationThreshold)

@@ -456,7 +456,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 result.IsotopicProfile = profile;
 
-                this.CombineDeconResults(resultList, result, DeconResultComboMode.simplyAddIt);
+                this.AddDeconResult(resultList, result, DeconResultComboMode.simplyAddIt);
                 //resultList.ResultList.Add(result);
                 currentScanset.NumIsotopicProfiles++;
             }

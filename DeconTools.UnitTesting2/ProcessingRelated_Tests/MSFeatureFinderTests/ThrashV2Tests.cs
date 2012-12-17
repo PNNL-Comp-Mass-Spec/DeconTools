@@ -19,12 +19,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void ThrashV2Test1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            run.ScanSetCollection.Create(run, 6005, 6050, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             ThrashDeconvolutorV2 deconvolutor = new ThrashDeconvolutorV2();
             deconvolutor.MinMSFeatureToBackgroundRatio = 3;
+           
 
             List<IsotopicProfile> isotopicprofiles = new List<IsotopicProfile>();
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
@@ -34,7 +35,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
                 //TestUtilities.DisplayXYValues(run.XYData);
 
-                //run.XYData= run.XYData.TrimData(579.5, 580.5);
+               // run.XYData= run.XYData.TrimData(575, 585);
 
 
                 peakDetector.Execute(run.ResultCollection);
@@ -80,13 +81,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void OldDeconvolutorTest1()
         {
             Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            run.ScanSetCollection.Create(run, 6005, 6050, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             HornDeconvolutor deconvolutor = new HornDeconvolutor();
+            //deconvolutor.IsMZRangeUsed = true;
+            //deconvolutor.MinMZ = 575;
+            //deconvolutor.MaxMZ = 585;
+
 
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
@@ -117,10 +122,47 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             //TestUtilities.DisplayIsotopicProfileData(testIso.IsotopicProfile);
 
-            // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
             //TestUtilities.DisplayPeaks(run.PeakList);
 
         }
+
+
+        [Test]
+        public void CompareOldAndNewDeconvolutors()
+        {
+            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            ThrashDeconvolutorV2 newDeconvolutor = new ThrashDeconvolutorV2();
+            newDeconvolutor.MinMSFeatureToBackgroundRatio = 3;
+            newDeconvolutor.MaxFit = 0.4;
+            
+
+            ScanSet scanset = new ScanSet(6005);
+            run.CurrentScanSet = scanset;
+
+            HornDeconvolutor oldDeconvolutor = new HornDeconvolutor();
+            oldDeconvolutor.MinPeptideBackgroundRatio = 3;
+            oldDeconvolutor.MaxFitAllowed = 0.4;
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+            newDeconvolutor.Execute(run.ResultCollection);
+
+            Console.WriteLine("\n--------------New decon ------------------");
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            run.ResultCollection.ResultList.Clear();
+            run.ResultCollection.IsosResultBin.Clear();
+            oldDeconvolutor.Execute(run.ResultCollection);
+
+            Console.WriteLine("\n--------------Old decon ------------------");
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+        }
+
 
         [Test]
         public void OldDeconvolutorTest_temp1()

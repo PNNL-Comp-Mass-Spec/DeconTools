@@ -66,11 +66,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(9282, result1.TargetID);
             Assert.AreEqual(2, result1.ChargeState);
-            Assert.AreEqual(4541, result1.ScanLC);
-            Assert.AreEqual(0.32525m, (decimal)Math.Round(result1.NET, 5));
-            Assert.AreEqual(-0.001781m, (decimal)Math.Round(result1.NETError, 6));
+            Assert.AreEqual(4537, result1.ScanLC);
+            Assert.AreEqual(0.32514m, (decimal)Math.Round(result1.NET, 5));
+            Assert.AreEqual(-0.001662m, (decimal)Math.Round(result1.NETError, 6));
 
-            Assert.AreEqual(0.283m, (decimal)Math.Round(result1.Ratio,3));
+            Assert.AreEqual(0.274m, (decimal)Math.Round(result1.Ratio, 3));
 
         }
 
@@ -99,6 +99,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+            executor.Targets.TargetList = executor.Targets.TargetList.Take(20).ToList();
             executor.Execute();
 
 
