@@ -5,6 +5,7 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Utilities;
 
@@ -25,7 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #region Properties
 
-        public DeconToolsPeakDetector MSPeakDetector { get; set; }
+        public DeconToolsPeakDetectorV2 MSPeakDetector { get; set; }
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         public TFFBase TargetedMSFeatureFinder { get; set; }

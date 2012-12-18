@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using IQ.ViewModel;
 
 namespace IQ.View
@@ -56,6 +57,72 @@ namespace IQ.View
             Properties.Settings.Default.LastWorkflowFilePath = ViewModel.WorkflowParametersFilePath ?? "";
 
             Properties.Settings.Default.Save();
+        }
+
+        private void btnSelectDataset_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Filter = "All files (*.*)|*.*";
+
+            // Display OpenFileDialog by calling ShowDialog method
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                ViewModel.DatasetPath = filename;
+            }
+
+        }
+
+        private void btnSelectWorkflowFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Filter = "XML workflow files (.xml)|*.xml|All files (*.*)|*.*";
+
+            // Display OpenFileDialog by calling ShowDialog method
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                ViewModel.WorkflowParametersFilePath = filename;
+            }
+
+        }
+
+        private void btnSelectTargetFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Filter = "target / result files (.txt)|*.txt|All files (*.*)|*.*";
+
+            // Display OpenFileDialog by calling ShowDialog method
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                ViewModel.TargetsFilePath = filename;
+            }
+
+        }
+
+        private void btnClearDataset_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.DatasetPath = String.Empty;
+        }
+
+        private void btnClearWorkflowFilePath_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.WorkflowParametersFilePath = String.Empty;
+        }
+
+        private void btnClearTargetFilePath_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.TargetsFilePath = String.Empty;
         }
     }
 }

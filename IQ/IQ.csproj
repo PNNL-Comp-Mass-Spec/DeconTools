@@ -116,18 +116,16 @@
     <Folder Include="Model\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\closed.png" />
+    <Resource Include="Images\closed.ico" />
+    <Resource Include="Images\arrow_undo.ico" />
+    <Resource Include="Images\undo.ico" />
     <Content Include="IMSCOMP.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="PNNLOmicsElementData.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="xerces-c_2_7.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="xerces-c_2_7D.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

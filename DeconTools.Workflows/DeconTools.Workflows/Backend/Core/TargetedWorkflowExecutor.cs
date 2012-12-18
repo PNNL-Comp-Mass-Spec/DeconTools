@@ -349,17 +349,31 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void SetupLogging()
         {
+            string loggingFolder;
+
             if (string.IsNullOrEmpty(ExecutorParameters.LoggingFolder))
             {
-                ExecutorParameters.LoggingFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
+                loggingFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
             }
-
-            if (!Directory.Exists(ExecutorParameters.LoggingFolder))
+            else
             {
-                Directory.CreateDirectory(ExecutorParameters.LoggingFolder);
+                loggingFolder = ExecutorParameters.LoggingFolder;
             }
 
-            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
+            try
+            {
+                if (!Directory.Exists(loggingFolder))
+                {
+                    Directory.CreateDirectory(loggingFolder);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new System.IO.IOException("Trying to set up logging folder but there was a critical error. Details:\n\n" + ex.Message, ex);
+            }
+           
+
+            _loggingFileName = loggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
         }
 
 

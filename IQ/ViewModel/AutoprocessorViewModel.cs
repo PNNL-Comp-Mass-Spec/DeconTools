@@ -18,7 +18,7 @@ namespace IQ.ViewModel
             TargetedWorkflowParameters = new BasicTargetedWorkflowParameters();
 
 
-          
+
 
         }
 
@@ -38,7 +38,12 @@ namespace IQ.ViewModel
             get { return _datasetPath; }
             set
             {
-                _datasetPath = value;
+                string trimmedPath = "";
+                if (!string.IsNullOrEmpty(value))
+                {
+                    trimmedPath = value.Trim('"');
+                }
+                _datasetPath = trimmedPath;
                 OnPropertyChanged("DatasetPath");
             }
         }
@@ -48,7 +53,13 @@ namespace IQ.ViewModel
             get { return ExecutorParameters.WorkflowParameterFile; }
             set
             {
-                ExecutorParameters.WorkflowParameterFile = value;
+                string trimmedPath = "";
+                if (!string.IsNullOrEmpty(value))
+                {
+                    trimmedPath = value.Trim('"');
+                }
+
+                ExecutorParameters.WorkflowParameterFile = trimmedPath;
                 OnPropertyChanged("WorkflowParametersFilePath");
             }
         }
@@ -59,7 +70,12 @@ namespace IQ.ViewModel
             get { return ExecutorParameters.TargetsFilePath; }
             set
             {
-                ExecutorParameters.TargetsFilePath = value;
+                string trimmedPath = "";
+                if (!string.IsNullOrEmpty(value))
+                {
+                    trimmedPath = value.Trim('"');
+                }
+                ExecutorParameters.TargetsFilePath = trimmedPath;
                 OnPropertyChanged("TargetsFilePath");
             }
         }
@@ -98,15 +114,15 @@ namespace IQ.ViewModel
 
         public void Execute()
         {
-            
+
 
             if (_backgroundWorker != null && _backgroundWorker.IsBusy)
             {
                 GeneralStatusMessage = "Already processing.... please wait or click 'Cancel'";
                 return;
             }
-            
-             GeneralStatusMessage = "IQ working....";
+
+            GeneralStatusMessage = "IQ working....";
 
 
             _backgroundWorker = new BackgroundWorker();
@@ -120,7 +136,7 @@ namespace IQ.ViewModel
 
 
 
-            
+
 
         }
 
@@ -136,9 +152,12 @@ namespace IQ.ViewModel
         void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
+
+
+
             var executor = new BasicTargetedWorkflowExecutor(ExecutorParameters, DatasetPath, worker);
             executor.Execute();
-            
+
             if (worker.CancellationPending)
             {
                 e.Cancel = true;
@@ -163,7 +182,7 @@ namespace IQ.ViewModel
             }
         }
 
-     
+
         void _backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PercentProgress = e.ProgressPercentage;
@@ -191,6 +210,36 @@ namespace IQ.ViewModel
 
 
                     }
+                    else
+                    {
+                        string currentTargetString = info.Result == null ? "" : info.Result.Target != null ? info.Result.Target.ID.ToString() : "";
+
+                        if (info.Result == null || info.Result.Target == null)
+                        {
+                            currentTargetString = "";
+                        }
+                        else
+                        {
+                            currentTargetString = info.Result.Target.ID.ToString() + "; m/z " +
+                                                  info.Result.Target.MZ.ToString("0.0000") + "; z=" +
+                                                  info.Result.Target.ChargeState;
+
+                            if (info.Result.IsotopicProfile!=null)
+                            {
+                                currentTargetString = currentTargetString + "\nTARGET found!. Scan= " +
+                                                      info.Result.GetScanNum() + "; Intensity= " +
+                                                      info.Result.IntensityAggregate.ToString("0") +
+                                                      "; Fit score= " + info.Result.Score.ToString("0.000");
+                            }
+                            else
+                            {
+                                currentTargetString = currentTargetString + "\nTarget not found";
+                            }
+
+                        }
+
+                        GeneralStatusMessage = "Processed target " + currentTargetString;
+                    }
                 }
                 else
                 {
@@ -204,6 +253,6 @@ namespace IQ.ViewModel
 
         }
 
-      
+
     }
 }
