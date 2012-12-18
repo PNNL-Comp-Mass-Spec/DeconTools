@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
 using DeconTools.Backend.Runs;
 
@@ -11,7 +12,7 @@ namespace DeconTools.Workflows.Backend.Core
     public class PeakDetectAndExportWorkflow : WorkflowBase
     {
 
-        DeconToolsPeakDetector _peakDetector;
+        DeconToolsPeakDetectorV2 _peakDetector;
         PeakDetectAndExportWorkflowParameters _workflowParameters;
         private BackgroundWorker backgroundWorker;
 
@@ -45,7 +46,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
-            _peakDetector = new DeconToolsPeakDetector(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
+            _peakDetector = new DeconToolsPeakDetectorV2(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
                 this._workflowParameters.PeakFitType, this._workflowParameters.IsDataThresholded);
 
             _peakDetector.PeaksAreStored = true;
