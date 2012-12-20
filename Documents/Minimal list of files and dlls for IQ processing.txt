@@ -1,0 +1,23 @@
+Minimal list of .dlls required for IQ.  
+
+1) you need to reference DeconTools.Backend.dll and DeconTools.Workflows.dll
+2) you need to have the following .dlls in the same folder where the two above .dlls are found.
+
+alglibnet2.dll		A math library
+Mapack.dll		Another math library
+MathNet.Numerics.dll	Another math library
+MultiAlignEngine.dll	For performing mass and NET alignment
+PNNLOmics.dll		Constants for creating Theoretical isotopic profile
+
+
+For reading file types:
+Bruker:			BrukerDataReader.dll
+UIMF:			UIMFLibrary.dll
+YAFMS:			YafmsLibrary.dll
+			IMSCOMP.dll
+MZXML, MZML and MZ5: 	ProteowizardWrapper.dll	
+			pwiz_bindings_cli.dll
+
+
+3) You need to ensure the following file(s) are copied to the 'bin' folder where your application executes:
+PNNLOmicsElementData.xml
