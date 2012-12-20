@@ -42,6 +42,11 @@ namespace DeconTools.Workflows.Backend.Core
         public virtual XYData MassSpectrumXYData { get; set; }
 
         public virtual XYData ChromatogramXYData { get; set; }
+
+        public bool Success { get; set; } 
+
+        public string WorkflowStatusMessage { get; set; }
+
         #endregion
 
 
@@ -147,6 +152,49 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        protected virtual void ExecutePostWorkflowHook()
+        {
+            if (Result!=null && Result.Target!=null && Success)
+            {
+                WorkflowStatusMessage = "Result " + Result.Target.ID + "; m/z= " + Result.Target.MZ.ToString("0.0000") +
+                                        "; z=" + Result.Target.ChargeState;
+
+                if (Result.FailedResult==false)
+                {
+                    if (Result.IsotopicProfile!=null)
+                    {
+                        WorkflowStatusMessage = WorkflowStatusMessage + "; Target FOUND!";
+
+                    }
+                    
+                }
+                else
+                {
+                    WorkflowStatusMessage = WorkflowStatusMessage + "; Target NOT found. Reason: " + Result.FailureType;
+                }
+
+                
+            }
+            
+        }
+
+
+        protected virtual void HandleWorkflowError(Exception ex)
+        {
+            Success = false;
+            WorkflowStatusMessage = "Unexpected IQ workflow error. Error info: " + ex.Message;
+
+            if (ex.Message.Contains("COM") || ex.Message.ToLower().Contains(".dll"))
+            {
+                throw new ApplicationException("There was a critical failure! Error info: " + ex.Message);
+            }
+
+            TargetedResultBase result =Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
+            result.FailedResult = true;
+        }
+
+
         public virtual void ResetStoredData()
         {
             this.ResetStoredXYData(this.ChromatogramXYData);
@@ -178,15 +226,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
-
-
+   
         /// <summary>
         /// Factory method for creating the Workflow object using the WorkflowType information in the parameter object
         /// </summary>

@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
             PeakToMSFeatureAssociator peakAssociator = new PeakToMSFeatureAssociator();
 
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;

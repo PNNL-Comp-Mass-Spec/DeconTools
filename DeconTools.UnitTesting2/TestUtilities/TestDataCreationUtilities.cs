@@ -14,7 +14,7 @@ namespace DeconTools.UnitTesting2
 
         public static Run CreatePeakDataFromStandardOrbitrapData()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             run.ScanSetCollection .Create(run, 6000, 6050, 1, 1, false);
 
@@ -42,7 +42,7 @@ namespace DeconTools.UnitTesting2
         public static Run CreateResultsFromThreeScansOfStandardOrbitrapData()
         {
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             run.ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
 

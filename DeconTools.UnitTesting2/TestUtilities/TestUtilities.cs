@@ -87,7 +87,7 @@ namespace DeconTools.UnitTesting2
 
         public List<IsosResult> CreateThrashIsosResults1()
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             run.ScanSetCollection .Create(run, 6000, 6020, 1, 1);
             
@@ -366,7 +366,7 @@ namespace DeconTools.UnitTesting2
 
         public static List<Peak> GeneratePeakList(ScanSet scanSet)
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 

@@ -513,7 +513,7 @@ namespace DeconTools.Workflows.Backend.Core
                 catch (Exception ex)
                 {
                     string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
-                    ReportProcessingProgress(errorString, mtCounter);
+                    ReportGeneralProgress(errorString, mtCounter);
 
                     throw;
                 }

@@ -14,7 +14,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
         [Test]
         public void deconWithTHRASH_Then_ValidateTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
         [Test]
         public void deconWithRAPID_Then_ValidateTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 

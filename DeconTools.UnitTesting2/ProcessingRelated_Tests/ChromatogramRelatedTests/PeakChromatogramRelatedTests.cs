@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -52,7 +52,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double targetMZ = 831.48;
 
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -94,7 +94,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         {
             PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -123,7 +123,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double targetMZ = 831.48;
             double toleranceInPPM = 20;
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -182,7 +182,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             int totalIterations = 40;
 
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -218,7 +218,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         //{
         //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
-        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        //    Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
         //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
         //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -301,7 +301,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         //{
         //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
-        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        //    Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
         //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
         //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -342,7 +342,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         //{
         //    Dictionary<long, int> peakFrequency = new Dictionary<long, int>();
 
-        //    Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        //    Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
         //    PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
         //    peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);

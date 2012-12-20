@@ -4,6 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
+    [Obsolete("Not used anymore. Use 'MzRun'",true)]
     public sealed class MZXMLRun : DeconToolsRun
     {
 

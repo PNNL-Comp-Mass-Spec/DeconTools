@@ -88,20 +88,20 @@ namespace DeconTools.Workflows.Backend.Core
                     ExecuteTask(_chromatogramCorrelatorTask);
                 }
 
+                Success = true;
 
-
+                ExecutePostWorkflowHook();
                 //updateMassAndNETCalibrationValues
 
             }
             catch (Exception ex)
             {
-                TargetedResultBase result = (TargetedResultBase)this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-                result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
-                result.FailedResult = true;
-                return;
+              
+                HandleWorkflowError(ex);
+                
             }
         }
 
-     
+       
     }
 }

@@ -181,6 +181,28 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+
+        [Test]
+        public void executorTest7_VladAlignmentIssue()
+        {
+            string testfile =
+                @"D:\Data\N14N15Vlad\cel_GA153_F_0_20Jun12_Falcon_12-06-01.RAW";
+            string parameterFile =
+                @"D:\Data\N14N15Vlad\parameters\ExecutorParameters1 - Copy.xml";
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(parameterFile);
+
+            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
+            executor.Execute();
+
+            
+
+
+        }
+
+
+
         [Test]
         public void managerTest1()
         {

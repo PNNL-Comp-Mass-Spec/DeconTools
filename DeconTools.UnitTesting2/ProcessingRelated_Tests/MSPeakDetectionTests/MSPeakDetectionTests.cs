@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
-            Run run = new XCaliburRun(testFile);
+            Run run = new XCaliburRun2(testFile);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
@@ -84,7 +84,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
-            Run run = new XCaliburRun(testFile);
+            Run run = new XCaliburRun2(testFile);
 
             //create list of target scansets
             run.ScanSetCollection .Create(run, 6000, 6015, 1, 1);

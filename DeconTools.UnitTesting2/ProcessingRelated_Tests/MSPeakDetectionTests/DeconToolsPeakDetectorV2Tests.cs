@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         public void OldPeakDetectorTest1()
         {
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -41,7 +41,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         public void NewPeakDetectorTest1()
         {
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -108,7 +108,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         public void NewPeakDetectorTest2()
         {
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -211,7 +211,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         public void NewPeakDetectorExecuteTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -238,7 +238,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         public void CheckBackgroundIntensityTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -266,7 +266,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         public void OldPeakDetectorUsingMatrixBasedFittingRoutineTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 
@@ -308,7 +308,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         public void CalcOfFwhmByOldPeakdetector_Test1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scan = new ScanSet(6005);
 

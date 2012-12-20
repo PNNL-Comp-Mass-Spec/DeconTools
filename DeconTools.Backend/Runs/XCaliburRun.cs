@@ -7,6 +7,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
+    [Obsolete("Not used anymore", true)]
     [Serializable]
     public sealed class XCaliburRun : DeconToolsRun
     {
@@ -39,7 +40,7 @@ namespace DeconTools.Backend.Runs
             try
             {
 
-                this.RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.FINNIGAN);
+                RawData = new DeconToolsV2.Readers.clsRawData(filename, DeconToolsV2.Readers.FileType.FINNIGAN);
             }
             catch (Exception ex)
             {

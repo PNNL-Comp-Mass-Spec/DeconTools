@@ -132,7 +132,7 @@ namespace DeconTools.Backend.Runs
                     run = null;
                     break;
                 case Globals.MSFileType.MZXML_Rawdata:
-                    run = new MZXMLRun(fileName);
+                    run = new MzRun(fileName);
                     break;
                 case Globals.MSFileType.PNNL_IMS:
                     run = new IMFRun(fileName);

@@ -14,7 +14,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void findMSFeaturesInOrbitrapData_Test1()
         {
 
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             ScanSet scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;

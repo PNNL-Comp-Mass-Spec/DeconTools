@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         [Test]
         public void fitterOnHornDataTest1()
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         [Test]
         public void fitterOnRapidDataTest1()
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
@@ -188,7 +188,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         [Test]
         public void effectOfFWHMOnFitTest()
         {
-            Run run = new XCaliburRun(xcaliburTestfile);
+            Run run = new XCaliburRun2(xcaliburTestfile);
 
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);

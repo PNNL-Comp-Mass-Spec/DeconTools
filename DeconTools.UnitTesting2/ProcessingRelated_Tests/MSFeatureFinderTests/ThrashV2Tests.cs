@@ -18,7 +18,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void ThrashV2Test1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -80,7 +80,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void OldDeconvolutorTest1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
 
@@ -131,7 +131,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void CompareOldAndNewDeconvolutors()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -167,7 +167,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void OldDeconvolutorTest_temp1()
         {
-            Run run = new XCaliburRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             OldDecon2LSParameters parameters = new OldDecon2LSParameters();
             string paramFile =

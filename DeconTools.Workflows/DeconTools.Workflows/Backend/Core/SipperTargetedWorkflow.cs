@@ -113,17 +113,21 @@ namespace DeconTools.Workflows.Backend.Core
 
                 GetDataFromQuantifier();
 
+                Success = true;
+
+                ExecutePostWorkflowHook();
+
             }
             catch (Exception ex)
             {
-                TargetedResultBase result = Run.ResultCollection.CurrentTargetedResult;
-                result.FailedResult = true;
-                result.ErrorDescription = ex.Message;
-                Console.WriteLine(((LcmsFeatureTarget)result.Target).FeatureToMassTagID + "; " + result.ErrorDescription);
+                HandleWorkflowError(ex);
 
-                return;
+                string targetInfoString = "Uncaptured failure on the following target: " + ((LcmsFeatureTarget)Result.Target).FeatureToMassTagID + "; " + Result.ErrorDescription;
+                Console.WriteLine(targetInfoString);
             }
         }
+
+        
 
 
         private void GetDataFromQuantifier()

@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Runs
 {
 
     [Serializable]
-    public sealed class UIMFRun : DeconToolsRun
+    public sealed class UIMFRun : Run
     {
         const double FramePressureStandard = 4.00000d;   // 
 
@@ -33,7 +33,6 @@ namespace DeconTools.Backend.Runs
         {
             XYData = new XYData();
             MSFileType = Globals.MSFileType.PNNL_UIMF;
-            RawData = null;
             IMSScanSetCollection = new IMSScanSetCollection();
             _framePressuresUnsmoothed = new Dictionary<int, double>();
             //_frameTypeForMS1 = DataReader.FrameType.MS1;   //default is MS1
@@ -66,6 +65,23 @@ namespace DeconTools.Backend.Runs
             ContainsMSMSData = CheckRunForMSMSData();
 
         }
+
+        public UIMFRun(string fileName, int minFrame, int maxFrame)
+            : this(fileName)
+        {
+            MinLCScan = minFrame;
+            MaxLCScan = maxFrame;
+        }
+
+        public UIMFRun(string fileName, int minFrame, int maxFrame, int minScan, int maxScan)
+            : this(fileName, minFrame, maxFrame)
+        {
+            this.MinIMSScan = minScan;
+            this.MaxIMSScan = maxScan;
+
+        }
+
+
 
         private void GetMSLevelInfo()
         {
@@ -136,25 +152,14 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public UIMFRun(string fileName, int minFrame, int maxFrame)
-            : this(fileName)
-        {
-            MinLCScan = minFrame;
-            MaxLCScan = maxFrame;
-        }
-
-        public UIMFRun(string fileName, int minFrame, int maxFrame, int minScan, int maxScan)
-            : this(fileName, minFrame, maxFrame)
-        {
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
-
-        }
-
+      
 
         #endregion
 
         #region Properties
+
+        public override XYData XYData { get; set; }
+       
 
         
         public IMSScanSetCollection IMSScanSetCollection { get; set; }
@@ -601,7 +606,14 @@ namespace DeconTools.Backend.Runs
                 ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
                 this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
 
-                double sumIntensities = this.XYData.Yvalues.Sum();
+                
+                double sumIntensities=0;
+
+                if (XYData!=null && XYData.Yvalues !=null && XYData.Yvalues.Length>0)
+                {
+                    sumIntensities = this.XYData.Yvalues.Sum(); 
+                }
+                
                 frameVals.Add(frame);
                 intensityVals.Add(sumIntensities);
             }
