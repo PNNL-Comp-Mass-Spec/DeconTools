@@ -422,7 +422,6 @@ namespace DeconTools.Backend.Core
 
         public virtual void Close()
         {
-            this.DeconToolsPeakList = null;
             if (this.PeakList != null)
             {
                 this.PeakList.Clear();

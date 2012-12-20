@@ -578,8 +578,8 @@ namespace DeconTools.Backend.Runs
             if (UIMFLibraryAdapter.getInstance(this.Filename).Datareader != null)
             {
                 UIMFLibraryAdapter.getInstance(this.Filename).CloseCurrentUIMF();
-
             }
+
             base.Close();
         }
 
