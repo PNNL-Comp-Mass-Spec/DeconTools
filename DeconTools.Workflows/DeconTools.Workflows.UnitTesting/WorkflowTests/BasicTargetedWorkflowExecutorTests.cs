@@ -8,7 +8,8 @@ using NUnit.Framework;
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     [TestFixture]
-    public class TargetedWorkflowExecutorTests
+    [Category("Functional")]
+    public class BasicTargetedWorkflowExecutorTests
     {
 
         [Test]
@@ -119,7 +120,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
-            Assert.AreEqual(8119, result1.ScanLC);
+            Assert.AreEqual(8112, result1.ScanLC);
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
            // Assert.AreEqual(0.002534m, (decimal)Math.Round(result1.NETError, 6));
             Assert.AreEqual(974.52068m, (decimal) Math.Round(result1.MonoMZ, 5));
@@ -133,6 +134,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         [Test]
+        [Category("LongRunning")]
         public void targetedWorkflow_withTargetedAlignment_test()
         {
 
@@ -193,6 +195,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         [Test]
+        [Category("LongRunning")]
         public void copyToLocalTest1()
         {
 
@@ -229,7 +232,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
-            Assert.AreEqual(8119, result1.ScanLC);
+            Assert.AreEqual(8112, result1.ScanLC);
 
 
 

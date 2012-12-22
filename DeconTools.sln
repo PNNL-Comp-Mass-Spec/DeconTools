@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.Proble
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE90075-DA17-4B3A-BF55-EB490CE08B33}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "IQ_Installer", "IQ_Installer\IQ_Installer.vdproj", "{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -95,6 +97,8 @@ Global
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x86.Build.0 = Debug|x86
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.ActiveCfg = Release|x86
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.Build.0 = Release|x86
+		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Debug|x86.ActiveCfg = Debug
+		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

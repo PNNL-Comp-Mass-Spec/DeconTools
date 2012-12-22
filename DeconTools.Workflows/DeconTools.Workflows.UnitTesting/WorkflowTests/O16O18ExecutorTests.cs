@@ -10,11 +10,13 @@ using NUnit.Framework;
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     [TestFixture]
+    [Category("Functional")]
     public class O16O18ExecutorTests
     {
 
 
         [Test]
+        [Category("MustPass")]
         public void StandardO16O18Testing_VladAlz()
         {
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
@@ -76,6 +78,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         [Test]
+        [Ignore("temporary")]
         public void TestErnestosData1()
         {
 
@@ -106,6 +109,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
         [Test]
+        [Ignore("temporary")]
         public void TestErnestosData2_createExecutorFile()
         {
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();

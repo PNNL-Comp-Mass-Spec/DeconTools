@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -64,13 +65,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Run run = RunUtilities.CreateAndAlignRun(bruker9t_samplefile1, bruker9t_peaksfile1);
 
-            var massTagCollection = new TargetCollection();
-            massTagCollection.TargetIDList = new List<long> { 23085448 };
+            string targetsFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets_Filtered0.45-0.47NET_first18.txt";
 
-            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_R_Sphaeroides_P208", "Albert", massTagCollection.TargetIDList);
-            massTagCollection = importer.Import();
 
-            run.CurrentMassTag = massTagCollection.TargetList.FirstOrDefault(p => p.ChargeState == 1);
+            MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(targetsFile);
+           var targetCollection=    importer.Import();
+            
+
+            run.CurrentMassTag = targetCollection.TargetList.FirstOrDefault(p => p.ChargeState == 1);
 
             N14N15Workflow2Parameters parameters = new N14N15Workflow2Parameters();
             parameters.LoadParameters(FileRefs.ImportedData + "\\" + "importedN14N15WorkflowParameters.xml");
@@ -90,6 +93,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             N14N15Workflow2 workflow = new N14N15Workflow2(run, parameters);
             workflow.Execute();
 
+            //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
+
             var resultOutput=  run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as N14N15_TResult;
 
             Assert.AreEqual(23085448, resultOutput.Target.ID);
@@ -97,7 +102,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsNotNull(resultOutput.ScanSet);
             
-            Assert.AreEqual(1640, resultOutput.ScanSet.PrimaryScanNumber);
+            Assert.AreEqual(1638, resultOutput.ScanSet.PrimaryScanNumber);
 
             Assert.AreEqual(1639, resultOutput.ScanSetForN15Profile.PrimaryScanNumber);
 

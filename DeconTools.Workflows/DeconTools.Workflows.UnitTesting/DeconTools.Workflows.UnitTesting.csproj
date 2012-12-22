@@ -94,7 +94,7 @@
     <Compile Include="WorkflowTests\SpecialOrNewCasesWorkflowTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentOnDifficultDatasetsTests.cs" />
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
-    <Compile Include="WorkflowTests\TargetedWorkflowExecutorTests.cs" />
+    <Compile Include="WorkflowTests\BasicTargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflow_problemCases.cs" />
     <Compile Include="WorkflowTests\TopDownTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\UIMFWorkflowExecutorTests.cs" />

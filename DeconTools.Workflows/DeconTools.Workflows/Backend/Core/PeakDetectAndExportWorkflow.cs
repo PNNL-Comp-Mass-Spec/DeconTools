@@ -159,6 +159,10 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 backgroundWorker.ReportProgress((int)percentProgress);
             }
+            else
+            {
+                Console.WriteLine("Peak creation progress: " + percentProgress + "%");
+            }
         }
 
         private string getOutputPeaksFilename()

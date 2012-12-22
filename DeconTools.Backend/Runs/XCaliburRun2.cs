@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Runs
 {
     public class XCaliburRun2 : Run
     {
-        
+
         private MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
 
 
@@ -155,92 +155,58 @@ namespace DeconTools.Backend.Runs
         {
             PrecursorInfo precursor = new PrecursorInfo();
 
-            string filter = null;
-            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
+            string scanFilterString = null;
+            _msfileReader.GetFilterForScanNum(scanNum, ref scanFilterString);
 
-            int msLevel = 1;
+            //Get MS Level
+            precursor.MSLevel = GetMSLevel(scanNum);
 
-            if (filter == null)
-            {
-                precursor.MSLevel = 1;
-            }
-            else
-            {
-                int indexOfMSReference = filter.IndexOf("ms");
-                if (indexOfMSReference == -1)
-                {
-                    msLevel = 1;
-                }
-                else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string 
-                {
-                    char mslevelFromFilter = filter[indexOfMSReference + 2];
 
-                    switch (mslevelFromFilter)
-                    {
-                        case ' ':
-                            msLevel = 1;
-                            break;
-                        case '1':
-                            msLevel = 1;
-                            break;
-                        case '2':
-                            msLevel = 2;
-                            break;
-                        case '3':
-                            msLevel = 3;
-                            break;
-                        case '4':
-                            msLevel = 4;
-                            break;
-                        case '5':
-                            msLevel = 5;
-                            break;
-
-                        default:
-                            msLevel = 1;
-                            break;
-                    }
-                }
-                else
-                {
-                    msLevel = 1;    //  the 'ms' was found right at the end of the scan description. Probably never happens.
-                }
-            }
-            precursor.MSLevel = msLevel;
-
-            //step back till the scan number = 1;
-            int stepBack = 0;
-            int testScanLevel = 0;
-            while (scanNum - stepBack > 0)
-                if (scanNum - stepBack > 0)
-                {
-                    testScanLevel = GetMSLevelFromRawData(scanNum - stepBack);
-                    stepBack++;
-                    if (testScanLevel == 1)//the first precursor scan prior
-                    {
-                        break;
-                    }
-                }
-            precursor.PrecursorScan = scanNum - (stepBack - 1);
-
-            string scanInfo = null;
-            _msfileReader.GetFilterForScanNum(scanNum, ref scanInfo);
-
-            if (scanInfo != null)
-            {
-                precursor.PrecursorMZ = ParseThermoScanInfo(scanInfo);
-            }
-            else
+            //Get Precursor MZ
+            if (scanFilterString == null)
             {
                 precursor.PrecursorMZ = -1;
+
             }
+            else
+            {
+                precursor.PrecursorMZ = ParseMZValueFromThermoScanInfo(scanFilterString);
+            }
+
+            //Get the Parent scan if MS level is not MS1
+            if (precursor.MSLevel>1)
+            {
+                int stepBack = 0;
+                while (scanNum - stepBack > 0)
+                {
+                    if (scanNum - stepBack > 0)
+                    {
+                        int testScanLevel = GetMSLevel(scanNum - stepBack);
+                        stepBack++;
+                        if (testScanLevel == 1) //the first precursor scan prior
+                        {
+                            break;
+                        }
+                    }
+                }
+                precursor.PrecursorScan = scanNum - (stepBack - 1);
+            }
+            else
+            {
+                precursor.PrecursorScan = scanNum;
+            }
+
+           
+
+
             //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
 
             return precursor;
         }
 
-        private double ParseThermoScanInfo(string scanInfo)
+
+        private double ParseMZValueFromThermoScanInfo(string scanInfo)
         {
             double precursorMass = 0;
 
@@ -258,7 +224,7 @@ namespace DeconTools.Backend.Runs
                 precursorMass = -1;
             }
 
-            if(precursorMass < 0)//if still -1, check for hcd
+            if (precursorMass < 0)//if still -1, check for hcd
             {
                 string patternHcd = @"(?<mz>[0-9.]+)@hcd";
 

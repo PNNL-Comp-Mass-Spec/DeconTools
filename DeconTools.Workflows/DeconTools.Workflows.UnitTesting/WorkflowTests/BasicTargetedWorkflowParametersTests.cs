@@ -1,18 +1,27 @@
-﻿using DeconTools.Workflows.Backend.Core;
+﻿using System.IO;
+using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     [TestFixture]
+    [Category("Standard")]
     public class BasicTargetedWorkflowParametersTests
     {
         [Test]
+
         public void exportParametersTest1()
         {
             string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedBasicTargetedWorkflowParameters.xml";
 
+            if (File.Exists(exportedParametersFile)) File.Delete(exportedParametersFile);
+
+
             BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
+
+            Assert.That(File.Exists(exportedParametersFile), "Parameter file doesn't exist");
+
 
         }
 

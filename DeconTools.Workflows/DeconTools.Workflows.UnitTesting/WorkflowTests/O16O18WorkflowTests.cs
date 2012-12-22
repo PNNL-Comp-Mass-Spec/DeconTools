@@ -124,14 +124,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-
-
-      
-
-
         [Test]
+        [Ignore("Local files used")]
         public void checkO16O18ChromGenMode_test1()
         {
+            //
+
             string testFile = @"D:\Data\O16O18\Weijun\TechTest_O18_02\TechTest_O18_02_RunA_10Dec09_Doc_09-11-08.RAW";
 
             string massTagFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\O16O18_TargetedProcessing\Targets\MassTags_MousePlasma_1709_allChargeStates_nonRedundant.txt";
