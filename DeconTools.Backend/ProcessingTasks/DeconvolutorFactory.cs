@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -19,7 +21,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
 
-            
+
             if (parameters.HornTransformParameters.UseRAPIDDeconvolution)
             {
                 decon = new RapidDeconvolutor();
@@ -30,6 +32,23 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             return decon;
         }
+
+        public static Deconvolutor CreateDeconvolutor(ThrashParameters parameters)
+        {
+            Deconvolutor decon;
+
+            if (parameters == null)
+            {
+                return new NullDeconvolutor();
+            }
+
+
+
+
+            decon = new ThrashDeconvolutorV2(parameters);
+            return decon;
+        }
+
 
     }
 }

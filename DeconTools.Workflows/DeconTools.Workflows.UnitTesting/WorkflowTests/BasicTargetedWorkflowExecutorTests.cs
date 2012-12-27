@@ -74,6 +74,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void targetedWorkflow_noAlignment()
         {
+            //TODO: fix test - it is using previous data for alignment
+            //TODO: make JIRA issue so we can see chromatogram, etc.
+
             string executorParameterFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_OrbiStandard_workflowExecutorParameters.xml";
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
@@ -179,7 +182,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
-            Assert.AreEqual(8119, result1.ScanLC);
+            Assert.AreEqual(8112, result1.ScanLC);
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
             Assert.AreEqual(0.002534m, (decimal)Math.Round(result1.NETError, 6));
             Assert.AreEqual(2920.53082m, (decimal)Math.Round(result1.MonoMass, 5));

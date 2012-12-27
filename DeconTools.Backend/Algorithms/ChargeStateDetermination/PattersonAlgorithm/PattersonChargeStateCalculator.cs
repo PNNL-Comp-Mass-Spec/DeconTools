@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
+using Task = DeconTools.Backend.Core.Task;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
@@ -35,40 +37,74 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             int leftIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue - fwhm - minus);
             int rightIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue + fwhm + plus);
-            //int leftIndex = MathUtils.BinarySearchWithTolerance(rawData.Xvalues, peak.XValue - fwhm - minus,
-            //    0, rawData.Xvalues.Length - 1, 0.2);
+         
+           
 
-            //int rightIndex = MathUtils.BinarySearchWithTolerance(rawData.Xvalues, peak.XValue + fwhm + plus,
-            //    leftIndex + 1, rawData.Xvalues.Length - 1, 0.2);
+            XYData filteredXYData = getFilteredXYData(rawData, leftIndex, rightIndex);
+            double minMZ = filteredXYData.Xvalues[0];
+            double maxMZ = filteredXYData.Xvalues[filteredXYData.Xvalues.Length - 1];
 
-            //then 'Splint' and 'Spline' points to make them evenly spaced
-            //Use ALGLIB to do this
-
-
-            int numPoints = rightIndex - leftIndex + 1;
+            double sumOfDiffsBetweenValues = 0;
+            double pointCounter = 0;
             
-            int desiredNumPoints = 256;
+            for (int i = 0; i < filteredXYData.Xvalues.Length-1; i++)
+            {
+                var y1 = filteredXYData.Yvalues[i];
+                var y2 = filteredXYData.Yvalues[i + 1];
+                
+                if ( y1>0 && y2>0)
+                {
+                    var x1 = filteredXYData.Xvalues[i];
+                    var x2 = filteredXYData.Xvalues[i + 1];
 
-            int pointMultiplier =(int)Math.Ceiling(desiredNumPoints/(double)numPoints);
+                    sumOfDiffsBetweenValues += (x2 - x1);
+                    pointCounter++;
+                }
+            }
 
-            if (numPoints < 5)
-                return -1;
+
+            
 
             int numL;
-            if (numPoints < desiredNumPoints)
+            if (pointCounter>5)
             {
-                numL = pointMultiplier * numPoints;
+                double averageDiffBetweenPoints = sumOfDiffsBetweenValues / pointCounter;
+
+                numL = (int) Math.Ceiling((maxMZ - minMZ)/averageDiffBetweenPoints);
+
+                numL = (int) (numL +numL*0.1);
+                //numL = 445;
             }
             else
             {
-                numL = numPoints;
-            }
+                int numPoints = rightIndex - leftIndex + 1;
+
+                int desiredNumPoints = 256;
+
+                int pointMultiplier = (int)Math.Ceiling(desiredNumPoints / (double)numPoints);
+
+                if (numPoints < 5)
+                    return -1;
+
                 
+                if (numPoints < desiredNumPoints)
+                {
+                    pointMultiplier = Math.Max(5, pointMultiplier);
+                    numL = pointMultiplier * numPoints;
+                }
+                else
+                {
+                    numL = numPoints;
+                }
 
 
-            XYData filteredXYData = getFilteredXYData(rawData, leftIndex, rightIndex);
+                
+            }
 
-            //DisplayXYVals(xydata);
+             //Console.WriteLine("Number of points in interpolated data= " + numL);
+
+
+            
 
             alglib.spline1d.spline1dinterpolant interpolant = new alglib.spline1d.spline1dinterpolant();
 
@@ -80,9 +116,9 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
 
-            double minMZ = filteredXYData.Xvalues[0];
-            double maxMZ = filteredXYData.Xvalues[filteredXYData.Xvalues.Length - 1];
+            
 
+           // DisplayXYVals(filteredXYData);
 
             XYData evenlySpacedXYData = new XYData();
             evenlySpacedXYData.Xvalues = new double[numL];
@@ -101,13 +137,18 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             
 
             //Console.WriteLine();
-            //DisplayXYVals(xydata);
-
+            //DisplayXYVals(evenlySpacedXYData);
 
 
             double[] autoCorrScores = ACss(evenlySpacedXYData.Yvalues);
 
-            
+            XYData tempXYdata = new XYData();
+            tempXYdata.Xvalues = autoCorrScores;
+            tempXYdata.Yvalues = autoCorrScores;
+
+           // DisplayXYVals(tempXYdata);
+
+
             int startingIndex = 0;
             while (startingIndex < numL - 1 && autoCorrScores[startingIndex] > autoCorrScores[startingIndex + 1])
             {
@@ -271,13 +312,24 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
 
+
+
+
                 if (wasGoingUp && !goingUp)
                 {
-                    int currentChargeState = (int)(numPoints / ((maxMZ - minMZ) * (i - 1)) + 0.5);
+                    double currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)) );
+
+
+                    double tempAutocorrScore = autoCorrScores[i];
                     double currentAutoCorrScore = autoCorrScores[i - 1];
+
+                    //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" + 
+                    //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutocorrScore);
+
+
                     if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < _maxCharge))
                     {
-                        chargeState = currentChargeState;
+                        chargeState = (int) Math.Round(currentChargeState);
                         chargeStatesAndScores.Add(chargeState);
                         
                     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
@@ -53,6 +54,8 @@ namespace DeconTools.Backend.Workflows
         protected DeconToolsFitScoreCalculator FitScoreCalculator;
 
         public OldDecon2LSParameters OldDecon2LsParameters { get; set; }
+
+        public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
         private PeakUtilities _peakUtilities = new PeakUtilities();
 

@@ -142,7 +142,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
             Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
 
-            if (resultList.Run.PeakList.Count<2)
+            if (resultList.Run.PeakList.Count < 2)
             {
                 return;
             }
@@ -154,16 +154,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             foreach (IsotopicProfile isotopicProfile in msFeatures)
             {
-                IsosResult result = new StandardIsosResult(resultList.Run,resultList.Run.CurrentScanSet);
+                IsosResult result = new StandardIsosResult(resultList.Run, resultList.Run.CurrentScanSet);
                 result.IsotopicProfile = isotopicProfile;
                 result.IntensityAggregate = GetReportedAbundance(isotopicProfile, NumPeaksUsedInAbundance);
-                
-                if (isotopicProfile.Score<=MaxFit)
+
+                if (isotopicProfile.Score <= MaxFit)
                 {
-                    AddDeconResult(resultList, result);    
+                    AddDeconResult(resultList, result);
                 }
-                
-                
+
+
             }
 
         }
@@ -227,6 +227,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             foreach (var msPeak in sortedPeaklist)
             {
 
+                int indexOfCurrentPeak = mspeakList.IndexOf(msPeak);
+
                 if (peaksAlreadyProcessed.Contains(msPeak))
                 {
                     continue;
@@ -245,79 +247,182 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     // Console.WriteLine(peakCounter);
                 }
 
-                int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
 
-                double bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
-                if (chargeState == -1)
+                //get potential charge states 
+                double toleranceInPPM = 5;
+
+                HashSet<int> potentialChargeStates;
+                if (UseAutocorrelationChargeDetermination)
                 {
+                    int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
+                    potentialChargeStates = new HashSet<int>();
+                    potentialChargeStates.Add(chargeState);
+                }
+                else
+                {
+                    potentialChargeStates = GetPotentialChargeStates(mspeakList, indexOfCurrentPeak, toleranceInPPM);
+                }
+
+                List<IsotopicProfile> potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
+                foreach (int potentialChargeState in potentialChargeStates)
+                {
+                    double bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
+                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal);
+
+                    if (msFeature != null && bestFitVal < MaxFit)
+                    {
+                        msFeature.Score = bestFitVal;
+                        msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
+                        potentialMSFeaturesForGivenChargeState.Add(msFeature);
+                    }
+
+                }
+
+                string reportstring;
+                if (potentialMSFeaturesForGivenChargeState.Count == 0)
+                {
+                    stringBuilder.Append( msPeak.XValue.ToString("0.00000") + "\tNo profile found.\n");
+                }
+                else if (potentialMSFeaturesForGivenChargeState.Count == 1)
+                {
+                    var msFeature = potentialMSFeaturesForGivenChargeState[0];
+                    peaksAlreadyProcessed.AddRange(msFeature.Peaklist);
+                    isotopicProfiles.Add(potentialMSFeaturesForGivenChargeState[0]);
+
+                    stringBuilder.Append( msPeak.XValue.ToString("0.00000") + "\t" +
+                                     msFeature.MonoPeakMZ.ToString("0.0000") + "\t" +
+                                     msFeature.ChargeState + "\t" + msFeature.Score + "\n");
 
                 }
                 else
                 {
-                    double obsPeakMass = (msPeak.XValue - Globals.PROTON_MASS) * chargeState;
+                    stringBuilder.Append("Multiple candidates found...." + "\n");
 
-                    int massUsedForLookup = (int)Math.Round(obsPeakMass, 0);
-
-                    IsotopicProfile theorIso;
-                    if (_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
+                    foreach (IsotopicProfile isotopicProfile in potentialMSFeaturesForGivenChargeState)
                     {
-                        theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
+                        stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\t" +
+                                    isotopicProfile.MonoPeakMZ.ToString("0.0000") + "\t" +
+                                    isotopicProfile.ChargeState + "\t" + isotopicProfile.Score + "\n");
                     }
-                    else
+                    stringBuilder.Append(Environment.NewLine);
+
+                    IsotopicProfile msfeature = (from n in potentialMSFeaturesForGivenChargeState
+                                                 where n.Score < 0.15
+                                                 orderby n.ChargeState descending
+                                                 select n).FirstOrDefault();
+
+                    if (msfeature==null)
                     {
-                        theorIso = _isotopicDistCalculator.GetAveraginePattern(obsPeakMass);
-                        _averagineProfileLookupTable.Add(massUsedForLookup, theorIso);
-                    }
-
-                    theorIso.ChargeState = chargeState;
-                    theorIso.MostAbundantIsotopeMass = obsPeakMass;
-
-                    //PeakUtilities.TrimIsotopicProfile(theorIso, 0.05);
-
-                    CalculateMassesForIsotopicProfile(theorIso);
-                    XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
-
-                    PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
-
-                    //TODO: ppm tolerance is hard-coded
-                    var ppmTolerance = 10;
-                    var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, ppmTolerance, false);
-
-                    string reportstring;
-                    if (msFeature != null)
-                    {
-                        peaksAlreadyProcessed.AddRange(msFeature.Peaklist);
-                        msFeature.Score = bestFitVal;
-                        msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
-
-
-                        isotopicProfiles.Add(msFeature);
-
-                        reportstring = msPeak.XValue.ToString("0.00000") + "\t" +
-                                       msFeature.MonoIsotopicMass.ToString("0.0000") + "\t" +
-                                       msFeature.ChargeState + "\t" + msFeature.Score;
-                    }
-                    else
-                    {
-                        reportstring = msPeak.XValue.ToString("0.00000") + "\tNo profile found.";
+                        msfeature = (from n in potentialMSFeaturesForGivenChargeState
+                                     orderby n.Score
+                                     select n).First();
                     }
 
-
-                    //Console.WriteLine(reportstring);
-
-                    stringBuilder.Append(reportstring + "\n");
-
-
-
-
+                    peaksAlreadyProcessed.AddRange(msfeature.Peaklist);
+                    isotopicProfiles.Add(msfeature);
                 }
-
-
+           
             }
 
             //Console.WriteLine(stringBuilder.ToString());
 
             return isotopicProfiles;
+
+        }
+
+        public bool UseAutocorrelationChargeDetermination { get; set; }
+
+        private IsotopicProfile GetMSFeature(List<Peak> mspeakList, XYData xyData, int chargeState, Peak msPeak, ref double bestFitVal)
+        {
+            double obsPeakMass = (msPeak.XValue - Globals.PROTON_MASS) * chargeState;
+
+            int massUsedForLookup = (int)Math.Round(obsPeakMass, 0);
+
+            IsotopicProfile theorIso;
+            if (_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
+            {
+                theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
+            }
+            else
+            {
+                theorIso = _isotopicDistCalculator.GetAveraginePattern(obsPeakMass);
+                _averagineProfileLookupTable.Add(massUsedForLookup, theorIso);
+            }
+
+            theorIso.ChargeState = chargeState;
+            theorIso.MostAbundantIsotopeMass = obsPeakMass;
+
+            //PeakUtilities.TrimIsotopicProfile(theorIso, 0.05);
+
+            CalculateMassesForIsotopicProfile(theorIso);
+            XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
+
+            PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
+
+            //TODO: ppm tolerance is hard-coded
+            var ppmTolerance = 10;
+            var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, ppmTolerance, false);
+            return msFeature;
+        }
+
+        private HashSet<int> GetPotentialChargeStates(List<Peak> mspeakList, int indexOfCurrentPeak, double toleranceInPPM)
+        {
+            HashSet<int> potentialChargeStates = new HashSet<int>();
+
+            var basePeak = mspeakList[indexOfCurrentPeak];
+            // determine max charge state possible by getting nearest candidate peak
+            for (int i = indexOfCurrentPeak - 1; i > 0; i--)
+            {
+                var comparePeak = mspeakList[i];
+
+                if (Math.Abs(comparePeak.XValue - basePeak.XValue) > 1.1)
+                {
+                    break;
+                }
+
+                for (int j = 1; j <= MaxCharge; j++)
+                {
+                    double expectedMZ = basePeak.XValue - Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
+
+                    double diff = Math.Abs(comparePeak.XValue - expectedMZ);
+                    double toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
+
+                    if (diff < toleranceInMZ)
+                    {
+                        potentialChargeStates.Add(j);
+                    }
+
+                }
+
+            }
+
+            for (int i = indexOfCurrentPeak + 1; i < mspeakList.Count; i++)
+            {
+                var comparePeak = mspeakList[i];
+
+                if (Math.Abs(comparePeak.XValue - basePeak.XValue) > 1.1)
+                {
+                    break;
+                }
+
+                for (int j = 1; j <= MaxCharge; j++)
+                {
+                    double expectedMZ = basePeak.XValue + Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
+
+                    double diff = Math.Abs(comparePeak.XValue - expectedMZ);
+                    double toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
+
+                    if (diff < toleranceInMZ)
+                    {
+                        potentialChargeStates.Add(j);
+                    }
+
+                }
+            }
+
+            return potentialChargeStates;
+
+            //
 
         }
 

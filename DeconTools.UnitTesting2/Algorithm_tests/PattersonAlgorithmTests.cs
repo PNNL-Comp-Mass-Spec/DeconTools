@@ -1,7 +1,11 @@
-﻿using DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -16,45 +20,72 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
         private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
         [Test]
-        public void test1()
+        public void EasyCase1()
         {
+
+            // https://jira.pnnl.gov/jira/browse/OMCS-647
+
+            var chargeStateCalculator = new PattersonChargeStateCalculator();
+
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            Task msgen = new GenericMSGenerator();
-            Task peakDetector = new DeconToolsPeakDetector();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
+            peakDetector.PeakToBackgroundRatio = 1.3;
 
             run.CurrentScanSet = new ScanSet(6005);
-          
+
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
-            MSPeak testPeak1 = (MSPeak)run.PeakList[384];
-            MSPeak testPeak2 = (MSPeak)run.PeakList[543];
-            MSPeak testPeak3 = (MSPeak)run.PeakList[59];
-            MSPeak testPeak4 = (MSPeak)run.PeakList[454];
-            MSPeak testPeak5 = (MSPeak)run.PeakList[455];
-            MSPeak testPeak6 = (MSPeak)run.PeakList[4];
+            var peak = run.PeakList.First(n => n.XValue > 903.94 && n.XValue < 903.95);
 
-            //TestUtilities.DisplayPeaks(run.PeakList);
-
-            PattersonChargeStateCalculator chargeCalc = new PattersonChargeStateCalculator();
-            int testpeak1CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak1);
-            //int testpeak2CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak2);
-            //int testpeak3CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak3);
-            //int testpeak4CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak4);
-            //int testpeak5CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak5);
-            //int testpeak6CS = chargeCalc.GetChargeState(run.XYData, run.PeakList, testPeak6);
-
-
-
-            Assert.AreEqual(2, testpeak1CS);
-            //Assert.AreEqual(3, testpeak2CS);
-            //Assert.AreEqual(5, testpeak3CS);
-            ////Assert.AreEqual(4, testpeak4CS);
-            //Assert.AreEqual(4, testpeak5CS);
-            ////Assert.AreEqual(1, testpeak6CS);
+            int chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+            Assert.AreEqual(2, chargeState);
+            
         }
 
+        [Test]
+        public void HardCase1()
+        {
+
+            // https://jira.pnnl.gov/jira/browse/OMCS-647
+
+            var chargeStateCalculator = new PattersonChargeStateCalculator();
+
+            Run run = new XCaliburRun2(xcaliburTestfile);
+
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
+            peakDetector.PeakToBackgroundRatio = 1.3;
+
+            run.CurrentScanSet = new ScanSet(6005);
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+
+           
+            //579.535
+            //TestUtilities.DisplayPeaks(run.PeakList);
+
+           var  peak = run.PeakList.First(n => n.XValue > 579.53 && n.XValue < 579.54);
+            int chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+            Assert.AreEqual(4, chargeState);
+
+            List<long> times = new List<long>();
+
+           // return;
+            for (int i = 0; i < 500; i++)
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+                sw.Stop();
+                times.Add(sw.ElapsedMilliseconds);
+            }
+
+            Console.WriteLine("average time in ms= " + times.Average());
+        }
 
     }
 }
