@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 
 namespace DeconTools.Backend.Workflows
 {
@@ -9,7 +10,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal StandardIMSScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        internal StandardIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath,backgroundWorker)
         {
 

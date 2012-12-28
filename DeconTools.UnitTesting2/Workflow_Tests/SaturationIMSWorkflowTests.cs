@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Workflows;
@@ -21,22 +22,22 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
-            parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
-            parameters.PeakProcessorParameters.SignalToNoiseThreshold = 3;
-            parameters.HornTransformParameters.MaxFit = 0.6;
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 180;
-            parameters.HornTransformParameters.MaxScan = 195;
-            parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
-            parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
-            parameters.HornTransformParameters.NumFramesToSumOver = 1;
-            parameters.HornTransformParameters.NumScansToSumOver = 3;
-            parameters.HornTransformParameters.ZeroFill = true;
-            parameters.HornTransformParameters.DeleteIntensityThreshold = 10;
+            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
+            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
+            parameters.ThrashParameters.MaxFit = 0.6;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 180;
+            parameters.MSGeneratorParameters.MaxLCScan = 195;
+            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
+            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
+            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
+            parameters.MSGeneratorParameters.NumImsScansToSum = 3;
+            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
+            parameters.ThrashParameters.MinIntensityForDeletion = 10;
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = true;
@@ -45,14 +46,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             sw.Start();
 
             workflow.Execute();
-            return;
+           // return;
 
             sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 125;
@@ -106,14 +107,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
-            parameters.Load(
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
+            parameters.LoadFromOldDeconToolsParameterFile(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
 
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 375;
-            parameters.HornTransformParameters.MaxScan = 420;
+            parameters.MSGeneratorParameters.UseLCScanRange= true;
+            parameters.MSGeneratorParameters.MinLCScan = 375;
+            parameters.MSGeneratorParameters.MaxLCScan = 420;
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = true;
@@ -122,14 +122,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             sw.Start();
 
             workflow.Execute();
-            return;
+            //return;
 
             sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 125;
@@ -165,15 +165,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
-            parameters.Load(
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
+            parameters.LoadFromOldDeconToolsParameterFile(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
 
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 375;
-            parameters.HornTransformParameters.MaxScan = 378;
-            parameters.PeakProcessorParameters.WritePeaksToTextFile = true;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 375;
+            parameters.MSGeneratorParameters.MaxLCScan = 378;
+            parameters.ScanBasedWorkflowParameters.ExportPeakData=true;
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = true;
@@ -182,14 +181,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             sw.Start();
 
             workflow.Execute();
-            return;
+            //return;
 
             sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 125;
@@ -224,14 +223,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
-            parameters.Load(
+            parameters.LoadFromOldDeconToolsParameterFile(
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
 
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 394;
-            parameters.HornTransformParameters.MaxScan = 404;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 394;
+            parameters.MSGeneratorParameters.MaxLCScan = 404;
 
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -247,8 +246,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 127;
@@ -284,29 +283,29 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
             string parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_saturationRepair_Frame_1-500.xml";
 
-            parameters.Load(parameterFile);
+            parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
 
-            parameters=new OldDecon2LSParameters();
-            parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
-            parameters.PeakProcessorParameters.SignalToNoiseThreshold = 3;
-            parameters.HornTransformParameters.MaxFit = 0.6;
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 320;
-            parameters.HornTransformParameters.MaxScan = 328;
-            parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
-            parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
-            parameters.HornTransformParameters.NumFramesToSumOver = 1;
-            parameters.HornTransformParameters.NumScansToSumOver = 3;
-            parameters.HornTransformParameters.UseMZRange = false;
-            parameters.HornTransformParameters.ZeroFill = true;
-            parameters.HornTransformParameters.DeleteIntensityThreshold = 10;
+            parameters=new DeconToolsParameters();
+            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
+            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
+            parameters.ThrashParameters.MaxFit = 0.6;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 320;
+            parameters.MSGeneratorParameters.MaxLCScan = 328;
+            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
+            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
+            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
+            parameters.MSGeneratorParameters.NumImsScansToSum = 3;
+            parameters.MSGeneratorParameters.UseMZRange = false;
+            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
+            parameters.ThrashParameters.MinIntensityForDeletion = 10;
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
             parameters.Save(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_saturationRepair_Frame_1-500_copy.xml");
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -322,8 +321,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 117;
             int maxScan = 131;
@@ -359,18 +358,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
 
-            parameters.PeakProcessorParameters.PeakBackgroundRatio = 4;
-            parameters.PeakProcessorParameters.SignalToNoiseThreshold = 3;
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 180;
-            parameters.HornTransformParameters.MaxScan = 180;
-            parameters.HornTransformParameters.SumSpectraAcrossFrameRange = true;
-            parameters.HornTransformParameters.SumSpectraAcrossScanRange = true;
-            parameters.HornTransformParameters.NumFramesToSumOver = 1;
-            parameters.HornTransformParameters.NumScansToSumOver = 3;
+            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
+            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 180;
+            parameters.MSGeneratorParameters.MaxLCScan = 180;
+            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
+            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
+            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
+            parameters.MSGeneratorParameters.NumImsScansToSum = 3;
 
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -386,13 +385,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "standard";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName= "standard";
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             Assert.IsTrue(workflow is IMSScanBasedWorkflow);
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
             workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             Assert.IsTrue(workflow is SaturationIMSScanBasedWorkflow);
 
@@ -408,10 +407,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "incorrectTextProblem";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "incorrectTextProblem";
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
 
         }

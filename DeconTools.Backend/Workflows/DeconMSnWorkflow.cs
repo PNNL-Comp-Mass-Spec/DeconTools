@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
@@ -17,7 +19,7 @@ namespace DeconTools.Backend.Workflows
         private int _currentMS1Scan;
 
         private MSGenerator _msGenerator;
-        private DeconToolsPeakDetector _peakDetector;
+        private DeconToolsPeakDetectorV2 _peakDetector;
         private Deconvolutor _deconvolutor;
         TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private BasicTFF _basicFeatureFinder = new BasicTFF();
@@ -28,14 +30,18 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        public DeconMSnWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public DeconMSnWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             _currentMS1Scan = -1;
 
 
             _msGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
-            _peakDetector = new DeconToolsPeakDetector(parameters.PeakProcessorParameters);
+            _peakDetector = new DeconToolsPeakDetectorV2(
+                parameters.PeakDetectorParameters.PeakToBackgroundRatio,
+                parameters.PeakDetectorParameters.SignalToNoiseThreshold,
+                parameters.PeakDetectorParameters.PeakFitType,
+                parameters.PeakDetectorParameters.IsDataThresholded);
 
             _zeroFiller = new DeconToolsZeroFiller();
 

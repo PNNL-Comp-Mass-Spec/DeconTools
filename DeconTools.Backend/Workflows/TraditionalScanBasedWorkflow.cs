@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Utilities;
 
@@ -17,7 +18,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        public TraditionalScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public TraditionalScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
 
@@ -79,7 +80,7 @@ namespace DeconTools.Backend.Workflows
         protected override void ExecuteOtherTasksHook()
         {
             base.ExecuteOtherTasksHook();
-            if (OldDecon2LsParameters.HornTransformParameters.O16O18Media)
+            if (NewDeconToolsParameters.ThrashParameters.IsO16O18Data)
             {
                 ExecuteTask(_o16O18PeakDataAppender);
             }

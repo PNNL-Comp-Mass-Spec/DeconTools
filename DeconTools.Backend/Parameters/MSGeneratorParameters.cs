@@ -60,6 +60,11 @@ namespace DeconTools.Backend.Parameters
 
         public override void LoadParameters(XElement xElement)
         {
+            throw new System.NotImplementedException();
+        }
+
+        public override void LoadParametersV2(XElement xElement)
+        {
             UseMZRange = GetBoolVal(xElement, "UseMZRange", UseMZRange);
             MinMZ = GetDoubleValue(xElement, "MinMZ", MinMZ);
             MaxMZ = GetDoubleValue(xElement, "MaxMZ", MaxMZ);
@@ -68,16 +73,17 @@ namespace DeconTools.Backend.Parameters
             MinLCScan = GetIntValue(xElement, "MinScan", MinLCScan);
             MaxLCScan = GetIntValue(xElement, "MaxScan", MaxLCScan);
 
-            UseImsScanRange = GetBoolVal(xElement, "UseImsScanRange", UseImsScanRange);   //TODO: add this parameter to parameter file
+            //TODO: add these parameters to parameter file
+            UseImsScanRange = GetBoolVal(xElement, "UseImsScanRange", UseImsScanRange);  
             MinImsScan = GetIntValue(xElement, "MinImsScan", MinImsScan);
             MaxImsScan = GetIntValue(xElement, "MaxImsScan", MaxImsScan);
 
-
+            //TODO:  change how IMS-parameters are loaded and used in this case
             SumAllSpectra = GetBoolVal(xElement, "SumSpectra", SumAllSpectra);
             SumSpectraAcrossLC = GetBoolVal(xElement, "SumSpectraAcrossScanRange", SumSpectraAcrossLC);
-            SumSpectraAcrossIms = GetBoolVal(xElement, "SumSpectraAcrossIms", SumSpectraAcrossIms);      //TODO:  change how IMS-parameters are loaded and used in this case
+            SumSpectraAcrossIms = GetBoolVal(xElement, "SumSpectraAcrossIms", SumSpectraAcrossIms);      
             NumLCScansToSum = GetIntValue(xElement, "NumberOfScansToSumOver", NumLCScansToSum);
-            NumImsScansToSum = GetIntValue(xElement, "NumberOfImsScansToSum", NumImsScansToSum);
+            NumImsScansToSum = GetIntValue(xElement, "NumberOfImsScansToSumOver", NumImsScansToSum);
             
             GetTicInfo = GetBoolVal(xElement, "GetTicInfo", GetTicInfo); //doesn't exist yet
 

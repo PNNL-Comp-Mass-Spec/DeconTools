@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DeconTools.Backend.Data;
 using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
@@ -42,10 +43,16 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(true, File.Exists(exportedFile));
 
-            FileInfo fi = new FileInfo(exportedFile);
-            Assert.AreEqual(28054, fi.Length);
-            Console.Write(fi.Length);
+            IsosImporter importer = new IsosImporter(exportedFile, run.MSFileType);
+            var results=   importer.Import();
 
+            Assert.IsTrue(results != null);
+            Assert.IsTrue(results.Count>0);
+
+            //TODO: need to check if '388' is good or not
+            Assert.AreEqual(388, results.Count);
+
+           
         }
 
         

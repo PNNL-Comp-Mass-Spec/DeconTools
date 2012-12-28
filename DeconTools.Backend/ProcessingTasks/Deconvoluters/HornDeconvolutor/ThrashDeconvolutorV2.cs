@@ -147,13 +147,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 return;
             }
 
-
+            //GORD: fix this for UIMF data
             var msFeatures = PerformThrash(resultList.Run.XYData, resultList.Run.PeakList,
                                            resultList.Run.CurrentScanSet.BackgroundIntensity,
                                            this.MinMSFeatureToBackgroundRatio);
 
             foreach (IsotopicProfile isotopicProfile in msFeatures)
             {
+
+                //GORD: fix this for UIMF data
                 IsosResult result = new StandardIsosResult(resultList.Run, resultList.Run.CurrentScanSet);
                 result.IsotopicProfile = isotopicProfile;
                 result.IntensityAggregate = GetReportedAbundance(isotopicProfile, NumPeaksUsedInAbundance);

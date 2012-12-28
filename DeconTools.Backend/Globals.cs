@@ -121,9 +121,9 @@ namespace DeconTools.Backend
 
         public enum ScanBasedWorkflowType
         {
-            Standard,
-            UIMFStandard,
-            UIMFSaturationWorkflow,
+            standard,
+            uimf_standard,
+            uimf_saturation_workflow,
 
         }
 

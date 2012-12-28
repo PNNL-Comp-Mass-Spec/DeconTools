@@ -40,6 +40,11 @@ namespace DeconTools.Backend.Parameters
 
         public override void LoadParameters(XElement xElement)
         {
+            throw new System.NotImplementedException();
+        }
+
+        public override void LoadParametersV2(XElement xElement)
+        {
             PeakToBackgroundRatio = GetDoubleValue(xElement, "PeakBackgroundRatio", PeakToBackgroundRatio);
             SignalToNoiseThreshold = GetDoubleValue(xElement, "SignalToNoiseThreshold", SignalToNoiseThreshold);
             IsDataThresholded = GetBoolVal(xElement, "DataIsThresholded", IsDataThresholded);

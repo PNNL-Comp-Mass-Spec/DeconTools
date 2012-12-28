@@ -53,15 +53,13 @@ namespace DeconTools.Backend.Workflows
         protected ScanResultExporter ScanResultExporter;
         protected DeconToolsFitScoreCalculator FitScoreCalculator;
 
-        public OldDecon2LSParameters OldDecon2LsParameters { get; set; }
-
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
         private PeakUtilities _peakUtilities = new PeakUtilities();
 
 
         #region Factory methods
-        public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
         {
 
             Run run;
@@ -80,57 +78,65 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("ERROR message= " + ex.Message, Logger.Instance.OutputFilename);
                 Logger.Instance.AddEntry("ERROR type= " + ex, Logger.Instance.OutputFilename);
                 Logger.Instance.AddEntry("STACKTRACE = " + ex.StackTrace, Logger.Instance.OutputFilename);
-               
+
 
                 throw;
             }
 
-            var parameters = new OldDecon2LSParameters();
-            parameters.Load(parameterFile);
 
-            return CreateWorkflow(run, parameters, outputFolderPath, backgroundWorker);
+            var newParameters = new DeconToolsParameters();
+            newParameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+
+
+            return CreateWorkflow(run, newParameters, outputFolderPath, backgroundWorker);
+
 
         }
 
-
-        public static ScanBasedWorkflow CreateWorkflow(Run run, OldDecon2LSParameters parameters, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public static ScanBasedWorkflow CreateWorkflow(Run run, DeconToolsParameters parameters, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
-
-            switch (parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower())
+            switch (parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower())
             {
                 case "uimf_saturation_repair":
                     return new SaturationIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
-                
+
+                case "uimf_standard":
+                    return new StandardIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+
                 case "standard":
                     if (run is UIMFRun)
                     {
                         return new StandardIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
                     }
                     return new TraditionalScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
-                    
-                case "run_merging_with_peak_export":
-                    return new RunMergingPeakExportingWorkflow(parameters,null,outputFolderPath,backgroundWorker);
-                    
-                default:
-                    throw new ArgumentOutOfRangeException("workflowType");
-            }
 
-          
+
+
+                case "run_merging_with_peak_export":
+                    return new RunMergingPeakExportingWorkflow(parameters, null, outputFolderPath, backgroundWorker);
+
+                default:
+                    throw new ArgumentOutOfRangeException("ScanBasedWorkflowName is unknown");
+            }
         }
+
+
 
         #endregion
 
         #region Constructors
 
-        public ScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+
+        public ScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
-            OldDecon2LsParameters = parameters;
+            NewDeconToolsParameters = parameters;
             Run = run;
             OutputFolderPath = outputFolderPath;    //path is null unless specified
             BackgroundWorker = backgroundWorker;   //null unless specified
 
             ExportData = true;
         }
+
 
 
         #endregion
@@ -164,11 +170,11 @@ namespace DeconTools.Backend.Workflows
         public virtual void InitializeWorkflow()
         {
             Check.Assert(Run != null, "Cannot initialize workflow. Run is null");
-            Check.Assert(OldDecon2LsParameters != null, "Cannot initialize workflow. Parameters are null");
+            Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
             Run.ResultCollection.ResultType = GetResultType();
-       
-            
+
+
 
             InitializeParameters();
 
@@ -194,8 +200,8 @@ namespace DeconTools.Backend.Workflows
                 throw;
             }
 
-           
-            
+
+
 
         }
 
@@ -203,8 +209,8 @@ namespace DeconTools.Backend.Workflows
         protected virtual void InitializeProcessingTasks()
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
-            PeakDetector = PeakDetectorFactory.CreatePeakDetector(OldDecon2LsParameters);
-            
+            PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
+
             //TODO: new Peak detector will read this parameter from parameter file. 
             if (PeakDetector is DeconToolsPeakDetector)
             {
@@ -215,23 +221,23 @@ namespace DeconTools.Backend.Workflows
                     case Globals.MSFileType.Finnigan:
                         ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = true;
                         break;
-                   
+
                     default:
                         ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = false;
                         break;
                 }
             }
-            
-            Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(OldDecon2LsParameters);
+
+            Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
 
 
             //Will initialize these but whether or not they are used are determined elsewhere
-            ZeroFiller = new DeconToolsZeroFiller(OldDecon2LsParameters.HornTransformParameters.NumZerosToFill);
-            Smoother = new SavitzkyGolaySmoother(OldDecon2LsParameters.HornTransformParameters.SGNumLeft+
-                OldDecon2LsParameters.HornTransformParameters.SGNumRight +1, OldDecon2LsParameters.HornTransformParameters.SGOrder);
+            ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);
+            Smoother = new SavitzkyGolaySmoother(NewDeconToolsParameters.MiscMSProcessingParameters.SavitzkyGolayNumPointsInSmooth,
+                NewDeconToolsParameters.MiscMSProcessingParameters.SavitzkyGolayOrder);
 
             FitScoreCalculator = new DeconToolsFitScoreCalculator();
-            ScanResultUpdater = new ScanResultUpdater(OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
+            ScanResultUpdater = new ScanResultUpdater(NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
             ResultValidator = new ResultValidatorTask();
 
             IsosResultExporter = IsosExporterFactory.CreateIsosExporter(Run.ResultCollection.ResultType, ExporterType,
@@ -254,17 +260,17 @@ namespace DeconTools.Backend.Workflows
             int minScan;
             int maxScan;
 
-            if (OldDecon2LsParameters.HornTransformParameters.SumSpectra)
+            if (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra)
             {
                 Run.ScanSetCollection.Create(Run, true, false);
                 return;
             }
 
 
-            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)
+            if (NewDeconToolsParameters.MSGeneratorParameters.UseLCScanRange)
             {
-                minScan = Math.Max(Run.MinLCScan, OldDecon2LsParameters.HornTransformParameters.MinScan);
-                maxScan = Math.Min(Run.MaxLCScan, OldDecon2LsParameters.HornTransformParameters.MaxScan);
+                minScan = Math.Max(Run.MinLCScan, NewDeconToolsParameters.MSGeneratorParameters.MinLCScan);
+                maxScan = Math.Min(Run.MaxLCScan, NewDeconToolsParameters.MSGeneratorParameters.MaxLCScan);
             }
             else
             {
@@ -274,18 +280,18 @@ namespace DeconTools.Backend.Workflows
 
 
             int numSummed;
-            if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossScanRange)
+            if (NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossLC)
             {
-                numSummed = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver*2 + 1;
+                numSummed = NewDeconToolsParameters.MSGeneratorParameters.NumLCScansToSum;
             }
             else
             {
                 numSummed = 1;
             }
-            
-            Run.ScanSetCollection.Create(Run, minScan, maxScan,numSummed, OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance,
-                          OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
-            
+
+            Run.ScanSetCollection.Create(Run, minScan, maxScan, numSummed, 1,
+                          NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
+
         }
 
         /// <summary>
@@ -340,15 +346,17 @@ namespace DeconTools.Backend.Workflows
         {
             ExecuteTask(MSGenerator);
 
-            if (OldDecon2LsParameters.HornTransformParameters.ZeroFill)
+            if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
                 ExecuteTask(ZeroFiller);
             }
 
-            if (OldDecon2LsParameters.HornTransformParameters.UseSavitzkyGolaySmooth)
+            if (NewDeconToolsParameters.MiscMSProcessingParameters.UseSmoothing)
             {
                 ExecuteTask(Smoother);
             }
+          
+
 
             ExecuteTask(PeakDetector);
 
@@ -360,7 +368,7 @@ namespace DeconTools.Backend.Workflows
 
             ExecuteTask(ScanResultUpdater);
 
-            if (OldDecon2LsParameters.HornTransformParameters.ReplaceRAPIDScoreWithHornFitScore)
+            if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
             {
                 ExecuteTask(FitScoreCalculator);
             }
@@ -373,7 +381,7 @@ namespace DeconTools.Backend.Workflows
             if (ExportData)
             {
 
-                if (OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile)
+                if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
                 {
                     ExecuteTask(PeakToMSFeatureAssociator);
                     ExecuteTask(PeakListExporter);
@@ -395,7 +403,7 @@ namespace DeconTools.Backend.Workflows
 
             if (Run is UIMFRun)
             {
-                currentScanset = ((UIMFRun) Run).CurrentIMSScanSet;
+                currentScanset = ((UIMFRun)Run).CurrentIMSScanSet;
             }
             else
             {
@@ -407,11 +415,7 @@ namespace DeconTools.Backend.Workflows
             currentScanset.BackgroundIntensity = this.PeakDetector.BackgroundIntensity;
             currentScanset.NumPeaks = Run.PeakList.Count;    //used in ScanResult
             currentScanset.BasePeak = _peakUtilities.GetBasePeak(Run.PeakList);     //Used in ScanResult
-
-            //TODO: remove this when C# thrash is ready
-            Run.DeconToolsPeakList = ((DeconToolsPeakDetector)PeakDetector).DeconEnginePeakList;    //this must be stored since the THRASH algorithms works on DeconEngine peaks. 
             
-          
         }
 
         protected virtual void ExecuteOtherTasksHook() { }
@@ -463,7 +467,7 @@ namespace DeconTools.Backend.Workflows
             if (Run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
             if (Run is IMFRun) return Globals.ResultType.IMS_TRADITIONAL_RESULT;
 
-            if (OldDecon2LsParameters.HornTransformParameters.O16O18Media)
+            if (NewDeconToolsParameters.ThrashParameters.IsO16O18Data)
             {
                 return Globals.ResultType.O16O18_TRADITIONAL_RESULT;
             }
@@ -477,7 +481,8 @@ namespace DeconTools.Backend.Workflows
         protected virtual void WriteProcessingInfoToLog()
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
-            Logger.Instance.AddEntry("ParameterFile = " + (OldDecon2LsParameters.ParameterFilename == null ? "[NONE]" : Path.GetFileName(OldDecon2LsParameters.ParameterFilename)));
+            Logger.Instance.AddEntry("ParameterFile = " + (NewDeconToolsParameters.ParameterFilename == null ? "[NONE]" :
+                Path.GetFileName(NewDeconToolsParameters.ParameterFilename)));
             Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
             Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
             Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
@@ -525,20 +530,8 @@ namespace DeconTools.Backend.Workflows
 
         protected void InitializeParameters()
         {
-            //set exporter type. This property wraps the OldDeconTools parameter
-            switch (OldDecon2LsParameters.HornTransformParameters.ExportFileType)
-            {
-                case DeconToolsV2.HornTransform.enmExportFileType.SQLITE:
-                    ExporterType = Globals.ExporterType.Sqlite;
-                    break;
-                case DeconToolsV2.HornTransform.enmExportFileType.TEXT:
-                    ExporterType = Globals.ExporterType.Text;
-                    break;
-                default:
-                    ExporterType = Globals.ExporterType.Text;
-                    break;
-            }
-
+            //TODO: move this
+            ExporterType = NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportFileType;
 
 
 

@@ -11,8 +11,7 @@ namespace DeconTools.Backend.Parameters
         {
             UseSmoothing = false;
             SmoothingType = Globals.SmoothingType.SavitzkyGolay;
-            SavitzkyGolayNumSmoothedRight = 2;
-            SavitzkyGolayNumSmoothedLeft = 2;
+            SavitzkyGolayNumPointsInSmooth = 5;
             SavitzkyGolayOrder = 2;
 
             UseZeroFilling = false;
@@ -28,9 +27,7 @@ namespace DeconTools.Backend.Parameters
 
         public Globals.SmoothingType SmoothingType { get; set; }
 
-        public int SavitzkyGolayNumSmoothedLeft { get; set; }
-
-        public int SavitzkyGolayNumSmoothedRight { get; set; }
+        public int SavitzkyGolayNumPointsInSmooth { get; set; }
 
         public int SavitzkyGolayOrder { get; set; }
 
@@ -47,12 +44,18 @@ namespace DeconTools.Backend.Parameters
 
         public override void LoadParameters(XElement xElement)
         {
+            throw new System.NotImplementedException();
+        }
+
+        public override void LoadParametersV2(XElement xElement)
+        {
             UseSmoothing = GetBoolVal(xElement, "ApplySavitzkyGolay", UseSmoothing);
             SmoothingType = (Globals.SmoothingType) GetEnum(xElement, "SmoothingType", SmoothingType.GetType(), SmoothingType);  //Smoothing type does not yet exist in parameter file
 
-            SavitzkyGolayNumSmoothedLeft = GetIntValue(xElement, "SGNumLeft", SavitzkyGolayNumSmoothedLeft);
+            int smoothLeft = GetIntValue(xElement, "SGNumLeft", (SavitzkyGolayNumPointsInSmooth-1)/2);
+            int smoothRight = GetIntValue(xElement, "SGNumRight", (SavitzkyGolayNumPointsInSmooth - 1) / 2);
 
-            SavitzkyGolayNumSmoothedRight = GetIntValue(xElement, "SGNumRight", SavitzkyGolayNumSmoothedRight);
+            SavitzkyGolayNumPointsInSmooth = smoothLeft + smoothRight + 1;
             SavitzkyGolayOrder = GetIntValue(xElement, "SGOrder", SavitzkyGolayOrder);
 
             UseZeroFilling = GetBoolVal(xElement, "ZeroFillDiscontinousAreas", UseZeroFilling);

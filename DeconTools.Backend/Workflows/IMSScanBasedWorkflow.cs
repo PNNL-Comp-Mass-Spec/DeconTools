@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -17,7 +18,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal IMSScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        internal IMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             DeconTools.Utilities.Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
@@ -38,28 +39,25 @@ namespace DeconTools.Backend.Workflows
 
         protected override void CreateTargetMassSpectra()
         {
-           
-
-
             UIMFRun uimfRun = (UIMFRun)Run;
             uimfRun.ScanSetCollection = new ScanSetCollection();
             uimfRun.IMSScanSetCollection = new IMSScanSetCollection();
 
 
             int numFramesSummed;
-            if (OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossFrameRange)
+            if (NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossLC)
             {
-                numFramesSummed = OldDecon2LsParameters.HornTransformParameters.NumFramesToSumOver;
+                numFramesSummed = NewDeconToolsParameters.MSGeneratorParameters.NumLCScansToSum;
             }
             else
             {
                 numFramesSummed = 1;
             }
 
-            if (OldDecon2LsParameters.HornTransformParameters.UseScanRange)   //Defines whether or not to use all LC time points, or a restricted range
+            if (NewDeconToolsParameters.MSGeneratorParameters.UseLCScanRange)   //Defines whether or not to use all LC time points, or a restricted range
             {
-                uimfRun.ScanSetCollection.Create(uimfRun, OldDecon2LsParameters.HornTransformParameters.MinScan,
-                    OldDecon2LsParameters.HornTransformParameters.MaxScan, numFramesSummed, 1, OldDecon2LsParameters.HornTransformParameters.ProcessMSMS);
+                uimfRun.ScanSetCollection.Create(uimfRun, NewDeconToolsParameters.MSGeneratorParameters.MinLCScan,
+                   NewDeconToolsParameters.MSGeneratorParameters.MaxLCScan, numFramesSummed, 1, NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
 
             }
             else
@@ -69,7 +67,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
-            bool sumAllIMSScansInAFrame = (OldDecon2LsParameters.HornTransformParameters.SumSpectra);
+            bool sumAllIMSScansInAFrame = (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra);
             if (sumAllIMSScansInAFrame)
             {
 
@@ -82,19 +80,19 @@ namespace DeconTools.Backend.Workflows
             else
             {
 
-                bool sumAcrossIMSScans = OldDecon2LsParameters.HornTransformParameters.SumSpectraAcrossScanRange;
+                bool sumAcrossIMSScans = NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossIms;
 
                 int numIMSScanToSum;
                 if (sumAcrossIMSScans)
                 {
-                    numIMSScanToSum = OldDecon2LsParameters.HornTransformParameters.NumScansToSumOver * 2 + 1;   //Old parameters report a +/- value for summing. But new code is different
+                    numIMSScanToSum = NewDeconToolsParameters.MSGeneratorParameters.NumImsScansToSum;  
                 }
                 else
                 {
                     numIMSScanToSum = 1;
                 }
 
-                uimfRun.IMSScanSetCollection.Create(Run,uimfRun.MinIMSScan,uimfRun.MaxIMSScan,numIMSScanToSum,OldDecon2LsParameters.HornTransformParameters.NumScansToAdvance);
+                uimfRun.IMSScanSetCollection.Create(Run,uimfRun.MinIMSScan,uimfRun.MaxIMSScan,numIMSScanToSum, 1);
 
             }
 

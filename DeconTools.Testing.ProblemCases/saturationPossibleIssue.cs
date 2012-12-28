@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Workflows;
@@ -21,14 +22,14 @@ namespace DeconTools.Testing.ProblemCases
                 @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P08_G02_0746_7Dec11_Cheetah_11-09-04.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
-            parameters.Load(@"\\gigasax\DMS_Parameter_Files\Decon2LS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat50000_2012-01-30.xml");
+            var parameters = new DeconToolsParameters();
+            parameters.LoadFromOldDeconToolsParameterFile(@"\\gigasax\DMS_Parameter_Files\Decon2LS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat50000_2012-01-30.xml");
 
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 403;
-            parameters.HornTransformParameters.MaxScan = 409;
-            
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 403;
+            parameters.MSGeneratorParameters.MaxLCScan = 409;
+
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName= "uimf_saturation_repair";
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = true;
@@ -43,8 +44,8 @@ namespace DeconTools.Testing.ProblemCases
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 125;
@@ -80,14 +81,14 @@ namespace DeconTools.Testing.ProblemCases
                 @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P08_A01_0673_21Nov11_Cheetah_11-09-03.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
-            parameters.Load(@"\\gigasax\DMS_Parameter_Files\Decon2LS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat50000_2012-01-30.xml");
+            var parameters = new DeconToolsParameters();
+            parameters.LoadFromOldDeconToolsParameterFile(@"\\gigasax\DMS_Parameter_Files\Decon2LS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat50000_2012-01-30.xml");
 
-            parameters.HornTransformParameters.UseScanRange = true;
-            parameters.HornTransformParameters.MinScan = 397;
-            parameters.HornTransformParameters.MaxScan = 408;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 397;
+            parameters.MSGeneratorParameters.MaxLCScan = 408;
 
-            parameters.HornTransformParameters.ScanBasedWorkflowType = "uimf_saturation_repair";
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = true;
@@ -102,8 +103,8 @@ namespace DeconTools.Testing.ProblemCases
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.HornTransformParameters.MinScan;
-            int maxFrame = parameters.HornTransformParameters.MaxScan;
+            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
             int minScan = 102;
             int maxScan = 125;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -23,11 +24,11 @@ namespace DeconTools.Backend.Workflows
 
 
 
-        public RunMergingPeakExportingWorkflow(OldDecon2LSParameters parameters, IEnumerable<string> datasetFileNameList, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public RunMergingPeakExportingWorkflow(DeconToolsParameters parameters, IEnumerable<string> datasetFileNameList, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(null, null, null, null)
         {
-            OldDecon2LsParameters = parameters;
-            OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile = true;
+            NewDeconToolsParameters = parameters;
+            NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData = true;
 
             DatasetFileNameList = datasetFileNameList;
 
@@ -44,7 +45,7 @@ namespace DeconTools.Backend.Workflows
 
         public override void InitializeWorkflow()
         {
-            Check.Assert(OldDecon2LsParameters != null, "Cannot initialize workflow. Parameters are null");
+            Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
          
             ExportData = true;
@@ -172,16 +173,16 @@ namespace DeconTools.Backend.Workflows
 
             
             ExecuteTask(MSGenerator);
-
-            if (OldDecon2LsParameters.HornTransformParameters.ZeroFill)
+            if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
                 ExecuteTask(ZeroFiller);
             }
 
-            if (OldDecon2LsParameters.HornTransformParameters.UseSavitzkyGolaySmooth)
+            if (NewDeconToolsParameters.MiscMSProcessingParameters.UseSmoothing)
             {
                 ExecuteTask(Smoother);
             }
+          
 
             ExecuteTask(PeakDetector);
 

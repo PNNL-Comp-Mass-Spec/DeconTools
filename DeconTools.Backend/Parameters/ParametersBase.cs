@@ -21,6 +21,15 @@ namespace DeconTools.Backend.Parameters
 
         public abstract void LoadParameters(XElement xElement);
 
+        /// <summary>
+        /// This load method supports loading from an alternate source. This was done to support the old
+        /// DeconTools parameter file format until the new parameter file was pushed out.
+        /// </summary>
+        /// <param name="xElement"></param>
+        public virtual void LoadParametersV2(XElement xElement)
+        {
+            throw new NotImplementedException("LoadParametersV2 is not supported in this mode.");
+        }
 
         protected object GetEnum(XElement element, string elementName, Type enumType, object defaultVal)
         {

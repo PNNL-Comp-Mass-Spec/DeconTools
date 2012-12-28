@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
@@ -22,8 +25,8 @@ namespace DeconTools.Backend.Workflows
 
         List<IsosResult> _unsummedMSFeatures = new List<IsosResult>();
         private MSGenerator _msGenerator;
-        private DeconToolsPeakDetector _peakDetector;
-        private HornDeconvolutor _deconvolutor;
+        private DeconToolsPeakDetectorV2 _peakDetector;
+        private ThrashDeconvolutorV2 _deconvolutor;
         TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private BasicTFF _basicFeatureFinder = new BasicTFF();
         private DeconToolsFitScoreCalculator _fitScoreCalculator = new DeconToolsFitScoreCalculator();
@@ -32,15 +35,15 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal SaturationIMSScanBasedWorkflow(OldDecon2LSParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        internal SaturationIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
 
-            PeakBRSaturatedPeakDetector = parameters.PeakProcessorParameters.PeakBackgroundRatio * 0.75;
+            PeakBRSaturatedPeakDetector = parameters.PeakDetectorParameters.PeakToBackgroundRatio * 0.75;
 
             _msGenerator = new UIMF_MSGenerator();
-            _peakDetector = new DeconToolsPeakDetector(PeakBRSaturatedPeakDetector, 3, Globals.PeakFitType.QUADRATIC,
+            _peakDetector = new DeconToolsPeakDetectorV2(PeakBRSaturatedPeakDetector, 3, Globals.PeakFitType.QUADRATIC,
                                                        run.IsDataThresholded);
 
 
@@ -48,9 +51,9 @@ namespace DeconTools.Backend.Workflows
             _zeroFiller = new DeconToolsZeroFiller();
 
 
-            _deconvolutor = new HornDeconvolutor(parameters.HornTransformParameters);
-            _deconvolutor.MinPeptideBackgroundRatio = PeakBRSaturatedPeakDetector;
-            _deconvolutor.MaxFitAllowed = 0.6;
+            _deconvolutor = new ThrashDeconvolutorV2(parameters.ThrashParameters);
+            _deconvolutor.MinMSFeatureToBackgroundRatio = PeakBRSaturatedPeakDetector;
+            _deconvolutor.MaxFit = 0.6;
 
 
 
@@ -123,7 +126,7 @@ namespace DeconTools.Backend.Workflows
                     {
 
                         bool isPossiblySaturated = isosResult.IntensityAggregate >
-                                                   OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
+                                                   NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
 
                         //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
@@ -164,12 +167,12 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(MSGenerator);
 
-                    if (OldDecon2LsParameters.HornTransformParameters.ZeroFill)
+                    if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
                     {
                         ExecuteTask(ZeroFiller);
                     }
 
-                    if (OldDecon2LsParameters.HornTransformParameters.UseSavitzkyGolaySmooth)
+                    if (NewDeconToolsParameters.MiscMSProcessingParameters.UseSmoothing)
                     {
                         ExecuteTask(Smoother);
                     }
@@ -185,7 +188,7 @@ namespace DeconTools.Backend.Workflows
                     {
 
                         bool isPossiblySaturated = isosResult.IntensityAggregate >
-                                                      OldDecon2LsParameters.HornTransformParameters.SaturationThreshold;
+                                                      NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
                        
 
@@ -254,7 +257,7 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(ScanResultUpdater);
 
-                    if (OldDecon2LsParameters.HornTransformParameters.ReplaceRAPIDScoreWithHornFitScore)
+                    if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
                     {
                         ExecuteTask(FitScoreCalculator);
                     }
@@ -266,7 +269,7 @@ namespace DeconTools.Backend.Workflows
                     if (ExportData)
                     {
                         //the following exporting tasks should be last
-                        if (OldDecon2LsParameters.PeakProcessorParameters.WritePeaksToTextFile)
+                        if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
                         {
                             ExecuteTask(PeakToMSFeatureAssociator);
                             ExecuteTask(PeakListExporter);
@@ -482,7 +485,7 @@ namespace DeconTools.Backend.Workflows
 
                 //double peakRatio = currentPeak.Height / mostAbundantPeak.Height;
 
-                if (currentPeak.Height < OldDecon2LsParameters.HornTransformParameters.SaturationThreshold)
+                if (currentPeak.Height < NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold)
                 {
                     indexOfPeakUsedInExtrapolation = i;
                     break;
@@ -505,7 +508,7 @@ namespace DeconTools.Backend.Workflows
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                if (iso.Peaklist[i].Height > OldDecon2LsParameters.HornTransformParameters.SaturationThreshold)
+                if (iso.Peaklist[i].Height > NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold)
                 {
                     if (updatePeakIntensities)
                     {

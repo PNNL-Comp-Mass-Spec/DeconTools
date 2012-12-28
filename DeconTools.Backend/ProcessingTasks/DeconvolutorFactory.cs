@@ -33,7 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks
             return decon;
         }
 
-        public static Deconvolutor CreateDeconvolutor(ThrashParameters parameters)
+        public static Deconvolutor CreateDeconvolutor(DeconToolsParameters parameters)
         {
             Deconvolutor decon;
 
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-            decon = new ThrashDeconvolutorV2(parameters);
+            decon = new ThrashDeconvolutorV2(parameters.ThrashParameters);
             return decon;
         }
 

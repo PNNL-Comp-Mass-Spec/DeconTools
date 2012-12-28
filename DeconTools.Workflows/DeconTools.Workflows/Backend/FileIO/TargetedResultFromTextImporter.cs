@@ -101,6 +101,8 @@ namespace DeconTools.Workflows.Backend.FileIO
                         throw new InvalidDataException("In File: " + Path.GetFileName(_filename)+   "; Data in row # " + lineCounter.ToString() + " is NOT valid - \nThe number of columns does not match that of the header line");
                     }
 
+
+
                     TargetedResultDTO result = ConvertTextToDataObject(processedData);
                     repos.Results.Add(result);
                     lineCounter++;

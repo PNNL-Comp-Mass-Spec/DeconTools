@@ -2,8 +2,10 @@
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.Runs;
 
@@ -19,10 +21,10 @@ namespace DeconTools.UnitTesting2
             run.ScanSetCollection .Create(run, 6000, 6050, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeaksAreStored = true;
 
-            Task decon = new HornDeconvolutor();
+            Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
 
@@ -46,9 +48,9 @@ namespace DeconTools.UnitTesting2
 
             run.ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
 
-            Task msgen = new GenericMSGenerator();
-            Task peakDetector = new DeconToolsPeakDetector();
-            Task decon = new HornDeconvolutor();
+            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task peakDetector = new DeconToolsPeakDetectorV2();
+            Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
 
@@ -76,26 +78,23 @@ namespace DeconTools.UnitTesting2
             run.IMSScanSetCollection.Create(run, 250, 270, 9, 1);
 
             Task msgen = new UIMF_MSGenerator();
-            Task peakDetector = new DeconToolsPeakDetector();
-            Task decon = new RapidDeconvolutor();
-            Task refitter = new DeconToolsFitScoreCalculator();
+            Task peakDetector = new DeconToolsPeakDetectorV2();
+            Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
             Task ticExtractor = new DeconTools.Backend.ProcessingTasks.UIMF_TICExtractor();
             Task driftTimeextractor = new UIMFDriftTimeExtractor();
 
-
             foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentFrameSet = frame;
 
-                foreach (var scan in run.ScanSetCollection.ScanSetList)
+                foreach (IMSScanSet scan in run.IMSScanSetCollection.ScanSetList)
                 {
-                    run.CurrentScanSet = scan;
+                    run.CurrentIMSScanSet = scan;
                     msgen.Execute(run.ResultCollection);
                     peakDetector.Execute(run.ResultCollection);
                     decon.Execute(run.ResultCollection);
-                    refitter.Execute(run.ResultCollection);
                     flagger.Execute(run.ResultCollection);
                     driftTimeextractor.Execute(run.ResultCollection);
                     msScanInfoCreator.Execute(run.ResultCollection);

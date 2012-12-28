@@ -98,7 +98,12 @@ namespace DeconTools.Backend.Parameters
 
         #endregion
 
-        public override void LoadParameters(XElement thrashElement)
+        public override void LoadParameters(XElement xElement)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void LoadParametersV2(XElement thrashElement)
         {
             AveragineFormula = GetStringValue(thrashElement, "AveragineFormula", AveragineFormula);
 

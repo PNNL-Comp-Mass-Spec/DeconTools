@@ -16,7 +16,7 @@ namespace DeconTools.Backend.Parameters
 
             ExportPeakData = false;
             ExportFileType = Globals.ExporterType.Text;
-            ScanBasedWorkflowType = Globals.ScanBasedWorkflowType.Standard;
+            ScanBasedWorkflowName = "standard";
             DeconvolutionType = Globals.DeconvolutionType.Thrash;
 
             IsRefittingPerformed = true;
@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Parameters
         public bool IsRefittingPerformed { get; set; }
 
         public Globals.ExporterType ExportFileType { get; set; }
-        public Globals.ScanBasedWorkflowType ScanBasedWorkflowType { get; set; }
+        public string ScanBasedWorkflowName { get; set; }
 
         public Globals.DeconvolutionType DeconvolutionType { get; set; }
 
@@ -50,11 +50,17 @@ namespace DeconTools.Backend.Parameters
         #region Public Methods
         public override void LoadParameters(XElement xElement)
         {
+            throw new NotImplementedException();
+        }
+
+
+        public override void LoadParametersV2(XElement xElement)
+        {
             ProcessMS1 = GetBoolVal(xElement, "Process_MS", ProcessMS1);
             ProcessMS2 = GetBoolVal(xElement, "ProcessMSMS", ProcessMS2);
 
             ExportFileType = (Globals.ExporterType)GetEnum(xElement, "ExportFileType", ExportFileType.GetType(), ExportFileType);
-            ScanBasedWorkflowType = (Globals.ScanBasedWorkflowType)GetEnum(xElement, "ScanBasedWorkflowType", ScanBasedWorkflowType.GetType(), ScanBasedWorkflowType);
+            ScanBasedWorkflowName = GetStringValue(xElement, "ScanBasedWorkflowType", ScanBasedWorkflowName);
             DeconvolutionType = (Globals.DeconvolutionType)GetEnum(xElement, "DeconvolutionType", DeconvolutionType.GetType(), DeconvolutionType);
 
             UseRAPIDDeconvolution = GetBoolVal(xElement, "UseRAPIDDeconvolution", UseRAPIDDeconvolution);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Workflows;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void Test1()
         {
 
-            OldDecon2LSParameters parameters = new OldDecon2LSParameters();
+            var parameters = new DeconToolsParameters();
 
 
             List<string> datasetList = new List<string>();
@@ -23,7 +24,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             datasetList.Add(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\JuliaLaskinRunMergingWorkflow\b-LSOA_HPLC_ESIbox_pos_res60k_RT1255-1282.raw");
             datasetList.Add(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\JuliaLaskinRunMergingWorkflow\b-LSOA_HPLC_ESIbox_pos_res60k_RT1400-1500.raw");
     
-            RunMergingPeakExportingWorkflow workflow = new RunMergingPeakExportingWorkflow(parameters, datasetList);
+            var workflow = new RunMergingPeakExportingWorkflow(parameters, datasetList);
             workflow.Execute();
 
 

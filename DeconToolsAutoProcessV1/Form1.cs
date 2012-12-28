@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Workflows;
@@ -21,7 +22,7 @@ namespace DeconToolsAutoProcessV1
         BackgroundWorker _bw;
         bool _isRunMergingModeUsed;
 
-        OldDecon2LSParameters _parameters;
+        DeconToolsParameters _parameters;
         private string _currentFile;
 
         public Form1()
@@ -164,8 +165,8 @@ namespace DeconToolsAutoProcessV1
             try
             {
 
-                _parameters = new OldDecon2LSParameters();
-                _parameters.Load(_parameterFileName);
+                _parameters = new DeconToolsParameters();
+                _parameters.LoadFromOldDeconToolsParameterFile(_parameterFileName);
             }
             catch (Exception ex)
             {
@@ -286,7 +287,7 @@ namespace DeconToolsAutoProcessV1
 
                 //This mode was requested by Julia Laskin. 
                 //This mode detects peaks in each dataset and merges the output
-                if (_parameters.HornTransformParameters.ScanBasedWorkflowType.ToLower() == "run_merging_with_peak_export")
+                if (_parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower() == "run_merging_with_peak_export")
                 {
                     var workflow = new RunMergingPeakExportingWorkflow(_parameters, _inputFileList, _outputPath, bw);
                     workflow.Execute();
