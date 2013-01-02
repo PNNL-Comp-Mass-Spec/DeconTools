@@ -71,7 +71,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 			// Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
 			msgen.MinMZ = currentTarget.MZ - 10;
-			msgen.MaxMZ = currentTarget.MZ - 10;
+			msgen.MaxMZ = currentTarget.MZ + 10;
 
 			float normalizedElutionTime;
 
