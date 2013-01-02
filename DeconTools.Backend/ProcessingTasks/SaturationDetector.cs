@@ -51,18 +51,18 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 UIMFRun uimfRun = (UIMFRun)run;
 
-                if (uimfRun.CurrentFrameSet == null) throw new NullReferenceException("CurrentFrameSet is null. You need to set it.");
+                if (uimfRun.CurrentScanSet == null) throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
                 if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
 
                 //this creates a Frameset containing only the primary frame.  Therefore no summing will occur
-                var lcScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryScanNumber);
+                var lcScanSet = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
 
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
                 var imsScanSet = new IMSScanSet(uimfRun.CurrentIMSScanSet.PrimaryScanNumber);
 
                 //get the mass spectrum +/- 5 da from the range of the isotopicProfile
 
-                uimfRun.CurrentFrameSet = lcScanSet;
+                uimfRun.CurrentScanSet = lcScanSet;
                 uimfRun.CurrentIMSScanSet = imsScanSet;
                 _msGenerator.Execute(run.ResultCollection);
                 

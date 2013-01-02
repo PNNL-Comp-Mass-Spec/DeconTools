@@ -152,7 +152,7 @@ namespace DeconTools.Testing.ProblemCases
             ScanSet frame = new ScanSet(1);
             ScanSet scan = new ScanSet(200);
 
-            run.CurrentFrameSet = frame;
+            run.CurrentScanSet = frame;
             run.CurrentScanSet = scan;
 
             MSGeneratorFactory msgenFactory = new MSGeneratorFactory();

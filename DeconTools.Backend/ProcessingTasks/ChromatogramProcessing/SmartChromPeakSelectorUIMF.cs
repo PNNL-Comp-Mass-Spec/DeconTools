@@ -37,7 +37,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             else
             {
                 var lcscanset = new ScanSet(bestLCScan);
-                uimfrun.CurrentFrameSet = lcscanset;
+                uimfrun.CurrentScanSet = lcscanset;
 
 				// TODO: Hard coded to sum across all IMS Scans.
 				int centerScan = (uimfrun.MinIMSScan + uimfrun.MaxIMSScan + 1) / 2;
@@ -52,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             result.ChromPeakSelected = bestPeak;
 
-            result.ScanSet = new ScanSet(uimfRun.CurrentFrameSet.PrimaryScanNumber);
+            result.ScanSet = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
         }
 
 		public override void Execute(ResultCollection resultList)

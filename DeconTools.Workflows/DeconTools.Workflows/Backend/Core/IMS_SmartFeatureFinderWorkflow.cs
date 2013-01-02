@@ -355,7 +355,7 @@ namespace DeconTools.Workflows.Backend.Core
     //                    sscc = new ScanSetCollectionCreator(thisUimfRun, startScan, startScan, 1, 1);
     //                    sscc.Create();
 
-    //                    thisUimfRun.CurrentFrameSet = thisUimfRun.FrameSetCollection.FrameSetList[0];
+    //                    thisUimfRun.CurrentScanSet = thisUimfRun.FrameSetCollection.FrameSetList[0];
     //                    thisUimfRun.CurrentScanSet = thisUimfRun.ScanSetCollection.ScanSetList[0];
 
     //                    //now let's deconvolute this data within +/- 5 Mz.
@@ -648,7 +648,7 @@ namespace DeconTools.Workflows.Backend.Core
 
     //        foreach (var frame in uimfRun.FrameSetCollection.FrameSetList)
     //        {
-    //            uimfRun.CurrentFrameSet = frame;
+    //            uimfRun.CurrentScanSet = frame;
 
 
     //            // detect all peaks in frame
@@ -931,13 +931,13 @@ FrameSet endFrameSet;
 
 
 
-uimfRun.CurrentFrameSet = uimfRun.FrameSetCollection.FrameSetList[frameSetIndex];
+uimfRun.CurrentScanSet = uimfRun.FrameSetCollection.FrameSetList[frameSetIndex];
 ScanSetCollectionCreator sscc = new ScanSetCollectionCreator(uimfRun, 1, 1);
 sscc.Create();
 peakDetector = new DeconToolsPeakDetector(4, 3, Globals.PeakFitType.QUADRATIC, true);
             
 int startScan = 0;
-int startFrame = uimfRun.CurrentFrameSet.PrimaryScanNumber;
+int startFrame = uimfRun.CurrentScanSet.PrimaryScanNumber;
 int endScan = 0;
 int endFrame = 0;
 
@@ -1009,15 +1009,15 @@ for (int i = 0; i < uimfRun.ScanSetCollection.ScanSetList.Count; i++)
             //endScan = i;
 
             //we need to do this same step along the LC dimension to find the endFrame and the endFrame
-            uimfRun.CurrentFrameSet = uimfRun.FrameSetCollection.FrameSetList[
+            uimfRun.CurrentScanSet = uimfRun.FrameSetCollection.FrameSetList[
                 ++frameSetIndex];
             uimfRun.CurrentScanSet = startScanSet;
             while (peakPresent(mzPeak, uimfRun.CurrentScanSet, uimfRun)){
-                uimfRun.CurrentFrameSet = uimfRun.FrameSetCollection.FrameSetList[
+                uimfRun.CurrentScanSet = uimfRun.FrameSetCollection.FrameSetList[
                 ++frameSetIndex];
             }
 
-            endFrame = uimfRun.CurrentFrameSet.PrimaryScanNumber - 1;
+            endFrame = uimfRun.CurrentScanSet.PrimaryScanNumber - 1;
 
 
             //now we've got the endFrame for this feature

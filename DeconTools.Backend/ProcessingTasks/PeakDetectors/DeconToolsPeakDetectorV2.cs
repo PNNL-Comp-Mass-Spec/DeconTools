@@ -211,6 +211,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 run.ResultCollection.FillMSPeakResults();
             }
 
+            GatherPeakStatistics(run);
+
         }
 
 
@@ -448,6 +450,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
 
         }
+
+        
 
         #endregion
 

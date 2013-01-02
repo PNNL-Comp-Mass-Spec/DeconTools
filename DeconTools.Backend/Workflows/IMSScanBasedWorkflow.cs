@@ -115,7 +115,7 @@ namespace DeconTools.Backend.Workflows
             {
                 foreach (IMSScanSet imsScanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
-                    uimfRun.CurrentFrameSet = frameset;
+                    uimfRun.CurrentScanSet = frameset;
                     uimfRun.CurrentIMSScanSet = imsScanSet;
                     ReportProgress();
                     ExecuteProcessingTasks();
@@ -136,8 +136,8 @@ namespace DeconTools.Backend.Workflows
             UIMFRun uimfRun = (UIMFRun)Run;
             if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet);
-            int framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentFrameSet);
+            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+            int framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
 
             int scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
             int scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;

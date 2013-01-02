@@ -26,13 +26,40 @@ namespace DeconTools.Backend.ProcessingTasks
             
             Deconvolute(resultList);
 
+            GatherMSFeatureStatistics(resultList.Run);
+
             associatePeaksToMSFeatureID(resultList);
 
             addCurrentScanIsosResultsToOverallList(resultList);
 
+
             
 
         }
+
+
+        protected virtual void GatherMSFeatureStatistics(Run run)
+        {
+            if (run.ResultCollection.IsosResultBin == null || run.ResultCollection.IsosResultBin.Count == 0) return;
+
+            ScanSet currentScanset;
+
+            if (run is UIMFRun)
+            {
+                currentScanset = ((UIMFRun)run).CurrentIMSScanSet;
+            }
+            else
+            {
+                currentScanset = run.CurrentScanSet;
+            }
+
+            Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+
+            
+            currentScanset.NumIsotopicProfiles = run.ResultCollection.IsosResultBin.Count;    //used in ScanResult
+            
+        }
+
 
         private void associatePeaksToMSFeatureID(ResultCollection resultList)
         {

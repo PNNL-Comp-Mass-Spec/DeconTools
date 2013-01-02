@@ -30,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
 
-            // = uimfRun.GetDriftTime(uimfRun.CurrentFrameSet.PrimaryScanNumber, uimfRun.CurrentScanSet.PrimaryScanNumber);
+            // = uimfRun.GetDriftTime(uimfRun.CurrentScanSet.PrimaryScanNumber, uimfRun.CurrentScanSet.PrimaryScanNumber);
 
         }
     }

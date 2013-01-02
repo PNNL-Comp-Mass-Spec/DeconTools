@@ -44,10 +44,10 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
             UIMFRun uimfRun = (UIMFRun)(run);
-            Check.Require(uimfRun.CurrentFrameSet != null, "Cannot generate MS. Target FrameSet ('CurrentFrameSet') has not been assigned to the Run");
+            Check.Require(uimfRun.CurrentScanSet != null, "Cannot generate MS. Target FrameSet ('CurrentScanSet') has not been assigned to the Run");
             Check.Require(uimfRun.CurrentIMSScanSet != null, "Cannot generate MS. Target ScanSet ('CurrentScanSet') has not been assigned to the Run");
             
-			uimfRun.GetMassSpectrum(uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet,MinMZ,MaxMZ);
+			uimfRun.GetMassSpectrum(uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet,MinMZ,MaxMZ);
 
             if (uimfRun.XYData.Xvalues == null || uimfRun.XYData.Xvalues.Length == 0)
             {

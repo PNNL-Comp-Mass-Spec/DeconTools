@@ -10,6 +10,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void Test1()
         {
+            //see https://jira.pnnl.gov/jira/browse/OMCS-460
+
+
+
             string parameterFile = "..\\..\\..\\..\\SampleParameterFile.xml";
 
             Assert.IsTrue(File.Exists(parameterFile));

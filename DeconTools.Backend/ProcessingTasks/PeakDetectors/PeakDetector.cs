@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public abstract class PeakDetector:Task
     {
-
+        private PeakUtilities _peakUtilities = new PeakUtilities();
      
         public abstract List<Peak> FindPeaks(XYData xydata, double minX, double maxX);
 
@@ -92,5 +94,30 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         {
             run.CurrentBackgroundIntensity = BackgroundIntensity;
         }
+
+
+        protected void GatherPeakStatistics(Run run)
+        {
+
+            ScanSet currentScanset;
+
+            if (run is UIMFRun)
+            {
+                currentScanset = ((UIMFRun)run).CurrentIMSScanSet;
+            }
+            else
+            {
+                currentScanset = run.CurrentScanSet;
+            }
+
+            Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+
+            currentScanset.BackgroundIntensity = BackgroundIntensity;
+            currentScanset.NumPeaks = run.PeakList.Count;    //used in ScanResult
+            currentScanset.BasePeak = _peakUtilities.GetBasePeak(run.PeakList);     //Used in ScanResult
+
+        }
+
+
     }
 }

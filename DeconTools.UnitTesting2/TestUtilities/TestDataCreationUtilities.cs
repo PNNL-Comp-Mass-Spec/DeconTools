@@ -87,7 +87,7 @@ namespace DeconTools.UnitTesting2
 
             foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
-                run.CurrentFrameSet = frame;
+                run.CurrentScanSet = frame;
 
                 foreach (IMSScanSet scan in run.IMSScanSetCollection.ScanSetList)
                 {

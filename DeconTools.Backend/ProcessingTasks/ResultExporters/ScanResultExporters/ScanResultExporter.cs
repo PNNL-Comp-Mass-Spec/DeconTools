@@ -36,7 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             //    int lastFrameNum = uimfFrameSet[uimfFrameSet.Count - 1].PrimaryFrame;
             //    int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
-            //    isLastScan = (((UIMFRun)resultList.Run).CurrentFrameSet.PrimaryScanNumber == lastFrameNum &&
+            //    isLastScan = (((UIMFRun)resultList.Run).CurrentScanSet.PrimaryScanNumber == lastFrameNum &&
             //        resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             //}
             //else

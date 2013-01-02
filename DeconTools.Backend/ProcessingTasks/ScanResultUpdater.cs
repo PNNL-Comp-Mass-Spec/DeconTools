@@ -32,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run is UIMFRun)
             {
                 var uimfrun = (UIMFRun) resultList.Run;
-                scanIsMS2 = (resultList.Run.GetMSLevel(uimfrun.CurrentFrameSet.PrimaryScanNumber) == 2);       //GORD:  update this when you rename 'currentFrameSet'
+                scanIsMS2 = (resultList.Run.GetMSLevel(uimfrun.CurrentScanSet.PrimaryScanNumber) == 2);       //GORD:  update this when you rename 'currentFrameSet'
             }
             else
             {

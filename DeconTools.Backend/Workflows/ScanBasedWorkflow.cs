@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Workflows
 
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
-        private PeakUtilities _peakUtilities = new PeakUtilities();
+     
 
 
         #region Factory methods
@@ -360,8 +360,6 @@ namespace DeconTools.Backend.Workflows
 
             ExecuteTask(PeakDetector);
 
-            GatherPeakStatistics();
-
             ExecuteTask(Deconvolutor);
 
             ExecuteTask(ResultValidator);
@@ -396,28 +394,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        protected void GatherPeakStatistics()
-        {
-
-            ScanSet currentScanset;
-
-            if (Run is UIMFRun)
-            {
-                currentScanset = ((UIMFRun)Run).CurrentIMSScanSet;
-            }
-            else
-            {
-                currentScanset = Run.CurrentScanSet;
-            }
-
-            Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
-
-            currentScanset.BackgroundIntensity = this.PeakDetector.BackgroundIntensity;
-            currentScanset.NumPeaks = Run.PeakList.Count;    //used in ScanResult
-            currentScanset.BasePeak = _peakUtilities.GetBasePeak(Run.PeakList);     //Used in ScanResult
-            
-        }
-
+     
         protected virtual void ExecuteOtherTasksHook() { }
 
         protected void ExecuteTask(Task processingTask)

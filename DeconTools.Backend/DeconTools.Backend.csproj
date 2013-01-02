@@ -387,7 +387,6 @@
     <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />
     <Compile Include="ProcessingTasks\UIMFDriftTimeExtractor.cs" />
     <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
-    <Compile Include="ProcessingTasks\ZeroFillers\BasicZeroFiller.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\ZeroFiller.cs" />
     <Compile Include="Runs\BrukerRun.cs" />

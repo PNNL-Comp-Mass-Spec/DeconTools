@@ -50,7 +50,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
                 ScanSet scan = new ScanSet(primaryScan, primaryScan - 3 , primaryScan +3);
 
 
-                run.CurrentFrameSet = frame;
+                run.CurrentScanSet = frame;
                 run.CurrentScanSet = scan;
 
 

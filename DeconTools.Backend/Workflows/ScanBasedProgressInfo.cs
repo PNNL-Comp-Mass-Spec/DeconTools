@@ -1,3 +1,4 @@
+using System;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
@@ -5,14 +6,16 @@ namespace DeconTools.Backend.Workflows
 {
     public class ScanBasedProgressInfo
     {
-        public ScanBasedProgressInfo(Run currentRun, ScanSet scanSet, IMSScanSet imsScanSet)
+        public ScanBasedProgressInfo(Run currentRun, ScanSet scanSet, IMSScanSet imsScanSet = null)
         {
             this.currentRun = currentRun;
             this.currentScanSet = scanSet;
-            
+
             if (currentRun is UIMFRun)
             {
-                ((UIMFRun) currentRun).CurrentIMSScanSet = imsScanSet;
+                if (imsScanSet == null)
+                    throw new NullReferenceException("ScanBasedProgressInfo error. You need to provide a valid IMSScanSet");
+                ((UIMFRun)currentRun).CurrentIMSScanSet = imsScanSet;
             }
 
 
@@ -41,35 +44,14 @@ namespace DeconTools.Backend.Workflows
             get { return currentScanSet; }
             set { currentScanSet = value; }
         }
-        private FrameSet currentFrameSet;
 
-        public FrameSet CurrentFrameSet
+
+        public int GetScanOrFrameNum()
         {
-            get { return currentFrameSet; }
-            set { currentFrameSet = value; }
-        }
+            if (currentRun == null) return -1;
 
-        public int getScanOrFrameNum()
-        {
-            if (this.currentRun == null) return -1;
-            if (this.currentRun is UIMFRun)
-            {
-                if (currentFrameSet == null) return -1;
-                else
-                {
-                    return currentFrameSet.PrimaryFrame;
-                }
-            }
-            else
-            {
-                if (currentScanSet == null) return -1;
-                else
-                {
-                    return currentScanSet.PrimaryScanNumber;
-                }
-
-            }
-
+            if (CurrentScanSet == null) return -1;
+            return CurrentScanSet.PrimaryScanNumber;
         }
 
 

@@ -110,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (var frame in uimfRun.ScanSetCollection.ScanSetList)
             {
-                uimfRun.CurrentFrameSet = frame;
+                uimfRun.CurrentScanSet = frame;
 
 
                 // detect all peaks in frame

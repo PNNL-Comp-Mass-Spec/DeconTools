@@ -51,11 +51,11 @@ namespace DeconTools.Backend.Workflows
             _zeroFiller = new DeconToolsZeroFiller();
 
 
+            parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = PeakBRSaturatedPeakDetector;
+            parameters.ThrashParameters.MaxFit = 0.6;
+
             _deconvolutor = new ThrashDeconvolutorV2(parameters.ThrashParameters);
-            _deconvolutor.MinMSFeatureToBackgroundRatio = PeakBRSaturatedPeakDetector;
-            _deconvolutor.MaxFit = 0.6;
-
-
+           
 
 
             AdjustMonoIsotopicMasses = true;
@@ -92,7 +92,7 @@ namespace DeconTools.Backend.Workflows
 
                 ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                 //get saturated MSFeatures for unsummed data
-                uimfRun.CurrentFrameSet = unsummedFrameSet;
+                uimfRun.CurrentScanSet = unsummedFrameSet;
 
 
 
@@ -144,7 +144,7 @@ namespace DeconTools.Backend.Workflows
                             RebuildSaturatedIsotopicProfile(isosResult, uimfRun.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
                         }
-                        
+
 
                     }
                 }
@@ -159,7 +159,7 @@ namespace DeconTools.Backend.Workflows
 
 
                     //get the summed isotopic profile
-                    uimfRun.CurrentFrameSet = lcScanSet;
+                    uimfRun.CurrentScanSet = lcScanSet;
                     uimfRun.CurrentIMSScanSet = scanset;
 
 
@@ -179,8 +179,6 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(PeakDetector);
 
-                    GatherPeakStatistics();
-
                     ExecuteTask(Deconvolutor);
 
 
@@ -190,7 +188,7 @@ namespace DeconTools.Backend.Workflows
                         bool isPossiblySaturated = isosResult.IntensityAggregate >
                                                       NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
-                       
+
 
                         if (isPossiblySaturated)
                         {
@@ -204,7 +202,7 @@ namespace DeconTools.Backend.Workflows
                         {
 
                         }
-                        
+
                         if (isosResult.IsotopicProfile.IsSaturated)
                         {
                             GetRebuiltFitScore(isosResult);
@@ -219,22 +217,22 @@ namespace DeconTools.Backend.Workflows
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
                         double ppmToleranceForDuplicate = 20;
-                        double massTolForDuplicate = ppmToleranceForDuplicate*
-                                                     isosResult.IsotopicProfile.MonoIsotopicMass/1e6;
+                        double massTolForDuplicate = ppmToleranceForDuplicate *
+                                                     isosResult.IsotopicProfile.MonoIsotopicMass / 1e6;
 
-                        
+
 
                         var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
                                                     where
                                                         Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
                                                                  isosResult.IsotopicProfile.MonoIsotopicMass) <
-                                                        massTolForDuplicate && n.IsotopicProfile.ChargeState== isosResult.IsotopicProfile.ChargeState
+                                                        massTolForDuplicate && n.IsotopicProfile.ChargeState == isosResult.IsotopicProfile.ChargeState
                                                     select n);
 
                         int minMSFeatureID = int.MaxValue;
                         foreach (var dup in duplicateIsosResults)
                         {
-                          
+
                             if (dup.MSFeatureID < minMSFeatureID)
                             {
 
@@ -471,10 +469,10 @@ namespace DeconTools.Backend.Workflows
 
         public void AdjustSaturatedIsotopicProfile(IsotopicProfile iso, IsotopicProfile theorIsotopicProfile, bool updatePeakMasses = true, bool updatePeakIntensities = true)
         {
-            
+
             //get index of suitable peak on which to base the intensity adjustment
             int indexOfPeakUsedInExtrapolation = 0;
-            
+
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
@@ -512,8 +510,8 @@ namespace DeconTools.Backend.Workflows
                 {
                     if (updatePeakIntensities)
                     {
-                        
-                        if (i>=theorIsotopicProfile.Peaklist.Count)
+
+                        if (i >= theorIsotopicProfile.Peaklist.Count)
                         {
                             iso.Peaklist[i].Height = 0;
 
@@ -524,7 +522,7 @@ namespace DeconTools.Backend.Workflows
                                                  intensityObsPeakForExtrapolation /
                                                  intensityTheorPeakForExtrapolation;
                         }
-                        
+
 
                         iso.Peaklist[i].Width = iso.Peaklist[indexOfPeakUsedInExtrapolation].Width;    //repair the width too, because it can get huge. Width can be used in determining tolerances.
 
@@ -542,7 +540,7 @@ namespace DeconTools.Backend.Workflows
                 }
             }
 
-            iso.IntensityMostAbundant= iso.getMostIntensePeak().Height;
+            iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;
 
             UpdateMonoisotopicMassData(iso);
 
@@ -680,7 +678,7 @@ namespace DeconTools.Backend.Workflows
             //is used to correct the intensity of our target peptide. 
             //A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
             //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide. 
-            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.01);    
+            PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, 0.01);
 
             return theorTarget.IsotopicProfile;
         }

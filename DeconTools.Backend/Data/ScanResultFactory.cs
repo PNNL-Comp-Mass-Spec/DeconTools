@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Data
             if (run is UIMFRun)
             {
                 UIMFRun uimfRun = (UIMFRun)run;
-                scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentFrameSet, uimfRun.CurrentIMSScanSet);
+                scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
             }
             else
             {

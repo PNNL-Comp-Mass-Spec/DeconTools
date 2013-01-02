@@ -110,37 +110,37 @@ namespace DeconTools.Backend.Runs
 
             if (numMs2Frames > 0)
             {
-				if (numMs1Frames == 1)
-				{
-					// If there is only 1 MS1 frame, then there is only 1 set of MS2 frames, so we use the count of MS2 frames
-					_numOfConsecutiveMs2Frames = numMs2Frames;
-				}
-				else
-				{
-					// Subtract the frame numbers of the first 2 MS1 frames to figure out how many MS2 frame are in between
-					_numOfConsecutiveMs2Frames = MS1Frames[1] - MS1Frames[0] - 1;
-				}
+                if (numMs1Frames == 1)
+                {
+                    // If there is only 1 MS1 frame, then there is only 1 set of MS2 frames, so we use the count of MS2 frames
+                    _numOfConsecutiveMs2Frames = numMs2Frames;
+                }
+                else
+                {
+                    // Subtract the frame numbers of the first 2 MS1 frames to figure out how many MS2 frame are in between
+                    _numOfConsecutiveMs2Frames = MS1Frames[1] - MS1Frames[0] - 1;
+                }
 
-            	ValidateMSMSConsistency(MS1Frames);
+                ValidateMSMSConsistency(MS1Frames);
             }
         }
 
-		/// <summary>
-		/// This method will verify that the number of MS/MS frame in between each MS1 frame stays constant throughout the UIMF file.
-		/// </summary>
-		/// <returns>True if the MS/MS data is valid. Otherwise, an exception is thrown.</returns>
-		private bool ValidateMSMSConsistency(IList<int> ms1Frames)
-		{
-			for(int i = 1; i < ms1Frames.Count; i++)
-			{
-				if(ms1Frames[i] - ms1Frames[i-1] - 1 != _numOfConsecutiveMs2Frames)
-				{
-					throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: An incorrect number of MS/MS frames were detected between MS1 Frame #s " + ms1Frames[i-1] + " and " + ms1Frames[i] + ".");
-				}
-			}
+        /// <summary>
+        /// This method will verify that the number of MS/MS frame in between each MS1 frame stays constant throughout the UIMF file.
+        /// </summary>
+        /// <returns>True if the MS/MS data is valid. Otherwise, an exception is thrown.</returns>
+        private bool ValidateMSMSConsistency(IList<int> ms1Frames)
+        {
+            for (int i = 1; i < ms1Frames.Count; i++)
+            {
+                if (ms1Frames[i] - ms1Frames[i - 1] - 1 != _numOfConsecutiveMs2Frames)
+                {
+                    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: An incorrect number of MS/MS frames were detected between MS1 Frame #s " + ms1Frames[i - 1] + " and " + ms1Frames[i] + ".");
+                }
+            }
 
-			return true;
-		}
+            return true;
+        }
 
         private bool CheckRunForMSMSData()
         {
@@ -152,40 +152,27 @@ namespace DeconTools.Backend.Runs
 
 
 
-      
+
 
         #endregion
 
         #region Properties
 
         public override XYData XYData { get; set; }
-       
 
-        
+
+
         public IMSScanSetCollection IMSScanSetCollection { get; set; }
 
 
         public IMSScanSet CurrentIMSScanSet { get; set; }
 
-        public override ScanSet CurrentScanSet
-        {
-            get
-            {
-                throw new NotSupportedException();
-                return base.CurrentScanSet;
-            }
-            set
-            {
-                throw new NotSupportedException();
-                base.CurrentScanSet = value;
-            }
-        }
-
-
+        public override ScanSet CurrentScanSet { get; set; }
+       
         public int MinIMSScan { get; set; }
         public int MaxIMSScan { get; set; }
 
-
+        [Obsolete("CurrentFrameSet not used anymore. Use CurrentScanSet.", true)]
         public ScanSet CurrentFrameSet { get; set; }
 
         public List<int> MS1Frames { get; set; }
@@ -264,16 +251,16 @@ namespace DeconTools.Backend.Runs
 
         public override int GetCurrentScanOrFrame()
         {
-            return this.CurrentFrameSet.PrimaryScanNumber;
+            return this.CurrentScanSet.PrimaryScanNumber;
         }
 
-        
+
 
 
         public override int GetMSLevelFromRawData(int frameNum)
         {
-			if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
-			if (MS2Frames.BinarySearch(frameNum) >= 0) return 2;
+            if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
+            if (MS2Frames.BinarySearch(frameNum) >= 0) return 2;
 
             FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
             return (int)fp.FrameType;
@@ -302,7 +289,7 @@ namespace DeconTools.Backend.Runs
             int scanLower = imsScanset.getLowestScanNumber();
             int scanUpper = imsScanset.getHighestScanNumber();
 
-			// TODO: If lowest and highest scan numbers are both 0, should we be summing the mass spectrum?
+            // TODO: If lowest and highest scan numbers are both 0, should we be summing the mass spectrum?
 
             double[] xvals = null;
             int[] yvals = null;
@@ -341,7 +328,7 @@ namespace DeconTools.Backend.Runs
         {
             return _numOfConsecutiveMs2Frames;
         }
-        
+
         public double GetDriftTime(int frameNum, int scanNum)
         {
             FrameParameters fp = null;
@@ -350,7 +337,7 @@ namespace DeconTools.Backend.Runs
             double driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
             var framePressure = GetFramePressure(frameNum);
-            
+
             if (framePressure != 0)
             {
                 driftTime = driftTime * (FramePressureStandard / framePressure);  // correc
@@ -586,7 +573,7 @@ namespace DeconTools.Backend.Runs
         public float GetTIC(int lcScan, int imsScan)
         {
 
-            return (float) UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetTIC(lcScan, imsScan);
+            return (float)UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetTIC(lcScan, imsScan);
 
 
         }
@@ -606,14 +593,14 @@ namespace DeconTools.Backend.Runs
                 ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
                 this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
 
-                
-                double sumIntensities=0;
 
-                if (XYData!=null && XYData.Yvalues !=null && XYData.Yvalues.Length>0)
+                double sumIntensities = 0;
+
+                if (XYData != null && XYData.Yvalues != null && XYData.Yvalues.Length > 0)
                 {
-                    sumIntensities = this.XYData.Yvalues.Sum(); 
+                    sumIntensities = this.XYData.Yvalues.Sum();
                 }
-                
+
                 frameVals.Add(frame);
                 intensityVals.Add(sumIntensities);
             }
@@ -627,9 +614,9 @@ namespace DeconTools.Backend.Runs
             StringBuilder sb = new StringBuilder();
 
             sb.Append("Frame = ");
-            if (CurrentFrameSet != null)
+            if (CurrentScanSet != null)
             {
-                sb.Append(CurrentFrameSet.PrimaryScanNumber);
+                sb.Append(CurrentScanSet.PrimaryScanNumber);
             }
             else
             {

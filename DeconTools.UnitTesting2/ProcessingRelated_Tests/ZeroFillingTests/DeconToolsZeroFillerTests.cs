@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
-using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 
 namespace DeconTools.UnitTesting2.ProcessingTasksTests
@@ -16,207 +11,70 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
     [TestFixture]
     public class DeconToolsZeroFillerTests
     {
-  
-        string imfStrangeOneFilepath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\IMF\7peptides_1uM_600_50_4t_114Vpp_0000.Accum_1_recal.imf";
+        //string imfStrangeOneFilepath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\IMF\7peptides_1uM_600_50_4t_114Vpp_0000.Accum_1_recal.imf";
 
         [Test]
-        public void test1()
+        public void ZeroFillerTest1()
         {
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
-            ResultCollection resultcollection = new ResultCollection(run);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var zeroFiller = new DeconToolsZeroFiller(3);
 
-            Task msgen = new GenericMSGenerator();
-            msgen.Execute(resultcollection);
-
-            Task peakdetector = new DeconToolsPeakDetector(3,3, Globals.PeakFitType.QUADRATIC,false);
-            peakdetector.Execute(resultcollection);
-
-            Assert.AreEqual(82, resultcollection.Run.PeakList.Count);
-
-            Task zeroFiller = new DeconToolsZeroFiller(3);
-            zeroFiller.Execute(resultcollection);
-
-            peakdetector.Execute(resultcollection);
-
-            //need to verify if this is working properly
-            Assert.AreEqual(81, resultcollection.Run.PeakList.Count);
-        }
-
-
-        
-        /// <summary>
-        /// The following tests were created to deal with a zero filling issue that occurred
-        /// with TOF data (IMF) and when the algorithm encountered low m/z data ( less than 100)
-        /// This was fixed in Decon2LS, DeconEngineV2, version 1.3.2 (June 18, 2009);  
-        /// </summary>
-        [Test]
-        public void zeroFillingWeirdness1()
-        {
-            Run run = new IMFRun(imfStrangeOneFilepath);
-           
-            run.ScanSetCollection.Create(run, 238, 245,7,1);
-            
-
-            run.CurrentScanSet = run.ScanSetCollection.GetScanSet(239);
-            Task msgen = new GenericMSGenerator(0,2000);
             msgen.Execute(run.ResultCollection);
+            int numZerosToFill = 3;
+            var newZeroFilled = zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
 
-            var detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
+            double lowerMZ = 625.50;
+            double upperMZ = 626.18;
 
-            Task peakdetector = new DeconToolsPeakDetector(detectorParams);
-            peakdetector.Execute(run.ResultCollection);
-
-            Assert.AreEqual(21, run.PeakList.Count);
-            //Assert.AreEqual(1382, results.Run.XYData.Xvalues.Length);
-
-            var sb = new StringBuilder();
-            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
-            //Console.Write(sb.ToString());
-            Console.WriteLine();
-            Console.WriteLine();
-
-
-            var zerofiller = new DeconToolsZeroFiller(3);
-            zerofiller.Execute(run.ResultCollection);
-
-            sb = new StringBuilder();
-            TestUtilities.GetXYValuesToStringBuilder(sb, run.XYData.Xvalues, run.XYData.Yvalues);
-           // Console.Write(sb.ToString());
-
-            peakdetector.Execute(run.ResultCollection);
-            Assert.AreEqual(21, run.PeakList.Count);
-            Assert.AreEqual(3732, run.XYData.Xvalues.Length);
-
-        }
-
-        [Test]
-        public void zeroFillingWeirdness2()
-        {
-            Run run = new IMFRun(imfStrangeOneFilepath);
-            ResultCollection results = new ResultCollection(run);
-
-            run.ScanSetCollection.Create(run, 238, 245, 7, 1);
-            
-            run.CurrentScanSet = run.ScanSetCollection.GetScanSet(239);
-
-            Task msgen;
-            
-            var detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
-
-            Task peakdetector = new DeconToolsPeakDetector(detectorParams);
-            var zerofiller = new DeconToolsZeroFiller(3);
-
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                msgen = new GenericMSGenerator(i, 2000);
-                msgen.Execute(results);
-
-                zerofiller.Execute(results);
-
-                peakdetector.Execute(results);
-
-                sb.Append(i);
-                sb.Append("\t");
-                sb.Append(results.Run.XYData.Xvalues.Length);
-                sb.Append("\t");
-                sb.Append(results.Run.PeakList.Count);
-                sb.Append("\n");
-            }
-
-            //Console.Write(sb.ToString());
-            
+            run.XYData = run.XYData.TrimData(lowerMZ, upperMZ);
+            newZeroFilled = newZeroFilled.TrimData(lowerMZ, upperMZ);
            
+            Console.WriteLine("---------- before zerofilling ---------------");
+            TestUtilities.DisplayXYValues(run.XYData);
 
+            Console.WriteLine("---------- after zerofilling ---------------");
+            TestUtilities.DisplayXYValues(newZeroFilled);
+
+            Assert.IsTrue(newZeroFilled.Xvalues.Length > run.XYData.Xvalues.Length);
         }
 
-
+        [Ignore("For comparing old and new")]
         [Test]
-        public void zeroFillingWeirdness3()
+        public void ZeroFillerCompareNewAndOld()
         {
-            Run run = new IMFRun(imfStrangeOneFilepath);
 
-            run.ScanSetCollection .Create(run, 0, 599, 7, 1);
-            
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
+            Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var zeroFiller = new DeconToolsZeroFiller(3);
 
-            Task peakdetector = new DeconToolsPeakDetector(detectorParams);
-            DeconToolsZeroFiller zerofiller = new DeconToolsZeroFiller(3);
+            msgen.Execute(run.ResultCollection);
+            int numZerosToFill=3;
+            var newZeroFilled=  zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
+            var oldZeroFilled = zeroFiller.ZeroFillOld(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
 
 
-            StringBuilder sb = new StringBuilder();
+            double lowerMZ = 625.48;
+            double upperMZ = 626.18;
 
-            Task msgen;
-            ResultCollection results = new ResultCollection(run);
+            run.XYData = run.XYData.TrimData(lowerMZ, upperMZ);
+            newZeroFilled = newZeroFilled.TrimData(lowerMZ, upperMZ);
+            oldZeroFilled = oldZeroFilled.TrimData(lowerMZ, upperMZ);
 
+            Console.WriteLine("---------- before zerofilling ---------------");
+            TestUtilities.DisplayXYValues(run.XYData);
 
-            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
-            {
-                run.CurrentScanSet = scan;
-                msgen = new GenericMSGenerator(0, 2000);
-                msgen.Execute(results);
+            Console.WriteLine("---------- after zerofilling ---------------");
+            TestUtilities.DisplayXYValues(newZeroFilled);
 
-                bool containsPoints = doesXYDataContainPointsInRange(results.Run.XYData.Xvalues, 0, 100);
-
-                
-                sb.Append(scan.PrimaryScanNumber);
-                sb.Append("\t");
-                sb.Append(containsPoints);
-                sb.Append("\t");
-
-                peakdetector.Execute(results);
-                sb.Append(results.Run.PeakList.Count);
-                sb.Append("\t");
-
-                zerofiller.Execute(results);
-                peakdetector.Execute(results);
-
-                sb.Append(results.Run.PeakList.Count);
-
-                sb.Append("\n");
-
-            }
-
-
-
-
-           
-
-
-            
-            Console.Write(sb.ToString());
-
+            Console.WriteLine("---------- after zerofilling using DeconEngine ---------------");
+            TestUtilities.DisplayXYValues(oldZeroFilled);
 
 
         }
 
-        private bool doesXYDataContainPointsInRange(double[]xvals, double lowerMZ, double upperMZ)
-        {
-            for (int i = 0; i < xvals.Length; i++)
-            {
-                if (xvals[i] >= lowerMZ && xvals[i] <= upperMZ)
-                {
-                    return true;
-                }
 
-                
-            }
-            return false;
-        }
+
 
     }
 }

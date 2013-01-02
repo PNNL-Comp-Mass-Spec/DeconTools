@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -17,15 +20,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
     public class ThrashV2Tests
     {
         [Test]
-        public void ThrashV2Test1()
+        public void ThrashV2OnOrbitrapTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 7005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-            ThrashDeconvolutorV2 deconvolutor = new ThrashDeconvolutorV2();
-            deconvolutor.MinMSFeatureToBackgroundRatio = 1;
+
+            ThrashParameters parameters = new ThrashParameters();
+            parameters.MinMSFeatureToBackgroundRatio = 1;
+            
+            ThrashDeconvolutorV2 deconvolutor = new ThrashDeconvolutorV2(parameters);
+            
 
 
             List<IsotopicProfile> isotopicprofiles = new List<IsotopicProfile>();
@@ -67,7 +74,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         }
 
         [Test]
-        public void OldDeconvolutorTest1()
+        public void OldDeconvolutorOrbitrapTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6200, 1, 1, false);
@@ -123,17 +130,21 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
         [Test]
-        public void CompareOldAndNewDeconvolutors()
+        public void CompareOldAndNewDeconvolutorsOrbitrap()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-            ThrashDeconvolutorV2 newDeconvolutor = new ThrashDeconvolutorV2();
-            newDeconvolutor.MinMSFeatureToBackgroundRatio = 3;
-            newDeconvolutor.MaxFit = 0.4;
 
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = 3;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+            
 
             ScanSet scanset = new ScanSet(6005);
             run.CurrentScanSet = scanset;
@@ -153,6 +164,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
             List<IsosResult> newResults = new List<IsosResult>(run.ResultCollection.ResultList);
+
+            DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
 
             run.ResultCollection.ResultList.Clear();
             run.ResultCollection.IsosResultBin.Clear();
@@ -227,6 +240,236 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
+
+        }
+
+
+        [Test]
+        public void CompareOldAndNewDeconvolutorsUIMF()
+        {
+            string uimfFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
+
+
+
+            Run run = new RunFactory().CreateRun(uimfFile);
+
+            int testLCScan = 500;
+            int testIMSScan = 120;
+
+            int numIMSScanSummed = 7;
+            int lowerIMSScan = testIMSScan - (numIMSScanSummed - 1) / 2;
+            int upperIMSScan = testIMSScan + (numIMSScanSummed - 1) / 2;
+
+            var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
+
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 2);
+
+
+            var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
+
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = 1;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+
+            
+            HornDeconvolutor oldDeconvolutor = new HornDeconvolutor();
+            oldDeconvolutor.MinPeptideBackgroundRatio = 1;
+            oldDeconvolutor.MaxFitAllowed = 0.4;
+
+            run.CurrentScanSet = scanSet;
+            ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
+
+
+            msgen.Execute(run.ResultCollection);
+            zeroFiller.Execute(run.ResultCollection);
+            //smoother.Execute(run.ResultCollection);
+            
+            peakDetector.Execute(run.ResultCollection);
+            
+            newDeconvolutor.Execute(run.ResultCollection);
+
+            //Console.WriteLine("\n--------------New decon ------------------");
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            var newResults = new List<IsosResult>(run.ResultCollection.ResultList);
+
+            DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
+
+            return;
+
+            run.ResultCollection.ResultList.Clear();
+            run.ResultCollection.IsosResultBin.Clear();
+            oldDeconvolutor.Execute(run.ResultCollection);
+
+            List<IsosResult> oldResults = new List<IsosResult>(run.ResultCollection.ResultList);
+
+
+            //Console.WriteLine("\n--------------Old decon ------------------");
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+
+            var sharedIsos = new List<IsosResult>();
+            var uniqueToNew = new List<IsosResult>();
+            var uniqueToOld = new List<IsosResult>();
+
+
+            foreach (var newresult in newResults)
+            {
+                bool foundMatch = false;
+                for (int i = 0; i < oldResults.Count; i++)
+                {
+                    var oldResult = oldResults[i];
+
+                    if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
+                        newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
+                    {
+                        foundMatch = true;
+                    }
+                }
+
+                if (foundMatch)
+                {
+                    sharedIsos.Add(newresult);
+                }
+                else
+                {
+                    uniqueToNew.Add(newresult);
+                }
+
+            }
+
+            foreach (var oldResult in oldResults)
+            {
+                bool foundMatch = false;
+                for (int i = 0; i < newResults.Count; i++)
+                {
+                    var newresult = newResults[i];
+
+                    if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
+                        newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
+                    {
+                        foundMatch = true;
+                    }
+                }
+
+                if (!foundMatch)
+                {
+                    uniqueToOld.Add(oldResult);
+                }
+
+
+            }
+
+
+            Console.WriteLine("\n--------------Common to new and Old ------------------");
+            TestUtilities.DisplayMSFeatures(sharedIsos);
+
+
+            Console.WriteLine("\n--------------Unique to new ------------------");
+            TestUtilities.DisplayMSFeatures(uniqueToNew);
+
+            Console.WriteLine("\n--------------Unique to old ------------------");
+            TestUtilities.DisplayMSFeatures(uniqueToOld);
+
+        }
+
+        private void DisplayPPMErrorsForeachPeakOfMSFeature(List<IsosResult> newResults)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            var delimiter = '\t';
+
+            foreach (var isosResult in newResults)
+            {
+                var indexOfMostIntensePeak = isosResult.IsotopicProfile.GetIndexOfMostIntensePeak();
+
+                var maxPeak = isosResult.IsotopicProfile.Peaklist[indexOfMostIntensePeak];
+
+                sb.Append(maxPeak.XValue);
+                sb.Append(delimiter);
+                sb.Append(isosResult.IsotopicProfile.ChargeState);
+                sb.Append(delimiter);
+
+                List<double> ppmErrors = new List<double>();
+
+                for (int i = 0; i < isosResult.IsotopicProfile.Peaklist.Count; i++)
+                {
+                    var currentPeak = isosResult.IsotopicProfile.Peaklist[i];
+
+                    var expectedMZ = isosResult.IsotopicProfile.MonoPeakMZ +
+                                     Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / isosResult.IsotopicProfile.ChargeState * i;
+
+
+                    var ppmError = (expectedMZ - currentPeak.XValue) / expectedMZ * 1e6;
+                    ppmErrors.Add(Math.Abs(ppmError));
+
+                    //sb.Append(currentPeak.XValue);
+                    //sb.Append(delimiter);
+                    //sb.Append(currentPeak.Height);
+                    //sb.Append(delimiter);
+                    //sb.Append(ppmError.ToString("0.0"));
+                    //sb.Append(delimiter);
+
+                }
+                sb.Append(ppmErrors.Average().ToString("0.0"));
+                sb.Append(Environment.NewLine);
+
+
+
+            }
+
+            Console.WriteLine(sb.ToString());
+        }
+
+        [Test]
+        public void UIMFTesting1()
+        {
+            string uimfFile =
+             @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
+
+            Run run = new RunFactory().CreateRun(uimfFile);
+
+            int testLCScan = 500;
+            int testIMSScan = 120;
+
+            int numIMSScanSummed = 7;
+            int lowerIMSScan = testIMSScan - (numIMSScanSummed - 1) / 2;
+            int upperIMSScan = testIMSScan + (numIMSScanSummed - 1) / 2;
+
+            var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
+
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(2, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = 2;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+
+
+            run.CurrentScanSet = scanSet;
+            ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+
+            run.PeakList = (from n in run.PeakList where n.XValue > 554 && n.XValue < 559 select n).ToList();
+
+            newDeconvolutor.Execute(run.ResultCollection);
+
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            //TODO: figure out why duplicate MSFeatures are being created
 
         }
 

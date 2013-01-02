@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.ThrashParameters.MaxFit = 0.6;
             parameters.MSGeneratorParameters.UseLCScanRange = true;
             parameters.MSGeneratorParameters.MinLCScan = 180;
-            parameters.MSGeneratorParameters.MaxLCScan = 195;
+            parameters.MSGeneratorParameters.MaxLCScan = 183;
             parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
             parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
             parameters.MSGeneratorParameters.NumLCScansToSum = 1;
@@ -46,7 +46,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             sw.Start();
 
             workflow.Execute();
-           // return;
+            return;
 
             sw.Stop();
 

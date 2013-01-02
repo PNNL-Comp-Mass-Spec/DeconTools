@@ -77,7 +77,7 @@ namespace DeconTools.Workflows.Backend.Core
                 foreach (var frameSet in uimfrun.ScanSetCollection.ScanSetList)
                 {
                     frameCounter++;
-                    uimfrun.CurrentFrameSet = frameSet;
+                    uimfrun.CurrentScanSet = frameSet;
                     uimfrun.ResultCollection.MSPeakResultList.Clear();
 
 					foreach (var scanSet in uimfrun.IMSScanSetCollection.ScanSetList)

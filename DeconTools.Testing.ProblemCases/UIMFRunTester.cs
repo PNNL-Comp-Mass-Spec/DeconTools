@@ -38,7 +38,7 @@ namespace DeconTools.Testing.ProblemCases
             foreach (var frame in run.ScanSetCollection.ScanSetList)
             {
 
-                run.CurrentFrameSet = frame;
+                run.CurrentScanSet = frame;
 
                 foreach (var scan in run.ScanSetCollection.ScanSetList)
                 {

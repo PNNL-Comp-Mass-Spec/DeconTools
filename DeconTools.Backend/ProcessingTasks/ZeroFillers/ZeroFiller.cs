@@ -2,16 +2,25 @@
 
 namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 {
-    public abstract class ZeroFiller:Task
+    public abstract class ZeroFiller : Task
     {
+        protected ZeroFiller()
+        {
+            MaxNumPointsToAdd = 3;
+        }
 
-        //TODO: fix so this method so it doesn't work on resultList
-        public abstract void ZeroFill(ResultCollection resultList);
+        protected ZeroFiller(int maxNumPointsToAdd)
+        {
+            MaxNumPointsToAdd = maxNumPointsToAdd;
+        }
 
+        public int MaxNumPointsToAdd { get; set; }
+
+        public abstract XYData ZeroFill(double[] xvalues, double[] yvalues, int maxZerosToAdd);
 
         public override void Execute(ResultCollection resultList)
         {
-            ZeroFill(resultList);
+            resultList.Run.XYData = ZeroFill(resultList.Run.XYData.Xvalues, resultList.Run.XYData.Yvalues, MaxNumPointsToAdd);
         }
     }
 }

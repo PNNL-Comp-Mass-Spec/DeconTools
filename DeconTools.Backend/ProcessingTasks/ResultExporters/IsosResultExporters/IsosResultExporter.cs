@@ -34,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 int lastFrameNum = lcScanSet[lcScanSet.Count - 1].PrimaryScanNumber;
                 int lastIMSScanNum = uimfRun.IMSScanSetCollection.ScanSetList[uimfRun.IMSScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
-                isLastScan = uimfRun.CurrentFrameSet.PrimaryScanNumber == lastFrameNum &&
+                isLastScan = uimfRun.CurrentScanSet.PrimaryScanNumber == lastFrameNum &&
                     uimfRun.CurrentIMSScanSet.PrimaryScanNumber == lastIMSScanNum;
             }
             else
