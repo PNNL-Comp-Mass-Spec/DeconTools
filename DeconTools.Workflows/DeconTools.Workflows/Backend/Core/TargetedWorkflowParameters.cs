@@ -32,7 +32,7 @@ namespace DeconTools.Workflows.Backend.Core
             MaxScansSummedInDynamicSumming = 100;
 
             ChromatogramCorrelationIsPerformed = false;
-
+        	ProcessMsMs = false;
 
         }
 
@@ -52,6 +52,7 @@ namespace DeconTools.Workflows.Backend.Core
         public DeconTools.Backend.Globals.ChromatogramGeneratorMode ChromGeneratorMode { get; set; }
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
         public bool ChromatogramCorrelationIsPerformed { get; set; }
+		public bool ProcessMsMs { get; set; }
         
 
         

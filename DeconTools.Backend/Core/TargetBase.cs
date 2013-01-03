@@ -7,9 +7,7 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public abstract class TargetBase
     {
-
         protected PeptideUtils PeptideUtils = new PeptideUtils();
-
 
         #region Constructors
         public TargetBase()
@@ -17,12 +15,11 @@ namespace DeconTools.Backend.Core
             this.ElementLookupTable = new Dictionary<string, int>();
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
             ChargeStateTargets = new List<int>();
+        	this.MsLevel = 1; // Default to MS1 Target
         }
-
 
         protected TargetBase(TargetBase copiedTarget)
         {
-
             this.ChargeState = copiedTarget.ChargeState;
             this.ChargeStateTargets = new List<int>(copiedTarget.ChargeStateTargets);
             this.Code = copiedTarget.Code;
@@ -38,13 +35,8 @@ namespace DeconTools.Backend.Core
             this.NormalizedElutionTime = copiedTarget.NormalizedElutionTime;
             this.ObsCount = copiedTarget.ObsCount;
             this.ScanLCTarget = copiedTarget.ScanLCTarget;
-            
-
+        	this.MsLevel = copiedTarget.MsLevel;
         }
-
-
-
-
         #endregion
 
         #region Properties
@@ -52,9 +44,8 @@ namespace DeconTools.Backend.Core
         public double MonoIsotopicMass { get; set; }
         public short ChargeState { get; set; }
         public double MZ { get; set; }
-
+		public int MsLevel { get; set; }
         public List<int> ChargeStateTargets { get; set; }
-
 
         /// <summary>
         /// Indicates if target contains modifications
@@ -74,8 +65,6 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public string ModDescription { get; set; }
 
-
-
         private string _empiricalFormula;
         public string EmpiricalFormula
         {
@@ -88,10 +77,7 @@ namespace DeconTools.Backend.Core
                 _empiricalFormula = value;
                 updateElementLookupTable();
             }
-
         }
-
-
 
         public Globals.ElutionTimeUnit ElutionTimeUnit { get; set; }
 
