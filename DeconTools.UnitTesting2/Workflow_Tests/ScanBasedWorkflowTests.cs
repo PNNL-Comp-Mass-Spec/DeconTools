@@ -474,27 +474,29 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
         }
 
+        [Ignore("Not currently used")]
         [Test]
         public void ProcessAgilentCentroidedFile()
         {
-            //string testFile =
-            // @"\\protoapps\UserData\Nikola\DDD_Milk\D6.1.forExpRepAnal_3.14.2012.d";
-            //string parameterFile = @"\\protoapps\UserData\Nikola\DDD_Milk\agilTOF_Normal_SavGolSmooth_2007-08-16_DEFAULT.xml";
-
-          
-            //var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
-            //workflow.Execute();
+            string testFile =
+             @"\\protoapps\UserData\Nikola\DDD_Milk\D6.1.forExpRepAnal_3.14.2012.d";
+            string parameterFile = @"\\protoapps\UserData\Nikola\DDD_Milk\agilTOF_Normal_SavGolSmooth_2007-08-16_DEFAULT.xml";
 
 
-            //IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+            var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
+            workflow.Execute();
+            //return;
 
-            //List<IsosResult> results = new List<IsosResult>();
-            //results = importer.Import();
+            string expectedIsosOutput=null;
+            IsosImporter importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
 
-            //TestUtilities.DisplayMSFeatures(results);
+            List<IsosResult> results = new List<IsosResult>();
+            results = importer.Import();
 
-            //Assert.AreEqual(1340, results.Count);
-            //Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityAggregate));
+            TestUtilities.DisplayMSFeatures(results);
+
+            Assert.AreEqual(1340, results.Count);
+            Assert.AreEqual(2006580356, results.Sum(p => p.IsotopicProfile.IntensityMostAbundant));
         }
 
     }

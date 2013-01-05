@@ -27,6 +27,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         private const int NumPointsPerTheorPeak = 20;
 
 
+
+
+
         #region Constructors
         public ThrashDeconvolutorV2(ThrashParameters parameters)
         {
@@ -118,41 +121,56 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             var msFeatures = PerformThrash(resultList.Run.XYData, resultList.Run.PeakList,
                                            backgroundIntensity, Parameters.MinMSFeatureToBackgroundRatio);
 
+
             foreach (IsotopicProfile isotopicProfile in msFeatures)
             {
-
                 var result = resultList.CreateIsosResult();
                 result.IsotopicProfile = isotopicProfile;
-                result.IntensityAggregate = GetReportedAbundance(isotopicProfile, Parameters.NumPeaksUsedInAbundance);
+
+                var theorIso = GetTheoreticalProfile(result.IsotopicProfile.MonoIsotopicMass);
+                result.IntensityAggregate = GetReportedAbundance(isotopicProfile,theorIso, Parameters.NumPeaksUsedInAbundance);
 
                 if (isotopicProfile.Score <= Parameters.MaxFit)
                 {
                     AddDeconResult(resultList, result);
                 }
 
-
             }
 
         }
 
-        private double GetReportedAbundance(IsotopicProfile profile, int numPeaksUsedInAbundance = 1, int defaultVal = 0)
+        private List<int> GetIndexesOfTopPeaks(IsotopicProfile iso, int numPeaks)
+        {
+            var peakList = new Dictionary<int, Peak>();
+
+            for (int i = 0; i < iso.Peaklist.Count; i++)
+            {
+                peakList.Add(i, iso.Peaklist[i]);
+            }
+
+            var topIndexes = peakList.OrderByDescending(p => p.Value.Height).Take(numPeaks).Select(p => p.Key).ToList();
+            return topIndexes;
+
+        }
+
+
+
+        private double GetReportedAbundance(IsotopicProfile profile, IsotopicProfile theoIsotopicProfile, int numPeaksUsedInAbundance = 1, int defaultVal = 0)
         {
             if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
 
             Check.Require(numPeaksUsedInAbundance > 0, "NumPeaksUsedInAbundance must greater than 0. Currently it is = " + numPeaksUsedInAbundance);
 
-            List<float> peakListIntensities = (from n in profile.Peaklist orderby n.Height descending select n.Height).ToList();
+            var peakIndicesToSum = GetIndexesOfTopPeaks(theoIsotopicProfile, numPeaksUsedInAbundance);
 
             double summedIntensities = 0;
-
-            for (int i = 0; i < peakListIntensities.Count; i++)
+            foreach (var i in peakIndicesToSum)
             {
-                if (i < numPeaksUsedInAbundance)
+                if (profile.Peaklist.Count>i)
                 {
-                    summedIntensities += peakListIntensities[i];
+                    summedIntensities += profile.Peaklist[i].Height;
                 }
-
-
+                
             }
 
             return summedIntensities;
@@ -161,7 +179,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-        public List<IsotopicProfile> PerformThrash(XYData originalXYData, List<Peak> mspeakList, double backgroundIntensity = 0, double minPeptideIntensity = 0, double minMSFeatureToBackgroundRatio = 1)
+        public List<IsotopicProfile> PerformThrash(XYData originalXYData, 
+            List<Peak> mspeakList, 
+            double backgroundIntensity = 0, 
+            double minPeptideIntensity = 0, double 
+            minMSFeatureToBackgroundRatio = 1)
         {
 
             List<IsotopicProfile> isotopicProfiles = new List<IsotopicProfile>();
@@ -188,9 +210,21 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             StringBuilder stringBuilder = new StringBuilder();
 
+            var listOfMonoMZs = new SortedDictionary<int,double>();
+            int currentUniqueMSFeatureIDNum = 0;
+
+
             int peakCounter = -1;
             foreach (var msPeak in sortedPeaklist)
             {
+
+                
+                if (Math.Round(msPeak.XValue,1)==639.8)
+                {
+                    Console.WriteLine("Here starts trouble");
+                }
+
+
 
                 int indexOfCurrentPeak = mspeakList.IndexOf(msPeak);
 
@@ -214,8 +248,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
                 //get potential charge states 
-
-                var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;
+                var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
                 if (UseAutocorrelationChargeDetermination)
@@ -233,13 +266,38 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 foreach (int potentialChargeState in potentialChargeStates)
                 {
                     double bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
-                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal);
+                    
+                    IsotopicProfile theorIso;
+                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out theorIso);
 
                     if (msFeature != null)
                     {
                         msFeature.Score = bestFitVal;
                         msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
-                        potentialMSFeaturesForGivenChargeState.Add(msFeature);
+
+                        int indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
+
+                        if (msFeature.Peaklist.Count<indexMostAbundantPeakTheor)
+                        {
+                            msFeature.IntensityMostAbundantTheor = msFeature.Peaklist[indexMostAbundantPeakTheor].Height;
+                        }
+                        else
+                        {
+                            msFeature.IntensityMostAbundantTheor = msFeature.IntensityMostAbundant;
+                        }
+                        
+
+                        bool msFeatureAlreadyPresentInAnotherChargeState = listOfMonoMZs.ContainsValue(msFeature.MonoPeakMZ);
+
+                        if (!msFeatureAlreadyPresentInAnotherChargeState)
+                        {
+                            potentialMSFeaturesForGivenChargeState.Add(msFeature);  
+                        }
+                        else
+                        {
+                            //Console.WriteLine( "Nope... not using this charge state... MSFeature already found with same MonoMZ. \tcurrent peak= \t" +msPeak.XValue.ToString("0.0000") + "\tmsfeature= " + msFeature);
+                        }
+                        
                     }
 
                 }
@@ -273,6 +331,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     }
                     stringBuilder.Append(Environment.NewLine);
 
+                    if (Parameters.CheckAllPatternsAgainstChargeState1)
+                    {
+                        msfeature = potentialMSFeaturesForGivenChargeState.FirstOrDefault(n => n.ChargeState == 1);
+                        if (msfeature==null)
+                        {
+                            
+                        }
+
+                    }
+
                     msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                                  where n.Score < 0.15
                                                  orderby n.ChargeState descending
@@ -291,6 +359,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 if (msfeature!=null)
                 {
+
+                    listOfMonoMZs.Add(currentUniqueMSFeatureIDNum, msfeature.MonoPeakMZ);
+                    currentUniqueMSFeatureIDNum++;
+                    
                     isotopicProfiles.Add(msfeature);
 
                     foreach (var peak in msfeature.Peaklist)
@@ -303,9 +375,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             }
 
-            Console.WriteLine(stringBuilder.ToString());
+            //Console.WriteLine(stringBuilder.ToString());
 
             var uniqueIsotopicProfiles = removeDuplicatesFromFoundMSFeatures(isotopicProfiles);
+
+            //NOTE: we don't need to do the reordering, but I do this so I can compare to the old THRASH
+            uniqueIsotopicProfiles = uniqueIsotopicProfiles.OrderByDescending(p => p.IntensityMostAbundantTheor).ToList();
             return uniqueIsotopicProfiles;
 
         }
@@ -338,42 +413,43 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         public bool UseAutocorrelationChargeDetermination { get; set; }
 
-        private IsotopicProfile GetMSFeature(List<Peak> mspeakList, XYData xyData, int chargeState, Peak msPeak, ref double bestFitVal)
+        private IsotopicProfile GetMSFeature(List<Peak> mspeakList, XYData xyData, int chargeState, Peak msPeak, ref double bestFitVal, out IsotopicProfile theorIso)
         {
             double obsPeakMass = (msPeak.XValue - Globals.PROTON_MASS) * chargeState;
-
-            int massUsedForLookup = (int)Math.Round(obsPeakMass, 0);
-
-            IsotopicProfile theorIso;
-            if (_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
-            {
-                theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
-            }
-            else
-            {
-                theorIso = _isotopicDistCalculator.GetAveraginePattern(obsPeakMass);
-                _averagineProfileLookupTable.Add(massUsedForLookup, theorIso);
-            }
-
+            theorIso = GetTheoreticalProfile(obsPeakMass);
             theorIso.ChargeState = chargeState;
             theorIso.MostAbundantIsotopeMass = obsPeakMass;
 
-            //PeakUtilities.TrimIsotopicProfile(theorIso, 0.05);
-
             CalculateMassesForIsotopicProfile(theorIso);
-            XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width);
+            XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width, Parameters.MinIntensityForScore/100);
 
             PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
-
-            //TODO: ppm tolerance is hard-coded
+            
             var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;  //fwhm / 2.35= sigma
             var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, ppmTolerance, false);
             return msFeature;
         }
 
+
+        private IsotopicProfile GetTheoreticalProfile(double mass)
+        {
+            int massUsedForLookup = (int)Math.Round(mass, 0);
+
+            if (!_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
+            {
+                var newtheorIso = _isotopicDistCalculator.GetAveraginePattern(mass);
+                _averagineProfileLookupTable.Add(massUsedForLookup, newtheorIso);
+            }
+
+            IsotopicProfile theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
+            return theorIso;
+        }
+
+
+
         private HashSet<int> GetPotentialChargeStates(List<Peak> mspeakList, int indexOfCurrentPeak, double toleranceInPPM, double maxCharge = 10)
         {
-            HashSet<int> potentialChargeStates = new HashSet<int>();
+            var potentialChargeStates = new HashSet<int>();
 
             var basePeak = mspeakList[indexOfCurrentPeak];
             // determine max charge state possible by getting nearest candidate peak
@@ -498,6 +574,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             theorIso.MonoIsotopicMass = (theorIso.MonoPeakMZ - Globals.PROTON_MASS) * chargeState;
             theorIso.MostAbundantIsotopeMass = (theorIso.getMostIntensePeak().XValue - Globals.PROTON_MASS) * chargeState;
+            
         }
 
 
@@ -543,7 +620,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         }
 
-        private XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile iso, double fwhm, double minRelIntensity = 0.1)
+        private XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile iso, double fwhm, double minRelIntensity)
         {
 
             var xydata = new XYData();

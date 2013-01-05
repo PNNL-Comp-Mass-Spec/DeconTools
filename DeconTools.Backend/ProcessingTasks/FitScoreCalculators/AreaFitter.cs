@@ -11,6 +11,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     /// </summary>
     public class AreaFitter
     {
+
+
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
         {
             Check.Require(theorXYData != null && theorXYData.Xvalues != null && theorXYData.Yvalues != null,

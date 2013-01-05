@@ -542,6 +542,14 @@ namespace DeconTools.Backend.Workflows
 
             iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;
 
+            int indexMostAbundantPeakTheor = theorIsotopicProfile.GetIndexOfMostIntensePeak();
+
+            if (iso.Peaklist.Count < indexMostAbundantPeakTheor)
+            {
+                iso.IntensityMostAbundantTheor = iso.Peaklist[indexMostAbundantPeakTheor].Height;
+            }
+
+
             UpdateMonoisotopicMassData(iso);
 
         }

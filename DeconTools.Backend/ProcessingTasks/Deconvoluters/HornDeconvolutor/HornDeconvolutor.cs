@@ -441,10 +441,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 GetIsotopicProfile(hornResult.marr_isotope_peak_indices, mspeakList, ref profile);
 
                 profile.IntensityMostAbundant = hornResult.mint_abundance;
+                profile.IntensityMostAbundantTheor = hornResult.mint_abundance;
                 if (NumPeaksUsedInAbundance == 1)  // fyi... this is typical
                 {
                     result.IntensityAggregate = profile.IntensityMostAbundant;
-
                 }
                 else
                 {

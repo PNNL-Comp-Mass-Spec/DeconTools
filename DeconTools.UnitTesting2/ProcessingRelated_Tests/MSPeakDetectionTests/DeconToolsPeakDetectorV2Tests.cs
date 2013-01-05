@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             msgen.Execute(run.ResultCollection);
 
-            var peaks= peakDetector.FindPeaks(run.XYData, 481.1, 481.4);
+            var peaks = peakDetector.FindPeaks(run.XYData, 481.1, 481.4);
 
             TestUtilities.DisplayPeaks(peaks);
 
@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             msgen.Execute(run.ResultCollection);
 
-            var peaks = peakDetector.FindPeaks(run.XYData.Xvalues,run.XYData.Yvalues, 481.1, 481.4);
+            var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, 481.1, 481.4);
 
             var oldPeaks = oldPeakDetector.FindPeaks(run.XYData, 481.1, 481.4);
 
@@ -74,7 +74,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             for (int i = 0; i < oldPeaks.Count; i++)
             {
-                var oldpeakMz = (decimal) Math.Round(oldPeaks[i].XValue, 4);
+                var oldpeakMz = (decimal)Math.Round(oldPeaks[i].XValue, 4);
                 var newPeakMz = (decimal)Math.Round(peaks[i].XValue, 4);
 
                 var oldPeakIntensity = (decimal)Math.Round(oldPeaks[i].Height, 0);
@@ -91,7 +91,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 Assert.AreEqual(oldPeakIntensity, newPeakIntensity);
                 Assert.AreEqual(oldPeakWidth, newPeakWidth);
                 Assert.AreEqual(oldPeakMaxIndex, newPeakMaxIndex);
-                
+
 
 
             }
@@ -138,22 +138,22 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             foreach (var peak in sourcePeaks)
             {
 
-                sb.Append(peak.DataIndex + "\t" +  peak.XValue + "\t" + peak.Height + "\t" + peak.Width.ToString("0.0000") + "\t");
+                sb.Append(peak.DataIndex + "\t" + peak.XValue + "\t" + peak.Height + "\t" + peak.Width.ToString("0.0000") + "\t");
 
-                 bool found = false;
-                 foreach (var oldPeak in comparePeaks)
+                bool found = false;
+                foreach (var oldPeak in comparePeaks)
                 {
-                   
 
-                    if (Math.Abs(oldPeak.XValue-peak.XValue)<0.01)
+
+                    if (Math.Abs(oldPeak.XValue - peak.XValue) < 0.01)
                     {
-                        bool widthIsDifferent = Math.Abs(oldPeak.Width-peak.Width)>0.001;
+                        bool widthIsDifferent = Math.Abs(oldPeak.Width - peak.Width) > 0.001;
 
                         sb.Append("true" + "\t" + oldPeak.Width.ToString("0.0000") + "\t" + widthIsDifferent);
                         found = true;
                         break;
                     }
-                   
+
                 }
 
                 if (!found)
@@ -186,14 +186,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
                 var percentDiffBetweenIntensities =
-                    Math.Abs((oldPeakIntensity - newPeakIntensity)/newPeakIntensity*100);
+                    Math.Abs((oldPeakIntensity - newPeakIntensity) / newPeakIntensity * 100);
 
                 var mzDiffBetweenOldAndNew = Math.Abs(oldpeakMz - newPeakMz);
                 ;
 
 
-                Assert.IsTrue(mzDiffBetweenOldAndNew<0.0002m);
-                Assert.IsTrue(percentDiffBetweenIntensities<0.01m);
+                Assert.IsTrue(mzDiffBetweenOldAndNew < 0.0002m);
+                Assert.IsTrue(percentDiffBetweenIntensities < 0.01m);
                 //Assert.AreEqual(oldPeakWidth, newPeakWidth);
                 Assert.AreEqual(oldPeakMaxIndex, newPeakMaxIndex);
             }
@@ -235,7 +235,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         }
 
-
+        [Test]
         public void CheckBackgroundIntensityTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -263,7 +263,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         }
 
-
+        [Test]
         public void OldPeakDetectorUsingMatrixBasedFittingRoutineTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -305,7 +305,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         }
 
-
+        [Test]
         public void CalcOfFwhmByOldPeakdetector_Test1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -340,6 +340,34 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             TestUtilities.DisplayPeaks(peaks);
 
             TestUtilities.DisplayPeaks(oldPeaks);
+        }
+
+        [Test]
+        public void PeakDetectorOnCentroidedDataTest1()
+        {
+            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            ScanSet scan = new ScanSet(6006);   //this is a MS2 scan
+
+
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
+            peakDetector.RawDataType = Globals.RawDataType.Centroided;
+
+            run.CurrentScanSet = scan;
+
+            msgen.Execute(run.ResultCollection);
+
+            peakDetector.Execute(run.ResultCollection);
+
+            Console.WriteLine("Num XY datapoints in mass spectrum= " + run.XYData.Xvalues.Length);
+            Console.WriteLine("numPeaks = " + run.PeakList.Count);
+
+            Assert.AreEqual(run.XYData.Xvalues.Length, run.PeakList.Count);
+            //TestUtilities.DisplayXYValues(run.XYData);
+            //TestUtilities.DisplayPeaks(run.PeakList);
+
+
         }
 
     }

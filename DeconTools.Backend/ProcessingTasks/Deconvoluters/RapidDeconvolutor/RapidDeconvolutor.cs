@@ -334,6 +334,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
                 profile.IntensityMostAbundant = (float) intensityResults[i];
+                profile.IntensityMostAbundantTheor = profile.IntensityMostAbundant;
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
                 monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);

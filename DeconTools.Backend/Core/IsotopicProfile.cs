@@ -98,7 +98,16 @@ namespace DeconTools.Backend.Core
 
         public double MonoPeakMZ { get; set; }
 
+       
+        /// <summary>
+        /// Intensity of the most abundant peak of the isotopic profile
+        /// </summary>
         public float IntensityMostAbundant { get; set; }
+
+        /// <summary>
+        /// Intensity of the peak that relates to the most abundant peak of the theoretical profile
+        /// </summary>
+        public float IntensityMostAbundantTheor { get; set; }
 
 
         public int GetNumOfIsotopesInProfile()
@@ -232,6 +241,7 @@ namespace DeconTools.Backend.Core
             iso.AverageMass = AverageMass;
             iso.ChargeState = ChargeState;
             iso.IntensityMostAbundant = IntensityMostAbundant;
+            iso.IntensityMostAbundantTheor = IntensityMostAbundantTheor;
             iso.MonoIsotopicMass = MonoIsotopicMass;
             iso.MonoIsotopicPeakIndex = MonoIsotopicPeakIndex;
             iso.MonoPeakMZ = MonoPeakMZ;
@@ -281,6 +291,11 @@ namespace DeconTools.Backend.Core
         public XYData GetTheoreticalIsotopicProfileXYData(double fwhm, double mzOffset)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return MonoPeakMZ.ToString("0.0000") + "; " + ChargeState + "; " + MonoIsotopicMass.ToString("0.0000");
         }
     }
 }

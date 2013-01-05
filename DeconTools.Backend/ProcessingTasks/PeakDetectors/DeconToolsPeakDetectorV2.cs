@@ -33,8 +33,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             _intensityThreshold = 0;
         }
 
-        public DeconToolsPeakDetectorV2(double peakToBackgroundRatio, 
-            double signalToNoiseThreshold, Globals.PeakFitType peakFitType = Globals.PeakFitType.QUADRATIC, bool isDataThresholded = false)
+        public DeconToolsPeakDetectorV2(double peakToBackgroundRatio,
+                                        double signalToNoiseThreshold,
+                                        Globals.PeakFitType peakFitType = Globals.PeakFitType.QUADRATIC,
+                                        bool isDataThresholded = false)
         {
             PeakToBackgroundRatio = peakToBackgroundRatio;
             SignalToNoiseThreshold = signalToNoiseThreshold;
@@ -69,6 +71,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #endregion
 
         #region Public Methods
+
         public override List<Peak> FindPeaks(XYData xydata, double minX, double maxX)
         {
             if (xydata == null) return new List<Peak>();
@@ -121,32 +124,47 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             //Find stop index in raw data
             int stopIndex = MathUtils.GetClosest(xvalues, maxXValue);
 
-            //Adjust start index if necessary
-            if (startIndex <= 0)
+
+            switch (RawDataType)
             {
-                startIndex = 1;
-            }
+                case Globals.RawDataType.Centroided:
+                    for (int index = startIndex; index <= stopIndex; index++)
+                    {
+                        double currentIntensity = yvalues[index];
+                        if (currentIntensity >= _intensityThreshold)
+                        {
+                            var peak = CreatePeak(xvalues[index], (float)yvalues[index]);
+                            peak.DataIndex = index;
+                            peakList.Add(peak);
 
-            //adjust stop index if necessary
-            if (stopIndex >= xvalues.Length - 2)
-            {
-                stopIndex = xvalues.Length - 2;
-            }
+                        }
 
+                    }
 
-            for (int index = startIndex; index <= stopIndex; index++)
-            {
-                // double fwhm = -1;
-                double currentIntensity = yvalues[index];
-                double lastIntensity = yvalues[index - 1];
-                double nextIntensity = yvalues[index + 1];
+                    break;
 
-                switch (RawDataType)
-                {
-                    case Globals.RawDataType.Profile:
+                case Globals.RawDataType.Profile:
+                    //Adjust start index if necessary
+                    if (startIndex <= 0)
+                    {
+                        startIndex = 1;
+                    }
+
+                    //adjust stop index if necessary
+                    if (stopIndex >= xvalues.Length - 2)
+                    {
+                        stopIndex = xvalues.Length - 2;
+                    }
+
+                    for (int index = startIndex; index <= stopIndex; index++)
+                    {
+                        // double fwhm = -1;
+                        double currentIntensity = yvalues[index];
+                        double lastIntensity = yvalues[index - 1];
+                        double nextIntensity = yvalues[index + 1];
 
                         bool peakApexFound = currentIntensity >= lastIntensity &&
-                            currentIntensity >= nextIntensity;
+                                             currentIntensity >= nextIntensity;
 
 
                         double signalToNoise = -1;
@@ -170,37 +188,32 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                             double calculatedXValue = CalculateFittedValue(xvalues, yvalues, index);
                             double width = CalculateFWHM(xvalues, yvalues, index, signalToNoise);
 
-                            var peak = CreatePeak(calculatedXValue, (float)currentIntensity, (float)width, (float)signalToNoise);
+                            var peak = CreatePeak(calculatedXValue, (float)currentIntensity, (float)width,
+                                                  (float)signalToNoise);
                             peak.DataIndex = index;
 
                             peakList.Add(peak);
                         }
+                    }
 
 
-                        break;
-                    case Globals.RawDataType.Centroided:
-                        // raw data is in centroided form. We simply convert each xy datapoint to a peak
+                    break;
 
-                        if (currentIntensity >= _intensityThreshold)
-                        {
-                            var peak = CreatePeak(xvalues[index], (float)yvalues[index]);
-                            peak.DataIndex = index;
-                            peakList.Add(peak);
-
-                        }
-
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
 
             return peakList;
 
 
-
         }
+
+
+
+
+
+
 
         protected override void ExecutePostProcessingHook(Run run)
         {
@@ -390,7 +403,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         /// <returns></returns>
         private double CalculateSignalToNoise(double[] yvalues, int index)
         {
-            double minIntensityLeft=0;
+            double minIntensityLeft = 0;
             double minIntensityRight = 0;
 
             int numPoints = yvalues.Length;
@@ -398,15 +411,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             double currentIntensity = yvalues[index];
             if (Math.Abs(currentIntensity - 0) < double.Epsilon) return 0;
-            
+
             //Find the local minimum as we move down the m/z range
             bool found = false;
             for (int i = index; i > 0; i--)
             {
-                if (yvalues[i+1]>=yvalues[i] && yvalues[i-1]>yvalues[i])
+                if (yvalues[i + 1] >= yvalues[i] && yvalues[i - 1] > yvalues[i])
                 {
                     minIntensityLeft = yvalues[i];
-                    
+
                     found = true;
                     break;
                 }
@@ -416,9 +429,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             //Find the local minimum as we move up the m/z range
             found = false;
-            for (int i = index; i < numPoints-1; i++)
+            for (int i = index; i < numPoints - 1; i++)
             {
-                if (yvalues[i+1]>=yvalues[i] && yvalues[i-1] > yvalues[i])
+                if (yvalues[i + 1] >= yvalues[i] && yvalues[i - 1] > yvalues[i])
                 {
                     minIntensityRight = yvalues[i];
                     found = true;
@@ -428,30 +441,30 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             if (!found) minIntensityRight = yvalues[numPoints - 1];
 
-            if (minIntensityLeft==0)
+            if (minIntensityLeft == 0)
             {
-                if (minIntensityRight==0)
+                if (minIntensityRight == 0)
                 {
                     return 100;
 
                 }
                 else
                 {
-                    return currentIntensity/minIntensityRight;
+                    return currentIntensity / minIntensityRight;
                 }
             }
-            
-            if (minIntensityRight<minIntensityLeft && minIntensityRight!=0)
+
+            if (minIntensityRight < minIntensityLeft && minIntensityRight != 0)
             {
-                return currentIntensity/minIntensityRight;
+                return currentIntensity / minIntensityRight;
             }
 
-            return currentIntensity/minIntensityLeft;
+            return currentIntensity / minIntensityLeft;
 
 
         }
 
-        
+
 
         #endregion
 

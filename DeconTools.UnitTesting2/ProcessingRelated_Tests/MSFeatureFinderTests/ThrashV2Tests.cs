@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
@@ -136,7 +138,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            
 
 
             var thrashParameters = new ThrashParameters();
@@ -156,6 +159,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
+
+            run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
+            run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.mdbl_mz > 634 && p.mdbl_mz < 642).ToArray();
+
             run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
 
             newDeconvolutor.Execute(run.ResultCollection);
@@ -165,7 +172,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             List<IsosResult> newResults = new List<IsosResult>(run.ResultCollection.ResultList);
 
-            DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
+            //TestUtilities.DisplayMSFeatures(newResults);
+            //return;
+
+           // DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
 
             run.ResultCollection.ResultList.Clear();
             run.ResultCollection.IsosResultBin.Clear();
@@ -238,6 +248,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
+            string outputFilename = @"D:\temp\exportedIsos.csv";
+            var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text ,outputFilename);
+
+            exporter.ExportIsosResults(uniqueToNew);
+
+
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
 
@@ -265,9 +281,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 2);
+            SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 2);
 
 
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
@@ -301,7 +317,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var newResults = new List<IsosResult>(run.ResultCollection.ResultList);
 
-            DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
+            TestUtilities.DisplayMSFeatures(newResults);
+
+            //DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
 
             return;
 
