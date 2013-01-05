@@ -61,6 +61,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
                     break;
                 case Globals.LabellingType.Deuterium:
+                    
                     mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
                     mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling);
                     break;
