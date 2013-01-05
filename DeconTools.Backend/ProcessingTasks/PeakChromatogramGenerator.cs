@@ -107,8 +107,14 @@ namespace DeconTools.Backend.ProcessingTasks
 				for (int i = 0; i < run.XYData.Xvalues.Length; i++)
 				{
 					int currentScanVal = (int)run.XYData.Xvalues[i];
-					int msLevel = run.GetMSLevel(currentScanVal);
 
+					// If the scan is not a primary scan number, then we do not want to consider it
+					if (run.PrimaryLcScanNumbers.BinarySearch(currentScanVal) < 0)
+					{
+						continue;
+					}
+
+					int msLevel = run.GetMSLevel(currentScanVal);
 					if(msLevel == msLevelToUse)
 					{
 						filteredChromVals.Add(currentScanVal, run.XYData.Yvalues[i]);

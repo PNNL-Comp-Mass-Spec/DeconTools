@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
@@ -81,6 +82,11 @@ namespace DeconTools.Backend.Utilities
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
+
+			if (!run.PrimaryLcScanNumbers.Any())
+			{
+				run.PrimaryLcScanNumbers = FindPrimaryLcScanNumbers(run.ResultCollection.MSPeakResultList);
+			}
         }
 
         #endregion
@@ -271,8 +277,21 @@ namespace DeconTools.Backend.Utilities
 
             GetPeaks(run, sourcePeaksFile);
 
-            // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
+        	// Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
         }
+
+		public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
+		{
+			HashSet<int> primaryLcScanNumbers = new HashSet<int>();
+
+			foreach (var msPeakResult in msPeaks)
+			{
+				int scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
+				primaryLcScanNumbers.Add(scan);
+			}
+
+			return primaryLcScanNumbers.ToList();
+		}
     }
 }

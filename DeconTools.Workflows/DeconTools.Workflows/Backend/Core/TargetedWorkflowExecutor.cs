@@ -886,6 +886,11 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
+			// Grab the primary LC Scan numbers if they are not already filled out
+			if(!Run.PrimaryLcScanNumbers.Any())
+			{
+				Run.PrimaryLcScanNumbers = RunUtilities.FindPrimaryLcScanNumbers(this.Run.ResultCollection.MSPeakResultList);
+			}
 
             ReportGeneralProgress("Peak Loading complete.");
             return;

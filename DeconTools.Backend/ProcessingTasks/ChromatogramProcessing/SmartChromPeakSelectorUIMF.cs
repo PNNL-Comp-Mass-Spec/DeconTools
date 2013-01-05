@@ -28,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var uimfrun = run as UIMFRun;
 
             var chromPeakScan = (int)Math.Round(chromPeak.XValue);
-            var bestLCScan = uimfrun.GetClosestMS1Frame(chromPeakScan);
+			var bestLCScan = uimfrun.GetClosestMS1Frame(chromPeakScan);
 
 			if (numLCScansToSum > 1)
             {
@@ -36,8 +36,17 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                var lcscanset = new ScanSet(bestLCScan);
-                uimfrun.CurrentScanSet = lcscanset;
+				if (run.CurrentMassTag.MsLevel == 1)
+				{
+					var lcscanset = new ScanSet(bestLCScan);
+					uimfrun.CurrentScanSet = lcscanset;
+				}
+				else
+				{
+					// TODO: This is hard-coded to work with the "sum all consecutive MS2 frames mode" but we should really look these up by going through the IMSScanCollection
+					var lcscanset = new ScanSet(bestLCScan + 1, bestLCScan + 1, bestLCScan + uimfrun.GetNumberOfConsecutiveMs2Frames());
+					uimfrun.CurrentScanSet = lcscanset;
+				}
 
 				// TODO: Hard coded to sum across all IMS Scans.
 				int centerScan = (uimfrun.MinIMSScan + uimfrun.MaxIMSScan + 1) / 2;

@@ -35,9 +35,7 @@ namespace DeconTools.Backend.Core
             Check.Require(isNumScansOdd, "Number of scans summed must be an odd number");
             Check.Require(scanIncrement > 0, "Scan Increment must be greater than 0");
 
-            CreateScansets(run, scanStart, scanStop, numScansSummed,
-                                                                                  scanIncrement, processMSMS);
-
+            CreateScansets(run, scanStart, scanStop, numScansSummed, scanIncrement, processMSMS);
         }
 
         public void Create(Run run, bool sumAllScans = true, bool processMSMS = true)
@@ -184,7 +182,7 @@ namespace DeconTools.Backend.Core
 
         //}
 
-        protected virtual void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
+        protected virtual void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
         {
 
             ScanSetList = new List<ScanSet>();
@@ -212,8 +210,9 @@ namespace DeconTools.Backend.Core
                 scanStop = maxPossibleScanIndex;
             }
 
+        	bool haveProcessedCurrentMsMsSet = false;
 
-            for (int i = scanStart; i <= scanStop; i++)
+            for (int i = scanStart; i <= scanStop; i+= scanIncrement)
             {
                 int currentMSLevel = run.GetMSLevel(i);
 
@@ -231,7 +230,7 @@ namespace DeconTools.Backend.Core
 
                     scanSet = ScanSetFactory.CreateScanSet(run, i, scansToSum);
 
-
+                	haveProcessedCurrentMsMsSet = false;
                 }
                 else
                 {
@@ -239,55 +238,80 @@ namespace DeconTools.Backend.Core
                     //NOTE: we may want to abstract this section out somehow. 
                     if (run is UIMFRun)
                     {
-                        var uimfrun = (UIMFRun) run;
+						// TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
+						if (sumConsecutiveMsMs)
+						{
+							if(!haveProcessedCurrentMsMsSet)
+							{
+								List<int> framesToSum = new List<int>();
 
-                        var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames();
+								var uimfrun = (UIMFRun)run;
+								var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames();
 
-                        int indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
+								for (int j = 0; j < numberOfConsecutiveMs2Frames; j++)
+								{
+									framesToSum.Add(i + j);
+								}
 
-                        if (indexOfCurrentFrame < 0) continue;
+								scanSet = ScanSetFactory.CreateScanSet(run, i, framesToSum.ToArray());
 
-                        int lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
-                        int upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
+								haveProcessedCurrentMsMsSet = true;
+							}
+							else
+							{
+								continue;
+							}
+						}
+						else
+						{
+							var uimfrun = (UIMFRun)run;
 
-                        List<int> framesToSum = new List<int>();
-                        int numLowerFramesToGet = (numScansSummed - 1) / 2;
-                        int numUpperFramesToGet = (numScansSummed - 1) / 2;
+							var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames();
 
-                        //get lower frames
-                        int framesCounter = 0;
-                        while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
-                        {
-                            framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
-                            lowerIndex -= numberOfFrameIndexesToSkip;
-                            framesCounter++;
-                        }
+							int indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
 
-                        //get middle frame
-                        framesToSum.Add(i);
+							if (indexOfCurrentFrame < 0) continue;
 
-                        //get upper frames
-                        framesCounter = 0;
-                        int maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
-                        while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
-                        {
-                            framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
-                            upperIndex += numberOfFrameIndexesToSkip;
-                            framesCounter++;
-                        }
+							int lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
+							int upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
 
-                        scanSet = ScanSetFactory.CreateScanSet(run,i, framesToSum.ToArray());
-                        
+							List<int> framesToSum = new List<int>();
+							int numLowerFramesToGet = (numScansSummed - 1) / 2;
+							int numUpperFramesToGet = (numScansSummed - 1) / 2;
+
+							//get lower frames
+							int framesCounter = 0;
+							while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
+							{
+								framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
+								lowerIndex -= numberOfFrameIndexesToSkip;
+								framesCounter++;
+							}
+
+							//get middle frame
+							framesToSum.Add(i);
+
+							//get upper frames
+							framesCounter = 0;
+							int maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
+							while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
+							{
+								framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
+								upperIndex += numberOfFrameIndexesToSkip;
+								framesCounter++;
+							}
+
+							scanSet = ScanSetFactory.CreateScanSet(run, i, framesToSum.ToArray());
+						}
                     }
                     else
                     {
                         scanSet = ScanSetFactory.CreateScanSet(run, i, 1);    
                     }
                 }
+
                 ScanSetList.Add(scanSet);
-
-                i = i + scanIncrement - 1;   //  '-1' because we advance by +1 when the loop iterates. 
-
+				run.PrimaryLcScanNumbers.Add(scanSet.PrimaryScanNumber);
             }
 
         }

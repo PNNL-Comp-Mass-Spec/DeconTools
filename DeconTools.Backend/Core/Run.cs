@@ -17,6 +17,7 @@ namespace DeconTools.Backend.Core
             XYData = new XYData();
             MSLevelList = new SortedDictionary<int, byte>();
             ScanToNETAlignmentData = new SortedDictionary<int, float>();
+			PrimaryLcScanNumbers = new List<int>();
         }
 
         #region Properties
@@ -129,6 +130,8 @@ namespace DeconTools.Backend.Core
         private List<int> msLevelScanIndexList { get; set; }
 
         public IList<int> MSLevelMappings { get; set; }
+
+		public List<int> PrimaryLcScanNumbers { get; set; }
 
         #endregion
 

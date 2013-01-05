@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Core
             return ((UIMFRun)run).GetMaxPossibleIMSScanNum();
         }
 
-        protected override void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false)
+        protected override void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
         {
                ScanSetList = new List<ScanSet>();
 
