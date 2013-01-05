@@ -11,6 +11,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     {
         IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
         N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+        DeuteriumIsotopeProfileGenerator _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator();
 
         #region Constructors
         public JoshTheorFeatureGenerator()
@@ -30,6 +31,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Properties
         public Globals.LabellingType LabellingType { get; set; }
+
+        /// <summary>
+        /// Degree of labeling. Ranges between 0 and 1.0
+        /// </summary>
+        public double FractionLabeling { get; set; }
+
         public double LowPeakCutOff { get; set; }
 
         #endregion
@@ -53,7 +60,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                     mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile2(mt, LowPeakCutOff);
 
                     break;
+                case Globals.LabellingType.Deuterium:
+                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
+                    mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling);
+                    break;
                 default:
+                    throw new NotImplementedException();
                     break;
             }
 
