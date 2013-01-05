@@ -9,6 +9,9 @@ namespace DeconTools.Backend
         public const double N14_MASS = 14.003074007418;    // IUPAC, 2002
         public const double N15_MASS = 15.000108973000;
 
+        public const double Hydrogen_MASS = 1.00782503196;    // IUPAC, 2007
+        public const double Deuterium_MASS = 2.01410177796;   // IUPAC, 2007
+
 
 
 
@@ -142,7 +145,8 @@ namespace DeconTools.Backend
         {
             NONE,
             O18,
-            N15
+            N15,
+            Deuterium
         }
 
         public enum TargetedResultFailureType
