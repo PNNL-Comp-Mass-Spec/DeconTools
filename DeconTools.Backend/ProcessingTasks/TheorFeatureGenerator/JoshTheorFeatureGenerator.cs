@@ -27,6 +27,13 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             this.LowPeakCutOff = lowPeakCutOff;
         }
 
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double fractionLabeling, double lowPeakCutOff)
+        {
+            this.LabellingType = labellingType;
+            this.LowPeakCutOff = lowPeakCutOff;
+            this.FractionLabeling = fractionLabeling;
+        }
+
         #endregion
 
         #region Properties

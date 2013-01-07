@@ -75,19 +75,62 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
             //int numNitrogens = mt.GetAtomCountForElement("N");
-            int numDeuterium = 1;
+            int numDeuterium = 0;
 
-            _isotopicDistributionCalculator.SetLabeling("H", H_ISOTOPE_NUMBER, this.HLabellingAmount, D_ISOTOPE_NUMBER, this.DLabellingAmount);
-            IsotopicProfile labeledTheorProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
-            addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, numDeuterium, mt.ChargeState);
+            //_isotopicDistributionCalculator.SetLabeling("H", H_ISOTOPE_NUMBER, this.HLabellingAmount, D_ISOTOPE_NUMBER, this.DLabellingAmount);
+            IsotopicProfile hydrogenTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
-            _isotopicDistributionCalculator.ResetToUnlabeled();
+            IsotopicProfile deuteriumTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
-            PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
+            
 
-            labeledTheorProfile.ChargeState = mt.ChargeState;
+            float maxHeightForNormalization = 0;
+            if (hydrogenTheoreticalProfile.Peaklist.Count > 0)
+            {
+                maxHeightForNormalization = hydrogenTheoreticalProfile.Peaklist[0].Height;
+            }
 
-            return labeledTheorProfile;
+            //add deuterated peaks as an offset index
+            for (int i = 0; i < hydrogenTheoreticalProfile.Peaklist.Count; i++)
+            {
+                MSPeak peakH = hydrogenTheoreticalProfile.Peaklist[i];
+                MSPeak peakD;
+                if(i==0)//initial peak where there is no D contribution
+                {
+                    peakD = new MSPeak();
+                }
+                else
+                {
+                    peakD = deuteriumTheoreticalProfile.Peaklist[i-1];
+                }
+
+                peakH.Height = peakH.Height + (1-Convert.ToSingle(fractionLabeling)) * peakD.Height +Convert.ToSingle(fractionLabeling) * peakD.Height;
+
+                if(peakH.Height>maxHeightForNormalization)
+                {
+                    maxHeightForNormalization = peakH.Height;
+                }
+            }
+
+            IsotopicProfile labeledTheoreticalProfile = hydrogenTheoreticalProfile;
+
+            //normalize to 1
+            foreach (MSPeak peak in labeledTheoreticalProfile.Peaklist)
+            {
+                peak.Height /= maxHeightForNormalization;
+            }
+
+            //should be good up to here
+
+            addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheoreticalProfile, numDeuterium, mt.ChargeState);//Keep this as the H mass?
+
+            //_isotopicDistributionCalculator.ResetToUnlabeled();
+
+            PeakUtilities.TrimIsotopicProfile(labeledTheoreticalProfile, lowpeakCutoff);
+
+            labeledTheoreticalProfile.ChargeState = mt.ChargeState;
+
+            return labeledTheoreticalProfile;
 
         }
 
