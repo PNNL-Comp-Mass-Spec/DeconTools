@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
@@ -76,10 +77,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
 			executor.Execute();
 
-			List<TargetedResultBase> resultList = executor.TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
-			foreach (var targetedResultBase in resultList)
-			{
-			}
+			//List<TargetedResultBase> resultList = executor.TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
+			//foreach (var targetedResultBase in resultList)
+			//{
+			//    Console.WriteLine("*******************************************************");
+			//    Console.WriteLine(targetedResultBase.Target.Code + "\t" + targetedResultBase.Target.ChargeState);
+
+			//    foreach (var peakQualityData in targetedResultBase.ChromPeakQualityList)
+			//    {
+			//        peakQualityData.Display();
+			//    }
+			//}
 
 			//TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
 		}
@@ -117,7 +125,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			var workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();
 			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
-			workflowParameters.ChromatogramCorrelationIsPerformed = true;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
 			workflowParameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
 			workflowParameters.ChromGenSourceDataPeakBR = 2;
 			workflowParameters.ChromGenSourceDataSigNoise = 3;
@@ -133,10 +141,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			workflowParameters.MSToleranceInPPM = 25;
 			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
 			workflowParameters.NumMSScansToSum = 1;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = int.MaxValue;
+			workflowParameters.ProcessMsMs = true;
 			workflowParameters.ResultType = Globals.ResultType.BASIC_TARGETED_RESULT;
 			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
 
-			var executor = new BasicTargetedWorkflowExecutor(executorParameters, workflowParameters, datasetPath);
+			var executor = new UIMFTargetedWorkflowExecutor(executorParameters, workflowParameters, datasetPath);
 			executor.Execute();
 		}
 
