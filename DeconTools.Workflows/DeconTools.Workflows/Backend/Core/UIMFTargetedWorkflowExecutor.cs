@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 
@@ -75,6 +77,15 @@ namespace DeconTools.Workflows.Backend.Core
 			ExportData();
 
 			HandleAlignmentInfoFiles();
+		}
+
+		protected override void ExecutePreProcessingHook()
+		{
+			var uimfTargetedMsmsWorkflowCollapseIMS = this.TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
+			if (uimfTargetedMsmsWorkflowCollapseIMS != null)
+			{
+				(uimfTargetedMsmsWorkflowCollapseIMS).ChromPeakToXYDataMap.Clear();
+			}
 		}
 	}
 }

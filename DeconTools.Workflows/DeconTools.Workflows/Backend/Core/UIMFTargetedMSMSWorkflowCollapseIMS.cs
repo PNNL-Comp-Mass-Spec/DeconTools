@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -9,10 +10,13 @@ namespace DeconTools.Workflows.Backend.Core
 {
 	public class UIMFTargetedMSMSWorkflowCollapseIMS : TargetedWorkflow
 	{
+		public Dictionary<ChromPeak, XYData> ChromPeakToXYDataMap { get; set; }
+
 		public UIMFTargetedMSMSWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters)
         {
             this.WorkflowParameters = parameters;
             this.Run = run;
+			this.ChromPeakToXYDataMap = new Dictionary<ChromPeak, XYData>();
 
             InitializeWorkflow();
         }
@@ -44,6 +48,8 @@ namespace DeconTools.Workflows.Backend.Core
 				ExecuteTask(_chromPeakDetector);
 				UpdateChromDetectedPeaks(Run.PeakList);
 
+				UpdateChromPeaksWithXYData();
+
 				ExecuteTask(_chromPeakSelector);
 				ChromPeakSelected = Result.ChromPeakSelected;
 
@@ -68,6 +74,26 @@ namespace DeconTools.Workflows.Backend.Core
 				result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
 				result.FailedResult = true;
 				return;
+			}
+		}
+
+		private void UpdateChromPeaksWithXYData()
+		{
+			if (Run.XYData == null || Run.XYData.Xvalues == null) return;
+
+			foreach (ChromPeak peak in Run.PeakList)
+			{
+				double apex = peak.XValue;
+				double width = peak.Width;
+				double peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
+				double fourSigma = 4 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
+				double halfFourSigma = fourSigma / 2.0;
+
+				double minScan = apex - halfFourSigma;
+				double maxScan = apex + halfFourSigma;
+
+				XYData filteredXYData = Run.XYData.TrimData(minScan, maxScan);
+				this.ChromPeakToXYDataMap.Add(peak, filteredXYData);
 			}
 		}
 	}
