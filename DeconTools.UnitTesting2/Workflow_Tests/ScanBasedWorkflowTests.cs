@@ -17,9 +17,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
     [TestFixture]
     public class ScanBasedWorkflowTests
     {
+        [Category("MustPass")]
         [Test]
-        public void TraditionalWorkflowTest1()
+        public void TraditionalWorkflowTestOrbitrapData1()
         {
+            string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
+
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
             string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
@@ -29,39 +32,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
-
             var parameters=new DeconToolsParameters();
-            parameters.LoadFromOldDeconToolsParameterFile(@"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\Standard_Testing\DeconTools\Orbitrap\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scan6000-9000.xml");
-            
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+
             parameters.MSGeneratorParameters.MinLCScan = 6005;
             parameters.MSGeneratorParameters.MaxLCScan = 6005;
-            parameters.ScanBasedWorkflowParameters.ExportPeakData = true;
 
-
-
-            //parameters.HornTransformParameters.UseMZRange = true;
-            //parameters.HornTransformParameters.MinMZ = 500;
-            //parameters.HornTransformParameters.MaxMZ = 505;
-
-            //parameters.PeakProcessorParameters.PeakBackgroundRatio = 0.1;
-            //parameters.PeakProcessorParameters.SignalToNoiseThreshold = 0.1;
-            //parameters.PeakProcessorParameters.ThresholdedData = true;
-
+           
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
-            //workflow.ExportData = false;
             workflow.Execute();
-
-            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-            
-
 
             Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
             Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
             Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
-
-
-
+            
             IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
             var isos = isosImporter.Import();
 
@@ -72,14 +56,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             List<MSPeakResult> peaklist = new List<MSPeakResult>();
             peakImporter.ImportPeaks(peaklist);
 
-            //TODO: fix this
-            //Assert.AreEqual(809, peaklist.Count);
+            Assert.AreEqual(809, peaklist.Count);
 
             var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
-            //Assert.AreEqual(266571118.0d, sumIntensities);
+            Assert.AreEqual(263499300d, Math.Round(sumIntensities));
 
             var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
-            //Assert.AreEqual(605170112.0f, sumPeakIntensities);
+            Assert.AreEqual(605170496.0f, sumPeakIntensities);
 
         }
 
@@ -150,7 +133,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void processOrbitrapData_outputMS2_and_peaks_test1()
         {
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string parameterFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans6000_6050_MS2.xml";
+            string parameterFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans6000_6050_MS2.xml";
 
             string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
             string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";

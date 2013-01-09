@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Workflows
 
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
-     
+
 
 
         #region Factory methods
@@ -72,8 +72,6 @@ namespace DeconTools.Backend.Workflows
             {
                 Logger.Instance.OutputFilename = datasetFileName + "_BAD_ERROR_log.txt";
                 Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
-                Logger.Instance.AddEntry("DeconEngine version = " + AssemblyInfoRetriever.GetVersion(typeof(DeconToolsV2.HornTransform.clsHornTransformParameters)));
-                Logger.Instance.AddEntry("RapidEngine version = " + RapidDeconvolutor.getRapidVersion());
                 Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
                 Logger.Instance.AddEntry("ERROR message= " + ex.Message, Logger.Instance.OutputFilename);
                 Logger.Instance.AddEntry("ERROR type= " + ex, Logger.Instance.OutputFilename);
@@ -211,24 +209,9 @@ namespace DeconTools.Backend.Workflows
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
 
-            //TODO: new Peak detector will read this parameter from parameter file. 
-            if (PeakDetector is DeconToolsPeakDetector)
-            {
-                var fileType = Run.MSFileType;
-
-                switch (fileType)
-                {
-                    case Globals.MSFileType.Finnigan:
-                        ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = true;
-                        break;
-
-                    default:
-                        ((DeconToolsPeakDetector)PeakDetector).IsDataThresholded = false;
-                        break;
-                }
-            }
-
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
+
+
 
 
             //Will initialize these but whether or not they are used are determined elsewhere
@@ -355,7 +338,7 @@ namespace DeconTools.Backend.Workflows
             {
                 ExecuteTask(Smoother);
             }
-          
+
 
 
             ExecuteTask(PeakDetector);
@@ -394,7 +377,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-     
+
         protected virtual void ExecuteOtherTasksHook() { }
 
         protected void ExecuteTask(Task processingTask)
@@ -490,7 +473,7 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        private string GetBaseFileName(Run run)
+        protected string GetBaseFileName(Run run)
         {
             //outputFilePath will be null if outputFilePath wasn't set using a constructor
             //So if null, will create the default outputPath
@@ -509,10 +492,6 @@ namespace DeconTools.Backend.Workflows
         {
             //TODO: move this
             ExporterType = NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportFileType;
-
-
-
-
 
         }
 

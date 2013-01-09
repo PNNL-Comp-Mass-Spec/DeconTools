@@ -140,6 +140,7 @@
     <Compile Include="Core\IMSScanSet.cs" />
     <Compile Include="Core\IMSScanSetCollection.cs" />
     <Compile Include="Core\LCScanSetIMS.cs" />
+    <Compile Include="Core\Results\DeconMSnResult.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorUIMF.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />

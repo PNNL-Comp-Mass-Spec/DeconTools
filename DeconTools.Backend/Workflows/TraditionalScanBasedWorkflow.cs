@@ -21,21 +21,11 @@ namespace DeconTools.Backend.Workflows
         public TraditionalScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
-
-
         }
-
-
-       
-
         #endregion
 
 
         #region Public Methods
-        
-
-
-
 
         protected override void IterateOverScans()
         {
@@ -122,10 +112,7 @@ namespace DeconTools.Backend.Workflows
 
         #endregion
 
-        #region Private Methods
-
-        #endregion
-
+   
 
 
 

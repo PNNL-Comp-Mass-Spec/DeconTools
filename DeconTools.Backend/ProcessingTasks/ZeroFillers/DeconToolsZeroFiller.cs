@@ -129,6 +129,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
             }
         }
 
+        [Obsolete("Don't use this one. The other works fine")]
         public XYData ZeroFillOld(double[] x, double[] y, int maxPointsToAdd)
         {
 

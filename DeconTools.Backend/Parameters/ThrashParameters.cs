@@ -15,6 +15,8 @@ namespace DeconTools.Backend.Parameters
             MaxFit = 0.25;
             MinIntensityForDeletion = 10;
             MinIntensityForScore = 10;
+            
+            
             IsO16O18Data = false;
             NumPeaksForShoulder = 1;
             ChargeCarrierMass = Globals.PROTON_MASS;
@@ -23,7 +25,7 @@ namespace DeconTools.Backend.Parameters
             TagFormula = string.Empty;
             IsThrashUsed = true;
             CompleteFit = false;
-            UseMercuryCaching = true;
+            AreAllTheoreticalProfilesCachedBeforeStarting = true;
             NumPeaksUsedInAbundance = 1;
             UseAbsoluteIntensity = false;
             AbsolutePeptideIntensity = 0;
@@ -31,7 +33,9 @@ namespace DeconTools.Backend.Parameters
             IsotopicProfileFitType = Globals.IsotopicProfileFitType.AREA;
             LeftFitStringencyFactor = 1;
             RightFitStringencyFactor = 1;
-            UseMercuryCaching = true;
+            AreAllTheoreticalProfilesCachedBeforeStarting = false;
+
+
         }
 
 
@@ -80,7 +84,7 @@ namespace DeconTools.Backend.Parameters
 
         public Globals.IsotopicProfileFitType IsotopicProfileFitType { get; set; }
 
-        public bool UseMercuryCaching { get; set; }
+        public bool AreAllTheoreticalProfilesCachedBeforeStarting { get; set; }
 
         public double LeftFitStringencyFactor { get; set; }
 
@@ -133,7 +137,7 @@ namespace DeconTools.Backend.Parameters
             RightFitStringencyFactor = GetDoubleValue(thrashElement, "RightFitStringencyFactor", RightFitStringencyFactor);
             TagFormula = GetStringValue(thrashElement, "TagFormula", TagFormula);
             UseAbsoluteIntensity = GetBoolVal(thrashElement, "UseAbsolutePeptideIntensity", UseAbsoluteIntensity);
-            UseMercuryCaching = GetBoolVal(thrashElement, "UseMercuryCaching", UseMercuryCaching);
+            AreAllTheoreticalProfilesCachedBeforeStarting = GetBoolVal(thrashElement, "UseMercuryCache", AreAllTheoreticalProfilesCachedBeforeStarting);
 
 
         }

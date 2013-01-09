@@ -22,11 +22,15 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 case Globals.PeakDetectorType.DeconTools:
 
-                    return new DeconToolsPeakDetectorV2(
+                     var peakDetector= new DeconToolsPeakDetectorV2(
                         parameters.PeakDetectorParameters.PeakToBackgroundRatio,
                         parameters.PeakDetectorParameters.SignalToNoiseThreshold,
                         parameters.PeakDetectorParameters.PeakFitType,
                         parameters.PeakDetectorParameters.IsDataThresholded);
+
+                    peakDetector.PeaksAreStored = parameters.PeakDetectorParameters.PeaksAreStored;
+
+                    return peakDetector;
 
                 case Globals.PeakDetectorType.DeconToolsChromPeakDetector:
                     return new ChromPeakDetector(parameters.PeakDetectorParameters.PeakToBackgroundRatio,

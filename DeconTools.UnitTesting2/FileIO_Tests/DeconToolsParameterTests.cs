@@ -7,12 +7,11 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class DeconToolsParameterTests
     {
+        [Category("MustPass")]
         [Test]
-        public void Test1()
+        public void ParameterFileTest1()
         {
             //see https://jira.pnnl.gov/jira/browse/OMCS-460
-
-
 
             string parameterFile = "..\\..\\..\\..\\SampleParameterFile.xml";
 
@@ -39,23 +38,23 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(-2147483648, parameters.MSGeneratorParameters.MinLCScan);
             Assert.AreEqual(2147483647, parameters.MSGeneratorParameters.MaxLCScan);
-            Assert.AreEqual(1, parameters.MSGeneratorParameters.NumLCScansToSum);
             Assert.AreEqual(true, parameters.MSGeneratorParameters.UseMZRange);
             Assert.AreEqual(100, parameters.MSGeneratorParameters.MinMZ);
             Assert.AreEqual(2000, parameters.MSGeneratorParameters.MaxMZ);
+            Assert.AreEqual(3, parameters.MSGeneratorParameters.NumLCScansToSum);
+            Assert.AreEqual(true, parameters.MSGeneratorParameters.SumSpectraAcrossLC);
 
             Assert.AreEqual("quadratic", parameters.PeakDetectorParameters.PeakFitType.ToString().ToLower());
-
-            Assert.AreEqual(1, parameters.MSGeneratorParameters.NumLCScansToSum);
-
+            Assert.AreEqual(true, parameters.PeakDetectorParameters.IsDataThresholded);
+            Assert.AreEqual(true, parameters.PeakDetectorParameters.PeaksAreStored);
         }
 
-
+        [Category("MustPass")]
         [Test]
-        public void LoadParametersTest2()
+        public void LoadParametersForIMSDataprocessingTest2()
         {
             string parameterFile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat90000_newFormat.xml";
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat90000_newFormat.xml";
 
             Assert.IsTrue(File.Exists(parameterFile));
             DeconToolsParameters parameters = new DeconToolsParameters();
@@ -85,6 +84,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(3000, parameters.MSGeneratorParameters.MaxMZ);
 
             Assert.AreEqual("quadratic", parameters.PeakDetectorParameters.PeakFitType.ToString().ToLower());
+            Assert.AreEqual(true, parameters.PeakDetectorParameters.IsDataThresholded);
+
 
             Assert.AreEqual(1, parameters.MSGeneratorParameters.NumLCScansToSum);
             Assert.AreEqual(7, parameters.MSGeneratorParameters.NumImsScansToSum);

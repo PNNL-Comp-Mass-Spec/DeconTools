@@ -210,11 +210,13 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.ChargeState);
                 sb.Append("\t");
-                sb.Append(item.IntensityAggregate);
+                sb.Append(item.IntensityAggregate.ToString("0"));
                 sb.Append("\t");
                 sb.Append(item.IsotopicProfile.Score.ToString("0.000"));
                 sb.Append("\t");
                 sb.Append(item.InterferenceScore.ToString("0.000"));
+                sb.Append("\t");
+                sb.Append(item.Flags.Count == 0 ? "" : "FLAGGED");
 
                 sb.Append("\n");
 

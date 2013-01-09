@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
@@ -25,6 +26,8 @@ namespace DeconTools.Backend.Runs
             this.MSFileType = Globals.MSFileType.Finnigan;
             this.ContainsMSMSData = true;
             XYData = new XYData();
+
+            ParentScanList = new SortedDictionary<int, int>();
 
         }
 

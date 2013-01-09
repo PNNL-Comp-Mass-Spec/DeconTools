@@ -147,6 +147,7 @@
     <Compile Include="Utilities\IsotopicProfileElutionExtractorTests.cs" />
     <Compile Include="Utilities\PeptideUtilsTests.cs" />
     <Compile Include="Utilities\XYDataUtilitiesTests.cs" />
+    <Compile Include="Workflow_Tests\DeconMSnWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\RunMergingPeakExportingWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\SaturationIMSWorkflowTests.cs" />
     <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />

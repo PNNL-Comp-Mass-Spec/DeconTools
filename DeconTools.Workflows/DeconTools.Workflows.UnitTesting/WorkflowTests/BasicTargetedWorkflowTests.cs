@@ -53,7 +53,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-
+        [Category("MustPass")]
         [Test]
         public void findSingleMassTag_test1()
         {
@@ -111,8 +111,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleModifiedMassTagTest1()
         {
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string peaksTestFile = UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
             Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
