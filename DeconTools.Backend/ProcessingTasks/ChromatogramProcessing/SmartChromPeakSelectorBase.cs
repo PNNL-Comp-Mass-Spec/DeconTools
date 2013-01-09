@@ -125,18 +125,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                         //get i_score
                         resultValidator.Execute(resultList);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-
                         currentResult.FailedResult = true;
-
                     }
-
-                    
 
                     //collect the results together
                     AddScoresToPeakQualityData(pq, currentResult);
-
 #if DEBUG
                     pq.Display();
 #endif
