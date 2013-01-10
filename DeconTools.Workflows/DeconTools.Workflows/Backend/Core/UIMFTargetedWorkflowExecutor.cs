@@ -84,7 +84,12 @@ namespace DeconTools.Workflows.Backend.Core
 			var uimfTargetedMsmsWorkflowCollapseIMS = this.TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
 			if (uimfTargetedMsmsWorkflowCollapseIMS != null)
 			{
-				(uimfTargetedMsmsWorkflowCollapseIMS).ChromPeakToXYDataMap.Clear();
+				if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)
+				{
+					uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.ClearAllResults();	
+				}
+				
+				uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap.Clear();
 			}
 		}
 	}

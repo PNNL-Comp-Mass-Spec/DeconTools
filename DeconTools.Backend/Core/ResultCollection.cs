@@ -147,6 +147,7 @@ namespace DeconTools.Backend.Core
             this.MSPeakResultList.Clear();
             this.ResultList.Clear();
             this.ScanResultList.Clear();
+			this.MassTagResultList.Clear();
         }
 
         public TargetedResultBase CreateMassTagResult(TargetBase massTag)
