@@ -37,7 +37,21 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         }
 
+        [Test]
+        public void WorkflowTestUsingParameterFile1()
+        {
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\ParameterFiles\DeconMSn_LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_scans6000_6050.xml";
 
+            string rawdataFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+
+            string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\Output";
+
+
+            var workflow = ScanBasedWorkflow.CreateWorkflow(rawdataFile, parameterFile, outputFolder);
+            workflow.Execute();
+
+        }
 
         [Test]
         public void WorkflowTesting1()

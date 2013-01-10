@@ -31,6 +31,7 @@ namespace DeconTools.Backend.Workflows
         private string _outputFileName;
         private int _scanCounter;
         private int _currentMS1Scan;
+        private string _outputSummaryFilename;
         private const int NumScansBetweenProgress = 500;
 
 
@@ -79,7 +80,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-
+        
 
         #endregion
 
@@ -115,7 +116,7 @@ namespace DeconTools.Backend.Workflows
 
             if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
 
-
+            _outputSummaryFilename = basefileName + "_deconMSnSummary.txt";
         }
 
 
@@ -123,7 +124,6 @@ namespace DeconTools.Backend.Workflows
         protected override void IterateOverScans()
         {
             DeconMSnResults.Clear();
-
             _scanCounter = 0;
 
             foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
@@ -136,16 +136,7 @@ namespace DeconTools.Backend.Workflows
                     {
                         return;
                     }
-
                 }
-
-                int testScan = 6018;
-                if (scanSet.PrimaryScanNumber==6018)
-                {
-                    Console.WriteLine("Here comes trouble");
-                }
-
-
 
                 //check ms level
                 int currentMSLevel = Run.GetMSLevel(scanSet.PrimaryScanNumber);
@@ -171,6 +162,13 @@ namespace DeconTools.Backend.Workflows
                 }
                 else if (currentMSLevel == 2)
                 {
+
+                    if (_currentMS1Peaks==null || _currentMS1Peaks.Count==0)
+                    {
+                        continue;
+                        
+                    }
+
                     var precursorInfo = Run.GetPrecursorInfo(scanSet.PrimaryScanNumber);
                     Run.CurrentScanSet = scanSet;
 
@@ -333,13 +331,35 @@ namespace DeconTools.Backend.Workflows
                         "DeconMSn only works on MS1 and MS2 data; You are attempting MS3");
                 }
 
+   
                 ReportProgress();
 
             }
 
-            string deconResultsStringOutput = DeconMSnResultsToString1(DeconMSnResults);
-            Console.WriteLine(deconResultsStringOutput);
+            if (ExportData)
+            {
+                string deconResultsStringOutput = DeconMSnResultsToString1(DeconMSnResults);
+                WriteOutDeconMSnSummary(deconResultsStringOutput);
+                
+                
+                //Console.WriteLine(deconResultsStringOutput);
+    
+            }
 
+            
+        }
+
+        private void WriteOutDeconMSnSummary(string deconResultsStringOutput)
+        {
+            using (var sw = new StreamWriter(new System.IO.FileStream(_outputSummaryFilename, System.IO.FileMode.Append,
+                      System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            {
+                sw.AutoFlush = true;
+                sw.Write(deconResultsStringOutput);
+                sw.Flush();
+
+                sw.Close();
+            }
         }
 
         private string DeconMSnResultsToString1(List<DeconMSnResult> deconMSnResults)

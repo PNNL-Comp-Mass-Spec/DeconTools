@@ -108,10 +108,11 @@ namespace DeconTools.Backend.Workflows
                     }
                     return new TraditionalScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
 
-
-
                 case "run_merging_with_peak_export":
                     return new RunMergingPeakExportingWorkflow(parameters, null, outputFolderPath, backgroundWorker);
+
+                case "deconmsn":
+                    return new DeconMSnWorkflow(parameters, run, outputFolderPath, backgroundWorker);
 
                 default:
                     throw new ArgumentOutOfRangeException("ScanBasedWorkflowName is unknown");

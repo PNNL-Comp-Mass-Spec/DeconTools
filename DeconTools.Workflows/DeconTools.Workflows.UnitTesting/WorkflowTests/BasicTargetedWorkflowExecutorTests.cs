@@ -124,6 +124,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8112, result1.ScanLC);
+           
+            //TODO: confirm/fix this NET value
             Assert.AreEqual(0.41724m, (decimal)Math.Round(result1.NET, 5));
            // Assert.AreEqual(0.002534m, (decimal)Math.Round(result1.NETError, 6));
             Assert.AreEqual(974.52068m, (decimal) Math.Round(result1.MonoMZ, 5));
