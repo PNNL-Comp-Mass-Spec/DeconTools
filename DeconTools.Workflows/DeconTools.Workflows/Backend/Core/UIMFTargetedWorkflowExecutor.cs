@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)
 				{
-					uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.ClearAllResults();	
+					uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.MassTagResultList.Clear();	
 				}
 				
 				uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap.Clear();
