@@ -10,6 +10,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     public class DeconToolsFitScoreCalculator : IFitScoreCalculator
     {
+        //DECONENGINE: remove this.... it references deconEngine
         MercuryDistributionCreator distributionCreator;
         TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
 
@@ -21,7 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public DeconToolsFitScoreCalculator()
         {
-            this.distributionCreator = new MercuryDistributionCreator();
+           
         }
 
         public DeconToolsFitScoreCalculator(double mzVar)
