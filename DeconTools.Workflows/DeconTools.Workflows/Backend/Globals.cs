@@ -28,7 +28,8 @@ namespace DeconTools.Workflows.Backend
             SipperWorkflowExecutor1,
 			TopDownTargeted1,
 			TopDownTargetedWorkflowExecutor1,
-			UIMFTargetedMSMSWorkflowCollapseIMS
+			UIMFTargetedMSMSWorkflowCollapseIMS,
+            Deuterated
         }
 
 
