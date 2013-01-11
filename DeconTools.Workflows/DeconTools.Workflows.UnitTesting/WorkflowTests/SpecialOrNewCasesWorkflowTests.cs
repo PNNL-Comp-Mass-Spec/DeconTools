@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -8,6 +7,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class SpecialOrNewCasesWorkflowTests
     {
+        [Ignore("For dev only")]
         [Test]
         public void GlycanProcessingTest1()
         {
@@ -28,6 +28,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+        [Ignore("For dev only")]
         [Test]
         public void HemePeptidesProcessingTest1()
         {

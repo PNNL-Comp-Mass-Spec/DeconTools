@@ -137,6 +137,31 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void AlternateConstructor_targetedWorkflowNoAlignment()
+        {
+            string executorParameterFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_OrbiStandard_workflowExecutorParameters.xml";
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+            string resultsFolderLocation = executorParameters.ResultsFolder;
+            string testDatasetPath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
+
+            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
+         
+            var basicTargetedWorkflowParameters = new BasicTargetedWorkflowParameters();
+            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(basicTargetedWorkflowParameters);
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
+                workflow, testDatasetPath);
+            executor.Execute();
+
+            Assert.IsTrue(File.Exists(expectedResultsFilename));
+        }
 
         [Test]
         [Category("LongRunning")]
