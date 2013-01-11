@@ -31,15 +31,12 @@ namespace DeconTools.Backend.Algorithms
         {
             XYData xydata = new XYData();
 
-
             List<double> xvals = new List<double>();
             List<double> yvals = new List<double>();
 
             for (int scan = minScan; scan <= maxScan; scan++)
             {
-
                 bool scanIsGoodToGet = true;
-
 
                 bool currentScanContainsMSMS = (run.ContainsMSMSData && run.GetMSLevel(scan) > 1);
                 if (currentScanContainsMSMS)
@@ -59,24 +56,13 @@ namespace DeconTools.Backend.Algorithms
 
                 xvals.Add(scan);
                 yvals.Add(chromDataPointIntensity);
-
-
-                
             }
 
             xydata.Xvalues = xvals.ToArray();
             xydata.Yvalues = yvals.ToArray();
 
             return xydata;
-            
-
-
-
-
         }
-
-
-
 
         private double getChromDataPoint(XYData xydata, double targetMZ, double toleranceInPPM)
         {
@@ -100,7 +86,6 @@ namespace DeconTools.Backend.Algorithms
                 indexOfGoodStartingPoint = 0;
             }
 
-
             double intensitySum = 0;
 
             for (int i = indexOfGoodStartingPoint; i < xydata.Xvalues.Length; i++)
@@ -116,18 +101,11 @@ namespace DeconTools.Backend.Algorithms
                     {
                         intensitySum = +xydata.Yvalues[i];
                     }
-
-
                 }
-
             }
 
             return intensitySum;
-
-
-
         }
-
 
         public List<MSPeakResult> GeneratePeakChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM)
         {
@@ -169,9 +147,6 @@ namespace DeconTools.Backend.Algorithms
             return compiledChromPeakList;
         }
 
-
-
-
         /// <summary>
         /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans. 
         /// </summary>
@@ -189,7 +164,6 @@ namespace DeconTools.Backend.Algorithms
             return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
         }
 
-
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM, int chromIDToAssign)
         {
             List<double> targetMZList = new List<double>();
@@ -197,7 +171,6 @@ namespace DeconTools.Backend.Algorithms
 
             return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM, chromIDToAssign);
         }
-
 
         /// <summary>
         /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
@@ -215,11 +188,9 @@ namespace DeconTools.Backend.Algorithms
             int defaultChromID = 0;
 
             return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM, defaultChromID);
-
         }
 
         //TODO:  make a ChromatogramObject that will help handle my MSPeakResults, etc.
-
 
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM, int chromIDToAssign)
         {
@@ -300,7 +271,6 @@ namespace DeconTools.Backend.Algorithms
                 
                 if (!xyValues.ContainsKey(scanNumber))
                 {
-
 					string errorString = "Unexpected error in chromatogram generator!! Scan= " + scanNumber +
 										 "; num filtered peaks = " + filteredPeakListCount;
 
@@ -342,7 +312,6 @@ namespace DeconTools.Backend.Algorithms
                     baseValues.Add((int)baseData.Xvalues[i], baseData.Yvalues[i]);
                 }
 
-
                 //now combine base data with the new
                 for (int i = 0; i < newdata.Xvalues.Length; i++)
                 {
@@ -360,7 +329,6 @@ namespace DeconTools.Backend.Algorithms
 
                 }
 
-
                 returnedData.Xvalues = XYData.ConvertIntsToDouble(baseValues.Keys.ToArray());
                 returnedData.Yvalues = baseValues.Values.ToArray();
 
@@ -368,9 +336,6 @@ namespace DeconTools.Backend.Algorithms
 
             return returnedData;
         }
-
-
-
 
         #endregion
 
@@ -396,17 +361,13 @@ namespace DeconTools.Backend.Algorithms
             }
             else if (leftIndex == rightIndex)
             {
-
                 {
                     return leftIndex;
-
                 }
             }
             return leftIndex;    // if fails to find...  will return the inputted left-most scan
         }
 
         #endregion
-
-
     }
 }
