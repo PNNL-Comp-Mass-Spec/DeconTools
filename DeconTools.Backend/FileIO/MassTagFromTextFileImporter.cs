@@ -178,13 +178,17 @@ namespace DeconTools.Backend.FileIO
 
             mt.ID = parseIntField(getValue(new string[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1"));
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
-            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
-
-
-
 
             int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" }, lineData, "-1"));
+            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
 
+            bool neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
+            if (neitherScanOrNETIsProvided)
+            {
+                mt.ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
+                mt.NormalizedElutionTime = 0.5f;  // set the NET mid-way between 0 and 1. 
+            }
+            
             bool useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
             if (useScanNum)
             {
@@ -192,6 +196,8 @@ namespace DeconTools.Backend.FileIO
                 //mt.NormalizedElutionTime = scanNum / ;
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
             }
+
+
 
             mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
             mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));

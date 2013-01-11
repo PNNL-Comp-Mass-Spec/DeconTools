@@ -131,6 +131,7 @@ namespace DeconTools.Workflows.Backend.Core
             _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             _chromGen.TopNPeaksLowerCutOff = 0.333;
             _chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
+            _chromGen.NETWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2;
 
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);

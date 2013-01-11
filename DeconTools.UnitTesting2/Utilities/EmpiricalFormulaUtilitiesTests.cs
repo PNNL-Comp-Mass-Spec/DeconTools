@@ -123,6 +123,16 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(802.40072m, (decimal)Math.Round(monomass, 5));    //note that Peptide Util reports 802.40071, as does MacCoss's lab: http://proteome.gs.washington.edu/cgi-bin/aa_calc.pl
         }
 
+        [Test]
+        public void GetMonoisotopicMassForEmpiricalFormulaWithIronTest1()
+        {
+            string formula = "C145 H208 N39 O40 S2 Fe1";
+            double monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+
+            Assert.IsTrue(monomass > 0);
+            Console.WriteLine("monoisotopic mass= \t" + monomass);
+        }
+
 
         [Test]
         public void AddAcetylationTest1()
