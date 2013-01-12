@@ -23,7 +23,8 @@ namespace DeconTools.Workflows.Backend.Core
         protected ChromPeakDetector _chromPeakDetector;
         protected ChromPeakSelectorBase _chromPeakSelector;
         protected IterativeTFF _msfeatureFinder;
-        protected MassTagFitScoreCalculator _fitScoreCalc;
+        //protected MassTagFitScoreCalculator _fitScoreCalc;
+        protected Task _fitScoreCalc;
         protected ResultValidatorTask _resultValidator;
         protected ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
 
