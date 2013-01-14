@@ -82,6 +82,9 @@ namespace DeconTools.Backend.Data
                     
                 case Globals.ResultType.N14N15_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
+
+                case Globals.ResultType.DEUTERAED:
+                    throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
                     
                 default:
                     throw new ApplicationException("Cannot create IsosExporter for this type of Result: " + resultType);

@@ -17,8 +17,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public JoshTheorFeatureGenerator()
             : this(Globals.LabellingType.NONE, 0.005)
         {
-
-
         }
 
         public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
@@ -34,17 +32,31 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             this.FractionLabeling = fractionLabeling;
         }
 
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double fractionLabeling, double lowPeakCutOff, double molarMixingFraction)
+        {
+            this.LabellingType = labellingType;
+            this.LowPeakCutOff = lowPeakCutOff;
+            this.FractionLabeling = fractionLabeling;
+            this.MolarMixingFraction = molarMixingFraction;
+            DeuteriumIsotopeProfileGenerator _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator(molarMixingFraction, 1 - molarMixingFraction);
+        }
+
         #endregion
 
         #region Properties
         public Globals.LabellingType LabellingType { get; set; }
 
         /// <summary>
-        /// Degree of labeling. Ranges between 0 and 1.0
+        /// Degree of labeling. Ranges between 0 and 1.0.  1 = 100% label incorporation
         /// </summary>
         public double FractionLabeling { get; set; }
 
         public double LowPeakCutOff { get; set; }
+
+        /// <summary>
+        /// how the two samples were mixed together.  0.5 means 1:1 ratio.  Range is 0 to 1.  .25 ia 
+        /// </summary>
+        public double MolarMixingFraction { get; set; }
 
         #endregion
 
@@ -66,7 +78,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                     break;
                 case Globals.LabellingType.Deuterium:
                     mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
-                    mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling);
+                    //mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling);
+                    mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
                     break;
                 default:
                     throw new NotImplementedException();

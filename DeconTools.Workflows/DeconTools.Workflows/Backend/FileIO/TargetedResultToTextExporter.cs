@@ -34,6 +34,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 				case Globals.TargetedWorkflowTypes.TopDownTargeted1:
 					exporter = new TopDownTargetedResultToTextExporter(outputFileName);
             		break;
+                case Globals.TargetedWorkflowTypes.Deuterated:
+                    exporter = new DeuteratedTargetedResultToTextExporter(outputFileName);
+                    break;
 
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");

@@ -17,7 +17,20 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         #region Constructors
 
-        public DeuteriumIsotopeProfileGenerator(double hLabelingAmount = 0.5, double dLabelingAmount = 0.5)
+        //default
+        public DeuteriumIsotopeProfileGenerator()
+        {
+            double hLabelingAmount = 0.5;
+            double dLabelingAmount = 0.5;
+            decimal sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
+
+            Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labelling amounts do not add up to 1.00 - which they should.");
+
+            this.HLabellingAmount = hLabelingAmount;
+            this.DLabellingAmount = dLabelingAmount;
+        }
+
+        public DeuteriumIsotopeProfileGenerator(double hLabelingAmount, double dLabelingAmount)
         {
             decimal sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
 
@@ -68,7 +81,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
 
 
-        public IsotopicProfile GetDHIsotopicProfile2(TargetBase mt, double lowpeakCutoff, double fractionLabeling)
+        public IsotopicProfile GetDHIsotopicProfile2(TargetBase mt, double lowpeakCutoff, double fractionLabeling, double molarMixingofH)
         {
             Check.Require(mt != null, "Mass tag not defined");
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
@@ -82,12 +95,18 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             IsotopicProfile deuteriumTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
-            
+            HLabellingAmount = molarMixingofH;
+            DLabellingAmount = 1 - molarMixingofH;
+            //convert to floats
+            float labelingAmountfraction = Convert.ToSingle(fractionLabeling);
+            float HLabellingAmountMix = Convert.ToSingle(HLabellingAmount);
+            float DLabellingAmountMix = Convert.ToSingle(DLabellingAmount);
 
+            //initialization
             float maxHeightForNormalization = 0;
             if (hydrogenTheoreticalProfile.Peaklist.Count > 0)
             {
-                maxHeightForNormalization = hydrogenTheoreticalProfile.Peaklist[0].Height;
+                maxHeightForNormalization = hydrogenTheoreticalProfile.Peaklist[0].Height * HLabellingAmountMix;
             }
 
             //add deuterated peaks as an offset index
@@ -104,14 +123,21 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                     peakD = deuteriumTheoreticalProfile.Peaklist[i-1];
                 }
 
-                peakH.Height = peakH.Height + (1-Convert.ToSingle(fractionLabeling)) * peakD.Height +Convert.ToSingle(fractionLabeling) * peakD.Height;
+                float contributionH = peakH.Height * HLabellingAmountMix;
+                float contributionD = (1 - labelingAmountfraction) * peakD.Height * DLabellingAmountMix + labelingAmountfraction * peakD.Height * DLabellingAmountMix;
 
+                peakH.Height = contributionH + contributionD;
+                
+                //peakH.Height = peakH.Height + (1-Convert.ToSingle(fractionLabeling)) * peakD.Height +Convert.ToSingle(fractionLabeling) * peakD.Height;
+
+                //find true hightes peak in combined distribusion
                 if(peakH.Height>maxHeightForNormalization)
                 {
                     maxHeightForNormalization = peakH.Height;
                 }
             }
 
+            //rename for clarity
             IsotopicProfile labeledTheoreticalProfile = hydrogenTheoreticalProfile;
 
             //normalize to 1
