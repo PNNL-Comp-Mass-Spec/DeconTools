@@ -104,12 +104,14 @@ namespace DeconTools.Backend.ProcessingTasks
 			{
 				Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
 
+			    bool usePrimaryLcScanNumbers = run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
+
 				for (int i = 0; i < run.XYData.Xvalues.Length; i++)
 				{
 					int currentScanVal = (int)run.XYData.Xvalues[i];
 
 					// If the scan is not a primary scan number, then we do not want to consider it
-					if (run.PrimaryLcScanNumbers.BinarySearch(currentScanVal) < 0)
+                    if (usePrimaryLcScanNumbers && run.PrimaryLcScanNumbers.BinarySearch(currentScanVal) < 0)
 					{
 						continue;
 					}

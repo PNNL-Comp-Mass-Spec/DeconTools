@@ -18,9 +18,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void WorkflowTest1()
         {
             var parameters = new DeconToolsParameters();
-            //parameters.MSGeneratorParameters.UseLCScanRange = true;
-            //parameters.MSGeneratorParameters.MinLCScan = 6005;
-            //parameters.MSGeneratorParameters.MaxLCScan = 9000;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 6005;
+            parameters.MSGeneratorParameters.MaxLCScan = 6012;
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 1.3;
             parameters.PeakDetectorParameters.SignalToNoiseThreshold = 2;
