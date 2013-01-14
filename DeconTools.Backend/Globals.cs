@@ -113,7 +113,7 @@ namespace DeconTools.Backend
             SIPPER_TARGETED_RESULT,
             DECON_MSN_RESULT,
             TOPDOWN_TARGETED_RESULT,
-            DEUTERAED
+            DEUTERATED
         }
 
         public enum ScanSelectionMode

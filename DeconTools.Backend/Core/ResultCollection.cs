@@ -171,7 +171,7 @@ namespace DeconTools.Backend.Core
 				case Globals.ResultType.TOPDOWN_TARGETED_RESULT:
 					result = new TopDownTargetedResult(massTag);
             		break;
-                case Globals.ResultType.DEUTERAED:
+                case Globals.ResultType.DEUTERATED:
                     result = new DeuteratedTargetedResultObject(massTag);
                     break;
                 default:
@@ -294,7 +294,7 @@ namespace DeconTools.Backend.Core
                     throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
                 case Globals.ResultType.N14N15_TARGETED_RESULT:
                     throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
-                case Globals.ResultType.DEUTERAED:
+                case Globals.ResultType.DEUTERATED:
                     throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
                 default:
                     throw new ApplicationException("ResultType is not of a know type: " + this.ResultType);
