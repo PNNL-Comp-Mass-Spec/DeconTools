@@ -60,13 +60,7 @@ namespace DeconConsole
 
                     }
                 }
-                
-                if (!IsFileValid(outputFolder))
-                {
-                    
-                    return;
-                }
-
+               
             }
 
             if (!IsFileValid(filename))
