@@ -482,6 +482,22 @@ namespace DeconTools.Backend.Workflows
             }
             else
             {
+                if (!Directory.Exists(OutputFolderPath))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(OutputFolderPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new DirectoryNotFoundException(
+                            "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,
+                            ex);
+                        
+                    }
+                    
+                }
+
                 return OutputFolderPath.TrimEnd(new char[] { '\\' }) + "\\" + run.DatasetName;
             }
         }
