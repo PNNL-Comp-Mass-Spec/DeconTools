@@ -45,6 +45,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             BasicTargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromNETTolerance = 0.5;
+            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
 
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(workflowParameters);
 
@@ -73,28 +74,36 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.InitializeRun(testDatasetPath);
             executor.Run.CurrentMassTag = executor.Targets.TargetList.First();
-            double[] chromPeakBRValues = {2, 3, 4, 5, 6, 7, 8, 9, 10,15,25};
+            double[] chromParamValues = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10,15,25};
 
-            foreach (var chromPeakBrValue in chromPeakBRValues)
+            //chromPeakBRValues =new double[] {10,15,25};
+
+            foreach (var value in chromParamValues)
             {
                 var parameters = executor.TargetedWorkflow.WorkflowParameters as BasicTargetedWorkflowParameters;
-                parameters.ChromPeakDetectorPeakBR = chromPeakBrValue;
+                parameters.ChromPeakDetectorPeakBR = 5;
+                parameters.ChromPeakDetectorSigNoise = value;
 
                 executor.TargetedWorkflow = new BasicTargetedWorkflow(executor.Run, parameters);
                
                 executor.TargetedWorkflow.Execute();
 
-                Console.WriteLine("PeakBR=" + chromPeakBrValue + " num chrom peaks= " +   executor.TargetedWorkflow.ChromPeaksDetected.Count);
+                Console.WriteLine("PeakBR=" + value + " num chrom peaks= " +   executor.TargetedWorkflow.ChromPeaksDetected.Count);
+                foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
+                {
+                    Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t" + chrompeak.Height.ToString("0") + "\t" + chrompeak.Width.ToString("0.000"));
+                }
+
             }
 
             
 
 
 
-            //foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
-            //{
-            //    Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t" + chrompeak.Height.ToString("0") + "\t" + chrompeak.Width.ToString("0.000"));
-            //}
+            foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t" + chrompeak.Height.ToString("0") + "\t" + chrompeak.Width.ToString("0.000"));
+            }
 
             Console.WriteLine();
             Console.WriteLine();

@@ -10,7 +10,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         public ChromPeakDetector():base()
         {
-            IsDataThresholded = true;
+            IsDataThresholded = false;
         }
 
         public ChromPeakDetector(double peakToBackgroundRatio, double signalToNoiseRatio) : this()
