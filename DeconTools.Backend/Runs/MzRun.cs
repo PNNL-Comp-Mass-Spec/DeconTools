@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Runs
                     MSFileType = Globals.MSFileType.MZ5;
                     break;
                 default:
-                    throw new IOException("Cannot initialize Run. File extension isn't supported. The following file extensions are supported: mzXML, mzML, and mz5");
+					throw new IOException("Cannot initialize Run. File extension " + fileExtension + " isn't supported. The following file extensions are supported: mzXML, mzML, and mz5");
             }
 
             Filename = fileName;

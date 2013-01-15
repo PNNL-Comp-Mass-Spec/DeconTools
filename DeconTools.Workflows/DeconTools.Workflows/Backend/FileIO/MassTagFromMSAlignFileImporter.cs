@@ -87,9 +87,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 reader = new StreamReader(_filename);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from the file.", ex);
             }
 
             var targets = new TargetCollection();

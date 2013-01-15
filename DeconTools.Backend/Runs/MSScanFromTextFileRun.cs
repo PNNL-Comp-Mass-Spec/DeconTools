@@ -247,7 +247,7 @@ namespace DeconTools.Backend.Runs
             catch (Exception ex)
             {
 
-                throw new System.IO.IOException("There was an error reading the file. Details below:\n\n" + ex.Message);
+                throw new System.IO.IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(this.Filename) + "\n\n" + ex.Message);
             }
 
             Check.Assert(this.xdata != null || this.ydata != null, "Error: no xy data read from file");

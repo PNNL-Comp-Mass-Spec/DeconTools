@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Data
 
         public PeakImporterFromText(string filename, BackgroundWorker bw)
         {
-            if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist.");
+			if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
 
             FileInfo fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker

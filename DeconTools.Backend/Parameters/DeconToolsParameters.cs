@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Parameters
 
             if (parameterBaseElement == null)
             {
-                throw new IOException("Problem reading xml file. Expected element 'parameters' but it was not found");
+				throw new IOException("Problem reading xml file " + xmlFilename + "; Expected element 'parameters' but it was not found");
             }
 
             ParameterFilename = xmlFilename;

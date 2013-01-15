@@ -932,7 +932,7 @@ namespace Decon2LS
 					}
 					else
 					{
-						MessageBox.Show("Parameter file doesn't exist - check the file path\n\n");
+						MessageBox.Show("Parameter file doesn't exist - check the file path\n\n" + this.mtxt_param_file.Text);
 						return;
 
 					}

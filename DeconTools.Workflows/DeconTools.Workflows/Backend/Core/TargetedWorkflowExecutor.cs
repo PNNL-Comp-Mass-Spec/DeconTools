@@ -520,7 +520,7 @@ namespace DeconTools.Workflows.Backend.Core
                 mtCounter++;
 
 #if DEBUG
-                Stopwatch stopwatch = new Stopwatch();
+				System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
 
 #endif

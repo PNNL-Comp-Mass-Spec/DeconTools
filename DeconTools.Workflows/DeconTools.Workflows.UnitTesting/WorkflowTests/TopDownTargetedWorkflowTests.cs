@@ -93,7 +93,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string exportedParameterFile = executorParameterFile.Replace("1.xml", "_exportTest1.xml");
             executorParameters.SaveParametersToXML(exportedParameterFile);
 
-            Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist");
+			Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist: " + exportedParameterFile);
 
             var executorParameters2 = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters2.LoadParameters(exportedParameterFile);
@@ -118,7 +118,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string exportedParameterFile = executorParameterFile.Replace("1.xml", "_exportTest1.xml");
             workflowParameters.SaveParametersToXML(exportedParameterFile);
 
-            Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist");
+			Assert.IsTrue(File.Exists(exportedParameterFile), "Exported parameter file doesn't exist: " + exportedParameterFile);
 
             var executorParameters2 = new TopDownTargetedWorkflowParameters();
             executorParameters2.LoadParameters(exportedParameterFile);
