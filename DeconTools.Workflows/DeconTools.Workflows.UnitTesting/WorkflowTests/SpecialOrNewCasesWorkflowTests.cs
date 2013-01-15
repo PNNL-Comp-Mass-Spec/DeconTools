@@ -30,19 +30,27 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-        [Ignore("For dev only")]
+    //    [Ignore("For dev only")]
         [Test]
         public void HemePeptidesProcessingTest1()
         {
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.WorkflowParameterFile =
-                @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Parameters\BasicTargetedWorkflowParameters1.xml";
-            executorParameters.TargetsFilePath =
+             executorParameters.TargetsFilePath =
                 @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Targets\SL-MtoA_peptides_formulas.txt";
 
             
             var testDatasetPath = @"D:\Data\From_EricMerkley\HisHemeSL-MtrA_002_2Feb11_Sphinx_10-12-01.RAW";
-            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+
+
+
+            BasicTargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
+            workflowParameters.ChromNETTolerance = 0.5;
+
+            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(workflowParameters);
+
+            
+            
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,workflow, testDatasetPath);
 
 
             int testTargetID = 1950;
@@ -63,9 +71,35 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID).ToList();
 
-            executor.Execute();
+            executor.InitializeRun(testDatasetPath);
+            executor.Run.CurrentMassTag = executor.Targets.TargetList.First();
+            double[] chromPeakBRValues = {2, 3, 4, 5, 6, 7, 8, 9, 10,15,25};
 
-            TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+            foreach (var chromPeakBrValue in chromPeakBRValues)
+            {
+                var parameters = executor.TargetedWorkflow.WorkflowParameters as BasicTargetedWorkflowParameters;
+                parameters.ChromPeakDetectorPeakBR = chromPeakBrValue;
+
+                executor.TargetedWorkflow = new BasicTargetedWorkflow(executor.Run, parameters);
+               
+                executor.TargetedWorkflow.Execute();
+
+                Console.WriteLine("PeakBR=" + chromPeakBrValue + " num chrom peaks= " +   executor.TargetedWorkflow.ChromPeaksDetected.Count);
+            }
+
+            
+
+
+
+            //foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            //{
+            //    Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t" + chrompeak.Height.ToString("0") + "\t" + chrompeak.Width.ToString("0.000"));
+            //}
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
             //TestUtilities.DisplayIsotopicProfileData(executor.TargetedWorkflow.Result.Target.IsotopicProfile);
 
            // Console.WriteLine(executor.TargetedWorkflow.Result.Target.EmpiricalFormula);
