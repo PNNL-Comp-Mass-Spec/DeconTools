@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -38,8 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetsFilePath =
                 @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Targets\SL-MtoA_peptides_formulas.txt";
 
-
-
+            
             var testDatasetPath = @"D:\Data\From_EricMerkley\HisHemeSL-MtrA_002_2Feb11_Sphinx_10-12-01.RAW";
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 
@@ -64,12 +65,59 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+            TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
             //TestUtilities.DisplayIsotopicProfileData(executor.TargetedWorkflow.Result.Target.IsotopicProfile);
 
            // Console.WriteLine(executor.TargetedWorkflow.Result.Target.EmpiricalFormula);
 
         }
+
+
+  //      [Ignore("For dev only")]
+        [Test]
+        public void LocalQCShewProcessingTest1()
+        {
+
+            string parameterFileName = @"C:\Users\d3x720\Documents\Data\QCShew\IQ\IQExecutorParameterFile1.xml";
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.TargetsFilePath =
+                @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_first10.txt";
+
+            executorParameters.SaveParametersToXML(parameterFileName);
+
+
+            BasicTargetedWorkflowParameters workflowParameters=new BasicTargetedWorkflowParameters();
+
+
+            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(workflowParameters);
+
+            var testDatasetPath =
+                @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow,
+                                                                                  testDatasetPath);
+            int testTargetID = 24749;
+            int testTargetZ = 3;
+
+
+
+            executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID
+                && p.ChargeState == testTargetZ).ToList();
+
+
+            executor.Execute();
+            
+
+            //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+
+            foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t"+ chrompeak.Height.ToString("0") + "\t"+chrompeak.Width.ToString("0.000") + "\n");
+            }
+
+
+        }
+
 
     }
 }
