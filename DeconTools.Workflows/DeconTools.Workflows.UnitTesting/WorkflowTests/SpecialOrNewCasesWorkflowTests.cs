@@ -147,7 +147,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID
                 && p.ChargeState == testTargetZ).ToList();
 
-
             executor.Execute();
             
 
