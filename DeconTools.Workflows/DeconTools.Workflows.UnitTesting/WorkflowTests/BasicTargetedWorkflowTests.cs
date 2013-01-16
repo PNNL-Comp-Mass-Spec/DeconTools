@@ -4,6 +4,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -57,6 +58,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleMassTag_test1()
         {
+            //see  https://jira.pnnl.gov/jira/browse/OMCS-709
+
             string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
@@ -72,10 +75,29 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
             parameters.ChromatogramCorrelationIsPerformed = true;
+            parameters.ChromSmootherNumPointsInSmooth = 9;
+            parameters.ChromPeakDetectorPeakBR = 1;
+            parameters.ChromPeakDetectorSigNoise = 1;
+
 
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
+            Assert.IsNotNull(workflow.ChromatogramXYData, "Chrom XY data is empty");
+            Assert.IsNotEmpty(workflow.ChromPeaksDetected, "Chrom peaks are empty");
+            Assert.AreEqual(2, workflow.ChromPeaksDetected.Count);
+
+            Assert.IsNotNull(workflow.ChromPeakSelected, "No chrom peak was selected");
+            Assert.IsNotNull(workflow.MassSpectrumXYData, "Mass spectrum for selected chrom peak was not generated");
+
+            //TestUtilities.DisplayXYValues(workflow.MassSpectrumXYData);
+            //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
+            Console.WriteLine("Chrom peaks detected");
+            foreach (var chromPeak in workflow.ChromPeaksDetected)
+            {
+                Console.WriteLine(chromPeak.XValue.ToString("0.0") + "\t" + chromPeak.Height.ToString("0") + "\t" +
+                                  chromPeak.Width.ToString("0.0"));
+            }
 
 
             MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
@@ -88,21 +110,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsFalse(result.FailedResult);
 
 
-            result.DisplayToConsole();
+           // result.DisplayToConsole();
+
 
             Assert.IsNotNull(result.IsotopicProfile);
             Assert.IsNotNull(result.ScanSet);
             Assert.IsNotNull(result.ChromPeakSelected);
             Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
             Assert.AreEqual(718.41m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
-            //Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
+            Assert.AreEqual(5939, (decimal)Math.Round(result.ChromPeakSelected.XValue));
 
             Assert.IsNotNull(result.ChromCorrelationData);
 
-            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
-            {
-                Console.WriteLine(dataItem);
-            }
+            //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            //{
+            //    Console.WriteLine(dataItem);
+            //}
 
 
         }
