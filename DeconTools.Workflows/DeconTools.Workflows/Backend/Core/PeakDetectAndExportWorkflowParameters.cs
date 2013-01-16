@@ -23,6 +23,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.Num_LC_TimePointsSummed = 1;
             NumIMSScansSummed = -1;
+
+            MS2PeakDetectorPeakBR = PeakBR;
+            MS2PeakDetectorSigNoiseThreshold = SigNoiseThreshold;
+            MS2PeakDetectorDataIsThresholded = IsDataThresholded;
+
         }
 
         #endregion
@@ -31,7 +36,26 @@ namespace DeconTools.Workflows.Backend.Core
 
         public double PeakBR { get; set; }
 
+        
+
         public double SigNoiseThreshold { get; set; }
+
+        
+        /// <summary>
+        /// For MS2 peak detection for data in profile mode. Otherwise, this does not need to be defined.
+        /// </summary>
+        public double MS2PeakDetectorPeakBR { get; set; }
+
+        /// <summary>
+        /// For MS2 peak detection for data in profile mode. Otherwise, this does not need to be defined.
+        /// </summary>
+        public double MS2PeakDetectorSigNoiseThreshold { get; set; }
+
+        /// <summary>
+        /// For MS2 peak detection for data in profile mode. Otherwise, this does not need to be defined.
+        /// </summary>
+        public bool MS2PeakDetectorDataIsThresholded { get; set; }
+
 
         public DeconTools.Backend.Globals.PeakFitType PeakFitType { get; set; }
 

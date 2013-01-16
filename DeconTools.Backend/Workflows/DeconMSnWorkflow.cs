@@ -46,6 +46,9 @@ namespace DeconTools.Backend.Workflows
 
             DeconMSnResults = new List<DeconMSnResult>();
 
+            MS2DataType = Globals.RawDataType.Centroided;
+            
+
         }
 
         protected override void InitializeProcessingTasks()
@@ -69,9 +72,25 @@ namespace DeconTools.Backend.Workflows
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
 
-
-            _ms2PeakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
-            _ms2PeakDetector.RawDataType = Globals.RawDataType.Centroided;
+            if (MS2DataType==Globals.RawDataType.Centroided)
+            {
+                _ms2PeakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
+                _ms2PeakDetector.RawDataType = MS2DataType;
+            }
+            else if (MS2DataType==Globals.RawDataType.Profile)
+            {
+                _ms2PeakDetector =
+                    new DeconToolsPeakDetectorV2(NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio,
+                                                 NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold,
+                                                 NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
+                                                 NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
+            }
+            else
+            {
+                throw new NotImplementedException("Cannot currently handle mixed types of MS2 data");
+            }
+            
+           
 
             Check.Ensure(Deconvolutor is ThrashDeconvolutorV2,
                          "Error. Currently the DeconMSn workflow only works with the ThrashV2 deconvolutor. Selected deconvolutor= " +
@@ -91,6 +110,11 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         public double ToleranceInPPM { get; set; }
 
+        /// <summary>
+        /// Information about the type of MS2 data: centroided or profile. This
+        /// has important implications on the MS2 peak detection
+        /// </summary>
+        public Globals.RawDataType MS2DataType { get; set; }
 
         #endregion
 

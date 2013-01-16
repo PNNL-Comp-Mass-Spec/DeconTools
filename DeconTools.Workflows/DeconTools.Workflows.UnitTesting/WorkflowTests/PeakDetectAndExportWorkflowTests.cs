@@ -80,6 +80,40 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(File.Exists(expectedPeaksFile));
         }
-    
+
+
+        [Test]
+        public void exportPeaksFromMixedProfileAndCentroidMS2Data()
+        {
+
+            string testFile = @"D:\Data\From_Matt\XGA121_lipid_pt5uM_1.raw";
+
+            RunFactory rf = new RunFactory();
+
+            Run run = rf.CreateRun(testFile);
+
+            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
+            parameters.LCScanMin = 1;
+            parameters.LCScanMax = 20;
+            parameters.ProcessMSMS = true;
+            parameters.IsDataThresholded = true;
+            
+            parameters.MS2PeakDetectorDataIsThresholded = true;
+            
+
+
+            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+
+            PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
+            workflow.Execute();
+
+            var fileinfo = new FileInfo(expectedPeaksFile);
+            Assert.IsTrue(fileinfo.Exists);
+            
+
+        }
+
     }
 }

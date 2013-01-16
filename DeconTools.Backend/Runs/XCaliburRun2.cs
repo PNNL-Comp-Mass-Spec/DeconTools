@@ -62,6 +62,15 @@ namespace DeconTools.Backend.Runs
 
         public override XYData XYData { get; set; }
 
+        public override bool IsDataCentroided(int scanNum)
+        {
+            int isCentroided = 0;
+            _msfileReader.IsCentroidScanForScanNum(scanNum, ref isCentroided);
+
+            return isCentroided != 0;
+        }
+
+
         public override int GetNumMSScans()
         {
             int numSpectra = 0;

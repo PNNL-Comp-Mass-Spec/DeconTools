@@ -12,7 +12,10 @@ namespace DeconTools.Workflows.Backend.Core
     public class PeakDetectAndExportWorkflow : WorkflowBase
     {
 
-        DeconToolsPeakDetectorV2 _peakDetector;
+        DeconToolsPeakDetectorV2 _ms1PeakDetector;
+        DeconToolsPeakDetectorV2 _ms2PeakDetectorForCentroidedData;
+        DeconToolsPeakDetectorV2 _ms2PeakDetectorForProfileData;
+
         PeakDetectAndExportWorkflowParameters _workflowParameters;
         private BackgroundWorker backgroundWorker;
 
@@ -46,10 +49,22 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
-            _peakDetector = new DeconToolsPeakDetectorV2(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
+            _ms1PeakDetector = new DeconToolsPeakDetectorV2(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
                 this._workflowParameters.PeakFitType, this._workflowParameters.IsDataThresholded);
 
-            _peakDetector.PeaksAreStored = true;
+
+            _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(_workflowParameters.MS2PeakDetectorPeakBR,
+                                                                          _workflowParameters.MS2PeakDetectorSigNoiseThreshold,
+                                                                          _workflowParameters.PeakFitType,
+                                                                          _workflowParameters.MS2PeakDetectorDataIsThresholded);
+            
+
+            _ms2PeakDetectorForCentroidedData = new DeconToolsPeakDetectorV2(0, 0, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            _ms2PeakDetectorForCentroidedData.RawDataType=DeconTools.Backend.Globals.RawDataType.Centroided;
+
+            _ms2PeakDetectorForProfileData.PeaksAreStored = true;
+            _ms2PeakDetectorForCentroidedData.PeaksAreStored = true;
+            _ms1PeakDetector.PeaksAreStored = true;
 
 
         }
@@ -84,7 +99,7 @@ namespace DeconTools.Workflows.Backend.Core
                     {
 						uimfrun.CurrentIMSScanSet = (IMSScanSet) scanSet;
 						MSGenerator.Execute(uimfrun.ResultCollection);
-						this._peakDetector.Execute(uimfrun.ResultCollection);
+						this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
 
                     }
 					peakExporter.WriteOutPeaks(uimfrun.ResultCollection.MSPeakResultList);
@@ -109,7 +124,22 @@ namespace DeconTools.Workflows.Backend.Core
                     Run.ResultCollection.MSPeakResultList.Clear();
 
                     MSGenerator.Execute(Run.ResultCollection);
-                    this._peakDetector.Execute(Run.ResultCollection);
+                    if (Run.GetMSLevel(scan.PrimaryScanNumber)==1)
+                    {
+                        this._ms1PeakDetector.Execute(Run.ResultCollection);
+                    }
+                    else
+                    {
+                        var dataIsCentroided = Run.IsDataCentroided(scan.PrimaryScanNumber);
+                        if (dataIsCentroided)
+                        {
+                            _ms2PeakDetectorForCentroidedData.Execute(Run.ResultCollection);
+                        }
+                        else
+                        {
+                            _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
+                        }
+                    }
 
                     peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
 
@@ -263,5 +293,9 @@ namespace DeconTools.Workflows.Backend.Core
                 _workflowParameters = value as PeakDetectAndExportWorkflowParameters;
             }
         }
+
+
+        
+
     }
 }

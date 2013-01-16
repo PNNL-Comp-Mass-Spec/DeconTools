@@ -191,7 +191,8 @@ namespace DeconTools.Backend
         public enum RawDataType
         {
             Profile,
-            Centroided
+            Centroided,
+            MixedProfileAndCentroided
         }
 
 

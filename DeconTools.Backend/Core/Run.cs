@@ -140,6 +140,8 @@ namespace DeconTools.Backend.Core
         public abstract double GetTime(int scanNum);
         public abstract int GetMSLevelFromRawData(int scanNum);
 
+        
+
         /// <summary>
         /// Returns Scan information.
         /// </summary>
@@ -174,6 +176,12 @@ namespace DeconTools.Backend.Core
         {
             throw new System.NotImplementedException("GetPrecursorInfo is not available for this Run type.");
         }
+
+        public virtual bool IsDataCentroided(int scanNum)
+        {
+            throw new System.NotImplementedException("GetPrecursorInfo is not available for this Run type.");
+        }
+
 
         public virtual void GetMassSpectrum(ScanSet scanset)
         {
