@@ -44,7 +44,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual XYData ChromatogramXYData { get; set; }
 
-        public bool Success { get; set; } 
+        public bool Success { get; set; }
+
+        public bool IsWorkflowInitialized { get; set; }
 
         public string WorkflowStatusMessage { get; set; }
 
@@ -118,6 +120,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             DoPostInitialization();
 
+            IsWorkflowInitialized = true;
+
         }
 
         protected virtual void DoPreInitialization(){}
@@ -134,7 +138,8 @@ namespace DeconTools.Workflows.Backend.Core
             _chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
             _chromGen.NETWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2;
 
-            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
+            bool allowNegativeValues=false;
+            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
             _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 

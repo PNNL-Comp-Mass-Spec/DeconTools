@@ -15,7 +15,9 @@ namespace DeconTools.Workflows.Backend.Core
             this.WorkflowParameters = parameters;
             this.Run = run;
 
-            InitializeWorkflow();
+            
+
+            
         }
 
         public BasicTargetedWorkflow(TargetedWorkflowParameters parameters)
@@ -45,6 +47,14 @@ namespace DeconTools.Workflows.Backend.Core
         public override void Execute()
         {
             Check.Require(this.Run != null, "Run has not been defined.");
+
+            
+            if (!IsWorkflowInitialized)
+            {
+                InitializeWorkflow();
+            }
+           
+
 
             //TODO: remove this later:
             //this.Run.CreateDefaultScanToNETAlignmentData();
@@ -77,8 +87,6 @@ namespace DeconTools.Workflows.Backend.Core
                 updateMassSpectrumXYValues(Run.XYData);
 
                 ExecuteTask(_msfeatureFinder);
-
-
 
                 ExecuteTask(_fitScoreCalc);
                 ExecuteTask(_resultValidator);

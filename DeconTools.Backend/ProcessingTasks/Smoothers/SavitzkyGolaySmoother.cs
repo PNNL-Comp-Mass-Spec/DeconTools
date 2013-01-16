@@ -18,15 +18,21 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
     {
         DenseMatrix _smoothingFilters;
         
-        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder)
+        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder, bool allowNegativeValues=true)
         {
             PointsForSmoothing = pointsForSmoothing;
             PolynomialOrder = polynomialOrder;
+
+
         }
 
         public int PointsForSmoothing { get; set; }
         public int PolynomialOrder { get; set; }
-
+        
+        /// <summary>
+        /// When smoothing, smoothed values that once were positive, may become negative. This will zero-out any negative values
+        /// </summary>
+        public bool AllowNegativeValues { get; set; }
 
         /// <summary>
         /// Performs SavitzkyGolay smoothing
@@ -63,6 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
                 {
                     multiplicationResult += (conjTransposeColumn[z] * inputValues[z]);
                 }
+                
                 returnYValues[i] = multiplicationResult;
             }
 
@@ -90,6 +97,13 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
                 returnYValues[colCount - m - 1 + i] = multiplicationResult;
             }
 
+            if (!AllowNegativeValues)
+            {
+                for (int i = 0; i < returnYValues.Length; i++)
+                {
+                    if (returnYValues[i] < 0) returnYValues[i] = 0;
+                }
+            }
 
             return returnYValues;
         }

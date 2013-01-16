@@ -5,6 +5,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -65,13 +66,21 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
+            Check.Require(this.Run != null, "Run has not been defined.");
+
+            if (!IsWorkflowInitialized)
+            {
+                InitializeWorkflow();
+            }
+           
+
+
             ResetStoredData();
 
             Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.SIPPER_TARGETED_RESULT;
 
             try
             {
-
                 Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
                 Result.ResetResult();
 
