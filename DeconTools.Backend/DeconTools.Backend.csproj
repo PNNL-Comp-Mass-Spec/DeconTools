@@ -144,7 +144,6 @@
     <Compile Include="Core\Results\DeuteratedTargetedResultObject.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorUIMF.cs" />
-    <Compile Include="ProcessingTasks\FitScoreCalculators\MassTagFitScoreCalculatorLabeled.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
     <Compile Include="ProcessingTasks\Smoothers\SavitzkyGolaySmoother.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />
