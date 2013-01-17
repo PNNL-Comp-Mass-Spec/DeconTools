@@ -33,7 +33,7 @@ namespace DeconTools.UnitTesting.QualityControlTests
             run.CurrentScanSet = scan1821;
 
             msgen.Execute(run.ResultCollection);
-            run.XYData = run.XYData.TrimData(450, 520);
+            run.XYData = run.XYData.TrimData(450, 520, TODO);
 
             peakDet.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);

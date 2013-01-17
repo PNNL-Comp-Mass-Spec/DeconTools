@@ -7,15 +7,15 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class O16O18TargetedIterativeFeatureFinder : TFFBase
+    public class O16O18TargetedIterativeFeatureFinder : IterativeTFF
     {
 
         IterativeTFF _iterativeTFFStandard;
 
-        public O16O18TargetedIterativeFeatureFinder(IterativeTFFParameters parameters)
+        public O16O18TargetedIterativeFeatureFinder(IterativeTFFParameters parameters) : base(parameters)
         {
 
-            this.ToleranceInPPM = parameters.ToleranceInPPM;
+            ToleranceInPPM = parameters.ToleranceInPPM;
             _iterativeTFFStandard = new IterativeTFF(parameters);
 
 
@@ -180,15 +180,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
 
-        private IsotopicProfile getTheorProfile(PeptideTarget massTag, IsotopicProfileType isotopicProfileType)
+        private IsotopicProfile getTheorProfile(PeptideTarget massTag, Globals.IsotopicProfileType isotopicProfileType)
         {
 
             switch (isotopicProfileType)
             {
-                case IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELLED:
                     return massTag.IsotopicProfile;
 
-                case IsotopicProfileType.LABELLED:
+                case Globals.IsotopicProfileType.LABELLED:
                     return massTag.IsotopicProfileLabelled;
 
                 default:

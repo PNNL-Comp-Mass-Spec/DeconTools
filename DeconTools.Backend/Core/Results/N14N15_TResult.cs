@@ -67,18 +67,18 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
+        public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset, Globals.IsotopicProfileType isotopicProfileType)
         {
             //if result was not previously processed, will do a standard add of selected chrom peak and scanset
             //if result was previously processed, add new data to the Labelled results 
-            if (!WasPreviouslyProcessed)
+            if (isotopicProfileType==Globals.IsotopicProfileType.UNLABELLED)
             {
-                base.AddSelectedChromPeakAndScanSet(bestPeak, scanset);
+                base.AddSelectedChromPeakAndScanSet(bestPeak, scanset,isotopicProfileType);
             }
             else
             {
-                this.ChromPeakSelectedN15 = bestPeak;
-                this.ScanSetForN15Profile = scanset;
+                ChromPeakSelectedN15 = bestPeak;
+                ScanSetForN15Profile = scanset;
             }
         }
 

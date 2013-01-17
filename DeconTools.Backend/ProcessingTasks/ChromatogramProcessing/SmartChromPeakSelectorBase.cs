@@ -148,17 +148,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
             
            
-            bool failedChromPeakSelection = (currentResult.ChromPeakSelected == null || currentResult.ChromPeakSelected.XValue == 0);
-            if (failedChromPeakSelection)
-            {
-                currentResult.FailedResult = true;
-                currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
-            }
-            else
-            {
-                currentResult.FailedResult = false;
-                currentResult.FailureType = Globals.TargetedResultFailureType.None;
-            }
         }
 
         #endregion

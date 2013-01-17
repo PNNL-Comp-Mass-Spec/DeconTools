@@ -86,7 +86,6 @@
     <Compile Include="WorkflowTests\N14N15WorkflowTests.cs" />
     <Compile Include="WorkflowTests\O16O18WorkflowTests.cs" />
     <Compile Include="WorkflowTests\PeakDetectAndExportWorkflowTests.cs" />
-    <Compile Include="WorkflowTests\ScanBasedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\ScanUserProvidedTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\SipperExecutorParameterTests.cs" />
     <Compile Include="WorkflowTests\SipperExecutorTests.cs" />

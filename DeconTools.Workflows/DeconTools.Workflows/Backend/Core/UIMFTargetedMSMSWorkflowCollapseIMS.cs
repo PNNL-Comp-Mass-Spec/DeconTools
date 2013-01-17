@@ -12,13 +12,12 @@ namespace DeconTools.Workflows.Backend.Core
 	{
 		public Dictionary<ChromPeak, XYData> ChromPeakToXYDataMap { get; set; }
 
-		public UIMFTargetedMSMSWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters)
+		public UIMFTargetedMSMSWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters):base(run,parameters)
         {
-            this.WorkflowParameters = parameters;
-            this.Run = run;
+            
 			this.ChromPeakToXYDataMap = new Dictionary<ChromPeak, XYData>();
 
-            InitializeWorkflow();
+            
         }
 
 		public UIMFTargetedMSMSWorkflowCollapseIMS(TargetedWorkflowParameters parameters)
@@ -27,55 +26,46 @@ namespace DeconTools.Workflows.Backend.Core
 
 		}
 
-		public override void Execute()
-		{
-			Check.Require(this.Run != null, "Run has not been defined.");
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
+        {
+            return DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+        }
 
-			this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+        public override void DoWorkflow()
+        {
+            Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            Result.ResetResult();
 
-			ResetStoredData();
+            ExecuteTask(_theorFeatureGen);
+            ExecuteTask(_chromGen);
+            ExecuteTask(_chromSmoother);
+            updateChromDataXYValues(Run.XYData);
 
-			try
+            ExecuteTask(_chromPeakDetector);
+            UpdateChromDetectedPeaks(Run.PeakList);
+
+            UpdateChromPeaksWithXYData();
+
+            ExecuteTask(_chromPeakSelector);
+            ChromPeakSelected = Result.ChromPeakSelected;
+
+            Result.ResetMassSpectrumRelatedInfo();
+
+            ExecuteTask(MSGenerator);
+            updateMassSpectrumXYValues(Run.XYData);
+
+            ExecuteTask(_msfeatureFinder);
+
+            ExecuteTask(_fitScoreCalc);
+            ExecuteTask(_resultValidator);
+
+            if (_workflowParameters.ChromatogramCorrelationIsPerformed)
             {
-				Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-				Result.ResetResult();
+                ExecuteTask(_chromatogramCorrelatorTask);
+            }
+        }
 
-				ExecuteTask(_theorFeatureGen);
-				ExecuteTask(_chromGen);
-				ExecuteTask(_chromSmoother);
-				updateChromDataXYValues(Run.XYData);
 
-				ExecuteTask(_chromPeakDetector);
-				UpdateChromDetectedPeaks(Run.PeakList);
-
-				UpdateChromPeaksWithXYData();
-
-				ExecuteTask(_chromPeakSelector);
-				ChromPeakSelected = Result.ChromPeakSelected;
-
-				Result.ResetMassSpectrumRelatedInfo();
-
-				ExecuteTask(MSGenerator);
-				updateMassSpectrumXYValues(Run.XYData);
-
-				ExecuteTask(_msfeatureFinder);
-
-				ExecuteTask(_fitScoreCalc);
-				ExecuteTask(_resultValidator);
-
-				if (_workflowParameters.ChromatogramCorrelationIsPerformed)
-				{
-					ExecuteTask(_chromatogramCorrelatorTask);
-				}
-			}
-			catch (Exception ex)
-			{
-				TargetedResultBase result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-				result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
-				result.FailedResult = true;
-				return;
-			}
-		}
 
 		private void UpdateChromPeaksWithXYData()
 		{

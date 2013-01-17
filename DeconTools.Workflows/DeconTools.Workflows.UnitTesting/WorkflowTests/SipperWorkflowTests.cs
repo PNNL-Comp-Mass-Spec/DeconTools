@@ -194,7 +194,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperTargetedWorkflow workflow = new SipperTargetedWorkflow(run, parameters);
 
 
-            string outputFolder = @"D:\data\temp\SipperOutput";
+            string outputFolder = @"C:\data\temp\SipperOutput";
 
             if (!Directory.Exists(outputFolder))
             {

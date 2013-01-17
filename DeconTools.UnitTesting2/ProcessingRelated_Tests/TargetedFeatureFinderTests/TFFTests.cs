@@ -111,7 +111,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
 
             IterativeTFFParameters parameters=new IterativeTFFParameters();
-            parameters.IsotopicProfileType = IsotopicProfileType.LABELLED;
+            parameters.IsotopicProfileType = Globals.IsotopicProfileType.LABELLED;
             parameters.ToleranceInPPM = 30;
 
 

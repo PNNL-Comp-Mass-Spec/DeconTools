@@ -64,7 +64,6 @@
     <Compile Include="Backend\Core\O16O18Workflow.cs" />
     <Compile Include="Backend\Core\O16O18WorkflowParameters.cs" />
     <Compile Include="Backend\Core\ResultReprocessingTargetedWorkflowExecutor.cs" />
-    <Compile Include="Backend\Core\ScanBasedWorkflow.cs" />
     <Compile Include="Backend\Core\SipperTargetedWorkflow.cs" />
     <Compile Include="Backend\Core\SipperTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\SipperWorkflowExecutor.cs" />

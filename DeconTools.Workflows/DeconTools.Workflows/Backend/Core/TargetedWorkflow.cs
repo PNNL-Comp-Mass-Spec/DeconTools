@@ -30,11 +30,25 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IterativeTFFParameters _iterativeTFFParameters = new IterativeTFFParameters();
 
+        protected TargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
+        {
+            Run = run;
+            WorkflowParameters = parameters;
+
+            MsLeftTrimAmount = 1e10;     // set this high so, by default, nothing is trimmed
+            MsRightTrimAmount = 1e10;  // set this high so, by default, nothing is trimmed
+        }
+
+        protected TargetedWorkflow(TargetedWorkflowParameters parameters)
+            : this(null, parameters)
+        {
+
+        }
 
         #region Constructors
         #endregion
 
-       
+
         #region Properties
         public virtual IList<ChromPeak> ChromPeaksDetected { get; set; }
 
@@ -50,8 +64,27 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string WorkflowStatusMessage { get; set; }
 
+        public string Name
+        {
+            get { return ToString(); }
+        }
+
+        /// <summary>
+        /// For trimming the final mass spectrum. A value of '2' means 
+        /// that the mass spectrum will be trimmed -2 to the given m/z value.
+        /// </summary>
+        public double MsLeftTrimAmount { get; set; }
+
+        /// <summary>
+        /// For trimming the final mass spectrum. A value of '10' means 
+        /// that the mass spectrum will be trimmed +10 to the given m/z value.
+        /// </summary>
+        public double MsRightTrimAmount { get; set; }
+
         #endregion
 
+
+        protected abstract DeconTools.Backend.Globals.ResultType GetResultType();
 
         protected void UpdateChromDetectedPeaks(List<Peak> list)
         {
@@ -64,7 +97,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected  virtual void ValidateParameters()
+        protected virtual void ValidateParameters()
         {
             Check.Require(_workflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
 
@@ -114,6 +147,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
+            Check.Require(Run != null, "Run is null");
+            Run.ResultCollection.ResultType = GetResultType();
+
             DoPreInitialization();
 
             DoMainInitialization();
@@ -124,11 +160,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected virtual void DoPreInitialization(){}
-        
-        protected  virtual  void DoPostInitialization(){}
+        protected virtual void DoPreInitialization() { }
 
-        protected  virtual void DoMainInitialization()
+        protected virtual void DoPostInitialization() { }
+
+        protected virtual void DoMainInitialization()
         {
             ValidateParameters();
 
@@ -136,16 +172,16 @@ namespace DeconTools.Workflows.Backend.Core
             _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
             _chromGen.TopNPeaksLowerCutOff = 0.333;
             _chromGen.NETWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;   //only
-            _chromGen.NETWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2;
+            _chromGen.NETWindowWidthForNonAlignedData = (float)_workflowParameters.ChromNETTolerance * 2;
 
-            bool allowNegativeValues=false;
+            bool allowNegativeValues = false;
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
             _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 
             _iterativeTFFParameters = new IterativeTFFParameters();
             _iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            
+
             _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
             _fitScoreCalc = new MassTagFitScoreCalculator();
             _resultValidator = new ResultValidatorTask();
@@ -159,30 +195,112 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+
+
+        public virtual void DoWorkflow()
+        {
+            Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            Result.ResetResult();
+
+            ExecuteTask(_theorFeatureGen);
+            ExecuteTask(_chromGen);
+            ExecuteTask(_chromSmoother);
+            updateChromDataXYValues(Run.XYData);
+
+            ExecuteTask(_chromPeakDetector);
+            UpdateChromDetectedPeaks(Run.PeakList);
+
+            ExecuteTask(_chromPeakSelector);
+            ChromPeakSelected = Result.ChromPeakSelected;
+
+            Result.ResetMassSpectrumRelatedInfo();
+
+            ExecuteTask(MSGenerator);
+            updateMassSpectrumXYValues(Run.XYData);
+
+            TrimData(Run.XYData, Run.CurrentMassTag.MZ, MsLeftTrimAmount, MsRightTrimAmount);
+
+            ExecuteTask(_msfeatureFinder);
+
+            ExecuteTask(_fitScoreCalc);
+            ExecuteTask(_resultValidator);
+
+            if (_workflowParameters.ChromatogramCorrelationIsPerformed)
+            {
+                ExecuteTask(_chromatogramCorrelatorTask);
+            }
+
+            Success = true;
+        }
+
+        protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
+        {
+            if (xyData == null) return xyData;
+
+            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
+
+            
+            double leftTrimValue = targetVal - leftTrimAmount;
+            double rightTrimValue = targetVal + rightTrimAmount;
+
+
+            return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
+
+
+
+
+        }
+
+
+        public override void Execute()
+        {
+            Check.Require(this.Run != null, "Run has not been defined.");
+
+
+            if (!IsWorkflowInitialized)
+            {
+                InitializeWorkflow();
+            }
+
+            ResetStoredData();
+
+            try
+            {
+                DoWorkflow();
+
+                ExecutePostWorkflowHook();
+            }
+            catch (Exception ex)
+            {
+                HandleWorkflowError(ex);
+            }
+
+        }
+
         protected virtual void ExecutePostWorkflowHook()
         {
-            if (Result!=null && Result.Target!=null && Success)
+            if (Result != null && Result.Target != null && Success)
             {
                 WorkflowStatusMessage = "Result " + Result.Target.ID + "; m/z= " + Result.Target.MZ.ToString("0.0000") +
                                         "; z=" + Result.Target.ChargeState;
 
-                if (Result.FailedResult==false)
+                if (Result.FailedResult == false)
                 {
-                    if (Result.IsotopicProfile!=null)
+                    if (Result.IsotopicProfile != null)
                     {
                         WorkflowStatusMessage = WorkflowStatusMessage + "; Target FOUND!";
 
                     }
-                    
+
                 }
                 else
                 {
                     WorkflowStatusMessage = WorkflowStatusMessage + "; Target NOT found. Reason: " + Result.FailureType;
                 }
 
-                
+
             }
-            
+
         }
 
 
@@ -196,7 +314,7 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new ApplicationException("There was a critical failure! Error info: " + ex.Message);
             }
 
-            TargetedResultBase result =Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            TargetedResultBase result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
             result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
             result.FailedResult = true;
         }
@@ -233,7 +351,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-   
+
         /// <summary>
         /// Factory method for creating the Workflow object using the WorkflowType information in the parameter object
         /// </summary>
@@ -261,18 +379,18 @@ namespace DeconTools.Workflows.Backend.Core
                     wf = new SipperTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
                 case Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1:
-                    wf = new TargetedAlignerWorkflow(workflowParameters);
+                    wf = new TargetedAlignerWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
-				case Globals.TargetedWorkflowTypes.TopDownTargeted1:
-					wf = new TopDownTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
-            		break;
+                case Globals.TargetedWorkflowTypes.TopDownTargeted1:
+                    wf = new TopDownTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
                     throw new System.NotImplementedException("Cannot create this workflow type here.");
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
                     throw new System.NotImplementedException("Cannot create this workflow type here.");
-				case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
-					wf = new UIMFTargetedMSMSWorkflowCollapseIMS(workflowParameters as TargetedWorkflowParameters);
-            		break;
+                case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
+                    wf = new UIMFTargetedMSMSWorkflowCollapseIMS(workflowParameters as TargetedWorkflowParameters);
+                    break;
                 default:
                     wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
@@ -324,17 +442,17 @@ namespace DeconTools.Workflows.Backend.Core
                     chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelectorParameters);
 
                     break;
-				case DeconTools.Backend.Globals.PeakSelectorMode.SmartUIMF:
-					var smartUIMFchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
-					smartUIMFchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-					smartUIMFchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
-					smartUIMFchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
-					smartUIMFchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-					smartUIMFchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
-					smartUIMFchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
-					smartUIMFchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
+                case DeconTools.Backend.Globals.PeakSelectorMode.SmartUIMF:
+                    var smartUIMFchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
+                    smartUIMFchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
+                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
+                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
+                    smartUIMFchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
+                    smartUIMFchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
+                    smartUIMFchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
+                    smartUIMFchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
 
-					chromPeakSelector = new SmartChromPeakSelectorUIMF(smartUIMFchrompeakSelectorParameters);
+                    chromPeakSelector = new SmartChromPeakSelectorUIMF(smartUIMFchrompeakSelectorParameters);
 
                     break;
                 default:

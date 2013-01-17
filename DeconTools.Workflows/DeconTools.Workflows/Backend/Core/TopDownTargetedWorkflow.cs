@@ -12,15 +12,12 @@ namespace DeconTools.Workflows.Backend.Core
 		public Dictionary<int, TargetedResultBase> TargetResults { get; set; }
 
 		
-		public TopDownTargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
+		public TopDownTargetedWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
 		{
-			Run = run;
-            _workflowParameters = parameters;
-
-            InitializeWorkflow();
+		    
         }
 
-		public TopDownTargetedWorkflow(TargetedWorkflowParameters parameters) : this(null, parameters)
+		public TopDownTargetedWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
 		{
 
 		}
@@ -38,58 +35,19 @@ namespace DeconTools.Workflows.Backend.Core
         }
 		
 
-		public override void Execute()
-		{
-			Check.Require(Run != null, "Run has not been defined.");
-			
-			Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
+		
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
+        {
+            return DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
+        }
 
-			ResetStoredData();
-
-			try
-			{
-				Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-				Result.ResetResult();
-
-				ExecuteTask(_theorFeatureGen);
-				ExecuteTask(_chromGen);
-				ExecuteTask(_chromSmoother);
-				updateChromDataXYValues(Run.XYData);
-
-				ExecuteTask(_chromPeakDetector);
-				UpdateChromDetectedPeaks(Run.PeakList);
-
-				ExecuteTask(_chromPeakSelector);
-				ChromPeakSelected = Result.ChromPeakSelected;
-
-				Result.ResetMassSpectrumRelatedInfo();
-
-				ExecuteTask(MSGenerator);
-				updateMassSpectrumXYValues(Run.XYData);
-
-				ExecuteTask(_msfeatureFinder);
-
-				ExecuteTask(_fitScoreCalc);
-				ExecuteTask(_resultValidator);
-
-				if (_workflowParameters.ChromatogramCorrelationIsPerformed)
-				{
-					ExecuteTask(_chromatogramCorrelatorTask);
-				}
-
-                if (((TopDownTargetedWorkflowParameters)_workflowParameters).SaveChromatogramData)
-                {
-                    Result.ChromValues = new XYData {Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues};    
-                }
-				
-				//TargetResults.Add(Run.CurrentMassTag.ID, Result);
-			}
-			catch (Exception ex)
-			{
-				var result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-				result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
-				result.FailedResult = true;
-			}
-		}
+        protected override void ExecutePostWorkflowHook()
+        {
+            base.ExecutePostWorkflowHook();
+            if (((TopDownTargetedWorkflowParameters)_workflowParameters).SaveChromatogramData)
+            {
+                Result.ChromValues = new XYData { Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues };
+            }
+        }
 	}
 }

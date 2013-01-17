@@ -10,11 +10,19 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         ScanSetFactory _scansetFactory = new ScanSetFactory();
 
         #region Constructors
+
+        public ChromPeakSelectorBase()
+        {
+            IsotopicProfileType= Globals.IsotopicProfileType.UNLABELLED;
+        }
+
         #endregion
 
         #region Properties
 
         public abstract ChromPeakSelectorParameters Parameters { get; set; }
+
+        public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
 
         #endregion
@@ -99,22 +107,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected virtual void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
-            result.ChromPeakSelected = bestPeak;
-            result.ScanSet = result.Run.CurrentScanSet;
-
-
-            int numMSScansSummed;
-            if (result.ScanSet == null || result.ScanSet.IndexValues == null || result.ScanSet.IndexValues.Count == 0)
-            {
-                numMSScansSummed = 0;
-            }
-            else
-            {
-                numMSScansSummed = result.ScanSet.IndexValues.Count;
-
-            }
-
-            result.NumMSScansSummed = numMSScansSummed;
+            result.AddSelectedChromPeakAndScanSet(bestPeak, result.Run.CurrentScanSet, IsotopicProfileType);
             result.WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labelled (N15) data
         }
 

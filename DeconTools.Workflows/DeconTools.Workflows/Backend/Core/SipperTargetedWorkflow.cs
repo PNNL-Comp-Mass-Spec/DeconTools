@@ -11,27 +11,25 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class SipperTargetedWorkflow : TargetedWorkflow
     {
-
-        
-        private TFFBase _iterativeMSFeatureFinder;
         private SipperQuantifier _quantifier;
 
         #region Constructors
 
         public SipperTargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
+            : base(run, parameters)
         {
-            WorkflowParameters = parameters;
-
-            Run = run;
-            InitializeWorkflow();
-
+            MsRightTrimAmount = 100;
+            MsLeftTrimAmount = 3;
         }
 
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-            
-            
+        }
+
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
+        {
+            return DeconTools.Backend.Globals.ResultType.SIPPER_TARGETED_RESULT;
         }
 
         protected override void DoPreInitialization()
@@ -56,7 +54,7 @@ namespace DeconTools.Workflows.Backend.Core
             _iterativeTFFParameters.PeakBRStep = 0.2;
             _iterativeTFFParameters.PeakDetectorMinimumPeakBR = 0.1;
 
-            _iterativeMSFeatureFinder = new SipperIterativeMSFeatureFinder(_iterativeTFFParameters);
+            _msfeatureFinder = new SipperIterativeMSFeatureFinder(_iterativeTFFParameters);
 
             _quantifier = new SipperQuantifier();
 
@@ -64,80 +62,12 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public override void Execute()
+        protected override void ExecutePostWorkflowHook()
         {
-            Check.Require(this.Run != null, "Run has not been defined.");
-
-            if (!IsWorkflowInitialized)
-            {
-                InitializeWorkflow();
-            }
-           
-
-
-            ResetStoredData();
-
-            Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.SIPPER_TARGETED_RESULT;
-
-            try
-            {
-                Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-                Result.ResetResult();
-
-                ExecuteTask(_theorFeatureGen);
-                ExecuteTask(_chromGen);
-                ExecuteTask(_chromSmoother);
-                updateChromDataXYValues(Run.XYData);
-
-                ExecuteTask(_chromPeakDetector);
-                UpdateChromDetectedPeaks(Run.PeakList);
-
-                ExecuteTask(_chromPeakSelector);
-                ChromPeakSelected = Result.ChromPeakSelected;
-
-                //Console.WriteLine("ChromPeak width = \t" + ChromPeakSelected.Width);
-
-                Result.ResetMassSpectrumRelatedInfo();
-
-
-                ExecuteTask(MSGenerator);
-
-
-                double minMZ = Run.CurrentMassTag.MZ - 3;
-                double maxMz = Run.CurrentMassTag.MZ + 100;
-
-                if (Run.XYData != null)
-                {
-                    Run.XYData = Run.XYData.TrimData(minMZ, maxMz);
-                }
-
-
-                updateMassSpectrumXYValues(Run.XYData);
-
-                ExecuteTask(_iterativeMSFeatureFinder);
-                ExecuteTask(_fitScoreCalc);
-                ExecuteTask(_resultValidator);
-
-                ExecuteTask(_quantifier);
-
-                GetDataFromQuantifier();
-
-                Success = true;
-
-                ExecutePostWorkflowHook();
-
-            }
-            catch (Exception ex)
-            {
-                HandleWorkflowError(ex);
-
-                string targetInfoString = "Uncaptured failure on the following target: " + ((LcmsFeatureTarget)Result.Target).FeatureToMassTagID + "; " + Result.ErrorDescription;
-                Console.WriteLine(targetInfoString);
-            }
+            base.ExecutePostWorkflowHook();
+            ExecuteTask(_quantifier);
+            GetDataFromQuantifier();
         }
-
-        
-
 
         private void GetDataFromQuantifier()
         {
@@ -150,7 +80,7 @@ namespace DeconTools.Workflows.Backend.Core
             var peakNumList = new List<double>();
             var rsquaredvalList = new List<double>();
 
-            
+
             int counter = 0;
             foreach (var val in _quantifier.ChromatogramRSquaredVals)
             {
@@ -169,10 +99,21 @@ namespace DeconTools.Workflows.Backend.Core
 
             SubtractedIso = _quantifier.HighQualitySubtractedProfile;
 
-            
-            
+
+
         }
 
+      
+
+        #endregion
+
+        #region Properties
+
+        public XYData ChromCorrelationRSquaredVals { get; set; }
+
+        public XYData RatioVals { get; set; }
+
+        public XYData RatioLogVals { get; set; }
         public IsotopicProfile SubtractedIso { get; set; }
 
         public IsotopicProfile NormalizedIso { get; set; }
@@ -180,24 +121,11 @@ namespace DeconTools.Workflows.Backend.Core
         public IsotopicProfile NormalizedAdjustedIso { get; set; }
 
 
-        #endregion
-
-        #region Properties
-    
-        public XYData ChromCorrelationRSquaredVals { get; set; }
-
-        public XYData RatioVals { get; set; }
-
-        public XYData RatioLogVals { get; set; }
-
-
 
         #endregion
 
-        #region Public Methods
+     
 
-        #endregion
 
-    
     }
 }

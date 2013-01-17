@@ -9,12 +9,9 @@ namespace DeconTools.Workflows.Backend.Core
 {
 	public class UIMFTargetedWorkflowCollapseIMS : TargetedWorkflow
 	{
-		public UIMFTargetedWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters)
-        {
-            this.WorkflowParameters = parameters;
-            this.Run = run;
-
-            InitializeWorkflow();
+		public UIMFTargetedWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters) : base(run, parameters)
+		{
+            
         }
 
 		public UIMFTargetedWorkflowCollapseIMS(TargetedWorkflowParameters parameters)
@@ -23,11 +20,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 		}
 
-		public override void Execute()
-		{
-			Check.Require(this.Run != null, "Run has not been defined.");
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
+        {
+            return  DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+        }
 
-			this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
-		}
 	}
 }

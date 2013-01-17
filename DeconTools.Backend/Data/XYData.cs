@@ -212,18 +212,25 @@ namespace DeconTools.Backend
             return xydata;
         }
 
-        public XYData TrimData(double xmin, double xmax)
+        public XYData TrimData(double xmin, double xmax, double tolerance = 0.1)
         {
 
-            if (xvalues == null || yvalues == null) return this;
+            if (xvalues == null || yvalues == null || xvalues.Length == 0 || yvalues.Length == 0) return this;
+
+            double currentMinXValue = xvalues[0];
+            double currentMaxXValue = xvalues[xvalues.Length - 1];
+
+            //if it doesn't need trimming, return it.
+            if (xmin < currentMinXValue && xmax > currentMaxXValue)
+            {
+                return this;
+            }
+
 
             XYData data = new XYData();
+            int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin, tolerance);
 
-
-
-            int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin);
-
-            int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax);
+            int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax, tolerance);
 
             int numPoints = indexClosestXValMax - indexClosestXValMin + 1;
 

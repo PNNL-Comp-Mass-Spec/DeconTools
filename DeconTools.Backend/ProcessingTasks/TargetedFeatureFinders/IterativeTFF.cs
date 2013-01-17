@@ -204,10 +204,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (this.IsotopicProfileType)
             {
-                case IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELLED:
                     result.IsotopicProfile = iso;
                     break;
-                case IsotopicProfileType.LABELLED:
+                case Globals.IsotopicProfileType.LABELLED:
                     result.AddLabelledIso(iso);
                     break;
                 default:

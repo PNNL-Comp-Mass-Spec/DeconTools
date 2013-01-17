@@ -16,7 +16,7 @@ namespace DeconTools.Workflows.Backend.Core
             ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
 
             ChromNETToleranceN15 = 0.001; //very low since it is found in relation to the N14 chrom peak
-            TargetedFeatureFinderIsotopicProfileTargetType = IsotopicProfileType.LABELLED;
+            TargetedFeatureFinderIsotopicProfileTargetType = DeconTools.Backend.Globals.IsotopicProfileType.LABELLED;
             TargetedFeatureFinderToleranceInPPM = MSToleranceInPPM;
             ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 
@@ -31,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
         public double ChromNETToleranceN15 { get; set; }
         public int NumPeaksUsedInQuant { get; set; }
     
-        public IsotopicProfileType TargetedFeatureFinderIsotopicProfileTargetType { get; set; }
+        public DeconTools.Backend.Globals.IsotopicProfileType TargetedFeatureFinderIsotopicProfileTargetType { get; set; }
         public double TargetedFeatureFinderToleranceInPPM { get; set; }
 
         public double SmartChromSelectorPeakBR { get; set; }
@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
                 Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
 
             TargetedFeatureFinderIsotopicProfileTargetType =
-                StringToEnum<IsotopicProfileType>(
+                StringToEnum<DeconTools.Backend.Globals.IsotopicProfileType>(
                     parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
             TargetedFeatureFinderToleranceInPPM =
                 Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);

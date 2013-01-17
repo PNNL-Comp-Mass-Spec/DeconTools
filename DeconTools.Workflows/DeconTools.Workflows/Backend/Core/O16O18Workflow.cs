@@ -7,80 +7,29 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18Workflow : TargetedWorkflow
     {
-
-        private O16O18TargetedIterativeFeatureFinder _o16o18FeatureFinder;
         private O16O18QuantifierTask _quant;
 
         #region Constructors
 
-        public O16O18Workflow(Run run, TargetedWorkflowParameters parameters)
+        public O16O18Workflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
         {
-            this.WorkflowParameters = parameters;
-
-            this.Run = run;
-            InitializeWorkflow();
+           
         }
 
-        public O16O18Workflow(TargetedWorkflowParameters parameters)
-            : this(null, parameters)
+        public O16O18Workflow(TargetedWorkflowParameters parameters):base (parameters)
         {
-
         }
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
+   
         #region IWorkflow Members
 
-        public override void Execute()
+       
+        protected override void ExecutePostWorkflowHook()
         {
-
-            ResetStoredData();
-
-            this.Run.ResultCollection.ResultType = DeconTools.Backend.Globals.ResultType.O16O18_TARGETED_RESULT;
-
-
-
-            try
-            {
-                Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-                Result.ResetResult();
-
-
-                ExecuteTask(_theorFeatureGen);
-                ExecuteTask(_chromGen);
-                ExecuteTask(_chromSmoother);
-                updateChromDataXYValues(Run.XYData);
-
-                ExecuteTask(_chromPeakDetector);
-                UpdateChromDetectedPeaks(Run.PeakList);
-
-                ExecuteTask(_chromPeakSelector);
-                ChromPeakSelected = Result.ChromPeakSelected;
-
-                Result.ResetMassSpectrumRelatedInfo();
-
-                ExecuteTask(MSGenerator);
-                updateMassSpectrumXYValues(Run.XYData);
-
-                ExecuteTask(_o16o18FeatureFinder);
-                ExecuteTask(_fitScoreCalc);
-
-                ExecuteTask(_quant);
-
-
-            }
-            catch (Exception ex)
-            {
-                TargetedResultBase result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-                result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
-
-                return;
-            }
-
+            base.ExecutePostWorkflowHook();
+            ExecuteTask(_quant);
         }
 
 
@@ -88,23 +37,16 @@ namespace DeconTools.Workflows.Backend.Core
         {
             base.DoPostInitialization();
 
-            _o16o18FeatureFinder = new O16O18TargetedIterativeFeatureFinder(_iterativeTFFParameters);
+            _msfeatureFinder = new O16O18TargetedIterativeFeatureFinder(_iterativeTFFParameters);
             _quant = new O16O18QuantifierTask();
 
         }
 
 
-       
-        string _name;
-        public string Name
-        {
-            get
-            { return this.ToString(); }
-            set
-            {
-                _name = value;
-            }
 
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
+        {
+            return DeconTools.Backend.Globals.ResultType.O16O18_TARGETED_RESULT;
         }
 
         #endregion

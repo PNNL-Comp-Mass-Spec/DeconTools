@@ -18,7 +18,10 @@ namespace DeconTools.Workflows.Backend.Core
     /// </summary>
     public class TargetedAlignerWorkflow : TargetedWorkflow
     {
-        TargetedAlignerWorkflowParameters _parameters;
+        private TargetedAlignerWorkflowParameters AlignerParameters
+        {
+            get { return WorkflowParameters as TargetedAlignerWorkflowParameters; }
+        }
 
         private List<NETGrouping> _netGroupings;
         private BasicTargetedWorkflow _workflow;
@@ -30,18 +33,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Constructors
 
-        public TargetedAlignerWorkflow(WorkflowParameters workflowParameters)
+        public TargetedAlignerWorkflow(TargetedWorkflowParameters workflowParameters)
             : this(null, workflowParameters)
         {
 
         }
 
-        public TargetedAlignerWorkflow(Run run, WorkflowParameters workflowParameters)
+        public TargetedAlignerWorkflow(Run run, TargetedWorkflowParameters workflowParameters)
+            : base(run, workflowParameters)
         {
-            Run = run;
 
-            Check.Require(workflowParameters is TargetedAlignerWorkflowParameters, "TargetedAlignerWorkflow could not be instantiated. Parameters are not of the correct type.");
-            _parameters = (TargetedAlignerWorkflowParameters)workflowParameters;
+            Check.Require(workflowParameters is TargetedAlignerWorkflowParameters, "Parameter object is of the wrong type.");
+
             _netGroupings = createNETGroupings();
             NumSuccessesPerNETGrouping = new List<int>();
             NumFailuresPerNETGrouping = new List<int>();
@@ -51,7 +54,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        public TargetedAlignerWorkflow(Run run, WorkflowParameters workflowParameters, BackgroundWorker bw)
+        public TargetedAlignerWorkflow(Run run, TargetedWorkflowParameters workflowParameters, BackgroundWorker bw)
             : this(run, workflowParameters)
         {
             _backgroundWorker = bw;
@@ -60,29 +63,22 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        public override void InitializeWorkflow()
+        protected override DeconTools.Backend.Globals.ResultType GetResultType()
         {
-            _workflow = new BasicTargetedWorkflow(Run, _parameters);
+            return DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+        }
+
+        protected override void DoPostInitialization()
+        {
+            base.DoPostInitialization();
+            _workflow = new BasicTargetedWorkflow(Run, WorkflowParameters as TargetedWorkflowParameters);
         }
 
         #region Properties
 
         public NETAndMassAligner Aligner { get; set; }
 
-        public override WorkflowParameters WorkflowParameters
-        {
-            get
-            {
-                return _parameters;
-            }
-            set
-            {
-                _parameters = value as TargetedAlignerWorkflowParameters;
-            }
-        }
-
-
-
+        
         public List<TargetBase> MassTagList { get; set; }
 
         public bool outputToConsole { get; set; }
@@ -93,22 +89,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
-            Check.Require(Run != null, "Run has not been defined.");
-
-
-
-
-
-
             List<TargetedResultBase> resultsPassingCriteria;
             _targetedResultRepository = new TargetedResultRepository();
 
 
-            bool featuresAreImportedFromFile = (_parameters.ImportedFeaturesFilename != null && _parameters.ImportedFeaturesFilename.Length > 0);
+            bool featuresAreImportedFromFile = !string.IsNullOrEmpty(AlignerParameters.ImportedFeaturesFilename);
             if (featuresAreImportedFromFile)
             {
                 //load them from the Features file
-                UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(_parameters.ImportedFeaturesFilename);
+                UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(AlignerParameters.ImportedFeaturesFilename);
                 TargetedResultRepository repo = importer.Import();
                 _targetedResultRepository.Results = repo.Results;
             }
@@ -118,7 +107,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 //execute targeted feature finding to find the massTags in the raw data
 
-                _workflow = new BasicTargetedWorkflow(Run, _parameters);
+                _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
 
                 List<TargetedResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
                 firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
@@ -139,16 +128,16 @@ namespace DeconTools.Workflows.Backend.Core
                     double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
 
                     double tolerance = Math.Abs(avgPPMError) + 2 * stdev;
-                    this._parameters.ChromToleranceInPPM = (int)Math.Ceiling(tolerance);
-                    this._parameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
+                    this.AlignerParameters.ChromToleranceInPPM = (int)Math.Ceiling(tolerance);
+                    this.AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
                     string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     reportProgess(0, progressString);
 
-                    progressString = "NOTE: using the new PPMTolerance=  " + this._parameters.ChromToleranceInPPM;
+                    progressString = "NOTE: using the new PPMTolerance=  " + this.AlignerParameters.ChromToleranceInPPM;
                     reportProgess(0, progressString);
 
-                    _workflow = new BasicTargetedWorkflow(Run, _parameters);
+                    _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
 
                 }
                 else
@@ -187,7 +176,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 doAlignment();
             }
-
         }
 
         private bool executeDecisionOnUsingTightTolerances(List<double> ppmErrors)
@@ -278,7 +266,7 @@ namespace DeconTools.Workflows.Backend.Core
                     break;   //found enough massTags in this grouping
                 }
 
-                if (numFailingMassTagsInGrouping > _parameters.NumMaxAttemptsPerNETGrouping)
+                if (numFailingMassTagsInGrouping > AlignerParameters.NumMaxAttemptsPerNETGrouping)
                 {
                     break;  // too many failed massTags in this grouping. Will move on to next grouping
                 }
@@ -346,12 +334,12 @@ namespace DeconTools.Workflows.Backend.Core
                         numFailingMassTagsInGrouping++;
                     }
 
-                    if (numPassingMassTagsInGrouping >= _parameters.NumDesiredMassTagsPerNETGrouping)
+                    if (numPassingMassTagsInGrouping >= AlignerParameters.NumDesiredMassTagsPerNETGrouping)
                     {
                         break;   //found enough massTags in this grouping
                     }
 
-                    if (numFailingMassTagsInGrouping > _parameters.NumMaxAttemptsPerNETGrouping)
+                    if (numFailingMassTagsInGrouping > AlignerParameters.NumMaxAttemptsPerNETGrouping)
                     {
                         break;  // too many failed massTags in this grouping. Will move on to next grouping
                     }
@@ -485,11 +473,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (result.Flags.Count > 0) return false;
 
-            if (result.ChromPeakSelected.Height < _parameters.MinimumChromPeakIntensityCriteria) return false;
+            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria) return false;
 
-            if (result.Score > _parameters.UpperFitScoreAllowedCriteria) return false;
+            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria) return false;
 
-            if (result.InterferenceScore > _parameters.IScoreAllowedCriteria) return false;
+            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria) return false;
 
             return passesCriteria;
         }
@@ -505,15 +493,15 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (result.IsotopicProfile == null) return false;
 
-            if (result.NumQualityChromPeaks > _parameters.NumChromPeaksAllowedDuringSelection) return false;
+            if (result.NumQualityChromPeaks > AlignerParameters.NumChromPeaksAllowedDuringSelection) return false;
 
             if (result.Flags.Count > 0) return false;
 
-            if (result.ChromPeakSelected.Height < _parameters.MinimumChromPeakIntensityCriteria) return false;
+            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria) return false;
 
-            if (result.Score > _parameters.UpperFitScoreAllowedCriteria) return false;
+            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria) return false;
 
-            if (result.InterferenceScore > _parameters.IScoreAllowedCriteria) return false;
+            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria) return false;
 
             return passesCriteria;
         }

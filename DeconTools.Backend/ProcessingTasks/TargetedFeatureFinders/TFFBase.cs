@@ -26,7 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// This property specifies which of the two are to be targeted in the real data. 
         /// This property is mainly used in workflows that follow a Task-based implementation. 
         /// </summary>
-        public IsotopicProfileType IsotopicProfileType { get; set; }
+        public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
 
         public int NumPeaksUsedInAbundance { get; set; }
@@ -259,10 +259,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (IsotopicProfileType)
             {
-                case IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELLED:
                     result.IsotopicProfile = iso;
                     break;
-                case IsotopicProfileType.LABELLED:
+                case Globals.IsotopicProfileType.LABELLED:
                     result.AddLabelledIso(iso);
                     break;
                 default:
@@ -295,11 +295,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (this.IsotopicProfileType)
             {
-                case IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELLED:
                     Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
-                case IsotopicProfileType.LABELLED:
+                case Globals.IsotopicProfileType.LABELLED:
                     Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
                     break;

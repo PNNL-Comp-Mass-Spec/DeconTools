@@ -243,9 +243,33 @@ namespace DeconTools.Backend.Core
 
 
 
-        public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset)
+        public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset, Globals.IsotopicProfileType isotopicProfileType = Globals.IsotopicProfileType.UNLABELLED)
         {
-            throw new NotSupportedException("This method is no longer used!! - Things were moved to the ChromPeakSelector");
+            
+            if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELLED)
+            {
+
+                ChromPeakSelected = bestPeak;
+                ScanSet = scanset;
+
+                bool failedChromPeakSelection = (ChromPeakSelected == null || ChromPeakSelected.XValue == 0);
+                if (failedChromPeakSelection)
+                {
+                    FailedResult = true;
+                    FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+                }
+                else
+                {
+                    FailedResult = false;
+                    FailureType = Globals.TargetedResultFailureType.None;
+                }
+
+            }
+            else
+            {
+                throw new NotSupportedException("Cannot add data for a labeled result in this base class");
+            }
+            
 
 
         }

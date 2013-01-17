@@ -54,48 +54,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
             int numPeaksWithinTolerance = 0;
-            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode, resultList.Run.PeakList, normalizedElutionTime, Parameters.NETTolerance, out numPeaksWithinTolerance);
+            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode, 
+                resultList.Run.PeakList, normalizedElutionTime, 
+                Parameters.NETTolerance, out numPeaksWithinTolerance);
+            
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
-
-
-            //if (bestPeak == null)
-            //{
-            //    result.ScanSet = null;
-            //    result.Flags.Add(new ChromPeakNotFoundResultFlag("ChromPeakSelectorFailed. No LC peaks found with tolerance for specified mass tag."));
-            //}
-            //else
-            //{
-            //    result.ChromPeakSelected = bestPeak;
-            //    result.ScanSet = createSummedScanSet(result.ChromPeakSelected, resultList.Run, this.ScanOffSet);
-            //}
-
-
             SetScansForMSGenerator(bestPeak, resultList.Run, Parameters.NumScansToSum);
-
+            
             UpdateResultWithChromPeakAndLCScanInfo(result, bestPeak);
             
-            bool failedChromPeakSelection = (result.ChromPeakSelected == null || result.ChromPeakSelected.XValue == 0);
-            if (failedChromPeakSelection)
-            {
-                result.FailedResult = true;
-                result.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
-            }
-
+           
         }
-
-        
-
-        //private ScanSet createSummedScanSet(ChromPeak chromPeak, Run run, int scanOffset)
-        //{
-        //    if (chromPeak == null || chromPeak.XValue == 0) return null;
-
-        //    int bestScan = (int)chromPeak.XValue;
-        //    bestScan = run.GetClosestMSScan(bestScan, Globals.ScanSelectionMode.CLOSEST);
-        //    bestScan = bestScan + scanOffset;
-        //    return new ScanSetFactory().CreateScanSet(run, bestScan, this.NumScansToSum);
-        //}
-
 
         public Peak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance)
         {

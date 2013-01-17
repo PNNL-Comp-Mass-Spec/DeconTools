@@ -48,6 +48,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
+            Assert.IsTrue(workflow.Success);
+            Assert.IsFalse(result.FailedResult);
+
+
             result.DisplayToConsole();
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);

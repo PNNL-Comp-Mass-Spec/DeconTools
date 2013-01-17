@@ -131,6 +131,13 @@ namespace DeconTools.Backend
 
         }
 
+        public enum IsotopicProfileType
+        {
+            UNLABELLED,
+            LABELLED
+        }
+
+
 
         public enum ProjectControllerType
         {

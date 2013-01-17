@@ -25,8 +25,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-
-            parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+            parameters.CopyRawFileLocal = false;
+            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
 
 
             string testDataset =

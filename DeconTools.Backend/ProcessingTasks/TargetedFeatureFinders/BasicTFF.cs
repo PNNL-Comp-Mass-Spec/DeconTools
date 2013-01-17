@@ -23,11 +23,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
         public BasicTFF(double toleranceInPPM, bool requiresMonoPeak)
-            : this(toleranceInPPM, requiresMonoPeak, IsotopicProfileType.UNLABELLED)
+            : this(toleranceInPPM, requiresMonoPeak, Globals.IsotopicProfileType.UNLABELLED)
         {
         }
 
-        public BasicTFF(double toleranceInPPM, bool requiresMonoPeak, IsotopicProfileType isotopicProfileTarget)
+        public BasicTFF(double toleranceInPPM, bool requiresMonoPeak, Globals.IsotopicProfileType isotopicProfileTarget)
         {
             this.ToleranceInPPM = toleranceInPPM;
             this.NeedMonoIsotopicPeak = requiresMonoPeak;

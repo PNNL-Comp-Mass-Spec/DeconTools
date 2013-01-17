@@ -33,11 +33,11 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void featuresFoundByTargetedProcessing_thenAligned_test1()
         {
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1;
             Run run = RunUtilities.CreateAndLoadPeaks(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, peaksTestFile);
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
-            TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
+            var parameters = new TargetedAlignerWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
             parameters.ChromToleranceInPPM = 25;
             parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
@@ -48,7 +48,7 @@ namespace DeconTools.Workflows.UnitTesting
             parameters.UpperFitScoreAllowedCriteria = 0.1;
             parameters.IScoreAllowedCriteria = 0.15;
 
-            TargetedAlignerWorkflow aligner = new TargetedAlignerWorkflow(run, parameters);
+            var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.SetMassTags(massTagFile);
             aligner.Execute();
 

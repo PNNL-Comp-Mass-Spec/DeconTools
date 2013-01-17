@@ -31,10 +31,17 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public override void ValidateResult(DeconTools.Backend.Core.ResultCollection resultColl, DeconTools.Backend.Core.IsosResult currentResult)
         {
-            Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
-            Check.Require(resultColl.Run.PeakList != null && resultColl.Run.PeakList.Count > 0, String.Format("{0} failed. Peaklist is empty.", this.Name));
 
             if (currentResult.IsotopicProfile == null) return;
+
+            Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
+            if(resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0)
+            {
+                currentResult.InterferenceScore = -1;
+                return;
+            }
+
+            
             MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
             MSPeak lastPeak = currentResult.IsotopicProfile.Peaklist[currentResult.IsotopicProfile.Peaklist.Count - 1];
 

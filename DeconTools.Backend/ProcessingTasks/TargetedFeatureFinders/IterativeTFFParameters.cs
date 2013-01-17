@@ -18,8 +18,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             this.PeakDetectorSigNoiseRatioThreshold = 3;
             this.PeakDetectorPeakFitType = Globals.PeakFitType.QUADRATIC;
             this.PeakDetectorIsDataThresholded = false;
-            
-            this.IsotopicProfileType = ProcessingTasks.IsotopicProfileType.UNLABELLED;
+
+            this.IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
             this.NumPeaksUsedInAbundance = 1;
             this.RequiresMonoIsotopicPeak = false;
             this.ToleranceInPPM = 25;
@@ -56,7 +56,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         
         public double ToleranceInPPM { get; set; }
-        public IsotopicProfileType IsotopicProfileType { get; set; }
+        public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
         public int NumPeaksUsedInAbundance { get; set; }
         public bool RequiresMonoIsotopicPeak { get; set; }
 
