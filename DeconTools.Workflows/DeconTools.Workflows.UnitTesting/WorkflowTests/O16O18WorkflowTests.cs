@@ -14,7 +14,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     public class O16O18WorkflowTests
     {
 
-
+        [Category("MustPass")]
         [Test]
         public void testVladsData()
         {
@@ -29,8 +29,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = RunUtilities.CreateAndAlignRun(testFile, peakTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             int testMassTagID = 24653;
@@ -41,7 +41,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MSToleranceInPPM = 10;
             parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromPeakDetectorPeakBR = 1;
-
 
             O16O18Workflow workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();

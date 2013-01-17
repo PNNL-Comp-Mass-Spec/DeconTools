@@ -86,6 +86,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void exportPeaksFromMixedProfileAndCentroidMS2Data()
         {
 
+            //TODO:  finish off this test
+
             string testFile = @"D:\Data\From_Matt\XGA121_lipid_pt5uM_1.raw";
 
             RunFactory rf = new RunFactory();

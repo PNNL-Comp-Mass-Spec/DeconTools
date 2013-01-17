@@ -579,6 +579,15 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
         }
 
+        
+        /// <summary>
+        /// The idea is to check for deisotoping errors (common in saturated data) and fix them. This inspects 
+        /// the isotopic profile and then looks for major peaks 'to-the-left'(from the PeakList) that should
+        /// have been part of the isotopic profile
+        /// </summary>
+        /// <param name="saturatedFeature"></param>
+        /// <param name="peakList"></param>
+        /// <param name="theorIso"></param>
         private void RebuildSaturatedIsotopicProfile(IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIso)
         {
             //check for peak to the left
@@ -612,10 +621,6 @@ namespace DeconTools.Backend.Workflows
 
             //now, starting at the updated monoisotopic peak, will re-find the other peaks and add them
             AssignMissingPeaksToSaturatedProfile(Run.PeakList, saturatedFeature.IsotopicProfile, theorIso);
-
-
-
-
 
         }
 
