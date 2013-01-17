@@ -10,14 +10,14 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         /// <summary>
         /// score experimental profile to labeled or unlabeled theoretical profile
         /// </summary>
-        public IsotopicProfileType IsotopicProfileTarget { get; set; }
+        public DeconTools.Backend.Globals.IsotopicProfileType IsotopicProfileTarget { get; set; }
 
         public MassTagFitScoreCalculatorLabeled()
         {
-            IsotopicProfileTarget = IsotopicProfileType.LABELLED;
+            IsotopicProfileTarget = DeconTools.Backend.Globals.IsotopicProfileType.LABELLED;
         }
 
-        public MassTagFitScoreCalculatorLabeled(IsotopicProfileType lableType)
+        public MassTagFitScoreCalculatorLabeled(DeconTools.Backend.Globals.IsotopicProfileType lableType)
         {
             IsotopicProfileTarget = lableType;
         }
@@ -31,11 +31,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             IsotopicProfile theorProfile = new IsotopicProfile();
             switch (IsotopicProfileTarget)
             {
-                case IsotopicProfileType.UNLABELLED:
+                case DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED:
                     Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, "Target's theoretical isotopic profile has not been established");
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;
                     break;
-                case IsotopicProfileType.LABELLED:
+                case DeconTools.Backend.Globals.IsotopicProfileType.LABELLED:
                     //Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
                     Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfileLabelled;
