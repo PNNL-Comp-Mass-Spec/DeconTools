@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -101,7 +98,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 if (fitScore<bestFitScore)
                 {
                     bestFitScore = fitScore;
-                    bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
+
+                    List<Peak> peakList = new List<Peak>();
+                    bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso, ref peakList);
                     bestIso.Score = fitScore;
                 }
 

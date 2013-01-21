@@ -85,7 +85,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfile theorFeature = CreateTargetIso(resultList.Run);
             resultList.IsosResultBin.Clear();
 
-            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature);
+
+            var msPeakList = new List<Peak>();
+            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, ref msPeakList);
+            
+            result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here. 
 
 
             AddFeatureToResult(result, iso);
@@ -136,9 +140,18 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
 
-
-
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso)
+        {
+
+            List<Peak> peakList = new List<Peak>();
+            return IterativelyFindMSFeature(massSpecXYData, theorIso, ref peakList);
+
+        }
+
+
+
+
+        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso, ref List<Peak> peakList)
         {
 
 
@@ -153,7 +166,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 this.MSPeakDetector.PeakToBackgroundRatio = d;
 
-                var peakList=  MSPeakDetector.FindPeaks(massSpecXYData.Xvalues, massSpecXYData.Yvalues);
+                peakList=  MSPeakDetector.FindPeaks(massSpecXYData.Xvalues, massSpecXYData.Yvalues);
                 iso = FindMSFeature(peakList, theorIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
                 bool isoIsGoodEnough;

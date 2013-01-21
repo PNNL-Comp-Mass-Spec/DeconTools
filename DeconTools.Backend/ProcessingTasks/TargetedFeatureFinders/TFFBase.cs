@@ -27,14 +27,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// This property is mainly used in workflows that follow a Task-based implementation. 
         /// </summary>
         public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
-
-
+        
         public int NumPeaksUsedInAbundance { get; set; }
-
-        protected MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo { get; set; }
-
-
-
+        
         #endregion
 
         #region Public Methods

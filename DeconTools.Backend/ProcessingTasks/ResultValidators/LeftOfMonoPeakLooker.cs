@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
@@ -56,18 +56,22 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             double targetMZ = monoPeak.XValue - (1.003 / (double)chargeState);
 
-            foreach (MSPeak peak in peakList)
+
+            var foundLeftOfMonoPeaks=  PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
+
+            //if found a peak to the left, will return that peak. If 
+           
+            if (foundLeftOfMonoPeaks.Count==0)
             {
-                if (Math.Abs(peak.XValue - targetMZ) < mzTol)
-                {
-                    return peak;
-                }
-
+                return null;
             }
-            return null;
-
-
-
+            
+            if (foundLeftOfMonoPeaks.Count==1)
+            {
+                return (MSPeak) foundLeftOfMonoPeaks.First();
+            }
+            
+            return (MSPeak) foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First();
         }
         #endregion
 
