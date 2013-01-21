@@ -30,6 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
             Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
+            Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
 
             IsotopicProfile theorProfile = new IsotopicProfile();
             switch (IsotopicProfileType)
@@ -47,31 +48,33 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;
                     break;
             }
-
-            TargetedResultBase result = resultList.CurrentTargetedResult;
-            Check.Require(result != null, "No MassTagResult has been generated for CurrentMassTag");
-
-            if (result.IsotopicProfile == null || result.IsotopicProfile.Peaklist == null || result.IsotopicProfile.Peaklist.Count == 0)
-            {
-                result.Score = 1;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
-                return;
-            }
-
             
-            int indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
-            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(result.IsotopicProfile.Peaklist,
-                theorProfile.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
+           resultList.CurrentTargetedResult.Score = CalculateFitScore(theorProfile, resultList.CurrentTargetedResult.IsotopicProfile, resultList.Run.XYData);
+        }
+        #endregion
 
 
-            if (indexOfCorrespondingObservedPeak<0)      // most abundant peak isn't present in the actual theoretical profile... problem!
+        public double CalculateFitScore(IsotopicProfile theorProfile, IsotopicProfile observedProfile, XYData massSpecXYData )
+        {
+            if (observedProfile == null || observedProfile.Peaklist == null || observedProfile.Peaklist.Count == 0)
             {
-                result.Score = 1;
-                return;
+                return 1.0;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
+                
             }
 
-            double mzOffset = result.IsotopicProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+            int indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
+            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist,
+                theorProfile.getMostIntensePeak().XValue, 0, observedProfile.Peaklist.Count - 1, 0.1);
 
-            XYData theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(result.IsotopicProfile.GetFWHM());
+
+            if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
+            {
+                return 1.0;
+            }
+
+            double mzOffset = observedProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+
+            XYData theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(observedProfile.GetFWHM());
             //theorXYData.Display();
 
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
@@ -79,11 +82,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //theorXYData.Display();
 
             AreaFitter areafitter = new AreaFitter();
-            double fitval = areafitter.GetFit(theorXYData, resultList.Run.XYData, 0.1);
+            double fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1);
 
-            if (fitval == double.NaN || fitval > 1) fitval = 1;
-            result.Score = fitval;
+            if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
+            return fitval;
         }
-        #endregion
+
     }
 }

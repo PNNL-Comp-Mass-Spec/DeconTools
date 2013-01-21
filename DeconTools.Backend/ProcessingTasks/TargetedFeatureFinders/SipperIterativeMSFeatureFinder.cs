@@ -90,7 +90,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         // Sipper's key method. Sipper will try to pull out low level C13-related peaks. So 
         // it will not stop as early as the BasicTFF, but will iterate more times to pull
         // out the smaller intensity C13-related peaks
-        public override IsotopicProfile IterativelyFindMSFeature(Run run, IsotopicProfile theorIso)
+        public override IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso)
         {
 
             IsotopicProfile foundIso = null;
@@ -99,9 +99,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             for (double d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
                 MSPeakDetector.PeakToBackgroundRatio = d;
-                MSPeakDetector.Execute(run.ResultCollection);
 
-                IsotopicProfile iso = FindMSFeature(run.PeakList, theorIso, ToleranceInPPM, this.NeedMonoIsotopicPeak);
+                var peakList = MSPeakDetector.FindPeaks(massSpecXYData.Xvalues, massSpecXYData.Yvalues);
+                IsotopicProfile iso = FindMSFeature(peakList, theorIso, ToleranceInPPM, this.NeedMonoIsotopicPeak);
 
                 if (foundIso == null)
                 {

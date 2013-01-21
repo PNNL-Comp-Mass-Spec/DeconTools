@@ -373,6 +373,8 @@
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\IsotopicDistributionCalculator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\IsotopicProfileComponent.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\LabeledIsotopicProfileUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryIsoDistCreator2.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\DeuteriumIsotopeProfileGenerator.cs" />

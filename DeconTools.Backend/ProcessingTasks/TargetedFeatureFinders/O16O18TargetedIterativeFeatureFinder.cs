@@ -41,13 +41,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             resultList.IsosResultBin.Clear();
 
             IsotopicProfile o16TheorFeature = resultList.Run.CurrentMassTag.IsotopicProfile;
-            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o16TheorFeature);
+            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o16TheorFeature);
 
             IsotopicProfile o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
-            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o18TheorProfileSingleLabel);
+            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileSingleLabel);
 
             IsotopicProfile o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
-            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run, o18TheorProfileDoubleLabel);
+            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileDoubleLabel);
 
 
             IsotopicProfile foundO16O18Profile;
