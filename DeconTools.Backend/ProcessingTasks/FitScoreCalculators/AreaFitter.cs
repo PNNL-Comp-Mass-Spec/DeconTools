@@ -9,7 +9,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     /// <summary>
     /// Does a least-squares fit.  
     /// </summary>
-    public class AreaFitter
+    public class AreaFitter:LeastSquaresFitter
     {
 
 

@@ -99,11 +99,19 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             msgen.Execute(run.ResultCollection);
             iterativeTff.Execute(run.ResultCollection);
+
+            TestUtilities.DisplayPeaks(run.PeakList);
+
             fitscoreCalc.Execute(run.ResultCollection);
 
         
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
-            result.DisplayToConsole();
+            //result.DisplayToConsole();
+
+
+            TestUtilities.DisplayIsotopicProfileData(result.Target.IsotopicProfile);
+
+           
 
         }
 

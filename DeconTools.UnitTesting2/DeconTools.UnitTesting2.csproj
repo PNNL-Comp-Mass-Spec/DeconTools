@@ -98,6 +98,7 @@
     <Compile Include="FileIO_Tests\PeakImporterTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramCorrelatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\PeakBasedLeastSquaresFitterTests.cs" />
     <Compile Include="ProcessingRelated_Tests\IsotopicProfileQualityScoringTests\InterferenceScorerTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\THRASHMSFeatureFinderTests.cs" />
