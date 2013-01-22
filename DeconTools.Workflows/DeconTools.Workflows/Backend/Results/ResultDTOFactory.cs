@@ -46,12 +46,12 @@ namespace DeconTools.Workflows.Backend.Results
                 writeStandardInfoToResult(tr, result);
                 addAdditionalInfo(tr, result as TopDownTargetedResult);
             }
-            //else if (result is DeuteratedTargetedResultObject)
-            //{
-            //    tr = new DeuteratedTargetedResultDTO();
-            //    writeStandardInfoToResult(tr, result);
-            //    addAdditionalInfo(tr, result as DeuteratedTargetedResultObject);
-            //}
+            else if (result is DeuteratedTargetedResultObject)
+            {
+                tr = new DeuteratedTargetedResultDTO();
+                writeStandardInfoToResult(tr, result);
+                addAdditionalInfo(tr, result as DeuteratedTargetedResultObject);
+            }
             else
             {
                 throw new NotImplementedException();
@@ -153,38 +153,38 @@ namespace DeconTools.Workflows.Backend.Results
             r.Ratio = result.RatioO16O18;
         }
 
-        //private static void addAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
-        //{
-        //    DeuteratedTargetedResultDTO r = (DeuteratedTargetedResultDTO)tr;
-        //    r.HydrogenI0 = result.HydrogenI0;
-        //    r.HydrogenI1 = result.HydrogenI1;
-        //    r.HydrogenI2 = result.HydrogenI2;
-        //    r.HydrogenI3 = result.HydrogenI3;
-        //    r.HydrogenI4 = result.HydrogenI4;
-           
-        //    r.DeuteriumI0 = result.DeuteriumI0;
-        //    r.DeuteriumI1 = result.DeuteriumI1;
-        //    r.DeuteriumI2 = result.DeuteriumI2;
-        //    r.DeuteriumI3 = result.DeuteriumI3;
-        //    r.DeuteriumI4 = result.DeuteriumI4;
-            
+        private static void addAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
+        {
+            DeuteratedTargetedResultDTO r = (DeuteratedTargetedResultDTO)tr;
+            r.HydrogenI0 = result.HydrogenI0;
+            r.HydrogenI1 = result.HydrogenI1;
+            r.HydrogenI2 = result.HydrogenI2;
+            r.HydrogenI3 = result.HydrogenI3;
+            r.HydrogenI4 = result.HydrogenI4;
 
-        //    r.TheoryI0 = result.TheoryI0;
-        //    r.TheoryI1 = result.TheoryI1;
-        //    r.TheoryI2 = result.TheoryI2;
-        //    r.TheoryI3 = result.TheoryI3;
-        //    r.TheoryI4 = result.TheoryI4;
-            
-        //    r.RawI0 = result.RawI0;
-        //    r.RawI1 = result.RawI1;
-        //    r.RawI2 = result.RawI2;
-        //    r.RawI3 = result.RawI3;
-        //    r.RawI4 = result.RawI4;
-   
-        //    r.LabelingEfficiency = result.LabelingEfficiency;
-        //    r.RatioDH = result.RatioDH;
-        //    r.IntensityI0HydrogenMono = result.IntensityI0HydrogenMono;
-        //}
+            r.DeuteriumI0 = result.DeuteriumI0;
+            r.DeuteriumI1 = result.DeuteriumI1;
+            r.DeuteriumI2 = result.DeuteriumI2;
+            r.DeuteriumI3 = result.DeuteriumI3;
+            r.DeuteriumI4 = result.DeuteriumI4;
+
+
+            r.TheoryI0 = result.TheoryI0;
+            r.TheoryI1 = result.TheoryI1;
+            r.TheoryI2 = result.TheoryI2;
+            r.TheoryI3 = result.TheoryI3;
+            r.TheoryI4 = result.TheoryI4;
+
+            r.RawI0 = result.RawI0;
+            r.RawI1 = result.RawI1;
+            r.RawI2 = result.RawI2;
+            r.RawI3 = result.RawI3;
+            r.RawI4 = result.RawI4;
+
+            r.LabelingEfficiency = result.LabelingEfficiency;
+            r.RatioDH = result.RatioDH;
+            r.IntensityI0HydrogenMono = result.IntensityI0HydrogenMono;
+        }
 
         private static float getIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)
         {
