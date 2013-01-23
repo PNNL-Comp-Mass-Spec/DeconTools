@@ -129,9 +129,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             // Update LCMSFeatures using MassTag info
 
-            int[] testMassTags = { 344540889, 344540889, 344972415, 354881152, 355157363, 355162540, 355315129, 355054192, 355160150};
+            int[] testMassTags = { 344540889, 344972415, 354881152, 355157363, 355162540, 355315129, 355054192, 355160150};
 
-           // testMassTags = new[] {344540889};
+            //testMassTags = new[] {344540889};
 
             //testMassTags = new int[]
             //                   {
@@ -147,7 +147,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //                   };
 
             //no enrichment peptides:
-            //testMassTags = new int[] { 355057553, 355058671, 355084418 };
+            testMassTags = new int[] { 355057553, 355058671, 355084418 };
 
             //enriched
             //testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Core.Results;
@@ -17,6 +18,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private readonly LabelingDistributionCalculator _labelingDistributionCalculator;
         private readonly ChromatogramCorrelatorTask _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
+
+        private readonly PartialLabelingQuantifier _partialLabelingQuantifier;
 
         #region Properties
         protected double MaximumFitScoreForFurtherProcessing { get; set; }
@@ -89,7 +92,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             RatioVals = new XYData();
 
             _labelingDistributionCalculator = new LabelingDistributionCalculator();
-
+            _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
+            _partialLabelingQuantifier.MaxLabelAmount = 15;
+            _partialLabelingQuantifier.StepAmountForIterator = 0.25;
         }
 
 
@@ -134,14 +139,18 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             //PeakUtilities.TrimIsotopicProfile(unlabeledIso, 0.001);
 
 
+            
+            StringBuilder sb = new StringBuilder();
+            sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
+                      "-----------------------------\n");
 
-
-
+            
             int indexMostAbundantTheorPeak = theorUnlabelledIso.GetIndexOfMostIntensePeak();
 
             NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
             IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexMostAbundantTheorPeak);
 
+            //            return;
 
 
             if (result.Flags.Count > 0)
@@ -172,7 +181,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-            
+
             if (resultPassesMinimalCriteria)
             {
                 //------------------------------------- Get chromatogramCorrelation data -------------------------------
@@ -182,7 +191,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     GetChromatogramCorrelationData(result);
                 }
 
-                
+
 
 
                 NormalizedAdjustedIso = NormalizedIso.CloneIsotopicProfile();
@@ -253,6 +262,19 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     subtractedIsoData.Peaklist[i].Height = subtractedIntensity;
                 }
 
+                var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, new List<Peak>(subtractedIsoData.Peaklist));
+                
+                int counter = 0;
+                foreach (var currentFitScore in _partialLabelingQuantifier.CurrentFitScores)
+                {
+
+                    sb.Append(counter + "\t" + currentFitScore.ToString("0.000") + "\n");
+                    counter++;
+                }
+
+                Console.WriteLine(sb.ToString());
+                _partialLabelingQuantifier.CurrentFitScores.Clear();
+
                 result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
                 result.NumCarbonsLabelled = calculateNumCarbonsFromSubtractedProfile(subtractedIsoData);
 
@@ -269,7 +291,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                               LabeldistCalcIntensityThreshold,
                                                                               LabeldistCalcIntensityThreshold,
                                                                               out numLabelVals,
-                                                                              out labelDistributionVals,true,true,0,numRightPads,0,0);
+                                                                              out labelDistributionVals, true, true, 0, numRightPads, 0, 0);
 
 
                 //negative distribution values are zeroed out. And, then the remaining values are adjusted such that they add up to 1. 
@@ -315,7 +337,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                                              HighQualitySubtractedProfile);
 
 
-               
+
                 //result.NumCarbonsLabelled = numCarbonsLabelled;
                 result.NumCarbonsLabelled = distAverageLabelsIncorporated;
 
@@ -363,14 +385,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
-        
+
 
         private void GetChromatogramCorrelationData(SipperLcmsTargetedResult result)
         {
-            _chromScanWindowWidth = result.ChromPeakSelected.Width*2;
+            _chromScanWindowWidth = result.ChromPeakSelected.Width * 2;
 
-            int startScan = result.ScanSet.PrimaryScanNumber - (int) Math.Round(_chromScanWindowWidth/2, 0);
-            int stopScan = result.ScanSet.PrimaryScanNumber + (int) Math.Round(_chromScanWindowWidth/2, 0);
+            int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
+            int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
 
             result.ChromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(result.Run,
                                                                                                           NormalizedIso,
@@ -429,11 +451,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             double sumDotProducts = 0;
             for (int peakNum = 0; peakNum < intensityVals.Count; peakNum++)
             {
-                var dotProduct = intensityVals[peakNum]*peakNum;
+                var dotProduct = intensityVals[peakNum] * peakNum;
                 sumDotProducts += dotProduct;
             }
 
-            return sumDotProducts/sumIntensities;
+            return sumDotProducts / sumIntensities;
         }
 
         private double GetNumCarbonsLabelledUsingAverageMassDifferences(IsotopicProfile theorUnlabelledIso, IsotopicProfile highQualitySubtractedProfile)
@@ -579,7 +601,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             bool foundYvalAboveZero = false;
             for (int i = 0; i < xvals.Count; i++)
             {
-               
+
                 if (yvals[i] > 0)
                 {
                     foundYvalAboveZero = true;

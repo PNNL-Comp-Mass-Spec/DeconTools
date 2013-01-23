@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -12,7 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     {
 
         private List<IsotopicProfile> _theorLabeledProfiles;
-
+        readonly PeakLeastSquaresFitter _leastSquaresFitter = new PeakLeastSquaresFitter();
         private IterativeTFF _iterativeTff;
 
         private readonly LabeledIsotopicProfileUtilities _isoCreator = new LabeledIsotopicProfileUtilities();
@@ -22,6 +23,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private string _elementLabeled;
         private int _lightIsotope;
         private int _heavyIsotope;
+        private double _toleranceInPPM = 30;
+
+        //TODO: for testing. delete later 
+        public List<double> CurrentFitScores = new List<double>();
 
         public PartialLabelingQuantifier(string element, int lightIsotope, int heavyIsotope)
         {
@@ -50,9 +55,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public int LightIsotope { get; set; }
 
-        public List<double> CurrentFitScores { get; set; } 
+       
 
-        public IsotopicProfile FindBestLabeledProfile(TargetBase target, XYData massSpectrumXYData, List<Peak> massSpectrumPeakList)
+        public IsotopicProfile FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
         {
 
             IsotopicProfile bestIso = null;
@@ -65,7 +70,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _theorLabeledProfiles.Clear();
             for (double labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount = labelAmount + StepAmountForIterator)
             {
-                var theorIso = _isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula, _elementLabeled, _lightIsotope, _heavyIsotope, labelAmount);
+                var theorIso = _isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula,
+                                                                                     _elementLabeled, _lightIsotope,
+                                                                                     _heavyIsotope, labelAmount,
+                                                                                     target.ChargeState);
 
 
                 int indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
@@ -73,44 +81,87 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     theorIso.getMostIntensePeak().XValue, 0, massSpectrumPeakList.Count - 1, 0.1);
 
                 double fitScore;
+               
                 if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
                 {
                     fitScore = 1;
                 }
                 else
                 {
-                    double mzOffset = massSpectrumPeakList[indexOfCorrespondingObservedPeak].XValue - theorIso.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+                    //double mzOffset = massSpectrumPeakList[indexOfCorrespondingObservedPeak].XValue - theorIso.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-                    XYData theorXYData = theorIso.GetTheoreticalIsotopicProfileXYData(massSpectrumPeakList[indexOfCorrespondingObservedPeak].Width);
+                    double minIntensityForFitting =0.02  ;
+                    var theorPeakListForFitter = new List<Peak>(theorIso.Peaklist).Where(p=>p.Height>minIntensityForFitting).ToList();
 
-                    theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
+                    var mzForZeroIntensityPeak = theorIso.getMonoPeak().XValue -
+                                                 Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS/theorIso.ChargeState;
 
-                    //theorXYData.Display();
+                    var zeroIntensityPeak = new Peak(mzForZeroIntensityPeak, float.Epsilon, 0);
 
-                    AreaFitter areafitter = new AreaFitter();
-                    fitScore = areafitter.GetFit(theorXYData, massSpectrumXYData, 0.1);
+                    theorPeakListForFitter.Insert(0, zeroIntensityPeak);
+
+                    fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, massSpectrumPeakList, 0, 30);
 
                     if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
-                    
-
                 }
 
                 if (fitScore<bestFitScore)
                 {
                     bestFitScore = fitScore;
 
-                    List<Peak> peakList = new List<Peak>();
-                    bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso, ref peakList);
-                    bestIso.Score = fitScore;
+                   
+                    if (massSpectrumXYData==null)
+                    {
+                        //create isotopic profile from peakList
+
+
+                        var peakListForCreatedIso = new List<MSPeak>();
+
+                        foreach (var peak in theorIso.Peaklist)
+                        {
+                            double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
+                            var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(massSpectrumPeakList, peak.XValue,
+                                                                                   mzTolerance);
+                            MSPeak mspeak;
+                            if (foundPeaks.Count==0)
+                            {
+                                mspeak = new MSPeak(peak.XValue, 0, 0, 0);
+                            }
+                            else if (foundPeaks.Count==1)
+                            {
+                                var foundPeak = foundPeaks.First();
+                                mspeak = new MSPeak(foundPeak.XValue, foundPeak.Height, foundPeak.Width, 0);
+
+                            }
+                            else
+                            {
+                                var foundPeak = foundPeaks.OrderByDescending(p => p.Height).First();
+                                mspeak = new MSPeak(foundPeak.XValue, foundPeak.Height, foundPeak.Width, 0);
+                            }
+
+                            peakListForCreatedIso.Add(mspeak);
+
+                        }
+
+                        bestIso = new IsotopicProfile();
+                        bestIso.Peaklist = peakListForCreatedIso;
+                        bestIso.ChargeState = theorIso.ChargeState;
+                        bestIso.Score = fitScore;
+
+                    }
+                    else
+                    {
+                        bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
+                        bestIso.Score = fitScore;    
+                    }
+
+                    
                 }
 
                 CurrentFitScores.Add(fitScore);
 
                 _theorLabeledProfiles.Add(theorIso);
             }
-
-
-
 
             return bestIso;
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using PNNLOmics.Data.Constants;
 
@@ -146,7 +145,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             CalculateMZValuesForLabeledProfile(iso, baseEmpiricalFormula, elementLabelled, chargeState,
                                                lightIsotope, heavyIsotope);
 
-
+            iso.ChargeState = chargeState;
+            
 
             return iso;
         }

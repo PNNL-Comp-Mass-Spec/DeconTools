@@ -28,21 +28,37 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var observedIntensitiesUsedInCalc = new List<double>();
            
             //first gather all the intensities from theor and obs peaks
-            foreach (var peak in theorPeakList)
+
+            int indexMaxTheor = 0;
+            double maxTheorIntensity = double.MinValue;
+            for (int i = 0; i < theorPeakList.Count; i++)
             {
-                if (peak.Height< minIntensityForScore) continue;
+                if (theorPeakList[i].Height>maxTheorIntensity)
+                {
+                    maxTheorIntensity = theorPeakList[i].Height;
+                    indexMaxTheor = i;
+
+                }
+            }
+
+
+
+            for (int index = 0; index < theorPeakList.Count; index++)
+            {
+                var peak = theorPeakList[index];
+                if (peak.Height < minIntensityForScore) continue;
                 theorIntensitiesUsedInCalc.Add(peak.Height);
 
                 //find peak in obs data
-                double mzTolerance = toleranceInPPM * peak.XValue / 1e6;
-                var foundPeaks=  PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
+                double mzTolerance = toleranceInPPM*peak.XValue/1e6;
+                var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
 
                 double obsIntensity;
-                if (foundPeaks.Count ==0)
+                if (foundPeaks.Count == 0)
                 {
                     obsIntensity = 0;
                 }
-                else if (foundPeaks.Count==1)
+                else if (foundPeaks.Count == 1)
                 {
                     obsIntensity = foundPeaks.First().Height;
                 }
