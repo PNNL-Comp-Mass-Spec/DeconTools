@@ -20,13 +20,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private MassTagFitScoreCalculator _fitScoreCalculator = new MassTagFitScoreCalculator();
 
 
+
+
         private string _elementLabeled;
         private int _lightIsotope;
         private int _heavyIsotope;
         private double _toleranceInPPM = 30;
 
         //TODO: for testing. delete later 
-        public List<double> CurrentFitScores = new List<double>();
+       public Dictionary<decimal, double> FitScoreData = new Dictionary<decimal, double>(); 
 
         public PartialLabelingQuantifier(string element, int lightIsotope, int heavyIsotope)
         {
@@ -55,19 +57,24 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public int LightIsotope { get; set; }
 
+
+
+
        
 
-        public IsotopicProfile FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
+        public IsotopicProfileComponent FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
         {
-
             IsotopicProfile bestIso = null;
             double bestFitScore = 1.0;
+            double bestLabelAmount = -1;
 
             Check.Require(target != null, "Target is null. You need a valid target in order to quantify it.");
             Check.Require(target.IsotopicProfile != null, "Target's theoretical isotopic profile is null. You need to create it first.");
 
             //create theor profiles to iterate over and use in fitting
             _theorLabeledProfiles.Clear();
+            FitScoreData.Clear();
+
             for (double labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount = labelAmount + StepAmountForIterator)
             {
                 var theorIso = _isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula,
@@ -143,27 +150,29 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                         }
 
-                        bestIso = new IsotopicProfile();
-                        bestIso.Peaklist = peakListForCreatedIso;
-                        bestIso.ChargeState = theorIso.ChargeState;
-                        bestIso.Score = fitScore;
+                        bestIso = new IsotopicProfile {Peaklist = peakListForCreatedIso, ChargeState = theorIso.ChargeState};
+
 
                     }
                     else
                     {
                         bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
-                        bestIso.Score = fitScore;    
+                        
                     }
 
-                    
+                    bestIso.Score = fitScore;
+                    bestLabelAmount = labelAmount;
                 }
 
-                CurrentFitScores.Add(fitScore);
+                FitScoreData.Add((decimal)labelAmount, fitScore);
 
                 _theorLabeledProfiles.Add(theorIso);
             }
 
-            return bestIso;
+            var isoComponent = new IsotopicProfileComponent(bestIso, 0, bestLabelAmount);
+            return isoComponent;
+
+
         }
 
 

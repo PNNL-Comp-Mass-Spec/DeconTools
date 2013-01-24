@@ -41,7 +41,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
 
 
-            int[] targetsOfInterest = new int[]{5555, 11985};
+            int[] targetsOfInterest = new int[]{5555};
 
             executor.Targets.TargetList =
                 (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
@@ -61,11 +61,77 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
 
 
-            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            //{
+            //    Console.WriteLine(dataItem.CorrelationRSquaredVal);
+            //}
+
+            foreach (var fitScoreDataItem in workflow.FitScoreData)
             {
-                Console.WriteLine(dataItem.CorrelationRSquaredVal);
+                Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
             }
             
+
+        }
+
+
+        [Test]
+        public void ExecuteSipperUsingStandardExecutorClass1()
+        {
+            string paramFile =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
+
+            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+            parameters.CopyRawFileLocal = false;
+            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+
+
+            string testDataset =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+
+            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            parameters.SaveParametersToXML(outputParameterFile);
+
+
+            parameters.TargetType = Globals.TargetType.LcmsFeature;
+            var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
+            
+
+            int[] targetsOfInterest = new int[] { 5555 };
+
+            targetsOfInterest = new int[]{7229};   //throwing error in Chromcorr
+
+            executor.Targets.TargetList =
+                (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
+
+            executor.Execute();
+
+            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+
+
+
+            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ChromCorrelationData);
+            Assert.IsNotNull(result.ChromCorrelationData.CorrelationDataItems);
+
+            Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
+
+
+            //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            //{
+            //    Console.WriteLine(dataItem.CorrelationRSquaredVal);
+            //}
+
+            foreach (var fitScoreDataItem in workflow.FitScoreData)
+            {
+                Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
+            }
+
 
         }
 

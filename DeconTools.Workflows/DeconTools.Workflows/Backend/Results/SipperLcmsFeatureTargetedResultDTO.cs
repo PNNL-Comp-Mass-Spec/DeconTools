@@ -12,9 +12,7 @@ namespace DeconTools.Workflows.Backend.Results
         public double AreaUnderRatioCurve { get; set; }
 
         public double AreaUnderDifferenceCurve { get; set; }
-
-        public double RSquaredValForRatioCurve { get; set; }
-
+        
         public double ChromCorrelationMin { get; set; }
 
         public double ChromCorrelationMax { get; set; }
@@ -36,6 +34,9 @@ namespace DeconTools.Workflows.Backend.Results
         public int NumHighQualityProfilePeaks { get; set; }
 
         public double[] LabelDistributionVals { get; set; }
+
+        public double FitScoreLabeledProfile { get; set; }
+
 
 
         /// <summary>

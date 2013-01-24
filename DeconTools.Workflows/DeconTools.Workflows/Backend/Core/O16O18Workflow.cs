@@ -1,5 +1,5 @@
-﻿using System;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
@@ -36,6 +36,10 @@ namespace DeconTools.Workflows.Backend.Core
         protected override void DoPostInitialization()
         {
             base.DoPostInitialization();
+
+            _chromatogramCorrelator = new ChromatogramCorrelatorO16O18(_workflowParameters.ChromSmootherNumPointsInSmooth,
+                                                                       _workflowParameters.ChromToleranceInPPM);
+
 
             _msfeatureFinder = new O16O18TargetedIterativeFeatureFinder(_iterativeTFFParameters);
             _quant = new O16O18QuantifierTask();

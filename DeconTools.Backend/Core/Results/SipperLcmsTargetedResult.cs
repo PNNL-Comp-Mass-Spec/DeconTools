@@ -20,13 +20,9 @@ namespace DeconTools.Backend.Core.Results
         #region Properties
         public double AreaUnderRatioCurve { get; set; }
 
+        public double FitScoreLabeledProfile { get; set; }
+
         public double AreaUnderDifferenceCurve { get; set; }
-
-        public double SlopeOfRatioCurve { get; set; }
-
-        public double InterceptOfRatioCurve { get; set; }
-
-        public double RSquaredValForRatioCurve { get; set; }
 
         public double ChromCorrelationMax { get; set; }
 
@@ -65,7 +61,7 @@ namespace DeconTools.Backend.Core.Results
             sb.Append(delim);
             sb.Append(((LcmsFeatureTarget)Target).FeatureToMassTagID);
             sb.Append(delim);
-            sb.Append(ScanSet == null ? "null" : ScanSet.PrimaryScanNumber.ToString());
+            sb.Append(ScanSet == null ? "null" : ScanSet.PrimaryScanNumber.ToString("0"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : IsotopicProfile.MonoIsotopicMass.ToString("0.000"));
             sb.Append(delim);
@@ -73,29 +69,19 @@ namespace DeconTools.Backend.Core.Results
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : Score.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : InterferenceScore.ToString("0.000"));
+            sb.Append(IsotopicProfile == null ? "null" : FitScoreLabeledProfile.ToString("0.000"));
+            sb.Append(delim);
+            sb.Append(IsotopicProfile == null ? "null" : NumHighQualityProfilePeaks.ToString("0"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : AreaUnderDifferenceCurve.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : AreaUnderRatioCurve.ToString("0.000"));
-            sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : AreaUnderRatioCurveRevised.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : RSquaredValForRatioCurve.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMin.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMax.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationAverage.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMedian.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : NumCarbonsLabelled.ToString("0.000"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : PercentPeptideLabelled.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : NumHighQualityProfilePeaks.ToString("0"));
             sb.Append(delim);
             sb.Append(IsotopicProfile == null ? "null" : PercentCarbonsLabelled.ToString("0.000"));
             sb.Append(delim);

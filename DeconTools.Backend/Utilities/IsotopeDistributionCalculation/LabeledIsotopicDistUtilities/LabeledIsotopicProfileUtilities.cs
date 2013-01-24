@@ -23,9 +23,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
         public List<IsotopicProfileComponent> IsotopicProfiles { get; set; }
 
-        public void AddIsotopicProfile(IsotopicProfile iso, double fraction, string description = "")
+        public void AddIsotopicProfile(IsotopicProfile iso, double fraction)
         {
-            var component = new IsotopicProfileComponent(iso, fraction, description);
+            var component = new IsotopicProfileComponent(iso, fraction);
             IsotopicProfiles.Add(component);
         }
 

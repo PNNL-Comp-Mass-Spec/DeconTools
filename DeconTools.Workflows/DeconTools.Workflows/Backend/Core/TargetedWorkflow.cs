@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         //protected MassTagFitScoreCalculator _fitScoreCalc;
         protected Task _fitScoreCalc;
         protected ResultValidatorTask _resultValidator;
-        protected ChromatogramCorrelatorTask _chromatogramCorrelatorTask;
+        protected ChromatogramCorrelatorBase _chromatogramCorrelator;
 
         protected IterativeTFFParameters _iterativeTFFParameters = new IterativeTFFParameters();
 
@@ -185,8 +185,8 @@ namespace DeconTools.Workflows.Backend.Core
             _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
             _fitScoreCalc = new MassTagFitScoreCalculator();
             _resultValidator = new ResultValidatorTask();
-            _chromatogramCorrelatorTask = new ChromatogramCorrelatorTask();
-            _chromatogramCorrelatorTask.ChromToleranceInPPM = _workflowParameters.ChromToleranceInPPM;
+            _chromatogramCorrelator = new ChromatogramCorrelator(_workflowParameters.ChromSmootherNumPointsInSmooth,
+                                                                 _workflowParameters.ChromToleranceInPPM, 0.01);
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
@@ -227,7 +227,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (_workflowParameters.ChromatogramCorrelationIsPerformed)
             {
-                ExecuteTask(_chromatogramCorrelatorTask);
+                ExecuteTask(_chromatogramCorrelator);
             }
 
             Success = true;

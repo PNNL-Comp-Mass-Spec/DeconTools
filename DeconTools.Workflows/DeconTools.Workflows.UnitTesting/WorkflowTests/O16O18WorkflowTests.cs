@@ -41,17 +41,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MSToleranceInPPM = 10;
             parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromPeakDetectorPeakBR = 1;
+            parameters.ChromatogramCorrelationIsPerformed = true;
 
             O16O18Workflow workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
-            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as O16O18TargetedResultObject;
 
             Assert.IsTrue(workflow.Success);
             Assert.IsFalse(result.FailedResult);
 
 
             result.DisplayToConsole();
+
+            Console.WriteLine("Correlation between 016 and O18(double label)= " + result.ChromCorrO16O18DoubleLabel);
+
+            Assert.IsTrue(result.ChromCorrO16O18DoubleLabel > 0);
+
+
+
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);

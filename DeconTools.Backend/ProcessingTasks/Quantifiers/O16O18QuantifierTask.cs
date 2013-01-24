@@ -33,6 +33,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             o16o18result.RatioO16O18 = _quantifier.GetAdjusted_I0_I4_YeoRatio(result.IsotopicProfile, result.Target.IsotopicProfile);
             o16o18result.IntensityI4Adjusted = _quantifier.adjustedI4Intensity;
 
+            o16o18result.RatioO16O18FromChromCorr = _quantifier.GetAdjustedRatioUsingChromCorrData(result as O16O18TargetedResultObject);
+
         }
     }
 }

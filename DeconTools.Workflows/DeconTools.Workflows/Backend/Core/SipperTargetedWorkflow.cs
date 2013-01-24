@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -20,6 +18,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             MsRightTrimAmount = 100;
             MsLeftTrimAmount = 3;
+
+            
         }
 
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
@@ -36,7 +36,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             base.DoPreInitialization();
             RatioVals = new XYData();
-            RatioLogVals = new XYData();
             ChromCorrelationRSquaredVals = new XYData();
         }
 
@@ -58,6 +57,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             _quantifier = new SipperQuantifier();
 
+            //always do ChromCorrelation whether you want it or not!
+            _workflowParameters.ChromatogramCorrelationIsPerformed = true;
 
         }
 
@@ -73,10 +74,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             RatioVals.Xvalues = _quantifier.RatioVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioVals.Xvalues;
             RatioVals.Yvalues = _quantifier.RatioVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioVals.Yvalues;
-
-            RatioLogVals.Xvalues = _quantifier.RatioLogVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioLogVals.Xvalues;
-            RatioLogVals.Yvalues = _quantifier.RatioLogVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioLogVals.Yvalues;
-
+            
             var peakNumList = new List<double>();
             var rsquaredvalList = new List<double>();
 
@@ -99,11 +97,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             SubtractedIso = _quantifier.HighQualitySubtractedProfile;
 
+            FitScoreData = _quantifier.FitScoreData;
 
 
         }
 
-      
+        
 
         #endregion
 
@@ -113,14 +112,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         public XYData RatioVals { get; set; }
 
-        public XYData RatioLogVals { get; set; }
-        public IsotopicProfile SubtractedIso { get; set; }
+       public IsotopicProfile SubtractedIso { get; set; }
 
         public IsotopicProfile NormalizedIso { get; set; }
 
         public IsotopicProfile NormalizedAdjustedIso { get; set; }
 
-
+        public Dictionary<decimal, double> FitScoreData { get; set; }
 
         #endregion
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using DeconTools.Backend;
-using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
@@ -14,10 +14,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
     [TestFixture]
     public class ChromatogramCorrelatorTests
     {
-
+        [Category("MustPass")]
         [Test]
         public void CorrelationTest1()
         {
+            //TODO: test something
+
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
@@ -47,14 +49,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             run.XYData = smoother.Smooth(run.XYData);
             
             XYData chromdata2 = run.XYData.TrimData(startScan, stopScan);
-
-          
-
+            
             //chromdata1.Display();
             //Console.WriteLine();
             //chromdata2.Display();
 
-            ChromatogramCorrelator correlator = new ChromatogramCorrelator();
+            ChromatogramCorrelatorBase correlator = new ChromatogramCorrelator(3);
             double slope=0;
             double intercept=0;
             double rsquaredVal=0;
@@ -116,7 +116,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             //Console.WriteLine();
             //chromdata2.Display();
 
-            ChromatogramCorrelator correlator = new ChromatogramCorrelator();
+            ChromatogramCorrelatorBase correlator = new ChromatogramCorrelator(3);
             double slope = 0;
             double intercept = 0;
             double rsquaredVal = 0;

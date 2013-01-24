@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Algorithms.Quantifiers
@@ -59,37 +56,110 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             intensityTheorI2 = getI2Intensity(theorIso);
             intensityTheorI4 = GetI4Intensity(theorIso);
 
+
+            double adjI4Intensity;
+            var ratio= CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, intensityI0, intensityI2, intensityI4,
+                                  out adjI4Intensity);
+
+            adjustedI4Intensity = adjI4Intensity;
+
+
+            return ratio;
+            
+            //if (intensityI4 == 0)
+            //{
+            //    adjustedI4Intensity = intensityI4;
+            //}
+            //else
+            //{
+            //    // see Yeo et al (2001), Analytical Chemistry. "Proteolytic O-18 labeling for comparative proteomics: Model studies with two serotypes of adenovirus."
+            //    adjustedI4Intensity = intensityI4 - (intensityTheorI4 / intensityTheorI0 * intensityI0);
+
+            //    if (intensityI2 > 0)
+            //    {
+            //        adjustedI4Intensity = adjustedI4Intensity - (intensityTheorI2 / intensityTheorI0) * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0) + 0.5 * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0);
+            //    }
+            //    else
+            //    {
+            //        //TODO:  if there is an intensity at I4, there should be something at I2. 
+            //    }
+  
+            //}
+
+            //if (adjustedI4Intensity <= 0) adjustedI4Intensity = double.Epsilon;
+
+
+            //ratio = intensityI0 / adjustedI4Intensity;
+            //return ratio;
+
+
+        }
+
+
+        public double GetAdjustedRatioUsingChromCorrData(O16O18TargetedResultObject o16O18TargetedResultObject)
+        {
+            double ratio;
+
+            intensityTheorI0 = getI0Intensity(o16O18TargetedResultObject.Target.IsotopicProfile);
+            intensityTheorI2 = getI2Intensity(o16O18TargetedResultObject.Target.IsotopicProfile);
+            intensityTheorI4 = GetI4Intensity(o16O18TargetedResultObject.Target.IsotopicProfile);
+
+            if (o16O18TargetedResultObject.ChromCorrelationData == null) return -1;
+
+            bool noO16PeakPresent = !o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Any();
+            if (noO16PeakPresent )
+            {
+                ratio = 0;
+            }
+            else
+            {
+                double ratioSingleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[0].CorrelationSlope??0d;
+
+                double ratioDoubleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[1].CorrelationSlope ?? 0d;
+
+                double adjRatioI0I4;
+                var tempIntensity = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, 1.0, ratioSingleO18ToO16,
+                                                      ratioDoubleO18ToO16, out adjRatioI0I4);
+
+                ratio = 1/adjRatioI0I4;   //report the o16/o18 ratio
+
+            }
+
+            return ratio;
+
+        }
+
+
+
+        public double CalculateRatio(double theorI0, double theorI2, double theorI4, double i0, double i2, double i4, out double adjustedI4)
+        {
+            double ratio;
             
             if (intensityI4 == 0)
             {
-                adjustedI4Intensity = intensityI4;
+                adjustedI4 = i4;
             }
             else
             {
                 // see Yeo et al (2001), Analytical Chemistry. "Proteolytic O-18 labeling for comparative proteomics: Model studies with two serotypes of adenovirus."
-                adjustedI4Intensity = intensityI4 - (intensityTheorI4 / intensityTheorI0 * intensityI0);
+                adjustedI4 = i4 - (theorI4 / theorI0 * i0);
 
-                if (intensityI2 > 0)
+                if (i2 > 0)
                 {
-                    adjustedI4Intensity = adjustedI4Intensity - (intensityTheorI2 / intensityTheorI0) * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0) + 0.5 * (intensityI2 - intensityTheorI2 / intensityTheorI0 * intensityI0);
+                    adjustedI4 = adjustedI4 - (theorI2 / theorI0) * (i2 - theorI2 / theorI0 * i0) + 0.5 * (i2 - theorI2 / theorI0 * i0);
                 }
                 else
                 {
                     //TODO:  if there is an intensity at I4, there should be something at I2. 
                 }
-  
+
             }
 
+            if (adjustedI4 <= 0) adjustedI4 = double.Epsilon;
 
 
-
-
-            if (adjustedI4Intensity <= 0) adjustedI4Intensity = double.Epsilon;
-
-
-            return intensityI0 / adjustedI4Intensity;
-
-
+            ratio = intensityI0 / adjustedI4;
+            return ratio;
         }
 
 
@@ -153,5 +223,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         public double intensityTheorI4 { get; set; }
 
         public double adjustedI4Intensity { get; set; }
+
+       
     }
 }

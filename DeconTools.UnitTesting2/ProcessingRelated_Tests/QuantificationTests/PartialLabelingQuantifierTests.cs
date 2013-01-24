@@ -61,9 +61,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
             var bestIso=  partialLabelingQuantifier.FindBestLabeledProfile(target, peakList, null);
 
             int counter = 0;
-            foreach (var currentFitScore in partialLabelingQuantifier.CurrentFitScores)
+            foreach (var currentFitScore in partialLabelingQuantifier.FitScoreData)
             {
-                Console.WriteLine(counter + "\t" + currentFitScore);
+                Console.WriteLine(currentFitScore.Key + "\t" + currentFitScore.Value);
                 counter++;
             }
 

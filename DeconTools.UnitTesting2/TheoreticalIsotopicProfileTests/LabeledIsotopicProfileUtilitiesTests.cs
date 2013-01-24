@@ -29,8 +29,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var labelledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled2);
 
 
-            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled, "unlabelled");
-            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled, "labelled");
+            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled);
+            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled);
 
             var mixedIso = isoCreator.GetMixedIsotopicProfile();
 
@@ -57,8 +57,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var labelledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled2);
 
 
-            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled, "unlabelled");
-            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled, "labelled");
+            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled);
+            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled);
 
             var mixedIso = isoCreator.GetMixedIsotopicProfile();
 

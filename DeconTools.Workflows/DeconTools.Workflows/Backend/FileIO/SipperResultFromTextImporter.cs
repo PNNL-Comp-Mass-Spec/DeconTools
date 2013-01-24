@@ -19,6 +19,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _percentCarbonsLabelledHeaders = { "PercentCarbonsLabelled"};
         private string[] _numHQProfilePeaksHeaders = { "NumHQProfilePeaks" };
         private string[] _labelDistribHeaders = { "LabelDistributionData" };
+        private string[] _fitScoreLabeledHeaders = {"FitScoreLabeled", "FitScoreLabelled"};
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
@@ -40,7 +41,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.AreaUnderRatioCurve = ParseDoubleField(LookupData(processedData, _areaUnderRatioCurveHeaders));
             result.AreaUnderRatioCurveRevised = ParseDoubleField(LookupData(processedData, _areaUnderRatioRevisedHeaders));
             result.MatchedMassTagID = ParseIntField(LookupData(processedData, matchedMassTagIDHeaders));
-            result.RSquaredValForRatioCurve = ParseDoubleField(LookupData(processedData, _RSquaredForRatio));
             result.ChromCorrelationMin = ParseDoubleField(LookupData(processedData, _chromCorrMinHeaders));
             result.ChromCorrelationMax = ParseDoubleField(LookupData(processedData, _chromCorrMaxHeaders));
             result.ChromCorrelationAverage = ParseDoubleField(LookupData(processedData, _chromCorrAverageHeaders));
@@ -50,8 +50,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.NumCarbonsLabelled = ParseDoubleField(LookupData(processedData, _numCarbonsLabelledHeaders));
             result.PercentCarbonsLabelled = ParseDoubleField(LookupData(processedData, _percentCarbonsLabelledHeaders));
             result.NumHighQualityProfilePeaks = ParseIntField(LookupData(processedData, _numHQProfilePeaksHeaders));
-
             result.LabelDistributionVals = ConvertLabelDistStringToArray(LookupData(processedData, _labelDistribHeaders));
+            result.FitScoreLabeledProfile = ParseDoubleField(LookupData(processedData, _fitScoreLabeledHeaders));
             
             return result;
 

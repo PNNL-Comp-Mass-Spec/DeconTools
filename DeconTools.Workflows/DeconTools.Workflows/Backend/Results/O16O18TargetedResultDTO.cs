@@ -12,11 +12,16 @@ namespace DeconTools.Workflows.Backend.Results
         public float IntensityI4 { get; set; }
         public double IntensityI4Adjusted { get; set; }
         public double Ratio { get; set; }
-
+        public double RatioFromChromCorr { get; set; }
 
         public float IntensityTheorI0 { get; set; }
         public float IntensityTheorI2 { get; set; }
         public float IntensityTheorI4 { get; set; }
+
+        public float ChromCorrO16O18SingleLabel { get; set; }
+        public float ChromCorrO16O18DoubleLabel { get; set; }
+
+        
 
         #endregion
 
@@ -63,8 +68,13 @@ namespace DeconTools.Workflows.Backend.Results
             sb.Append(delim);
             sb.Append(this.IntensityI4Adjusted);
             sb.Append(delim);
+            sb.Append(this.ChromCorrO16O18SingleLabel);
+            sb.Append(delim);
+            sb.Append(this.ChromCorrO16O18DoubleLabel);
+            sb.Append(delim);
             sb.Append(this.Ratio.ToString("0.0000"));
-
+            sb.Append(delim);
+            sb.Append(this.RatioFromChromCorr.ToString("0.0000"));
 
             return sb.ToString();
 

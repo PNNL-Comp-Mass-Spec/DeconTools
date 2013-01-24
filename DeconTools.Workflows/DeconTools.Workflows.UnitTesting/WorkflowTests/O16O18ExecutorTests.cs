@@ -73,6 +73,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(-0.001662m, (decimal)Math.Round(result1.NETError, 6));
 
             Assert.AreEqual(0.274m, (decimal)Math.Round(result1.Ratio, 3));
+            Assert.IsTrue(result1.ChromCorrO16O18DoubleLabel > 0);
+
+            Console.WriteLine(result1.ToStringWithDetailsAsRow());
 
         }
 

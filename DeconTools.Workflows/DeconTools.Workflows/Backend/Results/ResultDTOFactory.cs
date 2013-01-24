@@ -73,8 +73,6 @@ namespace DeconTools.Workflows.Backend.Results
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
             r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
             r.AreaUnderRatioCurveRevised = result.AreaUnderRatioCurveRevised;
-            r.RSquaredValForRatioCurve = result.RSquaredValForRatioCurve;
-
             r.ChromCorrelationMin = result.ChromCorrelationMin;
             r.ChromCorrelationMax = result.ChromCorrelationMax;
             r.ChromCorrelationAverage = result.ChromCorrelationAverage;
@@ -85,6 +83,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
             r.LabelDistributionVals = result.LabelDistributionVals == null ? null : result.LabelDistributionVals.ToArray();
+            r.FitScoreLabeledProfile = result.FitScoreLabeledProfile;
         }
 
 
@@ -150,7 +149,12 @@ namespace DeconTools.Workflows.Backend.Results
             r.IntensityTheorI2 = getIntensityFromIso(result.Target.IsotopicProfile, 2);
             r.IntensityTheorI4 = getIntensityFromIso(result.Target.IsotopicProfile, 4);
             r.IntensityI4Adjusted = result.IntensityI4Adjusted;
+
+            r.ChromCorrO16O18DoubleLabel = (float) (result.ChromCorrO16O18DoubleLabel ?? 0f);
+            r.ChromCorrO16O18SingleLabel = (float)(result.ChromCorrO16O18SingleLabel ?? 0f);
+            
             r.Ratio = result.RatioO16O18;
+            r.RatioFromChromCorr = result.RatioO16O18FromChromCorr;
         }
 
         private static void addAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)

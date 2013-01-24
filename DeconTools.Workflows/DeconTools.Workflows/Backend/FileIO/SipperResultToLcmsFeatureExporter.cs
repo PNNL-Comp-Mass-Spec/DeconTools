@@ -23,15 +23,15 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.MatchedMassTagID);
             sb.Append(Delimiter);
+            sb.Append(sipperResult.NumHighQualityProfilePeaks.ToString("0"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.FitScoreLabeledProfile.ToString("0.0000"));
+            sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderDifferenceCurve.ToString("0.000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderRatioCurve.ToString("0.000"));
             sb.Append(Delimiter);
-            sb.Append(sipperResult.NumHighQualityProfilePeaks.ToString("0"));
-            sb.Append(Delimiter);
             sb.Append(sipperResult.AreaUnderRatioCurveRevised.ToString("0.000"));
-            sb.Append(Delimiter);
-            sb.Append(sipperResult.RSquaredValForRatioCurve.ToString("0.00000"));
             sb.Append(Delimiter);
             sb.Append(sipperResult.ChromCorrelationMin.ToString("0.00000"));
             sb.Append(Delimiter);
@@ -49,8 +49,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.PercentPeptideLabelled.ToString("0.00"));
             sb.Append(Delimiter);
-            sb.Append(GetLabelDistributionDataAsString(sipperResult));
-            sb.Append(Delimiter);
+            //sb.Append(GetLabelDistributionDataAsString(sipperResult));
+            //sb.Append(Delimiter);
             sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
             return sb.ToString();
 
@@ -82,16 +82,15 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("MatchedMassTagID");
             sb.Append(Delimiter);
+            sb.Append("NumHQProfilePeaks");
+            sb.Append(Delimiter);
+            sb.Append("FitScoreLabeled");
+            sb.Append(Delimiter); 
             sb.Append("AreaDifferenceCurve");
             sb.Append(Delimiter);
             sb.Append("AreaRatioCurve");
             sb.Append(Delimiter);
-            sb.Append("NumHQProfilePeaks");
-            sb.Append(Delimiter);
             sb.Append("AreaRatioCurveRevised");
-            sb.Append(Delimiter);
-            
-            sb.Append("RSquared");
             sb.Append(Delimiter);
             sb.Append("ChromCorrMin");
             sb.Append(Delimiter);
@@ -109,12 +108,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("PercentPeptidesLabelled");
             sb.Append(Delimiter);
-            sb.Append("LabelDistributionData");
-            sb.Append(Delimiter);
+            //sb.Append("LabelDistributionData");
+            //sb.Append(Delimiter);
             sb.Append("ValidationCode");
-            
-
-
             return sb.ToString();
 
         }

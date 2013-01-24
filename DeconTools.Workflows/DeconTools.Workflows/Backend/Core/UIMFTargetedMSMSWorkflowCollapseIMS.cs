@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -61,7 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (_workflowParameters.ChromatogramCorrelationIsPerformed)
             {
-                ExecuteTask(_chromatogramCorrelatorTask);
+                ExecuteTask(_chromatogramCorrelator);
             }
         }
 
