@@ -46,6 +46,7 @@ namespace DeconTools.Backend.Workflows
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             ToleranceInPPM = 30;
+            NumMaxAttemptsAtLowIntensitySpecies = 4;
             parameters.ScanBasedWorkflowParameters.ProcessMS2 = true;
 
             DeconMSnResults = new List<DeconMSnResult>();
