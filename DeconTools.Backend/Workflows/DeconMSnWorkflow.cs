@@ -137,10 +137,11 @@ namespace DeconTools.Backend.Workflows
 
             Logger.Instance.OutputFilename = basefileName + "_log.txt";
             _outputFileName = basefileName + ".mgf";
+            _outputSummaryFilename = basefileName + "_DeconMSn_log.txt";
 
             if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
-
-            _outputSummaryFilename = basefileName + "_deconMSnSummary.txt";
+            if (File.Exists(_outputSummaryFilename)) File.Delete(_outputSummaryFilename);
+            
         }
 
 
@@ -380,9 +381,6 @@ namespace DeconTools.Backend.Workflows
             {
                 sw.AutoFlush = true;
                 sw.Write(deconResultsStringOutput);
-                sw.Flush();
-
-                sw.Close();
             }
         }
 
@@ -390,7 +388,7 @@ namespace DeconTools.Backend.Workflows
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("MSn_Scan	MSn_Level	Parent_Scan	Parent_Scan_Level	Parent_Mz	Mono_Mz	Charge_State	Monoisotopic_Mass	Isotopic_Fit	Parent_Intensity	Mono_Intensity  OriginalMZ  ExtraInfo");
+            sb.Append("MSn_Scan\tMSn_Level\tParent_Scan\tParent_Scan_Level\tParent_Mz\tMono_Mz\tCharge_State\tMonoisotopic_Mass\tIsotopic_Fit\tParent_Intensity\tMono_Intensity\tOriginalMZ\tExtraInfo");
             sb.Append(Environment.NewLine);
 
             string delimiter = "\t";
