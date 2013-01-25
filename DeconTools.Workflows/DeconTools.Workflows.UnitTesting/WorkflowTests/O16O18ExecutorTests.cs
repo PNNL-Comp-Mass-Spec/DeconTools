@@ -79,6 +79,92 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+        [Category("ProblemTesting")]
+        [Test]
+        public void O16O18Workflow_ProblemCaseTesting1()
+        {
+
+            //This is a nice case where the O16 is quite low and can be missed. In the current settings
+            //the O16Chrom is null (by itself), so the chrom correlation fails.
+            //Thus quant based on chrom corr fails, but quant based on O16O18 feature finding succeeds. 
+
+
+            //7673789
+
+            string executorParametersFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
+
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParametersFile);
+
+            string testDatasetPath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
+
+            string autoSavedExecutorParametersFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
+            executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+
+            int testTarget = 7415;
+            executor.Targets.TargetList =
+                executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
+
+            executor.Execute();
+
+            string expectedResultsFilename = executorParameters.ResultsFolder + "\\" +
+                                             executor.TargetedWorkflow.Run.DatasetName + "_results.txt";
+
+            var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
+            var results = importer.Import().Results;
+            var result1 = results.First();
+
+            Console.WriteLine(result1.ToStringWithDetailsAsRow());
+
+        }
+
+
+        [Category("ProblemTesting")]
+        [Test]
+        public void O16O18Workflow_ProblemCaseTesting2()
+        {
+
+            string executorParametersFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
+
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParametersFile);
+
+            executorParameters.TargetsFilePath =
+                @"\\protoapps\DataPkgs\Public\2012\641_Alz_O16O18_dataprocessing2\Targets\MT_Human_ALZ_O18_P852\MassTags_PMT2.txt";
+
+
+            string testDatasetPath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
+
+            string autoSavedExecutorParametersFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
+            executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+
+            int testTarget = 7673789;
+            //executor.Targets.TargetList =executor.Targets.TargetList.Where(p => p.ID == testTarget && p.ChargeState==3).ToList();
+
+            executor.Execute();
+
+            string expectedResultsFilename = executorParameters.ResultsFolder + "\\" +
+                                             executor.TargetedWorkflow.Run.DatasetName + "_results.txt";
+
+            var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
+            var results = importer.Import().Results;
+            var result1 = results.First();
+
+            Console.WriteLine(result1.ToStringWithDetailsAsRow());
+
+        }
+
+
 
         [Test]
         [Ignore("temporary")]

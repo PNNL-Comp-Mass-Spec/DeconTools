@@ -287,7 +287,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
 
-            UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+            var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
             var repository = importer.Import();
 
             Assert.AreEqual(10, repository.Results.Count);

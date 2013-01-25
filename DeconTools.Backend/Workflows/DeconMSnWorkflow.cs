@@ -23,8 +23,8 @@ namespace DeconTools.Backend.Workflows
     public class DeconMSnWorkflow : ScanBasedWorkflow
     {
         private List<IsosResult> _currentMSFeatures = new List<IsosResult>();
-        private DeconToolsPeakDetectorV2 _ms1PeakDetector;
-        private DeconToolsPeakDetectorV2 _ms2PeakDetector;
+        private DeconToolsPeakDetectorV2 _ms2PeakDetectorForCentroidData;
+        private DeconToolsPeakDetectorV2 _ms2PeakDetectorForProfileData;
 
         private XYData _currentMS1XYValues;
         private List<Peak> _currentMS1Peaks;
@@ -45,10 +45,6 @@ namespace DeconTools.Backend.Workflows
             parameters.ScanBasedWorkflowParameters.ProcessMS2 = true;
 
             DeconMSnResults = new List<DeconMSnResult>();
-
-            MS2DataType = Globals.RawDataType.Centroided;
-            
-
         }
 
         protected override void InitializeProcessingTasks()
@@ -72,34 +68,18 @@ namespace DeconTools.Backend.Workflows
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
 
-            if (MS2DataType==Globals.RawDataType.Centroided)
-            {
-                _ms2PeakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
-                _ms2PeakDetector.RawDataType = MS2DataType;
-            }
-            else if (MS2DataType==Globals.RawDataType.Profile)
-            {
-                _ms2PeakDetector =
-                    new DeconToolsPeakDetectorV2(NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio,
-                                                 NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold,
-                                                 NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
-                                                 NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
-            }
-            else
-            {
-                throw new NotImplementedException("Cannot currently handle mixed types of MS2 data");
-            }
-            
-           
-
-            Check.Ensure(Deconvolutor is ThrashDeconvolutorV2,
-                         "Error. Currently the DeconMSn workflow only works with the ThrashV2 deconvolutor. Selected deconvolutor= " +
-                         Deconvolutor);
+            _ms2PeakDetectorForCentroidData = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true) { RawDataType = Globals.RawDataType.Centroided };
 
 
+            _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio,
+                                             NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold,
+                                             NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
+                                             NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
+
+            Check.Ensure(Deconvolutor is ThrashDeconvolutorV2, "Error. Currently the DeconMSn workflow only works with the ThrashV2 deconvolutor. Selected deconvolutor= " + Deconvolutor);
         }
 
-        
+
 
         #endregion
 
@@ -182,23 +162,31 @@ namespace DeconTools.Backend.Workflows
 
                     PeakDetector.Execute(Run.ResultCollection);
                     _currentMS1Peaks = new List<Peak>(Run.PeakList);
-                    
+
 
                 }
                 else if (currentMSLevel == 2)
                 {
 
-                    if (_currentMS1Peaks==null || _currentMS1Peaks.Count==0)
+                    if (_currentMS1Peaks == null || _currentMS1Peaks.Count == 0)
                     {
                         continue;
-                        
+
                     }
 
                     var precursorInfo = Run.GetPrecursorInfo(scanSet.PrimaryScanNumber);
                     Run.CurrentScanSet = scanSet;
 
                     MSGenerator.Execute(Run.ResultCollection);
-                    _ms2PeakDetector.Execute(Run.ResultCollection);
+                    var dataIsCentroided = Run.IsDataCentroided(scanSet.PrimaryScanNumber);
+                    if (dataIsCentroided)
+                    {
+                        _ms2PeakDetectorForCentroidData.Execute(Run.ResultCollection);
+                    }
+                    else
+                    {
+                        _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
+                    }
 
                     var ms2Peaks = new List<Peak>(Run.PeakList);
 
@@ -312,7 +300,7 @@ namespace DeconTools.Backend.Workflows
 
                         if (selectedPeak != null)
                         {
-                            
+
                             deconMSnResult.ParentMZ = selectedPeak.XValue;
                             deconMSnResult.ParentChargeState = 1;   //not sure what charge I should assign... Ask SangTae
                             deconMSnResult.ParentIntensity = selectedPeak.Height;
@@ -341,12 +329,12 @@ namespace DeconTools.Backend.Workflows
                         WriteOutData(outputString);
                     }
 
-                    if (deconMSnResult.ParentIntensity>0)
+                    if (deconMSnResult.ParentIntensity > 0)
                     {
-                        DeconMSnResults.Add(deconMSnResult);    
+                        DeconMSnResults.Add(deconMSnResult);
                     }
 
-                    
+
 
 
                 }
@@ -356,7 +344,7 @@ namespace DeconTools.Backend.Workflows
                         "DeconMSn only works on MS1 and MS2 data; You are attempting MS3");
                 }
 
-   
+
                 ReportProgress();
 
             }
@@ -365,13 +353,13 @@ namespace DeconTools.Backend.Workflows
             {
                 string deconResultsStringOutput = DeconMSnResultsToString1(DeconMSnResults);
                 WriteOutDeconMSnSummary(deconResultsStringOutput);
-                
-                
+
+
                 //Console.WriteLine(deconResultsStringOutput);
-    
+
             }
 
-            
+
         }
 
         private void WriteOutDeconMSnSummary(string deconResultsStringOutput)
@@ -418,7 +406,7 @@ namespace DeconTools.Backend.Workflows
                 sb.Append(delimiter);
                 sb.Append(result.OriginalMZTarget);
                 sb.Append(delimiter);
-                
+
                 sb.Append(result.ExtraInfo);
                 sb.Append(Environment.NewLine);
 

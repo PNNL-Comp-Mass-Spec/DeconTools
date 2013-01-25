@@ -242,7 +242,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromToleranceInPPM);
 
+            if (run.XYData == null || run.XYData.Xvalues.Length < 3) return null;
+
             var basePeakChromXYData = Smoother.Smooth(run.XYData);
+            
             bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
                                      basePeakChromXYData.Xvalues.Length > 3;
 
@@ -267,17 +270,19 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             var filledInData = new SortedDictionary<int, double>();
 
-            for (int i = 0; i < chromPeakXYData.Xvalues.Length; i++)
-            {
-                filledInData.Add((int)chromPeakXYData.Xvalues[i], chromPeakXYData.Yvalues[i]);
-            }
-
+            //first fill with zeros
             for (int i = 0; i < basePeakChromXYData.Xvalues.Length; i++)
             {
-                int currentScan = (int)basePeakChromXYData.Xvalues[i];
-                if (!filledInData.ContainsKey(currentScan))
+                filledInData.Add((int)basePeakChromXYData.Xvalues[i], 0);
+            }
+
+            //then fill in other values
+            for (int i = 0; i < chromPeakXYData.Xvalues.Length; i++)
+            {
+                int currentScan = (int)chromPeakXYData.Xvalues[i];
+                if (filledInData.ContainsKey(currentScan))
                 {
-                    filledInData.Add(currentScan, 0);
+                    filledInData[currentScan] = chromPeakXYData.Yvalues[i];
                 }
             }
 
