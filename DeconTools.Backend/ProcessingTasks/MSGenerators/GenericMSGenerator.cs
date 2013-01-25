@@ -43,7 +43,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 run.XYData = new XYData();
             }
 
-          
             run.GetMassSpectrum(run.CurrentScanSet, MinMZ, MaxMZ);
 
             if (run.XYData.Xvalues == null || run.XYData.Xvalues.Length == 0)

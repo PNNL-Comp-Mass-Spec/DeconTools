@@ -23,6 +23,10 @@ namespace DeconTools.Backend.Workflows
     public class DeconMSnWorkflow : ScanBasedWorkflow
     {
         private List<IsosResult> _currentMSFeatures = new List<IsosResult>();
+
+        private DeconToolsPeakDetectorV2 _moreSensitiveMS1PeakDetector;
+        private DeconToolsPeakDetectorV2 _superSensitiveMS1PeakDetector;
+
         private DeconToolsPeakDetectorV2 _ms2PeakDetectorForCentroidData;
         private DeconToolsPeakDetectorV2 _ms2PeakDetectorForProfileData;
 
@@ -52,6 +56,18 @@ namespace DeconTools.Backend.Workflows
 
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
+
+
+            double moreSensitivePeakToBackgroundRatio = NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio / 2;
+            double moreSensitiveSigNoiseThresh = NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold;
+            _moreSensitiveMS1PeakDetector = new DeconToolsPeakDetectorV2(moreSensitivePeakToBackgroundRatio,
+                                             moreSensitiveSigNoiseThresh, NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
+                                             NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
+
+            _superSensitiveMS1PeakDetector = new DeconToolsPeakDetectorV2(0, 0, NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
+                                             NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
+
+
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
 
 
@@ -121,7 +137,7 @@ namespace DeconTools.Backend.Workflows
 
             if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
             if (File.Exists(_outputSummaryFilename)) File.Delete(_outputSummaryFilename);
-            
+
         }
 
 
@@ -178,6 +194,11 @@ namespace DeconTools.Backend.Workflows
                     Run.CurrentScanSet = scanSet;
 
                     MSGenerator.Execute(Run.ResultCollection);
+
+                    double inaccurateParentMZ = precursorInfo.PrecursorMZ;
+                    double lowerMZ = inaccurateParentMZ - 1.1;
+                    double upperMZ = inaccurateParentMZ + 1.1;
+
                     var dataIsCentroided = Run.IsDataCentroided(scanSet.PrimaryScanNumber);
                     if (dataIsCentroided)
                     {
@@ -187,69 +208,74 @@ namespace DeconTools.Backend.Workflows
                     {
                         _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
                     }
-
                     var ms2Peaks = new List<Peak>(Run.PeakList);
 
-                    double inaccurateParentMZ = precursorInfo.PrecursorMZ;
-                    double lowerMZ = inaccurateParentMZ - 1.1;
-                    double upperMZ = inaccurateParentMZ + 1.1;
-
-
                     var filteredMS1Peaks = _currentMS1Peaks.Where(p => p.XValue > lowerMZ && p.XValue < upperMZ).ToList();
-                    var ms1Features = ((ThrashDeconvolutorV2)Deconvolutor).PerformThrash(_currentMS1XYValues, filteredMS1Peaks, 0, 0, 0);
-
 
                     var deconMSnResult = new DeconMSnResult();
                     deconMSnResult.ParentScan = Run.GetParentScan(scanSet.PrimaryScanNumber);
                     deconMSnResult.ScanNum = scanSet.PrimaryScanNumber;
                     deconMSnResult.OriginalMZTarget = inaccurateParentMZ;
 
-                    List<IsotopicProfile> candidateMS1Features = new List<IsotopicProfile>();
-                    foreach (var msfeature in ms1Features)
-                    {
-                        foreach (var peak in msfeature.Peaklist)
-                        {
-                            double currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
-
-                            double toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
-
-                            if (currentDiff < toleranceInMZ)
-                            {
-                                candidateMS1Features.Add(msfeature);
-                            }
-
-                        }
-                    }
 
                     IsotopicProfile selectedMS1Feature = null;
-                    if (candidateMS1Features.Count == 0)
+                    for (int attemptNum = 0; attemptNum < NumMaxAttemptsAtLowIntensitySpecies; attemptNum++)
                     {
-                        //TODO: perform another round
-                    }
-                    else if (candidateMS1Features.Count == 1)
-                    {
-                        selectedMS1Feature = candidateMS1Features.First();
+                        var candidateMS1Features = GetCandidateMS1Features(inaccurateParentMZ, filteredMS1Peaks);
 
-
-                    }
-                    else
-                    {
-                        var highQualityCandidates = candidateMS1Features.Where(p => p.Score < 0.15).ToList();
-                        if (highQualityCandidates.Count == 0)
+                        //if none were found, will regenerate MS1 spectrum and find peaks again
+                        if (candidateMS1Features.Count == 0)
                         {
-                            selectedMS1Feature = candidateMS1Features.OrderByDescending(p => p.IntensityMostAbundantTheor).First();
+
+                            int numSummed = attemptNum * 2 + 3;
+                            int ms1Scan = precursorInfo.PrecursorScan;
+
+                            ScanSet ms1scanset = new ScanSetFactory().CreateScanSet(Run, ms1Scan, numSummed);
+
+                            //get MS1 mass spectrum again. This time sum spectra
+                            Run.CurrentScanSet = ms1scanset;
+                            MSGenerator.Execute(Run.ResultCollection);
+
+                            //run MS1 peak detector, with greater sensitivity
+                            bool isLastAttempt = attemptNum >= NumMaxAttemptsAtLowIntensitySpecies - 2;    //need to do -2 because of the way the loop advances the counter. 
+
+                            if (isLastAttempt)
+                            {
+                                _superSensitiveMS1PeakDetector.MinX = lowerMZ;
+                                _superSensitiveMS1PeakDetector.MaxX = upperMZ;
+                                _superSensitiveMS1PeakDetector.Execute(Run.ResultCollection);
+                                filteredMS1Peaks = new List<Peak>(Run.PeakList);
+                            }
+                            else
+                            {
+                                _moreSensitiveMS1PeakDetector.Execute(Run.ResultCollection);
+                                var moreSensitiveMS1Peaks = new List<Peak>(Run.PeakList);
+                                filteredMS1Peaks = moreSensitiveMS1Peaks.Where(p => p.XValue > lowerMZ && p.XValue < upperMZ).ToList();
+                            }
                         }
-                        else if (highQualityCandidates.Count == 1)
+                        else if (candidateMS1Features.Count == 1)
                         {
-                            selectedMS1Feature = highQualityCandidates.First();
+                            selectedMS1Feature = candidateMS1Features.First();
                         }
                         else
                         {
-                            selectedMS1Feature = highQualityCandidates.OrderByDescending(p => p.IntensityMostAbundantTheor).First();
+                            var highQualityCandidates = candidateMS1Features.Where(p => p.Score < 0.15).ToList();
+                            if (highQualityCandidates.Count == 0)
+                            {
+                                selectedMS1Feature = candidateMS1Features.OrderByDescending(p => p.IntensityMostAbundantTheor).First();
+                            }
+                            else if (highQualityCandidates.Count == 1)
+                            {
+                                selectedMS1Feature = highQualityCandidates.First();
+                            }
+                            else
+                            {
+                                selectedMS1Feature = highQualityCandidates.OrderByDescending(p => p.IntensityMostAbundantTheor).First();
+                            }
+
+                            deconMSnResult.ExtraInfo = "Warning - multiple MSFeatures found for target parent MZ";
+
                         }
-
-                        deconMSnResult.ExtraInfo = "Warning - multiple MSFeatures found for target parent MZ";
-
                     }
 
 
@@ -262,8 +288,6 @@ namespace DeconTools.Backend.Workflows
                         deconMSnResult.ParentIntensity = selectedMS1Feature.IntensityMostAbundantTheor;
                         deconMSnResult.IntensityAggregate = selectedMS1Feature.IntensityMostAbundantTheor;
                         deconMSnResult.IsotopicProfile = selectedMS1Feature;
-
-
                     }
                     else
                     {
@@ -360,6 +384,36 @@ namespace DeconTools.Backend.Workflows
             }
 
 
+        }
+
+        /// <summary>
+        /// Number of attempts at trying to find MS1 features. This
+        /// In each attempt, two more spectra are summed.  In the last attempt,
+        /// the peak detector thresholds are dropped to lowest levels so that all
+        /// peaks are reported and used in the Thrash algorithm
+        /// </summary>
+        public int NumMaxAttemptsAtLowIntensitySpecies { get; set; }
+
+        private List<IsotopicProfile> GetCandidateMS1Features(double inaccurateParentMZ, List<Peak> filteredMS1Peaks)
+        {
+            List<IsotopicProfile> candidateMS1Features = new List<IsotopicProfile>();
+            var ms1Features = ((ThrashDeconvolutorV2)Deconvolutor).PerformThrash(_currentMS1XYValues, filteredMS1Peaks, 0, 0, 0);
+
+            foreach (var msfeature in ms1Features)
+            {
+                foreach (var peak in msfeature.Peaklist)
+                {
+                    double currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
+
+                    double toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
+
+                    if (currentDiff < toleranceInMZ)
+                    {
+                        candidateMS1Features.Add(msfeature);
+                    }
+                }
+            }
+            return candidateMS1Features;
         }
 
         private void WriteOutDeconMSnSummary(string deconResultsStringOutput)
