@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var run = new RunFactory().CreateRun(testFile1);
 
             var expectedResultsFile1 = run.DataSetPath + "\\" + run.DatasetName + ".mgf";
-            var expectedResultsFile2 = run.DataSetPath + "\\" + run.DatasetName + "_deconMSnSummary.txt";
+			var expectedResultsFile2 = run.DataSetPath + "\\" + run.DatasetName + "_DeconMSn_log.txt";
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
             if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
@@ -62,7 +62,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string datasetName= RunUtilities.GetDatasetName(rawdataFile);
 
             var expectedResultsFile1 = outputFolder + "\\" + datasetName + ".mgf";
-            var expectedResultsFile2 = outputFolder + "\\" + datasetName + "_deconMSnSummary.txt";
+			var expectedResultsFile2 = outputFolder + "\\" + datasetName + "_DeconMSn_log.txt";
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
             if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
