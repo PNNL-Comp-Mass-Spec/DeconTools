@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -88,11 +84,34 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             
             var workflow = ScanBasedWorkflow.CreateWorkflow(rawdataFile, parameterFile);
             workflow.Execute();
-
-            
-
         }
 
+
+        [Category("ProblemTesting")]
+        [Test]
+        public void LowIntensityButGoodFeatureTest1()
+        {
+            string rawDataFile = @"D:\Data\DeconMSn_testing\QC_Shew_13_01_pt5_b_23Jan13_Cougar_12-02-27.raw";
+
+
+            var parameters = new DeconToolsParameters();
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 20593;
+            parameters.MSGeneratorParameters.MaxLCScan = 20598;
+
+            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 1.3;
+            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 2;
+            parameters.PeakDetectorParameters.IsDataThresholded = true;
+
+            parameters.ThrashParameters.MinIntensityForScore = 1;
+            parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 1;
+
+            var run = new RunFactory().CreateRun(rawDataFile);
+
+            var workflow = new DeconMSnWorkflow(parameters, run);
+            workflow.NumMaxAttemptsAtLowIntensitySpecies = 4;
+            workflow.Execute();
+        }
 
 
 
