@@ -142,7 +142,7 @@ namespace DeconTools.Backend.Workflows
 
                 if (currentMSLevel == 1)
                 {
-                    _currentMS1Scan = scanSet.PrimaryScanNumber;
+                    
                     _currentMSFeatures.Clear();
                     Run.ResultCollection.IsosResultBin.Clear();
 
