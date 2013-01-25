@@ -77,9 +77,14 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                     mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile2(mt, LowPeakCutOff);
                     break;
                 case Globals.LabellingType.Deuterium:
-                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
-                    //mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling);
-                    mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
+                    //mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
+                    //mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
+                    
+                    //swap so we can keep the normal in labeled box and use the D/H for generall processing
+                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);//needed for _DeuteriumIsotopicProfileGenerator
+                    mt.IsotopicProfile = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
+                    mt.IsotopicProfileLabelled = GetUnlabelledIsotopicProfile(mt);
+                    
                     break;
                 default:
                     throw new NotImplementedException();
