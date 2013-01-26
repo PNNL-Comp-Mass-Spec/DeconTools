@@ -93,7 +93,6 @@
     <Compile Include="Backend\Core\WorkflowParameters.cs" />
     <Compile Include="Backend\Data\TopdownChromData.cs" />
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
-    <Compile Include="Backend\FileIO\DeuteratedTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
