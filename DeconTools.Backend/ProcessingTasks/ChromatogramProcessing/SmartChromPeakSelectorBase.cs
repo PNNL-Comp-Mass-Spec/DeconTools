@@ -170,6 +170,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             	pq.IsotopicProfile = currentResult.IsotopicProfile;
                 bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
                 pq.IsIsotopicProfileFlagged = resultHasFlags;
+                
+                pq.Scan =  currentResult.Run.CurrentScanSet.PrimaryScanNumber;
             }
         }
 
