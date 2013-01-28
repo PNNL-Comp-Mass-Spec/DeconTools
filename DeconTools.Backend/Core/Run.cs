@@ -207,6 +207,15 @@ namespace DeconTools.Backend.Core
             return (float)summedIntensities;
         }
 
+
+
+        public virtual double GetTICFromInstrumentInfo(int scanNum)
+        {
+            return 0;
+        }
+
+
+
         public TargetBase CurrentMassTag { get; set; }
 
         public virtual void GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
@@ -939,6 +948,11 @@ namespace DeconTools.Backend.Core
         public virtual int GetParentScan(int scanLC)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual double GetIonInjectionTimeInMilliseconds(int scanNum)
+        {
+            return 0;
         }
     }
 }

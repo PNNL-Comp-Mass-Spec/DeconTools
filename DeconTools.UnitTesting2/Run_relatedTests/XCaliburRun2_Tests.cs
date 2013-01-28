@@ -84,7 +84,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         }
 
+        [Test]
+        public  void GetIonInjectionTimeTest1()
+        {
+            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+            int scan = 6005;
+            var ionInjectionTime = run.GetIonInjectionTimeInMilliseconds(scan);
+
+            Assert.AreEqual(2.84m, (decimal) Math.Round(ionInjectionTime, 2));
+
+            Console.WriteLine("Scan "+ scan + "; ion injection time = " + ionInjectionTime);
+        }
 
         [Test]
         public void getSpectrum_Test1()
@@ -197,6 +208,20 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(0, precursor.PrecursorIntensity);
             Assert.AreEqual(408.25, precursor.PrecursorMZ);
             Assert.AreEqual(6005, precursor.PrecursorScan);
+        }
+
+
+        [Test]
+        public void GetTICFromInstrumentInfoTest1()
+        {
+            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            int scan = 6005;
+
+           var ticIntensity =   run.GetTICFromInstrumentInfo(scan);
+
+            Assert.IsTrue(ticIntensity > 0);
+
         }
        
 

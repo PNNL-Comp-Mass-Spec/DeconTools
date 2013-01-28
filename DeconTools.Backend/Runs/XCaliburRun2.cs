@@ -70,6 +70,15 @@ namespace DeconTools.Backend.Runs
             return isCentroided != 0;
         }
 
+        public override double GetIonInjectionTimeInMilliseconds(int scanNum)
+        {
+            object value=null;
+            _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
+            
+            return Convert.ToDouble(value);
+
+        }
+
 
         public override int GetNumMSScans()
         {
@@ -162,6 +171,21 @@ namespace DeconTools.Backend.Runs
 
             return msLevel;
         }
+
+
+        public override double GetTICFromInstrumentInfo(int scanNum)
+        {
+            int pnNumPackets = 0, pnNumChannels = 0, pbUniformTime = 0;
+            double pdStartTime = 0, pdLowMass = 0, pdHighMass = 0, pdTIC = 0, pdBasePeakMass = 0, pdBasePeakIntensity = 0, pdFrequency = 0;
+            _msfileReader.GetScanHeaderInfoForScanNum(scanNum, ref pnNumPackets, ref pdStartTime, ref pdLowMass, ref pdHighMass, ref pdTIC,
+                                                      ref pdBasePeakMass, ref pdBasePeakIntensity, ref pnNumChannels, ref pbUniformTime,
+                                                      ref pdFrequency);
+
+            return pdTIC;
+
+
+        }
+
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {

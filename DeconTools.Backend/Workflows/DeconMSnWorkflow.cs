@@ -35,6 +35,9 @@ namespace DeconTools.Backend.Workflows
         private string _outputFileName;
         private int _scanCounter;
         private string _outputSummaryFilename;
+        private string _outputParentProfileDataFilename;
+
+        private double _currentMS1TICIntensity=0;
         private const int NumScansBetweenProgress = 500;
 
         #region Constructors
@@ -45,10 +48,9 @@ namespace DeconTools.Backend.Workflows
             ToleranceInPPM = 30;
             NumMaxAttemptsAtLowIntensitySpecies = 4;
             parameters.ScanBasedWorkflowParameters.ProcessMS2 = true;
-
-
-
             DeconMSnResults = new List<DeconMSnResult>();
+            IsParentProfileDataExported = true;
+
         }
 
         protected override void InitializeProcessingTasks()
@@ -114,6 +116,12 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         public int NumMaxAttemptsAtLowIntensitySpecies { get; set; }
 
+        /// <summary>
+        /// Create a _profile.txt file. This supports DTARefinery which looks for this file. 
+        /// Otherwise, the same data can be found in the _DeconMSn_log.txt file
+        /// </summary>
+        public bool IsParentProfileDataExported { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -154,6 +162,8 @@ namespace DeconTools.Backend.Workflows
                     _currentMS1XYValues.Xvalues = Run.XYData.Xvalues;
                     _currentMS1XYValues.Yvalues = Run.XYData.Yvalues;
 
+                    _currentMS1TICIntensity = Run.GetTICFromInstrumentInfo(scanSet.PrimaryScanNumber);
+
                     PeakDetector.Execute(Run.ResultCollection);
                     _currentMS1Peaks = new List<Peak>(Run.PeakList);
 
@@ -174,8 +184,10 @@ namespace DeconTools.Backend.Workflows
                     resultCounter++;
                     var deconMSnResult = new DeconMSnResult();
                     deconMSnResult.ParentScan = Run.GetParentScan(scanSet.PrimaryScanNumber);
+                    deconMSnResult.IonInjectionTime = Run.GetIonInjectionTimeInMilliseconds(deconMSnResult.ParentScan);
                     deconMSnResult.ScanNum = scanSet.PrimaryScanNumber;
                     deconMSnResult.OriginalMZTarget = inaccurateParentMZ;
+                    deconMSnResult.ParentScanTICIntensity = _currentMS1TICIntensity;
 
                     MSGenerator.Execute(Run.ResultCollection);
 
@@ -321,11 +333,22 @@ namespace DeconTools.Backend.Workflows
                     bool includeHeader = resultCounter == 1;
                     string summaryString = GetSummaryString(deconMSnResult, includeHeader);
 
+                    string parentProfileString = GetParentProfileString(deconMSnResult, includeHeader);
+
+
+
                     if (ExportData)
                     {
                         WriteOutMainData(outputString);
 
                         WriteOutDeconMSnSummary(summaryString);
+
+                        if (IsParentProfileDataExported)
+                        {
+                            WriteOutParentProfileInfoString(parentProfileString);  
+                        }
+                        
+
                     }
 
                     if (deconMSnResult.ParentIntensity > 0)
@@ -348,6 +371,8 @@ namespace DeconTools.Backend.Workflows
 
         }
 
+    
+
         protected override void CreateOutputFileNames()
         {
             string basefileName = GetBaseFileName(Run);
@@ -355,9 +380,11 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.OutputFilename = basefileName + "_log.txt";
             _outputFileName = basefileName + ".mgf";
             _outputSummaryFilename = basefileName + "_DeconMSn_log.txt";
+            _outputParentProfileDataFilename = basefileName + "_profile.txt";
 
             if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
             if (File.Exists(_outputSummaryFilename)) File.Delete(_outputSummaryFilename);
+            if (File.Exists(_outputParentProfileDataFilename)) File.Delete(_outputParentProfileDataFilename);
         }
 
         protected override Globals.ResultType GetResultType()
@@ -396,13 +423,38 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
         #region Private Methods
+
+        private string GetParentProfileString(DeconMSnResult result, bool includeHeader)
+        {
+            var sb = new StringBuilder();
+
+            if (includeHeader)
+            {
+                sb.Append("MSn_Scan\tParent_Scan\tAGC_accumulation_time\tTIC");
+                sb.Append(Environment.NewLine);
+            }
+
+            var delimiter = "\t";
+
+            sb.Append(result.ScanNum);
+            sb.Append(delimiter);
+            sb.Append(result.ParentScan);
+            sb.Append(delimiter);
+            sb.Append(result.IonInjectionTime.ToString("0.0000"));
+            sb.Append(delimiter);
+            sb.Append(result.ParentScanTICIntensity.ToString("0"));
+
+            return sb.ToString();
+        }
+        
+        
         private string GetSummaryString(DeconMSnResult result, bool includeHeader = false)
         {
             var sb = new StringBuilder();
 
             if (includeHeader)
             {
-                sb.Append("MSn_Scan\tMSn_Level\tParent_Scan\tParent_Scan_Level\tParent_Mz\tMono_Mz\tCharge_State\tMonoisotopic_Mass\tIsotopic_Fit\tParent_Intensity\tMono_Intensity\tOriginalMZ\tExtraInfo");
+                sb.Append("MSn_Scan\tMSn_Level\tParent_Scan\tParent_Scan_Level\tParent_Mz\tMono_Mz\tCharge_State\tMonoisotopic_Mass\tIsotopic_Fit\tParent_Intensity\tMono_Intensity\tParent_TIC\tIon_Injection_Time\tOriginalMZ\tExtraInfo");
                 sb.Append(Environment.NewLine);
             }
 
@@ -428,6 +480,10 @@ namespace DeconTools.Backend.Workflows
             sb.Append(result.ParentIntensity.ToString("0"));
             sb.Append(delimiter);
             sb.Append(result.IntensityAggregate.ToString("0"));
+            sb.Append(delimiter);
+            sb.Append(result.ParentScanTICIntensity.ToString("0"));
+            sb.Append(delimiter);
+            sb.Append(result.IonInjectionTime.ToString("0.0000"));
             sb.Append(delimiter);
             sb.Append(result.OriginalMZTarget);
             sb.Append(delimiter);
@@ -492,6 +548,18 @@ namespace DeconTools.Backend.Workflows
 
             }
         }
+
+        private void WriteOutParentProfileInfoString(string outputString)
+        {
+            using (var sw = new StreamWriter(new System.IO.FileStream(_outputParentProfileDataFilename, System.IO.FileMode.Append,
+                    System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            {
+                sw.AutoFlush = true;
+                sw.WriteLine(outputString);
+
+            }
+        }
+
 
         protected override void WriteOutSummaryToLogfile()
         {

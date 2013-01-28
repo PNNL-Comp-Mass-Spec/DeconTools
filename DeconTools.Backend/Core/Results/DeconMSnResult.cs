@@ -11,9 +11,12 @@ namespace DeconTools.Backend.Core.Results
 
 
         public double ParentMZ { get; set; }
-        public double ParentScan { get; set; }
+        public int ParentScan { get; set; }
         public double ParentIntensity { get; set; }
-        
+        public double ParentScanTICIntensity { get; set; }
+       
+ 
+
         public int ScanNum { get; set; }
 
         public string ExtraInfo { get; set; }
@@ -21,6 +24,10 @@ namespace DeconTools.Backend.Core.Results
         public int ParentChargeState { get; set; }
 
         public double OriginalMZTarget { get; set; }
+
+        public double IonInjectionTime { get; set; }
+
+       
 
         #endregion
 

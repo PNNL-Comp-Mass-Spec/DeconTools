@@ -32,16 +32,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var expectedResultsFile1 = run.DataSetPath + "\\" + run.DatasetName + ".mgf";
 			var expectedResultsFile2 = run.DataSetPath + "\\" + run.DatasetName + "_DeconMSn_log.txt";
+            var expectedResultsFile3 = run.DataSetPath + "\\" + run.DatasetName + "_profile.txt";
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
             if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
+            if (File.Exists(expectedResultsFile3)) File.Delete(expectedResultsFile3);
 
             var workflow = new DeconMSnWorkflow(parameters, run);
             workflow.Execute();
 
             Assert.IsTrue(File.Exists(expectedResultsFile1));
             Assert.IsTrue(File.Exists(expectedResultsFile2));
-
+            Assert.IsTrue(File.Exists(expectedResultsFile3));
         }
 
         [Category("Standard")]
@@ -59,17 +61,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var expectedResultsFile1 = outputFolder + "\\" + datasetName + ".mgf";
 			var expectedResultsFile2 = outputFolder + "\\" + datasetName + "_DeconMSn_log.txt";
+            var expectedResultsFile3 = outputFolder + "\\" + datasetName + "_profile.txt";
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
             if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
-
+            if (File.Exists(expectedResultsFile3)) File.Delete(expectedResultsFile3);
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(rawdataFile, parameterFile, outputFolder);
             workflow.Execute();
 
             Assert.IsTrue(File.Exists(expectedResultsFile1));
             Assert.IsTrue(File.Exists(expectedResultsFile2));
-
+            Assert.IsTrue(File.Exists(expectedResultsFile3));
         }
 
 
