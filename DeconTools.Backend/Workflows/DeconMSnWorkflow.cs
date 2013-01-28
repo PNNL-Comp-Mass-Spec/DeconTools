@@ -245,6 +245,7 @@ namespace DeconTools.Backend.Workflows
                         else if (candidateMS1Features.Count == 1)
                         {
                             selectedMS1Feature = candidateMS1Features.First();
+                            break;   //we found something, so no need for any further attempts
                         }
                         else
                         {
@@ -263,7 +264,7 @@ namespace DeconTools.Backend.Workflows
                             }
 
                             deconMSnResult.ExtraInfo = "Warning - multiple MSFeatures found for target parent MZ";
-
+                            break;   //we found something, so no need for any further attempts
                         }
                     }
 
@@ -370,8 +371,6 @@ namespace DeconTools.Backend.Workflows
 
 
         }
-
-    
 
         protected override void CreateOutputFileNames()
         {
