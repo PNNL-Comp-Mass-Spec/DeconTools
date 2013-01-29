@@ -49,11 +49,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             ScanSet scanset = new ScanSet(25);
 
             run.GetMassSpectrum(scanset, 0, 6000);
-            TestUtilities.DisplayXYValues(run.XYData);
+            //TestUtilities.DisplayXYValues(run.XYData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
             Assert.AreEqual(156721, run.XYData.Xvalues.Length);
         }
 
+         [Ignore("Testing only")]
         [Test]
         ///checks the length of a non-summed and summed spectra
         public void GetSummedSpectrumTest1()
@@ -97,6 +98,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
         }
 
+         [Ignore("Testing only")]
         [Test]
         ///checks the length of a non-summed and summed spectra and restrict the mass range to 100Da
         public void GetSummedSpectrumTest2()
@@ -140,6 +142,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(8926, run.XYData.Xvalues.Length);
         }
 
+        [Ignore("Testing only")]
         [Test]
         ///  Writes three spectra files to disk so that the data can be compared before and after summing
         public void GetSummedSpectrumTestWriteToDisk()
@@ -203,6 +206,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(1, run.GetMSLevel(25)); 
         }
 
+        [Ignore("Testing only")]
         [Test]
         public void GetMSLevelTest2()
         {
@@ -232,6 +236,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(2, run.GetMSLevel(613)); 
         }
 
+        [Ignore("Testing only")]
         [Test]
         public void GetPrecursorTest1()
         {
@@ -327,6 +332,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
+         [Ignore("Testing only")]
         [Test]
         public void Test1()
         {

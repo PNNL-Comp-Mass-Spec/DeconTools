@@ -74,13 +74,26 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //want to throw errors here
             if (theorIntensitiesUsedInCalc.Count == 0) return 1.0;
 
-            double sumObsPeaks = observedIntensitiesUsedInCalc.Sum();
-            if (Math.Abs(sumObsPeaks - 0) < float.Epsilon) sumObsPeaks = double.PositiveInfinity;
+            double maxObs = observedIntensitiesUsedInCalc.Max();
+            if (Math.Abs(maxObs - 0) < float.Epsilon) maxObs = double.PositiveInfinity;
 
-            List<double> normalizedObs = observedIntensitiesUsedInCalc.Select(p => p/sumObsPeaks).ToList();
+            List<double> normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
 
-            double sumTheorPeaks = theorIntensitiesUsedInCalc.Sum();
-            List<double> normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p/sumTheorPeaks).ToList();
+            double maxTheor = theorIntensitiesUsedInCalc.Max();
+            List<double> normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
+
+
+            //foreach (var val in normalizedObs)
+            //{
+            //    Console.WriteLine(val);
+            //}
+
+            //Console.WriteLine();
+            //foreach (var val in normalizedTheo)
+            //{
+            //    Console.WriteLine(val);
+            //}
+
 
             double sumSquareOfDiffs = 0;
             double sumSquareOfTheor = 0;

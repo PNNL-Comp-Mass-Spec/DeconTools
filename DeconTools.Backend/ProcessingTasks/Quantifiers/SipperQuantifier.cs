@@ -37,6 +37,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
             _partialLabelingQuantifier.MaxLabelAmount = 15;
             _partialLabelingQuantifier.StepAmountForIterator = 0.25;
+            _partialLabelingQuantifier.NumLeftZeroPads = 1;
+            _partialLabelingQuantifier.NumRightZeroPads = 1;
+            _partialLabelingQuantifier.IsTheoreticalTrimmedDownToObserved = true;
 
 
             IsChromatogramCorrelationPerformed = true;
@@ -268,16 +271,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
 
-                foreach (var peak in peaksForLabeledIsoQuant)
-                {
-                    Console.WriteLine(peak.XValue + "\t" + peak.Height);
-                }
+                //foreach (var peak in peaksForLabeledIsoQuant)
+                //{
+                //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
+                //}
 
 
-                foreach (var msPeak in result.Target.IsotopicProfile.Peaklist)
-                {
-                    Console.WriteLine(msPeak.XValue + "\t" + msPeak.Height);
-                }
+                //foreach (var msPeak in result.Target.IsotopicProfile.Peaklist)
+                //{
+                //    Console.WriteLine(msPeak.XValue + "\t" + msPeak.Height);
+                //}
 
 
                 var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);

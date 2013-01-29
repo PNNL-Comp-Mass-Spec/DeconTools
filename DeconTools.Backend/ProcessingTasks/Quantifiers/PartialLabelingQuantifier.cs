@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
@@ -28,9 +29,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private double _toleranceInPPM = 30;
 
         //TODO: for testing. delete later 
-       public Dictionary<decimal, double> FitScoreData = new Dictionary<decimal, double>(); 
+        public Dictionary<decimal, double> FitScoreData = new Dictionary<decimal, double>();
 
-        public PartialLabelingQuantifier(string element, int lightIsotope, int heavyIsotope)
+        public PartialLabelingQuantifier(string element, int lightIsotope, int heavyIsotope, int numLeftZeroPads = 1, int numRightZeroPads = 1, bool isTheorProfileTrimmed = false)
         {
             MinLabelAmount = 0;
             MaxLabelAmount = 100;
@@ -42,9 +43,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             _theorLabeledProfiles = new List<IsotopicProfile>();
 
-            IterativeTFFParameters tffParameters= new IterativeTFFParameters();
+            IterativeTFFParameters tffParameters = new IterativeTFFParameters();
             tffParameters.ToleranceInPPM = 30;
             _iterativeTff = new IterativeTFF(tffParameters);
+
+            NumLeftZeroPads = numLeftZeroPads;
+            NumRightZeroPads = numRightZeroPads;
+
+            IsTheoreticalTrimmedDownToObserved = isTheorProfileTrimmed;
+
 
         }
 
@@ -57,10 +64,21 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public int LightIsotope { get; set; }
 
+        /// <summary>
+        /// Default = false.  If true, the theoretical is trimmed such that it has only +/- 1 peak more than the observed. 
+        /// This helps with low intensity obs data, which might have several '0' peaks on the left and 
+        /// right edges of the isotopic profile, resulting in a poor fit score
+        /// </summary>
+        public bool IsTheoreticalTrimmedDownToObserved { get; set; }
 
 
 
-       
+        public int NumLeftZeroPads { get; set; }
+
+        public int NumRightZeroPads { get; set; }
+
+
+
 
         public IsotopicProfileComponent FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
         {
@@ -88,7 +106,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     theorIso.getMostIntensePeak().XValue, 0, massSpectrumPeakList.Count - 1, 0.1);
 
                 double fitScore;
-               
+
+                List<Peak> obsPeakListForFitter = new List<Peak>();
                 if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
                 {
                     fitScore = 1;
@@ -97,70 +116,67 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 {
                     //double mzOffset = massSpectrumPeakList[indexOfCorrespondingObservedPeak].XValue - theorIso.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-                    double minIntensityForFitting =0.02  ;
-                    var theorPeakListForFitter = new List<Peak>(theorIso.Peaklist).Where(p=>p.Height>minIntensityForFitting).ToList();
+                    double minIntensityForFitting = 0.02;
+                    var theorPeakListForFitter = new List<Peak>(theorIso.Peaklist).Where(p => p.Height > minIntensityForFitting).ToList();
 
-                    var mzForZeroIntensityPeak = theorIso.getMonoPeak().XValue -
-                                                 Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS/theorIso.ChargeState;
+                    obsPeakListForFitter = FilterPeaksBasedOnBasePeakList(theorPeakListForFitter, massSpectrumPeakList);
 
-                    var zeroIntensityPeak = new Peak(mzForZeroIntensityPeak, float.Epsilon, 0);
 
-                    theorPeakListForFitter.Insert(0, zeroIntensityPeak);
+                    AddLeftZeroPads(obsPeakListForFitter, NumLeftZeroPads, theorIso.ChargeState);
+                    AddRightZeroPads(obsPeakListForFitter, NumRightZeroPads, theorIso.ChargeState);
 
-                    fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, massSpectrumPeakList, 0, 30);
 
-                    if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
+                    if (IsTheoreticalTrimmedDownToObserved)
+                    {
+                        theorPeakListForFitter = FilterPeaksBasedOnBasePeakList(obsPeakListForFitter, theorPeakListForFitter);
+                    }
+
+
+
+                    //foreach (var peak in obsPeakListForFitter)
+                    //{
+                    //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
+                    //}
+
+
+                    //foreach (var peak in theorPeakListForFitter)
+                    //{
+                    //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
+                    //}
+
+
+
+                    fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, obsPeakListForFitter, 0, 30);
+
+                    //if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
                 }
 
-                if (fitScore<bestFitScore)
+                if (fitScore < bestFitScore)
                 {
                     bestFitScore = fitScore;
 
-                   
-                    if (massSpectrumXYData==null)
+
+                    if (massSpectrumXYData == null)
                     {
-                        //create isotopic profile from peakList
 
+                        bestIso = new IsotopicProfile();
+                        bestIso.Peaklist = new List<MSPeak>();
 
-                        var peakListForCreatedIso = new List<MSPeak>();
-
-                        foreach (var peak in theorIso.Peaklist)
+                        foreach (var peak in obsPeakListForFitter)
                         {
-                            double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
-                            var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(massSpectrumPeakList, peak.XValue,
-                                                                                   mzTolerance);
-                            MSPeak mspeak;
-                            if (foundPeaks.Count==0)
-                            {
-                                mspeak = new MSPeak(peak.XValue, 0, 0, 0);
-                            }
-                            else if (foundPeaks.Count==1)
-                            {
-                                var foundPeak = foundPeaks.First();
-                                mspeak = new MSPeak(foundPeak.XValue, foundPeak.Height, foundPeak.Width, 0);
-
-                            }
-                            else
-                            {
-                                var foundPeak = foundPeaks.OrderByDescending(p => p.Height).First();
-                                mspeak = new MSPeak(foundPeak.XValue, foundPeak.Height, foundPeak.Width, 0);
-                            }
-
-                            peakListForCreatedIso.Add(mspeak);
-
+                            bestIso.Peaklist.Add(new MSPeak(peak.XValue,peak.Height,peak.Width,0));
                         }
 
-                        bestIso = new IsotopicProfile {Peaklist = peakListForCreatedIso, ChargeState = theorIso.ChargeState};
-
+                        bestIso.ChargeState = theorIso.ChargeState;
 
                     }
                     else
                     {
                         bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
-                        
+
                     }
 
-                    bestIso.Score = fitScore;
+                    if (bestIso != null) bestIso.Score = fitScore;
                     bestLabelAmount = labelAmount;
                 }
 
@@ -175,8 +191,85 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
+        private List<Peak> FilterPeaksBasedOnBasePeakList(List<Peak> basePeaklist, List<Peak> inputPeakList)
+        {
+            var trimmedPeakList = new List<Peak>();
+
+            foreach (var peak in basePeaklist)
+            {
+                double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
+                var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(inputPeakList, peak.XValue,
+                                                                       mzTolerance);
+
+                if (foundPeaks.Count == 1)
+                {
+                    trimmedPeakList.Add(foundPeaks.First());
+                }
+                else if (foundPeaks.Count > 1)
+                {
+                    trimmedPeakList.Add(foundPeaks.OrderByDescending(p => p.Height).First());
+                }
+
+            }
+
+            //if we can't find any observed peaks, we won't trim anything. Just return the original list
+            if (!trimmedPeakList.Any())
+            {
+                return basePeaklist;
+            }
+            return trimmedPeakList;
 
 
+        }
 
+        private void AddRightZeroPads(List<Peak> theorPeakListForFitter, int numRightZeroPads, int chargeState)
+        {
+            var mzInitial = theorPeakListForFitter.Last().XValue;
+
+            for (int i = 0; i < numRightZeroPads; i++)
+            {
+
+                double mzForAddedPeak = mzInitial + (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                theorPeakListForFitter.Add(new Peak(mzForAddedPeak, 0, 0));
+            }
+
+        }
+
+        private void AddLeftZeroPads(List<Peak> theorPeakListForFitter, int numLeftZeroPads, int chargeState)
+        {
+            var mzInitial = theorPeakListForFitter.First().XValue;
+
+            for (int i = 0; i < numLeftZeroPads; i++)
+            {
+                double mzForAddedPeak = mzInitial - (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                theorPeakListForFitter.Insert(0, new Peak(mzForAddedPeak, 0, 0));
+            }
+        }
+
+        private List<Peak> ApplySmartTrimming(List<Peak> theorPeakList, List<Peak> massSpectrumPeakList)
+        {
+
+            var trimmedPeakList = new List<Peak>();
+
+            foreach (var peak in theorPeakList)
+            {
+                double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
+                var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(massSpectrumPeakList, peak.XValue,
+                                                                       mzTolerance);
+                if (foundPeaks.Any())
+                {
+                    trimmedPeakList.Add(peak);
+                }
+            }
+
+            //if we can't find any observed peaks, we won't trim anything. Just return the original list
+            if (!trimmedPeakList.Any())
+            {
+                return theorPeakList;
+            }
+            return trimmedPeakList;
+
+
+        }
     }
 }

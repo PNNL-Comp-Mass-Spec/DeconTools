@@ -41,15 +41,15 @@
     </Reference>
     <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\BaseCommon.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseCommon.dll</HintPath>
     </Reference>
     <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\BaseDataAccess.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="BaseTof, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseTof.dll</HintPath>
     </Reference>
     <Reference Include="BrukerDataReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -73,7 +73,7 @@
     </Reference>
     <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\MassSpecDataReader.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\MassSpecDataReader.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\Library\MathNet.Numerics.dll</HintPath>
