@@ -10,7 +10,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
     public abstract class ChromatogramCorrelatorBase : Task
     {
-        
+
         protected SavitzkyGolaySmoother Smoother;
         protected PeakChromatogramGenerator PeakChromGen;
 
@@ -19,10 +19,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         protected ChromatogramCorrelatorBase(int numPointsInSmoother, int chromToleranceInPPM, double minRelativeIntensityForChromCorr)
         {
             SavitzkyGolaySmoothingOrder = 2;
-            NumPointsInSmoother = numPointsInSmoother ;
+            NumPointsInSmoother = numPointsInSmoother;
 
             ChromToleranceInPPM = chromToleranceInPPM;
             MinimumRelativeIntensityForChromCorr = minRelativeIntensityForChromCorr;
+
+            PeakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK);
+
+            Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder, false);
         }
 
 
@@ -37,7 +41,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             set
             {
                 _chromToleranceInPPM = value;
-                PeakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM);
+                
+                if (PeakChromGen!=null)
+                {
+                    PeakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM);    
+                }
+                
+                
             }
         }
 
@@ -49,13 +59,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             get { return _numPointsInSmoother; }
             set
             {
-                if (_numPointsInSmoother!=value)
+                if (_numPointsInSmoother != value)
                 {
 
                     _numPointsInSmoother = value;
-                    Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
+
+                    if (Smoother != null)
+                    {
+                        Smoother = new SavitzkyGolaySmoother(_numPointsInSmoother, SavitzkyGolaySmoothingOrder);
+                    }
+
                 }
-                
+
             }
         }
 
@@ -65,12 +80,17 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             get { return _savitzkyGolaySmoothingOrder; }
             set
             {
-                if (_savitzkyGolaySmoothingOrder!=value)
+                if (_savitzkyGolaySmoothingOrder != value)
                 {
                     _savitzkyGolaySmoothingOrder = value;
-                    Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
+
+                    if (Smoother!=null)
+                    {
+                        Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, _savitzkyGolaySmoothingOrder);    
+                    }
+                    
                 }
-                
+
             }
         }
 
@@ -132,13 +152,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
         public abstract ChromCorrelationData CorrelateData(Run run, TargetedResultBase result, int startScan, int stopScan);
-        
+
 
 
 
         public ChromCorrelationData CorrelatePeaksWithinIsotopicProfile(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
-         
+
             var correlationData = new ChromCorrelationData();
             int indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
@@ -245,7 +265,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             if (run.XYData == null || run.XYData.Xvalues.Length < 3) return null;
 
             var basePeakChromXYData = Smoother.Smooth(run.XYData);
-            
+
             bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
                                      basePeakChromXYData.Xvalues.Length > 3;
 

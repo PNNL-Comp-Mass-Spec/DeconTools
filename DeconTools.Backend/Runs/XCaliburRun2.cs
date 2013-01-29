@@ -90,9 +90,9 @@ namespace DeconTools.Backend.Runs
 
         public override double GetTime(int scanNum)
         {
-            double RTForAGivenScan = 0;
-            _msfileReader.RTFromScanNum(scanNum, ref RTForAGivenScan);
-            return RTForAGivenScan;
+            double rtForAGivenScan = 0;
+            _msfileReader.RTFromScanNum(scanNum, ref rtForAGivenScan);
+            return rtForAGivenScan;
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -171,6 +171,7 @@ namespace DeconTools.Backend.Runs
 
             return msLevel;
         }
+
 
 
         public override double GetTICFromInstrumentInfo(int scanNum)

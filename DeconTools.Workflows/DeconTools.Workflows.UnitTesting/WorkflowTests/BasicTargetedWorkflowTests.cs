@@ -122,10 +122,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsNotNull(result.ChromCorrelationData);
 
-            //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
-            //{
-            //    Console.WriteLine(dataItem);
-            //}
+            foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            {
+                Console.WriteLine(dataItem);
+            }
 
 
         }

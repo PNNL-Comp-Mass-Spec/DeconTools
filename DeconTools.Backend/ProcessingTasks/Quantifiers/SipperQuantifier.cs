@@ -21,30 +21,31 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private readonly PartialLabelingQuantifier _partialLabelingQuantifier;
 
-        
 
 
         #region Constructors
         public SipperQuantifier()
         {
-            IsChromatogramCorrelationPerformed = true;
-            MaximumFitScoreForFurtherProcessing = 0.50;
-            MinimumRatioAreaForFurtherProcessing = 5;
 
-            MinimumRelativeIntensityForChromCorr = 0.0001;
             ChromToleranceInPPM = 25;
+            NumPointsInSmoother = 5;
+            MinimumRelativeIntensityForChromCorr = 0.0001;
 
-            const int numPointsInSmoother = 5;
-            _chromatogramCorrelatorTask = new ChromatogramCorrelator(numPointsInSmoother, (int)ChromToleranceInPPM, MinimumRelativeIntensityForChromCorr);
-
-
-            ChromatogramRSquaredVals = new List<double>();
-            RatioVals = new XYData();
+            _chromatogramCorrelatorTask = new ChromatogramCorrelator(NumPointsInSmoother, (int)ChromToleranceInPPM, MinimumRelativeIntensityForChromCorr);
 
             _labelingDistributionCalculator = new LabelingDistributionCalculator();
             _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
             _partialLabelingQuantifier.MaxLabelAmount = 15;
             _partialLabelingQuantifier.StepAmountForIterator = 0.25;
+
+
+            IsChromatogramCorrelationPerformed = true;
+            MaximumFitScoreForFurtherProcessing = 0.50;
+            MinimumRatioAreaForFurtherProcessing = 5;
+
+
+            ChromatogramRSquaredVals = new List<double>();
+            RatioVals = new XYData();
 
             FitScoreData = new Dictionary<decimal, double>();
         }
@@ -61,29 +62,46 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public bool IsChromatogramCorrelationPerformed { get; set; }
 
+        private double _chromToleranceInPPM;
         protected double ChromToleranceInPPM
         {
-            get
-            {
-                return _chromatogramCorrelatorTask.ChromToleranceInPPM;
-            }
+            get { return _chromToleranceInPPM; }
             set
             {
-                _chromatogramCorrelatorTask.ChromToleranceInPPM = value;
+                _chromToleranceInPPM = value;
+                if (_chromatogramCorrelatorTask != null) _chromatogramCorrelatorTask.ChromToleranceInPPM = _chromToleranceInPPM;
+            }
+        }
+
+        private double _minimumRelativeIntensityForChromCorr;
+        public double MinimumRelativeIntensityForChromCorr
+        {
+            get { return _minimumRelativeIntensityForChromCorr; }
+            set
+            {
+                _minimumRelativeIntensityForChromCorr = value;
+                if (_chromatogramCorrelatorTask != null)
+                    _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr = _minimumRelativeIntensityForChromCorr;
             }
         }
 
 
-        public double MinimumRelativeIntensityForChromCorr
+        private int _numPointsInSmoother;
+        public int NumPointsInSmoother
         {
-            get { return _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr; }
-            set { _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr = value; }
+            get { return _numPointsInSmoother; }
+            set
+            {
+                _numPointsInSmoother = value;
+                if (_chromatogramCorrelatorTask != null) 
+                    _chromatogramCorrelatorTask.NumPointsInSmoother = _numPointsInSmoother;
+            }
         }
 
 
         public List<double> ChromatogramRSquaredVals { get; set; }
 
-        public Dictionary<decimal, double> FitScoreData { get; set; } 
+        public Dictionary<decimal, double> FitScoreData { get; set; }
 
         public IsotopicProfile NormalizedIso { get; set; }
 
@@ -142,8 +160,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-        
-            
+
+
             int indexMostAbundantTheorPeak = theorUnlabelledIso.GetIndexOfMostIntensePeak();
 
             NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
@@ -246,7 +264,23 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
 
 
-                var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, new List<Peak>(subtractedIsoData.Peaklist));
+
+
+                var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
+
+                foreach (var peak in peaksForLabeledIsoQuant)
+                {
+                    Console.WriteLine(peak.XValue + "\t" + peak.Height);
+                }
+
+
+                foreach (var msPeak in result.Target.IsotopicProfile.Peaklist)
+                {
+                    Console.WriteLine(msPeak.XValue + "\t" + msPeak.Height);
+                }
+
+
+                var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
                 FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
                 result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
@@ -255,17 +289,17 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 int numCarbons = result.Target.GetAtomCountForElement("C");
                 result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
 
-                
+
 
 #if DEBUG
                 StringBuilder sb = new StringBuilder();
                 sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
                           "-----------------------------\n");
-                
+
                 int counter = 0;
                 foreach (var fsData in _partialLabelingQuantifier.FitScoreData)
                 {
-                    sb.Append(fsData.Key  + "\t" + fsData.Value.ToString("0.000") + "\n");
+                    sb.Append(fsData.Key + "\t" + fsData.Value.ToString("0.000") + "\n");
                     counter++;
                 }
 
@@ -281,7 +315,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double)p.Height).ToList();
 
-                if (isoFromPartialLabelingQuantifier.IsotopicProfile!=null)
+                if (isoFromPartialLabelingQuantifier.IsotopicProfile != null)
                 {
                     var normalizedCorrectedIntensityVals = NormalizedAdjustedIso.Peaklist.Select(p => (double)p.Height).ToList();
 
@@ -302,13 +336,13 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                        out distFractionLabelled,
                                                                        out distAverageLabelsIncorporated);
 
-                    result.PercentPeptideLabelled = distFractionLabelled * 100;     
+                    result.PercentPeptideLabelled = distFractionLabelled * 100;
                 }
                 else
                 {
                     result.PercentCarbonsLabelled = 0;
                 }
-               
+
 
 
 

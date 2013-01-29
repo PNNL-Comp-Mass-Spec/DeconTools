@@ -102,7 +102,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             int[] targetsOfInterest = new int[] { 5555 };
 
-            targetsOfInterest = new int[]{7229};   //throwing error in Chromcorr
+           // targetsOfInterest = new int[]{7229};   //throwing error in Chromcorr
+
+            targetsOfInterest = new int[]{6110};
+
 
             executor.Targets.TargetList =
                 (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
