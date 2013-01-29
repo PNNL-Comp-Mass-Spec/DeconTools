@@ -15,7 +15,7 @@ namespace DeconConsole
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
             SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);
@@ -25,7 +25,7 @@ namespace DeconConsole
             if (args.Length > 3)
             {
                 ReportSyntax();
-                return;
+                return 1;
             }
 
             string filename = args[0];
@@ -39,7 +39,7 @@ namespace DeconConsole
 
                 if (String.IsNullOrWhiteSpace(outputFolder))
                 {
-                    return;
+                    return 2;
                 }
                 
                 if (!Directory.Exists(outputFolder))
@@ -56,7 +56,7 @@ namespace DeconConsole
                     {
 
                         Console.WriteLine("ERROR! Couldn't create output folder. Message: " + exception.Message);
-                        return;
+                        return 3;
 
                     }
                 }
@@ -66,12 +66,12 @@ namespace DeconConsole
             if (!IsFileValid(filename))
             {
                 ReportFileProblem(filename);
-                return;
+                return 4;
             }
             if (!IsFileValid(parameterFilename))
             {
                 ReportFileProblem(parameterFilename);
-                return;
+                return 4;
             }
 
             Console.WriteLine("Dataset = " + filename);
@@ -85,7 +85,12 @@ namespace DeconConsole
             {
 
                 Console.WriteLine(ex.Message);
-                return;
+				Console.WriteLine(ex.StackTrace);
+				int errorCode = ex.Message.GetHashCode();
+				if (errorCode != 0)
+					return errorCode;
+				else
+					return -1;
             }
             Console.WriteLine();
             Console.WriteLine();
@@ -96,7 +101,7 @@ namespace DeconConsole
             Console.WriteLine("****************************************");
             Console.WriteLine();
 
-
+			return 0;
         }
 
         private static void ReportFileProblem(string filename)

@@ -333,12 +333,19 @@ namespace DeconTools.Backend.Runs
 
             double[] xvals = new double[vals.GetLength(1)];
             double[] yvals = new double[vals.GetLength(1)];
+			bool sortRequired = false;
 
             for (int i = 0; i < vals.GetLength(1); i++)
             {
                 xvals[i] = vals[0, i];
                 yvals[i] = vals[1, i];
+
+				if (i > 0 && xvals[i] < xvals[i - 1])
+					sortRequired = true;
             }
+
+			if (sortRequired)
+				Array.Sort(xvals, yvals);
 
             this.XYData.SetXYValues(ref xvals, ref yvals);
 
