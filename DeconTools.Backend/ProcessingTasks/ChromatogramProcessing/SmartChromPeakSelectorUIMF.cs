@@ -229,6 +229,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 				}
 			}
 
+			// If any of the peaks were good, then we want to make sure to not consider the result an error. 
+			// I added this because if the last peak checked had an error, the entire result was still flagged as having an error.
+			if(bestpeak != null)
+			{
+				currentResult.FailedResult = false;
+				currentResult.FailureType = Globals.TargetedResultFailureType.None;
+			}
+
 			return bestpeak;
 		}
 
