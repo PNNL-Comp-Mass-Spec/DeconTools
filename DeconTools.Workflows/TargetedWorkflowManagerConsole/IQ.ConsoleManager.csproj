@@ -8,8 +8,8 @@
     <ProjectGuid>{E47D0F42-F72F-4030-95D4-B2D136583595}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TargetedWorkflowManagerConsole</RootNamespace>
-    <AssemblyName>TargetedWorkflowManagerConsole</AssemblyName>
+    <RootNamespace>IQ.ConsoleManager</RootNamespace>
+    <AssemblyName>IQConsoleManager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

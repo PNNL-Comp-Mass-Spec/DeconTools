@@ -5,8 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using DeconTools.Workflows.Backend.Utilities;
 
-
-namespace TargetedWorkflowManagerConsole
+namespace IQ.ConsoleManager
 {
     public class Program
     {
