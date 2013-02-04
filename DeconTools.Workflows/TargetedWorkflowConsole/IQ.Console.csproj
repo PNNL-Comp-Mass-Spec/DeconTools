@@ -8,8 +8,8 @@
     <ProjectGuid>{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TargetedWorkflowConsole</RootNamespace>
-    <AssemblyName>TargetedWorkflowConsole</AssemblyName>
+    <RootNamespace>IQ.Console</RootNamespace>
+    <AssemblyName>IQConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -71,9 +71,9 @@
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj">
+    <ProjectReference Include="..\TargetedWorkflowManagerConsole\IQ.ConsoleManager.csproj">
       <Project>{E47D0F42-F72F-4030-95D4-B2D136583595}</Project>
-      <Name>TargetedWorkflowManagerConsole</Name>
+      <Name>IQ.ConsoleManager</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

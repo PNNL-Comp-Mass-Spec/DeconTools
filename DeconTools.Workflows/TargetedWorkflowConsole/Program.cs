@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using DeconTools.Workflows.Backend.Core;
 
 
-namespace TargetedWorkflowConsole
+namespace IQ.Console
 {
     class Program
     {
@@ -71,33 +71,33 @@ namespace TargetedWorkflowConsole
 
 		private static void ReportError(string message)
 		{
-			Console.WriteLine();
-			Console.WriteLine("=======================================================");
-			Console.WriteLine("Error: " + message);
-			Console.WriteLine("=======================================================");
-			Console.WriteLine();
+			System.Console.WriteLine();
+			System.Console.WriteLine("=======================================================");
+			System.Console.WriteLine("Error: " + message);
+			System.Console.WriteLine("=======================================================");
+			System.Console.WriteLine();
 		}
 
 		private static void ReportError(Exception ex)
 		{
-			Console.WriteLine();
-			Console.WriteLine("=======================================================");
-			Console.WriteLine("Error: " + ex.Message);
-			Console.WriteLine();
-			Console.WriteLine("Stack trace:");
-			Console.WriteLine(ex.StackTrace);
-			Console.WriteLine("=======================================================");
-			Console.WriteLine();
+			System.Console.WriteLine();
+			System.Console.WriteLine("=======================================================");
+			System.Console.WriteLine("Error: " + ex.Message);
+			System.Console.WriteLine();
+			System.Console.WriteLine("Stack trace:");
+			System.Console.WriteLine(ex.StackTrace);
+			System.Console.WriteLine("=======================================================");
+			System.Console.WriteLine();
 		}
 
         private static void ReportSyntax()
         {
-            Console.WriteLine();
-            Console.WriteLine("This Commandline app requires two arguments.");
-            Console.WriteLine("\tArg1 = dataset path");
-            Console.WriteLine("\tArg2 = workflow executor parameter file (.xml)");
+            System.Console.WriteLine();
+            System.Console.WriteLine("This Commandline app requires two arguments.");
+            System.Console.WriteLine("\tArg1 = dataset path");
+            System.Console.WriteLine("\tArg2 = workflow executor parameter file (.xml)");
          
-            Console.WriteLine();
+            System.Console.WriteLine();
         }
     }
 }
