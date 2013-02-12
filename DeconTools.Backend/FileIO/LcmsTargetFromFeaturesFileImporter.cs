@@ -26,7 +26,7 @@ namespace DeconTools.Backend.FileIO
         private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
        
         private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
-        private string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance" };
+        private string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance","ScanNum" };
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
         private string[] scanStartHeaders = {"scanStart", "scan_start"};
         private string[] netHeaders = {"net", "NETClassRep", "ElutionTime"};

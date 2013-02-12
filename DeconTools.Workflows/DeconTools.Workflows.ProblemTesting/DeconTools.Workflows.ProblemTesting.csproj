@@ -48,10 +48,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="O16O18Testing.cs" />
     <Compile Include="OMCS_0502_OutOfMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempProblemTesting.cs" />
+    <Compile Include="UnitTestTemplate1.cs" />
+    <Compile Include="WorkflowsInitialTesting.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
+      <Project>{7CF4CD1A-E5DA-477D-B15C-FDBFDC59B013}</Project>
+      <Name>DeconTools.UnitTesting2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>

@@ -4,8 +4,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
     public class ChromatogramCorrelator : ChromatogramCorrelatorBase
     {
-        public ChromatogramCorrelator(int numPointsInSmoother, int chromToleranceInPPM=20, double minRelativeIntensityForChromCorr=0.01)
-            : base(numPointsInSmoother, chromToleranceInPPM, minRelativeIntensityForChromCorr)
+        public ChromatogramCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr = 0.01,double chromToleranceInPPM = 20, Globals.ToleranceUnit chromToleranceUnit=Globals.ToleranceUnit.PPM)
+            : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromToleranceInPPM,chromToleranceUnit)
         {
         }
 

@@ -20,6 +20,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string[] _numHQProfilePeaksHeaders = { "NumHQProfilePeaks" };
         private string[] _labelDistribHeaders = { "LabelDistributionData" };
         private string[] _fitScoreLabeledHeaders = {"FitScoreLabeled", "FitScoreLabelled"};
+        private string[] _contigScoreHeaders = {"ContigScore"};
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
@@ -52,7 +53,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.NumHighQualityProfilePeaks = ParseIntField(LookupData(processedData, _numHQProfilePeaksHeaders));
             result.LabelDistributionVals = ConvertLabelDistStringToArray(LookupData(processedData, _labelDistribHeaders));
             result.FitScoreLabeledProfile = ParseDoubleField(LookupData(processedData, _fitScoreLabeledHeaders));
-            
+            result.ContiguousnessScore = ParseIntField(LookupData(processedData, _contigScoreHeaders));
+            result.RSquaredValForRatioCurve = ParseDoubleField(LookupData(processedData, _RSquaredForRatio));
             return result;
 
         }

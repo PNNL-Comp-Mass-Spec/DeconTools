@@ -25,9 +25,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows", "Dec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.UnitTesting", "DeconTools.Workflows\DeconTools.Workflows.UnitTesting\DeconTools.Workflows.UnitTesting.csproj", "{A27D805C-DDEB-4E82-BEC8-9B80CCE9E702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowConsole", "DeconTools.Workflows\TargetedWorkflowConsole\TargetedWorkflowConsole.csproj", "{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ.Console", "DeconTools.Workflows\TargetedWorkflowConsole\IQ.Console.csproj", "{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowManagerConsole", "DeconTools.Workflows\TargetedWorkflowManagerConsole\TargetedWorkflowManagerConsole.csproj", "{E47D0F42-F72F-4030-95D4-B2D136583595}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ.ConsoleManager", "DeconTools.Workflows\TargetedWorkflowManagerConsole\IQ.ConsoleManager.csproj", "{E47D0F42-F72F-4030-95D4-B2D136583595}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows.ProblemTesting", "DeconTools.Workflows\DeconTools.Workflows.ProblemTesting\DeconTools.Workflows.ProblemTesting.csproj", "{D1410A85-36CE-4AED-8EC5-9C88E7DE58C1}"
 EndProject

@@ -84,6 +84,8 @@ namespace DeconTools.Workflows.Backend.Results
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
             r.LabelDistributionVals = result.LabelDistributionVals == null ? null : result.LabelDistributionVals.ToArray();
             r.FitScoreLabeledProfile = result.FitScoreLabeledProfile;
+            r.ContiguousnessScore = result.ContiguousnessScore;
+            r.RSquaredValForRatioCurve = result.RSquaredValForRatioCurve;
         }
 
 

@@ -4,7 +4,6 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -19,7 +18,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(parameters);
-
             
             //workflow.Execute();
         }
@@ -29,7 +27,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void parameterFileTest1()
         {
             var parameters = new BasicTargetedWorkflowParameters();
-
             parameters.ChromGenSourceDataPeakBR = 2;
             parameters.ChromGenSourceDataSigNoise = 3;
             parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
@@ -38,18 +35,33 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromPeakDetectorSigNoise = 1;
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.Smart;
             parameters.ChromSmootherNumPointsInSmooth = 9;
-            parameters.ChromToleranceInPPM = 10;
+            parameters.ChromGenTolerance = 10;
             parameters.ChromatogramCorrelationIsPerformed = true;
             parameters.MSPeakDetectorPeakBR = 1.3;
             parameters.MSPeakDetectorSigNoise = 3;
             parameters.MSToleranceInPPM = 10;
             parameters.NumMSScansToSum = 5;
 
-
             string exportedParameterFilename =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\BasicTargetedWorkflowParameters1_autoexported.xml";
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Parameters\BasicTargetedWorkflowParameters1_autoexported.xml";
             parameters.SaveParametersToXML(exportedParameterFilename);
+        }
 
+
+
+        [Test]
+        public void parameterFileImportTest1()
+        {
+            var parameters = new BasicTargetedWorkflowParameters();
+
+            string importTestFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Parameters\BasicTargetedWorkflowParameters1_forImportTesting.xml";
+
+            parameters.LoadParameters(importTestFile);
+
+            //TODO: complete testing of other values
+            Assert.AreEqual(parameters.ChromGenToleranceUnit, Globals.ToleranceUnit.MZ);
+            Assert.AreEqual(0.01, parameters.ChromGenTolerance);
         }
 
 

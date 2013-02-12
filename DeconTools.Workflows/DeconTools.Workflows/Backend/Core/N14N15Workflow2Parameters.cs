@@ -41,51 +41,51 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-        public override void LoadParameters(string xmlFilename)
-        {
-            Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
+        //public override void LoadParameters(string xmlFilename)
+        //{
+        //    Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
 
-            XDocument doc = XDocument.Load(xmlFilename);
+        //    XDocument doc = XDocument.Load(xmlFilename);
 
-            var query = doc.Element("WorkflowParameters").Elements();
+        //    var query = doc.Element("WorkflowParameters").Elements();
 
 
-            Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
+        //    Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
 
-            foreach (var item in query)
-            {
-                string paramName = item.Name.ToString();
-                string paramValue = item.Value;
+        //    foreach (var item in query)
+        //    {
+        //        string paramName = item.Name.ToString();
+        //        string paramValue = item.Value;
 
-                if (!parameterTableFromXML.ContainsKey(paramName))
-                {
-                    parameterTableFromXML.Add(paramName, paramValue);
-                }
+        //        if (!parameterTableFromXML.ContainsKey(paramName))
+        //        {
+        //            parameterTableFromXML.Add(paramName, paramValue);
+        //        }
 
-            }
+        //    }
 
-            ChromGeneratorMode = StringToEnum<DeconTools.Backend.Globals.ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
-            ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
-            ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
-            ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
-            ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
-            ChromToleranceInPPM = Convert.ToInt32(parameterTableFromXML["ChromToleranceInPPM"]);
-            MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
-            MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
-            MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
-            NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
+        //    ChromGeneratorMode = StringToEnum<DeconTools.Backend.Globals.ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
+        //    ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
+        //    ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
+        //    ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
+        //    ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
+        //    ChromGenTolerance = Convert.ToInt32(parameterTableFromXML["ChromGenTolerance"]);
+        //    MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
+        //    MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
+        //    MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
+        //    NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
 
-            NumPeaksUsedInQuant = Convert.ToInt32(parameterTableFromXML["NumPeaksUsedInQuant"]);
-            SmartChromSelectorPeakBR = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakBR"]);
-            SmartChromSelectorPeakSigNoiseRatio =
-                Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
+        //    NumPeaksUsedInQuant = Convert.ToInt32(parameterTableFromXML["NumPeaksUsedInQuant"]);
+        //    SmartChromSelectorPeakBR = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakBR"]);
+        //    SmartChromSelectorPeakSigNoiseRatio =
+        //        Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
 
-            TargetedFeatureFinderIsotopicProfileTargetType =
-                StringToEnum<DeconTools.Backend.Globals.IsotopicProfileType>(
-                    parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
-            TargetedFeatureFinderToleranceInPPM =
-                Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
-        }
+        //    TargetedFeatureFinderIsotopicProfileTargetType =
+        //        StringToEnum<DeconTools.Backend.Globals.IsotopicProfileType>(
+        //            parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
+        //    TargetedFeatureFinderToleranceInPPM =
+        //        Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
+        //}
 
         public override Globals.TargetedWorkflowTypes WorkflowType
         {

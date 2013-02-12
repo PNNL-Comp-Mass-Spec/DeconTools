@@ -74,7 +74,7 @@ namespace IQ.ConsoleManager
                         ProcessStartInfo processStartInfo = new ProcessStartInfo();
                         //processStartInfo.UseShellExecute = false;
 
-                        processStartInfo.FileName = @"TargetedWorkflowConsole.exe";
+                        processStartInfo.FileName = @"IQConsole.exe";
 
 						var argString = new StringBuilder();
                     	argString.Append("\"" + currentDatasetPath + "\"");

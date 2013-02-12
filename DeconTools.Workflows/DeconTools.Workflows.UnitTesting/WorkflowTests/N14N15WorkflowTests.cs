@@ -75,13 +75,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             N14N15Workflow2Parameters parameters = new N14N15Workflow2Parameters();
             parameters.LoadParameters(FileRefs.ImportedData + "\\" + "importedN14N15WorkflowParameters.xml");
-            parameters.ChromToleranceInPPM = 25;
+            parameters.ChromGenTolerance = 25;
             parameters.MSToleranceInPPM = 25;
             parameters.TargetedFeatureFinderToleranceInPPM = 25;
             parameters.MultipleHighQualityMatchesAreAllowed = true;
             parameters.NumMSScansToSum = 5;
-
-
             parameters.SaveParametersToXML(
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1_test.xml");
 
@@ -89,8 +87,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine(parameters.ToStringWithDetails());
 
             N14N15Workflow2 workflow = new N14N15Workflow2(run, parameters);
-
-
             workflow.Execute();
             Assert.IsTrue(run.ResultCollection.ResultType == Globals.ResultType.N14N15_TARGETED_RESULT);
 

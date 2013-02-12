@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Core.Results;
@@ -28,10 +27,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
 
             ChromToleranceInPPM = 25;
-            NumPointsInSmoother = 5;
+            NumPointsInSmoother = 7;
             MinimumRelativeIntensityForChromCorr = 0.0001;
 
-            _chromatogramCorrelatorTask = new ChromatogramCorrelator(NumPointsInSmoother, (int)ChromToleranceInPPM, MinimumRelativeIntensityForChromCorr);
+            _chromatogramCorrelatorTask = new ChromatogramCorrelator(NumPointsInSmoother, MinimumRelativeIntensityForChromCorr,
+                                                                     (int) ChromToleranceInPPM);
 
             _labelingDistributionCalculator = new LabelingDistributionCalculator();
             _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
@@ -45,6 +45,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             IsChromatogramCorrelationPerformed = true;
             MaximumFitScoreForFurtherProcessing = 0.50;
             MinimumRatioAreaForFurtherProcessing = 5;
+
+            MinimumRSquaredValForQuant = 0.75;
 
 
             ChromatogramRSquaredVals = new List<double>();
@@ -72,7 +74,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             set
             {
                 _chromToleranceInPPM = value;
-                if (_chromatogramCorrelatorTask != null) _chromatogramCorrelatorTask.ChromToleranceInPPM = _chromToleranceInPPM;
+                if (_chromatogramCorrelatorTask != null) _chromatogramCorrelatorTask.ChromTolerance = _chromToleranceInPPM;
             }
         }
 
@@ -246,6 +248,13 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 RatioVals.Xvalues = xvals.ToArray();
                 RatioVals.Yvalues = yvals.ToArray();
 
+
+
+                result.RSquaredValForRatioCurve=   GetLinearRegressionData(result, xvals, yvals);
+
+
+
+
                 //------------- subtract unlabelled profile from normalized profile ----------------------
                 var subtractedIsoData = NormalizedAdjustedIso.CloneIsotopicProfile();
                 for (int i = 0; i < subtractedIsoData.Peaklist.Count; i++)
@@ -266,23 +275,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     subtractedIsoData.Peaklist[i].Height = subtractedIntensity;
                 }
 
+                result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
 
 
+                
+
+                //----------- get data for the subtracted, labeled isotopic profile------------------------
 
                 var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
 
-                //foreach (var peak in peaksForLabeledIsoQuant)
-                //{
-                //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
-                //}
-
-
-                //foreach (var msPeak in result.Target.IsotopicProfile.Peaklist)
-                //{
-                //    Console.WriteLine(msPeak.XValue + "\t" + msPeak.Height);
-                //}
-
-
+          
                 var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
                 FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
@@ -294,22 +296,22 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-#if DEBUG
-                StringBuilder sb = new StringBuilder();
-                sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
-                          "-----------------------------\n");
 
-                int counter = 0;
-                foreach (var fsData in _partialLabelingQuantifier.FitScoreData)
-                {
-                    sb.Append(fsData.Key + "\t" + fsData.Value.ToString("0.000") + "\n");
-                    counter++;
-                }
+                //StringBuilder sb = new StringBuilder();
+                //sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
+                //          "-----------------------------\n");
+
+                //int counter = 0;
+                //foreach (var fsData in _partialLabelingQuantifier.FitScoreData)
+                //{
+                //    sb.Append(fsData.Key + "\t" + fsData.Value.ToString("0.000") + "\n");
+                //    counter++;
+                //}
 
                 //Console.WriteLine(sb.ToString());
 
-#endif
-                result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
+
+                
 
 
                 //-------------- calculate Label Distribution ------------------------------------------------
@@ -352,6 +354,27 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 //-------------- make calculations using inputs from chrom correlation data -------------------
 
                 HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, subtractedIsoData);
+
+
+                var contiguousnessScore = GetContiguousnessScore(HighQualitySubtractedProfile);
+                result.ContiguousnessScore = contiguousnessScore;
+
+                //GORD ------------- note this section is a duplicate of the above....  choose one or the other ------------------------
+                peaksForLabeledIsoQuant = new List<Peak>(HighQualitySubtractedProfile.Peaklist.Where(p => p.Height > 0));
+
+
+                isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
+                FitScoreData = _partialLabelingQuantifier.FitScoreData;
+
+                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
+                result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
+
+                numCarbons = result.Target.GetAtomCountForElement("C");
+                result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
+                //end of section --------------------------------------------------------------------------
+
+
+
 
                 IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, ratioData);
 
@@ -411,19 +434,123 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
         }
 
+        private int GetContiguousnessScore(IsotopicProfile subtractedIsoData)
+        {
+            int contiguousScore = 0;
+
+            if (subtractedIsoData == null || subtractedIsoData.Peaklist.Count == 0) return contiguousScore;
+
+
+            bool lastPeakWasAboveZero = false;
+            foreach (var peak in subtractedIsoData.Peaklist )
+            {
+
+                if (peak.Height>0)
+                {
+                        contiguousScore++;
+                    
+                        lastPeakWasAboveZero = true;
+                }
+                else
+                {
+                    if (lastPeakWasAboveZero)
+                    {
+                        contiguousScore--;
+                    }
+                    lastPeakWasAboveZero = false;
+                }
+                
+            }
+
+            return contiguousScore;
+        }
+
+
+        private double GetLinearRegressionData(SipperLcmsTargetedResult result, List<double> xvals, List<double> yvals)
+        {
+            List<double> logRatioXVals = new List<double>();
+            List<double> logRatioYVals = new List<double>();
+
+            bool foundYvalAboveZero = false;
+            for (int i = 0; i < xvals.Count; i++)
+            {
+
+                if (yvals[i] > 0)
+                {
+                    foundYvalAboveZero = true;
+                    logRatioXVals.Add(xvals[i]);
+                    logRatioYVals.Add(Math.Log(yvals[i]));
+                }
+                else
+                {
+                    //if we have already found a yval above 0, and then we found one below 0, this
+                    //indicates a problem which we will penalize. 
+                    //if (foundYvalAboveZero)
+                    //{
+                    //    logRatioXVals.Add(xvals[i]);
+                    //    logRatioYVals.Add(0);
+                    //}
+                }
+            }
+
+            double slope = -9999;
+            double intercept = -9999;
+            double rsquaredVal = -1;
+
+
+            if (logRatioYVals.Count > 2)
+            {
+                try
+                {
+                    MathUtils.GetLinearRegression(logRatioXVals.ToArray(), logRatioYVals.ToArray(), out slope, out intercept,
+                                                  out rsquaredVal);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(result.Target.ID + "; Error getting linear regression in Sipper quantifier");
+                }
+            }
+            else
+            {
+                rsquaredVal = 0;
+            }
+            return rsquaredVal;
+
+        }
+
+
         private void GetChromatogramCorrelationData(SipperLcmsTargetedResult result)
         {
-            _chromScanWindowWidth = result.ChromPeakSelected.Width * 2;
+            //NOTE: this is a very important step. If too wide, correlation data will be poor
+            //and may lead to overly strict treatment of the data
+            _chromScanWindowWidth = result.ChromPeakSelected.Width/2.35 *4;
+
+            //TODO: change this!
+            //_chromScanWindowWidth = 19;
 
             int startScan = result.ScanSet.PrimaryScanNumber - (int)Math.Round(_chromScanWindowWidth / 2, 0);
             int stopScan = result.ScanSet.PrimaryScanNumber + (int)Math.Round(_chromScanWindowWidth / 2, 0);
 
             result.ChromCorrelationData = _chromatogramCorrelatorTask.CorrelatePeaksWithinIsotopicProfile(result.Run, NormalizedIso, startScan, stopScan);
 
-            ChromatogramRSquaredVals.AddRange(result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
+            if (result.ChromCorrelationData.CorrelationDataItems.Count>0)
+            {
+                ChromatogramRSquaredVals.AddRange(result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
+    
+            }
 
+
+            //GORD: remove this console code later
+            //Console.WriteLine();
+            //Console.WriteLine(result.Target.ID);
+            //foreach (var item in result.ChromCorrelationData.CorrelationDataItems)
+            //{
+            //    Console.WriteLine(item.CorrelationRSquaredVal);
+            //}
+
+            
             //trim off zeros
-            for (int i = ChromatogramRSquaredVals.Count - 1; i >= 0; i--)
+            for (int i = ChromatogramRSquaredVals.Count - 1; i >= 1; i--)
             {
                 if (ChromatogramRSquaredVals[i] <= 0)
                 {
@@ -435,10 +562,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
             }
 
-            result.ChromCorrelationMin = ChromatogramRSquaredVals.Min();
+
+
 
             if (ChromatogramRSquaredVals.Count > 1)
             {
+                result.ChromCorrelationMin = ChromatogramRSquaredVals.Min();
                 //get the best rsquared value other than the base peak's rsquared value (which is always 1)
                 result.ChromCorrelationMax =
                     (from n in ChromatogramRSquaredVals orderby n descending select n).ToList().ElementAt(1);
@@ -457,7 +586,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
             else
             {
-                result.ChromCorrelationMax = 1;
+                result.ChromCorrelationMin = -1;
+                result.ChromCorrelationMax = -1;
             }
         }
 

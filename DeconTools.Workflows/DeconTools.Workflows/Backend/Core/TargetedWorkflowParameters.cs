@@ -1,5 +1,4 @@
 ﻿using System;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -15,7 +14,7 @@ namespace DeconTools.Workflows.Backend.Core
             ChromPeakDetectorPeakBR = 1;
             ChromPeakDetectorSigNoise = 1;
             ChromSmootherNumPointsInSmooth = 9;
-            ChromToleranceInPPM = 10;
+            ChromGenTolerance = 10;
             MSPeakDetectorPeakBR = 2;
             MSPeakDetectorSigNoise = 2;
             MSToleranceInPPM = 10;
@@ -40,11 +39,32 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Properties
-        public int ChromToleranceInPPM { get; set; }
+        
+
+        //TODO: need to update this so it reads 'ChromGenTolerance'
+        /// <summary>
+        /// Mass-related tolerance used when generating the chromatogram
+        /// </summary>
+        public double ChromGenTolerance { get; set; }
+
+        /// <summary>
+        /// Tolerance Unit used in conjunction with ChromGenTolerance. Either PPM or MZ (this means m/z or Thompson units).  Default = PPM
+        /// </summary>
+        public DeconTools.Backend.Globals.ToleranceUnit ChromGenToleranceUnit { get; set; }
+        
+        
         public double ChromPeakDetectorPeakBR { get; set; }
         public double ChromPeakDetectorSigNoise { get; set; }
         public int ChromSmootherNumPointsInSmooth { get; set; }
+        
+        
+        /// <summary>
+        /// The tolerance for the normalized elution time, which is used in defining the range of the extracted
+        /// ion chromatogram, and in the scoring and selection of the chromatographic peaks (ChromPeakSelector)
+        /// </summary>
         public double ChromNETTolerance { get; set; }
+        
+        
         public int NumMSScansToSum { get; set; }
         public double MSPeakDetectorPeakBR { get; set; }
         public double MSPeakDetectorSigNoise { get; set; }
@@ -151,7 +171,7 @@ namespace DeconTools.Workflows.Backend.Core
         //    this.ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
         //    this.ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
         //    this.ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
-        //    this.ChromToleranceInPPM = Convert.ToInt32(parameterTableFromXML["ChromToleranceInPPM"]);
+        //    this.ChromGenTolerance = Convert.ToInt32(parameterTableFromXML["ChromGenTolerance"]);
         //    this.MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
         //    this.MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
         //    this.MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);

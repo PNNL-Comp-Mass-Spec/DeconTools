@@ -39,7 +39,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var parameters = new TargetedAlignerWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
-            parameters.ChromToleranceInPPM = 25;
+            parameters.ChromGenTolerance = 25;
             parameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
             parameters.ChromPeakDetectorPeakBR = 2;
             parameters.ChromPeakDetectorSigNoise = 2;

@@ -127,6 +127,7 @@
     <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
+    <Compile Include="Scripts\UIMFChromatogramScripts.cs" />
     <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />
     <Compile Include="TargetedProcessing_Tests\SmartChromPeakSelectorTests.cs" />
     <Compile Include="TargetedProcessing_Tests\TargetedProcessingOrbiDataTests.cs" />
@@ -163,9 +164,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>

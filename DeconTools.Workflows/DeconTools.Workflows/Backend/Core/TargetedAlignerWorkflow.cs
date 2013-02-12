@@ -128,13 +128,13 @@ namespace DeconTools.Workflows.Backend.Core
                     double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
 
                     double tolerance = Math.Abs(avgPPMError) + 2 * stdev;
-                    this.AlignerParameters.ChromToleranceInPPM = (int)Math.Ceiling(tolerance);
+                    this.AlignerParameters.ChromGenTolerance = (int)Math.Ceiling(tolerance);
                     this.AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
                     string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     reportProgess(0, progressString);
 
-                    progressString = "NOTE: using the new PPMTolerance=  " + this.AlignerParameters.ChromToleranceInPPM;
+                    progressString = "NOTE: using the new PPMTolerance=  " + this.AlignerParameters.ChromGenTolerance;
                     reportProgess(0, progressString);
 
                     _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);

@@ -38,7 +38,7 @@ namespace DeconTools.Workflows.Backend.Core
             base.DoPostInitialization();
 
             _chromatogramCorrelator = new ChromatogramCorrelatorO16O18(_workflowParameters.ChromSmootherNumPointsInSmooth,
-                                                                       _workflowParameters.ChromToleranceInPPM);
+                                                                       _workflowParameters.ChromGenTolerance);
 
 
             _msfeatureFinder = new O16O18TargetedIterativeFeatureFinder(_iterativeTFFParameters);

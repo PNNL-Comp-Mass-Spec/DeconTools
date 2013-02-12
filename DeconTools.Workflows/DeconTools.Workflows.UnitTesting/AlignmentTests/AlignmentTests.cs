@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;   //use a very wide tolerance
-            parameters.ChromToleranceInPPM = 5;
+            parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
@@ -352,7 +352,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.01;   //use a more narrow tolerance
-            parameters.ChromToleranceInPPM = 5;
+            parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
             workflow = new BasicTargetedWorkflow(run, parameters);
@@ -399,7 +399,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;   //use a very wide tolerance
-            parameters.ChromToleranceInPPM = 5;
+            parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
             BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
@@ -425,7 +425,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.01;   //use a more narrow tolerance
-            parameters.ChromToleranceInPPM = 5;
+            parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
             workflow = new BasicTargetedWorkflow(run, parameters);

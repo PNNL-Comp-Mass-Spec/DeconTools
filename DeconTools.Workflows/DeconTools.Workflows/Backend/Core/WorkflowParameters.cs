@@ -169,7 +169,8 @@ namespace DeconTools.Workflows.Backend.Core
                     }
                     else
                     {
-                        Console.WriteLine("Imported parameter values missing the Parameter: " + propertyName + ". Value was not updated. Current value= " + pi.GetValue(this, null));
+                        string shortFilename = Path.GetFileName(xmlFilename);
+                        Console.WriteLine("xml file: " + shortFilename+  "; missing parameter: " + propertyName + ". Using default value: " + pi.GetValue(this, null));
                     }
                 }
             }

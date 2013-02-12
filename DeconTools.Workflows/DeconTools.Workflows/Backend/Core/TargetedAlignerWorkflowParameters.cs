@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.Backend.Core
             this.ChromPeakDetectorPeakBR = 2;
             this.ChromPeakDetectorSigNoise = 2;
             this.ChromSmootherNumPointsInSmooth = 9;
-            this.ChromToleranceInPPM = 25;
+            this.ChromGenTolerance = 25;
             this.MSPeakDetectorPeakBR = 2;
             this.MSPeakDetectorSigNoise = 2;
             this.MSToleranceInPPM = 25;

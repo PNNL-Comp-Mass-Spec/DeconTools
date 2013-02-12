@@ -32,7 +32,10 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 int numPoints = x.Length;
                 if (numPoints <= 1)
                 {
-                    throw new ArgumentException("Zerofiller failed. Xvalues empty.");
+                    XYData xyData = new XYData();
+                    xyData.Xvalues = x;
+                    xyData.Yvalues = y;
+                    return xyData;
                 }
 
 

@@ -46,6 +46,8 @@ namespace DeconTools.Workflows.Backend.Results
         /// </summary>
         public double PercentCarbonsLabelled { get; set; }
 
+        public int ContiguousnessScore { get; set; }
+
         #endregion
 
 
@@ -88,7 +90,8 @@ namespace DeconTools.Workflows.Backend.Results
             sb.Append(PercentCarbonsLabelled);
             sb.Append(delim);
             sb.Append(PercentPeptideLabelled);
-
+            sb.Append(delim);
+            sb.Append(ContiguousnessScore);
 
             return sb.ToString();
         }

@@ -31,11 +31,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             get
             {
-                return _chromatogramCorrelatorTask.ChromToleranceInPPM;
+                return _chromatogramCorrelatorTask.ChromTolerance;
             }
             set
             {
-                _chromatogramCorrelatorTask.ChromToleranceInPPM = value;
+                _chromatogramCorrelatorTask.ChromTolerance = value;
             }
         }
 
@@ -87,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             ChromToleranceInPPM = 25;
 
             const int numPointsInSmoother = 5;
-            _chromatogramCorrelatorTask = new ChromatogramCorrelator(numPointsInSmoother, (int)ChromToleranceInPPM, MinimumRelativeIntensityForChromCorr);
+            _chromatogramCorrelatorTask = new ChromatogramCorrelator(numPointsInSmoother, MinimumRelativeIntensityForChromCorr, (int)ChromToleranceInPPM);
 
 
 

@@ -213,6 +213,13 @@ namespace DeconTools.Backend
         }
 
 
+        public enum ToleranceUnit
+        {
+            PPM,
+            MZ
+        }
+
+
 
 
 

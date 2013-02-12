@@ -16,40 +16,53 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #region Constructors
 
-        protected ChromatogramCorrelatorBase(int numPointsInSmoother, int chromToleranceInPPM, double minRelativeIntensityForChromCorr)
+        protected ChromatogramCorrelatorBase(int numPointsInSmoother, double minRelativeIntensityForChromCorr,
+            double chromTolerance, Globals.ToleranceUnit toleranceUnit= Globals.ToleranceUnit.PPM)
         {
             SavitzkyGolaySmoothingOrder = 2;
             NumPointsInSmoother = numPointsInSmoother;
 
-            ChromToleranceInPPM = chromToleranceInPPM;
+            ChromTolerance = chromTolerance;
             MinimumRelativeIntensityForChromCorr = minRelativeIntensityForChromCorr;
 
-            PeakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK);
+            ChromToleranceUnit = toleranceUnit;
+
+            PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
+                                                         Globals.IsotopicProfileType.UNLABELLED, toleranceUnit);
+
 
             Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder, false);
         }
 
-
+        
         #endregion
 
         #region Properties
 
-        private double _chromToleranceInPPM;
-        public double ChromToleranceInPPM
+        private double _chromTolerance;
+        public double ChromTolerance
         {
-            get { return _chromToleranceInPPM; }
+            get { return _chromTolerance; }
             set
             {
-                _chromToleranceInPPM = value;
+                _chromTolerance = value;
                 
                 if (PeakChromGen!=null)
                 {
-                    PeakChromGen = new PeakChromatogramGenerator(ChromToleranceInPPM);    
+                    PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
+                                                                 Globals.IsotopicProfileType.UNLABELLED, ChromToleranceUnit);
                 }
                 
                 
             }
         }
+
+        /// <summary>
+        /// Tolerence unit for chromatogram. Either PPM (default) or MZ. Can only be set in the class constructor
+        /// </summary>
+        public Globals.ToleranceUnit ChromToleranceUnit { get; private set; }
+
+
 
         public double MinimumRelativeIntensityForChromCorr { get; set; }
 
@@ -166,8 +179,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             bool baseChromDataIsOK;
             var basePeakChromXYData = GetBaseChromXYData(run, startScan, stopScan, baseMZValue);
 
-            baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
-                                 basePeakChromXYData.Xvalues.Length > 3;
+            baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null; 
+                //&&basePeakChromXYData.Xvalues.Length > 3;
 
 
             double minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
@@ -176,7 +189,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                if (!baseChromDataIsOK) break;
+                if (!baseChromDataIsOK)
+                {
+                    var defaultChromCorrDataItem = new ChromCorrelationDataItem();
+                    correlationData.AddCorrelationData(defaultChromCorrDataItem);
+                    break;
+                }
 
                 if (i == indexMostAbundantPeak)
                 {
@@ -191,8 +209,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     bool chromDataIsOK;
                     var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, basePeakChromXYData, correlatedMZValue);
 
-                    chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null &&
-                                 chromPeakXYData.Xvalues.Length > 3;
+                    chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null;
+                        //&&chromPeakXYData.Xvalues.Length > 3;
 
                     if (chromDataIsOK)
                     {
@@ -233,7 +251,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected XYData GetCorrelatedChromPeakXYData(Run run, int startScan, int stopScan, XYData basePeakChromXYData, double correlatedMZValue)
         {
-            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromToleranceInPPM);
+            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromTolerance,ChromToleranceUnit);
 
             XYData chromPeakXYData;
             if (run.XYData == null || run.XYData.Xvalues.Length == 0)
@@ -260,7 +278,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected XYData GetBaseChromXYData(Run run, int startScan, int stopScan, double baseMZValue)
         {
-            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromToleranceInPPM);
+            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance,ChromToleranceUnit);
 
             if (run.XYData == null || run.XYData.Xvalues.Length < 3) return null;
 

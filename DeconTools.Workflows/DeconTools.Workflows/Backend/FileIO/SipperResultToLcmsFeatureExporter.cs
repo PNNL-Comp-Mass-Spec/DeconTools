@@ -49,6 +49,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(sipperResult.PercentPeptideLabelled.ToString("0.00"));
             sb.Append(Delimiter);
+            sb.Append(sipperResult.ContiguousnessScore.ToString("0"));
+            sb.Append(Delimiter);
+            sb.Append(sipperResult.RSquaredValForRatioCurve.ToString("0.0000"));
+            sb.Append(Delimiter);
             //sb.Append(GetLabelDistributionDataAsString(sipperResult));
             //sb.Append(Delimiter);
             sb.Append(sipperResult.ValidationCode == ValidationCode.None ? string.Empty : sipperResult.ValidationCode.ToString());
@@ -108,9 +112,12 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("PercentPeptidesLabelled");
             sb.Append(Delimiter);
-            //sb.Append("LabelDistributionData");
-            //sb.Append(Delimiter);
+            sb.Append("ContigScore");
+            sb.Append(Delimiter);
+            sb.Append("RSquared");
+            sb.Append(Delimiter);
             sb.Append("ValidationCode");
+            
             return sb.ToString();
 
         }

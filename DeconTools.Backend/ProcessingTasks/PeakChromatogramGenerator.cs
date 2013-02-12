@@ -9,9 +9,6 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    
-
-
     public class PeakChromatogramGenerator : Task
     {
         int maxZerosToAdd = 2;
@@ -24,27 +21,30 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        public PeakChromatogramGenerator(double ppmTol)
-            : this(ppmTol, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
+        public PeakChromatogramGenerator(double tolerance)
+            : this(tolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
         {
 
         }
 
-        public PeakChromatogramGenerator(double ppmTolerance, Globals.ChromatogramGeneratorMode chromMode)
-            : this(ppmTolerance, chromMode, Globals.IsotopicProfileType.UNLABELLED)
+        public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode)
+            : this(tolerance, chromMode, Globals.IsotopicProfileType.UNLABELLED)
         {
 
         }
 
-        public PeakChromatogramGenerator(double ppmTolerance, Globals.ChromatogramGeneratorMode chromMode, Globals.IsotopicProfileType isotopicProfileTarget)
+        public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode, 
+            Globals.IsotopicProfileType isotopicProfileTarget, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            this.PPMTolerance = ppmTolerance;
+            this.Tolerance = tolerance;
             this.ChromatogramGeneratorMode = chromMode;
             this.IsotopicProfileTarget = isotopicProfileTarget;
 
             this.TopNPeaksLowerCutOff = 0.3;
             this.NETWindowWidthForNonAlignedData = 0.4f;
             this.NETWindowWidthForAlignedData = 0.1f;
+
+            ToleranceUnit = toleranceUnit;
         }
 
         #endregion
@@ -53,8 +53,8 @@ namespace DeconTools.Backend.ProcessingTasks
         public Globals.IsotopicProfileType IsotopicProfileTarget { get; set; }
 
         public Globals.ChromatogramGeneratorMode ChromatogramGeneratorMode { get; set; }
-
-        public double PPMTolerance { get; set; }
+        public Globals.ToleranceUnit ToleranceUnit { get; set; }
+        public double Tolerance { get; set; }
 
         /// <summary>
         /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
@@ -73,14 +73,15 @@ namespace DeconTools.Backend.ProcessingTasks
         /// </summary>
         public double TopNPeaksLowerCutOff { get; set; }
 
+       
         #endregion
 
         #region Public Methods
         
-        public void GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double toleranceInPPM)
+        public void GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             var chromGen = new ChromatogramGenerator();
-            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop, targetMZ, toleranceInPPM);
+            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop, targetMZ, tolerance, toleranceUnit);
 
             if (run.XYData!=null)
             {
@@ -192,7 +193,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, Tolerance,ToleranceUnit);
                 
             }
             else if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.TOP_N_PEAKS)
@@ -211,7 +212,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
             }
             else if (ChromatogramGeneratorMode== Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
@@ -228,7 +229,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
             }
             else
             {
@@ -241,10 +242,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, this.PPMTolerance);
+                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, Tolerance, ToleranceUnit);
             }
 
-            TargetedResultBase result = resultList.CurrentTargetedResult;
+            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
             
 			resultList.Run.XYData = chromValues;
@@ -395,29 +396,7 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
 
         #region Private Methods
-        private int getIndexOfClosestMZValue(List<MSPeakResult> peakList, double targetMZ, int leftIndex, int rightIndex, double toleranceInMZ)
-        {
-            if (leftIndex <= rightIndex)
-            {
-                int middle = (leftIndex + rightIndex) / 2;
-                if (Math.Abs(targetMZ - peakList[middle].MSPeak.XValue) <= toleranceInMZ)
-                {
-                    return middle;
-                }
-                else if (targetMZ < peakList[middle].MSPeak.XValue)
-                {
-                    return getIndexOfClosestMZValue(peakList, targetMZ, leftIndex, middle - 1, toleranceInMZ);
-                }
-                else
-                {
-                    return getIndexOfClosestMZValue(peakList, targetMZ, middle + 1, rightIndex, toleranceInMZ);
-                }
-            }
-
-            return -1;
-        }
-
-
+      
         private XYData getChromValues(List<MSPeakResult> filteredPeakList, Run run)
         {
             XYData data = new XYData();

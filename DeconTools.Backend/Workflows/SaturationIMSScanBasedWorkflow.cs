@@ -33,9 +33,12 @@ namespace DeconTools.Backend.Workflows
 
         private DeconToolsZeroFiller _zeroFiller = new DeconToolsZeroFiller();
 
+        private bool _output3DBasePeakChrom = true;
+
+
         #region Constructors
 
-        internal SaturationIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public SaturationIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputFolderPath, backgroundWorker)
         {
             Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
@@ -302,6 +305,7 @@ namespace DeconTools.Backend.Workflows
         private void GetRebuiltFitScore(IsosResult isosResult)
         {
 
+            //TODO: use peak-based fit score calculator
             isosResult.IsotopicProfile.Score = 0.0099;  //hard-code the fit score. We can't re-fit since the raw xy data wasn't changed
             return;
 
@@ -588,7 +592,7 @@ namespace DeconTools.Backend.Workflows
         /// <param name="saturatedFeature"></param>
         /// <param name="peakList"></param>
         /// <param name="theorIso"></param>
-        private void RebuildSaturatedIsotopicProfile(IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIso)
+        public void RebuildSaturatedIsotopicProfile(IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIso)
         {
             //check for peak to the left
 

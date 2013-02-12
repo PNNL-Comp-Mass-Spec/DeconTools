@@ -101,8 +101,11 @@ namespace DeconTools.Workflows.Backend.Core
                 _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
             }
 
-
-            MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
+            if (ExecutorParameters.TargetedAlignmentIsPerformed)
+            {
+                MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath); 
+            }
+           
 
             bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
@@ -313,6 +316,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (!RunIsInitialized)
                 {
+                    //create Run; load _peaks data; do alignment if desired
                     InitializeRun(DatasetPath);
                 }
 

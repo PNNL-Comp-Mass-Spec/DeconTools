@@ -93,6 +93,76 @@ namespace DeconTools.Backend.DTO
         }
 
 
+        public void FilterAndOutputIsos(string inputIsosFileName, int colIndex, double minVal, double maxVal, string outputIsosFilename)
+        {
+            using (StreamReader sr = new StreamReader(inputIsosFileName))
+            {
+
+                using (StreamWriter sw = new StreamWriter(outputIsosFilename))
+                {
+                    string header = sr.ReadLine();
+                    sw.WriteLine(header);
+
+
+                    int msFeatureIndex = 0;
+                    while (sr.Peek() != -1)
+                    {
+                        string currentLine = sr.ReadLine();
+
+                        string[] splitLine = currentLine.Split(',');
+
+                        double parsedVal = -1;
+                        bool parsedOK = double.TryParse(splitLine[colIndex], out parsedVal);
+
+                        bool writeOutCurrentLine = true;
+
+                        if (parsedOK)
+                        {
+                            if (minVal == -1)
+                            {
+                                writeOutCurrentLine = (parsedVal <= maxVal);
+                            }
+                            else if (maxVal == -1)
+                            {
+                                writeOutCurrentLine = (parsedVal >= minVal);
+                            }
+                            else
+                            {
+                                writeOutCurrentLine = (parsedVal >= minVal && parsedVal <= maxVal);
+                            }
+                        }
+
+                        if (writeOutCurrentLine)
+                        {
+                            sw.WriteLine(currentLine);
+
+                        }
+
+                        msFeatureIndex++;
+
+                    }
+
+                    sw.Close();
+                    sr.Close();
+
+                }
+
+
+
+
+
+
+
+
+            }
+
+
+
+        }
+
+
+
+
         public List<IsosResult> getUIMFResults(string uimfInputFile, int minFrame, int maxFrame)
         {
             IsosResultUtilities uimfisoUtil = new IsosResultUtilities();

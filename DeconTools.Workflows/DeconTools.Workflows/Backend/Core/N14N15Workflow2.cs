@@ -148,10 +148,10 @@ namespace DeconTools.Workflows.Backend.Core
             theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
             theorN15FeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
 
-            chromGenN14 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, _workflowParameters.ChromGeneratorMode);
+            chromGenN14 = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, _workflowParameters.ChromGeneratorMode);
             chromGenN14.TopNPeaksLowerCutOff = 0.333;
 
-            chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromToleranceInPPM, DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, DeconTools.Backend.Globals.IsotopicProfileType.LABELLED);
+            chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, DeconTools.Backend.Globals.IsotopicProfileType.LABELLED);
             chromGenN15.TopNPeaksLowerCutOff = 0.333;
 
             int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;

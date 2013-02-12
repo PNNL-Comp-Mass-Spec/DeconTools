@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             for (int i = 0; i < chromdata1.Xvalues.Length; i++)
             {
-                Console.WriteLine(chromdata1.Xvalues[i] + "\t" + chromdata1.Yvalues[i] + "\t" + chromdata2.Yvalues[i]);
+                Console.WriteLine(chromdata1.Xvalues[i].ToString("0") + "\t" + chromdata1.Yvalues[i].ToString("0") + "\t" + chromdata2.Yvalues[i]);
             }
 
 

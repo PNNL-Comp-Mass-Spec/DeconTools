@@ -20,7 +20,12 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
         public override void Execute(ResultCollection resultList)
         {
-            resultList.Run.XYData = ZeroFill(resultList.Run.XYData.Xvalues, resultList.Run.XYData.Yvalues, MaxNumPointsToAdd);
+            if (resultList.Run.XYData!=null && resultList.Run.XYData.Xvalues.Length>0)
+            {
+                resultList.Run.XYData = ZeroFill(resultList.Run.XYData.Xvalues, resultList.Run.XYData.Yvalues, MaxNumPointsToAdd);    
+            }
+
+            
         }
     }
 }

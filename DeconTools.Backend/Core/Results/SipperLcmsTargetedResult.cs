@@ -49,6 +49,10 @@ namespace DeconTools.Backend.Core.Results
 
         public List<double> LabelDistributionVals { get; set; }
 
+        public int ContiguousnessScore { get; set; }
+
+        public double RSquaredValForRatioCurve { get; set; }
+
         #endregion
 
         public override string ToString()

@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
             parameters.ChromNETTolerance = 0.3;
-            parameters.ChromToleranceInPPM = 60;
+            parameters.ChromGenTolerance = 60;
             parameters.MSToleranceInPPM = 60;
 
             Console.WriteLine(parameters.ToStringWithDetails());
@@ -51,7 +51,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
             parameters.ChromNETTolerance = 0.3;
-            parameters.ChromToleranceInPPM = 60;
+            parameters.ChromGenTolerance = 60;
             parameters.MSToleranceInPPM = 60;
 
             Console.WriteLine(parameters.ToStringWithDetails());
@@ -80,7 +80,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
             parameters.ChromNETTolerance = 0.3;
-            parameters.ChromToleranceInPPM = 60;
+            parameters.ChromGenTolerance = 60;
             parameters.MSToleranceInPPM = 60;
 
             Console.WriteLine(parameters.ToStringWithDetails());
@@ -108,7 +108,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
             parameters.ChromNETTolerance = 0.3;
-            parameters.ChromToleranceInPPM = 60;
+            parameters.ChromGenTolerance = 60;
             parameters.MSToleranceInPPM = 60;
 
             Console.WriteLine(parameters.ToStringWithDetails());

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -160,6 +161,66 @@ namespace DeconTools.Backend.Utilities
 
             return twoDimensionalIntensityArray;
         }
+
+        public void OutputElutionProfileToFile(string outputFilename, char delimiter = '\t', bool outputZeroValues = true, int numDecimals = 0)
+        {
+            if (Intensities == null || Intensities.Length == 0 || Scans == null || Scans.Length == 0 || MzBins == null || MzBins.Length == 0)
+            {
+                return;
+            }
+
+            int scanArrayLength = Intensities2D.GetLength(0);
+            int mzBinLength = Intensities2D.GetLength(1);
+
+            using (StreamWriter writer = new StreamWriter(outputFilename))
+            {
+                for (int i = 0; i < mzBinLength; i++)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    for (int j = 0; j < scanArrayLength; j++)
+                    {
+
+                        float currentVal = Intensities2D[j, i];
+
+
+                        if (outputZeroValues || currentVal > 0)
+                        {
+                            if (!float.IsInfinity(currentVal))
+                            {
+                                string formatString = "0";
+                                if (numDecimals > 0)
+                                {
+                                    formatString = "0.".PadRight(numDecimals + 3, '0');
+                                    // making a format string based on number of decimals wanted. Clunky but works!
+                                }
+
+                                sb.Append(currentVal.ToString(formatString));
+
+                            }
+                            else
+                            {
+                                sb.Append(0); //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value. 
+                            }
+
+
+                        }
+
+                        if (j != mzBinLength - 1) // if not the last value, add delimiter
+                        {
+                            sb.Append(delimiter);
+                        }
+                    }
+
+                    writer.WriteLine(sb.ToString());
+
+                }
+
+
+            }
+
+
+        }
+
 
 
         public string OutputElutionProfileAsString(char delimiter = '\t', bool outputZeroValues = true, int numDecimals = 0)
