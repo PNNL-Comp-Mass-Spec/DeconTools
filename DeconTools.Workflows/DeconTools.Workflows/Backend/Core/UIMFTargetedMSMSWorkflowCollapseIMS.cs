@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -42,23 +46,29 @@ namespace DeconTools.Workflows.Backend.Core
 
             UpdateChromPeaksWithXYData();
 
+			// TODO: When/how should I look for the IMS chromatogram inside the LC peak/range we are looking?
+
+			// TODO: The chrom peak selector is only being used currently to calculate fit scores and other stats for each chrom peak.
+			// TODO: With this workflow, we are never selecting a single peak as an answer. That is handled in InformedProteomics.
+			// TODO: Something else to consider is if the scoring that InformedProteomics does should be the peak selector. Do we want InformedProteomics to give either 0 or 1 answers for a possible target?
             ExecuteTask(_chromPeakSelector);
-            ChromPeakSelected = Result.ChromPeakSelected;
+            //ChromPeakSelected = Result.ChromPeakSelected;
 
-            Result.ResetMassSpectrumRelatedInfo();
+			// TODO: Because we do not use a single best answer, the below tasks do not actually accomplish anything for the workflow.
+            //Result.ResetMassSpectrumRelatedInfo();
 
-            ExecuteTask(MSGenerator);
-            updateMassSpectrumXYValues(Run.XYData);
+            //ExecuteTask(MSGenerator);
+            //updateMassSpectrumXYValues(Run.XYData);
 
-            ExecuteTask(_msfeatureFinder);
+            //ExecuteTask(_msfeatureFinder);
 
-            ExecuteTask(_fitScoreCalc);
-            ExecuteTask(_resultValidator);
+            //ExecuteTask(_fitScoreCalc);
+            //ExecuteTask(_resultValidator);
 
-            if (_workflowParameters.ChromatogramCorrelationIsPerformed)
-            {
-                ExecuteTask(_chromatogramCorrelator);
-            }
+            //if (_workflowParameters.ChromatogramCorrelationIsPerformed)
+            //{
+            //    ExecuteTask(_chromatogramCorrelatorTask);
+            //}
         }
 
 
