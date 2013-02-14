@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -381,6 +382,58 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         //    Assert.AreEqual(478, repository.Results.Count);
         //}
 
-        
-	}
+
+        [Test]
+        public void TopDownWorkflowTestRepeatedChargeState()
+        {
+
+            //see https://jira.pnnl.gov/jira/browse/OMCR-100
+
+            const string executorParameterFile =
+                @"\\protoapps\UserData\Fujimoto\TopDownTesting\Parameters\topdownExecutorParameters_repeatedChargeState.xml";
+            var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParameterFile);
+            executorParameters.ExportChromatogramData = true;
+
+            const string testDatasetPath =
+                @"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+            string resultsFolderLocation = executorParameters.ResultsFolder;
+
+            string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
+
+            var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+
+            string proteinSeq1 =
+                @"M.SDKMKGQVKWFNESKGFGFITPADGSKDVFVHFSAIQGNGFKTLAEGQNVEFTIENGAKGPAAANVTAL.";
+            string proteinSeq2 =
+                @"A.AENVVHHKLDGMPISEAVEINAGNNLVFLSGKVPTKKSADAPEGELASYGNTEEQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVAKLANPAWRVEIEVIAVRPAK.";
+
+            executor.Targets.TargetList = executor.Targets.TargetList.Where(p => (p.Code == proteinSeq1) || (p.Code == proteinSeq2)).ToList();
+            executor.Execute();
+
+            Assert.IsNotNull(executor.TargetedWorkflow.Run);
+
+            Console.WriteLine("Num targetedResults in Run = " + executor.TargetedWorkflow.Run.ResultCollection.MassTagResultList.Count);
+
+            Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+            var resultsfile = new StreamReader(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\repeatedChargeState\Proteus_Peri_intact_ETD_quant.txt");
+            string line = resultsfile.ReadLine();
+            line = resultsfile.ReadLine();
+            string[] chargestatelist = line.Split('\t');
+            Assert.AreEqual("5, 6, 7, 8, 9, 10, 11", chargestatelist[2]);
+            resultsfile.Close();
+        }
+
+
+    }
+
 }
