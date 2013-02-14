@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class TargetedWorkflow : WorkflowBase
     {
         protected TargetedWorkflowParameters _workflowParameters;
-        protected JoshTheorFeatureGenerator _theorFeatureGen;
+        protected ITheorFeatureGenerator _theorFeatureGen;
         protected PeakChromatogramGenerator _chromGen;
         protected SavitzkyGolaySmoother _chromSmoother;
         protected ChromPeakDetector _chromPeakDetector;
