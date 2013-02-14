@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
-using DeconTools.Backend.Data;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Workflows;
@@ -281,6 +278,8 @@ namespace DeconTools.UnitTesting2.Scripts
         [Test]
         public void Generate3dBpiFromIsosFile1()
         {
+            bool outputOrigIntensity = false;
+            bool outputToConsole = true;
 
             string isosFile =
                 @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06_isos.csv";
@@ -311,7 +310,7 @@ namespace DeconTools.UnitTesting2.Scripts
             {
                 for (int scan = lcScanStart; scan <= lcScanStop; scan++)
                 {
-                    Console.WriteLine("Frame = " + scan);
+                    //Console.WriteLine("Frame = " + scan);
 
                     var lcScanResults = (from n in filteredIsos where n.ScanSet.PrimaryScanNumber == scan select n).ToList();
 
@@ -322,7 +321,7 @@ namespace DeconTools.UnitTesting2.Scripts
                         var imsScanResults =
                             (from n in lcScanResults
                              where ((UIMFIsosResult)n).IMSScanSet.PrimaryScanNumber == imsScan
-                             orderby n.IntensityAggregate descending
+                             orderby ((UIMFIsosResult)n).IntensityAggregate descending
                              select n).ToList();
 
                         int basePeakIntensity = 0;
@@ -332,7 +331,16 @@ namespace DeconTools.UnitTesting2.Scripts
                         }
                         else
                         {
-                            basePeakIntensity = (int)imsScanResults.First().IntensityAggregate;
+                            if (outputOrigIntensity)
+                            {
+                                basePeakIntensity = (int) imsScanResults.First().IsotopicProfile.getMostIntensePeak().Height;
+                            }
+                            else
+                            {
+                                basePeakIntensity = (int)imsScanResults.First().IntensityAggregate; 
+                            }
+
+                            
                         }
 
                         sb.Append(basePeakIntensity);
@@ -344,6 +352,11 @@ namespace DeconTools.UnitTesting2.Scripts
                     }
 
                     writer.WriteLine(sb.ToString());
+                    if (outputToConsole)
+                    {
+                        Console.WriteLine(sb.ToString());
+                    }
+
                 }
             }
 

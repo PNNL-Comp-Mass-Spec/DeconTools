@@ -43,6 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="GWSGraphLibrary">
+      <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -63,6 +66,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -71,6 +75,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>..\Library\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm_tests\LabelingDistributionCalculatorTests.cs" />
@@ -127,6 +134,8 @@
     <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
+    <Compile Include="Scripts\ChromatogramAnalysisScripts.cs" />
+    <Compile Include="Scripts\ChromScripts.cs" />
     <Compile Include="Scripts\UIMFChromatogramScripts.cs" />
     <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />
     <Compile Include="TargetedProcessing_Tests\SmartChromPeakSelectorTests.cs" />
@@ -174,6 +183,10 @@
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows\DeconTools.Workflows.csproj">
+      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
+      <Name>DeconTools.Workflows</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

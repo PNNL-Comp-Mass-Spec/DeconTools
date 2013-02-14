@@ -83,7 +83,67 @@ namespace DeconTools.Backend.FileIO
 
             GetModDataFromDB(data, MassTagsToBeRetrieved);
 
-            CalculateEmpiricalFormulas(data);
+            PeptideUtils peptideUtils = new PeptideUtils();
+
+            List<TargetBase> troubleSomePeptides = new List<TargetBase>();
+
+
+            foreach (PeptideTarget peptide in data.TargetList)
+            {
+                string baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
+
+                if (peptide.ContainsMods)
+                {
+                    PeptideTarget peptide1 = peptide;
+                    var mods = (from n in _massTagModData where n.Item1 == peptide1.ID select n);
+
+                    foreach (var tuple in mods)
+                    {
+                        string modString = tuple.Item4;
+
+                        try
+                        {
+                            baseEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(baseEmpiricalFormula, modString);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Failed to calculate empirical formula for the Target " + peptide.ID +
+                                              "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
+
+                            troubleSomePeptides.Add(peptide);
+                        }
+                        
+                    }
+                }
+
+                try
+                {
+                    peptide.EmpiricalFormula = baseEmpiricalFormula;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to calculate empirical formula for the Target " + peptide.ID +
+                                             "; Cannot parse this formula: " + peptide.EmpiricalFormula + "; This Target was NOT imported!!");
+
+                    troubleSomePeptides.Add(peptide);
+                }
+
+                
+            }
+
+            var cleanTargetList = new List<TargetBase>();
+
+            //filter out the bad peptides (the once with errors during empirical formula parsing)
+            foreach (var peptide in data.TargetList)
+            {
+                if (!troubleSomePeptides.Contains(peptide))
+                {
+                    cleanTargetList.Add(peptide);
+                }
+
+            }
+
+            data.TargetList = cleanTargetList;
 
             data.ApplyChargeStateFilter(this.ChargeStateFilterThreshold);
 
@@ -163,6 +223,12 @@ namespace DeconTools.Backend.FileIO
                         {
                             Console.WriteLine("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
                             //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled 
+                        }
+                        else if (rowData.Item2.Contains("N15"))
+                        {
+                            //ignore N15 modifications for now
+                            Console.WriteLine("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
+                            
                         }
                         else
                         {

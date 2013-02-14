@@ -13,7 +13,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
 	public class TopDownTargetedWorkflowTests
 	{
-
+        [Category("MustPass")]
         [Test]
         public void TopDownWorkflowTest1()
         {
@@ -129,7 +129,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
-
+        [Ignore("")]
         [Test]
         public void TestTargetedWorkflowExecutor()
         {

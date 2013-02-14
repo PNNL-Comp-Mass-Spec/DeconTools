@@ -184,12 +184,22 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
 		protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
-        {
+		{
+
+            //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
+            //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
+		    bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+
+            
             var filteredList1 = (from n in peakQualityList
-                                 where n.IsotopicProfileFound == true &&
-                                 n.FitScore < 1 && n.InterferenceScore < 1 &&
-                                 n.IsIsotopicProfileFlagged == false
-                                 select n).ToList();
+                                 where n.IsotopicProfileFound &&
+                                 n.FitScore < 1 && n.InterferenceScore < 1 select n).ToList();
+
+
+            if (goodToFilterOnFlaggedIsotopicProfiles)
+            {
+                filteredList1 = filteredList1.Where(p => p.IsIsotopicProfileFlagged == false).ToList();
+            }
 
             ChromPeak bestpeak;
 
