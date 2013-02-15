@@ -399,6 +399,9 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
                     wf = new UIMFTargetedMSMSWorkflowCollapseIMS(workflowParameters as TargetedWorkflowParameters);
                     break;
+                case Globals.TargetedWorkflowTypes.IQMillionWorkflow:
+                    wf = new IQMillionWorkflow(workflowParameters as TargetedWorkflowParameters);
+                    break;
                 default:
                     wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;

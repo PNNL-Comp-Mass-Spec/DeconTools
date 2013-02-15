@@ -77,6 +77,7 @@
     <Compile Include="UtilitiesTests\PeakMatchedResultUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\IQMillionTests.cs" />
     <Compile Include="WorkflowTests\N14N15ExecutorTests.cs" />
     <Compile Include="WorkflowTests\O16O18ExecutorTests.cs" />
     <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />

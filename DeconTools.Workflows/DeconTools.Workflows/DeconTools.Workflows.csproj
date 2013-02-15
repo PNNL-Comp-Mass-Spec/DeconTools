@@ -55,6 +55,9 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\IQMillionWorkflow.cs" />
+    <Compile Include="Backend\Core\IQMillionWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\NominalMassTarget.cs" />
     <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutorParameters.cs" />
