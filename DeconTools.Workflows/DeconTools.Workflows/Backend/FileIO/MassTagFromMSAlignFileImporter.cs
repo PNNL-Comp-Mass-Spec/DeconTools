@@ -258,16 +258,21 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			// Loop through each protein species group and add in the missing charge states
 			int idCounter = 0;
-			foreach (var group in proteinSpeciesGroups)
+			foreach (KeyValuePair<string, List<LcmsFeatureTarget>> keyValuePair in proteinSpeciesGroups)
 			{
-				IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(group.Value, EXTEND_CHARGE_RANGE);
+				IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(keyValuePair.Value, EXTEND_CHARGE_RANGE);
 
+				var chargeStates = new List<short> {0};
 				// Add all targets in group and IDs to list
 				foreach (LcmsFeatureTarget target in targetGroup)
 				{
-					target.ID = ++idCounter;
-					targets.TargetList.Add(target);
-					targets.TargetIDList.Add(idCounter);
+					if (!chargeStates.Contains(target.ChargeState))
+					{
+						chargeStates.Add(target.ChargeState);
+						target.ID = ++idCounter;
+						targets.TargetList.Add(target);
+						targets.TargetIDList.Add(idCounter);
+					}
 				}
 			}
 
