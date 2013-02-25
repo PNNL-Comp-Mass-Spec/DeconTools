@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.Utilities;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
+using Globals = DeconTools.Workflows.Backend.Globals;
+using Globals1 = DeconTools.Backend.Globals;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
@@ -389,17 +394,40 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //see https://jira.pnnl.gov/jira/browse/OMCR-100
 
-            const string executorParameterFile =
-                @"\\protoapps\UserData\Fujimoto\TopDownTesting\Parameters\topdownExecutorParameters_repeatedChargeState.xml";
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
-            executorParameters.LoadParameters(executorParameterFile);
+			executorParameters.CopyRawFileLocal = false;
+			executorParameters.DeleteLocalDatasetAfterProcessing = false;
+			executorParameters.LoggingFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Logs";
+			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Targets\repeatedChargeState\Proteus_Peri_intact_ETD_MSAlign_ResultTable.txt";
+        	executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+			executorParameters.ResultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\repeatedChargeState";
             executorParameters.ExportChromatogramData = true;
 
-            const string testDatasetPath =
-                @"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+			var workflowParameters = new TopDownTargetedWorkflowParameters();
+			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
+			workflowParameters.ChromGeneratorMode = Globals1.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+			workflowParameters.ChromGenSourceDataPeakBR = 4;
+			workflowParameters.ChromGenSourceDataSigNoise = 3;
+			workflowParameters.ChromNETTolerance = 0.025;
+			workflowParameters.ChromPeakDetectorPeakBR = 0.1;
+			workflowParameters.ChromPeakDetectorSigNoise = 0.1;
+			workflowParameters.ChromPeakSelectorMode = Globals1.PeakSelectorMode.Smart;
+			workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+			workflowParameters.MaxScansSummedInDynamicSumming = 100;
+			workflowParameters.MSPeakDetectorPeakBR = 1.3;
+			workflowParameters.MSPeakDetectorSigNoise = 2;
+			workflowParameters.ChromGenTolerance = 15;
+			workflowParameters.MSToleranceInPPM = 25;
+			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = 10;
+			workflowParameters.NumMSScansToSum = 5;
+			workflowParameters.ResultType = Globals1.ResultType.TOPDOWN_TARGETED_RESULT;
+			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
 
+            const string testDatasetPath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
 
-            string resultsFolderLocation = executorParameters.ResultsFolder;
+            const string resultsFolderLocation = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\repeatedChargeState";
 
             string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
@@ -409,7 +437,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 File.Delete(expectedResultsFilename);
             }
 
-            var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+            var executor = new TopDownTargetedWorkflowExecutor(executorParameters, workflowParameters, testDatasetPath);
 
             string proteinSeq1 =
                 @"M.SDKMKGQVKWFNESKGFGFITPADGSKDVFVHFSAIQGNGFKTLAEGQNVEFTIENGAKGPAAANVTAL.";
@@ -433,7 +461,274 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             resultsfile.Close();
         }
 
+		[Test]
+		public void TopDownWorkflowTestMissingChargeState()
+		{
 
-    }
+			//see https://jira.pnnl.gov/jira/browse/OMCR-102
+
+			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+			executorParameters.CopyRawFileLocal = false;
+			executorParameters.DeleteLocalDatasetAfterProcessing = false;
+			executorParameters.LoggingFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Logs";
+			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Targets\missingChargeState\Proteus_Peri_intact_ETD_MSAlign_ResultTable.txt";
+			executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+			executorParameters.ResultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\missingChargeState";
+			executorParameters.ExportChromatogramData = true;
+
+			var workflowParameters = new TopDownTargetedWorkflowParameters();
+			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
+			workflowParameters.ChromGeneratorMode = Globals1.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+			workflowParameters.ChromGenSourceDataPeakBR = 4;
+			workflowParameters.ChromGenSourceDataSigNoise = 3;
+			workflowParameters.ChromNETTolerance = 0.025;
+			workflowParameters.ChromPeakDetectorPeakBR = 0.1;
+			workflowParameters.ChromPeakDetectorSigNoise = 0.1;
+			workflowParameters.ChromPeakSelectorMode = Globals1.PeakSelectorMode.Smart;
+			workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+			workflowParameters.MaxScansSummedInDynamicSumming = 100;
+			workflowParameters.MSPeakDetectorPeakBR = 1.3;
+			workflowParameters.MSPeakDetectorSigNoise = 2;
+			workflowParameters.ChromGenTolerance = 15;
+			workflowParameters.MSToleranceInPPM = 25;
+			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = 10;
+			workflowParameters.NumMSScansToSum = 5;
+			workflowParameters.ResultType = Globals1.ResultType.TOPDOWN_TARGETED_RESULT;
+			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+
+			const string testDatasetPath =
+				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+			string resultsFolderLocation = executorParameters.ResultsFolder;
+
+			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			if (File.Exists(expectedResultsFilename))
+			{
+				File.Delete(expectedResultsFilename);
+			}
+
+			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, workflowParameters, testDatasetPath);
+
+			string proteinSeq1 =
+				@"A.AENVVHHKLDGMPISEAVEINAGNNLVFLSGKVPTKKSADAPEGELASYGNTEEQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVAKLANPAWRVEIEVIAVRPAK.";
+
+			executor.Targets.TargetList = executor.Targets.TargetList.Where(p => (p.Code == proteinSeq1)).ToList();
+			executor.Execute();
+
+			Assert.IsNotNull(executor.TargetedWorkflow.Run);
+
+			Console.WriteLine("Num targetedResults in Run = " + executor.TargetedWorkflow.Run.ResultCollection.MassTagResultList.Count);
+
+			Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+			var resultsfile = new StreamReader(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\missingChargeState\Proteus_Peri_intact_ETD_quant.txt");
+			string line = resultsfile.ReadLine();
+			line = resultsfile.ReadLine();
+			string[] chargestatelist = line.Split('\t');
+			Assert.AreEqual("10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22", chargestatelist[2]);
+			resultsfile.Close();
+		}
+
+		[Test]
+		public void TopDownWorkflowTestNoChargeStateList()
+		{
+
+			//see https://jira.pnnl.gov/jira/browse/OMCR-101
+
+			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+			executorParameters.CopyRawFileLocal = false;
+			executorParameters.DeleteLocalDatasetAfterProcessing = false;
+			executorParameters.LoggingFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Logs";
+			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Targets\noChargeStateList\Proteus_Peri_intact_ETD_MSAlign_ResultTable.txt";
+			executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+			executorParameters.ResultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\noChargeStateList";
+			executorParameters.ExportChromatogramData = true;
+
+			var workflowParameters = new TopDownTargetedWorkflowParameters();
+			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
+			workflowParameters.ChromGeneratorMode = Globals1.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+			workflowParameters.ChromGenSourceDataPeakBR = 4;
+			workflowParameters.ChromGenSourceDataSigNoise = 3;
+			workflowParameters.ChromNETTolerance = 0.025;
+			workflowParameters.ChromPeakDetectorPeakBR = 0.1;
+			workflowParameters.ChromPeakDetectorSigNoise = 0.1;
+			workflowParameters.ChromPeakSelectorMode = Globals1.PeakSelectorMode.Smart;
+			workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+			workflowParameters.MaxScansSummedInDynamicSumming = 100;
+			workflowParameters.MSPeakDetectorPeakBR = 1.3;
+			workflowParameters.MSPeakDetectorSigNoise = 2;
+			workflowParameters.ChromGenTolerance = 15;
+			workflowParameters.MSToleranceInPPM = 25;
+			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = 10;
+			workflowParameters.NumMSScansToSum = 5;
+			workflowParameters.ResultType = Globals1.ResultType.TOPDOWN_TARGETED_RESULT;
+			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+
+			const string testDatasetPath =
+				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+			string resultsFolderLocation = executorParameters.ResultsFolder;
+
+			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			if (File.Exists(expectedResultsFilename))
+			{
+				File.Delete(expectedResultsFilename);
+			}
+
+			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, workflowParameters, testDatasetPath);
+			executor.Execute();
+
+			/*
+			var currentTarget = executor.TargetedWorkflow.Result.Target;
+			Console.WriteLine("Target info:");
+			Console.WriteLine(currentTarget.ID + "\t" + currentTarget.MonoIsotopicMass + "\t" + currentTarget.MZ + "\t" + currentTarget.ChargeState + "\t"+ currentTarget.EmpiricalFormula);
+			Console.WriteLine("Theor profile");
+			TestUtilities.DisplayIsotopicProfileData(executor.TargetedWorkflow.Result.Target.IsotopicProfile);
+			TestUtilities.DisplayXYValues(executor.TargetedWorkflow.MassSpectrumXYData);
+			TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+			TestUtilities.DisplayPeaks(executor.TargetedWorkflow.ChromPeaksDetected.Select(p=>(Peak)p).ToList());
+			*/
+
+			Assert.IsNotNull(executor.TargetedWorkflow.Run);
+
+			Console.WriteLine("Num targetedResults in Run = " + executor.TargetedWorkflow.Run.ResultCollection.MassTagResultList.Count);
+
+			Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+			//var resultsfile = new StreamReader(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\noChargeStateList\Proteus_Peri_intact_ETD_quant.txt");
+			//string line = resultsfile.ReadLine();
+			//line = resultsfile.ReadLine();
+			//string[] chargestatelist = line.Split('\t');
+			//Assert.AreEqual("10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22", chargestatelist[2]);
+			//resultsfile.Close();
+		}
+
+		[Test]
+		public void TopDownWorkflowTestBestHit()
+		{
+
+			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+			executorParameters.CopyRawFileLocal = false;
+			executorParameters.DeleteLocalDatasetAfterProcessing = false;
+			executorParameters.LoggingFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Logs";
+			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Targets\bestHit\Proteus_Peri_intact_ETD_MSAlign_ResultTable.txt";
+			executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+			executorParameters.ResultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\bestHit";
+			executorParameters.ExportChromatogramData = true;	
+
+			var workflowParameters = new TopDownTargetedWorkflowParameters();
+			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
+			workflowParameters.ChromGeneratorMode = Globals1.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+			workflowParameters.ChromGenSourceDataPeakBR = 4;
+			workflowParameters.ChromGenSourceDataSigNoise = 3;
+			workflowParameters.ChromNETTolerance = 0.025;
+			workflowParameters.ChromPeakDetectorPeakBR = 0.1;
+			workflowParameters.ChromPeakDetectorSigNoise = 0.1;
+			workflowParameters.ChromPeakSelectorMode = Globals1.PeakSelectorMode.Smart;
+			workflowParameters.ChromSmootherNumPointsInSmooth = 9; 
+			workflowParameters.MaxScansSummedInDynamicSumming = 100;
+			workflowParameters.MSPeakDetectorPeakBR = 1.3;
+			workflowParameters.MSPeakDetectorSigNoise = 2;
+			workflowParameters.ChromGenTolerance = 15;
+			workflowParameters.MSToleranceInPPM = 25;
+			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = 10;
+			workflowParameters.NumMSScansToSum = 5; 
+			workflowParameters.ResultType = Globals1.ResultType.TOPDOWN_TARGETED_RESULT;
+			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+
+			const string testDatasetPath =
+				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+			string resultsFolderLocation = executorParameters.ResultsFolder;
+
+			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			if (File.Exists(expectedResultsFilename))
+			{
+				File.Delete(expectedResultsFilename);
+			}
+
+			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, workflowParameters, testDatasetPath);
+
+			executor.Execute();
+
+			Assert.IsNotNull(executor.TargetedWorkflow.Run);
+			Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+		}
+
+		[Test]
+		public void TopDownWorkflowFullTargetSet()
+		{
+
+			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
+			executorParameters.CopyRawFileLocal = false;
+			executorParameters.DeleteLocalDatasetAfterProcessing = false;
+			executorParameters.LoggingFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Logs";
+			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Targets\fullTargetSet\Proteus_Peri_intact_ETD_MSAlign_ResultTable.Filtered05FDR.txt";
+			executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+			executorParameters.ResultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Results\fullTargetSet";
+			executorParameters.ExportChromatogramData = true;
+
+			var workflowParameters = new TopDownTargetedWorkflowParameters();
+			workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
+			workflowParameters.ChromatogramCorrelationIsPerformed = false;
+			workflowParameters.ChromGeneratorMode = Globals1.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+			workflowParameters.ChromGenSourceDataPeakBR = 4;
+			workflowParameters.ChromGenSourceDataSigNoise = 3;
+			workflowParameters.ChromNETTolerance = 0.025;
+			workflowParameters.ChromPeakDetectorPeakBR = 0.1;
+			workflowParameters.ChromPeakDetectorSigNoise = 0.1;
+			workflowParameters.ChromPeakSelectorMode = Globals1.PeakSelectorMode.Smart;
+			workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+			workflowParameters.MaxScansSummedInDynamicSumming = 100;
+			workflowParameters.MSPeakDetectorPeakBR = 1.3;
+			workflowParameters.MSPeakDetectorSigNoise = 2;
+			workflowParameters.ChromGenTolerance = 15;
+			workflowParameters.MSToleranceInPPM = 25;
+			workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
+			workflowParameters.NumChromPeaksAllowedDuringSelection = 10;
+			workflowParameters.NumMSScansToSum = 5;
+			workflowParameters.ResultType = Globals1.ResultType.TOPDOWN_TARGETED_RESULT;
+			workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+
+			const string testDatasetPath =
+				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
+
+
+			string resultsFolderLocation = executorParameters.ResultsFolder;
+
+			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
+
+			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			if (File.Exists(expectedResultsFilename))
+			{
+				File.Delete(expectedResultsFilename);
+			}
+
+			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, workflowParameters, testDatasetPath);
+
+			executor.Execute();
+
+			Assert.IsNotNull(executor.TargetedWorkflow.Run);
+			Assert.IsTrue(File.Exists(expectedResultsFilename), "Results file does not exist!");
+
+		}
+
+	}
 
 }
