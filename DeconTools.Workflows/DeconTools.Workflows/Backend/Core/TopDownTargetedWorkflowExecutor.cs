@@ -24,6 +24,10 @@ namespace DeconTools.Workflows.Backend.Core
             : base(parameters, datasetPath, backgroundWorker)
 		{
 		}
+		public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+			: base(parameters, workflowParameters, datasetPath, backgroundWorker)
+		{
+		}
 
 	
 		#endregion
