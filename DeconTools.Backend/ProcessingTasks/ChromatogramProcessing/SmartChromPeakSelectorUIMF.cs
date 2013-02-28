@@ -81,8 +81,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             TargetBase currentTarget = resultList.Run.CurrentMassTag;
 
             // Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
-            msgen.MinMZ = currentTarget.MZ - 10;
-            msgen.MaxMZ = currentTarget.MZ + 10;
+			List<MSPeak> theoIsotopicPeakList = currentTarget.IsotopicProfile.Peaklist.Where(x => x.Height > 0.1).OrderBy(x => x.XValue).ToList();
+			msgen.MinMZ = theoIsotopicPeakList[0].XValue - 1.1;
+			msgen.MaxMZ = theoIsotopicPeakList[theoIsotopicPeakList.Count - 1].XValue + 1.1;
 
             float normalizedElutionTime;
 
