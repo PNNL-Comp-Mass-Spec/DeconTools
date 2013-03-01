@@ -43,6 +43,11 @@ namespace DeconTools.Workflows.Backend.Results
         public double RatioDH { get; set; }
         public double IntensityI0HydrogenMono { get; set; }
 
+        /// <summary>
+        /// area under the parabolic LC fit
+        /// </summary>
+        public double IndegratedLcAbundance { get; set; }
+
         #endregion
 
 
@@ -117,6 +122,8 @@ namespace DeconTools.Workflows.Backend.Results
             sb.Append(this.LabelingEfficiency);
             sb.Append(delim);
             sb.Append(this.RatioDH.ToString("0.0000"));
+            sb.Append(delim);
+            sb.Append(this.IndegratedLcAbundance.ToString("0.0"));
 
 
             return sb.ToString();

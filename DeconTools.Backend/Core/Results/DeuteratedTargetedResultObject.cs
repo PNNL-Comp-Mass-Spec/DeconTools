@@ -43,6 +43,11 @@ namespace DeconTools.Backend.Core.Results
         public double RawI4 { get; set; }
         public double LabelingEfficiency { get; set; }
 
+        /// <summary>
+        /// Integrated LC Fit Abundance
+        /// </summary>
+        public double IndegratedLcAbundance { get; set; }
+
         #endregion
 
        

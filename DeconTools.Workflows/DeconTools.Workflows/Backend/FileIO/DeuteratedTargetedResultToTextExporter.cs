@@ -133,6 +133,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("LabelingEfficiency");
             sb.Append(Delimiter);
             sb.Append("RatioDH");
+            sb.Append(Delimiter);
+            sb.Append("IntegratedLcAbundance");
 
             return sb.ToString();
 

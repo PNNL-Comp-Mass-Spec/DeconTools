@@ -190,6 +190,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.LabelingEfficiency = result.LabelingEfficiency;
             r.RatioDH = result.RatioDH;
             r.IntensityI0HydrogenMono = result.IntensityI0HydrogenMono;
+            r.IndegratedLcAbundance = result.IndegratedLcAbundance;
         }
 
         private static float getIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)
