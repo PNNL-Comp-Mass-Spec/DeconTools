@@ -360,6 +360,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 result.ContiguousnessScore = contiguousnessScore;
 
                 //GORD ------------- note this section is a duplicate of the above....  choose one or the other ------------------------
+                //Feb 26, 2013...  I processed the results and these look really good. ROC curve nice
                 peaksForLabeledIsoQuant = new List<Peak>(HighQualitySubtractedProfile.Peaklist.Where(p => p.Height > 0));
 
 
