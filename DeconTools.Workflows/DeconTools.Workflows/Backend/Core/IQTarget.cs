@@ -51,9 +51,17 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public IqResult DoWorkflow()
+        public void DoWorkflow(IqResult iqResult)
         {
-            return _workflow.Execute(this);
+            if (iqResult.HasChildren())
+            {
+                var childresults = iqResult.ChildResults();
+                foreach (var childResult in childresults)
+                {
+                    DoWorkflow(childResult);
+                }
+            }
+            _workflow.Execute(iqResult);
         }
 
 
@@ -108,5 +116,25 @@ namespace DeconTools.Workflows.Backend.Core
             return (ID + "; " + Code + "; " + EmpiricalFormula + "; " + MonoMassTheor.ToString("0.0000"));
         }
 
+
+        public IqResult CreateResult(IqTarget target)
+        {
+            var result= _workflow.CreateIQResult(target);
+
+            if (target.HasChildren())
+            {
+                var childTargets = ChildTargets();
+                foreach (var childTarget in childTargets)
+                {
+                    var childResult = CreateResult(childTarget);
+                    result.AddResult(childResult);
+                }
+            }
+            
+
+            return result;
+
+
+        }
     }
 }

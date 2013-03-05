@@ -47,7 +47,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
 
             IqTargetUtilities targetUtilities = new IqTargetUtilities();
-
             var targets = importer.Import();
 
             //select distinct Target ID's 
@@ -75,6 +74,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.5;
 
+
+            //now attach the workflows to each target. 
             var workflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
             foreach (IqTarget iqTarget in targets)
             {
@@ -94,10 +95,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var executor = new IqExecutor(executorBaseParameters);
             executor.ChromSourceDataFilePath = peaksTestFile;
+            
+            //Main line for executing IQ:
             executor.Execute(targets);
 
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
-            int numLinesInResults = 0;
+            int numResultsInResultsFile = 0;
             bool outputToConsole = true;
 
             using (StreamReader reader=new StreamReader(expectedResultsFilename))
@@ -105,7 +108,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 while (reader.Peek()!=-1)
                 {
                     string line= reader.ReadLine();
-                    numLinesInResults++;    
+                    numResultsInResultsFile++;    
 
                     if (outputToConsole)
                     {
@@ -114,10 +117,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 }
             }
 
-            Assert.IsTrue(numLinesInResults > 1,"No results in output file");
-            Assert.IsTrue(numLinesInResults == 35);
+            Assert.IsTrue(numResultsInResultsFile > 1,"No results in output file");
+            
+            //the Result Tree is flattened out in the results file.
+            Assert.IsTrue(numResultsInResultsFile == 35);
 
-
+            //the results in the Executor are in the a Result tree. So there should be just 10. 
+            Assert.AreEqual(10,executor.Results.Count);
+            
         }
 
 

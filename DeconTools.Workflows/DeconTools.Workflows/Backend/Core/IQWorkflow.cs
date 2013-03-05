@@ -261,7 +261,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public virtual IqResult Execute(IqTarget target)
+        public virtual void Execute(IqResult result)
         {
             Check.Require(this.Run != null, "Run has not been defined.");
 
@@ -270,20 +270,12 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 InitializeWorkflow();
             }
-
-            ////try
-            ////{
-            var result = ExecuteWorkflow(target);
+            
+            ExecuteWorkflow(result);
 
             ExecutePostWorkflowHook(result);
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    HandleWorkflowError(ex);
-            //}
-
-            return result;
+         
+            
 
         }
 
@@ -334,18 +326,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="target"></param>
-        private IqResult ExecuteWorkflow(IqTarget target)
+        private void ExecuteWorkflow(IqResult result)
         {
 
-            var result = CreateIQResult(target);
+           
+            result.Target.TheorIsotopicProfile = TheorFeatureGen.GenerateTheorProfile(result.Target.EmpiricalFormula, result.Target.ChargeState);
 
-            target.TheorIsotopicProfile = TheorFeatureGen.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
-
-            result.IqResultDetail.Chromatogram = ChromGen.GenerateChromatogram(Run, target.TheorIsotopicProfile, target.ElutionTimeTheor);
+            result.IqResultDetail.Chromatogram = ChromGen.GenerateChromatogram(Run, result.Target.TheorIsotopicProfile, result.Target.ElutionTimeTheor);
 
             result.IqResultDetail.Chromatogram = ChromSmoother.Smooth(result.IqResultDetail.Chromatogram);
 
@@ -353,9 +340,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             ChromPeakDetector.CalculateElutionTimes(Run, result.ChromPeakList);
 
-            result.IqResultDetail.ChromPeakQualityData = ChromPeakAnalyzer.GetChromPeakQualityData(Run, target, result.ChromPeakList);
+            result.IqResultDetail.ChromPeakQualityData = ChromPeakAnalyzer.GetChromPeakQualityData(Run, result.Target, result.ChromPeakList);
 
-            bool filterOutFlagged = target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+            bool filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
             result.ChromPeakSelected = ChromPeakSelector.SelectBestPeak(result.IqResultDetail.ChromPeakQualityData, filterOutFlagged);
 
             result.LCScanSetSelected = ChromPeakUtilities.GetLCScanSetForChromPeak(result.ChromPeakSelected, Run,
@@ -363,13 +350,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             result.IqResultDetail.MassSpectrum = MSGenerator.GenerateMS(Run, result.LCScanSetSelected);
 
-            TrimData(result.IqResultDetail.MassSpectrum, target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
+            TrimData(result.IqResultDetail.MassSpectrum, result.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
 
             List<Peak> mspeakList;
-            result.ObservedIsotopicProfile = MsfeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, target.TheorIsotopicProfile, out mspeakList);
+            result.ObservedIsotopicProfile = MsfeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, result.Target.TheorIsotopicProfile, out mspeakList);
 
             
-            result.FitScore = FitScoreCalc.CalculateFitScore(target.TheorIsotopicProfile, result.ObservedIsotopicProfile,
+            result.FitScore = FitScoreCalc.CalculateFitScore(result.Target.TheorIsotopicProfile, result.ObservedIsotopicProfile,
                                                               result.IqResultDetail.MassSpectrum);
 
             result.InterferenceScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
@@ -388,15 +375,10 @@ namespace DeconTools.Workflows.Backend.Core
 
             result.Abundance = GetAbundance(result);
 
-            return result;
-
-            //Success = true;
-
-
         }
 
         //TODO:  later will make this abstract/virtual.  Workflow creates the type of IqResult we want
-        private IqResult CreateIQResult(IqTarget target)
+        internal IqResult CreateIQResult(IqTarget target)
         {
             return new IqResult(target);
         }

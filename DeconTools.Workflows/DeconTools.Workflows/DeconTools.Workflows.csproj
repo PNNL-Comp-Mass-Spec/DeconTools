@@ -70,6 +70,8 @@
     <Compile Include="Backend\Core\IQMillionWorkflow.cs" />
     <Compile Include="Backend\Core\IQMillionWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IQResult.cs" />
+    <Compile Include="Backend\Core\IqResultDetail.cs" />
+    <Compile Include="Backend\Core\IqResultUtilities.cs" />
     <Compile Include="Backend\Core\IQTarget.cs" />
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />

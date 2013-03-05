@@ -13,6 +13,9 @@ namespace DeconTools.Workflows.Backend.Core
     {
         private BackgroundWorker _backgroundWorker;
 
+        private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
+
+
         #region Constructors
 
         public IqExecutor()
@@ -21,15 +24,15 @@ namespace DeconTools.Workflows.Backend.Core
             Results = new List<IqResult>();
             ResultExporter = new IqLabelFreeResultExporter();
             IsDataExported = true;
+            DisposeResultDetails = true;
+
 
         }
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters)
             : this()
         {
-            ResultExporter = new IqLabelFreeResultExporter();
             Parameters = parameters;
-            IsDataExported = true;
         }
 
         protected WorkflowExecutorBaseParameters Parameters { get; set; }
@@ -40,7 +43,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-
+        public bool DisposeResultDetails { get; set; }
 
 
         #endregion
@@ -57,7 +60,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void Execute(IEnumerable<IqTarget> targets)
         {
-
             foreach (var target in targets)
             {
                 Run = target.GetRun();
@@ -67,47 +69,34 @@ namespace DeconTools.Workflows.Backend.Core
                     LoadChromData(Run);
                 }
 
+                var result = target.CreateResult(target);    //NOTE: this creates a composite IqResult from a composite IqTarget
+                target.DoWorkflow(result);
 
-
-                if (target.HasChildren())
+                if (IsDataExported)
                 {
-                   Execute(target.ChildTargets());
+                    ExportResults(result);
                 }
 
-                var result = target.DoWorkflow();
                 Results.Add(result);
 
-                //if target is a parent node
-                if (!target.HasParent)
+                if (DisposeResultDetails)
                 {
-                    if (IsDataExported)
-                    {
-                        ExportResults();
-                        Results.Clear();
-                    }
-                    else
-                    {
-
-                    }
-
-                    //clear the heavy data information
-                    result.IqResultDetail.Dispose();
-
-
-
+                    result.Dispose(); 
                 }
-
             }
 
         }
 
-
-        protected void ExportResults()
+        protected virtual void ExportResults(IqResult iqResult)
         {
-            var orderedResults = Results.OrderBy(p => p.Target.ChargeState).ToList();
+            List<IqResult> resultsForExport =_iqResultUtilities.FlattenOutResultTree(iqResult);
+
+            var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
             ResultExporter.WriteOutResults(Parameters.ResultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
         }
+
+  
 
         private string CreatePeaksForChromSourceData()
         {

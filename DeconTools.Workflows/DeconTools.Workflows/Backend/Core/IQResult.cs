@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 
@@ -10,16 +10,17 @@ namespace DeconTools.Workflows.Backend.Core
     public class IqResult
     {
         readonly IqLabelFreeResultExporter _labelFreeResultExporter;
-
+        private List<IqResult> _childResults;
 
         #region Constructors
 
         public IqResult(IqTarget target)
         {
             _labelFreeResultExporter = new IqLabelFreeResultExporter();
+            _childResults = new List<IqResult>();
 
             Target = target;
-			IqResultDetail = new IqResultDetail();
+            IqResultDetail = new IqResultDetail();
         }
 
         public IqTarget Target { get; set; }
@@ -52,7 +53,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public float Abundance { get; set; }
 
-		public IqResultDetail IqResultDetail { get; set; }
+        public IqResultDetail IqResultDetail { get; set; }
 
         #endregion
 
@@ -85,7 +86,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             sb.Append("ChromPeakSelected" + delim + chromPeakSelectedString + Environment.NewLine);
             sb.Append("MassSpectrum length" + delim + (IqResultDetail.MassSpectrum == null ? "[null]" : IqResultDetail.MassSpectrum.Xvalues.Length.ToString()) + Environment.NewLine);
-           
+
             return sb.ToString();
 
         }
@@ -101,32 +102,51 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-      
+        public void AddResult(IqResult result)
+        {
+            result.ParentResult = this;
+            _childResults.Add(result);
+
+        }
+
+        public void Dispose()
+        {
+            if (HasChildren())
+            {
+                var childResults = ChildResults();
+
+                foreach (var childResult in childResults)
+                {
+                    childResult.Dispose();
+                }
+            }
+
+            IqResultDetail.ChromPeakQualityData.Clear();
+            IqResultDetail.Chromatogram = null;
+            IqResultDetail.MassSpectrum = null;
+        }
+
+
+        public IEnumerable<IqResult>ChildResults()
+        {
+            return _childResults;
+        }
+
+        public IqResult ParentResult { get; set; }
+
+        public bool HasChildren()
+        {
+            return _childResults.Any();
+        }
+
+
+        public bool HasParent
+        {
+            get
+            {
+                return ParentResult != null;
+            }
+        }
+
     }
-
-	public class IqResultDetail
-	{
-		#region Properties
-
-		public XYData Chromatogram { get; set; }
-
-		public XYData MassSpectrum { get; set; }
-
-		public List<ChromPeakQualityData> ChromPeakQualityData { get; set; }
-
-		#endregion
-
-		#region Public Methods
-
-		public void Dispose()
-		{
-			ChromPeakQualityData.Clear();
-			Chromatogram = null;
-			MassSpectrum = null;
-		}
-
-		#endregion
-
-
-	}
 }
