@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
     public class IQWorkflowTests
     {
         [Test]
-        public void Test1()
+        public void IqWorkflowTest1()
         {
             //see  https://jira.pnnl.gov/jira/browse/OMCS-709
 
