@@ -67,15 +67,17 @@ namespace DeconTools.Workflows.Backend.Core
                     LoadChromData(Run);
                 }
 
+
+
                 if (target.HasChildren())
                 {
-                    Execute(target.ChildTargets());
+                   Execute(target.ChildTargets());
                 }
 
                 var result = target.DoWorkflow();
                 Results.Add(result);
 
-
+                //if target is a parent node
                 if (!target.HasParent)
                 {
                     if (IsDataExported)
@@ -88,6 +90,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     }
 
+                    //clear the heavy data information
                     result.IqResultDetail.Dispose();
 
 

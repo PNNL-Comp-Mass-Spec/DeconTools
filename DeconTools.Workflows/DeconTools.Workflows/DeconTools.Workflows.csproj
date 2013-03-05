@@ -71,7 +71,7 @@
     <Compile Include="Backend\Core\IQMillionWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IQResult.cs" />
     <Compile Include="Backend\Core\IQTarget.cs" />
-    <Compile Include="Backend\Core\IQTargetBase.cs" />
+    <Compile Include="Backend\Core\IqTargetBasic.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
     <Compile Include="Backend\Core\IQWorkflow.cs" />
     <Compile Include="Backend\Core\NominalMassTarget.cs" />

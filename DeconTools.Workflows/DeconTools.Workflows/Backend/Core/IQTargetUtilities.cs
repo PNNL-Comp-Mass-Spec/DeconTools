@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (string formula in empiricalFormulaList)
             {
-                IqTarget parentTarget = new IqTargetBase();
+                IqTarget parentTarget = new IqTargetBasic();
 
 
                 parentTarget.EmpiricalFormula = formula;

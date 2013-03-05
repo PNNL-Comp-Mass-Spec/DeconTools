@@ -1,14 +1,14 @@
 ﻿
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class IqTargetBase : IqTarget
+    public class IqTargetBasic : IqTarget
     {
-        public IqTargetBase()
+        public IqTargetBasic()
         {
 
         }
 
-        public IqTargetBase(IqWorkflow workflow)
+        public IqTargetBasic(IqWorkflow workflow)
             : base(workflow)
         {
 
