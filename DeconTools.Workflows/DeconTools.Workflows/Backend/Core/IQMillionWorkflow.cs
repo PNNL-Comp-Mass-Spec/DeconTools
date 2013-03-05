@@ -42,8 +42,8 @@ namespace DeconTools.Workflows.Backend.Core
                                                       _workflowParameters.ChromGenToleranceUnit)
                             {
                                 TopNPeaksLowerCutOff = 0.333,
-                                NETWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2,
-                                NETWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2
+                                ChromWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2,
+                                ChromWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2
                             };
 
             const bool allowNegativeValues = false;

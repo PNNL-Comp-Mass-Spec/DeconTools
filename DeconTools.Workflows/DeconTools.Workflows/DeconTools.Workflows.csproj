@@ -56,8 +56,24 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\BasicChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\ChromPeakAnalyzer.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\ChromPeakSelectorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\ChromPeakSelectorParameters.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\ChromPeakUtilities.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\SmartChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\SmartChromPeakSelectorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\SmartChromPeakSelectorParameters.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection2\SmartChromPeakSelectorUIMF.cs" />
+    <Compile Include="Backend\Core\IQChargeStateTarget.cs" />
+    <Compile Include="Backend\Core\IQExecutor.cs" />
     <Compile Include="Backend\Core\IQMillionWorkflow.cs" />
     <Compile Include="Backend\Core\IQMillionWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\IQResult.cs" />
+    <Compile Include="Backend\Core\IQTarget.cs" />
+    <Compile Include="Backend\Core\IQTargetBase.cs" />
+    <Compile Include="Backend\Core\IQTargetUtilities.cs" />
+    <Compile Include="Backend\Core\IQWorkflow.cs" />
     <Compile Include="Backend\Core\NominalMassTarget.cs" />
     <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
@@ -98,12 +114,14 @@
     <Compile Include="Backend\Data\TopdownChromData.cs" />
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\ResultExporter.cs" />
     <Compile Include="Backend\FileIO\SipperResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
@@ -139,7 +157,6 @@
     <Compile Include="Backend\Core\SipperWorkflowExecutorParameters.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Backend\Core\NewFolder1\" />
     <Folder Include="Backend\Parameters\" />
   </ItemGroup>
   <ItemGroup>

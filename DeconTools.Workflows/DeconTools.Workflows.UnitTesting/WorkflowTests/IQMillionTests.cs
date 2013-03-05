@@ -7,6 +7,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests

@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.Utilities;
 using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
