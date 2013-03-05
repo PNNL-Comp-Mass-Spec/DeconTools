@@ -8,6 +8,7 @@ namespace DeconTools.Backend.Core
             : base()
         {
             NETValue = -1;
+            IntegratedAbundance = -1;
         }
 
         public ChromPeak(double xValue, float intensity, float width, float signalToNoise)
@@ -22,6 +23,8 @@ namespace DeconTools.Backend.Core
         public double NETValue { get; set; }
 
         public float SignalToNoise { get; set; }
+
+        public double IntegratedAbundance { get; set; }
 
         #endregion
 
