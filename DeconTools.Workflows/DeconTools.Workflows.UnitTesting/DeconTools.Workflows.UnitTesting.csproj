@@ -80,6 +80,10 @@
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQMillionTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\IQExecutorTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\IQTargetUtilitiesTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\IQWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\TempTests.cs" />
     <Compile Include="WorkflowTests\N14N15ExecutorTests.cs" />
     <Compile Include="WorkflowTests\O16O18ExecutorTests.cs" />
     <Compile Include="WorkflowTests\ExecuteWorkflowOnBadlyAlignedDatasets.cs" />

@@ -28,6 +28,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         }
 
 
+        [Category("MustPass")]
         [Test]
         public void ExecuteMultipleTargetsTest1()
         {
