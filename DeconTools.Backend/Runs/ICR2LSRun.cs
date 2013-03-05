@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
@@ -69,7 +69,7 @@ namespace DeconTools.Backend.Runs
             if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
 
-
+                //TODO:  Old DeconTools reference!!
                 this.RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
             }
             else
@@ -78,8 +78,12 @@ namespace DeconTools.Backend.Runs
                 //this.rawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
             }
 
-            this.XYData.SetXYValues(ref xvals, ref yvals);
-            this.FilterXYPointsByMZRange(minMZ, maxMZ);
+            XYData xydata = new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals;
+
+            xydata = xydata.TrimData(minMZ, maxMZ);
+            return xydata;
         }
         #endregion
 

@@ -22,11 +22,10 @@ namespace DeconTools.Backend.Runs
             return -1;
         }
 
- 
 
-        public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(Core.ScanSet scanset)
         {
-            //do nothing...   constructor requires that XY values are inputted
+            return XYData;
         }
 
   

@@ -1,12 +1,10 @@
 ﻿using DeconTools.Backend.Core;
-using DeconTools.Backend;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
-    public class MassTagFitScoreCalculator:Task
+    public class IsotopicProfileFitScoreCalculator:Task
     {
         #region properties
         /// <summary>
@@ -14,12 +12,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         /// </summary>
         public DeconTools.Backend.Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
-        public MassTagFitScoreCalculator()
+        public IsotopicProfileFitScoreCalculator()
         {
             IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
         }
 
-        public MassTagFitScoreCalculator(DeconTools.Backend.Globals.IsotopicProfileType lableType)
+        public IsotopicProfileFitScoreCalculator(DeconTools.Backend.Globals.IsotopicProfileType lableType)
         {
             IsotopicProfileType = lableType;
         }

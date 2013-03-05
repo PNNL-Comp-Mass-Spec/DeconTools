@@ -20,22 +20,25 @@ namespace DeconTools.Backend.Core
 
         protected TargetBase(TargetBase copiedTarget)
         {
-            this.ChargeState = copiedTarget.ChargeState;
-            this.ChargeStateTargets = new List<int>(copiedTarget.ChargeStateTargets);
-            this.Code = copiedTarget.Code;
-            this.ElutionTimeUnit = copiedTarget.ElutionTimeUnit;
-            this.EmpiricalFormula = copiedTarget.EmpiricalFormula;
-            this.ID = copiedTarget.ID;
-            this.IsotopicProfile = copiedTarget.IsotopicProfile == null ? null : copiedTarget.IsotopicProfile.CloneIsotopicProfile();
-            this.IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled == null ? null : copiedTarget.IsotopicProfileLabelled.CloneIsotopicProfile();
-            this.MZ = copiedTarget.MZ;
-            this.ModCount = copiedTarget.ModCount;
-            this.ModDescription = copiedTarget.ModDescription;
-            this.MonoIsotopicMass = copiedTarget.MonoIsotopicMass;
-            this.NormalizedElutionTime = copiedTarget.NormalizedElutionTime;
-            this.ObsCount = copiedTarget.ObsCount;
-            this.ScanLCTarget = copiedTarget.ScanLCTarget;
-        	this.MsLevel = copiedTarget.MsLevel;
+            ChargeState = copiedTarget.ChargeState;
+            Code = copiedTarget.Code;
+            ElutionTimeUnit = copiedTarget.ElutionTimeUnit;
+            EmpiricalFormula = copiedTarget.EmpiricalFormula;
+            ID = copiedTarget.ID;
+            IsotopicProfile = copiedTarget.IsotopicProfile == null
+                                  ? null
+                                  : copiedTarget.IsotopicProfile.CloneIsotopicProfile();
+            IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled == null
+                                          ? null
+                                          : copiedTarget.IsotopicProfileLabelled.CloneIsotopicProfile();
+            MZ = copiedTarget.MZ;
+            ModCount = copiedTarget.ModCount;
+            ModDescription = copiedTarget.ModDescription;
+            MonoIsotopicMass = copiedTarget.MonoIsotopicMass;
+            NormalizedElutionTime = copiedTarget.NormalizedElutionTime;
+            ObsCount = copiedTarget.ObsCount;
+            ScanLCTarget = copiedTarget.ScanLCTarget;
+            MsLevel = copiedTarget.MsLevel;
         }
         #endregion
 

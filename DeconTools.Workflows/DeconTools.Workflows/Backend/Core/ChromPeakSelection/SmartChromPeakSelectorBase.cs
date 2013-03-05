@@ -1,35 +1,40 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Utilities;
 
-namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
+namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
 
 
 
     public abstract class SmartChromPeakSelectorBase : ChromPeakSelectorBase
     {
-
         protected MSGenerator msgen;
         protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask resultValidator;
-        protected MassTagFitScoreCalculator fitScoreCalc;
+        protected IsotopicProfileFitScoreCalculator fitScoreCalc;
+        protected InterferenceScorer InterferenceScorer;
+        protected DeconToolsPeakDetectorV2 MSPeakDetector;
+        protected IterativeTFF TargetedMSFeatureFinder;
+
+        //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         #region Constructors
         #endregion
 
         #region Properties
 
-        public DeconToolsPeakDetectorV2 MSPeakDetector { get; set; }
-        //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
+      
 
-        public TFFBase TargetedMSFeatureFinder { get; set; }
+
+
 
         protected SmartChromPeakSelectorParameters _parameters;
         public override ChromPeakSelectorParameters Parameters
@@ -40,6 +45,80 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
         #region Public Methods
+
+
+
+
+        public override Peak SelectBestPeak(List<ChromPeakQualityData> peakQualityList, bool filterOutFlaggedIsotopicProfiles)
+        {
+
+            //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
+            //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
+
+
+            var filteredList1 = (from n in peakQualityList
+                                 where n.IsotopicProfileFound &&
+                                 n.FitScore < 1 && n.InterferenceScore < 1
+                                 select n).ToList();
+
+
+            if (filterOutFlaggedIsotopicProfiles)
+            {
+                filteredList1 = filteredList1.Where(p => p.IsIsotopicProfileFlagged == false).ToList();
+            }
+
+            ChromPeak bestpeak;
+
+            //target.NumQualityChromPeaks = filteredList1.Count;
+
+            if (filteredList1.Count == 0)
+            {
+                bestpeak = null;
+                //currentResult.FailedResult = true;
+                //currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+            }
+            else if (filteredList1.Count == 1)
+            {
+                bestpeak = filteredList1[0].Peak;
+            }
+            else
+            {
+                filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
+
+                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+
+                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                if (differenceIsSmall)
+                {
+                    if (_parameters.MultipleHighQualityMatchesAreAllowed)
+                    {
+
+                        if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
+                        {
+                            bestpeak = filteredList1[0].Peak;
+                        }
+                        else
+                        {
+                            bestpeak = filteredList1[1].Peak;
+                        }
+                    }
+                    else
+                    {
+                        bestpeak = null;
+                        //currentResult.FailedResult = true;
+                        //currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+                    }
+                }
+                else
+                {
+                    bestpeak = filteredList1[0].Peak;
+                }
+            }
+
+            return bestpeak;
+        }
+        
+        [Obsolete("This is the old SmartChromPeakSelector")]
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
@@ -56,7 +135,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             float normalizedElutionTime;
 
-            if (currentResult.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+            if (currentResult.Run.CurrentMassTag.ElutionTimeUnit == DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum)
             {
                 normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)currentResult.Run.GetNumMSScans();
             }
@@ -67,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             //collect Chrom peaks that fall within the NET tolerance
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
-      
+
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
                 if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
@@ -76,7 +155,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 }
             }
 
-			List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
+            List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
@@ -85,7 +164,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             int tempCenterTol = resultList.Run.GetScanValueForNET(normalizedElutionTime);
 
 
-            Console.WriteLine("SmartPeakSelector --> NETTolerance= "+ Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
+            Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
             Console.WriteLine("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
 #endif
@@ -102,18 +181,19 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 foreach (var chromPeak in peaksWithinTol)
                 {
-					ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
+                    ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
-					// TODO: Currently hard-coded to sum only 1 scan
-                    SetScansForMSGenerator(chromPeak, resultList.Run, 1);
+                    // TODO: Currently hard-coded to sum only 1 scan
+                    var lcscanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, 1);
+                    resultList.Run.CurrentScanSet = lcscanSet;
 
                     //This resets the flags and the scores on a given result
                     currentResult.ResetResult();
 
                     //generate a mass spectrum
                     msgen.Execute(resultList);
-    
+
                     //find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
 
@@ -131,6 +211,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     }
 
                     //collect the results together
+                    
+
+
+                    
                     AddScoresToPeakQualityData(pq, currentResult);
 #if DEBUG
                     pq.Display();
@@ -141,20 +225,31 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 
-			currentResult.ChromPeakQualityList = peakQualityList;
+            currentResult.ChromPeakQualityList = peakQualityList;
 
-            SetScansForMSGenerator(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
+            if (Parameters.SummingMode==SummingModeEnum.SUMMINGMODE_STATIC)
+            {
+                resultList.Run.CurrentScanSet = ChromPeakUtilities.GetLCScanSetForChromPeak(bestChromPeak, resultList.Run, Parameters.NumScansToSum); 
+            }
+            else
+            {
+                resultList.Run.CurrentScanSet = ChromPeakUtilities.GetLCScanSetForChromPeakBasedOnPeakWidth(bestChromPeak, resultList.Run, 
+                    Parameters.AreaOfPeakToSumInDynamicSumming, Parameters.MaxScansSummedInDynamicSumming);
+               
+    
+            }
 
             UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
-            
-           
+
+
         }
 
         #endregion
 
         #region Private Methods
 
-		protected void AddScoresToPeakQualityData(ChromPeakQualityData pq, TargetedResultBase currentResult)
+        [Obsolete("Use the new IQ-based method")]
+        protected void AddScoresToPeakQualityData(ChromPeakQualityData pq, TargetedResultBase currentResult)
         {
             if (currentResult.IsotopicProfile == null)
             {
@@ -167,11 +262,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 pq.Abundance = currentResult.IntensityAggregate;
                 pq.FitScore = currentResult.Score;
                 pq.InterferenceScore = currentResult.InterferenceScore;
-            	pq.IsotopicProfile = currentResult.IsotopicProfile;
+                pq.IsotopicProfile = currentResult.IsotopicProfile;
                 bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
                 pq.IsIsotopicProfileFlagged = resultHasFlags;
-                
-                pq.ScanLc =  currentResult.Run.CurrentScanSet.PrimaryScanNumber;
+
+                pq.ScanLc = currentResult.Run.CurrentScanSet.PrimaryScanNumber;
             }
         }
 
@@ -183,17 +278,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #endregion
 
 
-		protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
-		{
+        protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
+        {
 
             //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
             //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
-		    bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+            bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() == 0;
 
-            
+
             var filteredList1 = (from n in peakQualityList
                                  where n.IsotopicProfileFound &&
-                                 n.FitScore < 1 && n.InterferenceScore < 1 select n).ToList();
+                                 n.FitScore < 1 && n.InterferenceScore < 1
+                                 select n).ToList();
 
 
             if (goodToFilterOnFlaggedIsotopicProfiles)
@@ -209,7 +305,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 bestpeak = null;
                 currentResult.FailedResult = true;
-                currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+                currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
             else if (filteredList1.Count == 1)
             {
@@ -240,7 +336,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     {
                         bestpeak = null;
                         currentResult.FailedResult = true;
-                        currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+                        currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
                     }
                 }
                 else

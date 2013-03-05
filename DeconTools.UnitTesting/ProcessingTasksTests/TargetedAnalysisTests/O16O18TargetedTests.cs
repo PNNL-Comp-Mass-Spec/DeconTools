@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using NUnit.Framework;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Data.Importers;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks.NETAlignment;
-using DeconTools.Backend.Data;
+using System.Text;
 using DeconTools.Backend;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.NETAlignment;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -243,7 +242,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
                     Task msPeakdetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-                    Task fitScoreCalc = new DeconTools.Backend.ProcessingTasks.FitScoreCalculators.MassTagFitScoreCalculator();
+                    Task fitScoreCalc = new DeconTools.Backend.ProcessingTasks.FitScoreCalculators.IsotopicProfileFitScoreCalculator();
 
                     Task finder = new O16O18TFFTask(10);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
 {

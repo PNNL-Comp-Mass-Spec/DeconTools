@@ -1,10 +1,12 @@
 ﻿using System;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 
-namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
+namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class SmartChromPeakSelector : SmartChromPeakSelectorBase
     {
@@ -14,28 +16,33 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             this.Parameters = parameters;
 
-            MSPeakDetector = new DeconToolsPeakDetectorV2(parameters.MSPeakDetectorPeakBR, parameters.MSPeakDetectorSigNoiseThresh, Globals.PeakFitType.QUADRATIC, true);
+            MSPeakDetector = new DeconToolsPeakDetectorV2(parameters.MSPeakDetectorPeakBR, parameters.MSPeakDetectorSigNoiseThresh, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var iterativeTFFParams = new IterativeTFFParameters();
             iterativeTFFParams.ToleranceInPPM = parameters.MSToleranceInPPM;
             iterativeTFFParams.MinimumRelIntensityForForPeakInclusion = parameters.IterativeTffMinRelIntensityForPeakInclusion;
 
-            if (parameters.MSFeatureFinderType == Globals.TargetedFeatureFinderType.BASIC)
+            if (parameters.MSFeatureFinderType == DeconTools.Backend.Globals.TargetedFeatureFinderType.BASIC)
             {
-                TargetedMSFeatureFinder = new TargetedFeatureFinders.BasicTFF(parameters.MSToleranceInPPM);
+                throw new NotSupportedException("Currently the Basic TFF is not supported in the SmartChromPeakSelector");
+                
+                //TargetedMSFeatureFinder = new TargetedFeatureFinders.BasicTFF(parameters.MSToleranceInPPM);
             }
             else
             {
                 TargetedMSFeatureFinder = new IterativeTFF(iterativeTFFParams);
             }
 
-            resultValidator = new ResultValidators.ResultValidatorTask();
-            fitScoreCalc = new MassTagFitScoreCalculator();
+            resultValidator = new ResultValidatorTask();
+            fitScoreCalc = new IsotopicProfileFitScoreCalculator();
+
+            InterferenceScorer = new InterferenceScorer();
+
 
         }
 
         #endregion
 
-    
+       
     }
 }

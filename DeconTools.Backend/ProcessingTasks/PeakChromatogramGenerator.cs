@@ -13,6 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks
     {
         int maxZerosToAdd = 2;
         List<int> msScanList = new List<int>();
+        private ChromatogramGenerator _chromGen;
 
         #region Constructors
         public PeakChromatogramGenerator()
@@ -33,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode, 
+        public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode,
             Globals.IsotopicProfileType isotopicProfileTarget, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             this.Tolerance = tolerance;
@@ -41,10 +42,13 @@ namespace DeconTools.Backend.ProcessingTasks
             this.IsotopicProfileTarget = isotopicProfileTarget;
 
             this.TopNPeaksLowerCutOff = 0.3;
-            this.NETWindowWidthForNonAlignedData = 0.4f;
-            this.NETWindowWidthForAlignedData = 0.1f;
+            this.ChromWindowWidthForNonAlignedData = 0.4f;
+            this.ChromWindowWidthForAlignedData = 0.1f;
 
             ToleranceUnit = toleranceUnit;
+
+            _chromGen = new ChromatogramGenerator();
+
         }
 
         #endregion
@@ -59,84 +63,28 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <summary>
         /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
         /// </summary>
-        public float NETWindowWidthForNonAlignedData { get; set; }
+        public float ChromWindowWidthForNonAlignedData { get; set; }
 
 
         /// <summary>
         /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
         /// For Aligned data, we should be able to use a smaller range which will lead to faster chromatogram generation
         /// </summary>
-        public float NETWindowWidthForAlignedData { get; set; }
+        public float ChromWindowWidthForAlignedData { get; set; }
 
         /// <summary>
         /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram. 
         /// </summary>
         public double TopNPeaksLowerCutOff { get; set; }
 
-       
+
         #endregion
 
         #region Public Methods
-        
-        public void GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
-        {
-            var chromGen = new ChromatogramGenerator();
-            run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop, targetMZ, tolerance, toleranceUnit);
-
-            if (run.XYData!=null)
-            {
-                FilterOutDataFromMSMSLevels(run); 
-            }
-        }
-
-        private void FilterOutDataFromMSMSLevels(Run run)
-        {
-			FilterOutDataBasedOnMsMsLevel(run, 1);
-        }
-
-		private void FilterOutDataBasedOnMsMsLevel(Run run, int msLevelToUse)
-		{
-			if (run.ContainsMSMSData)
-			{
-				Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
-
-			    bool usePrimaryLcScanNumbers = run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
-
-				for (int i = 0; i < run.XYData.Xvalues.Length; i++)
-				{
-					int currentScanVal = (int)run.XYData.Xvalues[i];
-
-					// If the scan is not a primary scan number, then we do not want to consider it
-                    if (usePrimaryLcScanNumbers && run.PrimaryLcScanNumbers.BinarySearch(currentScanVal) < 0)
-					{
-						continue;
-					}
-
-					int msLevel = run.GetMSLevel(currentScanVal);
-					if(msLevel == msLevelToUse)
-					{
-						filteredChromVals.Add(currentScanVal, run.XYData.Yvalues[i]);
-					}
-				}
-
-				run.XYData.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
-				run.XYData.Yvalues = filteredChromVals.Values.ToArray();
-			}
-			else
-			{
-				// If we are trying to find MS2 data from a run that does not contain MS2 data, then just return empty arrays
-				if(msLevelToUse > 1)
-				{
-					run.XYData.Xvalues = new double[0];
-					run.XYData.Yvalues = new double[0];
-				}
-			}
-		}
-
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.MSPeakResultList != null && resultList.MSPeakResultList.Count>0, "PeakChromatogramGenerator failed. No peaks.");
+            Check.Require(resultList.MSPeakResultList != null && resultList.MSPeakResultList.Count > 0, "PeakChromatogramGenerator failed. No peaks.");
             Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
             Check.Require(resultList.Run.CurrentMassTag.MZ != 0, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
 
@@ -148,29 +96,29 @@ namespace DeconTools.Backend.ProcessingTasks
             //it fell outside the chrom generator window. 
 
             float netElutionTime;
-            if (resultList.Run.CurrentMassTag.ElutionTimeUnit== Globals.ElutionTimeUnit.ScanNum)
+            if (resultList.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
             {
-                netElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget/(float)resultList.Run.GetNumMSScans();
+                netElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)resultList.Run.GetNumMSScans();
             }
             else
             {
                 netElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
-               
+
             }
 
             float minNetVal;
             float maxNetVal;
             if (resultList.Run.NETIsAligned)
             {
-                minNetVal = netElutionTime - NETWindowWidthForAlignedData;
-                maxNetVal = netElutionTime + NETWindowWidthForAlignedData;  
+                minNetVal = netElutionTime - ChromWindowWidthForAlignedData;
+                maxNetVal = netElutionTime + ChromWindowWidthForAlignedData;
             }
             else
             {
-                minNetVal = netElutionTime - NETWindowWidthForNonAlignedData;
-                maxNetVal = netElutionTime + NETWindowWidthForNonAlignedData;  
+                minNetVal = netElutionTime - ChromWindowWidthForNonAlignedData;
+                maxNetVal = netElutionTime + ChromWindowWidthForNonAlignedData;
             }
-          
+
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
@@ -182,73 +130,34 @@ namespace DeconTools.Backend.ProcessingTasks
 
             XYData chromValues;
 
-            if (ChromatogramGeneratorMode==Globals.ChromatogramGeneratorMode.MZ_BASED)
+            List<double> targetMZList;
+
+            if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
-                double targetMZ = resultList.Run.CurrentMassTag.MZ;
-
-                //if we have alignment information, we can adjust the targetMZ...
-                if (resultList.Run.MassIsAligned)
-                {
-                    targetMZ = getAlignedMZValue(targetMZ, resultList.Run);
-                }
-
-                ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, Tolerance,ToleranceUnit);
-                
-            }
-            else if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.TOP_N_PEAKS)
-            {
-                List<double> targetMZList = getTargetMZListForTopNPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
-
-                if (resultList.Run.MassIsAligned)
-                {
-                    //if we have alignment information, we can adjust the targetMZ...
-                    for (int i = 0; i < targetMZList.Count; i++)
-                    {
-                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
-                    }
-                   
-                }
-
-
-                ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
-
-            }
-            else if (ChromatogramGeneratorMode== Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS)
-            {
-                List<double> targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(resultList.Run.CurrentMassTag, this.IsotopicProfileTarget);
-
-                if (resultList.Run.MassIsAligned)
-                {
-                    for (int i = 0; i < targetMZList.Count; i++)
-                    {
-                        targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
-                    }
-
-                }
-
-                ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+                double currentTargetMZ = resultList.Run.CurrentMassTag.MZ;
+                targetMZList = new List<double> { currentTargetMZ };
             }
             else
             {
-                double targetMZ = getTargetMZBasedOnChromGeneratorMode(resultList.Run.CurrentMassTag, this.ChromatogramGeneratorMode, this.IsotopicProfileTarget);
+                IsotopicProfile theorIso = resultList.Run.CurrentMassTag.IsotopicProfile;
+                targetMZList = GetTargetMZList(theorIso);
 
-                //if we have alignment information, we can adjust the targetMZ...
-                if (resultList.Run.MassIsAligned)
-                {
-                    targetMZ = getAlignedMZValue(targetMZ, resultList.Run);
-                }
-
-                ChromatogramGenerator chromGen = new ChromatogramGenerator();
-                chromValues = chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZ, Tolerance, ToleranceUnit);
             }
+
+            if (resultList.Run.MassIsAligned)
+            {
+                for (int i = 0; i < targetMZList.Count; i++)
+                {
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
+                }
+            }
+
+            chromValues = _chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
             TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
-            
-			resultList.Run.XYData = chromValues;
+
+            resultList.Run.XYData = chromValues;
 
             if (chromValues == null)
             {
@@ -256,16 +165,213 @@ namespace DeconTools.Backend.ProcessingTasks
                 {
                     result.FailedResult = true;
                     result.FailureType = Globals.TargetedResultFailureType.ChromDataNotFound;
-                    
+
                     result.Flags.Add(new ChromPeakNotFoundResultFlag());
                 }
 
                 return;
             }
 
-			// TODO: This could be done during the chromatogram generation instread of afterwards. This would speed things up.
-			// Filter out data based on if the current target is an MS1 or MS2 target
-            FilterOutDataBasedOnMsMsLevel(resultList.Run, result.Run.CurrentMassTag.MsLevel);
+            resultList.Run.XYData = FilterOutDataBasedOnMsMsLevel(resultList.Run, resultList.Run.XYData, result.Run.CurrentMassTag.MsLevel,false);
+        }
+
+        private List<double> GetTargetMZList(IsotopicProfile theorIso)
+        {
+            List<double> targetMZList;
+            switch (ChromatogramGeneratorMode)
+            {
+                case Globals.ChromatogramGeneratorMode.MZ_BASED:
+                    {
+                        throw new NotSupportedException("Don't use this method if you already know your MZ target.");
+                    }
+                    break;
+                case Globals.ChromatogramGeneratorMode.TOP_N_PEAKS:
+                    {
+                        targetMZList = getTargetMZListForTopNPeaks(theorIso);
+                    }
+                    break;
+                case Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS:
+                    {
+                        targetMZList = getTargetMZListForO16O18ThreeMonoPeaks(theorIso);
+                    }
+                    break;
+                case Globals.ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
+                    {
+                        double targetMZ = theorIso.getMonoPeak().XValue;
+                        targetMZList = new List<double> { targetMZ };
+                        break;
+                    }
+                case Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
+                    {
+                        double targetMZ = theorIso.getMostIntensePeak().XValue;
+                        targetMZList = new List<double> { targetMZ };
+                        break;
+                    }
+                default:
+                    {
+                        throw new NotSupportedException(
+                            "Chromatogram generation failed. Selected ChromatogramGeneratorMode is not supported");
+                    }
+            }
+            return targetMZList;
+        }
+
+        public XYData GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        {
+            XYData xyData = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop,
+                                                          targetMZ, tolerance, toleranceUnit);
+
+            if (xyData != null)
+            {
+                xyData = FilterOutDataBasedOnMsMsLevel(run, xyData, 1, false);
+            }
+
+            return xyData;
+
+
+        }
+
+
+
+        public XYData GenerateChromatogram(Run run, List<double> targetMZList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
+        {
+
+            if (run.MassIsAligned)
+            {
+                for (int i = 0; i < targetMZList.Count; i++)
+                {
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run);
+                }
+            }
+
+            int lowerScan = run.MinLCScan;
+            int upperScan = run.MaxLCScan;
+
+            if (elutionTimeUnit == Globals.ElutionTimeUnit.NormalizedElutionTime)
+            {
+                float minNetVal;
+                float maxNetVal;
+                if (run.NETIsAligned)
+                {
+                    minNetVal = (float)(elutionTimeCenter - ChromWindowWidthForAlignedData);
+                    maxNetVal = (float)(elutionTimeCenter + ChromWindowWidthForAlignedData);
+                }
+                else
+                {
+                    minNetVal = (float)(elutionTimeCenter - ChromWindowWidthForNonAlignedData);
+                    maxNetVal = (float)(elutionTimeCenter + ChromWindowWidthForNonAlignedData);
+                }
+
+                if (minNetVal < 0) minNetVal = 0;
+                if (maxNetVal > 1) maxNetVal = 1;
+
+                lowerScan = run.GetScanValueForNET(minNetVal);
+                if (lowerScan == -1) lowerScan = run.MinLCScan;
+
+                upperScan = run.GetScanValueForNET(maxNetVal);
+                if (upperScan == -1) upperScan = run.MaxLCScan;
+
+
+            }
+            else if (elutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+            {
+                if (run.NETIsAligned)
+                {
+                    lowerScan = (int)(elutionTimeCenter - ChromWindowWidthForAlignedData);
+                    upperScan = (int)(elutionTimeCenter + ChromWindowWidthForAlignedData);
+                }
+                else
+                {
+                    lowerScan = (int)(elutionTimeCenter - ChromWindowWidthForNonAlignedData);
+                    upperScan = (int)(elutionTimeCenter + ChromWindowWidthForNonAlignedData);
+                }
+            }
+
+            if (lowerScan == -1) lowerScan = run.MinLCScan;
+            if (upperScan == -1) upperScan = run.MaxLCScan;
+
+            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+
+            chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1,false);
+
+            return chromValues;
+
+
+        }
+
+
+        public XYData GenerateChromatogram(Run run, double targetMZ, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
+        {
+            List<double> targetMZList = new List<double> { targetMZ };
+            return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
+        }
+
+
+        public XYData GenerateChromatogram(Run run, IsotopicProfile theorProfile, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
+        {
+            List<double> targetMZList;
+            if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
+            {
+                throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
+            }
+            targetMZList = GetTargetMZList(theorProfile);
+
+            return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
+
+        }
+
+
+        #endregion
+
+        #region Private Methods
+
+        private XYData FilterOutDataBasedOnMsMsLevel(Run run, XYData xyData, int msLevelToUse = 1, bool usePrimaryLcScanNumberCache = true)
+        {
+            if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
+
+            XYData filteredXYData = new XYData();
+            filteredXYData.Xvalues = xyData.Xvalues;
+            filteredXYData.Yvalues = xyData.Yvalues;
+
+            if (run.ContainsMSMSData)
+            {
+                Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+
+                bool usePrimaryLcScanNumbers = usePrimaryLcScanNumberCache && run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
+
+                for (int i = 0; i < xyData.Xvalues.Length; i++)
+                {
+                    int currentScanVal = (int)xyData.Xvalues[i];
+
+                    //TODO: this has a problem of cutting off ChromXYData that falls outside the range defined by PrimaryLcScanNumbers. Not good, since this is expected to filter only on MSMS Level
+                    //
+                    // If the scan is not a primary scan number, then we do not want to consider it
+                    if (usePrimaryLcScanNumbers && run.PrimaryLcScanNumbers.BinarySearch(currentScanVal) < 0)
+                    {
+                        continue;
+                    }
+
+                    int msLevel = run.GetMSLevel(currentScanVal);
+                    if (msLevel == msLevelToUse)
+                    {
+                        filteredChromVals.Add(currentScanVal, xyData.Yvalues[i]);
+                    }
+                }
+
+                filteredXYData.Xvalues = filteredChromVals.Keys.Select(p => (double)p).ToArray();
+                filteredXYData.Yvalues = filteredChromVals.Values.ToArray();
+            }
+            else
+            {
+                // If we are trying to find MS2 data from a run that does not contain MS2 data, then just return empty arrays
+                if (msLevelToUse > 1)
+                {
+                    filteredXYData.Xvalues = new double[0];
+                    filteredXYData.Yvalues = new double[0];
+                }
+            }
+
+            return filteredXYData;
         }
 
         private double getAlignedMZValue(double targetMZ, Run run)
@@ -282,26 +388,9 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private List<double> getTargetMZListForO16O18ThreeMonoPeaks(TargetBase target, Globals.IsotopicProfileType isotopicProfileType)
+        private List<double> getTargetMZListForO16O18ThreeMonoPeaks(IsotopicProfile iso)
         {
-            List<double> targetMZList = new List<double>();
-
-            IsotopicProfile iso = new IsotopicProfile();
-            switch (isotopicProfileType)
-            {
-                case Globals.IsotopicProfileType.UNLABELLED:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    iso = target.IsotopicProfileLabelled;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-                default:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-            }
+            var targetMZList = new List<double>();
 
             if (iso.Peaklist.Count > 0)
             {
@@ -321,82 +410,18 @@ namespace DeconTools.Backend.ProcessingTasks
             return targetMZList;
         }
 
-        private List<double> getTargetMZListForTopNPeaks(TargetBase target, Globals.IsotopicProfileType isotopicProfileTarget)
+        private List<double> getTargetMZListForTopNPeaks(IsotopicProfile iso)
         {
-            List<double> targetMZList = new List<double>();
-
-            IsotopicProfile iso = new IsotopicProfile();
-            switch (isotopicProfileTarget)
-            {
-                case Globals.IsotopicProfileType.UNLABELLED:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    iso = target.IsotopicProfileLabelled;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
-                    break;
-                default:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-            }
-
-            List<MSPeak> msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, this.TopNPeaksLowerCutOff);
+            var msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, this.TopNPeaksLowerCutOff);
 
             Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
 
-            targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
-
+            List<double> targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
             return targetMZList;
         }
 
-        private double getTargetMZBasedOnChromGeneratorMode(TargetBase target, Globals.ChromatogramGeneratorMode chromatogramGeneratorMode, Globals.IsotopicProfileType isotopicProfileTarget)
-        {
-            if (chromatogramGeneratorMode==Globals.ChromatogramGeneratorMode.MZ_BASED)
-            {
-                return target.MZ;
-            }
 
-            IsotopicProfile iso = new IsotopicProfile();
-            switch (isotopicProfileTarget)
-            {
-                case Globals.IsotopicProfileType.UNLABELLED:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    iso = target.IsotopicProfileLabelled;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on labelled isotopic profile, but profile was never defined.");
-                    break;
-                default:
-                    iso = target.IsotopicProfile;
-                    Check.Require(iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
-                    break;
-            }
 
-            MSPeak msPeak;
-            switch (chromatogramGeneratorMode)
-            {
-                case Globals.ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
-                    msPeak = iso.getMonoPeak();
-                    break;
-                case Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
-                    msPeak = iso.getMostIntensePeak();
-                    break;
-                case Globals.ChromatogramGeneratorMode.TOP_N_PEAKS:
-                    throw new NotSupportedException();
-                default:
-                    msPeak = iso.getMostIntensePeak();
-                    break;
-            }
-
-            return msPeak.XValue;
-        }
-        #endregion
-
-        #region Private Methods
-      
         private XYData getChromValues(List<MSPeakResult> filteredPeakList, Run run)
         {
             XYData data = new XYData();
@@ -615,6 +640,6 @@ namespace DeconTools.Backend.ProcessingTasks
             throw new NotImplementedException();
         }
         #endregion
-        
+
     }
 }

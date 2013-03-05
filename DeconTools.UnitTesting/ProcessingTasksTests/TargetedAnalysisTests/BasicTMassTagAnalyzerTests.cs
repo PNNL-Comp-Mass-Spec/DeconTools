@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks.NETAlignment;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.Data.Importers;
-using DeconTools.Backend;
 using System.Diagnostics;
 using System.Linq;
+using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.NETAlignment;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExporters;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -627,7 +625,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
 
 
-            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
+            IsotopicProfileFitScoreCalculator fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             List<long> timingResults = new List<long>();
 
@@ -1115,7 +1113,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task theorFeatureGen = new TomTheorFeatureGenerator();
             Task targetedFeatureFinder = new BasicTFF(0.01);
             Task exporter = new BasicMTResultSQLiteExporter(massTagResultFileName1);
-            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
+            IsotopicProfileFitScoreCalculator fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
 
 

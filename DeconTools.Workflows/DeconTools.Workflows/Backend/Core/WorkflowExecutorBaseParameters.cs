@@ -38,6 +38,14 @@ namespace DeconTools.Workflows.Backend.Core
         public bool AlignmentFeaturesAreSavedToTextFile { get; set; }
         public string AlignmentInfoFolder { get; set; }
 
+        //ChromGen Peak Generator
+
+
+        public double ChromGenSourceDataPeakBR { get; set; }
+        public double ChromGenSourceDataSigNoise { get; set; }
+        public bool ChromGenSourceDataIsThresholded { get; set; }
+        public bool ChromGenSourceDataProcessMsMs { get; set; }
+
         //public string ExportAlignmentFolder { get; set; }
 
         

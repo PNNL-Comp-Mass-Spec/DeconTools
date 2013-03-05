@@ -61,6 +61,26 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Public Methods
+
+
+        public override IsotopicProfile GenerateTheorProfile (string empiricalFormula, int chargeState)
+        {
+            IsotopicProfile  iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
+            iso.ChargeState = chargeState;
+
+            var monoMass=  EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+
+            if (chargeState!=0)
+            {
+                calculateMassesForIsotopicProfile(iso, monoMass, chargeState);
+
+            }
+
+            return iso;
+
+        }
+
+
         public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
@@ -94,6 +114,11 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Private Methods
+
+
+
+
+
         private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
@@ -116,7 +141,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             iso.ChargeState = mt.ChargeState;
 
          
-            if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
+            if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass,mt.ChargeState);
 
             return iso;
 
@@ -126,18 +151,18 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
 
-        private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
+        private void calculateMassesForIsotopicProfile(IsotopicProfile iso, double targetMonoMass, double targetChargeState)
         {
             if (iso == null || iso.Peaklist == null) return;
 
             for (int i = 0; i < iso.Peaklist.Count; i++)
             {
-                double calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / mt.ChargeState;
+                double calcMZ = targetMonoMass/ targetChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / targetChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
 
             iso.MonoPeakMZ = iso.Peaklist[0].XValue;
-            iso.MonoIsotopicMass = (iso.MonoPeakMZ - Globals.PROTON_MASS) * mt.ChargeState;
+            iso.MonoIsotopicMass = (iso.MonoPeakMZ - Globals.PROTON_MASS) * targetChargeState;
         }
 
         public override void LoadRunRelatedInfo(Core.ResultCollection results)

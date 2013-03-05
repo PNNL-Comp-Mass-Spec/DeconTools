@@ -182,7 +182,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             float[] xvals = null;
             float[] yvals = null;
@@ -191,12 +191,14 @@ namespace DeconTools.Backend.Runs
 
             m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maxMZ, ref xvals, ref yvals);
 
-            this.XYData.Xvalues = xvals.Select<float, double>(i => i).ToArray();
-            this.XYData.Yvalues = yvals.Select<float, double>(i => i).ToArray();
+            var xydata = new XYData();
+            xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
+            xydata.Xvalues = xvals.Select(p => (double)p).ToArray(); ;
+            return xydata;
 
         }
 
-        public override void GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanset)
         {
             float[] xvals = null;
             float[] yvals = null;
@@ -204,9 +206,11 @@ namespace DeconTools.Backend.Runs
             int[] scanValues = scanset.IndexValues.ToArray();
 
             m_rawDataReader.GetMassSpectrum(scanValues, ref xvals, ref yvals);
+            var xydata = new XYData();
+            xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+            xydata.Xvalues = xvals.Select(p => (double)p).ToArray(); ;
+            return xydata;
 
-            this.XYData.Xvalues = xvals.Select<float, double>(i => i).ToArray();
-            this.XYData.Yvalues = yvals.Select<float, double>(i => i).ToArray();
         }
 
 

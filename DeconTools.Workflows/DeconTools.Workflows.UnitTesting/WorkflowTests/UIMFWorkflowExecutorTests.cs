@@ -6,6 +6,7 @@ using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Globals = DeconTools.Backend.Globals;

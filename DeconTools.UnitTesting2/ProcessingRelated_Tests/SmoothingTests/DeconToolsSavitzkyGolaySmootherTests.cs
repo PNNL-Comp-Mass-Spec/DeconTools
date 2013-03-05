@@ -6,6 +6,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
@@ -24,17 +25,17 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             Task msgen = new GenericMSGenerator();
             msgen.Execute(run.ResultCollection);
 
-            Task peakdetector = new DeconToolsPeakDetector(3, 3, Globals.PeakFitType.QUADRATIC, false);
+            var peakdetector = new DeconToolsPeakDetectorV2(3, 3, Globals.PeakFitType.QUADRATIC, true);
             peakdetector.Execute(run.ResultCollection);
 
-            Assert.AreEqual(82, run.PeakList.Count);
+            Assert.AreEqual(84, run.PeakList.Count);
 
-            Task smoother = new SavitzkyGolaySmoother(7, 2);
+            Task smoother = new SavitzkyGolaySmoother(7, 2,false);
             smoother.Execute(run.ResultCollection);
 
             peakdetector.Execute(run.ResultCollection);
 
-            Assert.AreEqual(67, run.PeakList.Count);
+            Assert.AreEqual(46, run.PeakList.Count);
         }
 
 

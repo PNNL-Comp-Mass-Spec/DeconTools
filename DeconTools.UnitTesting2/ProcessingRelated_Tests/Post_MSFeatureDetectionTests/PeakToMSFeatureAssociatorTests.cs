@@ -68,7 +68,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
            
             Console.WriteLine("total peaks associated with MSFeatures = " + numPeaksAssociatedWithFeatures);
             Console.WriteLine("total peaks in original peaklist that were associated = " + numPeaksInPeakListWithAssociations);
-            Console.WriteLine("fraction peaks assigned = " + (double)numPeaksInPeakListWithAssociations / (double)run.PeakList.Count);
+            Console.WriteLine("fraction peaks assigned = " + (double)(numPeaksInPeakListWithAssociations / (double)run.PeakList.Count));
             
 
 

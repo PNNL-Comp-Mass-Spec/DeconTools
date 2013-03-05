@@ -9,9 +9,6 @@ namespace DeconTools.Backend.Runs
     public class MSScanFromTextFileRun : XYDataRun
     {
 
-        private double[] xdata;
-        private double[] ydata;
-
         private char m_delimiter;
         private int m_xvalsColumnIndex = 0;
         private int m_yvalsColumnIndex = 1;
@@ -49,7 +46,7 @@ namespace DeconTools.Backend.Runs
             this.m_yvalsColumnIndex = yvalsColumnIndex;
         }
 
-        internal void loadDataFromFile(string filename)
+        internal XYData loadDataFromFile(string filename)
         {
             if (m_delimiter == 0) m_delimiter = determineDelimiter(filename);
 
@@ -90,7 +87,7 @@ namespace DeconTools.Backend.Runs
 
                 List<string> vals = processLine(line);
 
-                
+
                 if (m_yvalsColumnIndex >= vals.Count)
                 {
                     using (StreamReader tempSr = sr)
@@ -113,8 +110,11 @@ namespace DeconTools.Backend.Runs
                 yvals.Add(parseDoubleField(vals[m_yvalsColumnIndex]));
             }
 
-            xdata = xvals.ToArray();
-            ydata = yvals.ToArray();
+            XYData xydata = new XYData();
+            xydata.Xvalues = xvals.ToArray();
+            xydata.Yvalues = yvals.ToArray();
+
+            return xydata;
 
         }
         private double parseDoubleField(string inputstring)
@@ -238,11 +238,13 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
         {
+            XYData xydata = new XYData();
+
             try
             {
-                loadDataFromFile(this.Filename);
+                xydata = loadDataFromFile(this.Filename);
             }
             catch (Exception ex)
             {
@@ -250,10 +252,9 @@ namespace DeconTools.Backend.Runs
                 throw new System.IO.IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(this.Filename) + "\n\n" + ex.Message);
             }
 
-            Check.Assert(this.xdata != null || this.ydata != null, "Error: no xy data read from file");
+            xydata = xydata.TrimData(minMZ, maxMZ);
 
-            this.XYData.Xvalues = this.xdata;
-            this.XYData.Yvalues = this.ydata;
+            return xydata;
         }
 
         public override double GetTime(int scanNum)

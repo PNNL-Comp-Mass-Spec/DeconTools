@@ -39,21 +39,30 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
+        public override void Execute(ResultCollection resultList)
+        {
+            UIMFRun uimfRun = (UIMFRun) resultList.Run;
 
-        public override void GenerateMS(Run run)
+            resultList.Run.XYData = GenerateMS(resultList.Run, resultList.Run.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+        }
+
+
+        public override XYData GenerateMS(Run run, ScanSet lcscanSet, ScanSet imsScanset = null)
         {
             Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
             UIMFRun uimfRun = (UIMFRun)(run);
-            Check.Require(uimfRun.CurrentScanSet != null, "Cannot generate MS. Target FrameSet ('CurrentScanSet') has not been assigned to the Run");
-            Check.Require(uimfRun.CurrentIMSScanSet != null, "Cannot generate MS. Target ScanSet ('CurrentScanSet') has not been assigned to the Run");
-            
-			uimfRun.GetMassSpectrum(uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet,MinMZ,MaxMZ);
 
-            if (uimfRun.XYData.Xvalues == null || uimfRun.XYData.Xvalues.Length == 0)
+            if (lcscanSet == null || imsScanset == null) return null;
+            
+			var xydata=  uimfRun.GetMassSpectrum(lcscanSet, imsScanset,MinMZ,MaxMZ);
+
+            if (xydata.Xvalues == null || xydata.Xvalues.Length == 0)
             {
-                uimfRun.XYData.Xvalues = new double[1];
-                uimfRun.XYData.Yvalues = new double[1];
+                xydata.Xvalues = new double[1];
+                xydata.Yvalues = new double[1];
             }
+
+            return xydata;
 
         }
 

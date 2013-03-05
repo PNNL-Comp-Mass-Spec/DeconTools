@@ -87,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             var msPeakList = new List<Peak>();
-            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, ref msPeakList);
+            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, out msPeakList);
             
             result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here. 
 
@@ -144,16 +144,21 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
 
             List<Peak> peakList = new List<Peak>();
-            return IterativelyFindMSFeature(massSpecXYData, theorIso, ref peakList);
+            return IterativelyFindMSFeature(massSpecXYData, theorIso, out peakList);
 
         }
 
 
 
 
-        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso, ref List<Peak> peakList)
+        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso, out List<Peak> peakList)
         {
-
+            if (massSpecXYData == null)
+            {
+                peakList = new List<Peak>();
+                return null;
+            }
+                
 
             IsotopicProfile iso = null;
 
@@ -162,12 +167,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
+            peakList = new List<Peak>();
+            
             for (double d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
                 this.MSPeakDetector.PeakToBackgroundRatio = d;
 
                 peakList=  MSPeakDetector.FindPeaks(massSpecXYData.Xvalues, massSpecXYData.Yvalues);
-                iso = FindMSFeature(peakList, theorIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
+                iso = FindMSFeature(peakList, theorIso);
 
                 bool isoIsGoodEnough;
 

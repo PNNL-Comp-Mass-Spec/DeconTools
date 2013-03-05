@@ -10,6 +10,7 @@ using DeconTools.Backend.ProcessingTasks.NETAlignment;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using NUnit.Framework;
 
 
@@ -67,7 +68,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
             Task targetedFeatureFinder = new BasicTFF();
-            Task fitScoreCalc = new MassTagFitScoreCalculator();
+            Task fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
 
             theorFeatureGen.Execute(run.ResultCollection);
@@ -146,7 +147,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
             Task targetedFeatureFinder = new BasicTFF();
-            Task fitScoreCalc = new MassTagFitScoreCalculator();
+            Task fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
 
             theorFeatureGen.Execute(run.ResultCollection);

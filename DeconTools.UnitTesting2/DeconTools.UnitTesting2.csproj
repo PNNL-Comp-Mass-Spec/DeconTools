@@ -104,6 +104,8 @@
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\THRASHMSFeatureFinderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\ThrashV2Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\UIMFMSGeneratorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\ChromPeakDetectorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\DeconToolsPeakDetectorV2Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\O16O18TraditionalProcessingTests\O16O18TraditionalProcessingTests.cs" />
@@ -132,7 +134,6 @@
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
-    <Compile Include="Run_relatedTests\YAFMS_FileIntegrityTests.cs" />
     <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="Scripts\ChromatogramAnalysisScripts.cs" />
     <Compile Include="Scripts\ChromScripts.cs" />

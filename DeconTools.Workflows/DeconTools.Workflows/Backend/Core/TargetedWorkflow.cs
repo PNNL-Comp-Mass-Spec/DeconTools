@@ -11,6 +11,7 @@ using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Utilities;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -23,7 +24,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected ChromPeakDetector _chromPeakDetector;
         protected ChromPeakSelectorBase _chromPeakSelector;
         protected IterativeTFF _msfeatureFinder;
-        //protected MassTagFitScoreCalculator _fitScoreCalc;
+        //protected IsotopicProfileFitScoreCalculator _fitScoreCalc;
         protected Task _fitScoreCalc;
         protected ResultValidatorTask _resultValidator;
         protected ChromatogramCorrelatorBase _chromatogramCorrelator;
@@ -174,8 +175,8 @@ namespace DeconTools.Workflows.Backend.Core
                                                       _workflowParameters.ChromGenToleranceUnit)
                             {
                                 TopNPeaksLowerCutOff = 0.333,
-                                NETWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2,
-                                NETWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2
+                                ChromWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2,
+                                ChromWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2
                             };
 
             //only
@@ -192,7 +193,7 @@ namespace DeconTools.Workflows.Backend.Core
             _iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
 
             _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
-            _fitScoreCalc = new MassTagFitScoreCalculator();
+            _fitScoreCalc = new IsotopicProfileFitScoreCalculator();
             _resultValidator = new ResultValidatorTask();
             _chromatogramCorrelator = new ChromatogramCorrelator(_workflowParameters.ChromSmootherNumPointsInSmooth, 0.01, _workflowParameters.ChromGenTolerance);
 

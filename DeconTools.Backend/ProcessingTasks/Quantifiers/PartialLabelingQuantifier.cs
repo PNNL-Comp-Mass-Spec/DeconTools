@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
@@ -18,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private IterativeTFF _iterativeTff;
 
         private readonly LabeledIsotopicProfileUtilities _isoCreator = new LabeledIsotopicProfileUtilities();
-        private MassTagFitScoreCalculator _fitScoreCalculator = new MassTagFitScoreCalculator();
+        private IsotopicProfileFitScoreCalculator _fitScoreCalculator = new IsotopicProfileFitScoreCalculator();
 
 
 

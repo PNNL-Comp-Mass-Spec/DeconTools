@@ -112,6 +112,8 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
         public override XYData Smooth(XYData xyData)
         {
+            if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
+
             var smoothedData = Smooth(xyData.Yvalues);
 
             XYData returnVals = new XYData();

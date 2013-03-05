@@ -87,7 +87,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public override void GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanset)
         {
             //if (scanset.IndexValues.Count > 1)
             //{
@@ -115,10 +115,13 @@ namespace DeconTools.Backend.Runs
                 this.getSummedSpectrum(scanset, ref xvals, ref yvals);
             }
 
-            this.XYData.SetXYValues(xvals, yvals);
+            XYData xydata = new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
+            return xydata;
         }
 
-        public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
         {
             //TODO: Update upon error fix....  the YAFMS library is throwing an error if I give an m/z outside it's expected range. So until that is fixed, I'll go get all the m/z values and trim them myself
 
@@ -139,25 +142,10 @@ namespace DeconTools.Backend.Runs
                 alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
-            this.XYData.SetXYValues(xvals, yvals);
-
-            if (alreadyFiltered == false)
-            {
-                this.XYData = this.XYData.TrimData(minMZ, maxMZ);
-            }
-            return;
-
-            //if (scanset.IndexValues.Count > 1)
-            //{
-            //    throw new NotImplementedException("Summing was attempted on YafMS data, but summing hasn't been implemented");
-            //}
-
-            //double[] xvals = null;
-            //float[] yvals = null;
-
-            //m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals, minMZ, maxMZ);
-
-            //this.XYData.SetXYValues(xvals, yvals);
+            XYData xydata = new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+            return xydata;
         }
 
         public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals, double minX, double maxX)

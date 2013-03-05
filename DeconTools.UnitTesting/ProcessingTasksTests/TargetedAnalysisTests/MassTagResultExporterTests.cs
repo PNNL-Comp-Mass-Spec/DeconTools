@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using System.Linq;
-using DeconTools.Backend.Runs;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExporters;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -41,7 +38,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task theorFeatureGen = new TomTheorFeatureGenerator();
             Task targetedFeatureFinder = new BasicTFF(0.01);
 
-            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
+            IsotopicProfileFitScoreCalculator fitScoreCalc = new IsotopicProfileFitScoreCalculator();
             Task exporter = new BasicMTResultSQLiteExporter(exporterOutputFile1);
 
 

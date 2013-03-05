@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.Utilities
             List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
             BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
+            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
 
             XYData theorXYData=   mt23140708.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(n14Profile.GetFWHM());
 

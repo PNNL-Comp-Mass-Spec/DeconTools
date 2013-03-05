@@ -199,13 +199,14 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public override void GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            if (scanSet == null) return;
+            if (scanSet == null) return null;
 
+            XYData xydata = new XYData();
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
@@ -216,7 +217,9 @@ namespace DeconTools.Backend.Runs
                 bool filterMassRange = true;
                 FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
 
-                this.XYData.SetXYValues(xvals, yvals);
+                
+                xydata.Xvalues = xvals;
+                xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
             }
             else
             {
@@ -231,9 +234,12 @@ namespace DeconTools.Backend.Runs
                 bool filterMassRange = true;
                 FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
 
-                this.XYData.SetXYValues(xvals, yvals);
+                xydata.Xvalues = xvals;
+                xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
             }
-            
+
+            return xydata;
+
         }
 
         private static void FilterMassRange(double minMZ, double maxMZ, ref double[] xvals, ref float[] yvals, bool filterMassRange)
@@ -257,17 +263,22 @@ namespace DeconTools.Backend.Runs
             }
         }
 
-        public override void GetMassSpectrum(ScanSet scanSet)
+        public override XYData GetMassSpectrum(ScanSet scanSet)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            if (scanSet == null) return;
+            if (scanSet == null) return null;
+
+            XYData xydata=new XYData();
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
-                this.XYData.SetXYValues(m_spec.XArray, m_spec.YArray);
+
+                xydata.Xvalues = m_spec.XArray;
+                xydata.Yvalues = m_spec.YArray.Select(p=>(double)p).ToArray();
+                
             }
             else
             {
@@ -278,9 +289,12 @@ namespace DeconTools.Backend.Runs
                 float[] yvals = null;
                 double minMZ = 0; double maxMZ = 0;
                 getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
-                this.XYData.SetXYValues(xvals, yvals);
+                xydata.Xvalues = xvals;
+                xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+                
             }
 
+            return xydata;
         }
 
         #endregion

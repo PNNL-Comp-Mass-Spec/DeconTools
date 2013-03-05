@@ -251,10 +251,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected XYData GetCorrelatedChromPeakXYData(Run run, int startScan, int stopScan, XYData basePeakChromXYData, double correlatedMZValue)
         {
-            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromTolerance,ChromToleranceUnit);
+            var xydata= PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromTolerance,ChromToleranceUnit);
 
             XYData chromPeakXYData;
-            if (run.XYData == null || run.XYData.Xvalues.Length == 0)
+            if (xydata == null || xydata.Xvalues.Length == 0)
             {
                 chromPeakXYData = new XYData();
                 chromPeakXYData.Xvalues = basePeakChromXYData.Xvalues;
@@ -262,7 +262,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                chromPeakXYData = Smoother.Smooth(run.XYData);
+                chromPeakXYData = Smoother.Smooth(xydata);
             }
 
 
@@ -278,11 +278,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected XYData GetBaseChromXYData(Run run, int startScan, int stopScan, double baseMZValue)
         {
-            PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance,ChromToleranceUnit);
+            var xydata=   PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance,ChromToleranceUnit);
 
-            if (run.XYData == null || run.XYData.Xvalues.Length < 3) return null;
+            if (xydata == null || xydata.Xvalues.Length < 3) return null;
 
-            var basePeakChromXYData = Smoother.Smooth(run.XYData);
+            var basePeakChromXYData = Smoother.Smooth(xydata);
 
             bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
                                      basePeakChromXYData.Xvalues.Length > 3;

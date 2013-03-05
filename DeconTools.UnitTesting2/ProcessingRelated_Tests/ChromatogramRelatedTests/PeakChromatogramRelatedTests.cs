@@ -20,6 +20,43 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
     public class PeakChromatogramRelatedTests
     {
 
+
+        [Test]
+        public void GetPeakChromatogram_IQStyle_Test1()
+        {
+
+            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+                                                      FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+
+            var target = TestUtilities.GetIQTargetStandard(1);
+
+
+            //TestUtilities.DisplayIsotopicProfileData(target.TheorIsotopicProfile);
+
+            var chromGen = new PeakChromatogramGenerator();
+            chromGen.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS;
+            chromGen.TopNPeaksLowerCutOff = 0.4;
+            chromGen.Tolerance = 10;
+
+            var chromXYData = chromGen.GenerateChromatogram(run, target.TheorIsotopicProfile, target.ElutionTimeTheor);
+
+            Assert.IsNotNull(chromXYData);
+
+            TestUtilities.DisplayXYValues(chromXYData);
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
         [Test]
         public void GetPeakChromatogram_useMZTolerance_Test1()
         {
@@ -34,11 +71,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double toleranceInMZ = 0.02;
 
             var chromGen = new PeakChromatogramGenerator();
-            chromGen.GenerateChromatogram(run,startScan,stopScan,targetMZ,toleranceInMZ,Globals.ToleranceUnit.MZ);
+            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
 
-            Assert.IsNotNull(run.XYData);
-            TestUtilities.DisplayXYValues(run.XYData);
-            
+            Assert.IsNotNull(xydata);
+            TestUtilities.DisplayXYValues(xydata);
+
         }
 
         [Test]
@@ -55,10 +92,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double toleranceInMZ = 1.0;
 
             var chromGen = new PeakChromatogramGenerator();
-            chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
+            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
 
-            Assert.IsNotNull(run.XYData);
-            TestUtilities.DisplayXYValues(run.XYData);
+            Assert.IsNotNull(xydata);
+            TestUtilities.DisplayXYValues(xydata);
 
         }
 
@@ -78,15 +115,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double toleranceInPPM = 20;
 
             var chromGen = new PeakChromatogramGenerator();
-            chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInPPM, Globals.ToleranceUnit.PPM);
+            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInPPM, Globals.ToleranceUnit.PPM);
 
-            Assert.IsNotNull(run.XYData);
-            TestUtilities.DisplayXYValues(run.XYData);
+            Assert.IsNotNull(xydata);
+            TestUtilities.DisplayXYValues(xydata);
 
 
         }
 
-
+        [Category("MustPass")]
         [Test]
         public void getPeakChromatogramTest1()
         {
@@ -97,10 +134,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             int startScan = 5500;
             int stopScan = 6500;
 
+            
             double toleranceInPPM = 20;
 
             var chromGen = new PeakChromatogramGenerator();
-            
+
             PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;
 
@@ -115,7 +153,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             Assert.AreEqual(133, run.XYData.Xvalues.Length);
             Assert.AreEqual(5543, (int)run.XYData.Xvalues[35]);
             Assert.AreEqual(7319569, (int)run.XYData.Yvalues[35]);
-            
+
+            //make sure that the 0's are not trimmed off
+            Assert.AreEqual(0, run.XYData.Yvalues[1]);
+
         }
 
 

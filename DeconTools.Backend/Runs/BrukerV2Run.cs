@@ -228,7 +228,7 @@ namespace DeconTools.Backend.Runs
         #region Public Methods
 
         //NOTE: code duplication here... see BrukerRun too
-        public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
@@ -265,14 +265,14 @@ namespace DeconTools.Backend.Runs
 
                 yvals = summedYvals;
             }
-            this.XYData.SetXYValues(ref xvals, ref yvals);
+            
+            XYData xydata=new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals;
 
-            if (this.XYData.Xvalues == null || this.XYData.Xvalues.Length == 0) return;
-            bool needsFiltering = (minMZ > this.XYData.Xvalues[0] || maxMZ < this.XYData.Xvalues[this.XYData.Xvalues.Length - 1]);
-            if (needsFiltering)
-            {
-                this.FilterXYPointsByMZRange(minMZ, maxMZ);
-            }
+            xydata = xydata.TrimData(minMZ, maxMZ);
+
+            return xydata;
 
         }
 

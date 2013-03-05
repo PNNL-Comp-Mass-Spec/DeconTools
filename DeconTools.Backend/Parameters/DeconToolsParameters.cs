@@ -60,6 +60,9 @@ namespace DeconTools.Backend.Parameters
             var miscElement = parameterBaseElement.Element("Miscellaneous");
             MiscMSProcessingParameters.LoadParametersV2(miscElement);
 
+            var elements = parameterBaseElement.Elements();
+
+
             //MSGenerator parameters are found in the old DeconTools parameter file under the 'HornTransformParameters' and the 'Miscellaneous' parameters
             MSGeneratorParameters.LoadParametersV2(thrashElement);
             MSGeneratorParameters.LoadParametersV2(miscElement);

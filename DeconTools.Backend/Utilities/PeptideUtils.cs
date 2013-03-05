@@ -17,7 +17,6 @@ namespace DeconTools.Backend.Utilities
         string aminoAcidSingleLetterCodes = "ARNDCEQGHILKMFPSTWYV";
         private List<Tuple<char, string, double>> _aminoAcidList;
 
-
         #region Constructors
 
         public PeptideUtils()
@@ -93,18 +92,10 @@ namespace DeconTools.Backend.Utilities
 
         public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
         {
-
-
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
-
 
             bool sequenceIsValid = ValidateSequence(peptideSequence);
             if (!sequenceIsValid) return string.Empty;
-
-
-
-
-
 
             string outputEmpiricalFormula = "";
 

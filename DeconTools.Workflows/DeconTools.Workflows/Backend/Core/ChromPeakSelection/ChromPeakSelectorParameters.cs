@@ -1,5 +1,5 @@
 ﻿
-namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
+namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public enum SummingModeEnum
     {
@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             NumScansToSum = 1;
             NETTolerance = 0.05f;
-            PeakSelectorMode = Globals.PeakSelectorMode.MostIntense;
+            PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.MostIntense;
             SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
             MaxScansSummedInDynamicSumming = 20;
             AreaOfPeakToSumInDynamicSumming = 2.0;
@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public float NETTolerance { get; set; }
 
-        public Globals.PeakSelectorMode PeakSelectorMode { get; set; }
+        public DeconTools.Backend.Globals.PeakSelectorMode PeakSelectorMode { get; set; }
 
 
         /// <summary>

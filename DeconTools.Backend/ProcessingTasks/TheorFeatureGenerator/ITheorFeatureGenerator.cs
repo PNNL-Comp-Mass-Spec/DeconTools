@@ -1,4 +1,5 @@
-﻿using DeconTools.Backend.Core;
+﻿using System;
+using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
@@ -14,6 +15,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #region Public Methods
         public abstract void LoadRunRelatedInfo(ResultCollection results);
         public abstract void GenerateTheorFeature(TargetBase mt);
+
+        public virtual IsotopicProfile GenerateTheorProfile(string empiricalFormula, int chargeState)
+        {
+            throw new NotImplementedException("Not implemented");
+        }
+
         #endregion
 
         #region Private Methods
@@ -26,5 +33,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             
             GenerateTheorFeature(resultList.Run.CurrentMassTag);
         }
+
+
+        
     }
 }

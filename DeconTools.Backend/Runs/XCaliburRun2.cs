@@ -279,7 +279,7 @@ namespace DeconTools.Backend.Runs
             return precursorMass;
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
@@ -330,7 +330,7 @@ namespace DeconTools.Backend.Runs
                 vals = (double[,])massList;
             }
 
-            if (vals == null) return;
+            if (vals == null) return null;
 
             double[] xvals = new double[vals.GetLength(1)];
             double[] yvals = new double[vals.GetLength(1)];
@@ -348,14 +348,18 @@ namespace DeconTools.Backend.Runs
 			if (sortRequired)
 				Array.Sort(xvals, yvals);
 
-            this.XYData.SetXYValues(ref xvals, ref yvals);
+            XYData xydata=new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals;
 
-            if (XYData.Xvalues == null || XYData.Xvalues.Length == 0) return;
-            bool needsFiltering = (minMZ > this.XYData.Xvalues[0] || maxMZ < this.XYData.Xvalues[this.XYData.Xvalues.Length - 1]);
+
+            if (xydata.Xvalues == null || xydata.Xvalues.Length == 0) return xydata;
+            bool needsFiltering = (minMZ > xydata.Xvalues[0] || maxMZ < xydata.Xvalues[xydata.Xvalues.Length - 1]);
             if (needsFiltering)
             {
-                this.FilterXYPointsByMZRange(minMZ, maxMZ);
+                xydata = xydata.TrimData(minMZ, maxMZ);
             }
+            return xydata;
         }
 
         public override string GetScanInfo(int scanNum)

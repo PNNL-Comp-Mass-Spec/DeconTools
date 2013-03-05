@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -11,6 +10,7 @@ using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private N14N15QuantifierTask quantifier;
 
-        private MassTagFitScoreCalculator fitScoreCalc;
+        private IsotopicProfileFitScoreCalculator fitScoreCalc;
 
         private ResultValidatorTask resultValidatorN14;
 
@@ -199,7 +199,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             quantifier = new N14N15QuantifierTask(_n14N15Workflow2Parameters.NumPeaksUsedInQuant, _workflowParameters.MSToleranceInPPM);
 
-            fitScoreCalc = new MassTagFitScoreCalculator();
+            fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             double minRelativeIntensityForScore = 0.2;
             resultValidatorN14 = new ResultValidatorTask(minRelativeIntensityForScore, true);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
@@ -32,14 +33,19 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             return new ChromPeak(xvalue, height, width, signalToNoise);
         }
 
+        public void CalculateElutionTimes(Run run, List<Peak> peakList)
+        {
+            foreach (ChromPeak chromPeak in peakList)
+            {
+                chromPeak.NETValue = run.GetNETValueForScan((int)Math.Round(chromPeak.XValue));
+            }
+        }
+
 
         #endregion
         protected override void ExecutePostProcessingHook(Run run)
         {
-            foreach (ChromPeak chromPeak in run.PeakList)
-            {
-                chromPeak.NETValue = run.GetNETValueForScan((int) Math.Round(chromPeak.XValue));
-            }
+            CalculateElutionTimes(run, run.PeakList);
         }
 
         #region Private Methods

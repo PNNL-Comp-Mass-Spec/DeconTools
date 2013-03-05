@@ -72,7 +72,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         #region Public Methods
 
-        public override List<Peak> FindPeaks(XYData xydata, double minX, double maxX)
+        public override List<Peak> FindPeaks(XYData xydata, double minX=0, double maxX=0)
         {
             if (xydata == null) return new List<Peak>();
 

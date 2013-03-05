@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
@@ -72,21 +73,21 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             ScanSet frame = new ScanSet(162);
             IMSScanSet scan = new IMSScanSet(121);
 
-            run.GetMassSpectrum(frame, scan, 0, 50000);
+            var xydata=  run.GetMassSpectrum(frame, scan, 0, 50000);
 
             double testMZ = 627.2655682;
             int maxIntensityForTestMZ = 0;
-            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
             {
 
-                if (run.XYData.Xvalues[i] > (testMZ - 0.1) && run.XYData.Xvalues[i] < (testMZ + 0.1))
+                if (xydata.Xvalues[i] > (testMZ - 0.1) && xydata.Xvalues[i] < (testMZ + 0.1))
                 {
-                    if (run.XYData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)run.XYData.Yvalues[i];
+                    if (xydata.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xydata.Yvalues[i];
                 }
             }
 
             Assert.AreEqual(35845, maxIntensityForTestMZ);
-            //TestUtilities.DisplayXYValues(run.XYData);
+            //TestUtilities.DisplayXYValues(xydata);
         }
 
         [Test]
@@ -97,16 +98,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frame = new ScanSet(163,162,164);
             var scan = new IMSScanSet(121);
 
-            run.GetMassSpectrum(frame, scan, 0, 50000);
+            XYData xydata=  run.GetMassSpectrum(frame, scan, 0, 50000);
 
             double testMZ = 627.2655682;
             int maxIntensityForTestMZ = 0;
-            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+
+            
+            for (int i = 0; i < xydata.Xvalues.Length; i++)
             {
 
-                if (run.XYData.Xvalues[i] > (testMZ - 0.1) && run.XYData.Xvalues[i] < (testMZ + 0.1))
+                if (xydata.Xvalues[i] > (testMZ - 0.1) && xydata.Xvalues[i] < (testMZ + 0.1))
                 {
-                    if (run.XYData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)run.XYData.Yvalues[i];
+                    if (xydata.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xydata.Yvalues[i];
                 }
             }
 
@@ -404,11 +407,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frame = new ScanSet(testFrame);
             var scanset = new ScanSet(150, startScan, stopScan);
 
-            uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);
+            var xydata=uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);
 
-            Assert.IsNotNull(uimfRun.XYData);
-            Assert.IsNotNull(uimfRun.XYData.Xvalues);
-            TestUtilities.DisplayXYValues(uimfRun.XYData);
+            Assert.IsNotNull(xydata);
+            Assert.IsNotNull(xydata.Xvalues);
+            TestUtilities.DisplayXYValues(xydata);
 
 
         }

@@ -32,32 +32,32 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z2_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum1);
-            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return run.XYData;
+            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xydata;
         }
 
 
         public XYData GetSpectrumAMTTag23140708_Z2_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum3);
-            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return run.XYData;
+            XYData xydata=   run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xydata;
 
         }
 
         public XYData GetSpectrumAMTTag23140708_Z3_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum1);
-            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return run.XYData;
+            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xydata;
         }
 
 
         public XYData GetSpectrumAMTTag23140708_Z3_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum3);
-            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return run.XYData;
+            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xydata;
 
         }
 
@@ -65,8 +65,8 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public static XYData GetTestSpectrum(string xydataFileName)
         {
             Run run = new MSScanFromTextFileRun(xydataFileName);
-            run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return run.XYData;
+            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xydata;
         }
 
 

@@ -94,16 +94,12 @@ namespace DeconTools.Backend.Runs
            
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-
-
-            GetMassSpectrum(scanset);
-
-
+            return GetMassSpectrum(scanset);
         }
 
-        public override void GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanset)
         {
             object mzVals;
             object intensityVals;
@@ -112,9 +108,11 @@ namespace DeconTools.Backend.Runs
 
 
             spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out mzVals, out intensityVals);
+            XYData xydata = new XYData();
+            xydata.Xvalues = (double[]) mzVals;
+            xydata.Yvalues = (double[]) intensityVals;
+            return xydata;
 
-            XYData.Xvalues = (double[]) mzVals;
-            XYData.Yvalues = (double[])intensityVals;
 
         }
 

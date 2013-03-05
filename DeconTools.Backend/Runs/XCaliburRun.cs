@@ -80,7 +80,7 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public override void GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
@@ -101,21 +101,10 @@ namespace DeconTools.Backend.Runs
                 alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
-            if (this.XYData == null)
-            {
-                this.XYData = new XYData();
-            }
-
-
-            this.XYData.SetXYValues(ref xvals, ref yvals);
-            if (alreadyFiltered) return;
-
-            if (XYData.Xvalues == null || XYData.Xvalues.Length == 0) return;
-            bool needsFiltering = (minMZ > this.XYData.Xvalues[0] || maxMZ < this.XYData.Xvalues[this.XYData.Xvalues.Length - 1]);
-            if (needsFiltering)
-            {
-                this.FilterXYPointsByMZRange(minMZ, maxMZ);
-            }
+            XYData xydata = new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals;
+            return xydata;
 
         }
 

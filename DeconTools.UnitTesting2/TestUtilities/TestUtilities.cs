@@ -6,7 +6,9 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
+using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2
@@ -252,6 +254,31 @@ namespace DeconTools.UnitTesting2
         }
 
 
+        public static IqTarget GetIQTargetStandard(int standardNum)
+        {
+            //MassTagID	MonoisotopicMass	NET	NETStDev	Obs	minMSGF	mod_count	mod_description	pmt_quality_score	peptide	peptideex	Multiple_Proteins
+            //86963986	1516.791851	0.227147	0.007416702	3	1	0		2.00000	AAKEGISCEIIDLR	M.AAKEGISCEIIDLR.T	0
+
+
+
+            IqTarget target = new IqChargeStateTarget(null);
+            target.ID = 86963986;
+            target.MonoMassTheor = 1516.791851;
+            target.EmpiricalFormula = "C64H112N18O22S";
+            target.Code = "AAKEGISCEIIDLR";
+            target.ChargeState = 2;
+            target.ElutionTimeTheor = 0.227147;
+            target.MZTheor = target.MonoMassTheor/target.ChargeState + Globals.PROTON_MASS;
+
+
+            JoshTheorFeatureGenerator theorFeatureGenerator = new JoshTheorFeatureGenerator();
+            target.TheorIsotopicProfile = theorFeatureGenerator.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
+
+            return target;
+
+
+        }
+
 
         public static PeptideTarget GetMassTagStandard(int standardNum)
         {
@@ -471,10 +498,10 @@ namespace DeconTools.UnitTesting2
 
         public static XYData LoadXYDataFromFile(string testChromatogramDataFile)
         {
-            DeconTools.Backend.Runs.MSScanFromTextFileRun tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
-            tempRun.GetMassSpectrum(new ScanSet(0));
+            var tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
+            XYData xydata=   tempRun.GetMassSpectrum(new ScanSet(0));
 
-            return tempRun.XYData;
+            return xydata;
 
         }
     }

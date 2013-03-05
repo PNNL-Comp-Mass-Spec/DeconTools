@@ -61,10 +61,10 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
             BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
+            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
 
 
-            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile, featureFinderTol, featureFinderRequiresMonoPeak);
+            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
@@ -140,10 +140,8 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
             BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
-
-
-            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile, featureFinderTol, featureFinderRequiresMonoPeak);
+            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
+            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 

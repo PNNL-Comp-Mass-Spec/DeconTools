@@ -81,7 +81,7 @@ namespace DeconTools.UnitTesting2.Scripts
                     int startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
                     int stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
 
-                    peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
+                    run.XYData=   peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
 
                     if (run.XYData == null)
                     {
@@ -229,7 +229,7 @@ namespace DeconTools.UnitTesting2.Scripts
                     int startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
                     int stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
 
-                    peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
+                    run.XYData=   peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
 
 
 

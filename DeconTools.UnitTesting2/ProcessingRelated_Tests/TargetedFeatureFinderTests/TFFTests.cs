@@ -64,8 +64,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             //find features in experimental data, using the theoretical profiles
             BasicTFF msfeatureFinder = new BasicTFF();
-            IsotopicProfile n14profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile, featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n15profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabelled, featureFinderTol, featureFinderRequiresMonoPeak);
+            msfeatureFinder.ToleranceInPPM = featureFinderTol;
+            msfeatureFinder.NeedMonoIsotopicPeak = featureFinderRequiresMonoPeak;
+
+            IsotopicProfile n14profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
+            IsotopicProfile n15profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabelled);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 

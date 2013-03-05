@@ -47,7 +47,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         #region Private Methods
         #endregion
-        public override void GenerateMS(DeconTools.Backend.Core.Run run)
+        public override XYData GenerateMS(DeconTools.Backend.Core.Run run, ScanSet lcScanset, ScanSet imsScanset=null)
         {
             Check.Require(run != null, String.Format("{0} failed. Run has not been defined.", this.Name));
             Check.Require(run.PeakList != null && run.PeakList.Count > 0, String.Format("{0} failed. Run has not been defined.", this.Name));
@@ -77,8 +77,10 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 yvals.AddRange(generatedXYData.Yvalues);
             }
 
-            run.XYData.Xvalues = xvals.ToArray();
-            run.XYData.Yvalues = yvals.ToArray();
+            XYData xydata=new XYData();
+            xydata.Xvalues = xvals.ToArray();
+            xydata.Yvalues = yvals.ToArray();
+            return xydata;
         }
 
         

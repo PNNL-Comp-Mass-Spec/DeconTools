@@ -5,8 +5,7 @@ using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
-
-namespace DeconTools.UnitTesting2.ProcessingTasksTests
+namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
 {
     [TestFixture]
     public class DeconToolsZeroFillerTests

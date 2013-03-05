@@ -1,4 +1,5 @@
-﻿using DeconTools.Backend.Core;
+﻿using System;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 
@@ -79,5 +80,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         #endregion
+
+        public virtual void Execute(IqTarget target)
+        {
+            throw new NotImplementedException("IqWorkflow not implemented");
+        }
     }
 }

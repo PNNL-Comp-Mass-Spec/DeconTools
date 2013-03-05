@@ -267,7 +267,8 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             throw new NotImplementedException("this 'GetMassSpectrum' method is no longer supported");
         }
@@ -279,7 +280,7 @@ namespace DeconTools.Backend.Runs
         /// <param name="imsScanset"></param>
         /// <param name="minMZ"></param>
         /// <param name="maxMZ"></param>
-        public override void GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
         {
             Check.Require(imsScanset.GetScanCount() > 0, "Cannot get spectrum. Number of scans in ScanSet is 0");
             Check.Require(lcScanset.GetScanCount() > 0, "Cannot get spectrum. Number of frames in FrameSet is 0");
@@ -299,20 +300,25 @@ namespace DeconTools.Backend.Runs
             int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower,
                 frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
 
+            XYData xydata=new XYData();
+            
+
             if (xvals == null || xvals.Length == 0)
             {
-                this.XYData.Xvalues = null;
-                this.XYData.Yvalues = null;
-                return;
+                xydata.Xvalues = null;
+                xydata.Yvalues = null;
+                return xydata;
             }
 
-            XYData.Xvalues = xvals;
-            XYData.Yvalues = yvals.Select<int, double>(i => i).ToArray();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals.Select<int, double>(i => i).ToArray();
 
-            if (XYData.Xvalues[0] < minMZ || XYData.Xvalues[XYData.Xvalues.Length - 1] > maxMZ)
+            if (xydata.Xvalues[0] < minMZ || xydata.Xvalues[xydata.Xvalues.Length - 1] > maxMZ)
             {
-                XYData = XYData.TrimData(minMZ, maxMZ);
+                xydata = xydata.TrimData(minMZ, maxMZ);
             }
+
+            return xydata;
 
         }
 

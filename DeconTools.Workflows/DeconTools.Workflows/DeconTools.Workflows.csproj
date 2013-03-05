@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backend\Core\BasicIqWorkflow.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflow.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Backend\Data\TopdownChromData.cs" />
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\LabelFreeIqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />
@@ -126,6 +129,9 @@
     <Compile Include="Backend\Results\UnlabelledTargetedResultDTO.cs" />
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
+    <Compile Include="Backend\Utilities\IqCodeParser\IqCodeParser.cs" />
+    <Compile Include="Backend\Utilities\IqCodeParser\MSAlignCodeParser.cs" />
+    <Compile Include="Backend\Utilities\IqCodeParser\MSGFCodeParser.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
     <Compile Include="Backend\Utilities\ResultUtilities.cs" />
@@ -133,6 +139,7 @@
     <Compile Include="Backend\Core\SipperWorkflowExecutorParameters.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Backend\Core\NewFolder1\" />
     <Folder Include="Backend\Parameters\" />
   </ItemGroup>
   <ItemGroup>

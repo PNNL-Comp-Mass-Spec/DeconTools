@@ -97,13 +97,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsNotNull(workflow.ChromatogramXYData, "Chrom XY data is empty");
             Assert.IsNotEmpty(workflow.ChromPeaksDetected, "Chrom peaks are empty");
-            Assert.AreEqual(2, workflow.ChromPeaksDetected.Count);
 
-            Assert.IsNotNull(workflow.ChromPeakSelected, "No chrom peak was selected");
-            Assert.IsNotNull(workflow.MassSpectrumXYData, "Mass spectrum for selected chrom peak was not generated");
-
-            //TestUtilities.DisplayXYValues(workflow.MassSpectrumXYData);
-            //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
             Console.WriteLine("Chrom peaks detected");
             foreach (var chromPeak in workflow.ChromPeaksDetected)
             {
@@ -111,6 +105,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                                   chromPeak.Width.ToString("0.0"));
             }
 
+            
+            Assert.AreEqual(3, workflow.ChromPeaksDetected.Count);
+
+            Assert.IsNotNull(workflow.ChromPeakSelected, "No chrom peak was selected");
+            Assert.IsNotNull(workflow.MassSpectrumXYData, "Mass spectrum for selected chrom peak was not generated");
+
+            //TestUtilities.DisplayXYValues(workflow.MassSpectrumXYData);
+            //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
+          
 
             MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
 

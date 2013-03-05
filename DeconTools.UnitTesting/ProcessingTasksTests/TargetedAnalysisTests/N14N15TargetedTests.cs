@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.Quantifiers;
-using DeconTools.Backend.Data.Importers;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.ProcessingTasks.NETAlignment;
-using DeconTools.Backend;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using System.Diagnostics;
+using System.Linq;
+using DeconTools.Backend;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
+using DeconTools.Backend.ProcessingTasks.NETAlignment;
+using DeconTools.Backend.ProcessingTasks.Quantifiers;
+using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
+using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
 
 namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 {
@@ -242,7 +240,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             Task theorFeatureGen = new TomTheorFeatureGenerator();
             Task finder = new N14N15TFFTask(5);
             Task quant = new N14N15QuantifierTask(1);
-            Task fitScoreCalc = new MassTagFitScoreCalculator();
+            Task fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             List<Task> taskList = new List<Task>();
 
@@ -380,7 +378,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             N14N15QuantifierTask quant = new N14N15QuantifierTask(1);
 
 
-            MassTagFitScoreCalculator fitScoreCalc = new MassTagFitScoreCalculator();
+            IsotopicProfileFitScoreCalculator fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             List<long> timingResults = new List<long>();
 

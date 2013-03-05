@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class TargetedWorkflowExecutor : WorkflowBase
     {
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
-
+            
 
         protected string _loggingFileName;
         protected string _resultsFolder;
@@ -202,6 +202,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
+     
+
+        #region Public Methods
+
         protected virtual void UpdateTargetMissingInfo()
         {
 
@@ -276,7 +280,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        #region Public Methods
+
 
         protected string TryFindTargetsForCurrentDataset()
         {

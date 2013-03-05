@@ -218,8 +218,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
             //this finds the isotopic profile based on the theor. isotopic profile.
             _basicFeatureFinder.ToleranceInPPM = toleranceInPPM;
+            _basicFeatureFinder.NeedMonoIsotopicPeak = false;
 
-            IsotopicProfile iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile, toleranceInPPM, false);
+            IsotopicProfile iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile);
 
             if (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 1)
             {

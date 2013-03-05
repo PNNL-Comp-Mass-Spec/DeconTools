@@ -435,7 +435,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
 
             var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;  //fwhm / 2.35= sigma
-            var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso, ppmTolerance, false);
+
+            _targetedFeatureFinder.ToleranceInPPM = ppmTolerance;
+            _targetedFeatureFinder.NeedMonoIsotopicPeak = false;
+
+            var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso);
             return msFeature;
         }
 

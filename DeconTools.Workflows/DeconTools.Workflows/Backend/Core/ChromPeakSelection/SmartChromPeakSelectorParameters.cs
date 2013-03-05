@@ -1,5 +1,5 @@
 ﻿
-namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
+namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
 
 
@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             : base(parameters)
         {
             MSToleranceInPPM = 25;
-            MSFeatureFinderType = Globals.TargetedFeatureFinderType.ITERATIVE;
+            MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
             MSPeakDetectorPeakBR = 1.3;
             MSPeakDetectorSigNoiseThresh = 2;
             NumChromPeaksAllowed = 20;
@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #region Properties
         public double MSToleranceInPPM { get; set; }
 
-        public Globals.TargetedFeatureFinderType MSFeatureFinderType { get; set; }
+        public DeconTools.Backend.Globals.TargetedFeatureFinderType MSFeatureFinderType { get; set; }
 
 
         /// <summary>

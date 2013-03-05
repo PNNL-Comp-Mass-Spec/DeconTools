@@ -11,6 +11,7 @@ using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
@@ -65,7 +66,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
-            var fitscoreCalc = new MassTagFitScoreCalculator();
+            var fitscoreCalc = new IsotopicProfileFitScoreCalculator();
 
 
 
@@ -144,7 +145,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
-            var fitscoreCalc = new MassTagFitScoreCalculator();
+            var fitscoreCalc = new IsotopicProfileFitScoreCalculator();
 
 
 
@@ -215,7 +216,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             result.DisplayToConsole();
 
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
-            Assert.AreEqual(0.0251m, (decimal)(Math.Round(result.Score,4)));
+            Assert.AreEqual(0.025m, (decimal)(Math.Round(result.Score,4)));
             //Console.WriteLine(result.ScanSet);
             Assert.AreEqual(26, result.ScanSet.IndexValues.Count);
             Assert.AreEqual("9575 {9493, 9500, 9506, 9513, 9520, 9527, 9534, 9540, 9547, 9554, 9561, 9568, 9575, 9582, 9589, 9596, 9603, 9610, 9617, 9624, 9631, 9638, 9645, 9652, 9658, 9665}", result.ScanSet.ToString());

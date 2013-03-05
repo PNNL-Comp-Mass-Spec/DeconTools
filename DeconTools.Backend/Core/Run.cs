@@ -183,29 +183,15 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public virtual void GetMassSpectrum(ScanSet scanset)
+        public virtual XYData GetMassSpectrum(ScanSet scanset)
         {
             //set a wide mz range so we get everything
-            this.GetMassSpectrum(scanset, 0, 100000);
+            return GetMassSpectrum(scanset, 0, 100000);
         }
 
-        public abstract void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
+        public abstract XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
 
-        public virtual float GetTIC(double minMZ, double maxMZ)
-        {
-            if (this.XYData == null || this.XYData.Xvalues == null || this.XYData.Yvalues == null) return -1;
-
-            double summedIntensities = 0;
-            for (int i = 0; i < this.XYData.Yvalues.Length; i++)
-            {
-                if (this.XYData.Xvalues[i] > minMZ && this.XYData.Xvalues[i] < maxMZ)
-                {
-                    summedIntensities += this.XYData.Yvalues[i];
-                }
-            }
-
-            return (float)summedIntensities;
-        }
+     
 
 
 
@@ -218,8 +204,9 @@ namespace DeconTools.Backend.Core
 
         public TargetBase CurrentMassTag { get; set; }
 
-        public virtual void GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
+        public virtual XYData GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
         {
+            throw new NotSupportedException("This overload of GetMassSpectrum is only supported in IMS dataset types");
         }
 
         #region Methods

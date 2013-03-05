@@ -143,9 +143,9 @@ namespace DeconTools.Backend.ProcessingTasks
                     double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(result.IsotopicProfile);
 
                     //this finds the isotopic profile based on the theor. isotopic profile.
-                    BasicTFF bff = new BasicTFF(toleranceInPPM);
+                    BasicTFF bff = new BasicTFF(toleranceInPPM, false);
 
-                    IsotopicProfile iso = bff.FindMSFeature(resultList.Run.PeakList, mt.IsotopicProfile, toleranceInPPM, false);
+                    IsotopicProfile iso = bff.FindMSFeature(resultList.Run.PeakList, mt.IsotopicProfile);
 
                     if (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 1)
                     {

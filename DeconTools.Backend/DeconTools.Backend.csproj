@@ -144,7 +144,6 @@
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelator.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorO16O18.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorUIMF.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
@@ -208,11 +207,6 @@
     <Compile Include="Parameters\ThrashParameters.cs" />
     <Compile Include="ProcessingTasks\ChromatogramGeneratorMode.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorBase.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorBase.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromPeakSelectorParameters.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelector.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorBase.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\SmartChromPeakSelectorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashDeconvolutorV2.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
@@ -278,8 +272,7 @@
     <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText.cs" />
     <Compile Include="Data\Importers\UMCFileImporter.cs" />
-    <Compile Include="ProcessingTasks\ChromatogramProcessing\BasicChromPeakSelector.cs" />
-    <Compile Include="ProcessingTasks\FitScoreCalculators\MassTagFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicProfileFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
     <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
     <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />

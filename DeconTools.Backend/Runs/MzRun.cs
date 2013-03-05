@@ -141,7 +141,7 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public override void GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanset)
         {
             double[] xvals;
             double[] yvals;
@@ -160,21 +160,22 @@ namespace DeconTools.Backend.Runs
 
 
             _reader.GetSpectrum(scanset.PrimaryScanNumber, out xvals, out yvals);
+            var xydata = new XYData {Xvalues = xvals, Yvalues = yvals};
+            return xydata;
 
-            XYData.Xvalues = xvals;
-            XYData.Yvalues = yvals;
 
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-            GetMassSpectrum(scanset);
+            var xydata=   GetMassSpectrum(scanset);
 
-            if (XYData.Xvalues == null || XYData.Xvalues.Length <= 0) return;
-            if (minMZ > XYData.Xvalues[0] || maxMZ < XYData.Xvalues[XYData.Xvalues.Length - 1])
+            if (xydata.Xvalues == null || xydata.Xvalues.Length <= 0) return xydata;
+            if (minMZ > xydata.Xvalues[0] || maxMZ < xydata.Xvalues[xydata.Xvalues.Length - 1])
             {
-                XYData = XYData.TrimData(minMZ, maxMZ);
+                xydata = xydata.TrimData(minMZ, maxMZ);
             }
+            return xydata;
         }
 
         public override int GetMinPossibleLCScanNum()

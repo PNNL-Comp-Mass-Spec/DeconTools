@@ -12,7 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
     {
         private PeakUtilities _peakUtilities = new PeakUtilities();
      
-        public abstract List<Peak> FindPeaks(XYData xydata, double minX, double maxX);
+        public abstract List<Peak> FindPeaks(XYData xydata, double minX=0, double maxX=0);
 
         
         public double MinX { get; set; }

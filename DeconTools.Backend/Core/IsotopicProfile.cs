@@ -36,15 +36,10 @@ namespace DeconTools.Backend.Core
             set { _chargeState = value; }
         }
 
-
-
-
         /// <summary>
         /// The adjusted intensity of the isotopic profile. Currently used for correcting saturated profiles in IMS workflows
         /// </summary>
         public double IntensityAggregateAdjusted { get; set; }
-
-
 
         private double _originalIntensity;   // the unsummed intensity;  
         public double OriginalIntensity
@@ -53,20 +48,12 @@ namespace DeconTools.Backend.Core
             set { _originalIntensity = value; }
         }
 
-        //private double _originalTotalIsotopicAbundance;  // aka original_TIA;   used in IMS-TOF analysis.
-        //public double OriginalTotalIsotopicAbundance
-        //{
-        //    get { return _originalTotalIsotopicAbundance; }
-        //    set { _originalTotalIsotopicAbundance = value; }
-        //}
-
         private double _score;
         public double Score
         {
             get { return _score; }
             set { _score = value; }
         }
-
 
         private double _monoIsotopicMass;
         public double MonoIsotopicMass
@@ -114,7 +101,6 @@ namespace DeconTools.Backend.Core
         {
             return _peaklist.Count;
         }
-
 
         public double GetMZofMostAbundantPeak()
         {

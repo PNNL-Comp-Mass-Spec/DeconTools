@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
-namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
+namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public sealed class BasicChromPeakSelector : ChromPeakSelectorBase
     {
@@ -14,23 +14,31 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             Parameters = parameters;
         }
-       
+
 
         #endregion
 
         #region Properties
 
-      
+
         //TODO:   figure out what uses this and why!   Default is 0 - that's all I know
         public int ScanOffSet { get; set; }
 
         public double ReferenceNETValueForReferenceMode { get; set; }
 
+
+        public override Peak SelectBestPeak(List<ChromPeakQualityData> peakQualityList, bool filterOutFlaggedIsotopicProfiles)
+        {
+            throw new NotImplementedException();
+        }
+
         public override ChromPeakSelectorParameters Parameters { get; set; }
-       
+
         #endregion
 
-  
+       
+        
+
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, "ChromPeakSelector failed. Mass Tag must be defined but it isn't.");
@@ -43,9 +51,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             float normalizedElutionTime;
 
-            if (result.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
+            if (result.Run.CurrentMassTag.ElutionTimeUnit == DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum)
             {
-                normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget/(float)result.Run.GetNumMSScans();
+                normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)result.Run.GetNumMSScans();
             }
             else
             {
@@ -54,26 +62,21 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
             int numPeaksWithinTolerance = 0;
-            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode, 
-                resultList.Run.PeakList, normalizedElutionTime, 
+            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode,
+                resultList.Run.PeakList, normalizedElutionTime,
                 Parameters.NETTolerance, out numPeaksWithinTolerance);
-            
+
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
-            SetScansForMSGenerator(bestPeak, resultList.Run, Parameters.NumScansToSum);
-            
+            result.Run.CurrentScanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(bestPeak, resultList.Run, Parameters.NumScansToSum);
+
             UpdateResultWithChromPeakAndLCScanInfo(result, bestPeak);
-            
-           
+
+
         }
 
-        public Peak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance)
-        {
-            int numPeaksWithinTolerance = 0;
-            return selectBestPeak(peakSelectorMode, chromPeakList, targetNET, netTolerance, out numPeaksWithinTolerance);
-        }
-
-        public Peak selectBestPeak(Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
+        [Obsolete("Do not use. Will delete in future")]
+        public Peak selectBestPeak(DeconTools.Backend.Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
         {
             List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
 
@@ -94,7 +97,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             switch (peakSelectorMode)
             {
-                case Globals.PeakSelectorMode.ClosestToTarget:
+                case DeconTools.Backend.Globals.PeakSelectorMode.ClosestToTarget:
                     double diff = double.MaxValue;
 
                     for (int i = 0; i < peaksWithinTol.Count; i++)
@@ -108,7 +111,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                         }
                     }
                     break;
-                case Globals.PeakSelectorMode.MostIntense:
+                case DeconTools.Backend.Globals.PeakSelectorMode.MostIntense:
                     double max = -1;
                     for (int i = 0; i < peaksWithinTol.Count; i++)
                     {
@@ -121,7 +124,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                         }
                     }
                     break;
-                case Globals.PeakSelectorMode.RelativeToOtherChromPeak:
+                case DeconTools.Backend.Globals.PeakSelectorMode.RelativeToOtherChromPeak:
                     diff = double.MaxValue;
 
 
@@ -138,7 +141,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                     break;
 
-                case Globals.PeakSelectorMode.N15IntelligentMode:
+                case DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode:
                     diff = double.MaxValue;
 
                     //want to only consider peaks that are less than the target NET.  (N15 peptides elutes at the same NET or earlier). 
@@ -150,7 +153,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                         double currentDiff = ReferenceNETValueForReferenceMode - peak.NETValue;
 
-                        if ((currentDiff) >= 0 && currentDiff <= netTolerance)     
+                        if ((currentDiff) >= 0 && currentDiff <= netTolerance)
                         {
                             peaksWithinTol.Add(peak);
                             if (currentDiff < diff)
@@ -176,6 +179,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
 
-       
+
     }
 }

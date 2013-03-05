@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using DeconTools.Backend;
 using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
@@ -47,14 +48,14 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(testScan);
 
-            run.GetMassSpectrum(scanset);
+            XYData xydata= run.GetMassSpectrum(scanset);
 
-            Assert.AreNotEqual(run.XYData, null);
-            Assert.AreNotEqual(run.XYData.Xvalues, null);
-            Assert.AreNotEqual(run.XYData.Xvalues.Length, 0);
-            Assert.AreEqual(run.XYData.Xvalues.Length, 1576);
+            Assert.AreNotEqual(xydata, null);
+            Assert.AreNotEqual(xydata.Xvalues, null);
+            Assert.AreNotEqual(xydata.Xvalues.Length, 0);
+            Assert.AreEqual(1576,xydata.Xvalues.Length);
 
-            //run.XYData.Display();
+            //xydata.Display();
         }
 
 
@@ -69,11 +70,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(testScan);
 
-            run.GetMassSpectrum(scanset, minMZ, maxMZ);
+            var xydata =run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
-            Assert.AreNotEqual(run.XYData, null);
-            Assert.AreNotEqual(run.XYData.Xvalues, null);
-            Assert.AreNotEqual(run.XYData.Xvalues.Length, 0);
+            Assert.AreNotEqual(xydata, null);
+            Assert.AreNotEqual(xydata.Xvalues, null);
+            Assert.AreNotEqual(xydata.Xvalues.Length, 0);
         }
 
         [Test]
@@ -87,12 +88,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(testScan);
 
-            run.GetMassSpectrum(scanset, minMZ, maxMZ);
+            var  xydata =run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
-            Assert.AreNotEqual(run.XYData, null);
-            Assert.AreNotEqual(run.XYData.Xvalues, null);
-            Assert.AreNotEqual(run.XYData.Xvalues.Length, 0);
-            //Assert.AreEqual(run.XYData.Xvalues.Length, 1000);
+            Assert.AreNotEqual(xydata, null);
+            Assert.AreNotEqual(xydata.Xvalues, null);
+            Assert.AreNotEqual(xydata.Xvalues.Length, 0);
+            //Assert.AreEqual(xydata.Xvalues.Length, 1000);
         }
 
         [Test]
@@ -106,12 +107,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             ScanSet scanset = new ScanSet(testScan, 6009, 6020);
 
-            run.GetMassSpectrum(scanset, minMZ, maxMZ);
+            var xydata=  run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
-            Assert.AreNotEqual(run.XYData, null);
-            Assert.AreNotEqual(run.XYData.Xvalues, null);
-            Assert.AreNotEqual(run.XYData.Xvalues.Length, 0);
-            Assert.AreEqual(run.XYData.Xvalues.Length, 462);
+            Assert.AreNotEqual(xydata, null);
+            Assert.AreNotEqual(xydata.Xvalues, null);
+            Assert.AreNotEqual(xydata.Xvalues.Length, 0);
+            Assert.AreEqual(xydata.Xvalues.Length, 462);
         }
 
         [Test]

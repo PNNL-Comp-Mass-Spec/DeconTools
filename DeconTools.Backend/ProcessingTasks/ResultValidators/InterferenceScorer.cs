@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
@@ -25,6 +26,30 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #endregion
 
         #region Public Methods
+
+
+        public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks)
+        {
+            if (observedIso == null) return 1.0;
+
+            if (!observedMSPeaks.Any()) return 1.0;
+
+
+            var leftBoundary = observedIso.getMonoPeak().XValue-1.1;
+            var rightMostPeak = observedIso.Peaklist[observedIso.Peaklist.Count - 1];
+
+            var rightBoundary = rightMostPeak.XValue + rightMostPeak.Width/2.35 *2;  // 2 * sigma
+
+            List<MSPeak> scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+
+             return  GetInterferenceScore(scanPeaks, observedIso.Peaklist, leftBoundary, rightBoundary);
+
+
+
+        }
+
+
+
         /// <summary>
         /// 
         /// </summary>

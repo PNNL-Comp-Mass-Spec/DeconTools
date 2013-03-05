@@ -12,6 +12,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
+        public TFFBase(double toleranceInPPM = 20, bool needMonoIsotopicPeak = false)
+
+        {
+            ToleranceInPPM = toleranceInPPM;
+            NeedMonoIsotopicPeak = needMonoIsotopicPeak;
+
+
+        }
+
+
         #region Properties
 
         public virtual double ToleranceInPPM { get; set; }
@@ -33,7 +43,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Public Methods
-        public virtual IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool needMonoIsotopicPeak)
+        public virtual IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature)
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
@@ -44,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             int indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
 
 
-            double toleranceInMZ = theorFeature.getMonoPeak().XValue * toleranceInPPM / 1e6;
+            double toleranceInMZ = theorFeature.getMonoPeak().XValue * ToleranceInPPM / 1e6;
 
             bool foundMatchingMaxPeak = false;
             double massDefect = 0;   // this is the m/z diff between the max peak of theor feature and the max peak of the experimental feature
@@ -73,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 if (peaksWithinTol.Count == 0)
                 {
-                    if (needMonoIsotopicPeak)
+                    if (NeedMonoIsotopicPeak)
                     {
                         //here, we are looking to the left of most intense theor peak.  If we have the prerequisite of finding the monoIsotopic peak and fail here, we'll return a failed result
                         failedResult = true;
@@ -248,7 +258,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             this.RunIsAligned = resultList.Run.MassIsAligned;
 
             IsotopicProfile targetedIso = CreateTargetIso(resultList.Run);
-            iso = FindMSFeature(resultList.Run.PeakList, targetedIso, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
+            iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
 
 
 

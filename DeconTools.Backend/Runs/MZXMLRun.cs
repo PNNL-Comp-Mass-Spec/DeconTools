@@ -58,7 +58,7 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans() - 1;      // this is tricky...  some mzXML files might be 1-based;  others might be 0-based. So I will play it safe and go zero-based
         }
 
-        public override void GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
@@ -78,8 +78,10 @@ namespace DeconTools.Backend.Runs
                 //this.rawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
             }
 
-
-            XYData.SetXYValues(ref xvals, ref yvals);
+            XYData xydata=new XYData();
+            xydata.Xvalues = xvals;
+            xydata.Yvalues = yvals;
+            return xydata;
         }
 
         #endregion

@@ -12,6 +12,7 @@ using System.Text;
     using DeconTools.Backend.Utilities;
     using DeconTools.UnitTesting2;
     using DeconTools.Workflows.Backend.Core;
+    using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
     using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
@@ -70,7 +71,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var chromGen = new PeakChromatogramGenerator(chromPeakGeneratorTolInPPM, chromGeneratorMode);
             // If we want to use the Execute Command 
             //BLL .1 and .5 NET windows work.   .02 NET window does not BR and SN was set to 1 however)
-            chromGen.NETWindowWidthForNonAlignedData = .02F;
+            chromGen.ChromWindowWidthForNonAlignedData = .02F;
 
 
             int pointsToSmooth = 5;

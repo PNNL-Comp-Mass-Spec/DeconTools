@@ -46,12 +46,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             IsotopicProfile o16TheorFeature = resultList.Run.CurrentMassTag.IsotopicProfile;
-            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o16TheorFeature, ref peakList);
+            IsotopicProfile o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o16TheorFeature, out peakList);
 
             peakListToUseLater = new List<Peak>(peakList);
 
             IsotopicProfile o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
-            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileSingleLabel, ref peakList);
+            IsotopicProfile o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileSingleLabel, out peakList);
 
             if (peakList!=null && peakList.Count>peakListToUseLater.Count)
             {
@@ -59,7 +59,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             IsotopicProfile o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
-            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileDoubleLabel, ref peakList);
+            IsotopicProfile o18DoubleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileDoubleLabel, out peakList);
 
             if (peakList != null && peakList.Count > peakListToUseLater.Count)
             {
