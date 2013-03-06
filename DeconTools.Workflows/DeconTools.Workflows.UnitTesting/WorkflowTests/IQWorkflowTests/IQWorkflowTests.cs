@@ -48,8 +48,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Console.WriteLine(target.EmpiricalFormula + "\t" + target.ChargeState);
 
-            var result = target.CreateResult(target);
-            target.DoWorkflow(result);
+            
+            target.DoWorkflow();
+            var result=  target.GetResult();
 
             Assert.IsNotNull(result, "result is null");
 
@@ -81,8 +82,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             target.ElutionTimeTheor = 0.3;
             target.ChargeState = 1;
 
-            var result = target.CreateResult(target);
-            target.DoWorkflow(result);
+            
+            target.DoWorkflow();
+            var result = target.GetResult();
 
             Assert.IsTrue(result.Target.TheorIsotopicProfile != null);
             Assert.IsTrue(result != null);

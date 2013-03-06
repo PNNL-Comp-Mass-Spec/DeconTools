@@ -76,6 +76,7 @@
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
     <Compile Include="Backend\Core\IQWorkflow.cs" />
+    <Compile Include="Backend\Core\IqWorkflowFactory.cs" />
     <Compile Include="Backend\Core\NominalMassTarget.cs" />
     <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
@@ -130,7 +131,7 @@
     <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultToTextExporter.cs" />
-    <Compile Include="Backend\FileIO\LabelFreeIqTargetImporter.cs" />
+    <Compile Include="Backend\FileIO\BasicIqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />

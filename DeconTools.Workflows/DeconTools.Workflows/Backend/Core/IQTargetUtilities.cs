@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 
@@ -22,10 +23,86 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
 
 
+        public int GetTotalNodelLevels(IqTarget inputTarget)
+        {
+            int levels = 0;
+
+            var target = inputTarget.RootTarget;
+
+
+            while (target.HasChildren())
+            {
+                target = target.ChildTargets().First();
+                levels++;
+            }
+
+            return 1+ levels;
+
+        }
+
+
+        public List<IqTarget> GetTargetsFromNodelLevel(List<IqTarget> inputTargets, int level)
+        {
+
+            List<IqTarget> iqtargets = new List<IqTarget>(inputTargets);
+
+            int currentlevel = 0;
+
+            while (currentlevel!=level)
+            {
+                currentlevel++;
+
+                iqtargets = GetAllTargetsOnNextLevel(iqtargets);
+
+
+            }
+
+            return iqtargets;
+
+
+
+        }
+
+
+        public List<IqTarget>GetAllTargetsOnNextLevel(List<IqTarget>inputTargets)
+        {
+            List<IqTarget> iqtargets = new List<IqTarget>();
+
+            foreach (var target in inputTargets)
+            {
+                if (target.HasChildren())
+                {
+                    iqtargets.AddRange(target.ChildTargets());
+                }
+            }
+
+            return iqtargets;
+        }
+
+
+
+
+
+        public void CreateChildTargets(List<IqTarget> targets)
+        {
+            foreach (IqTarget iqTarget in targets)
+            {
+                UpdateTargetMissingInfo(iqTarget);
+
+                var childTargets = CreateChargeStateTargets(iqTarget);
+                iqTarget.AddTargetRange(childTargets);
+            }
+        }
+
+
+
+
         public List<IqTarget> CreateChargeStateTargets(IqTarget iqTarget, double minMZObs = 400, double maxMZObserved = 1500)
         {
             int minCharge = 1;
             int maxCharge = 100;
+
+            UpdateTargetMissingInfo(iqTarget);
 
 
             List<IqTarget> targetList = new List<IqTarget>();
@@ -60,7 +137,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public List<IqTarget> CreateTargets(IEnumerable<string>empiricalFormulaList, double minMZObs =400, double maxMZObserved=1500 )
+        public List<IqTarget> CreateTargets(IEnumerable<string> empiricalFormulaList, double minMZObs = 400, double maxMZObserved = 1500)
         {
             int targetIDCounter = 0;
 
@@ -95,10 +172,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula=true)
+        public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula = true)
         {
 
-            
+
             bool isMissingMonoMass = target.MonoMassTheor <= 0;
 
             if (String.IsNullOrEmpty(target.EmpiricalFormula))
@@ -128,12 +205,12 @@ namespace DeconTools.Workflows.Backend.Core
                 target.MonoMassTheor =
                     EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
 
-                if (target.ChargeState!=0)
+                if (target.ChargeState != 0)
                 {
-                    target.MZTheor = target.MonoMassTheor / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;    
+                    target.MZTheor = target.MonoMassTheor / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
                 }
 
-                
+
             }
 
 
@@ -148,6 +225,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-       
+
     }
 }

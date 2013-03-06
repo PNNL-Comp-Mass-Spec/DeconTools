@@ -3,10 +3,10 @@ using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public class LabelFreeIqTargetImporter:IqTargetImporter
+    public class BasicIqTargetImporter:IqTargetImporter
     {
 
-        public LabelFreeIqTargetImporter(string filename)
+        public BasicIqTargetImporter(string filename)
         {
             Filename = filename;
         }

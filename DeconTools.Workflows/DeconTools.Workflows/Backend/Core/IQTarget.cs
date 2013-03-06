@@ -10,6 +10,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<IqTarget> _childTargets;
 
+
+        IqResult _result;
+
+
         public IqTarget()
         {
             _childTargets = new List<IqTarget>();
@@ -36,6 +40,31 @@ namespace DeconTools.Workflows.Backend.Core
         public double ElutionTimeTheor { get; set; }
         public IqTarget ParentTarget { get; set; }
 
+
+        public int NodeLevel
+        {
+            get
+            {
+                if (ParentTarget == null) return 0;
+
+                return 1 + ParentTarget.NodeLevel;
+            }
+        }
+
+     
+        
+
+        public IqTarget RootTarget
+        {
+            get
+            {
+                if (ParentTarget == null) return this;
+
+                return ParentTarget.RootTarget;
+            }
+        }
+
+
         #endregion
 
         public IEnumerable<IqTarget> ChildTargets()
@@ -51,7 +80,13 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public void DoWorkflow(IqResult iqResult)
+        public void DoWorkflow()
+        {
+            _result = CreateResult(this);
+            DoWorkflow(_result);
+        }
+
+        protected void DoWorkflow(IqResult iqResult)
         {
             if (iqResult.HasChildren())
             {
@@ -62,6 +97,36 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
             _workflow.Execute(iqResult);
+        }
+
+
+        protected IqResult CreateResult()
+        {
+            return CreateResult(this);
+        }
+
+        protected IqResult CreateResult(IqTarget target)
+        {
+            var result = _workflow.CreateIQResult(target);
+
+            if (target.HasChildren())
+            {
+                var childTargets = ChildTargets();
+                foreach (var childTarget in childTargets)
+                {
+                    var childResult = CreateResult(childTarget);
+                    result.AddResult(childResult);
+                }
+            }
+
+            return result;
+
+
+        }
+
+        public IqResult GetResult()
+        {
+            return _result;
         }
 
 
@@ -117,24 +182,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public IqResult CreateResult(IqTarget target)
-        {
-            var result= _workflow.CreateIQResult(target);
 
-            if (target.HasChildren())
-            {
-                var childTargets = ChildTargets();
-                foreach (var childTarget in childTargets)
-                {
-                    var childResult = CreateResult(childTarget);
-                    result.AddResult(childResult);
-                }
-            }
-            
-
-            return result;
-
-
-        }
     }
 }

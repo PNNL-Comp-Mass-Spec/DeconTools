@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -14,6 +15,14 @@ namespace DeconTools.Workflows.Backend.Core
         private BackgroundWorker _backgroundWorker;
 
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
+        private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
+
+
+        private RunFactory _runFactory = new RunFactory();
+
+
+        private List<IqWorkflow> _iqWorkflows = new List<IqWorkflow>(); 
+
 
 
         #region Constructors
@@ -46,6 +55,10 @@ namespace DeconTools.Workflows.Backend.Core
         public bool DisposeResultDetails { get; set; }
 
 
+        public IqTargetImporter TargetImporter { get; set; }
+
+
+
         #endregion
 
 
@@ -56,7 +69,37 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqResult> Results { get; set; }
 
+        public List<IqTarget> Targets { get; set; } 
+
+
         protected ResultExporter ResultExporter { get; set; }
+
+        public void Execute()
+        {
+            Execute(Targets);
+        }
+
+
+
+        public void SetRun(string datasetPath)
+        {
+            Run = _runFactory.CreateRun(datasetPath);
+        }
+
+
+        public void SetRun(Run run)
+        {
+            Run = run;
+        }
+
+        
+        public void AddIqWorkflow(IqWorkflow workflow)
+        {
+            _iqWorkflows.Add(workflow);
+
+        }
+
+
 
         public void Execute(IEnumerable<IqTarget> targets)
         {
@@ -68,9 +111,9 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     LoadChromData(Run);
                 }
-
-                var result = target.CreateResult(target);    //NOTE: this creates a composite IqResult from a composite IqTarget
-                target.DoWorkflow(result);
+               
+                target.DoWorkflow();
+                var result= target.GetResult();
 
                 if (IsDataExported)
                 {
@@ -86,6 +129,64 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
         }
+
+
+
+
+        public virtual void InitializeTargets()
+        {
+            if (TargetImporter ==null)
+            {
+                TargetImporter = new BasicIqTargetImporter(this.Parameters.TargetsFilePath);
+            }
+
+            Targets=  TargetImporter.Import();
+
+            _targetUtilities.CreateChildTargets(Targets);
+        }
+
+
+
+        public virtual void InitializeWorkflows()
+        {
+            InitializeWorkflows(_iqWorkflows);
+
+
+        }
+
+        protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
+
+
+        public virtual void InitializeWorkflows(List<IqWorkflow>workflowList)
+        {
+            if (Targets==null || !Targets.Any())
+            {
+                throw new InvalidOperationException(
+                    "Failed to initialize workflow. Reason: Targets need to be loaded first so that workflows can be associated with targets");
+            }
+
+            //int totalNodeLevels = _targetUtilities.GetTotalNodelLevels(Targets.First());
+
+            for (int nodeLevel = 0; nodeLevel < workflowList.Count; nodeLevel++)
+            {
+                var targetsAtGivenNodeLevel = _targetUtilities.GetTargetsFromNodelLevel(Targets, nodeLevel);
+
+
+                var workflowAtGivenNode = workflowList[nodeLevel];
+
+                foreach (var iqTarget in targetsAtGivenNodeLevel)
+                {
+                    workflowAtGivenNode.Run = Run;
+                    iqTarget.SetWorkflow(workflowAtGivenNode);
+                }
+
+
+            }
+
+
+        }
+
+
 
         protected virtual void ExportResults(IqResult iqResult)
         {

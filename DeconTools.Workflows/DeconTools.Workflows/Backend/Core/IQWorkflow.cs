@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void ExecuteWorkflow(IqResult result)
+        protected virtual void ExecuteWorkflow(IqResult result)
         {
 
            

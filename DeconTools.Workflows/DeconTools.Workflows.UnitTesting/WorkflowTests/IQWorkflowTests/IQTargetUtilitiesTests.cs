@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
@@ -76,6 +77,62 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
 
         }
+
+
+        [Test]
+        public void NodeLevelTest1()
+        {
+            IqTargetUtilities util = new IqTargetUtilities();
+
+            IqTarget iqTarget1 = new IqChargeStateTarget();
+            IqTarget iqTarget2 = new IqChargeStateTarget();
+
+            IqTarget iqTarget3_1 = new IqChargeStateTarget();
+            iqTarget3_1.ID = 3001;
+            
+
+            IqTarget iqTarget3_2 = new IqChargeStateTarget();
+            iqTarget3_2.ID = 3002;
+            
+
+
+            IqTarget iqTarget4 = new IqChargeStateTarget();
+
+            IqTarget iqTarget5 = new IqChargeStateTarget();
+
+
+            iqTarget4.AddTarget(iqTarget5);
+            iqTarget3_1.AddTarget(iqTarget4);
+            iqTarget2.AddTarget(iqTarget3_1);
+            iqTarget2.AddTarget(iqTarget3_2);
+            iqTarget1.AddTarget(iqTarget2);
+
+
+            var rootNode = iqTarget5.RootTarget;
+
+            Assert.AreEqual(rootNode, iqTarget1);
+
+
+            var nodeLevelCount=   util.GetTotalNodelLevels(iqTarget1);
+
+            Assert.AreEqual(5, nodeLevelCount);
+
+            nodeLevelCount = util.GetTotalNodelLevels(iqTarget5);
+
+            Assert.AreEqual(5, nodeLevelCount);
+
+            List<IqTarget> targetList = new List<IqTarget>();
+            targetList.Add(iqTarget1);
+
+            var level2Targets=  util.GetTargetsFromNodelLevel(targetList, 2);
+
+            foreach (var level2Target in level2Targets)
+            {
+                Console.WriteLine(level2Target);
+            }
+
+        }
+
 
     }
 }

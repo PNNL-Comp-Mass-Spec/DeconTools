@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
@@ -78,7 +76,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         public void ImportUnlabeledIqTargetsTest1()
         {
             string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            LabelFreeIqTargetImporter importer = new LabelFreeIqTargetImporter(targetsFile);
+            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
 
             var targets=  importer.Import();
             Assert.IsNotNull(targets);
@@ -97,7 +95,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             string targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ForImportOnly_iqResults.txt";
 
-            LabelFreeIqTargetImporter importer = new LabelFreeIqTargetImporter(targetsFile);
+            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
 
             var targets = importer.Import();
             Assert.IsNotNull(targets);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DeconTools.Backend.FileIO;
 using DeconTools.Workflows.Backend.Core;
 
@@ -92,8 +93,17 @@ namespace DeconTools.Workflows.Backend.FileIO
                 sr.Close();
 
             }
+
+            //remove duplicates:
+            var filteredTargets = (from n in allTargets
+                                   group n by new
+                                                  {
+                                                      n.ID
+                                                  }
+                                   into grp
+                                   select grp.First()).ToList();
             
-            return allTargets;
+            return filteredTargets;
         }
 
         protected abstract IqTarget ConvertTextToIqTarget(List<string> processedRowOfText);
