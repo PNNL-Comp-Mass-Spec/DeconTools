@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities;
+﻿using DeconTools.Backend.Utilities;
 
-namespace DeconTools.Workflows.Backend.Utilities.IqCodeParsers
+namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 {
 	public class MSGFCodeParser : IqCodeParser
 	{
