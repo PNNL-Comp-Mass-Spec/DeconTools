@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Parameters
             LeftFitStringencyFactor = 1;
             RightFitStringencyFactor = 1;
             AreAllTheoreticalProfilesCachedBeforeStarting = false;
-
+            UseThrashV1 = false;
 
         }
 
@@ -43,6 +43,9 @@ namespace DeconTools.Backend.Parameters
         #endregion
 
         #region Properties
+
+
+        public bool UseThrashV1 { get; set; }
 
         public string TagFormula { get; set; }
 
@@ -139,6 +142,7 @@ namespace DeconTools.Backend.Parameters
             UseAbsoluteIntensity = GetBoolVal(thrashElement, "UseAbsolutePeptideIntensity", UseAbsoluteIntensity);
             AreAllTheoreticalProfilesCachedBeforeStarting = GetBoolVal(thrashElement, "UseMercuryCache", AreAllTheoreticalProfilesCachedBeforeStarting);
 
+            UseThrashV1 = GetBoolVal(thrashElement, "UseThrashV1", false);
 
         }
     }

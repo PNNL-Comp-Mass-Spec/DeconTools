@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
@@ -43,9 +40,16 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
 
-
-
-            decon = new ThrashDeconvolutorV2(parameters.ThrashParameters);
+            
+            if (parameters.ThrashParameters.UseThrashV1)
+            {
+                decon = new HornDeconvolutor(parameters); 
+            }
+            else
+            {
+                decon = new ThrashDeconvolutorV2(parameters.ThrashParameters);
+            }
+            
             return decon;
         }
 

@@ -37,6 +37,7 @@
 		<UseRAPIDDeconvolution>False</UseRAPIDDeconvolution>
 		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
 		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
+		<UseThrashV1>false</UseThrashV1>
 	</HornTransformParameters>
 	<Miscellaneous>
 		<UseScanRange>False</UseScanRange>

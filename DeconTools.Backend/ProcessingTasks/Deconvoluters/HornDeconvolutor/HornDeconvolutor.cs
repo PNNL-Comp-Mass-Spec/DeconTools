@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
+using DeconToolsV2.Peaks;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
@@ -264,6 +266,36 @@ namespace DeconTools.Backend.ProcessingTasks
             saveMemoryByAddingMinimalPeaksToIsotopicProfile = false;       // I later found out that this doesn't make much difference
         }
 
+        public HornDeconvolutor(DeconToolsParameters deconParameters)
+        {
+             this.absoluteThresholdPeptideIntensity = deconParameters.ThrashParameters.AbsolutePeptideIntensity;
+            this.averagineFormula = deconParameters.ThrashParameters.AveragineFormula;
+            this.chargeCarrierMass = deconParameters.ThrashParameters.ChargeCarrierMass;
+            this.checkPatternsAgainstChargeOne = deconParameters.ThrashParameters.CheckAllPatternsAgainstChargeState1;
+            this.deleteIntensityThreshold = deconParameters.ThrashParameters.MinIntensityForDeletion;
+            this.isAbsolutePepIntensityUsed = deconParameters.ThrashParameters.UseAbsoluteIntensity;
+            this.isActualMonoMZUsed = false;
+            this.isCompleteFit = deconParameters.ThrashParameters.CompleteFit;
+            this.isMercuryCashingUsed = true;
+            this.isMSMSProcessed = deconParameters.ScanBasedWorkflowParameters.ProcessMS2;
+            this.isMZRangeUsed = deconParameters.MSGeneratorParameters.UseMZRange;
+            this.isO16O18Data = deconParameters.ThrashParameters.IsO16O18Data;
+            this.isotopicProfileFitType = deconParameters.ThrashParameters.IsotopicProfileFitType;
+            this.isThrashed = deconParameters.ThrashParameters.IsThrashUsed;
+            this.leftFitStringencyFactor = deconParameters.ThrashParameters.LeftFitStringencyFactor;
+            this.maxChargeAllowed = deconParameters.ThrashParameters.MaxCharge;
+            this.maxFitAllowed = deconParameters.ThrashParameters.MaxFit;
+            this.maxMWAllowed = deconParameters.ThrashParameters.MaxMass;
+            this.maxMZ = deconParameters.MSGeneratorParameters.MaxMZ;      //TODO: review this later
+            this.minMZ = deconParameters.MSGeneratorParameters.MinMZ;      //TODO: review this later
+            this.minIntensityForScore = deconParameters.ThrashParameters.MinIntensityForScore;
+            this.minPeptideBackgroundRatio = deconParameters.ThrashParameters.MinMSFeatureToBackgroundRatio;
+            this.numAllowedShoulderPeaks = deconParameters.ThrashParameters.NumPeaksForShoulder;
+            this.rightFitStringencyFactor = deconParameters.ThrashParameters.RightFitStringencyFactor;
+            this.tagFormula = deconParameters.ThrashParameters.TagFormula;
+            this.NumPeaksUsedInAbundance = deconParameters.ThrashParameters.NumPeaksUsedInAbundance;
+        }
+
         private void convertDeconEngineHornParameters(DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters)
         {
             this.absoluteThresholdPeptideIntensity = hornParameters.AbsolutePeptideIntensity;
@@ -326,6 +358,24 @@ namespace DeconTools.Backend.ProcessingTasks
 
             mspeakList = resultList.Run.DeconToolsPeakList;
             transformResults = new DeconToolsV2.HornTransform.clsHornTransformResults[0];
+            
+            if (resultList.Run.PeakList==null||resultList.Run.PeakList.Count==0) return;
+            
+            mspeakList=new clsPeak[resultList.Run.PeakList.Count];
+            
+            for (int index = 0; index < resultList.Run.PeakList.Count; index++)
+            {
+                MSPeak peak = (MSPeak) resultList.Run.PeakList[index];
+                var oldPeak = new clsPeak();
+                oldPeak.mdbl_FWHM = peak.Width;
+                oldPeak.mdbl_SN = peak.SignalToNoise;
+                oldPeak.mdbl_intensity = peak.Height;
+                oldPeak.mint_data_index = peak.DataIndex;
+                oldPeak.mdbl_mz = peak.XValue;
+
+                mspeakList[index] = oldPeak;
+            }
+
 
             this.Transformer.PerformTransform(backgroundIntensity, minPeptideIntensity, ref xvals, ref yvals, ref mspeakList, ref transformResults);
             GenerateResults(transformResults, mspeakList, resultList);

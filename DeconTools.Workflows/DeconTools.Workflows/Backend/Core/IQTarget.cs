@@ -93,7 +93,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var childresults = iqResult.ChildResults();
                 foreach (var childResult in childresults)
                 {
-                    DoWorkflow(childResult);
+                    childResult.Target.DoWorkflow(childResult);
                 }
             }
             _workflow.Execute(iqResult);

@@ -61,17 +61,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.5;
-            var workflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
-            executor.AddIqWorkflow(workflow);
-            //executor.AddIqWorkflow(workflow);
-
-
-            executor.InitializeWorkflows();
+            var parentWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
+            var childWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
+            executor.AddIqWorkflow(parentWorkflow);
+            executor.AddIqWorkflow(childWorkflow);
             
+            executor.InitializeWorkflows();
             
             //Main line for executing IQ:
             executor.Execute();
-
 
             //Test the results...
 
