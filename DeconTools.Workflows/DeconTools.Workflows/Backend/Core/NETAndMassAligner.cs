@@ -135,8 +135,6 @@ namespace DeconTools.Workflows.Backend.Core
             result.Mass_vs_mz_ResidualsAfterAlignment = residuals.mzMassErrorCorrected;
             result.Mass_vs_mz_ResidualsMZValues = residuals.mz;
 
-            
-
 
             //get stats on variability
             result.NETStDev = processor.GetNETStandardDeviation();

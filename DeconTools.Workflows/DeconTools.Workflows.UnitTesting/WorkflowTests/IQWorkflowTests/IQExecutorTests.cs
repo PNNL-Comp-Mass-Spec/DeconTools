@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void Isotest1()
         {
             double inputMass = 15.567;
-            var empForumla=  IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(inputMass,false);
+            var empForumla = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(inputMass, false);
             Console.WriteLine(empForumla);
 
             var formulaTable = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsTable(inputMass);
@@ -37,9 +37,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            string resultsFolder=  @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
+            string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
 
-            string expectedResultsFilename = resultsFolder+ "\\"+ RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            string expectedResultsFilename = resultsFolder + "\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -52,8 +52,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var executor = new IqExecutor(executorBaseParameters);
             executor.ChromSourceDataFilePath = peaksTestFile;
-            
-            executor.InitializeTargets();
+
+            executor.LoadAndInitializeTargets(targetsFile);
             executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.305 && n.ElutionTimeTheor < 0.325 select n).Take(10).ToList();
 
             Run run = new RunFactory().CreateRun(testFile);
@@ -61,28 +61,30 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.5;
+
+            //define workflows for parentTarget and childTargets
             var parentWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
-            executor.AddIqWorkflow(parentWorkflow);
-            executor.AddIqWorkflow(childWorkflow);
-            
-            executor.InitializeWorkflows();
-            
+
+            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
+            workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
+
+
             //Main line for executing IQ:
             executor.Execute();
 
             //Test the results...
-
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
             int numResultsInResultsFile = 0;
             bool outputToConsole = true;
 
-            using (StreamReader reader=new StreamReader(expectedResultsFilename))
+            using (StreamReader reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek()!=-1)
+                while (reader.Peek() != -1)
                 {
-                    string line= reader.ReadLine();
-                    numResultsInResultsFile++;    
+                    string line = reader.ReadLine();
+                    numResultsInResultsFile++;
 
                     if (outputToConsole)
                     {
@@ -91,14 +93,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 }
             }
 
-            Assert.IsTrue(numResultsInResultsFile > 1,"No results in output file");
-            
+            Assert.IsTrue(numResultsInResultsFile > 1, "No results in output file");
+
             //the Result Tree is flattened out in the results file.
             Assert.IsTrue(numResultsInResultsFile == 35);
 
             //the results in the Executor are in the a Result tree. So there should be just 10. 
-            Assert.AreEqual(10,executor.Results.Count);
-            
+            Assert.AreEqual(10, executor.Results.Count);
+
         }
 
 

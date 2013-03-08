@@ -35,7 +35,7 @@ namespace DeconTools.Workflows.Backend.Core
             IsDataExported = true;
             DisposeResultDetails = true;
 
-
+           
         }
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters)
@@ -133,14 +133,19 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public virtual void InitializeTargets()
+        public virtual void LoadAndInitializeTargets()
         {
-            if (TargetImporter ==null)
+            LoadAndInitializeTargets(Parameters.TargetsFilePath);
+        }
+
+        public virtual void LoadAndInitializeTargets(string targetsFilePath)
+        {
+            if (TargetImporter == null)
             {
-                TargetImporter = new BasicIqTargetImporter(this.Parameters.TargetsFilePath);
+                TargetImporter = new BasicIqTargetImporter(targetsFilePath);
             }
 
-            Targets=  TargetImporter.Import();
+            Targets = TargetImporter.Import();
 
             _targetUtilities.CreateChildTargets(Targets);
         }

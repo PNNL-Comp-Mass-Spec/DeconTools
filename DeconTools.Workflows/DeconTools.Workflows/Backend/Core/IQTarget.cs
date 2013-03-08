@@ -6,8 +6,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class IqTarget
     {
-        private IqWorkflow _workflow;
-
+       
         private List<IqTarget> _childTargets;
 
 
@@ -23,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Core
         public IqTarget(IqWorkflow workflow)
             : this()
         {
-            _workflow = workflow;
+            Workflow = workflow;
         }
 
         #region Properties
@@ -39,6 +38,10 @@ namespace DeconTools.Workflows.Backend.Core
         public IsotopicProfile TheorIsotopicProfile { get; set; }
         public double ElutionTimeTheor { get; set; }
         public IqTarget ParentTarget { get; set; }
+
+
+        public IqWorkflow Workflow { get; set; }
+
 
 
         public int NodeLevel
@@ -75,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SetWorkflow(IqWorkflow workflow)
         {
-            _workflow = workflow;
+            Workflow = workflow;
         }
 
 
@@ -96,7 +99,7 @@ namespace DeconTools.Workflows.Backend.Core
                     childResult.Target.DoWorkflow(childResult);
                 }
             }
-            _workflow.Execute(iqResult);
+            Workflow.Execute(iqResult);
         }
 
 
@@ -107,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IqResult CreateResult(IqTarget target)
         {
-            var result = _workflow.CreateIQResult(target);
+            var result = Workflow.CreateIQResult(target);
 
             if (target.HasChildren())
             {
@@ -166,9 +169,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public Run GetRun()
         {
-            if (_workflow != null)
+            if (Workflow != null)
             {
-                return _workflow.Run;
+                return Workflow.Run;
             }
 
             return null;
