@@ -14,7 +14,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
+        public IqTargetBasic(IqTarget copiedTarget)
+            : base(copiedTarget)
+        {
 
+        }
 
 
     }

@@ -6,7 +6,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class IqTarget
     {  
-        private List<IqTarget> _childTargets;
+        public List<IqTarget> _childTargets;
 
         IqResult _result;
 
@@ -23,12 +23,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         public IqTarget(IqTarget copiedTarget)
         {
+            
             ID = copiedTarget.ID;
             EmpiricalFormula = copiedTarget.EmpiricalFormula;
             Code = copiedTarget.Code;
             MonoMassTheor = copiedTarget.MonoMassTheor;
             ChargeState = copiedTarget.ChargeState;
             MZTheor = copiedTarget.MZTheor;
+            HasParent = copiedTarget.HasParent;
 
             TheorIsotopicProfile = copiedTarget.TheorIsotopicProfile == null
                                        ? null
@@ -51,8 +53,9 @@ namespace DeconTools.Workflows.Backend.Core
                 //ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
             }
 
-            if (copiedTarget._childTargets != null && copiedTarget._childTargets.Count > 0)
+            if (copiedTarget.HasChildren() && copiedTarget._childTargets.Count > 0)
             {
+                _childTargets = new List<IqTarget>();
                 foreach (IqTarget target in copiedTarget._childTargets)
                 {
                     _childTargets.Add(Clone(target));
@@ -63,13 +66,13 @@ namespace DeconTools.Workflows.Backend.Core
         private static IqTarget Clone(IqTarget copiedTarget) 
         {
             IqTarget tempTarget =  new IqTargetBasic();
-
             tempTarget.ID = copiedTarget.ID;
             tempTarget.EmpiricalFormula = copiedTarget.EmpiricalFormula;
             tempTarget.Code = copiedTarget.Code;
             tempTarget.MonoMassTheor = copiedTarget.MonoMassTheor;
             tempTarget.ChargeState = copiedTarget.ChargeState;
             tempTarget.MZTheor = copiedTarget.MZTheor;
+            tempTarget.HasParent = copiedTarget.HasParent;
 
             tempTarget.TheorIsotopicProfile = copiedTarget.TheorIsotopicProfile == null
                                        ? null
@@ -91,8 +94,19 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 //tempTarget.ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
             }
+
+            if (copiedTarget.HasChildren() && copiedTarget._childTargets.Count > 0)
+            {
+                tempTarget._childTargets = new List<IqTarget>();
+                foreach (IqTarget target in copiedTarget._childTargets)
+                {
+
+                    tempTarget._childTargets.Add(Clone(target));
+                }
+            }
             return tempTarget;
         }
+
 
         #region Properties
 
@@ -206,6 +220,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return ParentTarget != null;
             }
+            set
+            { }
         }
 
         public void AddTarget(IqTarget target)
