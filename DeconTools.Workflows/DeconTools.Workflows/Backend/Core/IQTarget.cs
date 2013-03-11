@@ -43,12 +43,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (copiedTarget.ParentTarget != null)
             {
-                NodeLevel = copiedTarget.NodeLevel;
+                //NodeLevel = copiedTarget.NodeLevel;
             }
 
             if (copiedTarget.ParentTarget != null && ParentTarget!=null)
             {
-                ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
+                //ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
             }
 
             if (copiedTarget._childTargets != null && copiedTarget._childTargets.Count > 0)
@@ -84,12 +84,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (copiedTarget.ParentTarget != null)
             {
-                tempTarget.NodeLevel = copiedTarget.NodeLevel;
+                //tempTarget.NodeLevel = copiedTarget.NodeLevel;
             }
 
             if (copiedTarget.ParentTarget != null && tempTarget.ParentTarget != null)
             {
-                tempTarget.ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
+                //tempTarget.ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
             }
             return tempTarget;
         }
@@ -124,7 +124,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 return 1 + ParentTarget.NodeLevel;
             }
-            set { }
         }
 
         public IqTarget RootTarget
@@ -135,7 +134,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 return ParentTarget.RootTarget;
             }
-            set { }
         }
 
 
@@ -184,14 +182,12 @@ namespace DeconTools.Workflows.Backend.Core
                 var childTargets = ChildTargets();
                 foreach (var childTarget in childTargets)
                 {
-                    var childResult = CreateResult(childTarget);
+                    var childResult =  childTarget.CreateResult(childTarget);
                     result.AddResult(childResult);
                 }
             }
 
             return result;
-
-
         }
 
         public IqResult GetResult()
