@@ -74,6 +74,7 @@
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileIOTests\ViperMassCalibrationLoaderTests.cs" />
     <Compile Include="FileRefs.cs" />
+    <Compile Include="IqUnitTesting\IQCloneTest.cs" />
     <Compile Include="IqUnitTesting\IqCodeParserUnitTests.cs" />
     <Compile Include="IqUnitTesting\IqFileIOUnitTests.cs" />
     <Compile Include="IqUnitTesting\IqWorkflowAssignerTests.cs" />
