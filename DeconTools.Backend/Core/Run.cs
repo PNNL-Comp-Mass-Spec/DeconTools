@@ -18,6 +18,9 @@ namespace DeconTools.Backend.Core
             MSLevelList = new SortedDictionary<int, byte>();
             ScanToNETAlignmentData = new SortedDictionary<int, float>();
 			PrimaryLcScanNumbers = new List<int>();
+
+            IsMsAbundanceReportedAsAverage = false;
+
         }
 
         #region Properties
@@ -420,7 +423,13 @@ namespace DeconTools.Backend.Core
 
         protected SortedDictionary<int, byte> MSLevelList { get; set; }
 
-        protected SortedDictionary<int, int> ParentScanList { get; set; } 
+        protected SortedDictionary<int, int> ParentScanList { get; set; }
+
+        /// <summary>
+        /// This indicates whether or not the intensity values from a summed/averaged mass spectrum is reported as an average or not.
+        /// e.g. Thermo .raw reports values as an average
+        /// </summary>
+        public bool IsMsAbundanceReportedAsAverage { get; set; }
 
         public SortedDictionary<int, byte> GetMSLevels(int minScan, int maxScan)
         {

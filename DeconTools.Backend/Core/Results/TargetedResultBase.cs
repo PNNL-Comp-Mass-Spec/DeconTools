@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
@@ -251,6 +250,14 @@ namespace DeconTools.Backend.Core
 
                 ChromPeakSelected = bestPeak;
                 ScanSet = scanset;
+
+                if (ScanSet!=null)
+                {
+                    NumMSScansSummed = ScanSet.IndexValues.Count;    
+                }
+
+                
+                
 
                 bool failedChromPeakSelection = (ChromPeakSelected == null || ChromPeakSelected.XValue == 0);
                 if (failedChromPeakSelection)

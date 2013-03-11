@@ -70,7 +70,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
-
             //Main line for executing IQ:
             executor.Execute();
 

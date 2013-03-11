@@ -109,9 +109,38 @@ namespace DeconTools.Workflows.Backend.Core
 
                 _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
 
-                List<TargetedResultBase> firstPassResults = FindTargetsThatPassWideMassTolerance(0.3);
-                firstPassResults.AddRange(FindTargetsThatPassWideMassTolerance(0.5));
+                double netGrouping = 0.2;
+                double chromTolerance = 5;  //in ppm
 
+                string progressString = "First trying to find alignment targets using narrow mass tolerances.... ";
+                ReportProgress(0, progressString);
+                List<TargetedResultBase> firstPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping,chromTolerance);
+
+                if (firstPassResults.Count<10)
+                {
+                    //try another netGrouping
+                    netGrouping = 0.3;
+
+                    chromTolerance = 20;
+                    progressString = "Couldn't find enough. Now trying wider mass tolerance = "+ chromTolerance;
+                    ReportProgress(0, progressString);
+                    List<TargetedResultBase> secondPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
+                    firstPassResults.AddRange(secondPassResults);
+
+                }
+
+                if (firstPassResults.Count < 10)
+                {
+                    netGrouping = 0.4;
+                    chromTolerance = 50;
+
+                    progressString = "Ok this is a tough one. Now going even wider. Mass tolerance = " + chromTolerance;
+                    ReportProgress(0, progressString);
+                    List<TargetedResultBase> thirdPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
+                    firstPassResults.AddRange(thirdPassResults);
+
+                }
+                
                 List<double> ppmErrors = getMassErrors(firstPassResults);
                 List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
@@ -131,11 +160,11 @@ namespace DeconTools.Workflows.Backend.Core
                     this.AlignerParameters.ChromGenTolerance = (int)Math.Ceiling(tolerance);
                     this.AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
-                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
-                    reportProgess(0, progressString);
+                    progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+                    ReportProgress(0, progressString);
 
                     progressString = "NOTE: using the new PPMTolerance=  " + this.AlignerParameters.ChromGenTolerance;
-                    reportProgess(0, progressString);
+                    ReportProgress(0, progressString);
 
                     _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
 
@@ -152,11 +181,11 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
 
-                    string progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
-                    reportProgess(0, progressString);
+                    progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
+                    ReportProgress(0, progressString);
 
                     progressString = "Cannot use narrow ppm tolerances during NET/Mass alignment. Either the massError was too high or couldn't find enough strict matches.";
-                    reportProgess(0, progressString);
+                    ReportProgress(0, progressString);
 
                     // find a way to work with datasets with masses way off but low stdev
                 }
@@ -181,7 +210,7 @@ namespace DeconTools.Workflows.Backend.Core
         private bool executeDecisionOnUsingTightTolerances(List<double> ppmErrors)
         {
 
-            if (ppmErrors.Count < 12) return false;
+            if (ppmErrors.Count < 5) return false;
 
             double avgPPMError = ppmErrors.Average();
 
@@ -214,13 +243,15 @@ namespace DeconTools.Workflows.Backend.Core
             return ppmErrors;
         }
 
-        private List<TargetedResultBase> FindTargetsThatPassWideMassTolerance(double netGrouping)
+        private List<TargetedResultBase> FindTargetsThatPassSpecifiedMassTolerance(double netGrouping, double chromTolerance)
         {
             Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
+            var workflowParameters = _workflow.WorkflowParameters as TargetedWorkflowParameters;
+            workflowParameters.ChromGenTolerance = chromTolerance;
 
-
+            
 
             List<TargetedResultBase> resultsPassingCriteria = new List<TargetedResultBase>();
 
@@ -250,9 +281,9 @@ namespace DeconTools.Workflows.Backend.Core
                     double ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
 
                     string progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
-                    reportProgess(0, progressInfo);
+                    ReportProgress(0, progressInfo);
 
-                    //reportProgess(progressPercentage, progressInfo);
+                    //ReportProgress(progressPercentage, progressInfo);
                     resultsPassingCriteria.Add(result);   //where passing results are added
                     numPassingMassTagsInGrouping++;
                 }
@@ -266,7 +297,7 @@ namespace DeconTools.Workflows.Backend.Core
                     break;   //found enough massTags in this grouping
                 }
 
-                if (numFailingMassTagsInGrouping > AlignerParameters.NumMaxAttemptsPerNETGrouping)
+                if (numFailingMassTagsInGrouping > AlignerParameters.NumMaxAttemptsDuringFirstPassMassAnalysis)
                 {
                     break;  // too many failed massTags in this grouping. Will move on to next grouping
                 }
@@ -300,7 +331,7 @@ namespace DeconTools.Workflows.Backend.Core
                 int progressPercentage = netGroupingCounter * 100 / _netGroupings.Count;
 
                 string progressString = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper;
-                reportProgess(progressPercentage, progressString);
+                ReportProgress(progressPercentage, progressString);
 
 
 
@@ -325,7 +356,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                         string progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum();
 
-                        reportProgess(progressPercentage, progressInfo);
+                        ReportProgress(progressPercentage, progressInfo);
                         resultsPassingCriteria.Add(result);   //where passing results are added
                         numPassingMassTagsInGrouping++;
                     }
@@ -350,7 +381,7 @@ namespace DeconTools.Workflows.Backend.Core
                 NumSuccessesPerNETGrouping.Add(numPassingMassTagsInGrouping);
 
                 string progressInfo2 = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper + " COMPLETE. Found massTags= " + numPassingMassTagsInGrouping + "; Missing massTags = " + numFailingMassTagsInGrouping;
-                reportProgess(progressPercentage, progressInfo2);
+                ReportProgress(progressPercentage, progressInfo2);
 
                 if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
                 {
@@ -439,7 +470,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void reportProgess(int progressPercentage, string progressString)
+        private void ReportProgress(int progressPercentage, string progressString)
         {
             if (_backgroundWorker == null)
             {

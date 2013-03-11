@@ -279,7 +279,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (isoIsGood)
             {
                 //GORD: check this later
-                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);             
             }
             else
             {

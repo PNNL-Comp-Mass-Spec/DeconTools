@@ -16,14 +16,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
-
-
         private RunFactory _runFactory = new RunFactory();
-
-
-        private List<IqWorkflow> _iqWorkflows = new List<IqWorkflow>(); 
-
-
 
         #region Constructors
 
@@ -34,8 +27,6 @@ namespace DeconTools.Workflows.Backend.Core
             ResultExporter = new IqLabelFreeResultExporter();
             IsDataExported = true;
             DisposeResultDetails = true;
-
-           
         }
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters)
@@ -93,14 +84,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         
-        public void AddIqWorkflow(IqWorkflow workflow)
-        {
-            _iqWorkflows.Add(workflow);
-
-        }
-
-
-
         public void Execute(IEnumerable<IqTarget> targets)
         {
             foreach (var target in targets)
@@ -152,46 +135,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        public virtual void InitializeWorkflows()
-        {
-            InitializeWorkflows(_iqWorkflows);
-
-
-        }
-
+      
         protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
-
-
-        public virtual void InitializeWorkflows(List<IqWorkflow>workflowList)
-        {
-            if (Targets==null || !Targets.Any())
-            {
-                throw new InvalidOperationException(
-                    "Failed to initialize workflow. Reason: Targets need to be loaded first so that workflows can be associated with targets");
-            }
-
-            //int totalNodeLevels = _targetUtilities.GetTotalNodelLevels(Targets.First());
-
-            for (int nodeLevel = 0; nodeLevel < workflowList.Count; nodeLevel++)
-            {
-                var targetsAtGivenNodeLevel = _targetUtilities.GetTargetsFromNodelLevel(Targets, nodeLevel);
-
-
-                var workflowAtGivenNode = workflowList[nodeLevel];
-
-                foreach (var iqTarget in targetsAtGivenNodeLevel)
-                {
-                    workflowAtGivenNode.Run = Run;
-                    iqTarget.SetWorkflow(workflowAtGivenNode);
-                }
-
-
-            }
-
-
-        }
-
-
 
         protected virtual void ExportResults(IqResult iqResult)
         {

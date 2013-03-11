@@ -21,10 +21,10 @@ namespace DeconTools.Backend.Runs
         {
             _msfileReader = new MSFileReaderLib.MSFileReader_XRawfile();
 
-
-            this.IsDataThresholded = true;
-            this.MSFileType = Globals.MSFileType.Finnigan;
-            this.ContainsMSMSData = true;
+            IsDataThresholded = true;
+            IsMsAbundanceReportedAsAverage = true;
+            MSFileType = Globals.MSFileType.Finnigan;
+            ContainsMSMSData = true;
             XYData = new XYData();
 
             ParentScanList = new SortedDictionary<int, int>();

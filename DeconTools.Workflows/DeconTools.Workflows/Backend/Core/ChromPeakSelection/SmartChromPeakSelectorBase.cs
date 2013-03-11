@@ -27,6 +27,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
         #region Constructors
+
+        public SmartChromPeakSelectorBase():base()
+        {
+            
+        }
+
         #endregion
 
         #region Properties
@@ -315,6 +321,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
+                int numCandidatesWithLowFitScores = filteredList1.Count(p => p.FitScore < _parameters.UpperLimitOfGoodFitScore);
+                currentResult.NumQualityChromPeaks = numCandidatesWithLowFitScores;
+
+
                 double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
                 bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
@@ -347,5 +357,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             return bestpeak;
         }
+
+       
     }
 }

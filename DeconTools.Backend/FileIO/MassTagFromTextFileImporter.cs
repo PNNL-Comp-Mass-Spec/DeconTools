@@ -119,7 +119,7 @@ namespace DeconTools.Backend.FileIO
                     if (!chargeStateInfoIsAvailable)
                     {
                         double minMZToConsider = 400;
-                        double maxMZToConsider = 1300;
+                        double maxMZToConsider = 1500;
 
                         List<PeptideTarget> targetList = new List<PeptideTarget>();
 

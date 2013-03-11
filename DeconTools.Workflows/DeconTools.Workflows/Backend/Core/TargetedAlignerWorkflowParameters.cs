@@ -26,6 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.NumDesiredMassTagsPerNETGrouping = 25;
             this.NumMaxAttemptsPerNETGrouping = 200;
+            this.NumMaxAttemptsDuringFirstPassMassAnalysis = 2000;
 
             this.NumChromPeaksAllowedDuringSelection = 1;
 
@@ -62,6 +63,13 @@ namespace DeconTools.Workflows.Backend.Core
         {
             get { return  Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1; }
         }
+
+        /// <summary>
+        /// In first pass of Targeted Aligner we use a very wide mass tolerance and 
+        /// wide NET. This parameter will limit the attempts to find suitable targets for the initial
+        /// narrowing of mass alignment
+        /// </summary>
+        public int NumMaxAttemptsDuringFirstPassMassAnalysis { get; set; }
 
         #endregion
 
