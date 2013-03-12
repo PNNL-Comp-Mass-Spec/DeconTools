@@ -12,8 +12,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
-
         #region Constructors
+
         #endregion
 
         #region Properties
@@ -21,7 +21,6 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Public Methods
-
 
         public int GetTotalNodelLevels(IqTarget inputTarget)
         {
@@ -40,7 +39,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-
         public List<IqTarget> GetTargetsFromNodelLevel(IqTarget target, int level)
         {
             var iqTargetList = new List<IqTarget>();
@@ -49,8 +47,6 @@ namespace DeconTools.Workflows.Backend.Core
             return GetTargetsFromNodelLevel(iqTargetList, level);
 
         }
-
-
 
         public List<IqTarget> GetTargetsFromNodelLevel(List<IqTarget> inputTargets, int level)
         {
@@ -74,7 +70,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-
         public List<IqTarget>GetAllTargetsOnNextLevel(List<IqTarget>inputTargets)
         {
             List<IqTarget> iqtargets = new List<IqTarget>();
@@ -90,10 +85,6 @@ namespace DeconTools.Workflows.Backend.Core
             return iqtargets;
         }
 
-
-
-
-
         public void CreateChildTargets(List<IqTarget> targets)
         {
             foreach (IqTarget iqTarget in targets)
@@ -104,9 +95,6 @@ namespace DeconTools.Workflows.Backend.Core
                 iqTarget.AddTargetRange(childTargets);
             }
         }
-
-
-
 
         public List<IqTarget> CreateChargeStateTargets(IqTarget iqTarget, double minMZObs = 400, double maxMZObserved = 1500)
         {
@@ -147,7 +135,6 @@ namespace DeconTools.Workflows.Backend.Core
             return targetList;
         }
 
-
         public List<IqTarget> CreateTargets(IEnumerable<string> empiricalFormulaList, double minMZObs = 400, double maxMZObserved = 1500)
         {
             int targetIDCounter = 0;
@@ -181,7 +168,36 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
+        public IqTarget CloneTarget(IqTarget copiedTarget)
+        {
+            IqTarget tempTarget = new IqTargetBasic();
+            tempTarget.ID = copiedTarget.ID;
+            tempTarget.EmpiricalFormula = copiedTarget.EmpiricalFormula;
+            tempTarget.Code = copiedTarget.Code;
+            tempTarget.MonoMassTheor = copiedTarget.MonoMassTheor;
+            tempTarget.ChargeState = copiedTarget.ChargeState;
+            tempTarget.MZTheor = copiedTarget.MZTheor;
+            tempTarget.ElutionTimeTheor = copiedTarget.ElutionTimeTheor;
 
+            tempTarget.TheorIsotopicProfile = copiedTarget.TheorIsotopicProfile == null
+                                       ? null
+                                       : copiedTarget.TheorIsotopicProfile.CloneIsotopicProfile();
+
+            tempTarget.Workflow = copiedTarget.Workflow;
+
+            //child targets
+            List<IqTarget> _childTargets = copiedTarget.ChildTargets().ToList();
+            if (copiedTarget.HasChildren() && _childTargets.Count > 0)
+            {
+                foreach (IqTarget target in _childTargets)
+                {
+                    IqTarget clone = CloneTarget(target);
+                    clone.ParentTarget = copiedTarget;
+                    tempTarget.AddTarget(clone);
+                }
+            }
+            return tempTarget;
+        }
 
         public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula = true)
         {
@@ -228,7 +244,6 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         }
-
 
         #endregion
 

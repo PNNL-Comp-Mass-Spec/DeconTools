@@ -5,8 +5,8 @@ using DeconTools.Backend.Core;
 namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class IqTarget
-    {  
-        public List<IqTarget> _childTargets;
+    {
+        protected List<IqTarget> _childTargets;
 
         IqResult _result;
 
@@ -21,109 +21,53 @@ namespace DeconTools.Workflows.Backend.Core
             Workflow = workflow;
         }
 
-        public IqTarget(IqTarget copiedTarget)
+        //public IqTarget(IqTarget copiedTarget)
+        //    : this()
+        //{
+        //    CloneIqTarget(copiedTarget);
+        //}
+
+        public static IqTarget CloneIqTarget(IqTarget copiedTarget)
         {
-            
-            ID = copiedTarget.ID;
-            EmpiricalFormula = copiedTarget.EmpiricalFormula;
-            Code = copiedTarget.Code;
-            MonoMassTheor = copiedTarget.MonoMassTheor;
-            ChargeState = copiedTarget.ChargeState;
-            MZTheor = copiedTarget.MZTheor;
-            HasParent = copiedTarget.HasParent;
+            //initialize utilities
+            IqTargetUtilities util = new IqTargetUtilities();
 
-            TheorIsotopicProfile = copiedTarget.TheorIsotopicProfile == null
-                                       ? null
-                                       : copiedTarget.TheorIsotopicProfile.CloneIsotopicProfile();
+            //find root
+            var rootNode = copiedTarget.RootTarget;
 
-            ElutionTimeTheor = copiedTarget.ElutionTimeTheor;
+            //this returnes the copied tree
+            IqTarget tempTarget = util.CloneTarget(rootNode);
 
-            if (ParentTarget != null)
-            {
-                ParentTarget = Clone(copiedTarget.ParentTarget);
-            }
+            int selectID = copiedTarget.ID;
+            //IqTarget selectedTarget = copiedTarget.
 
-            if (copiedTarget.ParentTarget != null)
-            {
-                //NodeLevel = copiedTarget.NodeLevel;
-            }
+            List<IqTarget> targetList = new List<IqTarget>();
+            targetList.Add(tempTarget);
 
-            if (copiedTarget.ParentTarget != null && ParentTarget!=null)
-            {
-                //ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
-            }
 
-            if (copiedTarget.HasChildren() && copiedTarget._childTargets.Count > 0)
-            {
-                _childTargets = new List<IqTarget>();
-                foreach (IqTarget target in copiedTarget._childTargets)
-                {
-                    _childTargets.Add(Clone(target));
-                }
-            }
+            List<IqTarget> level2Targets = util.GetTargetsFromNodelLevel(targetList, 2);
+
+            List<IqTarget> s = (from n in level2Targets where n.ID == selectID select n).Take(1).ToList();
+
+            return s[0];
         }
-
-        private static IqTarget Clone(IqTarget copiedTarget) 
-        {
-            IqTarget tempTarget =  new IqTargetBasic();
-            tempTarget.ID = copiedTarget.ID;
-            tempTarget.EmpiricalFormula = copiedTarget.EmpiricalFormula;
-            tempTarget.Code = copiedTarget.Code;
-            tempTarget.MonoMassTheor = copiedTarget.MonoMassTheor;
-            tempTarget.ChargeState = copiedTarget.ChargeState;
-            tempTarget.MZTheor = copiedTarget.MZTheor;
-            tempTarget.HasParent = copiedTarget.HasParent;
-
-            tempTarget.TheorIsotopicProfile = copiedTarget.TheorIsotopicProfile == null
-                                       ? null
-                                       : copiedTarget.TheorIsotopicProfile.CloneIsotopicProfile();
-
-            tempTarget.ElutionTimeTheor = copiedTarget.ElutionTimeTheor;
-
-            if (tempTarget.ParentTarget != null)
-            {
-                tempTarget.ParentTarget = Clone(copiedTarget.ParentTarget);
-            }
-
-            if (copiedTarget.ParentTarget != null)
-            {
-                //tempTarget.NodeLevel = copiedTarget.NodeLevel;
-            }
-
-            if (copiedTarget.ParentTarget != null && tempTarget.ParentTarget != null)
-            {
-                //tempTarget.ParentTarget.RootTarget = copiedTarget.ParentTarget.RootTarget;
-            }
-
-            if (copiedTarget.HasChildren() && copiedTarget._childTargets.Count > 0)
-            {
-                tempTarget._childTargets = new List<IqTarget>();
-                foreach (IqTarget target in copiedTarget._childTargets)
-                {
-
-                    tempTarget._childTargets.Add(Clone(target));
-                }
-            }
-            return tempTarget;
-        }
-
 
         #region Properties
 
         public int ID { get; set; }
-        
+
         public string EmpiricalFormula { get; set; }
-        
+
         public string Code { get; set; }
-        
+
         public double MonoMassTheor { get; set; }
-        
+
         public int ChargeState { get; set; }
-        
+
         public double MZTheor { get; set; }
 
         public IsotopicProfile TheorIsotopicProfile { get; set; }
-        
+
         public double ElutionTimeTheor { get; set; }
 
         public IqTarget ParentTarget { get; set; }
@@ -149,7 +93,6 @@ namespace DeconTools.Workflows.Backend.Core
                 return ParentTarget.RootTarget;
             }
         }
-
 
         #endregion
 
@@ -196,7 +139,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var childTargets = ChildTargets();
                 foreach (var childTarget in childTargets)
                 {
-                    var childResult =  childTarget.CreateResult(childTarget);
+                    var childResult = childTarget.CreateResult(childTarget);
                     result.AddResult(childResult);
                 }
             }
@@ -220,8 +163,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return ParentTarget != null;
             }
-            set
-            { }
         }
 
         public void AddTarget(IqTarget target)
@@ -259,3 +200,5 @@ namespace DeconTools.Workflows.Backend.Core
         }
     }
 }
+
+
