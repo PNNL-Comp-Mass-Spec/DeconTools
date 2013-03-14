@@ -183,7 +183,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             bool allowNegativeValues = false;
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
-            _chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
+            _chromPeakDetector = new ChromPeakDetectorMedianBased(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
             
 
 
@@ -450,6 +450,7 @@ namespace DeconTools.Workflows.Backend.Core
                     smartchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
                     smartchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
                     smartchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
+                    smartchrompeakSelectorParameters.NumMSSummedInSmartSelector = workflowParameters.SmartChromPeakSelectorNumMSSummed;
 
                     chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelectorParameters);
 

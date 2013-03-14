@@ -145,6 +145,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
         }
 
+        protected override double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null)
+        {
+            return 0;
+        }
+
 
         //public override void AddPeakRelatedData(Run run)
         //{

@@ -190,8 +190,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
-                    // TODO: Currently hard-coded to sum only 1 scan
-                    var lcscanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, 1);
+                    var lcscanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, _parameters.NumMSSummedInSmartSelector);
                     resultList.Run.CurrentScanSet = lcscanSet;
 
                     //This resets the flags and the scores on a given result

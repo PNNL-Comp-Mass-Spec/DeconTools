@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.DTO;
 using DeconTools.Backend.Data;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
@@ -200,10 +200,36 @@ namespace DeconTools.Backend.Utilities
                 }
                 else
                 {
-                    Console.WriteLine(run.DatasetName + " NOT aligned.");
+                    Console.WriteLine(run.DatasetName + " is NOT NET aligned.");
                     alignmentSuccessful = false;
                 }
             }
+
+            //mass is still not aligned... use data in viper output file: _MassAndGANETErrors_BeforeRefinement.txt
+            if (run.MassIsAligned==false)
+            {
+
+                string expectedViperMassAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_MassAndGANETErrors_BeforeRefinement.txt";
+
+                if (File.Exists(expectedViperMassAlignmentFile))
+                {
+                    
+                    var importer = new ViperMassCalibrationLoader(expectedViperMassAlignmentFile);
+                    var viperCalibrationData = importer.ImportMassCalibrationData();
+
+                    run.SetMassAlignmentData(viperCalibrationData);
+
+                    Console.WriteLine(run.DatasetName + "- mass aligned using file: " + expectedViperMassAlignmentFile);
+
+                    alignmentSuccessful = true;
+                }
+                else
+                {
+                    Console.WriteLine(run.DatasetName + " is NOT mass aligned");
+                }
+
+            }
+
 
             return alignmentSuccessful;
         }

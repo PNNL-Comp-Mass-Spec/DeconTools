@@ -443,5 +443,53 @@ namespace DeconTools.Workflows.UnitTesting
 
 
         }
+
+        [Test]
+        public void LoadAndApplyMassAlignmentFromViperDataTest1()
+        {
+            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            Run run = new RunFactory().CreateRun(testFile);
+
+            string viperMassAlignmentFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MassAndGANETErrors_BeforeRefinement.txt";
+            ViperMassCalibrationLoader loader = new ViperMassCalibrationLoader(viperMassAlignmentFile);
+
+            /*
+             * From unit test: targetedWorkflow_alignUsingDataFromFiles     
+             *      TargetID = 	24702
+                    ChargeState = 	3
+                    theor monomass= 	2920.5319802
+                    theor m/z= 	974.517936556667
+                    obs monomass= 	2920.49120230408
+                    obs m/z= 	974.504343924692
+                    ppmError before= 	13.9597398284934
+                    ppmError after= 	10.8899784905986
+                    calibrated mass= 	2920.50017566955
+                    calibrated mass2= 	2920.50017566955
+                    Database NET= 0.4197696
+                    Result NET= 0.42916464805603
+                    Result NET Error= -0.00934833288192749
+                    NumChromPeaksWithinTol= 3   
+             * 
+             * 
+             */
+
+
+            var alignmentData=  loader.ImportMassCalibrationData();
+
+            run.SetMassAlignmentData(alignmentData);
+
+            double testMZ = 974.504343924692;
+            double alignedMZ =  run.GetAlignedMZ(testMZ);
+            double ppmDiff = (testMZ - alignedMZ)/testMZ*1e6;
+            
+            Console.WriteLine("input m/z= " + testMZ);
+            Console.WriteLine("aligned m/z= "+ alignedMZ);
+            Console.WriteLine("ppmDiff= " + ppmDiff);
+
+            Assert.AreEqual(-3.6, (decimal) Math.Round(ppmDiff, 1));
+
+
+        }
     }
 }

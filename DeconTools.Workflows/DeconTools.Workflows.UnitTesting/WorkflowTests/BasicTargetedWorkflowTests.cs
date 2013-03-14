@@ -41,6 +41,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MSPeakDetectorSigNoise = 3;
             parameters.MSToleranceInPPM = 10;
             parameters.NumMSScansToSum = 5;
+            parameters.SmartChromPeakSelectorNumMSSummed = 3;
 
             string exportedParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Parameters\BasicTargetedWorkflowParameters1_autoexported.xml";

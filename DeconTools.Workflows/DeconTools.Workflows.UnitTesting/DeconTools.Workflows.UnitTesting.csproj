@@ -72,7 +72,6 @@
     <Compile Include="FileIOTests\TargetedResultFileIOTests\SipperResultToLcmsFeatureExporterTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\SipperTargetedResultFromTextImporterTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
-    <Compile Include="FileIOTests\ViperMassCalibrationLoaderTests.cs" />
     <Compile Include="FileRefs.cs" />
     <Compile Include="IqUnitTesting\IQCloneTest.cs" />
     <Compile Include="IqUnitTesting\IqCodeParserUnitTests.cs" />

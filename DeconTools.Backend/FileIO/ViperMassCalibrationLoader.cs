@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using DeconTools.Backend.Data;
 using DeconTools.Utilities;
-using DeconTools.Workflows.Backend.Data;
 
-namespace DeconTools.Workflows.Backend.FileIO
+namespace DeconTools.Backend.FileIO
 {
     public class ViperMassCalibrationLoader
     {
@@ -31,9 +31,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
 
-        public List<ViperMassCalibrationDataItem> ImportMassCalibrationData()
+        public ViperMassCalibrationData ImportMassCalibrationData()
         {
-            List<ViperMassCalibrationDataItem> calibrationData = new List<ViperMassCalibrationDataItem>();
+
+            ViperMassCalibrationData viperMassCalibrationData = new ViperMassCalibrationData();
+
+
+            var massCalibrationDataItems = new List<ViperMassCalibrationDataItem>();
 
             using (var reader=new StreamReader(Filename))
             {
@@ -66,12 +70,15 @@ namespace DeconTools.Workflows.Backend.FileIO
                         rowData.Comment = parsedLine[3];
                     }
 
-                    calibrationData.Add(rowData);
+                    massCalibrationDataItems.Add(rowData);
                 }
 
             }
 
-            return calibrationData;
+            viperMassCalibrationData.SetCalibrationDataItems(massCalibrationDataItems);
+            viperMassCalibrationData.ExtractKeyCalibrationValues();
+
+            return viperMassCalibrationData;
 
 
         }

@@ -1,8 +1,8 @@
 ﻿using System;
-using DeconTools.Workflows.Backend.FileIO;
+using DeconTools.Backend.FileIO;
 using NUnit.Framework;
 
-namespace DeconTools.Workflows.UnitTesting.FileIOTests
+namespace DeconTools.UnitTesting2.FileIO_Tests
 {
     [TestFixture]
     public class ViperMassCalibrationLoaderTests
@@ -16,12 +16,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
             ViperMassCalibrationLoader loader = new ViperMassCalibrationLoader(testFile);
 
             var calibrationData=  loader.ImportMassCalibrationData();
-
-
-            foreach (var item in calibrationData)
-            {
-                Console.WriteLine(item.ToStringWithDetails());
-            }
+            Console.WriteLine(calibrationData.MassError);
 
 
         }

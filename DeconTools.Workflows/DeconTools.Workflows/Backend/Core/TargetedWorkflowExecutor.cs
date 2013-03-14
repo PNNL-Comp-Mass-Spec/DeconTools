@@ -335,7 +335,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 HandleAlignmentInfoFiles();
-                finalizeRun();
+                FinalizeRun();
 
 
 
@@ -348,7 +348,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 try
                 {
-                    finalizeRun();
+                    FinalizeRun();
 
                 }
                 catch
@@ -439,7 +439,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             //apply mass calibration and NET alignment from .txt files, if they exist
-            performAlignment();
+            PerformAlignment();
 
 
             bool runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
@@ -461,7 +461,7 @@ namespace DeconTools.Workflows.Backend.Core
                 ReportGeneralProgress("Targeted Alignment Report: ");
                 ReportGeneralProgress(this.TargetedAlignmentWorkflow.GetAlignmentReport1());
 
-                performAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
+                PerformAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
 
                 string outputFolderForAlignmentData;
@@ -877,7 +877,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             //check and load chrom source data (_peaks.txt)
-            bool peaksFileExists = checkForPeaksFile();
+            bool peaksFileExists = CheckForPeaksFile();
             if (!peaksFileExists)
             {
                 ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
@@ -956,7 +956,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        protected void performAlignment()
+        protected void PerformAlignment()
         {
             if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
             {
@@ -973,7 +973,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (Run.MassIsAligned)
             {
-                ReportGeneralProgress("Run has been mass aligned using info in _MZAlignment.txt file");
+                ReportGeneralProgress("Run has been mass aligned");
             }
             else
             {
@@ -1003,7 +1003,7 @@ namespace DeconTools.Workflows.Backend.Core
             peakCreator.Execute();
         }
 
-        private bool checkForPeaksFile()
+        private bool CheckForPeaksFile()
         {
             string baseFileName;
             baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
@@ -1058,7 +1058,7 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-        protected void finalizeRun()
+        protected void FinalizeRun()
         {
 
             string runfileName = Run.Filename;

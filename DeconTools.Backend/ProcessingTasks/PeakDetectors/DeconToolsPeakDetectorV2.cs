@@ -95,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
 
             //Get background intensity
-            BackgroundIntensity = GetBackgroundIntensity(yvalues);
+            BackgroundIntensity = GetBackgroundIntensity(yvalues, xvalues);
 
             _intensityThreshold = BackgroundIntensity * PeakToBackgroundRatio;
 
@@ -234,7 +234,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             return _intensityThreshold;
         }
 
-        private double GetBackgroundIntensity(double[] yvalues)
+        protected override double GetBackgroundIntensity(double[] yvalues, double[]xvalues=null)
         {
             double thresholdMultiplier = 5;
 

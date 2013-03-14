@@ -97,7 +97,9 @@
     <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
     <Compile Include="FileIO_Tests\PeakImporterTests.cs" />
+    <Compile Include="FileIO_Tests\ViperMassCalibrationLoaderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramCorrelatorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramPeakDetectorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
     <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\PeakBasedLeastSquaresFitterTests.cs" />
     <Compile Include="ProcessingRelated_Tests\IsotopicProfileQualityScoringTests\InterferenceScorerTests.cs" />

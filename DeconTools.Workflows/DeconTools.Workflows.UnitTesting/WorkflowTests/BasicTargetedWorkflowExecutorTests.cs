@@ -123,6 +123,95 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+
+
+        [Category("MustPass")]
+        [Test]
+        public void TargetedWorkflowAlignUsingViperDataTest1()
+        {
+            // https://jira.pnnl.gov/jira/browse/OMCS-854
+
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.TargetsFilePath =
+                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
+            executorParameters.TargetedAlignmentIsPerformed = true;
+            executorParameters.TargetsUsedForAlignmentFilePath =
+                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
+
+            executorParameters.TargetedAlignmentWorkflowParameterFile =
+                baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
+
+            executorParameters.AlignmentInfoFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo";
+
+            var workflowParameters = new BasicTargetedWorkflowParameters();
+            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+            workflowParameters.ChromPeakDetectorPeakBR = 1;
+            workflowParameters.ChromPeakDetectorSigNoise = 1;
+            workflowParameters.ChromGenTolerance = 20;
+            workflowParameters.ChromNETTolerance = 0.025;
+            workflowParameters.MSToleranceInPPM = 20;
+
+            var workflow = new BasicTargetedWorkflow(workflowParameters);
+
+            string testDatasetPath =
+                baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow, testDatasetPath);
+            executor.Execute();
+
+            string expectedResultsFilename =
+                @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
+
+            var result = executor.TargetedWorkflow.Result;
+            Assert.IsTrue(workflow.Success);
+            Assert.IsFalse(result.FailedResult);
+            Assert.IsNotNull(result.ScanSet);
+            Assert.IsNotNull(result.ChromPeakSelected);
+
+            Assert.IsTrue(result.Score < 0.1);
+
+            Console.WriteLine("TargetID = \t" + result.Target.ID);
+            Console.WriteLine("ChargeState = \t" + result.Target.ChargeState);
+            Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
+            Console.WriteLine("theor m/z= \t" + result.Target.MZ);
+            Console.WriteLine("obs monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
+            Console.WriteLine("obs m/z= \t" + result.IsotopicProfile.MonoPeakMZ);
+            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
+            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
+
+            
+            
+            
+            Assert.AreEqual(3, result.NumChromPeaksWithinTolerance);
+            Assert.AreEqual(8627, (decimal)Math.Round(result.ChromPeakSelected.XValue, 0));
+
+            //non-calibrated mass directly from mass spectrum
+            Assert.AreEqual(2920.49120m, (decimal)Math.Round(result.IsotopicProfile.MonoIsotopicMass, 5));
+
+            //calibrated mass
+            //Assert.AreEqual(2920.50018m, (decimal)Math.Round(result.GetCalibratedMonoisotopicMass(), 5));
+
+            
+
+            var calibratedMass = -1 * ((result.Target.MonoIsotopicMass * result.GetMassErrorAfterAlignmentInPPM() / 1e6) -
+                                  result.Target.MonoIsotopicMass);
+            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
+
+            Console.WriteLine("calibrated mass= \t" + calibratedMass);
+            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
+            Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
+            Console.WriteLine("Result NET= " + result.GetNET());
+            Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
+            Console.WriteLine("NumChromPeaksWithinTol= " + result.NumChromPeaksWithinTolerance);
+
+            //Dataset	TargetID	Code	EmpiricalFormula	ChargeState	Scan	ScanStart	ScanEnd	NumMSSummed	NET	NETError	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoisotopicMassCalibrated	MassErrorInPPM	MonoMZ	IntensityRep	FitScore	IScore	FailureType	ErrorDescription
+            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000		
+        }
+
+
+
+
+
         [Test]
         public void ExecutorTest2()
         {

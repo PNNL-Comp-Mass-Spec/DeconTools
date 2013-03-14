@@ -119,7 +119,6 @@
     <Compile Include="Backend\Core\WorkflowParameters.cs" />
     <Compile Include="Backend\Data\TopdownChromData.cs" />
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
-    <Compile Include="Backend\Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
@@ -139,7 +138,6 @@
     <Compile Include="Backend\FileIO\BasicIqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
-    <Compile Include="Backend\FileIO\ViperMassCalibrationLoader.cs" />
     <Compile Include="Backend\Globals.cs" />
     <Compile Include="Backend\Results\AlignmentResult.cs" />
     <Compile Include="Backend\Results\DeconToolsResultDTO.cs" />

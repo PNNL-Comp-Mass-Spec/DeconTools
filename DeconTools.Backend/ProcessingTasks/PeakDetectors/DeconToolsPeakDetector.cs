@@ -241,7 +241,12 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        
+        protected override double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null)
+        {
+            return 0;
+        }
+
+
         public override void Cleanup()
         {
             base.Cleanup();

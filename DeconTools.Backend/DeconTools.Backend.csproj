@@ -141,12 +141,16 @@
     <Compile Include="Core\LCScanSetIMS.cs" />
     <Compile Include="Core\Results\DeconMSnResult.cs" />
     <Compile Include="Core\Results\DeuteratedTargetedResultObject.cs" />
+    <Compile Include="Data\ViperMassCalibrationData.cs" />
+    <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
+    <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelator.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorO16O18.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetectorMedianBased.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\PartialLabelingQuantifier.cs" />
     <Compile Include="ProcessingTasks\Smoothers\SavitzkyGolaySmoother.cs" />
     <Compile Include="Core\BasicPeakChrom.cs" />

@@ -48,9 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             CalculateElutionTimes(run, run.PeakList);
         }
 
-        #region Private Methods
-
-        #endregion
+      
 
     }
 }

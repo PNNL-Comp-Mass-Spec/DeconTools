@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using DeconTools.Backend.Data;
 using PNNLOmics.Data;
 
 namespace DeconTools.Backend.Core
@@ -17,7 +17,7 @@ namespace DeconTools.Backend.Core
             XYData = new XYData();
             MSLevelList = new SortedDictionary<int, byte>();
             ScanToNETAlignmentData = new SortedDictionary<int, float>();
-			PrimaryLcScanNumbers = new List<int>();
+            PrimaryLcScanNumbers = new List<int>();
 
             IsMsAbundanceReportedAsAverage = false;
 
@@ -134,7 +134,7 @@ namespace DeconTools.Backend.Core
 
         public IList<int> MSLevelMappings { get; set; }
 
-		public List<int> PrimaryLcScanNumbers { get; set; }
+        public List<int> PrimaryLcScanNumbers { get; set; }
 
         #endregion
 
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.Core
         public abstract double GetTime(int scanNum);
         public abstract int GetMSLevelFromRawData(int scanNum);
 
-        
+
 
         /// <summary>
         /// Returns Scan information.
@@ -164,7 +164,7 @@ namespace DeconTools.Backend.Core
             {
                 return this.MSLevelList[scanNum];
             }
-                // if not, look up MSLevel from Raw data
+            // if not, look up MSLevel from Raw data
             else
             {
                 int mslevel = GetMSLevelFromRawData(scanNum);
@@ -194,7 +194,7 @@ namespace DeconTools.Backend.Core
 
         public abstract XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
 
-     
+
 
 
 
@@ -215,14 +215,14 @@ namespace DeconTools.Backend.Core
         #region Methods
 
         public abstract int GetMinPossibleLCScanNum();
-     
+
         public abstract int GetMaxPossibleLCScanNum();
         //{
-            ////default:  scan is zero-based
-            //int maxpossibleScanIndex = GetNumMSScans() - 1;           
-            //if (maxpossibleScanIndex < 0) maxpossibleScanIndex = 0;
+        ////default:  scan is zero-based
+        //int maxpossibleScanIndex = GetNumMSScans() - 1;           
+        //if (maxpossibleScanIndex < 0) maxpossibleScanIndex = 0;
 
-            //return maxpossibleScanIndex;
+        //return maxpossibleScanIndex;
         //}
 
         internal void ResetXYPoints()
@@ -533,9 +533,9 @@ namespace DeconTools.Backend.Core
 
         }
 
-        
+
         //GORD: look carefully here for any scan/NET skewing 
-        protected  virtual float CalculateScanForNET(float net)
+        protected virtual float CalculateScanForNET(float net)
         {
             //need to find the two (scan,net) pairs that are the lower and upper boundaries of the input NET
             //then do an intersect
@@ -610,7 +610,7 @@ namespace DeconTools.Backend.Core
             }
 
 
-            if (upperScan<=lowerScan)    //this happens at the MinScan
+            if (upperScan <= lowerScan)    //this happens at the MinScan
             {
 
                 return lowerScan;
@@ -760,6 +760,51 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public void SetMassAlignmentData(ViperMassCalibrationData viperCalibrationData)
+        {
+            int numDataPoints = 3;
+
+            float[] mzVals = new float[numDataPoints];
+            float[] mzPPMCorrVals = new float[numDataPoints];
+
+            float[] scanVals = new float[numDataPoints];
+            float[] scanPPMCorrVals = new float[numDataPoints];
+
+
+
+
+            mzVals[0] = 1000;
+            //mzVals[1] = 1000;
+            //mzVals[2] = 1500;
+
+            for (int index = 0; index < mzPPMCorrVals.Length; index++)
+            {
+                mzPPMCorrVals[index] = (float)viperCalibrationData.MassError;
+            }
+
+            scanVals[0] = (MinLCScan + MaxLCScan) / (float)2;
+            for (int index = 0; index < numDataPoints; index++)
+            {
+                scanPPMCorrVals[index] = (float)viperCalibrationData.MassError;
+            }
+
+
+
+            if (this.AlignmentInfo == null)
+                this.AlignmentInfo =
+                    new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB,
+                                                                        MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+
+            this.AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
+            this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
+
+            this.AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
+            this.AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
+
+
+        }
 
 
         public virtual void UpdateNETValuesInScanSetCollection()
@@ -791,7 +836,7 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public double GetTargetMZAligned(double theorMZ)
         {
-            
+
             bool alignmentInfoContainsMZInfo = (AlignmentInfo != null && AlignmentInfo.marrMassFncMZInput != null && AlignmentInfo.marrMassFncMZInput.Length > 0);
             if (!alignmentInfoContainsMZInfo) return theorMZ;
 
@@ -924,14 +969,7 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                if (this.AlignmentInfo == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return AlignmentInfo != null;
             }
         }
 
@@ -950,5 +988,7 @@ namespace DeconTools.Backend.Core
         {
             return 0;
         }
+
+
     }
 }

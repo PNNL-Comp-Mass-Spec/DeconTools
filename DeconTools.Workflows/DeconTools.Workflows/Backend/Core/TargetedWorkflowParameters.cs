@@ -1,5 +1,4 @@
 ﻿using System;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -34,6 +33,8 @@ namespace DeconTools.Workflows.Backend.Core
             ChromatogramCorrelationIsPerformed = false;
         	ProcessMsMs = false;
 
+            SmartChromPeakSelectorNumMSSummed = 1;
+
         }
 
         
@@ -42,7 +43,6 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
         
 
-        //TODO: need to update this so it reads 'ChromGenTolerance'
         /// <summary>
         /// Mass-related tolerance used when generating the chromatogram
         /// </summary>
@@ -132,6 +132,12 @@ namespace DeconTools.Workflows.Backend.Core
         /// 
         /// </summary>
         public int MaxScansSummedInDynamicSumming { get; set; }
+
+        /// <summary>
+        /// If a Smart chrom peak selector is used, this is the number of MS scans that are summed duing the chrom peak selection method. 
+        /// </summary>
+        public int SmartChromPeakSelectorNumMSSummed { get; set; }
+
 
         #endregion
 

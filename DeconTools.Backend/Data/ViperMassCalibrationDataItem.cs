@@ -1,5 +1,5 @@
 ﻿
-namespace DeconTools.Workflows.Backend.Data
+namespace DeconTools.Backend.Data
 {
     /// <summary>
     /// Holding place for Viper's 'MassAndGANETErrors_BeforeRefinement'
@@ -18,7 +18,17 @@ namespace DeconTools.Workflows.Backend.Data
 
         public double SmoothedCount { get; set; }
 
-        public string Comment { get; set; }
+        private string _comment;
+        public string Comment
+        {
+            get
+            {
+                return _comment;
+            }
+            set {
+                _comment = value ?? "";
+            }
+        }
 
         #endregion
 

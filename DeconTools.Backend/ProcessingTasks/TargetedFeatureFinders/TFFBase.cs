@@ -165,6 +165,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
 
+
+
+            //for higher mass peptides, we will return the profile if there is 2 or more peaks, regardless if none are found to the right of the most abundant
+            if (indexOfMaxTheorPeak>0 && outFeature.Peaklist.Count>1)
+            {
+                failedResult = false;
+            }
+
+
+
             if (failedResult)
             {
                 return null;   // return a null Isotopic profile, indicating a failed result
@@ -174,15 +184,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 addMassInfoToIsotopicProfile(theorFeature, outFeature);
                 return outFeature;
             }
-
-
-
-
-
-
-
-
-
 
         }
 

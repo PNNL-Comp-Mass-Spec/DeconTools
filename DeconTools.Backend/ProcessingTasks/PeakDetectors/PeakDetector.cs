@@ -119,5 +119,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         }
 
 
+        
+        protected abstract double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null);
     }
 }

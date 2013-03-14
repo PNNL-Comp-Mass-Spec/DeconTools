@@ -61,6 +61,11 @@ namespace DeconTools.Backend.Utilities
         }
 
 
+        public static double GetMedian(double[] values)
+        {
+            return GetMedian(values.ToList());
+        }
+
 
 
         public static double GetMedian(List<double> values)
@@ -254,6 +259,6 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-
+        
     }
 }

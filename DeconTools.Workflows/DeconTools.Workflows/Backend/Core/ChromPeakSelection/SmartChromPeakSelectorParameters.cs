@@ -24,6 +24,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             NumChromPeaksAllowed = 20;
             IterativeTffMinRelIntensityForPeakInclusion = 0.25;
             UpperLimitOfGoodFitScore = 0.15;
+            NumMSSummedInSmartSelector = 1;
+
         }
         #endregion
 
@@ -63,6 +65,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// Upper limit of what is considered a good fit score; Used in reporting number of High-quality chrom peaks.
         /// </summary>
         public double UpperLimitOfGoodFitScore { get; set; }
+
+
+        public int NumMSSummedInSmartSelector { get; set; }
+
 
         #endregion
 

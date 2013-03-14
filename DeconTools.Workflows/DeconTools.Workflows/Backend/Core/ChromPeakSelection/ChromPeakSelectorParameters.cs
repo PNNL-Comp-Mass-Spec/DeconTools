@@ -38,6 +38,11 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #endregion
 
         #region Properties
+        
+        
+        /// <summary>
+        /// Number of MS scans to sum after the Chrom peak has been selected
+        /// </summary>
         public int NumScansToSum { get; set; }
 
         public float NETTolerance { get; set; }
