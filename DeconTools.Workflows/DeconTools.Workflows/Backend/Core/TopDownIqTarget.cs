@@ -5,14 +5,14 @@ using System.Text;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class IqCompositeTarget:IqTarget
+	public class TopDownIqTarget:IqTarget
 	{
-		public IqCompositeTarget ()
+		public TopDownIqTarget ()
 		{
 			
 		}
 
-		public IqCompositeTarget(IqWorkflow workflow) : base(workflow)
+		public TopDownIqTarget(IqWorkflow workflow) : base(workflow)
 		{
 
 		}
@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
 		/// <summary>
 		/// Removes redundant charge state targets and adds in missing targets within range. 
 		/// </summary>
-		public void IqTargetRefine()
+		public override void RefineIqTarget()
 		{
 			List<int> chargeStates= new List<int>();
 			var children = ChildTargets();

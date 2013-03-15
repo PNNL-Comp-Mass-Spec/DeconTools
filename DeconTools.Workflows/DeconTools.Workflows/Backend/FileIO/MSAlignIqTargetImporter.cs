@@ -126,9 +126,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 		#endregion
 
-		protected IqCompositeTarget ConvertTextToIqTarget(List<List<string>> processedGroup)
+		protected TopDownIqTarget ConvertTextToIqTarget(List<List<string>> processedGroup)
 		{
-			IqCompositeTarget target = new IqCompositeTarget();
+			TopDownIqTarget target = new TopDownIqTarget();
 			MSAlignCodeParser parser = new MSAlignCodeParser(); 
 
 			target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);

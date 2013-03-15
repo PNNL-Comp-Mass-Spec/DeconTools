@@ -50,11 +50,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             Targets = TargetImporter.Import();
 	
-			foreach (IqCompositeTarget target in Targets)
+			foreach (TopDownIqTarget target in Targets)
 			{
 				setParentNetFromChildren(target);
 				_targetUtilities.UpdateTargetMissingInfo(target);
-				target.IqTargetRefine();
+				target.RefineIqTarget();
 				target.setChildrenFromParent();
 			}
 		}

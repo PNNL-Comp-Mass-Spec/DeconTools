@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 
@@ -198,6 +199,16 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return (ID + "; " + Code + "; " + EmpiricalFormula + "; " + MonoMassTheor.ToString("0.0000"));
         }
+
+
+		/// <summary>
+		/// RefineIqTarget is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
+		/// EG: Top down uses RefineIqTarget to remove redundant charge state targets and add missing charge state targets as well.
+		/// </summary>
+	    public virtual void RefineIqTarget()
+		{
+			throw new NotImplementedException("RefineIqTarget Method not implemented!");
+		}
     }
 }
 
