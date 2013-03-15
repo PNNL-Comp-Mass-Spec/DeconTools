@@ -151,7 +151,18 @@ namespace DeconTools.Backend.Utilities
                 else
                 {
                     sb.Append(item.Key);
-                    sb.Append(item.Value);
+
+	                double lowerLimitForRounding = 1e-5;
+                    if (item.Value < lowerLimitForRounding)
+                    {
+	                    string roundedValueString = item.Value.ToString("#.######");
+	                    sb.Append(roundedValueString);
+                    }
+                    else
+                    {
+						sb.Append(item.Value); 
+                    }
+					
                 }
 
             }

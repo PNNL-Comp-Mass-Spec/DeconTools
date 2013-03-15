@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
@@ -116,55 +118,18 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\MSAlignTargetImporterTesting\MSAlignTestFile.txt";
 
 			MSAlignIqTargetImporter importer = new MSAlignIqTargetImporter(targetsFile);
-			var targets = importer.Import();
+			List<IqTarget> Targets = importer.Import();
 
-			Assert.IsNotNull(targets);
-			Assert.IsTrue(targets.Any());
-
-			Assert.IsTrue(targets.Count > 0);
-
-			foreach(IqTargetMSAlign target in targets)
+			foreach (IqTarget target in Targets)
 			{
-				Console.WriteLine("ID: " + target.ID);
-				Console.WriteLine("Sequence: " + target.Code);
-				Console.WriteLine("Empirical Formula: " + target.EmpiricalFormula);
-				string chargestate = "Charge State: ";
-				foreach(int x in target.ChargeState)
+				Console.WriteLine("Parent: " + target);
+				Console.WriteLine("Children: ");
+				var children = target.ChildTargets();
+				foreach (var child in children)
 				{
-					chargestate += x + " ";
+					Console.WriteLine(child);
 				}
-				Console.WriteLine(chargestate);
-				string scanlist = "Scan: ";
-				foreach(int y in target.ScanList)
-				{
-					scanlist += y + " ";
-				}
-				Console.WriteLine(scanlist);
-				Console.WriteLine();
 			}
-		}
-
-		[Test]
-		public void MSAlignIqTargetImporterListTest ()
-		{
-			//Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCR-184
-
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\MSAlignTargetImporterTesting\MSAlignTestFile.txt";
-
-			MSAlignIqTargetImporter importer = new MSAlignIqTargetImporter(targetsFile);
-			var targets = importer.Import();
-
-			List<int> chargelist = targets[0].ChargeState;
-			Assert.AreEqual(10, chargelist[0]);
-			Assert.AreEqual(11, chargelist[1]);
-			Assert.AreEqual(12, chargelist[2]);
-
-			List<int> scanlist = targets[0].ScanList;
-			Assert.AreEqual(1234, scanlist[0]);
-			Assert.AreEqual(2345, scanlist[1]);
-			Assert.AreEqual(3456, scanlist[2]);
-
-			Console.WriteLine("Test Successful!");
 		}
 
 

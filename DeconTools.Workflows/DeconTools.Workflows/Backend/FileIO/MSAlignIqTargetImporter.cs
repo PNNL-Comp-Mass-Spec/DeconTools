@@ -9,7 +9,7 @@ using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-	public class MSAlignIqTargetImporter : ImporterBase<List<IqTargetMSAlign>>
+	public class MSAlignIqTargetImporter : ImporterBase<List<IqTarget>>
 	{
 		#region properties
 
@@ -46,9 +46,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 		}
 
 
-		public override List<IqTargetMSAlign> Import()
+		public override List<IqTarget> Import()
 		{
-			List<IqTargetMSAlign> allTargets = new List<IqTargetMSAlign>();
+			List<IqTarget> allTargets = new List<IqTarget>();
 
 			StreamReader reader;
 
@@ -96,11 +96,16 @@ namespace DeconTools.Workflows.Backend.FileIO
 						throw new InvalidDataException("In File: " + Path.GetFileName(Filename) + "; Data in row # " + lineCounter.ToString() + " is NOT valid - \nThe number of columns does not match that of the header line");
 					}
 
-					if(!parentTargetGroup.ContainsKey(ParseStringField(processedData, PeptideHeader)))
+					//Implement EValueCutoff
+					double EValueCutoff = 1.0E-3;
+					if (ParseDoubleField(processedData, EValueHeader) < EValueCutoff)
 					{
-						parentTargetGroup.Add(ParseStringField(processedData, PeptideHeader), new List<List<string>>());
+						if (!parentTargetGroup.ContainsKey(ParseStringField(processedData, PeptideHeader)))
+						{
+							parentTargetGroup.Add(ParseStringField(processedData, PeptideHeader), new List<List<string>>());
+						}
+						parentTargetGroup[ParseStringField(processedData, PeptideHeader)].Add(processedData);
 					}
-					parentTargetGroup[ParseStringField(processedData, PeptideHeader)].Add(processedData);
 
 					lineCounter++;
 				}
@@ -111,7 +116,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			foreach (KeyValuePair<string, List<List<string>>> keyValuePair in parentTargetGroup)
 			{
-				IqTargetMSAlign target = ConvertTextToIqTarget(keyValuePair.Value);
+				IqTarget target = ConvertTextToIqTarget(keyValuePair.Value);
 				target.ID = target_id;
 				allTargets.Add(target);
 				target_id++;
@@ -121,20 +126,25 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 		#endregion
 
-		protected IqTargetMSAlign ConvertTextToIqTarget(List<List<string>> processedGroup)
+		protected IqCompositeTarget ConvertTextToIqTarget(List<List<string>> processedGroup)
 		{
-			IqTargetMSAlign target = new IqTargetMSAlign();
+			IqCompositeTarget target = new IqCompositeTarget();
 			MSAlignCodeParser parser = new MSAlignCodeParser(); 
 
 			target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);
 			target.EmpiricalFormula = parser.GetEmpiricalFormulaFromSequence(target.Code);
 			target.MonoMassTheor = ParseDoubleField(processedGroup[0], AdjustedPrecursorMassHeader);
+			List<IqTarget> children = new List<IqTarget>();
 
 			foreach (List<string> line in processedGroup)
 			{
-				target.ChargeState.Add(ParseIntField(line, ChargeHeader));
-				target.ScanList.Add(ParseIntField(line, ScansHeader));
+				var child =new IqChargeStateTarget();
+				child.ChargeState = ParseIntField(line, ChargeHeader);
+				child.ObservedScan = ParseIntField(line, ScansHeader);
+				children.Add(child);
 			}
+
+			target.AddTargetRange(children);
 			return target;
 		}
 

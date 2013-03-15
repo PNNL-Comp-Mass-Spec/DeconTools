@@ -74,13 +74,15 @@
     <Compile Include="Backend\Core\IqResultUtilities.cs" />
     <Compile Include="Backend\Core\IQTarget.cs" />
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
-    <Compile Include="Backend\Core\IqTargetMSAlign.cs" />
+    <Compile Include="Backend\Core\IqCompositeTarget.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
     <Compile Include="Backend\Core\IQWorkflow.cs" />
     <Compile Include="Backend\Core\IqWorkflowAssigner.cs" />
     <Compile Include="Backend\Core\IqWorkflowFactory.cs" />
     <Compile Include="Backend\Core\NominalMassTarget.cs" />
     <Compile Include="Backend\Core\O16O18IqWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownMSAlignExecutor.cs" />
+    <Compile Include="Backend\Core\TopDownTargetUtilities.cs" />
     <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutorParameters.cs" />
