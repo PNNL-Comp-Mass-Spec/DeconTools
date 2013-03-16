@@ -22,36 +22,17 @@ namespace DeconTools.Workflows.Backend.Core
             Workflow = workflow;
         }
 
-        //public IqTarget(IqTarget copiedTarget)
-        //    : this()
-        //{
-        //    CloneIqTarget(copiedTarget);
-        //}
-
-        public static IqTarget CloneIqTarget(IqTarget copiedTarget)
+        /// <summary>
+        /// Copies the target parameter to a new IqTarget.
+        /// </summary>
+        /// <param name="target">target parameter</param>
+        public IqTarget(IqTarget target)
+            : this()
         {
-            //initialize utilities
-            IqTargetUtilities util = new IqTargetUtilities();
-
-            //find root
-            var rootNode = copiedTarget.RootTarget;
-
-            //this returnes the copied tree
-            IqTarget tempTarget = util.CloneTarget(rootNode);
-
-            int selectID = copiedTarget.ID;
-            //IqTarget selectedTarget = copiedTarget.
-
-            List<IqTarget> targetList = new List<IqTarget>();
-            targetList.Add(tempTarget);
-
-
-            List<IqTarget> level2Targets = util.GetTargetsFromNodelLevel(targetList, 2);
-
-            List<IqTarget> s = (from n in level2Targets where n.ID == selectID select n).Take(1).ToList();
-
-            return s[0];
+            var util = new IqTargetUtilities();
+            util.CopyTargetProperties(target, this);
         }
+
 
         #region Properties
 
@@ -93,6 +74,8 @@ namespace DeconTools.Workflows.Backend.Core
 
                 return ParentTarget.RootTarget;
             }
+            //TODO: remove this set.  RootTarget should not have a Set. 
+            set { }
         }
 
         #endregion
@@ -195,20 +178,25 @@ namespace DeconTools.Workflows.Backend.Core
             return null;
         }
 
+        public int GetChildCount()
+        {
+            return _childTargets.Count;
+        }
+
         public override string ToString()
         {
             return (ID + "; " + Code + "; " + EmpiricalFormula + "; " + MonoMassTheor.ToString("0.0000"));
         }
 
 
-		/// <summary>
-		/// RefineIqTarget is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
-		/// EG: Top down uses RefineIqTarget to remove redundant charge state targets and add missing charge state targets as well.
-		/// </summary>
-	    public virtual void RefineIqTarget()
-		{
-			throw new NotImplementedException("RefineIqTarget Method not implemented!");
-		}
+        /// <summary>
+        /// RefineIqTarget is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
+        /// EG: Top down uses RefineIqTarget to remove redundant charge state targets and add missing charge state targets as well.
+        /// </summary>
+        public virtual void RefineIqTarget()
+        {
+            throw new NotImplementedException("RefineIqTarget Method not implemented!");
+        }
     }
 }
 
