@@ -61,19 +61,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 MSGenerator.IsTICRequested = false;
             }
 
-            //collect Chrom peaks that fall within the NET tolerance
-            List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
-
-            foreach (ChromPeak peak in chromPeakList)
-            {
-                //TODO: currently this supports only NET;  but could support any elution unit
-                if (Math.Abs(peak.NETValue - target.ElutionTimeTheor) <= Parameters.ChromNETTolerance)
-                //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
-                {
-                    peaksWithinTol.Add(peak);
-                }
-            }
-
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
             int tempMinScanWithinTol = run.GetScanValueForNET((float)(target.ElutionTimeTheor - Parameters.ChromNETTolerance));
@@ -85,7 +72,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                               tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
             Console.WriteLine("MT= " + target.ID + ";z= " + target.ChargeState + "; mz= " + target.MZTheor.ToString("0.000") +
-                              ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+                              ";  ------------------------- PeaksWithinTol = " + chromPeakList.Count);
 #endif
 
 
@@ -93,7 +80,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             //target.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
 
 
-            foreach (var chromPeak in peaksWithinTol)
+            foreach (ChromPeak chromPeak in chromPeakList)
             {
                 // TODO: Currently hard-coded to sum only 1 scan
                 var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, run, 1);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
+
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public class ChromPeakDetector:DeconToolsPeakDetectorV2
@@ -38,6 +39,24 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             foreach (ChromPeak chromPeak in peakList)
             {
                 chromPeak.NETValue = run.GetNETValueForScan((int)Math.Round(chromPeak.XValue));
+            }
+        }
+
+        public void FilterPeaksOnNET(double ChromNETTolerance, double elutionTime, List<Peak> peakList)
+        {
+            List<Peak> outOfRange = new List<Peak>();
+            foreach (ChromPeak peak in peakList)
+            {
+                if (Math.Abs(peak.NETValue - elutionTime) >= ChromNETTolerance)
+                //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                {
+                    outOfRange.Add(peak);
+                }
+            }
+
+            foreach (ChromPeak peak in outOfRange)
+            {
+                peakList.Remove(peak);
             }
         }
 

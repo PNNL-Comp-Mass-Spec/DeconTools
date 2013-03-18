@@ -340,6 +340,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             ChromPeakDetector.CalculateElutionTimes(Run, result.ChromPeakList);
 
+            ChromPeakDetector.FilterPeaksOnNET(WorkflowParameters.ChromNETTolerance, result.Target.ElutionTimeTheor, result.ChromPeakList);
+
             result.IqResultDetail.ChromPeakQualityData = ChromPeakAnalyzer.GetChromPeakQualityData(Run, result.Target, result.ChromPeakList);
 
             bool filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
