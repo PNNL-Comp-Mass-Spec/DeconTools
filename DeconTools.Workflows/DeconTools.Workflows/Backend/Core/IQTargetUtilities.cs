@@ -110,15 +110,22 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     IqTarget chargeStateTarget = new IqChargeStateTarget();
-                    chargeStateTarget.ChargeState = charge;
+                    
 
                     CopyTargetProperties(iqTarget, chargeStateTarget);
+
+                    //Note - make sure this step is done after the 'CopyTargetProperties'
+                    chargeStateTarget.ChargeState = charge;
+
 
                     //adjust isotope profile to reflect new charge state
                     if (chargeStateTarget.TheorIsotopicProfile != null && iqTarget.TheorIsotopicProfile !=null)
                     {
                         chargeStateTarget.TheorIsotopicProfile = AdjustIsotopicProfileMassesFromChargeState(chargeStateTarget.TheorIsotopicProfile, iqTarget.TheorIsotopicProfile.ChargeState, charge);
                     }
+
+                    chargeStateTarget.MZTheor = chargeStateTarget.MonoMassTheor/chargeStateTarget.ChargeState +
+                                                DeconTools.Backend.Globals.PROTON_MASS;
 
                     targetList.Add(chargeStateTarget);
                 }
@@ -127,7 +134,7 @@ namespace DeconTools.Workflows.Backend.Core
             return targetList;
         }
 
-        private static IsotopicProfile AdjustIsotopicProfileMassesFromChargeState(IsotopicProfile iso, int existingCharge, int chargeNew)
+        private IsotopicProfile AdjustIsotopicProfileMassesFromChargeState(IsotopicProfile iso, int existingCharge, int chargeNew)
         {
             if (iso != null)
             {
@@ -177,7 +184,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 var childTargets = CreateChargeStateTargets(parentTarget, minMZObs, maxMZObserved);
-                targetList.AddRange(childTargets);
+                parentTarget.AddTargetRange(childTargets);
+
+
+                targetList.Add(parentTarget);
+
             }
 
             return targetList;
