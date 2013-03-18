@@ -378,7 +378,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         //TODO:  later will make this abstract/virtual.  Workflow creates the type of IqResult we want
-        protected virtual IqResult CreateIQResult(IqTarget target)
+        protected internal virtual IqResult CreateIQResult(IqTarget target)
         {
             return new IqResult(target);
         }
