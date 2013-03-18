@@ -136,6 +136,19 @@ namespace DeconTools.Backend.Core
 
         public List<int> PrimaryLcScanNumbers { get; set; }
 
+        public bool MassIsAligned
+        {
+            get
+            {
+                return AlignmentInfo != null;
+            }
+        }
+
+        public bool NETIsAligned { get; set; }
+
+        public double CurrentBackgroundIntensity { get; set; }
+
+
         #endregion
 
         public abstract XYData XYData { get; set; }
@@ -767,28 +780,20 @@ namespace DeconTools.Backend.Core
             float[] mzVals = new float[numDataPoints];
             float[] mzPPMCorrVals = new float[numDataPoints];
 
-            float[] scanVals = new float[numDataPoints];
-            float[] scanPPMCorrVals = new float[numDataPoints];
-
-
-
-
-            mzVals[0] = 1000;
-            //mzVals[1] = 1000;
-            //mzVals[2] = 1500;
+            mzVals[0] = 0;
+            mzVals[1] = 1000;
+            mzVals[2] = 2000;
 
             for (int index = 0; index < mzPPMCorrVals.Length; index++)
             {
                 mzPPMCorrVals[index] = (float)viperCalibrationData.MassError;
             }
 
-            scanVals[0] = (MinLCScan + MaxLCScan) / (float)2;
-            for (int index = 0; index < numDataPoints; index++)
-            {
-                scanPPMCorrVals[index] = (float)viperCalibrationData.MassError;
-            }
-
-
+            //scanVals[0] = (MinLCScan + MaxLCScan) / (float)2;
+            //for (int index = 0; index < numDataPoints; index++)
+            //{
+            //    scanPPMCorrVals[index] = (float)viperCalibrationData.MassError;
+            //}
 
             if (this.AlignmentInfo == null)
                 this.AlignmentInfo =
@@ -797,13 +802,10 @@ namespace DeconTools.Backend.Core
 
             this.AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
             this.AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
-
+            //this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
+            //this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
+            
             this.AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
-            this.AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
-
-
         }
 
 
@@ -828,65 +830,81 @@ namespace DeconTools.Backend.Core
 
 
 
-
         /// <summary>
-        /// The method returns the m/z that you should look for, when m/z alignment is considered
+        /// Returns the adjusted m/z after alignment
         /// </summary>
-        /// <param name="theorMZ"></param>
+        /// <param name="observedMZ"></param>
+        /// <param name="scan"></param>
         /// <returns></returns>
-        public double GetTargetMZAligned(double theorMZ)
+        public double GetAlignedMZ(double observedMZ, double scan=-1)
         {
+            if (this.AlignmentInfo == null) return observedMZ;
 
-            bool alignmentInfoContainsMZInfo = (AlignmentInfo != null && AlignmentInfo.marrMassFncMZInput != null && AlignmentInfo.marrMassFncMZInput.Length > 0);
-            if (!alignmentInfoContainsMZInfo) return theorMZ;
-
-
-            double minMZ = AlignmentInfo.marrMassFncMZInput.First();
-            double maxMZ = AlignmentInfo.marrMassFncMZInput.Last();
-
-            double mzForLookup = theorMZ;
-
-            if (theorMZ < minMZ) mzForLookup = minMZ;
-            if (theorMZ > maxMZ) mzForLookup = maxMZ;
+            float ppmShift = GetPPMShift(observedMZ, scan);
 
 
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)mzForLookup);
-
-            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
             return alignedMZ;
         }
-
+    
         /// <summary>
         /// The method returns the m/z that you should look for, when m/z alignment is considered
         /// </summary>
         /// <param name="theorMZ"></param>
+        /// <param name="scan"> </param>
         /// <returns></returns>
-        public double GetTargetMZAligned(double theorMZ, double scan)
+        public double GetTargetMZAligned(double theorMZ, double scan=-1)
         {
-            if (this.AlignmentInfo == null) return theorMZ;
+            if (AlignmentInfo == null) return theorMZ;
 
             float ppmShift = GetPPMShift(theorMZ, scan);
 
-
-
-
             double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
             return alignedMZ;
         }
 
-
-        public float GetPPMShift(double theorMZ, double scan)
+        /// <summary>
+        /// Return the calibration information (mass shift) for a given m/z value and (optionally) at a given  scan
+        /// </summary>
+        /// <param name="inputMz"></param>
+        /// <param name="scan">Optional</param>
+        /// <returns></returns>
+        public float GetPPMShift(double inputMz, double scan=-1)
         {
-            if (this.AlignmentInfo == null) return 0;
+            if (AlignmentInfo == null) return 0;
 
             bool alignmentInfoContainsScanInfo = (this.AlignmentInfo.marrMassFncTimeInput != null && this.AlignmentInfo.marrMassFncTimeInput.Length > 0);
             bool alignmentInfoContainsMZInfo = (this.AlignmentInfo.marrMassFncMZInput != null && this.AlignmentInfo.marrMassFncMZInput.Length > 0);
-            float ppmShift = 0;
-
-            if (alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo)
+            
+            bool canUseScanWhenGettingPPMShift = alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo && scan >= 0;
+            
+            float mzForGettingAlignmentInfo;
+            if (alignmentInfoContainsMZInfo)
             {
+                //check if mz is less than lower limit
+                if (inputMz < AlignmentInfo.marrMassFncMZInput[0])
+                {
+                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[0];
+                }
+                else if (inputMz > AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1])   //check if mz is greater than upper limit
+                {
+                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1];
+                }
+                else
+                {
+                    mzForGettingAlignmentInfo = (float)inputMz;
+                }
 
-                float scanForGettingAlignmentInfo = (float)scan;
+            }
+            else
+            {
+                return 0;
+            }
+
+
+            if (canUseScanWhenGettingPPMShift)
+            {
+                var scanForGettingAlignmentInfo = (float)scan;
 
                 if (scanForGettingAlignmentInfo < AlignmentInfo.marrMassFncTimeInput[0])
                 {
@@ -901,81 +919,20 @@ namespace DeconTools.Backend.Core
                     scanForGettingAlignmentInfo = (float)scan;
                 }
 
-
-                float mzForGettingAlignmentInfo = (float)theorMZ;
-
-                //check if mz is less than lower limit
-                if (mzForGettingAlignmentInfo < AlignmentInfo.marrMassFncMZInput[0])
-                {
-                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[0];
-                }
-                else if (mzForGettingAlignmentInfo > AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1])   //check if mz is greater than upper limit
-                {
-                    mzForGettingAlignmentInfo = AlignmentInfo.marrMassFncMZInput[AlignmentInfo.marrMassFncMZInput.Length - 1];
-                }
-                else  //mz is within limits
-                {
-                    mzForGettingAlignmentInfo = (float)theorMZ;
-
-                }
-
-
-
-                ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, (float)mzForGettingAlignmentInfo);
-
+                var ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, mzForGettingAlignmentInfo);
+                return ppmShift;
             }
             else
             {
-                ppmShift = 0;
+                var ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ(mzForGettingAlignmentInfo);
+                return ppmShift;
             }
-            return ppmShift;
-        }
 
-        /// <summary>
-        /// Returns the adjusted m/z after alignment
-        /// </summary>
-        /// <param name="observedMZ"></param>
-        /// <returns></returns>
-        public double GetAlignedMZ(double observedMZ)
-        {
-            if (this.AlignmentInfo == null) return observedMZ;
-
-            float ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ((float)observedMZ);
-
-            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
-            return alignedMZ;
 
         }
 
-        /// <summary>
-        /// Returns the adjusted m/z after alignment
-        /// </summary>
-        /// <param name="observedMZ"></param>
-        /// <param name="scan"></param>
-        /// <returns></returns>
-        public double GetAlignedMZ(double observedMZ, double scan)
-        {
-            if (this.AlignmentInfo == null) return observedMZ;
+  
 
-            float ppmShift = GetPPMShift(observedMZ, scan);
-
-
-            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
-            return alignedMZ;
-        }
-
-
-        public bool MassIsAligned
-        {
-            get
-            {
-                return AlignmentInfo != null;
-            }
-        }
-
-        public bool NETIsAligned { get; set; }
-
-        public double CurrentBackgroundIntensity { get; set; }
 
         #endregion
 

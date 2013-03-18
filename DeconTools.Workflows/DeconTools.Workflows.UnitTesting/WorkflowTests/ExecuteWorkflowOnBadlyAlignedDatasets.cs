@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("obsMonoMassCalibrated = "+repo.Results[0].MonoMassCalibrated);
 
             Console.WriteLine("MassErrorBeforeAlignment = " + (mt1.MZ - repo.Results[0].MonoMZ) / mt1.MZ * 1e6);
-            Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorInPPM);
+            Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorBeforeCalibration);
 
 
         }
@@ -114,7 +114,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("obsMonoMassCalibrated = " + repo.Results[0].MonoMassCalibrated);
 
             Console.WriteLine("MassErrorBeforeAlignment = " + (mt1.MZ - repo.Results[0].MonoMZ) / mt1.MZ * 1e6);
-            Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorInPPM);
+            Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorBeforeCalibration);
         }
 
     }

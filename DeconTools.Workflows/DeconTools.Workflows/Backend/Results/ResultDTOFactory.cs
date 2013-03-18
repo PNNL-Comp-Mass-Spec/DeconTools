@@ -117,7 +117,7 @@ namespace DeconTools.Workflows.Backend.Results
             r.IScoreN15 = (float)result.InterferenceScoreN15;
             r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IntensityAggregate;
             r.MonoMZN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoPeakMZ;
-            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorInPPM / 1e6) -
+            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorBeforeCalibration / 1e6) -
                 result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
             r.MonoMassN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoIsotopicMass;
 
@@ -237,8 +237,11 @@ namespace DeconTools.Workflows.Backend.Results
             tr.IScore = (float)result.InterferenceScore;
             tr.MonoMass = result.IsotopicProfile == null ? result.Target.MonoIsotopicMass : result.IsotopicProfile.MonoIsotopicMass;
             tr.MonoMZ = result.IsotopicProfile == null ? result.Target.MZ : result.IsotopicProfile.MonoPeakMZ;
-            tr.MassErrorInPPM = result.IsotopicProfile == null ? 0d : result.GetMassErrorBeforeAlignmentInPPM();
-            tr.MonoMassCalibrated = result.GetCalibratedMonoisotopicMass();
+            
+            tr.MonoMassCalibrated = result.MonoIsotopicMassCalibrated;
+            tr.MassErrorBeforeCalibration = result.MassErrorBeforeAlignment;
+            tr.MassErrorAfterCalibration = result.MassErrorAfterAlignment;
+
 
             tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();

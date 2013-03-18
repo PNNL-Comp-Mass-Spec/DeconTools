@@ -118,61 +118,39 @@ namespace DeconTools.Backend.Core
 
         }
 
+       
         public virtual double GetNETAlignmentError()
         {
-            double NETError = 0;
-
             double theorNET = this.Target.NormalizedElutionTime;
             double obsNET = this.Run.GetNETValueForScan(GetScanNum());
 
-            NETError = theorNET - obsNET;
-
-
-            return NETError;
+            double netError = obsNET - theorNET;
+            return netError;
 
         }
 
-        public virtual double GetMassErrorBeforeAlignmentInPPM()
+        public double GetMassErrorBeforeAlignmentInPPM()
         {
-            double massErrorInPPM = 0;
             double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
             double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
-
-            int scan = GetScanNum();
-            if (scan == -1)
-            {
-                return 0;
-            }
             
-            massErrorInPPM = (theorMZ - observedMZ) / theorMZ * 1e6;
-            
+            double massErrorInPPM = (observedMZ - theorMZ) / theorMZ * 1e6;
             return massErrorInPPM;
             
         }
 
 
-        public virtual double GetMassErrorAfterAlignmentInPPM()
+        public double GetMassErrorAfterAlignmentInPPM()
         {
             double massErrorInPPM = 0;
             double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
             double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
 
             int scan = GetScanNum();
-            if (scan == -1)
-            {
-                return 0;
-            }
-
-
-            if (Run.MassIsAligned)
-            {
-                double alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
-                massErrorInPPM = (theorMZ - alignedMZ) / theorMZ * 1e6;
-            }
-            else
-            {
-                massErrorInPPM = (theorMZ - observedMZ) / theorMZ * 1e6;
-            }
+            
+            double alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
+            massErrorInPPM = (alignedMZ - theorMZ) / theorMZ * 1e6;
+            
             return massErrorInPPM;
         }
 
@@ -182,16 +160,15 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual double GetCalibratedMonoisotopicMass()
         {
+            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+            int scan = GetScanNum();
 
-            var massErrorInPPMAfterAlignment= GetMassErrorAfterAlignmentInPPM();
-
-            var calibratedMass = Target.MonoIsotopicMass - (Target.MonoIsotopicMass * massErrorInPPMAfterAlignment / 1e6);
-            return calibratedMass;
+            double ppmShift = Run.GetPPMShift(theorMZ, scan);
+            double monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
+            double alignedMono = monoMass - (ppmShift * monoMass / 1e6);
+            return alignedMono;
 
         }
-
-
-
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()
         {
@@ -311,5 +288,12 @@ namespace DeconTools.Backend.Core
 
 
         public int NumQualityChromPeaks { get; set; }
+
+
+        public double MonoIsotopicMassCalibrated { get; set; }
+
+        public double MassErrorBeforeAlignment { get; set; }
+
+        public double MassErrorAfterAlignment { get; set; }
     }
 }

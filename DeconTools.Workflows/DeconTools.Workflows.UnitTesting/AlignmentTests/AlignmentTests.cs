@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.Core;
@@ -14,6 +15,53 @@ namespace DeconTools.Workflows.UnitTesting
     [TestFixture]
     public class AlignmentTests
     {
+
+
+
+        [Category("MustPass")]
+        [Test]
+        public void GetCalibratedMass1()
+        {
+            //see  https://jira.pnnl.gov/jira/browse/OMCS-870
+
+            string testFile =
+                @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Stat_Sample_SC_28_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-36.raw";
+            Run run = new RunFactory().CreateRun(testFile);
+
+            ViperMassCalibrationData calibrationData = new ViperMassCalibrationData();
+            calibrationData.MassError = 4.8;
+
+            run.SetMassAlignmentData(calibrationData);
+
+            double observedMZ = 440.5887078;
+            double theorMZ = 440.5858315;
+
+            double calibratedMZ = run.GetAlignedMZ(observedMZ);
+
+            Assert.AreEqual(440.5866m, (decimal)Math.Round(calibratedMZ, 4));
+
+            double ppmDiffBefore = (observedMZ - theorMZ) / theorMZ * 1e6;
+            double ppmDiffAfter = (calibratedMZ - theorMZ) / theorMZ * 1e6;
+
+            Console.WriteLine("input m/z= " + observedMZ);
+            Console.WriteLine("calibrated m/z= " + calibratedMZ);
+            Console.WriteLine("ppmDiffBeforeCalibration= " + ppmDiffBefore);
+            Console.WriteLine("ppmDiffAftereCalibration= " + ppmDiffAfter);
+
+            double theorMZToLookForInRawData = run.GetTargetMZAligned(theorMZ);
+            double ppmDiffTheor = (theorMZToLookForInRawData - theorMZ) / theorMZ * 1e6;
+
+            Console.WriteLine();
+            Console.WriteLine("Theor m/z = " + theorMZ);
+            Console.WriteLine("Theor m/z to look for = " + theorMZToLookForInRawData);
+            Console.WriteLine("ppmDiff = " + ppmDiffTheor);
+
+        }
+
+
+
+
+
         [Test]
         public void doAlignmentTest1()
         {
@@ -443,6 +491,35 @@ namespace DeconTools.Workflows.UnitTesting
 
 
         }
+
+
+
+
+        [Test]
+        public void ApplyViperMassAlignmentDataFromViperTest1()
+        {
+            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            Run run = new RunFactory().CreateRun(testFile);
+
+            ViperMassCalibrationData calibrationData = new ViperMassCalibrationData();
+            calibrationData.MassError = -3.6;
+
+            run.SetMassAlignmentData(calibrationData);
+
+            double testMZ = 974.504343924692;
+            double alignedMZ = run.GetAlignedMZ(testMZ);
+            double ppmDiff = (testMZ - alignedMZ) / testMZ * 1e6;
+
+            Console.WriteLine("input m/z= " + testMZ);
+            Console.WriteLine("aligned m/z= " + alignedMZ);
+            Console.WriteLine("ppmDiff= " + ppmDiff);
+
+            Assert.AreEqual(-3.6, (decimal)Math.Round(ppmDiff, 1));
+            
+        }
+
+
+
 
         [Test]
         public void LoadAndApplyMassAlignmentFromViperDataTest1()

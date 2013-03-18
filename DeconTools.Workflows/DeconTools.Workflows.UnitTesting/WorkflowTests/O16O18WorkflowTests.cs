@@ -1,12 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
-using System;
-using DeconTools.UnitTesting2;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
@@ -64,26 +63,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
 
-            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
+            Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
 
-            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
+            Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
 
-
-            var calibratedMass = -1* ((result.Target.MonoIsotopicMass*result.GetMassErrorAfterAlignmentInPPM()/1e6) -
-                                  result.Target.MonoIsotopicMass);
-
-
-            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
-
-
-            Console.WriteLine("calibrated mass= \t" + calibratedMass);
-            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
-
-            var errorInMZ = result.GetMassErrorAfterAlignmentInPPM()*result.Target.MonoIsotopicMass/1e6;
-            var calcTheorMonoMass = calibratedMass + errorInMZ;
-
-
-            Console.WriteLine("Theor monomass=" + calcTheorMonoMass);
+           
 
 
         }

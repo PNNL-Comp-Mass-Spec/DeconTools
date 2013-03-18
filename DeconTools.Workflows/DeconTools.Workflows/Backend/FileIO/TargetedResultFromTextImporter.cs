@@ -134,7 +134,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IScore = ParseFloatField(LookupData(rowData, iscoreHeaders));
             result.TargetID = ParseLongField(LookupData(rowData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(rowData, monomassHeaders));
-            result.MassErrorInPPM = ParseDoubleField(LookupData(rowData, massErrorHeaders));
+            result.MassErrorBeforeCalibration = ParseDoubleField(LookupData(rowData, massErrorHeaders));
             result.MonoMZ = ParseDoubleField(LookupData(rowData, mzHeaders));
             result.NET = ParseFloatField(LookupData(rowData, netHeaders));
             result.NETError = ParseFloatField(LookupData(rowData, netErrorHeaders));

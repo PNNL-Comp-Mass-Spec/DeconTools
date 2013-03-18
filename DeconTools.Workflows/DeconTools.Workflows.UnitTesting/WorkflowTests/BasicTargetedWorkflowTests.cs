@@ -3,7 +3,9 @@ using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -145,6 +147,59 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
         }
+
+
+        [Test]
+        public void InvestigateIQFailures()
+        {
+            string executorParamFile =
+              @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Parameters\ExecutorParameters1 - Copy.xml";
+
+            DeconTools.Workflows.Backend.Core.BasicTargetedWorkflowExecutorParameters executorParameters =
+                new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParamFile);
+            executorParameters.ResultsFolder =
+                @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing";
+
+            executorParameters.LoggingFolder = executorParameters.ResultsFolder;
+
+            string testFile =
+                @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Expo_Sample_SC_9_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-35.raw";
+            Run run = new RunFactory().CreateRun(testFile);
+
+
+            string iqparameterFile =
+                @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\IQWorkflowParameters1.xml";
+
+            BasicTargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
+            workflowParameters.LoadParameters(iqparameterFile);
+            workflowParameters.MSToleranceInPPM = 10;
+            workflowParameters.ChromPeakDetectorPeakBR = 0.25;
+            workflowParameters.ChromPeakDetectorSigNoise = 2;
+
+            BasicTargetedWorkflow targetedWorkflow = new BasicTargetedWorkflow(run, workflowParameters);
+            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, targetedWorkflow, testFile);
+
+            //int[] testTargets = {349959971, 349951038,349954483 };    
+            //int[] testTargets = { 349951038 };
+
+            //int[] testTargets = { 349954483 };
+            //int[] testTargets = { 2911730 };
+
+            int[] testTargets = { 349946881 };
+            int chargeState = 3;
+
+            executor.Targets.TargetList = (from n in executor.Targets.TargetList where testTargets.Contains(n.ID) select n).ToList();
+            executor.Targets.TargetList = (from n in executor.Targets.TargetList where n.ChargeState == chargeState select n).ToList();
+
+            executor.Execute();
+
+            //Results of investiga  tion!  -  349959971 was being missed because the MSTolerance was too narrow. When changed from 5 to 6, it was found. I think we can safely set this at 10. 
+            //Results of investigation!  -  349951038 was being missed because it was being flagged (peak to the left) problem.  
+
+            TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
+        }
+
 
 
         [Test]

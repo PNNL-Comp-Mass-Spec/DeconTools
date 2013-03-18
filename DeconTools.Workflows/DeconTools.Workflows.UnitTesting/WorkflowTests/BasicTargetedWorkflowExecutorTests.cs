@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromSmootherNumPointsInSmooth = 9;
             workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 1;
+            workflowParameters.ChromPeakDetectorSigNoise = 3;
             workflowParameters.ChromGenTolerance = 20;
             workflowParameters.ChromNETTolerance = 0.025;
             workflowParameters.MSToleranceInPPM = 20;
@@ -92,6 +92,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelected);
 
             Assert.IsTrue(result.Score < 0.1);
+            
+            
+            
             Assert.AreEqual(3, result.NumChromPeaksWithinTolerance);
             Assert.AreEqual(8627, (decimal)Math.Round(result.ChromPeakSelected.XValue, 0));
             
@@ -99,20 +102,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(2920.49120m, (decimal) Math.Round(result.IsotopicProfile.MonoIsotopicMass,5));
 
             //calibrated mass
-            Assert.AreEqual(2920.50018m, (decimal) Math.Round(result.GetCalibratedMonoisotopicMass(),5));
+            Assert.AreEqual(2920.50017m, (decimal) Math.Round(result.MonoIsotopicMassCalibrated,5));
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
-            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
-            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
-
-
-            var calibratedMass = -1 * ((result.Target.MonoIsotopicMass * result.GetMassErrorAfterAlignmentInPPM() / 1e6) -
-                                  result.Target.MonoIsotopicMass);
-            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
-
-            Console.WriteLine("calibrated mass= \t" + calibratedMass);
-            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
+            Console.WriteLine("calibrated monomass= \t" + result.MonoIsotopicMassCalibrated);
+            
+            Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
+            Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
+            
+           
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
@@ -146,7 +145,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromSmootherNumPointsInSmooth = 9;
             workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 1;
+            workflowParameters.ChromPeakDetectorSigNoise = 3;
             workflowParameters.ChromGenTolerance = 20;
             workflowParameters.ChromNETTolerance = 0.025;
             workflowParameters.MSToleranceInPPM = 20;
@@ -176,12 +175,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("theor m/z= \t" + result.Target.MZ);
             Console.WriteLine("obs monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
             Console.WriteLine("obs m/z= \t" + result.IsotopicProfile.MonoPeakMZ);
-            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
-            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
+            Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
+            Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
 
-            
-            
-            
             Assert.AreEqual(3, result.NumChromPeaksWithinTolerance);
             Assert.AreEqual(8627, (decimal)Math.Round(result.ChromPeakSelected.XValue, 0));
 
@@ -190,15 +186,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //calibrated mass
             //Assert.AreEqual(2920.50018m, (decimal)Math.Round(result.GetCalibratedMonoisotopicMass(), 5));
-
-            
-
-            var calibratedMass = -1 * ((result.Target.MonoIsotopicMass * result.GetMassErrorAfterAlignmentInPPM() / 1e6) -
-                                  result.Target.MonoIsotopicMass);
-            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
-
-            Console.WriteLine("calibrated mass= \t" + calibratedMass);
-            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
+           
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
@@ -273,20 +261,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
-            Console.WriteLine("ppmError before= \t" + result.GetMassErrorBeforeAlignmentInPPM());
-            Console.WriteLine("ppmError after= \t" + result.GetMassErrorAfterAlignmentInPPM());
-
-
-            var calibratedMass = -1 * ((result.Target.MonoIsotopicMass * result.GetMassErrorAfterAlignmentInPPM() / 1e6) -
-                                  result.Target.MonoIsotopicMass);
-
-
-            var calibratedMass2 = result.GetCalibratedMonoisotopicMass();
-
-
-            Console.WriteLine("calibrated mass= \t" + calibratedMass);
-            Console.WriteLine("calibrated mass2= \t" + calibratedMass2);
-
+            Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
+            Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
 
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());

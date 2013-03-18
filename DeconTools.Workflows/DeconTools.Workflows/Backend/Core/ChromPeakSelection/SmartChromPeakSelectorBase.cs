@@ -288,7 +288,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
             //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
-            bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+            bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() < 5;
 
 
             var filteredList1 = (from n in peakQualityList

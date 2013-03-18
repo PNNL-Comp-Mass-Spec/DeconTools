@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
 using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.Utilities
@@ -97,7 +95,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                 result.IntensityI0 = result.Intensity;
                 result.IntensityMostAbundantPeak = result.Intensity;
                 result.IScore = 0;
-                result.MassErrorInPPM = readFloat(reader, "MassErrorPPM");
+                result.MassErrorBeforeCalibration = readFloat(reader, "MassErrorPPM");
                 
                 result.MonoMass = readDouble(reader, "Class_Mass");
                 result.MonoMassCalibrated = result.MonoMass;

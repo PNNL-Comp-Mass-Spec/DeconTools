@@ -34,6 +34,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var parameters=new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            parameters.ThrashParameters.UseThrashV1 = true;
 
             parameters.MSGeneratorParameters.MinLCScan = 6005;
             parameters.MSGeneratorParameters.MaxLCScan = 6005;
@@ -49,7 +50,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
             var isos = isosImporter.Import();
 
-            Assert.AreEqual(187, isos.Count);
+            Assert.AreEqual(186, isos.Count);
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
 
@@ -59,7 +60,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.AreEqual(809, peaklist.Count);
 
             var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
-            Assert.AreEqual(263499300d, Math.Round(sumIntensities));
+            Assert.AreEqual(266185816d, Math.Round(sumIntensities));
 
             var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
             Assert.AreEqual(605170496.0f, sumPeakIntensities);

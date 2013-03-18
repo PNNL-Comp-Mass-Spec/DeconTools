@@ -231,6 +231,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             ExecuteTask(_msfeatureFinder);
 
+            ApplyMassCalibration(Result);
+
             ExecuteTask(_fitScoreCalc);
             ExecuteTask(_resultValidator);
 
@@ -240,6 +242,14 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             Success = true;
+        }
+
+        private void ApplyMassCalibration(TargetedResultBase result)
+        {
+            Result.MonoIsotopicMassCalibrated = Result.GetCalibratedMonoisotopicMass();
+            Result.MassErrorBeforeAlignment = Result.GetMassErrorBeforeAlignmentInPPM();
+            Result.MassErrorAfterAlignment = Result.GetMassErrorAfterAlignmentInPPM();
+
         }
 
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
