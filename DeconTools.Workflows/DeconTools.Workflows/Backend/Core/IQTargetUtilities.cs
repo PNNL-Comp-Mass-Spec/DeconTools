@@ -110,9 +110,9 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     IqTarget chargeStateTarget = new IqChargeStateTarget();
+                    chargeStateTarget.ChargeState = charge;
 
                     CopyTargetProperties(iqTarget, chargeStateTarget);
-
 
                     //adjust isotope profile to reflect new charge state
                     if (chargeStateTarget.TheorIsotopicProfile != null && iqTarget.TheorIsotopicProfile !=null)
