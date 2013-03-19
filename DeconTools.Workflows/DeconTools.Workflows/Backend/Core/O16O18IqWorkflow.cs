@@ -1,4 +1,5 @@
 ﻿using DeconTools.Backend.Core;
+using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -18,5 +19,9 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
+        public override ResultExporter CreateExporter()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

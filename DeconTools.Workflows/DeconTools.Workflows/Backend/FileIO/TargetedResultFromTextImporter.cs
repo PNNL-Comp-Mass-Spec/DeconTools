@@ -21,7 +21,8 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] targetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid", "mtid" };
         protected string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
         protected string[] monomassCalibratedHeaders = { "MonoisotopicMassCalibrated" };
-        protected string[] massErrorHeaders = { "MassErrorInPPM" };
+        protected string[] massErrorBeforeCalibrationHeaders = { "MassErrorBefore" ,"MassErrorInPPM"};
+        protected string[] massErrorAfterCalibrationHeaders = { "MassErrorAfter" };
         protected string[] matchedMassTagIDHeaders = { "MatchedMassTagID" };
         protected string[] mzHeaders = { "MonoMZ", "UMCMZForChargeBasis" };
         protected string[] scanHeaders = { "scan", "scanClassRep" };
@@ -134,7 +135,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.IScore = ParseFloatField(LookupData(rowData, iscoreHeaders));
             result.TargetID = ParseLongField(LookupData(rowData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(rowData, monomassHeaders));
-            result.MassErrorBeforeCalibration = ParseDoubleField(LookupData(rowData, massErrorHeaders));
+            result.MonoMassCalibrated = ParseDoubleField(LookupData(rowData, monomassCalibratedHeaders));
+            result.MassErrorBeforeCalibration = ParseDoubleField(LookupData(rowData, massErrorBeforeCalibrationHeaders));
+            result.MassErrorAfterCalibration = ParseDoubleField(LookupData(rowData, massErrorAfterCalibrationHeaders));
             result.MonoMZ = ParseDoubleField(LookupData(rowData, mzHeaders));
             result.NET = ParseFloatField(LookupData(rowData, netHeaders));
             result.NETError = ParseFloatField(LookupData(rowData, netErrorHeaders));

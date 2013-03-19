@@ -1,4 +1,5 @@
 ﻿using DeconTools.Backend.Core;
+using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -21,5 +22,9 @@ namespace DeconTools.Workflows.Backend.Core
       
 
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
+        public override ResultExporter CreateExporter()
+        {
+            return new IqLabelFreeResultExporter();
+        }
     }
 }

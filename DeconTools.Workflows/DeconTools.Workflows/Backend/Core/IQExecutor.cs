@@ -24,7 +24,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Parameters = new BasicTargetedWorkflowExecutorParameters();
             Results = new List<IqResult>();
-            ResultExporter = new IqLabelFreeResultExporter();
             IsDataExported = true;
             DisposeResultDetails = true;
         }
@@ -143,6 +142,13 @@ namespace DeconTools.Workflows.Backend.Core
             List<IqResult> resultsForExport =_iqResultUtilities.FlattenOutResultTree(iqResult);
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
+
+
+            if (ResultExporter==null)
+            {
+                ResultExporter = iqResult.Target.Workflow.CreateExporter();
+            }
+
 
             ResultExporter.WriteOutResults(Parameters.ResultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
         }

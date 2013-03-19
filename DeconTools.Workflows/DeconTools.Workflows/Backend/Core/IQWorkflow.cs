@@ -424,6 +424,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-
+        public abstract ResultExporter CreateExporter();
     }
 }

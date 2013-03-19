@@ -32,12 +32,11 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.TargetID = ParseLongField(LookupData(processedData, targetIDHeaders));
             result.MonoMass = ParseDoubleField(LookupData(processedData, monomassHeaders));
             result.MonoMassCalibrated = ParseDoubleField(LookupData(processedData, monomassCalibratedHeaders));
-            result.MassErrorBeforeCalibration = ParseDoubleField(LookupData(processedData, massErrorHeaders));
+            result.MassErrorBeforeCalibration = ParseDoubleField(LookupData(processedData, massErrorBeforeCalibrationHeaders));
+            result.MassErrorAfterCalibration = ParseDoubleField(LookupData(processedData, massErrorAfterCalibrationHeaders));
             result.MonoMZ = ParseDoubleField(LookupData(processedData, mzHeaders));
             result.NET = ParseFloatField(LookupData(processedData, netHeaders));
             result.NETError = ParseFloatField(LookupData(processedData, netErrorHeaders));
-         
-
             result.NumChromPeaksWithinTol = ParseIntField(LookupData(processedData, numchromPeaksWithinTolHeaders));
             result.NumQualityChromPeaksWithinTol = ParseIntField(LookupData(processedData, numQualitychromPeaksWithinTolHeaders));
             result.ScanLC = ParseIntField(LookupData(processedData, scanHeaders));
