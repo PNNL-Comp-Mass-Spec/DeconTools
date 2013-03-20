@@ -61,6 +61,8 @@
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorBase.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorParameters.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakUtilities.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelator.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelatorBase.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelector.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorBase.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorParameters.cs" />
