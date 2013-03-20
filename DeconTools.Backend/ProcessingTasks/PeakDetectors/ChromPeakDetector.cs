@@ -42,12 +42,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
         }
 
-        public void FilterPeaksOnNET(double ChromNETTolerance, double elutionTime, List<Peak> peakList)
+        public void FilterPeaksOnNET(double chromNetTolerance, double elutionTime, List<Peak> peakList)
         {
             List<Peak> outOfRange = new List<Peak>();
             foreach (ChromPeak peak in peakList)
             {
-                if (Math.Abs(peak.NETValue - elutionTime) >= ChromNETTolerance)
+                if (Math.Abs(peak.NETValue - elutionTime) >= chromNetTolerance)
                 //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     outOfRange.Add(peak);

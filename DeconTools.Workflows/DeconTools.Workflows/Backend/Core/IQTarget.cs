@@ -190,12 +190,12 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         /// <summary>
-        /// RefineIqTarget is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
+        /// RefineChildTargets is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
         /// EG: Top down uses RefineIqTarget to remove redundant charge state targets and add missing charge state targets as well.
         /// </summary>
-        public virtual void RefineIqTarget()
+        public virtual void RefineChildTargets()
         {
-            throw new NotImplementedException("RefineIqTarget Method not implemented!");
+            throw new NotImplementedException("RefineChildTargets Method not implemented!");
         }
     }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -20,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
 		/// <summary>
 		/// Removes redundant charge state targets and adds in missing targets within range. 
 		/// </summary>
-		public override void RefineIqTarget()
+		public override void RefineChildTargets()
 		{
 			List<int> chargeStates= new List<int>();
 			var children = ChildTargets();

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.FileIO;
 
@@ -54,7 +51,7 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				setParentNetFromChildren(target);
 				_targetUtilities.UpdateTargetMissingInfo(target);
-				target.RefineIqTarget();
+				target.RefineChildTargets();
 				target.setChildrenFromParent();
 			}
 		}
