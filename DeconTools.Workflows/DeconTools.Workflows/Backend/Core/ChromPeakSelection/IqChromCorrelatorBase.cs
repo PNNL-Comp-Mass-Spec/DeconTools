@@ -154,8 +154,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
 
-            iqResult.ChromCorrelationData = CorrelateData(iqResult.Target.GetRun(),
-                iqResult.ObservedIsotopicProfile, startScan, stopScan);
+            //iqResult.ChromCorrelationData = CorrelateData(iqResult.Target.GetRun(),
+            //    iqResult.ObservedIsotopicProfile, startScan, stopScan);
         }
 
 
