@@ -121,7 +121,10 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            IqResultDetail.ChromPeakQualityData.Clear();
+            if (IqResultDetail.ChromPeakQualityData != null)
+            {
+                IqResultDetail.ChromPeakQualityData.Clear();
+            }
             IqResultDetail.Chromatogram = null;
             IqResultDetail.MassSpectrum = null;
         }
