@@ -78,14 +78,6 @@ namespace DeconTools.Backend.Algorithms
             int indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
             int indexOfUpperScan = getIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
 
-            int currentIndex = indexOfLowerScan;
-            List<MSPeakResult> filteredPeakList = new List<MSPeakResult>();
-            while (currentIndex <= indexOfUpperScan)
-            {
-                filteredPeakList.Add(msPeakList[currentIndex]);
-                currentIndex++;
-            }
-
             XYData chromData = null;
 
             foreach (var targetMZ in targetMZList)
@@ -108,9 +100,18 @@ namespace DeconTools.Backend.Algorithms
                     throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the "  + toleranceUnit +" unit isn't supported");
                 }
 
-                
+				List<MSPeakResult> tempPeakList = new List<MSPeakResult>();
 
-                List<MSPeakResult> tempPeakList = filteredPeakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+				for (int i = indexOfLowerScan; i <= indexOfUpperScan; i++)
+				{
+					MSPeakResult msPeakResult = msPeakList[i];
+					double xValue = msPeakResult.MSPeak.XValue;
+
+					if (xValue >= lowerMZ && xValue <= upperMZ)
+					{
+						tempPeakList.Add(msPeakResult);
+					}
+				}
 
             	if (!tempPeakList.Any())
                 {
@@ -259,7 +260,6 @@ namespace DeconTools.Backend.Algorithms
             return GeneratePeakChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
         }
 
-
         private XYData getChromDataAndFillInZerosAndAssignChromID(List<MSPeakResult> filteredPeakList, int chromID)
         {
 			int filteredPeakListCount = filteredPeakList.Count;
@@ -281,7 +281,7 @@ namespace DeconTools.Backend.Algorithms
             SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
             for (int i = peakListMinScan; i <= peakListMaxScan; i++)
             {
-                xyValues.Add(i, 0);
+            	xyValues[i] = 0;
             }
 
             //iterate over the peaklist, assign chromID,  and extract intensity values
