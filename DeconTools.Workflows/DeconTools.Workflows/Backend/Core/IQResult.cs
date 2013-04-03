@@ -21,6 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             Target = target;
             IqResultDetail = new IqResultDetail();
+			CorrelationData = new ChromCorrelationData();
         }
 
         public IqTarget Target { get; set; }
@@ -54,6 +55,10 @@ namespace DeconTools.Workflows.Backend.Core
         public float Abundance { get; set; }
 
         public IqResultDetail IqResultDetail { get; set; }
+
+		public double MassError { get; set; }
+
+		public double NETError { get; set; }
 
         #endregion
 
@@ -121,10 +126,6 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            if (IqResultDetail.ChromPeakQualityData != null)
-            {
-                IqResultDetail.ChromPeakQualityData.Clear();
-            }
             IqResultDetail.Chromatogram = null;
             IqResultDetail.MassSpectrum = null;
         }
