@@ -143,10 +143,13 @@ namespace DeconTools.Backend.Utilities
             StringBuilder sb = new StringBuilder();
             foreach (var item in elementTable)
             {
-                if (item.Value == 1)
+                if (item.Value <= 0)
+                {
+                    continue;
+                }
+                else if (item.Value == 1)
                 {
                     sb.Append(item.Key);
-
                 }
                 else
                 {
