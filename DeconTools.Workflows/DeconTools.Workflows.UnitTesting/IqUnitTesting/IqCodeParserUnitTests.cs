@@ -82,5 +82,16 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			Assert.AreEqual(examplenomodresult, difference);
 		}
 
+        [Test]
+        public void EmpiricalFormulaCalculatorTest()
+        {
+            MSAlignCodeParser parser = new MSAlignCodeParser();
+
+            string exampleSequence = @"A.ADLEDNMDILNDNLKVVEKTDSAPELKAALTKMRAAALDAQKATPPKLEDKAPDSPEMKDFRHGFDILVGQIDGALKLANEGNVKEAKAAAEALKTTRNTYHKKYR.";
+            string empiricalFormula = parser.GetEmpiricalFormulaFromSequence(exampleSequence);
+            Console.WriteLine(empiricalFormula);
+            Assert.AreEqual("C507H832N144O163S3", empiricalFormula);
+        }
+
 	}
 }

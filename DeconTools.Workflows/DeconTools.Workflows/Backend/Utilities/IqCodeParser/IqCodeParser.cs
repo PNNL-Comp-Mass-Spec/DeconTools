@@ -75,7 +75,17 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		public string SequenceToEmpiricalFormula(string code)
 		{
 			string sequence = "";
-			string[] test = Regex.Split(code, SequenceExpression);
+		    string[] periodremoval = code.Split('.');
+		    string[] test;
+            if (periodremoval[0].Length > 1)
+            {
+                test = Regex.Split(periodremoval[0], SequenceExpression);
+            }
+            else
+            {
+                test = Regex.Split(periodremoval[1], SequenceExpression);
+            }
+
 			foreach (string s in test)
 			{
 				sequence += Regex.Match(s, "^[A-Z]*[A-Z]$").Value;
