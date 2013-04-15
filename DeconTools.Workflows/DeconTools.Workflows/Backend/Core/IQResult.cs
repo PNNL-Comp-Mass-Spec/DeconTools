@@ -56,9 +56,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         public IqResultDetail IqResultDetail { get; set; }
 
+        public ChromCorrelationData CorrelationData { get; set; }
+
 		public double MassError { get; set; }
 
 		public double NETError { get; set; }
+
+
 
         #endregion
 
