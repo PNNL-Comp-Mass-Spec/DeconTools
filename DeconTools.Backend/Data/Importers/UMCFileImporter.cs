@@ -131,6 +131,8 @@ namespace DeconTools.Backend.Data
             row.MassTagMonoMW = parseDoubleField(lookup(processedData, headers, "MassTagMonoMW"));
             row.MassTagNET = parseDoubleField(lookup(processedData, headers, "MassTagNET"));
             row.MassTagNETStDev = parseDoubleField(lookup(processedData, headers, "MassTagNETStDev"));
+            row.StacScore = parseDoubleField(lookup(processedData, headers, "STAC Score"));
+            row.StacUniquenessProbability = parseDoubleField(lookup(processedData, headers, "Uniqueness Probability"));
             row.SLiCScore = parseDoubleField(lookup(processedData, headers, "SLiC Score"));
             row.DelSLiC = parseDoubleField(lookup(processedData, headers, "DelSLiC"));
             row.MemberCountMatchingMassTag = parseIntField(lookup(processedData, headers, "MemberCountMatchingMassTag"));

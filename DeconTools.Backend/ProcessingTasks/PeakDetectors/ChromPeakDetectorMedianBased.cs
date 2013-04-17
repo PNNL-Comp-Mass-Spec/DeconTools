@@ -83,7 +83,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             var valuesAboveZero = copiedYValues.Where(p => p > 0).ToList();
 
 
-            var medianIntensity = MathUtils.GetMedian(valuesAboveZero);
+            double medianIntensity = 0;
+            if (valuesAboveZero.Count>0)
+            {
+                medianIntensity = MathUtils.GetMedian(valuesAboveZero);
+            }
 
             return medianIntensity;
 

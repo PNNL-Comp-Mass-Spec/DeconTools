@@ -118,8 +118,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
         public IsotopicProfile CreateIsotopicProfileFromEmpiricalFormula(string baseEmpiricalFormula, string elementLabelled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
-            double monoisotopicMass =
-            EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
+            
 
             bool isUnlabelled = elementLabelled == "" || percentHeavyLabel == 0;
 
@@ -141,6 +140,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
             }
 
+
+            double monoisotopicMass =EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
             iso.MonoIsotopicMass = monoisotopicMass;
             CalculateMZValuesForLabeledProfile(iso, baseEmpiricalFormula, elementLabelled, chargeState,
                                                lightIsotope, heavyIsotope);

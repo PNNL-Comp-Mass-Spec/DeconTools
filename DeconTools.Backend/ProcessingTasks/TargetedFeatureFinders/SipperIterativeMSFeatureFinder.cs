@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -113,7 +114,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 if (foundIso != null)
                 {
-                    combineIsotopicProfiles(foundIso, iso);
+                    double toleranceInPPM = 20;
+                    combineIsotopicProfiles(foundIso, iso, toleranceInPPM);
                 }
 
                 //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
@@ -127,23 +129,52 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             }
 
+
+            if (foundIso!=null)
+            {
+                AddZeroIntensityPeaks(foundIso, theorIso, 0.02d);
+            }
+
+
             return foundIso;
         }
 
-        private void combineIsotopicProfiles(IsotopicProfile baseIso, IsotopicProfile addedIso)
+        private void AddZeroIntensityPeaks(IsotopicProfile foundIso, IsotopicProfile theorIso, double minIntensityThreshold)
         {
-            
+            var clonedTheor = theorIso.CloneIsotopicProfile();
+
+
+            clonedTheor.Peaklist = clonedTheor.Peaklist.Where(p => p.Height > minIntensityThreshold).ToList();
+
+            foreach (var msPeak in clonedTheor.Peaklist)
+            {
+                msPeak.Height = 0;
+            }
+
+
+            combineIsotopicProfiles(foundIso, clonedTheor,50);
+
+
+        }
+
+        private void combineIsotopicProfiles(IsotopicProfile baseIso, IsotopicProfile addedIso, double toleranceInPPM = 50)
+        {
+
+            double toleranceInMZ = toleranceInPPM*baseIso.MonoPeakMZ/1e6;
+
 
             foreach (var msPeak in addedIso.Peaklist)
             {
                 int indexOfPeakInBaseIos = PeakUtilities.getIndexOfClosestValue(baseIso.Peaklist, msPeak.XValue, 0, baseIso.Peaklist.Count - 1,
-                                                     msPeak.Width);
+                                                     toleranceInMZ);
 
                 if (indexOfPeakInBaseIos == -1)
                 {
                     baseIso.Peaklist.Add(msPeak);
                 }
             }
+
+            baseIso.Peaklist = baseIso.Peaklist.OrderBy(p => p.XValue).ToList();
 
         }
 

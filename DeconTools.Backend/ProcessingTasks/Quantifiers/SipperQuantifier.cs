@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define OUTPUT_ISO_DETAILS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Algorithms;
@@ -139,9 +141,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             var result = (SipperLcmsTargetedResult)resultList.CurrentTargetedResult;
             result.AreaUnderDifferenceCurve = -9999;
             result.AreaUnderRatioCurve = -9999;
-
-
-
+            
             RatioVals.Xvalues = new double[] { 1, 2, 3, 4, 5, 6, 7 };
             RatioVals.Yvalues = new double[] { 0, 0, 0, 0, 0, 0, 0 };
 
@@ -163,14 +163,31 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             //PeakUtilities.TrimIsotopicProfile(unlabeledIso, 0.001);
 
-
-
-
-
-            int indexMostAbundantTheorPeak = theorUnlabelledIso.GetIndexOfMostIntensePeak();
+            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(result.IsotopicProfile.Peaklist,
+                    theorUnlabelledIso.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 
             NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
-            IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexMostAbundantTheorPeak);
+            
+            
+            if (indexOfCorrespondingObservedPeak>=0)
+            {
+                IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexOfCorrespondingObservedPeak);
+
+
+
+
+
+            }
+            else
+            {
+                IsotopicProfileUtilities.NormalizeIsotopicProfile(NormalizedIso);
+            }
+
+
+            //insert zero intensity peaks into observed
+            
+            
+            
 
             //            return;
 
@@ -285,17 +302,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
 
           
-                var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
-                FitScoreData = _partialLabelingQuantifier.FitScoreData;
+               // var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
+                //FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
-                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
-                result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
+                //result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
+                //result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
 
-                int numCarbons = result.Target.GetAtomCountForElement("C");
-                result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
-
-
-
+                //int numCarbons = result.Target.GetAtomCountForElement("C");
+                //result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
 
                 //StringBuilder sb = new StringBuilder();
                 //sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
@@ -311,7 +325,30 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 //Console.WriteLine(sb.ToString());
 
 
-                
+                //-------------- make calculations using inputs from chrom correlation data -------------------
+
+                HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, subtractedIsoData);
+
+
+                var contiguousnessScore = GetContiguousnessScore(HighQualitySubtractedProfile);
+                result.ContiguousnessScore = contiguousnessScore;
+
+                //GORD ------------- note this section is a duplicate of the above....  choose one or the other ------------------------
+                //Feb 26, 2013...  I processed the results and these look really good. ROC curve nice
+                peaksForLabeledIsoQuant = new List<Peak>(HighQualitySubtractedProfile.Peaklist.Where(p => p.Height > 0));
+
+
+
+                //calculate labeled fit score
+                var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
+                FitScoreData = _partialLabelingQuantifier.FitScoreData;
+
+                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
+                result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
+
+                int numCarbons = result.Target.GetAtomCountForElement("C");
+                result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
+                //end of section --------------------------------------------------------------------------
 
 
                 //-------------- calculate Label Distribution ------------------------------------------------
@@ -348,31 +385,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.PercentCarbonsLabelled = 0;
                 }
 
-
-
-
-                //-------------- make calculations using inputs from chrom correlation data -------------------
-
-                HighQualitySubtractedProfile = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, subtractedIsoData);
-
-
-                var contiguousnessScore = GetContiguousnessScore(HighQualitySubtractedProfile);
-                result.ContiguousnessScore = contiguousnessScore;
-
-                //GORD ------------- note this section is a duplicate of the above....  choose one or the other ------------------------
-                //Feb 26, 2013...  I processed the results and these look really good. ROC curve nice
-                peaksForLabeledIsoQuant = new List<Peak>(HighQualitySubtractedProfile.Peaklist.Where(p => p.Height > 0));
-
-
-                isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
-                FitScoreData = _partialLabelingQuantifier.FitScoreData;
-
-                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
-                result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
-
-                numCarbons = result.Target.GetAtomCountForElement("C");
-                result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
-                //end of section --------------------------------------------------------------------------
 
 
 

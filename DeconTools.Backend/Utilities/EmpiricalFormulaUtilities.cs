@@ -203,7 +203,7 @@ namespace DeconTools.Backend.Utilities
                     }
                     else
                     {
-                        var re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
+                        var re = new Regex(@"([A-Z][a-z]*)([0-9\.]*)");    //got this from StackOverflow
                         var mc = re.Matches(element);
 
                         foreach (Match item in mc)
@@ -217,7 +217,7 @@ namespace DeconTools.Backend.Utilities
 
                             if (elementCountString.Length > 0)
                             {
-                                numAtoms = Int32.Parse(elementCountString);
+                                numAtoms = (int)Math.Round(double.Parse(elementCountString));
                             }
                             else
                             {
@@ -238,7 +238,7 @@ namespace DeconTools.Backend.Utilities
             }
             else
             {
-                var re = new Regex(@"([A-Z][a-z]*)(\d*)");    //got this from StackOverflow
+                var re = new Regex(@"([A-Z][a-z]*)([0-9\.]*)");    //got this from StackOverflow
                 var mc = re.Matches(empiricalFormula);
 
 
@@ -251,9 +251,11 @@ namespace DeconTools.Backend.Utilities
                     string elementCountString = item.Groups[2].Value;
 
 
+
+
                     if (elementCountString.Length > 0)
                     {
-                        numAtoms = Int32.Parse(elementCountString);
+                        numAtoms = (int) Math.Round(double.Parse(elementCountString));
                     }
                     else
                     {

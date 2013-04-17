@@ -83,6 +83,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance;
             naturalAbundanceLight = Constants.Elements[labeledElmentSymbol].IsotopeDictionary[
                 labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance;
+            
+            
+            //TODO: we should never be messing with the Constants values. We should be only altering our own copy!!
+            
             Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance =
                 labeledHeavyIsoAbundance;
             Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance =
@@ -96,6 +100,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// </summary>
         public void ResetToUnlabeled()
         {
+            if (elementalSymbol == "") return;
+
             Constants.Elements[elementalSymbol].IsotopeDictionary[elementalSymbol + lightIsotopeNum].NaturalAbundance =
                 naturalAbundanceLight;
             Constants.Elements[elementalSymbol].IsotopeDictionary[elementalSymbol + heavyIsotopeNum].NaturalAbundance =

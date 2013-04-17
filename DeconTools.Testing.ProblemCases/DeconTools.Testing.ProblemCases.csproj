@@ -68,6 +68,7 @@
     <Compile Include="Issue0168_FailureProcessOlderKristinsUIMFFile.cs" />
     <Compile Include="Issue0095_15T_FailureToLoadData.cs" />
     <Compile Include="Issue0531_FPGAUIMF_IndexingError.cs" />
+    <Compile Include="JoeBrownTesting.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
     <Compile Include="OMCS_0437_AgilentTOFFileReadingProblem.cs" />
@@ -99,6 +100,17 @@
     <Content Include="xerces-c_2_7D.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSFileReaderLib">
+      <Guid>{F0C5F3E3-4F2A-443E-A74D-0AABE3237494}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

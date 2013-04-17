@@ -373,6 +373,7 @@
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilities.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\BionomialExpansionIsotopicProfileCalculator.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\IsotopicDistributionCalculator.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\IsotopicProfileComponent.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\LabeledIsotopicProfileUtilities.cs" />

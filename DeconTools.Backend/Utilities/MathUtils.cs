@@ -70,6 +70,8 @@ namespace DeconTools.Backend.Utilities
 
         public static double GetMedian(List<double> values)
         {
+            if (values.Count == 0) return double.NaN;
+
             var sortedVals = values.OrderBy(d => d).ToList();
 
             int middleIndex = (sortedVals.Count-1)/2;

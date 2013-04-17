@@ -173,6 +173,13 @@ namespace DeconTools.Backend.Runs
         }
 
 
+        public double GetCollisionEnergyInfoFromInstrumentInfo(int scanNum)
+        {
+
+            return 0;
+
+        }
+
 
         public override double GetTICFromInstrumentInfo(int scanNum)
         {
