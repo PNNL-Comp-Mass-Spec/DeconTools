@@ -52,6 +52,7 @@
     <Compile Include="OMCS_0502_OutOfMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TempProblemTesting.cs" />
+    <Compile Include="UimfTesting.cs" />
     <Compile Include="UnitTestTemplate1.cs" />
     <Compile Include="WorkflowsInitialTesting.cs" />
   </ItemGroup>

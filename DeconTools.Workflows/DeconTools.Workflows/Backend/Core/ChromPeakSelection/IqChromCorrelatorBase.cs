@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -153,7 +152,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
             int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
-
+            //TODO: we need to finish this
             //iqResult.ChromCorrelationData = CorrelateData(iqResult.Target.GetRun(),
             //    iqResult.ObservedIsotopicProfile, startScan, stopScan);
         }
@@ -161,10 +160,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public abstract ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan);
 
-
         public ChromCorrelationData CorrelatePeaksWithinIsotopicProfile(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
-
             var correlationData = new ChromCorrelationData();
             int indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
@@ -236,11 +233,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             return correlationData;
         }
-
-
-
-
-
 
         protected XYData GetCorrelatedChromPeakXYData(Run run, int startScan, int stopScan, XYData basePeakChromXYData, double correlatedMZValue)
         {

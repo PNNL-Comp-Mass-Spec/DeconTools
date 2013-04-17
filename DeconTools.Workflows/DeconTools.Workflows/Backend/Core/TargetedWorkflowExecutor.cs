@@ -247,6 +247,12 @@ namespace DeconTools.Workflows.Backend.Core
                     else if (!String.IsNullOrEmpty(target.Code))
                     {
                         //Create empirical formula based on code. Assume it is an unmodified peptide
+
+                        if (target.Code.Contains("X"))
+                        {
+                            target.Code = target.Code.Replace('X', 'L');
+                        }
+
                         target.EmpiricalFormula = new PeptideUtils().GetEmpiricalFormulaForPeptideSequence(target.Code);
 
                     }
@@ -259,7 +265,7 @@ namespace DeconTools.Workflows.Backend.Core
                         }
                         target.Code = "AVERAGINE";
                         target.EmpiricalFormula =
-                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass);
+                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass,false);
                     }
                 }
 

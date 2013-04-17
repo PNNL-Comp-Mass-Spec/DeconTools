@@ -326,10 +326,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected virtual void ExecuteWorkflow(IqResult result)
+
+
+        public virtual void TestTarget(IqTarget target)
         {
 
-           
+        }
+
+
+
+        protected virtual void ExecuteWorkflow(IqResult result)
+        {
             result.Target.TheorIsotopicProfile = TheorFeatureGen.GenerateTheorProfile(result.Target.EmpiricalFormula, result.Target.ChargeState);
 
             result.IqResultDetail.Chromatogram = ChromGen.GenerateChromatogram(Run, result.Target.TheorIsotopicProfile, result.Target.ElutionTimeTheor);

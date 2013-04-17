@@ -334,7 +334,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             TargetedResultBase result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-            result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
+            result.ErrorDescription = "CRITICAL ERROR: " + ex.Message  ;
             result.FailedResult = true;
         }
 
