@@ -43,12 +43,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             Assert.IsNotNull(chromXYData);
 
             TestUtilities.DisplayXYValues(chromXYData);
-
-
-
-
-
-
         }
 
 
@@ -156,9 +150,57 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             //make sure that the 0's are not trimmed off
             Assert.AreEqual(0, run.XYData.Yvalues[1]);
-
         }
 
+        //SK
+        [Test]
+        public void GetPeakChromatogram_IQStyle_Test2()
+        {
+            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+
+            var target = TestUtilities.GetIQTargetStandard(1);
+
+            var chromGen = new PeakChromatogramGenerator();
+            chromGen.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS;
+            chromGen.TopNPeaksLowerCutOff = 0.4;
+            chromGen.Tolerance = 100;
+
+            int lowerScan = 6087;
+            int upperScan = 6418;
+
+            var chromXYData = chromGen.GenerateChromatogram(run, target.TheorIsotopicProfile, lowerScan, upperScan, chromGen.Tolerance, chromGen.ToleranceUnit);
+            Assert.IsNotNull(chromXYData);
+            Assert.AreEqual(105, chromXYData.Xvalues.Length);
+
+            TestUtilities.DisplayXYValues(chromXYData);
+        }
+
+        //SK
+        [Test]
+        public void GetPeakChromatogram_IQStyle_Test3()
+        {
+
+            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+
+            var target = TestUtilities.GetIQTargetStandard(1);
+
+            var chromGen = new PeakChromatogramGenerator();
+            chromGen.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS;
+            chromGen.TopNPeaksLowerCutOff = 0.4;
+            chromGen.Tolerance = 100;
+
+            int lowerScan = 6087;
+            int upperScan = 6418;
+            List<double> massOfInterest = new List<double>();
+            massOfInterest.Add(target.TheorIsotopicProfile.Peaklist[0].XValue);
+            massOfInterest.Add(target.TheorIsotopicProfile.Peaklist[1].XValue);
+
+            var chromXYData = chromGen.GenerateChromatogram(run, massOfInterest, lowerScan, upperScan, chromGen.Tolerance, chromGen.ToleranceUnit);
+            Assert.IsNotNull(chromXYData);
+            Assert.AreEqual(96, chromXYData.Xvalues.Length);
+
+            TestUtilities.DisplayXYValues(chromXYData);
+        }
 
         [Test]
         public void getPeakChromatogramInTheFormOfMSPeakResult_Test1()

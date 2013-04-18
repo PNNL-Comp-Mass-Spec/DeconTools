@@ -299,6 +299,36 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
+        public XYData GenerateChromatogram(Run run, List<double> targetMZList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        {
+
+            if (run.MassIsAligned)
+            {
+                for (int i = 0; i < targetMZList.Count; i++)
+                {
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run);
+                }
+            }
+
+            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+
+            chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1, false);
+
+            return chromValues;
+        }
+
+        public XYData GenerateChromatogram(Run run, IsotopicProfile theorProfile, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        {
+            List<double> targetMZList;
+            if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
+            {
+                throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
+            }
+            targetMZList = GetTargetMZList(theorProfile);
+
+            return GenerateChromatogram(run, targetMZList, lowerScan, upperScan, tolerance, toleranceUnit);
+
+        }
 
         public XYData GenerateChromatogram(Run run, double targetMZ, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
