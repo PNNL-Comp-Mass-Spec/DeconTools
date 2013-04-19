@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             string formula = @"H(-3) N(-1)";
 
-            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula, true);
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
 
             Assert.AreEqual(-3, formulaDictionary["H"]);
@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             string formula = @"H26 2H(8) C20 N4 O5 S";
 
-            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula, true);
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
 
             Assert.AreEqual(8, formulaDictionary["2H"]);
@@ -44,12 +44,54 @@ namespace DeconTools.UnitTesting2.Utilities
 
         }
 
+
+        [Test]
+        public void parseUnimodStyleFormulaTest2A()
+        {
+            string formula = @"H26 2H(8) C20 N4 O5 S";
+
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
+
+
+            Assert.AreEqual(8, formulaDictionary["2H"]);
+            Assert.AreEqual(26, formulaDictionary["H"]);
+            Assert.AreEqual(1, formulaDictionary["S"]);
+
+
+            var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
+
+
+
+        }
+
+
+        [Test]
+        public void parseUnimodStyleFormulaTest2B()
+        {
+            string formula = @"H26 2H(8) C20 N4 O5 S";
+
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
+
+
+            Assert.AreEqual(8, formulaDictionary["2H"]);
+            Assert.AreEqual(26, formulaDictionary["H"]);
+            Assert.AreEqual(1, formulaDictionary["S"]);
+
+
+            var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
+
+
+
+        }
+
+
+
         [Test]
         public void parseUnimodStyleFormulaTest3()
         {
             string formula = @"H32 C34 N4 O4 Fe";
 
-            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula, true);
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
             Assert.AreEqual(34, formulaDictionary["C"]);
             Assert.AreEqual(32, formulaDictionary["H"]);
@@ -62,13 +104,57 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             string formula = @"H32C34N4O4Fe";
 
-            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula, true);
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
             Assert.AreEqual(34, formulaDictionary["C"]);
             Assert.AreEqual(32, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["Fe"]);
 
         }
+
+
+        [Test]
+        public void ParseUnimodStyleTest5()
+        {
+            string formula = "H(-3) 2H(3) C(-1) 13C O 15N(10)";
+
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
+
+            Assert.AreEqual(-1, formulaDictionary["C"]);
+            Assert.AreEqual(-3, formulaDictionary["H"]);
+            Assert.AreEqual(1, formulaDictionary["13C"]);
+            Assert.AreEqual(10, formulaDictionary["15N"]);
+        }
+
+
+
+        [Test]
+        public void ParseUnimodStyleTest5B()
+        {
+            string formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
+
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
+
+            Assert.AreEqual(-2, formulaDictionary["C"]);
+            Assert.AreEqual(-3, formulaDictionary["H"]);
+            Assert.AreEqual(1, formulaDictionary["13C"]);
+            Assert.AreEqual(10, formulaDictionary["15N"]);
+        }
+
+
+        [Test]
+        public void ParseUnimodStyleTest5C()
+        {
+            string formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
+
+            var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
+
+            Assert.AreEqual(-1.5, formulaDictionary["C"]);
+            Assert.AreEqual(-3, formulaDictionary["H"]);
+            Assert.AreEqual(1, formulaDictionary["13C"]);
+            Assert.AreEqual(10.343, formulaDictionary["15N"]);
+        }
+
 
 
         [Test]
@@ -97,6 +183,8 @@ namespace DeconTools.UnitTesting2.Utilities
             PeptideUtils peptideUtils = new PeptideUtils();
             string baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
+            
+
             string mod = "H(-3) N(-1)";
             var modFormula = EmpiricalFormulaUtilities.AddFormula(baseFormula, mod);
 
@@ -106,6 +194,7 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual("C33H55N9O11S", modFormula);
 
         }
+
 
 
         [Test]
