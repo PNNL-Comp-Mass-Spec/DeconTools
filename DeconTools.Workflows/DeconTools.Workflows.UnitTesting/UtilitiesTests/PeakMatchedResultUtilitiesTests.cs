@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.UnitTesting.UtilitiesTests
             Assert.AreEqual(4184, importedResults.Count);
 
 
-            MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(dbname,dbserver,importedResults.Select(p=>(long)p.MatchedMassTagID).Distinct().ToList());
+            MassTagFromSqlDbImporter mtImporter = new MassTagFromSqlDbImporter(dbname,dbserver,importedResults.Select(p=>(long)p.MatchedMassTagID).Distinct().ToList());
             var targetCollection=  mtImporter.Import();
 
             StringBuilder sb=new StringBuilder();

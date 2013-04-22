@@ -7,24 +7,67 @@ using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public abstract class IqTargetImporter:ImporterBase<List<IqTarget>> 
+    public abstract class IqTargetImporter : ImporterBase<List<IqTarget>>
     {
+        private int _lineCounter;
         //note that case does not matter in the header
-        protected string[] DatasetHeaders = { "dataset" };
-        protected string[] EmpiricalFormulaHeaders = { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
-        protected string[] CodeHeaders = { "code", "sequence" };
-        protected string[] TargetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid", "mtid" };
-        protected string[] MonomassHeaders = { "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
-        protected string[] AlternateIDHeader = { "MatchedMassTagID", "AlternateID" };
-        protected string[] MzHeaders = { "MonoMZ", "UMCMZForChargeBasis" };
-        protected string[] ScanHeaders = { "scan", "scanClassRep" };
-        protected string[] NETHeaders = { "net", "ElutionTime", "RT", "NETElutionTime" };
-        protected string Filename { get; set; }
+        //protected string[] DatasetHeaders = { "dataset" };
+        //protected string[] EmpiricalFormulaHeaders = { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
+        //protected string[] CodeHeaders = { "code", "sequence" };
+        //protected string[] TargetIDHeaders = { "id", "mass_tag_id", "massTagid", "targetid", "mtid" };
+        //protected string[] MonomassHeaders = {"MonoMass", "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
+        //protected string[] AlternateIDHeader = { "MatchedMassTagID", "AlternateID" };
+        //protected string[] MzHeaders = { "MonoMZ","MonoisotopicMZ", "UMCMZForChargeBasis" };
+        //protected string[] ScanHeaders = {"ScanLC","LCScan", "scan", "scanClassRep" };
+        //protected string[] NETHeaders = { "net", "ElutionTime", "RT", "NETElutionTime" };
+
 
         #region Constructors
+
+        protected IqTargetImporter()
+        {
+            DatasetHeaders = new [] { "dataset" };
+            EmpiricalFormulaHeaders = new[] { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
+            CodeHeaders = new[] { "code", "sequence" , "peptide" };
+            TargetIDHeaders = new[] { "id", "mass_tag_id", "massTagid", "targetid", "mtid" };
+            MonomassHeaders = new[] { "MonoMass", "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
+            AlternateIDHeader = new[] { "MatchedMassTagID", "AlternateID" };
+            MzHeaders = new[] { "MonoMZ", "MonoisotopicMZ", "UMCMZForChargeBasis" };
+            ScanHeaders = new[] { "ScanLC", "LCScan", "scan", "scanClassRep" , "ScanNum" };
+            NETHeaders = new[] { "net", "ElutionTime", "RT", "NETElutionTime" };
+            QualityScoreHeaders = new[] {"QValue"};
+            ChargeStateHeaders = new[] {"ChargeState", "Z", "Charge"};
+        }
+
+
         #endregion
 
         #region Properties
+
+        protected string[] DatasetHeaders { get; set; }
+
+        protected string[] EmpiricalFormulaHeaders { get; set; }
+
+        protected string[] CodeHeaders { get; set; }
+
+        protected string[] TargetIDHeaders { get; set; }
+
+        protected string[] MonomassHeaders { get; set; }
+
+        protected string[] AlternateIDHeader { get; set; }
+
+        protected string[] MzHeaders { get; set; }
+
+        protected string[] ScanHeaders { get; set; }
+
+        protected string[] NETHeaders { get; set; }
+
+        protected string[] QualityScoreHeaders { get; set; }
+
+        protected string[] ChargeStateHeaders { get; set; }
+
+
+        protected string Filename { get; set; }
 
         #endregion
 
@@ -71,7 +114,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                _lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
@@ -82,12 +125,13 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("In File: " + Path.GetFileName(Filename) + "; Data in row # " + lineCounter.ToString() + " is NOT valid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("In File: " + Path.GetFileName(Filename) + "; Data in row # " + _lineCounter + " is NOT valid - \nThe number of columns does not match that of the header line");
                     }
 
                     IqTarget target = ConvertTextToIqTarget(processedData);
+
                     allTargets.Add(target);
-                    lineCounter++;
+                    _lineCounter++;
 
                 }
                 sr.Close();
@@ -100,9 +144,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                                                   {
                                                       n.ID
                                                   }
-                                   into grp
-                                   select grp.First()).ToList();
-            
+                                       into grp
+                                       select grp.First()).ToList();
+
             return filteredTargets;
         }
 
@@ -112,13 +156,19 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             return true;    //TODO: actually do some validation
         }
-        
+
+        protected int GetAutoIncrementForTargetID()
+        {
+            return _lineCounter;
+        }
+
+
         #endregion
 
         #region Private Methods
 
         #endregion
 
-     
+
     }
 }

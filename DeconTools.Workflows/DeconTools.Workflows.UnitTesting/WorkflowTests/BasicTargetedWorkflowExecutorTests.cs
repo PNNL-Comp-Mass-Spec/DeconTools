@@ -5,6 +5,7 @@ using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
+using System.Linq;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
@@ -197,7 +198,34 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        public void TargetedWorkflowUsingMsgfInputsTest1()
+        {
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.TargetsFilePath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
 
+            executorParameters.TargetedAlignmentIsPerformed = false;
+            
+         
+            var workflowParameters = new BasicTargetedWorkflowParameters();
+            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+            workflowParameters.ChromPeakDetectorPeakBR = 1;
+            workflowParameters.ChromPeakDetectorSigNoise = 3;
+            workflowParameters.ChromGenTolerance = 20;
+            workflowParameters.ChromNETTolerance = 0.025;
+            workflowParameters.MSToleranceInPPM = 20;
+
+            var workflow = new BasicTargetedWorkflow(workflowParameters);
+
+            string testDatasetPath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow, testDatasetPath);
+
+            executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
+
+            executor.Execute();
+        }
 
 
         [Test]
@@ -216,6 +244,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+        [Test]
+        public void ExecutorTest3Temp()
+        {
+            string executorParamFile =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\ExecutorParameters1 - Copy.xml";
+
+            string testDatasetPath =
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+
+
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(executorParamFile);
+            executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+
+            TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
+            executor.Execute();
+
+
+        }
 
 
 

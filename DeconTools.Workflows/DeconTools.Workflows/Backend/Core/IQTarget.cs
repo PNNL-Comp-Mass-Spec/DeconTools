@@ -52,6 +52,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         public double ElutionTimeTheor { get; set; }
 
+
+        public int ScanLC { get; set; }
+
+
         public IqTarget ParentTarget { get; set; }
 
         public IqWorkflow Workflow { get; set; }
@@ -148,6 +152,12 @@ namespace DeconTools.Workflows.Backend.Core
                 return ParentTarget != null;
             }
         }
+
+        /// <summary>
+        /// Indicates the quality of the target. E.g. the MSGF probability score for the target
+        /// </summary>
+        public double QualityScore { get; set; }
+
 
         public void AddTarget(IqTarget target)
         {

@@ -91,6 +91,36 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             }
         }
 
+
+        [Test]
+        public void ImportIqTargetsFromMsgfTest1()
+        {
+            string targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
+            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
+
+            var targets = importer.Import();
+            Assert.IsNotNull(targets);
+            Assert.IsTrue(targets.Any());
+
+
+            IqTargetUtilities utilities = new IqTargetUtilities();
+
+            foreach (var iqTarget in targets)
+            {
+                utilities.UpdateTargetMissingInfo(iqTarget, false);
+            }
+
+
+            Assert.IsTrue(targets.Count > 10);
+            foreach (IqTarget iqTarget in targets.Take(10))
+            {
+                Console.WriteLine(iqTarget.ToString() + "\t"+ iqTarget.ScanLC + "\t" +  iqTarget.QualityScore);
+            }
+        }
+
+
+
+
         [Test]
         public void ImportUnlabeledIqTargetsFromResultsFileTest1()
         {

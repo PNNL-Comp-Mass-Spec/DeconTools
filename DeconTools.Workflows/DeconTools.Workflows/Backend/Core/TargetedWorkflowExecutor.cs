@@ -42,6 +42,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.WorkflowParameters = parameters;
 
+            MsgfFdrScoreCutoff = 0.1;
+
             ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
@@ -200,6 +202,9 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetCollection MassTagsForReference { get; set; }
 
 
+        public double MsgfFdrScoreCutoff { get; set; }
+
+
         #endregion
 
      
@@ -295,6 +300,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             string expectedTargetsFile1 = expectedTargetsFileBase + "_targets.txt";
             string expectedTargetsFile2 = expectedTargetsFileBase + "_LCMSFeatures.txt";
+            string expectedTargetsFile3 = expectedTargetsFileBase + "_MSGFplus.tsv";
 
 
             if (File.Exists(expectedTargetsFile1))
@@ -306,6 +312,13 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return expectedTargetsFile2;
             }
+
+            if (File.Exists(expectedTargetsFile3))
+            {
+                return expectedTargetsFile3;
+            }
+
+
 
             return String.Empty;
         }
@@ -652,6 +665,39 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return new TargetCollection();
             }
+
+
+            if (massTagFileName.ToLower().Contains("_msgfplus.tsv"))
+            {
+                BasicIqTargetImporter iqTargetImporter = new BasicIqTargetImporter(massTagFileName);
+                var iqTargets = iqTargetImporter.Import();
+
+                IqTargetUtilities targetUtilities = new IqTargetUtilities();
+                TargetCollection targetCollection = new TargetCollection();
+                targetCollection.TargetList = new List<TargetBase>();
+
+                foreach (var iqTarget in iqTargets)
+                {
+                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff) continue;
+                    targetUtilities.UpdateTargetMissingInfo(iqTarget);
+
+                    TargetBase oldStyleTarget = new PeptideTarget();
+                    oldStyleTarget.ChargeState = (short)iqTarget.ChargeState;
+                    oldStyleTarget.Code = iqTarget.Code;
+                    oldStyleTarget.EmpiricalFormula = iqTarget.EmpiricalFormula;
+                    oldStyleTarget.ID = iqTarget.ID;
+                    oldStyleTarget.MZ = iqTarget.MZTheor;
+                    oldStyleTarget.MonoIsotopicMass = iqTarget.MonoMassTheor;
+                    oldStyleTarget.ScanLCTarget = iqTarget.ScanLC;
+                    oldStyleTarget.NormalizedElutionTime = (float)iqTarget.ElutionTimeTheor;
+
+                    oldStyleTarget.ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum;
+                    targetCollection.TargetList.Add(oldStyleTarget);
+                }
+
+                return targetCollection;
+            }
+
 
             MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
             return importer.Import(targetIDsToFilterOn);
@@ -1046,6 +1092,37 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
+            if (targetsFilePath.ToLower().Contains("_msgfplus.tsv"))
+            {
+                BasicIqTargetImporter iqTargetImporter = new BasicIqTargetImporter(targetsFilePath);
+                var iqTargets = iqTargetImporter.Import();
+
+                IqTargetUtilities targetUtilities = new IqTargetUtilities();
+                TargetCollection targetCollection = new TargetCollection();
+                targetCollection.TargetList = new List<TargetBase>();
+
+                foreach (var iqTarget in iqTargets)
+                {
+                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff) continue;
+                    targetUtilities.UpdateTargetMissingInfo(iqTarget);
+
+                    TargetBase oldStyleTarget = new LcmsFeatureTarget();
+                    oldStyleTarget.ChargeState = (short)iqTarget.ChargeState;
+                    oldStyleTarget.Code = iqTarget.Code;
+                    oldStyleTarget.EmpiricalFormula = iqTarget.EmpiricalFormula;
+                    oldStyleTarget.ID = iqTarget.ID;
+                    oldStyleTarget.MZ = iqTarget.MZTheor;
+                    oldStyleTarget.MonoIsotopicMass = iqTarget.MonoMassTheor;
+                    oldStyleTarget.ScanLCTarget = iqTarget.ScanLC;
+                    oldStyleTarget.NormalizedElutionTime = (float)iqTarget.ElutionTimeTheor;
+
+                    oldStyleTarget.ElutionTimeUnit = DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum;
+                    targetCollection.TargetList.Add(oldStyleTarget);
+                }
+
+                return targetCollection;
+            }
+            
             LcmsTargetFromFeaturesFileImporter importer =
                new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
 

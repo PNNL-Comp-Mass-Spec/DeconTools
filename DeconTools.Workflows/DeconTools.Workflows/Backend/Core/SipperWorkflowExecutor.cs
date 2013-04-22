@@ -110,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
-                MassTagFromSqlDBImporter mtImporter = new MassTagFromSqlDBImporter(db, server, MassTagIDsinTargets);
+                MassTagFromSqlDbImporter mtImporter = new MassTagFromSqlDbImporter(db, server, MassTagIDsinTargets);
                 MassTagsForReference = mtImporter.Import();
             }
             else

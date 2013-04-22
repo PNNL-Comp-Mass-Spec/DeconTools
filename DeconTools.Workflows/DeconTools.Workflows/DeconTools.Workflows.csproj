@@ -125,6 +125,7 @@
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetFromMsgfTextFileImporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\MSAlignIqTargetImporter.cs" />
