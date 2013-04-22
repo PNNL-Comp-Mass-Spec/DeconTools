@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
 
-            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
+            MassTagFromSqlDbImporter importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
             var targetCollection = importer.Import();
 
             PeptideTarget testPeptide1 = (PeptideTarget)targetCollection.TargetList[2];
@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void checkModImport_Test1()
         {
-            MassTagFromSqlDBImporter importer = new MassTagFromSqlDBImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
+            MassTagFromSqlDbImporter importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
             var targetCollection = importer.Import();
 
             PeptideTarget testPeptide1 = (PeptideTarget)targetCollection.TargetList[70];

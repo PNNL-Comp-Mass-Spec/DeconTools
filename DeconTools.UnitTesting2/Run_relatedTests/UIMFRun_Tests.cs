@@ -249,11 +249,36 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double targetMZ = 627.27;
             double toleranceInPPM = 25;
 
-            uimfRun.GetChromatogram(startFrame, stopFrame, startScan, stopScan, targetMZ, toleranceInPPM);
+           var chromXYData=   uimfRun.GetChromatogram(startFrame, stopFrame, startScan, stopScan, targetMZ, toleranceInPPM);
 
-            uimfRun.XYData.Display();
+           chromXYData.Display();
             //TODO: actually test something
         }
+
+
+
+        [Test]
+        public void getDriftTimeProfile()
+        {
+            UIMFRun uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
+
+            int frame = 163;
+           
+            int startScan = 100;
+            int stopScan = 140;
+
+
+            double targetMZ = 627.27;
+            double toleranceInPPM = 5;
+
+            var chromXYData = uimfRun.GetDriftTimeProfile(frame, startScan, stopScan, targetMZ, toleranceInPPM);
+
+            chromXYData.Display();
+            //TODO: actually test something
+        }
+
+
+
 
 
         [Test]

@@ -9,24 +9,29 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MassTagFromSqlDBImporter : IMassTagImporter
+    public class MassTagFromSqlDbImporter : IMassTagImporter
     {
         private List<Tuple<int, string, int, string>> _massTagModData;
         public List<long> MassTagsToBeRetrieved { get; private set; }
 
         #region Constructors
-        public MassTagFromSqlDBImporter()
+        public MassTagFromSqlDbImporter()
         {
             DbUsername = "mtuser";
             DbUserPassWord = "mt4fun";
             ImporterMode = Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode;
             ChunkSize = 500;
             ChargeStateFilterThreshold = 0.1;
+
+            MinMZForChargeStateRange = 400;
+
+            MaxMZForChargeStateRange = 1500;
+
         }
 
 
 
-        public MassTagFromSqlDBImporter(string dbName, string serverName, List<long> massTagsToBeRetrieved)
+        public MassTagFromSqlDbImporter(string dbName, string serverName, List<long> massTagsToBeRetrieved)
             : this()
         {
             this.DbName = dbName;
@@ -44,6 +49,12 @@ namespace DeconTools.Backend.FileIO
 
 
         public int ChunkSize { get; set; }
+
+        public double MinMZForChargeStateRange { get; set; }
+
+        public double MaxMZForChargeStateRange { get; set; }
+
+        public bool ChargeStateRangeBasedOnDatabase { get; set; }
 
 
         public DeconTools.Backend.Globals.MassTagDBImporterMode ImporterMode { get; set; }
@@ -76,19 +87,19 @@ namespace DeconTools.Backend.FileIO
         public override DeconTools.Backend.Core.TargetCollection Import()
         {
 
-            DeconTools.Backend.Core.TargetCollection data = new TargetCollection();
-            data.TargetList.Clear();
+            DeconTools.Backend.Core.TargetCollection targetCollection = new TargetCollection();
+            targetCollection.TargetList.Clear();
 
-            GetMassTagDataFromDB(data, MassTagsToBeRetrieved);
+            GetMassTagDataFromDB(targetCollection, MassTagsToBeRetrieved);
 
-            GetModDataFromDB(data, MassTagsToBeRetrieved);
+            GetModDataFromDB(targetCollection, MassTagsToBeRetrieved);
 
             PeptideUtils peptideUtils = new PeptideUtils();
 
             List<TargetBase> troubleSomePeptides = new List<TargetBase>();
 
 
-            foreach (PeptideTarget peptide in data.TargetList)
+            foreach (PeptideTarget peptide in targetCollection.TargetList)
             {
                 string baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
 
@@ -134,7 +145,7 @@ namespace DeconTools.Backend.FileIO
             var cleanTargetList = new List<TargetBase>();
 
             //filter out the bad peptides (the once with errors during empirical formula parsing)
-            foreach (var peptide in data.TargetList)
+            foreach (var peptide in targetCollection.TargetList)
             {
                 if (!troubleSomePeptides.Contains(peptide))
                 {
@@ -143,11 +154,53 @@ namespace DeconTools.Backend.FileIO
 
             }
 
-            data.TargetList = cleanTargetList;
+            targetCollection.TargetList = cleanTargetList;
 
-            data.ApplyChargeStateFilter(this.ChargeStateFilterThreshold);
 
-            return data;
+            if (ChargeStateRangeBasedOnDatabase)
+            {
+                targetCollection.ApplyChargeStateFilter(this.ChargeStateFilterThreshold);  
+            }
+            else
+            {
+                List<TargetBase> chargeStateTargets = new List<TargetBase>();
+
+                foreach (var targetBase in targetCollection.TargetList)
+                {
+                    int minCharge = 1;
+                    int maxCharge = 100;
+
+                    for (int charge = minCharge; charge <= maxCharge; charge++)
+                    {
+                        double mz = targetBase.MonoIsotopicMass / charge + DeconTools.Backend.Globals.PROTON_MASS;
+
+                        if (mz < MaxMZForChargeStateRange)
+                        {
+
+                            if (mz < MinMZForChargeStateRange)
+                            {
+                                break;
+                            }
+
+                            TargetBase chargeStateTarget = new PeptideTarget((PeptideTarget) targetBase);
+                            chargeStateTarget.ChargeState = (short) charge;
+                            chargeStateTarget.MZ = chargeStateTarget.MonoIsotopicMass/charge + Globals.PROTON_MASS;
+                            chargeStateTarget.ObsCount = -1;
+                            chargeStateTargets.Add(chargeStateTarget);
+                        }
+                    }
+
+                }
+
+
+
+                targetCollection.TargetList = chargeStateTargets.OrderBy(p=>p.ID).ThenBy(p=>p.ChargeState).ToList();
+
+
+            }
+            
+
+            return targetCollection;
 
 
 
@@ -393,7 +446,6 @@ namespace DeconTools.Backend.FileIO
                      ON T_Mass_Tags.Mass_Tag_ID=T_Mass_Tag_to_Protein_Map.Mass_Tag_ID
                      INNER JOIN T_Proteins
                      ON T_Mass_Tag_to_Protein_Map.Ref_ID=T_Proteins.Ref_ID
-              WHERE pmt_quality_score >= 2
               GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Mass_Tags.PeptideEx,
               T_Mass_Tags.Mod_Count,T_Mass_Tags.Mod_Description,T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID,
               T_Proteins.Reference, T_Proteins.Description

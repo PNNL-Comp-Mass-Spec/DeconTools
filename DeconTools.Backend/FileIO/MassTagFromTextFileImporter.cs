@@ -174,12 +174,12 @@ namespace DeconTools.Backend.FileIO
         {
 
             PeptideTarget mt = new PeptideTarget();
-            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" }, lineData, "0"));
+            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" ,"charge"}, lineData, "0"));
 
             mt.ID = parseIntField(getValue(new string[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1"));
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
 
-            int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" }, lineData, "-1"));
+            int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
             mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
 
             bool neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
@@ -220,7 +220,7 @@ namespace DeconTools.Backend.FileIO
             mt.GeneReference = getValue(new string[] {"reference"}, lineData, "");
 
             mt.RefID = parseIntField(getValue(new string[] { "ref_id" }, lineData, "-1"));
-            mt.ProteinDescription = getValue(new string[] { "description" }, lineData, "");
+            mt.ProteinDescription = getValue(new string[] { "description" ,"protein" }, lineData, "");
 
             return mt;
 

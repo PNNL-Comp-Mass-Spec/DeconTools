@@ -208,7 +208,7 @@ namespace DeconTools.UnitTesting2.Scripts
                             {
                                 var theorIso = new IsotopicProfile();
 
-                                saturationWorkflow.RebuildSaturatedIsotopicProfile(isosResult, uimfRun.PeakList, out theorIso);
+                                saturationWorkflow.RebuildSaturatedIsotopicProfile(run.XYData, isosResult, uimfRun.PeakList, out theorIso);
                                 saturationWorkflow.AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, true, true);
 
                             }

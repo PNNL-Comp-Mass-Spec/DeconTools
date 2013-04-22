@@ -543,25 +543,30 @@ namespace DeconTools.Backend.Runs
         //}
 
 
-        //public void GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
-        //{
-        //    int[] scanValues = null;
-        //    int[] intensityVals = null;
+        public XYData GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
+        {
+            int[] scanValues = null;
+            int[] intensityVals = null;
 
-        //    UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameNum, frameNum, 0, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+            UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetDriftTimeProfile(frameNum, frameNum, DataReader.FrameType.MS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
-        //    if (scanValues == null || scanValues.Length == 0)
-        //    {
-        //        this.XYData.Xvalues = null;
-        //        this.XYData.Yvalues = null;
-        //    }
-        //    else
-        //    {
-        //        this.XYData.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
-        //        this.XYData.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
-        //    }
 
-        //}
+            XYData xydata = new XYData();
+
+            if (scanValues == null || scanValues.Length == 0)
+            {
+                xydata.Xvalues = null;
+                xydata.Yvalues = null;
+            }
+            else
+            {
+                xydata.Xvalues = scanValues.Select<int, double>(i => i).ToArray();
+                xydata.Yvalues = intensityVals.Select<int, double>(i => i).ToArray();
+            }
+
+            return xydata;
+
+        }
 
 
 
@@ -584,7 +589,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public void GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
+        public XYData GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
         {
             double toleranceInMZ = toleranceInPPM / 1e6 * targetMZ;
             double lowerMZ = targetMZ - toleranceInMZ;
@@ -597,22 +602,27 @@ namespace DeconTools.Backend.Runs
             {
                 var frameset = new ScanSet(frame);
                 ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
-                this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
+                var xydata=   this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
 
 
                 double sumIntensities = 0;
 
-                if (XYData != null && XYData.Yvalues != null && XYData.Yvalues.Length > 0)
+                if (xydata != null && xydata.Yvalues != null && xydata.Yvalues.Length > 0)
                 {
-                    sumIntensities = this.XYData.Yvalues.Sum();
+                    sumIntensities = xydata.Yvalues.Sum();
                 }
 
                 frameVals.Add(frame);
                 intensityVals.Add(sumIntensities);
             }
 
-            this.XYData.Xvalues = frameVals.ToArray();
-            this.XYData.Yvalues = intensityVals.ToArray();
+            XYData chromXYData = new XYData();
+
+
+            chromXYData.Xvalues = frameVals.ToArray();
+            chromXYData.Yvalues = intensityVals.ToArray();
+
+            return chromXYData;
         }
 
         public override string GetCurrentScanOrFrameInfo()

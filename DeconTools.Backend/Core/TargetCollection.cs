@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -46,10 +44,10 @@ namespace DeconTools.Backend.Core
 
             var massTagsNonRedundant = new List<TargetBase>();
 
-            for (int i = 0; i < this.TargetList.Count; i++)
+            foreach (var mtCurrent in this.TargetList)
             {
-                var mtCurrent = this.TargetList[i];
-                if (massTagsNonRedundant.Where(p => p.ID == mtCurrent.ID && p.ChargeState == mtCurrent.ChargeState).Count() == 0)
+                TargetBase current = mtCurrent;
+                if (massTagsNonRedundant.Where(p => p.ID == current.ID && p.ChargeState == current.ChargeState).Count() == 0)
                 {
                     massTagsNonRedundant.Add(mtCurrent);
                 }
