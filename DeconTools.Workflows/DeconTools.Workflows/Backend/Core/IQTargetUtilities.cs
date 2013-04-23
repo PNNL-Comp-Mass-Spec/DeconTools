@@ -77,18 +77,18 @@ namespace DeconTools.Workflows.Backend.Core
             return iqtargets;
         }
 
-        public void CreateChildTargets(List<IqTarget> targets)
+        public void CreateChildTargets(List<IqTarget> targets, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100)
         {
             foreach (IqTarget iqTarget in targets)
             {
                 UpdateTargetMissingInfo(iqTarget);
 
-                var childTargets = CreateChargeStateTargets(iqTarget);
+                var childTargets = CreateChargeStateTargets(iqTarget, minMZObs, maxMZObserved, maxChargeStatesToCreate);
                 iqTarget.AddTargetRange(childTargets);
             }
         }
 
-        public List<IqTarget> CreateChargeStateTargets(IqTarget iqTarget, double minMZObs = 400, double maxMZObserved = 1500)
+        public List<IqTarget> CreateChargeStateTargets(IqTarget iqTarget, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100)
         {
             int minCharge = 1;
             int maxCharge = 100;
@@ -130,6 +130,13 @@ namespace DeconTools.Workflows.Backend.Core
                     targetList.Add(chargeStateTarget);
                 }
             }
+
+
+            //sort by charge state (descending). Then take the top N charge states. Then reorder by charge state (ascending).
+            targetList = targetList.OrderByDescending(p => p.ChargeState).Take(maxChargeStatesToCreate).OrderBy(p => p.ChargeState).ToList();
+
+            
+
 
             return targetList;
         }

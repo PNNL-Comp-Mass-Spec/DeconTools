@@ -59,7 +59,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqResult> Results { get; set; }
 
-        public List<IqTarget> Targets { get; set; } 
+        public List<IqTarget> Targets { get; set; }
 
 
         protected ResultExporter ResultExporter { get; set; }
@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.Backend.Core
             Run = run;
         }
 
-        
+
         public void Execute(IEnumerable<IqTarget> targets)
         {
             foreach (var target in targets)
@@ -93,9 +93,9 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     LoadChromData(Run);
                 }
-               
+
                 target.DoWorkflow();
-                var result= target.GetResult();
+                var result = target.GetResult();
 
                 if (IsDataExported)
                 {
@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (DisposeResultDetails)
                 {
-                    result.Dispose(); 
+                    result.Dispose();
                 }
             }
 
@@ -129,22 +129,25 @@ namespace DeconTools.Workflows.Backend.Core
 
             Targets = TargetImporter.Import();
 
-            _targetUtilities.CreateChildTargets(Targets);
+            _targetUtilities.CreateChildTargets(Targets, 
+                Parameters.MinMzForDefiningChargeStateTargets,
+                Parameters.MaxMzForDefiningChargeStateTargets,
+                Parameters.MaxNumberOfChargeStateTargetsToCreate);
         }
 
 
 
-      
+
         protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
 
         protected virtual void ExportResults(IqResult iqResult)
         {
-            List<IqResult> resultsForExport =_iqResultUtilities.FlattenOutResultTree(iqResult);
+            List<IqResult> resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
 
-            if (ResultExporter==null)
+            if (ResultExporter == null)
             {
                 ResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
@@ -153,7 +156,7 @@ namespace DeconTools.Workflows.Backend.Core
             ResultExporter.WriteOutResults(Parameters.ResultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
         }
 
-  
+
 
         private string CreatePeaksForChromSourceData()
         {

@@ -4,6 +4,7 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class WorkflowExecutorBaseParameters : WorkflowParameters
     {
         
+
         #region Constructors
         public WorkflowExecutorBaseParameters()
         {
@@ -15,6 +16,10 @@ namespace DeconTools.Workflows.Backend.Core
 
             AlignmentInfoIsExported = true;
             AlignmentFeaturesAreSavedToTextFile = true;
+
+            MinMzForDefiningChargeStateTargets = 400;
+            MaxMzForDefiningChargeStateTargets = 1500;
+
         }
         #endregion
 
@@ -45,6 +50,23 @@ namespace DeconTools.Workflows.Backend.Core
         public double ChromGenSourceDataSigNoise { get; set; }
         public bool ChromGenSourceDataIsThresholded { get; set; }
         public bool ChromGenSourceDataProcessMsMs { get; set; }
+
+        
+        /// <summary>
+        /// Minimum m/z value used for defining the a range of IqChargeState targets
+        /// </summary>
+        public double MinMzForDefiningChargeStateTargets { get; set; }
+
+
+        /// <summary>
+        /// Maxium m/z value used for defining the a range of IqChargeState targets
+        /// </summary>
+        public double MaxMzForDefiningChargeStateTargets { get; set; }
+
+        /// <summary>
+        /// Maximum number of charge states to create
+        /// </summary>
+        public int MaxNumberOfChargeStateTargetsToCreate { get; set; }
 
         //public string ExportAlignmentFolder { get; set; }
 

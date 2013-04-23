@@ -50,6 +50,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        [Test]
+        public void LoadExecutorParametersTest1()
+        {
+            string inputFilename = baseFolder + @"\Parameters\BasicTargetedWorkflowExecutorParameters_forImport.xml";
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorParameters.LoadParameters(inputFilename);
+
+            Assert.AreEqual(1500,(int)executorParameters.MaxMzForDefiningChargeStateTargets);
+
+        }
+
+        
+
+
+
 
         [Category("MustPass")]
         [Test]

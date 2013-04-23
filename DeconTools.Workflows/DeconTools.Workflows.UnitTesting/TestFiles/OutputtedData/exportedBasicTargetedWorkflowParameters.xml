@@ -5,12 +5,13 @@
   <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
   <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
   <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
+  <ChromGenTolerance>10</ChromGenTolerance>
+  <ChromGenToleranceUnit>PPM</ChromGenToleranceUnit>
   <ChromNETTolerance>0.025</ChromNETTolerance>
   <ChromPeakDetectorPeakBR>1</ChromPeakDetectorPeakBR>
   <ChromPeakDetectorSigNoise>1</ChromPeakDetectorSigNoise>
   <ChromPeakSelectorMode>Smart</ChromPeakSelectorMode>
   <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
-  <ChromToleranceInPPM>10</ChromToleranceInPPM>
   <MaxScansSummedInDynamicSumming>100</MaxScansSummedInDynamicSumming>
   <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
   <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
@@ -18,7 +19,9 @@
   <MultipleHighQualityMatchesAreAllowed>true</MultipleHighQualityMatchesAreAllowed>
   <NumChromPeaksAllowedDuringSelection>20</NumChromPeaksAllowedDuringSelection>
   <NumMSScansToSum>1</NumMSScansToSum>
+  <ProcessMsMs>false</ProcessMsMs>
   <ResultType>BASIC_TARGETED_RESULT</ResultType>
+  <SmartChromPeakSelectorNumMSSummed>1</SmartChromPeakSelectorNumMSSummed>
   <SummingMode>SUMMINGMODE_STATIC</SummingMode>
   <WorkflowType>UnlabelledTargeted1</WorkflowType>
 </WorkflowParameters>

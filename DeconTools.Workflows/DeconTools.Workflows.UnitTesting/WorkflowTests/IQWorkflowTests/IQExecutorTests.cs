@@ -26,6 +26,48 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
         }
 
+        [Category("MustPass")]
+        [Test]
+        public void ExecutorCreatingTargetsTest1()
+        {
+            var util = new IqTargetUtilities();
+            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+
+            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+
+            string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
+
+            string expectedResultsFilename = resultsFolder + "\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+
+
+            WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
+            executorBaseParameters.ChromGenSourceDataPeakBR = 3;
+            executorBaseParameters.ChromGenSourceDataSigNoise = 2;
+            executorBaseParameters.ResultsFolder = resultsFolder;
+            executorBaseParameters.TargetsFilePath = targetsFile;
+            executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
+
+            var executor = new IqExecutor(executorBaseParameters);
+            executor.ChromSourceDataFilePath = peaksTestFile;
+
+            executor.LoadAndInitializeTargets(targetsFile);
+            executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.305 && n.ElutionTimeTheor < 0.325 select n).Take(10).ToList();
+
+            foreach (var iqTarget in executor.Targets)
+            {
+                int numChildTargets = iqTarget.GetChildCount();
+
+                Assert.IsTrue(numChildTargets <= 2);    //MaxNumberOfChargeStateTargetsToCreate = 2;
+
+                Console.WriteLine(iqTarget + "\t" + numChildTargets);
+            }
+
+          
+        }
+
+
 
         [Category("MustPass")]
         [Test]
