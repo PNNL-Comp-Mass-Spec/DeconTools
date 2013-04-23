@@ -58,6 +58,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.LoadParameters(inputFilename);
 
             Assert.AreEqual(1500,(int)executorParameters.MaxMzForDefiningChargeStateTargets);
+            Assert.AreEqual(100, executorParameters.MaxNumberOfChargeStateTargetsToCreate);
 
         }
 
