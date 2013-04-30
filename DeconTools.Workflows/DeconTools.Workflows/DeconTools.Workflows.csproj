@@ -37,6 +37,9 @@
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Library\MultiAlignEngine.dll</HintPath>
@@ -162,6 +165,7 @@
     <Compile Include="Backend\Utilities\IqCodeParser\IqCodeParser.cs" />
     <Compile Include="Backend\Utilities\IqCodeParser\MSAlignCodeParser.cs" />
     <Compile Include="Backend\Utilities\IqCodeParser\MSGFCodeParser.cs" />
+    <Compile Include="Backend\Utilities\Logging\IqLogger.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
     <Compile Include="Backend\Utilities\ResultUtilities.cs" />
@@ -181,6 +185,9 @@
       <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

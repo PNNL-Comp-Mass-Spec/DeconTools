@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.FileIO;
+using log4net;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -20,72 +22,99 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Constructors
 
-        public IqExecutor()
+        public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run)
         {
-            Parameters = new BasicTargetedWorkflowExecutorParameters();
-            Results = new List<IqResult>();
-            IsDataExported = true;
-            DisposeResultDetails = true;
+			Results = new List<IqResult>();
+			IsDataExported = true;
+			DisposeResultDetails = true;
+            _parameters = parameters;
+	        _run = run;
+			SetupLogging();
+
+			Utilities.Logging.IqLogger.Log.Info("Start Processing...");
+			Utilities.Logging.IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
-
-        public IqExecutor(WorkflowExecutorBaseParameters parameters)
-            : this()
-        {
-            Parameters = parameters;
-        }
-
-        protected WorkflowExecutorBaseParameters Parameters { get; set; }
-
-        protected bool IsDataExported { get; set; }
 
         #endregion
 
         #region Properties
 
-        public bool DisposeResultDetails { get; set; }
+	    private WorkflowExecutorBaseParameters _parameters;
 
+	    private Run _run;
+
+		protected Run Run { 
+			get { return _run; }
+			set 
+			{ 
+				_run = value;
+				SetupLogging();
+			} 
+		}
+
+		protected WorkflowExecutorBaseParameters Parameters 
+		{ 
+			get { return _parameters; }
+			set
+			{
+				_parameters = value;
+				SetupLogging();
+			}
+		}
+
+		protected bool IsDataExported { get; set; }
+
+        public bool DisposeResultDetails { get; set; }
 
         public IqTargetImporter TargetImporter { get; set; }
 
+		public string ChromSourceDataFilePath { get; set; }
 
+		public List<IqResult> Results { get; set; }
 
+		public List<IqTarget> Targets { get; set; }
+
+		protected ResultExporter ResultExporter { get; set; }
+
+		protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
+
+		protected bool ChromDataIsLoaded
+		{
+			get
+			{
+				if (Run != null)
+				{
+					return Run.ResultCollection.MSPeakResultList.Count > 0;
+				}
+
+				return false;
+			}
+		}
+
+		protected bool RunIsInitialized
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+	
         #endregion
-
 
         #region Public Methods
 
-
-        public string ChromSourceDataFilePath { get; set; }
-
-        public List<IqResult> Results { get; set; }
-
-        public List<IqTarget> Targets { get; set; }
-
-
-        protected ResultExporter ResultExporter { get; set; }
 
         public void Execute()
         {
             Execute(Targets);
         }
 
-
-
-        public void SetRun(string datasetPath)
+        public void Execute(List<IqTarget> targets)
         {
-            Run = _runFactory.CreateRun(datasetPath);
-        }
+	        int totalTargets = targets.Count;
+	        int targetCount = 1;
+			Utilities.Logging.IqLogger.Log.Info("Total Targets: " + totalTargets);
+			Utilities.Logging.IqLogger.Log.Info("Processing...");
 
-
-        public void SetRun(Run run)
-        {
-            Run = run;
-        }
-
-
-        public void Execute(IEnumerable<IqTarget> targets)
-        {
-            foreach (var target in targets)
+	        foreach (var target in targets)
             {
                 Run = target.GetRun();
 
@@ -93,6 +122,8 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     LoadChromData(Run);
                 }
+
+				ReportGeneralProgress(targetCount, totalTargets);
 
                 target.DoWorkflow();
                 var result = target.GetResult();
@@ -108,17 +139,18 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     result.Dispose();
                 }
+	            targetCount++;
             }
 
+			Utilities.Logging.IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
         }
 
 
-
-
-        public virtual void LoadAndInitializeTargets()
+	    public virtual void LoadAndInitializeTargets()
         {
             LoadAndInitializeTargets(Parameters.TargetsFilePath);
         }
+
 
         public virtual void LoadAndInitializeTargets(string targetsFilePath)
         {
@@ -127,18 +159,18 @@ namespace DeconTools.Workflows.Backend.Core
                 TargetImporter = new BasicIqTargetImporter(targetsFilePath);
             }
 
+			Utilities.Logging.IqLogger.Log.Info("Target Loading Started...");
+
             Targets = TargetImporter.Import();
 
             _targetUtilities.CreateChildTargets(Targets, 
                 Parameters.MinMzForDefiningChargeStateTargets,
                 Parameters.MaxMzForDefiningChargeStateTargets,
                 Parameters.MaxNumberOfChargeStateTargetsToCreate);
+
+			Utilities.Logging.IqLogger.Log.Info("Targets Loaded Successfully");
         }
 
-
-
-
-        protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
 
         protected virtual void ExportResults(IqResult iqResult)
         {
@@ -157,8 +189,12 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+		#endregion
 
-        private string CreatePeaksForChromSourceData()
+		#region Private Methods
+
+
+		private string CreatePeaksForChromSourceData()
         {
             var parameters = new PeakDetectAndExportWorkflowParameters();
 
@@ -206,49 +242,42 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
                 //ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
+				Utilities.Logging.IqLogger.Log.Info("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
-
             }
             else
             {
-                //ReportGeneralProgress("Using existing _Peaks.txt file");
+				Utilities.Logging.IqLogger.Log.Info("Using Existing _Peaks.txt");
             }
 
-            //ReportGeneralProgress("Peak loading started...");
+			Utilities.Logging.IqLogger.Log.Info("Peak Loading Started...");
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
             peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
 
-
+			Utilities.Logging.IqLogger.Log.Info("Peak Loading Complete");
         }
 
-        protected bool ChromDataIsLoaded
-        {
-            get
-            {
-                if (Run != null)
-                {
-                    return Run.ResultCollection.MSPeakResultList.Count > 0;
-                }
+        
 
-                return false;
-            }
-        }
 
-        protected bool RunIsInitialized
-        {
-            get { throw new NotImplementedException(); }
-        }
 
-        protected Run Run
-        {
-            get;
-            set;
-        }
+		private void ReportGeneralProgress(int currentTarget, int totalTargets)
+		{
+			int percentage = totalTargets/10;
+			if (percentage == 0) percentage = 1;
+			if (currentTarget % (percentage) == 0)
+			{
+				Utilities.Logging.IqLogger.Log.Info("Processing " + ((double)currentTarget / totalTargets * 100) + "% Complete " + currentTarget + " of " + totalTargets);
+			}
+		}
 
-        #endregion
-
-        #region Private Methods
+		
+		private void SetupLogging()
+		{
+			Utilities.Logging.IqLogger.LogDirectory = _parameters.ResultsFolder;
+			Utilities.Logging.IqLogger.Initialize(_run.DatasetName);
+		}
 
         #endregion
 

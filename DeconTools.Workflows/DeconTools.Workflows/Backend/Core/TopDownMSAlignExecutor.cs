@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.FileIO;
 
@@ -17,19 +18,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 		#region constructors
 
-		public TopDownMSAlignExecutor ()
-        {
-            Parameters = new BasicTargetedWorkflowExecutorParameters();
-            Results = new List<IqResult>();
-            ResultExporter = new IqLabelFreeResultExporter();
-            IsDataExported = true;
-            DisposeResultDetails = true;
-        }
-
-        public TopDownMSAlignExecutor (WorkflowExecutorBaseParameters parameters)
-            : this()
-        {
-			Parameters = parameters;
+		public TopDownMSAlignExecutor(WorkflowExecutorBaseParameters parameters, Run run) : base(parameters, run)
+		{
+           
         }
 
 		#endregion

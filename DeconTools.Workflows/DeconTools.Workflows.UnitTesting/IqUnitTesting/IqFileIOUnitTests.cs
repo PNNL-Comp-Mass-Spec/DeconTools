@@ -56,7 +56,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			var targets = new List<IqTarget>(1);
 			targets.Add(target);
 
-			var executor = new IqExecutor(executorBaseParameters);
+			var executor = new IqExecutor(executorBaseParameters, run);
 			//executor.ChromSourceDataFilePath = peaksTestFile;
 			executor.Execute(targets);
 
@@ -65,9 +65,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			{
 				string temp = reader.ReadLine();
 				Assert.AreEqual(
-					"ID	code\tEmpiricalFormula\tChargeState\tMonomassTheor\tMZTheor\tElutionTimeTheor\tMonoMassObs\tMZObs\tElutionTimeObs\tNumPeaksWithinTolerance\tScanset\tAbundance\tFitScore\tInterferenceScore",
+					"TargetID\tCode\tEmpiricalFormula\tChargeState\tMonomassTheor\tMZTheor\tElutionTimeTheor\tMonoMassObs\tMZObs\tElutionTimeObs\tChromPeaksWithinTolerance\tScan\tAbundance\tIsoFitScore\tInterferenceScore",
 					temp);
 				temp = reader.ReadLine();
+				Console.WriteLine(temp);
 				Assert.AreEqual(
 					"24800\t\tC64H110N18O19\t2\t1434.8193888\t718.41697089\t0.321639209985733\t1434.81096195126\t718.412757465632\t0.318046778440475\t0\t5942\t1352176\t0.0850492709063084\t0.0942918054560866",
 					temp);
@@ -145,7 +146,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		{
 			//Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCR-184
 
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\MSAlignTargetImporterTesting\MSAlignTestFile.txt";
+			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_e4pvalue.txt";
 
 			MSAlignIqTargetImporter importer = new MSAlignIqTargetImporter(targetsFile);
 			List<IqTarget> Targets = importer.Import();

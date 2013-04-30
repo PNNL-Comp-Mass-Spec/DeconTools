@@ -52,7 +52,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //create no more than two charge state targets per peptide
             executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
 
-            var executor = new IqExecutor(executorBaseParameters);
+			Run run = new RunFactory().CreateRun(testFile);
+
+            var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
 
             executor.LoadAndInitializeTargets(targetsFile);
@@ -101,7 +103,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //create no more than two charge state targets per peptide
             //executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
 
-            var executor = new IqExecutor(executorBaseParameters);
+			Run run = new RunFactory().CreateRun(testFile);
+
+            var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
 
             executor.LoadAndInitializeTargets(targetsFile);
@@ -115,9 +119,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 Console.WriteLine(iqTarget + "\t" + numChildTargets);
             }
 
-
-            Run run = new RunFactory().CreateRun(testFile);
-            executor.SetRun(run);
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.5;
@@ -184,15 +185,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ResultsFolder = resultsFolder;
             executorBaseParameters.TargetsFilePath = targetsFile;
 
+			Run run = new RunFactory().CreateRun(testFile);
 
-            var executor = new IqExecutor(executorBaseParameters);
+            var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
 
             executor.LoadAndInitializeTargets(targetsFile);
             executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.305 && n.ElutionTimeTheor < 0.325 select n).Take(10).ToList();
-
-            Run run = new RunFactory().CreateRun(testFile);
-            executor.SetRun(run);
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.5;
