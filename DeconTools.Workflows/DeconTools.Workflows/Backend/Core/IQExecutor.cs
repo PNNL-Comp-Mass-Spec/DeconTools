@@ -182,8 +182,17 @@ namespace DeconTools.Workflows.Backend.Core
                 ResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
 
+            string outputFolder;
+            if (string.IsNullOrEmpty(Parameters.ResultsFolder))
+            {
+                outputFolder = GetDefaultOutputFolder();
+            }
+            else
+            {
+                outputFolder = Parameters.ResultsFolder;
+            }
 
-            ResultExporter.WriteOutResults(Parameters.ResultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
+            ResultExporter.WriteOutResults(outputFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
         }
 
 
