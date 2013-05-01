@@ -2,6 +2,7 @@
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -22,16 +23,18 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            peakDetector.IsDataThresholded = true;
 
             RapidDeconvolutor decon = new RapidDeconvolutor();
+            decon.IsNewFitCalculationPerformed = true;
 
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 
-            Assert.AreEqual(190, run.ResultCollection.ResultList.Count);
+            Assert.AreEqual(192, run.ResultCollection.ResultList.Count);
 
             //order and get the most intense msfeature
             run.ResultCollection.ResultList=  run.ResultCollection.ResultList.OrderByDescending(p => p.IntensityAggregate).ToList();
