@@ -80,7 +80,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void ExecutorIqTest1()
         {
             var util = new IqTargetUtilities();
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            string testFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
             string targetsFile =
@@ -174,7 +175,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
-
+            
             string expectedResultsFilename = resultsFolder + "\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
@@ -183,6 +184,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.ResultsFolder = resultsFolder;
+            executorBaseParameters.LoggingFolder = resultsFolder;
             executorBaseParameters.TargetsFilePath = targetsFile;
 
 			Run run = new RunFactory().CreateRun(testFile);

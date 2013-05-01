@@ -30,6 +30,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			executorBaseParameters.ChromGenSourceDataPeakBR = 3;
 			executorBaseParameters.ChromGenSourceDataSigNoise = 2;
 			executorBaseParameters.ResultsFolder = resultsFolder;
+		    executorBaseParameters.LoggingFolder = resultsFolder;
 			executorBaseParameters.TargetsFilePath = targetsFile;
 
 			Run run = new RunFactory().CreateRun(testFile);
