@@ -347,6 +347,8 @@ namespace DeconTools.Workflows.Backend.Core
             targetForUpdate.ChargeState = sourceTarget.ChargeState;
             targetForUpdate.MZTheor = sourceTarget.MZTheor;
             targetForUpdate.ElutionTimeTheor = sourceTarget.ElutionTimeTheor;
+            targetForUpdate.ScanLC = sourceTarget.ScanLC;
+            
 
             targetForUpdate.TheorIsotopicProfile = sourceTarget.TheorIsotopicProfile == null
                              ? null

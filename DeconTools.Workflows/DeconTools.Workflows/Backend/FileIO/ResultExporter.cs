@@ -70,6 +70,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append("ElutionTimeTheor");
             sb.Append(delim);
+            sb.Append("TargetScan");
+            sb.Append(delim);
             sb.Append("MonoMassObs");
             sb.Append(delim);
             sb.Append("MZObs");
@@ -99,7 +101,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             if (result.LCScanSetSelected != null)
             {
-                scanSetString = result.LCScanSetSelected.PrimaryScanNumber.ToString();
+                scanSetString = result.LCScanSetSelected.PrimaryScanNumber.ToString("0.#");
             }
             else
             {
@@ -124,27 +126,29 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append(result.Target.ChargeState);
             sb.Append(delim);
-            sb.Append(result.Target.MonoMassTheor);
+            sb.Append(result.Target.MonoMassTheor.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(result.Target.MZTheor);
+            sb.Append(result.Target.MZTheor.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(result.Target.ElutionTimeTheor);
+            sb.Append(result.Target.ElutionTimeTheor.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(result.MonoMassObs);
+            sb.Append(result.Target.ScanLC);
             sb.Append(delim);
-            sb.Append(result.MZObs);
+            sb.Append(result.MonoMassObs.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(result.ElutionTimeObs);
+            sb.Append(result.MZObs.ToString("0.00000"));
+            sb.Append(delim);
+            sb.Append(result.ElutionTimeObs.ToString("0.000"));
             sb.Append(delim);
             sb.Append(result.NumChromPeaksWithinTolerance);
             sb.Append(delim);
             sb.Append(scanSetString);
             sb.Append(delim);
-            sb.Append(result.Abundance);
+            sb.Append(result.Abundance.ToString("0.#"));
             sb.Append(delim);
-            sb.Append(result.FitScore);
+            sb.Append(result.FitScore.ToString("0.000"));
             sb.Append(delim);
-            sb.Append(result.InterferenceScore);
+            sb.Append(result.InterferenceScore.ToString("0.000"));
 
             string outString = sb.ToString();
             return outString;

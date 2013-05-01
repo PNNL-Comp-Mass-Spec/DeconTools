@@ -74,6 +74,9 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		//Uses the regex SequenceExpression to parse for the sequence in a specified format.
 		public string SequenceToEmpiricalFormula(string code)
 		{
+            //TODO:  this doesn't work with:  '
+
+
 			string sequence = "";
 		    string[] periodremoval = code.Split('.');
 		    string[] test;

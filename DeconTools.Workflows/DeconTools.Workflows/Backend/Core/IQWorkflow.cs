@@ -26,7 +26,6 @@ namespace DeconTools.Workflows.Backend.Core
         protected ChromPeakDetector ChromPeakDetector;
         protected ChromPeakSelectorBase ChromPeakSelector;
         protected IterativeTFF MsfeatureFinder;
-        //protected IsotopicProfileFitScoreCalculator _fitScoreCalc;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected ResultValidatorTask ResultValidator;
         protected ChromatogramCorrelatorBase ChromatogramCorrelator;

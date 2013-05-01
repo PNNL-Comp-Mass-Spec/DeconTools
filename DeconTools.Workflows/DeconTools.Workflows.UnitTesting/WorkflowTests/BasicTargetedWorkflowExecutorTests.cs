@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
-using System.Linq;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
@@ -221,7 +221,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
 
             executorParameters.TargetedAlignmentIsPerformed = false;
-            
+
+
+            executorParameters.SaveParametersToXML(
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\IQConsoleDemo\IqExecutorParameters.xml");
+           
+
          
             var workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromSmootherNumPointsInSmooth = 9;
@@ -231,7 +236,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflowParameters.ChromNETTolerance = 0.025;
             workflowParameters.MSToleranceInPPM = 20;
 
+            workflowParameters.SaveParametersToXML(
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\IQConsoleDemo\IqWorkflowParameters.xml");
+
+
             var workflow = new BasicTargetedWorkflow(workflowParameters);
+
+
+
 
             string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
