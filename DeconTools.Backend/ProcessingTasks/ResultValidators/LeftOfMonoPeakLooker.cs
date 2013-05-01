@@ -51,28 +51,48 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Private Methods
 
-        public MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<Peak> peakList)
+        /// <summary>
+        /// Returns a 'peak-to-the-left' of the monoisotopic peak if: 1) it exists and 2) it is above the user provided relative intensity
+        /// </summary>
+        /// <param name="monoPeak"></param>
+        /// <param name="chargeState"></param>
+        /// <param name="peakList"></param>
+        /// <param name="minRelIntensityForFlag"></param>
+        /// <returns></returns>
+        public MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<Peak> peakList, double minRelIntensityForFlag)
         {
             double mzTol = monoPeak.Width;
 
             double targetMZ = monoPeak.XValue - (1.003 / (double)chargeState);
 
 
-            var foundLeftOfMonoPeaks=  PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
+            var foundLeftOfMonoPeaks = PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
 
             //if found a peak to the left, will return that peak. If 
-           
-            if (foundLeftOfMonoPeaks.Count==0)
+
+            if (foundLeftOfMonoPeaks.Count == 0)
             {
                 return null;
             }
-            
-            if (foundLeftOfMonoPeaks.Count==1)
+
+
+            MSPeak peakToTheLeft = foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() as MSPeak;
+
+            if (peakToTheLeft == null) return null;
+
+
+            if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)
             {
-                return (MSPeak) foundLeftOfMonoPeaks.First();
+                return peakToTheLeft;
             }
-            
-            return (MSPeak) foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First();
+
+            return null;
+        }
+
+
+        public MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<Peak> peakList)
+        {
+            return LookforPeakToTheLeftOfMonoPeak(monoPeak, chargeState, peakList, this.MinRatioToGiveFlag);
         }
         #endregion
 

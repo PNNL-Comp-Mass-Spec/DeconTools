@@ -15,10 +15,10 @@ namespace DeconTools.Backend.Utilities
         public static double GetMonoisotopicMassFromEmpiricalFormula(string empiricalFormula)
         {
             
-            var formulaTable = ParseEmpiricalFormulaString(empiricalFormula);
+            var formulaTable = ParseDoubleEmpiricalFormulaString(empiricalFormula);
             
             double monomass = 0;
-            foreach (KeyValuePair<string, int> valuePair in formulaTable)
+            foreach (KeyValuePair<string, double> valuePair in formulaTable)
             {
                 double elementMass = Constants.Elements[valuePair.Key].MassMonoIsotopic;
                 double elementCount = valuePair.Value;

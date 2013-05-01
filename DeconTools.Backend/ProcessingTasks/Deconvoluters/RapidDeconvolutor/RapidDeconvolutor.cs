@@ -1,12 +1,12 @@
 ﻿extern alias RapidEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
 using DeconTools.Utilities;
 
@@ -106,7 +106,9 @@ namespace DeconTools.Backend.ProcessingTasks
             double[] massResults = new double[sizeOfRapidArray];
             double[] mostAbundantMassResults = new double[sizeOfRapidArray];
 
-            rapidPeakList = ConvertPeakListToRapidPeakList(resultList.Run.DeconToolsPeakList);
+            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
+
+            rapidPeakList = ConvertPeakListToRapidPeakList(resultList.Run.PeakList);
             if (rapidPeakList == null || rapidPeakList.Length == 0) return;
 
             double rapidsBackgroundIntensityParameter = (resultList.Run.CurrentBackgroundIntensity * minPeptideToBackgroundRatio);
@@ -273,17 +275,17 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 IsosResult result = resultList.CreateIsosResult();
                 result.IntensityAggregate = intensityResults[i];
-                
+
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
                 monoPeak.XValue = ConvertMassToMZ(massResults[i], profile.ChargeState);
-                
-                
+
+
 
                 //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found. 
-                GetIsotopicProfilePeaks(resultList.Run.DeconToolsPeakList, profile.ChargeState, monoPeak.XValue, ref profile);
+                GetIsotopicProfilePeaks(resultList.Run.PeakList, profile.ChargeState, monoPeak.XValue, ref profile);
 
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
                 {
@@ -333,7 +335,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (chargeResults[i] == 0) continue;
                 IsotopicProfile profile = new IsotopicProfile();
                 profile.ChargeState = chargeResults[i];
-                profile.IntensityMostAbundant = (float) intensityResults[i];
+                profile.IntensityMostAbundant = (float)intensityResults[i];
                 profile.IntensityMostAbundantTheor = profile.IntensityMostAbundant;
                 profile.Score = scoreResults[i];
                 MSPeak monoPeak = new MSPeak();
@@ -375,9 +377,59 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        private void GetIsotopicProfilePeaks(List<Peak> peakList, int chargeState, double monoMSZ, ref IsotopicProfile profile)
+        private void GetIsotopicProfilePeaks(List<Peak> peakList, int chargeState, double monoMass, ref IsotopicProfile inputProfile)
         {
-            BasicTFF ff = new BasicTFF(20);
+            double toleranceInPPM = 20;
+            var tff = new BasicTFF(toleranceInPPM);
+
+            var theorProfile = new IsotopicProfile();
+            theorProfile.MonoIsotopicMass = monoMass;
+            theorProfile.ChargeState = chargeState;
+            theorProfile.MonoPeakMZ = monoMass / chargeState + Globals.PROTON_MASS;
+
+            //a hack to guess how many peaks to include in the theor isotopic profile
+            int numPeaksToIncludeInProfile = (int)Math.Round(Math.Max(3, 3 + (monoMass - 1000) / 1000));
+
+            double monoPeakMZ = monoMass / chargeState + Globals.PROTON_MASS;
+            for (int i = 0; i < numPeaksToIncludeInProfile; i++)
+            {
+                var peak = new MSPeak();
+                peak.XValue = monoPeakMZ + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+
+                if (i == 0)
+                {
+                    peak.Height = 1;
+                }
+                else
+                {
+                    peak.Height = 0;    
+                }
+                
+
+                theorProfile.Peaklist.Add(peak);
+            }
+            
+            var foundIso = tff.FindMSFeature(peakList, theorProfile);
+
+            if (foundIso==null)
+            {
+                var monoPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, monoPeakMZ, toleranceInPPM).OrderByDescending(p => p.Height).FirstOrDefault();
+
+                
+                if (monoPeak!=null)
+                {
+                    inputProfile.Peaklist.Add((MSPeak) monoPeak);
+                }
+
+
+
+            }
+            else
+            {
+                inputProfile.Peaklist = new List<MSPeak>(foundIso.Peaklist);
+            }
+
+            
 
         }
 
@@ -390,20 +442,12 @@ namespace DeconTools.Backend.ProcessingTasks
 
             double mzVar = 0.01;  //  TODO:  find a more accurate way of defining the mz variability
             DeconToolsV2.Peaks.clsPeak monoPeak = lookupPeak(monoMZ, peaklist, mzVar);
-            if (monoPeak == null)       // here, the monoMZ as calculated from Rapid can't be matched with any peaks in the original peaklist; so return Rapid's mz value
-            {
-                //MSPeak peak = new MSPeak();
-                //peak.MZ = monoMZ;
-                //profile.Peaklist.Add(peak);
-                return;
-            }
-            else
+            if (monoPeak != null)
             {
                 MSPeak mspeak = convertDeconPeakToMSPeak(monoPeak);
                 profile.Peaklist.Add(mspeak);
                 return;
             }
-
         }
 
         private MSPeak convertDeconPeakToMSPeak(DeconToolsV2.Peaks.clsPeak monoPeak)
@@ -436,22 +480,22 @@ namespace DeconTools.Backend.ProcessingTasks
             return mass / charge + 1.0078250319;     //-0.00054858;     //1.0078250319= monoisotopic mass of hydrogen; 0.00054858 = mass of electron
         }
 
-        private RapidEngine.Decon2LS.Peaks.clsPeak[] ConvertPeakListToRapidPeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
+        private RapidEngine.Decon2LS.Peaks.clsPeak[] ConvertPeakListToRapidPeakList(List<Peak> peaklist)
         {
-            if (peaklist == null || peaklist.Length == 0) return null;
-            RapidEngine.Decon2LS.Peaks.clsPeak[] rapidPeaklist = new RapidEngine.Decon2LS.Peaks.clsPeak[peaklist.Length];
+            if (peaklist == null || peaklist.Count == 0) return null;
+            var rapidPeaklist = new RapidEngine.Decon2LS.Peaks.clsPeak[peaklist.Count];
 
-            for (int i = 0; i < peaklist.Length; i++)
+            for (int i = 0; i < peaklist.Count; i++)
             {
                 RapidEngine.Decon2LS.Peaks.clsPeak peak = new RapidEngine.Decon2LS.Peaks.clsPeak();
 
 
-                peak.mint_peak_index = peaklist[i].mint_peak_index;
-                peak.mint_data_index = peaklist[i].mint_data_index;
-                peak.mdbl_mz = peaklist[i].mdbl_mz;
-                peak.mdbl_intensity = peaklist[i].mdbl_intensity;
-                peak.mdbl_SN = peaklist[i].mdbl_SN;
-                peak.mdbl_FWHM = peaklist[i].mdbl_FWHM;
+                peak.mint_peak_index = i;
+                peak.mint_data_index = peaklist[i].DataIndex;
+                peak.mdbl_mz = peaklist[i].XValue;
+                peak.mdbl_intensity = peaklist[i].Height;
+                peak.mdbl_SN = 100;
+                peak.mdbl_FWHM = peaklist[i].Width;
 
                 rapidPeaklist[i] = peak;
 
@@ -460,23 +504,6 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         #endregion
-
-
-        public OldDeconFormatResult[] RAPIDDeconvolute(double backgroundIntensity,
-            float[] xvals, float[] yvals, DeconToolsV2.Peaks.clsPeak[] peaklist)
-        {
-
-            List<OldDeconFormatResult> resultList = new List<OldDeconFormatResult>();
-            OldDeconFormatResult testResult = new OldDeconFormatResult();
-            testResult.Abundance = 10100;
-            testResult.Mz = 500.01;
-            resultList.Add(testResult);
-            return resultList.ToArray();
-        }
-
-
-
-
 
 
     }

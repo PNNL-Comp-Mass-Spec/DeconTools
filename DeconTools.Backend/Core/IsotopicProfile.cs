@@ -85,6 +85,9 @@ namespace DeconTools.Backend.Core
 
         public double MonoPeakMZ { get; set; }
 
+
+        public bool IsFlagged { get; set; }
+
        
         /// <summary>
         /// Intensity of the most abundant peak of the isotopic profile
