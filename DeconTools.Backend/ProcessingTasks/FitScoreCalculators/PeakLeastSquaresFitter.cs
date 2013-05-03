@@ -41,8 +41,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 }
             }
 
-
-
             for (int index = 0; index < theorPeakList.Count; index++)
             {
                 var peak = theorPeakList[index];

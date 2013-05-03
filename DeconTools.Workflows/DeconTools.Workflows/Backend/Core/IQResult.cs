@@ -118,7 +118,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (HasChildren())
             {

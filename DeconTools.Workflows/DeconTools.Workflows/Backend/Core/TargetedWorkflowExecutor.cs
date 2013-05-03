@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
@@ -295,32 +296,52 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string TryFindTargetsForCurrentDataset()
         {
-            string expectedTargetsFileBase = ExecutorParameters.TargetsBaseFolder + Path.DirectorySeparatorChar +
-                                             RunUtilities.GetDatasetName(DatasetPath);
-
-            string expectedTargetsFile1 = expectedTargetsFileBase + "_targets.txt";
-            string expectedTargetsFile2 = expectedTargetsFileBase + "_LCMSFeatures.txt";
-            string expectedTargetsFile3 = expectedTargetsFileBase + "_MSGFplus.tsv";
+            string datasetName = RunUtilities.GetDatasetName(DatasetPath);
+            
+            string[] possibleFileSuffixs = {"_iqTargets.txt",  "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv"};
 
 
-            if (File.Exists(expectedTargetsFile1))
+            var possibleTargetFiles = new List<FileInfo>();
+
+            DirectoryInfo dirinfo = new DirectoryInfo(ExecutorParameters.TargetsBaseFolder);
+            foreach (var suffix in possibleFileSuffixs)
             {
-                return expectedTargetsFile1;
+                var fileInfos= dirinfo.GetFiles("*" + suffix);
+
+
+                foreach (var fileInfo in fileInfos)
+                {
+                    if (fileInfo.Name.StartsWith(datasetName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        possibleTargetFiles.Add(fileInfo);
+                    }
+                }
             }
 
-            if (File.Exists(expectedTargetsFile2))
+            if (possibleTargetFiles.Count==0)
             {
-                return expectedTargetsFile2;
+                return string.Empty;
+            }
+            else if (possibleTargetFiles.Count==1)
+            {
+                return possibleTargetFiles.First().FullName;
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append("Error in getting IQ target file. Multiple files were found for the dataset: " + datasetName + Environment.NewLine);
+                sb.Append("Candidate IQ target files: " + Environment.NewLine);
+
+                foreach (var possibleTargetFile in possibleTargetFiles)
+                {
+                    sb.Append(possibleTargetFile.FullName + Environment.NewLine);
+                }
+
+                throw new NotSupportedException(sb.ToString());
             }
 
-            if (File.Exists(expectedTargetsFile3))
-            {
-                return expectedTargetsFile3;
-            }
-
-
-
-            return String.Empty;
+           
         }
 
 

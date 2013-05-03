@@ -13,6 +13,11 @@ namespace DeconTools.Workflows.Backend.Core
             TargetedAlignmentIsPerformed = false;
             TargetType = Globals.TargetType.DatabaseTarget;
 
+            ChromGenSourceDataPeakBR = 2;
+            ChromGenSourceDataSigNoise = 3;
+            ChromGenSourceDataProcessMsMs = false;
+            ChromGenSourceDataIsThresholded = true;
+
 
             AlignmentInfoIsExported = true;
             AlignmentFeaturesAreSavedToTextFile = true;
@@ -46,7 +51,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         //ChromGen Peak Generator
 
-
+        //TODO: these chromGen parameters are duplicated in TargetedWorkflowParameters! Need to resolve this
         public double ChromGenSourceDataPeakBR { get; set; }
         public double ChromGenSourceDataSigNoise { get; set; }
         public bool ChromGenSourceDataIsThresholded { get; set; }

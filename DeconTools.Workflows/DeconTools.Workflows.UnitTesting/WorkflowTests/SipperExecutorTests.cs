@@ -79,9 +79,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void ExecuteSipperUsingStandardExecutorClass1()
         {
             string paramFile =
-                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\ExecutorParameters1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
             //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
@@ -120,7 +120,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Execute();
 
             SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
-
+            workflow.WorkflowParameters.SaveParametersToXML(
+                @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperTargetedWorkflowParameters_Sum5 - copy.xml");
 
 
             SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
@@ -145,7 +146,78 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
+        [Test]
+        public void ExecuteSipperOnMSGFOutputTest1()
+        {
+            string paramFile =
+                @"\\protoapps\DataPkgs\Public\2013\788_Sipper_C13_Analysis_Hot_Lake_SNC_Ana_preliminary\Parameters\ExecutorParameters1.xml";
 
+
+            var parameters = new BasicTargetedWorkflowExecutorParameters();
+            parameters.LoadParameters(paramFile);
+            parameters.CopyRawFileLocal = false;
+            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+
+
+            string testDataset =
+                @"D:\Data\Sipper\HLP_Ana\HLP_Ana_SIP_02_19APR13_Frodo_12-12-04.raw";
+
+
+            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            parameters.SaveParametersToXML(outputParameterFile);
+
+
+            
+            var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
+
+
+            int[] targetsOfInterest = new int[] { 5555 };
+
+            targetsOfInterest = new int[] { 5905 };   //throwing error in Chromcorr
+
+            //targetsOfInterest = new int[]{6110};
+
+            //targetsOfInterest = new int[]
+            //                        {
+            //                            5555, 5677, 5746, 5905, 6110, 6496, 7039, 7116, 7220, 7229, 7370, 7585, 8338, 8491, 8517, 8616, 8618,
+            //                            8715, 8947, 8958, 8968, 9024, 9159, 9240, 9242, 9261, 9328, 9441, 9474, 9506, 9519, 9583, 9792, 9944,
+            //                            9965, 10223, 10251, 10329, 10649, 10673, 11249, 11367, 11523, 11677, 11912, 12178, 12304, 12383, 12395,
+            //                            12492, 12517, 12692, 12700, 12828, 13443, 13590, 13740, 14090, 14256
+            //                        };
+
+            //executor.Targets.TargetList =
+            //    (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
+
+            executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
+
+
+            executor.Execute();
+
+            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+            
+
+            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.ChromCorrelationData);
+            Assert.IsNotNull(result.ChromCorrelationData.CorrelationDataItems);
+
+            Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
+
+
+            //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
+            //{
+            //    Console.WriteLine(dataItem.CorrelationRSquaredVal);
+            //}
+
+            //foreach (var fitScoreDataItem in workflow.FitScoreData)
+            //{
+            //    Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
+            //}
+
+
+        }
 
 
         [Test]
