@@ -45,30 +45,32 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             {
                 var peak = theorPeakList[index];
 
-                bool overrideMinIntensityCutoff = index >= numPeaksToTheLeftForScoring;
+                bool overrideMinIntensityCutoff = index < numPeaksToTheLeftForScoring;
 
-                if (peak.Height < minIntensityForScore || overrideMinIntensityCutoff) continue;
-                theorIntensitiesUsedInCalc.Add(peak.Height);
-
-                //find peak in obs data
-                double mzTolerance = toleranceInPPM*peak.XValue/1e6;
-                var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
-
-                double obsIntensity;
-                if (foundPeaks.Count == 0)
+                if (peak.Height > minIntensityForScore || overrideMinIntensityCutoff)
                 {
-                    obsIntensity = 0;
-                }
-                else if (foundPeaks.Count == 1)
-                {
-                    obsIntensity = foundPeaks.First().Height;
-                }
-                else
-                {
-                    obsIntensity = foundPeaks.OrderByDescending(p => p.Height).First().Height;
-                }
+                    theorIntensitiesUsedInCalc.Add(peak.Height);
 
-                observedIntensitiesUsedInCalc.Add(obsIntensity);
+                    //find peak in obs data
+                    double mzTolerance = toleranceInPPM*peak.XValue/1e6;
+                    var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
+
+                    double obsIntensity;
+                    if (foundPeaks.Count == 0)
+                    {
+                        obsIntensity = 0;
+                    }
+                    else if (foundPeaks.Count == 1)
+                    {
+                        obsIntensity = foundPeaks.First().Height;
+                    }
+                    else
+                    {
+                        obsIntensity = foundPeaks.OrderByDescending(p => p.Height).First().Height;
+                    }
+
+                    observedIntensitiesUsedInCalc.Add(obsIntensity);
+                }
             }
 
             //the minIntensityForScore is too high and no theor peaks qualified. This is bad. But we don't
