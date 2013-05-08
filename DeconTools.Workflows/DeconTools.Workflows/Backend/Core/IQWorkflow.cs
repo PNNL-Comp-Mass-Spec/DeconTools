@@ -269,10 +269,22 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 InitializeWorkflow();
             }
-            
-            ExecuteWorkflow(result);
+            try
+            {
+                ExecuteWorkflow(result);
+                ExecutePostWorkflowHook(result);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = "Critical error!!!! IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
+                                      "; sequence= " + result.Target.Code + "; ScanLC= " + result.Target.ScanLC;
 
-            ExecutePostWorkflowHook(result);
+                Console.WriteLine(errorMessage);
+                throw new ApplicationException(errorMessage,ex) ;
+            }
+            
+
+            
          
             
 
