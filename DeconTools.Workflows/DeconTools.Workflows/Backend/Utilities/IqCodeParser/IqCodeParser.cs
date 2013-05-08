@@ -5,7 +5,10 @@ using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 
 namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 {
-	public abstract class IqCodeParser
+	/// <summary>
+	/// Base class for parsing in sequences that do or do not contain PTMs
+	/// </summary>
+	public class IqCodeParser
 	{
 
 		#region Constructors
@@ -13,6 +16,8 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		public IqCodeParser()
 		{
 			PeptideUtils = new PeptideUtils();
+			SequenceExpression = @"[\].)(\[+-123456789]";
+			PtmExpression = @"([+-]?([0-9]*)\.?([0-9]+))";
 		}
 
 		#endregion
@@ -20,7 +25,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		#region Properties
 
 		//Regular expression that finds PTMs in a specified file format
-		protected string PTMExpression { get; set; }
+		protected string PtmExpression { get; set; }
 
 		//Regular expression that finds the unmodified sequence in a specified file format
 		protected string SequenceExpression { get; set; }
@@ -37,32 +42,39 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		//Adds or subtracts the PTM formula from the sequence formula based on the overall mass of the PTMs
 		public string GetEmpiricalFormulaFromSequence(string code)
 		{
-			string PTM_Formula = "";
-			string SequenceFormula = "";
-			string EmpiricalFormula = "";
+			string ptmFormula = "";
+			string sequenceFormula = "";
+			string empiricalFormula = "";
 
-			double ptm_mass = PTMMassFromCode(code);
-			PTM_Formula = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(Math.Abs(ptm_mass), false);
+			double ptmMass = PtmMassFromCode(code);
+			ptmFormula = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(Math.Abs(ptmMass), false);
 
-			SequenceFormula = SequenceToEmpiricalFormula(code);
+			sequenceFormula = SequenceToEmpiricalFormula(code);
 
-			if(ptm_mass < 0)
+			if(ptmMass < 0)
 			{
-				EmpiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(SequenceFormula, PTM_Formula);
+				empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(sequenceFormula, ptmFormula);
 			}
 			else
 			{
-				EmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(SequenceFormula, PTM_Formula);
+				empiricalFormula = EmpiricalFormulaUtilities.AddFormula(sequenceFormula, ptmFormula);
 			}
-			return EmpiricalFormula;
+
+            //TEMPORARY HANDLING OF BAD TARGETS WITH PTM > SEQUENCE
+            //CHECK THE UPDATEMISSINGTARGETINFO IN IQTARGETUTILITES WHEN CHANGING
+            if (String.IsNullOrEmpty(empiricalFormula))
+            {
+                empiricalFormula = "C0H0N0O0S0";
+            }
+			return empiricalFormula;
 		}
 
 		//Extracts the PTM masses from the input seqence.
 		//Uses the regex PTMExpression to parse for the PTM in a give input format.
-		public double PTMMassFromCode(string code)
+		public double PtmMassFromCode(string code)
 		{
 			double ptmMass = 0.0;
-			MatchCollection masses = Regex.Matches(code, PTMExpression);
+			MatchCollection masses = Regex.Matches(code, PtmExpression);
 			foreach (Match match in masses)
 			{
 				ptmMass += Convert.ToDouble(match.Value);
@@ -78,16 +90,11 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 
 
 			string sequence = "";
-		    string[] periodremoval = code.Split('.');
-		    string[] test;
-            if (periodremoval[0].Length > 1)
-            {
-                test = Regex.Split(periodremoval[0], SequenceExpression);
-            }
-            else
-            {
-                test = Regex.Split(periodremoval[1], SequenceExpression);
-            }
+
+			//Removes the . start and stop notation
+		    string front = Regex.Replace(code, @"^[A-Z\-_]?[\.]", "");
+            string rear = Regex.Replace(front, @"[\.]+[A-Z\-_]?$", "");
+            string[] test = Regex.Split(rear, SequenceExpression);
 
 			foreach (string s in test)
 			{

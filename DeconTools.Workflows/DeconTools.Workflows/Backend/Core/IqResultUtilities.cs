@@ -25,8 +25,8 @@ namespace DeconTools.Workflows.Backend.Core
                 var childresults = iqResult.ChildResults();
                 foreach (var childResult in childresults)
                 {
-                    var moreResults = FlattenOutResultTree(childResult);
-                    flattenedResults.AddRange(moreResults);
+		            var moreResults = FlattenOutResultTree(childResult);
+					flattenedResults.AddRange(moreResults);
                 }
             }
 

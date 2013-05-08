@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected IterativeTFF MsfeatureFinder;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected ResultValidatorTask ResultValidator;
-        protected ChromatogramCorrelatorBase ChromatogramCorrelator;
+        protected IqChromCorrelator ChromatogramCorrelator;
         protected InterferenceScorer InterferenceScorer;
         protected IterativeTFFParameters IterativeTffParameters = new IterativeTFFParameters();
 
@@ -189,7 +189,7 @@ namespace DeconTools.Workflows.Backend.Core
             InterferenceScorer = new InterferenceScorer();
 
             ResultValidator = new ResultValidatorTask();
-            ChromatogramCorrelator = new ChromatogramCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, 0.01, WorkflowParameters.ChromGenTolerance);
+            ChromatogramCorrelator = new IqChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, 0.05, WorkflowParameters.ChromGenTolerance);
 
 
         }
@@ -200,7 +200,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         /// <param name="workflowParameters"></param>
         /// <returns></returns>
-        public static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
+        public virtual ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
             ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();

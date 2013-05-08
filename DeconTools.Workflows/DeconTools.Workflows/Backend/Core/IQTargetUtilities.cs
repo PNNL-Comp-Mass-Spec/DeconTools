@@ -4,12 +4,14 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
+using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 
 namespace DeconTools.Workflows.Backend.Core
 {
     public class IqTargetUtilities
     {
         private PeptideUtils _peptideUtils = new PeptideUtils();
+		protected IqCodeParser IqCodeParser = new IqCodeParser();
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
         #region Public Methods
@@ -276,7 +278,8 @@ namespace DeconTools.Workflows.Backend.Core
                 if (!String.IsNullOrEmpty(target.Code))
                 {
                     //Create empirical formula based on code. Assume it is an unmodified peptide
-                    target.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(target.Code);
+                    //target.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(target.Code);
+	                target.EmpiricalFormula = IqCodeParser.GetEmpiricalFormulaFromSequence(target.Code);
                 }
                 else
                 {
@@ -338,7 +341,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public void CopyTargetProperties(IqTarget sourceTarget,   IqTarget targetForUpdate )
+        public void CopyTargetProperties(IqTarget sourceTarget, IqTarget targetForUpdate, bool updateWorkflow = true)
         {
             targetForUpdate.ID = sourceTarget.ID;
             targetForUpdate.EmpiricalFormula = sourceTarget.EmpiricalFormula;
@@ -354,9 +357,11 @@ namespace DeconTools.Workflows.Backend.Core
                              ? null
                              : sourceTarget.TheorIsotopicProfile.CloneIsotopicProfile();
 
-            targetForUpdate.Workflow = sourceTarget.Workflow;
+	        if (updateWorkflow)
+	        {
+		        targetForUpdate.Workflow = sourceTarget.Workflow;
+	        }
 
-            
         }
 
         #endregion

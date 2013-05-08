@@ -12,6 +12,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         public XYData MassSpectrum { get; set; }
 
+		/// <summary>
+		/// Not used by new workflows. Remove When Ready
+		/// </summary>
         public List<ChromPeakQualityData> ChromPeakQualityData { get; set; }
 
         #endregion

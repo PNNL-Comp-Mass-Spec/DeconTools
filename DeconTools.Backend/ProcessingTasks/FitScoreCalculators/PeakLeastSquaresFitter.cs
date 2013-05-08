@@ -20,30 +20,13 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
         
-        public double GetFit(List<Peak>theorPeakList,List<Peak>observedPeakList, double minIntensityForScore, double toleranceInPPM)
+        public double GetFit(IEnumerable<Peak>theorPeakList,List<Peak>observedPeakList, double minIntensityForScore, double toleranceInPPM)
         {
-            
-
             List<double> theorIntensitiesUsedInCalc = new List<double>();
             var observedIntensitiesUsedInCalc = new List<double>();
            
-            //first gather all the intensities from theor and obs peaks
-
-            int indexMaxTheor = 0;
-            double maxTheorIntensity = double.MinValue;
-            for (int i = 0; i < theorPeakList.Count; i++)
+            foreach (var peak in theorPeakList)
             {
-                if (theorPeakList[i].Height>maxTheorIntensity)
-                {
-                    maxTheorIntensity = theorPeakList[i].Height;
-                    indexMaxTheor = i;
-
-                }
-            }
-
-            for (int index = 0; index < theorPeakList.Count; index++)
-            {
-                var peak = theorPeakList[index];
                 if (peak.Height < minIntensityForScore) continue;
                 theorIntensitiesUsedInCalc.Add(peak.Height);
 
@@ -68,8 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 observedIntensitiesUsedInCalc.Add(obsIntensity);
             }
 
-            //the minIntensityForScore is too high and no theor peaks qualified. This is bad. But we don't
-            //want to throw errors here
+            //the minIntensityForScore is too high and no theor peaks qualified. This is bad. But we don't want to throw errors here
             if (theorIntensitiesUsedInCalc.Count == 0) return 1.0;
 
             double maxObs = observedIntensitiesUsedInCalc.Max();
@@ -80,19 +62,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             double maxTheor = theorIntensitiesUsedInCalc.Max();
             List<double> normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
 
-
-            //foreach (var val in normalizedObs)
-            //{
-            //    Console.WriteLine(val);
-            //}
-
-            //Console.WriteLine();
-            //foreach (var val in normalizedTheo)
-            //{
-            //    Console.WriteLine(val);
-            //}
-
-
             double sumSquareOfDiffs = 0;
             double sumSquareOfTheor = 0;
             for (int i = 0; i < normalizedTheo.Count; i++)
@@ -101,10 +70,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 sumSquareOfDiffs += (diff*diff);
                 sumSquareOfTheor += (normalizedTheo[i]*normalizedTheo[i]);
-
             }
 
             double fitScore = sumSquareOfDiffs/sumSquareOfTheor;
+
+            if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
 
             return fitScore;
         }

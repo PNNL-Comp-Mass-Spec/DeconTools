@@ -100,29 +100,24 @@ namespace DeconTools.Backend.Utilities
         {
             // assuming peaklist is in order 
 
-            // find a peak within the tolerance using a binary search method
-
             List<Peak> outputList = new List<Peak>();
 
-
+            // find a peak within the tolerance using a binary search method
             int targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
             if (targetIndex == -1) return outputList;
 
             // look to the left for other peaks within the tolerance
             if (targetIndex > 0)
             {
-
                 for (int i = (targetIndex - 1); i >= 0; i--)
                 {
-                    if (Math.Abs(targetVal - inputList[i].XValue) <= toleranceInMZ)
-                    {
-                        outputList.Insert(0, inputList[i]);
-                    }
-                }
-            }
-            else
-            {
+                    Peak peak = inputList[i];
 
+                    // Once we we reach a certain m/z, we can stop looking
+                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
+
+                    outputList.Insert(0, peak);
+                }
             }
 
             // add the center peak
@@ -133,11 +128,12 @@ namespace DeconTools.Backend.Utilities
             {
                 for (int i = (targetIndex + 1); i < inputList.Count; i++)
                 {
-                    if (Math.Abs(targetVal - inputList[i].XValue) <= toleranceInMZ)
-                    {
-                        outputList.Add(inputList[i]);
-                    }
+                    Peak peak = inputList[i];
 
+                    // Once we we reach a certain m/z, we can stop looking
+                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
+
+                    outputList.Add(peak);
                 }
             }
 
@@ -166,20 +162,19 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
-
-
         public static int getIndexOfClosestValue(List<Peak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
             if (leftIndex <= rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
 
-                if (Math.Abs(targetVal - inputList[middle].XValue) <= toleranceInMZ)
+                double xValue = inputList[middle].XValue;
+
+                if (Math.Abs(targetVal - xValue) <= toleranceInMZ)
                 {
                     return middle;
                 }
-                else if (targetVal < inputList[middle].XValue)
+                else if (targetVal < xValue)
                 {
                     return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, toleranceInMZ);
                 }

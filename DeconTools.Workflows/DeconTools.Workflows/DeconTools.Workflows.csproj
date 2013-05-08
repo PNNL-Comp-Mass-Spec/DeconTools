@@ -59,6 +59,10 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\ChargeStateChildIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakAnalyzerIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakDeciderIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakIqTarget.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\BasicChromPeakSelector.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakAnalyzer.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorBase.cs" />
@@ -66,6 +70,7 @@
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakUtilities.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelator.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelatorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqSmartChromPeakSelector.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelector.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorBase.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorParameters.cs" />
@@ -79,6 +84,7 @@
     <Compile Include="Backend\Core\IqResultUtilities.cs" />
     <Compile Include="Backend\Core\IQTarget.cs" />
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
+    <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
     <Compile Include="Backend\Core\TopDownIqTarget.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
     <Compile Include="Backend\Core\IQWorkflow.cs" />
@@ -163,12 +169,11 @@
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Backend\Utilities\IqCodeParser\IqCodeParser.cs" />
-    <Compile Include="Backend\Utilities\IqCodeParser\MSAlignCodeParser.cs" />
-    <Compile Include="Backend\Utilities\IqCodeParser\MSGFCodeParser.cs" />
     <Compile Include="Backend\Utilities\Logging\IqLogger.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
     <Compile Include="Backend\Utilities\ResultUtilities.cs" />
+    <Compile Include="Backend\Utilities\SipperDataDump.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Backend\Core\SipperWorkflowExecutorParameters.cs" />
   </ItemGroup>

@@ -10,8 +10,6 @@ namespace DeconTools.Workflows.Backend.Core
 	{
 		private BackgroundWorker _backgroundWorker;
 
-		public MSAlignIqTargetImporter TargetImporter { get; set; }
-
 		private RunFactory _runFactory = new RunFactory();
 
 		private IqTargetUtilities _targetUtilities = new IqTargetUtilities();

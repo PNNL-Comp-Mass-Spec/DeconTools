@@ -4,7 +4,7 @@ using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public class Peak
+    public class Peak : IComparable<Peak>
     {
         #region Constructors
 
@@ -54,6 +54,29 @@ namespace DeconTools.Backend.Core
         public XYData GetTheorPeakData(double fwhm, int numPointsPerPeak)
         {
             return TheorXYDataCalculationUtilities.GetTheorPeakData(XValue, Height, fwhm, numPointsPerPeak);
+        }
+
+        public int CompareTo(Peak other)
+        {
+            return this.XValue.CompareTo(other.XValue);
+        }
+
+        protected bool Equals(Peak other)
+        {
+            return XValue.Equals(other.XValue);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Peak) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return XValue.GetHashCode();
         }
     }
 }

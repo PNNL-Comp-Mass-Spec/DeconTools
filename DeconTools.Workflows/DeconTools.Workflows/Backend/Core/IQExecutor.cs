@@ -176,8 +176,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
+	        var exportedResults = orderedResults.Where(orderedResult => orderedResult.IsExported).ToList();
 
-            if (ResultExporter == null)
+	        if (ResultExporter == null)
             {
                 ResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
@@ -192,7 +193,7 @@ namespace DeconTools.Workflows.Backend.Core
                 outputFolder = Parameters.ResultsFolder;
             }
 
-            ResultExporter.WriteOutResults(outputFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", orderedResults);
+            ResultExporter.WriteOutResults(outputFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
         }
 
 

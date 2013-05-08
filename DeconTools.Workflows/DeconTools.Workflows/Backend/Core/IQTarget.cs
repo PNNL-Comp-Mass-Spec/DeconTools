@@ -102,14 +102,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void DoWorkflow(IqResult iqResult)
         {
-            if (iqResult.HasChildren())
-            {
-                var childresults = iqResult.ChildResults();
-                foreach (var childResult in childresults)
-                {
-                    childResult.Target.DoWorkflow(childResult);
-                }
-            }
             Workflow.Execute(iqResult);
         }
 
@@ -122,15 +114,11 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var result = Workflow.CreateIQResult(target);
 
-            if (target.HasChildren())
-            {
-                var childTargets = ChildTargets();
-                foreach (var childTarget in childTargets)
-                {
-                    var childResult = childTarget.CreateResult(childTarget);
-                    result.AddResult(childResult);
-                }
-            }
+			if (target.HasParent)
+			{
+				result.ParentResult = ParentTarget._result;
+				ParentTarget._result.AddResult(result);
+			}
 
             return result;
         }

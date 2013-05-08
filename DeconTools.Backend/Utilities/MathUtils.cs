@@ -254,7 +254,7 @@ namespace DeconTools.Backend.Utilities
             }
             else
             {
-                rsquaredVal = 1 - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
+                rsquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
             }
             
             

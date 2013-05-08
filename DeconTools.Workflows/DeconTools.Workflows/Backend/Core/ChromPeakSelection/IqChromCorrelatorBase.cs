@@ -143,20 +143,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #endregion
 
-        public void Execute(IqResult iqResult)
-        {
-            int scan = iqResult.LCScanSetSelected.PrimaryScanNumber;
-
-            double chromScanWindowWidth = iqResult.ChromPeakSelected.Width * 2;
-
-            int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
-            int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
-
-            //TODO: we need to finish this
-            //iqResult.ChromCorrelationData = CorrelateData(iqResult.Target.GetRun(),
-            //    iqResult.ObservedIsotopicProfile, startScan, stopScan);
-        }
-
 
         public abstract ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan);
 

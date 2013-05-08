@@ -22,13 +22,18 @@ namespace DeconTools.Workflows.Backend.Core
             Target = target;
             IqResultDetail = new IqResultDetail();
 			CorrelationData = new ChromCorrelationData();
+	        FitScore = 1;
+	        InterferenceScore = 1;
+	        IsExported = true;
         }
-
-        public IqTarget Target { get; set; }
 
         #endregion
 
         #region Properties
+
+		public IqResult ParentResult { get; set; }
+
+		public IqTarget Target { get; set; }
 
         public double MonoMassObs { get; set; }
 
@@ -56,13 +61,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         public IqResultDetail IqResultDetail { get; set; }
 
-        public ChromCorrelationData CorrelationData { get; set; }
+		public bool IsIsotopicProfileFlagged { get; set; }
+
+		public bool IsotopicProfileFound { get; set; }
+
+		public ChromCorrelationData CorrelationData { get; set; }
 
 		public double MassError { get; set; }
 
 		public double NETError { get; set; }
 
-
+		public bool IsExported { get; set; }
 
         #endregion
 
@@ -139,8 +148,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return _childResults;
         }
-
-        public IqResult ParentResult { get; set; }
 
         public bool HasChildren()
         {

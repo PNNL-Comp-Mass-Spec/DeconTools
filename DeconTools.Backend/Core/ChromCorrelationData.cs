@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Core
@@ -77,7 +78,18 @@ namespace DeconTools.Backend.Core
             CorrelationDataItems.Add(chromCorrelationDataItem);
         }
 
-        
+
+        //For Data Dumping Purposes Only!
+        public string GetCorrelationData()
+        {
+			StringBuilder data = new StringBuilder();
+            var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
+            foreach (var validItem in validItems)
+            {
+	            data.Append(validItem + " ");
+            }
+	        return data.ToString();
+        }
 
         #endregion
 

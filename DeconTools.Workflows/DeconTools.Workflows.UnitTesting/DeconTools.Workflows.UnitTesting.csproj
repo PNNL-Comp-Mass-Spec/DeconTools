@@ -78,11 +78,13 @@
     <Compile Include="IqUnitTesting\IqFileIOUnitTests.cs" />
     <Compile Include="IqUnitTesting\IqLoggerUnitTests.cs" />
     <Compile Include="IqUnitTesting\IqWorkflowAssignerTests.cs" />
+    <Compile Include="IqUnitTesting\TopDownIqTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UtilitiesTests\PeakMatchedResultUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQMillionTests.cs" />
+    <Compile Include="IqUnitTesting\ChromPeakAnalyzerIqWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQExecutorTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQTargetUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQWorkflowTests.cs" />

@@ -9,7 +9,7 @@ using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-	public class MSAlignIqTargetImporter : ImporterBase<List<IqTarget>>
+	public class MSAlignIqTargetImporter : IqTargetImporter
 	{
 		#region properties
 
@@ -33,8 +33,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 		protected string[] PValueHeader = {"p-value"};
 		protected string[] EValueHeader = {"e-value"};
 		protected string[] FDRHeader = {"fdr"};
-
-		protected string Filename { get; set; }
 
 		#endregion
 
@@ -116,7 +114,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			foreach (KeyValuePair<string, List<List<string>>> keyValuePair in parentTargetGroup)
 			{
-				IqTarget target = ConvertTextToIqTarget(keyValuePair.Value);
+				IqTarget target = CreateParentTarget(keyValuePair.Value);
 				target.ID = target_id;
 				allTargets.Add(target);
 				target_id++;
@@ -124,12 +122,21 @@ namespace DeconTools.Workflows.Backend.FileIO
 			return allTargets;
 		}
 
-		#endregion
+        #endregion
 
-		protected TopDownIqTarget ConvertTextToIqTarget(List<List<string>> processedGroup)
+        protected override IqTarget ConvertTextToIqTarget(List<string> processedRowOfText)
+	    {
+            var child = new IqChargeStateTarget();
+            child.ChargeState = ParseIntField(processedRowOfText, ChargeHeader);
+            child.ObservedScan = ParseIntField(processedRowOfText, ScansHeader);
+	        child.AlternateID = ParseIntField(processedRowOfText, PRSMIdHeader);
+            return child;
+	    }
+
+		protected TopDownIqTarget CreateParentTarget(List<List<string>> processedGroup)
 		{
 			TopDownIqTarget target = new TopDownIqTarget();
-			MSAlignCodeParser parser = new MSAlignCodeParser(); 
+			IqCodeParser parser = new IqCodeParser(); 
 
 			target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);
 			target.EmpiricalFormula = parser.GetEmpiricalFormulaFromSequence(target.Code);
@@ -138,15 +145,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			foreach (List<string> line in processedGroup)
 			{
-				var child =new IqChargeStateTarget();
-				child.ChargeState = ParseIntField(line, ChargeHeader);
-				child.ObservedScan = ParseIntField(line, ScansHeader);
-				children.Add(child);
+			    children.Add(ConvertTextToIqTarget(line));
 			}
 
 			target.AddTargetRange(children);
 			return target;
-		}
+        }
 
-	}
+    }
 }

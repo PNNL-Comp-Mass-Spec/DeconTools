@@ -286,7 +286,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             Dictionary<string, double> formula = new Dictionary<string, double>();
             foreach (string element in averagineDict.Keys)
             {
-                formula.Add(element, averagineDict[element] * numberOfAveraginesInInput);
+                formula.Add(element, (averagineDict[element] * numberOfAveraginesInInput));
             }
 
             return formula;
