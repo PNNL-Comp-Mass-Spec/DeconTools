@@ -14,15 +14,29 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         /// </summary>
         public DeconTools.Backend.Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
+        /// <summary>
+        /// Penalize FitScore  based on this any peaks to the left of the monoisotopiic peak.  Zeroes need to be added to the theoretical isotope profile
+        /// </summary>
+        public int NumberOfPeaksToLeftForPenalty { get; set; }
+
         public IsotopicPeakFitScoreCalculator()
         {
             IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
+            NumberOfPeaksToLeftForPenalty = 0;
         }
 
-        public IsotopicPeakFitScoreCalculator(DeconTools.Backend.Globals.IsotopicProfileType lableType)
+        public IsotopicPeakFitScoreCalculator(DeconTools.Backend.Globals.IsotopicProfileType lableType, int numberOfPeaksToLeftForPenalty)
         {
             IsotopicProfileType = lableType;
+            NumberOfPeaksToLeftForPenalty = numberOfPeaksToLeftForPenalty;
         }
+
+        public IsotopicPeakFitScoreCalculator(int numberOfPeaksToLeftForPenalty = 0)
+        {
+            IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
+            NumberOfPeaksToLeftForPenalty = numberOfPeaksToLeftForPenalty;
+        }
+
         #endregion
 
         #region Public Methods
@@ -48,8 +62,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;
                     break;
             }
-            
-           resultList.CurrentTargetedResult.Score = CalculateFitScore(theorProfile, resultList.CurrentTargetedResult.IsotopicProfile, resultList.Run.XYData);
+
+            resultList.CurrentTargetedResult.Score = CalculateFitScore(theorProfile, resultList.CurrentTargetedResult.IsotopicProfile, resultList.Run.XYData, NumberOfPeaksToLeftForPenalty);
         }
         #endregion
 
