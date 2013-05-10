@@ -116,6 +116,58 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         }
 
+
+        [Test]
+        public void NegativeIonModeDeisotoping_useThrashV1()
+        {
+            string parameterFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb\LTQ_Orb_SN2_PeakBR2_PeptideBR1_NegIon_Thrash_Sum3.xml";
+
+            string testFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\NegativeIonMode\AC2_Neg_highpH_14Apr13_Sauron_13-04-03.raw";
+
+
+            Run run = new RunFactory().CreateRun(testFile);
+            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
+            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
+            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+
+            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
+            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+            var parameters = new DeconToolsParameters();
+            parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            parameters.ThrashParameters.UseThrashV1 = true;          //key parameter for this test
+
+            parameters.MSGeneratorParameters.MinLCScan = 4100;
+            parameters.MSGeneratorParameters.MaxLCScan = 4100;
+
+
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            workflow.Execute();
+
+            Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
+            Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
+            Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
+
+            IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
+            var isos = isosImporter.Import();
+
+            var testIso =
+                (from n in isos where n.IsotopicProfile.MonoPeakMZ > 744 && n.IsotopicProfile.MonoPeakMZ < 749 select n).FirstOrDefault();
+
+            Assert.IsNotNull(testIso, "Test iso not found.");
+
+            Console.WriteLine("monomass= " + testIso.IsotopicProfile.MonoIsotopicMass);
+
+
+
+        }
+
+
+
+
         [Test]
         public void TraditionalWorkflowTestOrbitrapData_useThrashV1_test2()
         {
