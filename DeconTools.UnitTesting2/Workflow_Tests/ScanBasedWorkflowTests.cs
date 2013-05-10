@@ -160,7 +160,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.IsNotNull(testIso, "Test iso not found.");
 
             Console.WriteLine("monomass= " + testIso.IsotopicProfile.MonoIsotopicMass);
-
+            Assert.AreEqual(1491.32852m, (decimal) Math.Round(testIso.IsotopicProfile.MonoIsotopicMass, 5));
 
 
         }
