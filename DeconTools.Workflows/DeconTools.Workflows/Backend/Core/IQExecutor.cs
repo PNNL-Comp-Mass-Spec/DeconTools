@@ -294,7 +294,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 			Utilities.Logging.IqLogger.LogDirectory = loggingFolder;
-			Utilities.Logging.IqLogger.Initialize(_run.DatasetName);
+			Utilities.Logging.IqLogger.InitializeIqLog(_run.DatasetName);
 		}
 
         private string GetDefaultOutputFolder()

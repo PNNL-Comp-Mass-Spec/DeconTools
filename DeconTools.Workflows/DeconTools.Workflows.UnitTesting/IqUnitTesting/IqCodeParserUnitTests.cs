@@ -107,5 +107,69 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			Assert.IsTrue(!empiricalFormula.Contains("E"));
 		}
 
+		[Test]
+		public void AveragineRoundTripTest()
+		{
+			IqCodeParser parser = new IqCodeParser();
+
+			double ptmDouble = -11849.17;
+			string ptmMass = "[" + ptmDouble.ToString() + "]"; // this is done just for formatting of the function call below
+			double absPtmDouble = Math.Abs(ptmDouble); //this is done because the emperical formula returns a positive amount of atoms (not negative)
+					//so in the assert comparison we have to use the positive mass value
+
+			string empiricalFormula = parser.GetEmpiricalFormulaFromSequence(ptmMass);
+		
+			Console.WriteLine("This is my emperical formula:" + empiricalFormula + ":");
+
+			double returnedMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+
+			Console.WriteLine(empiricalFormula);
+			Console.WriteLine(returnedMass);
+			Assert.AreEqual(absPtmDouble, returnedMass, .0001);
+
+		}
+
+		//Test case: this is to test the accuracy of the averagine atomic formula conversion with very large PTMs
+		[Test]
+		public void ProteinSequenceToMassHugePTMTest()
+		{
+			IqCodeParser parser = new IqCodeParser();
+
+			string proteoform =
+				"M.V(HLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVC)[-11849.17]VLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH.";
+			double trueMass = 4008.08; // only one significant decimal really.  could be 4008.07 or .08 Can't tell yet
+			string unmodifiedProteoform =
+				"M.VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH.";
+			string ptm = "[-11849.17]";
+
+			string proteoformComposition = parser.GetEmpiricalFormulaFromSequence(proteoform);
+
+			string unmodifiedProteoformComposition = parser.GetEmpiricalFormulaFromSequence(unmodifiedProteoform);
+
+			string ptmComposition = parser.GetEmpiricalFormulaFromSequence(ptm);
+
+			string difference = EmpiricalFormulaUtilities.SubtractFormula(unmodifiedProteoformComposition, ptmComposition);
+
+			Console.WriteLine(proteoformComposition);
+			Console.WriteLine(difference);
+
+			Assert.AreEqual(proteoformComposition, difference);
+
+			double differenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(difference);
+			double proteformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(proteoformComposition);
+
+			double unmodifiedProteoformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(unmodifiedProteoformComposition);
+			Console.WriteLine(unmodifiedProteoformMass);
+			double ptmMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(ptmComposition);
+			Console.WriteLine(ptmMass);
+
+			double conversionFirst = unmodifiedProteoformMass - ptmMass;
+			Console.WriteLine(conversionFirst);
+
+			Assert.AreEqual(trueMass, conversionFirst, 0.1);
+			Assert.AreEqual(trueMass, differenceMass, .1);
+			Assert.AreEqual(trueMass, proteformMass, .1);
+		}
+
 	}
 }

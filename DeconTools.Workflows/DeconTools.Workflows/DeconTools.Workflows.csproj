@@ -60,6 +60,7 @@
     <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
     <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
     <Compile Include="Backend\Core\ChargeStateChildIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChargeStateChildTopDownIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakAnalyzerIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakDeciderIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakIqTarget.cs" />
@@ -195,7 +196,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

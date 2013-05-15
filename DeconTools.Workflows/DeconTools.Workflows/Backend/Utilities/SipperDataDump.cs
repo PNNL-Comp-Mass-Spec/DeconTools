@@ -36,7 +36,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 			{
 				sipper.WriteLine("TargetID" + "\t" + "PRSM_ID" + "\t" + "ChargeState" + "\t" + "Code" + "\t" + "EmpiricalFormula" + "\t" + "MonoMZ" +
 				                 "\t" + "MonoisotopicMass" + "\t" + "TargetScan" + "\t" + "ObservedScan" +
-				                 "\t" + "Scan" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" +
+				                 "\t" + "Scan" + "\t" + "NETError" + "\t" + "PPMError" + "\t" + "FitScore" + "\t" +
 				                 "ChromCorrMedian" + "\t" + "ChromCorrAverage" + "\t" + "ChromCorrStdev" + "\t" +
 				                 "CorrelationData" + "\t" + "Abundance" + "\t" + "Flagged" + "\t" + "Status");
 			}

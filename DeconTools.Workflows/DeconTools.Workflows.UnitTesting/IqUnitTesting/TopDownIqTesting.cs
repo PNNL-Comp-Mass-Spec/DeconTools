@@ -19,11 +19,11 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		[Test]
 		public void MSAlignTargetDataTest()
 		{
-			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_e4pvalue.txt";
-			string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
+			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\CPTAC_OT_Pep_JB_5427_0min_4May12_Legolas_11-07-64.raw";
+			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\no_peaks.txt";
+			string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks";
 
-			Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\results.txt");
+			Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\sipper_results.txt");
 			
 			var stopwatch = Stopwatch.StartNew();
 
@@ -43,12 +43,15 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
 			targetedWorkflowParameters.ChromNETTolerance = 0.05;
 			targetedWorkflowParameters.ChromatogramCorrelationIsPerformed = true;
+			targetedWorkflowParameters.ChromSmootherNumPointsInSmooth = 15;
+
+			//targetedWorkflowParameters.SaveParametersToXML(@"C:\Users\fuji510\Desktop");
 
 			//define workflows for parentTarget and childTargets
 			//var parentWorkflow = new ParentLogicIqWorkflow(run, targetedWorkflowParameters);
 
 			var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
-			var childWorkflow = new ChargeStateChildIqWorkflow(run, targetedWorkflowParameters);
+			var childWorkflow = new ChargeStateChildTopDownIqWorkflow(run, targetedWorkflowParameters);
 
 			IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
 			workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);

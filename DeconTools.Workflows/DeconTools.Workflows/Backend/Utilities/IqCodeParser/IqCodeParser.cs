@@ -104,6 +104,18 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 			return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(sequence);
 		}
 
+		public bool CheckSequenceIntegrity(string sequence)
+		{
+			double ptmMass = PtmMassFromCode(sequence);
+			string sequenceFormula = SequenceToEmpiricalFormula(sequence);
+			double sequenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(sequenceFormula);
+			if ((ptmMass < 0) && (Math.Abs(ptmMass) > (sequenceMass / 2)))
+			{
+				return false;
+			}
+			return true;
+		}
+
 		#endregion
 
 		#region Private Methods

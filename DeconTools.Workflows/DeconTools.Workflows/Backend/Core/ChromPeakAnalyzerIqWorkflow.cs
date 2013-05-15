@@ -89,8 +89,8 @@ namespace DeconTools.Workflows.Backend.Core
 			//Get NET Error
 			double NETError = Math.Abs(target.ChromPeak.NETValue - target.ElutionTimeTheor);
 
-			//Get Mass Error
-			double MassError = Math.Abs(target.MonoMassTheor - (observedIso == null ? 0 : observedIso.MonoIsotopicMass));
+			//Get PPM Error
+			double MassError = (((observedIso == null ? 0 : observedIso.MonoPeakMZ) - target.MZTheor) / target.MZTheor) * 1000000;
 
             LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, mspeakList);

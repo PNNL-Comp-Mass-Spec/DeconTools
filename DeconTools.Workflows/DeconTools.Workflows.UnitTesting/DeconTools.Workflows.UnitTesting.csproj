@@ -37,6 +37,7 @@
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="MultiAlignEngine">
       <HintPath>..\..\Library\MultiAlignEngine.dll</HintPath>
     </Reference>
@@ -141,7 +142,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

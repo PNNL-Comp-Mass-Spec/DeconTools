@@ -8,6 +8,7 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
+using log4net;
 
 namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 {
@@ -80,6 +81,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			}
 			Assert.IsTrue(numLogs == 47, "No Logs in output file");
 		}
-		
+
 	}
 }
