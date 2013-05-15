@@ -180,7 +180,7 @@ namespace DeconTools.Backend.FileIO
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
 
             int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
-            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet" }, lineData, "-1"));
+            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet", "ElutionTimeTheor" }, lineData, "-1"));
 
             bool neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
             if (neitherScanOrNETIsProvided)

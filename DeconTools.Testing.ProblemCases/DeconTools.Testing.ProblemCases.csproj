@@ -70,6 +70,7 @@
     <Compile Include="Issue0531_FPGAUIMF_IndexingError.cs" />
     <Compile Include="JoeBrownTesting.cs" />
     <Compile Include="MikesUIMFFileNotReadingRight.cs" />
+    <Compile Include="NegIonModeTesting.cs" />
     <Compile Include="OMCS_0335_MaxisFiletypeProblem.cs" />
     <Compile Include="OMCS_0437_AgilentTOFFileReadingProblem.cs" />
     <Compile Include="OMCS_0471_readingRawFile.cs" />

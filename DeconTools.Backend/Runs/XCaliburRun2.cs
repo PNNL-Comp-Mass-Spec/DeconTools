@@ -80,6 +80,16 @@ namespace DeconTools.Backend.Runs
         }
 
 
+        public override double GetMS2IsolationWidth(int scanNum)
+        {
+            object value = null;
+            _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
+
+            return Convert.ToDouble(value);
+        }
+
+
+
         public override int GetNumMSScans()
         {
             int numSpectra = 0;
@@ -189,8 +199,38 @@ namespace DeconTools.Backend.Runs
                                                       ref pdBasePeakMass, ref pdBasePeakIntensity, ref pnNumChannels, ref pbUniformTime,
                                                       ref pdFrequency);
 
+
+           
+
             return pdTIC;
 
+
+        }
+
+
+
+        public string GetTuneData()
+        {
+            
+
+            
+            object pvarLabels = null, pvarValues = null;
+            int pnArraySize = 0;
+            _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
+
+            var labels = (string[]) pvarLabels;
+            var values = (string[]) pvarValues;
+
+
+            for (int index = 0; index < labels.Length; index++)
+            {
+                var label = labels[index];
+                var value = values[index];
+
+                Console.WriteLine(label + "\t" + value);
+            }
+
+            return labels.ToString();
 
         }
 

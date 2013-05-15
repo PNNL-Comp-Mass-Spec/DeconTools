@@ -947,5 +947,9 @@ namespace DeconTools.Backend.Core
         }
 
 
+        public virtual double GetMS2IsolationWidth(int scanNum)
+        {
+            return 0;
+        }
     }
 }

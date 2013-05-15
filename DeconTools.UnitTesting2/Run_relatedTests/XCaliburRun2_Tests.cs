@@ -36,6 +36,19 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
+        [Test]
+        public void TempTest1()
+        {
+            using (XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
+            {
+
+                run.GetTuneData();
+            }
+
+        }
+
+
+
 
         [Test]
         public void ConstructorTest2()
@@ -95,7 +108,24 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(2.84m, (decimal) Math.Round(ionInjectionTime, 2));
 
             Console.WriteLine("Scan "+ scan + "; ion injection time = " + ionInjectionTime);
+
         }
+
+
+        [Test]
+        public void GetMS2IsolationWidthTest1()
+        {
+            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
+            int scan = 6006;
+            var isolationWidth = run.GetMS2IsolationWidth(scan);
+
+            Assert.AreEqual(3.0m, (decimal)Math.Round(isolationWidth,1));
+
+            Console.WriteLine("Scan " + scan + "; MS2IsolationWidth = " + isolationWidth);
+        }
+
+
 
         [Test]
         public void getSpectrum_Test1()

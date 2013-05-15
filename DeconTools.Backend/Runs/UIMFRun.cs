@@ -263,7 +263,10 @@ namespace DeconTools.Backend.Runs
             if (MS2Frames.BinarySearch(frameNum) >= 0) return 2;
 
             FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
-            return (int)fp.FrameType;
+
+            if (fp.FrameType == DataReader.FrameType.MS1) return 1;
+
+            return (int)1;
 
         }
 

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="NegIonModeTesting.cs" />
     <Compile Include="O16O18Testing.cs" />
     <Compile Include="OMCS_0502_OutOfMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

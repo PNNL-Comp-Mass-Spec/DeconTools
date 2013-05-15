@@ -30,23 +30,34 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks)
         {
+
+
+
             if (observedIso == null) return 1.0;
 
             if (!observedMSPeaks.Any()) return 1.0;
 
-
-            var leftBoundary = observedIso.getMonoPeak().XValue-1.1;
+            var leftBoundary = observedIso.getMonoPeak().XValue - 1.1;
             var rightMostPeak = observedIso.Peaklist[observedIso.Peaklist.Count - 1];
-
             var rightBoundary = rightMostPeak.XValue + rightMostPeak.Width/2.35 *2;  // 2 * sigma
 
-            List<MSPeak> scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
-
-             return  GetInterferenceScore(scanPeaks, observedIso.Peaklist, leftBoundary, rightBoundary);
+            return GetInterferenceScore(observedIso, observedMSPeaks, leftBoundary, rightBoundary);
 
 
 
         }
+
+        public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks, double minMz, double maxMz)
+        {
+            if (observedIso == null) return 1.0;
+
+            if (!observedMSPeaks.Any()) return 1.0;
+            
+            List<MSPeak> scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+
+            return GetInterferenceScore(scanPeaks, observedIso.Peaklist, minMz, maxMz);
+        }
+
 
 
 

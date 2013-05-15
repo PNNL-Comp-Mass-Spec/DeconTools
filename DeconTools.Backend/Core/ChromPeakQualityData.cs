@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -27,9 +24,9 @@ namespace DeconTools.Backend.Core
 			this.IsIsotopicProfileFlagged = false;
 		}
 
-		public void Display()
+		public string Display()
 		{
-			Console.WriteLine(Peak.XValue.ToString("0.00") + "\t" + Peak.NETValue.ToString("0.0000") + "\t" + Abundance + "\t" + FitScore.ToString("0.0000") + "\t" + InterferenceScore.ToString("0.000") + "\t" + IsIsotopicProfileFlagged);
+		      return (Peak.XValue.ToString("0.00") + "\t" + Peak.NETValue.ToString("0.0000") + "\t" + Abundance + "\t" + FitScore.ToString("0.0000") + "\t" + InterferenceScore.ToString("0.000") + "\t" + IsIsotopicProfileFlagged);
 		}
 
 	}

@@ -33,10 +33,11 @@ namespace DeconTools.Backend.Core
             sb.Append(delim);
             sb.Append(this.ScanSet.PrimaryScanNumber);
             sb.Append(delim);
-
-            sb.Append(this.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
+            sb.Append(this.IsotopicProfile.MonoIsotopicMass.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(this.IsotopicProfile.ChargeState);
+           sb.Append(this.IsotopicProfile.ChargeState);
+            sb.Append(delim);
+            sb.Append(this.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
             sb.Append(delim);
             sb.Append(this.IntensityAggregate);
             sb.Append(delim);

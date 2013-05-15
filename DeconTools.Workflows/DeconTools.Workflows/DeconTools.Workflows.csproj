@@ -84,6 +84,8 @@
     <Compile Include="Backend\Core\IqResultUtilities.cs" />
     <Compile Include="Backend\Core\IQTarget.cs" />
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
+    <Compile Include="Backend\Core\IqTargetDms.cs" />
+    <Compile Include="Backend\Core\IqTargetMsgfFirstHit.cs" />
     <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
     <Compile Include="Backend\Core\TopDownIqTarget.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
@@ -134,8 +136,9 @@
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
-    <Compile Include="Backend\FileIO\IqTargetFromMsgfTextFileImporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetFromDmsImporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetsFromFirstHitsFileImporter.cs" />
     <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
     <Compile Include="Backend\FileIO\MSAlignIqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
