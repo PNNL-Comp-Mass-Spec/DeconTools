@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
@@ -10,7 +8,7 @@ using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
-using DeconTools.Workflows.Backend.FileIO;
+using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -64,7 +62,7 @@ namespace DeconTools.Workflows.Backend.Core
                 MSGenerator.IsTICRequested = false;
             }
 
-			ChromPeakIqTarget target = result.Target as ChromPeakIqTarget;
+			var target = result.Target as ChromPeakIqTarget;
 			if (target == null)
 			{
 				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget."
@@ -73,13 +71,15 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			//Sums Scan
+
+            //TODO: numMSSummed is currently hardcoded to '1'; Need to use a Parameter for this
 			var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, 1);
 
 			//Generate a mass spectrum
 			var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
 
 			//Find isotopic profile
-			List<Peak> mspeakList = new List<Peak>();
+			List<Peak> mspeakList;
 			var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
 			//Default Worst Scores
@@ -106,8 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
 			{
                 //Get fit score
 			    List<Peak> observedIsoList = observedIso.Peaklist.Cast<Peak>().ToList();
-                List<Peak> theoryIsoList = target.TheorIsotopicProfile.Peaklist.Cast<Peak>().ToList();
-                fitScore = PeakFitter.GetFit(theoryIsoList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
 				iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
@@ -150,7 +149,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			
-			Console.WriteLine((target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassError.ToString("0.0000") + "\t" + 
+			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassError.ToString("0.0000") + "\t" + 
 				result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
 		}
 

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Workflows.Backend.FileIO;
+using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -32,10 +29,19 @@ namespace DeconTools.Workflows.Backend.Core
 
 		protected IqTargetUtilities TargetUtilities;
 
+
+        protected ChromPeakAnalyzerIqWorkflow ChromPeakAnalyzerIqWorkflow { get; set; }
+
+
 		#endregion
 
 		protected override void ExecuteWorkflow(IqResult result)
 		{
+            if (ChromPeakAnalyzerIqWorkflow == null)
+            {
+                InitializeChromPeakAnalyzerWorkflow();
+            }
+
 			result.Target.TheorIsotopicProfile = TheorFeatureGen.GenerateTheorProfile(result.Target.EmpiricalFormula, result.Target.ChargeState);
 
 			result.IqResultDetail.Chromatogram = ChromGen.GenerateChromatogram(Run, result.Target.TheorIsotopicProfile, result.Target.ElutionTimeTheor);
@@ -55,16 +61,15 @@ namespace DeconTools.Workflows.Backend.Core
 			result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 
 			//General peak information output written to console.
-			Console.WriteLine("SmartPeakSelector --> NETTolerance= " + WorkflowParameters.ChromNETTolerance + ";  chromMinCenterMax= " +
-							  tempMinScanWithinTol + "\t" + tempCenterTol + "" +
-							  "\t" + tempMaxScanWithinTol);
-			Console.WriteLine("MT= " + result.Target.ID + ";z= " + result.Target.ChargeState + "; mz= " + result.Target.MZTheor.ToString("0.000") +
-							  ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count);
+			IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + WorkflowParameters.ChromNETTolerance + ";  chromMinCenterMax= " +
+							  tempMinScanWithinTol + "\t" + tempCenterTol + "" + "\t" + tempMaxScanWithinTol + Environment.NewLine);
+            IqLogger.Log.Debug("MT= " + result.Target.ID + ";z= " + result.Target.ChargeState + "; mz= " + result.Target.MZTheor.ToString("0.000") +
+							  ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count + Environment.NewLine);
 
 			//Creates a ChromPeakIqTarget for each peak found
 			foreach (ChromPeak peak in result.ChromPeakList)
 			{
-				ChromPeakIqTarget target = new ChromPeakIqTarget(new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters));
+				ChromPeakIqTarget target = new ChromPeakIqTarget(ChromPeakAnalyzerIqWorkflow);
 				TargetUtilities.CopyTargetProperties(result.Target, target, false);
 				target.ChromPeak = peak;
 				result.Target.AddTarget(target);
@@ -107,5 +112,9 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
+	    protected virtual void InitializeChromPeakAnalyzerWorkflow()
+	    {
+	        ChromPeakAnalyzerIqWorkflow = new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters);
+	    }
 	}
 }

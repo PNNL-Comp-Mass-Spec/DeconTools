@@ -33,9 +33,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             MonomassHeaders = new[] { "MonoMass", "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
             AlternateIDHeader = new[] { "MatchedMassTagID", "AlternateID" };
             MzHeaders = new[] { "MonoMZ", "MonoisotopicMZ", "UMCMZForChargeBasis" };
-            ScanHeaders = new[] { "ScanLC", "LCScan", "scan", "scanClassRep" , "ScanNum" };
+            ScanHeaders = new[] { "ScanLC", "LCScan", "Scan", "scanClassRep" , "ScanNum" };
             NETHeaders = new[] { "net", "ElutionTime", "RT", "NETElutionTime" };
-            QualityScoreHeaders = new[] {"QValue"};
+            QualityScoreHeaders = new[] {"QValue", "QualityScore"};
             ChargeStateHeaders = new[] {"ChargeState", "Z", "Charge"};
         }
 

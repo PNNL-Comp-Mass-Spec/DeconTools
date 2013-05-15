@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Text;
 using log4net;
 using log4net.Appender;
 using log4net.Repository;
@@ -35,12 +31,17 @@ namespace DeconTools.Workflows.Backend.Utilities.Logging
 			IAppender[] appenders = repository.GetAppenders();
 
 			//only change the file path on the 'FileAppenders'
-			foreach (FileAppender fileAppender in appenders)
+			foreach (var appender in appenders)
 			{
+			    bool isFileAppender = appender is FileAppender;
+
+                if (!isFileAppender) continue;
+
+			    FileAppender fileAppender = (FileAppender) appender;
 				//set the path to your LogDirectory
-				fileAppender.File = Path.Combine(LogDirectory, datasetName + "_Iqlog.txt");
+                fileAppender.File = Path.Combine(LogDirectory, datasetName + "_Iqlog.txt");
 				//make sure to call fileAppender.ActivateOptions() to notify the logging of changes
-				fileAppender.ActivateOptions();
+                fileAppender.ActivateOptions();
 			}
 		}
 	}

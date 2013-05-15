@@ -9,6 +9,7 @@ using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Utilities;
+using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
@@ -164,16 +165,15 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
-#if DEBUG
+
             int tempMinScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime - Parameters.NETTolerance);
             int tempMaxScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime + Parameters.NETTolerance);
             int tempCenterTol = resultList.Run.GetScanValueForNET(normalizedElutionTime);
 
 
-            Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
+            IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
-            Console.WriteLine("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
-#endif
+            IqLogger.Log.Debug("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
             currentResult.NumQualityChromPeaks = -1;
@@ -222,7 +222,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     
                     AddScoresToPeakQualityData(pq, currentResult);
 #if DEBUG
-                    pq.Display();
+                    IqLogger.Log.Debug(pq.Display() + Environment.NewLine);
 #endif
                 }
 

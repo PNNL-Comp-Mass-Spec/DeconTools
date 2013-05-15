@@ -272,11 +272,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 		private void ReportGeneralProgress(int currentTarget, int totalTargets)
 		{
-			int percentage = totalTargets/10;
-			if (percentage == 0) percentage = 1;
-			if (currentTarget % (percentage) == 0)
+			double currentProgress =  (currentTarget/(double)totalTargets);
+			
+			if (currentTarget % 50 == 0)
 			{
-				Utilities.Logging.IqLogger.Log.Info("Processing " + ((double)currentTarget / totalTargets * 100) + "% Complete " + currentTarget + " of " + totalTargets);
+                Utilities.Logging.IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress *100, 1)) + "% Complete." );
 			}
 		}
 

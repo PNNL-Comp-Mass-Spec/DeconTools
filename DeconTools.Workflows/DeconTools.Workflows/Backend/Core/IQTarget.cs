@@ -147,6 +147,8 @@ namespace DeconTools.Workflows.Backend.Core
         public double QualityScore { get; set; }
 
 
+       
+
         public void AddTarget(IqTarget target)
         {
             target.ParentTarget = this;
