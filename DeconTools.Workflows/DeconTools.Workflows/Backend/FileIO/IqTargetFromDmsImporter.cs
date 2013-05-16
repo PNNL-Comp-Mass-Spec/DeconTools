@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.Core;
-using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {

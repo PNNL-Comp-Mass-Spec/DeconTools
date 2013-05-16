@@ -68,6 +68,9 @@
       <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Mapack">
       <HintPath>..\Library\Mapack.dll</HintPath>
     </Reference>
@@ -374,6 +377,7 @@
     <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
     <Compile Include="Utilities\DiagnosticUtilities.cs" />
     <Compile Include="Utilities\EmpiricalFormulaUtilities.cs" />
+    <Compile Include="Utilities\IqLogger\IqLogger.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\BionomialExpansionIsotopicProfileCalculator.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\IsotopicDistributionCalculator.cs" />
     <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\IsotopicProfileComponent.cs" />

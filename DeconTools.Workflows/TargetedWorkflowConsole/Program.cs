@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
-using DeconTools.Workflows.Backend.Utilities.Logging;
 
 
 namespace IQ.Console

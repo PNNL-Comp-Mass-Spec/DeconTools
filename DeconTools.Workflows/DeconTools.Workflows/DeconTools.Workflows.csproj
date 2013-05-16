@@ -173,7 +173,6 @@
     <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
     <Compile Include="Backend\Utilities\FileUtilities.cs" />
     <Compile Include="Backend\Utilities\IqCodeParser\IqCodeParser.cs" />
-    <Compile Include="Backend\Utilities\Logging\IqLogger.cs" />
     <Compile Include="Backend\Utilities\MathUtilities.cs" />
     <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
     <Compile Include="Backend\Utilities\ResultUtilities.cs" />

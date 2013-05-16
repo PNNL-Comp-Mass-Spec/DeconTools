@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Workflows.Backend.Utilities.Logging;
+using DeconTools.Backend.Utilities.IqLogger;
 
 namespace DeconTools.Workflows.Backend.Core
 {

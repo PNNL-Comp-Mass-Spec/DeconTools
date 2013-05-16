@@ -79,7 +79,8 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 					}
 				}
 			}
-			Assert.IsTrue(numLogs == 47, "No Logs in output file");
+			Console.WriteLine(numLogs);
+			Assert.IsTrue(numLogs == 37, "No Logs in output file");
 		}
 
 	}

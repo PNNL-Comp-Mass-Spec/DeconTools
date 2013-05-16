@@ -6,6 +6,7 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -29,8 +30,8 @@ namespace DeconTools.Workflows.Backend.Core
 	        _run = run;
 			SetupLogging();
 
-			Utilities.Logging.IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
-			Utilities.Logging.IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
+			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
 
         #endregion
@@ -109,8 +110,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
 	        int totalTargets = targets.Count;
 	        int targetCount = 1;
-			Utilities.Logging.IqLogger.Log.Info("Total targets being processed: " + totalTargets);
-			Utilities.Logging.IqLogger.Log.Info("Processing...");
+			IqLogger.Log.Info("Total targets being processed: " + totalTargets);
+			IqLogger.Log.Info("Processing...");
 
 	        foreach (var target in targets)
             {
@@ -140,7 +141,7 @@ namespace DeconTools.Workflows.Backend.Core
 	            targetCount++;
             }
 
-			Utilities.Logging.IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
+			IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
         }
 
 
@@ -157,7 +158,7 @@ namespace DeconTools.Workflows.Backend.Core
                 TargetImporter = new BasicIqTargetImporter(targetsFilePath);
             }
 
-			Utilities.Logging.IqLogger.Log.Info("Target Loading Started...");
+			IqLogger.Log.Info("Target Loading Started...");
 
             Targets = TargetImporter.Import();
 
@@ -166,7 +167,7 @@ namespace DeconTools.Workflows.Backend.Core
                 Parameters.MaxMzForDefiningChargeStateTargets,
                 Parameters.MaxNumberOfChargeStateTargetsToCreate);
 
-			Utilities.Logging.IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
+			IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
         }
 
 
@@ -250,20 +251,20 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
                 //ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
-				Utilities.Logging.IqLogger.Log.Info("Creating _Peaks.txt");
+				IqLogger.Log.Info("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }
             else
             {
-				Utilities.Logging.IqLogger.Log.Info("Using Existing _Peaks.txt");
+				IqLogger.Log.Info("Using Existing _Peaks.txt");
             }
 
-			Utilities.Logging.IqLogger.Log.Info("Peak Loading Started...");
+			IqLogger.Log.Info("Peak Loading Started...");
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
             peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
 
-			Utilities.Logging.IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
+			IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
         }
 
         
@@ -276,7 +277,7 @@ namespace DeconTools.Workflows.Backend.Core
 			
 			if (currentTarget % 50 == 0)
 			{
-                Utilities.Logging.IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress *100, 1)) + "% Complete." );
+                IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress *100, 1)) + "% Complete." );
 			}
 		}
 
@@ -293,8 +294,8 @@ namespace DeconTools.Workflows.Backend.Core
                 loggingFolder = _parameters.LoggingFolder;
             }
 
-			Utilities.Logging.IqLogger.LogDirectory = loggingFolder;
-			Utilities.Logging.IqLogger.InitializeIqLog(_run.DatasetName);
+			IqLogger.LogDirectory = loggingFolder;
+			IqLogger.InitializeIqLog(_run.DatasetName);
 		}
 
         private string GetDefaultOutputFolder()

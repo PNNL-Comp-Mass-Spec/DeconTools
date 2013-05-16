@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.FileIO;
-using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.Core
 {

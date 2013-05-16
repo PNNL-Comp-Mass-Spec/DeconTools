@@ -75,9 +75,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             //the minIntensityForScore is too high and no theor peaks qualified. This is bad. But we don't
             //want to throw errors here
-            if (theorIntensitiesUsedInCalc.Count == 0) return 1.0;
+	        if (theorIntensitiesUsedInCalc.Count == 0)
+	        {
+		        return 1.0;
+	        }
 
-            double maxObs = observedIntensitiesUsedInCalc.Max();
+	        double maxObs = observedIntensitiesUsedInCalc.Max();
             if (Math.Abs(maxObs - 0) < float.Epsilon) maxObs = double.PositiveInfinity;
 
             List<double> normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
