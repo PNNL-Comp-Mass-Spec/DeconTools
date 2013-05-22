@@ -127,6 +127,16 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
+		public void RemoveResult(IqResult result)
+		{
+			foreach (var childResult in result._childResults)
+			{
+				childResult.ParentResult = result.ParentResult;
+				result.ParentResult._childResults.Add(childResult);
+			}
+			result.ParentResult._childResults.Remove(result);
+		}
+
         public virtual void Dispose()
         {
             if (HasChildren())

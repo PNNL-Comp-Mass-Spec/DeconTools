@@ -81,24 +81,24 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				child.DoWorkflow();
 
-				/*
+				
 				//Selects grandchildren with extremely poor metric scores for removal
 				IqResult childResult = child.GetResult();
 				if ((childResult.FitScore >= .8) || (childResult.CorrelationData.RSquaredValsMedian <= .15))
 				{
 					targetRemovalList.Add(child);
 				}
-				*/
+				
 			}
 
-			/*
+			
 			//Removes the poorly scoring grandchild ChromPeakIqTargets
 			foreach (IqTarget iqTarget in targetRemovalList)
 			{
 				result.RemoveResult(iqTarget.GetResult());
 				result.Target.RemoveTarget(iqTarget);
 			}
-			*/
+			
 
 			if (Utilities.SipperDataDump.OutputResults)
 			{

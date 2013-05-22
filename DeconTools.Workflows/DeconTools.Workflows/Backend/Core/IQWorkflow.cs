@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -11,6 +12,7 @@ using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
+using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
@@ -435,12 +437,29 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
-
-
-
-
         }
 
+		/// <summary>
+		/// Calculates mass error based on the theoretical most intense peak. 
+		/// </summary>
+		/// <returns> This returns the mass error between a theoretical and observed peak.  Nota bene the is MASS, not m/z
+		/// If no peak is detected, we return the mass error 999999.  This should be interpreted as a null value.</returns>
+		protected double TheorMostIntensePeakMassError(IsotopicProfile theoreticalIso, IsotopicProfile observedIso, int chargeState)
+		{
+			MSPeak theoreticalMostIntensePeak = theoreticalIso.getMostIntensePeak();
+
+			//find peak in obs data
+			double mzTolerance = WorkflowParameters.MSToleranceInPPM * theoreticalMostIntensePeak.XValue / 1e6;
+			var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(new List<Peak>(observedIso.Peaklist), theoreticalMostIntensePeak.XValue, mzTolerance);
+
+			if (foundPeaks.Count == 0)
+			{
+				return 999999;
+			}
+
+			double obsXValue = foundPeaks.OrderByDescending(p => p.Height).First().XValue; //order the peaks and take the first (most intense) one.
+			return ((theoreticalMostIntensePeak.XValue * chargeState) - (obsXValue * chargeState));
+		}
 
         public abstract ResultExporter CreateExporter();
     }
