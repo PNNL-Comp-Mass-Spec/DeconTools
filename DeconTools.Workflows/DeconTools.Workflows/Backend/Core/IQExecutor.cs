@@ -75,7 +75,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 		protected ResultExporter ResultExporter { get; set; }
 
-		protected TargetedWorkflowParameters IqWorkflowParameters { get; set; }
+
+		public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
 
 		protected bool ChromDataIsLoaded
 		{
@@ -241,7 +242,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        private void LoadChromData(Run run)
+        public void LoadChromData(Run run)
         {
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {

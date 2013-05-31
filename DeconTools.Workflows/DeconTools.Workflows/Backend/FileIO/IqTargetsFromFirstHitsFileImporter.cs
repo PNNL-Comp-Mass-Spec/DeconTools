@@ -18,6 +18,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             MassErrorHeaders = new[] {"DelM_PPM"};
 
+            MzHeaders = new[] {"PrecursorMZ", "MZ"};
+
         }
 
         #endregion
@@ -53,7 +55,14 @@ namespace DeconTools.Workflows.Backend.FileIO
             target.QualityScore = ParseDoubleField(processedRow, QualityScoreHeaders, -1);
             target.ChargeState = ParseIntField(processedRow, ChargeStateHeaders, 0);
             target.MassError = ParseDoubleField(processedRow, MassErrorHeaders, 0);
+            target.MZTheor = ParseDoubleField(processedRow, MzHeaders, 0);
 
+            target.MonoMassTheor = (target.MZTheor - DeconTools.Backend.Globals.PROTON_MASS)*target.ChargeState;
+
+
+            IqTargetUtilities targetUtilities = new IqTargetUtilities();
+
+           
 
             return target;
         }

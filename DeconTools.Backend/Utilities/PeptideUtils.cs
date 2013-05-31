@@ -60,7 +60,7 @@ namespace DeconTools.Backend.Utilities
         #region Public Methods
 
 
-        public double GetMonoIsotopicMassForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
+        public double GetMonoIsotopicMassForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true, bool cysteinesAreModified=false)
         {
 
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
@@ -79,6 +79,14 @@ namespace DeconTools.Backend.Utilities
                 double aminoAcidResideMass = GetMonoisotopicMassForAminoAcidResidue(aminoAcid);
 
                 outputMonoisotopicMass += aminoAcidResideMass;
+
+                if (cysteinesAreModified &&  aminoAcid=='C')
+                {
+                    double iodoacetamideMass = 57.021463725623;
+
+                    outputMonoisotopicMass += iodoacetamideMass;
+
+                }
             }
 
             if (includeAmineHydrogenAndFreeAcid)
@@ -90,7 +98,7 @@ namespace DeconTools.Backend.Utilities
             return outputMonoisotopicMass;
         }
 
-        public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true)
+        public string GetEmpiricalFormulaForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true, bool cysteinesAreModified = false)
         {
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
 
@@ -104,6 +112,11 @@ namespace DeconTools.Backend.Utilities
                 string aminoAcidFormula = GetEmpiricalFormulaForAminoAcidResidue(aminoAcid);
 
                 outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, aminoAcidFormula);
+
+                if (cysteinesAreModified && aminoAcid=='C')
+                {
+                    outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, "H3C2NO");
+                }
             }
 
             if (includeAmineHydrogenAndFreeAcid)
@@ -118,7 +131,7 @@ namespace DeconTools.Backend.Utilities
             return outputEmpiricalFormula;
         }
 
-        private string CleanUpPeptideSequence(string peptideSequence)
+        public string CleanUpPeptideSequence(string peptideSequence)
         {
             if (peptideSequence.Contains("."))
             {

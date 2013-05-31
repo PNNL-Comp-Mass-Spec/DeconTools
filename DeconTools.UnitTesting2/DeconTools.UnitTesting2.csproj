@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm_tests\LabelingDistributionCalculatorTests.cs" />
+    <Compile Include="Algorithm_tests\LoessTests.cs" />
     <Compile Include="Algorithm_tests\PattersonAlgorithmTests.cs" />
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="Demos_basic_API_usage\DemoTests.cs" />

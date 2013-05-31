@@ -89,6 +89,7 @@
     <Compile Include="WorkflowTests\IQMillionTests.cs" />
     <Compile Include="IqUnitTesting\ChromPeakAnalyzerIqWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQExecutorTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\IqMassAlignerWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQTargetUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\TempTests.cs" />

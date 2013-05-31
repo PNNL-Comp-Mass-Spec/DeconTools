@@ -157,6 +157,7 @@
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />
+    <Compile Include="Backend\IqMassAlignerWorkflow.cs" />
     <Compile Include="Backend\Results\AlignmentResult.cs" />
     <Compile Include="Backend\Results\DeconToolsResultDTO.cs" />
     <Compile Include="Backend\Results\DeuteratedTargetedResultDTO.cs" />

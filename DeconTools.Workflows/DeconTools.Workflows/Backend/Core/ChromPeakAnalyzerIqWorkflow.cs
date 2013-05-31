@@ -7,9 +7,8 @@ using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
+using DeconTools.Workflows.Backend.Utilities.Logging;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -83,6 +82,19 @@ namespace DeconTools.Workflows.Backend.Core
 			List<Peak> mspeakList;
 			var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
+			//Default Worst Scores
+			double fitScore = 1;
+			double iscore = 1;
+
+			//Get NET Error
+			double NETError = Math.Abs(target.ChromPeak.NETValue - target.ElutionTimeTheor);
+
+			//Get Mass Error
+			double massErrorInDaltons =(observedIso == null ? 0 : observedIso.MonoIsotopicMass)- target.MonoMassTheor ;
+
+		    double massErrorInPpm = massErrorInDaltons/target.MonoMassTheor*1e6;
+
+
             LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, mspeakList);
 
@@ -92,23 +104,15 @@ namespace DeconTools.Workflows.Backend.Core
 			{
 				result.IsotopicProfileFound = false;
 			    result.FitScore = 1;
-				result.InterferenceScore = 1;
 			}
 			else
 			{
-
-				//Get NET Error
-				double NETError = Math.Abs(target.ChromPeak.NETValue - target.ElutionTimeTheor);
-
-				//Get PPM Error
-				double MassError = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, observedIso, target.ChargeState);
-
                 //Get fit score
 			    List<Peak> observedIsoList = observedIso.Peaklist.Cast<Peak>().ToList();
-                double fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
-				double iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
+				iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
 
                 //Get Isotope Correlation
                 int scan = lcscanset.PrimaryScanNumber;
@@ -127,7 +131,7 @@ namespace DeconTools.Workflows.Backend.Core
 				result.ObservedIsotopicProfile = observedIso;
 				result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
 				result.NETError = NETError;
-				result.MassError = MassError;
+				result.MassError = massErrorInPpm;
 				result.IqResultDetail.MassSpectrum = massSpectrumXYData;
 				result.Abundance = GetAbundance(result);
 			}
@@ -151,8 +155,6 @@ namespace DeconTools.Workflows.Backend.Core
 			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassError.ToString("0.0000") + "\t" + 
 				result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
 		}
-
-
 
 	}
 }

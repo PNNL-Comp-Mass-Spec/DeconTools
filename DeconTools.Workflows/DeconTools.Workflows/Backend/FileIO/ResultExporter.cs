@@ -53,6 +53,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
         }
 
+
+
+
+
         public virtual string GetHeader()
         {
             StringBuilder sb = new StringBuilder();
@@ -95,6 +99,15 @@ namespace DeconTools.Workflows.Backend.FileIO
             return outString;
 
         }
+
+        
+        public virtual string GetHeader(IqResult result)
+        {
+            return this.GetHeader();
+        }
+
+
+
 
         public virtual string GetResultAsString(IqResult result, bool includeHeader = false)
         {

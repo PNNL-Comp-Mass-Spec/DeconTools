@@ -351,6 +351,7 @@ namespace DeconTools.Workflows.Backend.Core
             targetForUpdate.MZTheor = sourceTarget.MZTheor;
             targetForUpdate.ElutionTimeTheor = sourceTarget.ElutionTimeTheor;
             targetForUpdate.ScanLC = sourceTarget.ScanLC;
+            targetForUpdate.QualityScore = sourceTarget.QualityScore;
             
 
             targetForUpdate.TheorIsotopicProfile = sourceTarget.TheorIsotopicProfile == null

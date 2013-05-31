@@ -133,6 +133,7 @@
     <Compile Include="Algorithms\ChromatogramGenerator.cs" />
     <Compile Include="Algorithms\IsotopicProfileMultiChromatogramExtractor.cs" />
     <Compile Include="Algorithms\LabelingDistributionCalculator.cs" />
+    <Compile Include="Algorithms\LoessInterpolator.cs" />
     <Compile Include="Algorithms\O16O18FeatureFinder.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />

@@ -112,6 +112,10 @@ namespace DeconTools.Workflows.Backend.Core
 						                    ? 0
 						                    : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
 
+                    childResult.MassError = chromPeakResult.ObservedIsotopicProfile == null
+                                            ? 0
+                                            : chromPeakResult.MassError;
+
 					var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak) childResult.ChromPeakSelected).NETValue;
 					childResult.ElutionTimeObs = elutionTime;
 
