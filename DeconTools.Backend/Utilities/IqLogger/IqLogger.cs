@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using log4net;
 using log4net.Appender;
@@ -23,17 +24,27 @@ namespace DeconTools.Backend.Utilities.IqLogger
 			ILoggerRepository repository = LogManager.GetRepository();
 
 			//get all of the appenders for the repository
-			IAppender[] appenders = repository.GetAppenders();
+			var appenders = repository.GetAppenders().ToList();
 
 			//only change the file path on the 'FileAppenders'
 			//sets default path to the current working directory
-			foreach (FileAppender fileAppender in appenders)
-			{
-				//set the path to your LogDirectory
-				fileAppender.File = Path.Combine(Environment.CurrentDirectory , fileAppender.Name + ".txt");
-				//make sure to call fileAppender.ActivateOptions() to notify the logging of changes
-				fileAppender.ActivateOptions();
-			}
+
+            //only change the file path on the 'FileAppenders'
+            foreach (var appender in appenders)
+            {
+                bool isFileAppender = appender is FileAppender;
+
+                if (!isFileAppender) continue;
+
+                FileAppender fileAppender = (FileAppender)appender;
+                //set the path to your LogDirectory
+                fileAppender.File = Path.Combine(Environment.CurrentDirectory, fileAppender.Name + ".txt");
+                //make sure to call fileAppender.ActivateOptions() to notify the logging of changes
+                fileAppender.ActivateOptions();
+            }
+
+
+		
 		}
 
 		public static readonly ILog Log;
@@ -73,17 +84,20 @@ namespace DeconTools.Backend.Utilities.IqLogger
 			IAppender[] appenders = repository.GetAppenders();
 
 			//only change the file path on the 'FileAppenders'
-			foreach (FileAppender fileAppender in appenders)
-			{
-				if (fileAppender.Name == name)
-				{
-					//set the path to your LogDirectory
-					fileAppender.File = Path.Combine(path , filename);
-					//make sure to call fileAppender.ActivateOptions() to notify the logging of changes
-					fileAppender.ActivateOptions();
-					break;
-				}
-			}
+			foreach (var appender in appenders)
+            {
+                bool isFileAppender = appender is FileAppender;
+
+                if (!isFileAppender) continue;
+
+                FileAppender fileAppender = (FileAppender)appender;
+                //set the path to your LogDirectory
+                fileAppender.File = Path.Combine(path, filename);
+                //make sure to call fileAppender.ActivateOptions() to notify the logging of changes
+                fileAppender.ActivateOptions();
+            }
+
+
 		}
 
 		/// <summary>
