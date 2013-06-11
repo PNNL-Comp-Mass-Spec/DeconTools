@@ -65,6 +65,8 @@
     <Compile Include="Backend\Core\ChromPeakDeciderIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakIqTarget.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\BasicChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChargeCorrelationItem.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChargeCorrelator.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakAnalyzer.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorBase.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorParameters.cs" />

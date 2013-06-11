@@ -40,6 +40,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string EmpiricalFormula { get; set; }
 
+		public string DatabaseReference { get; set; }
+
         public string Code { get; set; }
 
         public double MonoMassTheor { get; set; }

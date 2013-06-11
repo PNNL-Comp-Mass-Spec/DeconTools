@@ -19,13 +19,13 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		[Test]
 		public void MSAlignTargetDataTest()
 		{
-			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\CPTAC_OT_Pep_JB_5427_0min_4May12_Legolas_11-07-64.raw";
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\no_peaks.txt";
-			string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks";
+			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
+			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_fullTargetset.txt";
+			string resultsFolder = @"\\protoapps\UserData\Fujimoto\Data_For_Sangtae\Results";
 
-			Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Testing\NoPeaks\sipper_results.txt");
+			Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\Data_For_Sangtae\SBEP_STM_001_02222012_Aragon.txt");
 			
-			var stopwatch = Stopwatch.StartNew();
+			
 
 			WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
 			executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -43,11 +43,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			targetedWorkflowParameters.ChromNETTolerance = 0.05;
 			targetedWorkflowParameters.ChromatogramCorrelationIsPerformed = true;
 			targetedWorkflowParameters.ChromSmootherNumPointsInSmooth = 15;
-
-			//targetedWorkflowParameters.SaveParametersToXML(@"C:\Users\fuji510\Desktop");
+			targetedWorkflowParameters.MSToleranceInPPM = 15;
 
 			//define workflows for parentTarget and childTargets
-			//var parentWorkflow = new ParentLogicIqWorkflow(run, targetedWorkflowParameters);
 
 			var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
 			var childWorkflow = new ChargeStateChildTopDownIqWorkflow(run, targetedWorkflowParameters);
@@ -55,7 +53,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
 			workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
 			workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
-
+			var stopwatch = Stopwatch.StartNew();
 
 			//Main line for executing IQ:
 			executor.Execute();
@@ -64,5 +62,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			var runtime = stopwatch.Elapsed;
 			Console.WriteLine("Runtime: " + runtime);
 		}
+
 	}
 }

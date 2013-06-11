@@ -88,12 +88,7 @@ namespace DeconTools.Workflows.Backend.Core
 			double iscore = 1;
 
 			//Get NET Error
-			double NETError = Math.Abs(target.ChromPeak.NETValue - target.ElutionTimeTheor);
-
-			//Get Mass Error
-			double massErrorInDaltons =(observedIso == null ? 0 : observedIso.MonoIsotopicMass)- target.MonoMassTheor ;
-
-		    double massErrorInPpm = massErrorInDaltons/target.MonoMassTheor*1e6;
+			double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
 
 
             LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
@@ -115,6 +110,10 @@ namespace DeconTools.Workflows.Backend.Core
 				//get i_score
 				iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
 
+				//get ppm error
+				double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, observedIso, target.ChargeState);
+				double ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
+
                 //Get Isotope Correlation
                 int scan = lcscanset.PrimaryScanNumber;
                 double chromScanWindowWidth = target.ChromPeak.Width * 2;
@@ -131,8 +130,8 @@ namespace DeconTools.Workflows.Backend.Core
 				result.InterferenceScore = iscore;
 				result.ObservedIsotopicProfile = observedIso;
 				result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
-				result.NETError = NETError;
-				result.MassErrorBefore = massErrorInPpm;
+				result.NETError = netError;
+				result.MassErrorBefore = ppmError;
 				result.IqResultDetail.MassSpectrum = massSpectrumXYData;
 				result.Abundance = GetAbundance(result);
 			}

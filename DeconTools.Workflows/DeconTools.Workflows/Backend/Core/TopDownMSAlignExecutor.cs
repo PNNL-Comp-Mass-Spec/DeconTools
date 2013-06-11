@@ -41,7 +41,7 @@ namespace DeconTools.Workflows.Backend.Core
 				setParentNetFromChildren(target);
 				_targetUtilities.UpdateTargetMissingInfo(target);
 				target.RefineChildTargets();
-				target.setChildrenFromParent();
+				target.SetChildrenFromParent();
 			}
 		}
 

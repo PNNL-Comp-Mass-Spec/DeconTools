@@ -82,6 +82,7 @@ namespace DeconTools.Workflows.Backend.Core
 					childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
 
 				    childResult.LcScanObs = chromPeakResult.LcScanObs;
+
 					childResult.LCScanSetSelected = chromPeakResult.LCScanSetSelected;
 
 					childResult.IqResultDetail.MassSpectrum = chromPeakResult.IqResultDetail.MassSpectrum;
@@ -92,7 +93,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 					childResult.FitScore = chromPeakResult.FitScore;
 
+					childResult.NETError = chromPeakResult.NETError;
+
 					childResult.InterferenceScore = chromPeakResult.InterferenceScore;
+
+					childResult.CorrelationData = chromPeakResult.CorrelationData;
 
 					childResult.MonoMassObs = chromPeakResult.ObservedIsotopicProfile == null
 						                          ? 0
@@ -101,10 +106,6 @@ namespace DeconTools.Workflows.Backend.Core
 					childResult.MZObs = chromPeakResult.ObservedIsotopicProfile == null
 						                    ? 0
 						                    : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
-
-
-				   
-
                     
 
                     childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null

@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.Core
 		/// Sets the childrens code, NET, and other values based on its parent.
 		/// Removes children targets if out of MZ range.
 		/// </summary>
-		public void setChildrenFromParent(double minMZ = 400, double maxMZ = 1500)
+		public void SetChildrenFromParent(double minMZ = 400, double maxMZ = 1500)
 		{
 			var children = ChildTargets();
 			var removalList = new List<IqTarget>();

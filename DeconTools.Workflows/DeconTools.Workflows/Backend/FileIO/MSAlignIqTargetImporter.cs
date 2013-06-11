@@ -130,14 +130,16 @@ namespace DeconTools.Workflows.Backend.FileIO
             child.ChargeState = ParseIntField(processedRowOfText, ChargeHeader);
             child.ObservedScan = ParseIntField(processedRowOfText, ScansHeader);
 	        child.AlternateID = ParseIntField(processedRowOfText, PRSMIdHeader);
+	        child.DatabaseReference = ParseStringField(processedRowOfText, ProteinNameHeader);
             return child;
 	    }
 
 		protected TopDownIqTarget CreateParentTarget(List<List<string>> processedGroup)
 		{
 			TopDownIqTarget target = new TopDownIqTarget();
-			IqCodeParser parser = new IqCodeParser(); 
+			IqCodeParser parser = new IqCodeParser();
 
+			target.DatabaseReference = ParseStringField(processedGroup[0], ProteinNameHeader);
 			target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);
 			target.EmpiricalFormula = parser.GetEmpiricalFormulaFromSequence(target.Code);
 			target.MonoMassTheor = ParseDoubleField(processedGroup[0], AdjustedPrecursorMassHeader);

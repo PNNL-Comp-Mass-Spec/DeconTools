@@ -144,7 +144,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #endregion
 
 
-        public abstract ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan);
+        public virtual ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan)
+        {
+	        throw new NotImplementedException();
+        }
 
         public ChromCorrelationData CorrelatePeaksWithinIsotopicProfile(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
