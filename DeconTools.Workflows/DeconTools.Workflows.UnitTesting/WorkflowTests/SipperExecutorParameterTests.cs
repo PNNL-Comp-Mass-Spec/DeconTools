@@ -19,9 +19,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.DeleteLocalDatasetAfterProcessing = false;
             parameters.FolderPathForCopiedRawDataset = String.Empty;
-            parameters.LoggingFolder = @"C:\Sipper\SipperDemo\SipperOutputs";
             parameters.ReferenceDataForTargets = @"C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt";
-            parameters.ResultsFolder = @"C:\Sipper\SipperDemo\SipperOutputs";
             parameters.TargetedAlignmentIsPerformed = false;
             parameters.TargetedAlignmentWorkflowParameterFile = String.Empty;
             parameters.TargetsBaseFolder = @"C:\Sipper\SipperDemo\SipperInputs\Targets";

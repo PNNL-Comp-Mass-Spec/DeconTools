@@ -25,7 +25,8 @@ namespace DeconTools.Workflows.UnitTesting
             UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
             TargetedResultRepository repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
+            string massTagFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
 
             TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -105,7 +106,8 @@ namespace DeconTools.Workflows.UnitTesting
             UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
             TargetedResultRepository repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
+            string massTagFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
 
             TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -463,7 +465,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
                     double theorNET = mt.NormalizedElutionTime;
                     double obsNET = result.NET;
-                    float alignedNET = run.GetNETValueForScan((int)scan);
+                    var alignedNET = run.NetAlignmentInfo.GetNETValueForScan((int) scan);
 
                     sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0") + "\t" + theorNET.ToString("0.0000") + "\t" + obsNET.ToString("0.0000") + "\t" + alignedNET.ToString("0.0000"));
 

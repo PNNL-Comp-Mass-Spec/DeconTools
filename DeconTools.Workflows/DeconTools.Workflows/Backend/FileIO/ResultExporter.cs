@@ -83,6 +83,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append("MZObs");
             sb.Append(delim);
+            sb.Append("MonoMassObsCalibrated");
+            sb.Append(delim);
+            sb.Append("MZObsCalibrated");
+            sb.Append(delim);
             sb.Append("ElutionTimeObs");
             sb.Append(delim);
             sb.Append("ChromPeaksWithinTolerance");
@@ -112,17 +116,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         public virtual string GetResultAsString(IqResult result, bool includeHeader = false)
         {
             StringBuilder sb = new StringBuilder();
-
-            string scanSetString;
-
-            if (result.LCScanSetSelected != null)
-            {
-                scanSetString = result.LCScanSetSelected.PrimaryScanNumber.ToString("0.#");
-            }
-            else
-            {
-                scanSetString = "0";
-            }
 
             string delim = "\t";
 
@@ -154,11 +147,15 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append(result.MZObs.ToString("0.00000"));
             sb.Append(delim);
+            sb.Append(result.MonoMassObsCalibrated.ToString("0.00000"));
+            sb.Append(delim);
+            sb.Append(result.MZObsCalibrated.ToString("0.00000"));
+            sb.Append(delim);
             sb.Append(result.ElutionTimeObs.ToString("0.000"));
             sb.Append(delim);
             sb.Append(result.NumChromPeaksWithinTolerance);
             sb.Append(delim);
-            sb.Append(scanSetString);
+            sb.Append(result.LcScanObs);
             sb.Append(delim);
             sb.Append(result.Abundance.ToString("0.#"));
             sb.Append(delim);

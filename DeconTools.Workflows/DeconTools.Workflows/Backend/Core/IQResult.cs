@@ -39,6 +39,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         public double MZObs { get; set; }
 
+
+        public double MonoMassObsCalibrated { get; set; }
+
+        public double MZObsCalibrated { get; set; }
+
         public IsotopicProfile ObservedIsotopicProfile { get; set; }
 
         public double ElutionTimeObs { get; set; }
@@ -52,6 +57,8 @@ namespace DeconTools.Workflows.Backend.Core
         public Peak ChromPeakSelected { get; set; }
 
         public ScanSet LCScanSetSelected { get; set; }
+
+        public int LcScanObs { get; set; }
 
         public double FitScore { get; set; }
 
@@ -67,7 +74,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 		public ChromCorrelationData CorrelationData { get; set; }
 
-		public double MassError { get; set; }
+		public double MassErrorBefore { get; set; }
+
+        public double MassErrorAfter { get; set; }
 
 		public double NETError { get; set; }
 
@@ -90,7 +99,7 @@ namespace DeconTools.Workflows.Backend.Core
             sb.Append("MZ (theor/Obs)" + delim + Target.MZTheor.ToString("0.0000") + delim + MZObs.ToString("0.0000") + Environment.NewLine);
             sb.Append("MonoMass (theor/Obs)" + delim + Target.MonoMassTheor.ToString("0.0000") + delim + MonoMassObs.ToString("0.0000") + Environment.NewLine);
             sb.Append("ElutionTime (theor/Obs)" + delim + Target.ElutionTimeTheor.ToString("0.000") + delim + ElutionTimeObs.ToString("0.000") + Environment.NewLine);
-            sb.Append("ScanSet (Obs)" + delim + delim + (this.LCScanSetSelected == null ? "" : LCScanSetSelected.PrimaryScanNumber.ToString()) + Environment.NewLine);
+            sb.Append("ScanSet (Obs)" + delim + delim + LcScanObs + Environment.NewLine);
             sb.Append("FitScore (Obs)" + delim + delim + this.FitScore.ToString("0.000") + Environment.NewLine);
 
             sb.Append(Environment.NewLine);

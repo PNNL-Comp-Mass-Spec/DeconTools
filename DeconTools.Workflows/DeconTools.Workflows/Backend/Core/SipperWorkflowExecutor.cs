@@ -55,7 +55,7 @@ namespace DeconTools.Workflows.Backend.Core
             List<int> massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
-            _loggingFileName = ExecutorParameters.LoggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
+            _loggingFileName = ExecutorParameters.OutputFolderBase  + "\\Logs\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
 
 
             TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
@@ -136,7 +136,7 @@ namespace DeconTools.Workflows.Backend.Core
             UpdateTargetMissingInfo();
 
 
-            _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
+            _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
 
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);

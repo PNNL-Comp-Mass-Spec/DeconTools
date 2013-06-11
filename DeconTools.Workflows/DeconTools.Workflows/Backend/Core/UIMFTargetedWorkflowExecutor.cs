@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 		public override void InitializeWorkflow()
 		{
-			_resultsFolder = string.IsNullOrEmpty(ExecutorParameters.ResultsFolder) ? RunUtilities.GetDatasetParentFolder(DatasetPath) : getResultsFolder(ExecutorParameters.ResultsFolder);
+			_resultsFolder = string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase) ? RunUtilities.GetDatasetParentFolder(DatasetPath) : getResultsFolder(ExecutorParameters.OutputFolderBase);
 
 			MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
 

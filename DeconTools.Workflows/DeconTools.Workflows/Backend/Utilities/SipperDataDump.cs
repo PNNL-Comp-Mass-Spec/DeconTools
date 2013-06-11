@@ -73,9 +73,9 @@ namespace DeconTools.Workflows.Backend.Utilities
 			{
 				sipper.WriteLine(target.ID + "\t" + parent.AlternateID + "\t" + target.ChargeState + "\t" + target.Code + "\t" + target.EmpiricalFormula + "\t" +
 								 target.MZTheor.ToString("0.0000") + "\t" + target.MonoMassTheor + "\t" +
-								 Run.GetScanValueForNET((float)target.ElutionTimeTheor) +
+								 Run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor) +
 								 "\t" + parent.ObservedScan + "\t" + target.ChromPeak.XValue.ToString("0.00") + "\t" +
-								 result.NETError.ToString("0.0000") + "\t" + result.MassError.ToString("0.0000") + "\t" +
+								 result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
 								 result.FitScore.ToString("0.0000") + "\t" + result.CorrelationData.RSquaredValsMedian + "\t" +
 								 result.CorrelationData.RSquaredValsAverage + "\t" + result.CorrelationData.RSquaredValsStDev + "\t" +
 								 result.CorrelationData.GetCorrelationData() + "\t" + target.GetResult().Abundance + "\t" + result.IsIsotopicProfileFlagged + "\t" +

@@ -20,14 +20,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             string outputFileName = @"\\protoapps\UserData\Slysz\IQDemo\Parameters" + @"\IQExecutorParameters.xml";
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.AlignmentInfoFolder = @"\\protoapps\UserData\Slysz\IQ_Demo\AlignmentInfo";
-            executorParameters.AlignmentFeaturesAreSavedToTextFile = true;
-            executorParameters.AlignmentInfoIsExported = true;
             executorParameters.CopyRawFileLocal = false;
             executorParameters.DeleteLocalDatasetAfterProcessing = true;
             executorParameters.FolderPathForCopiedRawDataset = @"\\protoapps\UserData\Slysz\IQ_Demo\RawData";
-            executorParameters.LoggingFolder = @"\\protoapps\UserData\Slysz\IQ_Demo\Logs";
-            executorParameters.ResultsFolder = @"\\protoapps\UserData\Slysz\IQ_Demo\Results";
             executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
             executorParameters.TargetsBaseFolder = "";
             executorParameters.TargetedAlignmentIsPerformed = false;
@@ -156,8 +151,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executorParameters.TargetedAlignmentWorkflowParameterFile =
                 baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
-
-            executorParameters.AlignmentInfoFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo";
 
             var workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromSmootherNumPointsInSmooth = 9;
@@ -363,7 +356,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            string resultsFolderLocation = executorParameters.ResultsFolder;
+            string resultsFolderLocation = executorParameters.OutputFolderBase+ "\\Results";
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -375,8 +368,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             FileInfo rawFileInfo = new FileInfo(testDatasetPath);
-            executorParameters.AlignmentInfoFolder = rawFileInfo.DirectoryName;
-
+          
 
             //delete alignment files
             string mzalignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_mzAlignment.txt";
@@ -420,7 +412,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string executorParameterFile = baseFolder + @"\Parameters\QCShew_OrbiStandard_workflowExecutorParameters.xml";
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
-            string resultsFolderLocation = executorParameters.ResultsFolder;
+            string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -449,7 +441,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            string resultsFolderLocation = executorParameters.ResultsFolder;
+            string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -461,7 +453,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             FileInfo rawFileInfo = new FileInfo(testDatasetPath);
-            executorParameters.AlignmentInfoFolder = rawFileInfo.DirectoryName;
 
             string mzalignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_mzAlignment.txt";
             string netAlignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_netAlignment.txt";
@@ -518,7 +509,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            string expectedResultsFilename = executorParameters.ResultsFolder + "\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = executorParameters.OutputFolderBase + "\\Results" +"\\" + testDatasetName + "_results.txt";
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);

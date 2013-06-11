@@ -4,7 +4,6 @@ using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
@@ -282,13 +281,13 @@ namespace DeconTools.Workflows.Backend.Core
                                       "; sequence= " + result.Target.Code + "; ScanLC= " + result.Target.ScanLC;
 
                 Console.WriteLine(errorMessage);
-                throw new ApplicationException(errorMessage,ex) ;
+                throw new ApplicationException(errorMessage, ex);
             }
-            
 
-            
-         
-            
+
+
+
+
 
         }
 
@@ -367,8 +366,11 @@ namespace DeconTools.Workflows.Backend.Core
             bool filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
             result.ChromPeakSelected = ChromPeakSelector.SelectBestPeak(result.IqResultDetail.ChromPeakQualityData, filterOutFlagged);
 
+
             result.LCScanSetSelected = ChromPeakUtilities.GetLCScanSetForChromPeak(result.ChromPeakSelected, Run,
                                                                                  WorkflowParameters.NumMSScansToSum);
+
+            result.LcScanObs = result.LCScanSetSelected == null ? -1 : result.LCScanSetSelected.PrimaryScanNumber;
 
             result.IqResultDetail.MassSpectrum = MSGenerator.GenerateMS(Run, result.LCScanSetSelected);
 
@@ -377,7 +379,7 @@ namespace DeconTools.Workflows.Backend.Core
             List<Peak> mspeakList;
             result.ObservedIsotopicProfile = MsfeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, result.Target.TheorIsotopicProfile, out mspeakList);
 
-            
+
             result.FitScore = FitScoreCalc.CalculateFitScore(result.Target.TheorIsotopicProfile, result.ObservedIsotopicProfile,
                                                               result.IqResultDetail.MassSpectrum);
 
@@ -391,6 +393,12 @@ namespace DeconTools.Workflows.Backend.Core
             result.MonoMassObs = result.ObservedIsotopicProfile == null ? 0 : result.ObservedIsotopicProfile.MonoIsotopicMass;
 
             result.MZObs = result.ObservedIsotopicProfile == null ? 0 : result.ObservedIsotopicProfile.MonoPeakMZ;
+
+            result.MZObsCalibrated = result.ObservedIsotopicProfile == null ? 0 : Run.GetAlignedMZ(result.ObservedIsotopicProfile.MonoPeakMZ, result.LcScanObs);
+            result.MonoMassObsCalibrated = result.ObservedIsotopicProfile == null
+                                               ? 0
+                                               : (result.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) * result.Target.ChargeState;
+
 
             var elutionTime = result.ChromPeakSelected == null ? 0d : ((ChromPeak)result.ChromPeakSelected).NETValue;
             result.ElutionTimeObs = elutionTime;
@@ -439,27 +447,27 @@ namespace DeconTools.Workflows.Backend.Core
             return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
         }
 
-		/// <summary>
-		/// Calculates mass error based on the theoretical most intense peak. 
-		/// </summary>
-		/// <returns> This returns the mass error between a theoretical and observed peak.  Nota bene the is MASS, not m/z
-		/// If no peak is detected, we return the mass error 999999.  This should be interpreted as a null value.</returns>
-		protected double TheorMostIntensePeakMassError(IsotopicProfile theoreticalIso, IsotopicProfile observedIso, int chargeState)
-		{
-			MSPeak theoreticalMostIntensePeak = theoreticalIso.getMostIntensePeak();
+        /// <summary>
+        /// Calculates mass error based on the theoretical most intense peak. 
+        /// </summary>
+        /// <returns> This returns the mass error between a theoretical and observed peak.  Nota bene the is MASS, not m/z
+        /// If no peak is detected, we return the mass error 999999.  This should be interpreted as a null value.</returns>
+        protected double TheorMostIntensePeakMassError(IsotopicProfile theoreticalIso, IsotopicProfile observedIso, int chargeState)
+        {
+            MSPeak theoreticalMostIntensePeak = theoreticalIso.getMostIntensePeak();
 
-			//find peak in obs data
-			double mzTolerance = WorkflowParameters.MSToleranceInPPM * theoreticalMostIntensePeak.XValue / 1e6;
-			var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(new List<Peak>(observedIso.Peaklist), theoreticalMostIntensePeak.XValue, mzTolerance);
+            //find peak in obs data
+            double mzTolerance = WorkflowParameters.MSToleranceInPPM * theoreticalMostIntensePeak.XValue / 1e6;
+            var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(new List<Peak>(observedIso.Peaklist), theoreticalMostIntensePeak.XValue, mzTolerance);
 
-			if (foundPeaks.Count == 0)
-			{
-				return 999999;
-			}
+            if (foundPeaks.Count == 0)
+            {
+                return 999999;
+            }
 
-			double obsXValue = foundPeaks.OrderByDescending(p => p.Height).First().XValue; //order the peaks and take the first (most intense) one.
-			return ((theoreticalMostIntensePeak.XValue * chargeState) - (obsXValue * chargeState));
-		}
+            double obsXValue = foundPeaks.OrderByDescending(p => p.Height).First().XValue; //order the peaks and take the first (most intense) one.
+            return ((theoreticalMostIntensePeak.XValue * chargeState) - (obsXValue * chargeState));
+        }
 
         public abstract ResultExporter CreateExporter();
     }

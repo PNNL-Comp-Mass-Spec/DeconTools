@@ -40,7 +40,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			parameters.ChromPeakDetectorSigNoise = 1;
 
 			WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorBaseParameters.ResultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
 
 			IqWorkflow iqWorkflow = new BasicIqWorkflow(run, parameters);
 

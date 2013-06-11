@@ -124,7 +124,7 @@ namespace DeconTools.Workflows.Backend.Core
                 int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
                 result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, observedIso, startScan, stopScan);
-
+			    result.LcScanObs = lcscanset.PrimaryScanNumber;
 				result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
 				result.IsotopicProfileFound = true;
 				result.FitScore = fitScore;
@@ -132,7 +132,7 @@ namespace DeconTools.Workflows.Backend.Core
 				result.ObservedIsotopicProfile = observedIso;
 				result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
 				result.NETError = NETError;
-				result.MassError = massErrorInPpm;
+				result.MassErrorBefore = massErrorInPpm;
 				result.IqResultDetail.MassSpectrum = massSpectrumXYData;
 				result.Abundance = GetAbundance(result);
 			}
@@ -153,7 +153,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			
-			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassError.ToString("0.0000") + "\t" + 
+			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" + 
 				result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
 		}
 

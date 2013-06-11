@@ -166,10 +166,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 
-            int tempMinScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime - Parameters.NETTolerance);
-            int tempMaxScanWithinTol = resultList.Run.GetScanValueForNET(normalizedElutionTime + Parameters.NETTolerance);
-            int tempCenterTol = resultList.Run.GetScanValueForNET(normalizedElutionTime);
-
+            int tempMinScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
+            int tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
+            int tempCenterTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
 
             IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);

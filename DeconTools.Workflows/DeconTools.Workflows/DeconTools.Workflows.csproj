@@ -137,6 +137,8 @@
     <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
     <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultImporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultImporterBasic.cs" />
     <Compile Include="Backend\FileIO\IqTargetFromDmsImporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\IqTargetsFromFirstHitsFileImporter.cs" />
@@ -157,7 +159,7 @@
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\Globals.cs" />
-    <Compile Include="Backend\IqMassAlignerWorkflow.cs" />
+    <Compile Include="Backend\IqMassAndNetAligner.cs" />
     <Compile Include="Backend\Results\AlignmentResult.cs" />
     <Compile Include="Backend\Results\DeconToolsResultDTO.cs" />
     <Compile Include="Backend\Results\DeuteratedTargetedResultDTO.cs" />

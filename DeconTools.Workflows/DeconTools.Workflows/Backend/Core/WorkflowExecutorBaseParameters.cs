@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class WorkflowExecutorBaseParameters : WorkflowParameters
@@ -11,6 +13,9 @@ namespace DeconTools.Workflows.Backend.Core
             CopyRawFileLocal = false;
             DeleteLocalDatasetAfterProcessing = false;
             TargetedAlignmentIsPerformed = false;
+            IsMassAlignmentPerformed = false;
+            IsNetAlignmentPerformed = false;
+
             TargetType = Globals.TargetType.DatabaseTarget;
 
             ChromGenSourceDataPeakBR = 2;
@@ -18,13 +23,11 @@ namespace DeconTools.Workflows.Backend.Core
             ChromGenSourceDataProcessMsMs = false;
             ChromGenSourceDataIsThresholded = true;
 
-
-            AlignmentInfoIsExported = true;
-            AlignmentFeaturesAreSavedToTextFile = true;
-
             MinMzForDefiningChargeStateTargets = 400;
             MaxMzForDefiningChargeStateTargets = 1500;
             MaxNumberOfChargeStateTargetsToCreate = 100;
+
+
 
         }
         #endregion
@@ -36,19 +39,22 @@ namespace DeconTools.Workflows.Backend.Core
         public bool CopyRawFileLocal { get; set; }
         public bool DeleteLocalDatasetAfterProcessing { get; set; }
         public string FolderPathForCopiedRawDataset { get; set; }
-        public string LoggingFolder { get; set; }
+        public string OutputFolderBase { get; set; }
         public string TargetsUsedForAlignmentFilePath { get; set; }
+        public string TargetsUsedForLookupFilePath { get; set; }
         public string TargetsFilePath { get; set; }
         public string TargetsBaseFolder { get; set; }
         public Globals.TargetType TargetType { get; set; }
-        public string ResultsFolder { get; set; }
+        
+        [Obsolete("No longer use. Use 'IsMassAlignmentPerformed'")]
         public bool TargetedAlignmentIsPerformed { get; set; }
+
+        public bool IsMassAlignmentPerformed { get; set; }
+
+        public bool IsNetAlignmentPerformed { get; set; }
+
         public string TargetedAlignmentWorkflowParameterFile { get; set; }
         public string WorkflowParameterFile { get; set; }
-        public bool AlignmentInfoIsExported { get; set; }
-        public bool AlignmentFeaturesAreSavedToTextFile { get; set; }
-        public string AlignmentInfoFolder { get; set; }
-
         //ChromGen Peak Generator
 
         //TODO: these chromGen parameters are duplicated in TargetedWorkflowParameters! Need to resolve this

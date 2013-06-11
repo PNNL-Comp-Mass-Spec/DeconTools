@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class TargetedWorkflowExecutor : WorkflowBase
     {
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
-            
+
 
         protected string _loggingFileName;
         protected string _resultsFolder;
@@ -33,6 +33,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected BackgroundWorker _backgroundWorker;
         private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
+        private string _alignmentFolder;
 
         #region Constructors
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
@@ -49,7 +50,7 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, TargetedWorkflow targetedWorkflow,string datasetPath, BackgroundWorker backgroundWorker = null )
+        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
 
@@ -65,18 +66,18 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-		public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
-		{
-			this.DatasetPath = datasetPath;
+        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        {
+            this.DatasetPath = datasetPath;
 
-			_backgroundWorker = backgroundWorker;
+            _backgroundWorker = backgroundWorker;
 
-			this.WorkflowParameters = workflowExecutorParameters;
-			_workflowParameters = workflowParameters;
+            this.WorkflowParameters = workflowExecutorParameters;
+            _workflowParameters = workflowParameters;
 
-			ResultRepository = new TargetedResultRepository();
-			InitializeWorkflow();
-		}
+            ResultRepository = new TargetedResultRepository();
+            InitializeWorkflow();
+        }
 
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
         {
@@ -95,20 +96,20 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeWorkflow()
         {
-            if (string.IsNullOrEmpty(ExecutorParameters.ResultsFolder))
+            if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
                 _resultsFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
             }
             else
             {
-                _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
+                _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
             }
 
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
             {
-                MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath); 
+                MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
             }
-           
+
 
             bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
@@ -134,7 +135,7 @@ namespace DeconTools.Workflows.Backend.Core
                 UpdateTargetMissingInfo();
             }
 
-            if (TargetedWorkflow==null)
+            if (TargetedWorkflow == null)
             {
                 if (_workflowParameters == null)
                 {
@@ -147,8 +148,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 _workflowParameters = TargetedWorkflow.WorkflowParameters;
             }
-          
-        	if (ExecutorParameters.TargetedAlignmentIsPerformed)
+
+            if (ExecutorParameters.TargetedAlignmentIsPerformed)
             {
                 if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
                 {
@@ -162,7 +163,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            
+
         }
 
 
@@ -208,7 +209,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-     
+
 
         #region Public Methods
 
@@ -271,7 +272,7 @@ namespace DeconTools.Workflows.Backend.Core
                         }
                         target.Code = "AVERAGINE";
                         target.EmpiricalFormula =
-                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass,false);
+                            IsotopicDistributionCalculator.GetAveragineFormulaAsString(target.MonoIsotopicMass, false);
                     }
                 }
 
@@ -297,8 +298,8 @@ namespace DeconTools.Workflows.Backend.Core
         protected string TryFindTargetsForCurrentDataset()
         {
             string datasetName = RunUtilities.GetDatasetName(DatasetPath);
-            
-            string[] possibleFileSuffixs = {"_iqTargets.txt",  "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv"};
+
+            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv" };
 
 
             var possibleTargetFiles = new List<FileInfo>();
@@ -306,7 +307,7 @@ namespace DeconTools.Workflows.Backend.Core
             DirectoryInfo dirinfo = new DirectoryInfo(ExecutorParameters.TargetsBaseFolder);
             foreach (var suffix in possibleFileSuffixs)
             {
-                var fileInfos= dirinfo.GetFiles("*" + suffix);
+                var fileInfos = dirinfo.GetFiles("*" + suffix);
 
 
                 foreach (var fileInfo in fileInfos)
@@ -318,11 +319,11 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            if (possibleTargetFiles.Count==0)
+            if (possibleTargetFiles.Count == 0)
             {
                 return string.Empty;
             }
-            else if (possibleTargetFiles.Count==1)
+            else if (possibleTargetFiles.Count == 1)
             {
                 return possibleTargetFiles.First().FullName;
             }
@@ -341,7 +342,7 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new NotSupportedException(sb.ToString());
             }
 
-           
+
         }
 
 
@@ -405,16 +406,24 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void SetupAlignment()
         {
-            if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+            string alignmentFolder;
+
+            if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
-                //
-                return;
+                alignmentFolder = RunUtilities.GetDatasetParentFolder(DatasetPath) + "\\" + "AlignmentInfo";
+            }
+            else
+            {
+                alignmentFolder = ExecutorParameters.OutputFolderBase + "\\AlignmentInfo";
             }
 
-            if (!Directory.Exists(ExecutorParameters.AlignmentInfoFolder))
+            if (!Directory.Exists(alignmentFolder))
             {
-                Directory.CreateDirectory(ExecutorParameters.AlignmentInfoFolder);
+                Directory.CreateDirectory(alignmentFolder);
             }
+
+            _alignmentFolder = alignmentFolder;
+
         }
 
 
@@ -422,13 +431,13 @@ namespace DeconTools.Workflows.Backend.Core
         {
             string loggingFolder;
 
-            if (string.IsNullOrEmpty(ExecutorParameters.LoggingFolder))
+            if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
                 loggingFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
             }
             else
             {
-                loggingFolder = ExecutorParameters.LoggingFolder;
+                loggingFolder = ExecutorParameters.OutputFolderBase + "\\Logs";
             }
 
             try
@@ -442,7 +451,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 throw new System.IO.IOException("Trying to set up logging folder but there was a critical error. Details:\n\n" + ex.Message, ex);
             }
-           
+
 
             _loggingFileName = loggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
         }
@@ -504,47 +513,13 @@ namespace DeconTools.Workflows.Backend.Core
                 PerformAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
 
-                string outputFolderForAlignmentData;
-                if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+
+
+                TargetedAlignmentWorkflow.SaveFeaturesToTextfile(_alignmentFolder);
+                if (Run.AlignmentInfo != null)
                 {
-                    outputFolderForAlignmentData = Run.DataSetPath;
+                    TargetedAlignmentWorkflow.SaveAlignmentData(_alignmentFolder);
                 }
-                else
-                {
-                    outputFolderForAlignmentData = ExecutorParameters.AlignmentInfoFolder;
-                }
-
-                try
-                {
-                    if (!Directory.Exists(outputFolderForAlignmentData))
-                    {
-                        Directory.CreateDirectory(outputFolderForAlignmentData);
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    throw new System.IO.IOException("Trying to create folder for saving alignment info, but experienced an error.\nError details:\n" + 
-                        ex.Message + "\nStackTrace: " + ex.StackTrace, ex);
-                }
-
-
-                if (ExecutorParameters.AlignmentFeaturesAreSavedToTextFile)
-                {
-
-                    TargetedAlignmentWorkflow.SaveFeaturesToTextfile(outputFolderForAlignmentData);
-                }
-
-                if (ExecutorParameters.AlignmentInfoIsExported)
-                {
-                    if (Run.AlignmentInfo != null)
-                    {
-                        TargetedAlignmentWorkflow.SaveAlignmentData(outputFolderForAlignmentData);
-                    }
-
-
-                }
-
 
                 ReportGeneralProgress("MassAverage = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassAverage.ToString("0.00000"));
                 ReportGeneralProgress("MassStDev = \t" + this.TargetedAlignmentWorkflow.Aligner.Result.MassStDev.ToString("0.00000"));
@@ -568,7 +543,7 @@ namespace DeconTools.Workflows.Backend.Core
                 mtCounter++;
 
 #if DEBUG
-				System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+                System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
 
 #endif
@@ -622,6 +597,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void ExportData()
         {
+
+
+
             string outputFileName = GetOutputFileName();
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
@@ -650,21 +628,21 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Private Methods
-        protected string getResultsFolder(string folder)
+        protected string getResultsFolder(string baseFolder)
         {
-            string outputFolder;
+            string resultsFolder;
 
-            if (string.IsNullOrEmpty(folder))
+            if (string.IsNullOrEmpty(baseFolder))
             {
-                outputFolder = DatasetPath + Path.DirectorySeparatorChar + "Results";
+                resultsFolder = DatasetPath + Path.DirectorySeparatorChar + "Results";
             }
             else
             {
-                outputFolder = folder;
+                resultsFolder = baseFolder + "\\Results";
             }
 
 
-            DirectoryInfo dirinfo = new DirectoryInfo(outputFolder);
+            DirectoryInfo dirinfo = new DirectoryInfo(resultsFolder);
 
             if (!dirinfo.Exists)
             {
@@ -859,12 +837,12 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     bool allowOverwrite = false;
 
-                    string targetCopiedFilename = ExecutorParameters.AlignmentInfoFolder + Path.DirectorySeparatorChar + file.Name;
+                    string targetCopiedFilename = _alignmentFolder + Path.DirectorySeparatorChar + file.Name;
 
                     //upload alignment data only if it doesn't already exist
                     if (!File.Exists(targetCopiedFilename))
                     {
-                        file.CopyTo(ExecutorParameters.AlignmentInfoFolder + Path.DirectorySeparatorChar + file.Name, allowOverwrite);
+                        file.CopyTo(_alignmentFolder + Path.DirectorySeparatorChar + file.Name, allowOverwrite);
                     }
 
                     if (this.ExecutorParameters.CopyRawFileLocal)
@@ -990,11 +968,11 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-			// Grab the primary LC Scan numbers if they are not already filled out
-			if(!Run.PrimaryLcScanNumbers.Any())
-			{
-				Run.PrimaryLcScanNumbers = RunUtilities.FindPrimaryLcScanNumbers(this.Run.ResultCollection.MSPeakResultList);
-			}
+            // Grab the primary LC Scan numbers if they are not already filled out
+            if (!Run.PrimaryLcScanNumbers.Any())
+            {
+                Run.PrimaryLcScanNumbers = RunUtilities.FindPrimaryLcScanNumbers(this.Run.ResultCollection.MSPeakResultList);
+            }
 
             ReportGeneralProgress("Peak Loading complete.");
             return;
@@ -1002,9 +980,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void CopyAlignmentInfoIfExists()
         {
-            if (String.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder)) return;
+            if (String.IsNullOrEmpty(_alignmentFolder)) return;
 
-            DirectoryInfo dirInfo = new DirectoryInfo(ExecutorParameters.AlignmentInfoFolder);
+            DirectoryInfo dirInfo = new DirectoryInfo(_alignmentFolder);
 
             if (dirInfo.Exists)
             {
@@ -1031,17 +1009,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void PerformAlignment()
         {
-            if (string.IsNullOrEmpty(ExecutorParameters.AlignmentInfoFolder))
+            if (!string.IsNullOrEmpty(_alignmentFolder))
             {
-                RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run);
+                RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run, _alignmentFolder);
             }
-            else
-            {
-                RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run, ExecutorParameters.AlignmentInfoFolder);
-            }
-
-
-
 
 
             if (Run.MassIsAligned)
@@ -1071,7 +1042,7 @@ namespace DeconTools.Workflows.Backend.Core
             parameters.PeakBR = deconParam.ChromGenSourceDataPeakBR;
             parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
             parameters.SigNoiseThreshold = deconParam.ChromGenSourceDataSigNoise;
-        	parameters.ProcessMSMS = deconParam.ProcessMsMs;
+            parameters.ProcessMSMS = deconParam.ProcessMsMs;
             PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
         }
@@ -1143,7 +1114,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 return targetCollection;
             }
-            
+
             LcmsTargetFromFeaturesFileImporter importer =
                new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
 

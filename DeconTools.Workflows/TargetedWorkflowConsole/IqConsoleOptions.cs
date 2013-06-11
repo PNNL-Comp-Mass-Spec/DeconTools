@@ -11,6 +11,9 @@ namespace IQ.Console
         [Option('t', "TargetsFile", Required = true, HelpText = "A text file containing a list of IQ targets. Supported formats= .txt, .mgf")]
         public string TargetFile { get; set; }
 
+        [Option('r', "ReferenceFile", Required = false, HelpText = "A text file containing NET alignment reference data. Supported formats= .txt")]
+        public string ReferenceTargetFile { get; set; }
+
         [Option('a', "AlignmentTargetsFile", HelpText = "A text file containing a list of IQ targets which are used in calibrating mass and elution time. Supported formats= .txt, .mgf")]
         public string TargetFileForAlignment { get; set; }
 
@@ -34,6 +37,24 @@ namespace IQ.Console
 
         [Option('e', "AlignmentParameterFile", HelpText = "Parameters used for IQ mass and NET alignment")]
         public string AlignmentParameterFile { get; set; }
+
+        [Option("DoMassAlignment", DefaultValue = false, HelpText = "If true, mass alignment is performed.")]
+        public bool IsMassAlignmentPerformed { get; set; }
+
+        [Option("DoNetAlignment", DefaultValue = false, HelpText = "If true, NET alignment is performed.")]
+        public bool IsNetAlignmentPerformed { get; set; }
+
+        [Option("PeakBRForChromGenerator", DefaultValue = 2, HelpText = "Peak detector setting. Typical value ranges from 1 - 10, with lower values creating more peaks on which XIC data is based.")]
+        public double ChromGenSourceDataPeakBr { get; set; }
+
+        [Option('s', "SignalToNoiseThreshForChromGenerator", DefaultValue = 2, HelpText = "Peak detector setting. Typical value ranges from 1 - 10, with lower values creating more peaks on which XIC data is based.")]
+        public double ChromGenSourceDataSigNoise { get; set; }
+
+        [Option('h', "Thresholded", DefaultValue = true, HelpText = "Some mass spec data, like Orbitrap data, is thresholded. If so, set this to true.")]
+        public bool DataIsThresholded { get; set; }
+
+        [Option("ChromGenSourceDataProcessMsMs", DefaultValue = false, HelpText = "Some mass spec data, like Orbitrap data, is thresholded. If so, set this to true.")]
+        public bool ChromGenSourceDataProcessMsMs { get; set; }
 
         [HelpOption]
         public string GetUsage()

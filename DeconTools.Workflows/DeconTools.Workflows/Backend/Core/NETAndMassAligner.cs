@@ -167,8 +167,12 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(_featuresToBeAligned.HasResults, "Features for alignment have not been defined.");
             Check.Require(_massTagList != null && _massTagList.Count > 0, "The reference set of MassTags used in alignment have not been defined.");
 
-            run.AlignmentInfo = GetAlignment(_massTagList, _featuresToBeAligned.Results);
+            var lcmswarpAlignmentInfo = GetAlignment(_massTagList, _featuresToBeAligned.Results);
 
+            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            massAlignmentInfo.AlignmentInfo = lcmswarpAlignmentInfo;
+
+            run.MassAlignmentInfo = massAlignmentInfo;
 
 
         }

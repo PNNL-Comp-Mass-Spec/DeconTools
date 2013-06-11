@@ -89,7 +89,7 @@
     <Compile Include="WorkflowTests\IQMillionTests.cs" />
     <Compile Include="IqUnitTesting\ChromPeakAnalyzerIqWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQExecutorTests.cs" />
-    <Compile Include="WorkflowTests\IQWorkflowTests\IqMassAlignerWorkflowTests.cs" />
+    <Compile Include="WorkflowTests\IQWorkflowTests\IqMassAndNetAlignerWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQTargetUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\TempTests.cs" />
@@ -111,7 +111,6 @@
     <Compile Include="WorkflowTests\TargetedAlignmentWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\TargetedWorkflow_problemCases.cs" />
-    <Compile Include="WorkflowTests\TopDownTargetedWorkflowTests.cs" />
     <Compile Include="WorkflowTests\UIMFWorkflowExecutorTests.cs" />
     <Compile Include="WorkflowTests\UnitTestTemplate1.cs" />
     <Compile Include="WorkflowTests\WholisticChromBasedLCMSFeatureFinderWorkflow_tests.cs" />

@@ -118,10 +118,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var executorParameters = new BasicTargetedWorkflowExecutorParameters();
 			executorParameters.CopyRawFileLocal = false;
 			executorParameters.DeleteLocalDatasetAfterProcessing = false;
-			executorParameters.LoggingFolder = currentDirectory + "/logs";
 			executorParameters.TargetsUsedForAlignmentFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Targets\ConfidentTargets.txt";
 			executorParameters.TargetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Targets\ConfidentTargets.txt";
-			executorParameters.ResultsFolder = currentDirectory + "/results";
 			executorParameters.TargetedAlignmentIsPerformed = false;
 
 			var workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();

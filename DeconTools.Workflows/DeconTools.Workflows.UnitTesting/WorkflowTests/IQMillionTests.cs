@@ -108,8 +108,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executorParameters.CopyRawFileLocal = false;
             executorParameters.DeleteLocalDatasetAfterProcessing = false;
-            executorParameters.LoggingFolder = currentDirectory + "/logs";
-            executorParameters.ResultsFolder = currentDirectory + "/results";
             executorParameters.TargetedAlignmentIsPerformed = false;
 
             return executorParameters;

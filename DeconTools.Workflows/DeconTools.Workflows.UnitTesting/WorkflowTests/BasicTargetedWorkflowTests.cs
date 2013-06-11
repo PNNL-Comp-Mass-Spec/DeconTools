@@ -158,10 +158,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             DeconTools.Workflows.Backend.Core.BasicTargetedWorkflowExecutorParameters executorParameters =
                 new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParamFile);
-            executorParameters.ResultsFolder =
-                @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing";
-
-            executorParameters.LoggingFolder = executorParameters.ResultsFolder;
 
             string testFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Expo_Sample_SC_9_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-35.raw";

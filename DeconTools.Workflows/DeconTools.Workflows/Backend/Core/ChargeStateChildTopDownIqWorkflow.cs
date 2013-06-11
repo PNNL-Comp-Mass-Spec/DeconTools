@@ -52,9 +52,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 			ChromPeakDetector.FilterPeaksOnNET(WorkflowParameters.ChromNETTolerance, result.Target.ElutionTimeTheor, result.ChromPeakList);
 
-			int tempMinScanWithinTol = Run.GetScanValueForNET((float)(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance));
-			int tempMaxScanWithinTol = Run.GetScanValueForNET((float)(result.Target.ElutionTimeTheor + WorkflowParameters.ChromNETTolerance));
-			int tempCenterTol = Run.GetScanValueForNET((float)result.Target.ElutionTimeTheor);
+		    int tempMinScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance);
+            int tempMaxScanWithinTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor + WorkflowParameters.ChromNETTolerance);
+            int tempCenterTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor);
 
 			result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 

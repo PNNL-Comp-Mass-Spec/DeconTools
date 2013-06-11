@@ -55,7 +55,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             if (!File.Exists(_filename))
             {
-                throw new System.IO.IOException("Cannot import. File does not exist.");
+                throw new System.IO.IOException("Cannot import. File does not exist. Input file path= "+ _filename);
             }
 
             try

@@ -37,7 +37,7 @@ namespace DeconTools.Workflows.Backend.Core
             var executorParams = (LcmsFeatureTargetedWorkflowExecutorParameters) ExecutorParameters;
 
             //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
-            _resultsFolder = getResultsFolder(ExecutorParameters.ResultsFolder);
+            _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
             
             Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
 

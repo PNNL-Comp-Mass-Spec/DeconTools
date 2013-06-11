@@ -188,7 +188,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
-                string outputDebugFolder = ExecutorParameters.ResultsFolder + Path.DirectorySeparatorChar + "Testing";
+                string outputDebugFolder = ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "Testing";
                 if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
 
                 string chromDataFilename = outputDebugFolder + Path.DirectorySeparatorChar+ "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt";
@@ -225,7 +225,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override string GetOutputFileName()
         {
-            return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_quant.txt";
+            return ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "IqResults" + Path.DirectorySeparatorChar + Run.DatasetName + "_quant.txt";
         }
 
 		#endregion

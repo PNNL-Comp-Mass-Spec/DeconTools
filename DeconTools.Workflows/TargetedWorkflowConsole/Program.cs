@@ -137,13 +137,13 @@ namespace IQ.Console
         {
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.TargetsFilePath = options.TargetFile;
-            executorParameters.ResultsFolder = options.OutputFolder + Path.DirectorySeparatorChar + "Results";
-            executorParameters.LoggingFolder = options.OutputFolder + Path.DirectorySeparatorChar + "Logs";
-            executorParameters.AlignmentInfoFolder = options.OutputFolder + Path.DirectorySeparatorChar + "AlignmentInfo";
+            executorParameters.OutputFolderBase = options.OutputFolder;
             executorParameters.TargetedAlignmentIsPerformed = options.IsAlignmentPerformed;
             executorParameters.TargetsUsedForAlignmentFilePath = options.TargetFileForAlignment;
             executorParameters.WorkflowParameterFile = options.WorkflowParameterFile;
             executorParameters.TargetedAlignmentWorkflowParameterFile = options.AlignmentParameterFile;
+            executorParameters.IsMassAlignmentPerformed = options.IsMassAlignmentPerformed;
+            executorParameters.IsNetAlignmentPerformed = options.IsNetAlignmentPerformed;
 
 
             if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
@@ -156,35 +156,6 @@ namespace IQ.Console
             return executorParameters;
         }
 
-        private static void ReportError(string message)
-        {
-            System.Console.WriteLine();
-            System.Console.WriteLine("=======================================================");
-            System.Console.WriteLine("Error: " + message);
-            System.Console.WriteLine("=======================================================");
-            System.Console.WriteLine();
-        }
-
-        private static void ReportError(Exception ex)
-        {
-            System.Console.WriteLine();
-            System.Console.WriteLine("=======================================================");
-            System.Console.WriteLine("Error: " + ex.Message);
-            System.Console.WriteLine();
-            System.Console.WriteLine("Stack trace:");
-            System.Console.WriteLine(ex.StackTrace);
-            System.Console.WriteLine("=======================================================");
-            System.Console.WriteLine();
-        }
-
-        private static void ReportSyntax()
-        {
-            System.Console.WriteLine();
-            System.Console.WriteLine("This Commandline app requires two arguments.");
-            System.Console.WriteLine("\tArg1 = dataset path");
-            System.Console.WriteLine("\tArg2 = workflow executor parameter file (.xml)");
-
-            System.Console.WriteLine();
-        }
+      
     }
 }

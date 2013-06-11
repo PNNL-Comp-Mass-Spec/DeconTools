@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 				scanList.Add(chargeStateTarget.ObservedScan);
 			}
 			scanList.Sort();
-			target.ElutionTimeTheor = Run.GetNETValueForScan(scanList[scanList.Count / 2]);
+			target.ElutionTimeTheor = Run.NetAlignmentInfo.GetNETValueForScan(scanList[scanList.Count / 2]);
 		}
 
 		#endregion

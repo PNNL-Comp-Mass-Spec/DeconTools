@@ -19,6 +19,9 @@ namespace DeconTools.Workflows.Backend.Core
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
         private RunFactory _runFactory = new RunFactory();
 
+        private string _resultsFolder;
+        private string _alignmentFolder;
+
         #region Constructors
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run)
@@ -29,7 +32,6 @@ namespace DeconTools.Workflows.Backend.Core
             _parameters = parameters;
 	        _run = run;
 			SetupLogging();
-
 			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
 			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
@@ -38,10 +40,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-	    private WorkflowExecutorBaseParameters _parameters;
+
+        protected IqMassAndNetAligner IqMassAndNetAligner { get; set; }
 
 	    private Run _run;
-
 		protected Run Run { 
 			get { return _run; }
 			set 
@@ -51,7 +53,10 @@ namespace DeconTools.Workflows.Backend.Core
 			} 
 		}
 
-		protected WorkflowExecutorBaseParameters Parameters 
+        private WorkflowExecutorBaseParameters _parameters;
+        
+
+        protected WorkflowExecutorBaseParameters Parameters 
 		{ 
 			get { return _parameters; }
 			set
@@ -102,6 +107,86 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
 
 
+        public void SetupMassAndNetAlignment()
+        {
+            WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters();
+            IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run);
+
+            //check if alignment info exists already
+
+            SetupAlignmentFolder();
+
+            string expectedAlignmentFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqAlignmentResults.txt";
+            bool alignmentResultsExist = (File.Exists(expectedAlignmentFilename));
+
+            if (alignmentResultsExist)
+            {
+                IqLogger.Log.Info("Using the IQ alignment results from here: " + expectedAlignmentFilename);
+                IqMassAndNetAligner.LoadPreviousIqResults(expectedAlignmentFilename);
+                return;
+            }
+
+            string targetFileForAlignment = Parameters.TargetsUsedForAlignmentFilePath;
+
+
+            if (string.IsNullOrEmpty(targetFileForAlignment))
+            {
+                IqLogger.Log.Info("Alignment not performed - No target file has been specified for alignment.");
+                return;
+            }
+
+            if (!File.Exists(targetFileForAlignment))
+            {
+                IqLogger.Log.Info("Alignment not performed - Target file for alignment has been specified but a FILE NOT FOUND error has occured.");
+                return;
+            }
+
+            bool isFirstHitsFile = targetFileForAlignment.EndsWith("_fht.txt");
+
+            if (!isFirstHitsFile)
+            {
+                IqLogger.Log.Info("Alignment not performed - target file for alignment must be a first hits file (_fht.txt)");
+                return;
+            }
+
+            IqMassAndNetAligner.LoadAndInitializeTargets(targetFileForAlignment);
+
+            
+
+            if (!string.IsNullOrEmpty(Parameters.TargetsUsedForLookupFilePath))
+            {
+                IqTargetImporter massTagImporter = new BasicIqTargetImporter(Parameters.TargetsUsedForLookupFilePath);
+                var massTagRefs = massTagImporter.Import();
+
+                IqMassAndNetAligner.SetMassTagReferences(massTagRefs);
+                IqLogger.Log.Info("IQ Net aligner - "+ massTagRefs.Count+ " reference targets were loaded successfully." );
+            }
+            else
+            {
+                IqLogger.Log.Info("IQ Net aligner INACTIVE - no reference tags were loaded. You need to define 'TargetsUsedForLookupFilePath'");
+            }
+
+
+
+        }
+
+
+        public void DoAlignment()
+        {
+            if (Parameters.IsMassAlignmentPerformed)
+            {
+                Run.MassAlignmentInfo = IqMassAndNetAligner.DoMassAlignment();
+            }
+
+            if (Parameters.IsNetAlignmentPerformed)
+            {
+                Run.NetAlignmentInfo = IqMassAndNetAligner.DoNetAlignment();
+            }
+        }
+
+
+
+
         public void Execute()
         {
             Execute(Targets);
@@ -149,6 +234,9 @@ namespace DeconTools.Workflows.Backend.Core
 	    public virtual void LoadAndInitializeTargets()
         {
             LoadAndInitializeTargets(Parameters.TargetsFilePath);
+
+         
+
         }
 
 
@@ -184,22 +272,45 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 ResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
+            
+            SetupResultsFolder();
 
-            string outputFolder;
-            if (string.IsNullOrEmpty(Parameters.ResultsFolder))
+            ResultExporter.WriteOutResults(_resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
+        }
+
+        private void SetupAlignmentFolder()
+        {
+            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
             {
-                outputFolder = GetDefaultOutputFolder();
+                _alignmentFolder = GetDefaultOutputFolder();
             }
             else
             {
-                outputFolder = Parameters.ResultsFolder;
+                _alignmentFolder = Parameters.OutputFolderBase + "\\AlignmentInfo";
             }
 
-            ResultExporter.WriteOutResults(outputFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
+            if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
+
         }
 
 
-		#endregion
+        private void SetupResultsFolder()
+        {
+            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            {
+                _resultsFolder = GetDefaultOutputFolder();
+            }
+            else
+            {
+                _resultsFolder = Parameters.OutputFolderBase + "\\IqResults";
+            }
+
+            if (!Directory.Exists(_resultsFolder)) Directory.CreateDirectory(_resultsFolder);
+
+
+        }
+
+        #endregion
 
 		#region Private Methods
 
@@ -282,18 +393,25 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
+
+
+
 		
 		private void SetupLogging()
 		{
 		    string loggingFolder;
-            if (string.IsNullOrEmpty(_parameters.LoggingFolder))
+            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
             {
                 loggingFolder = GetDefaultOutputFolder();
             }
             else
             {
-                loggingFolder = _parameters.LoggingFolder;
+                loggingFolder = Parameters.OutputFolderBase + "\\IqLogs";
             }
+
+
+            if (!Directory.Exists(loggingFolder)) Directory.CreateDirectory(loggingFolder);
+
 
 			IqLogger.LogDirectory = loggingFolder;
 			IqLogger.InitializeIqLog(_run.DatasetName);

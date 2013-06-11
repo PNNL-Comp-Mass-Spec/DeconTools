@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
-using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconTools.Backend.ProcessingTasks.ResultValidators;
-using DeconTools.Backend.ProcessingTasks.Smoothers;
-using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
-using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -92,6 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 					childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
 
+				    childResult.LcScanObs = chromPeakResult.LcScanObs;
 					childResult.LCScanSetSelected = chromPeakResult.LCScanSetSelected;
 
 					childResult.IqResultDetail.MassSpectrum = chromPeakResult.IqResultDetail.MassSpectrum;
@@ -112,9 +102,26 @@ namespace DeconTools.Workflows.Backend.Core
 						                    ? 0
 						                    : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
 
-                    childResult.MassError = chromPeakResult.ObservedIsotopicProfile == null
+
+				   
+
+                    
+
+                    childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
                                             ? 0
-                                            : chromPeakResult.MassError;
+                                            : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
+
+
+				    childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS)*
+				                                        childResult.MZObsCalibrated/childResult.Target.ChargeState;
+                    
+                    childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
+                                            ? 0
+                                            : chromPeakResult.MassErrorBefore;
+
+
+				    childResult.MassErrorAfter = (childResult.MZObsCalibrated- childResult.Target.MZTheor)/childResult.Target.MZTheor*1e6;
+
 
 					var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak) childResult.ChromPeakSelected).NETValue;
 					childResult.ElutionTimeObs = elutionTime;

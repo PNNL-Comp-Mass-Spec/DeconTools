@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
+using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
-using DeconTools.Backend.FileIO;
-using DeconTools.Workflows.Backend.Core;
+using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting
 {
@@ -25,7 +22,8 @@ namespace DeconTools.Workflows.UnitTesting
             UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
             TargetedResultRepository repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
+            string massTagFile =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
 
             TargetCollection mtc = new TargetCollection();
             MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -43,16 +41,14 @@ namespace DeconTools.Workflows.UnitTesting
 
             double obsMZ = 780.0824;
 
-            float netBeforeAlignment = run.GetNETValueForScan(scan);
+            var netBeforeAlignment = run.NetAlignmentInfo.GetNETValueForScan(scan);
             double mzBeforeAlignment = run.GetAlignedMZ(obsMZ);
 
             aligner.Execute(run);
 
-            float netAfterAlignment = run.GetNETValueForScan(scan);
+            var netAfterAlignment = run.NetAlignmentInfo.GetNETValueForScan(scan);
             double mzAfterAlignment = run.GetAlignedMZ(obsMZ);
-
-
-
+            
             Console.WriteLine("NET before alignment = " + netBeforeAlignment);
             Console.WriteLine("NET after alignment = " + netAfterAlignment);
 

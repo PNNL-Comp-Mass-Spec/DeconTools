@@ -63,9 +63,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
-            int tempMinScanWithinTol = run.GetScanValueForNET((float)(target.ElutionTimeTheor - Parameters.ChromNETTolerance));
-            int tempMaxScanWithinTol = run.GetScanValueForNET((float)(target.ElutionTimeTheor + Parameters.ChromNETTolerance));
-            int tempCenterTol = run.GetScanValueForNET((float)target.ElutionTimeTheor);
+            int tempMinScanWithinTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor - Parameters.ChromNETTolerance);
+            int tempMaxScanWithinTol = (int)run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor + Parameters.ChromNETTolerance);
+            int tempCenterTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor);
 
 
             Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.ChromNETTolerance + ";  chromMinCenterMax= " +

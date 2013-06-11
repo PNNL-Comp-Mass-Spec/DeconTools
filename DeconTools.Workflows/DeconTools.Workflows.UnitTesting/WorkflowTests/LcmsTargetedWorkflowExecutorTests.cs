@@ -18,11 +18,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             WorkflowExecutorBaseParameters executorParameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            string resultsFolderLocation = executorParameters.ResultsFolder;
             string testDatasetPath = FileRefs.SipperRawDataFile;
             string testDatasetName = "Yellow_C13_070_23Mar10_Griffin_10-01-28";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = executorParameters.OutputFolderBase+ "\\Results" + "\\" + testDatasetName + "_results.txt";
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
