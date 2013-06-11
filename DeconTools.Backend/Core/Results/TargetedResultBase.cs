@@ -122,7 +122,7 @@ namespace DeconTools.Backend.Core
         public virtual double GetNETAlignmentError()
         {
             double theorNET = this.Target.NormalizedElutionTime;
-            double obsNET = this.Run.GetNETValueForScan(GetScanNum());
+            double obsNET = this.Run.NetAlignmentInfo.GetNETValueForScan(GetScanNum());
 
             double netError = obsNET - theorNET;
             return netError;
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.Core
             double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
             int scan = GetScanNum();
 
-            double ppmShift = Run.GetPPMShift(theorMZ, scan);
+            double ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
             double monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
             double alignedMono = monoMass - (ppmShift * monoMass / 1e6);
             return alignedMono;

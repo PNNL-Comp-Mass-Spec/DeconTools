@@ -42,10 +42,8 @@ namespace DeconTools.Backend.FileIO
             Check.Require(run != null, "NETAlignmentInfoImporter failed. Run is not defined.");
 
             GetScanNETPairsFromFile();
-            run.SetScanToNETAlignmentData(_scanNETPairs);
-            run.NETIsAligned = true;
-
-
+            run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
+            run.NetAlignmentInfo.SetScanToNETAlignmentData(_scanNETPairs);
 
         }
 

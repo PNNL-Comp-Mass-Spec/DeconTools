@@ -649,11 +649,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        protected override float CalculateScanForNET(float net)
-        {
-            return base.CalculateScanForNET(net);
-        }
-
+       
         #endregion
 
         public int GetClosestMS1Frame(int lcScan)

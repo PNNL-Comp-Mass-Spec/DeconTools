@@ -3,14 +3,14 @@ namespace DeconTools.Backend.Core
 {
     public class ScanNETPair
     {
-        public ScanNETPair(float scan, float net)
+        public ScanNETPair(double scan, double net)
         {
             Scan = scan;
             NET = net;
         }
 
-        public float Scan {get;set;}
-        public float NET { get; set; }
+        public double Scan {get;set;}
+        public double NET { get; set; }
 
 
         public override string ToString()

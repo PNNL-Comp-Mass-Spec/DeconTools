@@ -131,9 +131,9 @@ namespace DeconTools.Backend.Utilities
 
                 List<MassAlignmentDataItem> massAlignmentData = importer.Import();
 
-                run.SetMassAlignmentData(massAlignmentData);
-
-
+                MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+                massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
+                run.MassAlignmentInfo = massAlignmentInfo;
             }
 
             if (File.Exists(expectedNETAlignmentFile))
@@ -141,9 +141,11 @@ namespace DeconTools.Backend.Utilities
                 NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(expectedNETAlignmentFile);
                 List<ScanNETPair> scanNETList = netAlignmentInfoImporter.Import();
 
-                run.SetScanToNETAlignmentData(scanNETList);
+                NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
+                netAlignmentInfo.SetScanToNETAlignmentData(scanNETList);
 
-            }
+                run.NetAlignmentInfo = netAlignmentInfo;
+                }
 
             //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
             if (run.NETIsAligned)
@@ -167,8 +169,12 @@ namespace DeconTools.Backend.Utilities
                     umcs = importer.Import();
 
                     List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
-                    run.SetScanToNETAlignmentData(scannetPairs);
 
+                    NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
+                    netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
+
+                    run.NetAlignmentInfo = netAlignmentInfo;
+                    
                    
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
@@ -184,8 +190,12 @@ namespace DeconTools.Backend.Utilities
                         umcs = importer.Import();
 
                         List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
-                        run.SetScanToNETAlignmentData(scannetPairs);
 
+                        NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
+                        netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
+
+                        run.NetAlignmentInfo = netAlignmentInfo;
+                       
                         Console.WriteLine(run.DatasetName + " NET aligned using UMC file: " + expectedUMCName);
 
                         alignmentSuccessful = true;
@@ -217,7 +227,10 @@ namespace DeconTools.Backend.Utilities
                     var importer = new ViperMassCalibrationLoader(expectedViperMassAlignmentFile);
                     var viperCalibrationData = importer.ImportMassCalibrationData();
 
-                    run.SetMassAlignmentData(viperCalibrationData);
+                    MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+                    massAlignmentInfo.SetMassAlignmentData(viperCalibrationData);
+                    run.MassAlignmentInfo = massAlignmentInfo;
+
 
                     Console.WriteLine(run.DatasetName + "- mass aligned using file: " + expectedViperMassAlignmentFile);
 

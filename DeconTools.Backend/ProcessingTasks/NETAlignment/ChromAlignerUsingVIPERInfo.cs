@@ -49,11 +49,10 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             umcs = importer.Import();
 
             List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
-            run.SetScanToNETAlignmentData(scannetPairs);
-            
-            run.NETIsAligned = true;
-            
 
+            run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
+            run.NetAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
+            
         }
 
 

@@ -122,10 +122,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
-            int lowerScan = resultList.Run.GetScanValueForNET(minNetVal);
+            int lowerScan = (int) Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
             if (lowerScan == -1) lowerScan = resultList.Run.MinLCScan;
 
-            int upperScan = resultList.Run.GetScanValueForNET(maxNetVal);
+            int upperScan = (int) Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
             if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
 
             XYData chromValues;
@@ -265,10 +265,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (minNetVal < 0) minNetVal = 0;
                 if (maxNetVal > 1) maxNetVal = 1;
 
-                lowerScan = run.GetScanValueForNET(minNetVal);
+                lowerScan = (int) Math.Floor(run.NetAlignmentInfo.GetScanForNet(minNetVal));
                 if (lowerScan == -1) lowerScan = run.MinLCScan;
 
-                upperScan = run.GetScanValueForNET(maxNetVal);
+                upperScan = (int) Math.Ceiling(run.NetAlignmentInfo.GetScanForNet(maxNetVal));
                 if (upperScan == -1) upperScan = run.MaxLCScan;
 
 

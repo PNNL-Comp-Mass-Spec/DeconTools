@@ -143,6 +143,11 @@
     <Compile Include="Core\IMSScanSet.cs" />
     <Compile Include="Core\IMSScanSetCollection.cs" />
     <Compile Include="Core\LCScanSetIMS.cs" />
+    <Compile Include="Core\MassAlignmentInfo.cs" />
+    <Compile Include="Core\MassAlignmentInfoBasic.cs" />
+    <Compile Include="Core\MassAlignmentInfoLcmsWarp.cs" />
+    <Compile Include="Core\NetAlignmentInfo.cs" />
+    <Compile Include="Core\NetAlignmentInfoBasic.cs" />
     <Compile Include="Core\Results\DeconMSnResult.cs" />
     <Compile Include="Core\Results\DeuteratedTargetedResultObject.cs" />
     <Compile Include="Data\ViperMassCalibrationData.cs" />

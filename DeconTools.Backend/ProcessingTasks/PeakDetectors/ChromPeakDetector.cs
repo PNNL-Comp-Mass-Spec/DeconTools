@@ -38,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         {
             foreach (ChromPeak chromPeak in peakList)
             {
-                chromPeak.NETValue = run.GetNETValueForScan((int)Math.Round(chromPeak.XValue));
+                chromPeak.NETValue = run.NetAlignmentInfo.GetNETValueForScan((int)Math.Round(chromPeak.XValue));
             }
         }
 
