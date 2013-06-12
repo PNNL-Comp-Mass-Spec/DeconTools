@@ -4,7 +4,6 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
-using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
@@ -29,13 +28,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
+            executorParameters.OutputFolderBase =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz";
+
             string testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
+            executorParameters.IsMassAlignmentPerformed = true;
+            executorParameters.IsNetAlignmentPerformed = true;
 
-            string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
+            executorParameters.ReferenceTargetsFilePath =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
 
-            string expectedResultsFilename = resultsFolder + "\\" + RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt";
+
+            string expectedResultsFilename = executorParameters.OutputFolderBase + "\\IqResults\\" + RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -52,10 +58,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
             executor.LoadAndInitializeTargets(targetsFile);
+            executor.SetupMassAndNetAlignment();
+
+            
+            
 
 
-            int testTarget = 9282;
-            executor.Targets = (from n in executor.Targets where n.ID ==testTarget select n).ToList();
+            //int testTarget = 9282;
+            //executor.Targets = (from n in executor.Targets where n.ID ==testTarget select n).ToList();
 
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
@@ -69,6 +79,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
+            executor.DoAlignment();
             executor.Execute();
 
 
@@ -177,8 +188,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetedAlignmentWorkflowParameterFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\TargetedAlignmentWorkflowParameters1.xml";
 
-            executorParameters.TargetsUsedForAlignmentFilePath = executorParameters.TargetsFilePath;
-
+            
             //executorParameters.AlignmentInfoFolder = 
 
             //string testDatasetPath = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";

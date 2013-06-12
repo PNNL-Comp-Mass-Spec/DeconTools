@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core;
@@ -15,6 +17,7 @@ namespace IQ.Console
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
+
 
 
         static int Main(string[] args)
@@ -34,17 +37,17 @@ namespace IQ.Console
 
                 string inputFile = options.InputFile;
 
-                
+
 
                 bool inputFileIsAListOfDatasets = inputFile.ToLower().EndsWith(".txt");
                 if (inputFileIsAListOfDatasets)
                 {
                     using (StreamReader reader = new StreamReader(inputFile))
                     {
-                        
+
                         while (reader.Peek() != -1)
                         {
-                        
+
                             string datsetName = reader.ReadLine();
                             datasetList.Add(datsetName);
 
@@ -53,7 +56,7 @@ namespace IQ.Console
                 }
                 else
                 {
-                 
+
 
                     datasetList.Add(options.InputFile);
 
@@ -114,13 +117,59 @@ namespace IQ.Console
                     {
                         options.OutputFolder = RunUtilities.GetDatasetParentFolder(currentDatasetPath);
                     }
-                    
+
                     var executorParameters = GetExecutorParameters(options);
 
                     IqLogger.Log.Info("IQ analyzing dataset " + datasetCounter + " of " + numDatasets + ". Dataset = " + dataset);
 
-                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, currentDatasetPath);
-                    executor.Execute();
+
+                    if (options.UseNewIQ)
+                    {
+                        Run run = new RunFactory().CreateRun(currentDatasetPath);
+                        IqExecutor executor = new IqExecutor(executorParameters, run);
+
+                        executor.LoadAndInitializeTargets(executorParameters.TargetsFilePath);
+                        executor.SetupMassAndNetAlignment();
+                        executor.DoAlignment();
+
+
+                        foreach (var iqTarget in executor.Targets)
+                        {
+                            TargetedWorkflowParameters workflowParameters = new O16O18WorkflowParameters();
+
+                            if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
+                            {
+                                workflowParameters.ChromNETTolerance = 0.1;
+
+                            }
+                            else
+                            {
+                                workflowParameters.ChromNETTolerance = 0.025;
+                            }
+
+                            workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StdevPpmShiftData * 3;
+
+                            //define workflows for parentTarget and childTargets
+                            var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, workflowParameters);
+                            var childWorkflow = new O16O18IqWorkflow(run, workflowParameters);
+
+                            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+                            workflowAssigner.AssignWorkflowToParent(parentWorkflow, iqTarget);
+                            workflowAssigner.AssignWorkflowToChildren(childWorkflow, iqTarget);
+
+
+                        }
+
+                        executor.Execute();
+
+                    }
+                    else
+                    {
+                        TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, currentDatasetPath);
+                        executor.Execute();
+                    }
+
+
 
                 }
 
@@ -139,12 +188,11 @@ namespace IQ.Console
             executorParameters.TargetsFilePath = options.TargetFile;
             executorParameters.OutputFolderBase = options.OutputFolder;
             executorParameters.TargetedAlignmentIsPerformed = options.IsAlignmentPerformed;
-            executorParameters.TargetsUsedForAlignmentFilePath = options.TargetFileForAlignment;
             executorParameters.WorkflowParameterFile = options.WorkflowParameterFile;
             executorParameters.TargetedAlignmentWorkflowParameterFile = options.AlignmentParameterFile;
             executorParameters.IsMassAlignmentPerformed = options.IsMassAlignmentPerformed;
             executorParameters.IsNetAlignmentPerformed = options.IsNetAlignmentPerformed;
-
+            executorParameters.ReferenceTargetsFilePath = options.ReferenceTargetFile;
 
             if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
             {
@@ -156,6 +204,6 @@ namespace IQ.Console
             return executorParameters;
         }
 
-      
+
     }
 }

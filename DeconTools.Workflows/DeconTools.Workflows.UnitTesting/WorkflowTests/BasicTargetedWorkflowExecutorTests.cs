@@ -72,9 +72,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetsFilePath =
                 baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
             executorParameters.TargetedAlignmentIsPerformed = true;
-            executorParameters.TargetsUsedForAlignmentFilePath =
-                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
-
             executorParameters.TargetedAlignmentWorkflowParameterFile =
                 baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
 
@@ -146,10 +143,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetsFilePath =
                 baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
             executorParameters.TargetedAlignmentIsPerformed = true;
-            executorParameters.TargetsUsedForAlignmentFilePath =
-                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_all.txt";
-
-            executorParameters.TargetedAlignmentWorkflowParameterFile =
+           executorParameters.TargetedAlignmentWorkflowParameterFile =
                 baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
 
             var workflowParameters = new BasicTargetedWorkflowParameters();
@@ -298,13 +292,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetsFilePath =
                 @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
             executorParameters.TargetedAlignmentIsPerformed = true;
-            executorParameters.TargetsUsedForAlignmentFilePath =
-                @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_all.txt";
-
-            executorParameters.TargetedAlignmentWorkflowParameterFile =
-                @"C:\Users\d3x720\Documents\Data\QCShew\IQ\TargetedAlignmentWorkflowParameters1.xml";
-
-
+            
             BasicTargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromSmootherNumPointsInSmooth = 9;
             workflowParameters.ChromPeakDetectorPeakBR = 1;

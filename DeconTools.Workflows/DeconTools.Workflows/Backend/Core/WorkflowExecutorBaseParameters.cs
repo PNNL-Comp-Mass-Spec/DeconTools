@@ -40,8 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
         public bool DeleteLocalDatasetAfterProcessing { get; set; }
         public string FolderPathForCopiedRawDataset { get; set; }
         public string OutputFolderBase { get; set; }
-        public string TargetsUsedForAlignmentFilePath { get; set; }
-        public string TargetsUsedForLookupFilePath { get; set; }
+        public string ReferenceTargetsFilePath { get; set; }
         public string TargetsFilePath { get; set; }
         public string TargetsBaseFolder { get; set; }
         public Globals.TargetType TargetType { get; set; }

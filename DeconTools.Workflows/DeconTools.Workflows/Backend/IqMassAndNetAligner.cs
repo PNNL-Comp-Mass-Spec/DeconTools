@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend;
@@ -9,6 +10,8 @@ using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
+using GWSGraphLibrary;
+using ZedGraph;
 
 namespace DeconTools.Workflows.Backend
 {
@@ -47,9 +50,6 @@ namespace DeconTools.Workflows.Backend
         public MassAlignmentInfo MassAlignmentInfo { get; set; }
 
         public NetAlignmentInfo NetAlignmentInfo { get; set; }
-
-        public XYData MassAlignmentXYData { get; set; }
-
 
         public List<IqResult> IqResultsForAlignment { get; set; }
 
@@ -155,6 +155,111 @@ namespace DeconTools.Workflows.Backend
         }
 
 
+        public void ExportGraphs(string baseFilename)
+        {
+            ExportMassAlignmentGraph1(baseFilename);
+
+            ExportNetAlignmentGraph1(baseFilename);
+
+
+        }
+
+        private void ExportNetAlignmentGraph1(string baseFilename)
+        {
+            var graphGenerator = new BasicGraphControl();
+            graphGenerator.GraphHeight = 600;
+            graphGenerator.GraphWidth = 800;
+
+            graphGenerator.GenerateGraph(NetAlignmentInfo.ScanToNETAlignmentData.Keys.Select(p => (double)p).ToArray(), NetAlignmentInfo.ScanToNETAlignmentData.Values.Select(p => (double)p).ToArray());
+            var line = graphGenerator.GraphPane.CurveList[0] as LineItem;
+            line.Line.IsVisible = true;
+            line.Symbol.Size = 3;
+            line.Line.Width = 6;
+            line.Symbol.Type = SymbolType.Circle;
+            line.Color = Color.HotPink;
+
+            PointPairList pointPairList = new PointPairList();
+            foreach (var iqResult in IqResultsForNetAlignment)
+            {
+                PointPair pointPair = new PointPair(iqResult.LcScanObs, iqResult.Target.ElutionTimeTheor);
+                pointPairList.Add(pointPair);
+            }
+            LineItem curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
+            curveItem.Symbol.Size = 8;
+            curveItem.Line.IsVisible = false;
+
+            curveItem.Symbol.Fill = new Fill(Color.Black);
+            curveItem.Symbol.Fill.Type = FillType.Solid;
+
+            graphGenerator.GraphPane.CurveList.Add(curveItem);
+
+
+            graphGenerator.GraphPane.XAxis.Title.Text = "scan";
+            graphGenerator.GraphPane.YAxis.Title.Text = "NET";
+            graphGenerator.GraphPane.XAxis.Scale.MinAuto = true;
+            graphGenerator.GraphPane.YAxis.Scale.MinAuto = false;
+            graphGenerator.GraphPane.YAxis.Scale.MaxAuto = false;
+
+            graphGenerator.GraphPane.YAxis.Scale.Min = 0;
+            graphGenerator.GraphPane.YAxis.Scale.Max = 1;
+
+            graphGenerator.GraphPane.YAxis.Scale.Format = "0.0";
+
+
+            graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
+            string outputGraphFilename = baseFilename + "_netAlignment.png";
+
+            graphGenerator.SaveGraph(outputGraphFilename);
+        }
+
+        private void ExportMassAlignmentGraph1(string baseFilename)
+        {
+            var graphGenerator = new BasicGraphControl();
+            graphGenerator.GraphHeight = 600;
+            graphGenerator.GraphWidth = 800;
+
+            graphGenerator.GenerateGraph(MassAlignmentInfo.ScanAndPpmShiftVals.Xvalues, MassAlignmentInfo.ScanAndPpmShiftVals.Yvalues);
+            var line = graphGenerator.GraphPane.CurveList[0] as LineItem;
+            line.Line.IsVisible = true;
+            line.Symbol.Size = 3;
+            line.Line.Width = 6;
+            line.Symbol.Type = SymbolType.Circle;
+            line.Color = Color.HotPink;
+
+            PointPairList pointPairList = new PointPairList();
+            foreach (var iqResult in IqResultsForAlignment)
+            {
+                PointPair pointPair = new PointPair(iqResult.LcScanObs, iqResult.MassErrorBefore);
+                pointPairList.Add(pointPair);
+            }
+            LineItem curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
+            curveItem.Symbol.Size = 8;
+            curveItem.Line.IsVisible = false;
+
+            curveItem.Symbol.Fill = new Fill(Color.Black);
+            curveItem.Symbol.Fill.Type = FillType.Solid;
+
+            graphGenerator.GraphPane.CurveList.Add(curveItem);
+
+
+            graphGenerator.GraphPane.XAxis.Title.Text = "scan";
+            graphGenerator.GraphPane.YAxis.Title.Text = "ppm error";
+            graphGenerator.GraphPane.XAxis.Scale.MinAuto = true;
+            graphGenerator.GraphPane.YAxis.Scale.MinAuto = false;
+            graphGenerator.GraphPane.YAxis.Scale.MaxAuto = false;
+
+            graphGenerator.GraphPane.YAxis.Scale.Min = MassAlignmentInfo.AveragePpmShift - 10;
+            graphGenerator.GraphPane.YAxis.Scale.Max = MassAlignmentInfo.AveragePpmShift + 10;
+
+            graphGenerator.GraphPane.YAxis.Scale.Format = "#.#";
+
+
+            graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
+            string outputGraphFilename = baseFilename + "_massAlignment.png";
+
+            graphGenerator.SaveGraph(outputGraphFilename);
+        }
+
 
         public void LoadPreviousIqResults(string filename)
         {
@@ -248,6 +353,9 @@ namespace DeconTools.Workflows.Backend
             IqLogger.Log.Info("Mass alignment complete using " + massAlignmentInfo.GetNumPoints() + " data points");
 
             IqLogger.Log.Info("Average ppm shift = \t" + massAlignmentInfo.AveragePpmShift.ToString("0.00")+ " +/- " + massAlignmentInfo.StdevPpmShiftData.ToString("0.00"));
+
+            MassAlignmentInfo = massAlignmentInfo;
+            
             return massAlignmentInfo;
         }
 
@@ -299,7 +407,7 @@ namespace DeconTools.Workflows.Backend
 
             IqLogger.Log.Info("NET alignment complete using " + scanToNetVals.Count + " data points.");
 
-
+            NetAlignmentInfo = netAlignmentInfo;
 
             return netAlignmentInfo;
         }

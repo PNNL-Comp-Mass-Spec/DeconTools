@@ -25,7 +25,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsBaseFolder = @"C:\Sipper\SipperDemo\SipperInputs\Targets";
             parameters.TargetsFilePath = @"C:\Sipper\SipperDemo\SipperInputs\Targets\sample_targets.txt";
             parameters.TargetsToFilterOn = String.Empty;
-            parameters.TargetsUsedForAlignmentFilePath = String.Empty;
             parameters.WorkflowParameterFile = @"C:\Sipper\SipperDemo\SipperInputs\SipperWorkflowParameters.xml";
 
             parameters.SaveParametersToXML(outputFile);

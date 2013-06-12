@@ -56,6 +56,9 @@ namespace IQ.Console
         [Option("ChromGenSourceDataProcessMsMs", DefaultValue = false, HelpText = "Some mass spec data, like Orbitrap data, is thresholded. If so, set this to true.")]
         public bool ChromGenSourceDataProcessMsMs { get; set; }
 
+         [Option("UseNewIQ", DefaultValue = true, HelpText = "Use the latest version of IQ or not.")]
+        public bool UseNewIQ { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {

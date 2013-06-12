@@ -16,7 +16,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
             
-            parameters.TargetsUsedForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
             parameters.TargetsFilePath = @"d:\temp\MassTags\massTagsToBeTargeted.txt";
             parameters.TargetsBaseFolder = @"d:\temp";
   
@@ -39,7 +38,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = true;
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
-            parameters.TargetsUsedForAlignmentFilePath = @"d:\temp\MassTags\massTagsForAlignment.txt";
             parameters.TargetsFilePath = @"d:\temp\MassTags\targets.txt";
             parameters.TargetsBaseFolder = @"d:\temp";
             
@@ -65,7 +63,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(true, parameters.DeleteLocalDatasetAfterProcessing);
 
             Assert.AreEqual(@"d:\temp\rawdata", parameters.FolderPathForCopiedRawDataset);
-            Assert.AreEqual(@"d:\temp\MassTags\massTagsForAlignment.txt", parameters.TargetsUsedForAlignmentFilePath);
             Assert.AreEqual(@"d:\temp\MassTags\massTagsToBeTargeted.txt", parameters.TargetsFilePath);
             Assert.AreEqual(@"d:\temp\Parameters\targetedAlignmentParameters.xml", parameters.TargetedAlignmentWorkflowParameterFile);
             Assert.AreEqual(@"d:\temp\Parameters\WorkflowParameters.xml", parameters.WorkflowParameterFile);

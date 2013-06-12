@@ -110,7 +110,10 @@ namespace DeconTools.Workflows.Backend.Core
         public void SetupMassAndNetAlignment()
         {
             WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters();
+            
+
             IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run);
+            IqMassAndNetAligner.LoessBandwidthNetAlignment = 0.05;
 
             //check if alignment info exists already
 
@@ -123,15 +126,18 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 IqLogger.Log.Info("Using the IQ alignment results from here: " + expectedAlignmentFilename);
                 IqMassAndNetAligner.LoadPreviousIqResults(expectedAlignmentFilename);
+                
+                SetMassTagReferencesForNetAlignment();
                 return;
             }
 
-            string targetFileForAlignment = Parameters.TargetsUsedForAlignmentFilePath;
+            //Get a suitable targets file for alignment. These are grabbed from the ..\\AlignmentInfo folder. 
+            string targetFileForAlignment = GetTargetFilePathForIqAlignment();
 
 
             if (string.IsNullOrEmpty(targetFileForAlignment))
             {
-                IqLogger.Log.Info("Alignment not performed - No target file has been specified for alignment.");
+                IqLogger.Log.Info("Alignment not performed - No suitable target file found for use in alignment.");
                 return;
             }
 
@@ -151,23 +157,28 @@ namespace DeconTools.Workflows.Backend.Core
 
             IqMassAndNetAligner.LoadAndInitializeTargets(targetFileForAlignment);
 
-            
+            SetMassTagReferencesForNetAlignment();
 
-            if (!string.IsNullOrEmpty(Parameters.TargetsUsedForLookupFilePath))
+           
+
+
+
+        }
+
+        private void SetMassTagReferencesForNetAlignment()
+        {
+            if (!string.IsNullOrEmpty(Parameters.ReferenceTargetsFilePath))
             {
-                IqTargetImporter massTagImporter = new BasicIqTargetImporter(Parameters.TargetsUsedForLookupFilePath);
+                IqTargetImporter massTagImporter = new BasicIqTargetImporter(Parameters.ReferenceTargetsFilePath);
                 var massTagRefs = massTagImporter.Import();
 
                 IqMassAndNetAligner.SetMassTagReferences(massTagRefs);
-                IqLogger.Log.Info("IQ Net aligner - "+ massTagRefs.Count+ " reference targets were loaded successfully." );
+                IqLogger.Log.Info("IQ Net aligner - " + massTagRefs.Count + " reference targets were loaded successfully.");
             }
             else
             {
                 IqLogger.Log.Info("IQ Net aligner INACTIVE - no reference tags were loaded. You need to define 'TargetsUsedForLookupFilePath'");
             }
-
-
-
         }
 
 
@@ -182,6 +193,20 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 Run.NetAlignmentInfo = IqMassAndNetAligner.DoNetAlignment();
             }
+
+            if (Parameters.IsMassAlignmentPerformed || Parameters.IsMassAlignmentPerformed)
+            {
+                string exportedAlignmentIqResultsFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName +
+                                                            "_iqAlignmentResults.txt";
+
+                IqMassAndNetAligner.ExportResults(exportedAlignmentIqResultsFilename);
+
+                string exportedGraphBaseFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName;
+
+                IqMassAndNetAligner.ExportGraphs(exportedGraphBaseFilename);
+
+            }
+
         }
 
 
@@ -292,6 +317,33 @@ namespace DeconTools.Workflows.Backend.Core
             if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
 
         }
+
+        protected virtual string GetTargetFilePathForIqAlignment()
+        {
+            if (Run == null)
+            {
+                IqLogger.Log.Error("Trying to get target file path for use in IqAlignment but Run is null.");
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(_alignmentFolder))
+            {
+                SetupAlignmentFolder();
+
+            }
+
+            //first look for _fht.txt file (MSGF output)
+            string targetsForAlignmentFilePath = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_msgfdb_fht.txt";
+
+            if (File.Exists(targetsForAlignmentFilePath))
+            {
+                return targetsForAlignmentFilePath;
+            }
+
+            return string.Empty;
+        }
+
+
 
 
         private void SetupResultsFolder()

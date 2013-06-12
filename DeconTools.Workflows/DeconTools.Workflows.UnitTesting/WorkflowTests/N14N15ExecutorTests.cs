@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void saveExecutorParameterFileTest1()
         {
             string targetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets_Filtered0.45-0.47NET_first18.txt";
-            string targetsForAlignmentFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets.txt";
             string workflowFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1.xml";
             string targetedAlignmentParameterFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\TargetedAlignmentWorkflowParameters1.xml";
             string exportedExecutorParametersFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\ExecutorParameters1.xml";
@@ -28,7 +27,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetedAlignmentIsPerformed = true;
             executorParameters.TargetedAlignmentWorkflowParameterFile = targetedAlignmentParameterFile;
             executorParameters.TargetsFilePath = targetsFilePath;
-            executorParameters.TargetsUsedForAlignmentFilePath = targetsForAlignmentFilePath;
             executorParameters.WorkflowParameterFile = workflowFilePath;
             executorParameters.SaveParametersToXML(exportedExecutorParametersFilePath);
 

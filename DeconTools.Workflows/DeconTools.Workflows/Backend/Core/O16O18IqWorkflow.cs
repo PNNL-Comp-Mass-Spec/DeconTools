@@ -93,25 +93,6 @@ namespace DeconTools.Workflows.Backend.Core
                 result.Target.RemoveTarget(iqTarget);
             }
             */
-
-            if (Utilities.SipperDataDump.OutputResults)
-            {
-                //Data Dump for use with Sipper
-                children = result.Target.ChildTargets();
-                foreach (var child in children)
-                {
-                    Utilities.SipperDataDump.DataDump(child, Run);
-                }
-            }
-        }
-
-
-        public override void InitializeWorkflow()
-        {
-            base.InitializeWorkflow();
-
-            
-
         }
 
 

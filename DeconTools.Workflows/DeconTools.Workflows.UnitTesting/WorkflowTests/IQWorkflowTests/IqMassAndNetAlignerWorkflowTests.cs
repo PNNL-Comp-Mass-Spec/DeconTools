@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
-            parameters.TargetsUsedForLookupFilePath = massTagFilename;
+            parameters.ReferenceTargetsFilePath = massTagFilename;
 
             Run run = new RunFactory().CreateRun(rawFile);
 
@@ -143,7 +143,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
-            parameters.TargetsUsedForLookupFilePath = massTagFilename;
+            parameters.ReferenceTargetsFilePath = massTagFilename;
 
             Run run = new RunFactory().CreateRun(rawFile);
 
@@ -257,6 +257,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             massAndNetAligner.LoadPreviousIqResults(previouslyProcessedResultsFile);
 
             massAndNetAligner.ExecuteAlignment();
+
+            string baseFilenameForImageExport =
+                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
+            massAndNetAligner.ExportGraphs(baseFilenameForImageExport);
         }
 
         [Test]

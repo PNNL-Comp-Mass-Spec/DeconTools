@@ -137,6 +137,8 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
             }
+
+            IqLogger.Log.Info("IqTargetFromDmsImporter saved " + targets.Count + " to the following file: " + fileName);
         }
 
         private string GetTargetStringForExport(IqTargetDms iqTarget)

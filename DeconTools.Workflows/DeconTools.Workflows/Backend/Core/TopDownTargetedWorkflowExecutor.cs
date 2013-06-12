@@ -200,14 +200,9 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
+
+
                 //output graph image
-
-                ChromatogramGraphGenerator graphGenerator = new ChromatogramGraphGenerator();
-                
-
-
-
-
 
 
             }

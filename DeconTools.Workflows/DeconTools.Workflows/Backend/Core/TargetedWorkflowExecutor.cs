@@ -10,6 +10,7 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.FileIO;
@@ -107,7 +108,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
             {
-                MassTagsForTargetedAlignment = GetMassTagTargets(ExecutorParameters.TargetsUsedForAlignmentFilePath);
+                MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
             }
 
 
@@ -427,6 +428,35 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        protected virtual string GetTargetFilePathForIqAlignment()
+        {
+            if (Run==null)
+            {
+                IqLogger.Log.Error("Trying to get target file path for use in IqAlignment but Run is null.");
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(_alignmentFolder))
+            {
+                SetupAlignment();
+               
+            }
+
+            //first look for _fht.txt file (MSGF output)
+            string targetsForAlignmentFilePath = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_msgf_fht.txt";
+
+            if (File.Exists(targetsForAlignmentFilePath))
+            {
+                return targetsForAlignmentFilePath;
+            }
+
+            IqLogger.Log.Info("Trying to get target file path for use in IqAlignment, but no suitable targets file found. Suitable source files include: *_msgfdb_fht.txt");
+
+            return string.Empty;
+        }
+
+
+
         protected virtual void SetupLogging()
         {
             string loggingFolder;
@@ -498,7 +528,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 Check.Ensure(this.MassTagsForTargetedAlignment != null && this.MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
-                ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + this.ExecutorParameters.TargetsUsedForAlignmentFilePath);
+                ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + GetTargetFilePathForIqAlignment());
                 ReportGeneralProgress("Total mass tags to be aligned = " + this.MassTagsForTargetedAlignment.TargetList.Count);
 
                 this.TargetedAlignmentWorkflow = new TargetedAlignerWorkflow(this.TargetedAlignmentWorkflowParameters);
