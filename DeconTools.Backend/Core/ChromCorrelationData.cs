@@ -79,8 +79,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-        //For Data Dumping Purposes Only!
-        public string GetCorrelationData()
+        public string ToStringWithDetails()
         {
 			StringBuilder data = new StringBuilder();
             var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);

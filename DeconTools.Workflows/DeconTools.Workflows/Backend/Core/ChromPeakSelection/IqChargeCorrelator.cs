@@ -74,7 +74,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 							{
 								double slope, intercept, rsquaredval;
 								GetElutionCorrelationData(referenceXIC[i],
-								                          FillInAnyMissingValuesInChromatogram(referenceXIC[i], correlationXIC[i]), out slope,
+								                          FillInAnyMissingValuesInChromatogram(referenceXIC[i].Xvalues, correlationXIC[i]), out slope,
 								                          out intercept, out rsquaredval);
 								correlationData.AddCorrelationData(slope, intercept, rsquaredval);
 							}

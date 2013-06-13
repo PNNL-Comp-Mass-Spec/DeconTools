@@ -144,11 +144,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
+            int midScan = (int) ((lowerScan + (double)upperScan)/2);
+
             if (resultList.Run.MassIsAligned)
             {
                 for (int i = 0; i < targetMZList.Count; i++)
                 {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run);
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run,midScan);
                 }
             }
 
@@ -236,13 +238,7 @@ namespace DeconTools.Backend.ProcessingTasks
         public XYData GenerateChromatogram(Run run, List<double> targetMZList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
 
-            if (run.MassIsAligned)
-            {
-                for (int i = 0; i < targetMZList.Count; i++)
-                {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run);
-                }
-            }
+           
 
             int lowerScan = run.MinLCScan;
             int upperScan = run.MaxLCScan;
@@ -290,6 +286,17 @@ namespace DeconTools.Backend.ProcessingTasks
             if (lowerScan == -1) lowerScan = run.MinLCScan;
             if (upperScan == -1) upperScan = run.MaxLCScan;
 
+
+            int midScan = (int) ((lowerScan + (double)upperScan)/2);
+
+            if (run.MassIsAligned)
+            {
+                for (int i = 0; i < targetMZList.Count; i++)
+                {
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run,midScan);
+                }
+            }
+
             XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1,false);
@@ -301,12 +308,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData GenerateChromatogram(Run run, List<double> targetMZList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
+            int midScan =  (int) ((lowerScan + (double)upperScan)/2);
 
             if (run.MassIsAligned)
             {
                 for (int i = 0; i < targetMZList.Count; i++)
                 {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run);
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run, midScan);
                 }
             }
 
@@ -404,13 +412,13 @@ namespace DeconTools.Backend.ProcessingTasks
             return filteredXYData;
         }
 
-        private double getAlignedMZValue(double targetMZ, Run run)
+        private double getAlignedMZValue(double targetMZ, Run run, int lcScan)
         {
             if (run == null) return targetMZ;
 
             if (run.MassIsAligned)
             {
-                return run.GetTargetMZAligned(targetMZ);
+                return run.GetTargetMZAligned(targetMZ, lcScan);
             }
             else
             {

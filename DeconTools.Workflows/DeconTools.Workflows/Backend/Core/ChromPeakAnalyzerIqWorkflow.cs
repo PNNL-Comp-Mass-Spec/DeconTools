@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 			//Find isotopic profile
 			List<Peak> mspeakList;
-			var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
+			result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
 			//Default Worst Scores
 			double fitScore = 1;
@@ -96,7 +96,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             bool hasPeakTotheLeft = peakToTheLeft != null;
 
-			if (observedIso == null)
+            if (result.ObservedIsotopicProfile == null)
 			{
 				result.IsotopicProfileFound = false;
 			    result.FitScore = 1;
@@ -104,14 +104,14 @@ namespace DeconTools.Workflows.Backend.Core
 			else
 			{
                 //Get fit score
-			    List<Peak> observedIsoList = observedIso.Peaklist.Cast<Peak>().ToList();
+                List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
                 fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
 				iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
 
 				//get ppm error
-				double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, observedIso, target.ChargeState);
+                double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
 				double ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
 
                 //Get Isotope Correlation
@@ -122,13 +122,12 @@ namespace DeconTools.Workflows.Backend.Core
                 int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
                 int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
-                result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, observedIso, startScan, stopScan);
+               // result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
 			    result.LcScanObs = lcscanset.PrimaryScanNumber;
 				result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
 				result.IsotopicProfileFound = true;
 				result.FitScore = fitScore;
 				result.InterferenceScore = iscore;
-				result.ObservedIsotopicProfile = observedIso;
 				result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
 				result.NETError = netError;
 				result.MassErrorBefore = ppmError;

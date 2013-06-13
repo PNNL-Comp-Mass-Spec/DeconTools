@@ -69,6 +69,7 @@
     <Compile Include="AlignmentTests\NETAndMassAlignerParameterTesting.cs" />
     <Compile Include="AlignmentTests\NETAndMassAlignerTests.cs" />
     <Compile Include="AlignmentTests\TargetedAlignerTests.cs" />
+    <Compile Include="ChromCorrelatorTests\O16O18ChromCorrelatorTests.cs" />
     <Compile Include="FileIOTests\IqTargetFromDmsImporterTests.cs" />
     <Compile Include="FileIOTests\IqTargetFromMsgfFirstHitsImporterTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\N14N15TargetedResultFileIOTests.cs" />

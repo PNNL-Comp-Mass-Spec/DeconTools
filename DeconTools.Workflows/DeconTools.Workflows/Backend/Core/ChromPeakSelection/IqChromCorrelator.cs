@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
+using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
@@ -14,11 +15,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
         }
 
-        public override ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan)
+        public override ChromCorrelationData CorrelateData(Run run, IqResult iqResult, int startScan, int stopScan)
         {
-            {
-                return CorrelatePeaksWithinIsotopicProfile(run, iso, startScan, stopScan);
+            Check.Require(iqResult!=null,"ChromCorrelator failed. IqResult is null.");
+            Check.Require(iqResult.ObservedIsotopicProfile!=null, "ChromCorrelator failed. ObservedIsotopicProfile is null for IqResult");
+
+            return CorrelatePeaksWithinIsotopicProfile(run, iqResult.ObservedIsotopicProfile, startScan, stopScan);
             }
-        }
     }
 }

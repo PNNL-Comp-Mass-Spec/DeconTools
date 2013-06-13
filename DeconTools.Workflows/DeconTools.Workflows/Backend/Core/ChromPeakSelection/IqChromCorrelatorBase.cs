@@ -144,7 +144,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #endregion
 
 
-        public virtual ChromCorrelationData CorrelateData(Run run, IsotopicProfile iso, int startScan, int stopScan)
+        public virtual ChromCorrelationData CorrelateData(Run run, IqResult iqResult, int startScan, int stopScan)
         {
 	        throw new NotImplementedException();
         }
@@ -197,7 +197,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                         double intercept;
                         double rsquaredVal;
 
-                        chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData, chromPeakXYData);
+                        chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData.Xvalues, chromPeakXYData);
 
                         GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
                                                                           out slope, out intercept, out rsquaredVal);
@@ -250,21 +250,38 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             return chromPeakXYData;
         }
 
-        protected XYData GetBaseChromXYData(Run run, int startScan, int stopScan, double baseMZValue)
+        public XYData GetBaseChromXYData(Run run, int startScan, int stopScan, double baseMZValue)
         {
+            //note: currently 'GenerateChromatogram' results in 0's being padded on both sides of start and stop scans.
             var xydata=   PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance,ChromToleranceUnit);
 
-            if (xydata == null || xydata.Xvalues.Length < 3) return null;
-
-            var basePeakChromXYData = Smoother.Smooth(xydata);
-
-            bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
-                                     basePeakChromXYData.Xvalues.Length > 3;
-
-            if (baseChromDataIsOK)
+            XYData basePeakChromXYData;
+            if (xydata == null || xydata.Xvalues.Length < 3)
             {
-                basePeakChromXYData = basePeakChromXYData.TrimData(startScan, stopScan);
+                basePeakChromXYData = new XYData();
+                
+                if (xydata==null)
+                {
+                    basePeakChromXYData.Xvalues=new double[0];
+                    basePeakChromXYData.Yvalues = new double[0];
+                }
+                else
+                {
+                    basePeakChromXYData.Xvalues = xydata.Xvalues;
+                    basePeakChromXYData.Yvalues = xydata.Yvalues;
+                }
             }
+            else
+            {
+                basePeakChromXYData = Smoother.Smooth(xydata);
+            }    
+            
+            ScanSetCollection scanSetCollection =new ScanSetCollection();
+            scanSetCollection.Create(run, startScan, stopScan, 1, 1, false);
+
+            var validScanNums = scanSetCollection.ScanSetList.Select(p => (double)p.PrimaryScanNumber).ToArray();
+
+            basePeakChromXYData = FillInAnyMissingValuesInChromatogram(validScanNums, basePeakChromXYData);
             return basePeakChromXYData;
         }
 
@@ -273,32 +290,43 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// Fills in any missing data in the chrom data being correlated. 
         /// This ensures base chrom data and the correlated chrom data are the same length
         /// </summary>
-        /// <param name="basePeakChromXYData"></param>
-        /// <param name="chromPeakXYData"></param>
+        /// <param name="scanList"> </param>
+        /// <param name="chromPeakXyData"></param>
         /// <returns></returns>
-        protected XYData FillInAnyMissingValuesInChromatogram(XYData basePeakChromXYData, XYData chromPeakXYData)
+        protected XYData FillInAnyMissingValuesInChromatogram(double[] scanList, XYData chromPeakXyData)
         {
-            if (basePeakChromXYData == null || basePeakChromXYData.Xvalues == null || basePeakChromXYData.Xvalues.Length == 0) return null;
+            if (scanList == null || scanList.Length == 0) return null;
 
             var filledInData = new SortedDictionary<int, double>();
 
             //first fill with zeros
-            for (int i = 0; i < basePeakChromXYData.Xvalues.Length; i++)
+            for (int i = 0; i < scanList.Length; i++)
             {
-                filledInData.Add((int)basePeakChromXYData.Xvalues[i], 0);
+                filledInData.Add((int)scanList[i], 0);
+            }
+
+            if (chromPeakXyData==null)
+            {
+                chromPeakXyData=new XYData();
+            }
+
+            if (chromPeakXyData.Xvalues==null)
+            {
+                chromPeakXyData.Xvalues =new double[0];
+                chromPeakXyData.Yvalues=new double[0];
             }
 
             //then fill in other values
-            for (int i = 0; i < chromPeakXYData.Xvalues.Length; i++)
+            for (int i = 0; i < chromPeakXyData.Xvalues.Length; i++)
             {
-                int currentScan = (int)chromPeakXYData.Xvalues[i];
+                int currentScan = (int)chromPeakXyData.Xvalues[i];
                 if (filledInData.ContainsKey(currentScan))
                 {
-                    filledInData[currentScan] = chromPeakXYData.Yvalues[i];
+                    filledInData[currentScan] = chromPeakXyData.Yvalues[i];
                 }
             }
 
-            var xydata = new XYData { Xvalues = basePeakChromXYData.Xvalues, Yvalues = filledInData.Values.ToArray() };
+            var xydata = new XYData { Xvalues = scanList, Yvalues = filledInData.Values.ToArray() };
 
             return xydata;
 

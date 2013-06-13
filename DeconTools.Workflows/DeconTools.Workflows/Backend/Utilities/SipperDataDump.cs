@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 								 result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
 								 result.FitScore.ToString("0.0000") + "\t" + result.CorrelationData.RSquaredValsMedian + "\t" +
 								 result.CorrelationData.RSquaredValsAverage + "\t" + result.CorrelationData.RSquaredValsStDev + "\t" +
-								 result.CorrelationData.GetCorrelationData() + "\t" + target.GetResult().Abundance + "\t" + result.IsIsotopicProfileFlagged + "\t" +
+								 result.CorrelationData.ToStringWithDetails() + "\t" + target.GetResult().Abundance + "\t" + result.IsIsotopicProfileFlagged + "\t" +
 								 status);
 			}
 		}
