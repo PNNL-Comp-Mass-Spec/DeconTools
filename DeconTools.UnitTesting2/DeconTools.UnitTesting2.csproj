@@ -166,6 +166,12 @@
     <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="msvcp71.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="msvcr71.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="RequiredDLLs\IMSCOMP.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
