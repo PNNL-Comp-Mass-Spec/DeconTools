@@ -299,10 +299,12 @@ namespace DeconTools.Workflows.Backend.Core
                 target.MonoMassTheor =
                     EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
 
-                if (target.ChargeState != 0)
-                {
-                    target.MZTheor = target.MonoMassTheor / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
-                }
+               
+            }
+
+            if (target.ChargeState != 0)
+            {
+                target.MZTheor = target.MonoMassTheor / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
             }
         }
 

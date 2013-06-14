@@ -13,10 +13,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         public O16O18Workflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
         {
+            
+           
            
         }
 
-        public O16O18Workflow(TargetedWorkflowParameters parameters):base (parameters)
+        public O16O18Workflow(TargetedWorkflowParameters parameters):this (null, parameters)
         {
         }
 

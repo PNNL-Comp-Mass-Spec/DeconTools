@@ -240,6 +240,7 @@
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18IterativeTFF.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
     <Compile Include="ProcessingTasks\TargetedFeatureFinders\SipperIterativeMSFeatureFinder.cs" />

@@ -21,6 +21,7 @@ namespace DeconTools.Backend.Core
 
         public List<ChromCorrelationDataItem> CorrelationDataItems { get; set; }
 
+
         public double? RSquaredValsMedian
         {
             get

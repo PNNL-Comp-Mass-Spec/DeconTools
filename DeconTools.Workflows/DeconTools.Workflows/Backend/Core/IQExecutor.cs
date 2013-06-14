@@ -276,6 +276,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             Targets = TargetImporter.Import();
 
+            foreach (var iqTarget in Targets)
+            {
+                iqTarget.ChargeState = 0;    //parent has a 0 charge state
+            }
+
+
+
             _targetUtilities.CreateChildTargets(Targets, 
                 Parameters.MinMzForDefiningChargeStateTargets,
                 Parameters.MaxMzForDefiningChargeStateTargets,

@@ -19,26 +19,18 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             
             if (iqResult.Target.TheorIsotopicProfile==null|| iqResult.Target.TheorIsotopicProfile.Peaklist.Count < 5) return correlationData;
 
-            double o16MZValue = iqResult.Target.TheorIsotopicProfile.Peaklist[0].XValue;
+            double o16MzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[0].XValue;
 
-            double o18MZValue = run.GetTargetMZAligned(iqResult.Target.TheorIsotopicProfile.Peaklist[4].XValue,iqResult.LcScanObs);
+            double o18MzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[4].XValue;
 
-            bool o16O18ChromDataIsOK;
-            var o16ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o16MZValue);
-            var o18ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18MZValue);
+            var o16ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o16MzValue);
+            var o18ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18MzValue);
 
             double slope, intercept,rsquaredVal;
             GetElutionCorrelationData(o16ChromXyData, o18ChromXyData, out slope, out intercept, out rsquaredVal);
-
             correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
-
            
             return correlationData;
-
-
-
-
-
         }
 
     }

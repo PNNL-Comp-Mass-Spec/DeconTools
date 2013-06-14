@@ -140,20 +140,20 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
 
-        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso)
+        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso)
         {
 
             List<Peak> peakList = new List<Peak>();
-            return IterativelyFindMSFeature(massSpecXYData, theorIso, out peakList);
+            return IterativelyFindMSFeature(massSpecXyData, theorIso, out peakList);
 
         }
 
 
 
 
-        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXYData, IsotopicProfile theorIso, out List<Peak> peakList)
+        public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso, out List<Peak> peakList)
         {
-            if (massSpecXYData == null)
+            if (massSpecXyData == null)
             {
                 peakList = new List<Peak>();
                 return null;
@@ -173,7 +173,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 this.MSPeakDetector.PeakToBackgroundRatio = d;
 
-                peakList=  MSPeakDetector.FindPeaks(massSpecXYData.Xvalues, massSpecXYData.Yvalues);
+                peakList=  MSPeakDetector.FindPeaks(massSpecXyData.Xvalues, massSpecXyData.Yvalues);
                 iso = FindMSFeature(peakList, theorIso);
 
                 bool isoIsGoodEnough;

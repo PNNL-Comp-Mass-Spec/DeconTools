@@ -60,19 +60,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
 
-            
-            
-
-
             //int testTarget = 9282;
-            //executor.Targets = (from n in executor.Targets where n.ID ==testTarget select n).ToList();
-
+            //executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
-            targetedWorkflowParameters.ChromNETTolerance = 0.5;
+            targetedWorkflowParameters.ChromNETTolerance = 0.05;
 
             //define workflows for parentTarget and childTargets
-            var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
+            var parentWorkflow = new O16O18ParentIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new O16O18IqWorkflow(run, targetedWorkflowParameters);
 
             IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();

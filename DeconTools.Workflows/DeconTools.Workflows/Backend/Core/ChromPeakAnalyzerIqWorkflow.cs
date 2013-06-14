@@ -44,7 +44,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 	    protected PeakLeastSquaresFitter PeakFitter;
 
-		private ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
+	    protected ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
 
 		#endregion
 
@@ -66,9 +66,7 @@ namespace DeconTools.Workflows.Backend.Core
 			var target = result.Target as ChromPeakIqTarget;
 			if (target == null)
 			{
-				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget."
-					+ "Due to an inherent shortcomming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error."
-					+ "Please change the IqTarget to ChromPeakIqTarget for proper use of the ChromPeakAnalyzerIqWorkflow.");
+				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
 			}
 
 			//Sums Scan
@@ -78,6 +76,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 			//Generate a mass spectrum
 			var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
+
+		    massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
 
 			//Find isotopic profile
 			List<Peak> mspeakList;
@@ -108,7 +108,7 @@ namespace DeconTools.Workflows.Backend.Core
                 fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
-				iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
+				iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
 				//get ppm error
                 double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
@@ -122,8 +122,9 @@ namespace DeconTools.Workflows.Backend.Core
                 int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
                 int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
-               // result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
+                result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
 			    result.LcScanObs = lcscanset.PrimaryScanNumber;
+			    result.ChromPeakSelected = target.ChromPeak;
 				result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
 				result.IsotopicProfileFound = true;
 				result.FitScore = fitScore;

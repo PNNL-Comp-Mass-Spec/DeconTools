@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string EmpiricalFormula { get; set; }
 
-		public string DatabaseReference { get; set; }
+        public string DatabaseReference { get; set; }
 
         public string Code { get; set; }
 
@@ -107,20 +107,24 @@ namespace DeconTools.Workflows.Backend.Core
             Workflow.Execute(iqResult);
         }
 
-        protected IqResult CreateResult()
+        public IqResult CreateResult()
         {
             return CreateResult(this);
         }
 
-        protected IqResult CreateResult(IqTarget target)
+        public IqResult CreateResult(IqTarget target)
         {
             var result = Workflow.CreateIQResult(target);
 
-			if (target.HasParent)
-			{
-				result.ParentResult = ParentTarget._result;
-				ParentTarget._result.AddResult(result);
-			}
+            if (target.HasParent)
+            {
+                if (ParentTarget.GetResult() == null)
+                {
+                    ParentTarget._result=  ParentTarget.CreateResult();
+                }
+                result.ParentResult = ParentTarget._result;
+                ParentTarget._result.AddResult(result);
+            }
 
             return result;
         }
@@ -149,7 +153,7 @@ namespace DeconTools.Workflows.Backend.Core
         public double QualityScore { get; set; }
 
 
-       
+
 
         public void AddTarget(IqTarget target)
         {

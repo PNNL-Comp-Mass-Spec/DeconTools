@@ -57,8 +57,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                double correlatedO18SingleLabelMZValue = iso.Peaklist[indexO18SingleLabelPeak].XValue;
-                o18SingleLabelChromCorrDataItem = GetChromCorrDataItem(run, startScan, stopScan, basePeakChromXYData, correlatedO18SingleLabelMZValue);
+                double correlatedO18SingleLabelMzValue = iso.Peaklist[indexO18SingleLabelPeak].XValue;
+                o18SingleLabelChromCorrDataItem = GetChromCorrDataItem(run, startScan, stopScan, basePeakChromXYData, correlatedO18SingleLabelMzValue);
             }
 
             ChromCorrelationDataItem o18DoubleLabelChromCorrDataItem;
@@ -68,8 +68,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                double correlatedO18DoubleLabelMZValue = iso.Peaklist[indexO18DoubleLabelPeak].XValue;
-                o18DoubleLabelChromCorrDataItem = GetChromCorrDataItem(run, startScan, stopScan, basePeakChromXYData, correlatedO18DoubleLabelMZValue);
+                double correlatedO18DoubleLabelMzValue = iso.Peaklist[indexO18DoubleLabelPeak].XValue;
+                o18DoubleLabelChromCorrDataItem = GetChromCorrDataItem(run, startScan, stopScan, basePeakChromXYData, correlatedO18DoubleLabelMzValue);
             }
 
             correlationData.AddCorrelationData(o18SingleLabelChromCorrDataItem);

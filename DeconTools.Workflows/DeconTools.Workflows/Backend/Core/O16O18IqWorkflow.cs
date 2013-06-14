@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities.IqLogger;
+using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -13,10 +14,16 @@ namespace DeconTools.Workflows.Backend.Core
         public O16O18IqWorkflow(Run run, TargetedWorkflowParameters parameters)
             : base(run, parameters)
         {
+            this.ChromatogramCorrelator = new O16O18ChromCorrelator(parameters.ChromSmootherNumPointsInSmooth, 0.01,
+                                                                    parameters.ChromGenTolerance,
+                                                                    parameters.ChromGenToleranceUnit);
+
+
+
         }
 
         public O16O18IqWorkflow(TargetedWorkflowParameters parameters)
-            : base(parameters)
+            : this(null,parameters)
         {
         }
         #endregion
@@ -95,6 +102,10 @@ namespace DeconTools.Workflows.Backend.Core
             */
         }
 
+        protected override void InitializeChromPeakAnalyzerWorkflow()
+        {
+            ChromPeakAnalyzerIqWorkflow = new O16O18ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters);
+        }
 
     }
 }

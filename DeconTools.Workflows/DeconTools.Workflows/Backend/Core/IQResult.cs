@@ -182,7 +182,10 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
+        /// <summary>
+        /// This property allows assigning one of the child results as being the best or favored one.
+        /// </summary>
+        public IqResult FavoriteChild { get; set; }
        
 
     }

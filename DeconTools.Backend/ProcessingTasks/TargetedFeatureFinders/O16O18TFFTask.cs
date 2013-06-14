@@ -8,13 +8,13 @@ using DeconTools.Backend.Algorithms.Quantifiers;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class O16O18TFFTask:TFFBase
+    public class O16O18TffTask:TFFBase
     {
         O16O18FeatureFinder m_featureFinder = new O16O18FeatureFinder();
         BasicO16O18Quantifier m_quantifier = new BasicO16O18Quantifier();
 
         #region Constructors
-        public O16O18TFFTask(double toleranceInPPM)
+        public O16O18TffTask(double toleranceInPPM)
         {
             this.ToleranceInPPM = toleranceInPPM;
 

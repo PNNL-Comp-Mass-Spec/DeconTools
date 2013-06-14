@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Library\MultiAlignEngine.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Library\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -92,6 +95,8 @@
     <Compile Include="Backend\Core\IqTargetBasic.cs" />
     <Compile Include="Backend\Core\IqTargetDms.cs" />
     <Compile Include="Backend\Core\IqTargetMsgfFirstHit.cs" />
+    <Compile Include="Backend\Core\O16O18ChromPeakAnalyzerIqWorkflow.cs" />
+    <Compile Include="Backend\Core\O16O18ParentIqWorkflow.cs" />
     <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
     <Compile Include="Backend\Core\TopDownIqTarget.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />

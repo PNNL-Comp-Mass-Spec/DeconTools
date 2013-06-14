@@ -98,6 +98,7 @@ namespace DeconTools.Workflows.Backend.Core
 	    protected virtual void InitializeChromPeakAnalyzerWorkflow()
 	    {
 	        ChromPeakAnalyzerIqWorkflow = new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters);
+
 	    }
 	}
 }

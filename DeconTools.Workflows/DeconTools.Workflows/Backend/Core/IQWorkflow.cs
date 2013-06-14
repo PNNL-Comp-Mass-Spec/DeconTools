@@ -29,7 +29,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected IterativeTFF MsfeatureFinder;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected ResultValidatorTask ResultValidator;
-        protected IqChromCorrelator ChromatogramCorrelator;
+        protected IqChromCorrelatorBase ChromatogramCorrelator;
         protected InterferenceScorer InterferenceScorer;
         protected IterativeTFFParameters IterativeTffParameters = new IterativeTFFParameters();
 
