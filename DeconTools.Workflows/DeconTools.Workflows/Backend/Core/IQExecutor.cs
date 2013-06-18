@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 		public List<IqTarget> Targets { get; set; }
 
-		protected ResultExporter ResultExporter { get; set; }
+		protected IqResultExporter IqResultExporter { get; set; }
 
 
 		public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
@@ -107,17 +107,17 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
 
 
-        public void SetupMassAndNetAlignment()
+        public void SetupMassAndNetAlignment(string alignmentFolder="")
         {
             WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters();
             
 
             IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run);
-            IqMassAndNetAligner.LoessBandwidthNetAlignment = 0.05;
+            IqMassAndNetAligner.LoessBandwidthNetAlignment = 0.1;
 
             //check if alignment info exists already
 
-            SetupAlignmentFolder();
+            SetupAlignmentFolder(alignmentFolder);
 
             string expectedAlignmentFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqAlignmentResults.txt";
             bool alignmentResultsExist = (File.Exists(expectedAlignmentFilename));
@@ -219,6 +219,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void Execute(List<IqTarget> targets)
         {
+            if (targets==null || targets.Count==0)
+            {
+                IqLogger.Log.Info("WARNING - No targets loaded.");
+                return;
+            }
+
 	        int totalTargets = targets.Count;
 	        int targetCount = 1;
 			IqLogger.Log.Info("Total targets being processed: " + totalTargets);
@@ -300,21 +306,25 @@ namespace DeconTools.Workflows.Backend.Core
 
 	        var exportedResults = orderedResults.Where(orderedResult => orderedResult.IsExported).ToList();
 
-	        if (ResultExporter == null)
+	        if (IqResultExporter == null)
             {
-                ResultExporter = iqResult.Target.Workflow.CreateExporter();
+                IqResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
             
             SetupResultsFolder();
 
-            ResultExporter.WriteOutResults(_resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
+            IqResultExporter.WriteOutResults(_resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
         }
 
-        private void SetupAlignmentFolder()
+        private void SetupAlignmentFolder(string alignmentFolder= "")
         {
-            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            if (!string.IsNullOrEmpty(alignmentFolder))
             {
-                _alignmentFolder = GetDefaultOutputFolder();
+                _alignmentFolder = alignmentFolder;
+            }
+            else if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            {
+                _alignmentFolder = GetDefaultOutputFolder() + "\\AlignmentInfo";
             }
             else
             {
@@ -335,7 +345,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(_alignmentFolder))
             {
-                SetupAlignmentFolder();
+                SetupAlignmentFolder(_alignmentFolder);
 
             }
 

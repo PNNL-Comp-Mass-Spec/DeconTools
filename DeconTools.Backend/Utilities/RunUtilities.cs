@@ -45,6 +45,70 @@ namespace DeconTools.Backend.Utilities
 
         }
 
+        public static string GetDatasetNameWithFileExtension(string datasetPath)
+        {
+            string datasetName;
+
+            FileAttributes attr = File.GetAttributes(datasetPath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                DirectoryInfo sourceDirInfo;
+                sourceDirInfo = new DirectoryInfo(datasetPath);
+                datasetName = sourceDirInfo.Name;
+            }
+            else
+            {
+                datasetName = Path.GetFileName(datasetPath);
+            }
+
+            return datasetName;
+
+        }
+
+
+        /// <summary>
+        /// Returns 'true' if Dataset is stored as a windows Folder/Directory  (e.g. Agilent.D mass spec data)
+        /// Returns 'false' if Dataset is started as a standard Windows file  (e.g. Thermo .raw file)
+        /// </summary>
+        /// <param name="datasetPath"></param>
+        /// <returns></returns>
+        public static bool DatasetIsFolderStyle(string datasetPath)
+        {
+            FileAttributes attr = File.GetAttributes(datasetPath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static bool DatasetAlreadyExists(string datasetPath)
+        {
+            FileAttributes attr;
+
+            try
+            {
+                attr = File.GetAttributes(datasetPath);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                DirectoryInfo sourceDirInfo;
+                sourceDirInfo = new DirectoryInfo(datasetPath);
+                return sourceDirInfo.Exists;
+            }
+            
+            return File.Exists(datasetPath);
+        }
+            
 
         public static string GetDatasetParentFolder(string datasetPath)
         {

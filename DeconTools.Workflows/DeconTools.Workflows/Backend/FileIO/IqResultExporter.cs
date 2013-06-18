@@ -7,14 +7,10 @@ using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public abstract class ResultExporter
+    public abstract class IqResultExporter
     {
-        protected bool HeaderWasWritten = false;
-
-        public ResultExporter()
-        {
-
-        }
+        protected bool HeaderWasWritten;
+        protected string Delimiter = "\t";
 
         public virtual void WriteOutResults(string fileName, IEnumerable<IqResult> results)
         {
@@ -22,7 +18,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 try
                 {
-                    using (StreamWriter writer = new StreamWriter(fileName))
+                    using (var writer = new StreamWriter(fileName))
                     {
                         string header = GetHeader();
                         writer.WriteLine(header);
@@ -61,42 +57,42 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             StringBuilder sb = new StringBuilder();
 
-            string delim = "\t";
+            
 
             sb.Append("TargetID");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("Code");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("EmpiricalFormula");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("ChargeState");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MonomassTheor");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MZTheor");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("ElutionTimeTheor");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("TargetScan");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MonoMassObs");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MZObs");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MonoMassObsCalibrated");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("MZObsCalibrated");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("ElutionTimeObs");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("ChromPeaksWithinTolerance");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("Scan");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("Abundance");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("IsoFitScore");
-            sb.Append(delim);
+            sb.Append(Delimiter);
             sb.Append("InterferenceScore");
 
             string outString = sb.ToString();
@@ -107,7 +103,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         
         public virtual string GetHeader(IqResult result)
         {
-            return this.GetHeader();
+            return GetHeader();
         }
 
 
@@ -116,16 +112,13 @@ namespace DeconTools.Workflows.Backend.FileIO
         public virtual string GetResultAsString(IqResult result, bool includeHeader = false)
         {
             StringBuilder sb = new StringBuilder();
-
             string delim = "\t";
-
 
             if (includeHeader)
             {
                 string header = GetHeader();
                 sb.Append(header);
                 sb.Append(Environment.NewLine);
-
             }
             sb.Append(result.Target.ID);
             sb.Append(delim);
@@ -139,7 +132,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append(result.Target.MZTheor.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(result.Target.ElutionTimeTheor.ToString("0.000"));
+            sb.Append(result.Target.ElutionTimeTheor.ToString("0.00000"));
             sb.Append(delim);
             sb.Append(result.Target.ScanLC);
             sb.Append(delim);
@@ -151,7 +144,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append(result.MZObsCalibrated.ToString("0.00000"));
             sb.Append(delim);
-            sb.Append(result.ElutionTimeObs.ToString("0.000"));
+            sb.Append(result.ElutionTimeObs.ToString("0.00000"));
             sb.Append(delim);
             sb.Append(result.NumChromPeaksWithinTolerance);
             sb.Append(delim);

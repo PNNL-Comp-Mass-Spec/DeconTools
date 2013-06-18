@@ -140,7 +140,7 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
                 IsotopicProfile theorIso = resultList.Run.CurrentMassTag.IsotopicProfile;
-                targetMZList = GetTargetMZList(theorIso);
+                targetMZList = GetTargetMzList(theorIso);
 
             }
 
@@ -177,7 +177,7 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.Run.XYData = FilterOutDataBasedOnMsMsLevel(resultList.Run, resultList.Run.XYData, result.Run.CurrentMassTag.MsLevel,false);
         }
 
-        private List<double> GetTargetMZList(IsotopicProfile theorIso)
+        private List<double> GetTargetMzList(IsotopicProfile theorIso)
         {
             List<double> targetMZList;
             switch (ChromatogramGeneratorMode)
@@ -218,24 +218,7 @@ namespace DeconTools.Backend.ProcessingTasks
             return targetMZList;
         }
 
-        public XYData GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMZ, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
-        {
-            XYData xyData = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, scanStart, scanStop,
-                                                          targetMZ, tolerance, toleranceUnit);
-
-            if (xyData != null)
-            {
-                xyData = FilterOutDataBasedOnMsMsLevel(run, xyData, 1, false);
-            }
-
-            return xyData;
-
-
-        }
-
-
-
-        public XYData GenerateChromatogram(Run run, List<double> targetMZList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
+        public XYData GenerateChromatogram(Run run, List<double> targetMzList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
 
            
@@ -291,13 +274,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < targetMZList.Count; i++)
+                for (int i = 0; i < targetMzList.Count; i++)
                 {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run,midScan);
+                    targetMzList[i] = getAlignedMZValue(targetMzList[i], run,midScan);
                 }
             }
 
-            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1,false);
 
@@ -306,19 +289,25 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-        public XYData GenerateChromatogram(Run run, List<double> targetMZList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        public XYData GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMz, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        {
+            var targetMzList = new List<double> {targetMz};
+            return GenerateChromatogram(run, targetMzList, scanStart, scanStop, tolerance, toleranceUnit);
+        }
+
+        public XYData GenerateChromatogram(Run run, List<double> targetMzList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             int midScan =  (int) ((lowerScan + (double)upperScan)/2);
 
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < targetMZList.Count; i++)
+                for (int i = 0; i < targetMzList.Count; i++)
                 {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], run, midScan);
+                    targetMzList[i] = getAlignedMZValue(targetMzList[i], run, midScan);
                 }
             }
 
-            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1, false);
 
@@ -332,18 +321,17 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
             }
-            targetMZList = GetTargetMZList(theorProfile);
+            targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, lowerScan, upperScan, tolerance, toleranceUnit);
 
         }
 
-        public XYData GenerateChromatogram(Run run, double targetMZ, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
+        public XYData GenerateChromatogram(Run run, double targetMz, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
-            List<double> targetMZList = new List<double> { targetMZ };
-            return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
+            var targetMzList = new List<double> { targetMz };
+            return GenerateChromatogram(run, targetMzList, elutionTimeCenter, elutionTimeUnit);
         }
-
 
         public XYData GenerateChromatogram(Run run, IsotopicProfile theorProfile, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
@@ -352,12 +340,11 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
             }
-            targetMZList = GetTargetMZList(theorProfile);
+            targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
 
         }
-
 
         #endregion
 
@@ -367,9 +354,9 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
 
-            XYData filteredXYData = new XYData();
-            filteredXYData.Xvalues = xyData.Xvalues;
-            filteredXYData.Yvalues = xyData.Yvalues;
+            XYData filteredXyData = new XYData();
+            filteredXyData.Xvalues = xyData.Xvalues;
+            filteredXyData.Yvalues = xyData.Yvalues;
 
             if (run.ContainsMSMSData)
             {
@@ -396,20 +383,20 @@ namespace DeconTools.Backend.ProcessingTasks
                     }
                 }
 
-                filteredXYData.Xvalues = filteredChromVals.Keys.Select(p => (double)p).ToArray();
-                filteredXYData.Yvalues = filteredChromVals.Values.ToArray();
+                filteredXyData.Xvalues = filteredChromVals.Keys.Select(p => (double)p).ToArray();
+                filteredXyData.Yvalues = filteredChromVals.Values.ToArray();
             }
             else
             {
                 // If we are trying to find MS2 data from a run that does not contain MS2 data, then just return empty arrays
                 if (msLevelToUse > 1)
                 {
-                    filteredXYData.Xvalues = new double[0];
-                    filteredXYData.Yvalues = new double[0];
+                    filteredXyData.Xvalues = new double[0];
+                    filteredXyData.Yvalues = new double[0];
                 }
             }
 
-            return filteredXYData;
+            return filteredXyData;
         }
 
         private double getAlignedMZValue(double targetMZ, Run run, int lcScan)

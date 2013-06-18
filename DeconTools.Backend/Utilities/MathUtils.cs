@@ -220,7 +220,24 @@ namespace DeconTools.Backend.Utilities
             alglib.lrbuild(inputData, numPoints, numIndependentVariables, out info, out linearModel, out regressionReport);
 
             double[] regressionLineInfo;
-            alglib.lrunpack(linearModel, out regressionLineInfo, out numIndependentVariables);
+
+            try
+            {
+                alglib.lrunpack(linearModel, out regressionLineInfo, out numIndependentVariables);
+
+            }
+            catch (Exception ex)
+            {
+                IqLogger.IqLogger.Log.Fatal(
+                    "--------------------------------------------------------------------------------------------------> FATAL error occurred during linear regression. xval length= " +
+                    xvals.Length + "; yval length= " + yvals.Length + "; " + regressionReport.cvavgerror);
+
+                slope = -99999999;
+                intercept = -9999999;
+                rsquaredVal = -9999999;
+                return;
+            }
+            
 
             slope = regressionLineInfo[0];
             intercept = regressionLineInfo[1];

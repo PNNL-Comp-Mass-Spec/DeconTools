@@ -4,6 +4,7 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
@@ -132,7 +133,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             intercept = -9999;
             rsquaredVal = -1;
 
-            MathUtils.GetLinearRegression(chromIntensities1, chromIntensities2, out slope, out intercept, out rsquaredVal);
+            try
+            {
+                MathUtils.GetLinearRegression(chromIntensities1, chromIntensities2, out slope, out intercept, out rsquaredVal);
+            }
+            catch (Exception ex)
+            {
+                IqLogger.Log.Fatal("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FATAL ERROR in CHrom correlator !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                
+            }
         }
 
 

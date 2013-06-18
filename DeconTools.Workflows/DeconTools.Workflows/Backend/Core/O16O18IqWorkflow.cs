@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
@@ -29,11 +30,10 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
-        public override ResultExporter CreateExporter()
+        public override IqResultExporter CreateExporter()
         {
             throw new System.NotImplementedException();
         }
-
 
         protected override void ExecuteWorkflow(IqResult result)
         {
@@ -54,18 +54,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             ChromPeakDetector.FilterPeaksOnNET(WorkflowParameters.ChromNETTolerance, result.Target.ElutionTimeTheor, result.ChromPeakList);
 
-            int tempMinScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance);
-            int tempMaxScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor + WorkflowParameters.ChromNETTolerance);
-            int tempCenterTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor);
-
             result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 
-            //General peak information output written to console.
-            IqLogger.Log.Debug("\tSmartPeakSelector --> NETTolerance= " + WorkflowParameters.ChromNETTolerance + ";  chromMinCenterMax= " +
-                              tempMinScanWithinTol + "\t" + tempCenterTol + "" + "\t" + tempMaxScanWithinTol + Environment.NewLine);
-            IqLogger.Log.Debug("\tMT= " + result.Target.ID + ";z= " + result.Target.ChargeState + "; mz= " + result.Target.MZTheor.ToString("0.000") +
-                              ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count + Environment.NewLine);
-
+          
             //Creates a ChromPeakIqTarget for each peak found
             foreach (ChromPeak peak in result.ChromPeakList)
             {
@@ -101,6 +92,12 @@ namespace DeconTools.Workflows.Backend.Core
             }
             */
         }
+
+        protected internal override IqResult CreateIQResult(IqTarget target)
+        {
+            return new O16O18IqResult(target);
+        }
+
 
         protected override void InitializeChromPeakAnalyzerWorkflow()
         {

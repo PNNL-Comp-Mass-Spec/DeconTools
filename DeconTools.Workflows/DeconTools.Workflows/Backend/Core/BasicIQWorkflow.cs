@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Core
       
 
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
-        public override ResultExporter CreateExporter()
+        public override IqResultExporter CreateExporter()
         {
             return new IqLabelFreeResultExporter();
         }

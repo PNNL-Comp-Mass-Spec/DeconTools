@@ -59,7 +59,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (Run != null)
             {
                 MSGenerator = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
-
+                MSGenerator.IsTICRequested = false;
             }
         }
 
@@ -308,7 +308,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public virtual ResultExporter GetResultExporter()
+        public virtual IqResultExporter GetResultExporter()
         {
             return new IqLabelFreeResultExporter();
         }
@@ -469,6 +469,6 @@ namespace DeconTools.Workflows.Backend.Core
             return ((theoreticalMostIntensePeak.XValue * chargeState) - (obsXValue * chargeState));
         }
 
-        public abstract ResultExporter CreateExporter();
+        public abstract IqResultExporter CreateExporter();
     }
 }

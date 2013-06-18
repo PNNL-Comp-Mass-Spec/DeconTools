@@ -59,6 +59,11 @@ namespace IQ.Console
          [Option("UseNewIQ", DefaultValue = true, HelpText = "Use the latest version of IQ or not.")]
         public bool UseNewIQ { get; set; }
 
+         [Option("OutputGraphs", DefaultValue = false, HelpText = "Ouput .png images of mass spectra for all the results. See folder 'OutputGraphs' ")]
+         public bool OutputGraphs { get; set; } 
+
+
+
         [HelpOption]
         public string GetUsage()
         {

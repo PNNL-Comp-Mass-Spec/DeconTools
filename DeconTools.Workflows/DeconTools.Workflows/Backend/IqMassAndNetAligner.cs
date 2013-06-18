@@ -115,6 +115,17 @@ namespace DeconTools.Workflows.Backend
                 }
             }
 
+            filteredList = (from n in filteredList
+                            group n by new
+                                           {
+                                               n.Code,
+                                               n.ChargeState
+                                           }
+                            into grp
+                            select grp.OrderBy(p => p.QualityScore).First()
+                           ).ToList();
+
+
             Targets = filteredList;
 
             TargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
@@ -282,7 +293,7 @@ namespace DeconTools.Workflows.Backend
 
             try
             {
-                ResultExporter exporter = new IqLabelFreeResultExporter();
+                IqResultExporter exporter = new IqLabelFreeResultExporter();
                 exporter.WriteOutResults(filename, IqResultsForAlignment);
             }
             catch (Exception ex)

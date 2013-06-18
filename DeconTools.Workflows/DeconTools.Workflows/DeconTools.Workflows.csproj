@@ -96,6 +96,7 @@
     <Compile Include="Backend\Core\IqTargetDms.cs" />
     <Compile Include="Backend\Core\IqTargetMsgfFirstHit.cs" />
     <Compile Include="Backend\Core\O16O18ChromPeakAnalyzerIqWorkflow.cs" />
+    <Compile Include="Backend\Core\O16O18IqResult.cs" />
     <Compile Include="Backend\Core\O16O18ParentIqWorkflow.cs" />
     <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
     <Compile Include="Backend\Core\TopDownIqTarget.cs" />
@@ -156,9 +157,10 @@
     <Compile Include="Backend\FileIO\MSAlignIqTargetImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18IqResultExporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\O16O18TargetedResultToTextExporter.cs" />
-    <Compile Include="Backend\FileIO\ResultExporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultExporter.cs" />
     <Compile Include="Backend\FileIO\SipperResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -57,14 +58,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
+            targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
+            
+
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
 
             //int testTarget = 9282;
             //executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
+            executor.Targets = executor.Targets.OrderBy(p=>p.ID).Take(150).ToList();
+
+
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
-            targetedWorkflowParameters.ChromNETTolerance = 0.05;
+            targetedWorkflowParameters.ChromNETTolerance = 0.025;
+            targetedWorkflowParameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
 
             //define workflows for parentTarget and childTargets
             var parentWorkflow = new O16O18ParentIqWorkflow(run, targetedWorkflowParameters);
@@ -100,8 +108,51 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
+        public void ProblemTesting_correlationProb1()
+        {
+            //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
 
+         
+            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
 
+            string testDatasetPath =
+                @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1B_8Apr13_Cougar_13-03-25.raw";
+
+            executorParameters.IsMassAlignmentPerformed = true;
+            executorParameters.IsNetAlignmentPerformed = true;
+
+            executorParameters.ReferenceTargetsFilePath =
+                @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set3_P892_targets.txt";
+
+            Run run = new RunFactory().CreateRun(testDatasetPath);
+            var executor = new IqExecutor(executorParameters, run);
+
+            string targetsFile =
+                @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set3_P892_targets.txt";
+
+            executor.LoadAndInitializeTargets(targetsFile);
+            executor.SetupMassAndNetAlignment();
+            
+            int testTarget = 6955012;
+            executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
+
+            var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
+            targetedWorkflowParameters.LoadParameters(@"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Parameters\O16O18WorkflowParameters_2011_08_23_sum5.xml");
+
+            //define workflows for parentTarget and childTargets
+            var parentWorkflow = new O16O18ParentIqWorkflow(run, targetedWorkflowParameters);
+            var childWorkflow = new O16O18IqWorkflow(run, targetedWorkflowParameters);
+
+            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
+            workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
+
+            executor.DoAlignment();
+            executor.Execute();
+        }
+        
+
+        
 
         [Test]
         [Category("MustPass")]

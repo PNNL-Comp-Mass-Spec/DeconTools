@@ -1,7 +1,7 @@
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public class IqLabelFreeResultExporter : ResultExporter
+    public class IqLabelFreeResultExporter : IqResultExporter
     {
 
 
