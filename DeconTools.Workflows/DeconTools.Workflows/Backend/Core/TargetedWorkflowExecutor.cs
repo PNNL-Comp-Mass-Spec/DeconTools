@@ -130,6 +130,8 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
                          "Target massTags is empty. Check the path to the massTag data file.");
 
+            IqLogger.Log.Info("Total targets loaded= " + Targets.TargetList.Count);
+
 
             if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
             {
@@ -300,12 +302,18 @@ namespace DeconTools.Workflows.Backend.Core
         {
             string datasetName = RunUtilities.GetDatasetName(DatasetPath);
 
-            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv" };
+            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfdb_fht.txt" };
 
 
             var possibleTargetFiles = new List<FileInfo>();
 
-            DirectoryInfo dirinfo = new DirectoryInfo(ExecutorParameters.TargetsBaseFolder);
+            var targetsBaseFolder = ExecutorParameters.TargetsBaseFolder;
+            if (string.IsNullOrEmpty(ExecutorParameters.TargetsBaseFolder))
+            {
+                targetsBaseFolder = ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "Targets";
+            }
+
+            var dirinfo = new DirectoryInfo(targetsBaseFolder);
             foreach (var suffix in possibleFileSuffixs)
             {
                 var fileInfos = dirinfo.GetFiles("*" + suffix);
@@ -770,7 +778,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (_backgroundWorker == null)
             {
-                Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
+                IqLogger.Log.Info(generalProgressString);
+                //Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
             }
             else
             {
@@ -1114,7 +1123,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
-            if (targetsFilePath.ToLower().Contains("_msgfplus.tsv"))
+            if (targetsFilePath.ToLower().Contains("_msgf") )
             {
                 BasicIqTargetImporter iqTargetImporter = new BasicIqTargetImporter(targetsFilePath);
                 var iqTargets = iqTargetImporter.Import();

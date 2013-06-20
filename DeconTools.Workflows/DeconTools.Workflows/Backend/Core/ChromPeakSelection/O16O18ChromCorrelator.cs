@@ -7,15 +7,16 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
-    public class O16O18ChromCorrelator:IqChromCorrelatorBase
+    public class O16O18ChromCorrelator : IqChromCorrelatorBase
     {
-        public O16O18ChromCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr, double chromTolerance, DeconTools.Backend.Globals.ToleranceUnit toleranceUnit) : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromTolerance, toleranceUnit)
+        public O16O18ChromCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr, double chromTolerance, DeconTools.Backend.Globals.ToleranceUnit toleranceUnit)
+            : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromTolerance, toleranceUnit)
         {
 
         }
 
 
-        public override  ChromCorrelationData CorrelateData(Run run, IqResult iqResult, int startScan, int stopScan )
+        public override ChromCorrelationData CorrelateData(Run run, IqResult iqResult, int startScan, int stopScan)
         {
             var correlationData = new ChromCorrelationData();
 
@@ -26,7 +27,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var o16ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o16MzValue);
             var o18SingleLabelChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18SingleLabelMzValue);
             var o18DoubleLabelChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18DoubleLabelMzValue);
-            
+
             double slope, intercept, rsquaredVal;
             GetElutionCorrelationData(o16ChromXyData, o18SingleLabelChromXyData, out slope, out intercept, out rsquaredVal);
             correlationData.AddCorrelationData(slope, intercept, rsquaredVal);

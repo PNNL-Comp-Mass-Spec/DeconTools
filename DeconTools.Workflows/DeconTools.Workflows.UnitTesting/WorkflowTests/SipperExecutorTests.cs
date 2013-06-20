@@ -86,6 +86,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = false;
             //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
 
+            
 
             string testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -97,22 +98,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             parameters.TargetType = Globals.TargetType.LcmsFeature;
+
+
+
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
             
 
             int[] targetsOfInterest = new int[] { 5555 };
 
-            targetsOfInterest = new int[] { 5905 };   //throwing error in Chromcorr
+            //targetsOfInterest = new int[] { 5905 };   //throwing error in Chromcorr
 
             //targetsOfInterest = new int[]{6110};
 
-            targetsOfInterest = new int[]
-                                    {
-                                        5555, 5677, 5746, 5905, 6110, 6496, 7039, 7116, 7220, 7229, 7370, 7585, 8338, 8491, 8517, 8616, 8618,
-                                        8715, 8947, 8958, 8968, 9024, 9159, 9240, 9242, 9261, 9328, 9441, 9474, 9506, 9519, 9583, 9792, 9944,
-                                        9965, 10223, 10251, 10329, 10649, 10673, 11249, 11367, 11523, 11677, 11912, 12178, 12304, 12383, 12395,
-                                        12492, 12517, 12692, 12700, 12828, 13443, 13590, 13740, 14090, 14256
-                                    };
+            //targetsOfInterest = new int[]
+            //                        {
+            //                            5555, 5677, 5746, 5905, 6110, 6496, 7039, 7116, 7220, 7229, 7370, 7585, 8338, 8491, 8517, 8616, 8618,
+            //                            8715, 8947, 8958, 8968, 9024, 9159, 9240, 9242, 9261, 9328, 9441, 9474, 9506, 9519, 9583, 9792, 9944,
+            //                            9965, 10223, 10251, 10329, 10649, 10673, 11249, 11367, 11523, 11677, 11912, 12178, 12304, 12383, 12395,
+            //                            12492, 12517, 12692, 12700, 12828, 13443, 13590, 13740, 14090, 14256
+            //                        };
 
             executor.Targets.TargetList =
                 (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
@@ -123,6 +127,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow.WorkflowParameters.SaveParametersToXML(
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperTargetedWorkflowParameters_Sum5 - copy.xml");
 
+
+            
 
             SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
 
@@ -156,7 +162,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
-            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+            parameters.FolderPathForCopiedRawDataset = @"D:\Data\Sipper\HLP_Ana";
 
 
             string testDataset =
@@ -170,33 +176,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
-
-
-            int[] targetsOfInterest = new int[] { 5555 };
-
-            targetsOfInterest = new int[] { 5905 };   //throwing error in Chromcorr
-
-            //targetsOfInterest = new int[]{6110};
-
-            //targetsOfInterest = new int[]
-            //                        {
-            //                            5555, 5677, 5746, 5905, 6110, 6496, 7039, 7116, 7220, 7229, 7370, 7585, 8338, 8491, 8517, 8616, 8618,
-            //                            8715, 8947, 8958, 8968, 9024, 9159, 9240, 9242, 9261, 9328, 9441, 9474, 9506, 9519, 9583, 9792, 9944,
-            //                            9965, 10223, 10251, 10329, 10649, 10673, 11249, 11367, 11523, 11677, 11912, 12178, 12304, 12383, 12395,
-            //                            12492, 12517, 12692, 12700, 12828, 13443, 13590, 13740, 14090, 14256
-            //                        };
-
-            //executor.Targets.TargetList =
-            //    (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
-
             executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
-
 
             executor.Execute();
 
             SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
-            
-
             SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);

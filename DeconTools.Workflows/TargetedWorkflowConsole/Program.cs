@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
+using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
 
@@ -123,10 +125,22 @@ namespace IQ.Console
                     IqLogger.Log.Info("IQ analyzing dataset " + datasetCounter + " of " + numDatasets + ". Dataset = " + dataset);
 
 
-                    if (options.UseNewIQ)
+                    if (options.UseOldIq)
                     {
-                        Run run = new RunFactory().CreateRun(currentDatasetPath);
-                        IqExecutor executor = new IqExecutor(executorParameters, run);
+                        TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
+                                                                                              currentDatasetPath);
+
+
+                        //executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
+
+                        executor.MsgfFdrScoreCutoff = 0.1;
+
+                        executor.Execute();
+                    }
+                    else
+                    {
+                        var run = new RunFactory().CreateRun(currentDatasetPath);
+                        var executor = new IqExecutor(executorParameters, run);
 
                         executor.LoadAndInitializeTargets(executorParameters.TargetsFilePath);
                         executor.SetupMassAndNetAlignment();
@@ -140,14 +154,13 @@ namespace IQ.Console
                             if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
                             {
                                 workflowParameters.ChromNETTolerance = 0.1;
-
                             }
                             else
                             {
                                 workflowParameters.ChromNETTolerance = 0.025;
                             }
 
-                            workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StdevPpmShiftData * 3;
+                            workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StdevPpmShiftData*3;
 
                             //define workflows for parentTarget and childTargets
                             var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, workflowParameters);
@@ -156,21 +169,13 @@ namespace IQ.Console
                             IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
                             workflowAssigner.AssignWorkflowToParent(parentWorkflow, iqTarget);
                             workflowAssigner.AssignWorkflowToChildren(childWorkflow, iqTarget);
-
-
                         }
 
                         executor.Execute();
 
+                        run.Dispose();
+                        run = null;
                     }
-                    else
-                    {
-                        TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, currentDatasetPath);
-                        executor.Execute();
-                    }
-
-
-
                 }
 
 
@@ -193,6 +198,9 @@ namespace IQ.Console
             executorParameters.IsMassAlignmentPerformed = options.IsMassAlignmentPerformed;
             executorParameters.IsNetAlignmentPerformed = options.IsNetAlignmentPerformed;
             executorParameters.ReferenceTargetsFilePath = options.ReferenceTargetFile;
+            executorParameters.TargetType = options.UseInputScan
+                                                ? Globals.TargetType.LcmsFeature
+                                                : Globals.TargetType.DatabaseTarget;
 
             if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
             {

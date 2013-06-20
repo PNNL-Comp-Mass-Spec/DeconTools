@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Utilities
 {
+
+    [Category("MustPass")]
     [TestFixture]
     public class EmpiricalFormulaUtilitiesTests
     {
@@ -11,18 +13,12 @@ namespace DeconTools.UnitTesting2.Utilities
         public void parseUnimodStyleFormulaTest1()
         {
             string formula = @"H(-3) N(-1)";
-
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
-
 
             Assert.AreEqual(-3, formulaDictionary["H"]);
             Assert.AreEqual(-1, formulaDictionary["N"]);
-
-
+            
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
-
-
-
         }
 
         [Test]

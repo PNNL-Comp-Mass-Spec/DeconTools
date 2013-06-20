@@ -160,13 +160,22 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual double GetCalibratedMonoisotopicMass()
         {
-            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
-            int scan = GetScanNum();
+           double monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
 
-            double ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
-            double monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
-            double alignedMono = monoMass - (ppmShift * monoMass / 1e6);
-            return alignedMono;
+            if (Run.MassIsAligned)
+            {
+                double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+                int scan = GetScanNum();
+                double ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
+                
+                double alignedMono = monoMass - (ppmShift * monoMass / 1e6);
+                return alignedMono;
+            }
+
+            return monoMass;
+
+
+
 
         }
 

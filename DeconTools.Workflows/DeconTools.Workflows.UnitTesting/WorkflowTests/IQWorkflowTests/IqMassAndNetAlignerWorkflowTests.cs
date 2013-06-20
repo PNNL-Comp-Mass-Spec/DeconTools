@@ -440,7 +440,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Console.WriteLine(monomass + "\t" + mztheo);
 
 
-            var formula = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString("H(3) C(2) N O",true);
+            var formula = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString("H(3) C(2) N O");
 
             var revisedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formula);
 
