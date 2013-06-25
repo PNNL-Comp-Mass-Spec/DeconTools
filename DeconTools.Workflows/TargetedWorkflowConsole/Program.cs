@@ -130,11 +130,8 @@ namespace IQ.Console
                         TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
                                                                                               currentDatasetPath);
 
-
                         //executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
-
                         executor.MsgfFdrScoreCutoff = 0.1;
-
                         executor.Execute();
                     }
                     else
@@ -198,6 +195,7 @@ namespace IQ.Console
             executorParameters.IsMassAlignmentPerformed = options.IsMassAlignmentPerformed;
             executorParameters.IsNetAlignmentPerformed = options.IsNetAlignmentPerformed;
             executorParameters.ReferenceTargetsFilePath = options.ReferenceTargetFile;
+            
             executorParameters.TargetType = options.UseInputScan
                                                 ? Globals.TargetType.LcmsFeature
                                                 : Globals.TargetType.DatabaseTarget;

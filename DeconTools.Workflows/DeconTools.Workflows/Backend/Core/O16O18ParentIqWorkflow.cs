@@ -168,7 +168,7 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         if (_graphGenerator==null) _graphGenerator=new BasicGraphControl();
 
-                        ExportGraphs(OutputFolderForGraphs, childStateIqResult);
+                        ExportGraphs(childStateIqResult);
                     }
                     
                    
@@ -181,11 +181,17 @@ namespace DeconTools.Workflows.Backend.Core
 
        
 
-        private void ExportGraphs(string outputFolder, IqResult result)
+        private void ExportGraphs(IqResult result)
         {
             OutputFolderForGraphs = Run.DataSetPath +Path.DirectorySeparatorChar + "OutputGraphs";
             if (!Directory.Exists(OutputFolderForGraphs)) Directory.CreateDirectory(OutputFolderForGraphs);
             
+            ExportMassSpectrumGraph(result);
+            ExportChromGraph(result);
+        }
+
+        private void ExportMassSpectrumGraph(IqResult result)
+        {
             _graphGenerator.GraphHeight = 600;
             _graphGenerator.GraphWidth = 800;
 
@@ -205,21 +211,63 @@ namespace DeconTools.Workflows.Backend.Core
 
             _graphGenerator.GraphPane.YAxis.Scale.Min = 0;
 
-            
-            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.MassSpectrum.getMaxY();
-            
-            
 
+            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.MassSpectrum.getMaxY();
             _graphGenerator.GraphPane.YAxis.Scale.Format = "0";
 
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            string outputGraphFilename = outputFolder + Path.DirectorySeparatorChar + result.Target.ID + "_" +
-                                         result.Target.ChargeState + "_"+ result.Target.MZTheor.ToString("0.000") + "_MS.png";
+            string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
+                                         result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_MS.png";
 
             _graphGenerator.AddAnnotationAbsoluteXRelativeY("*", result.Target.MZTheor, 0.03);
+            _graphGenerator.SaveGraph(outputGraphFilename);
+        }
+
+        private void ExportChromGraph(IqResult result)
+        {
+            if (result.IqResultDetail.Chromatogram==null)
+            {
+                return;
+            }
 
 
+            int minScan = result.LcScanObs - 1000;
+            int maxScan = result.LcScanObs + 1000;
+
+
+            _graphGenerator.GraphHeight = 600;
+            _graphGenerator.GraphWidth = 800;
+
+            result.IqResultDetail.Chromatogram = result.IqResultDetail.Chromatogram.TrimData(minScan, maxScan);
+
+
+            _graphGenerator.GenerateGraph(result.IqResultDetail.Chromatogram.Xvalues, result.IqResultDetail.Chromatogram.Yvalues);
+            var line = _graphGenerator.GraphPane.CurveList[0] as LineItem;
+            line.Line.IsVisible = true;
+            line.Symbol.Size = 3;
+            line.Line.Width = 2;
+            line.Symbol.Type = SymbolType.None;
+            line.Color = Color.Black;
+
+            _graphGenerator.GraphPane.XAxis.Title.Text = "scan";
+            _graphGenerator.GraphPane.YAxis.Title.Text = "intensity";
+            _graphGenerator.GraphPane.XAxis.Scale.MinAuto = false;
+            _graphGenerator.GraphPane.XAxis.Scale.MaxAuto = false;
+            _graphGenerator.GraphPane.YAxis.Scale.MinAuto = false;
+            _graphGenerator.GraphPane.YAxis.Scale.MaxAuto = false;
+            _graphGenerator.GraphPane.YAxis.Scale.Min = 0;
+            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.Chromatogram.getMaxY();
+            _graphGenerator.GraphPane.YAxis.Scale.Format = "0";
+
+            _graphGenerator.GraphPane.XAxis.Scale.Min = minScan;
+            _graphGenerator.GraphPane.XAxis.Scale.Max = maxScan;
+
+            _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
+            string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
+                                         result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_chrom.png";
+
+            _graphGenerator.AddAnnotationAbsoluteXRelativeY("*", result.Target.MZTheor, 0.03);
             _graphGenerator.SaveGraph(outputGraphFilename);
         }
 

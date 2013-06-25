@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 		//Accounts for the PTMs using the Averagine formula.
 		//Parses out the PTMs and calculates the empirical formula for the known unmodified sequence.
 		//Adds or subtracts the PTM formula from the sequence formula based on the overall mass of the PTMs
-		public string GetEmpiricalFormulaFromSequence(string code)
+        public string GetEmpiricalFormulaFromSequence(string code, bool cysteinesAreModified = false)
 		{
 			string ptmFormula = "";
 			string sequenceFormula = "";
@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 			double ptmMass = PtmMassFromCode(code);
 			ptmFormula = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(Math.Abs(ptmMass), false);
 
-			sequenceFormula = SequenceToEmpiricalFormula(code);
+			sequenceFormula = SequenceToEmpiricalFormula(code, cysteinesAreModified);
 
 			if(ptmMass < 0)
 			{
@@ -84,7 +84,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 
 		//Extracts the unmodified sequence from the original input sequence. 
 		//Uses the regex SequenceExpression to parse for the sequence in a specified format.
-		public string SequenceToEmpiricalFormula(string code)
+        public string SequenceToEmpiricalFormula(string code, bool cysteinesAreModified = false)
 		{
             //TODO:  this doesn't work with:  '
 
@@ -101,7 +101,8 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 				sequence += Regex.Match(s, "^[A-Z]*[A-Z]$").Value;
 			}
 
-			return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(sequence);
+            
+			return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(sequence, true, cysteinesAreModified);
 		}
 
 		public bool CheckSequenceIntegrity(string sequence)

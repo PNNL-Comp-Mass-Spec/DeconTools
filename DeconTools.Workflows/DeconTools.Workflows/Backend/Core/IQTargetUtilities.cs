@@ -79,11 +79,11 @@ namespace DeconTools.Workflows.Backend.Core
             return iqtargets;
         }
 
-        public void CreateChildTargets(List<IqTarget> targets, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100)
+        public void CreateChildTargets(List<IqTarget> targets, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100, bool cysteinesAreModified = false)
         {
             foreach (IqTarget iqTarget in targets)
             {
-                UpdateTargetMissingInfo(iqTarget);
+                UpdateTargetMissingInfo(iqTarget,true, cysteinesAreModified);
 
                 var childTargets = CreateChargeStateTargets(iqTarget, minMZObs, maxMZObserved, maxChargeStatesToCreate);
                 iqTarget.AddTargetRange(childTargets);
@@ -269,7 +269,7 @@ namespace DeconTools.Workflows.Backend.Core
             return tempTarget;
         }
 
-        public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula = true)
+        public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula = true, bool cysteinesAreModified = false)
         {
             bool isMissingMonoMass = target.MonoMassTheor <= 0;
 
@@ -279,7 +279,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     //Create empirical formula based on code. Assume it is an unmodified peptide
                     //target.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(target.Code);
-	                target.EmpiricalFormula = IqCodeParser.GetEmpiricalFormulaFromSequence(target.Code);
+	                target.EmpiricalFormula = IqCodeParser.GetEmpiricalFormulaFromSequence(target.Code, cysteinesAreModified);
                 }
                 else
                 {

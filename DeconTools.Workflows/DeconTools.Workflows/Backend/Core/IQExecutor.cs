@@ -79,9 +79,14 @@ namespace DeconTools.Workflows.Backend.Core
 		public List<IqTarget> Targets { get; set; }
 
 		protected IqResultExporter IqResultExporter { get; set; }
-
-
+        
 		public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
+
+        /// <summary>
+        /// We need this setting when targets are being created. Indicates whether a target is cysteine-modified (reduced & alkylated, +57). 
+        /// TODO: move this to the IqTarget creator class, once developed. 
+        /// </summary>
+        public bool IqTargetsAreCysteineModified { get; set; }
 
 		protected bool ChromDataIsLoaded
 		{
@@ -285,14 +290,15 @@ namespace DeconTools.Workflows.Backend.Core
             foreach (var iqTarget in Targets)
             {
                 iqTarget.ChargeState = 0;    //parent has a 0 charge state
+
+                if (Parameters.TargetType == Globals.TargetType.LcmsFeature)
+                {
+                    iqTarget.ElutionTimeTheor = Run.NetAlignmentInfo.GetNETValueForScan(iqTarget.ScanLC);
+                }
             }
 
-
-
-            _targetUtilities.CreateChildTargets(Targets, 
-                Parameters.MinMzForDefiningChargeStateTargets,
-                Parameters.MaxMzForDefiningChargeStateTargets,
-                Parameters.MaxNumberOfChargeStateTargetsToCreate);
+            _targetUtilities.CreateChildTargets(Targets, Parameters.MinMzForDefiningChargeStateTargets,
+                Parameters.MaxMzForDefiningChargeStateTargets, Parameters.MaxNumberOfChargeStateTargetsToCreate, IqTargetsAreCysteineModified);
 
 			IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
         }
