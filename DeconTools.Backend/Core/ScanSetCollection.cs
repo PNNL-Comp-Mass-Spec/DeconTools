@@ -216,6 +216,8 @@ namespace DeconTools.Backend.Core
             {
                 int currentMSLevel = run.GetMSLevel(i);
 
+				if (run is UIMFRun && currentMSLevel == 0) continue;  // This is a calibration frame; skip it
+
                 if (!processMSMS && currentMSLevel > 1) continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
 
                 ScanSet scanSet;

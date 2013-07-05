@@ -179,6 +179,12 @@ namespace DeconTools.Backend.Core
             return sb.ToString();
         }
 
+		/// <summary>
+		/// Returns the MSLevel for the given scan
+		/// </summary>
+		/// <param name="scanNum">Scan number (or frame number for UIMF files)</param>
+		/// <returns>1 for MS1, 2 for MS2</returns>
+		/// <remarks>UIMF calibration frames will be reported as MSLevel 0</remarks>
         public virtual int GetMSLevel(int scanNum)
         {
             // check to see if we have a value already stored

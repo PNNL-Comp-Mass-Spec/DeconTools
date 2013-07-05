@@ -256,7 +256,11 @@ namespace DeconTools.Backend.Runs
 
 
 
-
+		/// <summary>
+		/// Returns the MSLevel for the given frame
+		/// </summary>
+		/// <param name="scanNum">Frame number</param>
+		/// <returns>1 for MS1 frames, 2 for MS2 frames, 0 for calibration frames, </returns>
         public override int GetMSLevelFromRawData(int frameNum)
         {
             if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
@@ -265,6 +269,8 @@ namespace DeconTools.Backend.Runs
             FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
 
             if (fp.FrameType == DataReader.FrameType.MS1) return 1;
+			if (fp.FrameType == DataReader.FrameType.MS2) return 2;
+			if (fp.FrameType == DataReader.FrameType.Calibration) return 0;
 
             return (int)1;
 
@@ -299,29 +305,39 @@ namespace DeconTools.Backend.Runs
             int[] yvals = null;
 
             var frameType = (DataReader.FrameType)GetMSLevel(lcScanset.PrimaryScanNumber);
+			
+			try
+			{
+				int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower,
+					frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
 
-            int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower,
-                frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
+				XYData xydata = new XYData();
 
-            XYData xydata=new XYData();
-            
 
-            if (xvals == null || xvals.Length == 0)
-            {
-                xydata.Xvalues = null;
-                xydata.Yvalues = null;
-                return xydata;
-            }
+				if (xvals == null || xvals.Length == 0)
+				{
+					xydata.Xvalues = null;
+					xydata.Yvalues = null;
+					return xydata;
+				}
 
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals.Select<int, double>(i => i).ToArray();
+				xydata.Xvalues = xvals;
+				xydata.Yvalues = yvals.Select<int, double>(i => i).ToArray();
 
-            if (xydata.Xvalues[0] < minMZ || xydata.Xvalues[xydata.Xvalues.Length - 1] > maxMZ)
-            {
-                xydata = xydata.TrimData(minMZ, maxMZ);
-            }
+				if (xydata.Xvalues[0] < minMZ || xydata.Xvalues[xydata.Xvalues.Length - 1] > maxMZ)
+				{
+					xydata = xydata.TrimData(minMZ, maxMZ);
+				}
 
-            return xydata;
+				return xydata;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error in UIMF GetMassSpectrum: " + ex.Message);
+				throw (ex);
+			}
+
+        
 
         }
 
