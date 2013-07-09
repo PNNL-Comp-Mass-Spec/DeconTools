@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -19,17 +20,43 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
 
 
-        public double RatioO16O18 { get; set; }
+        public double RatioO16O18DoubleLabel { get; set; }
+
+        public double RatioO16O18SingleLabel { get; set; }
+
+        public double RatioSingleToDoubleLabel { get; set; }
 
         public double CorrelationO16O18SingleLabel { get; set; }
 
         public double CorrelationO16O18DoubleLabel { get; set; }
 
+        public double CorrelationBetweenSingleAndDoubleLabel { get; set; }
 
+        public double FitScoreO18Profile { get; set; }
 
         #endregion
 
         #region Public Methods
+
+        //NOTE: this is duplicated code from the O16O18IterativeTff
+        public IsotopicProfile ConvertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
+        {
+            var o18Iso = new IsotopicProfile { ChargeState = theorFeature.ChargeState, Peaklist = new List<MSPeak>() };
+            double mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
+
+            foreach (var theorpeak in theorFeature.Peaklist)
+            {
+                var peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SignalToNoise);
+
+                peak.XValue += numPeaksToShift * mzBetweenIsotopes;
+
+                o18Iso.Peaklist.Add(peak);
+
+            }
+
+            return o18Iso;
+        }
+
 
         #endregion
 
@@ -53,7 +80,6 @@ namespace DeconTools.Workflows.Backend.Core
             return failedValue;
         }
 
-
         public double GetCorrelationO16O18DoubleLabel()
         {
             double failedValue = -1;
@@ -70,9 +96,23 @@ namespace DeconTools.Workflows.Backend.Core
             return failedValue;
         }
 
+        public double GetCorrelationBetweenSingleAndDoubleLabel()
+        {
+            double failedValue = -1;
 
+            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 2)
+            {
+                var corr = CorrelationData.CorrelationDataItems[2].CorrelationRSquaredVal == null
+                               ? failedValue
+                               : (double)CorrelationData.CorrelationDataItems[2].CorrelationRSquaredVal;
 
-        public double GetRatioO16O18()
+                return corr;
+            }
+
+            return failedValue;
+        }
+
+        public double GetRatioO16O18DoubleLabel()
         {
             double failedValue = -9999;
 
@@ -83,6 +123,39 @@ namespace DeconTools.Workflows.Backend.Core
                                : (double)CorrelationData.CorrelationDataItems[1].CorrelationSlope;
 
                 return corr;
+            }
+
+            return failedValue;
+        }
+
+
+        public double GetRatioO16O18SingleLabel()
+        {
+            double failedValue = -9999;
+
+            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 1)
+            {
+                var ratio = CorrelationData.CorrelationDataItems[0].CorrelationSlope == null
+                               ? failedValue
+                               : (double)CorrelationData.CorrelationDataItems[0].CorrelationSlope;
+
+                return ratio;
+            }
+
+            return failedValue;
+        }
+
+        public double GetRatioSingleToDoubleLabel()
+        {
+            double failedValue = -9999;
+
+            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 2)
+            {
+                var slope = CorrelationData.CorrelationDataItems[2].CorrelationSlope == null
+                               ? failedValue
+                               : (double)CorrelationData.CorrelationDataItems[2].CorrelationSlope;
+
+                return slope;
             }
 
             return failedValue;

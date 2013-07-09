@@ -68,7 +68,6 @@ namespace DeconTools.Workflows.Backend.Core
             result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
             //Default Worst Scores
-            double fitScore = 1;
             double iscore = 1;
 
             //Get NET Error
@@ -87,10 +86,17 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                //Get fit score
-                List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
-                fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                //Get fit score O16 profile
+                List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
+                var theorPeakList = target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
+                result.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
+                // fit score O18 profile
+                IsotopicProfile o18Iso = ((O16O18IqResult)result).ConvertO16ProfileToO18(target.TheorIsotopicProfile, 4);
+                theorPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
+                observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
+                ((O16O18IqResult) result).FitScoreO18Profile = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                
                 //get i_score
                 iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
@@ -113,7 +119,6 @@ namespace DeconTools.Workflows.Backend.Core
                 result.ChromPeakSelected = target.ChromPeak;
                 result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
                 result.IsotopicProfileFound = true;
-                result.FitScore = fitScore;
                 result.InterferenceScore = iscore;
                 result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
                 result.NETError = netError;
@@ -126,7 +131,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-
+        protected internal override IqResult CreateIQResult(IqTarget target)
+        {
+            return new O16O18IqResult(target);
+        }
 
 
     }

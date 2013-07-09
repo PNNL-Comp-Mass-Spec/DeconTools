@@ -25,11 +25,17 @@ namespace DeconTools.Workflows.Backend.FileIO
             var sb = new StringBuilder();
             sb.Append(baseHeader);
             sb.Append(Delimiter);
+            sb.Append("FitScoreO18Profile");
+            sb.Append(Delimiter);
             sb.Append("CorrO16O18Single");
             sb.Append(Delimiter);
             sb.Append("CorrO16O18Double");
             sb.Append(Delimiter);
-            sb.Append("Ratio");
+            sb.Append("CorrO18SingleToDouble");
+            sb.Append(Delimiter);
+            sb.Append("RatioO16O18Single");
+            sb.Append(Delimiter);
+            sb.Append("RatioO16O18Double");
             
             return sb.ToString();
         }
@@ -42,11 +48,17 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             sb.Append(baseResult);
             sb.Append(Delimiter);
+            sb.Append(o16O18Result.FitScoreO18Profile.ToString("0.000"));
+            sb.Append(Delimiter);
             sb.Append(o16O18Result.CorrelationO16O18SingleLabel.ToString("0.000"));
             sb.Append(Delimiter);
             sb.Append(o16O18Result.CorrelationO16O18DoubleLabel.ToString("0.000"));
             sb.Append(Delimiter);
-            sb.Append(o16O18Result.RatioO16O18.ToString("0.000"));
+            sb.Append(o16O18Result.CorrelationBetweenSingleAndDoubleLabel.ToString("0.000"));
+            sb.Append(Delimiter);
+            sb.Append(o16O18Result.RatioO16O18SingleLabel.ToString("0.000"));
+            sb.Append(Delimiter);
+            sb.Append(o16O18Result.RatioO16O18DoubleLabel.ToString("0.000"));
 
             return sb.ToString();
         }

@@ -63,9 +63,11 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+        
         protected override void ExecutePostWorkflowHook()
         {
             base.ExecutePostWorkflowHook();
+            
             ExecuteTask(_quantifier);
             GetDataFromQuantifier();
         }

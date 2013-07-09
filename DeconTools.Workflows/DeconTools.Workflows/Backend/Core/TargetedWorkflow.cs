@@ -286,14 +286,23 @@ namespace DeconTools.Workflows.Backend.Core
             try
             {
                 DoWorkflow();
-
-                ExecutePostWorkflowHook();
             }
             catch (Exception ex)
             {
                 HandleWorkflowError(ex);
             }
 
+            try
+            {
+                ExecutePostWorkflowHook();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = " Error during 'ExecutePostWorkflowHook': " + ex.Message;
+
+                WorkflowStatusMessage = WorkflowStatusMessage + errorMessage;
+                Result.ErrorDescription = Result.ErrorDescription + errorMessage;
+            }
         }
 
         protected virtual void ExecutePostWorkflowHook()
@@ -308,15 +317,12 @@ namespace DeconTools.Workflows.Backend.Core
                     if (Result.IsotopicProfile != null)
                     {
                         WorkflowStatusMessage = WorkflowStatusMessage + "; Target FOUND!";
-
                     }
-
                 }
                 else
                 {
                     WorkflowStatusMessage = WorkflowStatusMessage + "; Target NOT found. Reason: " + Result.FailureType;
                 }
-
 
             }
 

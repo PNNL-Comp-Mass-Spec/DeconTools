@@ -138,6 +138,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
             Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
 
+            ResetQuantifierData();
+
+
             var result = (SipperLcmsTargetedResult)resultList.CurrentTargetedResult;
             result.AreaUnderDifferenceCurve = -9999;
             result.AreaUnderRatioCurve = -9999;
@@ -172,11 +175,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             if (indexOfCorrespondingObservedPeak>=0)
             {
                 IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexOfCorrespondingObservedPeak);
-
-
-
-
-
             }
             else
             {
@@ -446,6 +444,21 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 }
             }
         }
+
+
+        public void ResetQuantifierData()
+        {
+            this.AmountC13Labelling = 0;
+            this.ChromatogramRSquaredVals = new List<double>();
+            this.FitScoreData = new Dictionary<decimal, double>();
+            this.FractionLabelled = 0;
+            this.HighQualitySubtractedProfile = new IsotopicProfile();
+            this.NormalizedAdjustedIso = new IsotopicProfile();
+            this.NormalizedIso = new IsotopicProfile();
+            this.RatioVals = new XYData();
+            
+        }
+
 
         private int GetContiguousnessScore(IsotopicProfile subtractedIsoData)
         {

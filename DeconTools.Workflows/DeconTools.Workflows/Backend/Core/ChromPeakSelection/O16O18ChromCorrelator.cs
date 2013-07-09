@@ -35,6 +35,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             GetElutionCorrelationData(o16ChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rsquaredVal);
             correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
 
+            GetElutionCorrelationData(o18SingleLabelChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rsquaredVal);
+            correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
+
             return correlationData;
         }
     }

@@ -40,6 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
+            RunIsDisposed = true;
 
             _backgroundWorker = backgroundWorker;
 
@@ -54,6 +55,7 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
+            RunIsDisposed = true;
 
             _backgroundWorker = backgroundWorker;
 
@@ -70,6 +72,7 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
+            RunIsDisposed = true;
 
             _backgroundWorker = backgroundWorker;
 
@@ -83,6 +86,7 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
         {
             Run = run;
+            RunIsDisposed = true;
 
             if (Run != null) DatasetPath = Run.DataSetPath;
 
@@ -208,6 +212,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         public double MsgfFdrScoreCutoff { get; set; }
+
+        public bool RunIsDisposed { get; set; }
 
 
         #endregion
@@ -382,13 +388,13 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ExportData();
 
-
-
                 HandleAlignmentInfoFiles();
-                FinalizeRun();
 
-
-
+                if (RunIsDisposed)
+                {
+                    FinalizeRun();
+                }
+                
             }
             catch (Exception ex)
             {

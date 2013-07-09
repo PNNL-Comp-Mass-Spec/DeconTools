@@ -129,8 +129,11 @@ namespace DeconTools.Workflows.Backend.Core
 
                     childStateIqResult.CorrelationO16O18SingleLabel = childStateIqResult.GetCorrelationO16O18SingleLabel();
                     childStateIqResult.CorrelationO16O18DoubleLabel = childStateIqResult.GetCorrelationO16O18DoubleLabel();
-                    childStateIqResult.RatioO16O18 = childStateIqResult.GetRatioO16O18();
+                    childStateIqResult.CorrelationBetweenSingleAndDoubleLabel = childStateIqResult.GetCorrelationBetweenSingleAndDoubleLabel();
 
+                    childStateIqResult.RatioO16O18DoubleLabel = childStateIqResult.GetRatioO16O18DoubleLabel();
+                    childStateIqResult.RatioO16O18SingleLabel = childStateIqResult.GetRatioO16O18SingleLabel();
+                    childStateIqResult.RatioSingleToDoubleLabel = childStateIqResult.GetRatioSingleToDoubleLabel();
 
                     childStateIqResult.ObservedIsotopicProfile=  MsfeatureFinder.IterativelyFindMSFeature(childStateIqResult.IqResultDetail.MassSpectrum,
                                                              iqTarget.TheorIsotopicProfile);
@@ -138,12 +141,17 @@ namespace DeconTools.Workflows.Backend.Core
                    
                     if (childStateIqResult.ObservedIsotopicProfile!=null)
                     {
-                        
-             
-
                         List<Peak> observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
                         var theorPeakList = iqTarget.TheorIsotopicProfile.Peaklist.Select(p => (Peak) p).Take(4).ToList();
                         childStateIqResult.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+
+                        IsotopicProfile o18Iso = childStateIqResult.ConvertO16ProfileToO18(iqTarget.TheorIsotopicProfile, 4);
+                        theorPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
+                        observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
+                        childStateIqResult.FitScoreO18Profile = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+
+
+
                         childStateIqResult.InterferenceScore = InterferenceScorer.GetInterferenceScore(childStateIqResult.ObservedIsotopicProfile, mspeakList);
                         childStateIqResult.MZObs = childStateIqResult.ObservedIsotopicProfile.MonoPeakMZ;
                         childStateIqResult.MonoMassObs = childStateIqResult.ObservedIsotopicProfile.MonoIsotopicMass;
@@ -164,6 +172,10 @@ namespace DeconTools.Workflows.Backend.Core
                     IqLogger.Log.Info("\t\t\t" + childStateIqResult.Target.ID + "\t" + childStateIqResult.Target.MZTheor.ToString("0.000") + "\t" + childStateIqResult.Target.ChargeState
                         + "\t" + childStateIqResult.LcScanObs + "\t" + childStateIqResult.FitScore.ToString("0.000") + "\t" + rsquaredVal + "\t" + slope);
 
+
+                    childStateIqResult.LCScanSetSelected = favResult.LCScanSetSelected;
+                    childStateIqResult.LcScanObs = favResult.LcScanObs;
+
                     if (GraphsAreOutputted)
                     {
                         if (_graphGenerator==null) _graphGenerator=new BasicGraphControl();
@@ -173,17 +185,21 @@ namespace DeconTools.Workflows.Backend.Core
                     
                    
 
-                    childStateIqResult.LCScanSetSelected = favResult.LCScanSetSelected;
-                    childStateIqResult.LcScanObs = favResult.LcScanObs;
+                    
                 }
             }
         }
 
-       
+
+   
 
         private void ExportGraphs(IqResult result)
         {
-            OutputFolderForGraphs = Run.DataSetPath +Path.DirectorySeparatorChar + "OutputGraphs";
+            if (string.IsNullOrEmpty(OutputFolderForGraphs))
+            {
+                OutputFolderForGraphs = Run.DataSetPath + Path.DirectorySeparatorChar + "OutputGraphs";
+            }
+            
             if (!Directory.Exists(OutputFolderForGraphs)) Directory.CreateDirectory(OutputFolderForGraphs);
             
             ExportMassSpectrumGraph(result);
@@ -219,6 +235,12 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
             string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
                                          result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_MS.png";
+
+
+            string graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
+                                   result.Target.MZTheor.ToString("0.000") + "; ScanLC= " + result.LcScanObs;
+
+            _graphGenerator.AddAnnotationRelativeAxis(graphInfoText, 0.3, 0.02);
 
             _graphGenerator.AddAnnotationAbsoluteXRelativeY("*", result.Target.MZTheor, 0.03);
             _graphGenerator.SaveGraph(outputGraphFilename);
@@ -266,6 +288,12 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
             string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
                                          result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_chrom.png";
+
+            string graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
+                                   result.Target.MZTheor.ToString("0.000") + "; ScanLC= " + result.LcScanObs;
+
+            _graphGenerator.AddAnnotationRelativeAxis(graphInfoText, 0.3, 0.02);
+            _graphGenerator.AddVerticalLineToGraph(result.LcScanObs, 1);
 
             _graphGenerator.AddAnnotationAbsoluteXRelativeY("*", result.Target.MZTheor, 0.03);
             _graphGenerator.SaveGraph(outputGraphFilename);
@@ -378,7 +406,7 @@ namespace DeconTools.Workflows.Backend.Core
         private IqResult SelectBestChromPeakIqResult(IqResult childResult, List<IqResult> filteredChromPeakResults)
         {
             int numCandidateResults = filteredChromPeakResults.Count;
-            IqResult bestChromPeakResult;
+            IqResult bestChromPeakResult=null;
             if (numCandidateResults == 0)
             {
                 bestChromPeakResult = null;
@@ -389,11 +417,66 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                var furtherFilteredResults =
-                    filteredChromPeakResults.OrderByDescending(
-                        p => p.CorrelationData.CorrelationDataItems.First().CorrelationRSquaredVal).ToList();
+                
+                List<IqResult> furtherFilteredResults = new List<IqResult>();
+                double lowestFit = 1;
+                foreach (O16O18IqResult r in filteredChromPeakResults)
+                {
+                    var currentLowFitVal = Math.Min(r.FitScore, r.FitScoreO18Profile);
+                    if (currentLowFitVal<lowestFit)
+                    {
+                        lowestFit = currentLowFitVal;
 
-                bestChromPeakResult = furtherFilteredResults.First();
+                        if (lowestFit<0.2)
+                        {
+                            furtherFilteredResults.Add(r);
+                        }
+
+
+                    }
+                }
+
+                if (furtherFilteredResults.Count == 0)    // all potential candidates were filtered out above. So need a plan B. 
+                {
+                    bestChromPeakResult = filteredChromPeakResults.OrderBy(p => p.FitScore).Take(3).OrderByDescending(p => p.Abundance).FirstOrDefault();
+                }
+                else if (furtherFilteredResults.Count==1)
+                {
+                    bestChromPeakResult = furtherFilteredResults.First();
+                }
+                else   //still more than one candidate.  Will try to use another filter
+                {
+                    var currentBestChromPeakResult = furtherFilteredResults.OrderByDescending(p => p.Abundance).FirstOrDefault();
+                    List<IqResult> level3FilteredResults = new List<IqResult>();
+
+                    foreach (O16O18IqResult furtherFilteredResult in furtherFilteredResults)
+                    {
+                        var currentCorrVal = Math.Max(furtherFilteredResult.GetCorrelationO16O18DoubleLabel(), furtherFilteredResult.GetCorrelationBetweenSingleAndDoubleLabel());
+
+                        if (currentCorrVal>0.7)
+                        {
+                            level3FilteredResults.Add(furtherFilteredResult);
+                        }
+
+                    }
+
+
+                    if (level3FilteredResults.Count==0)
+                    {
+                        bestChromPeakResult = currentBestChromPeakResult;
+                    }
+                    else if (level3FilteredResults.Count==1)
+                    {
+                        bestChromPeakResult = level3FilteredResults.First();
+                    }
+                    else
+                    {
+                        //fit score is good. Correlation good. But still have multiple possibilities
+                        bestChromPeakResult = level3FilteredResults.OrderByDescending(p => p.Abundance).First();
+                    }
+                    
+
+                }
             }
 
 

@@ -237,11 +237,9 @@ namespace DeconTools.Backend.Utilities
                 rsquaredVal = -9999999;
                 return;
             }
-            
 
             slope = regressionLineInfo[0];
             intercept = regressionLineInfo[1];
-
 
             List<double> squaredResiduals = new List<double>();
             List<double> calculatedYVals = new List<double>();
