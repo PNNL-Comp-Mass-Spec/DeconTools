@@ -174,6 +174,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     double bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
 
                     IsotopicProfile theorIso;
+
+                    //TODO: there could be a problem here
                     var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out theorIso);
 
                     if (msFeature != null)
@@ -243,6 +245,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     }
                     else
                     {
+
+                        //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
+                        //We need some test cases to capture this problem. 
                         msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                      where n.Score < 0.15
                                      orderby n.ChargeState descending
@@ -432,6 +437,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             CalculateMassesForIsotopicProfile(theorIso);
             XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width, Parameters.MinIntensityForScore / 100);
 
+            //TODO: check how many theor peaks are being used in the fit score calculation. We should reduce this to a reasonable number.
             PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
 
             var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;  //fwhm / 2.35= sigma
@@ -439,6 +445,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             _targetedFeatureFinder.ToleranceInPPM = ppmTolerance;
             _targetedFeatureFinder.NeedMonoIsotopicPeak = false;
 
+            //TODO: there could be a problem here with there being too many theorIso peaks and thus, too many observed iso peaks are being pulled out. 
             var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso);
             return msFeature;
         }
