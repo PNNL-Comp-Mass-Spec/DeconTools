@@ -307,7 +307,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
+            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, tolerance, toleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1, false);
 
