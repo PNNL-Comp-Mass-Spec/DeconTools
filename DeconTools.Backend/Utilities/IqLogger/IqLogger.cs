@@ -51,6 +51,11 @@ namespace DeconTools.Backend.Utilities.IqLogger
 
 		public static string LogDirectory { get; set; }
 
+        /// <summary>
+        /// Serves as a globally accessible counter (for debugging purposes only!)
+        /// </summary>
+        public static long Counter1 { get; set; }
+
 		private static readonly Level SamPayne = new Level(0, "SamPayne");
 
 		private static readonly Level DebugChannel1 = new Level(29999, "DebugChannel1");
@@ -58,6 +63,7 @@ namespace DeconTools.Backend.Utilities.IqLogger
 		private static readonly Level DebugChannel2 = new Level(29998, "DebugChannel2");
 
 		private static readonly Level DebugChannel3 = new Level(29997, "DebugChannel3");
+
 
 		/// <summary>
 		/// Initializes the standard IqLog file.
