@@ -167,7 +167,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             ChargeStateDecider chargestatedecider = new XICCorrelatingChargeDecider(run);
             var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
 
-            //Assert
+            //Assert something here.
         
         }
 
