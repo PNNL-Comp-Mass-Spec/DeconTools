@@ -46,6 +46,10 @@
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=2.1.2.21, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
@@ -112,6 +116,7 @@
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\ChromPeakDetectorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\DeconToolsPeakDetectorV2Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\O16O18TraditionalProcessingTests\O16O18TraditionalProcessingTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\PaulsTests\ChargeStateDeciderTests.cs" />
     <Compile Include="ProcessingRelated_Tests\Post_MSFeatureDetectionTests\PeakToMSFeatureAssociatorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\PartialLabelingQuantifierTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ResultValidatorTests\ResultValidatorTasks_Tests.cs" />

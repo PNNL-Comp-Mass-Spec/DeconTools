@@ -16,36 +16,75 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         }
         public override IsotopicProfile DetermineCorrectIsotopicProfile(List<IsotopicProfile> potentialIsotopicProfiles)
         {
+            if (null == potentialIsotopicProfiles || potentialIsotopicProfiles.Count()==0) return null;
+
             if (_run.ResultCollection.MSPeakResultList.Count() == 0) 
-            { 
-                _run = RunUtilities.CreateAndLoadPeaks(_run.Filename); 
+            {              
+               _run = RunUtilities.CreateAndLoadPeaks(_run.Filename);                  
             }
-            potentialIsotopicProfiles.OrderByDescending(n => n.ChargeState);
+            potentialIsotopicProfiles= potentialIsotopicProfiles.OrderByDescending(n => n.ChargeState).ToList();
 
             int[] chargeStates = getChargeStates(potentialIsotopicProfiles);
             double[] correlations = new double[chargeStates.Length];
+            double[] correlationswithAltChargeState = new double[chargeStates.Length];
             int indexCurrentFeature = -1;
             double bestScore = -1;
             IsotopicProfile bestFeat = potentialIsotopicProfiles.First();
             foreach (var potentialfeature in potentialIsotopicProfiles)
             {
                 indexCurrentFeature++;
-                double correlation = getCorrelation(potentialfeature);
+                double correlation =0.0;
+                double altCorr=0.0;
+                getCorrelation(potentialfeature, out correlation, out altCorr);
+
                 Console.WriteLine("chargeState: " + potentialfeature.ChargeState);
                 Console.WriteLine("correlation value: " + correlation);
+                Console.WriteLine("another Charge State present Corr? : " + altCorr);
+                Console.WriteLine("Score: " + potentialfeature.Score);
                 correlations[indexCurrentFeature] = correlation;
+                correlationswithAltChargeState[indexCurrentFeature] = altCorr;
                 if (bestScore<correlation)
                 {
                     bestScore = correlation;
                     bestFeat = potentialfeature;
                 }
             }
-            Console.Write("Best correlation: " + bestScore + "\n charge state: " + bestFeat.ChargeState);
-           return bestFeat;
+            return IsotopicProfileDecision1(chargeStates, correlations, correlationswithAltChargeState, potentialIsotopicProfiles, bestFeat,bestScore);
+
             
-            
-            
-            
+        }
+
+        private IsotopicProfile IsotopicProfileDecision1(int[] chargeStates, double[] correlations, double[] correlationswithAltChargeState, List<IsotopicProfile> potentialIsotopicProfiles, IsotopicProfile bestFeat, double bestScore)
+        {
+            double[] standDevsOfEachSet = new double[correlations.Length];
+            for (int i = 0; i < correlations.Length; i++)
+            {
+
+                HashSet<int> indexesWhoAreFactorsOfMe = getIndexesWhoAreAFactorOfMe(i, chargeStates);
+                if (null == indexesWhoAreFactorsOfMe)
+                {
+                    break; //null means that we are at the end of the set. st dev is already defaulted at 0, which is what it 
+                    //would be to take the st. dev of one item.
+                }
+                int length = indexesWhoAreFactorsOfMe.Count() + 1;
+                double[] arrayofCorrelationsInSet = new double[length];
+                arrayofCorrelationsInSet[0] = correlations[i];
+                for (int i2 = 1; i2 < length; i2++)
+                {
+                    arrayofCorrelationsInSet[i2] = correlations[indexesWhoAreFactorsOfMe.ElementAt(i2 - 1)];
+                }
+                standDevsOfEachSet[i] = MathNet.Numerics.Statistics.Statistics.StandardDeviation(arrayofCorrelationsInSet);
+                if (standDevsOfEachSet[i] < 0.05)//DANGER
+                {
+                    Console.WriteLine("BEST CORRELATION: " + correlations[i] + "\nBEST CHARGE STATE: " + potentialIsotopicProfiles.ElementAt(i).ChargeState);
+                    return potentialIsotopicProfiles.ElementAt(i);
+                }
+            }
+
+            //If none were really close, just return the highest correlation.
+            Console.WriteLine("BEST CORRELATION: " + bestScore + "\nBEST CHARGE STATE: " + bestFeat.ChargeState);
+            return bestFeat;
+
             //TODO:
             //ideas:
             //1. determine how many 'sets' there are.
@@ -72,6 +111,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             //if it's lower, exceedingly, then it's not that one and you should move on to try out the next one.
 
         }
+
+        
+
+        
         private int[] getChargeStates(List<IsotopicProfile> potentialIsotopicProfiles)
         {
             int[] chargestates = new int[potentialIsotopicProfiles.Count()];
@@ -83,7 +126,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             return chargestates;
         }
 
-        private double getCorrelation(IsotopicProfile potentialfeature)
+        private double getCorrelation(IsotopicProfile potentialfeature, out double correlation, out double altCorr)
         {
             //TODO: change how many correlations are done here. right now only correlates 2 peaks on each features and looks at that correlation
             int monoIndex = potentialfeature.MonoIsotopicPeakIndex;
@@ -99,10 +142,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             //HELP should it use theoprofile instead of the .XValue?
             double otherPeakToLookFor = potentialfeature.Peaklist[otherPeakToLookForIndex].XValue;
 
-            return getCorrelation(monoIndex, otherPeakToLookForIndex, potentialfeature);
+            return getCorrelation(monoIndex, otherPeakToLookForIndex, potentialfeature, out correlation, out altCorr);
 
         }
-        private double getCorrelation(int peak1Index, int peak2Index, IsotopicProfile potentialfeature)
+        private double getCorrelation(int peak1Index, int peak2Index, IsotopicProfile potentialfeature, out double correlation, out double altCorr)
         {
             double widthPeak1 = potentialfeature.Peaklist[peak1Index].Width;
             double xValuePeak1 = potentialfeature.Peaklist[peak1Index].XValue;
@@ -112,10 +155,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             double xValuePeak2 = potentialfeature.Peaklist[peak2Index].XValue;
             var ppmTolerancePeak2 = (widthPeak2 / 2.35) / xValuePeak2 * 1e6;    //   peak's sigma value / mz * 1e6
 
-            var alternatechargestatecorr = getCorrelation(getMZofLowerChargeState(potentialfeature, peak1Index), getMZofLowerChargeState(potentialfeature, peak1Index), ppmTolerancePeak1, ppmTolerancePeak2);
-            Console.WriteLine("ALTERNATE CHARGE STATE CORRELATION: " + alternatechargestatecorr);
-
-            return getCorrelation(xValuePeak1, xValuePeak2, ppmTolerancePeak1, ppmTolerancePeak2);
+            altCorr= getCorrelation( xValuePeak1, getMZofLowerChargeState(potentialfeature, peak1Index), ppmTolerancePeak1, ppmTolerancePeak2);
+            
+            correlation= getCorrelation(xValuePeak1, xValuePeak2, ppmTolerancePeak1, ppmTolerancePeak2);
+            return correlation;
 
         }
         private double getCorrelation(double MZpeak1, double MZpeak2, double tolerancePPMpeak1, double tolerancePPMpeak2)
@@ -127,7 +170,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             var chromxydataPeak2 = chromgenPeak1.GenerateChromatogram(_run, 1, _run.GetNumMSScans(), MZpeak2, tolerancePPMpeak2, Globals.ToleranceUnit.PPM);
 
             #region Align chroms for Correlation
-            if (null == chromxydataPeak1 || null == chromxydataPeak2){return 0.0;}
+            if (null == chromxydataPeak1 || null == chromxydataPeak2){return -1.0;}
             chromxydataPeak1.NormalizeYData();
             chromxydataPeak2.NormalizeYData();
             //Console.WriteLine("chromxydataPeak1");
@@ -140,12 +183,17 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             double highestFramePeak2 = chromxydataPeak2.Xvalues.Max();
             double minX = Math.Max(lowestFramePeak1, lowestFramePeak2);
             double maxX = Math.Min(highestFramePeak1, highestFramePeak2);
-
+            bool noOverlap = (minX > maxX);
+            if (noOverlap)
+            {
+                return -2.0;
+            }
             int chromPeak1StartIndex = chromxydataPeak1.GetClosestXVal(minX);
             int chromPeak2StartIndex = chromxydataPeak2.GetClosestXVal(minX);
             int chromPeak1StopIndex = chromxydataPeak1.GetClosestXVal(maxX);
             int chromPeak2StopIndex = chromxydataPeak2.GetClosestXVal(maxX);
 
+            
             double[] arrayToCorrelatePeak1 = new double[chromPeak1StopIndex - chromPeak1StartIndex + 1];
             double[] arrayToCorrelatePeak2 = new double[chromPeak2StopIndex - chromPeak2StartIndex + 1];
             #endregion
@@ -172,7 +220,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             int number = chargestates[index];
             HashSet<int> indexesWhoAreFactorsOfMe = new HashSet<int>();
-            for (int i = index + 1; i < chargestates.Length - 1; i++)
+            for (int i = index + 1; i < chargestates.Length; i++)
             {
                 if (number % chargestates[i] == 0) indexesWhoAreFactorsOfMe.Add(i);
             }

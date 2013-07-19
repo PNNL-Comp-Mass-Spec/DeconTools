@@ -113,6 +113,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -139,6 +140,7 @@
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
+    <Compile Include="ChargeStateDeciderTests.cs" />
     <Compile Include="Core\ChromPeakQualityData.cs" />
     <Compile Include="Core\IMSScanSet.cs" />
     <Compile Include="Core\IMSScanSetCollection.cs" />
@@ -159,6 +161,8 @@
     <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicPeakFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
+    <Compile Include="ProcessingTasks\PaulChargeStateDecider\ChargeStateDecider.cs" />
+    <Compile Include="ProcessingTasks\PaulChargeStateDecider\XICCorrelatingChargeDecider.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
     <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetectorMedianBased.cs" />
     <Compile Include="ProcessingTasks\Quantifiers\PartialLabelingQuantifier.cs" />

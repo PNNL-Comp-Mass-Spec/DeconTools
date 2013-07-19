@@ -9,6 +9,8 @@ using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
+using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
@@ -248,10 +250,27 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
                         //We need some test cases to capture this problem. 
+                        //if (potentialChargeStates.Contains(10))
+                        //{
+                        //    int x = potentialChargeStates.Count();
+                        //}
+                        //string fileName =
+                        //    @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                        //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
+
+                        //var brain = new XICCorrelatingChargeDecider(run);
+                        //var mymsFeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score<.30).ToList());
+                        
+                        
                         msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                      where n.Score < 0.15
                                      orderby n.ChargeState descending
                                      select n).FirstOrDefault();
+                        //if (msfeature != null)
+                        //{
+                        //    Console.WriteLine(msfeature.ChargeState == mymsFeature.ChargeState);
+                        //    Console.WriteLine();
+                        //}
                     }
 
 
@@ -493,7 +512,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-   
+
         private void PerformIterativeFittingAndGetAlignedProfile(XYData xyData, XYData theorXYData, int chargeState, ref IsotopicProfile theorIso, ref double bestFitVal)
         {
             if (xyData == null || xyData.Xvalues.Length == 0)

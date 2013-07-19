@@ -13,13 +13,14 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
+using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 {
     [TestFixture]
     public class ThrashV2Tests
     {
-        
+
         [Category("MustPass")]
         [Test]
         public void ThrashV2OnOrbitrapTest1()
@@ -43,18 +44,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             deconvolutor.Execute(run.ResultCollection);
-
-           // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+            Console.WriteLine(run.ResultCollection.MSPeakResultList);
+            // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
             Assert.IsTrue(run.ResultCollection.ResultList.Count > 0);
             //Assert.AreEqual(187, run.ResultCollection.ResultList.Count);
 
             var result1 = run.ResultCollection.ResultList[0];
-            Assert.AreEqual(13084442, (decimal) Math.Round(result1.IntensityAggregate));
+            Assert.AreEqual(13084442, (decimal)Math.Round(result1.IntensityAggregate));
             Assert.AreEqual(960.53365m, (decimal)Math.Round(result1.IsotopicProfile.MonoIsotopicMass, 5));
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
-            
-
 
         }
 
@@ -62,7 +61,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         public void ThrashV2OnIMSDataTest1()
         {
             string uimfFile =
-           @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
 
             Run run = new RunFactory().CreateRun(uimfFile);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -100,10 +99,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Assert.AreEqual(13084442, (decimal)Math.Round(result1.IntensityAggregate));
             Assert.AreEqual(960.53365m, (decimal)Math.Round(result1.IsotopicProfile.MonoIsotopicMass, 5));
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
-
-            
-
-
 
         }
 
@@ -157,7 +152,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             Assert.AreEqual(3, result1.IsotopicProfile.ChargeState);
 
-            
+
 
 
 
@@ -366,7 +361,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
         }
 
-  
+
 
 
         [Test]
@@ -392,7 +387,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
-            
+
             var thrashParameters = new ThrashParameters();
             thrashParameters.MinMSFeatureToBackgroundRatio = 1;
             thrashParameters.MaxFit = 0.4;
@@ -421,7 +416,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var newResults = new List<IsosResult>(run.ResultCollection.ResultList);
 
-           // TestUtilities.DisplayMSFeatures(newResults);
+            // TestUtilities.DisplayMSFeatures(newResults);
 
             //DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
 
@@ -596,7 +591,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
-            
+
 
         }
 

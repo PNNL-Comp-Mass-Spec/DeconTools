@@ -145,7 +145,8 @@ namespace DeconTools.Backend.Data
 
             if (_containsMSFeatureIDColumn)
             {
-                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[++columnCounter]);
+                int currentCounter = ++columnCounter;
+                peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[currentCounter]);
             }
 
 
