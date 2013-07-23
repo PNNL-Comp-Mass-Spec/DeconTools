@@ -73,7 +73,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             InitializeWorkflow();
 
-            PrepareOutputFolder();
+            PrepareOutputFolder(_workflowParameters.OutputFolder);
 
             string outputPeaksFileName = getOutputPeaksFilename();
 
@@ -160,18 +160,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private void PrepareOutputFolder()
+        private void PrepareOutputFolder(string outputFolder)
         {
-            if (string.IsNullOrEmpty(_workflowParameters.OutputFolder))
+            if (string.IsNullOrEmpty(outputFolder))
             {
                 return;
             }
 
-            if (!Directory.Exists(_workflowParameters.OutputFolder))
+            if (!Directory.Exists(outputFolder))
             {
                 try
                 {
-                    Directory.CreateDirectory(_workflowParameters.OutputFolder);
+                    Directory.CreateDirectory(outputFolder);
                 }
                 catch (Exception ex)
                 {

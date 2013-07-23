@@ -16,6 +16,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
     public class ThrashDeconvolutorV2 : Deconvolutor
     {
+
+        private Run _run;
+
         private readonly PattersonChargeStateCalculator _chargeStateCalculator = new PattersonChargeStateCalculator();
         readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
         private readonly AreaFitter _areafitter = new AreaFitter();
@@ -56,6 +59,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             Check.Require(resultList.Run != null, "Cannot deconvolute. Run is null");
             Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
             Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
+
+            _run = resultList.Run;
 
             if (resultList.Run.PeakList.Count < 2)
             {
@@ -256,9 +261,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         }
                         string fileName =
                             @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-                        Run run = RunUtilities.CreateAndLoadPeaks(fileName);
 
-                        var brain = new ChromCorrelatingChargeDecider(run);
+
+                        bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
+                                              _run.ResultCollection.MSPeakResultList.Count == 0;
+                        
+                        if (peaksNotLoaded)
+                        {
+                            LoadPeaks(_run);
+                        }
+
+                        var brain = new ChromCorrelatingChargeDecider(_run);
                         var mymsFeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
                         
                         
@@ -311,6 +324,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             uniqueIsotopicProfiles = uniqueIsotopicProfiles.OrderByDescending(p => p.IntensityMostAbundantTheor).ToList();
             return uniqueIsotopicProfiles;
 
+        }
+
+        private void LoadPeaks(Run run)
+        {
+            //create / load 
+            //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them. 
         }
 
         /// <summary>
