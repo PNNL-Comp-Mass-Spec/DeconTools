@@ -22,153 +22,80 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     [TestFixture]
     class ChargeStateDeciderTests
     {
-       
+
         [Test]
         public void EasyDecision()
         {
             string fileName =
-                 @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                             @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             Run run = new RunFactory().CreateRun(fileName);
+            List<IsotopicProfile> potentialFeatures;
+            EasyDecisionSetUp(out potentialFeatures);
+            ChargeStateDecider chargestatedecider = new ChromCorrelatingChargeDecider(run);
+            var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
 
-            #region SetUpFakePotentialFeatures
-            List<IsotopicProfile> potentialFeatures = new List<IsotopicProfile>();
-              
-              IsotopicProfile iso1 = new IsotopicProfile();
-              iso1.ChargeState = 2;
-              iso1.MonoPeakMZ = 481.27410112055895;
-              iso1.MonoIsotopicPeakIndex = 0;
-              List<MSPeak> peaklist1 = new List<MSPeak>();
+            Assert.AreEqual(msFeature.ChargeState, 2);
+        }
+        private void EasyDecisionSetUp( out List<IsotopicProfile> potentialFeatures)
+        {
+            
 
-                  MSPeak peak1_iso1 = new MSPeak();
-                  peak1_iso1.Width = 0.007932149f;
-                  peak1_iso1.XValue = 481.27410112055895;
-                  peaklist1.Add(peak1_iso1);
+            MSPeak peak1_iso1 = MakeMSPeak(0.007932149, 481.27410112055895);
+            MSPeak peak2_iso1 = MakeMSPeak(0.007846226, 481.775417927883);
+            MSPeak peak3_iso1 = MakeMSPeak(0.00768206455, 482.27682748526291);
+            List<MSPeak> peaklist1 = MakeMSPeakList(peak1_iso1, peak2_iso1, peak3_iso1);
+            IsotopicProfile iso1 = MakePotentialFeature(2, 481.27410112055895, 0, peaklist1);
 
-                  MSPeak peak2_iso1 = new MSPeak();
-                  peak2_iso1.Width = 0.007846226f;
-                  peak2_iso1.XValue = 481.775417927883;
-                  peaklist1.Add(peak2_iso1);
+            MSPeak peak1_iso2 = MakeMSPeak(0.007932149, 481.27410112055895);
+            MSPeak peak2_iso2 = MakeMSPeak(0.00768206455, 482.27682748526291);
+            List<MSPeak> peaklist2 = MakeMSPeakList(peak1_iso2, peak2_iso2);
+            IsotopicProfile iso2 = MakePotentialFeature(1, 481.27410112055895, 0, peaklist2);
 
-                  MSPeak peak3_iso1 = new MSPeak();
-                  peak3_iso1.Width = 0.00768206455f;
-                  peak3_iso1.XValue = 482.27682748526291;
-                  peaklist1.Add(peak3_iso1);
-              iso1.Peaklist = peaklist1;
-              potentialFeatures.Add(iso1);
+          
 
-
-              IsotopicProfile iso2 = new IsotopicProfile();
-              iso2.ChargeState = 1;
-              iso2.MonoPeakMZ = 481.27410112055895;
-              iso2.MonoIsotopicMass = 480.266824630559;
-              iso2.MonoIsotopicPeakIndex = 0;
-                  List<MSPeak> peakList2 = new List<MSPeak>();
-                  MSPeak peak1_iso2 = new MSPeak();
-                  peak1_iso2.DataIndex = 3769;
-                  peak1_iso2.Height = 13084442.0f;
-                  peak1_iso2.Width = 0.007932149f;
-                  peak1_iso2.XValue = 481.27410112055895;
-                  peakList2.Add(peak1_iso2);
-
-
-                  MSPeak peak2_iso2 = new MSPeak();
-                  peak2_iso2.DataIndex = 3846;
-                  peak2_iso2.Height = 1746590.88f;
-                  peak2_iso2.Width = 0.00768206455f;
-                  peak2_iso2.XValue = 482.27682748526291;
-                  peakList2.Add(peak2_iso2);
-              iso2.Peaklist = peakList2;
-              potentialFeatures.Add(iso2);
-            #endregion
-
-              ChargeStateDecider chargestatedecider = new XICCorrelatingChargeDecider(run);
-              var msFeature= chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
-
-              Assert.AreEqual(msFeature.ChargeState, 2);
-
+            potentialFeatures = MakePotentialFeaturesList(iso1, iso2);
         }
 
         [Test]
         public void MediumDecision()
         {
             string fileName =
-                    @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                                @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             Run run = new RunFactory().CreateRun(fileName);
-            #region SetUpFakePotentialFeatures
-            List<IsotopicProfile> potentialFeatures = new List<IsotopicProfile>();
 
-            IsotopicProfile iso1 = new IsotopicProfile();
+            List<IsotopicProfile> potentialFeatures;
+            MediumDecisionSetup(out potentialFeatures);
 
-            iso1.ChargeState = 6;
-            iso1.MonoPeakMZ =746.5392140968064 ;
-            iso1.MonoIsotopicPeakIndex = -1;
-            List<MSPeak> peaklist1 = new List<MSPeak>();
-
-                MSPeak peak1_iso1 = new MSPeak();
-                peak1_iso1.Width = 0.0151630929f;
-                peak1_iso1.XValue =746.70851219111921 ;
-                peaklist1.Add(peak1_iso1);
-
-                MSPeak peak2_iso1 = new MSPeak();
-                peak2_iso1.Width =0.0151641443f ;
-                peak2_iso1.XValue = 746.87333076347306;
-                peaklist1.Add(peak2_iso1);
-            iso1.Peaklist = peaklist1;
-            potentialFeatures.Add(iso1);
-
-
-            IsotopicProfile iso2 = new IsotopicProfile();
-            iso2.ChargeState = 2;
-            iso2.MonoPeakMZ = 746.87333076347306;
-            iso2.MonoIsotopicPeakIndex = 0;
-            List<MSPeak> peakList2 = new List<MSPeak>();
-                MSPeak peak1_iso2 = new MSPeak();
-                peak1_iso2.Width = 0.0151641443f;
-                peak1_iso2.XValue = 746.87333076347306;
-                peakList2.Add(peak1_iso2);
-
-
-                MSPeak peak2_iso2 = new MSPeak();
-                peak2_iso2.Width = 0.01580638f;
-                peak2_iso2.XValue = 747.37507455840785;
-                peakList2.Add(peak2_iso2);
-
-                MSPeak peak3_iso2 = new MSPeak();
-                peak3_iso2.Width = 0.0153686106f;
-                peak3_iso2.XValue = 747.87687140741934;
-                peakList2.Add(peak3_iso2);
-
-            iso2.Peaklist = peakList2;
-            potentialFeatures.Add(iso2);
-
-            IsotopicProfile iso3 = new IsotopicProfile();
-            iso3.ChargeState = 1;
-            iso3.MonoPeakMZ = 746.87333076347306;
-            iso3.MonoIsotopicPeakIndex =0 ;
-            List<MSPeak> peakList3 = new List<MSPeak>();
-                MSPeak peak1_iso3 = new MSPeak();
-                peak1_iso3.Width = 0.0151641443f;
-                peak1_iso3.XValue = 746.87333076347306;
-                peakList3.Add(peak1_iso3);
-
-
-                MSPeak peak2_iso3 = new MSPeak();
-                peak2_iso3.Width = 0.0153686106f;
-                peak2_iso3.XValue = 747.87687140741934;
-                peakList3.Add(peak2_iso3);
-
-            iso3.Peaklist = peakList2;
-            potentialFeatures.Add(iso3);
-            #endregion
-
-
-            ChargeStateDecider chargestatedecider = new XICCorrelatingChargeDecider(run);
+            ChargeStateDecider chargestatedecider = new ChromCorrelatingChargeDecider(run);
             var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
 
             //Assert something here.
-        
+
+        }
+
+        private void MediumDecisionSetup(out List<IsotopicProfile> potentialFeatures)
+        {
+            
+
+            MSPeak peak1_iso1 = MakeMSPeak(0.0151630929, 746.70851219111921);
+            MSPeak peak2_iso1 = MakeMSPeak(0.0151641443, 746.87333076347306);
+            List<MSPeak> peaklist1 = MakeMSPeakList(peak1_iso1, peak2_iso1);
+            IsotopicProfile iso1 = MakePotentialFeature(6, 746.5392140968064, -1, peaklist1);
+
+            MSPeak peak1_iso2 = MakeMSPeak(0.0151641443, 746.87333076347306);
+            MSPeak peak2_iso2 = MakeMSPeak(0.01580638, 747.37507455840785);
+            MSPeak peak3_iso2 = MakeMSPeak(0.0153686106, 747.87687140741934);
+            List<MSPeak> peaklist2 = MakeMSPeakList(peak1_iso2, peak2_iso2, peak3_iso2);
+            IsotopicProfile iso2 = MakePotentialFeature(2, 746.87333076347306, 0, peaklist2);
+
+            MSPeak peak1_iso3 = MakeMSPeak(0.0151641443, 746.87333076347306);
+            MSPeak peak2_iso3 = MakeMSPeak(0.0153686106, 747.87687140741934);
+            List<MSPeak> peaklist3 = MakeMSPeakList(peak1_iso2, peak2_iso2);
+            IsotopicProfile iso3 = MakePotentialFeature(1, 746.87333076347306, 0, peaklist3);
+
+            potentialFeatures = MakePotentialFeaturesList(iso1, iso2, iso3);
         }
 
         [Test]
@@ -266,21 +193,21 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             chromXYData1.NormalizeYData();
             chromXYData2.NormalizeYData();
             chromXYData3.NormalizeYData();
-            double[] c1= new double[c1stop-c1start+1];
-            double[] c2= new double[c2stop-c2start+1];
-            double[] c3= new double[c3stop-c3start+1];
+            double[] c1 = new double[c1stop - c1start + 1];
+            double[] c2 = new double[c2stop - c2start + 1];
+            double[] c3 = new double[c3stop - c3start + 1];
 
-           
-            for (int i = c1start,j=0; i <= c1stop ; i++, j++)
+
+            for (int i = c1start, j = 0; i <= c1stop; i++, j++)
             {
                 c1[j] = chromXYData1.Yvalues[i];
-                
+
             }
             for (int i = c2start, j = 0; i <= c2stop; i++, j++)
             {
                 c2[j] = chromXYData2.Yvalues[i];
 
-            } 
+            }
             for (int i = c3start, j = 0; i <= c3stop; i++, j++)
             {
                 c3[j] = chromXYData3.Yvalues[i];
@@ -289,17 +216,17 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             for (int i = 0; i < c1.Length; i++)
             {
-                Console.WriteLine("{0}\t{1}\t{2}",c1[i],c2[i],c3[i]);
-                
+                Console.WriteLine("{0}\t{1}\t{2}", c1[i], c2[i], c3[i]);
+
             }
-            
+
             // double c1chromEven= chromXYData1.Xvalues
             double corr1 = MathNet.Numerics.Statistics.Correlation.Pearson(c1, c2);
             double corr2 = MathNet.Numerics.Statistics.Correlation.Pearson(c1, c3);
             Console.WriteLine("HERE IS THE CORRELATION: " + corr1);
             Console.WriteLine("HERE IS THE CORRELATION: " + corr2);
 
-            
+
 
 
 
@@ -330,9 +257,43 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //    alldone = done1 && done2 && done3;
             //}
 
-            
+
 
         }
 
+
+
+        private MSPeak MakeMSPeak(double width, double xValue)
+        {
+            MSPeak mspeak = new MSPeak();
+            mspeak.Width = (float)width;
+            mspeak.XValue = xValue;
+            return mspeak;
+        }
+
+        private List<MSPeak> MakeMSPeakList(params MSPeak[] msPeaks)
+        {
+            return msPeaks.ToList();
+        }
+
+        private List<IsotopicProfile> MakePotentialFeaturesList(params IsotopicProfile[] isotopicProfiles)
+        {
+            return isotopicProfiles.ToList(); //cool...
+        }
+
+        private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, params MSPeak[] peakList)
+        {
+           return MakePotentialFeature(chargeState, monoPeakMZ, monoIsotpoicPeakIndex, peakList.ToList());
+        }
+        private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, List<MSPeak> peakList)
+        {
+            IsotopicProfile isopo = new IsotopicProfile();
+            isopo.ChargeState = chargeState;
+            isopo.MonoPeakMZ = monoPeakMZ;
+            isopo.MonoIsotopicPeakIndex = monoIsotpoicPeakIndex;
+            isopo.Peaklist = peakList;
+            return isopo;
+        }
     }
+
 }
