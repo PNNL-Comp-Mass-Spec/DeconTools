@@ -459,6 +459,9 @@
     <Compile Include="Workflows\WorkflowStats.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />
     <None Include="ClassDiagrams\ClassDiagram1.cd" />
     <None Include="ClassDiagrams\ClassDiagram2.cd" />

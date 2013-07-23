@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -111,8 +112,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             thermoRun.CurrentScanSet = testScanSetThermo;
 
 
-            mz5run.GetMassSpectrum(testScanSet1);
-            thermoRun.GetMassSpectrum(testScanSetThermo);
+            mz5run.XYData=   mz5run.GetMassSpectrum(testScanSet1);
+            thermoRun.XYData=   thermoRun.GetMassSpectrum(testScanSetThermo);
 
 
             Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
@@ -122,12 +123,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 Assert.AreEqual(mz5run.XYData.Xvalues[i], thermoRun.XYData.Xvalues[i]);
             }
 
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 3;
             peakDetector.SignalToNoiseThreshold = 2;
-
-
-
 
             //peakDetector.Execute(mz5run.ResultCollection);
 
@@ -201,11 +199,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         }
 
-
-
-
-
-
         [Test]
         public void GetScanInfoTest1()
         {
@@ -221,8 +214,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine(info);
 
         }
-
-
 
         [Test]
         public void Speedtest1()
@@ -281,6 +272,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         }
 
+        [Test]
+        public void WatersMzXmlTest1()
+        {
+            string testfile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Waters\LC_MS_pHis_Caulo_meth_110207.mzXML";
+
+            Run run = new RunFactory().CreateRun(testfile);
+            Console.WriteLine(TestUtilities.DisplayRunInformation(run));
+
+
+
+        }
 
     }
 }

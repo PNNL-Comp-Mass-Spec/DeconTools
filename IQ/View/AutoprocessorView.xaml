@@ -1,224 +1,197 @@
-﻿<Window x:Class="IQ.View.AutoprocessorView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-           x:Name="window"
-
-        mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+﻿<Window x:Class="IQ.View.AutoprocessorView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="window" mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Closing="window_Closing"
         SizeToContent="WidthAndHeight" WindowStyle="ThreeDBorderWindow" MaxWidth="800">
-    
-    <Window.Resources>
+
+  <Window.Resources>
+    <Style TargetType="Button">
+      <Setter Property="Control.BorderBrush" Value="SlateGray" />
+      <Setter Property="Control.VerticalAlignment" Value="Stretch" />
+      <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
+      <Setter Property="Control.Margin" Value="3,3,3,3" />
+      <Setter Property="Control.Padding" Value="8,3,8,3" />
+
+
+    </Style>
+
+
+    <Style TargetType="TextBlock">
+
+      <Setter Property="Control.VerticalAlignment" Value="Stretch" />
+      <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
+      <Setter Property="Control.Margin" Value="3,3,3,3" />
+      <Setter Property="Control.Padding" Value="8,3,8,3" />
+      <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+      <Setter Property="Control.VerticalAlignment" Value="Center" />
+      <Setter Property="Control.FontFamily" Value="Tahoma" />
+      <Setter Property="Control.FontSize" Value="12" />
+      <Setter Property="Control.FontWeight" Value="Heavy" />
+      <Setter Property="Control.Foreground" Value="Gray" />
+
+    </Style>
+
+    <Style x:Key="Flat">
+      <Setter Property="Control.Background" Value="{x:Null}" />
+      <Setter Property="Control.BorderBrush" Value="{x:Null}" />
+      <Style.Triggers>
+        <Trigger Property="Control.IsMouseOver" Value="True">
+          <Setter Property="Control.Background" Value="{x:Null}" />
+          <Setter Property="Control.BorderBrush" Value="{x:Null}" />
+          <Setter Property="Control.FontWeight" Value="Bold" />
+        </Trigger>
+        <Trigger Property="Control.IsFocused" Value="True">
+          <Setter Property="Control.FontWeight" Value="Bold" />
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+
+    <Style TargetType="TextBox">
+      <Setter Property="Control.BorderBrush" Value="SlateGray" />
+      <Setter Property="Control.VerticalAlignment" Value="Stretch" />
+      <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
+      <Setter Property="Control.Margin" Value="3,3,3,3" />
+      <Setter Property="Control.MaxWidth" Value="350" />
+      <Setter Property="Control.FontFamily" Value="Tahoma" />
+      <Setter Property="Control.FontSize" Value="12" />
+      <Setter Property="Control.FontWeight" Value="Light" />
+      <Setter Property="Control.Foreground" Value="Gray" />
+
+
+    </Style>
+
+
+  </Window.Resources>
+
+  <StackPanel>
+    <Border Width="Auto" Height="Auto" Margin="5" BorderBrush="Silver" BorderThickness="0" CornerRadius="10"
+            MinHeight="35">
+      <TextBlock HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontFamily="Tahoma"
+                 FontSize="18" FontWeight="Bold" Foreground="#818892" Text="IQ Autoprocessor" TextWrapping="Wrap" />
+    </Border>
+
+    <Grid>
+
+      <Grid.Resources>
         <Style TargetType="Button">
-            <Setter Property="Control.BorderBrush" Value="SlateGray"/>
-            <Setter Property="Control.VerticalAlignment" Value="Stretch" />
-            <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Control.Margin" Value="3,3,3,3" />
-            <Setter Property="Control.Padding" Value="8,3,8,3"/>
+          <Setter Property="Control.BorderBrush" Value="SlateGray" />
+
+          <Setter Property="Control.VerticalAlignment" Value="Stretch" />
+          <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
+          <Setter Property="Control.Margin" Value="3,3,3,3" />
+          <Setter Property="Control.Padding" Value="8,3,8,3" />
+          <Setter Property="Control.MaxHeight" Value="25" />
+          <Setter Property="Control.MaxWidth" Value="25" />
 
 
         </Style>
 
 
-        <Style TargetType="TextBlock">
-                       
-            <Setter Property="Control.VerticalAlignment" Value="Stretch" />
-            <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Control.Margin" Value="3,3,3,3" />
-            <Setter Property="Control.Padding" Value="8,3,8,3"/>
-            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
-            <Setter Property="Control.VerticalAlignment" Value="Center"/>
-            <Setter Property="Control.FontFamily" Value="Tahoma" />
-            <Setter Property="Control.FontSize" Value="12" />
-            <Setter Property="Control.FontWeight" Value="Heavy" />
-            <Setter Property="Control.Foreground" Value="Gray" />
-            
-        </Style>
+      </Grid.Resources>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition></ColumnDefinition>
+        <ColumnDefinition Width="3*"></ColumnDefinition>
+        <ColumnDefinition Width="25"></ColumnDefinition>
+        <ColumnDefinition Width="25"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+      </Grid.RowDefinitions>
 
-        <Style x:Key="Flat">
-            <Setter Property="Control.Background" Value="{x:Null}" />
-            <Setter Property="Control.BorderBrush" Value="{x:Null}" />
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Background" Value="{x:Null}" />
-                    <Setter Property="Control.BorderBrush" Value="{x:Null}" />
-                    <Setter Property="Control.FontWeight" Value="Bold" />
-                </Trigger>
-                <Trigger Property="Control.IsFocused" Value="True">
-                    <Setter Property="Control.FontWeight" Value="Bold" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+      <TextBlock Grid.Row="0">Dataset</TextBlock>
+      <TextBox Name="txtDatasetName" Grid.Row="0" Grid.Column="1"
+               Text="{Binding Path=DataContext.DatasetPath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" MinWidth="160"
+               MaxWidth="Infinity">
+      </TextBox>
+      <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Name="btnSelectDataset"
+              Grid.Row="0" Grid.Column="2" Click="btnSelectDataset_Click" HorizontalAlignment="Center" VerticalAlignment="Center"
+              Margin="0" Background="{x:Null}" OpacityMask="{x:Null}" Foreground="{x:Null}" BorderThickness="1">
 
-        <Style TargetType="TextBox">
-            <Setter Property="Control.BorderBrush" Value="SlateGray"/>
-            <Setter Property="Control.VerticalAlignment" Value="Stretch" />
-            <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Control.Margin" Value="3,3,3,3" />
-            <Setter Property="Control.MaxWidth" Value="350" />
-            <Setter Property="Control.FontFamily" Value="Tahoma" />
-            <Setter Property="Control.FontSize" Value="12" />
-            <Setter Property="Control.FontWeight" Value="Light" />
-            <Setter Property="Control.Foreground" Value="Gray" />
+        <Image Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
+
+      </Button>
+      <Button Name="btnClearDataset" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0"
+              Grid.Row="0" Grid.Column="3" Click="btnClearDataset_Click">
+        <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico"></Image>
+      </Button>
 
 
-        </Style>
+      <TextBlock TextWrapping="Wrap" Grid.Row="1">
+        Workflow parameters file path
+      </TextBlock>
+      <TextBox Name="txtWorkflowParametersFilepath" Grid.Row="1" Grid.Column="1"
+               Text="{Binding Path=DataContext.WorkflowParametersFilePath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap"
+               MinWidth="160" MaxWidth="Infinity"></TextBox>
+      <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Name="btnSelectWorkflowFile"
+              Grid.Row="1" Grid.Column="2" Click="btnSelectWorkflowFile_Click">
+        <Image Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
+      </Button>
+      <Button Name="btnClearWorkflowFilePath" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+              Padding="0" Grid.Row="1" Grid.Column="3" Click="btnClearWorkflowFilePath_Click">
+        <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico"></Image>
+      </Button>
 
 
+      <TextBlock Grid.Row="2">Targets file path</TextBlock>
+      <TextBox Name="txtTargetsFilepath" Grid.Row="2" Grid.Column="1"
+               Text="{Binding Path=DataContext.TargetsFilePath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" MinWidth="160"
+               MaxWidth="Infinity"></TextBox>
+      <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Name="btnSelectTargetFile"
+              Grid.Row="2" Grid.Column="2" Click="btnSelectTargetFile_Click">
+        <Image Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
+      </Button>
+      <Button Name="btnClearTargetFilePath" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+              Padding="0" Grid.Row="2" Grid.Column="3" Click="btnClearTargetFilePath_Click">
+        <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico"></Image>
+      </Button>
 
-    </Window.Resources>
-    
-    <StackPanel>
-        <Border 
-            
-            Width="Auto"
-            Height="Auto"
-            Margin="5"
-            BorderBrush="Silver"
-            BorderThickness="0"
-            CornerRadius="10" MinHeight="35" >
-            <TextBlock
-                
-                HorizontalAlignment="Center"
-                Margin="0"
-                VerticalAlignment="Center"
-                FontFamily="Tahoma"
-                FontSize="18"
-                FontWeight="Bold"
-                Foreground="#818892"
-                Text="IQ Autoprocessor"
-                TextWrapping="Wrap"/>
-        </Border>
-
-        <Grid>
-            
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Control.BorderBrush" Value="SlateGray"/>
-                    
-                    <Setter Property="Control.VerticalAlignment" Value="Stretch" />
-                    <Setter Property="Control.HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="Control.Margin" Value="3,3,3,3" />
-                    <Setter Property="Control.Padding" Value="8,3,8,3"/>
-                    <Setter Property="Control.MaxHeight" Value="25"/>
-                    <Setter Property="Control.MaxWidth" Value="25"/>
+      <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1" Width="Auto" Height="Auto" Margin="5"
+              BorderBrush="Silver" BorderThickness="3" CornerRadius="6" MinHeight="50">
 
 
+        <Grid HorizontalAlignment="Stretch">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+          </Grid.ColumnDefinitions>
 
-                </Style>
-
-
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition ></ColumnDefinition>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition Width="25"></ColumnDefinition>
-                <ColumnDefinition Width="25"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-        
-            <TextBlock Grid.Row="0">Dataset</TextBlock>
-            <TextBox Name="txtDatasetName" Grid.Row="0" Grid.Column="1" Text="{Binding Path=DataContext.DatasetPath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" MinWidth="160" MaxWidth="Infinity">             
-            </TextBox>
-            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Name="btnSelectDataset" Grid.Row="0" Grid.Column="2" Click="btnSelectDataset_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Background="{x:Null}" OpacityMask="{x:Null}" Foreground="{x:Null}" BorderThickness="1">
-                
-                    <Image  Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
-                
-            </Button>
-            <Button Name="btnClearDataset" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Grid.Row="0" Grid.Column="3" Click="btnClearDataset_Click">
-                <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico" ></Image>
-            </Button>
-        
-            
-            <TextBlock TextWrapping="Wrap" Grid.Row="1">Workflow parameters file path</TextBlock>
-            <TextBox Name="txtWorkflowParametersFilepath" Grid.Row="1" Grid.Column="1" Text="{Binding Path=DataContext.WorkflowParametersFilePath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" MinWidth="160" MaxWidth="Infinity"></TextBox>
-            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0"  Name="btnSelectWorkflowFile" Grid.Row="1" Grid.Column="2" Click="btnSelectWorkflowFile_Click">
-                <Image  Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
-            </Button>
-            <Button Name="btnClearWorkflowFilePath" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Grid.Row="1" Grid.Column="3" Click="btnClearWorkflowFilePath_Click">
-                <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico"></Image>
-            </Button>
-
-
-            <TextBlock Grid.Row="2">Targets file path</TextBlock>
-            <TextBox Name="txtTargetsFilepath" Grid.Row="2" Grid.Column="1" Text="{Binding Path=DataContext.TargetsFilePath, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" MinWidth="160" MaxWidth="Infinity"></TextBox>
-            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0"  Name="btnSelectTargetFile" Grid.Row="2" Grid.Column="2" Click="btnSelectTargetFile_Click">
-                <Image  Source="/IQ;component/Images/closed.ico" Style="{StaticResource Flat}"></Image>
-            </Button>
-            <Button Name="btnClearTargetFilePath" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Grid.Row="2" Grid.Column="3" Click="btnClearTargetFilePath_Click">
-                <Image Margin="3,0,3,5" Source="/IQ;component/Images/undo.ico"></Image>
-            </Button>
-
-            <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1"  Width="Auto"
-            Height="Auto"
-           Margin="5"
-            BorderBrush="Silver"
-            BorderThickness="3"
-            CornerRadius="6"
-             MinHeight="50" >
-
-
-                <Grid HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition ></ColumnDefinition>
-                        <ColumnDefinition ></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel HorizontalAlignment="Right" Grid.Column="1" Orientation="Horizontal">
-                        <Button MaxWidth="Infinity" Name="btnGo" Click="btnGo_Click" MinWidth="60" Margin="3,10" MaxHeight="50">Go</Button>
-                        <Button MaxWidth="Infinity" Name="btnCancel" Click="btnCancel_Click" MinWidth="40" Margin="3,10" MaxHeight="50">Cancel</Button>
-                    </StackPanel>
-                </Grid>
-
-
-
-
-            </Border>
-
-            <Border Visibility="Hidden" Grid.Column="0" Grid.Row="4"
-            Name="border1"
-            Width="Auto"
-            Height="Auto"
-            Margin="5"
-            BorderBrush="Silver"
-            BorderThickness="3"
-            CornerRadius="10" MinHeight="75" >
-            
-                
-                <TextBlock
-                Name="textBlock1"
-                HorizontalAlignment="Center"
-                Margin="0"
-                VerticalAlignment="Center"
-                FontFamily="Tahoma"
-                FontSize="18"
-                FontWeight="Bold"
-                Foreground="#6B4D4D34"
-                Text="Dropbox"
-                TextWrapping="Wrap"/>
-               
-            </Border>
-
-
-
+          <StackPanel HorizontalAlignment="Right" Grid.Column="1" Orientation="Horizontal">
+            <Button MaxWidth="Infinity" Name="btnGo" Click="btnGo_Click" MinWidth="60" Margin="3,10"
+                    MaxHeight="50">Go</Button>
+            <Button MaxWidth="Infinity" Name="btnCancel" Click="btnCancel_Click" MinWidth="40"
+                    Margin="3,10" MaxHeight="50">Cancel</Button>
+          </StackPanel>
         </Grid>
-        
-       
-        
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="5,5,5,5">Feedback:</TextBlock>
-            
-                <TextBox  Margin="5,5,5,5" BorderThickness="0" MaxWidth="Infinity" Text="{Binding Path=DataContext.GeneralStatusMessage, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap" ></TextBox>
-            </StackPanel>
-            <ProgressBar Margin="10,0,10,15" Height="8" Foreground="#FF4DB146" Background="#FFE5EDFC" BorderBrush="#FF436396"
-                                     Value="{Binding Path=DataContext.PercentProgress, ElementName=window, Mode=OneWay}">
-                
-            </ProgressBar>
-        </StackPanel>
+
+
+      </Border>
+
+      <Border Visibility="Hidden" Grid.Column="0" Grid.Row="4" Name="border1" Width="Auto" Height="Auto"
+              Margin="5" BorderBrush="Silver" BorderThickness="3" CornerRadius="10" MinHeight="75">
+
+
+        <TextBlock Name="textBlock1" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"
+                   FontFamily="Tahoma" FontSize="18" FontWeight="Bold" Foreground="#6B4D4D34" Text="Dropbox" TextWrapping="Wrap" />
+
+      </Border>
+
+
+    </Grid>
+
+
+    <StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Margin="5,5,5,5">Feedback:</TextBlock>
+
+        <TextBox Margin="5,5,5,5" BorderThickness="0" MaxWidth="Infinity"
+                 Text="{Binding Path=DataContext.GeneralStatusMessage, ElementName=window, Mode=TwoWay}" TextWrapping="Wrap"></TextBox>
+      </StackPanel>
+      <ProgressBar Margin="10,0,10,15" Height="8" Foreground="#FF4DB146" Background="#FFE5EDFC"
+                   BorderBrush="#FF436396" Value="{Binding Path=DataContext.PercentProgress, ElementName=window, Mode=OneWay}">
+      </ProgressBar>
     </StackPanel>
+  </StackPanel>
 </Window>

@@ -300,7 +300,39 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
 
+        [Test]
+        public void TempSaturationFixingTestOnYehiaBSAData()
+        {
+            string uimfFile =
+                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\BSA_30N2_30ms_gate_10tof_Padjust_0000.UIMF";
 
+            Run run = new RunFactory().CreateRun(uimfFile);
+            var parameters = new DeconToolsParameters();
+
+            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
+            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
+            parameters.ThrashParameters.MaxFit = 0.6;
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 2;
+            parameters.MSGeneratorParameters.MaxLCScan = 2;
+            parameters.MSGeneratorParameters.UseMZRange = true;
+            parameters.MSGeneratorParameters.MinMZ = 652;
+            parameters.MSGeneratorParameters.MaxMZ = 657;
+
+            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
+            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
+            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
+            parameters.MSGeneratorParameters.NumImsScansToSum = 7;
+            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
+            parameters.ThrashParameters.MinIntensityForDeletion = 10;
+            parameters.MiscMSProcessingParameters.SaturationThreshold = 6000;
+
+            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
+
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            //workflow.ExportData = false;
+            workflow.Execute();
+        }
 
         [Test]
         public void saturatedFixingTest1()
