@@ -11,6 +11,7 @@ using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Utilities;
 using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
@@ -246,44 +247,36 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     }
                     stringBuilder.Append(Environment.NewLine);
 
+                    #region Paul addition
+                    //paul addition
+                    //IsotopicProfile mymsFeature=null;
+                    #endregion
                     if (Parameters.CheckAllPatternsAgainstChargeState1)
                     {
                         msfeature = potentialMSFeaturesForGivenChargeState.FirstOrDefault(n => n.ChargeState == 1);
                     }
                     else
                     {
-
+                        #region Paul addition
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
-                        //We need some test cases to capture this problem. 
-                        if (potentialChargeStates.Contains(10))
-                        {
-                            int x = potentialChargeStates.Count();
-                        }
-                        string fileName =
-                            @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                        //We need some test cases to capture this problem.                         
+                        //bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
+                        //                      _run.ResultCollection.MSPeakResultList.Count == 0;                        
+                        //if (peaksNotLoaded)
+                        //{
+                        //    LoadPeaks(_run);
+                        //}
+                        //var brain = new ChromCorrelatingChargeDecider(_run);
+                        //mymsFeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
+                        #endregion
 
 
-                        bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
-                                              _run.ResultCollection.MSPeakResultList.Count == 0;
-                        
-                        if (peaksNotLoaded)
-                        {
-                            LoadPeaks(_run);
-                        }
-
-                        var brain = new ChromCorrelatingChargeDecider(_run);
-                        var mymsFeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
-                        
-                        
                         msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                      where n.Score < 0.15
                                      orderby n.ChargeState descending
                                      select n).FirstOrDefault();
-                        if (msfeature != null)
-                        {
-                            Console.WriteLine(msfeature.ChargeState == mymsFeature.ChargeState);
-                            Console.WriteLine();
-                        }
+
+
                     }
 
 
@@ -293,8 +286,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                      orderby n.Score
                                      select n).First();
                     }
-
-
+                    #region Paul Addition
+                    //if (msfeature != null && mymsFeature != null)
+                    //{
+                    //    string reportString = "\nI CHOOSE CHARGE: " + mymsFeature.ChargeState + "\n" +
+                    //        (msfeature.ChargeState == mymsFeature.ChargeState).ToString() + "\n";
+                    //    IqLogger.Log.Debug(reportString);
+                    //}
+                    #endregion
 
                 }
 
@@ -328,6 +327,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private void LoadPeaks(Run run)
         {
+            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            RunUtilities.GetPeaks(run, sourcePeaksFile);
+
             //create / load 
             //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them. 
         }
