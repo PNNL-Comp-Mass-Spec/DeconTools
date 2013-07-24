@@ -568,9 +568,13 @@ namespace DeconTools.Backend.Workflows
             
             int indexMostAbundantPeakTheor = theorIsotopicProfile.GetIndexOfMostIntensePeak();
 
-            if (iso.Peaklist.Count < indexMostAbundantPeakTheor)
+            if (iso.Peaklist.Count > indexMostAbundantPeakTheor)
             {
                 iso.IntensityMostAbundantTheor = iso.Peaklist[indexMostAbundantPeakTheor].Height;
+            }
+            else
+            {
+                iso.IntensityMostAbundantTheor = iso.IntensityMostAbundant;
             }
 
 
