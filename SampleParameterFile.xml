@@ -4,7 +4,7 @@
 	<PeakParameters>
 		<PeakBackgroundRatio>3</PeakBackgroundRatio>
 		<SignalToNoiseThreshold>2</SignalToNoiseThreshold>
-		<PeakFitType>Hello</PeakFitType>
+		<PeakFitType>Quadratic</PeakFitType>
 		<WritePeaksToTextFile>True</WritePeaksToTextFile>
 		<IsDataThresholded>True</IsDataThresholded>
 	</PeakParameters>
@@ -12,7 +12,7 @@
 		<TagFormula />
 		<AveragineFormula>C4.9384 H7.7583 N1.3577 O1.4773 S0.0417</AveragineFormula>
 		<DeleteIntensityThreshold>1</DeleteIntensityThreshold>
-		<MaxFit>0.3</MaxFit>
+		<MaxFit>0.4</MaxFit>
 		<MinIntensityForScore>10</MinIntensityForScore>
 		<MaxCharge>10</MaxCharge>
 		<MaxMW>10000</MaxMW>
@@ -37,7 +37,6 @@
 		<UseRAPIDDeconvolution>False</UseRAPIDDeconvolution>
 		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
 		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
-		<UseThrashV1>false</UseThrashV1>
 	</HornTransformParameters>
 	<Miscellaneous>
 		<UseScanRange>False</UseScanRange>

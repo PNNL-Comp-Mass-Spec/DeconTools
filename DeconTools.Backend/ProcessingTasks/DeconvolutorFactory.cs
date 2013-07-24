@@ -1,4 +1,5 @@
-﻿using DeconTools.Backend.Core;
+﻿using System;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
@@ -47,6 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             else
             {
+                throw new NotSupportedException("The new THRASH is under active development and is not currently available.");
                 decon = new ThrashDeconvolutorV2(parameters.ThrashParameters);
             }
             

@@ -340,8 +340,6 @@ namespace DeconTools.Backend.Workflows
                 ExecuteTask(Smoother);
             }
 
-
-
             ExecuteTask(PeakDetector);
 
             ExecuteTask(Deconvolutor);
