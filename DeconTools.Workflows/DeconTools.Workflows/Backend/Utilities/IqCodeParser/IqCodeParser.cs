@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
@@ -115,6 +116,17 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 				return false;
 			}
 			return true;
+		}
+
+		public List<double> GetPTMList(string code)
+		{
+			List<double> ptmMasses = new List<double>();
+			MatchCollection masses = Regex.Matches(code, PtmExpression);
+			foreach (Match match in masses)
+			{
+				ptmMasses.Add(Convert.ToDouble(match.Value));
+			}
+			return ptmMasses;
 		}
 
 		#endregion

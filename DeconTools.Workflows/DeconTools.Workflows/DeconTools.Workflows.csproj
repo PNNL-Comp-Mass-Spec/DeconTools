@@ -68,8 +68,10 @@
     <Compile Include="Backend\Core\ChargeStateChildTopDownIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakAnalyzerIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakDeciderIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakDeciderTopDownIqWorkflow.cs" />
     <Compile Include="Backend\Core\ChromPeakIqTarget.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\BasicChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChargeCorrelationData.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChargeCorrelationItem.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\IqChargeCorrelator.cs" />
     <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakAnalyzer.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Backend\Core\O16O18IqResult.cs" />
     <Compile Include="Backend\Core\O16O18ParentIqWorkflow.cs" />
     <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownIqResult.cs" />
     <Compile Include="Backend\Core\TopDownIqTarget.cs" />
     <Compile Include="Backend\Core\IQTargetUtilities.cs" />
     <Compile Include="Backend\Core\IQWorkflow.cs" />

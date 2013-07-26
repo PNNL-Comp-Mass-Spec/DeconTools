@@ -11,6 +11,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 	{
 		public ChargeCorrelationItem()
 		{
+			ReferenceTarget = new ChromPeakIqTarget();
 			PeakCorrelationData = new Dictionary<ChromPeakIqTarget, ChromCorrelationData>();
 		}
 

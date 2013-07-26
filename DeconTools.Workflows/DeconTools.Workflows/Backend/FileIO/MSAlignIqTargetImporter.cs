@@ -142,6 +142,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 			target.DatabaseReference = ParseStringField(processedGroup[0], ProteinNameHeader);
 			target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);
 			target.EmpiricalFormula = parser.GetEmpiricalFormulaFromSequence(target.Code);
+			target.PTMList = parser.GetPTMList(target.Code);
 			target.MonoMassTheor = ParseDoubleField(processedGroup[0], AdjustedPrecursorMassHeader);
 			List<IqTarget> children = new List<IqTarget>();
 

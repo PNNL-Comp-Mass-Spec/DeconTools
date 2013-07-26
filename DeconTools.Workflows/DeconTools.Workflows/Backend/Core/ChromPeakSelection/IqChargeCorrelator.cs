@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 		#endregion
 
-		public List<ChargeCorrelationItem> CorrelateData(List<ChromPeakIqTarget> targetList, Run run, double correlationThreshold = 0.8, int peaksToCorrelate = 3)
+		public ChargeCorrelationData CorrelateData(List<ChromPeakIqTarget> targetList, Run run, double correlationThreshold = 0.8, int peaksToCorrelate = 3)
 		{
 			List<ChargeCorrelationItem> correlationList = new List<ChargeCorrelationItem>();
 			List<ChromPeakIqTarget> availableTargets = new List<ChromPeakIqTarget>(targetList);
@@ -99,7 +99,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 				availableTargets.Remove(referenceTarget);
 				correlationList.Add(referenceCorrelationData);
 			}
-			return correlationList;
+			ChargeCorrelationData chargeCorrelationData = new ChargeCorrelationData();
+			chargeCorrelationData.CorrelationData = correlationList;
+			return chargeCorrelationData;
 		}
 
 		private void GetBaseScanRange(ChromPeak referencePeak, out int startScan, out int stopScan)

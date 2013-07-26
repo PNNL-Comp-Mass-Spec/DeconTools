@@ -19,11 +19,11 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		[Test]
 		public void MSAlignTargetDataTest()
 		{
-			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_fullTargetset.txt";
-			string resultsFolder = @"\\protoapps\UserData\Fujimoto\Data_For_Sangtae\Results";
+			string testFile = @"\\pnl\projects\MSSHARE\Zhe\252778_CPTAC_Peptidome_Test1_P1_13Jan12_Polaroid_11-10-14.raw";
+			string targetsFile = @"\\pnl\projects\MSSHARE\Zhe\grant_modified_targets.txt";
+			string resultsFolder = @"\\pnl\projects\MSSHARE\Zhe";
 
-			Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\Data_For_Sangtae\SBEP_STM_001_02222012_Aragon.txt");
+			//Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\detailed_results.txt");
 			
 			
 
@@ -31,6 +31,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			executorBaseParameters.ChromGenSourceDataPeakBR = 3;
 			executorBaseParameters.ChromGenSourceDataSigNoise = 2;
 			executorBaseParameters.TargetsFilePath = targetsFile;
+			executorBaseParameters.OutputFolderBase = resultsFolder;
 
 			Run run = new RunFactory().CreateRun(testFile);
 
@@ -47,7 +48,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
 			//define workflows for parentTarget and childTargets
 
-			var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
+			var parentWorkflow = new ChromPeakDeciderTopDownIqWorkflow(run, targetedWorkflowParameters);
 			var childWorkflow = new ChargeStateChildTopDownIqWorkflow(run, targetedWorkflowParameters);
 
 			IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();

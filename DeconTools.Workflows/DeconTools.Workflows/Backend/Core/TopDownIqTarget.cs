@@ -15,6 +15,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 		}
 
+		public List<double> PTMList { get; set; } 
+
 		/// <summary>
 		/// Removes redundant charge state targets and adds in missing targets within range. 
 		/// </summary>

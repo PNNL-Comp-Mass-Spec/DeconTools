@@ -200,6 +200,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                         chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData.Xvalues, chromPeakXYData);
 
+
                         GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
                                                                           out slope, out intercept, out rsquaredVal);
 
