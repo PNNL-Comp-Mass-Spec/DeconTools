@@ -88,8 +88,6 @@
     <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorUIMF.cs" />
     <Compile Include="Backend\Core\IQChargeStateTarget.cs" />
     <Compile Include="Backend\Core\IQExecutor.cs" />
-    <Compile Include="Backend\Core\IQMillionWorkflow.cs" />
-    <Compile Include="Backend\Core\IQMillionWorkflowParameters.cs" />
     <Compile Include="Backend\Core\IQResult.cs" />
     <Compile Include="Backend\Core\IqResultDetail.cs" />
     <Compile Include="Backend\Core\IqResultUtilities.cs" />

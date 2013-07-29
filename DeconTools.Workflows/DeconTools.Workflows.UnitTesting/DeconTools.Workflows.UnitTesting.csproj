@@ -87,7 +87,6 @@
     <Compile Include="UtilitiesTests\PeakMatchedResultUtilitiesTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowParametersTests.cs" />
     <Compile Include="WorkflowTests\BasicTargetedWorkflowTests.cs" />
-    <Compile Include="WorkflowTests\IQMillionTests.cs" />
     <Compile Include="IqUnitTesting\ChromPeakAnalyzerIqWorkflowTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IQExecutorTests.cs" />
     <Compile Include="WorkflowTests\IQWorkflowTests\IqMassAndNetAlignerWorkflowTests.cs" />
