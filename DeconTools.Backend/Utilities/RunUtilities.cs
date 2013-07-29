@@ -138,11 +138,14 @@ namespace DeconTools.Backend.Utilities
             return CreateAndAlignRun(filename, null);
         }
 
-        private static void GetPeaks(Run run, string expectedPeaksFile)
+		public static void GetPeaks(Run run, string expectedPeaksFile, BackgroundWorker bw = null)
         {
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.WorkerReportsProgress = true;
-            bw.WorkerSupportsCancellation = true;
+			if(bw == null)
+			{
+				bw = new BackgroundWorker();
+				bw.WorkerReportsProgress = true;
+				bw.WorkerSupportsCancellation = true;
+			}
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -358,7 +361,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile)
+        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
         {
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(rawdataFilename);
@@ -378,7 +381,7 @@ namespace DeconTools.Backend.Utilities
                 sourcePeaksFile = peaksTestFile;
             }
 
-            GetPeaks(run, sourcePeaksFile);
+            GetPeaks(run, sourcePeaksFile, bw);
 
         	// Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
