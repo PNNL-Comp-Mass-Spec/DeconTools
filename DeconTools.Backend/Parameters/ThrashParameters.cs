@@ -1,8 +1,9 @@
-﻿
+﻿using System;
 using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
+	[Serializable]
     public class ThrashParameters : ParametersBase
     {
 

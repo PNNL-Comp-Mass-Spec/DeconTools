@@ -8,7 +8,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DeconTools.Backend.Utilities
 {
-
+	/// <summary>
+	/// Reference Article "http://www.codeproject.com/KB/tips/SerializedObjectCloner.aspx"
+	/// Provides a method for performing a deep copy of an object.
+	/// Binary Serialization is used to perform the copy.
+	/// </summary>
+	/// <remarks>Described at "http://stackoverflow.com/questions/78536/deep-cloning-objects-in-c-sharp"</remarks>
     public static class ObjectCopier
     {
         /// <summary>

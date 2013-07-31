@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
+	[Serializable]
     public abstract class ParametersBase
     {
 

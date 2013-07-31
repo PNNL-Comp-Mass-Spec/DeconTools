@@ -1,9 +1,10 @@
-﻿
+﻿using System;
 using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
-    public class PeakDetectorParameters: ParametersBase
+	[Serializable]
+    public class PeakDetectorParameters : ParametersBase
     {
 
         #region Constructors

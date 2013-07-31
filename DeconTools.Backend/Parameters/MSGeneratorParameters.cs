@@ -1,9 +1,10 @@
-
+using System;
 using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
-    public class MSGeneratorParameters : ParametersBase
+	[Serializable]
+	public class MSGeneratorParameters : ParametersBase
     {
 
         public MSGeneratorParameters()

@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
+	[Serializable]
     public class DeconToolsParameters
     {
 
@@ -38,6 +39,13 @@ namespace DeconTools.Backend.Parameters
         #endregion
 
         #region Public Methods
+
+		public DeconToolsParameters Clone()
+		{
+			var newParams = DeconTools.Backend.Utilities.ObjectCopier.Clone(this);
+		
+			return newParams;
+		}
 
         public void LoadFromOldDeconToolsParameterFile(string xmlFilename)
         {

@@ -39,8 +39,8 @@ namespace DeconTools.Backend.Workflows
 
         protected MSGenerator MSGenerator;
         protected PeakDetector PeakDetector;
-        protected Deconvolutor Deconvolutor;
-        protected ZeroFiller ZeroFiller;
+		protected Deconvolutor Deconvolutor;
+		protected ZeroFiller ZeroFiller;
         protected Smoother Smoother;
 
         protected ScanResultUpdater ScanResultUpdater;
@@ -209,12 +209,8 @@ namespace DeconTools.Backend.Workflows
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
-
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
-
-
-
-
+			
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);
             Smoother = new SavitzkyGolaySmoother(NewDeconToolsParameters.MiscMSProcessingParameters.SavitzkyGolayNumPointsInSmooth,
@@ -330,7 +326,10 @@ namespace DeconTools.Backend.Workflows
         {
             ExecuteTask(MSGenerator);
 
-            if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
+			// We will auto-enable ZeroFilling if the spectrum is centroided
+			bool isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
+
+			if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling || isCentroided)
             {
                 ExecuteTask(ZeroFiller);
             }
@@ -340,10 +339,9 @@ namespace DeconTools.Backend.Workflows
                 ExecuteTask(Smoother);
             }
 
-            ExecuteTask(PeakDetector);
-
-            ExecuteTask(Deconvolutor);
-
+			ExecuteTask(PeakDetector);
+			ExecuteTask(Deconvolutor);
+           
             ExecuteTask(ResultValidator);
 
             ExecuteTask(ScanResultUpdater);

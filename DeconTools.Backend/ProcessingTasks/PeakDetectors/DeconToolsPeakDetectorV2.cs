@@ -128,17 +128,59 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             switch (RawDataType)
             {
                 case Globals.RawDataType.Centroided:
+					// Find the median width between any two adjacent x values that are less than 0.2 Th apart and have positive abundances
+
+					var peakWidths = new List<double>();
+					float peakWidth = 0.01F;
+
+					int currentIndex = startIndex;
+					while (currentIndex < stopIndex)
+					{
+						int nextIndex = currentIndex + 1;
+						if (yvalues[currentIndex] > 0)
+						{							
+							while (nextIndex < stopIndex && yvalues[nextIndex] == 0)
+							{
+								nextIndex += 1;
+							}
+
+							if (yvalues[nextIndex] > 0)
+							{
+								double currentWidth = (float)(xvalues[nextIndex] - xvalues[currentIndex]);
+								if (currentWidth < 0.2)
+									peakWidths.Add(currentWidth);
+							}
+						}
+						currentIndex = nextIndex;
+					}
+				
+					if (peakWidths.Count > 0)
+						peakWidth = (float)(MathUtils.GetMedian(peakWidths) / 2);
+
+					if (peakWidth < 0.01)
+						peakWidth = 0.01F;
+
                     for (int index = startIndex; index <= stopIndex; index++)
                     {
                         double currentIntensity = yvalues[index];
-                        if (currentIntensity >= _intensityThreshold)
-                        {
-                            var peak = CreatePeak(xvalues[index], (float)yvalues[index]);
-                            peak.DataIndex = index;
-                            peakList.Add(peak);
 
+						double signalToNoise = -1;
+                        if (IsDataThresholded)
+                        {
+							if (BackgroundIntensity > 0)
+								signalToNoise = currentIntensity / BackgroundIntensity;
+							else
+								signalToNoise = currentIntensity;
+                        }
+                        else
+                        {
+                            signalToNoise = CalculateSignalToNoise(yvalues, index);
                         }
 
+						var peak = CreatePeak(xvalues[index], (float)yvalues[index], peakWidth, (float)signalToNoise);
+                        peak.DataIndex = index;							
+                        peakList.Add(peak);
+                        
                     }
 
                     break;
@@ -334,7 +376,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     throw new NotImplementedException();
 
                 case Globals.PeakFitType.APEX:
-                    throw new NotImplementedException();
+					return xvalues[index];
 
                 case Globals.PeakFitType.LORENTZIAN:
                     throw new NotImplementedException();
@@ -352,6 +394,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         }
 
+		/// <summary>
+		/// Examine the 3 data points surrounding the given data point to compute an interpolated x value for where the peak apex most likely lies
+		/// </summary>
+		/// <param name="xvalues"></param>
+		/// <param name="yvalues"></param>
+		/// <param name="index"></param>
+		/// <returns>The interpolated x value</returns>
         private double CalculateQuadraticFittedValue(double[] xvalues, double[] yvalues, int index)
         {
             if (index < 1)

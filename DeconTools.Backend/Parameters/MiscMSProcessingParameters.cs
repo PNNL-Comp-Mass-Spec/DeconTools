@@ -1,9 +1,10 @@
-﻿
+﻿using System;
 using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
-    public class MiscMSProcessingParameters:ParametersBase
+	[Serializable]
+    public class MiscMSProcessingParameters : ParametersBase
     {
 
         #region Constructors
