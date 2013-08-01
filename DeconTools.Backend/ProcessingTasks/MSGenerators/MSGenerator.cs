@@ -4,8 +4,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
     public abstract class MSGenerator : Task
     {
-
-
         public bool IsTICRequested { get; set; }
 
         public virtual double MinMZ { get; set; }
@@ -18,28 +16,30 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         public override void Execute(ResultCollection resultList)
         {
-
             resultList.Run.XYData = GenerateMS(resultList.Run, resultList.Run.CurrentScanSet);
-
         }
-
-
 
         public float GetTIC(XYData xydata, double minMZ, double maxMZ)
         {
-            if (xydata == null || xydata.Xvalues == null || xydata.Yvalues == null) return -1;
+			if (xydata == null) return -1;
+
+        	double[] xValues = xydata.Xvalues;
+        	double[] yValues = xydata.Yvalues;
+
+			if (xValues == null || yValues == null) return -1;
 
             double summedIntensities = 0;
-            for (int i = 0; i < xydata.Yvalues.Length; i++)
-            {
-                if (xydata.Xvalues[i] > minMZ && xydata.Xvalues[i] < maxMZ)
+			for (int i = 0; i < yValues.Length; i++)
+			{
+				double xValue = xValues[i];
+
+				if (xValue > minMZ && xValue < maxMZ)
                 {
-                    summedIntensities += xydata.Yvalues[i];
+					summedIntensities += yValues[i];
                 }
             }
 
             return (float)summedIntensities;
         }
-
     }
 }
