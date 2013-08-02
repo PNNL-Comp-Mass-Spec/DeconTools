@@ -6,28 +6,19 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
     public class GenericMSGenerator : MSGenerator
     {
-
-
-
         public GenericMSGenerator()
-            : this(0, 5000)
+            : this(0, 5000, true)
         {
 
         }
 
-
-
-
-        public GenericMSGenerator(double minMZ, double maxMZ)
+        public GenericMSGenerator(double minMZ, double maxMZ, bool isTicRequested)
         {
             this.MinMZ = minMZ;
             this.MaxMZ = maxMZ;
 
-            this.IsTICRequested = true;
-
+			this.IsTICRequested = isTicRequested;
         }
-
-
        
         public override XYData GenerateMS(Run run, ScanSet lcScanset, ScanSet imsscanset=null)
         {
@@ -46,8 +37,5 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
             return xydata;
         }
-
-
-
     }
 }
