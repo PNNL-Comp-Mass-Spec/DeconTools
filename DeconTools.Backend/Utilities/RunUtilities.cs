@@ -137,15 +137,12 @@ namespace DeconTools.Backend.Utilities
         {
             return CreateAndAlignRun(filename, null);
         }
-
-		public static void GetPeaks(Run run, string expectedPeaksFile, BackgroundWorker bw = null)
+        //paul changed to public.
+        public static void GetPeaks(Run run, string expectedPeaksFile)
         {
-			if(bw == null)
-			{
-				bw = new BackgroundWorker();
-				bw.WorkerReportsProgress = true;
-				bw.WorkerSupportsCancellation = true;
-			}
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -361,7 +358,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
+        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile)
         {
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(rawdataFilename);
@@ -381,7 +378,7 @@ namespace DeconTools.Backend.Utilities
                 sourcePeaksFile = peaksTestFile;
             }
 
-            GetPeaks(run, sourcePeaksFile, bw);
+            GetPeaks(run, sourcePeaksFile);
 
         	// Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
@@ -390,12 +387,11 @@ namespace DeconTools.Backend.Utilities
 		public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
 		{
 			HashSet<int> primaryLcScanNumbers = new HashSet<int>();
-
-			foreach (var msPeakResult in msPeaks)
-			{
-				int scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
-				primaryLcScanNumbers.Add(scan);
-			}
+            foreach (var msPeakResult in msPeaks)
+            {
+                int scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
+                primaryLcScanNumbers.Add(scan);
+            }
 
 			return primaryLcScanNumbers.ToList();
 		}
