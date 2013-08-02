@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Runs
             ContainsMSMSData = true;
             XYData = new XYData();
 
-            ParentScanList = new SortedDictionary<int, int>();
+            ParentScanList = new Dictionary<int, int>();
 
         }
 
@@ -385,17 +385,20 @@ namespace DeconTools.Backend.Runs
 
             for (int i = 0; i < vals.GetLength(1); i++)
             {
-                xvals[i] = vals[0, i];
-                yvals[i] = vals[1, i];
+            	double xValue = vals[0, i];
+				double yValue = vals[1, i];
 
-				if (i > 0 && xvals[i] < xvals[i - 1])
+				xvals[i] = xValue;
+                yvals[i] = yValue;
+
+				if (i > 0 && xValue < xvals[i - 1])
 					sortRequired = true;
             }
 
 			if (sortRequired)
 				Array.Sort(xvals, yvals);
 
-            XYData xydata=new XYData();
+            XYData xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
 

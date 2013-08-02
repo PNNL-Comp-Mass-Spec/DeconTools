@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Core
             ScanSetCollection = new ScanSetCollection();
             ResultCollection = new ResultCollection(this);
             XYData = new XYData();
-            MSLevelList = new SortedDictionary<int, byte>();
+            MSLevelList = new Dictionary<int, byte>();
             PrimaryLcScanNumbers = new List<int>();
 
             IsMsAbundanceReportedAsAverage = false;
@@ -186,11 +186,13 @@ namespace DeconTools.Backend.Core
 		/// <returns>1 for MS1, 2 for MS2</returns>
 		/// <remarks>UIMF calibration frames will be reported as MSLevel 0</remarks>
         public virtual int GetMSLevel(int scanNum)
-        {
+		{
+			byte msLevel;
+
             // check to see if we have a value already stored
-            if (this.MSLevelList.ContainsKey(scanNum))
+            if (this.MSLevelList.TryGetValue(scanNum, out msLevel))
             {
-                return this.MSLevelList[scanNum];
+                return msLevel;
             }
             // if not, look up MSLevel from Raw data
             else
@@ -449,9 +451,9 @@ namespace DeconTools.Backend.Core
 
         }
 
-        protected SortedDictionary<int, byte> MSLevelList { get; set; }
+        protected Dictionary<int, byte> MSLevelList { get; set; }
 
-        protected SortedDictionary<int, int> ParentScanList { get; set; }
+        protected Dictionary<int, int> ParentScanList { get; set; }
 
         /// <summary>
         /// This indicates whether or not the intensity values from a summed/averaged mass spectrum is reported as an average or not.
