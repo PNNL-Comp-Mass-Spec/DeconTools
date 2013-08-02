@@ -18,11 +18,11 @@ namespace DeconTools.Backend.Core
             this.ResultList = new List<IsosResult>();
             this.MassTagResultList = new Dictionary<TargetBase, TargetedResultBase>();
             this.scanResultList = new List<ScanResult>();
+			this.msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
             this.MSPeakResultList = new List<MSPeakResult>();
             this.m_IsosResultBin = new List<IsosResult>(10);
             this.logMessageList = new List<string>();
             this.ElutingPeakCollection = new List<ElutingPeak>();
-			this.msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
         }
 
         #endregion
