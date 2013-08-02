@@ -277,41 +277,41 @@ namespace DeconTools.Backend.Algorithms
 
             if (peakListMinScan < 0) peakListMinScan = 0;
 
-            //populate array with zero intensities.
-            SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
+            //populate dictionary with zero intensities.
+			Dictionary<int, double> xyValues = new Dictionary<int, double>(peakListMaxScan - peakListMinScan + 1);
             for (int i = peakListMinScan; i <= peakListMaxScan; i++)
             {
-            	xyValues[i] = 0;
+				xyValues.Add(i, 0);
             }
 
-            //iterate over the peaklist, assign chromID,  and extract intensity values
+			//iterate over the peaklist, assign chromID,  and extract intensity values
 			for (int i = 0; i < filteredPeakListCount; i++)
-            {
-                MSPeakResult peakResult = filteredPeakList[i];
+			{
+				MSPeakResult peakResult = filteredPeakList[i];
 
-                //NOTE:   we assign the chromID here. 
-                peakResult.ChromID = chromID;
+				//NOTE:   we assign the chromID here. 
+				peakResult.ChromID = chromID;
 
-                double intensity = peakResult.MSPeak.Height;
-            	int scanNumber = peakResult.Scan_num;
+				double intensity = peakResult.MSPeak.Height;
+				int scanNumber = peakResult.Scan_num;
 
-                //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
-                
-                if (!xyValues.ContainsKey(scanNumber))
-                {
+				//because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
+
+				if (!xyValues.ContainsKey(scanNumber))
+				{
 					string errorString = "Unexpected error in chromatogram generator!! Scan= " + scanNumber +
 										 "; num filtered peaks = " + filteredPeakListCount;
 
-                    Console.WriteLine(errorString);
-                    
-                    throw new InvalidProgramException(errorString);
-                }
+					Console.WriteLine(errorString);
+
+					throw new InvalidProgramException(errorString);
+				}
 
 				if (intensity > xyValues[scanNumber])
-                {
+				{
 					xyValues[scanNumber] = intensity;
-                }
-            }
+				}
+			}
 
             XYData outputXYData = new XYData();
 
@@ -373,12 +373,13 @@ namespace DeconTools.Backend.Algorithms
             if (leftIndex < rightIndex)
             {
                 int middle = (leftIndex + rightIndex) / 2;
+            	int scanNumber = peakList[middle].Scan_num;
 
-                if (Math.Abs(targetScan - peakList[middle].Scan_num) <= scanTolerance)
+				if (Math.Abs(targetScan - scanNumber) <= scanTolerance)
                 {
                     return middle;
                 }
-                else if (targetScan < peakList[middle].Scan_num)
+				else if (targetScan < scanNumber)
                 {
                     return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
                 }
