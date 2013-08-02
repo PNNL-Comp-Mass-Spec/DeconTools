@@ -49,25 +49,110 @@ namespace DeconTools.Backend.Algorithms
             return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, tolerance, chromIDToAssign, toleranceUnit);
         }
 
+		/// <summary>
+		/// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
+		/// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
+		/// that encompass individual peaks of an isotopic profile. 
+		/// </summary>
+		/// <param name="msPeakList"></param>
+		/// <param name="minScan"></param>
+		/// <param name="maxScan"></param>
+		/// <param name="targetMZList"></param>
+		/// <param name="tolerance"></param>
+		/// <returns></returns>
+		public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+		{
+			int defaultChromID = 0;
+
+			return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
+		}
+
         /// <summary>
         /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
         /// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
         /// that encompass individual peaks of an isotopic profile. 
         /// </summary>
-        /// <param name="msPeakList"></param>
+		/// <param name="groupedMsPeakList"></param>
         /// <param name="minScan"></param>
         /// <param name="maxScan"></param>
         /// <param name="targetMZList"></param>
         /// <param name="tolerance"></param>
         /// <returns></returns>
-        public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+		public XYData GenerateChromatogram(Dictionary<int, List<MSPeakResult>> groupedMsPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             int defaultChromID = 0;
 
-            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
+			return GenerateChromatogram(groupedMsPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
         }
 
         //TODO:  make a ChromatogramObject that will help handle my MSPeakResults, etc.
+		public XYData GenerateChromatogram(Dictionary<int, List<MSPeakResult>> groupedMsPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+		{
+			Check.Require(groupedMsPeakList != null && groupedMsPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+
+			int scanTolerance = 5;     // TODO:   keep an eye on this
+
+			List<MSPeakResult> msPeakResultList;
+
+			AnonymousComparer<MSPeakResult> comparer = new AnonymousComparer<MSPeakResult>((x, y) => x.MSPeak.XValue.CompareTo(y.MSPeak.XValue));
+			List<MSPeakResult> tempPeakList = new List<MSPeakResult>();
+
+			for (int i = minScan - scanTolerance; i < maxScan + scanTolerance; i++)
+			{
+				if(groupedMsPeakList.TryGetValue(i, out msPeakResultList))
+				{
+					foreach (var targetMZ in targetMZList)
+					{
+						double lowerMZ;
+						double upperMZ;
+
+						if (toleranceUnit == Globals.ToleranceUnit.PPM)
+						{
+							lowerMZ = targetMZ - tolerance*targetMZ/1e6;
+							upperMZ = targetMZ + tolerance*targetMZ/1e6;
+						}
+						else if (toleranceUnit == Globals.ToleranceUnit.MZ)
+						{
+							lowerMZ = targetMZ - tolerance;
+							upperMZ = targetMZ + tolerance;
+						}
+						else
+						{
+							throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the " + toleranceUnit +
+							                                      " unit isn't supported");
+						}
+
+						MSPeak lowMsPeak = new MSPeak {XValue = lowerMZ};
+						MSPeakResult lowMsPeakResult = new MSPeakResult {MSPeak = lowMsPeak};
+
+						int binarySearchResult = msPeakResultList.BinarySearch(lowMsPeakResult, comparer);
+						binarySearchResult = binarySearchResult >= 0 ? binarySearchResult : ~binarySearchResult;
+
+						for (int j = binarySearchResult; j < msPeakResultList.Count; j++)
+						{
+							MSPeakResult msPeakResult = msPeakResultList[j];
+							if(msPeakResult.MSPeak.XValue <= upperMZ)
+							{
+								tempPeakList.Add(msPeakResult);
+							}
+						}
+					}
+				}
+			}
+
+			XYData chromData = null;
+
+			if (!tempPeakList.Any())
+			{
+				//TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
+			}
+			else
+			{
+				chromData = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+			}
+
+			return chromData;
+		}
 
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {

@@ -22,6 +22,7 @@ namespace DeconTools.Backend.Core
             this.m_IsosResultBin = new List<IsosResult>(10);
             this.logMessageList = new List<string>();
             this.ElutingPeakCollection = new List<ElutingPeak>();
+			this.msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
         }
 
         #endregion
@@ -36,7 +37,11 @@ namespace DeconTools.Backend.Core
         public List<MSPeakResult> MSPeakResultList
         {
             get { return mSPeakResultList; }
-            set { mSPeakResultList = value; }
+            set
+            {
+            	mSPeakResultList = value;
+            	msPeakResultsGroupedAndMzOrdered.Clear();
+            }
         }
 
         private IList<IsosResult> m_IsosResultBin;
@@ -85,6 +90,8 @@ namespace DeconTools.Backend.Core
         public Globals.ResultType ResultType { get; set; }
 
         public int PeakCounter { get; set; }
+
+    	private Dictionary<int, List<MSPeakResult>> msPeakResultsGroupedAndMzOrdered;
         #endregion
 
         #region Public Methods
@@ -93,6 +100,27 @@ namespace DeconTools.Backend.Core
             if (scanResultList == null || scanResultList.Count == 0) return null;
             return this.scanResultList[scanResultList.Count - 1];
         }
+
+		public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
+		{
+			if(msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
+			{
+				msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
+
+				if(mSPeakResultList != null)
+				{
+					// Group by scan number
+					foreach (var grouping in mSPeakResultList.GroupBy(x => x.Scan_num))
+					{
+						// Order by m/z
+						List<MSPeakResult> msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
+						msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, msPeakResultList);
+					}
+				}
+			}
+
+			return msPeakResultsGroupedAndMzOrdered;
+		}
 
         public int getTotalIsotopicProfiles()
         {
@@ -148,6 +176,7 @@ namespace DeconTools.Backend.Core
             this.ResultList.Clear();
             this.ScanResultList.Clear();
 			this.MassTagResultList.Clear();
+			this.msPeakResultsGroupedAndMzOrdered.Clear();
         }
 
         public TargetedResultBase CreateMassTagResult(TargetBase massTag)
