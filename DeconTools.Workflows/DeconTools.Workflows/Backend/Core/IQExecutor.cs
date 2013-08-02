@@ -124,7 +124,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             SetupAlignmentFolder(alignmentFolder);
 
-            string expectedAlignmentFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqAlignmentResults.txt";
+            string expectedAlignmentFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
             bool alignmentResultsExist = (File.Exists(expectedAlignmentFilename));
 
             if (alignmentResultsExist)
@@ -136,7 +136,7 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-            //Get a suitable targets file for alignment. These are grabbed from the ..\\AlignmentInfo folder. 
+            //Get a suitable targets file for alignment. These are grabbed from the ..\AlignmentInfo folder. 
             string targetFileForAlignment = GetTargetFilePathForIqAlignment();
 
 
@@ -201,12 +201,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (Parameters.IsMassAlignmentPerformed || Parameters.IsMassAlignmentPerformed)
             {
-                string exportedAlignmentIqResultsFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName +
-                                                            "_iqAlignmentResults.txt";
+                string exportedAlignmentIqResultsFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
 
                 IqMassAndNetAligner.ExportResults(exportedAlignmentIqResultsFilename);
 
-                string exportedGraphBaseFilename = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName;
+                string exportedGraphBaseFilename = Path.Combine(_alignmentFolder, Run.DatasetName);
 
                 IqMassAndNetAligner.ExportGraphs(exportedGraphBaseFilename);
 
@@ -319,7 +318,7 @@ namespace DeconTools.Workflows.Backend.Core
             
             SetupResultsFolder();
 
-            IqResultExporter.WriteOutResults(_resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_iqResults.txt", exportedResults);
+            IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, Run.DatasetName + "_iqResults.txt"), exportedResults);
         }
 
         private void SetupAlignmentFolder(string alignmentFolder= "")
@@ -330,11 +329,11 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
             {
-                _alignmentFolder = GetDefaultOutputFolder() + "\\AlignmentInfo";
+                _alignmentFolder = Path.Combine(GetDefaultOutputFolder(), "AlignmentInfo");
             }
             else
             {
-                _alignmentFolder = Parameters.OutputFolderBase + "\\AlignmentInfo";
+                _alignmentFolder = Path.Combine(Parameters.OutputFolderBase, "AlignmentInfo");
             }
 
             if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
@@ -356,7 +355,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //first look for _fht.txt file (MSGF output)
-            string targetsForAlignmentFilePath = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_msgfdb_fht.txt";
+            string targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgfdb_fht.txt");
 
             if (File.Exists(targetsForAlignmentFilePath))
             {
@@ -377,7 +376,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                _resultsFolder = Parameters.OutputFolderBase + "\\IqResults";
+                _resultsFolder = Path.Combine(Parameters.OutputFolderBase, "IqResults");
             }
 
             if (!Directory.Exists(_resultsFolder)) Directory.CreateDirectory(_resultsFolder);
@@ -403,7 +402,7 @@ namespace DeconTools.Workflows.Backend.Core
             var peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
 
-            var peaksFilename = this.Run.DataSetPath + "\\" + this.Run.DatasetName + "_peaks.txt";
+            var peaksFilename = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName + "_peaks.txt");
             return peaksFilename;
 
         }
@@ -412,7 +411,7 @@ namespace DeconTools.Workflows.Backend.Core
         private string GetPossiblePeaksFile()
         {
             string baseFileName;
-            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+            baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
             string possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -481,7 +480,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                loggingFolder = Parameters.OutputFolderBase + "\\IqLogs";
+                loggingFolder = Path.Combine(Parameters.OutputFolderBase, "IqLogs");
             }
 
 

@@ -273,7 +273,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
-            Check.Require(this.Run != null, "Run has not been defined.");
+			Check.Require(this.Run != null, "Error in TargetedWorkflow.Execute: Run has not been defined.");
 
 
             if (!IsWorkflowInitialized)

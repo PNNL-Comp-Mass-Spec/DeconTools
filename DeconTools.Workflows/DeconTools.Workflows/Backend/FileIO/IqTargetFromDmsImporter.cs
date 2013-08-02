@@ -95,7 +95,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                             }
                             catch (Exception ex)
                             {
-                                IqLogger.Log.Debug("Failed to calculate empirical formula for the Target " + target.ID +
+                                IqLogger.Log.Debug("Failed to calculate empirical formula for the Target " + target.ID + " (" + ex.Message + ")" +
                                                   "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
 
                                 

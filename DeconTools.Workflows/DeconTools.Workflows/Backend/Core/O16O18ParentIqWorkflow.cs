@@ -22,8 +22,9 @@ namespace DeconTools.Workflows.Backend.Core
         protected PeakLeastSquaresFitter PeakFitter;
 
         private DeconTools.Backend.ProcessingTasks.PeakDetectors.DeconToolsPeakDetectorV2 _mspeakDetector;
-
+		private bool _headerLogged;
         private BasicGraphControl _graphGenerator;
+
         #region Constructors
 
         public O16O18ParentIqWorkflow(Run run, TargetedWorkflowParameters parameters)
@@ -94,6 +95,12 @@ namespace DeconTools.Workflows.Backend.Core
             getRsquaredVal(result, out rsquaredVal, out slope);
             int favChargeState = result.FavoriteChild == null ? 0 : result.FavoriteChild.Target.ChargeState;
             double favMz = result.FavoriteChild == null ? 0 : result.FavoriteChild.Target.MZTheor;
+
+			if (!_headerLogged)
+			{
+				_headerLogged = true;
+				IqLogger.Log.Info("\t" + "TargetID" + "\t\t\t" + "M/Z" + "\t" + "Charge" + "\t" + "LCScan" + "\t" + "RSquared" + "\t" + "Slope");
+			}
 
             IqLogger.Log.Info("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rsquaredVal + "\t" + slope);
 

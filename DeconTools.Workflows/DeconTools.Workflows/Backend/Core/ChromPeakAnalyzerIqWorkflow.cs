@@ -19,6 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
 	/// </summary>
 	public class ChromPeakAnalyzerIqWorkflow : BasicIqWorkflow
 	{
+		protected bool _headerLogged;
 
 		#region Constructors
 
@@ -47,7 +48,6 @@ namespace DeconTools.Workflows.Backend.Core
 	    protected ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
 
 		#endregion
-
 
 		/// <summary>
 		/// Calculates Metrics based on ChromPeakIqTarget
@@ -105,7 +105,8 @@ namespace DeconTools.Workflows.Backend.Core
 			{
                 //Get fit score
                 List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
-                fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p=>(Peak)p).ToList(), observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+				double minIntensityForScore = 0.05;
+				fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
 				iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
@@ -146,12 +147,17 @@ namespace DeconTools.Workflows.Backend.Core
 			ChromPeakIqTarget target = result.Target as ChromPeakIqTarget;
 			if (target == null)
 			{
-				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget."
-					+ "Due to an inherent shortcomming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error."
+				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget. "
+					+ "Due to an inherent shortcoming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error. "
 					+ "Please change the IqTarget to ChromPeakIqTarget for proper use of the ChromPeakAnalyzerIqWorkflow.");
 			}
 
-			
+			if (!_headerLogged)
+			{
+				_headerLogged = true;
+				IqLogger.Log.Debug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
+			}
+
 			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" + 
 				result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
 		}

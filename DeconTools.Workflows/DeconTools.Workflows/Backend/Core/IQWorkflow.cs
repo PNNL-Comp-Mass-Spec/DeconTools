@@ -263,7 +263,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void Execute(IqResult result)
         {
-            Check.Require(this.Run != null, "Run has not been defined.");
+			Check.Require(this.Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
 
 
             if (!IsWorkflowInitialized)
