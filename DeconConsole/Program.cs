@@ -12,6 +12,8 @@ namespace DeconConsole
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
+		public const string PROGRAM_DATE = "August 5, 2013";
+
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
 
@@ -22,7 +24,7 @@ namespace DeconConsole
 
             Console.WriteLine("Starting..............");
 
-            if (args.Length > 3)
+			if (args.Length < 2 || args.Length > 3)
             {
                 ReportSyntax();
                 return 1;
@@ -30,7 +32,6 @@ namespace DeconConsole
 
             string filename = args[0];
             string parameterFilename = args[1];
-
 
             string outputFolder = null;
             if (args.Length == 3)
@@ -65,12 +66,12 @@ namespace DeconConsole
 
             if (!IsFileValid(filename))
             {
-                ReportFileProblem(filename);
+                ReportFileProblem(filename, "Dataset file (or folder)");
                 return 4;
             }
             if (!IsFileValid(parameterFilename))
             {
-                ReportFileProblem(parameterFilename);
+                ReportFileProblem(parameterFilename, "Parameter file");
                 return 4;
             }
 
@@ -104,12 +105,12 @@ namespace DeconConsole
 			return 0;
         }
 
-        private static void ReportFileProblem(string filename)
+        private static void ReportFileProblem(string filename, string fileDescription)
         {
             Console.WriteLine("------------- ERROR! ---------------------");
             Console.WriteLine(string.IsNullOrEmpty(filename)
-                                  ? "The path of your file has no characters!"
-                                  : "Inputted filename does not exist");
+                                  ? "The path of your " + fileDescription + " has no characters!"
+								  : fileDescription + " not found: " + filename);
             Console.WriteLine();
         }
 
@@ -121,13 +122,30 @@ namespace DeconConsole
             return false;
         }
 
+		private static string GetAppVersion()
+		{
+			return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " (" + PROGRAM_DATE + ")";
+		}
+
         private static void ReportSyntax()
         {
-            Console.WriteLine("This Commandline app requires two arguments (with spaces between).");
-            Console.WriteLine("\tArg1 = filename");
-            Console.WriteLine("\tArg2 = parameter filename");
-            Console.WriteLine("\tArg3 = [optional] output folder  [Default = same as raw data folder]");
-            Console.WriteLine();
+			string exeName = System.IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+			Console.WriteLine();
+            Console.WriteLine("This program will accept 2 or 3 arguments (with spaces between).");
+            Console.WriteLine("  Arg1 = filename");
+            Console.WriteLine("  Arg2 = parameter filename");
+            Console.WriteLine("  Arg3 = [optional] output folder  [Default = same as raw data folder]");
+			Console.WriteLine();
+			Console.WriteLine("Example usage:");
+            Console.WriteLine("  " + exeName + " QCDataset.raw SampleParameterFile.xml");
+			Console.WriteLine();
+			Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
+			Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
+			Console.WriteLine("Version: " + GetAppVersion());
+			Console.WriteLine();
+
+			System.Threading.Thread.Sleep(1000);
         }
     }
 }
