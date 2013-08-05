@@ -26,6 +26,8 @@ namespace DeconTools.Backend.Workflows
     {
         private const int PeakListExporterTriggerValue = 10000;
 
+        private bool _deconvolutorRequiresPeaksFile = false;
+
         internal string PeakListOutputFileName;
         internal string IsosOutputFileName;
         internal string ScansOutputFileName;
@@ -210,6 +212,11 @@ namespace DeconTools.Backend.Workflows
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
+
+            if (Deconvolutor is DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashDeconvolutorV2)
+            {
+                _deconvolutorRequiresPeaksFile = true;
+            }
 			
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);
@@ -291,6 +298,10 @@ namespace DeconTools.Backend.Workflows
             WorkflowStats = new WorkflowStats();
             WorkflowStats.TimeStarted = DateTime.Now;
 
+            if (_deconvolutorRequiresPeaksFile)
+            {
+                CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
+            }
 
             IterateOverScans();
 
@@ -300,6 +311,8 @@ namespace DeconTools.Backend.Workflows
             WriteOutSummaryToLogfile();
 
         }
+
+      
 
         protected virtual void WriteOutSummaryToLogfile()
         {
@@ -419,6 +432,13 @@ namespace DeconTools.Backend.Workflows
         #endregion
 
         #region Private Methods
+
+        private void CreatePeaksFile(PeakDetectorParameters peakDetectorParameters, string outputFolderPath)
+        {
+            throw new NotImplementedException();
+        }
+
+
         protected virtual Globals.ResultType GetResultType()
         {
             if (Run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
