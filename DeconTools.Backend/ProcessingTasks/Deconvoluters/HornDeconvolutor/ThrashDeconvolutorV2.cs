@@ -12,12 +12,15 @@ using DeconTools.Utilities;
 using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
+using System.Diagnostics;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
     public class ThrashDeconvolutorV2 : Deconvolutor
     {
-
+        #region Paul Addition
+        static bool doPaulMethod = false;
+        #endregion
         private Run _run;
 
         private readonly PattersonChargeStateCalculator _chargeStateCalculator = new PattersonChargeStateCalculator();
@@ -105,10 +108,19 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             List<Peak> mspeakList,
             double backgroundIntensity = 0,
             double minPeptideIntensity = 0, double
-            minMSFeatureToBackgroundRatio = 1)
+            minMSFeatureToBackgroundRatio = 3)
         {
 
             List<IsotopicProfile> isotopicProfiles = new List<IsotopicProfile>();
+            #region Paul Addition
+
+            List<IsotopicProfile> myIsotopicProfiles = new List<IsotopicProfile>();
+            List<IsotopicProfile> otherIsotopicProfiles = new List<IsotopicProfile>();
+            int hitcounter = 0;
+            int hitcounter2 = 0;
+            int hitcounter3 = 0;
+            int hitcounter4 = 0;
+            #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
             {
@@ -140,6 +152,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             foreach (var msPeak in sortedPeaklist)
             {
 
+                //if (msPeak.XValue > 579.53 && msPeak.XValue < 579.54)
+                //{
+                //    int x = 90;
+                //}
                 int indexOfCurrentPeak = mspeakList.IndexOf(msPeak);
 
                 if (peaksAlreadyProcessed.Contains(msPeak))
@@ -165,16 +181,30 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
-                if (UseAutocorrelationChargeDetermination)
+                HashSet<int> potentialChargeStatesbyPaul;
+                if (UseAutocorrelationChargeDetermination && false)
                 {
                     int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
                     potentialChargeStates = new HashSet<int>();
                     potentialChargeStates.Add(chargeState);
                 }
                 else
-                {
+                {   //Paul subtraction
+                    IqLogger.Log.Debug("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
+                    #region Paul Addition
+                    ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
+                    potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
+
+                    #endregion
                 }
+                string reportString201="potentialChargeStates: ";
+                foreach (int charge in potentialChargeStates)
+                {
+                    reportString201+=charge + "\t";
+                    
+                }
+                IqLogger.Log.Debug(reportString201 + "\n");
 
                 List<IsotopicProfile> potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
                 foreach (int potentialChargeState in potentialChargeStates)
@@ -193,8 +223,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                         int indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
 
-                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor)
+                        //Paul edit. "&& indexMostAbundantPeakTheor>=0"
+                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor>=0)
                         {
+
                             msFeature.IntensityMostAbundantTheor = msFeature.Peaklist[indexMostAbundantPeakTheor].Height;
                         }
                         else
@@ -220,7 +252,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 string reportstring;
 
-                IsotopicProfile msfeature;
+                IsotopicProfile msfeature = null;//Paul Addition "=null"
                 if (potentialMSFeaturesForGivenChargeState.Count == 0)
                 {
                     stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\tNo profile found.\n");
@@ -249,8 +281,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                     #region Paul addition
                     //paul addition
-                    //IsotopicProfile mymsFeature=null;
+                    IsotopicProfile mymsFeature = null;
                     #endregion
+
+
                     if (Parameters.CheckAllPatternsAgainstChargeState1)
                     {
                         msfeature = potentialMSFeaturesForGivenChargeState.FirstOrDefault(n => n.ChargeState == 1);
@@ -260,41 +294,63 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         #region Paul addition
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
                         //We need some test cases to capture this problem.                         
-                        //bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
-                        //                      _run.ResultCollection.MSPeakResultList.Count == 0;                        
-                        //if (peaksNotLoaded)
-                        //{
-                        //    LoadPeaks(_run);
-                        //}
-                        //var brain = new ChromCorrelatingChargeDecider(_run);
-                        //mymsFeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
+   Stopwatch stopwatch = new Stopwatch();
+
+                        if (doPaulMethod)
+                        {
+                            bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
+                                                  _run.ResultCollection.MSPeakResultList.Count == 0;
+                            if (peaksNotLoaded)
+                            {
+                                stopwatch.Start();
+                                LoadPeaks(_run);
+                                stopwatch.Stop();
+                                IqLogger.Log.Debug("stopwatch: " + stopwatch.Elapsed);
+                            }
+                            var brain = new ChromCorrelatingChargeDecider(_run);
+                            msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
+                            if (msfeature==null)
+                            {
+                                msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState);
+                            }
+                            //hitcounter2++;
+                        }
+                        else//do it the regular way.
+                        {
                         #endregion
+                            msfeature = (from n in potentialMSFeaturesForGivenChargeState
+                                         where n.Score < 0.15
+                                         orderby n.ChargeState descending
+                                         select n).FirstOrDefault();
+                            if (msfeature == null)
+                            {
+                                msfeature = (from n in potentialMSFeaturesForGivenChargeState
+                                             orderby n.Score
+                                             select n).First();
+                            }
 
 
-                        msfeature = (from n in potentialMSFeaturesForGivenChargeState
-                                     where n.Score < 0.15
-                                     orderby n.ChargeState descending
-                                     select n).FirstOrDefault();
+                            #region Paul Addition
+                        }
+                        //line outputs.
+                        string reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
+                                "\nCHOSEN CHARGE: " + msfeature.ChargeState + "\n\n";
+                        IqLogger.Log.Debug(reportString309);
+
+                        //tabular output
+                        //string reportString309 = "\tM/Z = \t" + msfeature.MonoPeakMZ +
+                        //        "\tCHOSEN CHARGE: \t" + msfeature.ChargeState+ "\n";
+                        //IqLogger.Log.Debug(reportString309);
+                            #endregion
+
 
 
                     }
 
 
-                    if (msfeature == null)
-                    {
-                        msfeature = (from n in potentialMSFeaturesForGivenChargeState
-                                     orderby n.Score
-                                     select n).First();
-                    }
-                    #region Paul Addition
-                    //if (msfeature != null && mymsFeature != null)
-                    //{
-                    //    string reportString = "\nI CHOOSE CHARGE: " + mymsFeature.ChargeState + "\n" +
-                    //        (msfeature.ChargeState == mymsFeature.ChargeState).ToString() + "\n";
-                    //    IqLogger.Log.Debug(reportString);
-                    //}
-                    #endregion
 
+
+                    
                 }
 
                 if (msfeature != null)
@@ -304,21 +360,41 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     currentUniqueMSFeatureIDNum++;
 
                     isotopicProfiles.Add(msfeature);
+                    //hitcounter++;//Paul Addition
+
 
                     foreach (var peak in msfeature.Peaklist)
                     {
+                        //For debugging
+                        //if (peak.XValue > 534.76515 && peak.XValue < 534.78515) //(peak.XValue>579.62 && peak.XValue<579.65) || (peak.XValue>579.75 && peak.XValue<579.8))
+                        //{
+                        //    int x = 39843;
+                        //}
                         peaksAlreadyProcessed.Add(peak);
                     }
                 }
 
 
 
-            }
+            }//end of foreach peak loop
 
             //Console.WriteLine(stringBuilder.ToString());
 
             var uniqueIsotopicProfiles = removeDuplicatesFromFoundMSFeatures(isotopicProfiles);
+            #region Paul Addition
+            //IqLogger.Log.Debug("Hit counter: " + hitcounter);
+            //IqLogger.Log.Debug("Hit counter2: " + hitcounter2);
+            //var uniqueOtherIsotopicProfiles = removeDuplicatesFromFoundMSFeatures(isotopicProfiles);
 
+            //IqLogger.Log.Debug("old non unique count: " + otherIsotopicProfiles.Count + "\n" +
+            //    "new non unique count: " + myIsotopicProfiles.Count + "\n");
+            //var uniqueMyIsotopicProfiles = removeDuplicatesFromFoundMSFeatures(myIsotopicProfiles);
+
+            //IqLogger.Log.Debug("\nOld unique profile count: " + uniqueOtherIsotopicProfiles.Count + "\n" +
+            //    "New unique profile count: " + uniqueMyIsotopicProfiles.Count);
+            //IqLogger.Log.Debug("\nunique profile count: " + uniqueIsotopicProfiles.Count + "\n");
+
+            #endregion
             //NOTE: we don't need to do the reordering, but I do this so I can compare to the old THRASH
             uniqueIsotopicProfiles = uniqueIsotopicProfiles.OrderByDescending(p => p.IntensityMostAbundantTheor).ToList();
             return uniqueIsotopicProfiles;
@@ -328,6 +404,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         private void LoadPeaks(Run run)
         {
             string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
             //create / load 
