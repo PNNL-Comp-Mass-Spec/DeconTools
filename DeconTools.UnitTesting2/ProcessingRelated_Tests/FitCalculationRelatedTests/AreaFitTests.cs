@@ -27,8 +27,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-
-            Task msGen = new GenericMSGenerator(1154, 1158);
+			bool isTicRequested = false;
+			Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
@@ -83,8 +83,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-
-            Task msGen = new GenericMSGenerator(1154, 1158);
+			bool isTicRequested = false;
+            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
@@ -134,8 +134,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-
-            Task msGen = new GenericMSGenerator(579, 582);
+			bool isTicRequested = false;
+			Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
@@ -193,8 +193,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-
-            Task msGen = new GenericMSGenerator(1154, 1160);
+			bool isTicRequested = false;
+			Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();

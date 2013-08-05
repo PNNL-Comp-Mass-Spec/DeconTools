@@ -436,7 +436,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
-                //ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
+                Console.WriteLine("Creating _Peaks.txt file for " + this.Run.DatasetName + " at " + this.Run.DataSetPath);
 				IqLogger.Log.Info("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }

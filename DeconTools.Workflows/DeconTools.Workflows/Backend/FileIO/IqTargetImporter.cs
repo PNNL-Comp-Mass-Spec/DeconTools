@@ -55,27 +55,27 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 		#region Properties
 
-		protected string[] DatasetHeaders { get; set; }
+		public string[] DatasetHeaders { get; set; }
 
-		protected string[] EmpiricalFormulaHeaders { get; set; }
+		public string[] EmpiricalFormulaHeaders { get; set; }
 
-		protected string[] CodeHeaders { get; set; }
+		public string[] CodeHeaders { get; set; }
 
-		protected string[] TargetIDHeaders { get; set; }
+		public string[] TargetIDHeaders { get; set; }
 
-		protected string[] MonomassHeaders { get; set; }
+		public string[] MonomassHeaders { get; set; }
 
-		protected string[] AlternateIDHeader { get; set; }
+		public string[] AlternateIDHeader { get; set; }
 
-		protected string[] MzHeaders { get; set; }
+		public string[] MzHeaders { get; set; }
 
-		protected string[] ScanHeaders { get; set; }
+		public string[] ScanHeaders { get; set; }
 
-		protected string[] NETHeaders { get; set; }
+		public string[] NETHeaders { get; set; }
 
-		protected string[] QualityScoreHeaders { get; set; }
+		public string[] QualityScoreHeaders { get; set; }
 
-		protected string[] ChargeStateHeaders { get; set; }
+		public string[] ChargeStateHeaders { get; set; }
 
 		public Dictionary<HeaderSection, bool> HeaderSectionsFound
 		{
@@ -225,7 +225,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 				else
 				{
 					throw new System.IO.IOException("Cannot import: must either have an empirical formula column or a peptide sequence column. " +
-						"Acceptable column names: " + CollapseList(EmpiricalFormulaHeaders.ToList(), ", ") + ", " + CollapseList(CodeHeaders.ToList(), ", "));
+						"Acceptable column names: " + string.Join(", ", EmpiricalFormulaHeaders) + ", " + string.Join(", ", CodeHeaders));
 				}
 
 			}
@@ -242,20 +242,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 		#endregion
 
 		#region Private Methods
-
-		private string CollapseList(List<string> list, string separator)
-		{
-			var sb = new System.Text.StringBuilder();
-
-			foreach (var item in list)
-			{
-				if (sb.Length > 0)
-					sb.Append(separator);
-				sb.Append(item);
-			}
-
-			return sb.ToString();
-		}
 
 		#endregion
 

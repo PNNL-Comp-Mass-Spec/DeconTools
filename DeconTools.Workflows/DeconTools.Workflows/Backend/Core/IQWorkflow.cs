@@ -277,7 +277,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                string errorMessage = "Critical error!!!! IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
+				string errorMessage = "Critical error!!!! " + ex.Message + "; processing IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
                                       "; sequence= " + result.Target.Code + "; ScanLC= " + result.Target.ScanLC;
 
                 Console.WriteLine(errorMessage);
