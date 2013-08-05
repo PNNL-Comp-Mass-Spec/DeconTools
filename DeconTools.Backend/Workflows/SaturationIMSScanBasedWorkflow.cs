@@ -47,14 +47,9 @@ namespace DeconTools.Backend.Workflows
 
             _msGenerator = new UIMF_MSGenerator();
             _peakDetector = new DeconToolsPeakDetectorV2(5, 3, Globals.PeakFitType.QUADRATIC,false);
-
-
-
             _zeroFiller = new DeconToolsZeroFiller();
-
-
             _deconvolutor = new HornDeconvolutor(parameters);
-            _deconvolutor.MaxFitAllowed = 0.6;
+            _deconvolutor.MaxFitAllowed = 0.9;
             _deconvolutor.MinPeptideBackgroundRatio = _peakDetector.PeakToBackgroundRatio;
 
 
@@ -82,25 +77,19 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
-
-
-
             var uimfRun = (UIMFRun)Run;
 
             //uimfRun.IMSScanSetCollection.ScanSetList =uimfRun.IMSScanSetCollection.ScanSetList.Where(p => p.PrimaryScanNumber == 153).ToList();
 
-
+            //Iterate over unsummed data and fix saturated isotopic profiles. Unsummed will be used during a second iteration (over summed data)
             foreach (var lcScanSet in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.ResultCollection.MSPeakResultList.Clear();
                 _unsummedMSFeatures.Clear();
 
-
                 ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                 //get saturated MSFeatures for unsummed data
                 uimfRun.CurrentScanSet = unsummedFrameSet;
-
-
 
                 foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
@@ -111,10 +100,14 @@ namespace DeconTools.Backend.Workflows
 
                     _msGenerator.Execute(Run.ResultCollection);
 
-                    
-
-
                     _zeroFiller.Execute(Run.ResultCollection);
+
+                    //For debugging....
+                    //if (scanset.PrimaryScanNumber == 123)
+                    //{
+                    //    Console.WriteLine(scanset + "\t being processed!");
+                    //}
+
 
                     _peakDetector.Execute(Run.ResultCollection);
 
@@ -129,7 +122,6 @@ namespace DeconTools.Backend.Workflows
 
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
-
                     //iterate over unsummed MSFeatures and check for saturation
                     foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                     {
@@ -143,18 +135,17 @@ namespace DeconTools.Backend.Workflows
                                                    NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
 
+                        //For debugging... 
                         //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
 
-                        //if (tempIsosResult.FrameSet.PrimaryFrame==202 && tempIsosResult.ScanSet.PrimaryScanNumber==108)
+                        //if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
                         //{
                         //    Console.WriteLine(tempIsosResult + "\t being processed!");
                         //}
 
-
                         if (isPossiblySaturated)
                         {
                             var theorIso = new IsotopicProfile();
-
                            
                             RebuildSaturatedIsotopicProfile(msFeatureXYData,  isosResult, uimfRun.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
