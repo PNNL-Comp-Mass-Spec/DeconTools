@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Parameters
             ScanBasedWorkflowName = "standard";
             DeconvolutionType = Globals.DeconvolutionType.Thrash;
 
-            IsRefittingPerformed = true;
+            IsRefittingPerformed = false;
 
         }
 
