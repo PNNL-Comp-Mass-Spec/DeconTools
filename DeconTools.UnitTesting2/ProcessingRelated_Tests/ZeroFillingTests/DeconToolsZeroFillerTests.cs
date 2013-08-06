@@ -3,6 +3,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
@@ -20,20 +21,40 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             var zeroFiller = new DeconToolsZeroFiller(3);
 
             msgen.Execute(run.ResultCollection);
+
+			// Delete data points such that we only retain 50% of the data
+			double fractionToKeep = 0.50;
+			int distanceBetweenPoints = (int)(run.XYData.Xvalues.Length / (run.XYData.Xvalues.Length * fractionToKeep));
+
+			var newXVals = new List<double>();
+			var newYVals = new List<double>();
+
+			for (int i = 0; i < run.XYData.Xvalues.Length; i += distanceBetweenPoints)
+			{
+				if (i < run.XYData.Xvalues.Length)
+				{
+					newXVals.Add(run.XYData.Xvalues[i]);
+					newYVals.Add(run.XYData.Yvalues[i]);
+				}
+			}
+
+			run.XYData.Xvalues = newXVals.ToArray();
+			run.XYData.Yvalues = newYVals.ToArray();
+
             int numZerosToFill = 3;
             var newZeroFilled = zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
 
-            double lowerMZ = 625.50;
-            double upperMZ = 626.18;
+            double lowerMZ = 1000;
+            double upperMZ = 1300;
 
             run.XYData = run.XYData.TrimData(lowerMZ, upperMZ);
             newZeroFilled = newZeroFilled.TrimData(lowerMZ, upperMZ);
            
             Console.WriteLine("---------- before zerofilling ---------------");
-            TestUtilities.DisplayXYValues(run.XYData);
+			TestUtilities.DisplayXYValues(run.XYData, lowerMZ, upperMZ);
 
             Console.WriteLine("---------- after zerofilling ---------------");
-            TestUtilities.DisplayXYValues(newZeroFilled);
+			TestUtilities.DisplayXYValues(newZeroFilled, lowerMZ, upperMZ);
 
             Assert.IsTrue(newZeroFilled.Xvalues.Length > run.XYData.Xvalues.Length);
         }

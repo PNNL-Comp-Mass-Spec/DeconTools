@@ -134,7 +134,12 @@ namespace DeconTools.UnitTesting2
             Console.Write(sb.ToString());
         }
 
-        public static void DisplayXYValues(ResultCollection resultCollection)
+		public static void DisplayXYValues(ResultCollection resultCollection)
+		{
+			DisplayXYValues(resultCollection, double.MinValue, double.MaxValue);
+		}
+
+        public static void DisplayXYValues(ResultCollection resultCollection, double lowerX, double upperX)
         {
             double[] xvals = resultCollection.Run.XYData.Xvalues;
             double[] yvals = resultCollection.Run.XYData.Yvalues;
@@ -143,26 +148,37 @@ namespace DeconTools.UnitTesting2
             sb.Append("--------- XYData found in Run " + resultCollection.Run.Filename + "-----------------\n");
             for (int i = 0; i < xvals.Length; i++)
             {
-                sb.Append(xvals[i]);
-                sb.Append("\t");
-                sb.Append(yvals[i]);
-                sb.Append("\n");
+				if (xvals[i] >= lowerX && xvals[i] <= upperX)
+				{
+					sb.Append(xvals[i]);
+					sb.Append("\t");
+					sb.Append(yvals[i]);
+					sb.Append("\n");
+				}
             }
             sb.Append("--------------------------- end ---------------------------------------\n");
 
             Console.Write(sb.ToString());
         }
 
-        public static void DisplayXYValues(XYData xydata)
+		public static void DisplayXYValues(XYData xydata)
+		{
+			DisplayXYValues(xydata, double.MinValue, double.MaxValue);
+		}
+
+		public static void DisplayXYValues(XYData xydata, double lowerX, double upperX)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
             for (int i = 0; i < xydata.Xvalues.Length; i++)
             {
-                sb.Append(xydata.Xvalues[i]);
-                sb.Append("\t");
-                sb.Append(xydata.Yvalues[i]);
-                sb.Append("\n");
+				if (xydata.Xvalues[i] >= lowerX && xydata.Xvalues[i] <= upperX)
+				{
+					sb.Append(xydata.Xvalues[i]);
+					sb.Append("\t");
+					sb.Append(xydata.Yvalues[i]);
+					sb.Append("\n");
+				}
             }
             sb.Append("--------------------------- end ---------------------------------------\n");
 

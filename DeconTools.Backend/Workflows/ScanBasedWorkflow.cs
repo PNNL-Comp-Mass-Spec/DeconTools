@@ -34,8 +34,9 @@ namespace DeconTools.Backend.Workflows
         //internal string LogFileName;
         //internal string ParameterFileName;
 
-        protected BackgroundWorker BackgroundWorker;
+		internal bool NotifiedZeroFillAutoEnabled;
 
+        protected BackgroundWorker BackgroundWorker;
 
         protected Run Run;
 
@@ -339,10 +340,16 @@ namespace DeconTools.Backend.Workflows
         {
             ExecuteTask(MSGenerator);
 
-			// We will auto-enable ZeroFilling if the spectrum is centroided
 			bool isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
 
-			if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling || isCentroided)
+			if (isCentroided && !NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling && !NotifiedZeroFillAutoEnabled)
+			{
+				// Log that ZeroFilling will be auto-enabled because centroided spectra are present
+				Logger.Instance.AddEntry("Auto-enabled zero-filling for centroided scans");
+				NotifiedZeroFillAutoEnabled = true;
+			}
+
+			if (isCentroided || NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
                 ExecuteTask(ZeroFiller);
             }
