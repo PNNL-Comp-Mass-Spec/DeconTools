@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
-    public class IThrashDeconvolutor : Deconvolutor
+    public class InformedThrashDeconvolutor : Deconvolutor
     { 
         #region Paul Addition
         public bool doPaulMethod = true;
@@ -31,12 +31,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         private const int NumPointsPerTheorPeak = 20;
 
         #region Constructors
-        public IThrashDeconvolutor(ThrashParameters parameters)
+        public InformedThrashDeconvolutor(ThrashParameters parameters)
         {
             Parameters = parameters;
         }
 
-        public IThrashDeconvolutor() : this(new ThrashParameters())
+        public InformedThrashDeconvolutor() : this(new ThrashParameters())
         {
         }
 

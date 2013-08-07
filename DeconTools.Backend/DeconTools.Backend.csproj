@@ -167,7 +167,7 @@
     <Compile Include="ProcessingTasks\ChargeStateDeciders\Class1.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelator.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorO16O18.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\IThrashDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\InformedThrashDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicPeakFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
