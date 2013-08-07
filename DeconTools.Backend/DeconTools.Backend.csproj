@@ -36,8 +36,9 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="alglibnet2">
-      <HintPath>..\Library\alglibnet2.dll</HintPath>
+    <Reference Include="alglibnet2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\alglibnet2.dll</HintPath>
     </Reference>
     <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -57,12 +58,17 @@
     </Reference>
     <Reference Include="DeconEngine, Version=1.0.3165.35432, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngine.dll</HintPath>
+      <HintPath>bin\x86\Debug\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
-    <Reference Include="DeconEngineV2">
+    <Reference Include="DeconEngineV2, Version=1.0.4961.26821, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <HintPath>bin\x86\Debug\DeconEngineV2.dll</HintPath>
+      <Aliases>global</Aliases>
+    </Reference>
+    <Reference Include="DeconTools.Backend, Version=1.0.4966.13171, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\DeconTools.Backend.dll</HintPath>
     </Reference>
     <Reference Include="Interop.EDAL">
       <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
@@ -78,8 +84,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\MassSpecDataReader.dll</HintPath>
     </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\Library\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=2.5.0.27, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -140,7 +147,6 @@
     <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
     <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
-    <Compile Include="ChargeStateDeciderTests.cs" />
     <Compile Include="Core\ChromPeakQualityData.cs" />
     <Compile Include="Core\IMSScanSet.cs" />
     <Compile Include="Core\IMSScanSetCollection.cs" />
@@ -161,6 +167,7 @@
     <Compile Include="ProcessingTasks\ChargeStateDeciders\Class1.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelator.cs" />
     <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorO16O18.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\IThrashDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicPeakFitScoreCalculator.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
     <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
