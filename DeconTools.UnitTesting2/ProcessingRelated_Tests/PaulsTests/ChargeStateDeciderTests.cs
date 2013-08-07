@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 using NUnit.Framework;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
@@ -24,6 +25,94 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     class ChargeStateDeciderTests
     {
         [Test]
+        public void TestScottsData()
+        {
+            string fileName=@"C:\Users\Klin638\Documents\PaulsData\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            Run run = new RunFactory().CreateRun(fileName);
+            run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
+             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = 3;
+            thrashParameters.MaxFit = 0.4;
+
+            //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+
+            ScanSet scanset = new ScanSet(5509);
+
+            //For summing mass spectra:
+            //scanset = new ScanSetFactory().CreateScanSet(run, 6005, 5);
+
+            run.CurrentScanSet = scanset;
+
+            HornDeconvolutor oldDeconvolutor = new HornDeconvolutor();
+            oldDeconvolutor.MinPeptideBackgroundRatio = 3;
+            oldDeconvolutor.MaxFitAllowed = 0.4;
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+
+
+            //run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
+            //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.mdbl_mz > 634 && p.mdbl_mz < 642).ToArray();
+
+            run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
+
+            newDeconvolutor.Execute(run.ResultCollection);
+
+            //Console.WriteLine("\n--------------New decon ------------------");
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            List<IsosResult> newResults = new List<IsosResult>(run.ResultCollection.ResultList);
+
+            //TestUtilities.DisplayMSFeatures(newResults);
+            //return;
+
+            // DisplayPPMErrorsForeachPeakOfMSFeature(newResults);
+
+            run.ResultCollection.ResultList.Clear();
+            run.ResultCollection.IsosResultBin.Clear();
+            oldDeconvolutor.Execute(run.ResultCollection);
+
+            List<IsosResult> oldResults = new List<IsosResult>(run.ResultCollection.ResultList);
+
+
+            //Console.WriteLine("\n--------------Old decon ------------------");
+            //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+
+            var sharedIsos = new List<IsosResult>();
+            var uniqueToNew = new List<IsosResult>();
+            var uniqueToOld = new List<IsosResult>();
+
+
+            GetComparisons(newResults, oldResults, sharedIsos, uniqueToNew, uniqueToOld);
+
+
+            Console.WriteLine("\n--------------Common to new and Old ------------------");
+            TestUtilities.DisplayMSFeatures(sharedIsos);
+
+
+            Console.WriteLine("\n--------------Unique to new ------------------");
+            TestUtilities.DisplayMSFeatures(uniqueToNew);
+
+            string outputFilename = @"C:\Temp\ThrashTesting\exportedIsos.csv";
+            var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);
+
+            exporter.ExportIsosResults(uniqueToNew);
+
+
+            Console.WriteLine("\n--------------Unique to old ------------------");
+            TestUtilities.DisplayMSFeatures(uniqueToOld);
+
+
+        }
+
+        [Test]
         public void Stolen_ThrashV2OnOrbitrapTest1()
         {
             //Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -42,7 +131,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             parameters.MinMSFeatureToBackgroundRatio = 1;
             parameters.MaxFit = 0.3;
 
-            var deconvolutor = new ThrashDeconvolutorV2(parameters);
+            var deconvolutor = new InformedThrashDeconvolutor(parameters);
+            //var deconvolutor2 = new
 
             ScanSet scan = new ScanSet(6005);
 
@@ -62,7 +152,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
 
         }
-
         [Test]
         public void Stolen_CompareOldAndNewDeconvolutorsOrbitrap()
         {
@@ -91,7 +180,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             thrashParameters.MinMSFeatureToBackgroundRatio = 3;
             thrashParameters.MaxFit = 0.4;
 
-            var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+            //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
 
             ScanSet scanset = new ScanSet(6005);
 
@@ -161,7 +251,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             TestUtilities.DisplayMSFeatures(uniqueToOld);
 
         }
-
         private void GetComparisons(List<IsosResult> allNewResults, List<IsosResult> allOldResults, List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld)
         {
 
@@ -222,11 +311,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         }
 
-
-
-
-
-
         [Test]
         public void stolen_peakexporterTest1()
         {
@@ -263,8 +347,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         }
 
-
-
         [Test]
         public void EasyDecision()
         {
@@ -298,7 +380,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             potentialFeatures = MakePotentialFeaturesList(iso1, iso2);
         }
-
         [Test]
         public void MediumDecision()
         {
@@ -316,7 +397,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //Assert something here.
 
         }
-
         private void MediumDecisionSetup(out List<IsotopicProfile> potentialFeatures)
         {
 
@@ -339,7 +419,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             potentialFeatures = MakePotentialFeaturesList(iso1, iso2, iso3);
         }
-
         [Test]
         public void HardDecision()
         {
@@ -347,7 +426,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //Assert.AreEqual(msFeature.ChargeState, 2);
 
         }
-
         [Test]
         public void testPeakGeneration()
         {
@@ -503,8 +581,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         }
 
-
-
+        #region private helper methods
         private MSPeak MakeMSPeak(double width, double xValue)
         {
             MSPeak mspeak = new MSPeak();
@@ -512,17 +589,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             mspeak.XValue = xValue;
             return mspeak;
         }
-
         private List<MSPeak> MakeMSPeakList(params MSPeak[] msPeaks)
         {
             return msPeaks.ToList();
         }
-
         private List<IsotopicProfile> MakePotentialFeaturesList(params IsotopicProfile[] isotopicProfiles)
         {
             return isotopicProfiles.ToList(); //cool...
         }
-
         private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, params MSPeak[] peakList)
         {
             return MakePotentialFeature(chargeState, monoPeakMZ, monoIsotpoicPeakIndex, peakList.ToList());
@@ -536,6 +610,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             isopo.Peaklist = peakList;
             return isopo;
         }
+        #endregion
     }
 
 }
