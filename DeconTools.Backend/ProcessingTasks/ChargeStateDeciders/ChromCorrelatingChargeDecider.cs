@@ -102,8 +102,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                    string expectedPeaksfile = _run.DataSetPath + "\\" + _run.DatasetName + "_peaks.txt";
                    if (!File.Exists(expectedPeaksfile))
                    {
-                        CreatePeaksFile();
-                    ExportPeaks_copied(expectedPeaksfile);   
+                       Exception ex = new Exception("No Peaks file found.");
+                       throw (ex);
+                    //    CreatePeaksFile();
+                    //ExportPeaks_copied(expectedPeaksfile);   
                    
                    }
                  RunUtilities.GetPeaks(_run, expectedPeaksfile);
