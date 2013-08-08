@@ -87,5 +87,10 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
+
+		public void SortChildTargetsByCharge()
+		{
+			_childTargets.Sort((target1, target2) => target1.ChargeState.CompareTo(target2.ChargeState));
+		}
 	}
 }

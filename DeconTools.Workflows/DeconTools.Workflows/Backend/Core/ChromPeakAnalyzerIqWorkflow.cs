@@ -55,6 +55,7 @@ namespace DeconTools.Workflows.Backend.Core
 		/// </summary>
 		protected override void ExecuteWorkflow(IqResult result)
 		{
+
 			result.IsExported = false;
 
             if (MSGenerator == null)
@@ -71,8 +72,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 			//Sums Scan
 
-            //TODO: numMSSummed is currently hardcoded to '1'; Need to use a Parameter for this
-			var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, 1);
+			var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
 
 			//Generate a mass spectrum
 			var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);

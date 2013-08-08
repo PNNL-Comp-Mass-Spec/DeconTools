@@ -75,9 +75,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     }
                 }
 
-
-             
-
             }
 
             var valuesAboveZero = copiedYValues.Where(p => p > 0).ToList();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -33,8 +34,24 @@ namespace DeconTools.Workflows.Backend.Core
 		#endregion
 
 
+		//protected override void DoPostInitialization()
+		//{
+		//    base.DoPostInitialization();
+
+		//    //TODO: add parameters
+		//    ChromPeakDetector = new ChromPeakDetectorMedianBased();
+
+		//}
+
+
+		/// <summary>
+		/// ChargeStateChildTopDownIqWorkflow
+		/// Generates theoretical isotopic profile, XIC, and creates ChromPeakIqTargets based on peaks found
+		/// </summary>
+		/// <param name="result"></param>
 		protected override void ExecuteWorkflow(IqResult result)
 		{
+			//Generate theoretical isotopic profile
 			result.Target.TheorIsotopicProfile = TheorFeatureGen.GenerateTheorProfile(result.Target.EmpiricalFormula, result.Target.ChargeState);
 
 			if (!Parser.CheckSequenceIntegrity(result.Target.Code))
@@ -42,14 +59,13 @@ namespace DeconTools.Workflows.Backend.Core
 				ShiftIsotopicProfile(result.Target.TheorIsotopicProfile, result.Target.MonoMassTheor, result.Target.ChargeState);
 			}
 
+			//Generate XIC and smooth
 			result.IqResultDetail.Chromatogram = ChromGen.GenerateChromatogram(Run, result.Target.TheorIsotopicProfile, result.Target.ElutionTimeTheor);
-
 			result.IqResultDetail.Chromatogram = ChromSmoother.Smooth(result.IqResultDetail.Chromatogram);
 
+			//Look for peaks in XIC
 			result.ChromPeakList = ChromPeakDetector.FindPeaks(result.IqResultDetail.Chromatogram);
-
 			ChromPeakDetector.CalculateElutionTimes(Run, result.ChromPeakList);
-
 			ChromPeakDetector.FilterPeaksOnNET(WorkflowParameters.ChromNETTolerance, result.Target.ElutionTimeTheor, result.ChromPeakList);
 
 		    int tempMinScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance);
@@ -76,29 +92,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 			//Executes each grandchild ChromPeakAnalyzerIqWorkflow
 			var children = result.Target.ChildTargets();
-			List<IqTarget> targetRemovalList = new List<IqTarget>();
+
 			foreach (var child in children)
 			{
 				child.DoWorkflow();
-
-				
-				//Selects grandchildren with extremely poor metric scores for removal
-				IqResult childResult = child.GetResult();
-				if ((childResult.FitScore >= .8) || (childResult.CorrelationData.RSquaredValsMedian <= .15))
-				{
-					targetRemovalList.Add(child);
-				}
-				
 			}
-
-			
-			//Removes the poorly scoring grandchild ChromPeakIqTargets
-			foreach (IqTarget iqTarget in targetRemovalList)
-			{
-				result.RemoveResult(iqTarget.GetResult());
-				result.Target.RemoveTarget(iqTarget);
-			}
-			
 
 			if (Utilities.SipperDataDump.OutputResults)
 			{

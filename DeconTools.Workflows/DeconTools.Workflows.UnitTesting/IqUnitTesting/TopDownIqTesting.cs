@@ -19,9 +19,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		[Test]
 		public void MSAlignTargetDataTest()
 		{
-			string testFile = @"\\pnl\projects\MSSHARE\Zhe\252778_CPTAC_Peptidome_Test1_P1_13Jan12_Polaroid_11-10-14.raw";
-			string targetsFile = @"\\pnl\projects\MSSHARE\Zhe\grant_modified_targets.txt";
-			string resultsFolder = @"\\pnl\projects\MSSHARE\Zhe";
+			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
+			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\salmonella_top_target.txt";
+			string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
 
 			//Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\detailed_results.txt");
 			
@@ -45,6 +45,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			targetedWorkflowParameters.ChromatogramCorrelationIsPerformed = true;
 			targetedWorkflowParameters.ChromSmootherNumPointsInSmooth = 15;
 			targetedWorkflowParameters.MSToleranceInPPM = 15;
+			targetedWorkflowParameters.NumMSScansToSum = 3;
 
 			//define workflows for parentTarget and childTargets
 
