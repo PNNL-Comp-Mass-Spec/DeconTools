@@ -182,7 +182,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
-                HashSet<int> potentialChargeStatesbyPaul;
+               // HashSet<int> potentialChargeStatesbyPaul;
                 if (UseAutocorrelationChargeDetermination && false)
                 {
                     int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
@@ -194,9 +194,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     IqLogger.Log.Debug("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
-                    ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
-                    potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
+                   // ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
+                   // potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
 
+                    //potentialChargeStates = potentialChargeStatesbyPaul;
                     #endregion
                 }
                 string reportString201="potentialChargeStates: ";
