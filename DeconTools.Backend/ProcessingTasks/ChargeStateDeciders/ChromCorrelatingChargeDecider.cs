@@ -326,15 +326,16 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             
             var chargeStateCalculator = new PattersonChargeStateCalculator();
             int chargeState = chargeStateCalculator.GetChargeState(_run.XYData, _run.PeakList, potentialIsotopicProfiles.First().getMonoPeak());
-            Console.WriteLine("had to use the patterson calculator and this is what it gave me: " + chargeState);
+            //Console.WriteLine("had to use the patterson calculator and this is what it gave me: " + chargeState);
+            IqLogger.Log.Debug("had to use the patterson calculator and this is what it gave me: " + chargeState);
             for (int i = 0; i < chargeStates.Length; i++)
             {
-                Console.Write(chargeStates[i] + "\t");
+                IqLogger.Log.Debug(chargeStates[i] + "\t");
             }
-            Console.WriteLine("aefaefawfrgsreg" + chargeStates.Length);
+            IqLogger.Log.Debug("Charge state length: " + chargeStates.Length);
             if (chargeStates.Contains(chargeState))
             {
-                Console.WriteLine(Array.IndexOf(chargeStates, chargeState));
+                IqLogger.Log.Debug(Array.IndexOf(chargeStates, chargeState));
                 return potentialIsotopicProfiles.ElementAt(Array.IndexOf(chargeStates, chargeState));
             }
             else
@@ -416,8 +417,17 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             var chromgenPeak1 = new PeakChromatogramGenerator();
             chromgenPeak1.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS;
             chromgenPeak1.TopNPeaksLowerCutOff = 0.4;
-            var chromxydataPeak1 = chromgenPeak1.GenerateChromatogram(_run, 1, _run.GetNumMSScans(), mzPeak1, tolerancePPMpeak1, Globals.ToleranceUnit.PPM);
-            var chromxydataPeak2 = chromgenPeak1.GenerateChromatogram(_run, 1, _run.GetNumMSScans(), mzPeak2, tolerancePPMpeak2, Globals.ToleranceUnit.PPM);
+            //TODO: correlate narrow range. -100 +100 
+            //TODO: for gord.
+            int scanWindow=100;
+            int lowerScan = _run.CurrentScanSet.PrimaryScanNumber - scanWindow;
+            int upperScan = _run.CurrentScanSet.PrimaryScanNumber + scanWindow;
+
+            var chromxydataPeak1 = chromgenPeak1.GenerateChromatogram(_run, lowerScan, upperScan, mzPeak1, tolerancePPMpeak1, Globals.ToleranceUnit.PPM);
+            var chromxydataPeak2 = chromgenPeak1.GenerateChromatogram(_run, lowerScan, upperScan, mzPeak2, tolerancePPMpeak2, Globals.ToleranceUnit.PPM);
+
+            //var chromxydataPeak1 = chromgenPeak1.GenerateChromatogram(_run, 1, _run.GetNumMSScans(), mzPeak1, tolerancePPMpeak1, Globals.ToleranceUnit.PPM);
+            //var chromxydataPeak2 = chromgenPeak1.GenerateChromatogram(_run, 1, _run.GetNumMSScans(), mzPeak2, tolerancePPMpeak2, Globals.ToleranceUnit.PPM);
             if (null == chromxydataPeak1 || null == chromxydataPeak2) { return -3.0; }
 
             double[] arrayToCorrelatePeak1;
@@ -430,7 +440,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 {
                     return -2;   //it's present, but they don't overlap any. same as other -2 value.                 
                 }
-                return MathNet.Numerics.Statistics.Correlation.Pearson(arrayToCorrelatePeak1, arrayToCorrelatePeak2);
+                //TODO: implement iq standard of getting linear regression.
+                return MathNet.Numerics.Statistics.Correlation.Pearson(arrayToCorrelatePeak1, arrayToCorrelatePeak2);              
             }
             return -2;
         }
