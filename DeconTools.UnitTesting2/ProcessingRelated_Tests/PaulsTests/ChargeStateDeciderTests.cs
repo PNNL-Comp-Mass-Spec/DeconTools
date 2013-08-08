@@ -24,19 +24,110 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     [TestFixture]
     class ChargeStateDeciderTests
     {
+        public List<double> ReadScottsAnnotationsScan5509()
+        {
+            string fileName = @"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt";
+
+            List<double> mzList = new List<double>();
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                while (reader.Peek() != -1)
+                {
+                    double currentMz;
+                    double.TryParse(reader.ReadLine(), out currentMz);
+                    mzList.Add(currentMz);
+                }
+            }
+
+            return mzList.OrderBy(p => p).ToList();
+        }
+
+
+        [Test]
+        public void CompareToScottsData1()
+        {
+            string fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            Run run = new RunFactory().CreateRun(fileName);
+            run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            double peakBr = 0.5;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+
+            ScanSet scanset = new ScanSet(5509);
+            run.CurrentScanSet = scanset;
+
+            msgen.Execute(run.ResultCollection);
+            peakDetector.Execute(run.ResultCollection);
+            run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
+            newDeconvolutor.Execute(run.ResultCollection);
+
+
+            var scottMzVals = ReadScottsAnnotationsScan5509().ToArray();
+
+            var myMzVals = run.ResultCollection.ResultList.Select(p => p.IsotopicProfile.MonoPeakMZ).OrderBy(p => p).ToArray();
+
+            Dictionary<decimal, double> comparisions = new Dictionary<decimal, double>();
+
+            foreach (var scottVal in scottMzVals)
+            {
+                double tolerance = 0.01;
+                int indexInThrash = MathUtils.BinarySearchWithTolerance(myMzVals, scottVal, 0, myMzVals.Length - 1, tolerance);
+
+                var myMzVal = indexInThrash == -1 ? 0.0d : myMzVals[indexInThrash];
+                comparisions.Add((decimal)scottVal, myMzVal);
+            }
+
+            int numCorrect = comparisions.Values.Count(p => p > 0);
+
+            int numMissing = scottMzVals.Count() - numCorrect;
+
+            Console.WriteLine("Total annotated= \t" + scottMzVals.Count());
+            Console.WriteLine("Number correct = \t" + numCorrect);
+            Console.WriteLine("Number missing = \t" + numMissing);
+
+        }
+
+        [Test]
+        public void ReadInScottsDataTest()
+        {
+            GetScottsData();
+        }
+        private List<double> GetScottsData()
+        {
+            int counter = 0;
+            string line;
+            List<double> scottsData = new List<double>();
+
+            System.IO.StreamReader file = new System.IO.StreamReader(@"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                scottsData.Add(Double.Parse(line));
+                counter++;
+            }
+            file.Close();
+            return scottsData;
+        }
         [Test]
         public void TestScottsData()
         {
-            string fileName=@"C:\Users\Klin638\Documents\PaulsData\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string fileName = @"C:\Users\Klin638\Documents\PaulsData\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             Run run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
-             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            double peakBr = 0.5;
 
-
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = 3;
+            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;//3;
             thrashParameters.MaxFit = 0.4;
 
             //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
@@ -50,12 +141,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.CurrentScanSet = scanset;
 
             HornDeconvolutor oldDeconvolutor = new HornDeconvolutor();
-            oldDeconvolutor.MinPeptideBackgroundRatio = 3;
+            oldDeconvolutor.MinPeptideBackgroundRatio = peakBr;
             oldDeconvolutor.MaxFitAllowed = 0.4;
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
-
 
             //run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
             //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.mdbl_mz > 634 && p.mdbl_mz < 642).ToArray();
@@ -80,22 +170,21 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             List<IsosResult> oldResults = new List<IsosResult>(run.ResultCollection.ResultList);
 
-
             //Console.WriteLine("\n--------------Old decon ------------------");
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-
 
             var sharedIsos = new List<IsosResult>();
             var uniqueToNew = new List<IsosResult>();
             var uniqueToOld = new List<IsosResult>();
 
-
             GetComparisons(newResults, oldResults, sharedIsos, uniqueToNew, uniqueToOld);
+            List<double> scottsData = GetScottsData();
+            double[] scottsDataArray = scottsData.ToArray();
 
+            GetScottComparisons(sharedIsos, uniqueToNew, uniqueToOld, scottsDataArray);
 
             Console.WriteLine("\n--------------Common to new and Old ------------------");
             TestUtilities.DisplayMSFeatures(sharedIsos);
-
 
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
@@ -105,11 +194,80 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             exporter.ExportIsosResults(uniqueToNew);
 
-
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
+        }
 
+        private void GetScottComparisons(List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld, double[] scottsDataArray)
+        {
+            int sharedFoundInScotts = 0;
+            int sharedNotFoundInScotts = 0;
+            int uniqueToNewFoundInScotts = 0;
+            int uniqueToNewNotFoundinScotts = 0;
+            int uniqueToOldFoundInScotts = 0;
+            int uniqueToOldNotFoundinScotts = 0;
+            CompareListToScottsData(sharedIsos, scottsDataArray, out sharedFoundInScotts, out sharedNotFoundInScotts);
+            CompareListToScottsData(uniqueToNew, scottsDataArray, out uniqueToNewFoundInScotts, out uniqueToNewNotFoundinScotts);
+            CompareListToScottsData(uniqueToOld, scottsDataArray, out uniqueToOldFoundInScotts, out uniqueToOldNotFoundinScotts);
 
+            int totalFoundByNew = sharedFoundInScotts + uniqueToNewFoundInScotts;
+            int totalFoundByOld = sharedFoundInScotts + uniqueToOldFoundInScotts;
+            int scottsTotal = scottsDataArray.Length;
+            Console.WriteLine("Total found new:\t" + totalFoundByNew);
+            Console.WriteLine("Total found old:\t" + totalFoundByOld);
+            Console.WriteLine("Total found SCOTT:\t" + scottsTotal);
+            Console.WriteLine("False positives in both: \t" + sharedNotFoundInScotts);
+            Console.WriteLine("False positives in new:\t" + uniqueToNewNotFoundinScotts);
+            Console.WriteLine("False positives in old: \t" + uniqueToOldNotFoundinScotts);
+
+            
+
+        }
+        private void CompareListToScottsData(List<IsosResult> list, double[] scottsDataArray, out int numFound, out int numNotFound)
+        {
+            numFound = 0;
+            numNotFound = 0;
+            foreach (var item in list)
+            {
+                double mz = item.IsotopicProfile.MonoPeakMZ;
+                if (IsValueCloseEnoughToOneOfScotts(mz, scottsDataArray))
+                {
+                    numFound++;
+                }
+                else
+                {
+                    numNotFound++;
+                }
+            }
+        }
+
+        private bool IsValueCloseEnoughToOneOfScotts(double mz, double[] scottsDataArray)
+        {
+            double aReasonableValue = 0.09;
+            int i = 0;
+            bool stoppedinArray = false;
+            for (i = 0; i < scottsDataArray.Length; i++)
+            {
+                if (scottsDataArray[i] > mz)
+                {
+                    stoppedinArray = true;
+                    break;
+                }
+
+            }
+            if (stoppedinArray)
+            {
+                if (Math.Abs(scottsDataArray[i] - mz) < aReasonableValue)
+                {
+                    return true;
+                }
+                else if (i == 0) { return false; }
+                else if (Math.Abs(scottsDataArray[i - 1] - mz) < aReasonableValue)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         [Test]
@@ -157,7 +315,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         {
             //Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             string fileName = @"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-                //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
             //@"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
