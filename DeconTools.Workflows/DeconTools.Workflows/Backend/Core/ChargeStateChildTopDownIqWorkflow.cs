@@ -34,14 +34,13 @@ namespace DeconTools.Workflows.Backend.Core
 		#endregion
 
 
-		//protected override void DoPostInitialization()
-		//{
-		//    base.DoPostInitialization();
+		protected override void DoPostInitialization()
+		{
+			base.DoPostInitialization();
 
-		//    //TODO: add parameters
-		//    ChromPeakDetector = new ChromPeakDetectorMedianBased();
+			ChromPeakDetector = new ChromPeakDetectorMedianBased(WorkflowParameters.ChromPeakDetectorPeakBR, WorkflowParameters.ChromPeakDetectorSigNoise);
 
-		//}
+		}
 
 
 		/// <summary>
