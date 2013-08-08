@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
@@ -42,6 +43,80 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             return mzList.OrderBy(p => p).ToList();
         }
+
+        [Test]
+        public void SpeedTest1()
+        {
+            string fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            Run run = new RunFactory().CreateRun(fileName);
+            run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            double peakBr = 0.5;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scanSet;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
+                newDeconvolutor.Execute(run.ResultCollection);
+            }
+            watch.Stop();
+
+            Console.WriteLine("Time per scan = " + watch.ElapsedMilliseconds / run.ScanSetCollection.ScanSetList.Count);
+
+
+        }
+
+
+        [Test]
+        public void SpeedTest_oldThrash()
+        {
+            string fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            Run run = new RunFactory().CreateRun(fileName);
+            run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            double peakBr = 0.5;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
+            thrashParameters.MaxFit = 0.4;
+
+            DeconToolsParameters deconParams=new DeconToolsParameters();
+            deconParams.ThrashParameters=thrashParameters;
+
+            var deconvolutor = new HornDeconvolutor(deconParams);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scanSet;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
+                deconvolutor.Execute(run.ResultCollection);
+            }
+            watch.Stop();
+
+            Console.WriteLine("Time per scan = " + watch.ElapsedMilliseconds / run.ScanSetCollection.ScanSetList.Count);
+
+
+        }
+
 
 
         [Test]
