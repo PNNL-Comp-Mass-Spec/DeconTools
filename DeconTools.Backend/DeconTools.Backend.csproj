@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -56,14 +56,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\BrukerDataReader.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngine, Version=1.0.3165.35432, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\x86\Debug\DeconEngine.dll</HintPath>
+    <Reference Include="DeconEngine">
+      <HintPath>..\Library\DeconEngine.dll</HintPath>
       <Aliases>RapidEngine</Aliases>
     </Reference>
     <Reference Include="DeconEngineV2">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
+      <Aliases>global</Aliases> 
     </Reference>
     <Reference Include="Interop.EDAL">
       <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
@@ -267,7 +267,6 @@
     <Compile Include="Core\OldDecon2LSParameters.cs" />
     <Compile Include="Core\OldDeconFormatResult.cs" />
     <Compile Include="Core\PeakToTheLeftResultFlag.cs" />
-    <Compile Include="Core\Rapid.cs" />
     <Compile Include="Core\ResultCollection.cs" />
     <Compile Include="Core\ResultFlag.cs" />
     <Compile Include="Core\Results\ScanResult.cs" />

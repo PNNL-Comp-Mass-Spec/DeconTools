@@ -34,10 +34,6 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconTools.Backend, Version=1.0.4959.34329, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DeconTools.Backend\bin\x86\Debug\DeconTools.Backend.dll</HintPath>
-    </Reference>
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
@@ -213,6 +209,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
