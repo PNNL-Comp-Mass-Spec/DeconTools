@@ -379,29 +379,35 @@ namespace DeconTools.Backend.Runs
 
             if (vals == null) return null;
 
-            double[] xvals = new double[vals.GetLength(1)];
-            double[] yvals = new double[vals.GetLength(1)];
+        	int length = vals.GetLength(1);
+
+			double[] xvals = new double[length];
+			double[] yvals = new double[length];
 			bool sortRequired = false;
 
-            for (int i = 0; i < vals.GetLength(1); i++)
+        	int index = 0;
+
+			for (int i = 0; i < length; i++)
             {
             	double xValue = vals[0, i];
+
+				if (xValue < minMZ || xValue > maxMZ) continue;
+
 				double yValue = vals[1, i];
 
-				xvals[i] = xValue;
-                yvals[i] = yValue;
+				xvals[index] = xValue;
+                yvals[index] = yValue;
 
-				if (i > 0 && xValue < xvals[i - 1])
-					sortRequired = true;
+				if (i > 0 && xValue < xvals[index - 1]) sortRequired = true;
+
+            	index++;
             }
 
-			if (sortRequired)
-				Array.Sort(xvals, yvals);
+			if (sortRequired) Array.Sort(xvals, yvals);
 
             XYData xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
-
 
             if (xydata.Xvalues == null || xydata.Xvalues.Length == 0) return xydata;
             bool needsFiltering = (minMZ > xydata.Xvalues[0] || maxMZ < xydata.Xvalues[xydata.Xvalues.Length - 1]);
@@ -409,6 +415,7 @@ namespace DeconTools.Backend.Runs
             {
                 xydata = xydata.TrimData(minMZ, maxMZ);
             }
+
             return xydata;
         }
 
