@@ -281,7 +281,15 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = new RunFactory().CreateRun(testfile);
             Console.WriteLine(TestUtilities.DisplayRunInformation(run));
 
+            run.ScanSetCollection = new ScanSetCollection();
+            run.ScanSetCollection.Create(run, 500, 600, 1, 1);
 
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
+            {
+                int level =   run.GetMSLevel(scanSet.PrimaryScanNumber);
+
+                Console.WriteLine(scanSet + "\t" + level);
+            }
 
         }
 

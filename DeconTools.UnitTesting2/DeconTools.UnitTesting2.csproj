@@ -39,9 +39,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2, Version=1.0.4961.26821, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="DeconEngineV2">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DeconTools.Backend\bin\x86\Debug\DeconEngineV2.dll</HintPath>
+      <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>

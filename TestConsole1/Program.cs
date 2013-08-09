@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
+using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters;
+using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution;
 using DeconTools.Workflows.Backend.Core;
 using Globals = DeconTools.Workflows.Backend.Globals;
@@ -57,6 +64,43 @@ namespace TestConsole1
          
 
         }
+
+        public void SpeedTest1()
+        {
+            string fileName = @"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            Run run = new RunFactory().CreateRun(fileName);
+            run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            double peakBr = 0.5;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+
+            var thrashParameters = new ThrashParameters();
+            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
+            thrashParameters.MaxFit = 0.4;
+
+            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            foreach (var scanSet in run.ScanSetCollection.ScanSetList)
+            {
+                run.CurrentScanSet = scanSet;
+                msgen.Execute(run.ResultCollection);
+                peakDetector.Execute(run.ResultCollection);
+                run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
+                newDeconvolutor.Execute(run.ResultCollection);
+            }
+            watch.Stop();
+
+            Console.WriteLine("Time per scan = " + watch.ElapsedMilliseconds / run.ScanSetCollection.ScanSetList.Count);
+
+
+
+
+        }
+
+
 
 
 
