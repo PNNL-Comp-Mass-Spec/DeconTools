@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.DTO;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
@@ -18,6 +20,7 @@ using DeconTools.Backend.ProcessingTasks.Smoothers;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Workflows
@@ -214,7 +217,8 @@ namespace DeconTools.Backend.Workflows
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
 
-            if (Deconvolutor is DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashDeconvolutorV2)
+            //the new iThrash imports the _peaks.txt file
+            if (Deconvolutor is DeconTools.Backend.ProcessingTasks.Deconvoluters.InformedThrashDeconvolutor)
             {
                 _deconvolutorRequiresPeaksFile = true;
             }
@@ -234,8 +238,12 @@ namespace DeconTools.Backend.Workflows
             ScanResultExporter = ScansExporterFactory.CreateScansExporter(Run.MSFileType, ExporterType,
                                                                           ScansOutputFileName);
 
-            PeakListExporter = PeakListExporterFactory.Create(ExporterType, Run.MSFileType, PeakListExporterTriggerValue,
+            if (!_deconvolutorRequiresPeaksFile)
+            {
+                PeakListExporter = PeakListExporterFactory.Create(ExporterType, Run.MSFileType, PeakListExporterTriggerValue,
                                                               PeakListOutputFileName);
+            }
+            
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
         }
@@ -301,7 +309,17 @@ namespace DeconTools.Backend.Workflows
 
             if (_deconvolutorRequiresPeaksFile)
             {
-                CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
+                //new iThrash deconvolutor uses the _peaks.txt file. So need to check for it and create it if necessary
+                bool peaksFileExists = CheckForPeaksFile(OutputFolderPath);
+                if (!peaksFileExists)
+                {
+                    IqLogger.Log.Info("Creating _peaks.txt file. Takes 1 to 5 minutes.");
+                    CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);    
+                }
+
+                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds");
+                LoadPeaks(OutputFolderPath);
+
             }
 
             IterateOverScans();
@@ -313,7 +331,39 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-      
+        private void LoadPeaks(string userProvidedOutputFolderPath = null)
+        {
+            string outputFolderPath;
+            if (string.IsNullOrEmpty(userProvidedOutputFolderPath))
+            {
+                outputFolderPath = Run.DataSetPath;
+            }
+            else
+            {
+                outputFolderPath = userProvidedOutputFolderPath;
+            }
+
+           string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            RunUtilities.GetPeaks(Run, expectedPeaksFile);
+        }
+
+       
+        private bool CheckForPeaksFile(string userProvidedOutputFolderPath=null)
+        {
+            string outputFolderPath;
+            if (string.IsNullOrEmpty(userProvidedOutputFolderPath))
+            {
+                outputFolderPath = Run.DataSetPath;
+            }
+            else
+            {
+                outputFolderPath = userProvidedOutputFolderPath;
+            }
+
+            string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            return File.Exists(expectedPeaksFile);
+        }
+
 
         protected virtual void WriteOutSummaryToLogfile()
         {
@@ -378,12 +428,14 @@ namespace DeconTools.Backend.Workflows
             //the following exporting tasks should be last
             if (ExportData)
             {
-
                 if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
                 {
                     ExecuteTask(PeakToMSFeatureAssociator);
-                    ExecuteTask(PeakListExporter);
-
+                    
+                    if (!_deconvolutorRequiresPeaksFile)  //if we are using the new iThrash, the _peaks file will have been already created
+                    {
+                        ExecuteTask(PeakListExporter);
+                    }
                 }
 
                 ExecuteTask(IsosResultExporter);
@@ -442,7 +494,21 @@ namespace DeconTools.Backend.Workflows
 
         private void CreatePeaksFile(PeakDetectorParameters peakDetectorParameters, string outputFolderPath)
         {
-            throw new NotImplementedException();
+
+
+            var parameters=new PeakDetectAndExportWorkflowParameters();
+            parameters.OutputFolder = outputFolderPath;
+            parameters.LCScanMin = Run.MinLCScan;
+            parameters.LCScanMax = Run.MaxLCScan;
+            parameters.IsDataThresholded = Run.IsDataThresholded;
+            parameters.ProcessMSMS = false;
+            parameters.PeakBR = peakDetectorParameters.PeakToBackgroundRatio;
+            parameters.Num_LC_TimePointsSummed = 1;
+            parameters.SigNoiseThreshold = peakDetectorParameters.SignalToNoiseThreshold;
+
+            var peakDetectAndExporter = new PeakDetectAndExportWorkflow(Run, parameters);
+            peakDetectAndExporter.Execute();
+
         }
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -63,7 +63,7 @@
     <Reference Include="DeconEngineV2">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
-      <Aliases>global</Aliases> 
+      <Aliases>global</Aliases>
     </Reference>
     <Reference Include="Interop.EDAL">
       <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
@@ -157,6 +157,8 @@
     <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\ChargeStateDecider.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\ChromCorrelatingChargeDecider.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\Class1.cs" />

@@ -35,8 +35,6 @@ namespace DeconTools.Backend.Parameters
             LeftFitStringencyFactor = 1;
             RightFitStringencyFactor = 1;
             AreAllTheoreticalProfilesCachedBeforeStarting = false;
-            UseThrashV1 = true;
-
         }
 
 
@@ -45,7 +43,7 @@ namespace DeconTools.Backend.Parameters
 
         #region Properties
 
-
+        [Obsolete("Use the 'DeconvolutionType' parameter in the ScanBasedWorkflowParameters class")]
         public bool UseThrashV1 { get; set; }
 
         public string TagFormula { get; set; }
@@ -142,8 +140,6 @@ namespace DeconTools.Backend.Parameters
             TagFormula = GetStringValue(thrashElement, "TagFormula", TagFormula);
             UseAbsoluteIntensity = GetBoolVal(thrashElement, "UseAbsolutePeptideIntensity", UseAbsoluteIntensity);
             AreAllTheoreticalProfilesCachedBeforeStarting = GetBoolVal(thrashElement, "UseMercuryCache", AreAllTheoreticalProfilesCachedBeforeStarting);
-
-            UseThrashV1 = GetBoolVal(thrashElement, "UseThrashV1", false);
 
         }
     }

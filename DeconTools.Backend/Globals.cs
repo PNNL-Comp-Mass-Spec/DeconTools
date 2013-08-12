@@ -70,9 +70,11 @@ namespace DeconTools.Backend
 
         public enum DeconvolutionType
         {
-            Thrash,
-            Rapid,
-            ThrashThenRapid
+            None, 
+            ThrashV1,
+            ThrashV2,
+            Rapid
+            
         }
 
 

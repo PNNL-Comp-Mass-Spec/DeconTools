@@ -10,6 +10,7 @@ using System.Text;
     using DeconTools.Backend.ProcessingTasks.Smoothers;
     using DeconTools.Backend.Runs;
     using DeconTools.Backend.Utilities;
+    using DeconTools.Backend.Workflows;
     using DeconTools.UnitTesting2;
     using DeconTools.Workflows.Backend.Core;
     using DeconTools.Workflows.Backend.Core.ChromPeakSelection;

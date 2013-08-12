@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Parameters
             ExportPeakData = false;
             ExportFileType = Globals.ExporterType.Text;
             ScanBasedWorkflowName = "standard";
-            DeconvolutionType = Globals.DeconvolutionType.Thrash;
+            DeconvolutionType = Globals.DeconvolutionType.ThrashV1;
 
             IsRefittingPerformed = false;
 
@@ -41,6 +41,9 @@ namespace DeconTools.Backend.Parameters
         public Globals.ExporterType ExportFileType { get; set; }
         public string ScanBasedWorkflowName { get; set; }
 
+        /// <summary>
+        /// Type of deconvolution algorithm used in finding MSFeatures. E.g. ThrashV1, ThrashV2
+        /// </summary>
         public Globals.DeconvolutionType DeconvolutionType { get; set; }
 
         [Obsolete("UseRAPIDDeconvolution is deprecated, use DeconvolutionType instead.")]

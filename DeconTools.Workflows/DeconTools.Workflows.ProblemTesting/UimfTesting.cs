@@ -28,8 +28,6 @@ namespace DeconTools.Workflows.ProblemTesting
                 @"\\pnl\projects\MSSHARE\Webb_Ian\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27.xml");
 
             
-            parameters.ThrashParameters.UseThrashV1 = true;
-            
             string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
             string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
             string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";

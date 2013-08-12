@@ -3,56 +3,37 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
+using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
     public class DeconvolutorFactory
     {
 
-        public static Deconvolutor CreateDeconvolutor(OldDecon2LSParameters parameters)
-        {
-            Deconvolutor decon;
-
-            if (parameters.HornTransformParameters.DetectPeaksOnlyWithNoDeconvolution)
-            {
-                return new NullDeconvolutor();
-            }
-
-
-
-            if (parameters.HornTransformParameters.UseRAPIDDeconvolution)
-            {
-                decon = new RapidDeconvolutor();
-            }
-            else
-            {
-                decon = new HornDeconvolutor(parameters.HornTransformParameters);
-            }
-            return decon;
-        }
-
         public static Deconvolutor CreateDeconvolutor(DeconToolsParameters parameters)
         {
+            Check.Require(parameters!=null,"Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
+
             Deconvolutor decon;
-
-            if (parameters == null)
+            switch (parameters.ScanBasedWorkflowParameters.DeconvolutionType)
             {
-                return new NullDeconvolutor();
+                case Globals.DeconvolutionType.None:
+                    return new NullDeconvolutor();
+                case Globals.DeconvolutionType.ThrashV1:
+                    decon = new HornDeconvolutor(parameters);
+                    return decon;
+                case Globals.DeconvolutionType.ThrashV2:
+                    decon = new InformedThrashDeconvolutor(parameters.ThrashParameters);
+                    return decon;
+                case Globals.DeconvolutionType.Rapid:
+                    return new RapidDeconvolutor(parameters.ThrashParameters.MinMSFeatureToBackgroundRatio,
+                                                 Deconvolutor.DeconResultComboMode.simplyAddIt);
+                default:
+                    throw new ArgumentOutOfRangeException("parameters",
+                                                          "Trying to create the deconvolutor, but an incorrect Deconvolutor type was given. Good example: 'ThrashV1'");
             }
 
 
-            
-            if (parameters.ThrashParameters.UseThrashV1)
-            {
-                decon = new HornDeconvolutor(parameters); 
-            }
-            else
-            {
-                throw new NotSupportedException("The new THRASH is under active development and is not currently available.");
-                decon = new ThrashDeconvolutorV2(parameters.ThrashParameters);
-            }
-            
-            return decon;
         }
 
 

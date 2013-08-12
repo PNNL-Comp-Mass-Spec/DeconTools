@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Workflows;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -20,8 +21,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.LCScanMin = 5500;
             parameters.LCScanMax = 6500;
 
+            parameters.OutputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+
+            string expectedPeaksFile = parameters.OutputFolder + "\\" + run.DatasetName + "_peaks.txt";
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 
@@ -34,25 +37,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-        [Test]
-        public void peakExporterTest2()
-        {
-            RunFactory rf = new RunFactory();
-
-            string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
-
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-
-            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.LCScanMin = 5500;
-            parameters.LCScanMax = 6500;
-            parameters.OutputFolder = outputFolder;
-
-            PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
-            workflow.Execute();
-        }
-
-
+    
         [Test]
         public void UIMFTest1()
         {

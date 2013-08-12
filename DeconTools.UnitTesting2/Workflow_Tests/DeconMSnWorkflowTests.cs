@@ -27,7 +27,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             parameters.ThrashParameters.MinIntensityForScore = 1;
             parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 1;
-            parameters.ThrashParameters.UseThrashV1 = false;
+           
 
             var run = new RunFactory().CreateRun(testFile1);
 

@@ -6,6 +6,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Workflows;
 using DeconTools.Workflows.Backend.Core;
 using GWSGraphLibrary;
 using NUnit.Framework;

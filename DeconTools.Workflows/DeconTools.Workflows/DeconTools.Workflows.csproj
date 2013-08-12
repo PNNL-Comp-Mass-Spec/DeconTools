@@ -128,8 +128,6 @@
     <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
     <Compile Include="Backend\Core\NETAndMassAligner.cs" />
     <Compile Include="Backend\Core\NETGrouping.cs" />
-    <Compile Include="Backend\Core\PeakDetectAndExportWorkflow.cs" />
-    <Compile Include="Backend\Core\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedAlignerWorkflow.cs" />
     <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
     <Compile Include="Backend\Core\TargetedWorkflow.cs" />

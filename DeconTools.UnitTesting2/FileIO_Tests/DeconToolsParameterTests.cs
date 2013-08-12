@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DeconTools.Backend.Parameters;
 using NUnit.Framework;
 
@@ -24,7 +25,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual("AREA", parameters.ThrashParameters.IsotopicProfileFitType.ToString());
             Assert.AreEqual(1.00727649, parameters.ThrashParameters.ChargeCarrierMass);
             Assert.AreEqual(1, parameters.ThrashParameters.MinIntensityForDeletion);
-            Assert.AreEqual(0.3, parameters.ThrashParameters.MaxFit);
+            Assert.AreEqual(0.4m, (decimal)Math.Round(parameters.ThrashParameters.MaxFit,1));
             Assert.AreEqual(10, parameters.ThrashParameters.MaxCharge);
             Assert.AreEqual(1, parameters.ThrashParameters.MinMSFeatureToBackgroundRatio);
             Assert.AreEqual(10000, parameters.ThrashParameters.MaxMass);
@@ -35,6 +36,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual("Text", parameters.ScanBasedWorkflowParameters.ExportFileType.ToString());
             Assert.AreEqual("standard", parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower());
             Assert.AreEqual(true, parameters.ScanBasedWorkflowParameters.ExportPeakData);
+            Assert.AreEqual("ThrashV2", parameters.ScanBasedWorkflowParameters.DeconvolutionType.ToString());
 
             Assert.AreEqual(-2147483648, parameters.MSGeneratorParameters.MinLCScan);
             Assert.AreEqual(2147483647, parameters.MSGeneratorParameters.MaxLCScan);
