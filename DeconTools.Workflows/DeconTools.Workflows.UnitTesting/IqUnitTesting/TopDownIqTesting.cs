@@ -45,7 +45,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			targetedWorkflowParameters.ChromatogramCorrelationIsPerformed = true;
 			targetedWorkflowParameters.ChromSmootherNumPointsInSmooth = 15;
 			targetedWorkflowParameters.MSToleranceInPPM = 15;
-			targetedWorkflowParameters.NumMSScansToSum = 3;
+			targetedWorkflowParameters.NumMSScansToSum = 5;
 
 			//define workflows for parentTarget and childTargets
 
@@ -55,6 +55,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 			IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
 			workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
 			workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
+
 			var stopwatch = Stopwatch.StartNew();
 
 			//Main line for executing IQ:

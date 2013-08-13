@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
@@ -52,11 +53,9 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			PerformChargeCorrelation(result);
-			TargetSelector((TopDownIqResult) result);
+			ChromPeakIqTarget referenceTarget = TargetSelector((TopDownIqResult) result);
 
-			//ExpandChargeRange((TopDownIqTarget) result.Target);
-
-			
+			ExpandChargeRange((TopDownIqTarget) result.Target, referenceTarget);
 		}
 
 		#endregion
@@ -84,129 +83,171 @@ namespace DeconTools.Workflows.Backend.Core
 		}
 
 
-		/// <summary>
-		/// Selects best peak for each chargestate and updates child IqResult
-		/// </summary>
-		/// <param name="child"></param>
-		private void SelectChildPeak(IqTarget child)
-		{
-			var peakSelector = ChromPeakSelector as IqSmartChromPeakSelector;
+		///// <summary>
+		///// Selects best peak for each chargestate and updates child IqResult
+		///// </summary>
+		///// <param name="child"></param>
+		//private void SelectChildPeak(IqTarget child)
+		//{
+		//    var peakSelector = ChromPeakSelector as IqSmartChromPeakSelector;
 
-			IqResult childResult = child.GetResult();
+		//    IqResult childResult = child.GetResult();
 
-			List<ChromPeakIqTarget> peakTargetList = new List<ChromPeakIqTarget>();
-			var peakTargets = child.ChildTargets();
-			foreach (ChromPeakIqTarget target in peakTargets)
-			{
-				peakTargetList.Add(target);
-			}
+		//    List<ChromPeakIqTarget> peakTargetList = new List<ChromPeakIqTarget>();
+		//    var peakTargets = child.ChildTargets();
+		//    foreach (ChromPeakIqTarget target in peakTargets)
+		//    {
+		//        peakTargetList.Add(target);
+		//    }
 
-			bool filterOutFlagged = childResult.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+		//    bool filterOutFlagged = childResult.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
 
-			ChromPeakIqTarget chromPeakTarget = peakSelector.SelectBestPeak(peakTargetList, filterOutFlagged);
+		//    ChromPeakIqTarget chromPeakTarget = peakSelector.SelectBestPeak(peakTargetList, filterOutFlagged);
 
-			if (chromPeakTarget != null)
-			{
+		//    if (chromPeakTarget != null)
+		//    {
 
-				IqResult chromPeakResult = chromPeakTarget.GetResult();
+		//        IqResult chromPeakResult = chromPeakTarget.GetResult();
 
-				childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
+		//        childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
 
-				childResult.LcScanObs = chromPeakResult.LcScanObs;
+		//        childResult.LcScanObs = chromPeakResult.LcScanObs;
 
-				childResult.LCScanSetSelected = chromPeakResult.LCScanSetSelected;
+		//        childResult.LCScanSetSelected = chromPeakResult.LCScanSetSelected;
 
-				childResult.IqResultDetail.MassSpectrum = chromPeakResult.IqResultDetail.MassSpectrum;
+		//        childResult.IqResultDetail.MassSpectrum = chromPeakResult.IqResultDetail.MassSpectrum;
 
-				TrimData(childResult.IqResultDetail.MassSpectrum, childResult.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
+		//        TrimData(childResult.IqResultDetail.MassSpectrum, childResult.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
 
-				childResult.ObservedIsotopicProfile = chromPeakResult.ObservedIsotopicProfile;
+		//        childResult.ObservedIsotopicProfile = chromPeakResult.ObservedIsotopicProfile;
 
-				childResult.FitScore = chromPeakResult.FitScore;
+		//        childResult.FitScore = chromPeakResult.FitScore;
 
-				childResult.NETError = chromPeakResult.NETError;
+		//        childResult.NETError = chromPeakResult.NETError;
 
-				childResult.InterferenceScore = chromPeakResult.InterferenceScore;
+		//        childResult.InterferenceScore = chromPeakResult.InterferenceScore;
 
-				childResult.CorrelationData = chromPeakResult.CorrelationData;
+		//        childResult.CorrelationData = chromPeakResult.CorrelationData;
 
-				childResult.MonoMassObs = chromPeakResult.ObservedIsotopicProfile == null
-											  ? 0
-											  : chromPeakResult.ObservedIsotopicProfile.MonoIsotopicMass;
+		//        childResult.MonoMassObs = chromPeakResult.ObservedIsotopicProfile == null
+		//                                      ? 0
+		//                                      : chromPeakResult.ObservedIsotopicProfile.MonoIsotopicMass;
 
-				childResult.MZObs = chromPeakResult.ObservedIsotopicProfile == null
-										? 0
-										: chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
-
-
-				childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
-												  ? 0
-												  : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
+		//        childResult.MZObs = chromPeakResult.ObservedIsotopicProfile == null
+		//                                ? 0
+		//                                : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
 
 
-				childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) *
-													childResult.MZObsCalibrated / childResult.Target.ChargeState;
-
-				childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
-												  ? 0
-												  : chromPeakResult.MassErrorBefore;
+		//        childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
+		//                                          ? 0
+		//                                          : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
 
 
-				childResult.MassErrorAfter = (childResult.MZObsCalibrated - childResult.Target.MZTheor) / childResult.Target.MZTheor *
-											 1e6;
+		//        childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) *
+		//                                            childResult.MZObsCalibrated / childResult.Target.ChargeState;
+
+		//        childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
+		//                                          ? 0
+		//                                          : chromPeakResult.MassErrorBefore;
 
 
-				var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak)childResult.ChromPeakSelected).NETValue;
-				childResult.ElutionTimeObs = elutionTime;
+		//        childResult.MassErrorAfter = (childResult.MZObsCalibrated - childResult.Target.MZTheor) / childResult.Target.MZTheor *
+		//                                     1e6;
 
-				childResult.Abundance = GetAbundance(childResult);
-			}
-		}
+
+		//        var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak)childResult.ChromPeakSelected).NETValue;
+		//        childResult.ElutionTimeObs = elutionTime;
+
+		//        childResult.Abundance = GetAbundance(childResult);
+		//    }
+		//}
 
 
 		/// <summary>
 		/// Expands charge range to cover all instances of a given sequence
 		/// </summary>
-		/// <param name="parent"></param>
-		private void ExpandChargeRange(TopDownIqTarget parent)
+		/// <param name="parentTarget"></param>
+		/// <param name="referenceTarget"></param>
+		private void ExpandChargeRange(TopDownIqTarget parentTarget, ChromPeakIqTarget referenceTarget)
 		{
-			double fitTolerance = .25;
-
 			ChargeStateChildTopDownIqWorkflow childWorkflow = new ChargeStateChildTopDownIqWorkflow(Run, WorkflowParameters);
 
-			parent.SortChildTargetsByCharge();
-			var children = parent.ChildTargets();
+			var childTargets = parentTarget.ChildTargets().ToArray();
 
-			int childCount = children.Count();
-			double[] fitScoreList = new double[childCount];
-			int i = 0;
+			double fitTolerance = 0.5;
+			double correlationTolerance = 0.95;
 
-			foreach (IqTarget child in children)
+			IqChargeStateTarget minCharge = (IqChargeStateTarget) childTargets.First();
+			IqChargeStateTarget maxCharge = (IqChargeStateTarget) childTargets.Last();
+			
+			if (minCharge.GetResult().IqResultDetail.Chromatogram != null)
 			{
-				fitScoreList[i] = child.GetResult().FitScore;
-				i++;
-			}
-
-			double[] sortedList = (double[]) fitScoreList.Clone();
-			fitScoreList.CopyTo(sortedList, 0);
-			Array.Sort(sortedList);
-			double medianFit = sortedList[childCount/2];
-
-			if (medianFit < fitTolerance)
-			{
-				if (fitScoreList[0] < fitTolerance && fitScoreList[1] < fitTolerance)
+				int charge = minCharge.ChargeState;
+				bool extendDown = true;
+				while (extendDown)
 				{
-					
-				}
-				if (fitScoreList[childCount - 1] < fitTolerance && fitScoreList[childCount - 2] < fitTolerance)
-				{
-
+					IqChargeStateTarget extend = new IqChargeStateTarget(childWorkflow);
+					charge = charge - 1;
+					extend.ChargeState = charge;
+					parentTarget.AddTarget(extend);
+					extend.RefineTarget();
+					extend.DoWorkflow();
+					extendDown = ChargeExpansionPeakSelection(parentTarget, referenceTarget, extend, correlationTolerance, fitTolerance);
 				}
 			}
 
-			parent.SortChildTargetsByCharge();
+			if (maxCharge.GetResult().IqResultDetail.Chromatogram != null)
+			{
+				int charge = maxCharge.ChargeState;
+				bool extendUp = true;
+				while (extendUp)
+				{
+					IqChargeStateTarget extend = new IqChargeStateTarget(childWorkflow);
+					charge = charge + 1;
+					extend.ChargeState = charge;
+					parentTarget.AddTarget(extend);
+					extend.RefineTarget();
+					extend.DoWorkflow();
+					extendUp = ChargeExpansionPeakSelection(parentTarget, referenceTarget, extend, correlationTolerance, fitTolerance);
+				}
+			}
+
+			parentTarget.SortChildTargetsByCharge();
 		}
 
+
+		/// <summary>
+		/// Selects a peak that correlates with the reference target and returns a bool to continue extending the charge range
+		/// </summary>
+		/// <param name="parentTarget"></param>
+		/// <param name="referenceTarget"></param>
+		/// <param name="chargeTarget"></param>
+		/// <param name="correlationCutoff"></param>
+		/// <param name="fitCutoff"></param>
+		/// <returns></returns>
+		private bool ChargeExpansionPeakSelection(TopDownIqTarget parentTarget, ChromPeakIqTarget referenceTarget, IqChargeStateTarget chargeTarget, double correlationCutoff, double fitCutoff)
+		{
+			var iqChargeCorrelator = ChromatogramCorrelator as IqChargeCorrelator;
+
+			var peakTargets = chargeTarget.ChildTargets();
+			var sortedPeakTargets = peakTargets.OrderBy(x => x.GetResult().FitScore);
+
+			foreach (ChromPeakIqTarget target in sortedPeakTargets)
+			{
+				double minScan = referenceTarget.ChromPeak.XValue - (0.5 * referenceTarget.ChromPeak.Width);
+				double maxScan = referenceTarget.ChromPeak.XValue + (0.5 * +referenceTarget.ChromPeak.Width);
+				if ((target.ChromPeak.XValue > minScan) && (target.ChromPeak.XValue < maxScan))
+				{
+					double correlation = iqChargeCorrelator.PairWiseChargeCorrelation(referenceTarget, target, Run, 3);
+					if (correlation > correlationCutoff && target.GetResult().FitScore < fitCutoff)
+					{
+						UpdateSelection(target);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// Performs charge correlation on parent level target
@@ -227,7 +268,12 @@ namespace DeconTools.Workflows.Backend.Core
 		}
 
 
-		private void TargetSelector(TopDownIqResult result)
+		/// <summary>
+		/// Selects charge correlating group based on composite score
+		/// </summary>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		private ChromPeakIqTarget TargetSelector(TopDownIqResult result)
 		{
 			double bestScore = 0;
 			ChargeCorrelationItem bestScoringGroup = new ChargeCorrelationItem();
@@ -255,9 +301,14 @@ namespace DeconTools.Workflows.Backend.Core
 				UpdateSelection(entry.Key);
 			}
 
+			return bestScoringGroup.ReferenceTarget;
 		}
 
 
+		/// <summary>
+		/// Updates parent charge state result based on the selected chrom peak target
+		/// </summary>
+		/// <param name="chromPeakTarget"></param>
 		private void UpdateSelection(ChromPeakIqTarget chromPeakTarget)
 		{
 

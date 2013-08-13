@@ -70,6 +70,9 @@ namespace DeconTools.Workflows.Backend.Core
 				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
 			}
 
+			MSGenerator.MinMZ = target.MZTheor - 2;
+			MSGenerator.MaxMZ = target.MZTheor + 5;
+
 			//Sums Scan
 
 			var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
@@ -77,7 +80,7 @@ namespace DeconTools.Workflows.Backend.Core
 			//Generate a mass spectrum
 			var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
 
-		    massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
+		    //massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
 
 			//Find isotopic profile
 			List<Peak> mspeakList;

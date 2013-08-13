@@ -381,11 +381,8 @@ namespace DeconTools.Backend.Runs
 
         	int length = vals.GetLength(1);
 
-			double[] xvals = new double[length];
-			double[] yvals = new double[length];
-			bool sortRequired = false;
-
-        	int index = 0;
+			List<double> xvals = new List<double>();
+			List<double> yvals = new List<double>();
 
 			for (int i = 0; i < length; i++)
             {
@@ -395,26 +392,13 @@ namespace DeconTools.Backend.Runs
 
 				double yValue = vals[1, i];
 
-				xvals[index] = xValue;
-                yvals[index] = yValue;
-
-				if (i > 0 && xValue < xvals[index - 1]) sortRequired = true;
-
-            	index++;
+				xvals.Add(xValue);
+                yvals.Add(yValue);
             }
-
-			if (sortRequired) Array.Sort(xvals, yvals);
 
             XYData xydata = new XYData();
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals;
-
-            if (xydata.Xvalues == null || xydata.Xvalues.Length == 0) return xydata;
-            bool needsFiltering = (minMZ > xydata.Xvalues[0] || maxMZ < xydata.Xvalues[xydata.Xvalues.Length - 1]);
-            if (needsFiltering)
-            {
-                xydata = xydata.TrimData(minMZ, maxMZ);
-            }
+			xydata.Xvalues = xvals.ToArray();
+			xydata.Yvalues = yvals.ToArray();
 
             return xydata;
         }
