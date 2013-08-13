@@ -17,9 +17,10 @@ using System.Diagnostics;
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
     public class InformedThrashDeconvolutor : Deconvolutor
-    { 
+    {
         #region Paul Addition
         public bool doPaulMethod = true;
+        bool importedFULLPeaks = false;
         #endregion
         private Run _run;
 
@@ -36,7 +37,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             Parameters = parameters;
         }
 
-        public InformedThrashDeconvolutor() : this(new ThrashParameters())
+        public InformedThrashDeconvolutor()
+            : this(new ThrashParameters())
         {
         }
 
@@ -182,7 +184,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
-               // HashSet<int> potentialChargeStatesbyPaul;
+                // HashSet<int> potentialChargeStatesbyPaul;
                 if (UseAutocorrelationChargeDetermination && false)
                 {
                     int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
@@ -194,17 +196,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     IqLogger.Log.Debug("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
-                   // ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
-                   // potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
+                    // ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
+                    // potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
 
                     //potentialChargeStates = potentialChargeStatesbyPaul;
                     #endregion
                 }
-                string reportString201="potentialChargeStates: ";
+                string reportString201 = "potentialChargeStates: ";
                 foreach (int charge in potentialChargeStates)
                 {
-                    reportString201+=charge + "\t";
-                    
+                    reportString201 += charge + "\t";
+
                 }
                 IqLogger.Log.Debug(reportString201 + "\n");
 
@@ -226,7 +228,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         int indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
 
                         //Paul edit. "&& indexMostAbundantPeakTheor>=0"
-                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor>=0)
+                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor >= 0)
                         {
 
                             msFeature.IntensityMostAbundantTheor = msFeature.Peaklist[indexMostAbundantPeakTheor].Height;
@@ -296,25 +298,26 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         #region Paul addition
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
                         //We need some test cases to capture this problem.                         
-   Stopwatch stopwatch = new Stopwatch();
+                        Stopwatch stopwatch = new Stopwatch();
 
                         if (doPaulMethod)
                         {
                             bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
                                                   _run.ResultCollection.MSPeakResultList.Count == 0;
-                            if (peaksNotLoaded)
+                            if (peaksNotLoaded || !importedFULLPeaks)
                             {
                                 stopwatch.Start();
                                 LoadPeaks(_run);
+                                importedFULLPeaks = true;
                                 stopwatch.Stop();
                                 IqLogger.Log.Debug("stopwatch: " + stopwatch.Elapsed);
                             }
                             var brain = new ChromCorrelatingChargeDecider(_run);
                             msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
-                            if (msfeature==null)
-                            {
-                                msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState);
-                            }
+                            //if (msfeature==null)
+                            //{
+                            //    msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState);
+                            //}
                             //hitcounter2++;
                         }
                         else//do it the regular way.
@@ -335,14 +338,18 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                             #region Paul Addition
                         }
                         //line outputs.
-                        string reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
+                        if (null != msfeature)
+                        {
+                            string reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
                                 "\nCHOSEN CHARGE: " + msfeature.ChargeState + "\n\n";
-                        IqLogger.Log.Debug(reportString309);
+                            IqLogger.Log.Debug(reportString309);
 
-                        //tabular output
-                        //string reportString309 = "\tM/Z = \t" + msfeature.MonoPeakMZ +
-                        //        "\tCHOSEN CHARGE: \t" + msfeature.ChargeState+ "\n";
-                        //IqLogger.Log.Debug(reportString309);
+                            //tabular output
+                            //string reportString309 = "\tM/Z = \t" + msfeature.MonoPeakMZ +
+                            //        "\tCHOSEN CHARGE: \t" + msfeature.ChargeState+ "\n";
+                            //IqLogger.Log.Debug(reportString309);
+                        }
+
                             #endregion
 
 
@@ -352,7 +359,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
 
 
-                    
+
                 }
 
                 if (msfeature != null)
@@ -405,8 +412,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         private void LoadPeaks(Run run)
         {
-            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
-            
+            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaksFULL.txt";
+
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
             //create / load 

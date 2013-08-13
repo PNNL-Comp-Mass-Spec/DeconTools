@@ -351,6 +351,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                         bestChargeIndex = index;
                     }
                 }
+                if (bestCorrelation<=0)
+                {
+                    return null;
+                }
                 return potentialIsotopicProfiles.ElementAt(bestChargeIndex);
             }
             #endregion
