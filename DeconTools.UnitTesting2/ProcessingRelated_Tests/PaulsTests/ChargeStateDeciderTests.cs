@@ -26,6 +26,56 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
     [TestFixture]
     class ChargeStateDeciderTests
     {
+
+        //[Test]
+        //public void TraditionalWorkflowTestOrbitrapData1()
+        //{
+        //    string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
+
+        //    Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        //    string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
+        //    string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
+        //    string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+
+        //    if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
+        //    if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
+        //    if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+        //    var parameters = new DeconToolsParameters();
+        //    parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+        //    parameters.ThrashParameters.UseThrashV1 = false;
+
+        //    parameters.MSGeneratorParameters.MinLCScan = 6005;
+        //    parameters.MSGeneratorParameters.MaxLCScan = 6005;
+
+
+        //    var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+        //    workflow.Execute();
+
+        //    Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
+        //    Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
+        //    Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
+
+        //    IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
+        //    var isos = isosImporter.Import();
+
+        //    Assert.AreEqual(186, isos.Count);
+
+        //    PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
+
+        //    List<MSPeakResult> peaklist = new List<MSPeakResult>();
+        //    peakImporter.ImportPeaks(peaklist);
+
+        //    Assert.AreEqual(809, peaklist.Count);
+
+        //    var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
+        //    Assert.AreEqual(266185816d, Math.Round(sumIntensities));
+
+        //    var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
+        //    Assert.AreEqual(605170496.0f, sumPeakIntensities);
+
+        //}
+
         public List<double> ReadScottsAnnotationsScan5509()
         {
             string fileName = @"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt";
@@ -53,7 +103,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr = 0.5;
+            double peakBr = 1.9;//0.25;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -74,7 +124,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             }
             watch.Stop();
 
-            Console.WriteLine("Time per scan = " + watch.ElapsedMilliseconds / run.ScanSetCollection.ScanSetList.Count);
+            Console.WriteLine("Time per scan (INFORMED) = " + watch.ElapsedMilliseconds / run.ScanSetCollection.ScanSetList.Count);
 
 
         }
@@ -88,7 +138,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr = 0.5;
+            double peakBr =0.25;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -128,7 +178,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr = 0.5;
+            double peakBr = 1.9;//1.3;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -192,7 +242,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             return scottsData;
         }
         [Test]
-        public void TestScottsData()
+        public void TestAndComparingScottsData()
         {
             string fileName = @"C:\Users\Klin638\Documents\PaulsData\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             Run run = new RunFactory().CreateRun(fileName);
@@ -286,15 +336,21 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             CompareListToScottsData(uniqueToNew, scottsDataArray, out uniqueToNewFoundInScotts, out uniqueToNewNotFoundinScotts);
             CompareListToScottsData(uniqueToOld, scottsDataArray, out uniqueToOldFoundInScotts, out uniqueToOldNotFoundinScotts);
 
-            int totalFoundByNew = sharedFoundInScotts + uniqueToNewFoundInScotts;
-            int totalFoundByOld = sharedFoundInScotts + uniqueToOldFoundInScotts;
+            int totalCorrectFoundByNew = sharedFoundInScotts + uniqueToNewFoundInScotts;
+            int totalCorrectFoundByOld = sharedFoundInScotts + uniqueToOldFoundInScotts;
+            int totalNOTFOUND_usingOld= sharedNotFoundInScotts+ uniqueToOldNotFoundinScotts;
+            int totalNOTFOUND_usingNEW= sharedNotFoundInScotts+ uniqueToNewNotFoundinScotts;
             int scottsTotal = scottsDataArray.Length;
-            Console.WriteLine("Total found new:\t" + totalFoundByNew);
-            Console.WriteLine("Total found old:\t" + totalFoundByOld);
+            Console.WriteLine("Total correct found new:\t" + totalCorrectFoundByNew);
+            Console.WriteLine("Total correct found old:\t" + totalCorrectFoundByOld);
+            Console.WriteLine("Total FALSE old:\t" + totalNOTFOUND_usingOld );
+            Console.WriteLine("Total FALSE NEW:\t" + totalNOTFOUND_usingNEW);
+            Console.WriteLine("Shared Found in Scott's Data\t" + sharedFoundInScotts);
+            Console.WriteLine("Shared NOT FOUND in Scott's Data\t" + sharedNotFoundInScotts);
             Console.WriteLine("Total found SCOTT:\t" + scottsTotal);
             Console.WriteLine("False positives in both: \t" + sharedNotFoundInScotts);
-            Console.WriteLine("False positives in new:\t" + uniqueToNewNotFoundinScotts);
-            Console.WriteLine("False positives in old: \t" + uniqueToOldNotFoundinScotts);
+            Console.WriteLine("False positives unique in new:\t" + uniqueToNewNotFoundinScotts);
+            Console.WriteLine("False positives unique in old: \t" + uniqueToOldNotFoundinScotts);
 
             
 
@@ -319,7 +375,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         private bool IsValueCloseEnoughToOneOfScotts(double mz, double[] scottsDataArray)
         {
-            double aReasonableValue = 0.09;
+            double aReasonableValue = 0.01;
             int i = 0;
             bool stoppedinArray = false;
             for (i = 0; i < scottsDataArray.Length; i++)
@@ -389,15 +445,15 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void Stolen_CompareOldAndNewDeconvolutorsOrbitrap()
         {
-            //Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string fileName = @"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            //string fileName = @"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
             //@"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //  
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
-            Run run = new RunFactory().CreateRun(fileName);
+            //Run run = new RunFactory().CreateRun(fileName);
 
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
@@ -414,8 +470,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             thrashParameters.MinMSFeatureToBackgroundRatio = 3;
             thrashParameters.MaxFit = 0.4;
 
-            //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
-            var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+            var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+            //var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
 
             ScanSet scanset = new ScanSet(6005);
 
