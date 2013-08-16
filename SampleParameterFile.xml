@@ -53,7 +53,6 @@
 		<NumZerosToFill>3</NumZerosToFill>
 		<ProcessMSMS>False</ProcessMSMS>
 		<ExportFileType>TEXT</ExportFileType>
-		<DetectPeaksOnly_NoDeconvolution>False</DetectPeaksOnly_NoDeconvolution>
 		<Process_MS>True</Process_MS>
 		<DeconvolutionType>ThrashV2</DeconvolutionType>
 		<ScanBasedWorkflowType>standard</ScanBasedWorkflowType>

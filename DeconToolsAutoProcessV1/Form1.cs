@@ -326,13 +326,7 @@ namespace DeconToolsAutoProcessV1
             }
             catch (Exception ex)
             {
-
-                string errorMessage = "Unexpected error! Will give details below...\n\n";
-                errorMessage += "Error type= " + ex;
-                errorMessage += "Error message= " + ex.Message + "\n\n";
-                errorMessage += "StackTrace" + ex.StackTrace;
-
-                MessageBox.Show(errorMessage);
+                MessageBox.Show(ex.Message + Environment.NewLine+  Environment.NewLine+ "**NOTE: see log file for additional details.");
             }
 
 

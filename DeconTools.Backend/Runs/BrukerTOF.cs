@@ -69,6 +69,11 @@ namespace DeconTools.Backend.Runs
             return _spectrumCollection.Count;
         }
 
+        public override bool IsDataCentroided(int scanNum)
+        {
+            return false;
+        }
+
         public override double GetTime(int scanNum)
         {
 

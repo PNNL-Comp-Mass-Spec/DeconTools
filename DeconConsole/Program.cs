@@ -12,7 +12,7 @@ namespace DeconConsole
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
-		public const string PROGRAM_DATE = "August 5, 2013";
+        public const string PROGRAM_DATE = "August 5, 2013";
 
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
@@ -24,7 +24,7 @@ namespace DeconConsole
 
             Console.WriteLine("Starting..............");
 
-			if (args.Length < 2 || args.Length > 3)
+            if (args.Length < 2 || args.Length > 3)
             {
                 ReportSyntax();
                 return 1;
@@ -42,7 +42,7 @@ namespace DeconConsole
                 {
                     return 2;
                 }
-                
+
                 if (!Directory.Exists(outputFolder))
                 {
 
@@ -61,7 +61,7 @@ namespace DeconConsole
 
                     }
                 }
-               
+
             }
 
             if (!IsFileValid(filename))
@@ -84,14 +84,20 @@ namespace DeconConsole
             }
             catch (Exception ex)
             {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------------------- ERROR! -------------------------------------------------");
 
                 Console.WriteLine(ex.Message);
-				Console.WriteLine(ex.StackTrace);
-				int errorCode = ex.Message.GetHashCode();
-				if (errorCode != 0)
-					return errorCode;
-				else
-					return -1;
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("** NOTE: See log file for more details.");
+                Console.WriteLine();
+
+                int errorCode = ex.Message.GetHashCode();
+                if (errorCode != 0)
+                    return errorCode;
+                else
+                    return -1;
             }
             Console.WriteLine();
             Console.WriteLine();
@@ -102,7 +108,7 @@ namespace DeconConsole
             Console.WriteLine("****************************************");
             Console.WriteLine();
 
-			return 0;
+            return 0;
         }
 
         private static void ReportFileProblem(string filename, string fileDescription)
@@ -110,7 +116,7 @@ namespace DeconConsole
             Console.WriteLine("------------- ERROR! ---------------------");
             Console.WriteLine(string.IsNullOrEmpty(filename)
                                   ? "The path of your " + fileDescription + " has no characters!"
-								  : fileDescription + " not found: " + filename);
+                                  : fileDescription + " not found: " + filename);
             Console.WriteLine();
         }
 
@@ -122,30 +128,30 @@ namespace DeconConsole
             return false;
         }
 
-		private static string GetAppVersion()
-		{
-			return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " (" + PROGRAM_DATE + ")";
-		}
+        private static string GetAppVersion()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " (" + PROGRAM_DATE + ")";
+        }
 
         private static void ReportSyntax()
         {
-			string exeName = System.IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string exeName = System.IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-			Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("This program will accept 2 or 3 arguments (with spaces between).");
             Console.WriteLine("  Arg1 = filename");
             Console.WriteLine("  Arg2 = parameter filename");
             Console.WriteLine("  Arg3 = [optional] output folder  [Default = same as raw data folder]");
-			Console.WriteLine();
-			Console.WriteLine("Example usage:");
+            Console.WriteLine();
+            Console.WriteLine("Example usage:");
             Console.WriteLine("  " + exeName + " QCDataset.raw SampleParameterFile.xml");
-			Console.WriteLine();
-			Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
-			Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
-			Console.WriteLine("Version: " + GetAppVersion());
-			Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
+            Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
+            Console.WriteLine("Version: " + GetAppVersion());
+            Console.WriteLine();
 
-			System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
         }
     }
 }

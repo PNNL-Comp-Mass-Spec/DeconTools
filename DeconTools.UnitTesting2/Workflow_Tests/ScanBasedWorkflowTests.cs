@@ -159,6 +159,58 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.AreEqual(1973657234m,(decimal)Math.Round(sumIntensities));
         }
 
+        [Category("MustPass")]
+        [Test]
+        public void TraditionalWorkflowTestOrbitrapData_DetectPeaksOnly()
+        {
+            string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
+
+            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
+            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
+            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+
+            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
+            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+            var parameters = new DeconToolsParameters();
+            parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            parameters.ScanBasedWorkflowParameters.DeconvolutionType = Globals.DeconvolutionType.None;
+
+            parameters.MSGeneratorParameters.MinLCScan = 6005;
+            parameters.MSGeneratorParameters.MaxLCScan = 6005;
+
+
+            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            workflow.Execute();
+
+            Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
+            Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
+            Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
+
+
+            PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
+
+            List<MSPeakResult> peaklist = new List<MSPeakResult>();
+            peakImporter.ImportPeaks(peaklist);
+
+            Assert.AreEqual(809, peaklist.Count);
+
+
+            IsosImporter isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
+            var isos = isosImporter.Import();
+
+            Assert.AreEqual(0, isos.Count);
+
+            
+
+            
+        }
+
+
+
+
 
         [Test]
         public void TraditionalWorkflowTestOrbitrapData_useThrashV1()

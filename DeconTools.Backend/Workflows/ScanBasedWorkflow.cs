@@ -37,7 +37,7 @@ namespace DeconTools.Backend.Workflows
         //internal string LogFileName;
         //internal string ParameterFileName;
 
-		internal bool NotifiedZeroFillAutoEnabled;
+        internal bool NotifiedZeroFillAutoEnabled;
 
         protected BackgroundWorker BackgroundWorker;
 
@@ -45,8 +45,8 @@ namespace DeconTools.Backend.Workflows
 
         protected MSGenerator MSGenerator;
         protected PeakDetector PeakDetector;
-		protected Deconvolutor Deconvolutor;
-		protected ZeroFiller ZeroFiller;
+        protected Deconvolutor Deconvolutor;
+        protected ZeroFiller ZeroFiller;
         protected Smoother Smoother;
 
         protected ScanResultUpdater ScanResultUpdater;
@@ -67,9 +67,7 @@ namespace DeconTools.Backend.Workflows
         #region Factory methods
         public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
         {
-
             Run run;
-
             try
             {
                 run = new RunFactory().CreateRun(datasetFileName);
@@ -83,17 +81,15 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("ERROR type= " + ex, Logger.Instance.OutputFilename);
                 Logger.Instance.AddEntry("STACKTRACE = " + ex.StackTrace, Logger.Instance.OutputFilename);
 
-
-                throw;
+                throw new ApplicationException(
+                    "A fatal error occured when connecting to the raw dataset. Could not create the Run object. Internal error message: " +
+                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
             }
-
 
             var newParameters = new DeconToolsParameters();
             newParameters.LoadFromOldDeconToolsParameterFile(parameterFile);
 
-
             return CreateWorkflow(run, newParameters, outputFolderPath, backgroundWorker);
-
 
         }
 
@@ -179,33 +175,32 @@ namespace DeconTools.Backend.Workflows
 
             Run.ResultCollection.ResultType = GetResultType();
 
-
-
             InitializeParameters();
 
             CreateOutputFileNames();
 
             WriteProcessingInfoToLog();
 
-            try
+            CreateTargetMassSpectra();
+
+            ExecutePreprocessHook();
+
+            InitializeProcessingTasks();
+
+            if (_deconvolutorRequiresPeaksFile)
             {
-                CreateTargetMassSpectra();
+                //new iThrash deconvolutor uses the _peaks.txt file. So need to check for it and create it if necessary
+                bool peaksFileExists = CheckForPeaksFile(OutputFolderPath);
+                if (!peaksFileExists)
+                {
+                    IqLogger.Log.Info("Creating _peaks.txt file. Takes 1 to 5 minutes.");
+                    CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
+                }
 
-                ExecutePreprocessHook();
-
-                InitializeProcessingTasks();
+                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds");
+                LoadPeaks(OutputFolderPath);
 
             }
-            catch (Exception ex)
-            {
-                string errorDetails = ex.Message + "; STACKTRACE= " + ex.StackTrace;
-
-                Logger.Instance.AddEntry("Error - during workflow initialization", Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry("Error details: " + errorDetails, Logger.Instance.OutputFilename);
-                throw;
-            }
-
-
 
 
         }
@@ -222,7 +217,7 @@ namespace DeconTools.Backend.Workflows
             {
                 _deconvolutorRequiresPeaksFile = true;
             }
-			
+
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);
             Smoother = new SavitzkyGolaySmoother(NewDeconToolsParameters.MiscMSProcessingParameters.SavitzkyGolayNumPointsInSmooth,
@@ -243,7 +238,7 @@ namespace DeconTools.Backend.Workflows
                 PeakListExporter = PeakListExporterFactory.Create(ExporterType, Run.MSFileType, PeakListExporterTriggerValue,
                                                               PeakListOutputFileName);
             }
-            
+
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
         }
@@ -302,33 +297,42 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void Execute()
         {
-            InitializeWorkflow();
+            try
+            {
+                InitializeWorkflow();
+            }
+            catch (Exception ex)
+            {
+                string simpleErrorMessage = "Error - during workflow initialization. Internal error message: "+ ex.Message;
+                LogError(ex, simpleErrorMessage);
+                throw new ApplicationException(simpleErrorMessage, ex);
+            }
 
             WorkflowStats = new WorkflowStats();
             WorkflowStats.TimeStarted = DateTime.Now;
 
-            if (_deconvolutorRequiresPeaksFile)
+            try
             {
-                //new iThrash deconvolutor uses the _peaks.txt file. So need to check for it and create it if necessary
-                bool peaksFileExists = CheckForPeaksFile(OutputFolderPath);
-                if (!peaksFileExists)
-                {
-                    IqLogger.Log.Info("Creating _peaks.txt file. Takes 1 to 5 minutes.");
-                    CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);    
-                }
-
-                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds");
-                LoadPeaks(OutputFolderPath);
-
+                IterateOverScans();
             }
-
-            IterateOverScans();
+            catch (Exception ex)
+            {
+                string simpleErrorMessage = "A bad error happened while processing each scan in the dataset. Internal error message: "+ ex.Message;
+                LogError(ex, simpleErrorMessage);
+                throw new ApplicationException(simpleErrorMessage, ex);
+            }
 
             WorkflowStats.TimeFinished = DateTime.Now;
             WorkflowStats.NumFeatures = Run.ResultCollection.MSFeatureCounter;
 
             WriteOutSummaryToLogfile();
 
+        }
+
+        private void LogError(Exception exception, string simpleErrorMessage)
+        {
+            Logger.Instance.AddEntry(simpleErrorMessage, Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry(exception.StackTrace, Logger.Instance.OutputFilename);
         }
 
         private void LoadPeaks(string userProvidedOutputFolderPath = null)
@@ -343,12 +347,12 @@ namespace DeconTools.Backend.Workflows
                 outputFolderPath = userProvidedOutputFolderPath;
             }
 
-           string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
             RunUtilities.GetPeaks(Run, expectedPeaksFile);
         }
 
-       
-        private bool CheckForPeaksFile(string userProvidedOutputFolderPath=null)
+
+        private bool CheckForPeaksFile(string userProvidedOutputFolderPath = null)
         {
             string outputFolderPath;
             if (string.IsNullOrEmpty(userProvidedOutputFolderPath))
@@ -390,16 +394,16 @@ namespace DeconTools.Backend.Workflows
         {
             ExecuteTask(MSGenerator);
 
-			bool isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
+            bool isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
 
-			if (isCentroided && !NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling && !NotifiedZeroFillAutoEnabled)
-			{
-				// Log that ZeroFilling will be auto-enabled because centroided spectra are present
-				Logger.Instance.AddEntry("Auto-enabled zero-filling for centroided scans");
-				NotifiedZeroFillAutoEnabled = true;
-			}
+            if (isCentroided && !NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling && !NotifiedZeroFillAutoEnabled)
+            {
+                // Log that ZeroFilling will be auto-enabled because centroided spectra are present
+                Logger.Instance.AddEntry("Auto-enabled zero-filling for centroided scans");
+                NotifiedZeroFillAutoEnabled = true;
+            }
 
-			if (isCentroided || NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
+            if (isCentroided || NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
                 ExecuteTask(ZeroFiller);
             }
@@ -409,9 +413,9 @@ namespace DeconTools.Backend.Workflows
                 ExecuteTask(Smoother);
             }
 
-			ExecuteTask(PeakDetector);
-			ExecuteTask(Deconvolutor);
-           
+            ExecuteTask(PeakDetector);
+            ExecuteTask(Deconvolutor);
+
             ExecuteTask(ResultValidator);
 
             ExecuteTask(ScanResultUpdater);
@@ -431,7 +435,7 @@ namespace DeconTools.Backend.Workflows
                 if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
                 {
                     ExecuteTask(PeakToMSFeatureAssociator);
-                    
+
                     if (!_deconvolutorRequiresPeaksFile)  //if we are using the new iThrash, the _peaks file will have been already created
                     {
                         ExecuteTask(PeakListExporter);
@@ -496,7 +500,7 @@ namespace DeconTools.Backend.Workflows
         {
 
 
-            var parameters=new PeakDetectAndExportWorkflowParameters();
+            var parameters = new PeakDetectAndExportWorkflowParameters();
             parameters.OutputFolder = outputFolderPath;
             parameters.LCScanMin = Run.MinLCScan;
             parameters.LCScanMax = Run.MaxLCScan;
@@ -579,12 +583,18 @@ namespace DeconTools.Backend.Workflows
                     }
                     catch (Exception ex)
                     {
+                        string errorMessage =
+                            "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
+
+                        Logger.Instance.AddEntry(errorMessage, Logger.Instance.OutputFilename);
+                        Logger.Instance.AddEntry(errorMessage, ex.StackTrace);
+
                         throw new DirectoryNotFoundException(
                             "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,
                             ex);
-                        
+
                     }
-                    
+
                 }
 
                 return OutputFolderPath.TrimEnd(new char[] { '\\' }) + "\\" + run.DatasetName;

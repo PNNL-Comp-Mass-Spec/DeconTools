@@ -212,7 +212,8 @@ namespace DeconTools.Backend.Core
 
         public virtual bool IsDataCentroided(int scanNum)
         {
-            throw new System.NotImplementedException("'IsDataCentroided' method is not available for this Run type.");
+            //Default is false
+            return false;
         }
 
 
