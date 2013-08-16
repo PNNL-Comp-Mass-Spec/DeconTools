@@ -322,11 +322,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 }
             }
             #endregion
-            #region Metric 3, highest of who's left
+            #region Metric 3, ask Patterson
             
             var chargeStateCalculator = new PattersonChargeStateCalculator();
-            int chargeState = chargeStateCalculator.GetChargeState(_run.XYData, _run.PeakList, potentialIsotopicProfiles.First().getMonoPeak());
-            //Console.WriteLine("had to use the patterson calculator and this is what it gave me: " + chargeState);
+            int chargeState = chargeStateCalculator.GetChargeState(_run.XYData, _run.PeakList, potentialIsotopicProfiles.First().getMonoPeak());            
             IqLogger.Log.Debug("had to use the patterson calculator and this is what it gave me: " + chargeState);
             for (int i = 0; i < chargeStates.Length; i++)
             {
