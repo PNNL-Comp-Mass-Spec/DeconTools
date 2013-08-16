@@ -24,7 +24,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         public override IsotopicProfile DetermineCorrectIsotopicProfile(List<IsotopicProfile> potentialIsotopicProfiles)
         {
             if (null == potentialIsotopicProfiles || potentialIsotopicProfiles.Count == 0) return null;
-            CreatePeaksIfNeeded();
+            
+            CreatePeaksIfNeeded();//note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
             potentialIsotopicProfiles = potentialIsotopicProfiles.OrderByDescending(n => n.ChargeState).ToList();
 
             int[] chargeStates = (from prof in potentialIsotopicProfiles select prof.ChargeState).ToArray();
@@ -95,6 +96,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             return GetIsotopicProfileMethod2(chargeStates, correlations, correlationswithAltChargeState, potentialIsotopicProfiles, bestFeature, bestScore);
         }
   
+        //note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
         private void CreatePeaksIfNeeded()
         {
             if (_run.ResultCollection.MSPeakResultList.Count == 0)
@@ -513,7 +515,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         internal HashSet<int> GetPotentialChargeState(int indexOfCurrentPeak, List<Peak> mspeakList, double ppmTolerance)
         {
             //List<IsotopicProfile> potentialProfiles = new List<IsotopicProfile>();
-            CreatePeaksIfNeeded();
+            CreatePeaksIfNeeded();//note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
             
 
             HashSet<int> chargeStates= new HashSet<int>();

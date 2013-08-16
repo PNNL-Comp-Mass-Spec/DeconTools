@@ -20,7 +20,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
     {
         #region Paul Addition
         public bool doPaulMethod = true;
-        bool importedFULLPeaks = false;
+        //bool importedFULLPeaks = false;
         #endregion
         private Run _run;
 
@@ -304,11 +304,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         {
                             bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
                                                   _run.ResultCollection.MSPeakResultList.Count == 0;
-                            if (peaksNotLoaded || !importedFULLPeaks)
+                            if (peaksNotLoaded)// || !importedFULLPeaks)
                             {
                                 stopwatch.Start();
                                 LoadPeaks(_run);
-                                importedFULLPeaks = true;
+                                //importedFULLPeaks = true;
                                 stopwatch.Stop();
                                 IqLogger.Log.Debug("stopwatch: " + stopwatch.Elapsed);
                             }
@@ -412,7 +412,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         private void LoadPeaks(Run run)
         {
-            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaksFULL.txt";
+            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";//FULL.txt";
 
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
