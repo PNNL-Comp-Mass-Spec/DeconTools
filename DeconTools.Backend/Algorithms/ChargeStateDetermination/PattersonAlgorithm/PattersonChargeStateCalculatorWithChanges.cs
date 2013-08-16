@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         private int _maxCharge;
         #region Constructors
 
-        public PattersonChargeStateCalculator()
+        public PattersonChargeStateCalculatorWithChanges()
         {
             _maxCharge = 25;
         }
