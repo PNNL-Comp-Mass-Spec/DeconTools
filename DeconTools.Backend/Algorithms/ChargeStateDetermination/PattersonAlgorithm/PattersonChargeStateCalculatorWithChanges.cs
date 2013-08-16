@@ -9,6 +9,11 @@ using Task = DeconTools.Backend.Core.Task;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
+
+    /// <summary>
+    /// This class is very similar to the PattersonChargeStateCalculator. Paul Kline (SULI intern) made some changes (Aug 2013) and wanted to
+    /// temporarily store them here until they are tested and incorporated in the official version. 
+    /// </summary>
     public class PattersonChargeStateCalculatorWithChanges
     {
         private int _maxCharge;

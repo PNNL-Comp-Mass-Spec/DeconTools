@@ -29,14 +29,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-         //   if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+
+            string allPeaksFilepath =@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaksFULL.txt";
+            File.Copy(allPeaksFilepath,allPeaksFilepath.Replace("FULL", "") );
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
-            parameters.ThrashParameters.UseThrashV1 = false;
+            parameters.ScanBasedWorkflowParameters.DeconvolutionType = Globals.DeconvolutionType.ThrashV2;
 
-            parameters.MSGeneratorParameters.MinLCScan = 1;// run.GetMinPossibleLCScanNum();
-            parameters.MSGeneratorParameters.MaxLCScan = 6005;// run.GetMaxPossibleLCScanNum();
+            parameters.MSGeneratorParameters.UseLCScanRange = true;
+            parameters.MSGeneratorParameters.MinLCScan = 6000;// run.GetMinPossibleLCScanNum();
+            parameters.MSGeneratorParameters.MaxLCScan = 6050;// run.GetMaxPossibleLCScanNum();
             
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -51,19 +55,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             //Assert.AreEqual(186, isos.Count);
             //TODO: still report
-            PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
 
-            List<MSPeakResult> peaklist = new List<MSPeakResult>();
-            peakImporter.ImportPeaks(peaklist);
-
-           // Assert.AreEqual(809, peaklist.Count);
-
+            Console.WriteLine("Num MSfeatures = " + isos.Count);
+            
             var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
            // Assert.AreEqual(266185816d, Math.Round(sumIntensities));
-
-            var sumPeakIntensities = peaklist.Select(p => p.Height).Sum();
-           // Assert.AreEqual(605170496.0f, sumPeakIntensities);
-
+            
         }
 
 

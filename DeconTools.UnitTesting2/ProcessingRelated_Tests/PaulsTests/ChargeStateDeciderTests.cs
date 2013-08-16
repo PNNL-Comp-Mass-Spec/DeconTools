@@ -103,7 +103,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr = 1.9;//0.25;
+            double peakBr = 1.3;//0.25;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -138,7 +138,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr =0.25;
+            double peakBr =1.3;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();

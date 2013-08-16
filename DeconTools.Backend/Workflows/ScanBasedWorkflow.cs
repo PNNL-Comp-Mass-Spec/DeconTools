@@ -197,7 +197,7 @@ namespace DeconTools.Backend.Workflows
                     CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
                 }
 
-                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds");
+                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
                 LoadPeaks(OutputFolderPath);
 
             }
