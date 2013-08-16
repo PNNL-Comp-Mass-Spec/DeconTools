@@ -86,9 +86,6 @@ namespace DeconTools.Workflows.Backend.Core
 			List<Peak> mspeakList;
 			result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
-			//Default Worst Scores
-			double fitScore = 1;
-			double iscore = 1;
 
 			//Get NET Error
 			double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
@@ -109,10 +106,10 @@ namespace DeconTools.Workflows.Backend.Core
                 //Get fit score
                 List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
 				double minIntensityForScore = 0.05;
-				fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
+				double fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
 				//get i_score
-				iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
+				double iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
 				//get ppm error
                 double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);

@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
+using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
 	public class TopDownMSAlignExecutor:IqExecutor
 	{
-		private BackgroundWorker _backgroundWorker;
-
 		private RunFactory _runFactory = new RunFactory();
 
 		private IqTargetUtilities _targetUtilities = new IqTargetUtilities();
@@ -18,8 +18,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 		public TopDownMSAlignExecutor(WorkflowExecutorBaseParameters parameters, Run run) : base(parameters, run)
 		{
-           
         }
+
+		public TopDownMSAlignExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker) : base(parameters, run, backgroundWorker)
+		{
+		}
 
 		#endregion
 
@@ -61,6 +64,22 @@ namespace DeconTools.Workflows.Backend.Core
 		}
 
 		#endregion
+
+		protected override void ReportGeneralProgress(int currentTarget, int totalTargets)
+		{
+			double currentProgress = (currentTarget / (double)totalTargets);
+
+			if (currentTarget % 50 == 0)
+			{
+				IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
+			}
+
+			if (_backgroundWorker != null)
+			{
+				_progressInfo.ProgressInfoString = "Processing Targets: ";
+				_backgroundWorker.ReportProgress(Convert.ToInt16(currentProgress * 100), _progressInfo);
+			}
+		}
 
 		#region private methods
 		#endregion

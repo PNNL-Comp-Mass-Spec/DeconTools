@@ -14,7 +14,8 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class IqExecutor
     {
-        private BackgroundWorker _backgroundWorker;
+        protected BackgroundWorker _backgroundWorker;
+		protected TargetedWorkflowExecutorProgressInfo _progressInfo;
 
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
@@ -36,6 +37,21 @@ namespace DeconTools.Workflows.Backend.Core
 			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
 			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
+
+		public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
+		{
+			Results = new List<IqResult>();
+			IsDataExported = true;
+			DisposeResultDetails = true;
+			_parameters = parameters;
+			_run = run;
+			SetupLogging();
+			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
+			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+
+			_backgroundWorker = backgroundWorker;
+			_progressInfo = new TargetedWorkflowExecutorProgressInfo();
+		}
 
         #endregion
 
@@ -367,6 +383,20 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
+		protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets)
+		{
+			double currentProgress = (currentTarget / (double)totalTargets);
+
+			if (currentTarget % 50 == 0)
+			{
+				IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
+			}
+
+			if (_backgroundWorker != null)
+			{
+				_backgroundWorker.ReportProgress(Convert.ToInt16(currentProgress * 100));
+			}
+		}
 
 
         private void SetupResultsFolder()
@@ -453,22 +483,6 @@ namespace DeconTools.Workflows.Backend.Core
 
 			IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
         }
-
-        
-
-
-
-		private void ReportGeneralProgress(int currentTarget, int totalTargets)
-		{
-			double currentProgress =  (currentTarget/(double)totalTargets);
-			
-			if (currentTarget % 50 == 0)
-			{
-                IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress *100, 1)) + "% Complete." );
-			}
-		}
-
-
 
 
 		

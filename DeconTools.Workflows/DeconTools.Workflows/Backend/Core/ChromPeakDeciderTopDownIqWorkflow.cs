@@ -83,85 +83,6 @@ namespace DeconTools.Workflows.Backend.Core
 		}
 
 
-		///// <summary>
-		///// Selects best peak for each chargestate and updates child IqResult
-		///// </summary>
-		///// <param name="child"></param>
-		//private void SelectChildPeak(IqTarget child)
-		//{
-		//    var peakSelector = ChromPeakSelector as IqSmartChromPeakSelector;
-
-		//    IqResult childResult = child.GetResult();
-
-		//    List<ChromPeakIqTarget> peakTargetList = new List<ChromPeakIqTarget>();
-		//    var peakTargets = child.ChildTargets();
-		//    foreach (ChromPeakIqTarget target in peakTargets)
-		//    {
-		//        peakTargetList.Add(target);
-		//    }
-
-		//    bool filterOutFlagged = childResult.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
-
-		//    ChromPeakIqTarget chromPeakTarget = peakSelector.SelectBestPeak(peakTargetList, filterOutFlagged);
-
-		//    if (chromPeakTarget != null)
-		//    {
-
-		//        IqResult chromPeakResult = chromPeakTarget.GetResult();
-
-		//        childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
-
-		//        childResult.LcScanObs = chromPeakResult.LcScanObs;
-
-		//        childResult.LCScanSetSelected = chromPeakResult.LCScanSetSelected;
-
-		//        childResult.IqResultDetail.MassSpectrum = chromPeakResult.IqResultDetail.MassSpectrum;
-
-		//        TrimData(childResult.IqResultDetail.MassSpectrum, childResult.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
-
-		//        childResult.ObservedIsotopicProfile = chromPeakResult.ObservedIsotopicProfile;
-
-		//        childResult.FitScore = chromPeakResult.FitScore;
-
-		//        childResult.NETError = chromPeakResult.NETError;
-
-		//        childResult.InterferenceScore = chromPeakResult.InterferenceScore;
-
-		//        childResult.CorrelationData = chromPeakResult.CorrelationData;
-
-		//        childResult.MonoMassObs = chromPeakResult.ObservedIsotopicProfile == null
-		//                                      ? 0
-		//                                      : chromPeakResult.ObservedIsotopicProfile.MonoIsotopicMass;
-
-		//        childResult.MZObs = chromPeakResult.ObservedIsotopicProfile == null
-		//                                ? 0
-		//                                : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
-
-
-		//        childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
-		//                                          ? 0
-		//                                          : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
-
-
-		//        childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) *
-		//                                            childResult.MZObsCalibrated / childResult.Target.ChargeState;
-
-		//        childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
-		//                                          ? 0
-		//                                          : chromPeakResult.MassErrorBefore;
-
-
-		//        childResult.MassErrorAfter = (childResult.MZObsCalibrated - childResult.Target.MZTheor) / childResult.Target.MZTheor *
-		//                                     1e6;
-
-
-		//        var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak)childResult.ChromPeakSelected).NETValue;
-		//        childResult.ElutionTimeObs = elutionTime;
-
-		//        childResult.Abundance = GetAbundance(childResult);
-		//    }
-		//}
-
 
 		/// <summary>
 		/// Expands charge range to cover all instances of a given sequence
@@ -242,6 +163,18 @@ namespace DeconTools.Workflows.Backend.Core
 					if (correlation > correlationCutoff && target.GetResult().FitScore < fitCutoff)
 					{
 						UpdateSelection(target);
+						TopDownIqResult parentResult = parentTarget.GetResult() as TopDownIqResult;
+						foreach (ChargeCorrelationItem item in parentResult.ChargeCorrelationData.CorrelationData)
+						{
+							if (referenceTarget == item.ReferenceTarget)
+							{
+								var corrItem = new ChromCorrelationDataItem(0, 0, correlation);
+								var corr = new ChromCorrelationData();
+								corr.AddCorrelationData(corrItem);
+								item.PeakCorrelationData.Add(target, corr);
+							}
+						}
+						
 						return true;
 					}
 				}
@@ -296,6 +229,7 @@ namespace DeconTools.Workflows.Backend.Core
 				}
 			}
 
+			bestScoringGroup.SelectedTargetGrouping = true;
 			foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in bestScoringGroup.PeakCorrelationData)
 			{
 				UpdateSelection(entry.Key);

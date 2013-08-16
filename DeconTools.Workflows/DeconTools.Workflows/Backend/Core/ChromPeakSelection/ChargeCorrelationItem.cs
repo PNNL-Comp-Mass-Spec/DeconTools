@@ -11,12 +11,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 	{
 		public ChargeCorrelationItem()
 		{
+			SelectedTargetGrouping = false;
 			ReferenceTarget = new ChromPeakIqTarget();
 			PeakCorrelationData = new Dictionary<ChromPeakIqTarget, ChromCorrelationData>();
 		}
 
 		public ChargeCorrelationItem(ChromPeakIqTarget referenceTarget)
 		{
+			SelectedTargetGrouping = false;
 			ReferenceTarget = referenceTarget;
 			PeakCorrelationData = new Dictionary<ChromPeakIqTarget, ChromCorrelationData>();
 		}
@@ -24,5 +26,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 		public ChromPeakIqTarget ReferenceTarget { get; set; }
 
 		public Dictionary<ChromPeakIqTarget, ChromCorrelationData> PeakCorrelationData { get; set; }
+
+		public bool SelectedTargetGrouping { get; set; }
 	}
 }
