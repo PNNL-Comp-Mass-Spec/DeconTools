@@ -217,15 +217,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
         }
 
-        [Ignore("For testing only")]
+        //[Ignore("For testing only")]
         [Test]
         public void CompareOldAndNewDeconvolutorsOrbitrap()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+            //run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
+
+            //to sum
+            run.ScanSetCollection.Create(run, 6005, 6005, 5, 1, false);
+
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
 
 
@@ -234,9 +238,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             thrashParameters.MaxFit = 0.4;
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
-
-
+            
             ScanSet scanset = new ScanSet(6005);
+            
+            //For summing mass spectra:
+            //scanset = new ScanSetFactory().CreateScanSet(run, 6005, 5);
+
             run.CurrentScanSet = scanset;
 
             HornDeconvolutor oldDeconvolutor = new HornDeconvolutor();
@@ -290,7 +297,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
-            string outputFilename = @"D:\temp\exportedIsos.csv";
+            string outputFilename = @"C:\Temp\ThrashTesting\exportedIsos.csv";
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);
 
             exporter.ExportIsosResults(uniqueToNew);
