@@ -182,7 +182,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 HashSet<int> potentialChargeStates;
                 HashSet<int> potentialChargeStatesbyPaul;
-                if (UseAutocorrelationChargeDetermination && false)
+                if (UseAutocorrelationChargeDetermination)
                 {
                     int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
                     potentialChargeStates = new HashSet<int>();
