@@ -132,6 +132,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\ACss.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculatorWithChanges.cs" />
     <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
     <Compile Include="Algorithms\ChromatogramGenerator.cs" />
     <Compile Include="Algorithms\IsotopicProfileMultiChromatogramExtractor.cs" />
