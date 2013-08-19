@@ -19,6 +19,7 @@ namespace DeconTools.Backend.Workflows
 
         PeakDetectAndExportWorkflowParameters _workflowParameters;
         private BackgroundWorker backgroundWorker;
+	    private PeakProgressInfo peakProgressInfo;
 
         PeakListTextExporter peakExporter;
 
@@ -50,6 +51,7 @@ namespace DeconTools.Backend.Workflows
             : this(run, parameters)
         {
             this.backgroundWorker = bw;
+			peakProgressInfo = new PeakProgressInfo();
         }
 
 
@@ -86,6 +88,7 @@ namespace DeconTools.Backend.Workflows
 
         public void Execute()
         {
+
             InitializeWorkflow();
 
             if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
@@ -229,7 +232,8 @@ namespace DeconTools.Backend.Workflows
         {
             if (backgroundWorker != null)
             {
-                backgroundWorker.ReportProgress((int)percentProgress);
+				peakProgressInfo.ProgressInfoString = "Creating Peaks File ";
+                backgroundWorker.ReportProgress((int)percentProgress, peakProgressInfo);
             }
             else
             {

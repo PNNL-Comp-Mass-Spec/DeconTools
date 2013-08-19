@@ -155,6 +155,7 @@
     <Compile Include="Core\MassAlignmentInfoLcmsWarp.cs" />
     <Compile Include="Core\NetAlignmentInfo.cs" />
     <Compile Include="Core\NetAlignmentInfoBasic.cs" />
+    <Compile Include="Core\PeakProgressInfo.cs" />
     <Compile Include="Core\Results\DeconMSnResult.cs" />
     <Compile Include="Core\Results\DeuteratedTargetedResultObject.cs" />
     <Compile Include="Data\ViperMassCalibrationData.cs" />

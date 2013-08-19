@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Data
@@ -34,7 +35,7 @@ namespace DeconTools.Backend.Data
             this.filename = filename;
             this.delimiter = '\t';
             this.backgroundWorker = bw;
-
+			this.peakProgressInfo = new PeakProgressInfo();
         }
 
         #endregion
@@ -103,7 +104,8 @@ namespace DeconTools.Backend.Data
 
                 if (this.backgroundWorker != null)
                 {
-                    backgroundWorker.ReportProgress(percentProgress);
+	                peakProgressInfo.ProgressInfoString = "Loading Peaks ";
+                    backgroundWorker.ReportProgress(percentProgress, peakProgressInfo);
                 }
                 else
                 {
