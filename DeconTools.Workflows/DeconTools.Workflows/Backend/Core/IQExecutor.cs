@@ -429,6 +429,8 @@ namespace DeconTools.Workflows.Backend.Core
             parameters.SigNoiseThreshold = Parameters.ChromGenSourceDataSigNoise;
             parameters.ProcessMSMS = Parameters.ChromGenSourceDataProcessMsMs;
             parameters.IsDataThresholded = Parameters.ChromGenSourceDataIsThresholded;
+			parameters.LCScanMin = this.Run.GetMinPossibleLCScanNum();
+			parameters.LCScanMax = this.Run.GetMaxPossibleLCScanNum();
 
             var peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
