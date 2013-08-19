@@ -120,6 +120,9 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ThermoRawFileReaderDLL">
+      <HintPath>..\Library\ThermoRawFileReaderDLL.dll</HintPath>
+    </Reference>
     <Reference Include="UIMFLibrary, Version=2.0.4419.21472, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>

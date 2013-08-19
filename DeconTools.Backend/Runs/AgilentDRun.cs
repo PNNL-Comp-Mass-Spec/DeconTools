@@ -6,6 +6,7 @@ using Agilent.MassSpectrometry.DataAnalysis;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
+using IonizationMode = PNNLOmics.Data.IonizationMode;
 
 namespace DeconTools.Backend.Runs
 {
@@ -179,7 +180,8 @@ namespace DeconTools.Backend.Runs
                 //adjust scan number if needed
                 precursor.PrecursorScan = scanNum;
 
-
+				// TODO: Only CID possible in Aglent files?
+				precursor.FragmentationType = FragmentionType.CID;
             }
             else if (precursorMassCount > 1)
             {
@@ -194,6 +196,9 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorCharge = -1;
                 precursor.PrecursorScan = scanNum;
             }
+
+			precursor.IonizationMode = m_spec.IonPolarity == IonPolarity.Negative ? IonizationMode.Negative : IonizationMode.Positive;
+
             return precursor;
         }
 

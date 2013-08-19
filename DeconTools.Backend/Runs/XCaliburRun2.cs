@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
-
+using ThermoRawFileReaderDLL.FinniganFileIO;
 
 
 namespace DeconTools.Backend.Runs
@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Runs
     {
 
         private MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
-
 
         #region Constructors
         public XCaliburRun2()
@@ -76,9 +75,7 @@ namespace DeconTools.Backend.Runs
             _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
             
             return Convert.ToDouble(value);
-
         }
-
 
         public override double GetMS2IsolationWidth(int scanNum)
         {
@@ -87,8 +84,6 @@ namespace DeconTools.Backend.Runs
 
             return Convert.ToDouble(value);
         }
-
-
 
         public override int GetNumMSScans()
         {
@@ -182,14 +177,10 @@ namespace DeconTools.Backend.Runs
             return msLevel;
         }
 
-
         public double GetCollisionEnergyInfoFromInstrumentInfo(int scanNum)
         {
-
             return 0;
-
         }
-
 
         public override double GetTICFromInstrumentInfo(int scanNum)
         {
@@ -199,28 +190,17 @@ namespace DeconTools.Backend.Runs
                                                       ref pdBasePeakMass, ref pdBasePeakIntensity, ref pnNumChannels, ref pbUniformTime,
                                                       ref pdFrequency);
 
-
-           
-
             return pdTIC;
-
-
         }
-
-
 
         public string GetTuneData()
         {
-            
-
-            
             object pvarLabels = null, pvarValues = null;
             int pnArraySize = 0;
             _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
 
             var labels = (string[]) pvarLabels;
             var values = (string[]) pvarValues;
-
 
             for (int index = 0; index < labels.Length; index++)
             {
@@ -231,34 +211,35 @@ namespace DeconTools.Backend.Runs
             }
 
             return labels.ToString();
-
         }
-
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
+        	double precursorMz;
+        	int msLevel;
+        	string fragmentationType;
+
+        	string scanInfo = this.GetScanInfo(scanNum);
+        	XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
+			FinniganFileReaderBaseClass.IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
+
             PrecursorInfo precursor = new PrecursorInfo();
 
-            string scanFilterString = null;
-            _msfileReader.GetFilterForScanNum(scanNum, ref scanFilterString);
-
             //Get MS Level
-            precursor.MSLevel = GetMSLevel(scanNum);
-
+			precursor.MSLevel = msLevel;
 
             //Get Precursor MZ
-            if (scanFilterString == null)
+			if (scanInfo == null)
             {
                 precursor.PrecursorMZ = -1;
-
             }
             else
             {
-                precursor.PrecursorMZ = ParseMZValueFromThermoScanInfo(scanFilterString);
+                precursor.PrecursorMZ = precursorMz;
             }
 
             //Get the Parent scan if MS level is not MS1
-            if (precursor.MSLevel>1)
+            if (precursor.MSLevel > 1)
             {
                 int stepBack = 0;
                 while (scanNum - stepBack > 0)
@@ -273,57 +254,37 @@ namespace DeconTools.Backend.Runs
                         }
                     }
                 }
+
                 precursor.PrecursorScan = scanNum - (stepBack - 1);
+
+				switch (fragmentationType)
+				{
+					case "hcd":
+						precursor.FragmentationType = FragmentionType.HCD;
+						break;
+					case "etd":
+						precursor.FragmentationType = FragmentionType.ETD;
+						break;
+					case "cid":
+						precursor.FragmentationType = FragmentionType.CID;
+						break;
+					default:
+						precursor.FragmentationType = FragmentionType.None;
+						break;
+				}
             }
             else
             {
                 precursor.PrecursorScan = scanNum;
+				precursor.FragmentationType = FragmentionType.None;
             }
 
-           
-
+			precursor.IonizationMode = ionMode.Equals(FinniganFileReaderBaseClass.IonModeConstants.Positive) ? IonizationMode.Positive : IonizationMode.Negative;
 
             //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
 
             return precursor;
-        }
-
-
-        private double ParseMZValueFromThermoScanInfo(string scanInfo)
-        {
-            double precursorMass = 0;
-
-            //TODO: we might need to improve this.  Seems to be geared towards CID only
-            string patternCid = @"(?<mz>[0-9.]+)@cid";
-
-            var matchCid = Regex.Match(scanInfo, patternCid);
-
-            if (matchCid.Success)
-            {
-                precursorMass = Convert.ToDouble(matchCid.Groups["mz"].Value);
-            }
-            else
-            {
-                precursorMass = -1;
-            }
-
-            if (precursorMass < 0)//if still -1, check for hcd
-            {
-                string patternHcd = @"(?<mz>[0-9.]+)@hcd";
-
-                var matchHcd = Regex.Match(scanInfo, patternHcd);
-
-                if (matchHcd.Success)
-                {
-                    precursorMass = Convert.ToDouble(matchHcd.Groups["mz"].Value);
-                }
-                else
-                {
-                    precursorMass = -1;
-                }
-            }
-            return precursorMass;
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
@@ -429,20 +390,8 @@ namespace DeconTools.Backend.Runs
                 //we got to the MinScan and never found the parent scan
                 return -1;
             }
+
             return ParentScanList[scanLC];
-        }
-
-        private double getMZFromScanInfo(string scanInfo)
-        {
-            string pattern = @"(?<mz>[0-9.]+)@\w";
-            var match = Regex.Match(scanInfo, pattern);
-
-            double mzScanInfo = 0;
-            if (match.Success)
-            {
-                mzScanInfo = Convert.ToDouble(match.Groups["mz"].Value);
-            }
-            return mzScanInfo;
         }
 
         public override void Close()
