@@ -83,8 +83,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 //IqLogger.Log.Debug(reportString);
 
 
-
-
                 correlations[indexCurrentFeature] = correlation;
 
                 if (bestScore < correlation)
@@ -93,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     bestFeature = potentialfeature;
                 }
             }
-            return GetIsotopicProfileMethod2(chargeStates, correlations, correlationswithAltChargeState, potentialIsotopicProfiles, bestFeature, bestScore);
+            return GetIsotopicProfileMethod1(chargeStates, correlations, correlationswithAltChargeState, potentialIsotopicProfiles, bestFeature, bestScore);
         }
   
         //note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
@@ -139,14 +137,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             double xValuePeak1 = potentialfeature.Peaklist[potentialfeature.MonoIsotopicPeakIndex].XValue;
             var ppmTolerancePeak1 = (widthPeak1 / 2.35) / xValuePeak1 * 1e6;    //   peak's sigma value / mz * 1e6 
 
-            return getCorrelation(monoPeakMZ, pretendMonoPeakMZ, ppmTolerancePeak1, ppmTolerancePeak1);
-            //IsotopicProfile pretendProfile = new IsotopicProfile();
-            //pretendProfile = potentialfeature.Clone();
-            //pretendProfile.Peaklist = potentialfeature.Peaklist.Clone();
-            //ConvertToNewChargeState(pretendProfile, chargeState);
-            //pretendProfile.ChargeState = chargeState;
-
-            //return GetCorrelation(potentialfeature);
+            return getCorrelation(monoPeakMZ, pretendMonoPeakMZ, ppmTolerancePeak1, ppmTolerancePeak1);         
 
         }
 
@@ -166,93 +157,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         }
 
         private IsotopicProfile GetIsotopicProfileMethod1(int[] chargeStates, double[] correlations, double[,] correlationswithAltChargeState, List<IsotopicProfile> potentialIsotopicProfiles, IsotopicProfile bestFeat, double bestScore)
-        {
-            double[] standDevsOfEachSet = new double[correlations.Length];
-            double[] averageCorrOfEachSet = new double[correlations.Length];
-            List<int>[] chargeStateSets = new List<int>[correlations.Length];
-
-            List<int> contenders = new List<int>();
-            for (int i = 0; i < correlations.Length; i++)
-            {
-
-                HashSet<int> indexesWhoAreFactorsOfMe = GetIndexesWhoAreAFactorOfMe(i, chargeStates);
-                if (null == indexesWhoAreFactorsOfMe)
-                {
-                    break; //null means that we are at the end of the set. st dev is already defaulted at 0, which is what it 
-                    //would be to take the st. dev of one item.
-                }
-                int length = indexesWhoAreFactorsOfMe.Count + 1;
-                double[] arrayofCorrelationsInSet = new double[length];
-
-                arrayofCorrelationsInSet[0] = correlations[i];
-                for (int i2 = 1; i2 < length; i2++)
-                {
-                    arrayofCorrelationsInSet[i2] = correlations[indexesWhoAreFactorsOfMe.ElementAt(i2 - 1)];
-                }
-                chargeStateSets[i] = GetSet(i, indexesWhoAreFactorsOfMe, chargeStates);
-                standDevsOfEachSet[i] = MathNet.Numerics.Statistics.Statistics.StandardDeviation(arrayofCorrelationsInSet);
-                averageCorrOfEachSet[i] = MathNet.Numerics.Statistics.Statistics.Mean(arrayofCorrelationsInSet);
-                if (standDevsOfEachSet[i] < 0.05 && correlations[i] > .7)//DANGERous 0.05 and .7 
-                {
-                    //string reportString = "BEST CORRELATION: " + correlations[i] + "\nBEST CHARGE STATE: " + potentialIsotopicProfiles.ElementAt(i).ChargeState;
-                    //IqLogger.Log.Debug(reportString);
-                    contenders.Add(i);
-
-                    //return potentialIsotopicProfiles.ElementAt(i);
-                }
-                if (contenders.Count == 1)
-                {
-                    IqLogger.Log.Debug("\nWas only one contender\n");
-                    return potentialIsotopicProfiles.ElementAt(contenders.ElementAt(0));
-                }
-
-
-                foreach (int contender in contenders)
-                {
-                    if (AnotherChargeStateExists(contender, correlationswithAltChargeState))
-                    {
-                        //TODO: and no correlations of other non-factor charge states.
-                        return potentialIsotopicProfiles.ElementAt(contender);
-                    }
-
-                }
-
-            }
-
-            //If none were really close, just return the highest correlation.            
-            //string reportString2 = "\n(default) \nBEST CORRELATION: " + bestScore + "\nBEST CHARGE STATE: " + bestFeat.ChargeState;
-            //IqLogger.Log.Debug(reportString2);
-
-            return bestFeat;
-
-            //TODO:
-            //ideas:
-            //1. determine how many 'sets' there are.
-            //2. determine who is 'right' in each set. this could entail looking at the st devs of the correlations 
-            //3. determine which 'set' is 'right'.
-
-            //also, look for that feature present in another charge state. 
-
-            //for (int i = 0; i < chargeStates.Length; i++)
-            //{
-            //    HashSet<int> indexesWhoAreFactorsOfMe = getIndexesWhoAreAFactorOfMe(i, chargeStates);
-            //    double[] arrayOfCorrelations = new double[indexesWhoAreFactorsOfMe.Count];
-            //    for (int i2 = 0; i2 < arrayOfCorrelations.Length; i2++)
-            //    {
-            //        arrayOfCorrelations[i2] = indexesWhoAreFactorsOfMe.ElementAt(i2);
-            //    }
-            //    if (MathNet.Numerics.Statistics.Statistics.StandardDeviation(arrayOfCorrelations) < .05) return potentialIsotopicProfiles[i];
-
-            //}
-
-            //take the first one, see how its correlation compares with ones that are factors of itself. 
-            //if it's about the same... then that confirms that the higher charge state is right.
-            //if it's higher, that also confirms it is that first one.
-            //if it's lower, exceedingly, then it's not that one and you should move on to try out the next one.
-            // INDEX,CHARGE, CORRELATION, OTHERCORRELATION[], 
-
-        }
-        private IsotopicProfile GetIsotopicProfileMethod2(int[] chargeStates, double[] correlations, double[,] correlationswithAltChargeState, List<IsotopicProfile> potentialIsotopicProfiles, IsotopicProfile bestFeat, double bestScore)
         {
             double[] standDevsOfEachSet = new double[correlations.Length];
             double[] averageCorrOfEachSet = new double[correlations.Length];

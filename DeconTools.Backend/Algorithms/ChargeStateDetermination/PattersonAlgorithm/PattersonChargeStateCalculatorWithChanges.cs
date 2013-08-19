@@ -203,6 +203,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 if (tempChargeState > 0)
                 {
+                    //CHANGE
                     double anotherPeak = peak.XValue + 1.0 / (double)tempChargeState;//(1.003d / tempChargeState);//paul edit
 
                     bool foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, anotherPeak, peak.Width).Count > 0;
@@ -215,7 +216,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                         }
                         else
                         {
-                            //paul edit. was just "return tempChargeState;" inside else.
+                            //CHANGE
+                            //paul edit. this c# version was just "return tempChargeState;" inside else.
                             double peakA = peak.XValue - (1.03 / (double)tempChargeState);
                             foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).Count > 0;
                             if (foundPeak)
@@ -310,11 +312,12 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 int j;
                 for (j = 0; j < (numPoints - i - 1); j++)
                 {
+                    //CHANGE POSSIBLY IMPORTANT CHANGE. cpp version uses inData[j] instead of inData[i]. 
                     //sum += (currentValue) * (inData[i + j] - average);
                     sum += (inData[j] - average) * (inData[i + j] - average);
                 }
 
-                if (j > 0)
+                if (j > 0)//I[Paul] don't see why this check needs to happen.
                 {
                     outData[i] = (sum / numPoints);
                 }
