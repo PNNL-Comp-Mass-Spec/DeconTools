@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 		public void MSAlignTargetDataTest()
 		{
 			string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
-			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\salmonella_top_target.txt";
+			string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_fullTargetset.txt";
 			string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
 
 			//Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\detailed_results.txt");

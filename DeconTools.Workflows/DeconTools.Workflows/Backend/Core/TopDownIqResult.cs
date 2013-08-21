@@ -12,8 +12,11 @@ namespace DeconTools.Workflows.Backend.Core
 			: base(target)
 		{
 			ChargeCorrelationData = new ChargeCorrelationData();
+			SelectedCorrelationGroup = new ChargeCorrelationItem();
 		}
 
 		public ChargeCorrelationData ChargeCorrelationData { get; set; }
+
+		public ChargeCorrelationItem SelectedCorrelationGroup { get; set; }
 	}
 }

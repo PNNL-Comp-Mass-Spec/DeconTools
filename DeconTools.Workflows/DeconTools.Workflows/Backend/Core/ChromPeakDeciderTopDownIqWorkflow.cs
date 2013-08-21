@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
+using DeconTools.Workflows.Backend.FileIO;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -35,6 +36,11 @@ namespace DeconTools.Workflows.Backend.Core
 		protected internal override IqResult CreateIQResult(IqTarget target)
 		{
 			return new TopDownIqResult(target);
+		}
+
+		public override FileIO.IqResultExporter CreateExporter()
+		{
+			return new TopDownIqResultExporter();
 		}
 
 
@@ -155,27 +161,30 @@ namespace DeconTools.Workflows.Backend.Core
 
 			foreach (ChromPeakIqTarget target in sortedPeakTargets)
 			{
-				double minScan = referenceTarget.ChromPeak.XValue - (0.5 * referenceTarget.ChromPeak.Width);
-				double maxScan = referenceTarget.ChromPeak.XValue + (0.5 * +referenceTarget.ChromPeak.Width);
-				if ((target.ChromPeak.XValue > minScan) && (target.ChromPeak.XValue < maxScan))
+				if (referenceTarget.ChromPeak != null)
 				{
-					double correlation = iqChargeCorrelator.PairWiseChargeCorrelation(referenceTarget, target, Run, 3);
-					if (correlation > correlationCutoff && target.GetResult().FitScore < fitCutoff)
+					double minScan = referenceTarget.ChromPeak.XValue - (0.5*referenceTarget.ChromPeak.Width);
+					double maxScan = referenceTarget.ChromPeak.XValue + (0.5*+referenceTarget.ChromPeak.Width);
+					if ((target.ChromPeak.XValue > minScan) && (target.ChromPeak.XValue < maxScan))
 					{
-						UpdateSelection(target);
-						TopDownIqResult parentResult = parentTarget.GetResult() as TopDownIqResult;
-						foreach (ChargeCorrelationItem item in parentResult.ChargeCorrelationData.CorrelationData)
+						double correlation = iqChargeCorrelator.PairWiseChargeCorrelation(referenceTarget, target, Run, 3);
+						if (correlation > correlationCutoff && target.GetResult().FitScore < fitCutoff)
 						{
-							if (referenceTarget == item.ReferenceTarget)
+							UpdateSelection(target);
+							TopDownIqResult parentResult = parentTarget.GetResult() as TopDownIqResult;
+							foreach (ChargeCorrelationItem item in parentResult.ChargeCorrelationData.CorrelationData)
 							{
-								var corrItem = new ChromCorrelationDataItem(0, 0, correlation);
-								var corr = new ChromCorrelationData();
-								corr.AddCorrelationData(corrItem);
-								item.PeakCorrelationData.Add(target, corr);
+								if (referenceTarget == item.ReferenceTarget)
+								{
+									var corrItem = new ChromCorrelationDataItem(0, 0, correlation);
+									var corr = new ChromCorrelationData();
+									corr.AddCorrelationData(corrItem);
+									item.PeakCorrelationData.Add(target, corr);
+								}
 							}
+
+							return true;
 						}
-						
-						return true;
 					}
 				}
 			}
@@ -230,6 +239,7 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 
 			bestScoringGroup.SelectedTargetGrouping = true;
+			result.SelectedCorrelationGroup = bestScoringGroup;
 			foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in bestScoringGroup.PeakCorrelationData)
 			{
 				UpdateSelection(entry.Key);

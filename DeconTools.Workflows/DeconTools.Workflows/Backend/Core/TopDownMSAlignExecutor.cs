@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities.IqLogger;
@@ -12,7 +14,10 @@ namespace DeconTools.Workflows.Backend.Core
 	{
 		private RunFactory _runFactory = new RunFactory();
 
-		private IqTargetUtilities _targetUtilities = new IqTargetUtilities();
+		private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
+		private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
+
+		private string _resultsFolder;
 
 		#region constructors
 
@@ -63,6 +68,7 @@ namespace DeconTools.Workflows.Backend.Core
 			target.ElutionTimeTheor = Run.NetAlignmentInfo.GetNETValueForScan(scanList[scanList.Count / 2]);
 		}
 
+
 		#endregion
 
 		protected override void ReportGeneralProgress(int currentTarget, int totalTargets)
@@ -81,7 +87,53 @@ namespace DeconTools.Workflows.Backend.Core
 			}
 		}
 
+
+		protected override void ExportResults(IqResult iqResult)
+		{
+			List<IqResult> resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
+
+			var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
+
+			var exportedResults = orderedResults.Where(orderedResult => orderedResult.IsExported).ToList();
+
+			if (IqResultExporter == null)
+			{
+				IqResultExporter = iqResult.Target.Workflow.CreateExporter();
+			}
+
+			SetupResultsFolder();
+
+			IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, Run.DatasetName), exportedResults);
+		}
+
+
 		#region private methods
+
+
+		private void SetupResultsFolder()
+		{
+			if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+			{
+				_resultsFolder = GetDefaultOutputFolder();
+			}
+			else
+			{
+				_resultsFolder = Path.Combine(Parameters.OutputFolderBase, "IqResults");
+			}
+
+			if (!Directory.Exists(_resultsFolder)) Directory.CreateDirectory(_resultsFolder);
+
+
+		}
+
+
+		private string GetDefaultOutputFolder()
+		{
+			string defaultOutputFolder = Run.DataSetPath;
+			return defaultOutputFolder;
+		}
+
+
 		#endregion
 
 	}

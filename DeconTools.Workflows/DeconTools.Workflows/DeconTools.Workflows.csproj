@@ -164,6 +164,7 @@
     <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\TopDownIqResultExporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultFromTextImporter.cs" />
     <Compile Include="Backend\FileIO\TopDownTargetedResultToTextExporter.cs" />
     <Compile Include="Backend\FileIO\BasicIqTargetImporter.cs" />

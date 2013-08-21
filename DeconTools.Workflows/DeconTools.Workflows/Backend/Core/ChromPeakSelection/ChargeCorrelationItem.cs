@@ -28,5 +28,19 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 		public Dictionary<ChromPeakIqTarget, ChromCorrelationData> PeakCorrelationData { get; set; }
 
 		public bool SelectedTargetGrouping { get; set; }
+
+		public double ChargeCorrelationMedian()
+		{
+			List<double> corrList = new List<double>();
+
+			foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in PeakCorrelationData)
+			{
+				double eMedian = (entry.Value.RSquaredValsMedian.HasValue) ? entry.Value.RSquaredValsMedian.Value : 0;
+				corrList.Add(eMedian);
+			}
+
+			return MathUtils.GetMedian(corrList);
+
+		}
 	}
 }
