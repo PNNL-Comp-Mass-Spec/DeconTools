@@ -123,6 +123,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 		}
 
 
+		/// <summary>
+		/// Gets target output header
+		/// </summary>
+		/// <returns></returns>
 		public string GetTargetHeader()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -147,7 +151,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 		}
 
 
-
+		/// <summary>
+		/// Gets charge output header
+		/// </summary>
+		/// <returns></returns>
 		public string GetChargeHeader()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -188,6 +195,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 		}
 
 
+		/// <summary>
+		/// Combines charge state results into one line for target level output
+		/// </summary>
+		/// <param name="results"></param>
+		/// <param name="includeHeader"></param>
+		/// <returns></returns>
 		public string GetTargetResultAsString(IEnumerable<IqResult> results, bool includeHeader = false)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -207,8 +220,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 			foreach (IqResult result in results)
 			{
+				//Sums abundance from each result
 				abundance += result.Abundance;
 
+				//Eliminates charge 0 or targets that are too poor to quantify
 				if (!(result.Target.ChargeState == 0 || result.Abundance <= 0))
 				{
 					fitScoreList.Add(result.FitScore);
@@ -223,6 +238,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 					}
 				}
 
+				//Looks for parent level target for information
 				TopDownIqResult parentResult = result as TopDownIqResult;
 				if (parentResult != null)
 				{
@@ -249,6 +265,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 			return outString;
 		}
 
+
+
+		/// <summary>
+		/// Gets charge results as strings, 1 line per result
+		/// </summary>
+		/// <param name="result"></param>
+		/// <param name="includeHeader"></param>
+		/// <returns></returns>
 		public string GetChargeResultAsString (IqResult result, bool includeHeader = false)
 		{
 			if (!(result.Target.ChargeState == 0 || result.Abundance <= 0))
