@@ -137,6 +137,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 			sb.Append(Delimiter);
 			sb.Append("EmpiricalFormula");
 			sb.Append(Delimiter);
+			sb.Append("PrecursorMass");
+			sb.Append(Delimiter);
 			sb.Append("ChargeStateList");
 			sb.Append(Delimiter);
 			sb.Append("Abundance");
@@ -247,17 +249,28 @@ namespace DeconTools.Workflows.Backend.FileIO
 				}
 			}
 
+			double medianFit = 1;
+
+			if (fitScoreList.Count != 0)
+			{
+				medianFit = MathUtils.GetMedian(fitScoreList);
+			}
+			
+			
+
 			sb.Append(target.ID);
 			sb.Append(Delimiter);
 			sb.Append(target.Code);
 			sb.Append(Delimiter);
 			sb.Append(target.EmpiricalFormula);
 			sb.Append(Delimiter);
+			sb.Append(target.MonoMassTheor);
+			sb.Append(Delimiter);
 			sb.Append(chargeStateList);
 			sb.Append(Delimiter);
 			sb.Append(abundance);
 			sb.Append(Delimiter);
-			sb.Append(MathUtils.GetMedian(fitScoreList));
+			sb.Append(medianFit);
 			sb.Append(Delimiter);
 			sb.Append(correlationMedian);
 
