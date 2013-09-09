@@ -629,8 +629,8 @@ namespace DeconTools.Backend.Workflows
 
                     double targetMZ = saturatedFeature.IsotopicProfile.getMonoPeak().XValue - (1.003 / (double)saturatedFeature.IsotopicProfile.ChargeState);
 
-
-                    int indexOfXYDataPointToTheLeft = MathUtils.GetClosest(msFeatureXYData.Xvalues, targetMZ, 0.1);
+					const double toleranceMZ = 0.1;
+					int indexOfXYDataPointToTheLeft = MathUtils.GetClosest(msFeatureXYData.Xvalues, targetMZ, toleranceMZ);
 
                     double obsMZ = msFeatureXYData.Xvalues[indexOfXYDataPointToTheLeft];
 
@@ -652,7 +652,7 @@ namespace DeconTools.Backend.Workflows
 
                     double avgIntensityObsPointsToLeft = obsMZData.Average();
 
-                    if (avgIntensityObsPointsToLeft>monoPeak.Height*0.75)
+					if (avgIntensityObsPointsToLeft > monoPeak.Height * 0.75 && Math.Abs(obsMZ - targetMZ) <= toleranceMZ)
                     {
                         peakToTheLeft = new MSPeak(obsMZ, (float)avgIntensityObsPointsToLeft, monoPeak.Width, 0);
                     }
