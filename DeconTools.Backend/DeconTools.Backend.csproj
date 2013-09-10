@@ -38,7 +38,7 @@
   <ItemGroup>
     <Reference Include="alglibnet2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\x86\Debug\alglibnet2.dll</HintPath>
+      <HintPath>..\Library\alglibnet2.dll</HintPath>
     </Reference>
     <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
