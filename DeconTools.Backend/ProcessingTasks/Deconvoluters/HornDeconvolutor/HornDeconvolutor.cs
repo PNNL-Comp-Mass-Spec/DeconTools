@@ -352,6 +352,8 @@ namespace DeconTools.Backend.ProcessingTasks
             float backgroundIntensity = (float)resultList.Run.CurrentBackgroundIntensity;
             float minPeptideIntensity = (float)(resultList.Run.CurrentBackgroundIntensity * this.MinPeptideBackgroundRatio);
 
+			if (resultList.Run.XYData == null) return;
+
             float[] xvals = new float[1];
             float[] yvals = new float[1];
             resultList.Run.XYData.GetXYValuesAsSingles(ref xvals, ref yvals);
