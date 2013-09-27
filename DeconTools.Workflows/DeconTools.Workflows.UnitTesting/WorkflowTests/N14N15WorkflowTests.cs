@@ -10,9 +10,6 @@ using NUnit.Framework;
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     [TestFixture]
-
-
-
     public class N14N15WorkflowTests
     {
         private string bruker9t_samplefile1 =

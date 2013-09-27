@@ -150,10 +150,13 @@ namespace IQ.Console
 
                             if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
                             {
+
+                                //TODO: remove the hard-coded value
                                 workflowParameters.ChromNETTolerance = 0.1;
                             }
                             else
                             {
+                                //TODO: remove the hard-coded value
                                 workflowParameters.ChromNETTolerance = 0.025;
                             }
 

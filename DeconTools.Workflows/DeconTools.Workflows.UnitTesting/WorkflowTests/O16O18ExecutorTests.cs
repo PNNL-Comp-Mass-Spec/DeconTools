@@ -52,23 +52,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
 
             Run run = new RunFactory().CreateRun(testDatasetPath);
-
             var executor = new IqExecutor(executorParameters, run);
 
             string targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
             targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
-            
+
 
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
 
-            //int testTarget = 9282;
-            //executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
-
-            executor.Targets = executor.Targets.OrderBy(p=>p.ID).Take(150).ToList();
-
+            int testTarget = 9282;
+            executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.025;
@@ -85,26 +81,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.DoAlignment();
             executor.Execute();
 
+            IqResultImporter importer = new IqResultImporterBasic(expectedResultsFilename);
+            var allResults = importer.Import();
 
-
-
-            //var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
-            //Backend.Results.TargetedResultRepository repository = importer.Import();
-
-            //Assert.AreEqual(3, repository.Results.Count);
-            //var result1 = repository.Results[1] as O16O18TargetedResultDTO;
-
-            //Assert.AreEqual(9282, result1.TargetID);
-            //Assert.AreEqual(2, result1.ChargeState);
-            //Assert.AreEqual(4537, result1.ScanLC);
-            //Assert.AreEqual(0.32514m, (decimal)Math.Round(result1.NET, 5));
-            //Assert.AreEqual(-0.001662m, (decimal)Math.Round(result1.NETError, 6));
-
-            //Assert.AreEqual(0.274m, (decimal)Math.Round(result1.Ratio, 3));
-            //Assert.IsTrue(result1.ChromCorrO16O18DoubleLabel > 0);
-
-            //Console.WriteLine(result1.ToStringWithDetailsAsRow());
-
+            var result1 = allResults.First(p => p.Target.ID == 9282 && p.Target.ChargeState == 2);
+            Assert.AreEqual(9282, result1.Target.ID);
+            Assert.AreEqual(0.32678m, (decimal)result1.ElutionTimeObs);
+            Assert.AreEqual(4545, result1.LcScanObs);
+            Assert.AreEqual(0.02,(decimal)result1.FitScore);
+            
         }
 
 
@@ -112,7 +97,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
 
-         
+
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
 
             string testDatasetPath =
@@ -132,7 +117,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
-            
+
             int testTarget = 6955012;
             executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
@@ -150,9 +135,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.DoAlignment();
             executor.Execute();
         }
-        
 
-        
+
+
 
         [Test]
         [Category("MustPass")]
@@ -181,7 +166,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Targets.TargetList =
                 executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
-            
+
             //executor.InitializeRun(testDatasetPath);
             //executor.TargetedWorkflow.Run = executor.Run;
 
@@ -234,7 +219,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetedAlignmentWorkflowParameterFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\TargetedAlignmentWorkflowParameters1.xml";
 
-            
+
             //executorParameters.AlignmentInfoFolder = 
 
             //string testDatasetPath = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
@@ -279,7 +264,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            string expectedResultsFilename = executorParameters.OutputFolderBase+ "\\Results" + "\\" +
+            string expectedResultsFilename = executorParameters.OutputFolderBase + "\\Results" + "\\" +
                                              executor.TargetedWorkflow.Run.DatasetName + "_results.txt";
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
@@ -320,7 +305,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            string expectedResultsFilename = executorParameters.OutputFolderBase+ "\\Results"+   "\\" +
+            string expectedResultsFilename = executorParameters.OutputFolderBase + "\\Results" + "\\" +
                                              executor.TargetedWorkflow.Run.DatasetName + "_results.txt";
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);

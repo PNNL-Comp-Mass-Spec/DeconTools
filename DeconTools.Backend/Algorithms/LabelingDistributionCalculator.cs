@@ -9,6 +9,7 @@ namespace DeconTools.Backend.Algorithms
 
     /// <summary>
     /// Calculates the distribution of labeled atoms. i.e fraction of species that have 0 label, 1 label, 2 label, etc. 
+    /// Based on work by Chik et al, 2006.  http://pubs.acs.org/doi/abs/10.1021/ac050988l
     /// </summary>
     public class LabelingDistributionCalculator
     {
@@ -29,8 +30,8 @@ namespace DeconTools.Backend.Algorithms
         /// <param name="obsIntensities">peak intensities for observed isotopic profile. Does not need to be normalized</param>
         /// <param name="theorIntensityThresh">intensity threshold for theor isotopic profile. Peaks below this value are not used in the algorithm</param>
         /// <param name="obsIntensityThresh">intensity threshold for observed isotopic profile. Peaks below this value are not used in the algorithm</param>
-        /// <param name="numLabelVals">array of values representing the number of labels incorporated</param>
-        /// <param name="labelDistributionVals">array of values representing the fraction of labeling</param>
+        /// <param name="numLabelVals">array of outputted values representing the number of labels incorporated</param>
+        /// <param name="labelDistributionVals">array of outputted values representing the fraction of labeling</param>
         /// <param name="truncateTheorBasedOnRelIntensity">determines whether or not the theor isotopic profile is trimmed</param>
         /// <param name="truncateObservedBasedOnRelIntensity">determines whether or not the observed isotopic profile is trimmed</param>
         /// <param name="leftPadding">number of 0 intensity 'pads' added to left side of isotopic profile</param>
@@ -219,9 +220,6 @@ namespace DeconTools.Backend.Algorithms
 
         #endregion
 
-        #region Private Methods
-
-        #endregion
 
     }
 }

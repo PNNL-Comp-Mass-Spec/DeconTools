@@ -264,7 +264,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 RatioVals.Yvalues = yvals.ToArray();
 
 
-
+                //NOTE:  Sept 23, 2013 - the 'R is no longer used. 
                 result.RSquaredValForRatioCurve=   GetLinearRegressionData(result, xvals, yvals);
 
 
@@ -350,6 +350,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
                 //-------------- calculate Label Distribution ------------------------------------------------
+                // see Chik et al:  http://pubs.acs.org/doi/abs/10.1021/ac050988l ; Also see Sipper paper. 
                 double[] numLabelVals;
                 double[] labelDistributionVals;
 
@@ -383,10 +384,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.PercentCarbonsLabelled = 0;
                 }
 
-
-
-
-
                 IsotopicProfile highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, ratioData);
 
                 if (highQualityRatioProfileData.Peaklist != null && highQualityRatioProfileData.Peaklist.Count > 0)
@@ -410,29 +407,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 result.NumHighQualityProfilePeaks = highQualityRatioProfileData.Peaklist != null
                                                       ? highQualityRatioProfileData.Peaklist.Count
                                                       : 0;
-
-                //double numCarbonsLabelled = GetNumCarbonsLabelledUsingAverageMassDifferences(theorUnlabelledIso,HighQualitySubtractedProfile);
-                //result.NumCarbonsLabelled = numCarbonsLabelled;
-                //result.NumCarbonsLabelled = distAverageLabelsIncorporated;
-
-                //numCarbons = result.Target.GetAtomCountForElement("C");
-                //result.PercentCarbonsLabelled = (result.NumCarbonsLabelled / numCarbons) * 100;
-
-                //if (HighQualitySubtractedProfile.Peaklist != null && HighQualitySubtractedProfile.Peaklist.Count > 0)
-                //{
-                //    result.PercentPeptideLabelled = HighQualitySubtractedProfile.Peaklist.Max(p => p.Height) * 100;
-                //}
-                //else
-                //{
-                //    result.PercentPeptideLabelled = 0;
-                //}
-
-                //Console.WriteLine();
-                //Console.WriteLine(result);
-                //foreach (var val in ChromatogramRSquaredVals)
-                //{
-                //    Console.WriteLine(val);
-                //}
+                
             }
             else
             {

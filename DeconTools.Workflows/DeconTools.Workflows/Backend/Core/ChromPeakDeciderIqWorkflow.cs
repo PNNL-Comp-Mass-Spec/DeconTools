@@ -113,8 +113,7 @@ namespace DeconTools.Workflows.Backend.Core
                                             : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
 
 
-				    childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS)*
-				                                        childResult.MZObsCalibrated/childResult.Target.ChargeState;
+				    childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS)* childResult.Target.ChargeState;
                     
                     childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
                                             ? 0

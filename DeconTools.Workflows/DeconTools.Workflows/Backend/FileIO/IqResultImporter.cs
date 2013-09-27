@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] TargetScanHeaders = { "targetScan" };
         protected string[] MonomassObsHeaders = { "MonoMassObs" };
         protected string[] MZObsHeaders = { "MZObs" };
-        protected string[] MonomassObsCalibratedHeaders = { "MZObsCalibrated" };
+        protected string[] MonomassObsCalibratedHeaders = { "MonoMassObsCalibrated" };
         protected string[] MZObsCalibratedHeaders = {"MZObsCalibrated"};
         protected string[] ElutionTimeObsHeaders = { "ElutionTimeObs" };
         protected string[] ChromPeaksWithinTolHeaders = { "ChromPeaksWithinTolerance" };
