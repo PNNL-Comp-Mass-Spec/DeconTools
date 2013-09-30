@@ -190,6 +190,12 @@ namespace DeconTools.Backend.Core
             int minPossibleScanIndex = GetMinScan(run);
             int maxPossibleScanIndex = GetMaxScan(run);
 
+			if (scanStart < 0 && scanStop < 0)
+			{
+				scanStart = minPossibleScanIndex;
+				scanStop = maxPossibleScanIndex;
+			}
+
             if (scanStart < minPossibleScanIndex)
             {
                 scanStart = minPossibleScanIndex;
@@ -202,7 +208,7 @@ namespace DeconTools.Backend.Core
 
             if (scanStop < minPossibleScanIndex)
             {
-                scanStop = minPossibleScanIndex;
+				scanStop = maxPossibleScanIndex;
             }
 
             if (scanStop > maxPossibleScanIndex)

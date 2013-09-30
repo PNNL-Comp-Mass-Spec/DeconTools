@@ -35,8 +35,6 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "IQ_Installer", "IQ_Installe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sipper", "..\SIPPER\Sipper\Sipper.csproj", "{E9434349-AFE0-4A13-B3D0-1453B6C50978}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sipper.Scripts", "..\DataAnalysis_scripts\IQProcessingScripts\Sipper.Scripts\Sipper.Scripts.csproj", "{235A9028-1290-454A-ACFA-98F24C45005E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DLLs|x86 = Debug DLLs|x86
