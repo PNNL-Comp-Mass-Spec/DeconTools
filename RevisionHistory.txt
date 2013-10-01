@@ -1,6 +1,6 @@
 DeconTools AutoProcessor Revision History
 
-Autoprocessor_1.0.5003		Sep 30, 2013	gslysz
+Autoprocessor_1.0.5021		Sep 30, 2013	gslysz
 	- Bug fixes
 
 Autoprocessor_1.0.5003		Sep 12, 2013	gslysz
