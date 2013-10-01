@@ -207,6 +207,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3448CC149F864F2497C87F24998A2B74"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_360E9F33278A4821934D4547BE30A809"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -531,12 +537,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BE4449215C7276441AEE1AA86636D7C0"
-        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C1B8328A6FF944C5975FF0E5A82A5E45"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -586,13 +586,13 @@
         "Entry"
         {
         "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
+        "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -635,6 +635,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -799,12 +805,6 @@
         "OwnerKey" = "8:_885B4732C8DA40B250C4142C7A2F31A0"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -869,10 +869,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:.NET Framework 3.5 SP1"
-                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -1233,6 +1233,26 @@
             {
             "SourcePath" = "8:..\\Library\\DLLsToBeCopied\\MSFileReader.XRawfile2.SxS.manifest"
             "TargetName" = "8:MSFileReader.XRawfile2.SxS.manifest"
+            "Tag" = "8:"
+            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3448CC149F864F2497C87F24998A2B74"
+            {
+            "SourcePath" = "8:..\\Readme.txt"
+            "TargetName" = "8:Readme.txt"
             "Tag" = "8:"
             "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
             "Condition" = "8:"
@@ -1725,7 +1745,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5003.28427, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5021.21727, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_AA40E4D85F0ACFE3C0413682F00E12CD"
@@ -1779,26 +1799,6 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BE4449215C7276441AEE1AA86636D7C0"
-            {
-            "SourcePath" = "8:BDal.CXt.Lc.Interfaces.tlb"
-            "TargetName" = "8:BDal.CXt.Lc.Interfaces.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -2023,15 +2023,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
-        "ProductCode" = "8:{6BCFF315-6F98-4DA6-BC9D-45315C464B87}"
-        "PackageCode" = "8:{556D6F5A-9D86-458C-BE88-2F571AB62D9F}"
+        "ProductCode" = "8:{3FF4490C-2216-4E8C-A82A-1382D4BC42AD}"
+        "PackageCode" = "8:{0C1593DC-0710-4EA4-BFE1-22C81EA93D0B}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:PNNL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

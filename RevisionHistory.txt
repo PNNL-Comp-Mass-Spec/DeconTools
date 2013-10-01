@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5003		Sep 30, 2013	gslysz
+	- Bug fixes
+
 Autoprocessor_1.0.5003		Sep 12, 2013	gslysz
 	- Public release that supports ThrashV1 (C++ based) and ThrashV2 (C# based)
 

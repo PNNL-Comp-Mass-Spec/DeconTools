@@ -33,8 +33,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE9
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "IQ_Installer", "IQ_Installer\IQ_Installer.vdproj", "{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sipper", "..\SIPPER\Sipper\Sipper.csproj", "{E9434349-AFE0-4A13-B3D0-1453B6C50978}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DLLs|x86 = Debug DLLs|x86
@@ -118,18 +116,6 @@ Global
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Debug DLLs|x86.ActiveCfg = Debug
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Debug|x86.ActiveCfg = Debug
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Release|x86.ActiveCfg = Release
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Debug DLLs|x86.ActiveCfg = Debug|x86
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Debug DLLs|x86.Build.0 = Debug|x86
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Debug|x86.ActiveCfg = Debug|x86
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Debug|x86.Build.0 = Debug|x86
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Release|x86.ActiveCfg = Release|x86
-		{E9434349-AFE0-4A13-B3D0-1453B6C50978}.Release|x86.Build.0 = Release|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Debug DLLs|x86.ActiveCfg = Debug|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Debug DLLs|x86.Build.0 = Debug|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Debug|x86.ActiveCfg = Debug|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Debug|x86.Build.0 = Debug|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Release|x86.ActiveCfg = Release|x86
-		{235A9028-1290-454A-ACFA-98F24C45005E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
