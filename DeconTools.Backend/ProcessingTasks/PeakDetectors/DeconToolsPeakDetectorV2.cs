@@ -321,6 +321,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
             }
 
+			if(interpolatedX1 == 0)
+			{
+				if (index > 0) interpolatedX1 = xvalues[index - 1];
+				else interpolatedX1 = xvalues[index];
+			}
+
             //moving to the right of the peak apex
             for (int i = index; i < numPoints; i++)
             {
@@ -341,9 +347,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     interpolatedX2 = (halfHeightIntensity - yintercept) / slope;
                     break;
                 }
-
-
             }
+
+			if (interpolatedX2 == 0)
+			{
+				if (index < xvalues.Length - 1) interpolatedX2 = xvalues[index + 1];
+				else interpolatedX2 = xvalues[index];
+			}
 
             return interpolatedX2 - interpolatedX1;   //return the width
         }
