@@ -93,12 +93,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 maxXValue = xvalues[xvalues.Length - 1];
             }
 
+			//Get background intensity
+			BackgroundIntensity = GetBackgroundIntensity(yvalues, xvalues);
 
-            //Get background intensity
-            BackgroundIntensity = GetBackgroundIntensity(yvalues, xvalues);
-
-            _intensityThreshold = BackgroundIntensity * PeakToBackgroundRatio;
-
+			_intensityThreshold = BackgroundIntensity * PeakToBackgroundRatio;
 
             if (IsDataThresholded)
             {
@@ -114,16 +112,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 {
                     BackgroundIntensity = 1;
                 }
-
             }
-
 
             //Find start index in raw data
             int startIndex = MathUtils.GetClosest(xvalues, minXValue);
 
             //Find stop index in raw data
             int stopIndex = MathUtils.GetClosest(xvalues, maxXValue);
-
 
             switch (RawDataType)
             {
@@ -205,9 +200,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                         double lastIntensity = yvalues[index - 1];
                         double nextIntensity = yvalues[index + 1];
 
-                        bool peakApexFound = currentIntensity >= lastIntensity &&
-                                             currentIntensity >= nextIntensity;
-
+                        bool peakApexFound = currentIntensity >= lastIntensity && currentIntensity >= nextIntensity;
 
                         double signalToNoise = -1;
 
@@ -222,7 +215,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                             {
                                 signalToNoise = CalculateSignalToNoise(yvalues, index);
                             }
-
                         }
 
                         if (signalToNoise > SignalToNoiseThreshold)
@@ -230,32 +222,20 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                             double calculatedXValue = CalculateFittedValue(xvalues, yvalues, index);
                             double width = CalculateFWHM(xvalues, yvalues, index, signalToNoise);
 
-                            var peak = CreatePeak(calculatedXValue, (float)currentIntensity, (float)width,
-                                                  (float)signalToNoise);
+                            var peak = CreatePeak(calculatedXValue, (float)currentIntensity, (float)width, (float)signalToNoise);
                             peak.DataIndex = index;
 
                             peakList.Add(peak);
                         }
                     }
-
-
-                    break;
-
+                    
+					break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-
             return peakList;
-
-
         }
-
-
-
-
-
-
 
         protected override void ExecutePostProcessingHook(Run run)
         {
@@ -428,16 +408,17 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         private double GetAverageIntensity(double[] intensities, double maxIntensity = double.MaxValue)
         {
             int numPoints = intensities.Length;
-            if (numPoints == 0)
-                return 0;
+            if (numPoints == 0) return 0;
 
             double backgroundIntensity = 0;
             int numPointsUsed = 0;
             for (int i = 0; i < numPoints; i++)
             {
-                if (intensities[i] <= maxIntensity && intensities[i] != 0)
+            	double intensity = intensities[i];
+
+				if (intensity <= maxIntensity && intensity > 0)
                 {
-                    backgroundIntensity += intensities[i];
+					backgroundIntensity += intensity;
                     numPointsUsed++;
                 }
             }
@@ -465,9 +446,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             bool found = false;
             for (int i = index; i > 0; i--)
             {
-                if (yvalues[i + 1] >= yvalues[i] && yvalues[i - 1] > yvalues[i])
+            	double yValue = yvalues[i];
+
+				if (yvalues[i + 1] >= yValue && yvalues[i - 1] > yValue)
                 {
-                    minIntensityLeft = yvalues[i];
+					minIntensityLeft = yValue;
 
                     found = true;
                     break;
@@ -480,9 +463,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             found = false;
             for (int i = index; i < numPoints - 1; i++)
             {
-                if (yvalues[i + 1] >= yvalues[i] && yvalues[i - 1] > yvalues[i])
+				double yValue = yvalues[i];
+
+				if (yvalues[i + 1] >= yValue && yvalues[i - 1] > yValue)
                 {
-                    minIntensityRight = yvalues[i];
+					minIntensityRight = yValue;
                     found = true;
                     break;
                 }
@@ -495,7 +480,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 if (minIntensityRight == 0)
                 {
                     return 100;
-
                 }
                 else
                 {
@@ -509,15 +493,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
 
             return currentIntensity / minIntensityLeft;
-
-
         }
 
-
-
         #endregion
-
-
-
     }
 }
