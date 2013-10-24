@@ -1,6 +1,6 @@
 ﻿// Written by Navdeep Jaitly and Gordon Slysz.  
 // Copyright 2012, Battelle Memorial Institute for the Department of Energy (PNNL, Richland, WA)
-// E-mail: gordon.slysz@pnl.gov
+// E-mail: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov
 // Website: http://panomics.pnnl.gov/software/
 // -------------------------------------------------------------------------------
 // 

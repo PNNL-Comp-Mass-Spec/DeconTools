@@ -1,7 +1,7 @@
 // Written by Kyle Littlefield for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2006, Battelle Memorial Institute
-// E-mail: gordon.slysz@pnl.gov
-// Website: http://ncrr.pnl.gov/software
+// E-mail: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov
+// Website: http://omics.pnl.gov/software
 // -------------------------------------------------------------------------------
 // 
 // Licensed under the Apache License, Version 2.0; you may not use this file except

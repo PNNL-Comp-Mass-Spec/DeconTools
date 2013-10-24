@@ -22,7 +22,7 @@ DeconTools has both a GUI version (DeconToolsAutoProcessor) and a command-line v
 -------------------------------------------------------------------------------
 Written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)
 
-E-mail: gordon.slysz@pnnl.gov or matthew.monroe@pnnl.gov
+E-mail: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov
 Website: http://panomics.pnnl.gov/ or http://omics.pnl.gov
 -------------------------------------------------------------------------------
 

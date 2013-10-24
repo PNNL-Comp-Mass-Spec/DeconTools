@@ -69,7 +69,7 @@ namespace DeconTools.Backend.Data
      
         public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
         {
-            using (StreamReader reader = new StreamReader(filename))
+            using (StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
                 _header =reader.ReadLine();    //first line is the header line.  
 

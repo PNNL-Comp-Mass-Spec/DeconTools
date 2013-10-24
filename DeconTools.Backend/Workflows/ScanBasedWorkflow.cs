@@ -365,7 +365,26 @@ namespace DeconTools.Backend.Workflows
             }
 
             string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
-            return File.Exists(expectedPeaksFile);
+
+			if (!File.Exists(expectedPeaksFile))
+				return false;
+
+			// Open the file and confirm that it has at least one row of data
+			var rowCount = 0;
+
+	        using (
+		        var peaksFile =
+			        new StreamReader(new FileStream(expectedPeaksFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
+	        {
+				while (peaksFile.Peek() > -1 && rowCount < 2)
+		        {
+			        string line = peaksFile.ReadLine();
+			        if (!string.IsNullOrWhiteSpace(line))
+				        rowCount++;
+		        }
+	        }
+
+	        return (rowCount > 1);	        
         }
 
 

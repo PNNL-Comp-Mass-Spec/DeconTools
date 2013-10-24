@@ -344,6 +344,7 @@ namespace DeconTools.Backend.Runs
 
 			List<double> xvals = new List<double>();
 			List<double> yvals = new List<double>();
+			bool sortrequired = false;
 
 			for (int i = 0; i < length; i++)
             {
@@ -353,6 +354,9 @@ namespace DeconTools.Backend.Runs
 
 				double yValue = vals[1, i];
 
+				if (i > 0 && xValue < vals[0, i - 1])
+					sortrequired = true;
+
 				xvals.Add(xValue);
                 yvals.Add(yValue);
             }
@@ -360,6 +364,9 @@ namespace DeconTools.Backend.Runs
             XYData xydata = new XYData();
 			xydata.Xvalues = xvals.ToArray();
 			xydata.Yvalues = yvals.ToArray();
+
+			if (sortrequired)
+				Array.Sort(xydata.Xvalues, xydata.Yvalues);
 
             return xydata;
         }

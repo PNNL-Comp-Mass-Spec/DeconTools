@@ -101,88 +101,90 @@ namespace DeconTools.Backend.Workflows
 
             PrepareOutputFolder(_workflowParameters.OutputFolder);
 
-            string outputPeaksFileName = getOutputPeaksFilename();
+            string outputPeaksFilePath = getOutputPeaksFilename();
 
-            peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFileName);
+			peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFilePath);
 
             int numTotalScans = LcScanSetCollection.ScanSetList.Count;
             int scanCounter = 0;
 
-            if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
-            {
-                var uimfrun = Run as UIMFRun;
-
-                int numTotalFrames = LcScanSetCollection.ScanSetList.Count;
-                int frameCounter = 0;
-
-                foreach (var frameSet in LcScanSetCollection.ScanSetList)
-                {
-                    frameCounter++;
-                    uimfrun.CurrentScanSet = frameSet;
-                    uimfrun.ResultCollection.MSPeakResultList.Clear();
-
-					foreach (var scanSet in IMSScanSetCollection.ScanSetList)
-                    {
-						uimfrun.CurrentIMSScanSet = (IMSScanSet) scanSet;
-						MSGenerator.Execute(uimfrun.ResultCollection);
-						this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
-
-                    }
-					peakExporter.WriteOutPeaks(uimfrun.ResultCollection.MSPeakResultList);
-
-                    if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
-                    {
-                        double percentProgress = frameCounter * 100 / numTotalFrames;
-                        reportProgress(percentProgress);
-                    }
-
-                }
-
-            }
-            else
-            {
-                foreach (var scan in LcScanSetCollection.ScanSetList)
-                {
-                    scanCounter++;
-
-                    Run.CurrentScanSet = scan;
-
-                    Run.ResultCollection.MSPeakResultList.Clear();
-
-                    MSGenerator.Execute(Run.ResultCollection);
-                    if (Run.GetMSLevel(scan.PrimaryScanNumber)==1)
-                    {
-                        this._ms1PeakDetector.Execute(Run.ResultCollection);
-                    }
-                    else
-                    {
-                        var dataIsCentroided = Run.IsDataCentroided(scan.PrimaryScanNumber);
-                        if (dataIsCentroided)
-                        {
-                            _ms2PeakDetectorForCentroidedData.Execute(Run.ResultCollection);
-                        }
-                        else
-                        {
-                            _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
-                        }
-                    }
-
-                    peakExporter.WriteOutPeaks(Run.ResultCollection.MSPeakResultList);
-
-                    if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
-                    {
-                        double percentProgress = scanCounter * 100 / numTotalScans;
-                        reportProgress(percentProgress);
-                    }
-
-                }
-            }
+	        using (var sw = new StreamWriter(new FileStream(outputPeaksFilePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
+	        {
 
 
+		        if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+		        {
+			        var uimfrun = Run as UIMFRun;
 
+			        int numTotalFrames = LcScanSetCollection.ScanSetList.Count;
+			        int frameCounter = 0;
 
+			        foreach (var frameSet in LcScanSetCollection.ScanSetList)
+			        {
+				        frameCounter++;
+				        uimfrun.CurrentScanSet = frameSet;
+				        uimfrun.ResultCollection.MSPeakResultList.Clear();
 
-            Run.ResultCollection.MSPeakResultList.Clear();
+				        foreach (var scanSet in IMSScanSetCollection.ScanSetList)
+				        {
+					        uimfrun.CurrentIMSScanSet = (IMSScanSet)scanSet;
+					        MSGenerator.Execute(uimfrun.ResultCollection);
+					        this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
+
+				        }
+						peakExporter.WriteOutPeaks(sw, uimfrun.ResultCollection.MSPeakResultList);
+
+				        if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
+				        {
+					        double percentProgress = frameCounter * 100 / (double)numTotalFrames;
+					        reportProgress(percentProgress);
+				        }
+
+			        }
+
+		        }
+		        else
+		        {
+			        foreach (var scan in LcScanSetCollection.ScanSetList)
+			        {
+				        scanCounter++;
+
+				        Run.CurrentScanSet = scan;
+
+				        Run.ResultCollection.MSPeakResultList.Clear();
+
+				        MSGenerator.Execute(Run.ResultCollection);
+				        if (Run.GetMSLevel(scan.PrimaryScanNumber) == 1)
+				        {
+					        this._ms1PeakDetector.Execute(Run.ResultCollection);
+				        }
+				        else
+				        {
+					        var dataIsCentroided = Run.IsDataCentroided(scan.PrimaryScanNumber);
+					        if (dataIsCentroided)
+					        {
+						        _ms2PeakDetectorForCentroidedData.Execute(Run.ResultCollection);
+					        }
+					        else
+					        {
+						        _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
+					        }
+				        }
+
+						peakExporter.WriteOutPeaks(sw, Run.ResultCollection.MSPeakResultList);
+
+				        if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
+				        {
+					        double percentProgress = scanCounter * 100 / (double)numTotalScans;
+					        reportProgress(percentProgress);
+				        }
+
+			        }
+		        }
+
+	        }
+
+	        Run.ResultCollection.MSPeakResultList.Clear();
 
         }
 
@@ -237,7 +239,7 @@ namespace DeconTools.Backend.Workflows
             }
             else
             {
-                Console.WriteLine("Peak creation progress: " + percentProgress + "%");
+                Console.WriteLine("Peak creation progress: " + percentProgress.ToString("0.0") + "%");
             }
         }
 

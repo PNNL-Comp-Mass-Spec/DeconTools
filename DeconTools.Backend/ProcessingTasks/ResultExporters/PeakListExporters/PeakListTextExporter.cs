@@ -57,12 +57,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
  
                 }
             }
-            else
-            {
-
-            }
-
-
 
             initializeAndWriteHeader();
         }
@@ -90,20 +84,35 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
         #region Public Methods
-        public override void WriteOutPeaks(List<MSPeakResult> peakList)
-        {
-            using (StreamWriter sw = File.AppendText(this.FileName))
-            {
-                foreach (var peak in peakList)
-                {
-                    
-                    string lineOfPeakData = buildPeakString(peak);
-                    sw.Write(lineOfPeakData);
-                }
 
-                sw.Flush();
-                sw.Close();
+		/// <summary>
+		/// Append the peaks to the _peaks.txt file
+		/// </summary>
+		/// <param name="peakList">Peak list to write</param>
+	    public override void WriteOutPeaks(List<MSPeakResult> peakList)
+	    {
+		    using (var sw = new StreamWriter(new FileStream(this.FileName, FileMode.Append, FileAccess.Write, FileShare.Read)))
+		    {
+			    WriteOutPeaks(sw, peakList);
+			    sw.Close();
+		    }
+	    }
+
+		/// <summary>
+		/// Append the peaks to the _peaks.txt file
+		/// </summary>
+		/// <param name="sw">Filestream object</param>
+		/// <param name="peakList">Peak list to write</param>
+		public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
+        {
+			
+            foreach (var peak in peakList)
+            {                    
+                string lineOfPeakData = buildPeakString(peak);
+                sw.Write(lineOfPeakData);
             }
+			sw.Flush();
+            
         }
 
         public override void Cleanup()
@@ -194,7 +203,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             }
 
 
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = new StreamWriter(new FileStream(this.FileName, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 string headerLine = buildHeaderLine();
                 writer.Write(headerLine);

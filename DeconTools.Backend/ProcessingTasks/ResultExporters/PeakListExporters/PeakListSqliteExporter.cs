@@ -93,8 +93,21 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #region Private Methods
         #endregion
 
+		/// <summary>
+		/// Append the peaks to the database
+		/// </summary>
+		/// <param name="peakList">Peak list to write</param>
+		public override void WriteOutPeaks(List<MSPeakResult> peakList)
+	    {
+			WriteOutPeaks(peakList);
+	    }
 
-        public override void WriteOutPeaks(List<MSPeakResult>peakResultList)
+		/// <summary>
+		/// Append the peaks to the database
+		/// </summary>
+		/// <param name="sw">Ignored by this class</param>
+		/// <param name="peakList">Peak list to write</param>
+		public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
         {
             SQLiteConnection myconnection = (SQLiteConnection)cnn;
 
@@ -118,7 +131,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     mycommand.Parameters.Add(msfeatureParam);
 
 
-                    foreach (var peak in peakResultList)
+					foreach (var peak in peakList)
                     {
                         peakIDParam.Value = peak.PeakID;
                         scanIDParam.Value = peak.Scan_num;

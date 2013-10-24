@@ -12,7 +12,7 @@ namespace DeconConsole
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
-        public const string PROGRAM_DATE = "August 5, 2013";
+        public const string PROGRAM_DATE = "October 23, 2013";
 
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 
@@ -149,6 +149,8 @@ namespace DeconConsole
             Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
             Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
             Console.WriteLine("Version: " + GetAppVersion());
+			Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov");
+			Console.WriteLine("Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov");
             Console.WriteLine();
 
             System.Threading.Thread.Sleep(1000);
