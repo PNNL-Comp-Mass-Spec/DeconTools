@@ -1,5 +1,11 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5044		Oct 23, 2013	mem
+	- Now validating that the _peaks.txt file has usable data
+	- Now sorting data returned by msfileReader.GetMassListFromScanNum if not sorted by m/z
+	- Fixed bug in FWHM calculator
+	- Slight peak detector speed up
+
 Autoprocessor_1.0.5021		Sep 30, 2013	gslysz
 	- Bug fixes
 

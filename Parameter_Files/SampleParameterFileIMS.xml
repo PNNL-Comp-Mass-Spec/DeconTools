@@ -60,7 +60,7 @@
 		<!-- When 1, then the abundance of the most abundant peak in an isotopic envelope is reported.
 		     When 2 or larger, then will sum the specified number of peaks from the isotopic envelope -->
 		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
-		<!-- Allowed values: ThrashV1, ThrashV1, Rapid -->
+		<!-- Allowed values: ThrashV1, ThrashV2, Rapid -->
 		<DeconvolutionType>ThrashV1</DeconvolutionType>
 	</HornTransformParameters>
 	<Miscellaneous>
