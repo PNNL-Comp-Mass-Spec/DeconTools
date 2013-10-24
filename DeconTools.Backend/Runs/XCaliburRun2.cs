@@ -344,7 +344,12 @@ namespace DeconTools.Backend.Runs
 
 			List<double> xvals = new List<double>();
 			List<double> yvals = new List<double>();
-			bool sortrequired = false;
+
+			// Note from MEM (October 2013)
+			// GetMassListFromScanNum generally returns the data sorted by m/z ascending
+			// However, there are edge cases for certain spectra in certain datasets where adjacent data points are out of order and need to be swapped
+			// Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xydata.Xvalues and xydata.Yvalues
+			bool sortRequired = false;
 
 			for (int i = 0; i < length; i++)
             {
@@ -355,7 +360,10 @@ namespace DeconTools.Backend.Runs
 				double yValue = vals[1, i];
 
 				if (i > 0 && xValue < vals[0, i - 1])
-					sortrequired = true;
+				{
+					// Points are out of order; this rarely occurs but it is possible and has been observed
+					sortRequired = true;
+				}
 
 				xvals.Add(xValue);
                 yvals.Add(yValue);
@@ -365,7 +373,7 @@ namespace DeconTools.Backend.Runs
 			xydata.Xvalues = xvals.ToArray();
 			xydata.Yvalues = yvals.ToArray();
 
-			if (sortrequired)
+			if (sortRequired)
 				Array.Sort(xydata.Xvalues, xydata.Yvalues);
 
             return xydata;
