@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
@@ -18,6 +19,21 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #endregion
 
         #region Public Methods
+		public static XYData GetXYDataForChromPeak(ChromPeak peak, Run run)
+		{
+			double apex = peak.XValue;
+			double width = peak.Width;
+			double peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
+			double sixSigma = 6 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
+			double halfSixSigma = sixSigma / 2.0;
+
+			double minScan = apex - halfSixSigma;
+			double maxScan = apex + halfSixSigma;
+
+			XYData filteredXYData = run.XYData.TrimData(minScan, maxScan);
+			return filteredXYData;
+		}
+
         public ScanSet GetLCScanSetForChromPeak(Peak chromPeak, Run run, int numLCScansToSum)
         {
             ScanSet scanset;
