@@ -46,16 +46,16 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             if (PointsForSmoothing % 2 == 0)
                 throw new ArgumentOutOfRangeException("savGolayPoints must be an odd number 3 or higher");
-
-            int m = (PointsForSmoothing - 1) / 2;
+            
             int colCount = inputValues.Length;
             double[] returnYValues = new double[colCount];
 
-            
+        	int newPointsForSmoothing = PointsForSmoothing > colCount ? colCount : PointsForSmoothing;
+			int m = (newPointsForSmoothing - 1) / 2;
             
             if (_smoothingFilters==null)
             {
-                _smoothingFilters = CalculateSmoothingFilters(PolynomialOrder, PointsForSmoothing);
+				_smoothingFilters = CalculateSmoothingFilters(PolynomialOrder, newPointsForSmoothing);
             }
 
             var conjTransposeMatrix = _smoothingFilters.ConjugateTranspose();
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
                 var conjTransposeColumn = conjTransposeMatrix.Column(i);
 
                 double multiplicationResult = 0;
-                for (int z = 0; z < PointsForSmoothing; z++)
+				for (int z = 0; z < newPointsForSmoothing; z++)
                 {
                     multiplicationResult += (conjTransposeColumn[z] * inputValues[z]);
                 }
@@ -78,7 +78,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             for (int i = m + 1; i < colCount - m - 1; i++)
             {
                 double multiplicationResult = 0;
-                for (int z = 0; z < PointsForSmoothing; z++)
+				for (int z = 0; z < newPointsForSmoothing; z++)
                 {
                     multiplicationResult += (conjTransposeColumnResult[z] * inputValues[i - m + z]);
                 }
@@ -90,9 +90,9 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
                 var conjTransposeColumn = conjTransposeMatrix.Column(m + i);
 
                 double multiplicationResult = 0;
-                for (int z = 0; z < PointsForSmoothing; z++)
+				for (int z = 0; z < newPointsForSmoothing; z++)
                 {
-                    multiplicationResult += (conjTransposeColumn[z] * inputValues[colCount - PointsForSmoothing + z]);
+					multiplicationResult += (conjTransposeColumn[z] * inputValues[colCount - newPointsForSmoothing + z]);
                 }
                 returnYValues[colCount - m - 1 + i] = multiplicationResult;
             }
