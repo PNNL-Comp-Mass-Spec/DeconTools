@@ -77,6 +77,7 @@
     <Compile Include="FileIOTests\TargetedResultFileIOTests\SipperTargetedResultFromTextImporterTests.cs" />
     <Compile Include="FileIOTests\TargetedResultFileIOTests\UnlabelledTargetedResultFileIOTests.cs" />
     <Compile Include="FileRefs.cs" />
+    <Compile Include="IqUnitTesting\BottomUpIqTesting.cs" />
     <Compile Include="IqUnitTesting\IQCloneTest.cs" />
     <Compile Include="IqUnitTesting\IqCodeParserUnitTests.cs" />
     <Compile Include="IqUnitTesting\IqFileIOUnitTests.cs" />
