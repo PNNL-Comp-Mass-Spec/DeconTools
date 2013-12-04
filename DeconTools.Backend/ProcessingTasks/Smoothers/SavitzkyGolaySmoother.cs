@@ -53,7 +53,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         	int newPointsForSmoothing = PointsForSmoothing > colCount ? colCount : PointsForSmoothing;
 			int m = (newPointsForSmoothing - 1) / 2;
             
-            if (_smoothingFilters==null)
+            if (_smoothingFilters == null || _smoothingFilters.ColumnCount != newPointsForSmoothing) 
             {
 				_smoothingFilters = CalculateSmoothingFilters(PolynomialOrder, newPointsForSmoothing);
             }
