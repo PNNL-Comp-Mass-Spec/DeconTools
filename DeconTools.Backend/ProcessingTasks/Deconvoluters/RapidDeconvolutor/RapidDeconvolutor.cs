@@ -167,7 +167,8 @@ namespace DeconTools.Backend.ProcessingTasks
                     offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
                     AreaFitter areafitter = new AreaFitter();
-                    double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1);
+					int ionCountUsed;
+					double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
 
                     if (fitval == double.NaN || fitval > 1) fitval = 1;
 

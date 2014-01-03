@@ -71,7 +71,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
             sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));
+            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));						// Fit score
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
             sb.Append(delimiter);
@@ -92,6 +92,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+			// Uncomment to write out the fit_count_basis
+			//sb.Append(Delimiter);
+			//sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
             return sb.ToString();
         }
 
@@ -127,6 +130,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("TIA_orig_intensity");
             sb.Append(delimiter);
             sb.Append("flag");
+			// Uncomment to write out the fit_count_basis
+			//sb.Append(Delimiter);
+			//sb.Append("fit_basis_count");
             sb.Append(Environment.NewLine);
             return sb.ToString();
 

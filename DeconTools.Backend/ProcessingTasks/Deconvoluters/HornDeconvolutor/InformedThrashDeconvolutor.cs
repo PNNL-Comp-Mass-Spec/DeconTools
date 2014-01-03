@@ -630,9 +630,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             double relIntensityUseForFitting = 0;
 
-
-
-            double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting);
+	        int ionCountUsed;
+			double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
 
             if (fitval < bestFitVal)
             {
@@ -647,7 +646,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 double offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 //negative offset
 
-                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
 
                 if (fitval > bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {
@@ -663,9 +662,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             {
                 double offsetForTheorProfile = numPeaksToTheRight * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
 
-
-
-                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
 
                 if (fitval >= bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {

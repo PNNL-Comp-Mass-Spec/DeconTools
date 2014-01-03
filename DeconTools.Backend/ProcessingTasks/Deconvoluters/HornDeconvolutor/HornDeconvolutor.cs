@@ -487,6 +487,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 profile.ChargeState = hornResult.mshort_cs;
                 profile.MonoIsotopicMass = hornResult.mdbl_mono_mw;
                 profile.Score = hornResult.mdbl_fit;
+				profile.ScoreCountBasis = hornResult.mint_fit_count_basis;
                 profile.MostAbundantIsotopeMass = hornResult.mdbl_most_intense_mw;
 
 

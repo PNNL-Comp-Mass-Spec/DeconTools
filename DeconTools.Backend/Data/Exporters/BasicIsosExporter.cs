@@ -11,8 +11,10 @@ namespace DeconTools.Backend.Data
         public BasicIsosExporter(string fileName)
         {
             this.delimiter = ',';
-            this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
-            this.fileName = fileName;
+			this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
+			// Alternate header line if writing out the fit_count_basis
+			//this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,fit_basis_count";
+			this.fileName = fileName;
         }
         protected override string headerLine { get; set; }
         protected override char delimiter { get; set; }
@@ -43,7 +45,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.Score.ToString("0.####"));
+                sb.Append(result.IsotopicProfile.Score.ToString("0.####"));		// Fit Score
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
                 sb.Append(delimiter);
@@ -60,6 +62,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(result.IsotopicProfile.GetMonoAbundance());
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
+				// Uncomment to write out the fit_count_basis
+				//sb.Append(delimiter);
+				//sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
 
                 sw.WriteLine(sb.ToString());
             }

@@ -19,26 +19,37 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         #region Public Methods
 
 
-        
-        public double GetFit(List<Peak>theorPeakList,List<Peak>observedPeakList, double minIntensityForScore, double toleranceInPPM, int numPeaksToTheLeftForScoring=0)
+
+	    public double GetFit(List<Peak> theorPeakList, List<Peak> observedPeakList, double minIntensityForScore, double toleranceInPPM)
+	    {
+		    const int numPeaksToTheLeftForScoring = 0;
+		    int ionCountUsed;
+		    return GetFit(theorPeakList, observedPeakList, minIntensityForScore, toleranceInPPM, numPeaksToTheLeftForScoring, out ionCountUsed);
+	    }
+
+		public double GetFit(
+			List<Peak> theorPeakList, 
+			List<Peak> observedPeakList, 
+			double minIntensityForScore, 
+			double toleranceInPPM, 
+			int numPeaksToTheLeftForScoring, 
+			out int ionCountUsed)
         {
             Utilities.IqLogger.IqLogger.SamPayneLog("Min Intensity For Scoring: " + minIntensityForScore);
 			Utilities.IqLogger.IqLogger.SamPayneLog("PPM Tolerance: " + toleranceInPPM);
 
-            List<double> theorIntensitiesUsedInCalc = new List<double>();
+			ionCountUsed = 0;
+            var theorIntensitiesUsedInCalc = new List<double>();
             var observedIntensitiesUsedInCalc = new List<double>();
            
             //first gather all the intensities from theor and obs peaks
 
-            int indexMaxTheor = 0;
             double maxTheorIntensity = double.MinValue;
             for (int i = 0; i < theorPeakList.Count; i++)
             {
-                if (theorPeakList[i].Height>maxTheorIntensity)
+                if (theorPeakList[i].Height > maxTheorIntensity)
                 {
                     maxTheorIntensity = theorPeakList[i].Height;
-                    indexMaxTheor = i;
-
                 }
             }
 
@@ -120,15 +131,26 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             {
                 var diff = normalizedObs[i] - normalizedTheo[i];
 
-                sumSquareOfDiffs += (diff*diff);
+                sumSquareOfDiffs += (diff * diff);
                 sumSquareOfTheor += (normalizedTheo[i]*normalizedTheo[i]);
 				Utilities.IqLogger.IqLogger.SamPayneLog("Normalized Observed: " + normalizedObs[i]);
 				Utilities.IqLogger.IqLogger.SamPayneLog("Normalized Theoretical: " + normalizedTheo[i]);
 				Utilities.IqLogger.IqLogger.SamPayneLog("Iterator: " + i + " Sum of Squares Differences: " + sumSquareOfDiffs + " Sum of Squares Theoretical: " + sumSquareOfTheor + Environment.NewLine);
             }
 
-            double fitScore = sumSquareOfDiffs/sumSquareOfTheor;
-            if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
+			ionCountUsed = normalizedTheo.Count;
+
+            double fitScore = sumSquareOfDiffs / sumSquareOfTheor;
+			if (double.IsNaN(fitScore) || fitScore > 1)
+			{
+				fitScore = 1;
+			}
+			else
+			{
+				// Future possibility (considered in January 2014):
+				// Normalize the fit score by the number of theoretical ions
+				// fitScore /= ionCountUsed;
+			}
 
 			Utilities.IqLogger.IqLogger.SamPayneLog("Fit Score: " + fitScore + Environment.NewLine);
             return fitScore;

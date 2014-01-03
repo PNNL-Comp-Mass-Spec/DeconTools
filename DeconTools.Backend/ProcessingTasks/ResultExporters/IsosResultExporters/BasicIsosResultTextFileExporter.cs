@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.GetMZofMostAbundantPeak().ToString("0.#####"));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));
+            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));				// Fit score
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
             sb.Append(Delimiter);
@@ -63,6 +63,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
             sb.Append(result.InterferenceScore.ToString("0.#####"));
+			// Uncomment to write out the fit_count_basis
+			//sb.Append(Delimiter);
+			//sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
             return sb.ToString();
         }
         protected override string buildHeaderLine()
@@ -95,6 +98,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("flag");
             sb.Append(Delimiter);
             sb.Append("interference_score");
+			// Uncomment to write out the fit_count_basis
+			//sb.Append(Delimiter);
+			//sb.Append("fit_basis_count");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }

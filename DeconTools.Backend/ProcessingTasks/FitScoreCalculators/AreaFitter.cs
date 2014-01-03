@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Utilities;
 
@@ -13,16 +14,23 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     {
 
 
-        public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
+	    public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
+	    {
+		    int ionCountUsed;
+		    return GetFit(theorXYData, observedXYData, minIntensityForScore, out ionCountUsed, offset);
+	    }
+
+	    public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, out int ionCountUsed, double offset = 0)
         {
             Check.Require(theorXYData != null && theorXYData.Xvalues != null && theorXYData.Yvalues != null,
-               "AreaFitter failed. Theoretical XY data is null");
+                "AreaFitter failed. Theoretical XY data is null");
 
             Check.Require(observedXYData != null & observedXYData.Xvalues != null && observedXYData.Yvalues != null,
                 "AreaFitter failed. Observed XY data is null");
             //Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
 
 
+		    ionCountUsed = 0;
 
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
@@ -36,8 +44,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //trimmedObservedXYData.Display();
             //theorXYData.Display();
 
-            List<double> interpolatedValues = new List<double>();
-            List<double> theoreticalValues = new List<double>();
+            var interpolatedValues = new List<double>();
+            var theoreticalValues = new List<double>();
 
 
             for (int i = 0; i < theorXYData.Xvalues.Length; i++)
@@ -133,18 +141,24 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 sumOfSquaredDiff += diff * diff;
 
                 sumOfSquaredTheorIntens += normalizedTheorIntensity * normalizedTheorIntensity;
-
-
-
             }
-            if (sumOfSquaredTheorIntens == 0) return -1;
+
+			if (theoreticalValues.Count == 0 || Math.Abs(sumOfSquaredTheorIntens) < double.Epsilon) 
+				return -1;
 
             //StringBuilder sb = new StringBuilder();
             //TestUtilities.GetXYValuesToStringBuilder(sb, theoreticalValues.ToArray(), interpolatedValues.ToArray());
             //Console.Write(sb.ToString());
 
+	        var fitScore = sumOfSquaredDiff / sumOfSquaredTheorIntens;
 
-            return sumOfSquaredDiff / sumOfSquaredTheorIntens;
+			ionCountUsed = theoreticalValues.Count;
+
+			// Future possibility (considered in January 2014):
+			// Normalize the fit score by the number of theoretical ions
+			// fitScore /= ionCountUsed;
+		    
+			return fitScore;
 
         }
 

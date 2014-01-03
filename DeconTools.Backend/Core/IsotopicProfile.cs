@@ -55,7 +55,14 @@ namespace DeconTools.Backend.Core
             set { _score = value; }
         }
 
-        private double _monoIsotopicMass;
+	    private int _scoreCountBasis;
+	    public int ScoreCountBasis
+	    {
+			get { return _scoreCountBasis; }
+			set { _scoreCountBasis = value; }
+	    }
+
+	    private double _monoIsotopicMass;
         public double MonoIsotopicMass
         {
             get { return _monoIsotopicMass; }
@@ -247,6 +254,7 @@ namespace DeconTools.Backend.Core
             }
 
             iso.Score = Score;
+			iso.ScoreCountBasis = ScoreCountBasis;
 
             return iso;
 
