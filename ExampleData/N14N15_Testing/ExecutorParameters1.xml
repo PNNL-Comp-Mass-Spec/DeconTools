@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <AlignmentFeaturesAreSavedToTextFile>true</AlignmentFeaturesAreSavedToTextFile>
+  <AlignmentInfoFolder>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\AlignmentInfo</AlignmentInfoFolder>
+  <AlignmentInfoIsExported>true</AlignmentInfoIsExported>
+  <ChromGenSourceDataIsThresholded>false</ChromGenSourceDataIsThresholded>
+  <ChromGenSourceDataPeakBR>0</ChromGenSourceDataPeakBR>
+  <ChromGenSourceDataProcessMsMs>false</ChromGenSourceDataProcessMsMs>
+  <ChromGenSourceDataSigNoise>0</ChromGenSourceDataSigNoise>
+  <CopyRawFileLocal>false</CopyRawFileLocal>
+  <DeleteLocalDatasetAfterProcessing>false</DeleteLocalDatasetAfterProcessing>
+  <FolderPathForCopiedRawDataset />
+  <LoggingFolder>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Logs</LoggingFolder>
+  <MaxMzForDefiningChargeStateTargets>1500</MaxMzForDefiningChargeStateTargets>
+  <MaxNumberOfChargeStateTargetsToCreate>100</MaxNumberOfChargeStateTargetsToCreate>
+  <MinMzForDefiningChargeStateTargets>400</MinMzForDefiningChargeStateTargets>
+  <ResultsFolder>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Results</ResultsFolder>
+  <TargetedAlignmentIsPerformed>true</TargetedAlignmentIsPerformed>
+  <TargetedAlignmentWorkflowParameterFile>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\TargetedAlignmentWorkflowParameters1.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsBaseFolder />
+  <TargetsFilePath>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets_Filtered0.45-0.47NET_first18.txt</TargetsFilePath>
+  <TargetsUsedForAlignmentFilePath>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets.txt</TargetsUsedForAlignmentFilePath>
+  <TargetType>DatabaseTarget</TargetType>
+  <WorkflowParameterFile>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1.xml</WorkflowParameterFile>
+  <WorkflowType>BasicTargetedWorkflowExecutor1</WorkflowType>
+</WorkflowParameters>

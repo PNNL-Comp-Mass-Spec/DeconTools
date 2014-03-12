@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <AlignmentInfoIsExported>true</AlignmentInfoIsExported>
+  <AreaOfPeakToSumInDynamicSumming>2</AreaOfPeakToSumInDynamicSumming>
+  <ChromatogramCorrelationIsPerformed>false</ChromatogramCorrelationIsPerformed>
+  <ChromGeneratorMode>MOST_ABUNDANT_PEAK</ChromGeneratorMode>
+  <ChromGenSourceDataPeakBR>2</ChromGenSourceDataPeakBR>
+  <ChromGenSourceDataSigNoise>3</ChromGenSourceDataSigNoise>
+  <ChromNETTolerance>0.2</ChromNETTolerance>
+  <ChromPeakDetectorPeakBR>2</ChromPeakDetectorPeakBR>
+  <ChromPeakDetectorSigNoise>2</ChromPeakDetectorSigNoise>
+  <ChromPeakSelectorMode>Smart</ChromPeakSelectorMode>
+  <ChromSmootherNumPointsInSmooth>9</ChromSmootherNumPointsInSmooth>
+  <ChromToleranceInPPM>25</ChromToleranceInPPM>
+  <ExportAlignmentFolder>\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\AlignmentInfo</ExportAlignmentFolder>
+  <FeaturesAreSavedToTextFile>true</FeaturesAreSavedToTextFile>
+  <ImportedFeaturesFilename />
+  <IScoreAllowedCriteria>0.15</IScoreAllowedCriteria>
+  <MaxScansSummedInDynamicSumming>100</MaxScansSummedInDynamicSumming>
+  <MinimumChromPeakIntensityCriteria>250000</MinimumChromPeakIntensityCriteria>
+  <MSPeakDetectorPeakBR>2</MSPeakDetectorPeakBR>
+  <MSPeakDetectorSigNoise>2</MSPeakDetectorSigNoise>
+  <MSToleranceInPPM>25</MSToleranceInPPM>
+  <MultipleHighQualityMatchesAreAllowed>false</MultipleHighQualityMatchesAreAllowed>
+  <NumChromPeaksAllowedDuringSelection>1</NumChromPeaksAllowedDuringSelection>
+  <NumDesiredMassTagsPerNETGrouping>25</NumDesiredMassTagsPerNETGrouping>
+  <NumMaxAttemptsPerNETGrouping>200</NumMaxAttemptsPerNETGrouping>
+  <NumMSScansToSum>1</NumMSScansToSum>
+  <ResultType>BASIC_TRADITIONAL_RESULT</ResultType>
+  <SummingMode>SUMMINGMODE_STATIC</SummingMode>
+  <UpperFitScoreAllowedCriteria>0.1</UpperFitScoreAllowedCriteria>
+  <WorkflowType>TargetedAlignerWorkflow1</WorkflowType>
+</WorkflowParameters>

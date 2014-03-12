@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WorkflowParameters>
+  <AlignmentInfoFolder>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\AlignmentInfo</AlignmentInfoFolder>
+  <CopyRawFileLocal>true</CopyRawFileLocal>
+  <DeleteLocalDatasetAfterProcessing>true</DeleteLocalDatasetAfterProcessing>
+  <FolderPathForCopiedRawDataset>E:\O16O18Processing\RawData</FolderPathForCopiedRawDataset>
+  <LoggingFolder>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Logs</LoggingFolder>
+  <ResultsFolder>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Results</ResultsFolder>
+  <TargetedAlignmentIsPerformed>True</TargetedAlignmentIsPerformed>
+  <TargetedAlignmentWorkflowParameterFile>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Parameters\TargetedAlignmentWorkflowParameters1.xml</TargetedAlignmentWorkflowParameterFile>
+  <TargetsFilePath>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt</TargetsFilePath>
+  <TargetsUsedForAlignmentFilePath>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_HighQuality.txt</TargetsUsedForAlignmentFilePath>
+  <WorkflowParameterFile>\\protoapps\DataPkgs\Public\2012\610_Alz_O16O18_dataprocessing\Parameters\O16O18WorkflowParameters_2011_08_23_sum5.xml</WorkflowParameterFile>
+  <WorkflowType>BasicTargetedWorkflowExecutor1</WorkflowType>
+</WorkflowParameters>
