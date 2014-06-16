@@ -219,12 +219,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_38AD9E964D844A59866AEFAB2A619815"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
         "OwnerKey" = "8:_176CFA24E00849D334D2131BFEC0F0CE"
         "MsmSig" = "8:_UNDEFINED"
@@ -400,6 +394,12 @@
         "Entry"
         {
         "MsmKey" = "8:_79F2A810DE688B7D475830A3BAD391D4"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_79F2A810DE688B7D475830A3BAD391D4"
         "OwnerKey" = "8:_8E115DDB6E963DC75C5CE33E7A2B9B5C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -465,6 +465,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8E115DDB6E963DC75C5CE33E7A2B9B5C"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8EDE14B5423A4AE9B5CE2265415807D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -485,6 +491,12 @@
         {
         "MsmKey" = "8:_9B73D8AC3FAAF8A1D8D96C861A3D0B8D"
         "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B73D8AC3FAAF8A1D8D96C861A3D0B8D"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -538,6 +550,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B8DB6F468F8711F93759C46E2D0B772C"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B8DB6F468F8711F93759C46E2D0B772C"
         "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -545,12 +563,6 @@
         {
         "MsmKey" = "8:_B8DB6F468F8711F93759C46E2D0B772C"
         "OwnerKey" = "8:_9B73D8AC3FAAF8A1D8D96C861A3D0B8D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C1B8328A6FF944C5975FF0E5A82A5E45"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -597,24 +609,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
-        "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_FA8A3BF5DF7B5575FE1E3BD1A639AF0F"
         "OwnerKey" = "8:_FF25E3C73497F0AA2C35F5BB14D69237"
         "MsmSig" = "8:_UNDEFINED"
@@ -653,12 +647,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1076,7 +1064,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BaseTof, Version=1.0.4686.24703, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:BaseTof, Version=1.0.4758.18585, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_17C8662DD734094C01CBDD595E017A79"
@@ -1307,26 +1295,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38AD9E964D844A59866AEFAB2A619815"
-            {
-            "SourcePath" = "8:..\\Library\\xerces-c_2_7D.dll"
-            "TargetName" = "8:xerces-c_2_7D.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_393612A4E9C7C5A2591CEDAAA3DB34C7"
             {
             "AssemblyRegister" = "3:1"
@@ -1464,7 +1432,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4961.26821, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.5218.25920, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_6BB10891733F7BEC7FFB0E4E48869D5D"
@@ -1577,7 +1545,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ThermoRawFileReaderDLL, Version=1.1.4763.26351, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ThermoRawFileReaderDLL, Version=1.1.5049.29983, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_772A584ADAC35950E2451BC628666915"
@@ -1608,7 +1576,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.4961.26821, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconEngineV2, Version=1.0.5218.25920, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_797E379A839FF181DBC6A5A5CCC2F674"
@@ -1639,7 +1607,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BaseCommon, Version=6.0.633.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BaseCommon, Version=6.0.633.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_79F2A810DE688B7D475830A3BAD391D4"
@@ -1701,7 +1669,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MassSpecDataReader, Version=6.0.633.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MassSpecDataReader, Version=6.0.633.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_8E115DDB6E963DC75C5CE33E7A2B9B5C"
@@ -1752,7 +1720,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BaseDataAccess, Version=6.0.633.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BaseDataAccess, Version=6.0.633.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_9B73D8AC3FAAF8A1D8D96C861A3D0B8D"
@@ -1803,7 +1771,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5044.35732, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5280.19620, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_AA40E4D85F0ACFE3C0413682F00E12CD"
@@ -1834,7 +1802,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BaseError, Version=6.0.633.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BaseError, Version=6.0.633.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B8DB6F468F8711F93759C46E2D0B772C"
@@ -1859,26 +1827,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C1B8328A6FF944C5975FF0E5A82A5E45"
-            {
-            "SourcePath" = "8:..\\Library\\xerces-c_2_7.dll"
-            "TargetName" = "8:xerces-c_2_7.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3F7657ABFD14807A7CFD05F1075408E"
@@ -1935,37 +1883,6 @@
                     }
                 }
             "SourcePath" = "8:YafmsLibrary.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F9DAAA2E8F3AD12012E2CF6A70131802"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:BDal.CXt.Lc.Interfaces, Version=1.0.17.0, Culture=neutral, PublicKeyToken=9cf59cd9dc0ba160, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F9DAAA2E8F3AD12012E2CF6A70131802"
-                    {
-                    "Name" = "8:BDal.CXt.Lc.Interfaces.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:BDal.CXt.Lc.Interfaces.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
@@ -2101,15 +2018,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
-        "ProductCode" = "8:{B73ABBA9-D038-4981-A630-73C9E2BC4840}"
-        "PackageCode" = "8:{D0712403-0AA8-4D20-B8A3-91E4F577D640}"
+        "ProductCode" = "8:{AD488F25-E1CE-4FFD-B335-C2C6547CDE3B}"
+        "PackageCode" = "8:{A52CAA74-5F9D-4F58-9517-9BFEE81E001C}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:PNNL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

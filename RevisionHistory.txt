@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5280		June 16, 2014	mem
+	- Updated DeconEngineV2.dll
+
 Autoprocessor_1.0.5044		Oct 23, 2013	mem
 	- Now validating that the _peaks.txt file has usable data
 	- Now sorting data returned by msfileReader.GetMassListFromScanNum if not sorted by m/z
