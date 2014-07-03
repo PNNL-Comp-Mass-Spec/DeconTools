@@ -11,7 +11,8 @@
     <RootNamespace>IQ</RootNamespace>
     <AssemblyName>IQ</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -111,9 +112,6 @@
     <Resource Include="Images\closed.ico" />
     <Resource Include="Images\arrow_undo.ico" />
     <Resource Include="Images\undo.ico" />
-    <Content Include="IMSCOMP.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="PNNLOmicsElementData.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

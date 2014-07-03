@@ -172,12 +172,6 @@
     <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Library\IMSCOMP.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Library\sqlite3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\Library\xerces-c_2_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

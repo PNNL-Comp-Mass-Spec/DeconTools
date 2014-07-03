@@ -1,5 +1,10 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5291		June 27, 2014	mem
+	- Fixed bug in DeconToolsZeroFiller that dropped the final data point when zero filling
+	- Updated UIMFLibrary.dll
+	- Updated System.Data.SQLite.dll
+
 Autoprocessor_1.0.5280		June 16, 2014	mem
 	- Updated DeconEngineV2.dll
 

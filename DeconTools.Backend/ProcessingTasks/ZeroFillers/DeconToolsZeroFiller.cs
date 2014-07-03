@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
 				// Determine the initial value for the zero-fill distance based on the minimum width between any two adjacent points
 				double minDistance = x[1] - x[0];
-				for (int index = 2; index < numPoints - 1; index++)
+				for (int index = 2; index < numPoints; index++)
 				{
 					var currentDiff = (x[index] - x[index - 1]);
 					if (minDistance > currentDiff && currentDiff > 0)
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
 				double lastX = x[0];
 
-				for (int index = 1; index < numPoints - 1; index++)
+				for (int index = 1; index < numPoints; index++)
 				{
 					double currentDiff = x[index] - lastX;
 					double diffBetweenCurrentAndBase = x[index] - x[lastDiffIndex];

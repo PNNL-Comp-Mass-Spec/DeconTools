@@ -492,13 +492,23 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(ScanSetCollection != null && ScanSetCollection.ScanSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
+			Console.Write("Loading frame parameters ");
+	        DateTime dtLastProgress = DateTime.UtcNow;
+
             foreach (LCScanSetIMS frame in ScanSetCollection.ScanSetList)
             {
                 FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frame.PrimaryScanNumber);
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressureUnsmoothed = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
 
+	            if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= 1)
+	            {
+		            Console.Write(".");
+		            dtLastProgress = DateTime.UtcNow;
+	            }
             }
+
+			Console.WriteLine();
 
         }
 
