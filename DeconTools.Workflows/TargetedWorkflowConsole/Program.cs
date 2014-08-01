@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Linq;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
@@ -16,20 +12,11 @@ namespace IQ.Console
 {
     class Program
     {
-        [DllImport("kernel32.dll")]
-        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-        private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
-
-
 
         static int Main(string[] args)
         {
-            //IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
-            //SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);     // sets it so that keyboard use does not interrupt things.
-
 
             var options = new IqConsoleOptions();
-
 
             List<string> datasetList = new List<string>();
 

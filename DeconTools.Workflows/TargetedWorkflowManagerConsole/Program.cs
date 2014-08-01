@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using DeconTools.Workflows.Backend.Utilities;
 
@@ -9,16 +8,9 @@ namespace IQ.ConsoleManager
 {
     public class Program
     {
-        [DllImport("kernel32.dll")]
-        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-        private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
-
 
         public static void Main(string[] args)
         {
-            IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
-            SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);     // sets it so that keyboard use does not interrupt things.
-
 
             if (args == null || args.Length == 0)
             {

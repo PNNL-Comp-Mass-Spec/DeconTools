@@ -22,7 +22,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 case "unlabeled":
                     return new BasicIqWorkflow(parameters);
-                    break;
                 case "o16o18":
                     break;
                 case "n14n15":
@@ -30,7 +29,6 @@ namespace DeconTools.Workflows.Backend.Core
                 default:
                     throw new NotImplementedException("Cannot create workflow. Workflow type is not known. Input workflowType= " +
                                                       workflowType);
-                    break;
             }
 
             return null;

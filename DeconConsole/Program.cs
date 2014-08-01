@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using DeconTools.Backend.Workflows;
 
 namespace DeconConsole
@@ -9,19 +7,10 @@ namespace DeconConsole
     public class Program
     {
 
-        [DllImport("kernel32.dll")]
-        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-
-        public const string PROGRAM_DATE = "July 31, 2014";
-
-        private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
-
-
+        public const string PROGRAM_DATE = "August 1, 2014";
+        
         public static int Main(string[] args)
         {
-            IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
-            SetConsoleMode(handle, ENABLE_EXTENDED_FLAGS);
-
             Console.WriteLine("Starting..............");
 
             if (args.Length < 2 || args.Length > 3)

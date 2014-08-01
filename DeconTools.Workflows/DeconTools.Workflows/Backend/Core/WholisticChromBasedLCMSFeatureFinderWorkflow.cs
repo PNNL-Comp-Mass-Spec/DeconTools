@@ -113,20 +113,17 @@ namespace DeconTools.Workflows.Backend.Core
 			// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
 #if INCLUDE_RAPID
             this.Deconvolutor = new RapidDeconvolutor();
+            Validator = new ResultValidatorTask();
+            isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic(m_isosResultFileName);
 #else
 			throw new NotSupportedException("Support for Rapid is not included in this version of the DLL");
 #endif
-            Validator = new ResultValidatorTask();
-
-
-            isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic(m_isosResultFileName);
-
 
         }
 
         public override void Execute()
         {
-            double scanTolerance = 100;
+            const double scanTolerance = 100;
 
 
             Check.Require(this.Run != null, String.Format("{0} failed. Run not defined.", this.Name));

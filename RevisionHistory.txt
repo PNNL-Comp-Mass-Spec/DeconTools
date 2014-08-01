@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5326		August 1, 2014	mem
+	- DeconConsole no longer references SetConsoleMode in kernel32.dll
+
 Autoprocessor_1.0.5325		July 31, 2014	mem
 	- Removed dependency on DeconEngine.dll, which required Visual C++ from .NET 1.1 (MSVCP71.dll)
 		- DeconEngine.dll was included to support the Rapid deconvolution method, which we no longer use
