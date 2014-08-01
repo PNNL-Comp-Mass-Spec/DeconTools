@@ -36,6 +36,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
         }
 
+		// To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
+		// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
+#if INCLUDE_RAPID
+
         [Test]
         public void deconWithRAPID_Then_ValidateTest1()
         {
@@ -62,6 +66,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
         }
 
+#endif
 
     }
 }

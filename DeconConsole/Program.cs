@@ -12,7 +12,7 @@ namespace DeconConsole
         [DllImport("kernel32.dll")]
         public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
-        public const string PROGRAM_DATE = "June 27, 2014";
+        public const string PROGRAM_DATE = "July 31, 2014";
 
         private const uint ENABLE_EXTENDED_FLAGS = 0x0080;
 

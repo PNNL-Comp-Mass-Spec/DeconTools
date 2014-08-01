@@ -56,10 +56,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\BrukerDataReader.dll</HintPath>
     </Reference>
-    <Reference Include="DeconEngine">
-      <HintPath>..\Library\DeconEngine.dll</HintPath>
-      <Aliases>RapidEngine</Aliases>
-    </Reference>
     <Reference Include="DeconEngineV2">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
@@ -470,7 +466,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ClassDiagrams\BasicDataObjects.cd" />
-    <None Include="ClassDiagrams\ClassDiagram1.cd" />
+    <None Include="ClassDiagrams\ClassDiagram1.cd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ClassDiagrams\ClassDiagram2.cd" />
     <None Include="ClassDiagrams\ClassDiagram3.cd" />
     <None Include="ClassDiagrams\Exporters_classDiagram.cd" />

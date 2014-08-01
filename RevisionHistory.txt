@@ -1,5 +1,9 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5325		July 31, 2014	mem
+	- Removed dependency on DeconEngine.dll, which required Visual C++ from .NET 1.1 (MSVCP71.dll)
+		- DeconEngine.dll was included to support the Rapid deconvolution method, which we no longer use
+
 Autoprocessor_1.0.5291		June 27, 2014	mem
 	- Fixed bug in DeconToolsZeroFiller that dropped the final data point when zero filling
 	- Updated UIMFLibrary.dll

@@ -26,9 +26,15 @@ namespace DeconTools.Backend.ProcessingTasks
                     decon = new InformedThrashDeconvolutor(parameters.ThrashParameters);
                     return decon;
                 case Globals.DeconvolutionType.Rapid:
-                    return new RapidDeconvolutor(parameters.ThrashParameters.MinMSFeatureToBackgroundRatio,
+					// To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
+					// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
+#if INCLUDE_RAPID
+					return new RapidDeconvolutor(parameters.ThrashParameters.MinMSFeatureToBackgroundRatio,
                                                  Deconvolutor.DeconResultComboMode.simplyAddIt);
-                default:
+#else
+					throw new NotSupportedException("Support for Rapid is not included in this version of the DLL");
+#endif
+					default:
                     throw new ArgumentOutOfRangeException("parameters",
                                                           "Trying to create the deconvolutor, but an incorrect Deconvolutor type was given. Good example: 'ThrashV1'");
             }

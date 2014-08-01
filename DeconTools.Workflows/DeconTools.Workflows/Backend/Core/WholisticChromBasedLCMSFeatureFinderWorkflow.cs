@@ -109,8 +109,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             this.MSPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
+			// To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
+			// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
+#if INCLUDE_RAPID
             this.Deconvolutor = new RapidDeconvolutor();
-
+#else
+			throw new NotSupportedException("Support for Rapid is not included in this version of the DLL");
+#endif
             Validator = new ResultValidatorTask();
 
 
