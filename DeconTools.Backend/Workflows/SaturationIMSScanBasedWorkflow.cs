@@ -77,7 +77,10 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
+            const int CONSOLE_INTERVAL_SECONDS = 15;
+
             var uimfRun = (UIMFRun)Run;
+            var dtLastProgress = DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0));
 
             //uimfRun.IMSScanSetCollection.ScanSetList =uimfRun.IMSScanSetCollection.ScanSetList.Where(p => p.PrimaryScanNumber == 153).ToList();
 
@@ -90,9 +93,18 @@ namespace DeconTools.Backend.Workflows
                 ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                 //get saturated MSFeatures for unsummed data
                 uimfRun.CurrentScanSet = unsummedFrameSet;
-
+                
+                bool forceProgressMessage = true;
                 foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
+
+                    if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= CONSOLE_INTERVAL_SECONDS || forceProgressMessage)
+                    {
+                        dtLastProgress = DateTime.UtcNow;
+                        forceProgressMessage = false;
+                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Unsummed)");
+                    }                    
+
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
                     var unsummedIMSScanset = new IMSScanSet(scanset.PrimaryScanNumber);
@@ -159,8 +171,17 @@ namespace DeconTools.Backend.Workflows
                 //DisplayMSFeatures(_unsummedMSFeatures);
 
                 //now sum across IMSScans, deconvolute and adjust
+                forceProgressMessage = true;
                 foreach (IMSScanSet scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
+                    if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= CONSOLE_INTERVAL_SECONDS || forceProgressMessage)
+                    {
+                        dtLastProgress = DateTime.UtcNow;
+                        forceProgressMessage = false;
+                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Summed)");
+                    }                    
+
+
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
 

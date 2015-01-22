@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Utilities;
+using DeconTools.Backend.Workflows;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
 using ThermoRawFileReaderDLL.FinniganFileIO;
@@ -46,8 +48,6 @@ namespace DeconTools.Backend.Runs
             this.MinLCScan = 1;
             this.MaxLCScan = this.GetNumMSScans();
 
-
-
         }
 
         public XCaliburRun2(string filename, int minScan, int maxScan)
@@ -71,9 +71,9 @@ namespace DeconTools.Backend.Runs
 
         public override double GetIonInjectionTimeInMilliseconds(int scanNum)
         {
-            object value=null;
+            object value = null;
             _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
-            
+
             return Convert.ToDouble(value);
         }
 
@@ -199,8 +199,8 @@ namespace DeconTools.Backend.Runs
             int pnArraySize = 0;
             _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
 
-            var labels = (string[]) pvarLabels;
-            var values = (string[]) pvarValues;
+            var labels = (string[])pvarLabels;
+            var values = (string[])pvarValues;
 
             for (int index = 0; index < labels.Length; index++)
             {
@@ -215,21 +215,21 @@ namespace DeconTools.Backend.Runs
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-        	double precursorMz;
-        	int msLevel;
-        	string fragmentationType;
+            double precursorMz;
+            int msLevel;
+            string fragmentationType;
 
-        	string scanInfo = this.GetScanInfo(scanNum);
-        	XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
-			FinniganFileReaderBaseClass.IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
+            string scanInfo = this.GetScanInfo(scanNum);
+            XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
+            FinniganFileReaderBaseClass.IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
 
             PrecursorInfo precursor = new PrecursorInfo();
 
             //Get MS Level
-			precursor.MSLevel = msLevel;
+            precursor.MSLevel = msLevel;
 
             //Get Precursor MZ
-			if (scanInfo == null)
+            if (scanInfo == null)
             {
                 precursor.PrecursorMZ = -1;
             }
@@ -257,29 +257,29 @@ namespace DeconTools.Backend.Runs
 
                 precursor.PrecursorScan = scanNum - (stepBack - 1);
 
-				switch (fragmentationType)
-				{
-					case "hcd":
-						precursor.FragmentationType = FragmentionType.HCD;
-						break;
-					case "etd":
-						precursor.FragmentationType = FragmentionType.ETD;
-						break;
-					case "cid":
-						precursor.FragmentationType = FragmentionType.CID;
-						break;
-					default:
-						precursor.FragmentationType = FragmentionType.None;
-						break;
-				}
+                switch (fragmentationType)
+                {
+                    case "hcd":
+                        precursor.FragmentationType = FragmentionType.HCD;
+                        break;
+                    case "etd":
+                        precursor.FragmentationType = FragmentionType.ETD;
+                        break;
+                    case "cid":
+                        precursor.FragmentationType = FragmentionType.CID;
+                        break;
+                    default:
+                        precursor.FragmentationType = FragmentionType.None;
+                        break;
+                }
             }
             else
             {
                 precursor.PrecursorScan = scanNum;
-				precursor.FragmentationType = FragmentionType.None;
+                precursor.FragmentationType = FragmentionType.None;
             }
 
-			precursor.IonizationMode = ionMode.Equals(FinniganFileReaderBaseClass.IonModeConstants.Positive) ? IonizationMode.Positive : IonizationMode.Negative;
+            precursor.IonizationMode = ionMode.Equals(FinniganFileReaderBaseClass.IonModeConstants.Positive) ? IonizationMode.Positive : IonizationMode.Negative;
 
             //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;
@@ -287,94 +287,153 @@ namespace DeconTools.Backend.Runs
             return precursor;
         }
 
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
+            // Note that we're using function attribute HandleProcessCorruptedStateExceptions
+            // to force .NET to properly catch critical errors thrown by the XRawfile DLL
+
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
+            if (scanset == null)
+                return null;
+
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            double[,] vals;
-
+            double[,] vals = null;
             bool spectraAreSummed = scanset.IndexValues.Count > 1;
+            int scanNumFirst = scanset.IndexValues[0];
+            int scanNumLast = scanset.IndexValues[scanset.IndexValues.Count - 1];
+
+            string scanDescription;
             if (spectraAreSummed)
             {
-                int scanNumFirst = scanset.IndexValues[0];
-                int scanNumLast = scanset.IndexValues[scanset.IndexValues.Count - 1];
-                int backgroundScan1First = 0;
-                int backgroundScan1Last = 0;
-                int backgroundScan2First = 0;
-                int backgroundScan2Last = 0;
-                string filter = "p full ms";   //only sum MS1 data
-
-                int intensityCutoffType = 0;
-                int intensityCutoffValue = 0;
-                int maxNumberOfPeaks = 0;
-                int centroidResult = 0;
-                double centVal = 0;
-                object massList = null;
-                object peakFlags = null;
-                int arraySize = 0;
-
-                _msfileReader.GetAverageMassList(ref scanNumFirst, ref scanNumLast, ref backgroundScan1First, ref backgroundScan1Last, ref backgroundScan2First, ref backgroundScan2Last,
-             filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
-
-                vals = (double[,])massList;
+                scanDescription = "scan " + scanset.PrimaryScanNumber + "( summing scans " + scanNumFirst + " to " + scanNumLast + ")";
             }
             else
             {
-                int scanNum = scanset.PrimaryScanNumber;
-                string filter = null;
-                int intensityCutoffType = 0;
-                int intensityCutoffValue = 0;
-                int maxNumberOfPeaks = 0;
-                int centroidResult = 0;
+                scanDescription = "scan " + scanset.PrimaryScanNumber;
+            }
+            try
+            {
 
-                double centVal = 0;
-                object massList = null;
-                object peakFlags = null;
-                int arraySize = 0;
 
-                _msfileReader.GetMassListFromScanNum(ref scanNum, filter, intensityCutoffType, intensityCutoffValue, maxNumberOfPeaks, centroidResult, ref centVal, ref massList, ref peakFlags, ref arraySize);
+                if (spectraAreSummed)
+                {
+                    int backgroundScan1First = 0;
+                    int backgroundScan1Last = 0;
+                    int backgroundScan2First = 0;
+                    int backgroundScan2Last = 0;
+                    const string filter = "p full ms"; //only sum MS1 data
 
-                vals = (double[,])massList;
+                    const int intensityCutoffType = 0;
+                    const int intensityCutoffValue = 0;
+                    const int maxNumberOfPeaks = 0;
+                    const int centroidResult = 0;
+                    double centVal = 0;
+                    object massList = null;
+                    object peakFlags = null;
+                    int arraySize = 0;
+
+                    _msfileReader.GetAverageMassList(
+                        ref scanNumFirst, 
+                        ref scanNumLast, 
+                        ref backgroundScan1First, 
+                        ref backgroundScan1Last, 
+                        ref backgroundScan2First, 
+                        ref backgroundScan2Last,
+                        filter, 
+                        intensityCutoffType, 
+                        intensityCutoffValue, 
+                        maxNumberOfPeaks, 
+                        centroidResult, 
+                        ref centVal,
+                        ref massList, 
+                        ref peakFlags, 
+                        ref arraySize);
+
+                    vals = (double[,])massList;
+                }
+                else
+                {
+                    int scanNum = scanset.PrimaryScanNumber;
+                    string filter = null;
+                    const int intensityCutoffType = 0;
+                    const int intensityCutoffValue = 0;
+                    const int maxNumberOfPeaks = 0;
+                    const int centroidResult = 0;
+
+                    double centVal = 0;
+                    object massList = null;
+                    object peakFlags = null;
+                    int arraySize = 0;
+
+                    _msfileReader.GetMassListFromScanNum(
+                        ref scanNum,
+                        filter,
+                        intensityCutoffType,
+                        intensityCutoffValue,
+                        maxNumberOfPeaks,
+                        centroidResult,
+                        ref centVal,
+                        ref massList,
+                        ref peakFlags,
+                        ref arraySize);
+
+                    vals = (double[,])massList;
+
+                }
+            }
+            catch (System.AccessViolationException ex)
+            {
+                Logger.Instance.AddEntry("XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
+                                         "; possibly a corrupt .Raw file");
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.AddEntry("XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
+                                         ": " + ex.Message + "; possibly a corrupt .Raw file");
             }
 
             if (vals == null) return null;
 
-        	int length = vals.GetLength(1);
+            int length = vals.GetLength(1);
 
-			List<double> xvals = new List<double>();
-			List<double> yvals = new List<double>();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
-			// Note from MEM (October 2013)
-			// GetMassListFromScanNum generally returns the data sorted by m/z ascending
-			// However, there are edge cases for certain spectra in certain datasets where adjacent data points are out of order and need to be swapped
-			// Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xydata.Xvalues and xydata.Yvalues
-			bool sortRequired = false;
+            // Note from MEM (October 2013)
+            // GetMassListFromScanNum generally returns the data sorted by m/z ascending
+            // However, there are edge cases for certain spectra in certain datasets where adjacent data points are out of order and need to be swapped
+            // Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xydata.Xvalues and xydata.Yvalues
+            bool sortRequired = false;
 
-			for (int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
-            	double xValue = vals[0, i];
+                double xValue = vals[0, i];
 
-				if (xValue < minMZ || xValue > maxMZ) continue;
+                if (xValue < minMZ || xValue > maxMZ) continue;
 
-				double yValue = vals[1, i];
+                double yValue = vals[1, i];
 
-				if (i > 0 && xValue < vals[0, i - 1])
-				{
-					// Points are out of order; this rarely occurs but it is possible and has been observed
-					sortRequired = true;
-				}
+                if (i > 0 && xValue < vals[0, i - 1])
+                {
+                    // Points are out of order; this rarely occurs but it is possible and has been observed
+                    sortRequired = true;
+                }
 
-				xvals.Add(xValue);
+                xvals.Add(xValue);
                 yvals.Add(yValue);
             }
 
-            XYData xydata = new XYData();
-			xydata.Xvalues = xvals.ToArray();
-			xydata.Yvalues = yvals.ToArray();
+            var xydata = new XYData
+            {
+                Xvalues = xvals.ToArray(),
+                Yvalues = yvals.ToArray()
+            };
 
-			if (sortRequired)
-				Array.Sort(xydata.Xvalues, xydata.Yvalues);
+            if (sortRequired)
+                Array.Sort(xydata.Xvalues, xydata.Yvalues);
 
             return xydata;
         }

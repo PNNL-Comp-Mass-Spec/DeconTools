@@ -1,5 +1,9 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5480		January 2, 2015	mem
+	- Added HandleProcessCorruptedStateExceptionsAttribute to GetMassSpectrum in XCaliburRun2 in an attempt to catch COM errors due to corrupt spectra
+	- New version of ThermoRawFileReader
+
 Autoprocessor_1.0.5326		August 1, 2014	mem
 	- DeconConsole no longer references SetConsoleMode in kernel32.dll
 

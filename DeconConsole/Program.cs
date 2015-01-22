@@ -7,9 +7,9 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "August 1, 2014";
+        public const string PROGRAM_DATE = "January 2, 2015";
         
-        public static int Main(string[] args)
+        static int Main(string[] args)
         {
             Console.WriteLine("Starting..............");
 
