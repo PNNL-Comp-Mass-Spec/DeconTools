@@ -69,20 +69,38 @@ namespace DeconTools.Backend.Runs
             return isCentroided != 0;
         }
 
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override double GetIonInjectionTimeInMilliseconds(int scanNum)
         {
-            object value = null;
-            _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
+            try
+            {
+                object value = null;
+                _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
 
-            return Convert.ToDouble(value);
+                return Convert.ToDouble(value);
+            }
+            catch (AccessViolationException ex)
+            {
+                Console.WriteLine("Warning: Exception calling _msfileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+                return 0;
+            }
         }
 
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override double GetMS2IsolationWidth(int scanNum)
         {
-            object value = null;
-            _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
+            try 
+            {
+                object value = null;
+                _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
 
-            return Convert.ToDouble(value);
+                return Convert.ToDouble(value);
+            }
+            catch (AccessViolationException ex)
+            {
+                Console.WriteLine("Warning: Exception calling _msfileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+                return 0;
+            }
         }
 
         public override int GetNumMSScans()
@@ -193,24 +211,35 @@ namespace DeconTools.Backend.Runs
             return pdTIC;
         }
 
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public string GetTuneData()
         {
-            object pvarLabels = null, pvarValues = null;
-            int pnArraySize = 0;
-            _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
-
-            var labels = (string[])pvarLabels;
-            var values = (string[])pvarValues;
-
-            for (int index = 0; index < labels.Length; index++)
+            try
             {
-                var label = labels[index];
-                var value = values[index];
 
-                Console.WriteLine(label + "\t" + value);
+                object pvarLabels = null, pvarValues = null;
+                int pnArraySize = 0;
+                _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
+
+                var labels = (string[])pvarLabels;
+                var values = (string[])pvarValues;
+
+                for (int index = 0; index < labels.Length; index++)
+                {
+                    var label = labels[index];
+                    var value = values[index];
+
+                    Console.WriteLine(label + "\t" + value);
+                }
+
+                return labels.ToString();
             }
-
-            return labels.ToString();
+            catch (AccessViolationException ex)
+            {
+                Console.WriteLine("Warning: Exception calling _msfileReader.GetTuneData: " + ex.Message);
+                return string.Empty;
+            }
+            
         }
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
@@ -313,6 +342,7 @@ namespace DeconTools.Backend.Runs
             {
                 scanDescription = "scan " + scanset.PrimaryScanNumber;
             }
+
             try
             {
 
@@ -385,8 +415,10 @@ namespace DeconTools.Backend.Runs
             }
             catch (System.AccessViolationException ex)
             {
-                Logger.Instance.AddEntry("XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
-                                         "; possibly a corrupt .Raw file");
+                string errorMessage = "XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
+                                      "; possibly a corrupt .Raw file";
+                Console.WriteLine(errorMessage);
+                Logger.Instance.AddEntry(errorMessage);
 
             }
             catch (Exception ex)
@@ -468,9 +500,18 @@ namespace DeconTools.Backend.Runs
             return ParentScanList[scanLC];
         }
 
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override void Close()
         {
-            _msfileReader.Close();
+            try
+            {
+                _msfileReader.Close();
+            }
+            catch (AccessViolationException ex)
+            {
+               // Ignore errors here
+            }
+            
             base.Close();
         }
     }

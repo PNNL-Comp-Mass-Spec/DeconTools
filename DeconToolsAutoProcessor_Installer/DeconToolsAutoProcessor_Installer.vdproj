@@ -21,7 +21,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0FC687BA87BE447D894C1BDD0B868902"
+        "MsmKey" = "8:_06E0B5C57E8549A1993CA72F827297A7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -215,6 +215,12 @@
         {
         "MsmKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
         "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4E8E4126EBCD449E8B247BE2E0961EF2"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -484,12 +490,6 @@
         "Entry"
         {
         "MsmKey" = "8:_B7D21E1DFDA794C438D57B65AF217283"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B7D21E1DFDA794C438D57B65AF217283"
         "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -549,6 +549,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BE4449215C7276441AEE1AA86636D7C0"
+        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D3F7657ABFD14807A7CFD05F1075408E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -587,6 +593,24 @@
         {
         "MsmKey" = "8:_F8E71669A94F46F6934CF8E479045A14"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
+        "OwnerKey" = "8:_72FC942F1328400CB97E95D37B06E97D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
+        "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
+        "OwnerKey" = "8:_393612A4E9C7C5A2591CEDAAA3DB34C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -634,6 +658,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4E8E4126EBCD449E8B247BE2E0961EF2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_748BE87B6206453893FE140528855944"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -671,12 +701,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_772A584ADAC35950E2451BC628666915"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B7D21E1DFDA794C438D57B65AF217283"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -785,6 +809,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_885B4732C8DA40B250C4142C7A2F31A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F9DAAA2E8F3AD12012E2CF6A70131802"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -912,7 +942,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0FC687BA87BE447D894C1BDD0B868902"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_06E0B5C57E8549A1993CA72F827297A7"
             {
             "SourcePath" = "8:..\\Library\\x86\\SQLite.Interop.dll"
             "TargetName" = "8:SQLite.Interop.dll"
@@ -1173,7 +1203,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UIMFLibrary, Version=2.1.5290.30649, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:UIMFLibrary, Version=2.1.5450.36888, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_2902BAB1EB392790C101A0DAB88A32F3"
@@ -1269,6 +1299,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4E8E4126EBCD449E8B247BE2E0961EF2"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.93.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_4E8E4126EBCD449E8B247BE2E0961EF2"
+                    {
+                    "Name" = "8:System.Data.SQLite.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\Library\\System.Data.SQLite.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_544CC1D49B3E4DDFD06CEC4312FC2613"
@@ -1439,16 +1500,16 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ThermoRawFileReaderDLL, Version=1.1.5049.29983, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ThermoRawFileReaderDLL, Version=1.1.5500.33012, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_772A584ADAC35950E2451BC628666915"
                     {
-                    "Name" = "8:ThermoRawFileReaderDLL.dll"
+                    "Name" = "8:ThermoRawFileReaderDLL.DLL"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:ThermoRawFileReaderDLL.dll"
+            "SourcePath" = "8:ThermoRawFileReaderDLL.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
@@ -1665,7 +1726,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5326.17111, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DeconTools.Backend, Version=1.0.5501.32009, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_AA40E4D85F0ACFE3C0413682F00E12CD"
@@ -1675,37 +1736,6 @@
                     }
                 }
             "SourcePath" = "8:DeconTools.Backend.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B7D21E1DFDA794C438D57B65AF217283"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.93.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_B7D21E1DFDA794C438D57B65AF217283"
-                    {
-                    "Name" = "8:System.Data.SQLite.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Data.SQLite.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
@@ -1750,6 +1780,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BE4449215C7276441AEE1AA86636D7C0"
+            {
+            "SourcePath" = "8:BDal.CXt.Lc.Interfaces.tlb"
+            "TargetName" = "8:BDal.CXt.Lc.Interfaces.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -1808,6 +1858,37 @@
                     }
                 }
             "SourcePath" = "8:YafmsLibrary.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F9DAAA2E8F3AD12012E2CF6A70131802"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:BDal.CXt.Lc.Interfaces, Version=1.0.17.0, Culture=neutral, PublicKeyToken=9cf59cd9dc0ba160, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F9DAAA2E8F3AD12012E2CF6A70131802"
+                    {
+                    "Name" = "8:BDal.CXt.Lc.Interfaces.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:BDal.CXt.Lc.Interfaces.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_938B714E73064D21AE2E2332D6FB3136"
@@ -1943,15 +2024,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DeconTools AutoProcessor"
-        "ProductCode" = "8:{F878EF9D-7E47-4FD8-A2E1-E26D92607836}"
-        "PackageCode" = "8:{5A34788A-ED50-4EB6-A659-1BB03628168B}"
+        "ProductCode" = "8:{E1423DB3-0FD9-42F3-AD56-7BCAECF74A8A}"
+        "PackageCode" = "8:{7B485B7C-9B85-4355-B6B2-0A2B0F1965B2}"
         "UpgradeCode" = "8:{268EF640-1873-458D-B75E-FC6D4BF44277}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.6"
+        "ProductVersion" = "8:1.0.7"
         "Manufacturer" = "8:PNNL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
