@@ -163,8 +163,8 @@ namespace DeconTools.Backend.Workflows
                             {
                                 var theorIso = new IsotopicProfile();
 
-                            RebuildSaturatedIsotopicProfile(msFeatureXYData,  isosResult, uimfRun.PeakList, out theorIso);
-                            AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
+                                RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, uimfRun.PeakList, out theorIso);
+                                AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
                             }
 
 
@@ -231,7 +231,7 @@ namespace DeconTools.Backend.Workflows
 
 
                                 RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out theorIso);
-                            AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
+                                AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
 
                                 int currentScan = scanset.PrimaryScanNumber;
                                 double currentMZ = isosResult.IsotopicProfile.MonoPeakMZ;
@@ -251,77 +251,77 @@ namespace DeconTools.Backend.Workflows
                         }
 
                     }
-                }
-
-                //need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
-                //Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
-                //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
-                foreach (var isosResult in Run.ResultCollection.IsosResultBin)
-                {
-                    double ppmToleranceForDuplicate = 20;
-                    double massTolForDuplicate = ppmToleranceForDuplicate *
-                                                 isosResult.IsotopicProfile.MonoIsotopicMass / 1e6;
 
 
-
-                    var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
-                                                where
-                                                    Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
-                                                             isosResult.IsotopicProfile.MonoIsotopicMass) <
-                                                    massTolForDuplicate && n.IsotopicProfile.ChargeState == isosResult.IsotopicProfile.ChargeState
-                                                select n);
-
-                    int minMSFeatureID = int.MaxValue;
-                    foreach (var dup in duplicateIsosResults)
+                    //need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
+                    //Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
+                    //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
+                    foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
+                        double ppmToleranceForDuplicate = 20;
+                        double massTolForDuplicate = ppmToleranceForDuplicate *
+                                                     isosResult.IsotopicProfile.MonoIsotopicMass / 1e6;
 
-                        if (dup.MSFeatureID < minMSFeatureID)
+
+
+                        var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
+                                                    where
+                                                        Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
+                                                                 isosResult.IsotopicProfile.MonoIsotopicMass) <
+                                                        massTolForDuplicate && n.IsotopicProfile.ChargeState == isosResult.IsotopicProfile.ChargeState
+                                                    select n);
+
+                        int minMSFeatureID = int.MaxValue;
+                        foreach (var dup in duplicateIsosResults)
                         {
 
-                            minMSFeatureID = dup.MSFeatureID;
-                        }
-                        else
-                        {
-                            //here we have found a duplicate
-                            dup.MSFeatureID = minMSFeatureID;
+                            if (dup.MSFeatureID < minMSFeatureID)
+                            {
 
-                            //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
-                            //happen when there are duplicates
-                            //Run.ResultCollection.MSFeatureCounter--;
-                        }
+                                minMSFeatureID = dup.MSFeatureID;
+                            }
+                            else
+                            {
+                                //here we have found a duplicate
+                                dup.MSFeatureID = minMSFeatureID;
 
+                                //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
+                                //happen when there are duplicates
+                                //Run.ResultCollection.MSFeatureCounter--;
+                            }
+
+                        }
                     }
-                }
 
-                ExecuteTask(ResultValidator);
+                    ExecuteTask(ResultValidator);
 
-                ExecuteTask(ScanResultUpdater);
+                    ExecuteTask(ScanResultUpdater);
 
-                if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
-                {
-                    ExecuteTask(FitScoreCalculator);
-                }
-
-                //Allows derived classes to execute additional tasks
-                ExecuteOtherTasksHook();
-
-                if (ExportData)
-                {
-                    //the following exporting tasks should be last
-                    if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
+                    if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
                     {
-                        ExecuteTask(PeakToMSFeatureAssociator);
-                        ExecuteTask(PeakListExporter);
-
+                        ExecuteTask(FitScoreCalculator);
                     }
 
-                    ExecuteTask(IsosResultExporter);
+                    //Allows derived classes to execute additional tasks
+                    ExecuteOtherTasksHook();
 
-                    ExecuteTask(ScanResultExporter);
+                    if (ExportData)
+                    {
+                        //the following exporting tasks should be last
+                        if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
+                        {
+                            ExecuteTask(PeakToMSFeatureAssociator);
+                            ExecuteTask(PeakListExporter);
+
+                        }
+
+                        ExecuteTask(IsosResultExporter);
+
+                        ExecuteTask(ScanResultExporter);
+                    }
+
+                    ReportProgress();
                 }
-
-                ReportProgress();
-
             }
 
         }
