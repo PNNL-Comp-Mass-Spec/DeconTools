@@ -39,7 +39,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw ex;
+                throw;
             }
 
             buildTables();

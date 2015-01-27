@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw ex;
+                throw;
             }
 
             createMSPeakTable();

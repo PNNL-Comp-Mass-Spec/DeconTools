@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Workflows
             PeakBRSaturatedPeakDetector = parameters.PeakDetectorParameters.PeakToBackgroundRatio * 0.75;
 
             _msGenerator = new UIMF_MSGenerator();
-            _peakDetector = new DeconToolsPeakDetectorV2(5, 3, Globals.PeakFitType.QUADRATIC,false);
+            _peakDetector = new DeconToolsPeakDetectorV2(5, 3, Globals.PeakFitType.QUADRATIC, false);
             _zeroFiller = new DeconToolsZeroFiller();
             _deconvolutor = new HornDeconvolutor(parameters);
             _deconvolutor.MaxFitAllowed = 0.9;
@@ -79,6 +79,8 @@ namespace DeconTools.Backend.Workflows
         {
             const int CONSOLE_INTERVAL_SECONDS = 15;
 
+            const bool SKIP_DECONVOLUTION = false;
+
             var uimfRun = (UIMFRun)Run;
             var dtLastProgress = DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0));
 
@@ -93,7 +95,7 @@ namespace DeconTools.Backend.Workflows
                 ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                 //get saturated MSFeatures for unsummed data
                 uimfRun.CurrentScanSet = unsummedFrameSet;
-                
+
                 bool forceProgressMessage = true;
                 foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
@@ -103,7 +105,7 @@ namespace DeconTools.Backend.Workflows
                         dtLastProgress = DateTime.UtcNow;
                         forceProgressMessage = false;
                         Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Unsummed)");
-                    }                    
+                    }
 
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
@@ -123,46 +125,50 @@ namespace DeconTools.Backend.Workflows
 
                     _peakDetector.Execute(Run.ResultCollection);
 
-                    _deconvolutor.Deconvolute(uimfRun.ResultCollection);     //adds to IsosResultBin
-
-                    //Note: the deconvolutor automatically increases the MSFeatureCounter. 
-                    //Here, we don't want this, since this data is used only for saturation correction,
-                    //not for generating the official MSFeatures list. So we need to 
-                    //correct the MSFeatureCounter value. 
-                    Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
-                                                            Run.ResultCollection.IsosResultBin.Count;
-
-                    _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
-
-                    //iterate over unsummed MSFeatures and check for saturation
-                    foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
+                    if (!SKIP_DECONVOLUTION)
                     {
-                        XYData msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
-                                                                     isosResult.IsotopicProfile.MonoPeakMZ + 10);
+                        _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
 
-                        double tempMZ = isosResult.IsotopicProfile.MonoPeakMZ;
-                        int currentScan = scanset.PrimaryScanNumber;
+                        //Note: the deconvolutor automatically increases the MSFeatureCounter. 
+                        //Here, we don't want this, since this data is used only for saturation correction,
+                        //not for generating the official MSFeatures list. So we need to 
+                        //correct the MSFeatureCounter value. 
+                        Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
+                                                                Run.ResultCollection.IsosResultBin.Count;
 
-                        bool isPossiblySaturated = isosResult.IntensityAggregate >
-                                                   NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
+                        _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 
-
-                        //For debugging... 
-                        //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
-
-                        //if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
-                        //{
-                        //    Console.WriteLine(tempIsosResult + "\t being processed!");
-                        //}
-
-                        if (isPossiblySaturated)
+                        //iterate over unsummed MSFeatures and check for saturation
+                        foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                         {
-                            var theorIso = new IsotopicProfile();
-                           
+                            XYData msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
+                                                                         isosResult.IsotopicProfile.MonoPeakMZ + 10);
+
+                            double tempMZ = isosResult.IsotopicProfile.MonoPeakMZ;
+                            int currentScan = scanset.PrimaryScanNumber;
+
+                            bool isPossiblySaturated = isosResult.IntensityAggregate >
+                                                       NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
+
+
+                            //For debugging... 
+                            //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
+
+                            //if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
+                            //{
+                            //    Console.WriteLine(tempIsosResult + "\t being processed!");
+                            //}
+
+                            if (isPossiblySaturated)
+                            {
+                                var theorIso = new IsotopicProfile();
+
                             RebuildSaturatedIsotopicProfile(msFeatureXYData,  isosResult, uimfRun.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
-                        }
+                            }
 
+
+                        }
 
                     }
                 }
@@ -179,8 +185,7 @@ namespace DeconTools.Backend.Workflows
                         dtLastProgress = DateTime.UtcNow;
                         forceProgressMessage = false;
                         Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Summed)");
-                    }                    
-
+                    }
 
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
@@ -188,9 +193,6 @@ namespace DeconTools.Backend.Workflows
                     //get the summed isotopic profile
                     uimfRun.CurrentScanSet = lcScanSet;
                     uimfRun.CurrentIMSScanSet = scanset;
-
-
-
 
                     ExecuteTask(MSGenerator);
 
@@ -206,116 +208,120 @@ namespace DeconTools.Backend.Workflows
 
                     ExecuteTask(PeakDetector);
 
-                    ExecuteTask(Deconvolutor);
-
-
-                    foreach (var isosResult in Run.ResultCollection.IsosResultBin)
+                    if (!SKIP_DECONVOLUTION)
                     {
 
-                        bool isPossiblySaturated = isosResult.IntensityAggregate >
-                                                      NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
+                        ExecuteTask(Deconvolutor);
 
 
-
-                        if (isPossiblySaturated)
+                        foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                         {
-                            var theorIso = new IsotopicProfile();
 
-                            XYData msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
-                                                                     isosResult.IsotopicProfile.MonoPeakMZ + 10);
+                            bool isPossiblySaturated = isosResult.IntensityAggregate >
+                                                       NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
 
-                            RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out theorIso);
+
+                            if (isPossiblySaturated)
+                            {
+                                var theorIso = new IsotopicProfile();
+
+                                XYData msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
+                                                                             isosResult.IsotopicProfile.MonoPeakMZ + 10);
+
+
+                                RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out theorIso);
                             AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
 
-                            int currentScan = scanset.PrimaryScanNumber;
-                            double currentMZ = isosResult.IsotopicProfile.MonoPeakMZ;
+                                int currentScan = scanset.PrimaryScanNumber;
+                                double currentMZ = isosResult.IsotopicProfile.MonoPeakMZ;
 
-                            UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, scanset);
-                        }
-                        else
-                        {
-
-                        }
-
-                        if (isosResult.IsotopicProfile.IsSaturated)
-                        {
-                            GetRebuiltFitScore(isosResult);
-                        }
-
-                    }
-
-
-                    //need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
-                    //Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
-                    //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
-                    foreach (var isosResult in Run.ResultCollection.IsosResultBin)
-                    {
-                        double ppmToleranceForDuplicate = 20;
-                        double massTolForDuplicate = ppmToleranceForDuplicate *
-                                                     isosResult.IsotopicProfile.MonoIsotopicMass / 1e6;
-
-
-
-                        var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
-                                                    where
-                                                        Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
-                                                                 isosResult.IsotopicProfile.MonoIsotopicMass) <
-                                                        massTolForDuplicate && n.IsotopicProfile.ChargeState == isosResult.IsotopicProfile.ChargeState
-                                                    select n);
-
-                        int minMSFeatureID = int.MaxValue;
-                        foreach (var dup in duplicateIsosResults)
-                        {
-
-                            if (dup.MSFeatureID < minMSFeatureID)
-                            {
-
-                                minMSFeatureID = dup.MSFeatureID;
+                                UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, scanset);
                             }
                             else
                             {
-                                //here we have found a duplicate
-                                dup.MSFeatureID = minMSFeatureID;
 
-                                //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
-                                //happen when there are duplicates
-                                //Run.ResultCollection.MSFeatureCounter--;
+                            }
+
+                            if (isosResult.IsotopicProfile.IsSaturated)
+                            {
+                                GetRebuiltFitScore(isosResult);
                             }
 
                         }
+
                     }
+                }
 
-                    ExecuteTask(ResultValidator);
+                //need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
+                //Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
+                //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
+                foreach (var isosResult in Run.ResultCollection.IsosResultBin)
+                {
+                    double ppmToleranceForDuplicate = 20;
+                    double massTolForDuplicate = ppmToleranceForDuplicate *
+                                                 isosResult.IsotopicProfile.MonoIsotopicMass / 1e6;
 
-                    ExecuteTask(ScanResultUpdater);
 
-                    if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
+
+                    var duplicateIsosResults = (from n in Run.ResultCollection.IsosResultBin
+                                                where
+                                                    Math.Abs(n.IsotopicProfile.MonoIsotopicMass -
+                                                             isosResult.IsotopicProfile.MonoIsotopicMass) <
+                                                    massTolForDuplicate && n.IsotopicProfile.ChargeState == isosResult.IsotopicProfile.ChargeState
+                                                select n);
+
+                    int minMSFeatureID = int.MaxValue;
+                    foreach (var dup in duplicateIsosResults)
                     {
-                        ExecuteTask(FitScoreCalculator);
-                    }
 
-                    //Allows derived classes to execute additional tasks
-                    ExecuteOtherTasksHook();
-
-
-                    if (ExportData)
-                    {
-                        //the following exporting tasks should be last
-                        if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
+                        if (dup.MSFeatureID < minMSFeatureID)
                         {
-                            ExecuteTask(PeakToMSFeatureAssociator);
-                            ExecuteTask(PeakListExporter);
 
+                            minMSFeatureID = dup.MSFeatureID;
+                        }
+                        else
+                        {
+                            //here we have found a duplicate
+                            dup.MSFeatureID = minMSFeatureID;
+
+                            //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
+                            //happen when there are duplicates
+                            //Run.ResultCollection.MSFeatureCounter--;
                         }
 
-                        ExecuteTask(IsosResultExporter);
+                    }
+                }
 
-                        ExecuteTask(ScanResultExporter);
+                ExecuteTask(ResultValidator);
+
+                ExecuteTask(ScanResultUpdater);
+
+                if (NewDeconToolsParameters.ScanBasedWorkflowParameters.IsRefittingPerformed)
+                {
+                    ExecuteTask(FitScoreCalculator);
+                }
+
+                //Allows derived classes to execute additional tasks
+                ExecuteOtherTasksHook();
+
+                if (ExportData)
+                {
+                    //the following exporting tasks should be last
+                    if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
+                    {
+                        ExecuteTask(PeakToMSFeatureAssociator);
+                        ExecuteTask(PeakListExporter);
+
                     }
 
-                    ReportProgress();
+                    ExecuteTask(IsosResultExporter);
+
+                    ExecuteTask(ScanResultExporter);
                 }
+
+                ReportProgress();
+
             }
 
         }
@@ -577,7 +583,7 @@ namespace DeconTools.Backend.Workflows
             }
 
             iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;
-            
+
             int indexMostAbundantPeakTheor = theorIsotopicProfile.GetIndexOfMostIntensePeak();
 
             if (iso.Peaklist.Count > indexMostAbundantPeakTheor)
@@ -643,15 +649,15 @@ namespace DeconTools.Backend.Workflows
                 MSPeak peakToTheLeft = GetPeakToTheLeftIfExists(saturatedFeature.IsotopicProfile,
                                                                 Run.PeakList);
                 //for very very saturated data, no peak is detected. Need to check the corresponding XY data point and see if it is highly saturated. 
-                if (peakToTheLeft==null)
+                if (peakToTheLeft == null)
                 {
 
                     var monoPeak = saturatedFeature.IsotopicProfile.getMonoPeak();
 
                     double targetMZ = saturatedFeature.IsotopicProfile.getMonoPeak().XValue - (1.003 / (double)saturatedFeature.IsotopicProfile.ChargeState);
 
-					const double toleranceMZ = 0.1;
-					int indexOfXYDataPointToTheLeft = MathUtils.GetClosest(msFeatureXYData.Xvalues, targetMZ, toleranceMZ);
+                    const double toleranceMZ = 0.1;
+                    int indexOfXYDataPointToTheLeft = MathUtils.GetClosest(msFeatureXYData.Xvalues, targetMZ, toleranceMZ);
 
                     double obsMZ = msFeatureXYData.Xvalues[indexOfXYDataPointToTheLeft];
 
@@ -659,21 +665,21 @@ namespace DeconTools.Backend.Workflows
 
 
                     //gather data for 3 XY data points
-                    if (indexOfXYDataPointToTheLeft>0)
+                    if (indexOfXYDataPointToTheLeft > 0)
                     {
                         obsMZData.Add(msFeatureXYData.Yvalues[indexOfXYDataPointToTheLeft - 1]);
                     }
-                    
+
                     obsMZData.Add(msFeatureXYData.Yvalues[indexOfXYDataPointToTheLeft]);
-                    
-                    if ((indexOfXYDataPointToTheLeft+1)<msFeatureXYData.Xvalues.Length)
+
+                    if ((indexOfXYDataPointToTheLeft + 1) < msFeatureXYData.Xvalues.Length)
                     {
                         obsMZData.Add(msFeatureXYData.Yvalues[indexOfXYDataPointToTheLeft + 1]);
                     }
 
                     double avgIntensityObsPointsToLeft = obsMZData.Average();
 
-					if (avgIntensityObsPointsToLeft > monoPeak.Height * 0.75 && Math.Abs(obsMZ - targetMZ) <= toleranceMZ)
+                    if (avgIntensityObsPointsToLeft > monoPeak.Height * 0.75 && Math.Abs(obsMZ - targetMZ) <= toleranceMZ)
                     {
                         peakToTheLeft = new MSPeak(obsMZ, (float)avgIntensityObsPointsToLeft, monoPeak.Width, 0);
                     }

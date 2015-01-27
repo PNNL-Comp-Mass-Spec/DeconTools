@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Runs
         // private DataReader.FrameType _frameTypeForMS1;
         private GlobalParameters _globalParameters;
 
-
         //private UIMFLibrary.DataReader m_reader;
         private Dictionary<int, double> _framePressuresUnsmoothed;
 
@@ -168,7 +167,7 @@ namespace DeconTools.Backend.Runs
         public IMSScanSet CurrentIMSScanSet { get; set; }
 
         public override ScanSet CurrentScanSet { get; set; }
-       
+
         public int MinIMSScan { get; set; }
         public int MaxIMSScan { get; set; }
 
@@ -256,11 +255,11 @@ namespace DeconTools.Backend.Runs
 
 
 
-		/// <summary>
-		/// Returns the MSLevel for the given frame
-		/// </summary>
-		/// <param name="scanNum">Frame number</param>
-		/// <returns>1 for MS1 frames, 2 for MS2 frames, 0 for calibration frames, </returns>
+        /// <summary>
+        /// Returns the MSLevel for the given frame
+        /// </summary>
+        /// <param name="scanNum">Frame number</param>
+        /// <returns>1 for MS1 frames, 2 for MS2 frames, 0 for calibration frames, </returns>
         public override int GetMSLevelFromRawData(int frameNum)
         {
             if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
@@ -269,8 +268,8 @@ namespace DeconTools.Backend.Runs
             FrameParameters fp = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFrameParameters(frameNum);
 
             if (fp.FrameType == DataReader.FrameType.MS1) return 1;
-			if (fp.FrameType == DataReader.FrameType.MS2) return 2;
-			if (fp.FrameType == DataReader.FrameType.Calibration) return 0;
+            if (fp.FrameType == DataReader.FrameType.MS2) return 2;
+            if (fp.FrameType == DataReader.FrameType.Calibration) return 0;
 
             return (int)1;
 
@@ -305,39 +304,47 @@ namespace DeconTools.Backend.Runs
             int[] yvals = null;
 
             var frameType = (DataReader.FrameType)GetMSLevel(lcScanset.PrimaryScanNumber);
-			
-			try
-			{
-				int nonZeroLength = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetSpectrum(frameLower,
-					frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
 
-				XYData xydata = new XYData();
+            try
+            {
+                // Obtain an instance of the reader
+                var uimfReader = UIMFLibraryAdapter.getInstance(Filename).Datareader;
 
+                // Prior to January 2015 the SpectrumCache class in the UIMFReader used Dictionary<int, int> for ListOfIntensityDictionaries
+                // This caused some datasets, e.g. EXP-Mix5_1um_pos_19Jan15_Columbia_DI, to run out of memory when caching 10 spectra
+                // The UIMFLibrary now uses List<int, int>, which takes up less memory (at the expense having slower lookups by BinNumber, though this does not affect DeconTools' use of the UIMFLibrry)
 
-				if (xvals == null || xvals.Length == 0)
-				{
-					xydata.Xvalues = null;
-					xydata.Yvalues = null;
-					return xydata;
-				}
+                // Change SpectraToCache from 10 to 6 to reduce the likelihood of encountering OutOfMemory exceptions
+                uimfReader.SpectraToCache = 6;
 
-				xydata.Xvalues = xvals;
-				xydata.Yvalues = yvals.Select<int, double>(i => i).ToArray();
+                int nonZeroLength = uimfReader.GetSpectrum(frameLower,
+                    frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
 
-				if (xydata.Xvalues[0] < minMZ || xydata.Xvalues[xydata.Xvalues.Length - 1] > maxMZ)
-				{
-					xydata = xydata.TrimData(minMZ, maxMZ);
-				}
+                XYData xydata = new XYData();
 
-				return xydata;
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Error in UIMF GetMassSpectrum: " + ex.Message);
-				throw (ex);
-			}
+                if (xvals == null || xvals.Length == 0)
+                {
+                    xydata.Xvalues = null;
+                    xydata.Yvalues = null;
+                    return xydata;
+                }
 
-        
+                xydata.Xvalues = xvals;
+                xydata.Yvalues = yvals.Select<int, double>(i => i).ToArray();
+
+                if (xydata.Xvalues[0] < minMZ || xydata.Xvalues[xydata.Xvalues.Length - 1] > maxMZ)
+                {
+                    xydata = xydata.TrimData(minMZ, maxMZ);
+                }
+
+                return xydata;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in UIMF GetMassSpectrum: " + ex.Message);
+                throw;
+            }
+
 
         }
 
@@ -492,8 +499,8 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(ScanSetCollection != null && ScanSetCollection.ScanSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
-			Console.Write("Loading frame parameters ");
-	        DateTime dtLastProgress = DateTime.UtcNow;
+            Console.Write("Loading frame parameters ");
+            DateTime dtLastProgress = DateTime.UtcNow;
 
             foreach (LCScanSetIMS frame in ScanSetCollection.ScanSetList)
             {
@@ -501,14 +508,14 @@ namespace DeconTools.Backend.Runs
                 frame.AvgTOFLength = fp.AverageTOFLength;
                 frame.FramePressureUnsmoothed = UIMFLibraryAdapter.getInstance(this.Filename).Datareader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
 
-	            if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= 1)
-	            {
-		            Console.Write(".");
-		            dtLastProgress = DateTime.UtcNow;
-	            }
+                if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= 1)
+                {
+                    Console.Write(".");
+                    dtLastProgress = DateTime.UtcNow;
+                }
             }
 
-			Console.WriteLine();
+            Console.WriteLine();
 
         }
 
@@ -631,7 +638,7 @@ namespace DeconTools.Backend.Runs
             {
                 var frameset = new ScanSet(frame);
                 ScanSet scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
-                var xydata=   this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
+                var xydata = this.GetMassSpectrum(frameset, scan, lowerMZ, upperMZ);
 
 
                 double sumIntensities = 0;
@@ -675,7 +682,7 @@ namespace DeconTools.Backend.Runs
         }
 
 
-       
+
         #endregion
 
         public int GetClosestMS1Frame(int lcScan)

@@ -118,7 +118,7 @@
     <Reference Include="ThermoRawFileReaderDLL">
       <HintPath>..\Library\ThermoRawFileReaderDLL.dll</HintPath>
     </Reference>
-    <Reference Include="UIMFLibrary">
+    <Reference Include="UIMFLibrary, Version=2.1.5504.34943, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>

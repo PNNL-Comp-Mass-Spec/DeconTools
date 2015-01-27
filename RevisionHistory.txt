@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5504		January 26, 2015	mem
+	- New version of the UIMFLibrary that uses less memory when caching spectra
+
 Autoprocessor_1.0.5480		January 2, 2015	mem
 	- Added HandleProcessCorruptedStateExceptionsAttribute to GetMassSpectrum in XCaliburRun2 in an attempt to catch COM errors due to corrupt spectra
 	- New version of ThermoRawFileReader

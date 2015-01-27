@@ -4,6 +4,7 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
+using DeconTools.Backend.Utilities;
 using DeconToolsV2.Peaks;
 
 
@@ -206,7 +207,8 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             catch (Exception ex)
             {
-                throw ex;
+                Logger.Instance.AddEntry("DeconToolsPeakDetector.FindPeaks exception: " + ex.Message, Logger.Instance.OutputFilename);
+                throw;
             }
 
             BackgroundIntensity = peakProcessor.GetBackgroundIntensity(ref yvals);
