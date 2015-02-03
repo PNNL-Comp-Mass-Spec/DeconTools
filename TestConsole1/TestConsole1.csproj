@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,6 +35,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
@@ -47,7 +51,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IqConsoleUnitTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,10 +70,6 @@
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows\DeconTools.Workflows.csproj">
       <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
       <Name>DeconTools.Workflows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DeconTools.Workflows\TargetedWorkflowConsole\IQ.Console.csproj">
-      <Project>{741ED8CB-08F7-43F2-9C66-DD28A470B1FE}</Project>
-      <Name>IQ.Console</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
