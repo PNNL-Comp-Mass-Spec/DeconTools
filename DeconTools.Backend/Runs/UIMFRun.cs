@@ -314,8 +314,8 @@ namespace DeconTools.Backend.Runs
                 // This caused some datasets, e.g. EXP-Mix5_1um_pos_19Jan15_Columbia_DI, to run out of memory when caching 10 spectra
                 // The UIMFLibrary now uses List<int, int>, which takes up less memory (at the expense having slower lookups by BinNumber, though this does not affect DeconTools' use of the UIMFLibrry)
 
-                // Change SpectraToCache from 10 to 6 to reduce the likelihood of encountering OutOfMemory exceptions
-                uimfReader.SpectraToCache = 6;
+                uimfReader.SpectraToCache = 10;
+                uimfReader.MaxSpectrumCacheMemoryMB = 750;
 
                 int nonZeroLength = uimfReader.GetSpectrum(frameLower,
                     frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out xvals, out yvals);
