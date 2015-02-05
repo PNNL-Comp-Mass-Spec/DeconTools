@@ -1,0 +1,1 @@
+C:\DMS_Programs\LCMSFeatureFinder\LCMSFeatureFinder.exe C:\Work\FF_IMS4Filters_NoFlags_20ppm_Min3Pts_4MaxLCGap_NoDaCorr_ConfDtn_2011-05-16.ini
