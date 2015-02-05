@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{479F410F-0456-4D09-9B3E-E69002F8D619}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.Backend</RootNamespace>
+    <AssemblyName>DeconTools.Backend</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Disable_DeconToolsV2</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="alglibnet2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\alglibnet2.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseTof, Version=1.0.4758.18585, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\BaseTof.dll</HintPath>
+    </Reference>
+    <Reference Include="BrukerDataReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\BrukerDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EDAL">
+      <HintPath>..\Library\x64\Interop.EDAL.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Library\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Mapack">
+      <HintPath>..\Library\Mapack.dll</HintPath>
+    </Reference>
+    <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\MassSpecDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=2.5.0.27, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MSDBLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\MultiAlignEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PNNLOmics, Version=1.0.5064.21815, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\PNNLOmics.dll</HintPath>
+    </Reference>
+    <Reference Include="ProteowizardWrapper">
+      <HintPath>..\Library\x64\ProteowizardWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="pwiz_bindings_cli, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\pwiz_bindings_cli.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="ThermoRawFileReaderDLL">
+      <HintPath>..\Library\ThermoRawFileReaderDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="UIMFLibrary, Version=2.1.5511.30742, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\UIMFLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="YafmsLibrary, Version=1.0.3989.9960, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\ACss.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculatorWithChanges.cs" />
+    <Compile Include="Algorithms\ChargeStateDetermination\PattersonAlgorithm\PattersonChargeStateCalculator.cs" />
+    <Compile Include="Algorithms\ChromatogramGenerator.cs" />
+    <Compile Include="Algorithms\IsotopicProfileMultiChromatogramExtractor.cs" />
+    <Compile Include="Algorithms\LabelingDistributionCalculator.cs" />
+    <Compile Include="Algorithms\LoessInterpolator.cs" />
+    <Compile Include="Algorithms\O16O18FeatureFinder.cs" />
+    <Compile Include="Algorithms\Quantifiers\BasicN14N15Quantifier.cs" />
+    <Compile Include="Algorithms\Quantifiers\BasicO16O18Quantifier.cs" />
+    <Compile Include="Algorithms\Quantifiers\IN14N15Quantifier.cs" />
+    <Compile Include="Algorithms\Quantifiers\O16O18QuantifierBase.cs" />
+    <Compile Include="Core\ChromPeakQualityData.cs" />
+    <Compile Include="Core\IMSScanSet.cs" />
+    <Compile Include="Core\IMSScanSetCollection.cs" />
+    <Compile Include="Core\LCScanSetIMS.cs" />
+    <Compile Include="Core\MassAlignmentInfo.cs" />
+    <Compile Include="Core\MassAlignmentInfoBasic.cs" />
+    <Compile Include="Core\MassAlignmentInfoLcmsWarp.cs" />
+    <Compile Include="Core\NetAlignmentInfo.cs" />
+    <Compile Include="Core\NetAlignmentInfoBasic.cs" />
+    <Compile Include="Core\PeakProgressInfo.cs" />
+    <Compile Include="Core\Results\DeconMSnResult.cs" />
+    <Compile Include="Core\Results\DeuteratedTargetedResultObject.cs" />
+    <Compile Include="Data\ViperMassCalibrationData.cs" />
+    <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
+    <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
+    <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
+    <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
+    <Compile Include="ProcessingTasks\ChargeStateDeciders\ChargeStateDecider.cs" />
+    <Compile Include="ProcessingTasks\ChargeStateDeciders\ChromCorrelatingChargeDecider.cs" />
+    <Compile Include="ProcessingTasks\ChargeStateDeciders\Class1.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelator.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorO16O18.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\InformedThrashDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicPeakFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\LeastSquaresFitter.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\PeakLeastSquaresFitter.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetectorMedianBased.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\PartialLabelingQuantifier.cs" />
+    <Compile Include="ProcessingTasks\Smoothers\SavitzkyGolaySmoother.cs" />
+    <Compile Include="Core\BasicPeakChrom.cs" />
+    <Compile Include="Core\ChromCorrelationData.cs" />
+    <Compile Include="Core\ChromCorrelationDataItem.cs" />
+    <Compile Include="Core\LcmsFeatureTarget.cs" />
+    <Compile Include="Core\MassAlignmentDataItem.cs" />
+    <Compile Include="Core\O16O18IsosResult.cs" />
+    <Compile Include="Core\PeakChrom.cs" />
+    <Compile Include="Core\ElutingPeak.cs" />
+    <Compile Include="Core\Results\LabeledMassTagResult.cs" />
+    <Compile Include="Core\LabeledProfileMissingResultFlag.cs" />
+    <Compile Include="Core\Results\LcmsFeatureTargetedResult.cs" />
+    <Compile Include="Core\Results\O16O18TargetedResultObject.cs" />
+    <Compile Include="Core\Results\SipperLcmsTargetedResult.cs" />
+    <Compile Include="Core\Results\TopDownTargetedResult.cs" />
+    <Compile Include="Core\ScanNETPair.cs" />
+    <Compile Include="Core\TargetBase.cs" />
+    <Compile Include="Data\AVLTree.cs" />
+    <Compile Include="Data\BinarySearchTree.cs" />
+    <Compile Include="Data\BitArray2D.cs" />
+    <Compile Include="FileIO\DeconToolsParameterFileReader.cs" />
+    <Compile Include="FileIO\MassTagFromTextFileImporter.cs" />
+    <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
+    <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
+    <Compile Include="DTO\MassTagMiniDTO.cs" />
+    <Compile Include="DTO\MSResultPeakWithLocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileIO\AcqusFileReader.cs" />
+    <Compile Include="FileIO\ExporterBase.cs" />
+    <Compile Include="FileIO\ImporterBase.cs" />
+    <Compile Include="FileIO\MassAlignmentInfoFromTextImporter.cs" />
+    <Compile Include="FileIO\MassAlignmentInfoToTextExporter.cs" />
+    <Compile Include="FileIO\NETAlignmentFromTextImporter.cs" />
+    <Compile Include="FileIO\NETAlignmentInfoToTextExporter.cs" />
+    <Compile Include="FileIO\MassTagTextFileExporter.cs" />
+    <Compile Include="FileIO\MSFeatureToSQLiteExporterBasic.cs" />
+    <Compile Include="FileIO\MSFeatureToSQLiteExporterUIMF.cs" />
+    <Compile Include="FileIO\MSFeatureToTextFileExporterBasic.cs" />
+    <Compile Include="FileIO\MSFeatureToTextFileExporterIMF.cs" />
+    <Compile Include="FileIO\MSFeatureExporterFactory.cs" />
+    <Compile Include="FileIO\MSScanInfoExporterFactory.cs" />
+    <Compile Include="FileIO\MSScanInfoToSQLiteExporterBasic.cs" />
+    <Compile Include="FileIO\MSScanInfoToSQLiteExporterUIMF.cs" />
+    <Compile Include="FileIO\MSScanInfoToTextFileExporterBasic.cs" />
+    <Compile Include="FileIO\MSScanInfoToTextFileExporterUIMF.cs" />
+    <Compile Include="FileIO\LcmsTargetFromFeaturesFileImporter.cs" />
+    <Compile Include="FileIO\SQLiteExporter.cs" />
+    <Compile Include="FileIO\TextFileExporter.cs" />
+    <Compile Include="FileIO\MSFeatureToTextFileExporterUIMF.cs" />
+    <Compile Include="Parameters\DeconToolsParameters.cs" />
+    <Compile Include="Parameters\MiscMSProcessingParameters.cs" />
+    <Compile Include="Parameters\MSGeneratorParameters.cs" />
+    <Compile Include="Parameters\ParametersBase.cs" />
+    <Compile Include="Parameters\PeakDetectorParameters.cs" />
+    <Compile Include="Parameters\ScanBasedWorkflowParameters.cs" />
+    <Compile Include="Parameters\ThrashParameters.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramGeneratorMode.cs" />
+    <Compile Include="ProcessingTasks\ChromatogramProcessing\ChromatogramCorrelatorBase.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashDeconvolutorV2.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\NullDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\SyntheticMSGeneratorFromPeakData.cs" />
+    <Compile Include="ProcessingTasks\O16O18PeakDataAppender.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectorFactory.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetectorV2.cs" />
+    <Compile Include="ProcessingTasks\PeakToMSFeatureAssociator.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\O16O18QuantifierTask.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\SipperQuantifierOld.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\SipperQuantifier.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\O16O18IsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\InterferenceScorer.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\IsotopicProfileInterferenceScorer.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\LabelledIsotopicProfileScorer.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\IterativeTFF.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\IterativeTFFParameters.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromGeneratorTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\LabeledMultiPeakChromSmootherTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15ResultObject.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18IterativeTFF.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TargetedIterativeFeatureFinder.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\O16O18TFFTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\SipperIterativeMSFeatureFinder.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\JoshTheorFeatureGenerator.cs" />
+    <Compile Include="Core\ChromPeak.cs" />
+    <Compile Include="Core\ChromPeakNotFoundResultFlag.cs" />
+    <Compile Include="Core\FrameSet.cs" />
+    <Compile Include="Core\Peak.cs" />
+    <Compile Include="Core\Results\IsosResult.cs" />
+    <Compile Include="Core\IsotopicProfile.cs" />
+    <Compile Include="Core\PeptideTarget.cs" />
+    <Compile Include="Core\Results\TargetedResultBase.cs" />
+    <Compile Include="Core\TargetCollection.cs" />
+    <Compile Include="Core\Results\MassTagResult.cs" />
+    <Compile Include="Core\MSPeak.cs" />
+    <Compile Include="Core\Results\N14N15_TResult.cs" />
+    <Compile Include="Core\OldDecon2LSParameters.cs" />
+    <Compile Include="Core\OldDeconFormatResult.cs" />
+    <Compile Include="Core\PeakToTheLeftResultFlag.cs" />
+    <Compile Include="Core\ResultCollection.cs" />
+    <Compile Include="Core\ResultFlag.cs" />
+    <Compile Include="Core\Results\ScanResult.cs" />
+    <Compile Include="Core\ScanResultCollection.cs" />
+    <Compile Include="Core\ScanSet.cs" />
+    <Compile Include="Core\ScanSetCollection.cs" />
+    <Compile Include="Core\ScanSetFactory.cs" />
+    <Compile Include="Core\Results\StandardIsosResult.cs" />
+    <Compile Include="Core\Results\StandardScanResult.cs" />
+    <Compile Include="Core\Results\UIMFIsosResult.cs" />
+    <Compile Include="Core\UIMFLibraryAdapter.cs" />
+    <Compile Include="Core\UMC.cs" />
+    <Compile Include="Core\UMCCollection.cs" />
+    <Compile Include="Data\Exporters\BasicIsosExporter.cs" />
+    <Compile Include="Data\Exporters\BasicScansExporter.cs" />
+    <Compile Include="Data\DeconResultCombiner.cs" />
+    <Compile Include="Data\Exporters\Exporter.cs" />
+    <Compile Include="Data\Exporters\IMFIsosExporter.cs" />
+    <Compile Include="FileIO\IMassTagImporter.cs" />
+    <Compile Include="Data\Importers\Importer.cs" />
+    <Compile Include="Data\Importers\IPeakImporter.cs" />
+    <Compile Include="Data\Exporters\IsosExporter.cs" />
+    <Compile Include="FileIO\MassTagFromDBImporter.cs" />
+    <Compile Include="Data\Importers\PeakImporterFromSQLite.cs" />
+    <Compile Include="Data\Importers\PeakImporterFromText.cs" />
+    <Compile Include="Data\Importers\UMCFileImporter.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\IsotopicProfileFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\NETAlignment\ChromAlignerUsingVIPERInfo.cs" />
+    <Compile Include="ProcessingTasks\NETAlignment\IChromAligner.cs" />
+    <Compile Include="ProcessingTasks\PeakChromatogramGenerator.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\ChromPeakDetectorOld.cs" />
+    <Compile Include="ProcessingTasks\Quantifiers\N14N15QuantifierTask.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosExporterFactory.cs" />
+    <Compile Include="Data\Importers\IsosImporter.cs" />
+    <Compile Include="Data\IsosResultDeSerializer.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\NominalMassFeatureGenerator.cs" />
+    <Compile Include="Runs\BrukerTOF.cs" />
+    <Compile Include="Runs\BrukerV2Run.cs" />
+    <Compile Include="Runs\BrukerV3Run.cs" />
+    <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
+    <Compile Include="Runs\CalibrationData\CalibrationDataBase.cs" />
+    <Compile Include="Runs\MzRun.cs" />
+    <Compile Include="Runs\MzxmlV2Run.cs" />
+    <Compile Include="Runs\RunFactory.cs" />
+    <Compile Include="Data\ScanResultFactory.cs" />
+    <Compile Include="Data\Exporters\ScansExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\MassTagResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\BasicMTResultSQLiteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\MassTagResultExporters\IMassTagResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListExporterFactory.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScansExporterFactory.cs" />
+    <Compile Include="Data\Exporters\UIMFIsosExporter.cs" />
+    <Compile Include="Data\Exporters\UIMFIsosOrigIntensitiesExporter.cs" />
+    <Compile Include="Data\UIMFScanSet.cs" />
+    <Compile Include="Data\Exporters\UIMFScansExporter.cs" />
+    <Compile Include="Data\Exporters\UIMFSQLiteIsosExporter.cs" />
+    <Compile Include="Data\Exporters\UIMFSQLiteScansExporter.cs" />
+    <Compile Include="DTO\IsosResultComparer.cs" />
+    <Compile Include="DTO\IsosResultStats.cs" />
+    <Compile Include="DTO\IsosResultUtilities.cs" />
+    <Compile Include="DTO\MSPeakResult.cs" />
+    <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
+    <Compile Include="Data\N14N15IsosResult.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
+    <Compile Include="ProcessingTasks\DeconvolutorFactory.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\AreaFitter.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\DeconToolsFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\FitScoreCalculators\IFitScoreCalculator.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\BasicIsosMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\BasicScansMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\IsosMergerExporters\IIsosMergerExporter.cs" />
+    <Compile Include="ProcessingTasks\TICExtractor.cs" />
+    <Compile Include="ProcessingTasks\MSGeneratorFactory.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\GenericMSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\MSGenerator.cs" />
+    <Compile Include="ProcessingTasks\MSGenerators\UIMF_MSGenerator.cs" />
+    <Compile Include="ProcessingTasks\SaturationDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\DeconToolsPeakDetector.cs" />
+    <Compile Include="ProcessingTasks\PeakDetectors\PeakDetector.cs" />
+    <Compile Include="Core\Task.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\IPeakListExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\MSPeakTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListTextExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\PeakListExporters\PeakListSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\BasicIsosResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IMFIsosResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\IsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResultSqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResultTextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\IsosResultExporters\UIMFIsosResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\BasicScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResultExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\ScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_SqliteTable.cs" />
+    <Compile Include="ProcessingTasks\ResultExporters\ScanResultExporters\UIMFScanResult_TextFileExporter.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\LeftOfMonoPeakLooker.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidationUtils.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidator.cs" />
+    <Compile Include="ProcessingTasks\ResultValidators\ResultValidatorTask.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\BasicTFF.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\TFFBase.cs" />
+    <Compile Include="ProcessingTasks\TargetedFeatureFinders\N14N15TFFTask.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\ITheorFeatureGenerator.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\MercuryFeatureGenerator.cs" />
+    <Compile Include="ProcessingTasks\TheorFeatureGenerator\TomTheorFeatureGenerator.cs" />
+    <Compile Include="Runs\AgilentDRun.cs" />
+    <Compile Include="Runs\XCaliburRun2.cs" />
+    <Compile Include="Runs\YAFMSRun.cs" />
+    <Compile Include="Utilities\Converters\IntensityToImageConverter.cs" />
+    <Compile Include="Utilities\Converters\PeakDatFileConverter.cs" />
+    <Compile Include="Utilities\Converters\PeakTypeConverter.cs" />
+    <Compile Include="Utilities\DiagnosticUtilities.cs" />
+    <Compile Include="Utilities\EmpiricalFormulaUtilities.cs" />
+    <Compile Include="Utilities\IqLogger\IqLogger.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\BionomialExpansionIsotopicProfileCalculator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\IsotopicDistributionCalculator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\IsotopicProfileComponent.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\LabeledIsotopicDistUtilities\LabeledIsotopicProfileUtilities.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryIsoDistCreator2.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TheorXYDataCalculationUtilities.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\DeuteriumIsotopeProfileGenerator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\N15IsotopeProfileGenerator.cs" />
+    <Compile Include="Utilities\IsotopicProfileElutionExtractor.cs" />
+    <Compile Include="Utilities\IsotopicProfileUtilities.cs" />
+    <Compile Include="Utilities\ObjectCopier.cs" />
+    <Compile Include="Utilities\PeptideUtils.cs" />
+    <Compile Include="Utilities\RunUtilities.cs" />
+    <Compile Include="Utilities\SerializerGeneric.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\Field.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\SqliteNETUtils.cs" />
+    <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
+    <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
+    <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
+    <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />
+    <Compile Include="ProcessingTasks\UIMFDriftTimeExtractor.cs" />
+    <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
+    <Compile Include="ProcessingTasks\ZeroFillers\ZeroFiller.cs" />
+    <Compile Include="Runs\BrukerRun.cs" />
+    <Compile Include="Runs\ConcreteXYDataRun.cs" />
+    <Compile Include="Runs\DeconToolsRun.cs" />
+    <Compile Include="Runs\ICR2LSRun.cs" />
+    <Compile Include="Runs\MSScanFromTextFileRun.cs" />
+    <Compile Include="Runs\MZXMLRun.cs" />
+    <Compile Include="Runs\UIMFRun.cs" />
+    <Compile Include="Runs\XCaliburRun.cs" />
+    <Compile Include="FileLoader.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Runs\IMFRun.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Run.cs" />
+    <Compile Include="Data\XYData.cs" />
+    <Compile Include="Runs\XYDataRun.cs" />
+    <Compile Include="Core\Results\UIMFScanResult.cs" />
+    <Compile Include="Utilities\AssemblyInfoRetriever.cs" />
+    <Compile Include="Utilities\Converters\FileTypeConverter.cs" />
+    <Compile Include="Utilities\DesignByContract.cs" />
+    <Compile Include="Utilities\IsosResultSerializer.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\TomIsotopicDistribution\TomIsotopicPattern.cs" />
+    <Compile Include="Utilities\Logger.cs" />
+    <Compile Include="Utilities\Logger_Importer.cs" />
+    <Compile Include="Utilities\MathUtils.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDist.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistCollection.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistCollectionCreator.cs" />
+    <Compile Include="Utilities\IsotopeDistributionCalculation\MercuryIsotopicDistribution\MercuryDistributionCreator.cs" />
+    <Compile Include="Utilities\MolecularFormula.cs" />
+    <Compile Include="Utilities\PeakUtilities.cs" />
+    <Compile Include="Utilities\UIMFCalibrationConstantUpdater.cs" />
+    <Compile Include="Utilities\XYDataLoaderFromTextFile.cs" />
+    <Compile Include="Utilities\XYDataUtilities.cs" />
+    <Compile Include="Workflows\DeconMSnWorkflow.cs" />
+    <Compile Include="Workflows\IMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\RunMergingPeakExportingWorkflow.cs" />
+    <Compile Include="Workflows\SaturationIMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\ScanBasedProgressInfo.cs" />
+    <Compile Include="Workflows\ScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\StandardIMSScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\TraditionalScanBasedWorkflow.cs" />
+    <Compile Include="Workflows\WorkflowStats.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagrams\BasicDataObjects.cd" />
+    <None Include="ClassDiagrams\ClassDiagram1.cd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagrams\ClassDiagram2.cd" />
+    <None Include="ClassDiagrams\ClassDiagram3.cd" />
+    <None Include="ClassDiagrams\Exporters_classDiagram.cd" />
+    <None Include="ClassDiagrams\MassTagClassDiagram.cd" />
+    <None Include="ClassDiagrams\ResultAndExporterClassDiagram.cd" />
+    <None Include="ClassDiagrams\ResultCollectionClassDiagram.cd" />
+    <None Include="ClassDiagrams\RunClassDiagram.cd" />
+    <None Include="ClassDiagrams\RunDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\ScanSetDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\SimpleClassDiagram1.cd" />
+    <None Include="ClassDiagrams\TaskControllerDetailsClassDiagram.cd" />
+    <None Include="ClassDiagrams\TaskSampleClassDiagram.cd" />
+    <None Include="Core\MassTagResultClassDiagram.cd" />
+    <None Include="Interop.EDAL.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Interop.HSREADWRITELib.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MSFileReader.XRawfile2.SxS.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileIO\TargetedResultFileIO\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Library\MassLynxRaw.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Interop.MSFileReaderLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSFileReaderLib">
+      <Guid>{F0C5F3E3-4F2A-443E-A74D-0AABE3237494}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

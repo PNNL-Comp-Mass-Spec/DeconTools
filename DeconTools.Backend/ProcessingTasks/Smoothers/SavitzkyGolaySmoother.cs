@@ -140,7 +140,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             var sTranspose = (DenseMatrix)denseMatrix.ConjugateTranspose();
             var f = sTranspose * denseMatrix;
-            var fInverse = (DenseMatrix)f.LU().Solve(DenseMatrix.Identity(f.ColumnCount));
+            var fInverse = (DenseMatrix)f.LU().Solve(DenseMatrix.CreateIdentity(f.ColumnCount));
             var smoothingFilters = denseMatrix * fInverse * sTranspose;
 
             return smoothingFilters;

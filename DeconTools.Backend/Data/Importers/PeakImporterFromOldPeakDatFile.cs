@@ -9,6 +9,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Data.Importers
 {
+#if !Disable_DeconToolsV2
     public class PeakImporterFromOldPeakDatFile : IPeakImporter
     {
         private string m_filename;
@@ -97,10 +98,11 @@ namespace DeconTools.Backend.Data.Importers
             return peakResult;
 
         }
+
         #endregion
 
-
-
-
     }
+#endif
+
+
 }

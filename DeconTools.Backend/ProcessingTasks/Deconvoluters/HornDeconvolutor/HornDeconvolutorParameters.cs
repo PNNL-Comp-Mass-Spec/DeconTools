@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+#if !Disable_DeconToolsV2
 using DeconToolsV2;
-
+#endif
 
 namespace DeconTools.Backend.ProcessingTasks
 {
     
+#if !Disable_DeconToolsV2
+
     //this class will act as an adapter class for dealing with DeconEngine's clsTransformParametersClass
     //note that smoothing-related and other unrelated parameters are not here
     public class HornDeconvolutorParameters
@@ -43,6 +46,8 @@ namespace DeconTools.Backend.ProcessingTasks
         public string AveragineFormula { get; set; }
         public string TagFormula { get; set; }
 
-
     }
+
+#endif
+
 }

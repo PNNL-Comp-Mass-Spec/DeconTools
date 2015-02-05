@@ -6,6 +6,8 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
+#if !Disable_DeconToolsV2
+
     public class DeconToolsSavitzkyGolaySmoother : Smoother
     {
         #region Properties
@@ -79,4 +81,6 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         #endregion
 
     }
+
+#endif
 }

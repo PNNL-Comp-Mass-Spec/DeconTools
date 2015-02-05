@@ -7,9 +7,10 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities
 {
+#if !Disable_DeconToolsV2
+
     public class MercuryDistributionCreator
     {
-
 
         private DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters;
         private DeconToolsV2.HornTransform.clsAveragine avergineFormulaCreator;
@@ -233,7 +234,9 @@ namespace DeconTools.Backend.Utilities
             }
 
         }
-
         
     }
+
+#endif
+
 }

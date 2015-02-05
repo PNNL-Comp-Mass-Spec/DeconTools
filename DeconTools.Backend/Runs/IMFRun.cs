@@ -2,10 +2,14 @@
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+#if !Disable_DeconToolsV2
 using DeconToolsV2.Readers;
+#endif
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
+
     [Serializable]
     public sealed class IMFRun : DeconToolsRun
     {
@@ -86,8 +90,7 @@ namespace DeconTools.Backend.Runs
             return xydata;
         }
 
-    
-
-
     }
+
+#endif
 }

@@ -7,12 +7,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public class ChromPeakDetectorOld:PeakDetector
     {
+#if !Disable_DeconToolsV2
         DeconToolsV2.Peaks.clsPeakProcessorParameters _oldPeakParameters;
 
         DeconToolsV2.Peaks.clsPeakProcessor _oldPeakProcessor;
 
         DeconToolsV2.Peaks.clsPeak[] _oldDeconEnginePeaklist;
-
+#endif
 
         private DeconToolsPeakDetectorV2 _peakDetectorV2;
 
@@ -33,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         }
 
-
+#if !Disable_DeconToolsV2
         public ChromPeakDetectorOld(DeconToolsV2.Peaks.clsPeakProcessorParameters parameters)
         {
             this.PeakBackgroundRatio = parameters.PeakBackgroundRatio;
@@ -41,6 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             _oldPeakParameters = parameters;
 
         }
+#endif
 
         #endregion
 
@@ -71,6 +73,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
             else
             {
+#if Disable_DeconToolsV2
+                throw new NotImplementedException("Cannot use the old Peak Detector since support for C++ based DeconToolsV2 is disabled");
+#else
                 if (_oldPeakParameters==null)
                 {
                     _oldPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters(this.SigNoise, this.PeakBackgroundRatio, false, DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC);     
@@ -120,7 +125,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     peakList.Add(chromPeak);
 
                 }
-                
+#endif
+
             }
 
 

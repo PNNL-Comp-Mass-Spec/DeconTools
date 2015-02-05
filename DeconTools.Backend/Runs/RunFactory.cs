@@ -20,13 +20,14 @@ namespace DeconTools.Backend.Runs
 
             string extension = Path.GetExtension(fullfileName).ToLower();
 
+#if !Disable_DeconToolsV2
             //check for ICR2LS type extension....
             Match match = Regex.Match(extension, @"\.\d\d\d\d\d$");
             if (match.Success)
             {
                 return new ICR2LSRun(fullfileName);
             }
-
+#endif
 
             string fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
 
@@ -54,10 +55,11 @@ namespace DeconTools.Backend.Runs
                 case ".raw":
                     run = new XCaliburRun2(fullfileName);
                     break;
+#if !Disable_DeconToolsV2
                 case ".imf":
                     run = new IMFRun(fullfileName);
                     break;
-
+#endif
                 case ".txt":
                     run = new MSScanFromTextFileRun(fullfileName);
                     break;
@@ -81,9 +83,12 @@ namespace DeconTools.Backend.Runs
                 case ".d":
                     run = new AgilentDRun(fullfileName);
                     break;
+
+#if !Disable_DeconToolsV2
                 case ".yafms":
                     run = new YAFMSRun(fullfileName);
                     break;
+#endif
 
                 default:
                     throw new ApplicationException("File type - "+ extension + " -  is not supported in DeconTools");
@@ -92,6 +97,7 @@ namespace DeconTools.Backend.Runs
             Check.Require(run!=null,"Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's dlls, or 3) not supported by DeconTools");
             return run;
         }
+
         public Run CreateRun(Globals.MSFileType filetype, string f)
         {
             Run run;
@@ -134,19 +140,22 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.MZXML_Rawdata:
                     run = new MzRun(fileName);
                     break;
+#if !Disable_DeconToolsV2
                 case Globals.MSFileType.PNNL_IMS:
                     run = new IMFRun(fileName);
                     break;
+#endif
                 case Globals.MSFileType.PNNL_UIMF:
                     run = new UIMFRun(fileName);
                     break;
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
+#if !Disable_DeconToolsV2
                 case Globals.MSFileType.YAFMS:
                     run = new YAFMSRun(fileName);
                     break;
-
+#endif
                 default:
                     run = null;
                     break;

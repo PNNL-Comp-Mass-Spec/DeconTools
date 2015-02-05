@@ -8,6 +8,8 @@ using YafmsLibrary;
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
+
     public sealed class YAFMSRun : DeconToolsRun
     {
         YafmsReader m_reader;
@@ -277,7 +279,8 @@ namespace DeconTools.Backend.Runs
         }
 
         #endregion
-
      
     }
+
+#endif
 }

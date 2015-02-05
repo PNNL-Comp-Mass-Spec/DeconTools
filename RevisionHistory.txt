@@ -1,5 +1,9 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5513		February 4, 2015	mem
+	- Created 64-bit version of DeconConsole.exe and DeconTools.Backend.dll
+		- Does not depend on DeconEngineV2.dll, and thus does not support ThrashV1
+
 Autoprocessor_1.0.5504		January 26, 2015	mem
 	- New version of the UIMFLibrary that uses less memory when caching spectra
 

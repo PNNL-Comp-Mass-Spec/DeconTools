@@ -4,6 +4,8 @@ using System.Text;
 
 namespace DeconTools.Backend.Utilities.Converters
 {
+#if !Disable_DeconToolsV2
+
     public static class FileTypeConverter
     {
         public static DeconTools.Backend.Globals.MSFileType ConvertDeconEngineFileType(DeconToolsV2.Readers.FileType filetype)
@@ -39,7 +41,7 @@ namespace DeconTools.Backend.Utilities.Converters
             }
 
         }
-
         
     }
+#endif
 }

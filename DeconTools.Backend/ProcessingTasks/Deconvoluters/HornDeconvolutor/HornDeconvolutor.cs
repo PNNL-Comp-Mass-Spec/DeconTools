@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
+
+#if !Disable_DeconToolsV2
 using DeconToolsV2.Peaks;
+#endif
 
 namespace DeconTools.Backend.ProcessingTasks
 {
+#if !Disable_DeconToolsV2
+
     public class HornDeconvolutor : Deconvolutor
     {
         #region Member Variables
@@ -586,10 +591,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         #endregion
-
-
-
-
-
     }
+
+#endif
 }

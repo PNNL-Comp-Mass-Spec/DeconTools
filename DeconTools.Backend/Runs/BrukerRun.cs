@@ -5,6 +5,8 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
+
     public class BrukerRun : Run
     {
 
@@ -38,7 +40,7 @@ namespace DeconTools.Backend.Runs
             }
             this.MinLCScan = 1;        //  remember that DeconEngine is 1-based
             this.MaxLCScan = GetMaxPossibleLCScanNum();
- 
+
 
         }
 
@@ -67,6 +69,7 @@ namespace DeconTools.Backend.Runs
             }
         }
 
+#if !Disable_DeconToolsV2
         [field: NonSerialized]
         private DeconToolsV2.Readers.clsRawData rawData;
         public DeconToolsV2.Readers.clsRawData RawData
@@ -74,7 +77,7 @@ namespace DeconTools.Backend.Runs
             get { return rawData; }
             set { rawData = value; }
         }
-
+#endif
 
 
         #endregion
@@ -104,7 +107,7 @@ namespace DeconTools.Backend.Runs
             else    // need to sum spectra
             {
                 //assume:  each scan has exactly same x values
-                
+
                 //get first spectrum
                 this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
 
@@ -124,8 +127,8 @@ namespace DeconTools.Backend.Runs
 
                 yvals = summedYvals;
             }
-            
-            XYData xydata=new XYData();
+
+            XYData xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
             return xydata;
@@ -158,10 +161,10 @@ namespace DeconTools.Backend.Runs
         {
 
             if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
-            int mslevel =(byte)this.rawData.GetMSLevel(scanNum);
+            int mslevel = (byte)this.rawData.GetMSLevel(scanNum);
 
             addToMSLevelData(scanNum, mslevel);
- 
+
             return mslevel;
         }
 
@@ -250,8 +253,7 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-
-  
     }
+#endif
+
 }

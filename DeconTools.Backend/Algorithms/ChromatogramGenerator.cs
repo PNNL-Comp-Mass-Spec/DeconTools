@@ -6,7 +6,6 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
-using PNNLOmics.Generic;
 
 namespace DeconTools.Backend.Algorithms
 {
@@ -94,7 +93,9 @@ namespace DeconTools.Backend.Algorithms
 
 			List<MSPeakResult> msPeakResultList;
 
-			AnonymousComparer<MSPeakResult> comparer = new AnonymousComparer<MSPeakResult>((x, y) => x.MSPeak.XValue.CompareTo(y.MSPeak.XValue));
+            // PNNLOmics.Generic.AnonymousComparer<MSPeakResult> comparer = new PNNLOmics.Generic.AnonymousComparer<MSPeakResult>((x, y) => x.MSPeak.XValue.CompareTo(y.MSPeak.XValue));
+		    MSPeakResultComparer comparer = new MSPeakResultComparer();
+
 			List<MSPeakResult> tempPeakList = new List<MSPeakResult>();
 
 			for (int i = minScan - scanTolerance; i < maxScan + scanTolerance; i++)
@@ -483,5 +484,24 @@ namespace DeconTools.Backend.Algorithms
         }
 
         #endregion
+    }
+
+    class MSPeakResultComparer : Comparer<MSPeakResult>
+    {
+        // Compares by Length, Height, and Width. 
+        public override int Compare(MSPeakResult x, MSPeakResult y)
+        {
+            if (x == null)
+            {
+                return -1;
+            }
+
+            if (y == null)
+            {
+                return 1;
+            }
+
+            return x.MSPeak.XValue.CompareTo(y.MSPeak.XValue);
+        }
     }
 }

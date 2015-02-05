@@ -4,6 +4,8 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
+
     [Serializable]
     public abstract class DeconToolsRun : Run
     {
@@ -73,4 +75,5 @@ namespace DeconTools.Backend.Runs
             throw new NotImplementedException();
         }
     }
+#endif
 }

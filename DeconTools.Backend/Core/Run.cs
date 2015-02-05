@@ -23,6 +23,7 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
+#if !Disable_DeconToolsV2
         [field: NonSerialized]
         private DeconToolsV2.Peaks.clsPeak[] _deconToolsPeakList;
         public DeconToolsV2.Peaks.clsPeak[] DeconToolsPeakList        //I need to change this later; don't want anything connected to DeconEngine in this class
@@ -30,6 +31,7 @@ namespace DeconTools.Backend.Core
             get { return _deconToolsPeakList; }
             set { _deconToolsPeakList = value; }
         }
+#endif
 
         public string Filename { get; set; }
 

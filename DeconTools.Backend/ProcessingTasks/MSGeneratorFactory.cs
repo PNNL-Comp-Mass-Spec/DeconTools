@@ -67,7 +67,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         }
 
-
+#if !Disable_DeconToolsV2
         internal Core.Task CreateMSGenerator(Globals.MSFileType fileType, DeconTools.Backend.Core.OldDecon2LSParameters oldDecon2LSParameters)
         {
             MSGenerator msgenerator = CreateMSGenerator(fileType);
@@ -80,5 +80,7 @@ namespace DeconTools.Backend.ProcessingTasks
             return msgenerator;
             
         }
+#endif
+
     }
 }

@@ -1,10 +1,14 @@
 ﻿using System;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
+#if !Disable_DeconToolsV2
 using DeconToolsV2.Readers;
+#endif
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
+
     public class ICR2LSRun : DeconToolsRun
     {
 
@@ -89,4 +93,5 @@ namespace DeconTools.Backend.Runs
 
 
     }
+#endif
 }

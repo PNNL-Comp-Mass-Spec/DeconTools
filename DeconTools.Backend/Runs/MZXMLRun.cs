@@ -4,6 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
     [Obsolete("Not used anymore. Use 'MzRun'",true)]
     public sealed class MZXMLRun : DeconToolsRun
     {
@@ -87,4 +88,5 @@ namespace DeconTools.Backend.Runs
         #endregion
 
     }
+#endif
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconToolsV2.Peaks;
 
 namespace DeconTools.Backend.ProcessingTasks
 {

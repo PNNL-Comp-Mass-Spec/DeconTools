@@ -7,6 +7,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
+#if !Disable_DeconToolsV2
     [Obsolete("Not used anymore", true)]
     [Serializable]
     public sealed class XCaliburRun : DeconToolsRun
@@ -157,12 +158,8 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
-
-
-
-
-
-
-
     }
+
+#endif
+
 }

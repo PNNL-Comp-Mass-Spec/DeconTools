@@ -83,6 +83,9 @@ namespace DeconTools.Backend.Runs
 
             loadSettings(this.SettingsFilePath);
 
+#if Disable_DeconToolsV2
+            throw new NotImplementedException("Cannot process Bruker V2 data since support for C++ based DeconToolsV2 is disabled");
+#else
 
             try
             {
@@ -105,6 +108,7 @@ namespace DeconTools.Backend.Runs
 
             Check.Ensure(this.MaxLCScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
 
+#endif
 
         }
 
@@ -215,6 +219,7 @@ namespace DeconTools.Backend.Runs
         /// </summary>
         public string SettingsFilePath { get; set; }
 
+#if !Disable_DeconToolsV2
         [field: NonSerialized]
         private DeconToolsV2.Readers.clsRawData rawData;
         public DeconToolsV2.Readers.clsRawData RawData
@@ -222,6 +227,7 @@ namespace DeconTools.Backend.Runs
             get { return rawData; }
             set { rawData = value; }
         }
+#endif
 
         #endregion
 
@@ -232,6 +238,10 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
+
+#if Disable_DeconToolsV2
+            throw new NotImplementedException("Cannot process Bruker V2 data since support for C++ based DeconToolsV2 is disabled");
+#else
 
             int totScans = this.GetNumMSScans();
 
@@ -265,7 +275,7 @@ namespace DeconTools.Backend.Runs
 
                 yvals = summedYvals;
             }
-            
+
             XYData xydata=new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
@@ -273,19 +283,28 @@ namespace DeconTools.Backend.Runs
             xydata = xydata.TrimData(minMZ, maxMZ);
 
             return xydata;
-
+#endif
         }
 
         public override double GetTime(int scanNum)
         {
+#if Disable_DeconToolsV2
+            return 0;
+#else
             return this.rawData.GetScanTime(scanNum);
+#endif
         }
 
         public override int GetNumMSScans()
         {
+#if Disable_DeconToolsV2
+            return 0;
+#else
+
             if (rawData == null) return 0;
             return this.rawData.GetNumScans();
-        }
+#endif
+            }
 
         public override int GetMinPossibleLCScanNum()
         {
@@ -300,6 +319,9 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
+#if Disable_DeconToolsV2
+            return 1;
+#else
 
             if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
             int mslevel = (byte)this.rawData.GetMSLevel(scanNum);
@@ -307,6 +329,7 @@ namespace DeconTools.Backend.Runs
             addToMSLevelData(scanNum, mslevel);
 
             return mslevel;
+#endif
         }
 
         #endregion
@@ -316,11 +339,13 @@ namespace DeconTools.Backend.Runs
         #region Private Methods
         private void applySettings()
         {
+#if !Disable_DeconToolsV2
             DeconToolsV2.CalibrationSettings deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(this.CalibrationData);
             this.RawData.SetFFTCalibrationValues(deconEngineCalibrationSettings);
-
+#endif
         }
 
+#if !Disable_DeconToolsV2
         private DeconToolsV2.CalibrationSettings convertCalibrationSettingsToDeconEngineSettings(BrukerCalibrationData brukerCalibrationData)
         {
             Check.Require(brukerCalibrationData != null, "Problem with calibration data in dataset. Calibration data is empty.");
@@ -336,6 +361,7 @@ namespace DeconTools.Backend.Runs
 
             return deconEngineCalibrationsettings;
         }
+#endif
 
         private void validateSelectionIsFolder(string folderName)
         {
@@ -393,15 +419,6 @@ namespace DeconTools.Backend.Runs
             settingsFilePath = settingsFile.FullName;
 
             return settingsFilePath;
-
-
-
-
-
-
-
-
-
 
         }
 

@@ -5,11 +5,13 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Utilities;
+#if !Disable_DeconToolsV2
 using DeconToolsV2.Peaks;
-
+#endif
 
 namespace DeconTools.Backend.ProcessingTasks
 {
+#if !Disable_DeconToolsV2
     public class DeconToolsPeakDetector : PeakDetector
     {
         DeconToolsV2.Peaks.clsPeakProcessor peakProcessor;
@@ -257,4 +259,5 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
     }
+#endif
 }

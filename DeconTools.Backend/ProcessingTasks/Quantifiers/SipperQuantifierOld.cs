@@ -645,11 +645,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             // var interp = Interpolate.RationalWithoutPoles(xvals, yvals);
 
-            var interp = new MathNet.Numerics.Interpolation.Algorithms.CubicSplineInterpolation(xvals, yvals);
+            // this was valid in MathNet.Numerics v2.5, but is no longer supported in v3.x
+            // var interp = new MathNet.Numerics.Interpolation.Algorithms.CubicSplineInterpolation(xvals, yvals);
+            // double area = interp.Integrate(xvals.Max());
+            // return area;
 
-            double area = interp.Integrate(xvals.Max());
+            throw new NotImplementedException("No longer compatible with MathNet.Numerics v3.x");
 
-            return area;
+            
         }
 
     }

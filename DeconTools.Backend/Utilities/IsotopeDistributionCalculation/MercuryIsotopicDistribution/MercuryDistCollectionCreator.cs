@@ -6,6 +6,8 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
 {
+#if !Disable_DeconToolsV2
+
     public class MercuryDistCollectionCreator
     {
         private DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters;
@@ -55,6 +57,8 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
 
         }
 
-
     }
+
+#endif
+
 }

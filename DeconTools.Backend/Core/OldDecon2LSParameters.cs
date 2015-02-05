@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Xml;
+#if !Disable_DeconToolsV2
 using DeconToolsV2.DTAGeneration;
 using DeconToolsV2.HornTransform;
 using DeconToolsV2.Peaks;
 using DeconToolsV2.Readers;
+#endif
 
 namespace DeconTools.Backend.Core
 {
+    #if !Disable_DeconToolsV2
     public class OldDecon2LSParameters
     {
 
@@ -142,4 +145,6 @@ namespace DeconTools.Backend.Core
 
 
     }
+#endif
+
 }

@@ -10,8 +10,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     public class DeconToolsFitScoreCalculator : IFitScoreCalculator
     {
-        //DECONENGINE: remove this.... it references deconEngine
-        MercuryDistributionCreator distributionCreator;
+
         TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
 
 
@@ -56,6 +55,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
+                // Obsolete Classwide variable: MercuryDistributionCreator distributionCreator;
+                //
                 //double resolution = result.IsotopicProfile.GetMZofMostAbundantPeak() / result.IsotopicProfile.GetFWHM();
                 //distributionCreator.CreateDistribution(result.IsotopicProfile.MonoIsotopicMass, result.IsotopicProfile.ChargeState, resolution);
                 //distributionCreator.OffsetDistribution(result.IsotopicProfile);

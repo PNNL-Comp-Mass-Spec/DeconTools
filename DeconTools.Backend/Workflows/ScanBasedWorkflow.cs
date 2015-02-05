@@ -82,7 +82,7 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("STACKTRACE = " + ex.StackTrace, Logger.Instance.OutputFilename);
 
                 throw new ApplicationException(
-                    "A fatal error occured when connecting to the raw dataset. Could not create the Run object. Internal error message: " +
+                    "A fatal error occured when connecting to the instrument data file. Could not create the Run object. Internal error message: " +
                     ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
             }
 
@@ -538,7 +538,10 @@ namespace DeconTools.Backend.Workflows
         protected virtual Globals.ResultType GetResultType()
         {
             if (Run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
+
+#if !Disable_DeconToolsV2
             if (Run is IMFRun) return Globals.ResultType.IMS_TRADITIONAL_RESULT;
+#endif
 
             if (NewDeconToolsParameters.ThrashParameters.IsO16O18Data)
             {
