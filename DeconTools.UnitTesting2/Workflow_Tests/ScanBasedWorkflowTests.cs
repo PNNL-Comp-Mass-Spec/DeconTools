@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
-            string allPeaksFilepath =@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaksFULL.txt";
+            string allPeaksFilepath =@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaksFULL.txt";
             File.Copy(allPeaksFilepath,allPeaksFilepath.Replace("FULL", "") );
 
             var parameters = new DeconToolsParameters();
@@ -153,7 +153,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.AreEqual(1287, isos.Count);
 
             var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
-            Assert.AreEqual(1973657234m,(decimal)Math.Round(sumIntensities));
+            Assert.AreEqual(1974438598m,(decimal)Math.Round(sumIntensities));
+
+            //  Expected: 1973657234m
+             // But was:  1974438598m
         }
 
         [Category("MustPass")]

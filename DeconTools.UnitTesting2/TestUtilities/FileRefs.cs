@@ -20,8 +20,8 @@ namespace DeconTools.UnitTesting2
             public static string TextFileMS_multipleHeaderLines = FileRefs.RawDataBasePath + @"\MassSpectra_TextFiles\sampleIMS_Data_09103034.TXT";
             public static string TextFileMS_multipleDelimiters = FileRefs.RawDataBasePath + @"\MassSpectra_TextFiles\DN_sym5_A1_87.txt";
             
-            public static string OrbitrapStdFile1 = FileRefs.RawDataBasePath + "\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            public static string MZXMLOrbitrapStdFile1 = FileRefs.RawDataBasePath + "\\mzXML\\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzxml";
+            public static string OrbitrapStdFile1 = FileRefs.RawDataBasePath + @"\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            public static string MZXMLOrbitrapStdFile1 = FileRefs.RawDataBasePath + @"\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzxml";
 
             public static string UIMFStdFile1 = FileRefs.RawDataBasePath + "\\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.uimf";
             public static string UIMFStdFile2 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000.uimf";

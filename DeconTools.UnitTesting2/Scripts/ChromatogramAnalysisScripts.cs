@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var graphGenerator = new BasicGraphControl();
 
-            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             Run run = new RunFactory().CreateRun(thermoFile1);
 
             string outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
@@ -165,7 +165,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var graphGenerator = new BasicGraphControl();
 
-            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             Run run = new RunFactory().CreateRun(thermoFile1);
 
             string outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";

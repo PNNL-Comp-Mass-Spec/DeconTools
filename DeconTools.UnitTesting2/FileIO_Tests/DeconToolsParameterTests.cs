@@ -14,18 +14,18 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             //see https://jira.pnnl.gov/jira/browse/OMCS-460
 
-            string parameterFile = "..\\..\\..\\..\\SampleParameterFile.xml";
+            var fiParameterFile = new FileInfo(@"..\..\..\TestFiles\SampleParameterFile.xml");
 
-            Assert.IsTrue(File.Exists(parameterFile));
+            Assert.IsTrue(fiParameterFile.Exists);
             DeconToolsParameters parameters = new DeconToolsParameters();
-            parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            parameters.LoadFromOldDeconToolsParameterFile(fiParameterFile.FullName);
 
             Assert.IsNotNullOrEmpty(parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("C4.9384 H7.7583 N1.3577 O1.4773 S0.0417", parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("AREA", parameters.ThrashParameters.IsotopicProfileFitType.ToString());
             Assert.AreEqual(1.00727649, parameters.ThrashParameters.ChargeCarrierMass);
             Assert.AreEqual(1, parameters.ThrashParameters.MinIntensityForDeletion);
-            Assert.AreEqual(0.4m, (decimal)Math.Round(parameters.ThrashParameters.MaxFit,1));
+            Assert.AreEqual(0.3m, (decimal)Math.Round(parameters.ThrashParameters.MaxFit,1));
             Assert.AreEqual(10, parameters.ThrashParameters.MaxCharge);
             Assert.AreEqual(1, parameters.ThrashParameters.MinMSFeatureToBackgroundRatio);
             Assert.AreEqual(10000, parameters.ThrashParameters.MaxMass);
@@ -35,20 +35,20 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual("Text", parameters.ScanBasedWorkflowParameters.ExportFileType.ToString());
             Assert.AreEqual("standard", parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower());
-            Assert.AreEqual(true, parameters.ScanBasedWorkflowParameters.ExportPeakData);
-            Assert.AreEqual("ThrashV2", parameters.ScanBasedWorkflowParameters.DeconvolutionType.ToString());
+            Assert.AreEqual(false, parameters.ScanBasedWorkflowParameters.ExportPeakData);
+            Assert.AreEqual("ThrashV1", parameters.ScanBasedWorkflowParameters.DeconvolutionType.ToString());
 
             Assert.AreEqual(-2147483648, parameters.MSGeneratorParameters.MinLCScan);
             Assert.AreEqual(2147483647, parameters.MSGeneratorParameters.MaxLCScan);
             Assert.AreEqual(true, parameters.MSGeneratorParameters.UseMZRange);
             Assert.AreEqual(100, parameters.MSGeneratorParameters.MinMZ);
-            Assert.AreEqual(2000, parameters.MSGeneratorParameters.MaxMZ);
+            Assert.AreEqual(3000, parameters.MSGeneratorParameters.MaxMZ);
             Assert.AreEqual(3, parameters.MSGeneratorParameters.NumLCScansToSum);
             Assert.AreEqual(true, parameters.MSGeneratorParameters.SumSpectraAcrossLC);
 
             Assert.AreEqual("quadratic", parameters.PeakDetectorParameters.PeakFitType.ToString().ToLower());
             Assert.AreEqual(true, parameters.PeakDetectorParameters.IsDataThresholded);
-            Assert.AreEqual(true, parameters.PeakDetectorParameters.PeaksAreStored);
+            Assert.AreEqual(false, parameters.PeakDetectorParameters.PeaksAreStored);
         }
 
         [Category("MustPass")]

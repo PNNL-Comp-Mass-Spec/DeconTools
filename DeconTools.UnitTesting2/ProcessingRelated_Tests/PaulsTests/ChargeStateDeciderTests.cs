@@ -244,7 +244,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void TestAndComparingScottsData()
         {
-            string fileName = @"C:\Users\Klin638\Documents\PaulsData\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             Run run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -408,7 +408,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             string fileName =
-                             @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                             @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             Run run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
@@ -447,7 +447,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             //string fileName = @"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
             //@"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
@@ -609,9 +609,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             //Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string fileName = @"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            string fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
-            //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
             //  
@@ -641,7 +641,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         public void EasyDecision()
         {
             string fileName =
-                            @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                            @"\\Protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             Run run = new RunFactory().CreateRun(fileName);
             List<IsotopicProfile> potentialFeatures;
@@ -674,9 +674,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         public void MediumDecision()
         {
             string fileName = @"C:\Users\Klin638\Documents\BobsFolder\bob.raw";
-            //@"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             Run run = new RunFactory().CreateRun(fileName);
+            run.CurrentScanSet = new ScanSet(1000);
 
             List<IsotopicProfile> potentialFeatures;
             MediumDecisionSetup(out potentialFeatures);
@@ -720,7 +721,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         public void testPeakGeneration()
         {
             string fileName =
-                 @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             Run run = new RunFactory().CreateRun(fileName);
 
             PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
@@ -747,7 +748,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
             //                                          FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             string fileName =
-                 @"\\pnl\projects\MSSHARE\Gord\For_Paul\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             Run run = RunUtilities.CreateAndLoadPeaks(fileName);
 
             var target = TestUtilities.GetIQTargetStandard(1);

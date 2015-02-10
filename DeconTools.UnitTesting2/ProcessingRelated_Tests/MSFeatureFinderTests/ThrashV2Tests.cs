@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend;
@@ -297,7 +298,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
-            string outputFilename = @"C:\Temp\ThrashTesting\exportedIsos.csv";
+            var diOutputFolder = new DirectoryInfo(@"C:\Temp\ThrashTesting");
+            if (!diOutputFolder.Exists)
+                diOutputFolder.Create();
+
+            string outputFilename = Path.Combine(diOutputFolder.FullName,  "exportedIsos.csv");
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);
 
             exporter.ExportIsosResults(uniqueToNew);
