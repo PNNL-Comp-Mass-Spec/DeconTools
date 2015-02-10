@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 
@@ -6,11 +7,28 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public abstract class IsosResultExporter : Task
     {
+        protected const int MAX_SECONDS_BETWEEN_EXPORT = 60;
+
         #region Constructors
+
+        protected IsosResultExporter()
+        {
+            LastExportTime = DateTime.UtcNow;
+        }
+
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Number of features to cache in memory before writing to disk
+        /// </summary>
         public abstract int TriggerToExport { get; set; }
+
+        /// <summary>
+        /// Last export time; features will be written to disk if 60 seconds elapses
+        /// </summary>
+        protected DateTime LastExportTime;
 
         protected List<int> MSFeatureIDsWritten = new List<int>();
 
@@ -44,12 +62,15 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             }
 
 
-
-            if (resultList.ResultList.Count >= TriggerToExport || isLastScan)
+            if (resultList.ResultList.Count >= TriggerToExport || 
+                DateTime.UtcNow.Subtract(LastExportTime).TotalSeconds >= MAX_SECONDS_BETWEEN_EXPORT || 
+                isLastScan)
             {
                 ExportIsosResults(resultList.ResultList);
                 MSFeatureIDsWritten.Clear();
                 resultList.ResultList.Clear();
+
+                LastExportTime = DateTime.UtcNow;
             }
 
         }

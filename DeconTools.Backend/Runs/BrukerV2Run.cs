@@ -350,14 +350,16 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(brukerCalibrationData != null, "Problem with calibration data in dataset. Calibration data is empty.");
 
-            DeconToolsV2.CalibrationSettings deconEngineCalibrationsettings = new DeconToolsV2.CalibrationSettings();
-            deconEngineCalibrationsettings.ByteOrder = this.CalibrationData.ByteOrder;
-            deconEngineCalibrationsettings.FRLow = this.CalibrationData.FR_Low;
-            deconEngineCalibrationsettings.ML1 = this.CalibrationData.ML1;
-            deconEngineCalibrationsettings.ML2 = this.CalibrationData.ML2;
-            deconEngineCalibrationsettings.NF = this.CalibrationData.NF;
-            deconEngineCalibrationsettings.SW_h = this.CalibrationData.SW_h;
-            deconEngineCalibrationsettings.TD = this.CalibrationData.TD;
+            var deconEngineCalibrationsettings = new DeconToolsV2.CalibrationSettings
+            {
+                ByteOrder = this.CalibrationData.ByteOrder,
+                FRLow = this.CalibrationData.FR_Low,
+                ML1 = this.CalibrationData.ML1,
+                ML2 = this.CalibrationData.ML2,
+                NF = this.CalibrationData.NF,
+                SW_h = this.CalibrationData.SampleRate,
+                TD = this.CalibrationData.NumValuesInScan
+            };
 
             return deconEngineCalibrationsettings;
         }
@@ -440,53 +442,39 @@ namespace DeconTools.Backend.Runs
         public void loadSettings(string settingsFileName)
         {
             XDocument xdoc = XDocument.Load(settingsFileName);
-            List<brukerNameValuePair> paramList = new List<brukerNameValuePair>();
+            var paramList = new List<brukerNameValuePair>();
 
-            try
+            var paramNodes = (from node in xdoc.Element("method").Element("paramlist").Elements() select node);
+
+            foreach (var node in paramNodes)
             {
-                var paramNodes = (from node in xdoc.Element("method").Element("paramlist").Elements() select node);
+                brukerNameValuePair nameValuePair = new brukerNameValuePair();
+                nameValuePair.Name = getNameFromNode(node);
+                nameValuePair.Value = getValueFromNode(node);
 
-                foreach (var node in paramNodes)
-                {
-                    brukerNameValuePair nameValuePair = new brukerNameValuePair();
-                    nameValuePair.Name = getNameFromNode(node);
-                    nameValuePair.Value = getValueFromNode(node);
-
-                    paramList.Add(nameValuePair);
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
+                paramList.Add(nameValuePair);
             }
 
 
+            this.CalibrationData = new BrukerCalibrationData
+            {
+                ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value),
+                ML2 = Convert.ToDouble(paramList.First(p => p.Name == "ML2").Value),
+                SampleRate = Convert.ToDouble(paramList.First(p => p.Name == "SW_h").Value) * 2,
+                NumValuesInScan = Convert.ToInt32(paramList.First(p => p.Name == "TD").Value),
+                FR_Low = Convert.ToDouble(paramList.First(p => p.Name == "FR_low").Value),
+                ByteOrder = Convert.ToInt32(paramList.First(p => p.Name == "BYTORDP").Value)
+            };
 
-
-            this.CalibrationData = new BrukerCalibrationData();
-
-            this.CalibrationData.ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value);
-            this.CalibrationData.ML2 = Convert.ToDouble(paramList.First(p => p.Name == "ML2").Value);
             //this.CalibrationData.NF = Convert.ToInt32(paramList.First(p => p.Name == "NF").Value);
-            this.CalibrationData.SW_h = Convert.ToDouble(paramList.First(p => p.Name == "SW_h").Value) * 2;   // //  from Gordon A.:  SW_h is the digitizer rate and Bruker entered it as the nyquist frequency so it needs to be multiplied by 2.
-            this.CalibrationData.TD = Convert.ToInt32(paramList.First(p => p.Name == "TD").Value);
-            this.CalibrationData.FR_Low = Convert.ToDouble(paramList.First(p => p.Name == "FR_low").Value);
-            this.CalibrationData.ByteOrder = Convert.ToInt32(paramList.First(p => p.Name == "BYTORDP").Value);
 
 
-            if (this.CalibrationData.SW_h > this.CalibrationData.FR_Low)
+            if (this.CalibrationData.SampleRate > this.CalibrationData.FR_Low)
             {
                 this.CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
             }
 
-
-
             this.CalibrationData.Display();
-
 
         }
 

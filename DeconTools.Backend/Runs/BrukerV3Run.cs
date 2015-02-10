@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using BrukerDataReader;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.FileIO;
-using DeconTools.Backend.Runs.CalibrationData;
 using Check = DeconTools.Utilities.Check;
 
 namespace DeconTools.Backend.Runs
 {
     public sealed class BrukerV3Run : Run
     {
-        FileInfo m_serFileInfo;
-        FileInfo m_settingsfileInfo;
-        FileInfo m_fidFileInfo;
-        FileInfo m_acqusFileInfo;
+        readonly FileInfo m_serFileInfo;
+        readonly FileInfo m_fidFileInfo;
 
-        BrukerDataReader.DataReader m_rawDataReader;
+        readonly BrukerDataReader.DataReader m_rawDataReader;
 
         internal class brukerNameValuePair
         {
@@ -45,14 +40,12 @@ namespace DeconTools.Backend.Runs
             m_serFileInfo = findSerFile();
             m_fidFileInfo = findFIDFile();
 
-            //TODO: change this name once things are in place.
-            string filePathForRawDataReader = "";
-
-
             if (m_serFileInfo == null && m_fidFileInfo == null)
             {
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
+
+            string filePathForRawDataReader;
 
             if (m_serFileInfo != null)
             {
@@ -67,47 +60,38 @@ namespace DeconTools.Backend.Runs
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
-
-
-            m_settingsfileInfo = findSettingsFile();
-            bool standardSettingsFileNotFound = (m_settingsfileInfo == null);
-            if (standardSettingsFileNotFound)
+            FileInfo fiSettingsFile = findSettingsFile();
+            if (fiSettingsFile == null)
             {
-                m_acqusFileInfo = findAcqusFile();
+                FileInfo fiAcqusFile = findAcqusFile();
 
-                if (m_acqusFileInfo == null)
+                if (fiAcqusFile == null)
                 {
                     throw new FileNotFoundException("Run initialization problem. Could not find the settings file ('apexAcquisition.method') within the directory structure.");
                 }
-                else
-                {
-                    this.SettingsFilePath = m_acqusFileInfo.FullName;
-                    loadSettingsFromAcqusFile(this.SettingsFilePath);
-                }
+                
+                this.SettingsFilePath = fiAcqusFile.FullName;
             }
             else
             {
-                this.SettingsFilePath = m_settingsfileInfo.FullName;
-                loadSettingsFromApexMethodFile(this.SettingsFilePath);
+                this.SettingsFilePath = fiSettingsFile.FullName;
             }
 
-            //intantiate the BrukerDataReader and set parameters
-            m_rawDataReader = new DataReader(filePathForRawDataReader);
-            m_rawDataReader.SetParameters(CalibrationData.ML1, CalibrationData.ML2, CalibrationData.SW_h,
-                                          CalibrationData.TD);
+            // Intantiate the BrukerDataReader
+            // It will read the settings file and define the parameters
+            // Parameters are: CalA, CalB, sampleRate, numValueInScan
+
+            m_rawDataReader = new DataReader(filePathForRawDataReader, this.SettingsFilePath);
+
+            m_rawDataReader.Parameters.Display();
 
             DatasetName = getDatasetName(Filename);
             DataSetPath = getDatasetfolderName(Filename);
 
-
-            MinLCScan = GetMinPossibleLCScanNum(); 
+            MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
 
             Check.Ensure(m_rawDataReader != null, "BrukerRun could not be initialized. Failed to connect to raw data.");
-
-
-
-
         }
 
         public BrukerV3Run(string fileName, int minScan, int maxScan)
@@ -121,9 +105,6 @@ namespace DeconTools.Backend.Runs
         #endregion
 
         #region Properties
-        public DeconTools.Backend.Runs.CalibrationData.BrukerCalibrationData CalibrationData { get; set; }
-
-
 
         [field: NonSerialized]
         private XYData xyData;
@@ -140,7 +121,7 @@ namespace DeconTools.Backend.Runs
         }
 
         /// <summary>
-        /// File path to the Bruker Solarix 'apexAcquisition.method' file
+        /// File path to the Bruker Solarix 'apexAcquisition.method' file or to the acqus file
         /// </summary>
         public string SettingsFilePath { get; set; }
 
@@ -150,7 +131,6 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             return m_rawDataReader.GetNumMSScans();
-
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -160,7 +140,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleLCScanNum()
         {
-            return GetNumMSScans() -1 ;
+            return GetNumMSScans() - 1;
         }
 
 
@@ -184,37 +164,47 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-            float[] xvals = null;
-            float[] yvals = null;
+            float[] xvals;
+            float[] yvals;
 
             int[] scanValues = scanset.IndexValues.ToArray();
 
-            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maxMZ, ref xvals, ref yvals);
+            double maximumMzToUse = maxMZ;
 
-            var xydata = new XYData();
-            xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
-            xydata.Xvalues = xvals.Select(p => (double)p).ToArray(); ;
+            if (m_rawDataReader.Parameters.AcquiredMZMaximum > 0 && maxMZ > m_rawDataReader.Parameters.AcquiredMZMaximum)
+            {
+                maximumMzToUse = m_rawDataReader.Parameters.AcquiredMZMaximum;
+            }
+
+            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maximumMzToUse, out xvals, out yvals);
+
+            var xydata = new XYData
+            {
+                Yvalues = yvals.Select(p => (double)p).ToArray(),
+                Xvalues = xvals.Select(p => (double)p).ToArray()
+            };
+            
             return xydata;
 
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset)
         {
-            float[] xvals = null;
-            float[] yvals = null;
+            float[] xvals;
+            float[] yvals;
 
             int[] scanValues = scanset.IndexValues.ToArray();
 
-            m_rawDataReader.GetMassSpectrum(scanValues, ref xvals, ref yvals);
-            var xydata = new XYData();
-            xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
-            xydata.Xvalues = xvals.Select(p => (double)p).ToArray(); ;
+            m_rawDataReader.GetMassSpectrum(scanValues, out xvals, out yvals);
+            var xydata = new XYData
+            {
+                Yvalues = yvals.Select(p => (double)p).ToArray(),
+                Xvalues = xvals.Select(p => (double)p).ToArray()
+            };
+            ;
             return xydata;
 
         }
-
-
-
 
         #endregion
 
@@ -347,156 +337,44 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (acqusFiles.Length == 1)
+
+            if (acqusFiles.Length == 1)
             {
-                FileInfo acqusFileInfo = new FileInfo(acqusFiles[0]);
+                var acqusFileInfo = new FileInfo(acqusFiles[0]);
                 return acqusFileInfo;
+            }
+
+            // Often the Bruker file structures contain multiple Acqus files. I will select 
+            // the one that is in the same folder as the 'ser' file and if that isn't present,
+            // the same folder as the 'fid' file. Otherwise, throw errors
+
+            DirectoryInfo favoredDirectory;
+            if (m_serFileInfo != null)
+            {
+                favoredDirectory = m_serFileInfo.Directory;
+            }
+            else if (m_fidFileInfo != null)
+            {
+                favoredDirectory = m_fidFileInfo.Directory;
             }
             else
             {
-                //often the Bruker file structures contain multiple Acqus files. I will select 
-                //the one that is in the same folder as the 'ser' file and if that isn't present,
-                //the same folder as the 'fid' file. Otherwise, throw errors
-
-                DirectoryInfo favoredDirectory;
-                if (m_serFileInfo != null)
-                {
-                    favoredDirectory = m_serFileInfo.Directory;
-                }
-                else if (m_fidFileInfo != null)
-                {
-                    favoredDirectory = m_fidFileInfo.Directory;
-                }
-                else
-                {
-                    throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
-                }
-
-
-                foreach (var file in acqusFiles)
-                {
-                    FileInfo fi = new FileInfo(file);
-                    if (fi.Directory.Name.Equals(favoredDirectory.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return fi;
-                    }
-                }
-
                 throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
             }
 
-        }
 
-        internal void loadSettingsFromAcqusFile(string settingsFileName)
-        {
-            this.CalibrationData = new BrukerCalibrationData();
-
-            AcqusFileReader acqusReader;
-            acqusReader = new AcqusFileReader(settingsFileName);
-
-            this.CalibrationData.ML1 = acqusReader.DataLookupTable["ML1"];
-            this.CalibrationData.ML2 = acqusReader.DataLookupTable["ML2"];
-            //this.CalibrationData.NF =  acqusReader.DataLookupTable["ML1"];
-            this.CalibrationData.SW_h = acqusReader.DataLookupTable["SW_h"] * 2;   // //  from Gordon A.:  SW_h is the digitizer rate and Bruker entered it as the nyquist frequency so it needs to be multiplied by 2.
-            this.CalibrationData.TD = (int)acqusReader.DataLookupTable["TD"];
-            this.CalibrationData.FR_Low = acqusReader.DataLookupTable["FR_low"];
-        }
-
-        internal void loadSettingsFromApexMethodFile(string settingsFileName)
-        {
-            XDocument xdoc = XDocument.Load(settingsFileName);
-            List<brukerNameValuePair> paramList = new List<brukerNameValuePair>();
-
-            try
+            foreach (var file in acqusFiles)
             {
-                var paramNodes = (from node in xdoc.Element("method").Element("paramlist").Elements() select node);
-
-                foreach (var node in paramNodes)
+                var fi = new FileInfo(file);
+                if (fi.Directory.Name.Equals(favoredDirectory.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    brukerNameValuePair nameValuePair = new brukerNameValuePair();
-                    nameValuePair.Name = getNameFromNode(node);
-                    nameValuePair.Value = getValueFromNode(node);
-
-                    paramList.Add(nameValuePair);
+                    return fi;
                 }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
 
-            this.CalibrationData = new BrukerCalibrationData();
-            this.CalibrationData.ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value);
-            this.CalibrationData.ML2 = Convert.ToDouble(paramList.First(p => p.Name == "ML2").Value);
-            //this.CalibrationData.NF = Convert.ToInt32(paramList.First(p => p.Name == "NF").Value);
-            this.CalibrationData.SW_h = Convert.ToDouble(paramList.First(p => p.Name == "SW_h").Value) * 2;   // //  from Gordon A.:  SW_h is the digitizer rate and Bruker entered it as the nyquist frequency so it needs to be multiplied by 2.
-            this.CalibrationData.TD = Convert.ToInt32(paramList.First(p => p.Name == "TD").Value);
-            this.CalibrationData.FR_Low = Convert.ToDouble(paramList.First(p => p.Name == "FR_low").Value);
-            this.CalibrationData.ByteOrder = Convert.ToInt32(paramList.First(p => p.Name == "BYTORDP").Value);
+            throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
 
-
-            if (this.CalibrationData.SW_h > this.CalibrationData.FR_Low)
-            {
-                this.CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
-            }
-            this.CalibrationData.Display();
         }
-
-        private string getNameFromNode(XElement node)
-        {
-            var elementNames = (from n in node.Elements() select n.Name.LocalName);
-            var attributeNames = (from n in node.Attributes() select n.Name.LocalName);
-
-            bool nameIsAnXMLElement = elementNames.Contains("name");
-
-            bool nameIsAnAttribute = attributeNames.Contains("name");
-
-            string nameValue;
-            if (nameIsAnXMLElement)
-            {
-                nameValue = node.Element("name").Value;
-            }
-            else if (nameIsAnAttribute)
-            {
-                nameValue = node.Attribute("name").Value;
-            }
-            else
-            {
-                nameValue = String.Empty;
-            }
-
-            return nameValue;
-        }
-
-        private string getValueFromNode(XElement node)
-        {
-            var elementNames = (from n in node.Elements() select n.Name.LocalName);
-
-            bool isAnXMLElement = elementNames.Contains("value") || elementNames.Contains("Value");
-
-            string valueString;
-            if (isAnXMLElement)
-            {
-                if (elementNames.Contains("value"))
-                {
-                    valueString = node.Element("value").Value;
-                }
-                else
-                {
-                    valueString = node.Element("Value").Value;
-                }
-
-            }
-            else
-            {
-                valueString = String.Empty;
-            }
-
-            return valueString;
-        }
-
 
         #endregion
 

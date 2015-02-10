@@ -294,8 +294,6 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        //public void exportIsosResults
-
         public static List<IsosResult>GetIsosResultsByScan(List<IsosResult>inputList, int scanNum)
         {
             List<IsosResult> results = new List<IsosResult>();

@@ -199,7 +199,6 @@
     <Compile Include="DTO\MSResultPeakWithLocation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileIO\AcqusFileReader.cs" />
     <Compile Include="FileIO\ExporterBase.cs" />
     <Compile Include="FileIO\ImporterBase.cs" />
     <Compile Include="FileIO\MassAlignmentInfoFromTextImporter.cs" />
@@ -309,7 +308,6 @@
     <Compile Include="Runs\BrukerV2Run.cs" />
     <Compile Include="Runs\BrukerV3Run.cs" />
     <Compile Include="Runs\CalibrationData\BrukerCalibrationData.cs" />
-    <Compile Include="Runs\CalibrationData\CalibrationDataBase.cs" />
     <Compile Include="Runs\MzRun.cs" />
     <Compile Include="Runs\MzxmlV2Run.cs" />
     <Compile Include="Runs\RunFactory.cs" />
