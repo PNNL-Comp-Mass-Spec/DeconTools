@@ -111,9 +111,15 @@ namespace DeconConsole
 
         private static bool IsFileValid(string filename)
         {
-            if (Directory.Exists(filename)) return true;
+            var fiFile = new FileInfo(filename);
+            var diFolder = new DirectoryInfo(filename);
 
-            if (File.Exists(filename)) return true;
+            if (fiFile.Exists)
+                return true;
+
+            if (diFolder.Exists)
+                return true;
+           
             return false;
         }
 

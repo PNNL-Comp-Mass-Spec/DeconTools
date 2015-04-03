@@ -14,7 +14,6 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
-using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 {
