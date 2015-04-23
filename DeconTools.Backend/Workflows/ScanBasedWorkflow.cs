@@ -67,6 +67,18 @@ namespace DeconTools.Backend.Workflows
         #region Factory methods
         public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
         {
+            var datasetFile = new FileInfo(datasetFileName);
+            if (!datasetFile.Exists)
+            {
+                var datasetFolder = new DirectoryInfo(datasetFileName);
+                if (!datasetFolder.Exists)
+                     throw new FileNotFoundException("Dataset file (or folder) not found: " + datasetFile);
+            }
+            
+            var paramFile = new FileInfo(parameterFile);
+            if (!paramFile.Exists)
+                throw new FileNotFoundException("Parameter file not found: " + parameterFile);
+
             Run run;
             try
             {
