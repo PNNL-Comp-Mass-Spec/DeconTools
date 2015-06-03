@@ -251,369 +251,364 @@ namespace Decon2LS
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
-			PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmProcess));
-			this.panelProcType = new System.Windows.Forms.Panel();
-			this.mcmb_process_type = new System.Windows.Forms.ComboBox();
-			this.mlabel_process_type = new System.Windows.Forms.Label();
-			this.panelParamFile = new System.Windows.Forms.Panel();
-			this.chkUseParameterFile = new System.Windows.Forms.CheckBox();
-			this.mbtn_file_open = new System.Windows.Forms.Button();
-			this.mtxt_param_file = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.panelButtons = new System.Windows.Forms.Panel();
-			this.mbtn_add_imsfolder = new System.Windows.Forms.Button();
-			this.mbtn_display = new System.Windows.Forms.Button();
-			this.mbtn_add_sfolder = new System.Windows.Forms.Button();
-			this.mbtn_cancel = new System.Windows.Forms.Button();
-			this.mbtn_process = new System.Windows.Forms.Button();
-			this.mbtn_add_files = new System.Windows.Forms.Button();
-			this.panelMain = new System.Windows.Forms.Panel();
-			this.mdatagrid_files = new System.Windows.Forms.DataGrid();
-			this.panelPBar = new System.Windows.Forms.Panel();
-			this.mpbar_process = new System.Windows.Forms.ProgressBar();
-			this.mpanel_display = new System.Windows.Forms.Panel();
-			this.mctl_spectra = new PNNL.Controls.MS.ctlSpectrum();
-			this.mStatusTimer = new System.Windows.Forms.Timer(this.components);
-			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.panelProcType.SuspendLayout();
-			this.panelParamFile.SuspendLayout();
-			this.panelButtons.SuspendLayout();
-			this.panelMain.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.mdatagrid_files)).BeginInit();
-			this.panelPBar.SuspendLayout();
-			this.mpanel_display.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// panelProcType
-			// 
-			this.panelProcType.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.panelProcType.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.panelProcType.Controls.Add(this.mcmb_process_type);
-			this.panelProcType.Controls.Add(this.mlabel_process_type);
-			this.panelProcType.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panelProcType.DockPadding.Bottom = 30;
-			this.panelProcType.DockPadding.Left = 15;
-			this.panelProcType.DockPadding.Right = 15;
-			this.panelProcType.DockPadding.Top = 45;
-			this.panelProcType.Location = new System.Drawing.Point(0, 0);
-			this.panelProcType.Name = "panelProcType";
-			this.panelProcType.Size = new System.Drawing.Size(624, 48);
-			this.panelProcType.TabIndex = 0;
-			// 
-			// mcmb_process_type
-			// 
-			this.mcmb_process_type.Cursor = System.Windows.Forms.Cursors.Default;
-			this.mcmb_process_type.Items.AddRange(new object[] {
-																   "Horn Mass Transform",
-																   "Tic Generation",
-																   "2D Rawdata Plot",
-																   "DTA Generation"});
-			this.mcmb_process_type.Location = new System.Drawing.Point(120, 5);
-			this.mcmb_process_type.Name = "mcmb_process_type";
-			this.mcmb_process_type.Size = new System.Drawing.Size(192, 21);
-			this.mcmb_process_type.TabIndex = 1;
-			this.mcmb_process_type.SelectedIndexChanged += new System.EventHandler(this.mcmb_process_type_SelectedIndexChanged);
-			// 
-			// mlabel_process_type
-			// 
-			this.mlabel_process_type.Location = new System.Drawing.Point(8, 8);
-			this.mlabel_process_type.Name = "mlabel_process_type";
-			this.mlabel_process_type.Size = new System.Drawing.Size(168, 24);
-			this.mlabel_process_type.TabIndex = 0;
-			this.mlabel_process_type.Text = "Process Type:";
-			// 
-			// panelParamFile
-			// 
-			this.panelParamFile.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.panelParamFile.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.panelParamFile.Controls.Add(this.chkUseParameterFile);
-			this.panelParamFile.Controls.Add(this.mbtn_file_open);
-			this.panelParamFile.Controls.Add(this.mtxt_param_file);
-			this.panelParamFile.Controls.Add(this.label1);
-			this.panelParamFile.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panelParamFile.DockPadding.Left = 15;
-			this.panelParamFile.DockPadding.Right = 15;
-			this.panelParamFile.DockPadding.Top = 100;
-			this.panelParamFile.Location = new System.Drawing.Point(0, 0);
-			this.panelParamFile.Name = "panelParamFile";
-			this.panelParamFile.Size = new System.Drawing.Size(624, 48);
-			this.panelParamFile.TabIndex = 1;
-			// 
-			// chkUseParameterFile
-			// 
-			this.chkUseParameterFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.chkUseParameterFile.Location = new System.Drawing.Point(16, 9);
-			this.chkUseParameterFile.Name = "chkUseParameterFile";
-			this.chkUseParameterFile.Size = new System.Drawing.Size(136, 24);
-			this.chkUseParameterFile.TabIndex = 3;
-			this.chkUseParameterFile.Text = "Use Parameter File";
-			this.chkUseParameterFile.CheckedChanged += new System.EventHandler(this.chkUseParameterFile_CheckedChanged);
-			// 
-			// mbtn_file_open
-			// 
-			this.mbtn_file_open.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_file_open.Location = new System.Drawing.Point(588, 11);
-			this.mbtn_file_open.Name = "mbtn_file_open";
-			this.mbtn_file_open.Size = new System.Drawing.Size(24, 20);
-			this.mbtn_file_open.TabIndex = 2;
-			this.mbtn_file_open.Text = "..";
-			this.mbtn_file_open.Click += new System.EventHandler(this.mbtn_file_open_Click);
-			// 
-			// mtxt_param_file
-			// 
-			this.mtxt_param_file.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mtxt_param_file.Location = new System.Drawing.Point(248, 11);
-			this.mtxt_param_file.Name = "mtxt_param_file";
-			this.mtxt_param_file.Size = new System.Drawing.Size(329, 20);
-			this.mtxt_param_file.TabIndex = 1;
-			this.mtxt_param_file.Text = "";
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(160, 14);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(88, 24);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Parameter File:";
-			// 
-			// panelButtons
-			// 
-			this.panelButtons.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.panelButtons.Controls.Add(this.mbtn_add_imsfolder);
-			this.panelButtons.Controls.Add(this.mbtn_display);
-			this.panelButtons.Controls.Add(this.mbtn_add_sfolder);
-			this.panelButtons.Controls.Add(this.mbtn_cancel);
-			this.panelButtons.Controls.Add(this.mbtn_process);
-			this.panelButtons.Controls.Add(this.mbtn_add_files);
-			this.panelButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelButtons.Location = new System.Drawing.Point(0, 342);
-			this.panelButtons.Name = "panelButtons";
-			this.panelButtons.Size = new System.Drawing.Size(624, 40);
-			this.panelButtons.TabIndex = 2;
-			// 
-			// mbtn_add_imsfolder
-			// 
-			this.mbtn_add_imsfolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_add_imsfolder.Location = new System.Drawing.Point(192, 8);
-			this.mbtn_add_imsfolder.Name = "mbtn_add_imsfolder";
-			this.mbtn_add_imsfolder.Size = new System.Drawing.Size(96, 24);
-			this.mbtn_add_imsfolder.TabIndex = 5;
-			this.mbtn_add_imsfolder.Text = "Add IMS folder";
-			this.mbtn_add_imsfolder.Click += new System.EventHandler(this.mbtn_add_imsfolder_Click);
-			// 
-			// mbtn_display
-			// 
-			this.mbtn_display.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_display.Location = new System.Drawing.Point(480, 8);
-			this.mbtn_display.Name = "mbtn_display";
-			this.mbtn_display.Size = new System.Drawing.Size(72, 24);
-			this.mbtn_display.TabIndex = 4;
-			this.mbtn_display.Text = "Display On";
-			this.mbtn_display.Click += new System.EventHandler(this.mbtn_display_Click);
-			// 
-			// mbtn_add_sfolder
-			// 
-			this.mbtn_add_sfolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_add_sfolder.Location = new System.Drawing.Point(104, 8);
-			this.mbtn_add_sfolder.Name = "mbtn_add_sfolder";
-			this.mbtn_add_sfolder.Size = new System.Drawing.Size(80, 24);
-			this.mbtn_add_sfolder.TabIndex = 3;
-			this.mbtn_add_sfolder.Text = "Add Sfolder";
-			this.mbtn_add_sfolder.Click += new System.EventHandler(this.mbtn_add_sfolder_Click);
-			// 
-			// mbtn_cancel
-			// 
-			this.mbtn_cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_cancel.Location = new System.Drawing.Point(392, 8);
-			this.mbtn_cancel.Name = "mbtn_cancel";
-			this.mbtn_cancel.Size = new System.Drawing.Size(72, 24);
-			this.mbtn_cancel.TabIndex = 2;
-			this.mbtn_cancel.Text = "Cancel";
-			this.mbtn_cancel.Click += new System.EventHandler(this.mbtn_cancel_Click);
-			// 
-			// mbtn_process
-			// 
-			this.mbtn_process.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_process.Location = new System.Drawing.Point(304, 8);
-			this.mbtn_process.Name = "mbtn_process";
-			this.mbtn_process.Size = new System.Drawing.Size(72, 24);
-			this.mbtn_process.TabIndex = 1;
-			this.mbtn_process.Text = "Process";
-			this.mbtn_process.Click += new System.EventHandler(this.mbtn_process_Click);
-			// 
-			// mbtn_add_files
-			// 
-			this.mbtn_add_files.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mbtn_add_files.Location = new System.Drawing.Point(16, 8);
-			this.mbtn_add_files.Name = "mbtn_add_files";
-			this.mbtn_add_files.Size = new System.Drawing.Size(72, 24);
-			this.mbtn_add_files.TabIndex = 0;
-			this.mbtn_add_files.Text = "Add Files";
-			this.mbtn_add_files.Click += new System.EventHandler(this.mbtn_add_files_Click);
-			// 
-			// panelMain
-			// 
-			this.panelMain.Controls.Add(this.mdatagrid_files);
-			this.panelMain.Controls.Add(this.panelPBar);
-			this.panelMain.Controls.Add(this.panelParamFile);
-			this.panelMain.Controls.Add(this.panelButtons);
-			this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelMain.Location = new System.Drawing.Point(0, 48);
-			this.panelMain.Name = "panelMain";
-			this.panelMain.Size = new System.Drawing.Size(624, 382);
-			this.panelMain.TabIndex = 3;
-			// 
-			// mdatagrid_files
-			// 
-			this.mdatagrid_files.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-			this.mdatagrid_files.DataMember = "";
-			this.mdatagrid_files.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mdatagrid_files.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-			this.mdatagrid_files.Location = new System.Drawing.Point(0, 48);
-			this.mdatagrid_files.Name = "mdatagrid_files";
-			this.mdatagrid_files.Size = new System.Drawing.Size(624, 270);
-			this.mdatagrid_files.TabIndex = 1;
-			// 
-			// panelPBar
-			// 
-			this.panelPBar.Controls.Add(this.mpbar_process);
-			this.panelPBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelPBar.Location = new System.Drawing.Point(0, 318);
-			this.panelPBar.Name = "panelPBar";
-			this.panelPBar.Size = new System.Drawing.Size(624, 24);
-			this.panelPBar.TabIndex = 3;
-			// 
-			// mpbar_process
-			// 
-			this.mpbar_process.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mpbar_process.Location = new System.Drawing.Point(0, 0);
-			this.mpbar_process.Name = "mpbar_process";
-			this.mpbar_process.Size = new System.Drawing.Size(624, 24);
-			this.mpbar_process.TabIndex = 0;
-			this.mpbar_process.Click += new System.EventHandler(this.mpbar_process_Click);
-			// 
-			// mpanel_display
-			// 
-			this.mpanel_display.Controls.Add(this.mctl_spectra);
-			this.mpanel_display.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.mpanel_display.Location = new System.Drawing.Point(0, 430);
-			this.mpanel_display.Name = "mpanel_display";
-			this.mpanel_display.Size = new System.Drawing.Size(624, 224);
-			this.mpanel_display.TabIndex = 4;
-			// 
-			// mctl_spectra
-			// 
-			this.mctl_spectra.AutoViewPortXAxis = true;
-			this.mctl_spectra.AutoViewPortXBase = 0F;
-			this.mctl_spectra.AutoViewPortYAxis = true;
-			this.mctl_spectra.AutoViewPortYBase = 0F;
-			this.mctl_spectra.AxisAndLabelFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-			this.mctl_spectra.AxisAndLabelMaxFontSize = 15;
-			this.mctl_spectra.AxisAndLabelMinFontSize = 8;
-			this.mctl_spectra.BackColor = System.Drawing.Color.White;
-			this.mctl_spectra.ChartBackgroundColor = System.Drawing.Color.White;
-			this.mctl_spectra.ChartLayout.LegendFraction = 0.2F;
-			this.mctl_spectra.ChartLayout.LegendLocation = PNNL.Controls.ChartLegendLocation.Right;
-			this.mctl_spectra.ChartLayout.MaxLegendHeight = 150;
-			this.mctl_spectra.ChartLayout.MaxLegendWidth = 250;
-			this.mctl_spectra.ChartLayout.MaxTitleHeight = 50;
-			this.mctl_spectra.ChartLayout.MinLegendHeight = 50;
-			this.mctl_spectra.ChartLayout.MinLegendWidth = 75;
-			this.mctl_spectra.ChartLayout.MinTitleHeight = 5;
-			this.mctl_spectra.ChartLayout.TitleFraction = 0.1F;
-			this.mctl_spectra.DefaultZoomHandler.Active = true;
-			this.mctl_spectra.DefaultZoomHandler.FillColor = System.Drawing.Color.FromArgb(((System.Byte)(60)), ((System.Byte)(119)), ((System.Byte)(136)), ((System.Byte)(153)));
-			this.mctl_spectra.DefaultZoomHandler.LineColor = System.Drawing.Color.Black;
-			this.mctl_spectra.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mctl_spectra.FWHMFont = new System.Drawing.Font("Times New Roman", 8F);
-			this.mctl_spectra.FWHMLineWidth = 1F;
-			this.mctl_spectra.FWHMPeakColor = System.Drawing.Color.Purple;
-			penProvider1.Color = System.Drawing.Color.FromArgb(((System.Byte)(211)), ((System.Byte)(211)), ((System.Byte)(211)));
-			penProvider1.Width = 1F;
-			this.mctl_spectra.GridLinePen = penProvider1;
-			this.mctl_spectra.HasLegend = false;
-			this.mctl_spectra.HilightColor = System.Drawing.Color.Magenta;
-			this.mctl_spectra.LabelOffset = 8F;
-			this.mctl_spectra.Legend.BackColor = System.Drawing.Color.Transparent;
-			penProvider2.Color = System.Drawing.Color.Black;
-			penProvider2.Width = 1F;
-			this.mctl_spectra.Legend.BorderPen = penProvider2;
-			this.mctl_spectra.Legend.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
-			this.mctl_spectra.Legend.ColumnWidth = 125;
-			this.mctl_spectra.Legend.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-			this.mctl_spectra.Legend.MaxFontSize = 12F;
-			this.mctl_spectra.Legend.MinFontSize = 6F;
-			this.mctl_spectra.LineWidth = 1F;
-			this.mctl_spectra.Location = new System.Drawing.Point(0, 0);
-			this.mctl_spectra.Margins.BottomMarginFraction = 0.1F;
-			this.mctl_spectra.Margins.BottomMarginMax = 72;
-			this.mctl_spectra.Margins.BottomMarginMin = 30;
-			this.mctl_spectra.Margins.DefaultMarginFraction = 0.05F;
-			this.mctl_spectra.Margins.DefaultMarginMax = 15;
-			this.mctl_spectra.Margins.DefaultMarginMin = 5;
-			this.mctl_spectra.Margins.LeftMarginFraction = 0.2F;
-			this.mctl_spectra.Margins.LeftMarginMax = 150;
-			this.mctl_spectra.Margins.LeftMarginMin = 72;
-			this.mctl_spectra.MarkerSize = 5;
-			this.mctl_spectra.MinPixelForFWHM = 5F;
-			this.mctl_spectra.Name = "mctl_spectra";
-			this.mctl_spectra.NumFWHM = 1F;
-			this.mctl_spectra.NumXBins = 20;
-			this.mctl_spectra.PeakColor = System.Drawing.Color.DarkGray;
-			this.mctl_spectra.PeakLabelRelativeHeightPercent = 5F;
-			this.mctl_spectra.PeakLineEndCap = System.Drawing.Drawing2D.LineCap.Flat;
-			this.mctl_spectra.Size = new System.Drawing.Size(624, 224);
-			this.mctl_spectra.TabIndex = 0;
-			this.mctl_spectra.Title = "Mass Spectrum";
-			this.mctl_spectra.TitleFont = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-			this.mctl_spectra.TitleMaxFontSize = 50F;
-			this.mctl_spectra.TitleMinFontSize = 6F;
-			this.mctl_spectra.VerticalExpansion = 1F;
-			this.mctl_spectra.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mctl_spectra.ViewPort")));
-			this.mctl_spectra.XAxisGridLines = false;
-			this.mctl_spectra.XAxisLabel = "m/z";
-			this.mctl_spectra.YAxisGridLines = false;
-			this.mctl_spectra.YAxisLabel = "intensity";
-			// 
-			// mStatusTimer
-			// 
-			this.mStatusTimer.Interval = 1000;
-			// 
-			// splitter1
-			// 
-			this.splitter1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.splitter1.Location = new System.Drawing.Point(0, 424);
-			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(624, 6);
-			this.splitter1.TabIndex = 5;
-			this.splitter1.TabStop = false;
-			// 
-			// frmProcess
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(624, 654);
-			this.Controls.Add(this.splitter1);
-			this.Controls.Add(this.panelMain);
-			this.Controls.Add(this.panelProcType);
-			this.Controls.Add(this.mpanel_display);
-			this.Name = "frmProcess";
-			this.Text = "Process";
-			this.Load += new System.EventHandler(this.frmProcess_Load);
-			this.panelProcType.ResumeLayout(false);
-			this.panelParamFile.ResumeLayout(false);
-			this.panelButtons.ResumeLayout(false);
-			this.panelMain.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.mdatagrid_files)).EndInit();
-			this.panelPBar.ResumeLayout(false);
-			this.mpanel_display.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).EndInit();
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
+            PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProcess));
+            this.panelProcType = new System.Windows.Forms.Panel();
+            this.mcmb_process_type = new System.Windows.Forms.ComboBox();
+            this.mlabel_process_type = new System.Windows.Forms.Label();
+            this.panelParamFile = new System.Windows.Forms.Panel();
+            this.chkUseParameterFile = new System.Windows.Forms.CheckBox();
+            this.mbtn_file_open = new System.Windows.Forms.Button();
+            this.mtxt_param_file = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.mbtn_add_imsfolder = new System.Windows.Forms.Button();
+            this.mbtn_display = new System.Windows.Forms.Button();
+            this.mbtn_add_sfolder = new System.Windows.Forms.Button();
+            this.mbtn_cancel = new System.Windows.Forms.Button();
+            this.mbtn_process = new System.Windows.Forms.Button();
+            this.mbtn_add_files = new System.Windows.Forms.Button();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.mdatagrid_files = new System.Windows.Forms.DataGrid();
+            this.panelPBar = new System.Windows.Forms.Panel();
+            this.mpbar_process = new System.Windows.Forms.ProgressBar();
+            this.mpanel_display = new System.Windows.Forms.Panel();
+            this.mctl_spectra = new PNNL.Controls.MS.ctlSpectrum();
+            this.mStatusTimer = new System.Windows.Forms.Timer(this.components);
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panelProcType.SuspendLayout();
+            this.panelParamFile.SuspendLayout();
+            this.panelButtons.SuspendLayout();
+            this.panelMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mdatagrid_files)).BeginInit();
+            this.panelPBar.SuspendLayout();
+            this.mpanel_display.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // panelProcType
+            // 
+            this.panelProcType.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelProcType.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelProcType.Controls.Add(this.mcmb_process_type);
+            this.panelProcType.Controls.Add(this.mlabel_process_type);
+            this.panelProcType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelProcType.Location = new System.Drawing.Point(0, 0);
+            this.panelProcType.Name = "panelProcType";
+            this.panelProcType.Padding = new System.Windows.Forms.Padding(15, 45, 15, 30);
+            this.panelProcType.Size = new System.Drawing.Size(624, 55);
+            this.panelProcType.TabIndex = 0;
+            // 
+            // mcmb_process_type
+            // 
+            this.mcmb_process_type.Cursor = System.Windows.Forms.Cursors.Default;
+            this.mcmb_process_type.Items.AddRange(new object[] {
+            "Horn Mass Transform",
+            "Tic Generation",
+            "2D Rawdata Plot",
+            "DTA Generation"});
+            this.mcmb_process_type.Location = new System.Drawing.Point(144, 6);
+            this.mcmb_process_type.Name = "mcmb_process_type";
+            this.mcmb_process_type.Size = new System.Drawing.Size(230, 24);
+            this.mcmb_process_type.TabIndex = 1;
+            this.mcmb_process_type.SelectedIndexChanged += new System.EventHandler(this.mcmb_process_type_SelectedIndexChanged);
+            // 
+            // mlabel_process_type
+            // 
+            this.mlabel_process_type.Location = new System.Drawing.Point(10, 9);
+            this.mlabel_process_type.Name = "mlabel_process_type";
+            this.mlabel_process_type.Size = new System.Drawing.Size(201, 28);
+            this.mlabel_process_type.TabIndex = 0;
+            this.mlabel_process_type.Text = "Process Type:";
+            // 
+            // panelParamFile
+            // 
+            this.panelParamFile.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelParamFile.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelParamFile.Controls.Add(this.chkUseParameterFile);
+            this.panelParamFile.Controls.Add(this.mbtn_file_open);
+            this.panelParamFile.Controls.Add(this.mtxt_param_file);
+            this.panelParamFile.Controls.Add(this.label1);
+            this.panelParamFile.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelParamFile.Location = new System.Drawing.Point(0, 0);
+            this.panelParamFile.Name = "panelParamFile";
+            this.panelParamFile.Padding = new System.Windows.Forms.Padding(15, 100, 15, 0);
+            this.panelParamFile.Size = new System.Drawing.Size(624, 55);
+            this.panelParamFile.TabIndex = 1;
+            // 
+            // chkUseParameterFile
+            // 
+            this.chkUseParameterFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkUseParameterFile.Location = new System.Drawing.Point(19, 10);
+            this.chkUseParameterFile.Name = "chkUseParameterFile";
+            this.chkUseParameterFile.Size = new System.Drawing.Size(163, 28);
+            this.chkUseParameterFile.TabIndex = 3;
+            this.chkUseParameterFile.Text = "Use Parameter File";
+            this.chkUseParameterFile.CheckedChanged += new System.EventHandler(this.chkUseParameterFile_CheckedChanged);
+            // 
+            // mbtn_file_open
+            // 
+            this.mbtn_file_open.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_file_open.Location = new System.Drawing.Point(706, 13);
+            this.mbtn_file_open.Name = "mbtn_file_open";
+            this.mbtn_file_open.Size = new System.Drawing.Size(28, 23);
+            this.mbtn_file_open.TabIndex = 2;
+            this.mbtn_file_open.Text = "..";
+            this.mbtn_file_open.Click += new System.EventHandler(this.mbtn_file_open_Click);
+            // 
+            // mtxt_param_file
+            // 
+            this.mtxt_param_file.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mtxt_param_file.Location = new System.Drawing.Point(298, 13);
+            this.mtxt_param_file.Name = "mtxt_param_file";
+            this.mtxt_param_file.Size = new System.Drawing.Size(394, 22);
+            this.mtxt_param_file.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(192, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 28);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Parameter File:";
+            // 
+            // panelButtons
+            // 
+            this.panelButtons.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelButtons.Controls.Add(this.mbtn_add_imsfolder);
+            this.panelButtons.Controls.Add(this.mbtn_display);
+            this.panelButtons.Controls.Add(this.mbtn_add_sfolder);
+            this.panelButtons.Controls.Add(this.mbtn_cancel);
+            this.panelButtons.Controls.Add(this.mbtn_process);
+            this.panelButtons.Controls.Add(this.mbtn_add_files);
+            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelButtons.Location = new System.Drawing.Point(0, 294);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(624, 46);
+            this.panelButtons.TabIndex = 2;
+            // 
+            // mbtn_add_imsfolder
+            // 
+            this.mbtn_add_imsfolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_add_imsfolder.Location = new System.Drawing.Point(230, 9);
+            this.mbtn_add_imsfolder.Name = "mbtn_add_imsfolder";
+            this.mbtn_add_imsfolder.Size = new System.Drawing.Size(116, 28);
+            this.mbtn_add_imsfolder.TabIndex = 5;
+            this.mbtn_add_imsfolder.Text = "Add IMS folder";
+            this.mbtn_add_imsfolder.Click += new System.EventHandler(this.mbtn_add_imsfolder_Click);
+            // 
+            // mbtn_display
+            // 
+            this.mbtn_display.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_display.Location = new System.Drawing.Point(576, 9);
+            this.mbtn_display.Name = "mbtn_display";
+            this.mbtn_display.Size = new System.Drawing.Size(86, 28);
+            this.mbtn_display.TabIndex = 4;
+            this.mbtn_display.Text = "Display On";
+            this.mbtn_display.Click += new System.EventHandler(this.mbtn_display_Click);
+            // 
+            // mbtn_add_sfolder
+            // 
+            this.mbtn_add_sfolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_add_sfolder.Location = new System.Drawing.Point(125, 9);
+            this.mbtn_add_sfolder.Name = "mbtn_add_sfolder";
+            this.mbtn_add_sfolder.Size = new System.Drawing.Size(96, 28);
+            this.mbtn_add_sfolder.TabIndex = 3;
+            this.mbtn_add_sfolder.Text = "Add Sfolder";
+            this.mbtn_add_sfolder.Click += new System.EventHandler(this.mbtn_add_sfolder_Click);
+            // 
+            // mbtn_cancel
+            // 
+            this.mbtn_cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_cancel.Location = new System.Drawing.Point(470, 9);
+            this.mbtn_cancel.Name = "mbtn_cancel";
+            this.mbtn_cancel.Size = new System.Drawing.Size(87, 28);
+            this.mbtn_cancel.TabIndex = 2;
+            this.mbtn_cancel.Text = "Cancel";
+            this.mbtn_cancel.Click += new System.EventHandler(this.mbtn_cancel_Click);
+            // 
+            // mbtn_process
+            // 
+            this.mbtn_process.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_process.Location = new System.Drawing.Point(365, 9);
+            this.mbtn_process.Name = "mbtn_process";
+            this.mbtn_process.Size = new System.Drawing.Size(86, 28);
+            this.mbtn_process.TabIndex = 1;
+            this.mbtn_process.Text = "Process";
+            this.mbtn_process.Click += new System.EventHandler(this.mbtn_process_Click);
+            // 
+            // mbtn_add_files
+            // 
+            this.mbtn_add_files.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbtn_add_files.Location = new System.Drawing.Point(19, 9);
+            this.mbtn_add_files.Name = "mbtn_add_files";
+            this.mbtn_add_files.Size = new System.Drawing.Size(87, 28);
+            this.mbtn_add_files.TabIndex = 0;
+            this.mbtn_add_files.Text = "Add Files";
+            this.mbtn_add_files.Click += new System.EventHandler(this.mbtn_add_files_Click);
+            // 
+            // panelMain
+            // 
+            this.panelMain.Controls.Add(this.mdatagrid_files);
+            this.panelMain.Controls.Add(this.panelPBar);
+            this.panelMain.Controls.Add(this.panelParamFile);
+            this.panelMain.Controls.Add(this.panelButtons);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 55);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(624, 340);
+            this.panelMain.TabIndex = 3;
+            // 
+            // mdatagrid_files
+            // 
+            this.mdatagrid_files.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.mdatagrid_files.DataMember = "";
+            this.mdatagrid_files.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mdatagrid_files.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.mdatagrid_files.Location = new System.Drawing.Point(0, 55);
+            this.mdatagrid_files.Name = "mdatagrid_files";
+            this.mdatagrid_files.Size = new System.Drawing.Size(624, 211);
+            this.mdatagrid_files.TabIndex = 1;
+            // 
+            // panelPBar
+            // 
+            this.panelPBar.Controls.Add(this.mpbar_process);
+            this.panelPBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelPBar.Location = new System.Drawing.Point(0, 266);
+            this.panelPBar.Name = "panelPBar";
+            this.panelPBar.Size = new System.Drawing.Size(624, 28);
+            this.panelPBar.TabIndex = 3;
+            // 
+            // mpbar_process
+            // 
+            this.mpbar_process.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mpbar_process.Location = new System.Drawing.Point(0, 0);
+            this.mpbar_process.Name = "mpbar_process";
+            this.mpbar_process.Size = new System.Drawing.Size(624, 28);
+            this.mpbar_process.TabIndex = 0;
+            this.mpbar_process.Click += new System.EventHandler(this.mpbar_process_Click);
+            // 
+            // mpanel_display
+            // 
+            this.mpanel_display.Controls.Add(this.mctl_spectra);
+            this.mpanel_display.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.mpanel_display.Location = new System.Drawing.Point(0, 395);
+            this.mpanel_display.Name = "mpanel_display";
+            this.mpanel_display.Size = new System.Drawing.Size(624, 259);
+            this.mpanel_display.TabIndex = 4;
+            // 
+            // mctl_spectra
+            // 
+            this.mctl_spectra.AutoViewPortXAxis = true;
+            this.mctl_spectra.AutoViewPortXBase = 0F;
+            this.mctl_spectra.AutoViewPortYAxis = true;
+            this.mctl_spectra.AutoViewPortYBase = 0F;
+            this.mctl_spectra.AxisAndLabelFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.mctl_spectra.AxisAndLabelMaxFontSize = 15;
+            this.mctl_spectra.AxisAndLabelMinFontSize = 8;
+            this.mctl_spectra.BackColor = System.Drawing.Color.White;
+            this.mctl_spectra.ChartBackgroundColor = System.Drawing.Color.White;
+            this.mctl_spectra.ChartLayout.LegendFraction = 0.2F;
+            this.mctl_spectra.ChartLayout.LegendLocation = PNNL.Controls.ChartLegendLocation.Right;
+            this.mctl_spectra.ChartLayout.MaxLegendHeight = 150;
+            this.mctl_spectra.ChartLayout.MaxLegendWidth = 250;
+            this.mctl_spectra.ChartLayout.MaxTitleHeight = 50;
+            this.mctl_spectra.ChartLayout.MinLegendHeight = 50;
+            this.mctl_spectra.ChartLayout.MinLegendWidth = 75;
+            this.mctl_spectra.ChartLayout.MinTitleHeight = 5;
+            this.mctl_spectra.ChartLayout.TitleFraction = 0.1F;
+            this.mctl_spectra.DefaultZoomHandler.Active = true;
+            this.mctl_spectra.DefaultZoomHandler.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(119)))), ((int)(((byte)(136)))), ((int)(((byte)(153)))));
+            this.mctl_spectra.DefaultZoomHandler.LineColor = System.Drawing.Color.Black;
+            this.mctl_spectra.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mctl_spectra.FWHMFont = new System.Drawing.Font("Times New Roman", 8F);
+            this.mctl_spectra.FWHMLineWidth = 1F;
+            this.mctl_spectra.FWHMPeakColor = System.Drawing.Color.Purple;
+            penProvider1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(211)))), ((int)(((byte)(211)))));
+            penProvider1.Width = 1F;
+            this.mctl_spectra.GridLinePen = penProvider1;
+            this.mctl_spectra.HasLegend = false;
+            this.mctl_spectra.HilightColor = System.Drawing.Color.Magenta;
+            this.mctl_spectra.LabelOffset = 8F;
+            this.mctl_spectra.Legend.BackColor = System.Drawing.Color.Transparent;
+            penProvider2.Color = System.Drawing.Color.Black;
+            penProvider2.Width = 1F;
+            this.mctl_spectra.Legend.BorderPen = penProvider2;
+            this.mctl_spectra.Legend.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.mctl_spectra.Legend.ColumnWidth = 125;
+            this.mctl_spectra.Legend.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.mctl_spectra.Legend.MaxFontSize = 12F;
+            this.mctl_spectra.Legend.MinFontSize = 6F;
+            this.mctl_spectra.LineWidth = 1F;
+            this.mctl_spectra.Location = new System.Drawing.Point(0, 0);
+            this.mctl_spectra.Margins.BottomMarginFraction = 0.1F;
+            this.mctl_spectra.Margins.BottomMarginMax = 72;
+            this.mctl_spectra.Margins.BottomMarginMin = 30;
+            this.mctl_spectra.Margins.DefaultMarginFraction = 0.05F;
+            this.mctl_spectra.Margins.DefaultMarginMax = 15;
+            this.mctl_spectra.Margins.DefaultMarginMin = 5;
+            this.mctl_spectra.Margins.LeftMarginFraction = 0.2F;
+            this.mctl_spectra.Margins.LeftMarginMax = 150;
+            this.mctl_spectra.Margins.LeftMarginMin = 72;
+            this.mctl_spectra.MarkerSize = 5;
+            this.mctl_spectra.MinPixelForFWHM = 5F;
+            this.mctl_spectra.Name = "mctl_spectra";
+            this.mctl_spectra.NumFWHM = 1F;
+            this.mctl_spectra.NumXBins = 20;
+            this.mctl_spectra.PeakColor = System.Drawing.Color.DarkGray;
+            this.mctl_spectra.PeakLabelRelativeHeightPercent = 5F;
+            this.mctl_spectra.PeakLineEndCap = System.Drawing.Drawing2D.LineCap.Flat;
+            this.mctl_spectra.Size = new System.Drawing.Size(624, 259);
+            this.mctl_spectra.TabIndex = 0;
+            this.mctl_spectra.Title = "Mass Spectrum";
+            this.mctl_spectra.TitleFont = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            this.mctl_spectra.TitleMaxFontSize = 50F;
+            this.mctl_spectra.TitleMinFontSize = 6F;
+            this.mctl_spectra.VerticalExpansion = 1F;
+            this.mctl_spectra.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mctl_spectra.ViewPort")));
+            this.mctl_spectra.XAxisGridLines = false;
+            this.mctl_spectra.XAxisLabel = "m/z";
+            this.mctl_spectra.YAxisGridLines = false;
+            this.mctl_spectra.YAxisLabel = "intensity";
+            // 
+            // mStatusTimer
+            // 
+            this.mStatusTimer.Interval = 1000;
+            // 
+            // splitter1
+            // 
+            this.splitter1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter1.Location = new System.Drawing.Point(0, 388);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(624, 7);
+            this.splitter1.TabIndex = 5;
+            this.splitter1.TabStop = false;
+            // 
+            // frmProcess
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(624, 654);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.panelMain);
+            this.Controls.Add(this.panelProcType);
+            this.Controls.Add(this.mpanel_display);
+            this.Name = "frmProcess";
+            this.Text = "Process";
+            this.Load += new System.EventHandler(this.frmProcess_Load);
+            this.panelProcType.ResumeLayout(false);
+            this.panelParamFile.ResumeLayout(false);
+            this.panelParamFile.PerformLayout();
+            this.panelButtons.ResumeLayout(false);
+            this.panelMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mdatagrid_files)).EndInit();
+            this.panelPBar.ResumeLayout(false);
+            this.mpanel_display.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion

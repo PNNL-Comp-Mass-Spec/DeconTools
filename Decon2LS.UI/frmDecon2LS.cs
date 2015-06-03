@@ -222,196 +222,198 @@ namespace Decon2LS
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmDecon2LS));
-			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.menuItem_File = new System.Windows.Forms.MenuItem();
-			this.menuItem_open = new System.Windows.Forms.MenuItem();
-			this.mmnuOpenResults = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.mmnuCreateTIC = new System.Windows.Forms.MenuItem();
-			this.mmnuMercury = new System.Windows.Forms.MenuItem();
-			this.menuItem_Exit = new System.Windows.Forms.MenuItem();
-			this.menuItem_Tools = new System.Windows.Forms.MenuItem();
-			this.menuItem_process = new System.Windows.Forms.MenuItem();
-			this.menuItem_Windows = new System.Windows.Forms.MenuItem();
-			this.menuItem_Cascade = new System.Windows.Forms.MenuItem();
-			this.menuItem_ArrangeIcons = new System.Windows.Forms.MenuItem();
-			this.menuItem_TileHorizontal = new System.Windows.Forms.MenuItem();
-			this.menuItem_TileVertical = new System.Windows.Forms.MenuItem();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItemAbout = new System.Windows.Forms.MenuItem();
-			this.menuItem_Options = new System.Windows.Forms.MenuItem();
-			this.mimgListMain = new System.Windows.Forms.ImageList(this.components);
-			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.mFileTreeView = new PNNL.Controls.ctlFileView();
-			this.SuspendLayout();
-			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem_File,
-																					  this.menuItem_Tools,
-																					  this.menuItem_Windows,
-																					  this.menuItem1,
-																					  this.menuItem_Options});
-			// 
-			// menuItem_File
-			// 
-			this.menuItem_File.Index = 0;
-			this.menuItem_File.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						  this.menuItem_open,
-																						  this.mmnuOpenResults,
-																						  this.menuItem3,
-																						  this.mmnuCreateTIC,
-																						  this.mmnuMercury,
-																						  this.menuItem_Exit});
-			this.menuItem_File.Text = "File";
-			// 
-			// menuItem_open
-			// 
-			this.menuItem_open.Index = 0;
-			this.menuItem_open.Text = "Open";
-			this.menuItem_open.Click += new System.EventHandler(this.menuItem_open_Click);
-			// 
-			// mmnuOpenResults
-			// 
-			this.mmnuOpenResults.Index = 1;
-			this.mmnuOpenResults.Text = "Open Results";
-			this.mmnuOpenResults.Click += new System.EventHandler(this.mmnuOpenResults_Click);
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 2;
-			this.menuItem3.Text = "-";
-			// 
-			// mmnuCreateTIC
-			// 
-			this.mmnuCreateTIC.Index = 3;
-			this.mmnuCreateTIC.Text = "TIC";
-			this.mmnuCreateTIC.Click += new System.EventHandler(this.mmnuCreateTIC_Click);
-			// 
-			// mmnuMercury
-			// 
-			this.mmnuMercury.Index = 4;
-			this.mmnuMercury.Text = "Mercury";
-			this.mmnuMercury.Click += new System.EventHandler(this.mmnuMercury_Click);
-			// 
-			// menuItem_Exit
-			// 
-			this.menuItem_Exit.Index = 5;
-			this.menuItem_Exit.Text = "Exit";
-			this.menuItem_Exit.Click += new System.EventHandler(this.menuItem_Exit_Click);
-			// 
-			// menuItem_Tools
-			// 
-			this.menuItem_Tools.Index = 1;
-			this.menuItem_Tools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						   this.menuItem_process});
-			this.menuItem_Tools.Text = "Tools";
-			// 
-			// menuItem_process
-			// 
-			this.menuItem_process.Index = 0;
-			this.menuItem_process.Text = "Process";
-			this.menuItem_process.Click += new System.EventHandler(this.menuItem_process_Click);
-			// 
-			// menuItem_Windows
-			// 
-			this.menuItem_Windows.Index = 2;
-			this.menuItem_Windows.MdiList = true;
-			this.menuItem_Windows.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							 this.menuItem_Cascade,
-																							 this.menuItem_ArrangeIcons,
-																							 this.menuItem_TileHorizontal,
-																							 this.menuItem_TileVertical});
-			this.menuItem_Windows.Text = "Windows";
-			// 
-			// menuItem_Cascade
-			// 
-			this.menuItem_Cascade.Index = 0;
-			this.menuItem_Cascade.Text = "Cascade";
-			this.menuItem_Cascade.Click += new System.EventHandler(this.menuItem_Cascade_Click);
-			// 
-			// menuItem_ArrangeIcons
-			// 
-			this.menuItem_ArrangeIcons.Index = 1;
-			this.menuItem_ArrangeIcons.Text = "Arrange Icons";
-			this.menuItem_ArrangeIcons.Click += new System.EventHandler(this.menuItem_ArrangeIcons_Click);
-			// 
-			// menuItem_TileHorizontal
-			// 
-			this.menuItem_TileHorizontal.Index = 2;
-			this.menuItem_TileHorizontal.Text = "Tile Horizontal";
-			this.menuItem_TileHorizontal.Click += new System.EventHandler(this.menuItem_TileHorizontal_Click);
-			// 
-			// menuItem_TileVertical
-			// 
-			this.menuItem_TileVertical.Index = 3;
-			this.menuItem_TileVertical.Text = "Tile Vertical";
-			this.menuItem_TileVertical.Click += new System.EventHandler(this.menuItem_TileVertical_Click);
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 3;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItemAbout});
-			this.menuItem1.Text = "Help";
-			// 
-			// menuItemAbout
-			// 
-			this.menuItemAbout.Index = 0;
-			this.menuItemAbout.Text = "About";
-			this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
-			// 
-			// menuItem_Options
-			// 
-			this.menuItem_Options.Index = 4;
-			this.menuItem_Options.Text = "Options";
-			this.menuItem_Options.Click += new System.EventHandler(this.menuItem_Options_Click);
-			// 
-			// mimgListMain
-			// 
-			this.mimgListMain.ImageSize = new System.Drawing.Size(16, 16);
-			this.mimgListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mimgListMain.ImageStream")));
-			this.mimgListMain.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// splitter1
-			// 
-			this.splitter1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitter1.Location = new System.Drawing.Point(192, 0);
-			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(6, 502);
-			this.splitter1.TabIndex = 5;
-			this.splitter1.TabStop = false;
-			// 
-			// mFileTreeView
-			// 
-			this.mFileTreeView.Dock = System.Windows.Forms.DockStyle.Left;
-			this.mFileTreeView.Location = new System.Drawing.Point(0, 0);
-			this.mFileTreeView.Name = "mFileTreeView";
-			this.mFileTreeView.Size = new System.Drawing.Size(192, 502);
-			this.mFileTreeView.TabIndex = 7;
-			this.mFileTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.mFileTreeView_BeforeExpand);
-			// 
-			// frmDecon2LS
-			// 
-			this.AllowDrop = true;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(744, 502);
-			this.Controls.Add(this.splitter1);
-			this.Controls.Add(this.mFileTreeView);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.IsMdiContainer = ((bool)(configurationAppSettings.GetValue("frmDecon2LS.IsMdiContainer", typeof(bool))));
-			this.Menu = this.mainMenu1;
-			this.Name = "frmDecon2LS";
-			this.Text = "DeconTools_BetaV1.3.3";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.MdiChildActivate += new System.EventHandler(this.frmDecon2LS_MdiChildActivate);
-			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragDrop);
-			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragEnter);
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDecon2LS));
+            System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem_File = new System.Windows.Forms.MenuItem();
+            this.menuItem_open = new System.Windows.Forms.MenuItem();
+            this.mmnuOpenResults = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.mmnuCreateTIC = new System.Windows.Forms.MenuItem();
+            this.mmnuMercury = new System.Windows.Forms.MenuItem();
+            this.menuItem_Exit = new System.Windows.Forms.MenuItem();
+            this.menuItem_Tools = new System.Windows.Forms.MenuItem();
+            this.menuItem_process = new System.Windows.Forms.MenuItem();
+            this.menuItem_Windows = new System.Windows.Forms.MenuItem();
+            this.menuItem_Cascade = new System.Windows.Forms.MenuItem();
+            this.menuItem_ArrangeIcons = new System.Windows.Forms.MenuItem();
+            this.menuItem_TileHorizontal = new System.Windows.Forms.MenuItem();
+            this.menuItem_TileVertical = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItemAbout = new System.Windows.Forms.MenuItem();
+            this.menuItem_Options = new System.Windows.Forms.MenuItem();
+            this.mimgListMain = new System.Windows.Forms.ImageList(this.components);
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.mFileTreeView = new PNNL.Controls.ctlFileView();
+            this.SuspendLayout();
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem_File,
+            this.menuItem_Tools,
+            this.menuItem_Windows,
+            this.menuItem1,
+            this.menuItem_Options});
+            // 
+            // menuItem_File
+            // 
+            this.menuItem_File.Index = 0;
+            this.menuItem_File.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem_open,
+            this.mmnuOpenResults,
+            this.menuItem3,
+            this.mmnuCreateTIC,
+            this.mmnuMercury,
+            this.menuItem_Exit});
+            this.menuItem_File.Text = "File";
+            // 
+            // menuItem_open
+            // 
+            this.menuItem_open.Index = 0;
+            this.menuItem_open.Text = "Open";
+            this.menuItem_open.Click += new System.EventHandler(this.menuItem_open_Click);
+            // 
+            // mmnuOpenResults
+            // 
+            this.mmnuOpenResults.Index = 1;
+            this.mmnuOpenResults.Text = "Open Results";
+            this.mmnuOpenResults.Click += new System.EventHandler(this.mmnuOpenResults_Click);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 2;
+            this.menuItem3.Text = "-";
+            // 
+            // mmnuCreateTIC
+            // 
+            this.mmnuCreateTIC.Index = 3;
+            this.mmnuCreateTIC.Text = "TIC";
+            this.mmnuCreateTIC.Click += new System.EventHandler(this.mmnuCreateTIC_Click);
+            // 
+            // mmnuMercury
+            // 
+            this.mmnuMercury.Index = 4;
+            this.mmnuMercury.Text = "Mercury";
+            this.mmnuMercury.Click += new System.EventHandler(this.mmnuMercury_Click);
+            // 
+            // menuItem_Exit
+            // 
+            this.menuItem_Exit.Index = 5;
+            this.menuItem_Exit.Text = "Exit";
+            this.menuItem_Exit.Click += new System.EventHandler(this.menuItem_Exit_Click);
+            // 
+            // menuItem_Tools
+            // 
+            this.menuItem_Tools.Index = 1;
+            this.menuItem_Tools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem_process});
+            this.menuItem_Tools.Text = "Tools";
+            // 
+            // menuItem_process
+            // 
+            this.menuItem_process.Index = 0;
+            this.menuItem_process.Text = "Process";
+            this.menuItem_process.Click += new System.EventHandler(this.menuItem_process_Click);
+            // 
+            // menuItem_Windows
+            // 
+            this.menuItem_Windows.Index = 2;
+            this.menuItem_Windows.MdiList = true;
+            this.menuItem_Windows.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem_Cascade,
+            this.menuItem_ArrangeIcons,
+            this.menuItem_TileHorizontal,
+            this.menuItem_TileVertical});
+            this.menuItem_Windows.Text = "Windows";
+            // 
+            // menuItem_Cascade
+            // 
+            this.menuItem_Cascade.Index = 0;
+            this.menuItem_Cascade.Text = "Cascade";
+            this.menuItem_Cascade.Click += new System.EventHandler(this.menuItem_Cascade_Click);
+            // 
+            // menuItem_ArrangeIcons
+            // 
+            this.menuItem_ArrangeIcons.Index = 1;
+            this.menuItem_ArrangeIcons.Text = "Arrange Icons";
+            this.menuItem_ArrangeIcons.Click += new System.EventHandler(this.menuItem_ArrangeIcons_Click);
+            // 
+            // menuItem_TileHorizontal
+            // 
+            this.menuItem_TileHorizontal.Index = 2;
+            this.menuItem_TileHorizontal.Text = "Tile Horizontal";
+            this.menuItem_TileHorizontal.Click += new System.EventHandler(this.menuItem_TileHorizontal_Click);
+            // 
+            // menuItem_TileVertical
+            // 
+            this.menuItem_TileVertical.Index = 3;
+            this.menuItem_TileVertical.Text = "Tile Vertical";
+            this.menuItem_TileVertical.Click += new System.EventHandler(this.menuItem_TileVertical_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 3;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemAbout});
+            this.menuItem1.Text = "Help";
+            // 
+            // menuItemAbout
+            // 
+            this.menuItemAbout.Index = 0;
+            this.menuItemAbout.Text = "About";
+            this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
+            // 
+            // menuItem_Options
+            // 
+            this.menuItem_Options.Index = 4;
+            this.menuItem_Options.Text = "Options";
+            this.menuItem_Options.Click += new System.EventHandler(this.menuItem_Options_Click);
+            // 
+            // mimgListMain
+            // 
+            this.mimgListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mimgListMain.ImageStream")));
+            this.mimgListMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.mimgListMain.Images.SetKeyName(0, "");
+            // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.SystemColors.Control;
+            this.splitter1.Location = new System.Drawing.Point(230, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(8, 502);
+            this.splitter1.TabIndex = 5;
+            this.splitter1.TabStop = false;
+            // 
+            // mFileTreeView
+            // 
+            this.mFileTreeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mFileTreeView.ImageIndex = 0;
+            this.mFileTreeView.Location = new System.Drawing.Point(0, 0);
+            this.mFileTreeView.Name = "mFileTreeView";
+            this.mFileTreeView.SelectedImageIndex = 0;
+            this.mFileTreeView.Size = new System.Drawing.Size(230, 502);
+            this.mFileTreeView.TabIndex = 7;
+            this.mFileTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.mFileTreeView_BeforeExpand);
+            // 
+            // frmDecon2LS
+            // 
+            this.AllowDrop = true;
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(744, 502);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.mFileTreeView);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.IsMdiContainer = ((bool)(configurationAppSettings.GetValue("frmDecon2LS.IsMdiContainer", typeof(bool))));
+            this.Menu = this.mainMenu1;
+            this.Name = "frmDecon2LS";
+            this.Text = "DeconTools_BetaV1.3.3";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.MdiChildActivate += new System.EventHandler(this.frmDecon2LS_MdiChildActivate);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragEnter);
+            this.ResumeLayout(false);
 
 		}
 		#endregion
