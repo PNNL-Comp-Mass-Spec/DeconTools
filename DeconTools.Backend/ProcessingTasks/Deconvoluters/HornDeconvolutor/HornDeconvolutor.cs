@@ -467,6 +467,7 @@ namespace DeconTools.Backend.ProcessingTasks
         #endregion
 
         #region Private Methods
+
         private void GenerateResults(DeconToolsV2.HornTransform.clsHornTransformResults[] transformResults,
        DeconToolsV2.Peaks.clsPeak[] mspeakList, ResultCollection resultList)
         {
@@ -498,15 +499,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 GetIsotopicProfile(hornResult.marr_isotope_peak_indices, mspeakList, ref profile);
 
-                profile.IntensityMostAbundant = hornResult.mint_abundance;
-                profile.IntensityMostAbundantTheor = hornResult.mint_abundance;
+                profile.IntensityMostAbundant = (float)hornResult.mdbl_abundance;
+                profile.IntensityMostAbundantTheor = (float)hornResult.mdbl_abundance;
+
                 if (NumPeaksUsedInAbundance == 1)  // fyi... this is typical
                 {
                     result.IntensityAggregate = profile.IntensityMostAbundant;
                 }
                 else
                 {
-                    result.IntensityAggregate = sumPeaks(profile, NumPeaksUsedInAbundance, hornResult.mint_abundance);
+                    result.IntensityAggregate = sumPeaks(profile, hornResult.mdbl_abundance);
                 }
 
                 profile.MonoPlusTwoAbundance = profile.GetMonoPlusTwoAbundance();
@@ -520,9 +522,11 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private double sumPeaks(IsotopicProfile profile, int NumPeaksUsedInAbundance, int defaultVal)
+        private double sumPeaks(IsotopicProfile profile, double defaultVal)
         {
-            if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
+            if (profile.Peaklist == null || profile.Peaklist.Count == 0) 
+                return defaultVal;
+
             List<float> peakListIntensities = new List<float>();
             foreach (MSPeak peak in profile.Peaklist)
             {
@@ -546,10 +550,6 @@ namespace DeconTools.Backend.ProcessingTasks
             return summedIntensities;
 
         }
-
-
-
-
 
         private void GetIsotopicProfile(int[] peakIndexList, DeconToolsV2.Peaks.clsPeak[] peakdata, ref IsotopicProfile profile)
         {
