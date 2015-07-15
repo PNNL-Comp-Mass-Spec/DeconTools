@@ -581,11 +581,13 @@ namespace DeconTools.Backend.ProcessingTasks
         private MSPeak convertDeconPeakToMSPeak(DeconToolsV2.Peaks.clsPeak deconPeak)
         {
 
-            MSPeak peak = new MSPeak();
-            peak.XValue = deconPeak.mdbl_mz;
-            peak.Width = (float)deconPeak.mdbl_FWHM;
-            peak.SignalToNoise = (float)deconPeak.mdbl_SN;
-            peak.Height = (int)deconPeak.mdbl_intensity;
+            MSPeak peak = new MSPeak
+            {
+                XValue = deconPeak.mdbl_mz,
+                Width = (float)deconPeak.mdbl_FWHM,
+                SignalToNoise = (float)deconPeak.mdbl_SN,
+                Height = (float)deconPeak.mdbl_intensity
+            };
 
             return peak;
         }
