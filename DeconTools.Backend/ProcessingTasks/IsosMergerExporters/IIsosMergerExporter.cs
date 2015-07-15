@@ -15,5 +15,10 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             MergeAndExport(resultList);
         }
+
+        protected string DblToString(double value, byte digitsOfPrecision)
+        {
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+        }
     }
 }

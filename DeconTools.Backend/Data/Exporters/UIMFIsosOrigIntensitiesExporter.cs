@@ -107,19 +107,19 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.GetAbundance());
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetMZ().ToString("0.#####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetScore().ToString("0.####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetScore(), 4));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.AverageMass.ToString("0.#####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.AverageMass, 5));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.MonoIsotopicMass, 5));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.MostAbundantIsotopeMass, 5));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetFWHM().ToString("0.####"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetFWHM(), 4));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.GetMonoAbundance());
                 sb.Append(delimiter);
@@ -131,9 +131,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(origIntensitiesCollection[counter].totIsotopicOrginalIntens);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IMSScanSet.DriftTime.ToString("0.###"));
+                sb.Append(DblToString(uimfResult.IMSScanSet.DriftTime, 3));
                 sb.Append(delimiter);
-                sb.Append((uimfResult.IMSScanSet.DriftTime * (uimfResult.ScanSet.PrimaryScanNumber + 1)).ToString("0.##"));     //PrimaryFrame is 0-based; so need to add one for calculation to be correct.
+                sb.Append(DblToString(uimfResult.IMSScanSet.DriftTime * (uimfResult.ScanSet.PrimaryScanNumber + 1), 2));     //PrimaryFrame is 0-based; so need to add one for calculation to be correct.
 
                 sw.WriteLine(sb.ToString());
 

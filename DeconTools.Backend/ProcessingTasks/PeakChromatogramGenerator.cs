@@ -186,7 +186,6 @@ namespace DeconTools.Backend.ProcessingTasks
                     {
                         throw new NotSupportedException("Don't use this method if you already know your MZ target.");
                     }
-                    break;
                 case Globals.ChromatogramGeneratorMode.TOP_N_PEAKS:
                     {
                         targetMZList = getTargetMZListForTopNPeaks(theorIso);

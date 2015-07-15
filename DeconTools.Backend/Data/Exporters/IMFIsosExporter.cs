@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -49,21 +50,21 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 1));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.Score.ToString("0.####"));		// Fit Score
+                sb.Append(DblToString(result.IsotopicProfile.Score, 4));		// Fit Score
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetFWHM().ToString("0.####"));
+                sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+                sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.GetMonoAbundance());
                 sb.Append(delimiter);
@@ -81,5 +82,6 @@ namespace DeconTools.Backend.Data
 
             sw.Close();
         }
+
     }
 }

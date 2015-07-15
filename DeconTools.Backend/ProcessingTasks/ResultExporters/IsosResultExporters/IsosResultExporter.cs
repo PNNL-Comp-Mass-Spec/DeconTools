@@ -79,6 +79,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
         #region Private Methods
+
+        protected string DblToString(double value, byte digitsOfPrecision)
+        {
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+        }
+
         #endregion
 
     }

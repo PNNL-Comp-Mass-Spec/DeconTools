@@ -26,7 +26,7 @@ namespace DeconTools.Backend.FileIO
 
         public void ExportAlignmentInfo(clsAlignmentFunction alignmentInfo)
         {
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
             using (StreamWriter writer = File.AppendText(this.FileName))
             {
 

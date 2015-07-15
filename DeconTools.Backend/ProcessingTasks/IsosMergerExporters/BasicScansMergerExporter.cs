@@ -75,13 +75,13 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
             sb.Append(getScanNumber(scanresult.ScanSet.PrimaryScanNumber));
             sb.Append(delimiter);
-            sb.Append(scanresult.ScanTime.ToString("0.####"));
+            sb.Append(DblToString(scanresult.ScanTime, 4));
             sb.Append(delimiter);
             sb.Append(scanresult.SpectrumType);
             sb.Append(delimiter);
             sb.Append(scanresult.BasePeak.Height);
             sb.Append(delimiter);
-            sb.Append(scanresult.BasePeak.XValue.ToString("0.#####"));
+            sb.Append(DblToString(scanresult.BasePeak.XValue, 5));
             sb.Append(delimiter);
             sb.Append(scanresult.ScanSet.TICValue);
             sb.Append(delimiter);

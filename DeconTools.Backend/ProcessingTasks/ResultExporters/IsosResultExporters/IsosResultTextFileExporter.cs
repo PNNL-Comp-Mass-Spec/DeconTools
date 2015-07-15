@@ -25,7 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #region Public Methods
         public override void ExportIsosResults(List<IsosResult> isosResultList)
         {
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
             using (StreamWriter writer = File.AppendText(this.FileName))
             {
                 foreach (IsosResult result in isosResultList)
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         protected virtual void initializeAndWriteHeader()
         {
 
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
 
             try
             {

@@ -31,13 +31,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
             sb.Append(uimfScanResult.LCScanNum);
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.ScanTime.ToString("0.###"));
+            sb.Append(DblToString(uimfScanResult.ScanTime, 3));
             sb.Append(Delimiter);
             sb.Append(result.SpectrumType);
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.BasePeak.Height);
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.BasePeak.XValue.ToString("0.#####"));
+            sb.Append(DblToString(uimfScanResult.BasePeak.XValue, 5));
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.TICValue);
             sb.Append(Delimiter);
@@ -45,9 +45,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(Delimiter);
             sb.Append(uimfScanResult.NumIsotopicProfiles);
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.FramePressureUnsmoothed.ToString("0.#####"));
+            sb.Append(DblToString(uimfScanResult.FramePressureUnsmoothed, 5));
             sb.Append(Delimiter);
-            sb.Append(uimfScanResult.FramePressureSmoothed.ToString("0.#####"));
+            sb.Append(DblToString(uimfScanResult.FramePressureSmoothed, 5));
 
             return sb.ToString();
 

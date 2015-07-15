@@ -29,7 +29,7 @@ namespace DeconTools.Backend.FileIO
         #region Public Methods
         public static ExporterBase<IsosResult> CreateMSFeatureExporter(Globals.ExporterType exporterType, Globals.MSFileType msFileType, string outputFileName)
         {
-            Check.Assert(outputFileName != null || outputFileName.Length > 0, "MSFeatureExporterFactory cannot work. OutputFileName is empty - which is bad.");
+            Check.Assert(!string.IsNullOrEmpty(outputFileName), "MSFeatureExporterFactory cannot work. OutputFileName is empty - which is bad.");
             ExporterBase<IsosResult> msFeatureExporter;
 
             switch (exporterType)

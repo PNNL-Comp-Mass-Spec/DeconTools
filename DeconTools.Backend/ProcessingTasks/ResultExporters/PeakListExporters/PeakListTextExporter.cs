@@ -144,13 +144,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             }
             sb.Append(peak.Scan_num);
             sb.Append(m_delimiter);
-            sb.Append(peak.MSPeak.XValue.ToString("0.#####"));
+            sb.Append(DblToString(peak.MSPeak.XValue, 5));
             sb.Append(m_delimiter);
             sb.Append(peak.MSPeak.Height);
             sb.Append(m_delimiter);
-            sb.Append(peak.MSPeak.Width.ToString("0.####"));
+            sb.Append(DblToString(peak.MSPeak.Width, 4));
             sb.Append(m_delimiter);
-            sb.Append(peak.MSPeak.SignalToNoise.ToString("0.##"));
+            sb.Append(DblToString(peak.MSPeak.SignalToNoise, 2));
             sb.Append(m_delimiter);
             sb.Append(peak.MSPeak.MSFeatureID);
             sb.Append(Environment.NewLine);
@@ -186,7 +186,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         protected void initializeAndWriteHeader()
         {
 
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
 
             try
             {

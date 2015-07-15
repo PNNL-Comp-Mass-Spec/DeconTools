@@ -57,7 +57,7 @@ namespace DeconTools.Backend.FileIO
         protected virtual void initializeAndWriteHeader()
         {
 
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
 
             try
             {
@@ -85,7 +85,7 @@ namespace DeconTools.Backend.FileIO
 
         public override void ExportResults(IEnumerable<T> resultList)
         {
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
             using (StreamWriter writer = File.AppendText(this.FileName))
             {
                 foreach (T result in resultList)

@@ -19,6 +19,12 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Private Methods
+
+        protected string DblToString(double value, byte digitsOfPrecision)
+        {
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+        }
+
         #endregion
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Utilities;
+using PNNLOmics.Utilities;
 
 namespace DeconTools.Backend.Core
 {
@@ -63,7 +61,7 @@ namespace DeconTools.Backend.Core
         public override void DisplayToConsole()
         {
             base.DisplayToConsole();
-            Console.WriteLine("Ratio = \t" + this.RatioN14N15.ToString("0.##"));
+            Console.WriteLine("Ratio = \t" + StringUtilities.DblToString(this.RatioN14N15, 2));
         }
 
 

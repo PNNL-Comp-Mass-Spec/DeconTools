@@ -45,7 +45,7 @@ namespace DeconTools.Backend.FileIO
         #region Public Methods
         public override void ExportResults(IEnumerable<T> resultList)
         {
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
             Check.Assert(m_dbConnection != null, String.Format("{0} failed. No connection was made to a database", this.Name));
             Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, String.Format("{0} failed. Connection to database is not open", this.Name));
 
@@ -147,7 +147,7 @@ namespace DeconTools.Backend.FileIO
 
         protected virtual string buildCreateTableSQLiteCommandString()
         {
-            Check.Assert(this.TableName != null && this.TableName.Length > 0, String.Format("SQLite TableName has not been declared within {0}.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(this.TableName), String.Format("SQLite TableName has not been declared within {0}.", this.Name));
             Check.Assert(this.FieldList != null && this.FieldList.Count > 0, String.Format("SQLite Table fields have not been declared within {0}.", this.Name));
 
             StringBuilder sb = new StringBuilder();

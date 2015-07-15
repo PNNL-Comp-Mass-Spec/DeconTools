@@ -18,7 +18,7 @@ namespace DeconTools.Backend.FileIO
       
         public void ExportAlignmentInfo(clsAlignmentFunction alignmentInfo)
         {
-            Check.Assert(this.FileName != null && this.FileName.Length > 0, this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
 
             Check.Require(alignmentInfo != null, "Alignment object is empty");
             Check.Require(alignmentInfo.marrMassFncMZInput != null && alignmentInfo.marrMassFncMZInput.Length > 0, "Mass alignment data is empty.");

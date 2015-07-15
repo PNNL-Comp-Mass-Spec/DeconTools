@@ -88,19 +88,19 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.IntensityAggregate);
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetMZ().ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetMZ(), 5));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetScore().ToString("0.####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetScore(), 4));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.AverageMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.AverageMass, 5));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.MonoIsotopicMass, 5));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.MostAbundantIsotopeMass, 5));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetFWHM().ToString("0.####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetFWHM(), 4));
             sb.Append(delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.GetMonoAbundance());
             sb.Append(delimiter);
@@ -110,11 +110,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(delimiter);
             sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(delimiter);
-            sb.Append(uimfResult.DriftTime.ToString("0.###"));
+            sb.Append(DblToString(uimfResult.DriftTime, 3));
             sb.Append(delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(delimiter);
-            sb.Append(uimfResult.InterferenceScore.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.InterferenceScore, 5));
 
 
             return sb.ToString();

@@ -44,5 +44,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 resultList.MSPeakResultList.Clear();
             }
         }
+
+        protected string DblToString(double value, byte digitsOfPrecision)
+        {
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+        }
+   
     }
 }

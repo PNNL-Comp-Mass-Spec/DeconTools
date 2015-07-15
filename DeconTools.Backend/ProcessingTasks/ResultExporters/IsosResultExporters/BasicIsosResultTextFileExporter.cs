@@ -4,7 +4,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class BasicIsosResultTextFileExporter :IsosResultTextFileExporter
+    public class BasicIsosResultTextFileExporter : IsosResultTextFileExporter
     {
       
         #region Constructors
@@ -42,19 +42,19 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(result.IntensityAggregate);
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetMZofMostAbundantPeak().ToString("0.#####"));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
+            sb.Append(DblToString(result.IsotopicProfile.GetMZofMostAbundantPeak(), 5));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));				// Fit score
+            sb.Append(DblToString(result.IsotopicProfile.Score, 4));				// Fit score
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetFWHM().ToString("0.####"));
+            sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+            sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.GetMonoAbundance());
             sb.Append(Delimiter);
@@ -62,7 +62,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
-            sb.Append(result.InterferenceScore.ToString("0.#####"));
+            sb.Append(DblToString(result.InterferenceScore, 5));
 			// Uncomment to write out the fit_count_basis
 			//sb.Append(Delimiter);
 			//sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score

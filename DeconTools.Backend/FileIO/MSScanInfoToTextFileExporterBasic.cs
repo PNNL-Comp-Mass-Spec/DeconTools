@@ -25,13 +25,13 @@ namespace DeconTools.Backend.FileIO
             StringBuilder sb = new StringBuilder();
             sb.Append(result.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
-            sb.Append(result.ScanTime.ToString("0.####"));
+            sb.Append(DblToString(result.ScanTime, 4));
             sb.Append(Delimiter);
             sb.Append(result.SpectrumType);
             sb.Append(Delimiter);
             sb.Append(result.BasePeak.Height);
             sb.Append(Delimiter);
-            sb.Append(result.BasePeak.XValue.ToString("0.#####"));
+            sb.Append(DblToString(result.BasePeak.XValue, 5));
             sb.Append(Delimiter);
             sb.Append(result.ScanSet.TICValue);
             sb.Append(Delimiter);

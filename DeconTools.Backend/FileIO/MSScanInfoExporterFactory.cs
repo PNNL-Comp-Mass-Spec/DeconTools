@@ -20,7 +20,7 @@ namespace DeconTools.Backend.FileIO
         public static ExporterBase<ScanResult> CreateMSScanInfoExporterFactory(Globals.ExporterType exporterType, 
             Globals.MSFileType msFileType, string outputFileName)
         {
-            Check.Assert(outputFileName != null || outputFileName.Length > 0, "MSScanInfoExporterFactory cannot work. OutputFileName is empty - which is bad.");
+            Check.Assert(!string.IsNullOrEmpty(outputFileName), "MSScanInfoExporterFactory cannot work. OutputFileName is empty - which is bad.");
             ExporterBase<ScanResult> msFeatureExporter;
 
 

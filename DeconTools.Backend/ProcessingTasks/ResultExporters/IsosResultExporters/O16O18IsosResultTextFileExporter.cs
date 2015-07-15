@@ -48,19 +48,19 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(o16o18result.IsotopicProfile.GetAbundance());
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.GetMZofMostAbundantPeak().ToString("0.#####"));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
+            sb.Append(DblToString(o16o18result.IsotopicProfile.GetMZofMostAbundantPeak(), 5));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.Score.ToString("0.####"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.Score, 4));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.AverageMass.ToString("0.#####"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.AverageMass, 5));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.MonoIsotopicMass, 5));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.MostAbundantIsotopeMass, 5));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.GetFWHM().ToString("0.####"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.GetFWHM(), 4));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+            sb.Append(DblToString(o16o18result.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
             sb.Append(o16o18result.IsotopicProfile.GetMonoAbundance());
             sb.Append(Delimiter);
@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(o16o18result.Flags));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.InterferenceScore.ToString("0.#####"));
+            sb.Append(DblToString(o16o18result.InterferenceScore, 5));
             return sb.ToString();
         }
 

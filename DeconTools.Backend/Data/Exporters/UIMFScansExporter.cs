@@ -42,13 +42,13 @@ namespace DeconTools.Backend.Data
                 sb = new StringBuilder();
                 sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.ScanTime.ToString("0.###"));
+                sb.Append(DblToString(uimfResult.ScanTime, 3));
                 sb.Append(delimiter);
                 sb.Append(result.SpectrumType);
                 sb.Append(delimiter);
                 sb.Append(uimfResult.BasePeak.Height);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.BasePeak.XValue.ToString("0.#####"));
+                sb.Append(DblToString(uimfResult.BasePeak.XValue, 5));
                 sb.Append(delimiter);
                 sb.Append(uimfResult.TICValue);
                 sb.Append(delimiter);
@@ -56,9 +56,9 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(uimfResult.NumIsotopicProfiles);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.FramePressureUnsmoothed.ToString("0.####"));
+                sb.Append(DblToString(uimfResult.FramePressureUnsmoothed, 4));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.FramePressureSmoothed.ToString("0.####"));
+                sb.Append(DblToString(uimfResult.FramePressureSmoothed, 4));
                 
                 sw.WriteLine(sb.ToString());
             }

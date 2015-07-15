@@ -41,13 +41,13 @@ namespace DeconTools.Backend.Data
                 sb = new StringBuilder();
                 sb.Append(result.ScanSet.PrimaryScanNumber);   
                 sb.Append(delimiter);
-                sb.Append(result.ScanTime.ToString("0.####"));
+                sb.Append(DblToString(result.ScanTime, 4));
                 sb.Append(delimiter);
                 sb.Append(result.SpectrumType);
                 sb.Append(delimiter);
                 sb.Append(result.BasePeak.Height);
                 sb.Append(delimiter);
-                sb.Append(result.BasePeak.XValue.ToString("0.#####"));
+                sb.Append(DblToString(result.BasePeak.XValue, 5));
                 sb.Append(delimiter);
                 sb.Append(result.ScanSet.TICValue);
                 sb.Append(delimiter);

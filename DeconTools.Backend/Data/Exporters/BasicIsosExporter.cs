@@ -34,30 +34,32 @@ namespace DeconTools.Backend.Data
             }
             sw.WriteLine(headerLine);
 
-            foreach (StandardIsosResult result in results.ResultList)
+            foreach (var isosResult in results.ResultList)
             {
+                var result = (StandardIsosResult)isosResult;
+
                 sb = new StringBuilder();
                 sb.Append(getScanNumber(result.ScanSet.PrimaryScanNumber));       
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 1));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.Score.ToString("0.####"));		// Fit Score
+                sb.Append(DblToString(result.IsotopicProfile.Score, 4));		// Fit Score
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
                 sb.Append(delimiter);
                 //     this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
 
-                sb.Append(result.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+                sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetFWHM().ToString("0.####"));
+                sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+                sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.GetMonoAbundance());
                 sb.Append(delimiter);

@@ -27,19 +27,19 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.GetAbundance());
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetMZ().ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.Score.ToString("0.####"));
+            sb.Append(DblToString(result.IsotopicProfile.Score, 4));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.AverageMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+            sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetFWHM().ToString("0.####"));
+            sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+            sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.GetMonoAbundance());
             sb.Append(Delimiter);
@@ -47,7 +47,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
-            sb.Append(result.InterferenceScore.ToString("0.#####"));
+            sb.Append(DblToString(result.InterferenceScore, 5));
             return sb.ToString();
         }
 

@@ -28,19 +28,19 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(uimfResult.IsotopicProfile.GetAbundance());
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetMZ().ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetMZ(), 5));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetScore().ToString("0.####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetScore(), 4));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.AverageMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.AverageMass, 5));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.MonoIsotopicMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.MonoIsotopicMass, 5));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.MostAbundantIsotopeMass.ToString("0.#####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.MostAbundantIsotopeMass, 5));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetFWHM().ToString("0.####"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetFWHM(), 4));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.IsotopicProfile.GetSignalToNoise().ToString("0.##"));
+            sb.Append(DblToString(uimfResult.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
             sb.Append(uimfResult.IsotopicProfile.GetMonoAbundance());
             sb.Append(Delimiter);
@@ -50,11 +50,11 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
             sb.Append(Delimiter);
-            sb.Append(uimfResult.DriftTime.ToString("0.###"));
+            sb.Append(DblToString(uimfResult.DriftTime, 3));
             sb.Append(Delimiter);
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
-            sb.Append(uimfResult.InterferenceScore.ToString("0.####"));
+            sb.Append(DblToString(uimfResult.InterferenceScore, 4));
 
 
             return sb.ToString();
