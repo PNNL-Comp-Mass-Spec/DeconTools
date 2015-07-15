@@ -127,7 +127,6 @@ namespace DeconTools.Backend.Runs
         {
             //TODO: Update upon error fix....  the YAFMS library is throwing an error if I give an m/z outside it's expected range. So until that is fixed, I'll go get all the m/z values and trim them myself
 
-            bool alreadyFiltered = false;
             double[] xvals = null;
             float[] yvals = null;
 
@@ -141,7 +140,6 @@ namespace DeconTools.Backend.Runs
                 yvals = new float[0];
 
                 this.getSummedSpectrum(scanset, ref xvals, ref yvals, minMZ, maxMZ);
-                alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
             XYData xydata = new XYData();

@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5674		July 15, 2015	mem
+	- Added DblToString() for formatting double values as strings, limiting the number of decimal places shown
+
 Autoprocessor_1.0.5518		February 9, 2015	mem
 	- Moved acqus and apexAcquisition.method file reading into BrukerDataReader.DLL
 	- BrukerCalibrationData now inherits from BrukerDataReader.GlobalParameters

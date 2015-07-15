@@ -52,7 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
@@ -68,9 +68,9 @@ namespace DeconTools.Backend.ProcessingTasks
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMonoAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
 
                 sw.WriteLine(sb.ToString());
             }

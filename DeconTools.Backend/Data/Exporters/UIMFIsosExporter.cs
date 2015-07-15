@@ -111,7 +111,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetAbundance());
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetAbundance(), 4, true));
                 sb.Append(delimiter);
                 sb.Append(DblToString(uimfResult.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
@@ -127,11 +127,11 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(DblToString(uimfResult.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetMonoAbundance());
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetMonoAbundance(), 4, true));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance());
+                sb.Append(DblToString(uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
                 sb.Append(delimiter);
-                sb.Append(uimfResult.IsotopicProfile.OriginalIntensity);
+                sb.Append(DblToString(uimfResult.IsotopicProfile.OriginalIntensity, 4, true));
                 sb.Append(delimiter);
                 sb.Append(uimfResult.IsotopicProfile.IsSaturated ? 1 : 0);
                 sb.Append(delimiter);

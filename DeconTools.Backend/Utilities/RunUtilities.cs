@@ -94,7 +94,7 @@ namespace DeconTools.Backend.Utilities
             {
                 attr = File.GetAttributes(datasetPath);
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

@@ -14,9 +14,9 @@ namespace DeconTools.Backend.Data
 
         public abstract void Export(T results);
 
-        protected string DblToString(double value, byte digitsOfPrecision)
+        protected string DblToString(double value, byte digitsAfterDecimal, bool limitDecimalsForLargeValues = false)
         {
-            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsAfterDecimal, limitDecimalsForLargeValues);
         }
    
     }

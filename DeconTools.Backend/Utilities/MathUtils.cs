@@ -229,8 +229,8 @@ namespace DeconTools.Backend.Utilities
             catch (Exception ex)
             {
                 IqLogger.IqLogger.Log.Fatal(
-                    "--------------------------------------------------------------------------------------------------> FATAL error occurred during linear regression. xval length= " +
-                    xvals.Length + "; yval length= " + yvals.Length + "; " + regressionReport.cvavgerror);
+                    "----> FATAL error occurred during linear regression. xval length= " +
+                    xvals.Length + "; yval length= " + yvals.Length + "; " + regressionReport.cvavgerror + ", " + ex.Message);
 
                 slope = -99999999;
                 intercept = -9999999;

@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(o16o18result.IsotopicProfile.ChargeState);
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.GetAbundance());
+            sb.Append(DblToString(o16o18result.IsotopicProfile.GetAbundance(), 4, true));
             sb.Append(Delimiter);
             sb.Append(DblToString(o16o18result.IsotopicProfile.GetMZofMostAbundantPeak(), 5));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
             sb.Append(Delimiter);
@@ -62,13 +62,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(Delimiter);
             sb.Append(DblToString(o16o18result.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.GetMonoAbundance());
+            sb.Append(DblToString(o16o18result.IsotopicProfile.GetMonoAbundance(), 4, true));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.MonoPlus2Abundance);
+            sb.Append(DblToString(o16o18result.MonoPlus2Abundance, 4, true));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.MonoPlus4Abundance);
+            sb.Append(DblToString(o16o18result.MonoPlus4Abundance, 4, true));
             sb.Append(Delimiter);
-            sb.Append(o16o18result.MonoMinus4Abundance);
+            sb.Append(DblToString(o16o18result.MonoMinus4Abundance, 4, true));
             sb.Append(Delimiter);
 
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(o16o18result.Flags));

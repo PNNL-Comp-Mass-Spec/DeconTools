@@ -146,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             sb.Append(m_delimiter);
             sb.Append(DblToString(peak.MSPeak.XValue, 5));
             sb.Append(m_delimiter);
-            sb.Append(peak.MSPeak.Height);
+            sb.Append(DblToString(peak.MSPeak.Height, 4, true));
             sb.Append(m_delimiter);
             sb.Append(DblToString(peak.MSPeak.Width, 4));
             sb.Append(m_delimiter);

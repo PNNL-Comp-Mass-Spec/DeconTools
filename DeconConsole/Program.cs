@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "July 14, 2015";
+        public const string PROGRAM_DATE = "July 15, 2015";
         
         static int Main(string[] args)
         {
@@ -19,8 +19,8 @@ namespace DeconConsole
                 return 1;
             }
 
-            string filename = args[0];
-            string parameterFilename = args[1];
+            var filename = args[0];
+            var parameterFilename = args[1];
 
             string outputFolder = null;
             if (args.Length == 3)
@@ -82,7 +82,7 @@ namespace DeconConsole
                 Console.WriteLine("** NOTE: See log file for more details.");
                 Console.WriteLine();
 
-                int errorCode = ex.Message.GetHashCode();
+                var errorCode = ex.Message.GetHashCode();
                 if (errorCode != 0)
                     return errorCode;
                 else
@@ -125,12 +125,12 @@ namespace DeconConsole
 
         private static string GetAppVersion()
         {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " (" + PROGRAM_DATE + ")";
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version + " (" + PROGRAM_DATE + ")";
         }
 
         private static void ReportSyntax()
         {
-            string exeName = System.IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var exeName = Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             Console.WriteLine();
             Console.WriteLine("This program will accept 2 or 3 arguments (with spaces between).");

@@ -25,7 +25,7 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(result.IsotopicProfile.ChargeState);
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetAbundance());
+            sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
             sb.Append(Delimiter);
             sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
             sb.Append(Delimiter);
@@ -41,9 +41,9 @@ namespace DeconTools.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetMonoAbundance());
+            sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
             sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
+            sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
             sb.Append(Delimiter);
             sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);

@@ -87,7 +87,6 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
             int totScans = this.GetNumMSScans();
-            bool alreadyFiltered = false;
 
             double[] xvals = new double[0];
             double[] yvals = new double[0];
@@ -99,7 +98,6 @@ namespace DeconTools.Backend.Runs
             else
             {
                 this.getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
-                alreadyFiltered = true;       //summing will filter the values.... no need to repeat it below.
             }
 
             XYData xydata = new XYData();

@@ -21,11 +21,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             sb.Append(Delimiter);
             sb.Append(result.SpectrumType);
             sb.Append(Delimiter);
-            sb.Append(result.BasePeak.Height);
+            sb.Append(DblToString(result.BasePeak.Height, 4, true));
             sb.Append(Delimiter);
             sb.Append(DblToString(result.BasePeak.XValue, 5));
             sb.Append(Delimiter);
-            sb.Append(result.ScanSet.TICValue);
+            sb.Append(DblToString(result.ScanSet.TICValue, 4, true));
             sb.Append(Delimiter);
             sb.Append(result.NumPeaks);
             sb.Append(Delimiter);

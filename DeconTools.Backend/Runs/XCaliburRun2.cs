@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Runs
     public class XCaliburRun2 : Run
     {
 
-        private MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
+        private readonly MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
 
         #region Constructors
         public XCaliburRun2()
@@ -413,9 +413,9 @@ namespace DeconTools.Backend.Runs
 
                 }
             }
-            catch (System.AccessViolationException ex)
+            catch (System.AccessViolationException)
             {
-                string errorMessage = "XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
+                var errorMessage = "XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
                                       "; possibly a corrupt .Raw file";
                 Console.WriteLine(errorMessage);
                 Logger.Instance.AddEntry(errorMessage);
@@ -507,7 +507,7 @@ namespace DeconTools.Backend.Runs
             {
                 _msfileReader.Close();
             }
-            catch (AccessViolationException ex)
+            catch (AccessViolationException)
             {
                // Ignore errors here
             }

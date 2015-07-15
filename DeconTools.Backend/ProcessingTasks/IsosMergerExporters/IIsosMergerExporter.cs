@@ -16,9 +16,9 @@ namespace DeconTools.Backend.ProcessingTasks
             MergeAndExport(resultList);
         }
 
-        protected string DblToString(double value, byte digitsOfPrecision)
+        protected string DblToString(double value, byte digitsAfterDecimal, bool limitDecimalsForLargeValues = false)
         {
-            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsOfPrecision);
+            return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsAfterDecimal, limitDecimalsForLargeValues);
         }
     }
 }

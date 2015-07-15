@@ -16,7 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             UIMFRun uimfRun = (UIMFRun)resultList.Run;
             float ticValue = uimfRun.GetTIC(uimfRun.CurrentScanSet.PrimaryScanNumber, uimfRun.CurrentIMSScanSet.PrimaryScanNumber);
-            uimfRun.CurrentIMSScanSet.TICValue = (float)ticValue;
+            uimfRun.CurrentIMSScanSet.TICValue = ticValue;
         }
     }
 }

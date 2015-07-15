@@ -139,7 +139,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             catch (Exception ex)
             {
-                IqLogger.Log.Fatal("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FATAL ERROR in CHrom correlator !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                IqLogger.Log.Fatal("!! FATAL ERROR in Chrom correlator !! " + ex.Message);
                 
             }
         }

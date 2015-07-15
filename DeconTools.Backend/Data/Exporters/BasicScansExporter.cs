@@ -45,11 +45,11 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.SpectrumType);
                 sb.Append(delimiter);
-                sb.Append(result.BasePeak.Height);
+                sb.Append(DblToString(result.BasePeak.Height, 4, true));
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.BasePeak.XValue, 5));
                 sb.Append(delimiter);
-                sb.Append(result.ScanSet.TICValue);
+                sb.Append(DblToString(result.ScanSet.TICValue, 4, true));
                 sb.Append(delimiter);
                 sb.Append(result.NumPeaks);
                 sb.Append(delimiter);

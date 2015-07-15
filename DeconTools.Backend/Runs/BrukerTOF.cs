@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Runs
     {
         
         private EDAL.IMSAnalysis _msAnalysis;
-        private MSSpectrumCollection _spectrumCollection;
+        private readonly MSSpectrumCollection _spectrumCollection;
 
         public BrukerTOF()
         {

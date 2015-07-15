@@ -210,7 +210,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             List<IqTarget> iqTargetList = new List<IqTarget>();
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            int currentListPos = 0;
 
             using (var cnn = fact.CreateConnection())
             {

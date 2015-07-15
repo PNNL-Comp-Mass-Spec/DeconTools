@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 1));
+                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
                 sb.Append(delimiter);
@@ -66,11 +66,11 @@ namespace DeconTools.Backend.Data
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMonoAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.GetMonoPlusTwoAbundance());
+                sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
                 sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.OriginalIntensity);
+                sb.Append(DblToString(result.IsotopicProfile.OriginalIntensity, 4, true));
                 sb.Append(delimiter);
                 sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);
 				// Uncomment to write out the fit_count_basis

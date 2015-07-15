@@ -116,10 +116,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             List<IsotopicProfile> myIsotopicProfiles = new List<IsotopicProfile>();
             List<IsotopicProfile> otherIsotopicProfiles = new List<IsotopicProfile>();
-            int hitcounter = 0;
-            int hitcounter2 = 0;
-            int hitcounter3 = 0;
-            int hitcounter4 = 0;
             #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
@@ -250,8 +246,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 }
 
-                string reportstring;
-
                 IsotopicProfile msfeature = null;//Paul Addition "=null"
                 if (potentialMSFeaturesForGivenChargeState.Count == 0)
                 {
@@ -278,12 +272,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                     isotopicProfile.ChargeState + "\t" + isotopicProfile.Score + "\t" + ppmTolerance + "\n");
                     }
                     stringBuilder.Append(Environment.NewLine);
-
-                    #region Paul addition
-                    //paul addition
-                    IsotopicProfile mymsFeature = null;
-                    #endregion
-
 
                     if (Parameters.CheckAllPatternsAgainstChargeState1)
                     {

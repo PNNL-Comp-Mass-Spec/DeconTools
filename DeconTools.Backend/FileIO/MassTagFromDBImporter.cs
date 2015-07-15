@@ -116,7 +116,7 @@ namespace DeconTools.Backend.FileIO
                         {
                             baseEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(baseEmpiricalFormula, modString);
                         }
-                        catch (Exception ex)
+                        catch
                         {
                             Console.WriteLine("Failed to calculate empirical formula for the Target " + peptide.ID +
                                               "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
@@ -131,7 +131,7 @@ namespace DeconTools.Backend.FileIO
                 {
                     peptide.EmpiricalFormula = baseEmpiricalFormula;
                 }
-                catch (Exception ex)
+                catch
                 {
                     Console.WriteLine("Failed to calculate empirical formula for the Target " + peptide.ID +
                                              "; Cannot parse this formula: " + peptide.EmpiricalFormula + "; This Target was NOT imported!!");
