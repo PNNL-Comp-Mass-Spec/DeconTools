@@ -254,6 +254,7 @@ namespace DeconTools.Workflows.Backend.Core
                 if (importer.DataRowsProcessed == importer.DataRowsSkippedUnknownMods)
                 {
                     ReportGeneralProgress("Error: every peptide in the mass tags file had an unknown modification; cannot continue; see " + massTagFileName);
+                    ReportGeneralProgress("   ... can only process peptides that are unmodified or have Acetylation (C2H2O, 42.01 Da), Phosphorylation (HPO3, 79.97 Da), or Pyroglutomate (H3N1, 17.03 Da) mods");
                 }
             }
 

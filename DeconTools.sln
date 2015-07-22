@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Backend", "DeconTools.Backend\DeconTools.Backend.csproj", "{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole1", "TestConsole1\TestConsole1.csproj", "{F6400614-6098-4163-93BB-42DBFE0850F6}"
@@ -32,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE90075-DA17-4B3A-BF55-EB490CE08B33}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "IQ_Installer", "IQ_Installer\IQ_Installer.vdproj", "{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowConsoleDMS", "DeconTools.Workflows\TargetedWorkflowConsoleDMS\TargetedWorkflowConsoleDMS.csproj", "{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +120,12 @@ Global
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Debug DLLs|x86.ActiveCfg = Debug
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Debug|x86.ActiveCfg = Debug
 		{13BBE2EA-AB73-4852-B985-B8C4AD5651E1}.Release|x86.ActiveCfg = Release
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Debug DLLs|x86.ActiveCfg = Debug|x86
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Debug DLLs|x86.Build.0 = Debug|x86
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Debug|x86.ActiveCfg = Debug|x86
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Debug|x86.Build.0 = Debug|x86
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Release|x86.ActiveCfg = Release|x86
+		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

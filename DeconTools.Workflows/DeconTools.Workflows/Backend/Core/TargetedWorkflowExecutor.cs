@@ -133,7 +133,7 @@ namespace DeconTools.Workflows.Backend.Core
             Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
 
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
-                         "Target massTags is empty. Check the path to the massTag data file.");
+                         "Target massTags is empty (or all peptides contain unknown modifications). Check the path to the massTag data file.");
 
             IqLogger.Log.Info("Total targets loaded= " + Targets.TargetList.Count);
 
@@ -785,7 +785,16 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (_backgroundWorker == null)
             {
-                IqLogger.Log.Info(generalProgressString);
+                if (generalProgressString.IndexOf('\r') >= 0 ||
+                    generalProgressString.IndexOf('\n') >= 0)
+                {
+                    IqLogger.Log.Info(generalProgressString);
+                }
+                else
+                {
+                    IqLogger.Log.Info(generalProgressString + Environment.NewLine);
+                }
+
                 //Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
             }
             else
