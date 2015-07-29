@@ -34,11 +34,12 @@ namespace DeconTools.Workflows.Backend.Core
         protected WorkflowParameters _workflowParameters;
 
         protected BackgroundWorker _backgroundWorker;
-        private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
+        private readonly TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
         private string _alignmentFolder;
 
         #region Constructors
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+
+        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
             RunIsDisposed = true;
@@ -53,14 +54,14 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
             RunIsDisposed = true;
 
             _backgroundWorker = backgroundWorker;
 
-            this.WorkflowParameters = workflowExecutorParameters;
+            this.WorkflowParameters = parameters;
 
             TargetedWorkflow = targetedWorkflow;
 
@@ -69,27 +70,27 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             this.DatasetPath = datasetPath;
             RunIsDisposed = true;
 
             _backgroundWorker = backgroundWorker;
 
-            this.WorkflowParameters = workflowExecutorParameters;
+            this.WorkflowParameters = parameters;
             _workflowParameters = workflowParameters;
 
             ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
 
-        public TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
         {
             Run = run;
             RunIsDisposed = true;
 
-            if (Run != null) DatasetPath = Run.DataSetPath;
+            if (Run != null) 
+                DatasetPath = Run.DataSetPath;
 
             _backgroundWorker = backgroundWorker;
 
@@ -100,7 +101,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public override void InitializeWorkflow()
+        public void InitializeWorkflow()
         {
             if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
@@ -108,7 +109,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
+                _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
             }
 
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
@@ -117,7 +118,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
             string currentTargetsFilePath;
 
@@ -186,7 +187,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetCollection Targets { get; set; }
 
-        public override WorkflowParameters WorkflowParameters
+        public WorkflowParameters WorkflowParameters
         {
             get
             {
@@ -317,7 +318,7 @@ namespace DeconTools.Workflows.Backend.Core
             var targetsBaseFolder = ExecutorParameters.TargetsBaseFolder;
             if (string.IsNullOrEmpty(ExecutorParameters.TargetsBaseFolder))
             {
-                targetsBaseFolder = ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "Targets";
+                targetsBaseFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Targets");
             }
 
             var dirinfo = new DirectoryInfo(targetsBaseFolder);
@@ -426,11 +427,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
-                alignmentFolder = RunUtilities.GetDatasetParentFolder(DatasetPath) + "\\" + "AlignmentInfo";
+                alignmentFolder = Path.Combine(RunUtilities.GetDatasetParentFolder(DatasetPath), "AlignmentInfo");
             }
             else
             {
-                alignmentFolder = ExecutorParameters.OutputFolderBase + "\\AlignmentInfo";
+                alignmentFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "AlignmentInfo");
             }
 
             if (!Directory.Exists(alignmentFolder))
@@ -458,7 +459,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //first look for _fht.txt file (MSGF output)
-            string targetsForAlignmentFilePath = _alignmentFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_msgf_fht.txt";
+            string targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgf_fht.txt");
 
             if (File.Exists(targetsForAlignmentFilePath))
             {
@@ -482,7 +483,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                loggingFolder = ExecutorParameters.OutputFolderBase + "\\Logs";
+                loggingFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Logs");
             }
 
             try
@@ -498,7 +499,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            _loggingFileName = loggingFolder + "\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
+            _loggingFileName = Path.Combine(loggingFolder, RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
         }
 
 
@@ -643,8 +644,6 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual void ExportData()
         {
 
-
-
             string outputFileName = GetOutputFileName();
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
@@ -664,30 +663,43 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         protected virtual void ExecutePreProcessingHook() { }
 
-
+        /// <summary>
+        /// Output file path
+        /// </summary>
+        /// <returns></returns>
         protected virtual string GetOutputFileName()
         {
-            return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
+            var outputFilePath = string.Empty;
+            if (!string.IsNullOrWhiteSpace(_resultsFolder))
+                outputFilePath = _resultsFolder;
+
+            return Path.Combine(outputFilePath, Run.DatasetName + "_results.txt");
         }
 
         #endregion
 
         #region Private Methods
-        protected string getResultsFolder(string baseFolder)
+        protected string GetResultsFolder(string baseFolder)
         {
             string resultsFolder;
 
-            if (string.IsNullOrEmpty(baseFolder))
+            if (string.IsNullOrWhiteSpace(baseFolder))
             {
-                resultsFolder = DatasetPath + Path.DirectorySeparatorChar + "Results";
+                if (Directory.Exists(DatasetPath))
+                    resultsFolder = Path.Combine(DatasetPath,  "Results");
+                else
+                {
+                    var fiDatasetFile = new FileInfo(DatasetPath);
+                    resultsFolder = Path.Combine(fiDatasetFile.Directory.FullName, "Results");
+                }
             }
             else
             {
-                resultsFolder = baseFolder + "\\Results";
+                resultsFolder = Path.Combine(baseFolder,  "Results");
             }
 
 
-            DirectoryInfo dirinfo = new DirectoryInfo(resultsFolder);
+            var dirinfo = new DirectoryInfo(resultsFolder);
 
             if (!dirinfo.Exists)
             {
@@ -713,12 +725,14 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (massTagFileName.ToLower().Contains("_msgfplus.tsv"))
             {
-                BasicIqTargetImporter iqTargetImporter = new BasicIqTargetImporter(massTagFileName);
+                var iqTargetImporter = new BasicIqTargetImporter(massTagFileName);
                 var iqTargets = iqTargetImporter.Import();
 
-                IqTargetUtilities targetUtilities = new IqTargetUtilities();
-                TargetCollection targetCollection = new TargetCollection();
-                targetCollection.TargetList = new List<TargetBase>();
+                var targetUtilities = new IqTargetUtilities();
+                var targetCollection = new TargetCollection
+                {
+                    TargetList = new List<TargetBase>()
+                };
 
                 foreach (var iqTarget in iqTargets)
                 {
@@ -743,26 +757,28 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFileName);
+            var importer = new MassTagFromTextFileImporter(massTagFileName);
             return importer.Import(targetIDsToFilterOn);
         }
 
-        protected string getLogFileName(string folderPath)
+        protected string GetLogFileName(string folderPath)
         {
-            string logfilename = "";
-
-            DirectoryInfo logfolderPath = new DirectoryInfo(folderPath);
+            var logfolderPath = new DirectoryInfo(folderPath);
 
             if (!logfolderPath.Exists) logfolderPath.Create();
 
-            logfilename = logfolderPath.FullName + Path.DirectorySeparatorChar + "logfile_" + DateTime.Now.Year.ToString() + "_" +
-                DateTime.Now.Month.ToString().PadLeft(2, '0') + "_" + DateTime.Now.Day.ToString().PadLeft(2, '0') + "_" + DateTime.Now.Ticks.ToString() + ".txt";
+            // The timestamp for the log file name is today's date, plus the number of milliseconds since midnight
+            var logfilename = Path.Combine(logfolderPath.FullName,
+                                           "logfile_" +
+                                           DateTime.Now.ToString("yyyy-MM-dd") + "_" +
+                                           DateTime.Now.Subtract(DateTime.Today).TotalMilliseconds.ToString("0") + 
+                                           ".txt");
 
             return logfilename;
 
         }
 
-        protected List<string> getListDatasetPaths(string fileContainingDatasetPaths)
+        protected List<string> GetListDatasetPaths(string fileContainingDatasetPaths)
         {
             List<string> datasetPathList = new List<string>();
 
@@ -892,12 +908,12 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     bool allowOverwrite = false;
 
-                    string targetCopiedFilename = _alignmentFolder + Path.DirectorySeparatorChar + file.Name;
+                    string targetCopiedFilename = Path.Combine(_alignmentFolder, file.Name);
 
                     //upload alignment data only if it doesn't already exist
                     if (!File.Exists(targetCopiedFilename))
                     {
-                        file.CopyTo(_alignmentFolder + Path.DirectorySeparatorChar + file.Name, allowOverwrite);
+                        file.CopyTo(Path.Combine(_alignmentFolder, file.Name), allowOverwrite);
                     }
 
                     if (this.ExecutorParameters.CopyRawFileLocal)
@@ -928,7 +944,7 @@ namespace DeconTools.Workflows.Backend.Core
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     sourceDirInfo = new DirectoryInfo(dataset);
-                    runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + sourceDirInfo.Name;
+                    runFilename = Path.Combine(this.ExecutorParameters.FolderPathForCopiedRawDataset, sourceDirInfo.Name);
                     targetDirInfo = new DirectoryInfo(runFilename);
                     FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
                     ReportGeneralProgress("Copying complete.");
@@ -937,7 +953,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     FileInfo fileinfo = new FileInfo(dataset);
                     sourceDirInfo = fileinfo.Directory;
-                    runFilename = this.ExecutorParameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + Path.GetFileName(dataset);
+                    runFilename = Path.Combine(this.ExecutorParameters.FolderPathForCopiedRawDataset, Path.GetFileName(dataset));
 
                     targetDirInfo = new DirectoryInfo(this.ExecutorParameters.FolderPathForCopiedRawDataset);
 
@@ -1000,8 +1016,7 @@ namespace DeconTools.Workflows.Backend.Core
             ReportGeneralProgress("Peak loading started...");
 
 
-            string baseFileName;
-            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+            var baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
             string possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -1048,10 +1063,10 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (file.Name.ToLower() == Run.DatasetName.ToLower() + "_mzalignment.txt" || file.Name.ToLower() == Run.DatasetName.ToLower() + "_netalignment.txt")
                     {
-                        string targetFileName = Run.DataSetPath + Path.DirectorySeparatorChar + file.Name;
+                        var targetFileName = Path.Combine(Run.DataSetPath, file.Name);
                         if (!File.Exists(targetFileName))
                         {
-                            file.CopyTo(Run.DataSetPath + Path.DirectorySeparatorChar + file.Name, true);
+                            file.CopyTo(Path.Combine(Run.DataSetPath, file.Name), true);
                         }
                     }
 
@@ -1104,10 +1119,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         private bool CheckForPeaksFile()
         {
-            string baseFileName;
-            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+            var baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
-            string possibleFilename1 = baseFileName + "_peaks.txt";
+            var possibleFilename1 = baseFileName + "_peaks.txt";
 
             if (File.Exists(possibleFilename1))
             {
@@ -1191,91 +1205,83 @@ namespace DeconTools.Workflows.Backend.Core
         protected void FinalizeRun()
         {
 
-            string runfileName = Run.Filename;
-            string datasetName = Run.DatasetName;
+            var runfileName = Run.Filename;
+            var datasetName = Run.DatasetName;
 
             Run.Close();
             Run = null;
             GC.Collect();
 
-
-
-            if (this.ExecutorParameters.CopyRawFileLocal && this.ExecutorParameters.DeleteLocalDatasetAfterProcessing)
+            if (!this.ExecutorParameters.CopyRawFileLocal || !this.ExecutorParameters.DeleteLocalDatasetAfterProcessing)
             {
-                FileAttributes attr = File.GetAttributes(runfileName);
-
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {
-                    DirectoryInfo dirInfo = new DirectoryInfo(runfileName);
-                    dirInfo.Delete(true);
-                }
-                else
-                {
-                    FileInfo fileinfo = new FileInfo(runfileName);
-
-                    string fileSuffix = fileinfo.Extension;
-
-                    DirectoryInfo dirInfo = fileinfo.Directory;
-
-                    string expectedPeaksFile = dirInfo.FullName + Path.DirectorySeparatorChar + datasetName + "_peaks.txt";
-
-                    if (File.Exists(expectedPeaksFile))
-                    {
-                        //File.Delete(expectedPeaksFile);
-                    }
-
-                    FileInfo[] allRawDataFiles = dirInfo.GetFiles("*" + fileSuffix);
-                    if (allRawDataFiles.Count() > 35)
-                    {
-                        foreach (var file in allRawDataFiles)
-                        {
-                            try
-                            {
-                                file.Delete();
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-
-
-                        }
-                    }
-
-
-                }
-
-
-
-
+                return;
             }
 
+            var attr = File.GetAttributes(runfileName);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                var dirInfo = new DirectoryInfo(runfileName);
+                dirInfo.Delete(true);
+            }
+            else
+            {
+                var fileinfo = new FileInfo(runfileName);
+
+                var fileSuffix = fileinfo.Extension;
+
+                var dirInfo = fileinfo.Directory;
+
+                var expectedPeaksFile = Path.Combine(dirInfo.FullName, datasetName + "_peaks.txt");
+
+                if (File.Exists(expectedPeaksFile))
+                {
+                    //File.Delete(expectedPeaksFile);
+                }
+
+                var allRawDataFiles = dirInfo.GetFiles("*" + fileSuffix);
+                if (allRawDataFiles.Count() <= 35)
+                {
+                    return;
+                }
+
+                foreach (var file in allRawDataFiles)
+                {
+                    try
+                    {
+                        file.Delete();
+                    }
+                    catch (Exception)
+                    {
+                        // Ignore errors here
+                    }
 
 
-
+                }
+            }
         }
 
         protected void backupResultsFileIfNecessary(string datasetName, string outputFileName)
         {
-            FileInfo outputFileInfo = new FileInfo(outputFileName);
+            var outputFileInfo = new FileInfo(outputFileName);
 
-
-            if (outputFileInfo.Exists)
+            if (!outputFileInfo.Exists)
             {
-                string backupFolder = this._resultsFolder + Path.DirectorySeparatorChar + "Backup";
-                DirectoryInfo backupFolderInfo = new DirectoryInfo(backupFolder);
-
-                if (!backupFolderInfo.Exists)
-                {
-                    backupFolderInfo.Create();
-                }
-
-                string backupFilename = backupFolderInfo.FullName + Path.DirectorySeparatorChar + datasetName + "_results.txt";
-                outputFileInfo.CopyTo(backupFilename, true);
-
-                outputFileInfo.Delete();
-
+                return;
             }
+
+            var backupFolder = Path.Combine(_resultsFolder, "Backup");
+            var backupFolderInfo = new DirectoryInfo(backupFolder);
+
+            if (!backupFolderInfo.Exists)
+            {
+                backupFolderInfo.Create();
+            }
+
+            var backupFilename = Path.Combine(backupFolderInfo.FullName, datasetName + "_results.txt");
+            outputFileInfo.CopyTo(backupFilename, true);
+
+            outputFileInfo.Delete();
         }
         #endregion
 
