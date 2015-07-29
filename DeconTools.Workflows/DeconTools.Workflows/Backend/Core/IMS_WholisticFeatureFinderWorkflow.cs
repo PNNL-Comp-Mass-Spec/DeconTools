@@ -74,7 +74,7 @@ namespace DeconTools.Workflows.Backend.Core
         //}
 
 
-        public override void InitializeWorkflow()
+        public void InitializeWorkflow()
         {
 
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-        public override WorkflowParameters WorkflowParameters
+        public WorkflowParameters WorkflowParameters
         {
             get
             {

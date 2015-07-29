@@ -106,21 +106,18 @@ namespace TestConsole1
 
         public static void testTopDownTargetedWorkflow()
         {
-            string copyToFolder = @"D:\Data\TopDown";
+            var copyToFolder = @"D:\Data\TopDown";
 
-            string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            var outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
-            var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
-            executorParameters.CopyRawFileLocal = true;
-            executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
-            
-            executorParameters.TargetType = Globals.TargetType.LcmsFeature;
-            executorParameters.WorkflowParameterFile =
-                @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\MSAlign_Quant_Workflow_2012-07-25.xml";
-
-
-            executorParameters.TargetsFilePath =
-                @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB_MSAlign_ResultTable.txt";
+            var executorParameters = new TopDownTargetedWorkflowExecutorParameters
+            {
+                CopyRawFileLocal = true,
+                FolderPathForCopiedRawDataset = copyToFolder,
+                TargetType = Globals.TargetType.LcmsFeature,
+                WorkflowParameterFile = @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\MSAlign_Quant_Workflow_2012-07-25.xml",
+                TargetsFilePath =       @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB_MSAlign_ResultTable.txt"
+            };
 
             const string testDatasetPath =
                 @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB.raw";

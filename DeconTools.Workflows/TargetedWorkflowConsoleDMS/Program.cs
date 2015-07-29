@@ -18,7 +18,7 @@ namespace TargetedWorkflowConsole
             // This command forces the console to not pause if the mouse is depressed
             SetConsoleMode(Process.GetCurrentProcess().MainWindowHandle, ENABLE_EXTENDED_FLAGS);
 
-            // Parase the command line arguments
+            // Parse the command line arguments
             if (args == null || args.Length == 0)
             {
                 ReportSyntax();
@@ -47,12 +47,20 @@ namespace TargetedWorkflowConsole
 
                 try
                 {
-                    var workflowParameters = WorkflowParameters.CreateParameters(args[1]) as WorkflowExecutorBaseParameters;
+                    var workflowParameters = WorkflowParameters.CreateParameters(fileInfo.FullName) as WorkflowExecutorBaseParameters;
+
+                    if (workflowParameters == null)
+                    {
+                        ReportError("Workflow parameters created from " + args[1] + " are null");
+                        return -6;
+                    }
 
                     if (args.Length == 3)
                         workflowParameters.TargetsFilePath = args[2];
 
-                    TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(workflowParameters, datasetPath).Execute();
+                    var workflowExecutor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(workflowParameters, datasetPath);
+                    workflowExecutor.Execute();
+
                 }
                 catch (Exception ex)
                 {
@@ -100,5 +108,6 @@ namespace TargetedWorkflowConsole
             Console.WriteLine("  Arg3 (optional) = targets file path (overrides targets file defined in the .xml file)");
             Console.WriteLine();
         }
+
     }
 }

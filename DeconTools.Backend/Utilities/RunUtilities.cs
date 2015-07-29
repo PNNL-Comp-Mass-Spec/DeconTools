@@ -28,12 +28,11 @@ namespace DeconTools.Backend.Utilities
         {
             string datasetName;
 
-            FileAttributes attr = File.GetAttributes(datasetPath);
+            var attr = File.GetAttributes(datasetPath);
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                DirectoryInfo sourceDirInfo;
-                sourceDirInfo = new DirectoryInfo(datasetPath);
+                var sourceDirInfo = new DirectoryInfo(datasetPath);
                 datasetName = sourceDirInfo.Name;
             }
             else
@@ -49,12 +48,11 @@ namespace DeconTools.Backend.Utilities
         {
             string datasetName;
 
-            FileAttributes attr = File.GetAttributes(datasetPath);
+            var attr = File.GetAttributes(datasetPath);
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                DirectoryInfo sourceDirInfo;
-                sourceDirInfo = new DirectoryInfo(datasetPath);
+                var sourceDirInfo = new DirectoryInfo(datasetPath);
                 datasetName = sourceDirInfo.Name;
             }
             else
@@ -75,7 +73,7 @@ namespace DeconTools.Backend.Utilities
         /// <returns></returns>
         public static bool DatasetIsFolderStyle(string datasetPath)
         {
-            FileAttributes attr = File.GetAttributes(datasetPath);
+            var attr = File.GetAttributes(datasetPath);
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
@@ -101,11 +99,10 @@ namespace DeconTools.Backend.Utilities
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                DirectoryInfo sourceDirInfo;
-                sourceDirInfo = new DirectoryInfo(datasetPath);
+                var sourceDirInfo = new DirectoryInfo(datasetPath);
                 return sourceDirInfo.Exists;
             }
-            
+
             return File.Exists(datasetPath);
         }
             
@@ -114,12 +111,11 @@ namespace DeconTools.Backend.Utilities
         {
             string datasetFolderPath;
 
-            FileAttributes attr = File.GetAttributes(datasetPath);
+            var attr = File.GetAttributes(datasetPath);
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                DirectoryInfo sourceDirInfo;
-                sourceDirInfo = new DirectoryInfo(datasetPath);
+                var sourceDirInfo = new DirectoryInfo(datasetPath);
                 datasetFolderPath = sourceDirInfo.FullName;
             }
             else
@@ -142,12 +138,14 @@ namespace DeconTools.Backend.Utilities
         {
 			if (bw == null)
 			{
-				bw = new BackgroundWorker();
-				bw.WorkerReportsProgress = true;
-				bw.WorkerSupportsCancellation = true;
+			    bw = new BackgroundWorker
+			    {
+			        WorkerReportsProgress = true,
+			        WorkerSupportsCancellation = true
+			    };
 			}
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFile, bw);
+            var peakImporter = new PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 			if (!run.PrimaryLcScanNumbers.Any())
@@ -164,7 +162,7 @@ namespace DeconTools.Backend.Utilities
 
         public static bool AlignRunUsingAlignmentInfoInFiles(Run run, string alignmentDataFolder="")
         {
-            bool alignmentSuccessful = false;
+            bool alignmentSuccessful;
 
 
             string basePath;
@@ -188,25 +186,25 @@ namespace DeconTools.Backend.Utilities
 
             
 
-            string expectedMZAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_MZAlignment.txt";
-            string expectedNETAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_NETAlignment.txt";
+            var expectedMZAlignmentFile = Path.Combine(basePath,  run.DatasetName + "_MZAlignment.txt");
+            var expectedNETAlignmentFile = Path.Combine(basePath, run.DatasetName + "_NETAlignment.txt");
 
             //first will try to load the multiAlign alignment info
             if (File.Exists(expectedMZAlignmentFile))
             {
-                MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(expectedMZAlignmentFile);
+                var importer = new MassAlignmentInfoFromTextImporter(expectedMZAlignmentFile);
 
-                List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+                var massAlignmentData = importer.Import();
 
-                MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+                var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
                 massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
                 run.MassAlignmentInfo = massAlignmentInfo;
             }
 
             if (File.Exists(expectedNETAlignmentFile))
             {
-                NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(expectedNETAlignmentFile);
-                List<ScanNETPair> scanNETList = netAlignmentInfoImporter.Import();
+                var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(expectedNETAlignmentFile);
+                var scanNETList = netAlignmentInfoImporter.Import();
 
                 NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
                 netAlignmentInfo.SetScanToNETAlignmentData(scanNETList);
@@ -222,20 +220,19 @@ namespace DeconTools.Backend.Utilities
             }
             else
             {
-                DirectoryInfo alignmentDirInfo = new DirectoryInfo(basePath);
-                FileInfo[] umcFileInfo = alignmentDirInfo.GetFiles("*_umcs.txt");
+                var alignmentDirInfo = new DirectoryInfo(basePath);
+                var umcFileInfo = alignmentDirInfo.GetFiles("*_umcs.txt");
 
-                int umcFileCount = umcFileInfo.Count();
+                var umcFileCount = umcFileInfo.Count();
 
                 if (umcFileCount == 1)
                 {
-                    string targetUmcFileName = umcFileInfo.First().FullName;
+                    var targetUmcFileName = umcFileInfo.First().FullName;
 
-                    UMCCollection umcs = new UMCCollection();
-                    UMCFileImporter importer = new UMCFileImporter(targetUmcFileName, '\t');
-                    umcs = importer.Import();
+                    var importer = new UMCFileImporter(targetUmcFileName, '\t');
+                    var umcs = importer.Import();
 
-                    List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
+                    var scannetPairs = umcs.GetScanNETLookupTable();
 
                     NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
                     netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
@@ -248,15 +245,14 @@ namespace DeconTools.Backend.Utilities
                 }
                 else if (umcFileCount>1)
                 {
-                    string expectedUMCName = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_UMCs.txt";
+                    var expectedUMCName = Path.Combine(basePath, run.DatasetName + "_UMCs.txt");
 
                     if (File.Exists(expectedUMCName))
                     {
-                        UMCCollection umcs = new UMCCollection();
-                        UMCFileImporter importer = new UMCFileImporter(expectedUMCName, '\t');
-                        umcs = importer.Import();
+                        var importer = new UMCFileImporter(expectedUMCName, '\t');
+                        var umcs = importer.Import();
 
-                        List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
+                        var scannetPairs = umcs.GetScanNETLookupTable();
 
                         NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
                         netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
@@ -286,7 +282,7 @@ namespace DeconTools.Backend.Utilities
             if (run.MassIsAligned==false)
             {
 
-                string expectedViperMassAlignmentFile = basePath + Path.DirectorySeparatorChar + run.DatasetName + "_MassAndGANETErrors_BeforeRefinement.txt";
+                var expectedViperMassAlignmentFile = Path.Combine(basePath, run.DatasetName + "_MassAndGANETErrors_BeforeRefinement.txt");
 
                 if (File.Exists(expectedViperMassAlignmentFile))
                 {
@@ -294,7 +290,7 @@ namespace DeconTools.Backend.Utilities
                     var importer = new ViperMassCalibrationLoader(expectedViperMassAlignmentFile);
                     var viperCalibrationData = importer.ImportMassCalibrationData();
 
-                    MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+                    var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
                     massAlignmentInfo.SetMassAlignmentData(viperCalibrationData);
                     run.MassAlignmentInfo = massAlignmentInfo;
 
@@ -319,14 +315,14 @@ namespace DeconTools.Backend.Utilities
         public static Run CreateAndAlignRun(string filename, string peaksFile)
         {
 
-            bool folderExists = Directory.Exists(filename);
-            bool fileExists = File.Exists(filename);
+            var folderExists = Directory.Exists(filename);
+            var fileExists = File.Exists(filename);
             
             
             Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilites tried to create Run.");
      
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(filename);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(filename);
 
             Check.Ensure(run != null, "RunUtilites could not create run. Run is null.");
 
@@ -336,13 +332,11 @@ namespace DeconTools.Backend.Utilities
             AlignRunUsingAlignmentInfoInFiles(run);
 
 
-
-
-
             string sourcePeaksFile;
-            if (peaksFile == null || peaksFile == String.Empty)
+            if (string.IsNullOrEmpty(peaksFile))
             {
-                sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+                // ReSharper disable once PossibleNullReferenceException (already checked for null above)
+                sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             }
             else
             {
@@ -363,18 +357,16 @@ namespace DeconTools.Backend.Utilities
 
 		public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(rawdataFilename);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(rawdataFilename);
 
             //Console.WriteLine(run.DatasetName + " loaded.");
 
-            string basePath = run.DataSetPath;
-
 
             string sourcePeaksFile;
-            if (peaksTestFile == null || peaksTestFile == String.Empty)
+            if (string.IsNullOrEmpty(peaksTestFile))
             {
-                sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+                sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             }
             else
             {
@@ -389,10 +381,11 @@ namespace DeconTools.Backend.Utilities
 
 		public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
 		{
-			HashSet<int> primaryLcScanNumbers = new HashSet<int>();
-			foreach (var msPeakResult in msPeaks)
+			var primaryLcScanNumbers = new HashSet<int>();
+			
+            foreach (var msPeakResult in msPeaks)
 			{
-				int scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
+				var scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
 				primaryLcScanNumbers.Add(scan);
 			}
 

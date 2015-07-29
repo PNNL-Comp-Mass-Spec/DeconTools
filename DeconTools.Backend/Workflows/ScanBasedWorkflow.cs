@@ -605,34 +605,33 @@ namespace DeconTools.Backend.Workflows
             //So if null, will create the default outputPath
             if (OutputFolderPath == null)
             {
-                return run.DataSetPath + "\\" + run.DatasetName;
+                return Path.Combine(run.DataSetPath, run.DatasetName);
             }
-            else
+
+            if (Directory.Exists(OutputFolderPath))
             {
-                if (!Directory.Exists(OutputFolderPath))
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(OutputFolderPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage =
-                            "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
-
-                        Logger.Instance.AddEntry(errorMessage, Logger.Instance.OutputFilename);
-                        Logger.Instance.AddEntry(errorMessage, ex.StackTrace);
-
-                        throw new DirectoryNotFoundException(
-                            "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,
-                            ex);
-
-                    }
-
-                }
-
-                return OutputFolderPath.TrimEnd(new char[] { '\\' }) + "\\" + run.DatasetName;
+                return Path.Combine(OutputFolderPath, run.DatasetName);
             }
+
+            try
+            {
+                Directory.CreateDirectory(OutputFolderPath);
+            }
+            catch (Exception ex)
+            {
+                var errorMessage =
+                    "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
+
+                Logger.Instance.AddEntry(errorMessage, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(errorMessage, ex.StackTrace);
+
+                throw new DirectoryNotFoundException(
+                    "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,
+                    ex);
+
+            }
+
+            return Path.Combine(OutputFolderPath, run.DatasetName);
         }
 
 

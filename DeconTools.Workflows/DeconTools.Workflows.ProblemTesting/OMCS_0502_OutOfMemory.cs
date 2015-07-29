@@ -79,8 +79,8 @@ namespace DeconTools.Workflows.ProblemTesting
             string outputFolder = @"D:\Temp\TargetedTesting";
 
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsBaseFolder = baseFolder + Path.DirectorySeparatorChar + "Targets";
-            executorParameters.WorkflowParameterFile = baseFolder + Path.DirectorySeparatorChar + "Parameters" + Path.DirectorySeparatorChar + "O16O18WorkflowParameters_2011_08_23_sum5.xml";
+            executorParameters.TargetsBaseFolder = Path.Combine(baseFolder, "Targets");
+            executorParameters.WorkflowParameterFile = Path.Combine(baseFolder, "Parameters", "O16O18WorkflowParameters_2011_08_23_sum5.xml");
 
 			executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 

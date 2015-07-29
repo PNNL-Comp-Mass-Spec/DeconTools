@@ -33,8 +33,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
-                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
@@ -92,8 +92,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
-                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
@@ -169,8 +169,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"D:\Data\Sipper\HLP_Ana\HLP_Ana_SIP_02_19APR13_Frodo_12-12-04.raw";
 
 
-            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
-                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
@@ -464,8 +464,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
-                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
@@ -546,8 +546,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.GetDirectoryName(paramFile) + Path.DirectorySeparatorChar +
-                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml";
+            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+                                         Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 

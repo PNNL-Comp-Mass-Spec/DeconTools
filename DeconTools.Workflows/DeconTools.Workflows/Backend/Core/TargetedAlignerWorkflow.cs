@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -423,7 +424,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SaveFeaturesToTextfile(string outputFolder)
         {
-            string exportTargetedFeaturesFile = outputFolder + "\\" + Run.DatasetName + "_alignedFeatures.txt";
+            string exportTargetedFeaturesFile = Path.Combine(outputFolder, Run.DatasetName + "_alignedFeatures.txt");
 
             UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
@@ -432,8 +433,8 @@ namespace DeconTools.Workflows.Backend.Core
         public void SaveAlignmentData(string outputFolder)
         {
 
-            string exportNETAlignmentFilename = outputFolder + "\\" + Run.DatasetName + "_NETAlignment.txt";
-            string exportMZAlignmentFilename = outputFolder + "\\" + Run.DatasetName + "_MZAlignment.txt";
+            string exportNETAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_NETAlignment.txt");
+            string exportMZAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_MZAlignment.txt");
 
             MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
             mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);

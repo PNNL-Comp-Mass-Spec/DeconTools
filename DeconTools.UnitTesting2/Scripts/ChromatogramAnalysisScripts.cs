@@ -45,7 +45,7 @@ namespace DeconTools.UnitTesting2.Scripts
             scanSetCollection.Create(run,scanStart,scanStop,1, 1, true);
             StringBuilder sb = new StringBuilder();
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (!File.Exists(expectedPeaksFile))
             {
                 var peakCreatorParams = new PeakDetectAndExportWorkflowParameters();
@@ -126,12 +126,12 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
 
                     }
-                    string currentOutputFolder = outputFolderForChromGraphs + "\\" + "bin" + currentBin;
+                    string currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
                     if (!Directory.Exists(currentOutputFolder)) Directory.CreateDirectory(currentOutputFolder);
 
 
-                    string baseFilename = currentOutputFolder + "\\" +
-                                          scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ;
+                    string baseFilename =  Path.Combine(currentOutputFolder,
+                                                        scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ);
 
                     string outputGraphFilename;
 
@@ -177,7 +177,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
             StringBuilder sb = new StringBuilder();
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
 
             if (!File.Exists(expectedPeaksFile))
@@ -286,12 +286,13 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
 
                     }
-                    string currentOutputFolder = outputFolderForChromGraphs + "\\" + "bin" + currentBin;
+                    string currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
                     if (!Directory.Exists(currentOutputFolder)) Directory.CreateDirectory(currentOutputFolder);
 
 
-                    string outputGraphFilename = currentOutputFolder + "\\" +
-                        scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png";
+                    string outputGraphFilename = Path.Combine(currentOutputFolder,
+                                                              scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png");
+                                                              
                     graphGenerator.SaveGraph(outputGraphFilename);
 
 

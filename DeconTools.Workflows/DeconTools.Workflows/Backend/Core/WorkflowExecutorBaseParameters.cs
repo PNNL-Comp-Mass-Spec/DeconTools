@@ -5,7 +5,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class WorkflowExecutorBaseParameters : WorkflowParameters
     {
-        
+
 
         #region Constructors
         public WorkflowExecutorBaseParameters()
@@ -32,19 +32,34 @@ namespace DeconTools.Workflows.Backend.Core
         }
         #endregion
 
-      
+
 
         #region Properties
 
         public bool CopyRawFileLocal { get; set; }
         public bool DeleteLocalDatasetAfterProcessing { get; set; }
         public string FolderPathForCopiedRawDataset { get; set; }
-        public string OutputFolderBase { get; set; }
+
+        protected string mOutputFolderBase;
+        public string OutputFolderBase
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(mOutputFolderBase))
+                    return string.Empty;
+
+                return mOutputFolderBase;
+            }
+            set
+            {
+                mOutputFolderBase = value;
+            }
+        }
         public string ReferenceTargetsFilePath { get; set; }
         public string TargetsFilePath { get; set; }
         public string TargetsBaseFolder { get; set; }
         public Globals.TargetType TargetType { get; set; }
-        
+
         [Obsolete("No longer use. Use 'IsMassAlignmentPerformed'")]
         public bool TargetedAlignmentIsPerformed { get; set; }
 
@@ -62,7 +77,7 @@ namespace DeconTools.Workflows.Backend.Core
         public bool ChromGenSourceDataIsThresholded { get; set; }
         public bool ChromGenSourceDataProcessMsMs { get; set; }
 
-        
+
         /// <summary>
         /// Minimum m/z value used for defining the a range of IqChargeState targets
         /// </summary>
@@ -81,7 +96,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         //public string ExportAlignmentFolder { get; set; }
 
-        
+
         #endregion
 
 

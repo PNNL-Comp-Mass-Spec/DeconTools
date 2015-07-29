@@ -121,7 +121,7 @@ namespace DeconTools.Workflows.Backend.Core
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     sourceDirInfo = new DirectoryInfo(dataset);
-                    runFilename = Parameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + sourceDirInfo.Name;
+                    runFilename = Path.Combine(Parameters.FolderPathForCopiedRawDataset, sourceDirInfo.Name);
                     targetDirInfo = new DirectoryInfo(runFilename);
                     FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
                     ReportGeneralProgress("Copying complete.");
@@ -130,7 +130,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     FileInfo fileinfo = new FileInfo(dataset);
                     sourceDirInfo = fileinfo.Directory;
-                    runFilename = Parameters.FolderPathForCopiedRawDataset + Path.DirectorySeparatorChar + Path.GetFileName(dataset);
+                    runFilename = Path.Combine(Parameters.FolderPathForCopiedRawDataset, Path.GetFileName(dataset));
 
                     targetDirInfo = new DirectoryInfo(Parameters.FolderPathForCopiedRawDataset);
 
@@ -191,7 +191,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             string baseFileName;
-            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+            baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
             string possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -252,10 +252,10 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (file.Name.ToLower() == Run.DatasetName.ToLower() + "_mzalignment.txt" || file.Name.ToLower() == Run.DatasetName.ToLower() + "_netalignment.txt")
                     {
-                        string targetFileName = Run.DataSetPath + Path.DirectorySeparatorChar + file.Name;
+                        string targetFileName = Path.Combine(Run.DataSetPath, file.Name);
                         if (!File.Exists(targetFileName))
                         {
-                            file.CopyTo(Run.DataSetPath + Path.DirectorySeparatorChar + file.Name, true);
+                            file.CopyTo(Path.Combine(Run.DataSetPath, file.Name, true));
                         }
                     }
                 }
@@ -300,7 +300,7 @@ namespace DeconTools.Workflows.Backend.Core
         private bool CheckForPeaksFile()
         {
             string baseFileName;
-            baseFileName = this.Run.DataSetPath + "\\" + this.Run.DatasetName;
+            baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
             string possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -351,7 +351,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual string GetOutputFileName()
         {
-            return _resultsFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_results.txt";
+            return Path.Combine(_resultsFolder, Run.DatasetName + "_results.txt");
         }
 
 
@@ -364,7 +364,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(folder))
             {
-                outputFolder = DatasetPath + Path.DirectorySeparatorChar + "Results";
+                outputFolder = Path.Combine(DatasetPath, "Results");
             }
             else
             {

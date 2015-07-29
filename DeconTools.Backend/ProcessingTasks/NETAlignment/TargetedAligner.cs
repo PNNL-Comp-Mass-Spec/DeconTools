@@ -96,7 +96,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
                    }
 
 
-                   string exportTargetedFeaturesFile = outputfolder + "\\" + _run.DatasetName + "_alignedFeatures.txt";
+                   string exportTargetedFeaturesFile = Path.Combine(outputfolder, _run.DatasetName + "_alignedFeatures.txt");
 
                    UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
                    exporter.ExportResults(_targetedResultRepository.Results);
@@ -140,8 +140,8 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
                     outputfolder = ExportAlignmentFolder;
                 }
 
-                string exportNETAlignmentFilename = outputfolder + "\\" + _run.DatasetName + "_NETAlignment.txt";
-                string exportMZAlignmentFilename = outputfolder + "\\" + _run.DatasetName + "_MZAlignment.txt";
+                string exportNETAlignmentFilename = Path.Combine(outputfolder, _run.DatasetName + "_NETAlignment.txt");
+                string exportMZAlignmentFilename = Path.Combine(outputfolder, _run.DatasetName + "_MZAlignment.txt");
 
                 MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
                 mzAlignmentExporter.ExportAlignmentInfo(_run.AlignmentInfo);

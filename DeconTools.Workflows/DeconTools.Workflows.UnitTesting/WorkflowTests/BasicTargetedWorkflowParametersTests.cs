@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         public void exportParametersTest1()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedBasicTargetedWorkflowParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowParameters.xml");
 
             if (File.Exists(exportedParametersFile)) File.Delete(exportedParametersFile);
 
@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedBasicTargetedWorkflowParameters.xml";
+            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
 
             BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest2()
         {
-            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedParameters_MostIntenseChromPeakSelection.xml";
+            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedParameters_MostIntenseChromPeakSelection.xml");
 
             BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void createParametersObjectTest1()
         {
-            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedBasicTargetedWorkflowParameters.xml";
+            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
             WorkflowParameters wp = WorkflowParameters.CreateParameters(importedParametersFile);
 
             Assert.AreEqual("UnlabelledTargeted1", wp.WorkflowType.ToString());

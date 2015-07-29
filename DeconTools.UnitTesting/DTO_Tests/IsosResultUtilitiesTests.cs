@@ -216,7 +216,7 @@ namespace DeconTools.UnitTesting.DTO_Tests
             IsosResultUtilities iru = new IsosResultUtilities();
             List<IsosResult>results = iru.getIMFResults(imfIsosFolder, 500, 600);
 
-            UIMFIsosExporter exporter = new UIMFIsosExporter(imfIsosFolder + "\\mergedIsosResults.csv");
+            UIMFIsosExporter exporter = new UIMFIsosExporter(Path.Combine(imfIsosFolder, mergedIsosResults.csv"));
 
             ResultCollection rc = new ResultCollection(new IMFRun());
             rc.ResultList = results;

@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (string.IsNullOrEmpty(OutputFolderForGraphs))
             {
-                OutputFolderForGraphs = Run.DataSetPath + Path.DirectorySeparatorChar + "OutputGraphs";
+                OutputFolderForGraphs = Path.Combine(Run.DataSetPath, "OutputGraphs");
             }
             
             if (!Directory.Exists(OutputFolderForGraphs)) Directory.CreateDirectory(OutputFolderForGraphs);
@@ -240,8 +240,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
-                                         result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_MS.png";
+            string outputGraphFilename = Path.Combine(OutputFolderForGraphs, 
+                                                      result.Target.ID + "_" +
+                                                      result.Target.ChargeState + "_" + 
+                                                      result.Target.MZTheor.ToString("0.000") + "_MS.png");
 
 
             string graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
@@ -293,8 +295,10 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.XAxis.Scale.Max = maxScan;
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            string outputGraphFilename = OutputFolderForGraphs + Path.DirectorySeparatorChar + result.Target.ID + "_" +
-                                         result.Target.ChargeState + "_" + result.Target.MZTheor.ToString("0.000") + "_chrom.png";
+            string outputGraphFilename = Path.Combine(OutputFolderForGraphs,
+                                                      result.Target.ID + "_" + 
+                                                      result.Target.ChargeState + "_" + 
+                                                      result.Target.MZTheor.ToString("0.000") + "_chrom.png");
 
             string graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
                                    result.Target.MZTheor.ToString("0.000") + "; ScanLC= " + result.LcScanObs;

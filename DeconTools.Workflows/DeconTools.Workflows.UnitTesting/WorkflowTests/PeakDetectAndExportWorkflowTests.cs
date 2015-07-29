@@ -24,7 +24,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.OutputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
 
 
-            string expectedPeaksFile = parameters.OutputFolder + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(parameters.OutputFolder, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 
@@ -89,7 +89,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             
 
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 

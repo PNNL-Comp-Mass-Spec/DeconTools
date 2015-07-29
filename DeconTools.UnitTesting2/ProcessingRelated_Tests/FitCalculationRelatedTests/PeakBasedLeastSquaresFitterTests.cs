@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
       [Test]
         public void ComparePeakFitterVsAreaFitter()
         {
-            string massTagFile1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
+            string massTagFile1 = Path.Combine(FileRefs.RawDataBasePath, "TargetedWorkflowStandards", "QCShew_peptidesWithObsCountGreaterThan1000.txt");
 
             //load target 
             var masstagImporter = new MassTagFromTextFileImporter(massTagFile1);

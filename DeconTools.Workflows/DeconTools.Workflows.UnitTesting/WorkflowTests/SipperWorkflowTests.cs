@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportSipperWorkflowParametersTest1()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedSipperTargetedWorkflowParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedSipperTargetedWorkflowParameters.xml");
 
             SipperTargetedWorkflowParameters parameters = new SipperTargetedWorkflowParameters();
 
@@ -256,7 +256,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             msGraphGenerator.AddAnnotationRelativeAxis(annotation, 0.45, 0.05);
 
-            string outputFilename = outputFolder + Path.DirectorySeparatorChar + target.ID + "_MS.png";
+            string outputFilename = Path.Combine(outputFolder, target.ID + "_MS.png");
             msGraphGenerator.SaveGraph(outputFilename);
 
         }

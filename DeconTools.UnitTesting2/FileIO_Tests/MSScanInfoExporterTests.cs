@@ -12,10 +12,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class MSScanInfoExporterTests
     {
-        string exportedMSScanInfoToTextFileFromOrbitrapFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSScanInfoToTextFileFromOrbitrapFile1.csv";
-        string exportedMSScanInfoToSQLiteFromOrbitrapFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSScanInfoToSQLiteFromOrbitrapFile1.db3";
-        string exportedMSScanInfoToSQLiteFromUIMFFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSScanInfoToSQLiteFromUIMFFile1.db3";
-        string exportedMSScanInfoToTextFileFromUIMFFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exportedMSScanInfoToTextFileFromUIMFFile1.csv";
+        readonly string exportedMSScanInfoToTextFileFromOrbitrapFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exportedMSScanInfoToTextFileFromOrbitrapFile1.csv";
+        readonly string exportedMSScanInfoToSQLiteFromOrbitrapFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exportedMSScanInfoToSQLiteFromOrbitrapFile1.db3";
+        readonly string exportedMSScanInfoToSQLiteFromUIMFFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exportedMSScanInfoToSQLiteFromUIMFFile1.db3";
+        readonly string exportedMSScanInfoToTextFileFromUIMFFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exportedMSScanInfoToTextFileFromUIMFFile1.csv";
 
         [Test]
         public void outputToText_xcaliburData_Test1()

@@ -8,16 +8,9 @@ namespace DeconTools.Workflows.Backend.Core
     public abstract class WorkflowBase
     {
 
-        string Name { get; set; }
-
         protected MSGenerator MSGenerator { get; set; }
 
-        public abstract WorkflowParameters WorkflowParameters { get; set; }
-
-
         #region Public Methods
-
-        public abstract void InitializeWorkflow();
 
         public abstract void Execute();
 
@@ -29,10 +22,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
-
-
-
         public virtual void InitializeRunRelatedTasks()
         {
             if (Run != null)
@@ -41,7 +30,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
         }
-
 
         private Run _run;
         public Run Run
@@ -52,32 +40,21 @@ namespace DeconTools.Workflows.Backend.Core
             }
             set
             {
-                if (_run != value)
+                if (_run == value)
                 {
-                    _run = value;
-
-                    if (_run!=null)
-                    {
-                        InitializeRunRelatedTasks(); 
-                    }
-                    
+                    return;
                 }
 
+                _run = value;
+
+                if (_run != null)
+                {
+                    InitializeRunRelatedTasks(); 
+                }
             }
         }
 
         public TargetedResultBase Result { get; set; }
-
-
-        //public static WorkflowBase CreateWorkflow(string workflowParameterFilename)
-        //{
-
-
-
-        //}
-
-
-
 
         #endregion
 

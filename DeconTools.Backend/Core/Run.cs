@@ -37,6 +37,7 @@ namespace DeconTools.Backend.Core
 
         public string DatasetName { get; set; }
 
+        // Directory containing the dataset file
         public string DataSetPath { get; set; }
 
         /// <summary>

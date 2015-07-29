@@ -145,11 +145,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            string resultsFolderLocation = executorParameters.OutputFolderBase + "\\IqResults";
+            string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "IqResults");
             const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
             const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
             var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -216,11 +216,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 			var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
 			executorParameters.LoadParameters(executorParameterFile);
 
-		    string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+		    string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
 			const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
 			const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
 			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 			var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -364,7 +364,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         //    const string testDatasetPath = @"\\protoapps\UserData\Kaipo\TopDown\test2\Proteus_Peri_intact_ETD.raw";
         //    const string testDatasetName = "Proteus_Peri_intact_ETD";
 
-        //    string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+        //    string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
         //    if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
         //    var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -431,7 +431,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
@@ -504,7 +504,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
 			if (File.Exists(expectedResultsFilename))
 			{
 				File.Delete(expectedResultsFilename);
@@ -571,11 +571,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
 
 
-		    string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+		    string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
 
 			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
 			if (File.Exists(expectedResultsFilename))
 			{
 				File.Delete(expectedResultsFilename);
@@ -646,11 +646,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
 
 
-		    string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+		    string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
 
 			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
 			if (File.Exists(expectedResultsFilename))
 			{
 				File.Delete(expectedResultsFilename);
@@ -702,11 +702,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 				@"\\protoapps\UserData\Fujimoto\TopDownTesting\RawData\Proteus_Peri_intact_ETD.raw";
 
 
-		    string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+		    string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
 
 			string testDatasetName = RunUtilities.GetDatasetName(testDatasetPath);
 
-			string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_quant.txt";
+			string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_quant.txt");
 			if (File.Exists(expectedResultsFilename))
 			{
 				File.Delete(expectedResultsFilename);

@@ -50,8 +50,8 @@ namespace DeconTools.UnitTesting2.NET_Mass_AlignmentTests
         [Test]
         public void ExportNET_andMass_AlignmentDataTest1()
         {
-            string exportNETFilename = FileRefs.OutputFolderPath + "\\" + "exportedNETAlignmentInfo1.txt";
-            string exportMassFilename = FileRefs.OutputFolderPath + "\\" + "exportedMassAlignmentInfo1.txt";
+            string exportNETFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedNETAlignmentInfo1.txt");
+            string exportMassFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedMassAlignmentInfo1.txt");
 
 
             RunFactory rf = new RunFactory();
@@ -84,7 +84,7 @@ namespace DeconTools.UnitTesting2.NET_Mass_AlignmentTests
         [Test]
         public void ImportNET_and_Try_Alignment_Test1()
         {
-            string importFilename = FileRefs.OutputFolderPath + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt";
+            string importFilename = Path.Combine(FileRefs.OutputFolderPath, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -102,7 +102,7 @@ namespace DeconTools.UnitTesting2.NET_Mass_AlignmentTests
         [Test]
         public void ImportMassAndTimePPMCorrections_and_Try_Alignment_Test1()
         {
-            string importFilename = FileRefs.OutputFolderPath + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt";
+            string importFilename = Path.Combine(FileRefs.OutputFolderPath, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
 
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -124,8 +124,8 @@ namespace DeconTools.UnitTesting2.NET_Mass_AlignmentTests
         [Test]
         public void Import_NET_And_MassAlignment_Test1()
         {
-            string mzAlignmentInfoFilename = FileRefs.OutputFolderPath + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt";
-            string NETAlignmentInfoFilename = FileRefs.OutputFolderPath + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt";
+            string mzAlignmentInfoFilename = Path.Combine(FileRefs.OutputFolderPath, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
+            string NETAlignmentInfoFilename = Path.Combine(FileRefs.OutputFolderPath, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
             RunFactory rf = new RunFactory();
             Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);

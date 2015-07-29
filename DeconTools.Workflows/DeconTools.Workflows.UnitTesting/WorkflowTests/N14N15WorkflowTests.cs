@@ -6,6 +6,7 @@ using DeconTools.Backend.FileIO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
@@ -24,7 +25,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest1()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedN14N15WorkflowParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedN14N15WorkflowParameters.xml");
 
             exportedParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1.xml";
@@ -42,7 +43,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedN14N15WorkflowParameters.xml";
+            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml");
 
             var wp = WorkflowParameters.CreateParameters(importedParametersFile);
 
@@ -73,7 +74,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             run.CurrentMassTag = targetCollection.TargetList.FirstOrDefault(p => p.ChargeState == 1);
 
             N14N15Workflow2Parameters parameters = new N14N15Workflow2Parameters();
-            parameters.LoadParameters(FileRefs.ImportedData + "\\" + "importedN14N15WorkflowParameters.xml");
+            parameters.LoadParameters(Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml"));
             parameters.ChromGenTolerance = 25;
             parameters.MSToleranceInPPM = 25;
             parameters.TargetedFeatureFinderToleranceInPPM = 25;

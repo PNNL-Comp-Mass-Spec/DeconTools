@@ -348,7 +348,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
@@ -359,8 +359,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
           
 
             //delete alignment files
-            string mzalignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_mzAlignment.txt";
-            string netAlignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_netAlignment.txt";
+            string mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
+            string netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
             if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
             if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
 
@@ -400,11 +400,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             string executorParameterFile = baseFolder + @"\Parameters\QCShew_OrbiStandard_workflowExecutorParameters.xml";
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
-            string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+            string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
@@ -429,11 +429,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            string resultsFolderLocation = executorParameters.OutputFolderBase + "\\Results";
+            string resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
             string testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             string testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
-            string expectedResultsFilename = resultsFolderLocation + "\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolderLocation, testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);
@@ -442,8 +442,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             FileInfo rawFileInfo = new FileInfo(testDatasetPath);
 
-            string mzalignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_mzAlignment.txt";
-            string netAlignmentFile = rawFileInfo.DirectoryName + "\\" + testDatasetName + "_netAlignment.txt";
+            string mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
+            string netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
             if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
             if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
 
@@ -497,7 +497,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            string expectedResultsFilename = executorParameters.OutputFolderBase + "\\Results" +"\\" + testDatasetName + "_results.txt";
+            string expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "Results", testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);

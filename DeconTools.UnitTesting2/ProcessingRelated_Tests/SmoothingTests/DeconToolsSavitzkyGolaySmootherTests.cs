@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         [Test]
         public void SmoothWithOldDeconToolsSmootherTest1()
         {
-            string sampleXYDataFile = FileRefs.TestFileBasePath + "\\" + "sampleXYData1.txt";
+            string sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
 
             Assert.IsTrue(File.Exists(sampleXYDataFile));
 
@@ -75,7 +75,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         [Test]
         public void SmoothWithNewDeconToolsSmootherTest1()
         {
-            string sampleXYDataFile = FileRefs.TestFileBasePath + "\\" + "sampleXYData1.txt";
+            string sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
 
             Assert.IsTrue(File.Exists(sampleXYDataFile));
 

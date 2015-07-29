@@ -39,7 +39,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
 
-            string expectedResultsFilename = resultsFolder + "\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            string expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -93,7 +93,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
-            string expectedResultsFilename = executorBaseParameters.OutputFolderBase + "\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+                                                          "IqResults", 
+                                                          RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 			Run run = new RunFactory().CreateRun(testFile);
@@ -167,7 +169,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
 
-            string expectedResultsFilename = executorBaseParameters.OutputFolderBase + "\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+                                                          "IqResults", 
+                                                          RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
             
             Run run = new RunFactory().CreateRun(testFile);
@@ -244,7 +248,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 		    executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
 
-            string expectedResultsFilename = executorBaseParameters.OutputFolderBase + "\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+                                                          "IqResults",
+                                                          RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 

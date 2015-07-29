@@ -201,11 +201,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (this._workflowParameters.OutputFolder == String.Empty)
             {
-                expectedPeaksFilename = Run.DataSetPath + Path.DirectorySeparatorChar + Run.DatasetName + "_peaks.txt";
+                expectedPeaksFilename = Path.Combine(Run.DataSetPath, Run.DatasetName + "_peaks.txt");
             }
             else
             {
-                expectedPeaksFilename = _workflowParameters.OutputFolder + Path.DirectorySeparatorChar + Run.DatasetName + "_peaks.txt";
+                expectedPeaksFilename = Path.Combine(_workflowParameters.OutputFolder, Run.DatasetName + "_peaks.txt");
             }
 
             return expectedPeaksFilename;

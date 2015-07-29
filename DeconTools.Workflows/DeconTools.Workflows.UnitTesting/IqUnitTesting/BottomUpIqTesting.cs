@@ -33,8 +33,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 				@"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\Results";
 
 
-			string expectedResultsFilename = executorBaseParameters.OutputFolderBase + "\\IqResults\\" +
-			                                 RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+			string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+			                                              "IqResults",
+			                                              RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
 			if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 

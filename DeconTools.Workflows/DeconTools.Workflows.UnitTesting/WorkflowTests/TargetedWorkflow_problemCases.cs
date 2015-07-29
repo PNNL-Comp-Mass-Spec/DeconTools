@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
@@ -33,7 +34,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = new RunFactory().CreateRun(rawdataFile);
             //RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
-            string expectedPeaksFilename = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFilename = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFilename, null);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -78,7 +79,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Run run = new RunFactory().CreateRun(rawdataFile);
             //RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
-            string expectedPeaksFilename = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFilename = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFilename, null);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);

@@ -230,12 +230,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             //in the DMS standard workflow for Orbi data
             //see "\\gigasax\DMS_Parameter_Files\Decon2LS\LTQ_Orb_O18_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml"
 
-            Dictionary<string, double> averagineDict = new Dictionary<string, double>();
-            averagineDict.Add("C", 4.9384);
-            averagineDict.Add("H", 7.7583);
-            averagineDict.Add("N", 1.3577);
-            averagineDict.Add("O", 1.4773);
-            averagineDict.Add("S", 0.0417);
+            var averagineDict = new Dictionary<string, double>
+            {
+                {"C", 4.9384},
+                {"H", 7.7583},
+                {"N", 1.3577},
+                {"O", 1.4773},
+                {"S", 0.0417}
+            };
 
             return averagineDict;
 

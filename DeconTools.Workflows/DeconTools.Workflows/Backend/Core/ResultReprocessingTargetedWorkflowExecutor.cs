@@ -48,7 +48,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (!File.Exists(ExecutorParameters.TargetsFilePath))
             {
-                throw new FileNotFoundException("File not found error for the TargetsFilePath. Check your parameter file.");
+                throw new FileNotFoundException("File not found error for the TargetsFilePath. Check your parameter file for " + ExecutorParameters.TargetsFilePath);
             }
 
 

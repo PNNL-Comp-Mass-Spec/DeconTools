@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
@@ -47,7 +48,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var run = RunUtilities.CreateAndLoadPeaks(orbiFile, peaksFile);
 
-            string outputFile = run.DataSetPath + "\\" + run.DatasetName + "_sample3DelutionProfile.txt";
+            string outputFile = Path.Combine(run.DataSetPath, run.DatasetName + "_sample3DelutionProfile.txt");
 
 
             Assert.IsNotNull(run);

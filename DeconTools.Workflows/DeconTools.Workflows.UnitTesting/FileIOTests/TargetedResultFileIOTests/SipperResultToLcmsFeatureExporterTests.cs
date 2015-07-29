@@ -24,7 +24,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             string testFile = FileRefs.SipperRawDataFile;
 
 
-            string exportedResultFile = FileRefs.OutputFolderPath + Path.DirectorySeparatorChar + "ExportedSipperResults1.txt";
+            string exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "ExportedSipperResults1.txt");
 
 
             string peaksFile =

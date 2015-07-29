@@ -26,8 +26,8 @@ namespace DeconTools.Testing.ProblemCases
             string parameterFile =
                 @"\\gigasax\DMS_Parameter_Files\Decon2LS\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27.xml";
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
-            string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
+            string expectedScansOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_scans.csv");
 
 
             if (File.Exists(expectedIsosOutput))

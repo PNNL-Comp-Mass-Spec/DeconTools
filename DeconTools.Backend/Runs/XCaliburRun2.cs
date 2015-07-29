@@ -35,10 +35,10 @@ namespace DeconTools.Backend.Runs
         public XCaliburRun2(string filename)
             : this()
         {
-            Check.Require(File.Exists(filename), "Run not initialized. File not found");
+            Check.Require(File.Exists(filename), "Run not initialized. File not found: " + filename);
 
             this.Filename = filename;
-            string baseFilename = Path.GetFileName(this.Filename);
+            var baseFilename = Path.GetFileName(this.Filename);
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(filename);
 

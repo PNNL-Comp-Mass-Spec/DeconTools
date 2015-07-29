@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Core.Results;
+using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Data;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
 using GWSGraphLibrary.GraphGenerator;
+using NUnit.Framework;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -188,10 +190,10 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
-                string outputDebugFolder = ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "Testing";
+                string outputDebugFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Testing");
                 if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
 
-                string chromDataFilename = outputDebugFolder + Path.DirectorySeparatorChar+ "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt";
+                string chromDataFilename = Path.Combine(outputDebugFolder, "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt");
 
                 using (StreamWriter writer = new StreamWriter(chromDataFilename))
                 {
@@ -220,7 +222,21 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override string GetOutputFileName()
         {
-            return ExecutorParameters.OutputFolderBase + Path.DirectorySeparatorChar + "IqResults" + Path.DirectorySeparatorChar + Run.DatasetName + "_quant.txt";
+            string resultsFolder;
+
+            if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
+            {
+                resultsFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
+            }
+            else
+            {
+                resultsFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "IqResults");
+            }
+            
+            if (!Directory.Exists(resultsFolder)) Directory.CreateDirectory(resultsFolder);
+
+            return Path.Combine(resultsFolder, Run.DatasetName + "_quant.txt");
+
         }
 
 		#endregion

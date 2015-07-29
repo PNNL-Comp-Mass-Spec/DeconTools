@@ -33,9 +33,9 @@ namespace DeconTools.Workflows.Backend.Core
             this.Name = this.ToString();
 
             this.m_baseOutputPath = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\2011_02_10_SmartAveraging_OrbitrapData";
-            this.m_isosResultFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "MSFeaturesOutput.csv";
-            this.m_peakOutputFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "peakOutput.txt";
-            this.m_logFileName = m_baseOutputPath + Path.DirectorySeparatorChar + "log.txt";
+            this.m_isosResultFileName = Path.Combine(m_baseOutputPath, "MSFeaturesOutput.csv");
+            this.m_peakOutputFileName = Path.Combine(m_baseOutputPath, "peakOutput.txt");
+            this.m_logFileName = Path.Combine(m_baseOutputPath, "log.txt");
 
             InitializeWorkflow();
 
@@ -97,7 +97,7 @@ namespace DeconTools.Workflows.Backend.Core
         //    }
         //}
 
-        public override void InitializeWorkflow()
+        public void InitializeWorkflow()
         {
             this.ChromGenToleranceInPPM = 20;
 
@@ -906,7 +906,7 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-        public override WorkflowParameters WorkflowParameters
+        public WorkflowParameters WorkflowParameters
         {
             get
             {

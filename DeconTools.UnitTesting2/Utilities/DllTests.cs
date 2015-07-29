@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2.Utilities
                         }
 
 
-                        //string outputProjectFilename = outputFolder + "\\" + Path.GetFileName(file);
+                        //string outputProjectFilename = Path.Combine(outputFolder, Path.GetFileName(file));
                         //StringBuilder sb=new StringBuilder();
 
                         //XmlWriterSettings xws = new XmlWriterSettings();
@@ -106,7 +106,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
                 //foreach (var file in fileList)
                 //{
-                //    string newProjectFile = outputFolder + "\\" + Path.GetFileName(file);
+                //    string newProjectFile = Path.Combine(outputFolder, Path.GetFileName(file));
 
                 //    File.Copy(newProjectFile, file, true);
 

@@ -44,15 +44,15 @@ namespace IQ.ConsoleManager
                         {
                             var datasetutil = new DatasetUtilities();
 
-                            currentDatasetPath = datasetutil.GetDatasetPath(datsetName) + "\\" + datsetName + ".raw";
+                            currentDatasetPath = Path.Combine(datasetutil.GetDatasetPath(datsetName), datsetName + ".raw");
 
                             if (currentDatasetPath.ToLower().Contains("purged"))
                             {
                                 string tempPathWhileArchiveIsDown = @"\\protoapps\UserData\Slysz\Data\Yellowstone\RawData";
 
-                                currentDatasetPath = tempPathWhileArchiveIsDown + "\\" + datsetName + ".raw";
+                                currentDatasetPath = Path.Combine(tempPathWhileArchiveIsDown, datsetName + ".raw");
 
-                                //currentDatasetPath = datasetutil.GetDatasetPathArchived(datsetName) + "\\" + datsetName + ".raw";
+                                //currentDatasetPath = Path.Combine(datasetutil.GetDatasetPathArchived(datsetName), datsetName + ".raw");
                             }
                         }
 

@@ -99,7 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         {
             if (_run.ResultCollection.MSPeakResultList.Count == 0)
             {
-                   string expectedPeaksfile = _run.DataSetPath + "\\" + _run.DatasetName + "_peaks.txt";
+                   var expectedPeaksfile = Path.Combine(_run.DataSetPath, _run.DatasetName + "_peaks.txt");
                    if (!File.Exists(expectedPeaksfile))
                    {
                        var ex = new Exception("No Peaks file found.");

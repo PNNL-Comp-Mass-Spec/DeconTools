@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
 using DeconTools.Utilities;
 using System.IO;
 using DeconTools.Backend.Utilities;
@@ -13,14 +10,14 @@ namespace DeconTools.Backend.FileIO
     {
         #region Constructors
 
-        public TextFileExporter(string filename)
+        protected TextFileExporter(string filename)
             : this(filename, '\t')
         {
 
 
         }
 
-        public TextFileExporter(string filename, char delimiter)
+        protected TextFileExporter(string filename, char delimiter)
         {
             this.FileName = filename;
             this.Delimiter = delimiter;
@@ -54,7 +51,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Public Methods
 
-        protected virtual void initializeAndWriteHeader()
+        protected void initializeAndWriteHeader()
         {
 
             Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
@@ -70,27 +67,29 @@ namespace DeconTools.Backend.FileIO
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + "; STACKTRACE = " + ex.StackTrace, this.Name), Logger.Instance.OutputFilename);
-                throw ex;
+                throw;
             }
 
+            PossiblyCreateFolder(this.FileName);
 
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(this.FileName))
             {
-                string headerLine = buildHeaderLine();
+                var headerLine = buildHeaderLine();
                 writer.WriteLine(headerLine);
                 writer.Flush();
                 writer.Close();
             }
         }
 
+     
         public override void ExportResults(IEnumerable<T> resultList)
         {
             Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(this.FileName))
             {
-                foreach (T result in resultList)
+                foreach (var result in resultList)
                 {
-                    string resultOutput = buildResultOutput(result);
+                    var resultOutput = buildResultOutput(result);
                     writer.WriteLine(resultOutput);
                 }
 
@@ -109,6 +108,21 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Private Methods
+
+
+        private void PossiblyCreateFolder(string filePath)
+        {
+            var fiFile = new FileInfo(filePath);
+            var diDirectory = fiFile.Directory;
+
+            if (diDirectory != null && !diDirectory.Exists)
+            {
+                diDirectory.Create();
+            }
+
+        }
+        
+
         #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
@@ -21,7 +22,7 @@ namespace DeconTools.Workflows.UnitTesting
             RunFactory rf = new RunFactory();
             run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string deconToolsResultFile = FileRefs.ImportedData + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt";
+            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
             UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
             TargetedResultRepository repo = importer.Import();

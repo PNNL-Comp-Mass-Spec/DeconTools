@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Properties
         public abstract Globals.TargetedWorkflowTypes WorkflowType { get; }
 
-      
+
 
         #endregion
 
@@ -27,19 +27,26 @@ namespace DeconTools.Workflows.Backend.Core
         /// <summary>
         /// A factory method for creating the WorkflowParameters class. Based on the 'WorkflowType' parameter of the xml file.
         /// </summary>
-        /// <param name="xmlFilename"></param>
+        /// <param name="xmlFilepath"></param>
         /// <returns></returns>
-        public static WorkflowParameters CreateParameters(string xmlFilename)
+        public static WorkflowParameters CreateParameters(string xmlFilepath)
         {
-            Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
-            XDocument doc = XDocument.Load(xmlFilename);
-            var query = doc.Element("WorkflowParameters").Elements();
+            Check.Require(File.Exists(xmlFilepath), "Workflow parameter file could not be loaded. File not found: " + xmlFilepath);
+            var doc = XDocument.Load(xmlFilepath);
+            var xElement = doc.Element("WorkflowParameters");
 
-            Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
+            if (xElement == null)
+            {
+                throw new Exception("WorkflowParameters element not found in " + xmlFilepath);
+            }
+
+            var query = xElement.Elements();
+
+            var parameterTableFromXML = new Dictionary<string, string>();
             foreach (var item in query)
             {
-                string paramName = item.Name.ToString();
-                string paramValue = item.Value;
+                var paramName = item.Name.ToString();
+                var paramValue = item.Value;
 
                 if (!parameterTableFromXML.ContainsKey(paramName))
                 {
@@ -49,13 +56,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             Globals.TargetedWorkflowTypes workflowType;
 
-            bool successfulEnum = Enum.TryParse(parameterTableFromXML["WorkflowType"], out workflowType);
+            var successfulEnum = Enum.TryParse(parameterTableFromXML["WorkflowType"], out workflowType);
 
             WorkflowParameters workflowParameters;
             if (successfulEnum)
             {
-
-                
                 switch (workflowType)
                 {
                     case Globals.TargetedWorkflowTypes.Undefined:
@@ -85,45 +90,50 @@ namespace DeconTools.Workflows.Backend.Core
                     case Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1:
                         workflowParameters = new SipperWorkflowExecutorParameters();
                         break;
-					case Globals.TargetedWorkflowTypes.TopDownTargeted1:
-						workflowParameters = new TopDownTargetedWorkflowParameters();
-                		break;
-					case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
-                		workflowParameters = new TopDownTargetedWorkflowExecutorParameters();
-                		break;
-					case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
-						workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();
-                		break;
+                    case Globals.TargetedWorkflowTypes.TopDownTargeted1:
+                        workflowParameters = new TopDownTargetedWorkflowParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1:
+                        workflowParameters = new TopDownTargetedWorkflowExecutorParameters();
+                        break;
+                    case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
+                        workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();
+                        break;
                     default:
                         workflowParameters = new BasicTargetedWorkflowParameters();
                         break;
                 }
-
-                
-
             }
             else
             {
-                throw new System.ArgumentOutOfRangeException("Tried to create WorkflowParameter object. But WorkflowType is unknown.");
+                throw new ArgumentOutOfRangeException(
+                    "Tried to create WorkflowParameter object. But WorkflowType is unknown.");
             }
 
-            workflowParameters.LoadParameters(xmlFilename);
+            workflowParameters.LoadParameters(xmlFilepath);
 
             return workflowParameters;
 
         }
-  
-        public virtual void LoadParameters(string xmlFilename)
-        {
-            Check.Require(File.Exists(xmlFilename), "Workflow parameter file could not be loaded. File not found.");
-            XDocument doc = XDocument.Load(xmlFilename);
-            var query = doc.Element("WorkflowParameters").Elements();
 
-            Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
+        public virtual void LoadParameters(string xmlFilepath)
+        {
+            Check.Require(File.Exists(xmlFilepath), "Workflow parameter file could not be loaded. File not found: " + xmlFilepath);
+            var doc = XDocument.Load(xmlFilepath);
+            var xElement = doc.Element("WorkflowParameters");
+            
+            if (xElement == null)
+            {
+                throw new Exception("WorkflowParameters element not found in " + xmlFilepath);
+            }
+
+            var query = xElement.Elements();
+
+            var parameterTableFromXML = new Dictionary<string, string>();
             foreach (var item in query)
             {
-                string paramName = item.Name.ToString();
-                string paramValue = item.Value;
+                var paramName = item.Name.ToString();
+                var paramValue = item.Value;
 
                 if (!parameterTableFromXML.ContainsKey(paramName))
                 {
@@ -132,63 +142,58 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            Type t = this.GetType();
-            foreach (System.Reflection.MemberInfo mi in t.GetMembers().OrderBy(p => p.Name))
+            var t = this.GetType();
+            foreach (var mi in t.GetMembers().OrderBy(p => p.Name))
             {
-                if (mi.MemberType == MemberTypes.Property)
+                if (mi.MemberType != MemberTypes.Property)
                 {
-                    PropertyInfo pi = (PropertyInfo)mi;
-                    string propertyName = pi.Name;
+                    continue;
+                }
 
-   
-                    if (parameterTableFromXML.ContainsKey(propertyName))
+                var pi = (PropertyInfo)mi;
+                var propertyName = pi.Name;
+
+
+                if (parameterTableFromXML.ContainsKey(propertyName))
+                {
+                    var propertyType = pi.PropertyType;
+
+                    if (!pi.CanWrite)
                     {
-                        Type propertyType = pi.PropertyType;
+                        continue;
+                    }
 
-                        object value;
+                    object value;
+                    if (propertyType.IsEnum)
+                    {
+                        //value = Enum.ToObject(propertyType
+                        value = Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
 
-                        if (pi.CanWrite)
-                        {
-                            if (propertyType.IsEnum)
-                            {
-                                //value = Enum.ToObject(propertyType
-                                value = Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
-
-                            }
-                            else
-                            {
-                                value = Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
-                            }
-                            
-                            pi.SetValue(this, value, null);
-                        }
-
-                      
-
-                       
                     }
                     else
                     {
-                        string shortFilename = Path.GetFileName(xmlFilename);
-                        Console.WriteLine("xml file: " + shortFilename+  "; missing parameter: " + propertyName + ". Using default value: " + pi.GetValue(this, null));
+                        value = Convert.ChangeType(parameterTableFromXML[propertyName], propertyType);
                     }
+
+                    pi.SetValue(this, value, null);
+                }
+                else
+                {
+                    var shortFilename = Path.GetFileName(xmlFilepath);
+                    Console.WriteLine("xml file: " + shortFilename + "; missing parameter: " + propertyName + ". Using default value: " + pi.GetValue(this, null));
                 }
             }
-
         }
 
-    
+
 
         public virtual void SaveParametersToXML(string xmlFilename)
         {
 
-            StringBuilder sb = new StringBuilder();
-            //Dictionary<string, string> parameterValues = GetParameterTable();
-
-            Dictionary<string, object> parameterValues = GetParameterTable();
+            var parameterValues = GetParameterTable();
 
 
-            XElement xml = new XElement("WorkflowParameters",
+            var xml = new XElement("WorkflowParameters",
                 from param in parameterValues
                 select new XElement(param.Key, param.Value)
                     );
@@ -199,8 +204,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual string ToStringWithDetails()
         {
-            StringBuilder sb = new StringBuilder();
-            Dictionary<string, object> parameterValues = GetParameterTable();
+            var sb = new StringBuilder();
+            var parameterValues = GetParameterTable();
 
             foreach (var item in parameterValues)
             {
@@ -218,25 +223,25 @@ namespace DeconTools.Workflows.Backend.Core
 
         public Dictionary<string, object> GetParameterTable()
         {
-            Dictionary<string, object> parameterValues = new Dictionary<string, object>();
+            var parameterValues = new Dictionary<string, object>();
 
+            var t = this.GetType();
 
-            Type t = this.GetType();
-
-            foreach (System.Reflection.MemberInfo mi in t.GetMembers().OrderBy(p => p.Name))
+            foreach (var mi in t.GetMembers().OrderBy(p => p.Name))
             {
-                if (mi.MemberType == System.Reflection.MemberTypes.Property)
+                if (mi.MemberType != MemberTypes.Property)
                 {
-                    System.Reflection.PropertyInfo pi = (PropertyInfo)mi;
+                    continue;
+                }
 
+                var pi = (PropertyInfo)mi;
 
-                    string propertyName = pi.Name;
-                    object propertyValue = pi.GetValue(this, null);
+                var propertyName = pi.Name;
+                var propertyValue = pi.GetValue(this, null);
 
-                    if (!parameterValues.ContainsKey(propertyName))
-                    {
-                        parameterValues.Add(propertyName, propertyValue);
-                    }
+                if (!parameterValues.ContainsKey(propertyName))
+                {
+                    parameterValues.Add(propertyName, propertyValue);
                 }
             }
 

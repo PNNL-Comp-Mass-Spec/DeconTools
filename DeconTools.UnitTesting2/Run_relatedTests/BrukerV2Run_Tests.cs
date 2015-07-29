@@ -17,9 +17,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
             Assert.AreEqual("12Ttest_000003", run.DatasetName);
-            Assert.AreEqual(FileRefs.RawDataBasePath + "\\Bruker\\Bruker_Solarix12T\\12Ttest_000003", run.DataSetPath);
-            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\Bruker\\Bruker_Solarix12T\\12Ttest_000003", run.Filename);
-            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\Bruker\\Bruker_Solarix12T\\12Ttest_000003\\ser", run.RawData.FileName);
+            Assert.AreEqual(FileRefs.RawDataBasePath + @"\Bruker\Bruker_Solarix12T\12Ttest_000003", run.DataSetPath);
+            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Solarix12T\12Ttest_000003", run.Filename);
+            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Solarix12T\12Ttest_000003\ser", run.RawData.FileName);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             BrukerV2Run run = new BrukerV2Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
             Assert.AreEqual("HVY_000001", run.DatasetName);
-            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\Bruker\\Bruker_Solarix12T\\HVY_000001", run.Filename);
+            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Solarix12T\HVY_000001", run.Filename);
 
         }
 
@@ -48,7 +48,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void ConstructorError_wrongFileInput()
         {
-            string wrongFileExample1 = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1 + "\\ser";
+            string wrongFileExample1 = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1 + @"\ser";
 
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {
@@ -60,7 +60,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void ConstructorError_wrongFileInput2()
         {
-            string wrongFileExample1 = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1 + "\\filenotfound";
+            string wrongFileExample1 = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1 + @"\filenotfound";
 
             PreconditionException ex = Assert.Throws<PreconditionException>(delegate
             {

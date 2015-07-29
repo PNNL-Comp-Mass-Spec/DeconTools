@@ -65,9 +65,9 @@ namespace IQ.Console
             {
                 datasetCounter++;
 
-                bool datasetNameContainsPath = dataset.Contains("\\");
+                var datasetNameContainsPath = dataset.Contains(@"\");
 
-                string currentDatasetPath = dataset;
+                string currentDatasetPath;
 
                 if (datasetNameContainsPath)
                 {
@@ -94,11 +94,11 @@ namespace IQ.Console
                     var datasetutil = new DatasetUtilities();
 
                     //TODO: figure out how to do this while supporting other file types
-                    currentDatasetPath = datasetutil.GetDatasetPath(dataset) + "\\" + dataset + ".raw";
+                    currentDatasetPath = Path.Combine(datasetutil.GetDatasetPath(dataset), dataset + ".raw");
 
                     if (currentDatasetPath.ToLower().Contains("purged"))
                     {
-                        currentDatasetPath = datasetutil.GetDatasetPathArchived(dataset) + "\\" + dataset + ".raw";
+                        currentDatasetPath = Path.Combine(datasetutil.GetDatasetPathArchived(dataset), dataset + ".raw");
                     }
                 }
 
@@ -269,7 +269,7 @@ namespace IQ.Console
 
         private static Dictionary<string, string> LoadParameters(string workflowParameterFilePath)
         {
-            Check.Require(File.Exists(workflowParameterFilePath), "Workflow parameter file could not be loaded. File not found.");
+            Check.Require(File.Exists(workflowParameterFilePath), "Workflow parameter file could not be loaded. File not found: " + workflowParameterFilePath);
             XDocument doc = XDocument.Load(workflowParameterFilePath);
             var query = doc.Element("WorkflowParameters").Elements();
 

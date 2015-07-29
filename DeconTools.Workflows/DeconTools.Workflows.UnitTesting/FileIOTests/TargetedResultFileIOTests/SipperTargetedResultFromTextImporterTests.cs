@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void importTest1()
         {
-            string testFile =  FileRefs.ImportedData + Path.DirectorySeparatorChar + "ImportedSipperResults1.txt";
+            string testFile =  Path.Combine(FileRefs.ImportedData, "ImportedSipperResults1.txt");
             SipperResultFromTextImporter importer = new SipperResultFromTextImporter(testFile);
 
             var results=   importer.Import();

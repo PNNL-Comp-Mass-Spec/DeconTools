@@ -1,4 +1,5 @@
-﻿using DeconTools.Workflows.Backend.Core;
+﻿using System.IO;
+using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
@@ -9,7 +10,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest1()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedBasicTargetedWorkflowExecutorParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowExecutorParameters.xml");
 
             BasicTargetedWorkflowExecutorParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.CopyRawFileLocal = true;
@@ -32,7 +33,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest2()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedLcmsTargetedWorkflowExecutorParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedLcmsTargetedWorkflowExecutorParameters.xml");
 
             LcmsFeatureTargetedWorkflowExecutorParameters parameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
             parameters.CopyRawFileLocal = true;
@@ -54,7 +55,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = FileRefs.ImportedData + "\\" + "importedBasicTargetedWorkflowExecutorParameters_defaults.xml";
+            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowExecutorParameters_defaults.xml");
 
             BasicTargetedWorkflowExecutorParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(importedParametersFile);

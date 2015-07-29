@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests.TargetedResultFileIOTests
             string peaksTestFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
-            string exportedResultFile = FileRefs.OutputFolderPath + Path.DirectorySeparatorChar + "UnlabelledTargetedResultsExporterOutput1.txt";
+            string exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
 
             if (File.Exists(exportedResultFile)) File.Delete(exportedResultFile);
 
@@ -67,7 +67,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests.TargetedResultFileIOTests
         public void importerTest1()
         {
            
-            string importedResultFile = FileRefs.OutputFolderPath + Path.DirectorySeparatorChar + "UnlabelledTargetedResultsExporterOutput1.txt";
+            string importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
 
             UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(importedResultFile);
             TargetedResultRepository repo = importer.Import();

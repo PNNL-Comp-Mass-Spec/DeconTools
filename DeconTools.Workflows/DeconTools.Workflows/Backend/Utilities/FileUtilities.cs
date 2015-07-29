@@ -73,7 +73,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                 Directory.CreateDirectory(targetFolder.FullName);
             }
 
-            fileToBeCopied.CopyTo(targetFolder.FullName + Path.DirectorySeparatorChar + fileToBeCopied.Name,true);
+            fileToBeCopied.CopyTo(Path.Combine(targetFolder.FullName, fileToBeCopied.Name), true);
 
         }
     }

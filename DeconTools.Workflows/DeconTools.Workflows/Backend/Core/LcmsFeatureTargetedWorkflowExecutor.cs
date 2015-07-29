@@ -16,28 +16,17 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Properties
-
-        public override WorkflowParameters WorkflowParameters
-        {
-            get
-            {
-                return ExecutorParameters;
-            }
-            set
-            {
-                ExecutorParameters = value as WorkflowExecutorBaseParameters;
-            }
-        }
-        
+     
         #endregion
 
         #region Public Methods
-        public override void InitializeWorkflow()
+
+        public new void InitializeWorkflow()
         {
             var executorParams = (LcmsFeatureTargetedWorkflowExecutorParameters) ExecutorParameters;
 
-            //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
-            _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
+            //_loggingFileName = GetLogFileName(ExecutorParameters.LoggingFolder);
+            _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
             
             Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
 

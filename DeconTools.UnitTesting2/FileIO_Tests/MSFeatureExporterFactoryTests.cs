@@ -12,9 +12,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class MSFeatureExporterFactoryTests
     {
-        string exporterFactoryUIMFTextFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exporterFactory_UIMF_TextFile1.csv";
-        string exporterFactoryIMFTextFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exporterFactory_IMF_TextFile1.csv";
-        string exporterFactoryBasicTextFile1 = FileRefs.TestFileBasePath + "\\FileIOTests\\exporterFactory_Basic_TextFile1.csv";
+        readonly string exporterFactoryUIMFTextFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exporterFactory_UIMF_TextFile1.csv";
+        readonly string exporterFactoryIMFTextFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exporterFactory_IMF_TextFile1.csv";
+        readonly string exporterFactoryBasicTextFile1 = FileRefs.TestFileBasePath + @"\FileIOTests\exporterFactory_Basic_TextFile1.csv";
         [Test]
         public void create_UIMF_IsosTextExporterTest1()
         {

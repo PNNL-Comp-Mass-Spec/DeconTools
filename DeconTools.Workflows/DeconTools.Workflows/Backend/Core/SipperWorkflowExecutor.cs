@@ -40,9 +40,9 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public override void InitializeWorkflow()
+        public new void InitializeWorkflow()
         {
-            //_loggingFileName = getLogFileName(ExecutorParameters.LoggingFolder);
+            //_loggingFileName = GetLogFileName(ExecutorParameters.LoggingFolder);
 
             Check.Require(WorkflowParameters is SipperWorkflowExecutorParameters, "Parameters are not of the right type.");
 
@@ -55,7 +55,7 @@ namespace DeconTools.Workflows.Backend.Core
             List<int> massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
-            _loggingFileName = ExecutorParameters.OutputFolderBase  + "\\Logs\\" + RunUtilities.GetDatasetName(DatasetPath) + "_log.txt";
+            _loggingFileName = Path.Combine(ExecutorParameters.OutputFolderBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
 
 
             TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
@@ -136,7 +136,7 @@ namespace DeconTools.Workflows.Backend.Core
             UpdateTargetMissingInfo();
 
 
-            _resultsFolder = getResultsFolder(ExecutorParameters.OutputFolderBase);
+            _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
 
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);

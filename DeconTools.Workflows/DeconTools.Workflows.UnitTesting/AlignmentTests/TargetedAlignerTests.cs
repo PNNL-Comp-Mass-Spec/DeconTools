@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -18,7 +19,7 @@ namespace DeconTools.Workflows.UnitTesting
             Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            string deconToolsResultFile = FileRefs.ImportedData + "\\" + "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt";
+            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.ImportedFeaturesFilename = deconToolsResultFile;

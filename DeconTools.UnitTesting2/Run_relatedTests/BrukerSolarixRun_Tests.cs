@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             BrukerSolarixRun run = new BrukerSolarixRun(FileRefs.RawDataMSFiles.BrukerSolarixFile1);
             Assert.AreEqual("12Ttest_000003", run.DatasetName);
             Assert.AreEqual(FileRefs.RawDataBasePath + @"Bruker_Solarix12T\12Ttest_000003", run.DataSetPath);
-            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\\\Bruker_Solarix12T\\12Ttest_000003\\ser", run.RawData.FileName);
+            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\\Bruker_Solarix12T\12Ttest_000003\ser", run.RawData.FileName);
         }
 
         [Test]

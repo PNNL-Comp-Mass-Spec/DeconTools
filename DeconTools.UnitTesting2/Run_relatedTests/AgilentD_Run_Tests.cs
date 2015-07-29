@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
             Assert.AreEqual("BSA_TOF4", run.DatasetName);
-            Assert.AreEqual("\\\\protoapps\\UserData\\Slysz\\DeconTools_TestFiles\\AgilentD\\BSA_TOF4\\BSA_TOF4.D", run.DataSetPath);
+            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\AgilentD\BSA_TOF4\BSA_TOF4.D", run.DataSetPath);
            
             Assert.AreEqual(61, run.MaxLCScan);
             Assert.AreEqual(0, run.MinLCScan);

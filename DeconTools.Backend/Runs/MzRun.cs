@@ -34,11 +34,11 @@ namespace DeconTools.Backend.Runs
             
             
 
-            FileInfo fileInfo = new FileInfo(fileName);
+            var fileInfo = new FileInfo(fileName);
 
             if (!fileInfo.Exists)
             {
-                throw new FileNotFoundException("Cannot initialize Run. File not found.");
+                throw new FileNotFoundException("Cannot initialize Run. File not found: " + fileName);
             }
 
             var fileExtension = Path.GetExtension(fileName).ToLower();

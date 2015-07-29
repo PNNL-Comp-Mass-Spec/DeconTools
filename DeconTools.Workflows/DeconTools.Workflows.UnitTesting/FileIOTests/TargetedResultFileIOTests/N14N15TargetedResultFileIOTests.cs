@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void ImporterTest1()
         {
-            string importedResultFile = FileRefs.ImportedData + Path.DirectorySeparatorChar + "N14N15TargetedResultsImportedData1.txt";
+            string importedResultFile = Path.Combine(FileRefs.ImportedData, "N14N15TargetedResultsImportedData1.txt");
 
             var importer = new N14N15TargetedResultFromTextImporter(importedResultFile);
             TargetedResultRepository repo = importer.Import();

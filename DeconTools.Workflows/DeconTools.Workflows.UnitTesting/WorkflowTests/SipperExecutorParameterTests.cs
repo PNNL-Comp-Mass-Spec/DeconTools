@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using DeconTools.Workflows.Backend.Core;
@@ -14,7 +15,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void Test1()
         {
 
-            string outputFile=   FileRefs.OutputFolderPath + "\\" + "SipperExecutorParameters1.xml";
+            string outputFile = Path.Combine(FileRefs.OutputFolderPath, "SipperExecutorParameters1.xml");
 
             SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
             parameters.DeleteLocalDatasetAfterProcessing = false;

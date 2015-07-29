@@ -33,9 +33,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         //    string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
         //    Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-        //    string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-        //    string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-        //    string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+        //    string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+        //    string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+        //    string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
         //    if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
         //    if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -624,7 +624,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             parameters.LCScanMax = 6500;
 
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 
@@ -729,7 +729,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             parameters.LCScanMax = 7000;
 
 
-            string expectedPeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 

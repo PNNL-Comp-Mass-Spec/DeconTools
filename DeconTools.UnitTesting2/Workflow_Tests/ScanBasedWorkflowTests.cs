@@ -23,9 +23,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -72,9 +72,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -124,9 +124,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -166,9 +166,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -218,9 +218,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -273,9 +273,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
             Run run = new RunFactory().CreateRun(testFile);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -320,9 +320,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scan6000_9000 - oldThrash.xml";
 
             Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
@@ -373,9 +373,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
-            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+            string expectedPeaksFileOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt");
 
 
 
@@ -435,10 +435,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             string parameterFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_scans6000_6050_MS2.xml";
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
-            string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
+            string expectedScansOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_scans.csv");
 
-            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+            string expectedPeaksFileOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt");
 
 
 
@@ -483,14 +483,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void processUIMF_demultiplexedUIMF()
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
-            //string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Frame_500-501.xml";
+            //string parameterFile = Path.Combine(FileRefs.RawDataBasePath, "ParameterFiles", "IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Frame_500-501.xml");
             var parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Frame_500-501.xml";
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
-            string expectedScansOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_scans.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
+            string expectedScansOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_scans.csv");
 
-            string expectedPeaksOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+            string expectedPeaksOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt");
 
 
 
@@ -557,7 +557,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
             
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -595,12 +595,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void processUIMF_Frames800_802_SumAllIMSScansPerFrame()
         {
             string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
-            string parameterFile = FileRefs.RawDataBasePath + "\\ParameterFiles\\UIMF_frames_peakBR7_800-802_OneSpectrumPerFrame.xml";
+            string parameterFile = Path.Combine(FileRefs.RawDataBasePath, "ParameterFiles", "UIMF_frames_peakBR7_800-802_OneSpectrumPerFrame.xml");
 
             Run run = new RunFactory().CreateRun(testFile);
 
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -640,7 +640,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             Run run = new RunFactory().CreateRun(testFile);
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -681,7 +681,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             DirectoryInfo dirInfo = new DirectoryInfo(testFile);
             string datasetName = dirInfo.Name;
 
-            string expectedIsosOutput = FileRefs.RawDataMSFiles.BrukerSolarix12TFile1 + Path.DirectorySeparatorChar + datasetName + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1, datasetName + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -704,7 +704,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             DirectoryInfo dirInfo = new DirectoryInfo(testFile);
             string datasetName = dirInfo.Name;
 
-            string expectedIsosOutput = FileRefs.RawDataMSFiles.Bruker15TFile1 + Path.DirectorySeparatorChar + datasetName + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(FileRefs.RawDataMSFiles.Bruker15TFile1, datasetName + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -731,7 +731,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             DirectoryInfo dirInfo = new DirectoryInfo(testFile);
             string datasetName = dirInfo.Name;
 
-            string expectedIsosOutput = testFile + Path.DirectorySeparatorChar + datasetName + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(testFile, datasetName + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
             {
@@ -754,7 +754,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var dirInfo = new DirectoryInfo(testFile);
             string datasetName = dirInfo.Name;
 
-            string expectedIsosOutput = testFile + Path.DirectorySeparatorChar + datasetName + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(testFile, datasetName + "_isos.csv");
+            
             if (File.Exists(expectedIsosOutput))
             {
                 File.Delete(expectedIsosOutput);
@@ -775,9 +776,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
             string parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
-            string expectedIsosOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_isos.csv";
+            string expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
-            string expectedPeaksFileOutput = Path.GetDirectoryName(testFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt";
+            string expectedPeaksFileOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_peaks.txt");
 
 
 

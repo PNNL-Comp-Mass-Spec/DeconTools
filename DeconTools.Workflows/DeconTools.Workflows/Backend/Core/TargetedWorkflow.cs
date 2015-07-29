@@ -146,7 +146,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        public override void InitializeWorkflow()
+        public void InitializeWorkflow()
         {
             Check.Require(Run != null, "Run is null");
             Run.ResultCollection.ResultType = GetResultType();
@@ -490,7 +490,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        public override WorkflowParameters WorkflowParameters
+        public WorkflowParameters WorkflowParameters
         {
             get
             {

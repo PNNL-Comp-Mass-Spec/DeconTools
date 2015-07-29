@@ -215,7 +215,7 @@ namespace DeconTools.Backend.DTO
                     IsosResultUtilities isoutil = new IsosResultUtilities();
 
                     string isosFileName = file.FullName;
-                    //string isosFileName = Path.GetDirectoryName(file.FullName) + Path.DirectorySeparatorChar+ Path.GetFileNameWithoutExtension(file.FullName) + "_isos.csv";
+                    //string isosFileName = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + "_isos.csv");
                     isoutil.LoadResults(isosFileName, DeconTools.Backend.Globals.MSFileType.PNNL_IMS);
 
                     List<IsosResult> isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoutil.Results);

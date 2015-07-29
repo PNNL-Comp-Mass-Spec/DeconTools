@@ -32,15 +32,15 @@ namespace DeconTools.Workflows.Backend.Core
 
     //    }
 
-    //    private string getlogFileName()
+    //    private string GetlogFileName()
     //    {
-    //        return Path.GetDirectoryName(this.rawdataFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smartSumming_log.txt";
+    //        return Path.Combine(Path.GetDirectoryName(this.rawdataFile), Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smartSumming_log.txt");
 
     //    }
 
     //    private string getOutputFileName()
     //    {
-    //        return Path.GetDirectoryName(this.rawdataFile) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smart_LCMSFeatures.txt";
+    //        return Path.Combine(Path.GetDirectoryName(this.rawdataFile), Path.GetFileNameWithoutExtension(this.rawdataFile) + "_smart_LCMSFeatures.txt");
     //    }
     //    #endregion
 
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
     //    {
     //        this.rawdataFile = this.Run.Filename;
     //        this.outputFeatureFile = getOutputFileName();
-    //        this.logFile = getlogFileName();
+    //        this.logFile = GetlogFileName();
 
 
 

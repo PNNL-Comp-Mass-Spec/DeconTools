@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
 
             foreach (var run in runList)
             {
-                string peakFileName = run.DataSetPath + "\\"+run.DatasetName + "_peaks.txt";
+                string peakFileName = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
                 PeakImporterFromText peakImporter = new PeakImporterFromText(peakFileName);
                 peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
@@ -216,7 +216,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests.TargetedAnalysisTests
             {
 
                 Console.WriteLine("------------------------- working on " + run.DatasetName);
-                string peakFileName = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+                string peakFileName = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
                 PeakImporterFromText peakImporter = new PeakImporterFromText(peakFileName);
                 peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);

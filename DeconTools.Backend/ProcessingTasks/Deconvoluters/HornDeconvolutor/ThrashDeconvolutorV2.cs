@@ -13,6 +13,7 @@ using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
 using System.Diagnostics;
+using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 {
@@ -391,7 +392,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private void LoadPeaks(Run run)
         {
-            string sourcePeaksFile = run.DataSetPath + "\\" + run.DatasetName + "_peaks.txt";
+            var sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 

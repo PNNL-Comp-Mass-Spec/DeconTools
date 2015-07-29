@@ -28,9 +28,9 @@ namespace DeconTools.Workflows.ProblemTesting
                 @"\\pnl\projects\MSSHARE\Webb_Ian\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27.xml");
 
             
-            string expectedIsosFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_isos.csv";
-            string expectedScansFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_scans.csv";
-            string expectedPeaksFile = run.DataSetPath + Path.DirectorySeparatorChar + run.DatasetName + "_peaks.txt";
+            string expectedIsosFile = Path.Combine(run.DataSetPath, run.DatasetName + "_isos.csv");
+            string expectedScansFile = Path.Combine(run.DataSetPath, run.DatasetName + "_scans.csv");
+            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
             if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
             if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);

@@ -38,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 
             if (m_targetUMCFileStoringAlignmentInfo == null)
             {
-                string baseFileName = run.DataSetPath + "\\" + run.DatasetName;
+                string baseFileName = Path.Combine(run.DataSetPath, run.DatasetName);
                 m_targetUMCFileStoringAlignmentInfo = baseFileName + "_UMCs.txt";
             }
             Check.Require(File.Exists(m_targetUMCFileStoringAlignmentInfo), "ChromAligner failed. The UMC file from which alignment data is extracted does not exist.");

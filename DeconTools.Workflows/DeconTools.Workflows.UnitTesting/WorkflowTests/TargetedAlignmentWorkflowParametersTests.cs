@@ -1,4 +1,5 @@
-﻿using DeconTools.Workflows.Backend.Core;
+﻿using System.IO;
+using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
@@ -9,7 +10,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParameterTests1()
         {
-            string exportedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedTargetedAlignmentWorkflowParameters.xml";
+            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
 
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
@@ -18,7 +19,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParameterTests1()
         {
-            string importedParametersFile = FileRefs.OutputFolderPath + "\\" + "exportedTargetedAlignmentWorkflowParameters.xml";
+            string importedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
             TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
         }
