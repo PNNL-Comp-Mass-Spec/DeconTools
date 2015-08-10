@@ -26,11 +26,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public override void ExportIsosResults(List<IsosResult> isosResultList)
         {
             Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(this.FileName))
             {
-                foreach (IsosResult result in isosResultList)
+                foreach (var result in isosResultList)
                 {
-                    string isosResultOutput = buildIsosResultOutput(result);
+                    var isosResultOutput = buildIsosResultOutput(result);
                     
                     if (!string.IsNullOrEmpty(isosResultOutput))
                     {
@@ -65,9 +65,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             }
 
 
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(this.FileName))
             {
-                string headerLine = buildHeaderLine();
+                var headerLine = buildHeaderLine();
                 writer.Write(headerLine);
                 writer.Flush();
                 writer.Close();

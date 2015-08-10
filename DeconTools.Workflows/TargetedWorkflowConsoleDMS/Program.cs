@@ -26,56 +26,58 @@ namespace TargetedWorkflowConsole
                 return -1;
             }
 
-            if (args.Length == 2 || args.Length == 3)
+            if (!(args.Length == 2 || args.Length == 3))
             {
-                var datasetPath = args[0];
+                Console.WriteLine("Too many command line arguments; expecting 2 or 3");
+                ReportSyntax();
+                System.Threading.Thread.Sleep(1500);
+                return -1;
+            }
 
-                if (!File.Exists(datasetPath))
+            var datasetPath = args[0];
+
+            if (!File.Exists(datasetPath))
+            {
+                ReportError("Dataset file not found: " + datasetPath);
+                System.Threading.Thread.Sleep(1500);
+                return -5;
+            }
+
+            var fileInfo = new FileInfo(args[1]);
+            if (!fileInfo.Exists)
+            {
+                ReportError("Parameter file not found: " + fileInfo.FullName);
+                System.Threading.Thread.Sleep(1500);
+                return -5;
+            }
+
+            try
+            {
+                var workflowParameters = WorkflowParameters.CreateParameters(fileInfo.FullName) as WorkflowExecutorBaseParameters;
+
+                if (workflowParameters == null)
                 {
-                    ReportError("Dataset file not found: " + datasetPath);
-                    System.Threading.Thread.Sleep(1500);
-                    return -5;
+                    ReportError("Workflow parameters created from " + args[1] + " are null");
+                    return -6;
                 }
 
-                var fileInfo = new FileInfo(args[1]);
-                if (!fileInfo.Exists)
-                {
-                    ReportError("Parameter file not found: " + fileInfo.FullName);
-                    System.Threading.Thread.Sleep(1500);
-                    return -5;
-                }
+                if (args.Length == 3)
+                    workflowParameters.TargetsFilePath = args[2];
 
-                try
-                {
-                    var workflowParameters = WorkflowParameters.CreateParameters(fileInfo.FullName) as WorkflowExecutorBaseParameters;
-
-                    if (workflowParameters == null)
-                    {
-                        ReportError("Workflow parameters created from " + args[1] + " are null");
-                        return -6;
-                    }
-
-                    if (args.Length == 3)
-                        workflowParameters.TargetsFilePath = args[2];
-
-                    var workflowExecutor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(workflowParameters, datasetPath);
-                    workflowExecutor.Execute();
-
-                }
-                catch (Exception ex)
-                {
-                    ReportError(ex);
-                    System.Threading.Thread.Sleep(1500);
-                    return ex.GetHashCode();
-                }
+                var workflowExecutor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(workflowParameters, datasetPath);
+                workflowExecutor.Execute();
 
                 // Success
                 return 0;
+
+            }
+            catch (Exception ex)
+            {
+                ReportError(ex);
+                System.Threading.Thread.Sleep(1500);
+                return ex.GetHashCode();
             }
 
-            ReportSyntax();
-            System.Threading.Thread.Sleep(1500);
-            return -1;
         }
 
         private static void ReportError(string message)

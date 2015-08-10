@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace DeconTools.Utilities
 {
-    public sealed class Check
+    public static class Check
     {
         #region Interface
 
@@ -43,6 +43,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Precondition check - should run regardless of preprocessor directives.
         /// </summary>
+        [Obsolete("Call the Require() overload that accepts a message")] 
         public static void Require(bool assertion)
         {
             if (UseExceptions)
@@ -88,6 +89,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Postcondition check.
         /// </summary>
+        [Obsolete("Call the Ensure() overload that accepts a message")] 
         public static void Ensure(bool assertion)
         {
             if (UseExceptions)
@@ -133,6 +135,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Invariant check.
         /// </summary>
+        [Obsolete("Call the Invariant() overload that accepts a message")] 
         public static void Invariant(bool assertion)
         {
             if (UseExceptions)
@@ -178,6 +181,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Assertion check.
         /// </summary>
+        [Obsolete("Call the Assert() overload that accepts a message")] 
         public static void Assert(bool assertion)
         {
             if (UseExceptions)
@@ -210,9 +214,6 @@ namespace DeconTools.Utilities
         #endregion // Interface
 
         #region Implementation
-
-        // No creation
-        private Check() { }
 
         /// <summary>
         /// Is exception handling being used?

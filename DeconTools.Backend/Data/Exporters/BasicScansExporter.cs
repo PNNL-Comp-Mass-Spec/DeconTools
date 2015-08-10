@@ -24,21 +24,28 @@ namespace DeconTools.Backend.Data
 
         public override void Export(DeconTools.Backend.Core.ResultCollection results)
         {
-            StringBuilder sb;
+
             StreamWriter sw;
             try
             {
                 sw = new StreamWriter(this.fileName);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error creating file " + this.fileName + ": " + ex.Message);
             }
+
+            if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4), DblToString(3.14159, 4)))
+            {
+                Console.WriteLine("Note: using a period for the decimal point for because the result files are CSV files");
+            }
+
             sw.WriteLine(headerLine);
+
             foreach (ScanResult result in results.ScanResultList)
             {
-                sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.Append(result.ScanSet.PrimaryScanNumber);   
                 sb.Append(delimiter);
                 sb.Append(DblToString(result.ScanTime, 4));

@@ -7,8 +7,8 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "July 15, 2015";
-        
+        public const string PROGRAM_DATE = "August 10, 2015";
+
         static int Main(string[] args)
         {
             Console.WriteLine("Starting..............");
@@ -27,7 +27,7 @@ namespace DeconConsole
             {
                 outputFolder = args[2];
 
-                if (String.IsNullOrWhiteSpace(outputFolder))
+                if (string.IsNullOrWhiteSpace(outputFolder))
                 {
                     return 2;
                 }
@@ -58,6 +58,7 @@ namespace DeconConsole
                 ReportFileProblem(filename, "Dataset file (or folder)");
                 return 4;
             }
+
             if (!IsFileValid(parameterFilename))
             {
                 ReportFileProblem(parameterFilename, "Parameter file");
@@ -111,16 +112,24 @@ namespace DeconConsole
 
         private static bool IsFileValid(string filename)
         {
-            var fiFile = new FileInfo(filename);
-            var diFolder = new DirectoryInfo(filename);
+            try
+            {
+                var fiFile = new FileInfo(filename);
+                var diFolder = new DirectoryInfo(filename);
 
-            if (fiFile.Exists)
-                return true;
+                if (fiFile.Exists)
+                    return true;
 
-            if (diFolder.Exists)
-                return true;
-           
-            return false;
+                if (diFolder.Exists)
+                    return true;
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Filename validation error: " + ex.Message);
+                return false;
+            }
         }
 
         private static string GetAppVersion()
@@ -144,8 +153,8 @@ namespace DeconConsole
             Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
             Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
             Console.WriteLine("Version: " + GetAppVersion());
-			Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov");
-			Console.WriteLine("Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov");
+            Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov");
+            Console.WriteLine("Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov");
             Console.WriteLine();
 
             System.Threading.Thread.Sleep(1000);

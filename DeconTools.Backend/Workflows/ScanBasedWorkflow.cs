@@ -72,14 +72,16 @@ namespace DeconTools.Backend.Workflows
             {
                 var datasetFolder = new DirectoryInfo(datasetFileName);
                 if (!datasetFolder.Exists)
-                     throw new FileNotFoundException("Dataset file (or folder) not found: " + datasetFile);
+                    throw new FileNotFoundException("Dataset file (or folder) not found: " + datasetFile);
             }
-            
+
             var paramFile = new FileInfo(parameterFile);
             if (!paramFile.Exists)
                 throw new FileNotFoundException("Parameter file not found: " + parameterFile);
 
+            // Initialize a new Run
             Run run;
+
             try
             {
                 run = new RunFactory().CreateRun(datasetFileName);
@@ -98,10 +100,30 @@ namespace DeconTools.Backend.Workflows
                     ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
             }
 
-            var newParameters = new DeconToolsParameters();
-            newParameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            DeconToolsParameters newParameters;
 
-            return CreateWorkflow(run, newParameters, outputFolderPath, backgroundWorker);
+            try
+            {
+                newParameters = new DeconToolsParameters();
+                newParameters.LoadFromOldDeconToolsParameterFile(parameterFile);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    "Error loading the parameter file: " +
+                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+            }
+
+            try
+            {
+                return CreateWorkflow(run, newParameters, outputFolderPath, backgroundWorker);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    "Error creating the workflow: " +
+                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+            }
 
         }
 
@@ -129,7 +151,7 @@ namespace DeconTools.Backend.Workflows
                     return new DeconMSnWorkflow(parameters, run, outputFolderPath, backgroundWorker);
 
                 default:
-                    throw new ArgumentOutOfRangeException("ScanBasedWorkflowName is unknown");
+                    throw new Exception("ScanBasedWorkflowName is unknown: " + parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName);
             }
         }
 
@@ -139,8 +161,7 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-
-        public ScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        protected ScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
         {
             NewDeconToolsParameters = parameters;
             Run = run;
@@ -202,7 +223,7 @@ namespace DeconTools.Backend.Workflows
             if (_deconvolutorRequiresPeaksFile)
             {
                 //new iThrash deconvolutor uses the _peaks.txt file. So need to check for it and create it if necessary
-                bool peaksFileExists = CheckForPeaksFile(OutputFolderPath);
+                var peaksFileExists = CheckForPeaksFile(OutputFolderPath);
                 if (!peaksFileExists)
                 {
                     IqLogger.Log.Info("Creating _peaks.txt file. Takes 1 to 5 minutes.");
@@ -305,8 +326,9 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-
-
+        /// <summary>
+        /// Execute the workflow
+        /// </summary>
         public virtual void Execute()
         {
             try
@@ -315,13 +337,15 @@ namespace DeconTools.Backend.Workflows
             }
             catch (Exception ex)
             {
-                string simpleErrorMessage = "Error - during workflow initialization. Internal error message: "+ ex.Message;
+                var simpleErrorMessage = "Error - during workflow initialization. Internal error message: " + ex.Message;
                 LogError(ex, simpleErrorMessage);
                 throw new ApplicationException(simpleErrorMessage, ex);
             }
 
-            WorkflowStats = new WorkflowStats();
-            WorkflowStats.TimeStarted = DateTime.Now;
+            WorkflowStats = new WorkflowStats
+            {
+                TimeStarted = DateTime.Now
+            };
 
             try
             {
@@ -329,7 +353,7 @@ namespace DeconTools.Backend.Workflows
             }
             catch (Exception ex)
             {
-                string simpleErrorMessage = "A bad error happened while processing each scan in the dataset. Internal error message: "+ ex.Message;
+                var simpleErrorMessage = "A bad error happened while processing each scan in the dataset. Internal error message: " + ex.Message;
                 LogError(ex, simpleErrorMessage);
                 throw new ApplicationException(simpleErrorMessage, ex);
             }
@@ -359,7 +383,7 @@ namespace DeconTools.Backend.Workflows
                 outputFolderPath = userProvidedOutputFolderPath;
             }
 
-            string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
             RunUtilities.GetPeaks(Run, expectedPeaksFile);
         }
 
@@ -376,27 +400,27 @@ namespace DeconTools.Backend.Workflows
                 outputFolderPath = userProvidedOutputFolderPath;
             }
 
-            string expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
 
-			if (!File.Exists(expectedPeaksFile))
-				return false;
+            if (!File.Exists(expectedPeaksFile))
+                return false;
 
-			// Open the file and confirm that it has at least one row of data
-			var rowCount = 0;
+            // Open the file and confirm that it has at least one row of data
+            var rowCount = 0;
 
-	        using (
-		        var peaksFile =
-			        new StreamReader(new FileStream(expectedPeaksFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
-	        {
-				while (peaksFile.Peek() > -1 && rowCount < 2)
-		        {
-			        string line = peaksFile.ReadLine();
-			        if (!string.IsNullOrWhiteSpace(line))
-				        rowCount++;
-		        }
-	        }
+            using (
+                var peaksFile =
+                    new StreamReader(new FileStream(expectedPeaksFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                while (peaksFile.Peek() > -1 && rowCount < 2)
+                {
+                    var line = peaksFile.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(line))
+                        rowCount++;
+                }
+            }
 
-	        return (rowCount > 1);	        
+            return (rowCount > 1);
         }
 
 
@@ -404,7 +428,7 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
 
-            string formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
             Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
@@ -425,7 +449,7 @@ namespace DeconTools.Backend.Workflows
         {
             ExecuteTask(MSGenerator);
 
-            bool isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
+            var isCentroided = Run.IsDataCentroided(Run.CurrentScanSet.PrimaryScanNumber);
 
             if (isCentroided && !NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling && !NotifiedZeroFillAutoEnabled)
             {
@@ -493,7 +517,7 @@ namespace DeconTools.Backend.Workflows
             }
             catch (Exception ex)
             {
-                string errorInfo = GetErrorInfo(Run, processingTask, ex);
+                var errorInfo = GetErrorInfo(Run, processingTask, ex);
                 Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
 
                 throw;
@@ -505,7 +529,7 @@ namespace DeconTools.Backend.Workflows
 
         protected string GetErrorInfo(Run run, Task task, Exception ex)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("ERROR THROWN. ProcessingTask = ");
             sb.Append(task);
             sb.Append("; ");
@@ -531,15 +555,17 @@ namespace DeconTools.Backend.Workflows
         {
 
 
-            var parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.OutputFolder = outputFolderPath;
-            parameters.LCScanMin = Run.MinLCScan;
-            parameters.LCScanMax = Run.MaxLCScan;
-            parameters.IsDataThresholded = Run.IsDataThresholded;
-            parameters.ProcessMSMS = false;
-            parameters.PeakBR = peakDetectorParameters.PeakToBackgroundRatio;
-            parameters.Num_LC_TimePointsSummed = 1;
-            parameters.SigNoiseThreshold = peakDetectorParameters.SignalToNoiseThreshold;
+            var parameters = new PeakDetectAndExportWorkflowParameters
+            {
+                OutputFolder = outputFolderPath,
+                LCScanMin = Run.MinLCScan,
+                LCScanMax = Run.MaxLCScan,
+                IsDataThresholded = Run.IsDataThresholded,
+                ProcessMSMS = false,
+                PeakBR = peakDetectorParameters.PeakToBackgroundRatio,
+                Num_LC_TimePointsSummed = 1,
+                SigNoiseThreshold = peakDetectorParameters.SignalToNoiseThreshold
+            };
 
             var peakDetectAndExporter = new PeakDetectAndExportWorkflow(Run, parameters);
             peakDetectAndExporter.Execute();
@@ -576,7 +602,7 @@ namespace DeconTools.Backend.Workflows
 
         protected virtual void CreateOutputFileNames()
         {
-            string basefileName = GetBaseFileName(Run);
+            var basefileName = GetBaseFileName(Run);
 
             Logger.Instance.OutputFilename = basefileName + "_log.txt";
 

@@ -22,24 +22,28 @@ namespace DeconTools.Backend.Data
 
         public override void Export(DeconTools.Backend.Core.ResultCollection results)
         {
-            StringBuilder sb;
             StreamWriter sw;
             try
             {
                 sw = new StreamWriter(this.fileName);
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error creating file " + this.fileName + ": " + ex.Message);
             }
+
+            if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4), DblToString(3.14159, 4)))
+            {
+                Console.WriteLine("Note: using a period for the decimal point for because the result files are CSV files");
+            }
+
             sw.WriteLine(headerLine);
 
-            foreach (ScanResult result in results.ScanResultList)
+            foreach (var result in results.ScanResultList)
             {
                 Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
-                UimfScanResult uimfResult = (UimfScanResult)result;
-                sb = new StringBuilder();
+                var uimfResult = (UimfScanResult)result;
+                var sb = new StringBuilder();
                 sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
                 sb.Append(delimiter);
                 sb.Append(DblToString(uimfResult.ScanTime, 3));
@@ -59,7 +63,7 @@ namespace DeconTools.Backend.Data
                 sb.Append(DblToString(uimfResult.FramePressureUnsmoothed, 4));
                 sb.Append(delimiter);
                 sb.Append(DblToString(uimfResult.FramePressureSmoothed, 4));
-                
+
                 sw.WriteLine(sb.ToString());
             }
             sw.Close();
