@@ -1,5 +1,8 @@
 DeconTools AutoProcessor Revision History
 
+Autoprocessor_1.0.5704		August 14, 2015	mem
+	- Updated PNNLOmics.dll that has parameter invariantCulture
+
 Autoprocessor_1.0.5700		August 10, 2015	mem
 	- Add additional exception handling
 	- Now using a period for decimal points, even if the system's language settings are configured to use a comma

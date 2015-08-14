@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "August 10, 2015";
+        public const string PROGRAM_DATE = "August 14, 2015";
 
         static int Main(string[] args)
         {
@@ -108,6 +108,8 @@ namespace DeconConsole
                                   ? "The path of your " + fileDescription + " has no characters!"
                                   : fileDescription + " not found: " + filename);
             Console.WriteLine();
+
+            System.Threading.Thread.Sleep(1500);
         }
 
         private static bool IsFileValid(string filename)

@@ -23,7 +23,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                 throw new Exception("Error creating file " + _filename + ": " + ex.Message);
             }
 
-            if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4), DblToString(3.14159, 4)))
+            if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4, false, false), DblToString(3.14159, 4)))
             {
                 Console.WriteLine("Note: using a period for the decimal point because the result files are CSV files");
             }
