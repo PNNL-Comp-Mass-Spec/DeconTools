@@ -1,145 +1,145 @@
-DeconTools AutoProcessor Revision History
+DeconTools DeconConsole / AutoProcessor Revision History
 
-Autoprocessor_1.0.5704		August 14, 2015	mem
-	- Updated PNNLOmics.dll that has parameter invariantCulture
+Version 1.0.5753; October 2, 2015	mem
+	- Fixed bug in ZeroFiller that led to a divide-by-zero overflow when adjacent data points had the same mass value
 
-Autoprocessor_1.0.5700		August 10, 2015	mem
+Version 1.0.5700; August 10, 2015	mem
 	- Add additional exception handling
 	- Now using a period for decimal points, even if the system's language settings are configured to use a comma
 
-Autoprocessor_1.0.5674		July 15, 2015	mem
+Version 1.0.5674; July 15, 2015	mem
 	- Added DblToString() for formatting double values as strings, limiting the number of decimal places shown
 
-Autoprocessor_1.0.5518		February 9, 2015	mem
+Version 1.0.5518; February 9, 2015	mem
 	- Moved acqus and apexAcquisition.method file reading into BrukerDataReader.DLL
 	- BrukerCalibrationData now inherits from BrukerDataReader.GlobalParameters
 	- BrukerV3Run.GetMassSpectrum now uses the mass range used during data acquisition to define the range of data to return
 	- Fixed file paths in unit tests
 	- Updated ProteoWizard DLLs
 
-Autoprocessor_1.0.5513		February 4, 2015	mem
+Version 1.0.5513; February 4, 2015	mem
 	- Created 64-bit version of DeconConsole.exe and DeconTools.Backend.dll
-		- Does not depend on DeconEngineV2.dll, and thus does not support ThrashV1
+	  - Does not depend on DeconEngineV2.dll, and thus does not support ThrashV1
 
-Autoprocessor_1.0.5504		January 26, 2015	mem
+Version 1.0.5504; January 26, 2015	mem
 	- New version of the UIMFLibrary that uses less memory when caching spectra
 
-Autoprocessor_1.0.5480		January 2, 2015	mem
+Version 1.0.5480; January 2, 2015	mem
 	- Added HandleProcessCorruptedStateExceptionsAttribute to GetMassSpectrum in XCaliburRun2 in an attempt to catch COM errors due to corrupt spectra
 	- New version of ThermoRawFileReader
 
-Autoprocessor_1.0.5326		August 1, 2014	mem
+Version 1.0.5326; August 1, 2014	mem
 	- DeconConsole no longer references SetConsoleMode in kernel32.dll
 
-Autoprocessor_1.0.5325		July 31, 2014	mem
+Version 1.0.5325; July 31, 2014	mem
 	- Removed dependency on DeconEngine.dll, which required Visual C++ from .NET 1.1 (MSVCP71.dll)
-		- DeconEngine.dll was included to support the Rapid deconvolution method, which we no longer use
+	  - DeconEngine.dll was included to support the Rapid deconvolution method, which we no longer use
 
-Autoprocessor_1.0.5291		June 27, 2014	mem
+Version 1.0.5291; June 27, 2014	mem
 	- Fixed bug in DeconToolsZeroFiller that dropped the final data point when zero filling
 	- Updated UIMFLibrary.dll
 	- Updated System.Data.SQLite.dll
 
-Autoprocessor_1.0.5280		June 16, 2014	mem
+Version 1.0.5280; June 16, 2014	mem
 	- Updated DeconEngineV2.dll
 
-Autoprocessor_1.0.5044		Oct 23, 2013	mem
+Version 1.0.5044; Oct 23, 2013	mem
 	- Now validating that the _peaks.txt file has usable data
 	- Now sorting data returned by msfileReader.GetMassListFromScanNum if not sorted by m/z
 	- Fixed bug in FWHM calculator
 	- Slight peak detector speed up
 
-Autoprocessor_1.0.5021		Sep 30, 2013	gslysz
+Version 1.0.5021; Sep 30, 2013	gslysz
 	- Bug fixes
 
-Autoprocessor_1.0.5003		Sep 12, 2013	gslysz
+Version 1.0.5003; Sep 12, 2013	gslysz
 	- Public release that supports ThrashV1 (C++ based) and ThrashV2 (C# based)
 
-Autoprocessor_1.0.4672		Oct 16, 2012	gslysz
+Version 1.0.4672; Oct 16, 2012	gslysz
 	- fixed total failure bug when trying to read mzXML data
 	- improved Bruker file reader 
 
-Autoprocessor_1.0.4591		July 27, 2012	gslysz
+Version 1.0.4591; July 27, 2012	gslysz
 	- Upgraded to read Thermo .raw files using xrawfile2.dll v2.2 
 
-Autoprocessor_1.0.4533		May 30, 2012	gslysz
+Version 1.0.4533; May 30, 2012	gslysz
 	- Support for mzML, large mzXML files, and mz5 (using Proteowizard)
 	- Support for BrukerTOF (Maxis)   
 
-Autoprocessor_1.0.4412		Jan 30, 2012	gslysz
+Version 1.0.4412; Jan 30, 2012	gslysz
 	- 'SaturationThreshold' parameter added. 
 
-Autoprocessor_1.0.4400		Jan 18, 2012	gslysz
+Version 1.0.4400; Jan 18, 2012	gslysz
 	- UIMF files with MS/MS now processed properly
 	- Summing fixed. Can sum across MS1 LC frames for MS/MS-containing UIMF files
 
-Autoprocessor_1.0.4364		Dec 13, 2011	gslysz
+Version 1.0.4364; Dec 13, 2011	gslysz
 	- Under-the-cover changes to support alternative workflows
 	- Rewrote workflow for peak output for multiple datasets (each consisting of a single scan)
 	- "UIMF saturation repair" workflow added
 
-Autoprocessor_1.0.4262		Sept 1, 2011	gslysz
+Version 1.0.4262; Sept 1, 2011	gslysz
 	- Incorporated Anoop's O16O18 program that extracts peak abundances for peaks that might be part of O16O18 labelled peptide 
 
-Autoprocessor_1.0.4259		Aug 30, 2011	gslysz
+Version 1.0.4259; Aug 30, 2011	gslysz
 	- DeconConsole errors do not wait for user to hit enter; now program exits; 
 
-Autoprocessor_1.0.4211		July 13, 2011	gslysz
+Version 1.0.4211; July 13, 2011	gslysz
 	- _scans files written after each scan, not at the end
 	- _isos file written to more frequently
 
-Autoprocessor_1.0.4210		July 12,2011	gslysz
+Version 1.0.4210; July 12,2011	gslysz
 	- Improved logging. Fixed some glitches with the Autoprocessor GUI
 
-Autoprocessor_1.0.4129		Apr 22, 2011	gslysz
+Version 1.0.4129; Apr 22, 2011	gslysz
 	- UIMF Frames are 0-based instead of 1-based (this is a change in the UIMFLibrary)
 
-Autoprocessor_1.0.4062		Feb 14, 2011	gslysz
+Version 1.0.4062; Feb 14, 2011	gslysz
 	- Peak data exported with MSFeature associations
 	- Interference scoring added
 
-Autoprocessor_1.0.3980		Nov 24, 2010	gslysz
+Version 1.0.3980; Nov 24, 2010	gslysz
 	- overhaul how Bruker files are handled. No longer uses DeconEngine. Uses C# code instead.
 	- simply select the parent folder that contains the raw data.
 	- works with Bruker_9T; Bruker_Solarix (12T); Bruker_15T
-Autoprocessor_1.0.3817		June 14, 2010	gslysz
+Version 1.0.3817; June 14, 2010	gslysz
 	- incorporates re-written UIMFLibrary.dll
 
-Autoprocessor_1.0.3791		May 19, 2010	gslysz
+Version 1.0.3791; May 19, 2010	gslysz
 	- support for Agilent.D files (new generation TOF)
 	- UIMF calibration support
 	- Fit re-calculation for RAPID is much improved (faster)
 
-Autoprocessor_1.0.3631		Dec 10, 2009	gslysz
+Version 1.0.3631; Dec 10, 2009	gslysz
 	- revamped exporters to export during the processing instead of at very end.  Writing to a temporary .bin no longer needed. 
 	- added sqlite exporters for _isos, _scans, and _peaks.  
 	- added new parameter (NumPeaksUsedInAbundance) to allow control over how abundance is calculated for a feature. 
 	- support for Bruker 9T data
 	- support for summing Bruker 9T data 
 
-Autoprocessor_1.0.XXXX		Nov 2, 2009	gslysz
+Version 1.0.XXXX; Nov 2, 2009	gslysz
 	- added support for mzXML processing
 	- added support for ICR2LS processing
 	- added 'Original Intensities' info to UIMF _isos result output.  This column reports the unsummed intensities (Anoop's work).
 
-Autoprocessor_1.0.3490		July 22, 2009 	gslysz
+Version 1.0.3490; July 22, 2009 	gslysz
 	- Added 'Re-fitter', which re-calculates the fit.  This can be used to calculate a THRASH-style fit value for data processed using RAPID. [this first version is very slow]
 
-Autoprocessor_1.0.3480		July 12, 2009 	gslysz
+Version 1.0.3480; July 12, 2009 	gslysz
 	- Stopped debugging info from being sent to console (this might slow Matt's DMS performance)
 	- Added info on processing % to log file (every 15 min will write to log file)
 	- Log file is written as the file is processed, instead of at the very end. 
 	- Added new column 'Summed_abundance' (currently doesn't work with RAPID since RAPID does not reveal the isotopes in the isotopic profile)
 	- Fixed 'cumulative_drift_time';  should be reporting correctly now.
 
-Autoprocessor_1.0.3475		July 7, 2009 	gslysz
+Version 1.0.3475; July 7, 2009 	gslysz
 	- Fixed an unwanted conversion from Double to Float that was occurring for most file types
 	- Added ability to merge multiple runs into a single _isos and _scans file. (Initially made for Julia Laskin's requirements).  
 
-Autoprocessor_1.0.3470		July 2, 2009 	gslysz
+Version 1.0.3470; July 2, 2009 	gslysz
 	- Added ability to output peak lists for each scan for IMF and RAW files. 
 
-Autoprocessor_1.0.3463		June 25, 2009 	gslysz
+Version 1.0.3463; June 25, 2009 	gslysz
 	- prevented memory overload by serializing / deserializing result objects to disk. 
 	- reduced sig figs in exported result files (_isos, _scans). 
 	- added indicator on UI for total number of Features found. 

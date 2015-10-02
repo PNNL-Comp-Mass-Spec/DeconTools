@@ -1,4 +1,5 @@
-﻿using DeconTools.Backend.Core;
+﻿using System;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 {
@@ -37,8 +38,8 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
         public override void Execute(ResultCollection resultList)
         {
             if (resultList.Run.XYData!=null && resultList.Run.XYData.Xvalues.Length>0)
-            {
-				resultList.Run.XYData = ZeroFill(resultList.Run.XYData.Xvalues, resultList.Run.XYData.Yvalues, MaxNumPointsToAdd, MaxZeroFillDistance);    
+            {               
+                resultList.Run.XYData = ZeroFill(resultList.Run.XYData.Xvalues, resultList.Run.XYData.Yvalues, MaxNumPointsToAdd, MaxZeroFillDistance);    
             }
 
             

@@ -372,6 +372,9 @@ namespace DeconTools.Backend.ProcessingTasks
             
             for (int index = 0; index < resultList.Run.PeakList.Count; index++)
             {
+                if (ShowTraceMessages)
+                    Console.Write(index + " ");
+
                 MSPeak peak = (MSPeak) resultList.Run.PeakList[index];
                 var oldPeak = new clsPeak();
                 oldPeak.mdbl_FWHM = peak.Width;
@@ -383,6 +386,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 mspeakList[index] = oldPeak;
             }
 
+            if (ShowTraceMessages)
+                Console.WriteLine();
 
             this.Transformer.PerformTransform(backgroundIntensity, minPeptideIntensity, ref xvals, ref yvals, ref mspeakList, ref transformResults);
             GenerateResults(transformResults, mspeakList, resultList);

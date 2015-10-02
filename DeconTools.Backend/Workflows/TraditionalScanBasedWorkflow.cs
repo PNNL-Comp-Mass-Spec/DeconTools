@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Workflows
     public class TraditionalScanBasedWorkflow : ScanBasedWorkflow
     {
 
-        private O16O18PeakDataAppender _o16O18PeakDataAppender = new O16O18PeakDataAppender();
+        private readonly O16O18PeakDataAppender _o16O18PeakDataAppender = new O16O18PeakDataAppender();
         private int _scanCounter = 1;
         private const int NumScansBetweenProgress = 10;
 
@@ -30,7 +30,7 @@ namespace DeconTools.Backend.Workflows
         protected override void IterateOverScans()
         {
             _scanCounter = 1;
-            foreach (ScanSet scanset in Run.ScanSetCollection.ScanSetList)
+            foreach (var scanset in Run.ScanSetCollection.ScanSetList)
             {
                 Run.CurrentScanSet = scanset;
 
@@ -45,15 +45,16 @@ namespace DeconTools.Backend.Workflows
 
                 }
                 ReportProgress();
-
+                
                 _scanCounter++;
+
             }
         }
 
 
         protected string getErrorInfo(Run run, Exception ex)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("ERROR THROWN. Scan/Frame = ");
             sb.Append(run.GetCurrentScanOrFrameInfo());
             sb.Append("; ");
@@ -85,19 +86,19 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
 
-            float percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
+            var percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
-            string logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
             if (BackgroundWorker != null)
             {
                 BackgroundWorker.ReportProgress((int)percentDone, userstate);
             }
 
-            if (_scanCounter % NumScansBetweenProgress == 0)
+            if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
             {
                 Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
 

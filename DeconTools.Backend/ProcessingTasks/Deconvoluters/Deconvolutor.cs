@@ -23,17 +23,19 @@ namespace DeconTools.Backend.ProcessingTasks
         public override void Execute(ResultCollection resultList)
         {
             clearCurrentScanIsosResultBin(resultList);   //TODO:   this does not clear
-            
+
+            ShowTraceMessageIfEnabled("Deconvolute: " + resultList);
+
             Deconvolute(resultList);
 
+            ShowTraceMessageIfEnabled("GatherMSFeatureStatistics: " + resultList.Run);
             GatherMSFeatureStatistics(resultList.Run);
 
+            ShowTraceMessageIfEnabled("associatePeaksToMSFeatureID: " + resultList);
             associatePeaksToMSFeatureID(resultList);
 
+            ShowTraceMessageIfEnabled("addCurrentScanIsosResultsToOverallList: " + resultList);
             addCurrentScanIsosResultsToOverallList(resultList);
-
-
-            
 
         }
 

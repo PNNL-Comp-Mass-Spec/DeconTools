@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "August 14, 2015";
+        public const string PROGRAM_DATE = "October 2, 2015";
 
         static int Main(string[] args)
         {

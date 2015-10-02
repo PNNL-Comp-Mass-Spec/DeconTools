@@ -59,10 +59,9 @@ namespace DeconTools.Backend.Workflows
         protected ScanResultExporter ScanResultExporter;
         protected DeconToolsFitScoreCalculator FitScoreCalculator;
 
+        protected bool mShowTraceMessages = false;
+
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
-
-
-
 
         #region Factory methods
         public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
@@ -469,6 +468,9 @@ namespace DeconTools.Backend.Workflows
             }
 
             ExecuteTask(PeakDetector);
+
+            Deconvolutor.ShowTraceMessages = mShowTraceMessages;
+
             ExecuteTask(Deconvolutor);
 
             ExecuteTask(ResultValidator);
@@ -479,6 +481,8 @@ namespace DeconTools.Backend.Workflows
             {
                 ExecuteTask(FitScoreCalculator);
             }
+
+            ShowTraceMessageIfEnabled("ExecuteOtherTasksHook");
 
             //Allows derived classes to execute additional tasks
             ExecuteOtherTasksHook();
@@ -513,6 +517,8 @@ namespace DeconTools.Backend.Workflows
 
             try
             {
+                ShowTraceMessageIfEnabled("ExecuteTask " + processingTask.GetType().Name);
+
                 processingTask.Execute(Run.ResultCollection);
             }
             catch (Exception ex)
@@ -546,6 +552,11 @@ namespace DeconTools.Backend.Workflows
 
         }
 
+        private void ShowTraceMessageIfEnabled(string currentTask)
+        {
+            if (mShowTraceMessages)
+                Console.WriteLine("Scan {0}: {1}", Run.CurrentScanSet, currentTask);
+        }
 
         #endregion
 

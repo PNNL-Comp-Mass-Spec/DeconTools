@@ -45,119 +45,157 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
 			Check.Require(maxZeroFillDistance > 0, "Zerofiller's maxZeroFillDistance cannot be zero or negative");
 
-			{
-				if (x.Length != y.Length)
-				{
-					throw new ArgumentException("Zerofiller failed. Xvalues and Yvalues had different lengths.");
-				}
+		    try
+		    {
+		        if (x.Length != y.Length)
+		        {
+		            throw new ArgumentException("Zerofiller failed. Xvalues and Yvalues had different lengths.");
+		        }
 
-				int numPoints = x.Length;
-				if (numPoints <= 1)
-				{
-					XYData xyData = new XYData();
-					xyData.Xvalues = x;
-					xyData.Yvalues = y;
-					return xyData;
-				}
+		        var numPoints = x.Length;
+		        if (numPoints <= 1)
+		        {
+		            var xyData = new XYData
+		            {
+		                Xvalues = x,
+		                Yvalues = y
+		            };
+		            return xyData;
+		        }
 
 
-				var zeroFilledXVals = new List<double>();
-				var zeroFilledYVals = new List<double>();
+		        var zeroFilledXVals = new List<double>();
+		        var zeroFilledYVals = new List<double>();
 
-				// Determine the initial value for the zero-fill distance based on the minimum width between any two adjacent points
-				double minDistance = x[1] - x[0];
-				for (int index = 2; index < numPoints; index++)
-				{
-					var currentDiff = (x[index] - x[index - 1]);
-					if (minDistance > currentDiff && currentDiff > 0)
-					{
-						minDistance = currentDiff;
-					}
-				}
+		        // Determine the initial value for the zero-fill distance based on the minimum width between any two adjacent points
+		        var minDistance = x[1] - x[0];
+		        for (var index = 2; index < numPoints; index++)
+		        {
+		            var currentDiff = (x[index] - x[index - 1]);
+		            if (minDistance > currentDiff && currentDiff > 0)
+		            {
+		                minDistance = currentDiff;
+		            }
+		        }
 
-				if (minDistance > maxZeroFillDistance)
-					minDistance = maxZeroFillDistance;
+		        if (minDistance > maxZeroFillDistance)
+		            minDistance = maxZeroFillDistance;
 
-				zeroFilledXVals.Add(x[0]);
-				zeroFilledYVals.Add(y[0]);
+		        if (minDistance < 0.00001)
+		            minDistance = 0.00001;
 
-                double lastDiff = minDistance;
-				int lastDiffIndex = 0;
+		        zeroFilledXVals.Add(x[0]);
+		        zeroFilledYVals.Add(y[0]);
 
-				double lastX = x[0];
+		        var lastDiff = minDistance;
+		        var lastDiffIndex = 0;
 
-				for (int index = 1; index < numPoints; index++)
-				{
-					double currentDiff = x[index] - lastX;
-					double diffBetweenCurrentAndBase = x[index] - x[lastDiffIndex];
-					double differenceFactor = 1.5;
+		        var lastX = x[0];
 
-					if (Math.Sqrt(diffBetweenCurrentAndBase) > differenceFactor)
-					{
-						differenceFactor = Math.Sqrt(diffBetweenCurrentAndBase);
-					}
+                if (ShowTraceMessages)
+                    Console.WriteLine("Starting ZeroFill for loop");
 
-					double diffThreshold = lastDiff;
-					if (diffThreshold > maxZeroFillDistance)
-						diffThreshold = maxZeroFillDistance;
+		        for (var index = 1; index < numPoints; index++)
+		        {
+		            if (ShowTraceMessages)
+		                Console.Write(index + " ");
 
-					if (currentDiff > differenceFactor * diffThreshold)
-					{
-						// insert points. 
-						int numPointsToAdd = ((int)(currentDiff / diffThreshold + 0.5)) - 1;
-						if (numPointsToAdd > 2 * maxPointsToAdd)
-						{
-							for (int pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
-							{
-								if (lastX >= x[index])
-									break;
-								lastX += diffThreshold;
-								zeroFilledXVals.Add(lastX);
-								zeroFilledYVals.Add(0);
-							}
-							double nextLastX = x[index] - maxPointsToAdd * diffThreshold;
-							if (nextLastX > lastX + diffThreshold)
-							{
-								lastX = nextLastX;
-							}
+		            if (Math.Abs(x[index] - lastX) < float.Epsilon)
+		            {
+                        // The two data points have the same X value
+		                continue;
+		            }
 
-							for (int pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
-							{
-								if (lastX >= x[index])
-									break;
-								zeroFilledXVals.Add(lastX);
-								zeroFilledYVals.Add(0);
-								lastX += diffThreshold;
-							}
-						}
-						else
-						{
-							for (int pointNum = 0; pointNum < numPointsToAdd; pointNum++)
-							{
-								lastX += diffThreshold;
-								if (lastX >= x[index])
-									break;
-								zeroFilledXVals.Add(lastX);
-								zeroFilledYVals.Add(0);
-							}
-						}
-						zeroFilledXVals.Add(x[index]);
-						zeroFilledYVals.Add(y[index]);
-						lastX = x[index];
-					}
-					else
-					{
-						zeroFilledXVals.Add(x[index]);
-						zeroFilledYVals.Add(y[index]);
-						lastDiff = currentDiff;
-						lastDiffIndex = index;
-						lastX = x[index];
-					}
-				}
+		            var currentDiff = x[index] - lastX;
+		            var diffBetweenCurrentAndBase = x[index] - x[lastDiffIndex];
+		            var differenceFactor = 1.5;
 
-				var zerofilledData = new XYData { Xvalues = zeroFilledXVals.ToArray(), Yvalues = zeroFilledYVals.ToArray() };
-				return zerofilledData;
-			}
+		            if (Math.Sqrt(diffBetweenCurrentAndBase) > differenceFactor)
+		            {
+		                differenceFactor = Math.Sqrt(diffBetweenCurrentAndBase);
+		            }
+
+		            var diffThreshold = lastDiff;
+		            if (diffThreshold > maxZeroFillDistance)
+		                diffThreshold = maxZeroFillDistance;
+
+                    if (diffThreshold < minDistance)
+                        diffThreshold = minDistance;
+
+		            if (currentDiff > differenceFactor * diffThreshold)
+		            {
+		                // insert points. 
+		                var numPointsToAdd = ((int)(currentDiff / diffThreshold + 0.5)) - 1;
+		                if (numPointsToAdd > 2 * maxPointsToAdd)
+		                {
+		                    for (var pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
+		                    {
+		                        if (lastX >= x[index])
+		                            break;
+		                        lastX += diffThreshold;
+		                        zeroFilledXVals.Add(lastX);
+		                        zeroFilledYVals.Add(0);
+		                    }
+		                    var nextLastX = x[index] - maxPointsToAdd * diffThreshold;
+		                    if (nextLastX > lastX + diffThreshold)
+		                    {
+		                        lastX = nextLastX;
+		                    }
+
+		                    for (var pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
+		                    {
+		                        if (lastX >= x[index])
+		                            break;
+		                        zeroFilledXVals.Add(lastX);
+		                        zeroFilledYVals.Add(0);
+		                        lastX += diffThreshold;
+		                    }
+		                }
+		                else
+		                {
+		                    for (var pointNum = 0; pointNum < numPointsToAdd; pointNum++)
+		                    {
+		                        lastX += diffThreshold;
+		                        if (lastX >= x[index])
+		                            break;
+		                        zeroFilledXVals.Add(lastX);
+		                        zeroFilledYVals.Add(0);
+		                    }
+		                }
+		                zeroFilledXVals.Add(x[index]);
+		                zeroFilledYVals.Add(y[index]);
+		                lastX = x[index];
+		            }
+		            else
+		            {
+		                zeroFilledXVals.Add(x[index]);
+		                zeroFilledYVals.Add(y[index]);
+		                lastDiff = currentDiff;
+
+		                if (lastDiff < minDistance)
+                            lastDiff = minDistance;
+
+		                lastDiffIndex = index;
+		                lastX = x[index];
+		            }
+		        }
+
+		        if (ShowTraceMessages)
+		            Console.WriteLine();
+
+		        var zerofilledData = new XYData
+		        {
+		            Xvalues = zeroFilledXVals.ToArray(),
+		            Yvalues = zeroFilledYVals.ToArray()
+		        };
+
+		        return zerofilledData;
+		    }
+		    catch (Exception ex)
+		    {
+		        Console.WriteLine("Exception in ZeroFill: " + ex.Message);
+		        throw new Exception("Exception in ZeroFill: " + ex.Message, ex);
+		    }
 		}
 
 #if !Disable_DeconToolsV2
@@ -170,12 +208,13 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
 			DeconEngine.Utils.ZeroFillUnevenData(ref floatXVals, ref floatYVals, maxPointsToAdd);
 
-			var zeroFilledData = new XYData();
+		    var zeroFilledData = new XYData
+		    {
+		        Xvalues = floatXVals.Select(p => (double)p).ToArray(),
+		        Yvalues = floatYVals.Select(p => (double)p).ToArray()
+		    };
 
-			zeroFilledData.Xvalues = floatXVals.Select(p => (double)p).ToArray();
-			zeroFilledData.Yvalues = floatYVals.Select(p => (double)p).ToArray();
-
-			return zeroFilledData;
+		    return zeroFilledData;
 
 		}
 #endif
