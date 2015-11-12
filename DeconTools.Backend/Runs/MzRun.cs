@@ -7,7 +7,7 @@ namespace DeconTools.Backend.Runs
 {
     public class MzRun : Run
     {
-        private pwiz.ProteowizardWrapper.MSDataFileReader _reader;
+        private MsDataFileImpl _reader;
 
         private double[] _pwizScanTimes;
 
@@ -21,6 +21,8 @@ namespace DeconTools.Backend.Runs
         public MzRun()
             : base()
         {
+            DependencyLoader.AddAssemblyResolver();
+
             this.IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
             this.MSFileType = Globals.MSFileType.Finnigan;
             this.ContainsMSMSData = true;
@@ -30,9 +32,7 @@ namespace DeconTools.Backend.Runs
         public MzRun(string fileName)
             : this()
         {
-
-            
-            
+            DependencyLoader.AddAssemblyResolver();
 
             var fileInfo = new FileInfo(fileName);
 
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.Runs
             
 
 
-            _reader = new MSDataFileReader(fileName);
+            _reader = new MsDataFileImpl(fileName);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();

@@ -15,6 +15,7 @@ namespace DeconTools.Backend.Runs
         public Run CreateRun(string filename)
         {
             Run run;
+            pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
 
             string fullfileName = getFullPath(filename);
 
@@ -101,6 +102,7 @@ namespace DeconTools.Backend.Runs
         public Run CreateRun(Globals.MSFileType filetype, string f)
         {
             Run run;
+            pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
 
             string fileName = getFullPath(f);
 
