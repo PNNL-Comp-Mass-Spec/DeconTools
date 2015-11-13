@@ -1,6 +1,8 @@
 ; This is an Inno Setup configuration file
 ; http://www.jrsoftware.org/isinfo.php
 
+#define ApplicationVersion GetFileVersion('..\DeconConsole\bin\x86\Release\DeconConsole.exe')
+
 [CustomMessages]
 AppName=DeconTools
 [Messages]
@@ -77,16 +79,17 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 
 [Icons]
 Name: {group}\DeconToolsAutoProcessor; Filename: {app}\DeconToolsAutoProcessV1.exe; Comment: Decon Tools Auto Processor
-Name: {group}\ReadMe File.txt; Filename: {app}\Readme.txt; Comment: DeconTools ReadMe
-Name: {group}\SampleParameterFile.xml; Filename: {app}\SampleParameterFile.xml; Comment: Sample Parameter File
-Name: {group}\SampleParameterFileIMS.xml; Filename: {app}\SampleParameterFileIMS.xml; Comment: Sample IMS Parameter File
+Name: {group}\ReadMe; Filename: {app}\Readme.txt; Comment: DeconTools ReadMe
+Name: {group}\SampleParameterFile; Filename: {app}\SampleParameterFile.xml; Comment: Sample Parameter File
+Name: {group}\SampleParameterFileIMS; Filename: {app}\SampleParameterFileIMS.xml; Comment: Sample IMS Parameter File
 Name: {group}\Uninstall DeconTools; Filename: {uninstallexe}
 
 Name: {commondesktop}\DeconToolsAutoProcessor; Filename: {app}\DeconToolsAutoProcessV1.exe; Tasks: desktopicon; Comment: Decon Tools Auto Processor
 
 [Setup]
 AppName=DeconTools
-AppVerName=DeconTools
+AppVersion={#ApplicationVersion}
+;AppVerName=DeconTools
 AppID=DeconToolsId
 AppPublisher=Pacific Northwest National Laboratory
 AppPublisherURL=http://omics.pnl.gov/software
@@ -98,7 +101,8 @@ AppCopyright=© PNNL
 ;LicenseFile=.\License.rtf
 PrivilegesRequired=poweruser
 OutputBaseFilename=DeconTools_Installer
-VersionInfoVersion=1.57
+;VersionInfoVersion=1.57
+VersionInfoVersion={#ApplicationVersion}
 VersionInfoCompany=PNNL
 VersionInfoDescription=DeconTools
 VersionInfoCopyright=PNNL
