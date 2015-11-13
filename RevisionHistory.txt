@@ -1,5 +1,10 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.0.5795; November 13, 2015     bcg
+	- Updated multiple DLLs
+	- Modified use of ProteowizardWrapper, to dynamically find (at runtime) the 32-bit ProteoWizard install
+	- Change the installer from a Visual Studio installer msi to an InnoSetup executable
+
 Version 1.0.5753; October 2, 2015	mem
 	- Fixed bug in ZeroFiller that led to a divide-by-zero overflow when adjacent data points had the same mass value
 
