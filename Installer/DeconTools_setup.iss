@@ -56,18 +56,22 @@ Source: Parameter_Files\SampleParameterFileIMS.xml                              
 
 Source: Library\msvc71\atl71.dll                                                                                                                  ; DestDir: {app}
 Source: Library\msvc71\mfc71.dll                                                                                                                  ; DestDir: {app}
-Source: Library\msvc71\MFC71CHS.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71CHT.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71DEU.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71ENU.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71ESP.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71FRA.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71ITA.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71JPN.DLL                                                                                                               ; DestDir: {app}
-Source: Library\msvc71\MFC71KOR.DLL                                                                                                               ; DestDir: {app}
 Source: Library\msvc71\mfc71u.dll                                                                                                                 ; DestDir: {app}
 Source: Library\msvc71\msvcp71.dll                                                                                                                ; DestDir: {app}
 Source: Library\msvc71\msvcr71.dll                                                                                                                ; DestDir: {app}
+;Source: Library\msvc71\MFC71CHS.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71CHT.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71DEU.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71ENU.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71ESP.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71FRA.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71ITA.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71JPN.DLL                                                                                                               ; DestDir: {app}
+;Source: Library\msvc71\MFC71KOR.DLL                                                                                                               ; DestDir: {app}
+
+; MSVC 100 for DeconEngineV2
+Source: Library\msvc100\msvcp100.dll                                                                                                                ; DestDir: {app}
+Source: Library\msvc100\msvcr100.dll                                                                                                                ; DestDir: {app}
 
 
 [Dirs]
