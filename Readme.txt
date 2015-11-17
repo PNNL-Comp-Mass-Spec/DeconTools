@@ -8,9 +8,9 @@ the quality of signature observed in the data.
 == Running DeconTools ==
 DeconTools can read the following file formats.  However, some of the file formats require that you 
 install the vendor-supplied data browsing software so that DeconTools has access to the necessary DLLs.
-* mzXML files
-* mzML files
-* mz5 files
+* mzXML files   (Requires 32-bit ProteoWizard installation)
+* mzML files    (Requires 32-bit ProteoWizard installation)
+* mz5 files     (Requires 32-bit ProteoWizard installation)
 * Thermo Finnigan .Raw files (requires Xcalibur or MSFileReader)
   * Download MSFileReader from http://sjsupport.thermofinnigan.com/public/detail.asp?id=703
   * When the installer offers you the option of the version to install, be sure to install the 32-bit version.
