@@ -20,6 +20,10 @@ namespace DeconTools.Backend.Runs
             string fullfileName = getFullPath(filename);
 
             string extension = Path.GetExtension(fullfileName).ToLower();
+            if (extension.Equals(".mzxml") || extension.Equals(".mzml") || extension.Equals(".mz5"))
+            {
+                pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
+            }
 
 #if !Disable_DeconToolsV2
             //check for ICR2LS type extension....
@@ -103,6 +107,10 @@ namespace DeconTools.Backend.Runs
         {
             Run run;
             pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
+            if (filetype == Globals.MSFileType.MZXML_Rawdata)
+            {
+                pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
+            }
 
             string fileName = getFullPath(f);
 

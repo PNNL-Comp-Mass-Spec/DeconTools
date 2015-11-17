@@ -1,6 +1,10 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
-Version 1.0.5795; November 13, 2015     bcg
+Version 1.0.5799; November 17, 2015	bcg
+	- Updated ProteoWizard Wrapper DLL
+	- Throw an exception when ProteoWizard is needed and it's not available.
+
+Version 1.0.5795; November 13, 2015	bcg
 	- Updated multiple DLLs
 	- Modified use of ProteowizardWrapper, to dynamically find (at runtime) the 32-bit ProteoWizard install
 	- Change the installer from a Visual Studio installer msi to an InnoSetup executable
