@@ -1,5 +1,13 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.0.5940; April 6, 2016     mem
+	- Update to UIMFLibrary.dll v3.0.5940
+
+Version 1.0.5935; April 1, 2016     mem
+	- Update to ProteowizardWrapper v1.0.5934
+	- Update to System.Data.SQLite v1.0.97
+	- Now compiling as v4.5.1 (for compatibility with ProteoWizard)
+
 Version 1.0.5753; October 2, 2015	mem
 	- Fixed bug in ZeroFiller that led to a divide-by-zero overflow when adjacent data points had the same mass value
 
