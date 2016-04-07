@@ -8,6 +8,15 @@ Version 1.0.5935; April 1, 2016     mem
 	- Update to System.Data.SQLite v1.0.97
 	- Now compiling as v4.5.1 (for compatibility with ProteoWizard)
 
+Version 1.0.5799; November 17, 2015	bcg
+	- Updated ProteoWizard Wrapper DLL
+	- Throw an exception when ProteoWizard is needed and it's not available.
+
+Version 1.0.5795; November 13, 2015	bcg
+	- Updated multiple DLLs
+	- Modified use of ProteowizardWrapper, to dynamically find (at runtime) the 32-bit ProteoWizard install
+	- Change the installer from a Visual Studio installer msi to an InnoSetup executable
+
 Version 1.0.5753; October 2, 2015	mem
 	- Fixed bug in ZeroFiller that led to a divide-by-zero overflow when adjacent data points had the same mass value
 
