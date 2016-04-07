@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
-
+using DeconToolsV2.HornTransform;
 #if !Disable_DeconToolsV2
 using DeconToolsV2.Peaks;
 #endif
@@ -15,238 +15,88 @@ namespace DeconTools.Backend.ProcessingTasks
     public class HornDeconvolutor : Deconvolutor
     {
         #region Member Variables
-        private DeconToolsV2.Peaks.clsPeak[] mspeakList;
-        DeconToolsV2.HornTransform.clsHornTransformResults[] transformResults;
+        
+        private DeconToolsV2.Peaks.clsPeak[] mSpeakList;
+        DeconToolsV2.HornTransform.clsHornTransformResults[] mTransformResults;
+
         #endregion
 
         #region Properties
 
-        private bool isAbsolutePepIntensityUsed;
+        public bool IsAbsolutePepIntensityUsed { get; set; }
 
-        public bool IsAbsolutePepIntensityUsed
-        {
-            get { return isAbsolutePepIntensityUsed; }
-            set { isAbsolutePepIntensityUsed = value; }
-        }
-        private bool isMercuryCashingUsed;
+        public bool IsMercuryCashingUsed { get; set; }
 
-        public bool IsMercuryCashingUsed
-        {
-            get { return isMercuryCashingUsed; }
-            set { isMercuryCashingUsed = value; }
-        }
-        private bool isThrashed;
+        public bool IsThrashed { get; set; }
 
-        public bool IsThrashed
-        {
-            get { return isThrashed; }
-            set { isThrashed = value; }
-        }
-        private bool isO16O18Data;
+        public bool IsO16O18Data { get; set; }
 
-        public bool IsO16O18Data
-        {
-            get { return isO16O18Data; }
-            set { isO16O18Data = value; }
-        }
-        private bool isActualMonoMZUsed;
+        public bool IsActualMonoMZUsed { get; set; }
 
-        public bool IsActualMonoMZUsed
-        {
-            get { return isActualMonoMZUsed; }
-            set { isActualMonoMZUsed = value; }
-        }
+        public bool CheckPatternsAgainstChargeOne { get; set; }
 
-        private bool checkPatternsAgainstChargeOne;
-        public bool CheckPatternsAgainstChargeOne
-        {
-            get { return checkPatternsAgainstChargeOne; }
-            set { checkPatternsAgainstChargeOne = value; }
-        }
+        public bool IsMZRangeUsed { get; set; }
 
-        private bool isMZRangeUsed;
+        public bool IsCompleteFit { get; set; }
 
-        public bool IsMZRangeUsed
-        {
-            get { return isMZRangeUsed; }
-            set { isMZRangeUsed = value; }
-        }
+        public bool IsMSMSProcessed { get; set; }
 
-        private bool isCompleteFit;
+        public double MinMZ { get; set; }
 
-        public bool IsCompleteFit
-        {
-            get { return isCompleteFit; }
-            set { isCompleteFit = value; }
-        }
-        private bool isMSMSProcessed;
+        public double MaxMZ { get; set; }
 
-        public bool IsMSMSProcessed
-        {
-            get { return isMSMSProcessed; }
-            set { isMSMSProcessed = value; }
-        }
+        public double LeftFitStringencyFactor { get; set; }
 
+        public double RightFitStringencyFactor { get; set; }
 
-        private double minMZ;
+        public double ChargeCarrierMass { get; set; }
 
-        public double MinMZ
-        {
-            get { return minMZ; }
-            set { minMZ = value; }
-        }
-        private double maxMZ;
+        public double DeleteIntensityThreshold { get; set; }
 
-        public double MaxMZ
-        {
-            get { return maxMZ; }
-            set { maxMZ = value; }
-        }
+        public double MinIntensityForScore { get; set; }
 
-        private double leftFitStringencyFactor;
+        public double MinPeptideBackgroundRatio { get; set; }
 
-        public double LeftFitStringencyFactor
-        {
-            get { return leftFitStringencyFactor; }
-            set { leftFitStringencyFactor = value; }
-        }
-        private double rightFitStringencyFactor;
+        public double AbsoluteThresholdPeptideIntensity { get; set; }
 
-        public double RightFitStringencyFactor
-        {
-            get { return rightFitStringencyFactor; }
-            set { rightFitStringencyFactor = value; }
-        }
+        public double MaxMWAllowed { get; set; }
 
-        private double chargeCarrierMass;
+        public int MaxChargeAllowed { get; set; }
 
-        public double ChargeCarrierMass
-        {
-            get { return chargeCarrierMass; }
-            set { chargeCarrierMass = value; }
-        }
-        private double deleteIntensityThreshold;
+        public double MaxFitAllowed { get; set; }
 
-        public double DeleteIntensityThreshold
-        {
-            get { return deleteIntensityThreshold; }
-            set { deleteIntensityThreshold = value; }
-        }
-        private double minIntensityForScore;
+        public string AveragineFormula { get; set; }
 
-        public double MinIntensityForScore
-        {
-            get { return minIntensityForScore; }
-            set { minIntensityForScore = value; }
-        }
-        private double minPeptideBackgroundRatio;
+        public string TagFormula { get; set; }
 
-        public double MinPeptideBackgroundRatio
-        {
-            get { return minPeptideBackgroundRatio; }
-            set { minPeptideBackgroundRatio = value; }
-        }
-        private double absoluteThresholdPeptideIntensity;
+        public Globals.IsotopicProfileFitType IsotopicProfileFitType { get; set; }
 
-        public double AbsoluteThresholdPeptideIntensity
-        {
-            get { return absoluteThresholdPeptideIntensity; }
-            set { absoluteThresholdPeptideIntensity = value; }
-        }
-        private double maxMWAllowed;
+        public int NumAllowedShoulderPeaks { get; set; }
 
-        public double MaxMWAllowed
-        {
-            get { return maxMWAllowed; }
-            set { maxMWAllowed = value; }
-        }
-        private int maxChargeAllowed;
+        public DeconToolsV2.HornTransform.clsHornTransformParameters DeconEngineHornParameters { get; set; }
 
-        public int MaxChargeAllowed
-        {
-            get { return maxChargeAllowed; }
-            set { maxChargeAllowed = value; }
-        }
+        public bool SaveMemoryByAddingMinimalPeaksToIsotopicProfile { get; set; }
 
-        private double maxFitAllowed;
-
-        public double MaxFitAllowed
-        {
-            get { return maxFitAllowed; }
-            set { maxFitAllowed = value; }
-        }
-
-        private string averagineFormula;
-
-        public string AveragineFormula
-        {
-            get { return averagineFormula; }
-            set { averagineFormula = value; }
-        }
-        private string tagFormula;
-
-        public string TagFormula
-        {
-            get { return tagFormula; }
-            set { tagFormula = value; }
-        }
-
-        private Globals.IsotopicProfileFitType isotopicProfileFitType;
-
-        public Globals.IsotopicProfileFitType IsotopicProfileFitType
-        {
-            get { return isotopicProfileFitType; }
-            set { isotopicProfileFitType = value; }
-        }
-        private int numAllowedShoulderPeaks;
-
-        public int NumAllowedShoulderPeaks
-        {
-            get { return numAllowedShoulderPeaks; }
-            set { numAllowedShoulderPeaks = value; }
-        }
-
-        DeconToolsV2.HornTransform.clsHornTransformParameters deconEngineHornParameters;
-
-        public DeconToolsV2.HornTransform.clsHornTransformParameters DeconEngineHornParameters
-        {
-            get { return deconEngineHornParameters; }
-            set { deconEngineHornParameters = value; }
-        }
-
-        bool saveMemoryByAddingMinimalPeaksToIsotopicProfile;
-
-        public bool SaveMemoryByAddingMinimalPeaksToIsotopicProfile
-        {
-            get { return saveMemoryByAddingMinimalPeaksToIsotopicProfile; }
-            set { saveMemoryByAddingMinimalPeaksToIsotopicProfile = value; }
-        }
-
-        private DeconToolsV2.HornTransform.clsHornTransform transformer;
+        private DeconToolsV2.HornTransform.clsHornTransform mTransformer;
 
         internal DeconToolsV2.HornTransform.clsHornTransform Transformer
         {
             get
             {
-                if (transformer == null)
+                if (mTransformer == null)
                 {
-                    transformer = new DeconToolsV2.HornTransform.clsHornTransform();
-                    transformer.TransformParameters = loadDeconEngineHornParameters();
+                    mTransformer = new DeconToolsV2.HornTransform.clsHornTransform
+                    {
+                        TransformParameters = loadDeconEngineHornParameters()
+                    };
                 }
 
-                return transformer;
+                return mTransformer;
             }
-            set { transformer = value; }
+            set { mTransformer = value; }
         }
 
-        private int numPeaksUsedInAbundance;
-        public int NumPeaksUsedInAbundance
-        {
-            get { return numPeaksUsedInAbundance; }
-            set { numPeaksUsedInAbundance = value; }
-        }
-
-
+        public int NumPeaksUsedInAbundance { get; set; }
 
         #endregion
 
@@ -260,7 +110,7 @@ namespace DeconTools.Backend.ProcessingTasks
         private void setDefaults()
         {
             //TODO:   Finish this
-            this.deleteIntensityThreshold = 10;
+            this.DeleteIntensityThreshold = 10;
 
 
         }
@@ -268,67 +118,67 @@ namespace DeconTools.Backend.ProcessingTasks
         public HornDeconvolutor(DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters)
         {
             convertDeconEngineHornParameters(hornParameters);
-            saveMemoryByAddingMinimalPeaksToIsotopicProfile = false;       // I later found out that this doesn't make much difference
+            SaveMemoryByAddingMinimalPeaksToIsotopicProfile = false;       // I later found out that this doesn't make much difference
         }
 
         public HornDeconvolutor(DeconToolsParameters deconParameters)
         {
-             this.absoluteThresholdPeptideIntensity = deconParameters.ThrashParameters.AbsolutePeptideIntensity;
-            this.averagineFormula = deconParameters.ThrashParameters.AveragineFormula;
-            this.chargeCarrierMass = deconParameters.ThrashParameters.ChargeCarrierMass;
-            this.checkPatternsAgainstChargeOne = deconParameters.ThrashParameters.CheckAllPatternsAgainstChargeState1;
-            this.deleteIntensityThreshold = deconParameters.ThrashParameters.MinIntensityForDeletion;
-            this.isAbsolutePepIntensityUsed = deconParameters.ThrashParameters.UseAbsoluteIntensity;
-            this.isActualMonoMZUsed = false;
-            this.isCompleteFit = deconParameters.ThrashParameters.CompleteFit;
-            this.isMercuryCashingUsed = true;
-            this.isMSMSProcessed = deconParameters.ScanBasedWorkflowParameters.ProcessMS2;
-            this.isMZRangeUsed = deconParameters.MSGeneratorParameters.UseMZRange;
-            this.isO16O18Data = deconParameters.ThrashParameters.IsO16O18Data;
-            this.isotopicProfileFitType = deconParameters.ThrashParameters.IsotopicProfileFitType;
-            this.isThrashed = deconParameters.ThrashParameters.IsThrashUsed;
-            this.leftFitStringencyFactor = deconParameters.ThrashParameters.LeftFitStringencyFactor;
-            this.maxChargeAllowed = deconParameters.ThrashParameters.MaxCharge;
-            this.maxFitAllowed = deconParameters.ThrashParameters.MaxFit;
-            this.maxMWAllowed = deconParameters.ThrashParameters.MaxMass;
-            this.maxMZ = deconParameters.MSGeneratorParameters.MaxMZ;      //TODO: review this later
-            this.minMZ = deconParameters.MSGeneratorParameters.MinMZ;      //TODO: review this later
-            this.minIntensityForScore = deconParameters.ThrashParameters.MinIntensityForScore;
-            this.minPeptideBackgroundRatio = deconParameters.ThrashParameters.MinMSFeatureToBackgroundRatio;
-            this.numAllowedShoulderPeaks = deconParameters.ThrashParameters.NumPeaksForShoulder;
-            this.rightFitStringencyFactor = deconParameters.ThrashParameters.RightFitStringencyFactor;
-            this.tagFormula = deconParameters.ThrashParameters.TagFormula;
-            this.NumPeaksUsedInAbundance = deconParameters.ThrashParameters.NumPeaksUsedInAbundance;
+            AbsoluteThresholdPeptideIntensity = deconParameters.ThrashParameters.AbsolutePeptideIntensity;
+            AveragineFormula = deconParameters.ThrashParameters.AveragineFormula;
+            ChargeCarrierMass = deconParameters.ThrashParameters.ChargeCarrierMass;
+            CheckPatternsAgainstChargeOne = deconParameters.ThrashParameters.CheckAllPatternsAgainstChargeState1;
+            DeleteIntensityThreshold = deconParameters.ThrashParameters.MinIntensityForDeletion;
+            IsAbsolutePepIntensityUsed = deconParameters.ThrashParameters.UseAbsoluteIntensity;
+            IsActualMonoMZUsed = false;
+            IsCompleteFit = deconParameters.ThrashParameters.CompleteFit;
+            IsMercuryCashingUsed = true;
+            IsMSMSProcessed = deconParameters.ScanBasedWorkflowParameters.ProcessMS2;
+            IsMZRangeUsed = deconParameters.MSGeneratorParameters.UseMZRange;
+            IsO16O18Data = deconParameters.ThrashParameters.IsO16O18Data;
+            IsotopicProfileFitType = deconParameters.ThrashParameters.IsotopicProfileFitType;
+            IsThrashed = deconParameters.ThrashParameters.IsThrashUsed;
+            LeftFitStringencyFactor = deconParameters.ThrashParameters.LeftFitStringencyFactor;
+            MaxChargeAllowed = deconParameters.ThrashParameters.MaxCharge;
+            MaxFitAllowed = deconParameters.ThrashParameters.MaxFit;
+            MaxMWAllowed = deconParameters.ThrashParameters.MaxMass;
+            MaxMZ = deconParameters.MSGeneratorParameters.MaxMZ;      //TODO: review this later
+            MinMZ = deconParameters.MSGeneratorParameters.MinMZ;      //TODO: review this later
+            MinIntensityForScore = deconParameters.ThrashParameters.MinIntensityForScore;
+            MinPeptideBackgroundRatio = deconParameters.ThrashParameters.MinMSFeatureToBackgroundRatio;
+            NumAllowedShoulderPeaks = deconParameters.ThrashParameters.NumPeaksForShoulder;
+            RightFitStringencyFactor = deconParameters.ThrashParameters.RightFitStringencyFactor;
+            TagFormula = deconParameters.ThrashParameters.TagFormula;
+            NumPeaksUsedInAbundance = deconParameters.ThrashParameters.NumPeaksUsedInAbundance;
         }
 
         private void convertDeconEngineHornParameters(DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters)
         {
-            this.absoluteThresholdPeptideIntensity = hornParameters.AbsolutePeptideIntensity;
-            this.averagineFormula = hornParameters.AveragineFormula;
-            this.chargeCarrierMass = hornParameters.CCMass;
-            this.checkPatternsAgainstChargeOne = hornParameters.CheckAllPatternsAgainstCharge1;
-            this.deleteIntensityThreshold = hornParameters.DeleteIntensityThreshold;
-            this.isAbsolutePepIntensityUsed = hornParameters.UseAbsolutePeptideIntensity;
-            this.isActualMonoMZUsed = hornParameters.IsActualMonoMZUsed;
-            this.isCompleteFit = hornParameters.CompleteFit;
-            this.isMercuryCashingUsed = hornParameters.UseMercuryCaching;
-            this.isMSMSProcessed = hornParameters.ProcessMSMS;
-            this.isMZRangeUsed = hornParameters.UseMZRange;
-            this.isO16O18Data = hornParameters.O16O18Media;
-            this.isotopicProfileFitType = convertDeconEngineIsoFitType(hornParameters.IsotopeFitType);
-            this.isThrashed = hornParameters.ThrashOrNot;
-            this.leftFitStringencyFactor = hornParameters.LeftFitStringencyFactor;
-            this.maxChargeAllowed = hornParameters.MaxCharge;
-            this.maxFitAllowed = hornParameters.MaxFit;
-            this.maxMWAllowed = hornParameters.MaxMW;
-            this.maxMZ = hornParameters.MaxMZ;      //TODO: review this later
-            this.minMZ = hornParameters.MinMZ;      //TODO: review this later
-            this.minIntensityForScore = hornParameters.MinIntensityForScore;
-            this.minPeptideBackgroundRatio = hornParameters.PeptideMinBackgroundRatio;
-            this.numAllowedShoulderPeaks = hornParameters.NumPeaksForShoulder;
-            this.rightFitStringencyFactor = hornParameters.RightFitStringencyFactor;
-            this.tagFormula = hornParameters.TagFormula;
-            this.NumPeaksUsedInAbundance = hornParameters.NumPeaksUsedInAbundance;
+            AbsoluteThresholdPeptideIntensity = hornParameters.AbsolutePeptideIntensity;
+            AveragineFormula = hornParameters.AveragineFormula;
+            ChargeCarrierMass = hornParameters.CCMass;
+            CheckPatternsAgainstChargeOne = hornParameters.CheckAllPatternsAgainstCharge1;
+            DeleteIntensityThreshold = hornParameters.DeleteIntensityThreshold;
+            IsAbsolutePepIntensityUsed = hornParameters.UseAbsolutePeptideIntensity;
+            IsActualMonoMZUsed = hornParameters.IsActualMonoMZUsed;
+            IsCompleteFit = hornParameters.CompleteFit;
+            IsMercuryCashingUsed = hornParameters.UseMercuryCaching;
+            IsMSMSProcessed = hornParameters.ProcessMSMS;
+            IsMZRangeUsed = hornParameters.UseMZRange;
+            IsO16O18Data = hornParameters.O16O18Media;
+            IsotopicProfileFitType = convertDeconEngineIsoFitType(hornParameters.IsotopeFitType);
+            IsThrashed = hornParameters.ThrashOrNot;
+            LeftFitStringencyFactor = hornParameters.LeftFitStringencyFactor;
+            MaxChargeAllowed = hornParameters.MaxCharge;
+            MaxFitAllowed = hornParameters.MaxFit;
+            MaxMWAllowed = hornParameters.MaxMW;
+            MaxMZ = hornParameters.MaxMZ;      //TODO: review this later
+            MinMZ = hornParameters.MinMZ;      //TODO: review this later
+            MinIntensityForScore = hornParameters.MinIntensityForScore;
+            MinPeptideBackgroundRatio = hornParameters.PeptideMinBackgroundRatio;
+            NumAllowedShoulderPeaks = hornParameters.NumPeaksForShoulder;
+            RightFitStringencyFactor = hornParameters.RightFitStringencyFactor;
+            TagFormula = hornParameters.TagFormula;
+            NumPeaksUsedInAbundance = hornParameters.NumPeaksUsedInAbundance;
 
         }
 
@@ -354,43 +204,45 @@ namespace DeconTools.Backend.ProcessingTasks
         public override void Deconvolute(ResultCollection resultList)
         {
 
-            float backgroundIntensity = (float)resultList.Run.CurrentBackgroundIntensity;
-            float minPeptideIntensity = (float)(resultList.Run.CurrentBackgroundIntensity * this.MinPeptideBackgroundRatio);
+            var backgroundIntensity = (float)resultList.Run.CurrentBackgroundIntensity;
+            var minPeptideIntensity = (float)(resultList.Run.CurrentBackgroundIntensity * MinPeptideBackgroundRatio);
 
 			if (resultList.Run.XYData == null) return;
 
-            float[] xvals = new float[1];
-            float[] yvals = new float[1];
+            var xvals = new float[1];
+            var yvals = new float[1];
             resultList.Run.XYData.GetXYValuesAsSingles(ref xvals, ref yvals);
 
-            mspeakList = resultList.Run.DeconToolsPeakList;
-            transformResults = new DeconToolsV2.HornTransform.clsHornTransformResults[0];
+            mSpeakList = resultList.Run.DeconToolsPeakList;
+            mTransformResults = new DeconToolsV2.HornTransform.clsHornTransformResults[0];
             
             if (resultList.Run.PeakList==null||resultList.Run.PeakList.Count==0) return;
             
-            mspeakList=new clsPeak[resultList.Run.PeakList.Count];
+            mSpeakList=new clsPeak[resultList.Run.PeakList.Count];
             
-            for (int index = 0; index < resultList.Run.PeakList.Count; index++)
+            for (var index = 0; index < resultList.Run.PeakList.Count; index++)
             {
                 if (ShowTraceMessages)
                     Console.Write(index + " ");
 
-                MSPeak peak = (MSPeak) resultList.Run.PeakList[index];
-                var oldPeak = new clsPeak();
-                oldPeak.mdbl_FWHM = peak.Width;
-                oldPeak.mdbl_SN = peak.SignalToNoise;
-                oldPeak.mdbl_intensity = peak.Height;
-                oldPeak.mint_data_index = peak.DataIndex;
-                oldPeak.mdbl_mz = peak.XValue;
+                var peak = (MSPeak) resultList.Run.PeakList[index];
+                var oldPeak = new clsPeak
+                {
+                    mdbl_FWHM = peak.Width,
+                    mdbl_SN = peak.SignalToNoise,
+                    mdbl_intensity = peak.Height,
+                    mint_data_index = peak.DataIndex,
+                    mdbl_mz = peak.XValue
+                };
 
-                mspeakList[index] = oldPeak;
+                mSpeakList[index] = oldPeak;
             }
 
             if (ShowTraceMessages)
                 Console.WriteLine();
 
-            this.Transformer.PerformTransform(backgroundIntensity, minPeptideIntensity, ref xvals, ref yvals, ref mspeakList, ref transformResults);
-            GenerateResults(transformResults, mspeakList, resultList);
+            this.Transformer.PerformTransform(backgroundIntensity, minPeptideIntensity, ref xvals, ref yvals, ref mSpeakList, ref mTransformResults);
+            GenerateResults(mTransformResults, mSpeakList, resultList);
 
 
 
@@ -402,34 +254,36 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private DeconToolsV2.HornTransform.clsHornTransformParameters loadDeconEngineHornParameters()
         {
-            DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
-            hornParameters.AbsolutePeptideIntensity = this.absoluteThresholdPeptideIntensity;
-            hornParameters.AveragineFormula = this.averagineFormula;
-            hornParameters.CCMass = this.chargeCarrierMass;
-            hornParameters.CheckAllPatternsAgainstCharge1 = this.checkPatternsAgainstChargeOne;
-            hornParameters.CompleteFit = this.isCompleteFit;
-            hornParameters.DeleteIntensityThreshold = this.deleteIntensityThreshold;
-            hornParameters.IsActualMonoMZUsed = this.isActualMonoMZUsed;
-            hornParameters.IsotopeFitType = convertFitTypeToDeconEngineType(this.isotopicProfileFitType);
-            hornParameters.LeftFitStringencyFactor = this.leftFitStringencyFactor;
-            hornParameters.MaxCharge = (short)this.maxChargeAllowed;
-            hornParameters.MaxFit = this.maxFitAllowed;
-            hornParameters.MaxMW = this.maxMWAllowed;
-            hornParameters.MinMZ = this.minMZ;
-            hornParameters.MaxMZ = this.maxMZ;
-            hornParameters.MinIntensityForScore = this.minIntensityForScore;
+            var hornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters
+            {
+                AbsolutePeptideIntensity = AbsoluteThresholdPeptideIntensity,
+                AveragineFormula = AveragineFormula,
+                CCMass = ChargeCarrierMass,
+                CheckAllPatternsAgainstCharge1 = CheckPatternsAgainstChargeOne,
+                CompleteFit = IsCompleteFit,
+                DeleteIntensityThreshold = DeleteIntensityThreshold,
+                IsActualMonoMZUsed = IsActualMonoMZUsed,
+                IsotopeFitType = ConvertFitTypeToDeconEngineType(IsotopicProfileFitType),
+                LeftFitStringencyFactor = LeftFitStringencyFactor,
+                MaxCharge = (short)MaxChargeAllowed,
+                MaxFit = MaxFitAllowed,
+                MaxMW = MaxMWAllowed,
+                MinMZ = MinMZ,
+                MaxMZ = MaxMZ,
+                MinIntensityForScore = MinIntensityForScore,
+                NumPeaksForShoulder = (short)NumAllowedShoulderPeaks,
+                O16O18Media = IsO16O18Data,
+                PeptideMinBackgroundRatio = MinPeptideBackgroundRatio,
+                ProcessMSMS = IsMSMSProcessed,
+                RightFitStringencyFactor = RightFitStringencyFactor,
+                TagFormula = TagFormula,
+                ThrashOrNot = IsThrashed,
+                UseAbsolutePeptideIntensity = IsAbsolutePepIntensityUsed,
+                UseMercuryCaching = IsMercuryCashingUsed,
+                UseMZRange = IsMZRangeUsed,
+                NumPeaksUsedInAbundance = (short)NumPeaksUsedInAbundance
+            };
             // hornParameters.MinS2N = ??     //TODO:  verify that this is no longer used
-            hornParameters.NumPeaksForShoulder = (short)this.numAllowedShoulderPeaks;
-            hornParameters.O16O18Media = this.isO16O18Data;
-            hornParameters.PeptideMinBackgroundRatio = this.minPeptideBackgroundRatio;
-            hornParameters.ProcessMSMS = this.isMSMSProcessed;
-            hornParameters.RightFitStringencyFactor = this.rightFitStringencyFactor;
-            hornParameters.TagFormula = this.tagFormula;
-            hornParameters.ThrashOrNot = this.isThrashed;
-            hornParameters.UseAbsolutePeptideIntensity = this.isAbsolutePepIntensityUsed;
-            hornParameters.UseMercuryCaching = this.isMercuryCashingUsed;
-            hornParameters.UseMZRange = this.isMZRangeUsed;
-            hornParameters.NumPeaksUsedInAbundance = (short)this.NumPeaksUsedInAbundance;
 
             /* The following DeconEngine Horn parameters are used elsewhere in the new framework.  For
              * example, Smoothing is now a Task that is performed after the MS is generated by the MSGenerator Task
@@ -452,9 +306,9 @@ namespace DeconTools.Backend.ProcessingTasks
             return hornParameters;
         }
 
-        private DeconToolsV2.enmIsotopeFitType convertFitTypeToDeconEngineType(Globals.IsotopicProfileFitType isotopicProfileFitType)
+        private DeconToolsV2.enmIsotopeFitType ConvertFitTypeToDeconEngineType(Globals.IsotopicProfileFitType isoProfileFitType)
         {
-            switch (isotopicProfileFitType)
+            switch (isoProfileFitType)
             {
                 case Globals.IsotopicProfileFitType.Undefined:
                     throw new Exception("Error.  IsotopicProfile fit type has not been defined. Cannot be used in HornTransform");
@@ -473,14 +327,14 @@ namespace DeconTools.Backend.ProcessingTasks
 
         #region Private Methods
 
-        private void GenerateResults(DeconToolsV2.HornTransform.clsHornTransformResults[] transformResults,
-       DeconToolsV2.Peaks.clsPeak[] mspeakList, ResultCollection resultList)
+        private void GenerateResults(IEnumerable<clsHornTransformResults> transformResults, clsPeak[] mspeakList, ResultCollection resultList)
         {
 
             ScanSet currentScanset;
-            if (resultList.Run is UIMFRun)
+            var currentRun = resultList.Run as UIMFRun;
+            if (currentRun != null)
             {
-                currentScanset = ((UIMFRun) resultList.Run).CurrentIMSScanSet;
+                currentScanset = currentRun.CurrentIMSScanSet;
             }
             else
             {
@@ -490,16 +344,18 @@ namespace DeconTools.Backend.ProcessingTasks
             currentScanset.NumIsotopicProfiles = 0;   //reset to 0;
 
 
-            foreach (DeconToolsV2.HornTransform.clsHornTransformResults hornResult in transformResults)
+            foreach (var hornResult in transformResults)
             {
-                IsosResult result = resultList.CreateIsosResult();
-                IsotopicProfile profile = new IsotopicProfile();
-                profile.AverageMass = hornResult.mdbl_average_mw;
-                profile.ChargeState = hornResult.mshort_cs;
-                profile.MonoIsotopicMass = hornResult.mdbl_mono_mw;
-                profile.Score = hornResult.mdbl_fit;
-				profile.ScoreCountBasis = hornResult.mint_fit_count_basis;
-                profile.MostAbundantIsotopeMass = hornResult.mdbl_most_intense_mw;
+                var result = resultList.CreateIsosResult();
+                var profile = new IsotopicProfile
+                {
+                    AverageMass = hornResult.mdbl_average_mw,
+                    ChargeState = hornResult.mshort_cs,
+                    MonoIsotopicMass = hornResult.mdbl_mono_mw,
+                    Score = hornResult.mdbl_fit,
+                    ScoreCountBasis = hornResult.mint_fit_count_basis,
+                    MostAbundantIsotopeMass = hornResult.mdbl_most_intense_mw
+                };
 
 
                 GetIsotopicProfile(hornResult.marr_isotope_peak_indices, mspeakList, ref profile);
@@ -532,8 +388,8 @@ namespace DeconTools.Backend.ProcessingTasks
             if (profile.Peaklist == null || profile.Peaklist.Count == 0) 
                 return defaultVal;
 
-            List<float> peakListIntensities = new List<float>();
-            foreach (MSPeak peak in profile.Peaklist)
+            var peakListIntensities = new List<float>();
+            foreach (var peak in profile.Peaklist)
             {
                 peakListIntensities.Add(peak.Height);
 
@@ -542,14 +398,12 @@ namespace DeconTools.Backend.ProcessingTasks
             peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
             double summedIntensities = 0;
 
-            for (int i = 0; i < peakListIntensities.Count; i++)
+            for (var i = 0; i < peakListIntensities.Count; i++)
             {
-                if (i < numPeaksUsedInAbundance)
+                if (i < NumPeaksUsedInAbundance)
                 {
                     summedIntensities += peakListIntensities[i];
                 }
-
-
             }
 
             return summedIntensities;
@@ -559,17 +413,17 @@ namespace DeconTools.Backend.ProcessingTasks
         private void GetIsotopicProfile(int[] peakIndexList, DeconToolsV2.Peaks.clsPeak[] peakdata, ref IsotopicProfile profile)
         {
             if (peakIndexList == null || peakIndexList.Length == 0) return;
-            DeconToolsV2.Peaks.clsPeak deconMonopeak = lookupPeak(peakIndexList[0], peakdata);
+            var deconMonopeak = lookupPeak(peakIndexList[0], peakdata);
 
-            MSPeak monoPeak = convertDeconPeakToMSPeak(deconMonopeak);
+            var monoPeak = convertDeconPeakToMSPeak(deconMonopeak);
             profile.Peaklist.Add(monoPeak);
 
             if (peakIndexList.Length == 1) return;           //only one peak in the DeconEngine's profile    
 
-            for (int i = 1; i < peakIndexList.Length; i++)     //start with second peak and add each peak to profile
+            for (var i = 1; i < peakIndexList.Length; i++)     //start with second peak and add each peak to profile
             {
-                DeconToolsV2.Peaks.clsPeak deconPeak = lookupPeak(peakIndexList[i], peakdata);
-                MSPeak peakToBeAdded = convertDeconPeakToMSPeak(deconPeak);
+                var deconPeak = lookupPeak(peakIndexList[i], peakdata);
+                var peakToBeAdded = convertDeconPeakToMSPeak(deconPeak);
                 profile.Peaklist.Add(peakToBeAdded);
             }
 
@@ -586,7 +440,7 @@ namespace DeconTools.Backend.ProcessingTasks
         private MSPeak convertDeconPeakToMSPeak(DeconToolsV2.Peaks.clsPeak deconPeak)
         {
 
-            MSPeak peak = new MSPeak
+            var peak = new MSPeak
             {
                 XValue = deconPeak.mdbl_mz,
                 Width = (float)deconPeak.mdbl_FWHM,

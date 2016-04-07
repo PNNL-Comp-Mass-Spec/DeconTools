@@ -30,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
             if (lcScanset == null) return null;
 
-            XYData xydata = run.GetMassSpectrum(lcScanset, MinMZ, MaxMZ);
+            var xydata = run.GetMassSpectrum(lcScanset, MinMZ, MaxMZ);
 
             //TODO: this doesn't really belong here!
             if (IsTICRequested)

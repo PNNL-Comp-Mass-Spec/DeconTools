@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Core
 
         public void Create(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = true)
         {
-            bool isNumScansOdd = (numScansSummed % 2 == 1 && numScansSummed > 0);
+            var isNumScansOdd = (numScansSummed % 2 == 1 && numScansSummed > 0);
 
             if (scanStop < scanStart)
             {
@@ -44,16 +44,16 @@ namespace DeconTools.Backend.Core
             ScanSetList = new List<ScanSet>();
 
 
-            int minScan = GetMinScan(run);
-            int maxScan = GetMaxScan(run);
+            var minScan = GetMinScan(run);
+            var maxScan = GetMaxScan(run);
 
 
             if (sumAllScans)
             {
                 //find first MS1 scan
 
-                int firstMS1Scan = -1;
-                for (int i = minScan; i <= maxScan; i++)
+                var firstMS1Scan = -1;
+                for (var i = minScan; i <= maxScan; i++)
                 {
                     if (run.GetMSLevel(i) == 1)
                     {
@@ -79,7 +79,7 @@ namespace DeconTools.Backend.Core
             else
             {
 
-                for (int i = minScan; i <= maxScan; i++)
+                for (var i = minScan; i <= maxScan; i++)
                 {
                     var mslevel = run.GetMSLevel(i);
 
@@ -187,8 +187,8 @@ namespace DeconTools.Backend.Core
 
             ScanSetList = new List<ScanSet>();
 
-            int minPossibleScanIndex = GetMinScan(run);
-            int maxPossibleScanIndex = GetMaxScan(run);
+            var minPossibleScanIndex = GetMinScan(run);
+            var maxPossibleScanIndex = GetMaxScan(run);
 
 			if (scanStart < 0 && scanStop < 0)
 			{
@@ -216,11 +216,11 @@ namespace DeconTools.Backend.Core
                 scanStop = maxPossibleScanIndex;
             }
 
-        	bool haveProcessedCurrentMsMsSet = false;
+        	var haveProcessedCurrentMsMsSet = false;
 
-            for (int i = scanStart; i <= scanStop; i+= scanIncrement)
+            for (var i = scanStart; i <= scanStop; i+= scanIncrement)
             {
-                int currentMSLevel = run.GetMSLevel(i);
+                var currentMSLevel = run.GetMSLevel(i);
 
 				if (run is UIMFRun && currentMSLevel == 0) continue;  // This is a calibration frame; skip it
 
@@ -229,10 +229,10 @@ namespace DeconTools.Backend.Core
                 ScanSet scanSet;
                 if (currentMSLevel == 1)
                 {
-                    List<int> lowerScansToSum = GetLowerScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
-                    List<int> upperScansToSum = GetUpperScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
+                    var lowerScansToSum = GetLowerScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
+                    var upperScansToSum = GetUpperScans(run, i, currentMSLevel, (numScansSummed - 1) / 2);
 
-                    List<int> scansToSum = lowerScansToSum;
+                    var scansToSum = lowerScansToSum;
                     scansToSum.Add(i);
                     scansToSum.AddRange(upperScansToSum);
 
@@ -244,24 +244,25 @@ namespace DeconTools.Backend.Core
                 {
                     //NOTE: we wish to sum non-adjacent UIMF MS/MS frames. I.e. Frame 2 and 7 were both fully fragmented using the same voltage. We wish to sum these together
                     //NOTE: we may want to abstract this section out somehow. 
-                    if (run is UIMFRun)
+                    var uimfRun = run as UIMFRun;
+                    if (uimfRun != null)
                     {
 						// TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
 						if (sumConsecutiveMsMs)
 						{
 							if(!haveProcessedCurrentMsMsSet)
 							{
-								List<int> framesToSum = new List<int>();
+								var framesToSum = new List<int>();
 
-								var uimfrun = (UIMFRun)run;
+								var uimfrun = uimfRun;
 								var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames();
 
-								for (int j = 0; j < numberOfConsecutiveMs2Frames; j++)
+								for (var j = 0; j < numberOfConsecutiveMs2Frames; j++)
 								{
 									framesToSum.Add(i + j);
 								}
 
-								scanSet = ScanSetFactory.CreateScanSet(run, i, framesToSum.ToArray());
+								scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
 
 								haveProcessedCurrentMsMsSet = true;
 							}
@@ -272,23 +273,23 @@ namespace DeconTools.Backend.Core
 						}
 						else
 						{
-							var uimfrun = (UIMFRun)run;
+							var uimfrun = uimfRun;
 
 							var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames();
 
-							int indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
+							var indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
 
 							if (indexOfCurrentFrame < 0) continue;
 
-							int lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
-							int upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
+							var lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
+							var upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
 
-							List<int> framesToSum = new List<int>();
-							int numLowerFramesToGet = (numScansSummed - 1) / 2;
-							int numUpperFramesToGet = (numScansSummed - 1) / 2;
+							var framesToSum = new List<int>();
+							var numLowerFramesToGet = (numScansSummed - 1) / 2;
+							var numUpperFramesToGet = (numScansSummed - 1) / 2;
 
 							//get lower frames
-							int framesCounter = 0;
+							var framesCounter = 0;
 							while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
 							{
 								framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
@@ -301,7 +302,7 @@ namespace DeconTools.Backend.Core
 
 							//get upper frames
 							framesCounter = 0;
-							int maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
+							var maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
 							while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
 							{
 								framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
@@ -309,7 +310,7 @@ namespace DeconTools.Backend.Core
 								framesCounter++;
 							}
 
-							scanSet = ScanSetFactory.CreateScanSet(run, i, framesToSum.ToArray());
+							scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
 						}
                     }
                     else
@@ -326,10 +327,10 @@ namespace DeconTools.Backend.Core
 
         private static List<int> GetLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
         {
-            int currentScan = startingScan - 1;
-            List<int> lowerScans = new List<int>();
+            var currentScan = startingScan - 1;
+            var lowerScans = new List<int>();
 
-            int scansCounter = 0;
+            var scansCounter = 0;
             while (currentScan >= 1 && numLowerScansToGet > scansCounter)
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
@@ -346,11 +347,11 @@ namespace DeconTools.Backend.Core
         }
         private static List<int> GetUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
         {
-            int currentScan = startingScan + 1;
+            var currentScan = startingScan + 1;
             var scans = new List<int>();
 
-            int scansCounter = 0;
-            int scanUppperLimit = run.GetMaxPossibleLCScanNum();
+            var scansCounter = 0;
+            var scanUppperLimit = run.GetMaxPossibleLCScanNum();
 
             while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
             {
@@ -381,7 +382,7 @@ namespace DeconTools.Backend.Core
         {
             if (this.ScanSetList == null || this.ScanSetList.Count == 0) return null;
 
-            ScanSet scan = ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum);
+            var scan = ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum);
 
             if (run.GetMSLevel(scan.PrimaryScanNumber) == 1)
             {
@@ -391,11 +392,11 @@ namespace DeconTools.Backend.Core
             {
                 if (ascending)
                 {
-                    scan = GetNextMSScanSet(run, ++primaryNum, ascending);
+                    scan = GetNextMSScanSet(run, ++primaryNum, true);
                 }
                 else
                 {
-                    scan = GetNextMSScanSet(run, --primaryNum, ascending);
+                    scan = GetNextMSScanSet(run, --primaryNum, false);
                 }
             }
 

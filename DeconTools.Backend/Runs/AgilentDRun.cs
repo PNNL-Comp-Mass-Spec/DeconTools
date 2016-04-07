@@ -17,22 +17,21 @@ namespace DeconTools.Backend.Runs
         IMsdrDataReader m_reader;
         IBDASpecData m_spec;
 
-        /// <summary>
-        /// Agilent XCT .D datafolder
-        /// </summary>
-        /// <param name="folderName">The name of the Agilent data folder. Folder has a '.d' suffix</param>
-
         public AgilentDRun()
         {
             this.MSFileType = Globals.MSFileType.Agilent_D;
             this.ContainsMSMSData = true;    //not sure if it does, but setting it to 'true' ensures that each scan will be checked. 
         }
 
+        /// <summary>
+        /// Agilent XCT .D datafolder
+        /// </summary>
+        /// <param name="dataFileName">The name of the Agilent data folder. Folder has a '.d' suffix</param>
         public AgilentDRun(string dataFileName)
             : this()
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(dataFileName);
-            FileInfo fileInfo = new FileInfo(dataFileName);
+            var dirInfo = new DirectoryInfo(dataFileName);
+            var fileInfo = new FileInfo(dataFileName);
 
             Check.Require(!fileInfo.Exists, "Dataset's inputted name refers to a file, but should refer to a Folder");
             Check.Require(dirInfo.Exists, "Dataset not found.");
@@ -120,7 +119,7 @@ namespace DeconTools.Backend.Runs
         {
             m_spec = m_reader.GetSpectrum(scanNum, null, null);
 
-            MSLevel level = m_spec.MSLevelInfo;
+            var level = m_spec.MSLevelInfo;
             if (level == MSLevel.MS)
             {
                 return 1;
@@ -139,9 +138,9 @@ namespace DeconTools.Backend.Runs
         {
             m_spec = m_reader.GetSpectrum(scanNum, null, null);
 
-            PrecursorInfo precursor = new PrecursorInfo();
+            var precursor = new PrecursorInfo();
 
-            MSLevel level = m_spec.MSLevelInfo;
+            var level = m_spec.MSLevelInfo;
             if (level == MSLevel.MS)
             {
                 precursor.MSLevel = 1;
@@ -156,12 +155,9 @@ namespace DeconTools.Backend.Runs
             }
 
             int precursorMassCount;
-            double precursorIntensity;
-            int precursorCharge;
-            bool getCharge;
 
             //this returns a list of precursor masses (not sure how there can be more than one)
-            double[] precursorMZlist = m_spec.GetPrecursorIon(out precursorMassCount);
+            var precursorMZlist = m_spec.GetPrecursorIon(out precursorMassCount);
 
             //if a mass is returned
             if (precursorMassCount == 1)
@@ -170,11 +166,13 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorMZ = precursorMZlist[0];
 
                 //intensity
+                double precursorIntensity;
                 m_spec.GetPrecursorIntensity(out precursorIntensity);
                 precursor.PrecursorIntensity = (float)precursorIntensity;
 
                 //charge
-                getCharge = m_spec.GetPrecursorCharge(out precursorCharge);
+                int precursorCharge;
+                m_spec.GetPrecursorCharge(out precursorCharge);
                 precursor.PrecursorCharge = precursorCharge;
 
                 //adjust scan number if needed
@@ -211,15 +209,15 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet == null) return null;
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
 
-                double[] xvals = m_spec.XArray;
-                float[] yvals = m_spec.YArray;
+                var xvals = m_spec.XArray;
+                var yvals = m_spec.YArray;
 
-                bool filterMassRange = true;
+                var filterMassRange = true;
                 FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
 
                 
@@ -236,7 +234,7 @@ namespace DeconTools.Backend.Runs
                 
                 getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
 
-                bool filterMassRange = true;
+                var filterMassRange = true;
                 FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
 
                 xydata.Xvalues = xvals;
@@ -251,12 +249,11 @@ namespace DeconTools.Backend.Runs
         {
             if (filterMassRange)
             {
-                List<double> xvalsShortened = new List<double>();
-                List<float> yvalsShortened = new List<float>();
-                double tempMass = 0;
-                for (int i = 0; i < xvals.Length; i++)
+                var xvalsShortened = new List<double>();
+                var yvalsShortened = new List<float>();
+                for (var i = 0; i < xvals.Length; i++)
                 {
-                    tempMass = xvals[i];
+                    var tempMass = xvals[i];
                     if (tempMass > minMZ && tempMass < maxMZ)
                     {
                         xvalsShortened.Add(xvals[i]);
@@ -275,7 +272,7 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet == null) return null;
 
-            XYData xydata=new XYData();
+            var xydata=new XYData();
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
@@ -314,11 +311,9 @@ namespace DeconTools.Backend.Runs
             //the integer is added to a dictionary generic list (sorted)
             //
 
-            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
-            SortedDictionary<long, float> mz_intensityPairFiltered = new SortedDictionary<long, float>();
-            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
-            double[] tempXvals = new double[0];
-            float[] tempYvals = new float[0];
+            var mz_intensityPair = new SortedDictionary<long, float>();
+            
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
 
             //long minXLong = (long)(minMZ * precision + 0.5);
             //long maxXLong = (long)(maxMZ * precision + 0.5);
@@ -327,12 +322,12 @@ namespace DeconTools.Backend.Runs
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
                 //m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
                 getAgilentSpectrum(scanSet.IndexValues[0] + scanCounter);
-                tempXvals = m_spec.XArray;
-                tempYvals = m_spec.YArray;
+                var tempXvals = m_spec.XArray;
+                var tempYvals = m_spec.YArray;
 
-                for (int i = 0; i < tempXvals.Length; i++)
+                for (var i = 0; i < tempXvals.Length; i++)
                 {
-                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    var tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
                     //if (tempmz < minXLong || tempmz > maxXLong) continue;
 
                     if (mz_intensityPair.ContainsKey(tempmz))
@@ -348,11 +343,11 @@ namespace DeconTools.Backend.Runs
 
             if (mz_intensityPair.Count == 0) return;
 
-            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+            var summedXVals = mz_intensityPair.Keys.ToList();
             xvals = new double[summedXVals.Count];
             yvals = mz_intensityPair.Values.ToArray();
            
-            for (int i = 0; i < summedXVals.Count; i++)
+            for (var i = 0; i < summedXVals.Count; i++)
             {
                 xvals[i] = summedXVals[i] / precision;
             }

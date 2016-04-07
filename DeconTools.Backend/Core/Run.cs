@@ -177,7 +177,7 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual string GetScanInfo(int scanNum)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(scanNum.ToString());
             return sb.ToString();
         }
@@ -195,22 +195,21 @@ namespace DeconTools.Backend.Core
             // check to see if we have a value already stored
             if (this.MSLevelList.TryGetValue(scanNum, out msLevel))
             {
+                // Return the cached value
                 return msLevel;
             }
-            // if not, look up MSLevel from Raw data
-            else
-            {
-                int mslevel = GetMSLevelFromRawData(scanNum);
+            
+            // Look up MSLevel from Raw data
+		    var mslevel = GetMSLevelFromRawData(scanNum);
 
-                this.MSLevelList.Add(scanNum, (byte)mslevel);
+		    this.MSLevelList.Add(scanNum, (byte)mslevel);
 
-                return mslevel;
-            }
-        }
+		    return mslevel;
+		}
 
         public virtual PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-            throw new System.NotImplementedException("GetPrecursorInfo is not available for this Run type.");
+            throw new NotImplementedException("GetPrecursorInfo is not available for this Run type.");
         }
 
         public virtual bool IsDataCentroided(int scanNum)
@@ -261,40 +260,45 @@ namespace DeconTools.Backend.Core
 
         internal void ResetXYPoints()
         {
-            this.XYData = new XYData();
-            this.XYData.Xvalues = new double[1];   //TODO:  re-examine this. I do this to allow
-            this.XYData.Yvalues = new double[1];
+            XYData = new XYData
+            {
+                Xvalues = new double[1],
+                Yvalues = new double[1]
+            };
+            //TODO:  re-examine this. I do this to allow
         }
 
         internal void FilterXYPointsByMZRange(double minMZ, double maxMZ)
         {
-            List<double> filteredXValues = new List<double>();
-            List<double> filteredYValues = new List<double>();
+            //var filteredXValues = new List<double>();
+            //var filteredYValues = new List<double>();
 
-            int numPointsToAdd = 0;
+            var numPointsToAdd = 0;
 
-            for (int i = 0; i < XYData.Xvalues.Length; i++)
+            for (var i = 0; i < XYData.Xvalues.Length; i++)
             {
-                if (XYData.Xvalues[i] >= minMZ)
+                if (!(XYData.Xvalues[i] >= minMZ))
                 {
-                    if (XYData.Xvalues[i] <= maxMZ)
-                    {
-                        //filteredXValues.Add(XYData.Xvalues[i]);
-                        //filteredYValues.Add(XYData.Yvalues[i]);
-                        numPointsToAdd++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    continue;
+                }
+
+                if (XYData.Xvalues[i] <= maxMZ)
+                {
+                    //filteredXValues.Add(XYData.Xvalues[i]);
+                    //filteredYValues.Add(XYData.Yvalues[i]);
+                    numPointsToAdd++;
+                }
+                else
+                {
+                    break;
                 }
             }
 
-            double[] xvals = new double[numPointsToAdd];
-            double[] yvals = new double[numPointsToAdd];
+            var xvals = new double[numPointsToAdd];
+            var yvals = new double[numPointsToAdd];
 
-            int counter = 0;
-            for (int i = 0; i < XYData.Xvalues.Length; i++)
+            var counter = 0;
+            for (var i = 0; i < XYData.Xvalues.Length; i++)
             {
 
                 if (XYData.Xvalues[i] >= minMZ)
@@ -347,7 +351,7 @@ namespace DeconTools.Backend.Core
             switch (scanSelectionMode)
             {
                 case Globals.ScanSelectionMode.ASCENDING:
-                    for (int i = inputScan; i <= this.MaxLCScan; i++)     // MaxScan is an index value
+                    for (var i = inputScan; i <= this.MaxLCScan; i++)     // MaxScan is an index value
                     {
                         if (this.GetMSLevel(i) == 1) return i;
                     }
@@ -355,7 +359,7 @@ namespace DeconTools.Backend.Core
                     return inputScan;
 
                 case Globals.ScanSelectionMode.DESCENDING:
-                    for (int i = inputScan; i >= this.MinLCScan; i--)
+                    for (var i = inputScan; i >= this.MinLCScan; i--)
                     {
                         if (this.GetMSLevel(i) == 1) return i;
                     }
@@ -363,10 +367,10 @@ namespace DeconTools.Backend.Core
                     return inputScan;
 
                 case Globals.ScanSelectionMode.CLOSEST:
-                    int upperScan = -1;
-                    int lowerScan = -1;
+                    var upperScan = -1;
+                    var lowerScan = -1;
                     if (this.GetMSLevel(inputScan) == 1) return inputScan;
-                    for (int i = inputScan; i <= this.MaxLCScan; i++)
+                    for (var i = inputScan; i <= this.MaxLCScan; i++)
                     {
                         if (this.GetMSLevel(i) == 1)
                         {
@@ -374,7 +378,7 @@ namespace DeconTools.Backend.Core
                             break;
                         }
                     }
-                    for (int i = inputScan; i >= this.MinLCScan; i--)
+                    for (var i = inputScan; i >= this.MinLCScan; i--)
                     {
                         if (this.GetMSLevel(i) == 1)
                         {
@@ -420,7 +424,7 @@ namespace DeconTools.Backend.Core
             {
                 msLevelScanIndexList = new List<int>();
 
-                for (int i = minScan; i <= maxScan; i++)
+                for (var i = minScan; i <= maxScan; i++)
                 {
                     if (this.ContainsMSMSData)   // contains MS1 and MS2
                     {
@@ -512,7 +516,7 @@ namespace DeconTools.Backend.Core
 
             if (ScanSetCollection == null) return;
 
-            foreach (ScanSet scan in ScanSetCollection.ScanSetList)
+            foreach (var scan in ScanSetCollection.ScanSetList)
             {
                 scan.NETValue=  (float) NetAlignmentInfo.GetNETValueForScan(scan.PrimaryScanNumber);
             }
@@ -533,7 +537,7 @@ namespace DeconTools.Backend.Core
             var ppmShift = MassAlignmentInfo.GetPpmShift(observedMZ, (int) scan);
 
 
-            double alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
+            var alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
             return alignedMZ;
         }
     
@@ -549,7 +553,7 @@ namespace DeconTools.Backend.Core
 
             var ppmShift =MassAlignmentInfo.GetPpmShift(theorMZ, (int) scan);
 
-            double alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
+            var alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
             return alignedMZ;
         }
         

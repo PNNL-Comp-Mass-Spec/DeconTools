@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.DTO;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
@@ -29,7 +27,7 @@ namespace DeconTools.Backend.Workflows
     {
         private const int PeakListExporterTriggerValue = 10000;
 
-        private bool _deconvolutorRequiresPeaksFile = false;
+        private bool _deconvolutorRequiresPeaksFile;
 
         internal string PeakListOutputFileName;
         internal string IsosOutputFileName;
