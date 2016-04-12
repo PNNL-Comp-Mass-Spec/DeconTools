@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.0.5945; April 11, 2016    mem
+	- Remove reference to pwiz_bindings_cli.dll since the presence of that file can interfere with ProteowizardWrapper searching for ProteoWizard DLLs
+
 Version 1.0.5940; April 6, 2016     mem
 	- Update to UIMFLibrary.dll v3.0.5940
 
