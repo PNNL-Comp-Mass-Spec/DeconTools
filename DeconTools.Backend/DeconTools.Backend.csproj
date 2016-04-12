@@ -101,10 +101,6 @@
     <Reference Include="ProteowizardWrapper">
       <HintPath>..\Library\ProteowizardWrapper.dll</HintPath>
     </Reference>
-    <Reference Include="pwiz_bindings_cli">
-      <HintPath>..\Library\pwiz_bindings_cli.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

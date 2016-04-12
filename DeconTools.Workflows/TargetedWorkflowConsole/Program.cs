@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Configuration;
 using System.Xml.Linq;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -22,7 +21,7 @@ namespace IQ.Console
 
             var options = new IqConsoleOptions();
 
-            List<string> datasetList = new List<string>();
+            var datasetList = new List<string>();
 
 
             if (!CommandLine.Parser.Default.ParseArguments(args, options))
@@ -30,20 +29,20 @@ namespace IQ.Console
                 return -1;
             }
 
-            string inputFile = options.InputFile;
+            var inputFile = options.InputFile;
 
 
 
-            bool inputFileIsAListOfDatasets = inputFile.ToLower().EndsWith(".txt");
+            var inputFileIsAListOfDatasets = inputFile.ToLower().EndsWith(".txt");
             if (inputFileIsAListOfDatasets)
             {
-                using (StreamReader reader = new StreamReader(inputFile))
+                using (var reader = new StreamReader(inputFile))
                 {
 
                     while (reader.Peek() != -1)
                     {
 
-                        string datsetName = reader.ReadLine();
+                        var datsetName = reader.ReadLine();
                         datasetList.Add(datsetName);
 
                     }
@@ -58,8 +57,8 @@ namespace IQ.Console
             }
 
 
-            int numDatasets = datasetList.Count;
-            int datasetCounter = 0;
+            var numDatasets = datasetList.Count;
+            var datasetCounter = 0;
 
             foreach (var dataset in datasetList)
             {
@@ -162,7 +161,7 @@ namespace IQ.Console
                         var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, workflowParameters);
                         var childWorkflow = new O16O18IqWorkflow(run, workflowParameters);
 
-                        IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+                        var workflowAssigner = new IqWorkflowAssigner();
                         workflowAssigner.AssignWorkflowToParent(parentWorkflow, iqTarget);
                         workflowAssigner.AssignWorkflowToChildren(childWorkflow, iqTarget);
                     }
@@ -170,7 +169,6 @@ namespace IQ.Console
                     executor.Execute();
 
                     run.Dispose();
-                    run = null;
                 }
             }
 
@@ -182,19 +180,21 @@ namespace IQ.Console
 
         private static BasicTargetedWorkflowExecutorParameters GetExecutorParameters(IqConsoleOptions options)
         {
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath = options.TargetFile;
-            executorParameters.OutputFolderBase = options.OutputFolder;
-            executorParameters.TargetedAlignmentIsPerformed = options.IsAlignmentPerformed;
-            executorParameters.WorkflowParameterFile = options.WorkflowParameterFile;
-            executorParameters.TargetedAlignmentWorkflowParameterFile = options.AlignmentParameterFile;
-            executorParameters.IsMassAlignmentPerformed = options.IsMassAlignmentPerformed;
-            executorParameters.IsNetAlignmentPerformed = options.IsNetAlignmentPerformed;
-            executorParameters.ReferenceTargetsFilePath = options.ReferenceTargetFile;
-            
-            executorParameters.TargetType = options.UseInputScan
-                                                ? Globals.TargetType.LcmsFeature
-                                                : Globals.TargetType.DatabaseTarget;
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                TargetsFilePath = options.TargetFile,
+                OutputFolderBase = options.OutputFolder,
+                TargetedAlignmentIsPerformed = options.IsAlignmentPerformed,
+                WorkflowParameterFile = options.WorkflowParameterFile,
+                TargetedAlignmentWorkflowParameterFile = options.AlignmentParameterFile,
+                IsMassAlignmentPerformed = options.IsMassAlignmentPerformed,
+                IsNetAlignmentPerformed = options.IsNetAlignmentPerformed,
+                ReferenceTargetsFilePath = options.ReferenceTargetFile,
+                TargetType = options.UseInputScan
+                                 ? Globals.TargetType.LcmsFeature
+                                 : Globals.TargetType.DatabaseTarget
+            };
+
 
             if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
             {
@@ -208,7 +208,7 @@ namespace IQ.Console
             {
                 // Load workflow parameter file to update the options
 
-                Dictionary<string, string> parameterList = LoadParameters(options.WorkflowParameterFile);
+                var parameterList = LoadParameters(options.WorkflowParameterFile);
 
                 executorParameters.CopyRawFileLocal = GetParameter(parameterList, "CopyRawFileLocal", executorParameters.CopyRawFileLocal);
                 executorParameters.DeleteLocalDatasetAfterProcessing = GetParameter(parameterList, "DeleteLocalDatasetAfterProcessing", executorParameters.DeleteLocalDatasetAfterProcessing);
@@ -220,7 +220,7 @@ namespace IQ.Console
 
                 executorParameters.TargetsFilePath = GetParameter(parameterList, "TargetsFilePath", executorParameters.TargetsFilePath);
 
-                string targetType = GetParameter(parameterList, "TargetType", "DatabaseTarget");
+                var targetType = GetParameter(parameterList, "TargetType", "DatabaseTarget");
                 if (string.Equals(targetType, "LcmsFeature", StringComparison.CurrentCultureIgnoreCase))
                     executorParameters.TargetType = Globals.TargetType.LcmsFeature;
 
@@ -270,14 +270,20 @@ namespace IQ.Console
         private static Dictionary<string, string> LoadParameters(string workflowParameterFilePath)
         {
             Check.Require(File.Exists(workflowParameterFilePath), "Workflow parameter file could not be loaded. File not found: " + workflowParameterFilePath);
-            XDocument doc = XDocument.Load(workflowParameterFilePath);
-            var query = doc.Element("WorkflowParameters").Elements();
+            var doc = XDocument.Load(workflowParameterFilePath);
+            var xElement = doc.Element("WorkflowParameters");
+            if (xElement == null)
+            {
+                return new Dictionary<string, string>();
+            }
+            
+            var query = xElement.Elements();
 
             var parameterTableFromXML = new Dictionary<string, string>();
             foreach (var item in query)
             {
-                string paramName = item.Name.ToString();
-                string paramValue = item.Value;
+                var paramName = item.Name.ToString();
+                var paramValue = item.Value;
 
                 if (!parameterTableFromXML.ContainsKey(paramName))
                 {
