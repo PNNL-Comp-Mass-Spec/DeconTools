@@ -9,7 +9,7 @@ using DeconToolsV2.Readers;
 
 namespace DeconTools.Backend.Core
 {
-    #if !Disable_DeconToolsV2
+#if !Disable_DeconToolsV2
     public class OldDecon2LSParameters
     {
 

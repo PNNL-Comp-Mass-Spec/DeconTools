@@ -8,9 +8,7 @@ using YafmsLibrary;
 
 namespace DeconTools.Backend.Runs
 {
-#if !Disable_DeconToolsV2
-
-    public sealed class YAFMSRun : DeconToolsRun
+    public sealed class YAFMSRun : Run
     {
         YafmsReader m_reader;
 
@@ -71,6 +69,8 @@ namespace DeconTools.Backend.Runs
         /// SpectraID is specific to the YafMS schema. Default is '1'
         /// </summary>
         public int SpectraID { get; set; }
+
+        public override XYData XYData { get; set; }
 
         #endregion
 
@@ -279,6 +279,4 @@ namespace DeconTools.Backend.Runs
         #endregion
      
     }
-
-#endif
 }

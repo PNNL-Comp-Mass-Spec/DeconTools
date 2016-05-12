@@ -16,6 +16,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
+#if !Disable_DeconToolsV2
     public class WholisticChromBasedLCMSFeatureFinderWorkflow : WorkflowBase
     {
         string m_peakOutputFileName;
@@ -918,4 +919,5 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
     }
+#endif
 }

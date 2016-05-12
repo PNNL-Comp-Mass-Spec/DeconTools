@@ -13,6 +13,7 @@ using DeconTools.Backend.Runs;
 
 namespace DeconTools.Workflows.Backend.Core
 {
+#if !Disable_DeconToolsV2
     public class IMS_WholisticFeatureFinderWorkflow : WorkflowBase
     {
         List<MSPeakResult> processedMSPeaks;
@@ -338,4 +339,5 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
     }
+#endif
 }

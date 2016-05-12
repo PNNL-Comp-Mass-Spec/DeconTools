@@ -7,6 +7,7 @@ namespace DeconTools.Backend
 {
 
 #if !Disable_DeconToolsV2
+    [Obsolete("Not used in current codebase", true)]
     public class FileLoader
     {
 

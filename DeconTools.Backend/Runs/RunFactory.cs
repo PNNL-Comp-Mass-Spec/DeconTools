@@ -132,9 +132,11 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.Bruker:
                     run = new BrukerV3Run(fileName);
                     break;
+#if !Disable_DeconToolsV2
                 case Globals.MSFileType.Bruker_V2:
                     run = new BrukerV2Run(fileName);
                     break;
+#endif
                 case Globals.MSFileType.Bruker_Ascii:
                     run = null;
                     break;
