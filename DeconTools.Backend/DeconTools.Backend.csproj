@@ -177,6 +177,28 @@
     <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\AutoCorrelationChargeDetermination.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\Interpolation.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\AtomicCount.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\Averagine.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementIsotopes.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\MolecularFormula.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\AreaFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\ChiSqFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\IsotopicProfileFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\PeakFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\ApodizationType.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\FFT.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryCache.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryIsotopeDistribution.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakFitter.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakIndex.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakProcessor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakStatistician.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\ThrashV1Peak.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\HornTransformResults.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\ChargeStateDecider.cs" />
@@ -534,6 +556,7 @@
     <Content Include="Interop.MSFileReaderLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ThrashV1_Readme.txt" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

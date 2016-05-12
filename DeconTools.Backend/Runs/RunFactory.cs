@@ -89,11 +89,9 @@ namespace DeconTools.Backend.Runs
                     run = new AgilentDRun(fullfileName);
                     break;
 
-#if !Disable_DeconToolsV2
                 case ".yafms":
                     run = new YAFMSRun(fullfileName);
                     break;
-#endif
 
                 default:
                     throw new ApplicationException("File type - "+ extension + " -  is not supported in DeconTools");
@@ -163,11 +161,9 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
-#if !Disable_DeconToolsV2
                 case Globals.MSFileType.YAFMS:
                     run = new YAFMSRun(fileName);
                     break;
-#endif
                 default:
                     run = null;
                     break;
