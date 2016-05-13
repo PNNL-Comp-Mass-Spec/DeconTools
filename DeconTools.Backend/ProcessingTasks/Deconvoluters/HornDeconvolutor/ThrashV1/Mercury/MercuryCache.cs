@@ -167,7 +167,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="mzs">Isotope m/zs</param>
         /// <param name="intensities">Isotope intensities</param>
         public void CacheIsotopeDistribution(double observedMostAbundantMass, double mostAbundantMass, double monoMass,
-            double averageMass, double mostAbundantMz, short charge, double fwhm, double massVariance, int numPtsPerAmu,
+            double averageMass, double mostAbundantMz, int charge, double fwhm, double massVariance, int numPtsPerAmu,
             double minIntensity, List<double> mzs, List<double> intensities)
         {
             // we're going to extract the peak tops for this distribution and add them to the array of distributions.
@@ -197,7 +197,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             _isotopicDistributions.Add(dist);
         }
 
-        private int GetIsotopeDistributionCachedAtPosition(int position, short charge, double fwhm,
+        private int GetIsotopeDistributionCachedAtPosition(int position, int charge, double fwhm,
             double minTheoreticalIntensity, out List<double> mzs, out List<double> intensities)
         {
             mzs = new List<double>();
@@ -299,7 +299,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             return 0;
         }
 
-        public bool GetIsotopeDistributionCached(double observedMostAbundantMass, short charge, double fwhm,
+        public bool GetIsotopeDistributionCached(double observedMostAbundantMass, int charge, double fwhm,
             double minTheoreticalIntensity, out List<double> mzs, out List<double> intensities)
         {
             mzs = new List<double>();
@@ -345,7 +345,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             public readonly List<double> Intensities = new List<double>();
             public readonly List<double> Mzs = new List<double>();
             public double AverageMass;
-            public short Charge;
+            public int Charge;
             public double MassVariance;
             public double MonoMass;
             public double MostAbundantMass;

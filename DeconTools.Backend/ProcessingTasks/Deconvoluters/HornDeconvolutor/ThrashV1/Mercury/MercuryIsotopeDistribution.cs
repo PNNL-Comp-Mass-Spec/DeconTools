@@ -103,8 +103,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="isotopeMzs">peak top mz's for the peaks of the isotopic profile</param>
         /// <param name="isotopeIntensities">peak top intensities's for the peaks of the isotopic profile</param>
         /// <param name="debug"></param>
-        public void CalculateDistribution(short charge, double resolution, MolecularFormula formula,
-            out List<double> x,
+        public void CalculateDistribution(int charge, double resolution, MolecularFormula formula, out List<double> x,
             out List<double> y, double threshold, out List<double> isotopeMzs, out List<double> isotopeIntensities,
             bool debug = false)
         {
@@ -217,7 +216,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
         }
 
-        public void CalcVariancesAndMassRange(short charge, MolecularFormula formula)
+        public void CalcVariancesAndMassRange(int charge, MolecularFormula formula)
         {
             MassVariance = 0;
             var numElementsFound = formula.NumElements;
@@ -529,7 +528,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             return true;
         }
 
-        public void CalcFrequencies(short charge, int numPoints, MolecularFormula formula)
+        public void CalcFrequencies(int charge, int numPoints, MolecularFormula formula)
         {
             int i;
             int j, k;

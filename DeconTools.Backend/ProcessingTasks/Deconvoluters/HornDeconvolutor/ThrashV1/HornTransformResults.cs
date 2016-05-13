@@ -22,7 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <summary>
         ///     charge state
         /// </summary>
-        public short ChargeState;
+        public int ChargeState;
 
         /// <summary>
         ///     difference between observed m/z and m/z from theoretical distribution of composition from Averagine

@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="pointsUsed">number of points used</param>
         /// <param name="debug">debug output flag</param>
-        public override double FitScore(PeakData peakData, short chargeState, ThrashV1Peak peak, double mzDelta,
+        public override double FitScore(PeakData peakData, int chargeState, ThrashV1Peak peak, double mzDelta,
             double minIntensityForScore, out int pointsUsed, bool debug = false)
         {
             pointsUsed = 0;
@@ -67,7 +67,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </param>
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="debug">prints debugging information if this is set to true.</param>
-        public override double FitScore(PeakData peakData, short chargeState, double intensityNormalizer, double mzDelta,
+        public override double FitScore(PeakData peakData, int chargeState, double intensityNormalizer, double mzDelta,
             double minIntensityForScore, bool debug = false)
         {
             var numPoints = TheoreticalDistMzs.Count;

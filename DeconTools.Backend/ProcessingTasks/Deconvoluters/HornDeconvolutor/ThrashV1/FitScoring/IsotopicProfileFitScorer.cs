@@ -110,7 +110,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        /// Create a new scorer based on the specified fit type, copying scorer settings from another scorer
+        ///     Create a new scorer based on the specified fit type, copying scorer settings from another scorer
         /// </summary>
         /// <param name="fitType"></param>
         /// <param name="oldFit"></param>
@@ -124,7 +124,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        /// Create a new scorer based on the specified fit type
+        ///     Create a new scorer based on the specified fit type
         /// </summary>
         /// <param name="fitType"></param>
         /// <returns></returns>
@@ -134,7 +134,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             switch (fitType)
             {
                 case Globals.IsotopicProfileFitType.Undefined:
-                    throw new Exception("Error.  IsotopicProfile fit type has not been defined. Cannot be used in HornTransform");
+                    throw new Exception(
+                        "Error.  IsotopicProfile fit type has not been defined. Cannot be used in HornTransform");
                 case Globals.IsotopicProfileFitType.PEAK:
                     scorer = new PeakFitScorer();
                     break;
@@ -159,7 +160,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="pointsUsed">number of points used</param>
         /// <param name="debug">debug output flag</param>
-        public abstract double FitScore(PeakData peakData, short chargeState, ThrashV1Peak peak, double mzDelta,
+        public abstract double FitScore(PeakData peakData, int chargeState, ThrashV1Peak peak, double mzDelta,
             double minIntensityForScore, out int pointsUsed, bool debug = false);
 
         /// <summary>
@@ -178,7 +179,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </param>
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="debug">prints debugging information if this is set to true.</param>
-        public abstract double FitScore(PeakData peakData, short chargeState, double normalizer, double mzDelta,
+        public abstract double FitScore(PeakData peakData, int chargeState, double normalizer, double mzDelta,
             double minIntensityForScore, bool debug = false);
 
         /// <summary>
@@ -381,7 +382,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         /*[gord]  the following is currently unused. The idea was to give weighting to the algorithm so that 
           the user could favor certain fitting parameters (i.e. space between isotopomers) over others
-        public double FindIsotopicDist(PeakProcessing.PeakData peakData, short cs, PeakProcessing.Peak peak,
+        public double FindIsotopicDist(PeakProcessing.PeakData peakData, int cs, PeakProcessing.Peak peak,
             IsotopeFitRecord isoRecord, double deleteIntensityThreshold, double spacingWeight, double spacingVar,
             double signalToNoiseWeight, double signalToNoiseThresh, double ratioWeight, double ratioThreshold,
             double fitWeight, double fitThreshold, bool debug = false)
@@ -481,7 +482,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     to the center point and then slides to the right until the fit score does not improve. Returns the
         ///     best fit score and fills the isotopic profile (isotopeFitRecord)
         /// </remarks>
-        public double GetFitScore(PeakData peakData, short chargeState, ref ThrashV1Peak peak, 
+        public double GetFitScore(PeakData peakData, int chargeState, ref ThrashV1Peak peak,
             out HornTransformResults isoRecord, double deleteIntensityThreshold, double minTheoreticalIntensityForScore,
             double leftFitStringencyFactor, double rightFitStringencyFactor, out int pointsUsed, bool debug = false)
         {
@@ -745,7 +746,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="deleteIntensityThreshold">intensity of least isotope to delete.</param>
         /// <param name="minTheoreticalIntensityForScore">minimum intensity of point to consider for scoring purposes.</param>
         /// <param name="debug">if debugging output is enabled</param>
-        public double GetFitScore(PeakData peakData, short chargeState, ThrashV1Peak peak, MolecularFormula formula,
+        public double GetFitScore(PeakData peakData, int chargeState, ThrashV1Peak peak, MolecularFormula formula,
             double deleteIntensityThreshold, double minTheoreticalIntensityForScore, bool debug = false)
         {
             if (chargeState <= 0)
@@ -841,7 +842,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             startMz = startMz + delta;
-                // TODO: verify/check; make an O18 mode flag that keeps this as added; regular mode no change/subtract/what?
+            // TODO: verify/check; make an O18 mode flag that keeps this as added; regular mode no change/subtract/what?
             stopMz = stopMz + delta; // TODO: Test and check changing this to "stop_mz + delta / 2
             if (debug)
             {
@@ -862,7 +863,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="intensities">vector for output of intensity values .</param>
         /// <param name="minTheoreticalIntensity">intensity of the minimum point to be provided in the vectors as output.</param>
         /// <param name="debug">if debugging info should output</param>
-        protected void GetIsotopeDistribution(double mostAbundantMass, short charge, double resolution,
+        protected void GetIsotopeDistribution(double mostAbundantMass, int charge, double resolution,
             out List<double> mzs, out List<double> intensities, double minTheoreticalIntensity, bool debug)
         {
             mzs = new List<double>();

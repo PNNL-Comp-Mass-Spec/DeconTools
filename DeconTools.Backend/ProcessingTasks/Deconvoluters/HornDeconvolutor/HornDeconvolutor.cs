@@ -666,7 +666,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         private void SetIsotopeDistributionToZero(PeakData peakData, ThrashV1Peak peak, double zeroingStartMz,
-            double zeroingStopMz, double monoMw, short chargeState, bool clearSpectrum, HornTransformResults record,
+            double zeroingStopMz, double monoMw, int chargeState, bool clearSpectrum, HornTransformResults record,
             bool debug = false)
         {
             var peakIndices = new List<int>();
