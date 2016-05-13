@@ -111,9 +111,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 MonoisotopicMass += atomicInformation.ElementalIsotopesList[elementIndex].Isotopes[0].Mass * count;
                 AverageMass += atomicInformation.ElementalIsotopesList[elementIndex].AverageMass * count;
             }
-            return;
-#if !Disable_Obsolete
-            // Regular expressions simplify this code soo much.
+            /*
+            // Regular expressions simplify this code so much. See above.
             var formulaLength = formula.Length;
             var index = 0;
             //var numAtoms = atomicInformation.GetNumElements();
@@ -197,8 +196,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 TotalAtomCount += count;
                 MonoisotopicMass += atomicInformation.ElementalIsotopesList[elementIndex].Isotopes[0].Mass * count;
                 AverageMass += atomicInformation.ElementalIsotopesList[elementIndex].AverageMass * count;
-            }
-#endif
+            }*/
         }
 
         public void AddAtomicCount(AtomicCount cnt, double monoMass, double avgMass)

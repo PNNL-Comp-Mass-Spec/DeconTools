@@ -13,6 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
     ///     This class is the base class for the isotope fitting. There are three types of fits:
     ///     Area Fit, Peak Fit, and Chi Sq. Fit.
     /// </remarks>
+    /// <seealso cref="DeconTools.Backend.Utilities.IsotopeDistributionCalculation.IsotopicDistributionCalculator"/>
     public abstract class IsotopicProfileFitScorer
     {
         private readonly MercuryCache _mercuryCache = new MercuryCache();
@@ -184,8 +185,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     gets the intensity for a given mz.
         /// </summary>
         /// <remarks>
-        ///     We look for the intensity at a given m/z value in the raw data List ptr_vect_mzs
-        ///     (the intensities are stored in the corresponding raw data intensity List ptr_vect_inensities).
+        ///     We look for the intensity at a given m/z value in the raw data List mzs
+        ///     (the intensities are stored in the corresponding raw data intensity List intensities).
         ///     If the value does not exist, we interpolate the intensities of points before and after this m/z value.
         /// </remarks>
         /// <param name="mz">the m/z value for which we want to find the intensity.</param>
@@ -480,10 +481,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     to the center point and then slides to the right until the fit score does not improve. Returns the
         ///     best fit score and fills the isotopic profile (isotopeFitRecord)
         /// </remarks>
-        public double GetFitScore(PeakData peakData, short chargeState, ref ThrashV1Peak peak,
-            out HornTransformResults isoRecord,
-            double deleteIntensityThreshold, double minTheoreticalIntensityForScore, double leftFitStringencyFactor,
-            double rightFitStringencyFactor, out int pointsUsed, bool debug = false)
+        public double GetFitScore(PeakData peakData, short chargeState, ref ThrashV1Peak peak, 
+            out HornTransformResults isoRecord, double deleteIntensityThreshold, double minTheoreticalIntensityForScore,
+            double leftFitStringencyFactor, double rightFitStringencyFactor, out int pointsUsed, bool debug = false)
         {
             isoRecord = new HornTransformResults();
             if (chargeState <= 0)
@@ -745,8 +745,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="deleteIntensityThreshold">intensity of least isotope to delete.</param>
         /// <param name="minTheoreticalIntensityForScore">minimum intensity of point to consider for scoring purposes.</param>
         /// <param name="debug">if debugging output is enabled</param>
-        public double GetFitScore(PeakData peakData, short chargeState, ThrashV1Peak peak,
-            MolecularFormula formula,
+        public double GetFitScore(PeakData peakData, short chargeState, ThrashV1Peak peak, MolecularFormula formula,
             double deleteIntensityThreshold, double minTheoreticalIntensityForScore, bool debug = false)
         {
             if (chargeState <= 0)
@@ -800,7 +799,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             UseThrash = useThrash;
             CompleteFitThrash = completeFitThrash;
             ChargeCarrierMass = chargeCarrierMass;
-            _mercuryCache.SetOptions(chargeCarrierMass, IsotopeDistribution.MercurySize);
+            _mercuryCache.MercurySize = IsotopeDistribution.MercurySize;
         }
 
         /// <summary>

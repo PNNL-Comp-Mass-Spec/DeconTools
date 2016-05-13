@@ -6,7 +6,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
     {
         /// <summary>
         ///     index in mzs, intensity vectors that were used to create the peaks in
-        ///     <see cref="Engine.PeakProcessing.PeakProcessor.DiscoverPeaks" />.
+        ///     <see cref="PeakProcessor.DiscoverPeaks" />.
         /// </summary>
         public int DataIndex;
 
@@ -26,7 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public double Mz;
 
         /// <summary>
-        ///     index in <see cref="Engine.PeakProcessing.PeakData.PeakTops" /> List.
+        ///     index in <see cref="PeakData.PeakTops" /> List.
         /// </summary>
         public int PeakIndex;
 
@@ -142,69 +142,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (pk1.Intensity < pk2.Intensity)
                 return false;
             return pk1.Mz > pk2.Mz;
-        }
-#endif
-
-#if !Disable_Obsolete
-        /// <summary>
-        ///     mz of the peak.
-        /// </summary>
-        [Obsolete("Use Mz", false)]
-        public double mdbl_mz
-        {
-            get { return Mz; }
-            set { Mz = value; }
-        }
-
-        /// <summary>
-        ///     intensity of peak.
-        /// </summary>
-        [Obsolete("Use Intensity", false)]
-        public double mdbl_intensity
-        {
-            get { return Intensity; }
-            set { Intensity = value; }
-        }
-
-        /// <summary>
-        ///     Signal to noise ratio
-        /// </summary>
-        [Obsolete("Use SignalToNoise", false)]
-        public double mdbl_SN
-        {
-            get { return SignalToNoise; }
-            set { SignalToNoise = value; }
-        }
-
-        /// <summary>
-        ///     index in <see cref="Engine.PeakProcessing.PeakData.PeakTops" /> List.
-        /// </summary>
-        [Obsolete("Use PeakIndex", false)]
-        public int mint_peak_index
-        {
-            get { return PeakIndex; }
-            set { PeakIndex = value; }
-        }
-
-        /// <summary>
-        ///     index in mzs, intensity vectors that were used to create the peaks in
-        ///     <see cref="Engine.PeakProcessing.PeakProcessor.DiscoverPeaks" />.
-        /// </summary>
-        [Obsolete("Use DataIndex", false)]
-        public int mint_data_index
-        {
-            get { return DataIndex; }
-            set { DataIndex = value; }
-        }
-
-        /// <summary>
-        ///     Full width at half maximum for peak.
-        /// </summary>
-        [Obsolete("Use FwHm", false)]
-        public double mdbl_FWHM
-        {
-            get { return FWHM; }
-            set { FWHM = value; }
         }
 #endif
     }

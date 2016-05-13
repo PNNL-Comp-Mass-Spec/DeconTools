@@ -2,6 +2,9 @@
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.FitScoring
 {
+    /// <summary>
+    /// TODO: remove this, since it's not actually used?
+    /// </summary>
     public class ChiSqFitScorer : IsotopicProfileFitScorer
     {
         /// <summary>

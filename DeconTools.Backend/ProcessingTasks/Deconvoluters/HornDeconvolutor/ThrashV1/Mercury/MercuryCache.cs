@@ -15,9 +15,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private readonly List<IsotopicDistribution> _isotopicDistributions = new List<IsotopicDistribution>();
         private readonly bool _useChargeStateInCaching;
 
-        //private double _chargeCarrierMass;
-        private int _mercurySize;
-
         public double AverageMw;
         public double MaxPeakMz;
         public double MonoMw;
@@ -27,8 +24,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             MaxPeakMz = 0;
             AverageMw = 0;
-            _mercurySize = 8192;
-            //_chargeCarrierMass = 1.00727638;
+            MercurySize = 8192;
             _useChargeStateInCaching = true;
         }
 
@@ -152,11 +148,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
         }
 
-        public void SetOptions(double chargeCarrierMass, int mercurySize)
-        {
-            //_chargeCarrierMass = chargeCarrierMass;
-            _mercurySize = mercurySize;
-        }
+        public int MercurySize { get; set; }
 
         /// <summary>
         ///     the observed most abundance mass is what the map will be created from. This comes from the spectrum. The most
@@ -234,11 +226,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
             if (massRange <= 0)
                 massRange = 1;
-            var pointsPerAmu = _mercurySize / massRange; /* Use maximum of 2048 real, 2048 imag points */
+            var pointsPerAmu = MercurySize / massRange; /* Use maximum of 2048 real, 2048 imag points */
             var amuPerPoint = 1.0 / pointsPerAmu;
 
             var numPts = 0;
-            for (var i = 0; i < _mercurySize; i++)
+            for (var i = 0; i < MercurySize; i++)
             {
                 var mz = amuPerPoint * i;
                 var ratio = Math.Pow(GaussianProfileFactorValue, -1 * mz * mz / (halfFwhm * halfFwhm));

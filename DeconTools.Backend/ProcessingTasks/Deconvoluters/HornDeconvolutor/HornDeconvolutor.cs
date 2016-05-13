@@ -491,7 +491,11 @@ namespace DeconTools.Backend.ProcessingTasks
             PercentDone = 100;
         }
 
-        public virtual bool FindTransform(PeakData peakData, ref ThrashV1Peak peak, out HornTransformResults record,
+        #endregion
+
+        #region Protected Methods
+
+        protected virtual bool FindTransform(PeakData peakData, ref ThrashV1Peak peak, out HornTransformResults record,
             double backgroundIntensity = 0)
         {
             SetIsotopeFitScorerOptions();
@@ -660,6 +664,7 @@ namespace DeconTools.Backend.ProcessingTasks
             _isotopeFitScorer.SetOptions(AveragineFormula, TagFormula, ChargeCarrierMass, IsThrashed, IsCompleteFit);
             _needToUpdateIsotopeFitScorerOptions = false;
         }
+
         private void SetIsotopeDistributionToZero(PeakData peakData, ThrashV1Peak peak, double zeroingStartMz,
             double zeroingStopMz, double monoMw, short chargeState, bool clearSpectrum, HornTransformResults record,
             bool debug = false)

@@ -3,6 +3,11 @@ using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.FitScoring
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.AreaFitter"/>
+    /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator"/>
     public class AreaFitScorer : IsotopicProfileFitScorer
     {
         /// <summary>

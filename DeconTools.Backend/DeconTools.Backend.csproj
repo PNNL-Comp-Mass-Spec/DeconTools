@@ -188,7 +188,6 @@
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\ChiSqFitScorer.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\IsotopicProfileFitScorer.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\PeakFitScorer.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\ApodizationType.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\FFT.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryCache.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryIsotopeDistribution.cs" />

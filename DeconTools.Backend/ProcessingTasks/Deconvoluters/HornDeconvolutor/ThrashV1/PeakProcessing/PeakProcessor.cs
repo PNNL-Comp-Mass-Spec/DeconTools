@@ -155,8 +155,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="stopMz">maximum m/z of the peak.</param>
         /// <returns>returns the number of peaks that were found in the vectors.</returns>
         /// <remarks>
-        ///     The function uses <see cref="Engine.PeakProcessing.PeakStatistician.FindFwhm" />, and
-        ///     <see cref="Engine.PeakProcessing.PeakStatistician.FindSignalToNoise" />
+        ///     The function uses <see cref="PeakStatistician.FindFwhm" />, and
+        ///     <see cref="PeakStatistician.FindSignalToNoise" />
         ///     to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
         ///     peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
         ///     but once generated only those which are above <see cref="_peakIntensityThreshold" /> are tested for peptidicity by
@@ -328,71 +328,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var maxMz = mzList[mzList.Count - 1];
             return DiscoverPeaks(mzList, intensityList, minMz, maxMz);
         }
-
-#if !Disable_Obsolete
-        /// <summary>
-        ///     Function discovers the most intense peak in the m/z and intensity vectors supplied within the supplied m/z window.
-        /// </summary>
-        /// <param name="mzList">is the pointer to List of m/z values</param>
-        /// <param name="intensityList">is the pointer to List of intensity values</param>
-        /// <param name="startMz">minimum m/z of the peak.</param>
-        /// <param name="stopMz">maximum m/z of the peak.</param>
-        /// <param name="peak">stores the most intense peak that is found.</param>
-        /// <param name="findFwhm">specifies whether or not to update the FWHM of the parameter pk</param>
-        /// <param name="findSignalToNoise">specifies whether or not to update the signal to noise of the parameter pk</param>
-        /// <param name="fitPeak">
-        ///     specifies whether we should just take the raw m/z value as the peak or use the member variable
-        ///     PeakProcessor.mobj_peak_fit to find the peak that fits.
-        /// </param>
-        /// <returns>returns whether or not a peak was found.</returns>
-        /// <remarks>
-        ///     The function uses PeakStatistician.FindFWHM, and PeakStatistician.FindSignalToNoise functions
-        ///     to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
-        ///     peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
-        ///     but once generated only those which are above mdbl_peak_intensity_threshold are tested for peptidicity by
-        ///     Deconvolution.HornMassTransform
-        /// </remarks>
-        [Obsolete("No uses found within DeconEngine")]
-        public bool DiscoverPeak(List<double> mzList, List<double> intensityList, double startMz, double stopMz,
-            out ThrashV1Peak peak, bool findFwhm = false, bool findSignalToNoise = false, bool fitPeak = false)
-        {
-            peak = new ThrashV1Peak();
-            var startIndex = PeakIndex.GetNearest(mzList, startMz, 0);
-            var stopIndex = PeakIndex.GetNearest(mzList, stopMz, startIndex);
-
-            peak.Mz = 0;
-            peak.Intensity = 0;
-            peak.DataIndex = -1;
-            peak.FWHM = 0;
-            peak.SignalToNoise = 0;
-
-            double maxIntensity = 0;
-            var found = false;
-            for (var i = startIndex; i < stopIndex; i++)
-            {
-                var intensity = intensityList[i];
-                if (intensity > maxIntensity)
-                {
-                    maxIntensity = intensity;
-                    peak.Mz = mzList[i];
-                    peak.Intensity = intensity;
-                    peak.DataIndex = i;
-                    found = true;
-                }
-            }
-            if (found)
-            {
-                if (findFwhm)
-                    peak.FWHM = PeakStatistician.FindFwhm(mzList, intensityList, peak.DataIndex);
-                if (findSignalToNoise)
-                    peak.SignalToNoise = PeakStatistician.FindSignalToNoise(peak.Intensity, intensityList,
-                        peak.DataIndex);
-                if (fitPeak)
-                    peak.Mz = _peakFit.Fit(peak.DataIndex, mzList, intensityList);
-            }
-            return found;
-        }
-#endif
 
         /// <summary>
         ///     clears the PeakData member variable <see cref="PeakProcessor.PeakData" />

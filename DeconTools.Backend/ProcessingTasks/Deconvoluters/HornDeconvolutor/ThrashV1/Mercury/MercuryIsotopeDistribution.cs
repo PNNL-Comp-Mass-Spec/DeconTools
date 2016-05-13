@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ElementalFormulas;
 
+// Compare MercuryIsotopeDistribution to DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution.MercuryIsoDistCreator2
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury
 {
+    /// <summary>
+    /// ApodizationType
+    /// </summary>
+    /// <seealso cref="DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution.MercuryApodizationType"/>
+    public enum ApodizationType
+    {
+        Unknown,
+        Gaussian,
+        Lorentzian
+    }
     /*internal enum enmApodizationType
     {
         GAUSSIAN = 1,
@@ -30,6 +41,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
     ///     Algorithm by: Alan L. Rockwood
     ///     Original Program by: Steven L. Van Orden
     /// </remarks>
+    /// <seealso cref="DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution.MercuryIsoDistCreator2"/>
     public class MercuryIsotopeDistribution
     {
         public const double Pi = 3.14159265358979323846;
@@ -259,15 +271,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     for (i = 1; i <= numPoints; i++)
                     {
                         var expDenom = numPoints / sub * (numPoints / sub);
-                        if (i <= numPoints / 2) apVal = Math.Exp(-(i - 1) * (i - 1) / expDenom);
-                        else apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expDenom);
-
-                        var freq = _frequencyData[2 * i - 1];
-                        var val = freq * apVal;
-                        _frequencyData[2 * i - 1] = val;
-                        freq = _frequencyData[2 * i];
-                        val = freq * apVal;
-                        _frequencyData[2 * i] = val;
+                        if (i <= numPoints / 2)
+                            apVal = Math.Exp(-(i - 1) * (i - 1) / expDenom);
+                        else
+                            apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expDenom);
+                        
+                        _frequencyData[2 * i - 1] *= apVal;
+                        _frequencyData[2 * i] *= apVal;
                     }
                     break;
                 case ApodizationType.Lorentzian: /* Lorentzian */
@@ -286,8 +296,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     for (i = 1; i <= numPoints; i++)
                     {
                         expdenom = (numPoints / sub) * (numPoints / sub);
-                        if (i <= numPoints / 2) apVal = Math.Exp(-(i - 1) * (i - 1) / expdenom);
-                        else apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expdenom);
+                        if (i <= numPoints / 2)
+                            apVal = Math.Exp(-(i - 1) * (i - 1) / expdenom);
+                        else
+                            apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expdenom);
                         _frequencyData[2 * i - 1] /= apVal;
                         _frequencyData[2 * i] /= apVal;
                     }

@@ -27,6 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
     /// <summary>
     ///     Used for detecting peaks in the data.
     /// </summary>
+    /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.PeakLeastSquaresFitter"/> TODO: Verify this
     internal class PeakFitter
     {
         // member variable to find out information about peaks such as signal to noise and full width at half maximum.
