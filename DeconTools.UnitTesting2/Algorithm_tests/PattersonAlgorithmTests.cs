@@ -25,8 +25,6 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             // https://jira.pnnl.gov/jira/browse/OMCS-647
 
-            var chargeStateCalculator = new PattersonChargeStateCalculator();
-
             Run run = new XCaliburRun2(xcaliburTestfile);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -40,9 +38,8 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             var peak = run.PeakList.First(n => n.XValue > 903.94 && n.XValue < 903.95);
 
-            int chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+            int chargeState = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
             Assert.AreEqual(2, chargeState);
-            
         }
 
         [Test]
@@ -50,8 +47,6 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
         {
 
             // https://jira.pnnl.gov/jira/browse/OMCS-647
-
-            var chargeStateCalculator = new PattersonChargeStateCalculator();
 
             Run run = new XCaliburRun2(xcaliburTestfile);
 
@@ -68,18 +63,18 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             //579.535
             //TestUtilities.DisplayPeaks(run.PeakList);
 
-           var  peak = run.PeakList.First(n => n.XValue > 579.53 && n.XValue < 579.54);
-            int chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+            var peak = run.PeakList.First(n => n.XValue > 579.53 && n.XValue < 579.54);
+            int chargeState = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
             Assert.AreEqual(4, chargeState);
             Console.WriteLine("charge State: " + chargeState);
             List<long> times = new List<long>();
 
-           // return;
+            // return;
             for (int i = 0; i < 500; i++)
             {
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                chargeState = chargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+                chargeState = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
                 sw.Stop();
                 times.Add(sw.ElapsedMilliseconds);
             }

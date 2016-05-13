@@ -24,7 +24,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         #endregion
         private Run _run;
 
-        private readonly PattersonChargeStateCalculator _chargeStateCalculator = new PattersonChargeStateCalculator();
         readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
         private readonly AreaFitter _areafitter = new AreaFitter();
         private readonly BasicTFF _targetedFeatureFinder = new BasicTFF();
@@ -181,7 +180,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 HashSet<int> potentialChargeStatesbyPaul;
                 if (UseAutocorrelationChargeDetermination)
                 {
-                    int chargeState = _chargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
+                    int chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
                     potentialChargeStates = new HashSet<int>();
                     potentialChargeStates.Add(chargeState);
                 }

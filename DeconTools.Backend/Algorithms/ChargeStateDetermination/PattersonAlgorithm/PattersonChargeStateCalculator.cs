@@ -8,16 +8,10 @@ using Task = DeconTools.Backend.Core.Task;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
-    public class PattersonChargeStateCalculator
+    public static class PattersonChargeStateCalculator
     {
-        private int _maxCharge;
+        private const int MaxCharge = 25;
         #region Constructors
-
-        public PattersonChargeStateCalculator()
-        {
-            _maxCharge = 25;
-        }
-
         #endregion
 
         #region Properties
@@ -25,7 +19,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #endregion
 
         #region Public Methods
-        public int GetChargeState(XYData rawData, List<Peak> peakList, MSPeak peak)
+        public static int GetChargeState(XYData rawData, List<Peak> peakList, MSPeak peak)
         {
 
             //look in rawData to the left (-0.1) and right (+1.1) of peak
@@ -159,14 +153,14 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             int bestChargeState = -1;
 
 
-            GetHighestChargeStatePeak(minMZ, maxMZ, startingIndex, autoCorrScores, _maxCharge, ref bestAutoCorrScore, ref bestChargeState);
+            GetHighestChargeStatePeak(minMZ, maxMZ, startingIndex, autoCorrScores, MaxCharge, ref bestAutoCorrScore, ref bestChargeState);
 
             if (bestChargeState == -1) return -1;
 
             int returnChargeStateVal = -1;
 
             List<int> chargeStateList = new List<int>();
-            GenerateChargeStateData(minMZ, maxMZ, startingIndex, autoCorrScores, _maxCharge, bestAutoCorrScore, chargeStateList);
+            GenerateChargeStateData(minMZ, maxMZ, startingIndex, autoCorrScores, MaxCharge, bestAutoCorrScore, chargeStateList);
 
             for (int i = 0; i < chargeStateList.Count; i++)
             {
@@ -251,7 +245,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #region Private Methods
 
 
-        private double[] ACss(double[] inData)
+        private static double[] ACss(double[] inData)
         {
             
 
@@ -298,7 +292,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         }
 
     
-        private void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, double[] autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
+        private static void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, double[] autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
         {
             bool goingUp = false;
             bool wasGoingUp = false;
@@ -342,7 +336,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
 
-        private void GetHighestChargeStatePeak(double minMZ, double maxMZ, int startingIndex, double[] autoCorrelationScores, int maxChargeState, ref double bestAutoCorrectionScore, ref int bestChargeState)
+        private static void GetHighestChargeStatePeak(double minMZ, double maxMZ, int startingIndex, double[] autoCorrelationScores, int maxChargeState, ref double bestAutoCorrectionScore, ref int bestChargeState)
         {
             bool goingUp = false;
             bool wasGoingUp = false;
@@ -372,13 +366,9 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 wasGoingUp = goingUp;
             }
-
-
-
-
         }
 
-        private void DisplayXYVals(XYData xydata)
+        private static void DisplayXYVals(XYData xydata)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < xydata.Xvalues.Length; i++)
@@ -391,7 +381,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             Console.WriteLine(sb.ToString());
         }
 
-        private XYData getFilteredXYData(XYData inputXYData, int leftIndex, int rightIndex)
+        private static XYData getFilteredXYData(XYData inputXYData, int leftIndex, int rightIndex)
         {
             int numPoints = rightIndex - leftIndex + 1;
 
@@ -410,8 +400,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             return outputXYData;
         }
-
-
 
         #endregion
     }
