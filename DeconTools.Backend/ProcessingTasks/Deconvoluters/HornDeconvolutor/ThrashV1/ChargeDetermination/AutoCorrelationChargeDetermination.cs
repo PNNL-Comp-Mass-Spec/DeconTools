@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing;
+using MathNet.Numerics.Interpolation;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ChargeDetermination
 {
@@ -71,40 +72,28 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 numL = 10 * numPts;
 
             // TODO: PattersonChargeStateCalculator does a lot of funny stuff around here.
-            // List to temporarily store part of the raw data for which we want to do calculate the autocorrelation.
-            // When performing autocorrelation to determine the charge we extract the points around the peak of interest
-            // and calculate the autocorrelations for that stretch only. This variable stores the m/z values of these
-            // points of interest.
-            var xList = new List<double>(numPts);
-
-            // List to temporarily store part of the raw data for which we want to do calculate the autocorrelation.
-            // When performing autocorrelation to determine the charge we extract the points around the peak of interest
-            // and calculate the autocorrelations for that stretch only. This variable stores the intensity values of these
-            // points of interest.
-            var yList = new List<double>(numPts);
-
-            // odd behaviour / bug in vb code here .. should have started at start_index.
-            for (var i = startIndex + 1; i <= stopIndex; i++)
-            {
-                var mz = peakData.MzList[i];
-                var intensity = peakData.IntensityList[i];
-                xList.Add(mz);
-                yList.Add(intensity);
-            }
-
             // variable to help us perform spline interpolation.
-            var interpolation = new Interpolation();
-            interpolation.Spline(xList, yList, 0, 0);
+            // count is stopIndex - startIndex + 1 because we need to include the values at stopIndex as well
+            // NOTE: This output is different from what the DeconEngineV2 code outputs; there are notes in that code
+            //    wondering if there was a bug in the previous implementation imported from VB, of starting at startIndex + 1.
+            //    That code performed interpolation on the range from startIndex + 1 to stopIndex, inclusive, and minMz set to PeakData.MzList[startIndex + 1].
+            //    This code can produce output that more closely matches the DeconEngineV2 output by using
+            //    "startIndex, stopIndex - startIndex + 2" as the parameters to "GetRange()", and setting minMz to PeakData.MzList[startIndex + 1].
+            //    Since using startIndex and stopIndex directly produces output that mostly differs on fit score by a small amount,
+            //    we are changing this code to use them.
+            var interpolator = CubicSpline.InterpolateNaturalSorted(
+                    peakData.MzList.GetRange(startIndex, stopIndex - startIndex + 1).ToArray(),
+                    peakData.IntensityList.GetRange(startIndex, stopIndex - startIndex + 1).ToArray());
 
-            var minMz = xList[0];
-            var maxMz = xList[numPts - 1];
+            var minMz = peakData.MzList[startIndex];
+            var maxMz = peakData.MzList[stopIndex];
 
             // List to store the interpolated intensities of the region on which we performed the cubic spline interpolation.
             var iv = new List<double>(numL);
             for (var i = 0; i < numL; i++)
             {
                 var xVal = minMz + (maxMz - minMz) * i / numL;
-                var fVal = interpolation.Splint(xList, yList, xVal);
+                var fVal = interpolator.Interpolate(xVal);
                 iv.Add(fVal);
             }
 

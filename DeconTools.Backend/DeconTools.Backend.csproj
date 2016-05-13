@@ -178,7 +178,6 @@
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\AutoCorrelationChargeDetermination.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\Interpolation.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\AtomicCount.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\Averagine.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementData.cs" />
