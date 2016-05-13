@@ -521,7 +521,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     ThrashV1Peak theorpeak;
                     theorPeakData.GetPeak(i, out theorpeak);
                     Console.WriteLine("Theoretical peak\t" + i + "\t" + theorpeak.Mz + "\t" +
-                                      theorpeak.Intensity + "\t" + theorpeak.FWHM + "\t" + theorpeak.SignalToNoise);
+                                      theorpeak.Intensity + "\t" + theorpeak.FWHM + "\t" + theorpeak.SignalToNoiseDbl);
                 }
                 Console.WriteLine("----------------------------------- END THEORETICAL PEAKS ------------------");
             }
@@ -541,7 +541,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 Console.WriteLine("Peak\tPeakIdx\tmz\tintens\tSN\tFWHM\tfit\tdelta");
                 Console.WriteLine("CENTER\t" + peak.PeakIndex + "\t" + peak.Mz + "\t" + peak.Intensity +
-                                  "\t" + peak.SignalToNoise + "\t" + peak.FWHM + "\t" + fit + "\t" + delta + "\t");
+                                  "\t" + peak.SignalToNoiseDbl + "\t" + peak.FWHM + "\t" + fit + "\t" + delta + "\t");
             }
 
             if (!UseThrash)
@@ -598,7 +598,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + cs + " Intensity = " + nxt_peak.mdbl_intensity + " delta = " + delta);
                         Console.WriteLine("LEFT\t" + nextPeak.PeakIndex + "\t" + nextPeak.Mz + "\t" +
-                                          nextPeak.Intensity + "\t" + nextPeak.SignalToNoise + "\t" + nextPeak.FWHM +
+                                          nextPeak.Intensity + "\t" + nextPeak.SignalToNoiseDbl + "\t" + nextPeak.FWHM +
                                           "\t" + fit + "\t" + delta);
                     }
                 }
@@ -668,7 +668,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + chargeState + " Intensity = " + nextPeak.mdbl_intensity + " delta = " + delta);
                         Console.WriteLine("RIGHT\t" + nextPeak.PeakIndex + "\t" + nextPeak.Mz + "\t" +
-                                          nextPeak.Intensity + "\t" + nextPeak.SignalToNoise + "\t" + nextPeak.FWHM +
+                                          nextPeak.Intensity + "\t" + nextPeak.SignalToNoiseDbl + "\t" + nextPeak.FWHM +
                                           "\t" + fit + "\t" + delta);
                     }
                 }

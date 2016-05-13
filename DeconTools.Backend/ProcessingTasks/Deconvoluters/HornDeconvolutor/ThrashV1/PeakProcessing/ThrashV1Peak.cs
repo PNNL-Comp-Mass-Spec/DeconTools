@@ -1,29 +1,54 @@
 ﻿using System;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing
 {
-    public class ThrashV1Peak : IComparable, IComparable<ThrashV1Peak>
+    public class ThrashV1Peak : MSPeak, IComparable, IComparable<ThrashV1Peak>
     {
+        private double _fwhm;
+        private double _intensity;
+        private double _signalToNoise;
+
         /// <summary>
         ///     index in mzs, intensity vectors that were used to create the peaks in
         ///     <see cref="PeakProcessor.DiscoverPeaks" />.
         /// </summary>
-        public int DataIndex;
+        //public int DataIndex;
 
         /// <summary>
         ///     Full width at half maximum for peak.
         /// </summary>
-        public double FWHM;
+        public double FWHM
+        {
+            get { return _fwhm; }
+            set
+            {
+                _fwhm = value;
+                Width = (float) value;
+            }
+        }
 
         /// <summary>
         ///     intensity of peak.
         /// </summary>
-        public double Intensity;
+        public double Intensity
+        {
+            get { return _intensity; }
+            set
+            {
+                _intensity = value;
+                Height = (float)value;
+            }
+        }
 
         /// <summary>
         ///     mz of the peak.
         /// </summary>
-        public double Mz;
+        public double Mz
+        {
+            get { return XValue; }
+            set { XValue = value; }
+        }
 
         /// <summary>
         ///     index in <see cref="PeakData.PeakTops" /> List.
@@ -33,13 +58,21 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <summary>
         ///     Signal to noise ratio
         /// </summary>
-        public double SignalToNoise;
+        public double SignalToNoiseDbl
+        {
+            get { return _signalToNoise; }
+            set
+            {
+                _signalToNoise = value;
+                SignalToNoise = (float)value;
+            }
+        }
 
         public ThrashV1Peak()
         {
             Mz = 0;
             Intensity = 0;
-            SignalToNoise = 0;
+            SignalToNoiseDbl = 0;
             PeakIndex = -1;
             DataIndex = -1;
             FWHM = 0;
@@ -54,9 +87,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             Mz = pk.Mz;
             FWHM = pk.FWHM;
             Intensity = pk.Intensity;
-            SignalToNoise = pk.SignalToNoise;
+            SignalToNoiseDbl = pk.SignalToNoiseDbl;
             DataIndex = pk.DataIndex;
             PeakIndex = pk.PeakIndex;
+        }
+
+        /// <summary>
+        ///     Copy constructor
+        /// </summary>
+        /// <param name="pk"></param>
+        public ThrashV1Peak(MSPeak pk)
+        {
+            Mz = pk.XValue;
+            FWHM = pk.Width;
+            Intensity = pk.Height;
+            SignalToNoiseDbl = pk.SignalToNoise;
+            DataIndex = pk.DataIndex;
+            PeakIndex = -1;
         }
 
         /// <summary>
@@ -81,7 +128,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             Mz = mz;
             Intensity = intensity;
-            SignalToNoise = signalToNoise;
+            SignalToNoiseDbl = signalToNoise;
             PeakIndex = peakIndex;
             DataIndex = dataIndex;
             FWHM = fwhm;
@@ -129,7 +176,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         public override string ToString()
         {
-            return Mz + " " + Intensity + " " + FWHM + " " + SignalToNoise + " " + DataIndex + " " +
+            return Mz + " " + Intensity + " " + FWHM + " " + SignalToNoiseDbl + " " + DataIndex + " " +
                    PeakIndex + "\n";
         }
 

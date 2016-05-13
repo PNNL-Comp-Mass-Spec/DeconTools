@@ -379,25 +379,26 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
 
-            mSpeakList = new ThrashV1Peak[resultList.Run.PeakList.Count];
-
-            for (var index = 0; index < resultList.Run.PeakList.Count; index++)
-            {
-                if (ShowTraceMessages)
-                    Console.Write(index + " ");
-
-                var peak = (MSPeak) resultList.Run.PeakList[index];
-                var oldPeak = new ThrashV1Peak
-                {
-                    FWHM = peak.Width,
-                    SignalToNoise = peak.SignalToNoise,
-                    Intensity = peak.Height,
-                    DataIndex = peak.DataIndex,
-                    Mz = peak.XValue
-                };
-
-                mSpeakList[index] = oldPeak;
-            }
+            mSpeakList = resultList.Run.PeakList.Select(x => new ThrashV1Peak(x as MSPeak)).ToArray();
+            //mSpeakList = new ThrashV1Peak[resultList.Run.PeakList.Count];
+            //
+            //for (var index = 0; index < resultList.Run.PeakList.Count; index++)
+            //{
+            //    if (ShowTraceMessages)
+            //        Console.Write(index + " ");
+            //
+            //    var peak = (MSPeak) resultList.Run.PeakList[index];
+            //    var oldPeak = new ThrashV1Peak
+            //    {
+            //        FWHM = peak.Width,
+            //        SignalToNoiseDbl = peak.SignalToNoise,
+            //        Intensity = peak.Height,
+            //        DataIndex = peak.DataIndex,
+            //        Mz = peak.XValue
+            //    };
+            //
+            //    mSpeakList[index] = oldPeak;
+            //}
 
             if (ShowTraceMessages)
                 Console.WriteLine();
@@ -500,7 +501,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             SetIsotopeFitScorerOptions();
             record = new HornTransformResults();
-            if (peak.SignalToNoise < MinSignalToNoise || peak.FWHM.Equals(0))
+            if (peak.SignalToNoiseDbl < MinSignalToNoise || peak.FWHM.Equals(0))
             {
                 return false;
             }
@@ -637,7 +638,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             record.MonoIntensity = (int) monoPeak.Intensity;
             record.MonoPlus2Intensity = (int) m3Peak.Intensity;
-            record.SignalToNoise = peak.SignalToNoise;
+            record.SignalToNoise = peak.SignalToNoiseDbl;
             record.FWHM = peak.FWHM;
             record.PeakIndex = peak.PeakIndex;
 
@@ -930,37 +931,17 @@ namespace DeconTools.Backend.ProcessingTasks
         private void GetIsotopicProfile(List<int> peakIndexList, ThrashV1Peak[] peakdata, ref IsotopicProfile profile)
         {
             if (peakIndexList == null || peakIndexList.Count == 0) return;
-            var deconMonopeak = lookupPeak(peakIndexList[0], peakdata);
+            var deconMonopeak = peakdata[peakIndexList[0]];
 
-            var monoPeak = convertDeconPeakToMSPeak(deconMonopeak);
-            profile.Peaklist.Add(monoPeak);
+            profile.Peaklist.Add(deconMonopeak);
 
             if (peakIndexList.Count == 1) return; //only one peak in the DeconEngine's profile    
 
             for (var i = 1; i < peakIndexList.Count; i++) //start with second peak and add each peak to profile
             {
-                var deconPeak = lookupPeak(peakIndexList[i], peakdata);
-                var peakToBeAdded = convertDeconPeakToMSPeak(deconPeak);
-                profile.Peaklist.Add(peakToBeAdded);
+                var deconPeak = peakdata[peakIndexList[i]];
+                profile.Peaklist.Add(deconPeak);
             }
-        }
-
-        private ThrashV1Peak lookupPeak(int index, ThrashV1Peak[] peakdata)
-        {
-            return peakdata[index];
-        }
-
-        private MSPeak convertDeconPeakToMSPeak(ThrashV1Peak deconPeak)
-        {
-            var peak = new MSPeak
-            {
-                XValue = deconPeak.Mz,
-                Width = (float) deconPeak.FWHM,
-                SignalToNoise = (float) deconPeak.SignalToNoise,
-                Height = (float) deconPeak.Intensity
-            };
-
-            return peak;
         }
 
         #endregion
