@@ -502,7 +502,21 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             //var resolution = peak.Mz / peak.FWHM;
+            /**/
             var chargeState = AutoCorrelationChargeDetermination.GetChargeState(peak, peakData, ShowTraceMessages);
+            /*/
+            // This chunk of code tries to use the DeconTools Patterson Algorithm Charge State Calculator, but it gets vastly different results.
+            var xyData = new XYData();
+            var mzArray = peakData.MzList.ToArray();
+            var intensityArray = peakData.IntensityList.ToArray();
+            xyData.SetXYValues(ref mzArray, ref intensityArray);
+            var peakList = new List<Peak>();
+            for (int i = 0; i < peakData.MzList.Count; i++)
+            {
+                peakList.Add(new Peak(peakData.MzList[i], (float)peakData.IntensityList[i], 1));
+            }
+            var chargeState = DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm.PattersonChargeStateCalculator.GetChargeState(xyData, peakList, convertDeconPeakToMSPeak(peak));
+            /**/
 
             if (chargeState == -1 && CheckPatternsAgainstChargeOne)
             {
