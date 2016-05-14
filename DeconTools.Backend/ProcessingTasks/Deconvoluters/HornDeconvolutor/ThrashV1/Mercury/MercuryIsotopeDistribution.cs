@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ElementalFormulas;
+using MathNet.Numerics.IntegralTransforms;
 
 // Compare MercuryIsotopeDistribution to DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution.MercuryIsoDistCreator2
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury
@@ -48,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public const double TwoPi = 2 * 3.14159265358979323846;
         private readonly List<double> _intensityList = new List<double>();
         private readonly List<double> _mzList = new List<double>();
-        private List<double> _frequencyData = new List<double>();
+        private Complex[] _frequencyData = new Complex[1];
         private int _massRange;
         private double _maxMz;
         private double _minMz;
@@ -134,9 +136,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             /* Allocate memory for Axis arrays */
             var numPoints = _massRange * PointsPerAmu;
-            _frequencyData.Clear();
-            _frequencyData.Capacity = 2 * numPoints + 1;
-            _frequencyData.AddRange(Enumerable.Repeat(0d, 2 * numPoints + 1));
+            _frequencyData = new Complex[numPoints];
 
             if (charge == 0)
                 charge = 1;
@@ -153,7 +153,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             double apResolution = 1; /* Resolution used in apodization. Not used yet */
             Apodize(numPoints, apResolution, aPSubscript);
 
-            FFT.Four1(numPoints, ref _frequencyData, -1);
+            Fourier.Inverse(_frequencyData, FourierOptions.NumericalRecipes);
             // myers changes this line to Realft(FreqData,NumPoints,-1);
 
             /*
@@ -275,8 +275,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         else
                             apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expDenom);
                         
-                        _frequencyData[2 * i - 1] *= apVal;
-                        _frequencyData[2 * i] *= apVal;
+                        _frequencyData[i - 1] *= apVal;
                     }
                     break;
                 case ApodizationType.Lorentzian: /* Lorentzian */
@@ -286,8 +285,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             apVal = Math.Exp(-(double) (i - 1) * (sub / 5000.0));
                         else
                             apVal = Math.Exp(-(double) (numPoints - i) * (sub / 5000.0));
-                        _frequencyData[2 * i - 1] *= apVal;
-                        _frequencyData[2 * i] *= apVal;
+
+                        _frequencyData[i - 1] *= apVal;
                     }
                     break;
                 /* Never used - this was the only use of the enum value "UNGAUSSIAN"
@@ -299,8 +298,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             apVal = Math.Exp(-(i - 1) * (i - 1) / expdenom);
                         else
                             apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expdenom);
-                        _frequencyData[2 * i - 1] /= apVal;
-                        _frequencyData[2 * i] /= apVal;
+                        _frequencyData[i - 1] /= apVal;
                     }
                     break;
                 */
@@ -310,20 +308,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public void OutputData(int numPoints, int charge, out List<double> x, out List<double> y, double threshold,
             out List<double> isotopeMzs, out List<double> isotopeIntensities)
         {
-            int i;
-            double maxint = 0;
+            double maxInt = 0;
 
             /* Normalize intensity to 0%-100% scale */
-            for (i = 1; i < 2 * numPoints; i += 2)
+            maxInt = _frequencyData.Max(h => h.Real);
+            for (int i = 0; i < _frequencyData.Length; i++)
             {
-                var intensity = _frequencyData[i];
-                if (intensity > maxint)
-                    maxint = intensity;
-            }
-            for (i = 1; i < 2 * numPoints; i += 2)
-            {
-                var intensity = _frequencyData[i];
-                _frequencyData[i] = 100 * intensity / maxint;
+                _frequencyData[i] /= maxInt / 100;
             }
 
             _intensityList.Clear();
@@ -333,19 +324,19 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 charge = 1;
 
             //[gord] fill mz and intensity arrays, ignoring minimum thresholds
-            for (i = numPoints / 2 + 1; i <= numPoints; i++)
+            for (int i = numPoints / 2 + 1; i <= numPoints; i++)
             {
-                var mz = (double) (i - numPoints - 1) / PointsPerAmu + AverageMw / charge +
+                var mz = (double)(i - numPoints - 1) / PointsPerAmu + AverageMw / charge +
                          (ChargeCarrierMass - MercuryCache.ElectronMass);
-                var intensity = _frequencyData[2 * i - 1];
+                var intensity = _frequencyData[i - 1].Real;
                 _mzList.Add(mz);
                 _intensityList.Add(intensity);
             }
-            for (i = 1; i <= numPoints / 2; i++)
+            for (int i = 1; i <= numPoints / 2; i++)
             {
-                var mz = (double) (i - 1) / PointsPerAmu + AverageMw / charge +
+                var mz = (double)(i - 1) / PointsPerAmu + AverageMw / charge +
                          (ChargeCarrierMass - MercuryCache.ElectronMass);
-                var intensity = _frequencyData[2 * i - 1];
+                var intensity = _frequencyData[i - 1].Real;
                 _mzList.Add(mz);
                 _intensityList.Add(intensity);
             }
@@ -365,7 +356,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             double y3 = 0;
 
             var lastIntensity = double.MaxValue * -1;
-            for (i = 0; i < numPoints; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 var intensity = _intensityList[i];
                 var mz = _mzList[i];
@@ -578,8 +569,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         theta += atomicity * -Pi / 2;
                 }
                 /* Convert back to real:imag coordinates and store */
-                _frequencyData[2 * i - 1] = r * Math.Cos(theta); /* real data in odd index */
-                _frequencyData[2 * i] = r * Math.Sin(theta); /* imag data in even index */
+                _frequencyData[i - 1] = new Complex(r * Math.Cos(theta), r * Math.Sin(theta));
             } /* end for(i) */
 
             /* Calculate second half of Frequency Domain (-)masses */
@@ -638,8 +628,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 } /* end for(j) */
 
                 /* Convert back to real:imag coordinates and store */
-                _frequencyData[2 * i - 1] = r * Math.Cos(theta); /* real data in even index */
-                _frequencyData[2 * i] = r * Math.Sin(theta); /* imag data in odd index */
+                _frequencyData[i - 1] = new Complex(r * Math.Cos(theta), r * Math.Sin(theta));
             } /* end of for(i) */
         }
 
