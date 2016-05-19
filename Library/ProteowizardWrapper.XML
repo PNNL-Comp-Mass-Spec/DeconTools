@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProteowizardWrapper</name>
+    </assembly>
+    <members>
+        <member name="T:pwiz.ProteowizardWrapper.DependencyLoader">
+            <summary>
+            ProteoWizard Dependency Loader
+            </summary>
+            <remarks>This class provides a custom AssemblyResolver to find an installation of ProteoWizard, specified in ProteoWizardReaderImplementation.
+            This class is a wrapper around ProteoWizardReaderImplementation to encapsulate the usage of the custom AssemblyResolver, which must be 
+            added to the AppDomain.CurrentDomain.AssemblyResolve event before the class is instantiated.</remarks>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.TargetDllName">
+            <summary>
+            Name of the DLL we are checking for
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver">
+            <summary>
+            Add the Assembly Resolver to the system assembly resolver chain
+            </summary>
+            <remarks>This should be called early in the program, so that the ProteoWizard Assembly Resolver will 
+            already be in the resolver chain before any other use of ProteoWizardWrapper.
+            Also, DependencyLoader.ValidateLoader() should be used to make sure a meaningful error message is thrown if ProteoWizard is not available.</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.ProteoWizardAssemblyResolver(System.Object,System.ResolveEventArgs)">
+            <summary>
+            On a missing DLL event, searches a path specified by FindPwizPath for the ProteoWizard dlls, and loads them
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.PwizPath">
+            <summary>
+            The path to the most recent 64-bit ProteoWizard install
+            If this is not null/empty, we can usually make a safe assumption that the ProteoWizard dlls are available.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.FindPwizPath">
+            <summary>
+            Finds the path to the most recent 64-bit ProteoWizard install
+            PwizPath is populated from this, but only causes a single search.
+            </summary>
+            <returns></returns>
+            <remarks>Paths searched, in order: 
+            "%ProteoWizard%" or "%ProteoWizard%_x86" environment variable data, 
+            "C:\DMS_Programs\ProteoWizard" or "C:\DMS_Programs\ProteoWizard_x86", 
+            "%ProgramFiles%\ProteoWizard\(highest sorted)"</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader">
+            <summary>
+            Checks to make sure the path to ProteoWizard files is set. If not, throws an exception.
+            </summary>
+            <remarks>This function should generally only be called inside of a conditional statement to prevent the 
+            exception from being thrown when the ProteoWizard dlls will not be needed.</remarks>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.MsDataFileImpl">
+            <summary>
+            This is our wrapper class for ProteoWizard's MSData file reader interface.
+            
+            Performance measurements can be made here, see notes below on enabling that.   
+            
+            When performance measurement is enabled, the GetLog() method can be called
+            after read operations have been completed. This returns a handy CSV-formatted
+            report on file read performance.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.ReadAll(System.String)">
+            <summary>
+            Return an array of MsDataFileImpl objects for all instrument files found in the path
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#ctor(pwiz.CLI.msdata.MSData)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="msData"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#ctor(System.String,System.Int32,pwiz.ProteowizardWrapper.LockMassParameters,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="path">Data file path</param>
+            <param name="sampleIndex">Sample index, typically 0</param>
+            <param name="lockmassParameters">Lock mass parameters (used for Waters datasets)</param>
+            <param name="simAsSpectra">Whether to treat SIM data as spectra, default false</param>
+            <param name="srmAsSpectra">Whether to treat SRM data as spectra, default false</param>
+            <param name="acceptZeroLengthSpectra">Whether to accept zero-length spectra, default true</param>
+            <param name="requireVendorCentroidedMS1">True to return centroided MS1 spectra</param>
+            <param name="requireVendorCentroidedMS2">True to return centroided MS2 spectra</param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetInstrumentConfigInfoList">
+            <summary>
+            Record any instrument info found in the file, along with any Waters lockmass info we have
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimes">
+            <summary>
+            Gets the retention times from the first chromatogram in the data file.
+            Returns null if there are no chromatograms in the file.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Double[]@,System.Byte[]@)">
+            <summary>
+            Walks the spectrum list, and fills in the retention time and MS level of each scan.
+            Some data files do not have any chromatograms in them, so GetScanTimes
+            cannot be used.
+            </summary>
+            <param name="times">Output: scan times (in minutes)</param>
+            <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
+            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Threading.CancellationToken,System.Double[]@,System.Byte[]@)">
+            <summary>
+            Walks the spectrum list, and fills in the retention time and MS level of each scan.
+            Some data files do not have any chromatograms in them, so GetScanTimes
+            cannot be used.
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <param name="times">Output: scan times (in minutes)</param>
+            <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
+            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrum(System.Int32)">
+            <summary>
+            Returns an MsDataSpectrum object representing the spectrum requested.
+            </summary>
+            <param name="spectrumIndex"></param>
+            <returns></returns>
+            <remarks>
+            If you need direct access to CVParams, and are using MSDataFileReader, try using "GetSpectrumObject" instead.
+            </remarks>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.LockMassParameters">
+            <summary>
+            For Waters lockmass correction
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.SignedMz">
+            <summary>
+            We need a way to distinguish chromatograms for negative ion modes from those for positive.
+            The idea of m/z is inherently "positive", in the sense of sorting etc, so we carry around 
+            the m/z value, and a sign flag, and when we sort it's by sign then by (normally positive) m/z.  
+            The m/z value *could* be negative as a result of an arithmetic operator, that has a special
+            meaning for comparisons but doesn't happen in normal use.
+            There's a lot of operator magic here to minimize code changes where we used to implement mz 
+            values as simple doubles.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.SignedMz.RawValue">
+            <summary>
+            For serialization etc - returns a negative number if IsNegative is true 
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.MsDataScanCache">
+            <summary>
+            A class to cache scans recently read from the file
+            </summary>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.MsDataScanCache._scanStack">
+            <summary>
+            queue to keep track of order in which scans were added
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="path">Data file path</param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.#ctor(System.String,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="path">Data file path</param>
+            <param name="sampleIndex">Sample Index to select within the data file</param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramCVParams(System.Int32)">
+            <summary>
+            Get the list of CVParams for the specified chromatogram
+            </summary>
+            <param name="chromIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramObject(System.Int32)">
+            <summary>
+            Get the ProteoWizard native chromatogram object for the specified spectrum
+            </summary>
+            <param name="chromIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParams(System.Int32)">
+            <summary>
+            Get the list of CVParams for the specified spectrum
+            </summary>
+            <param name="scanIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumObject(System.Int32)">
+            <summary>
+            Get the ProteoWizard native spectrum object for the specified spectrum.
+            </summary>
+            <param name="scanIndex"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

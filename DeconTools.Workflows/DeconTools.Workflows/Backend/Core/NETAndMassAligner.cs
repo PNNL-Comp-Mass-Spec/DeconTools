@@ -144,7 +144,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             double[,] massHistogramData = null;
             double[,] netHistogramData = null;
-            processor.GetErrorHistograms(0.1, 0.002, ref massHistogramData, ref netHistogramData);
+            double[,] driftHistogramData = null;
+            processor.GetErrorHistograms(0.1, 0.002, 0.1, ref massHistogramData, ref netHistogramData, ref driftHistogramData);
 
             result.massHistogramData = massHistogramData;
             result.NETHistogramData = netHistogramData;
