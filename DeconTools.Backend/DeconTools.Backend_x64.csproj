@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DeconTools.Backend</RootNamespace>
     <AssemblyName>DeconTools.Backend</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -26,6 +26,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -35,6 +36,17 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoDeconEngine_Release|x64'">
+    <OutputPath>bin\x64\NoDeconEngine_Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="alglibnet2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -51,7 +63,7 @@
     </Reference>
     <Reference Include="BaseTof, Version=1.0.4758.18585, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\x64\BaseTof.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll</HintPath>
     </Reference>
     <Reference Include="BrukerDataReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -73,7 +85,7 @@
     </Reference>
     <Reference Include="MathNet.Numerics, Version=2.5.0.27, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\x64\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\Library\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,12 +99,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="PNNLOmics, Version=1.0.5064.21815, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\x64\PNNLOmics.dll</HintPath>
+    <Reference Include="PNNLOmics">
+      <HintPath>..\Library\PNNLOmics.dll</HintPath>
     </Reference>
     <Reference Include="ProteowizardWrapper">
-      <HintPath>..\Library\x64\ProteowizardWrapper.dll</HintPath>
+      <HintPath>..\Library\ProteowizardWrapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -114,7 +125,7 @@
     </Reference>
     <Reference Include="UIMFLibrary, Version=2.1.5511.30742, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\x64\UIMFLibrary.dll</HintPath>
+      <HintPath>..\Library\UIMFLibrary.dll</HintPath>
     </Reference>
     <Reference Include="YafmsLibrary, Version=1.0.3989.9960, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -151,6 +162,25 @@
     <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\AutoCorrelationChargeDetermination.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\AtomicCount.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\Averagine.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementIsotopes.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\MolecularFormula.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\AreaFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\ChiSqFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\IsotopicProfileFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\PeakFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryCache.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryIsotopeDistribution.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakFitter.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakIndex.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakProcessor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakStatistician.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\ThrashV1Peak.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\HornTransformResults.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\ChargeStateDecider.cs" />
@@ -497,6 +527,7 @@
     <Content Include="Interop.MSFileReaderLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ThrashV1_Readme.txt" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

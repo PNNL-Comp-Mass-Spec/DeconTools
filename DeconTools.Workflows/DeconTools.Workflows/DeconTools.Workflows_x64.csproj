@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3041D403-9165-4018-8F83-FFBAA8528B79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.Workflows</RootNamespace>
+    <AssemblyName>DeconTools.Workflows</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Disable_DeconToolsV2</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoDeconEngine_Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\NoDeconEngine_Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GWSGraphLibrary">
+      <HintPath>..\..\Library\GWSGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Library\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\x64\MultiAlignEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Library\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backend\Core\BasicIqWorkflow.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowExecutorParameters.cs" />
+    <Compile Include="Backend\Core\BasicTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\ChargeStateChildIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChargeStateChildTopDownIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakAnalyzerIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakDeciderIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakDeciderTopDownIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ChromPeakIqTarget.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\BasicChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChargeCorrelationData.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChargeCorrelationItem.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChargeCorrelator.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakAnalyzer.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakSelectorParameters.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\ChromPeakUtilities.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelator.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqChromCorrelatorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\IqSmartChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\O16O18ChromCorrelator.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelector.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorBase.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorParameters.cs" />
+    <Compile Include="Backend\Core\ChromPeakSelection\SmartChromPeakSelectorUIMF.cs" />
+    <Compile Include="Backend\Core\IQChargeStateTarget.cs" />
+    <Compile Include="Backend\Core\IQExecutor.cs" />
+    <Compile Include="Backend\Core\IQResult.cs" />
+    <Compile Include="Backend\Core\IqResultDetail.cs" />
+    <Compile Include="Backend\Core\IqResultUtilities.cs" />
+    <Compile Include="Backend\Core\IQTarget.cs" />
+    <Compile Include="Backend\Core\IqTargetBasic.cs" />
+    <Compile Include="Backend\Core\IqTargetDms.cs" />
+    <Compile Include="Backend\Core\IqTargetMsgfFirstHit.cs" />
+    <Compile Include="Backend\Core\O16O18ChromPeakAnalyzerIqWorkflow.cs" />
+    <Compile Include="Backend\Core\O16O18IqResult.cs" />
+    <Compile Include="Backend\Core\O16O18ParentIqWorkflow.cs" />
+    <Compile Include="Backend\Core\ParentLogicIqWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownIqResult.cs" />
+    <Compile Include="Backend\Core\TopDownIqTarget.cs" />
+    <Compile Include="Backend\Core\IQTargetUtilities.cs" />
+    <Compile Include="Backend\Core\IQWorkflow.cs" />
+    <Compile Include="Backend\Core\IqWorkflowAssigner.cs" />
+    <Compile Include="Backend\Core\IqWorkflowFactory.cs" />
+    <Compile Include="Backend\Core\NominalMassTarget.cs" />
+    <Compile Include="Backend\Core\O16O18IqWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownMSAlignExecutor.cs" />
+    <Compile Include="Backend\Core\TopDownTargetUtilities.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMS.cs" />
+    <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\LcmsFeatureTargetedWorkflowExecutorParameters.cs" />
+    <Compile Include="Backend\Core\N14N15Workflow2.cs" />
+    <Compile Include="Backend\Core\N14N15Workflow2Parameters.cs" />
+    <Compile Include="Backend\Core\NETAndMassAlignerParameters.cs" />
+    <Compile Include="Backend\Core\O16O18Workflow.cs" />
+    <Compile Include="Backend\Core\O16O18WorkflowParameters.cs" />
+    <Compile Include="Backend\Core\ResultReprocessingTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\SipperTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\SipperTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\SipperWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutorFactory.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutorProgressInfo.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\IMS_SmartFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\IMS_WholisticFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\NETAndMassAligner.cs" />
+    <Compile Include="Backend\Core\NETGrouping.cs" />
+    <Compile Include="Backend\Core\TargetedAlignerWorkflow.cs" />
+    <Compile Include="Backend\Core\TargetedAlignerWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflow.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowExecutorParameters.cs" />
+    <Compile Include="Backend\Core\TopDownTargetedWorkflowParameters.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedMSMSWorkflowCollapseIMSParameters.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedWorkflowCollapseIMS.cs" />
+    <Compile Include="Backend\Core\UIMFTargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\WholisticChromBasedLCMSFeatureFinderWorkflow.cs" />
+    <Compile Include="Backend\Core\WorkflowBase.cs" />
+    <Compile Include="Backend\Core\TargetedWorkflowExecutor.cs" />
+    <Compile Include="Backend\Core\WorkflowExecutorBaseParameters.cs" />
+    <Compile Include="Backend\Core\WorkflowParameters.cs" />
+    <Compile Include="Backend\Data\TopdownChromData.cs" />
+    <Compile Include="Backend\Data\TopdownChromDataItem.cs" />
+    <Compile Include="Backend\FileIO\DeuteratedTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\IqLabelFreeResultExporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultImporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultImporterBasic.cs" />
+    <Compile Include="Backend\FileIO\IqTargetFromDmsImporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetImporter.cs" />
+    <Compile Include="Backend\FileIO\IqTargetsFromFirstHitsFileImporter.cs" />
+    <Compile Include="Backend\FileIO\MassTagFromMSAlignFileImporter.cs" />
+    <Compile Include="Backend\FileIO\MSAlignIqTargetImporter.cs" />
+    <Compile Include="Backend\FileIO\N14N15TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\N14N15TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18IqResultExporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\O16O18TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\IqResultExporter.cs" />
+    <Compile Include="Backend\FileIO\SipperResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\SipperResultToLcmsFeatureExporter.cs" />
+    <Compile Include="Backend\FileIO\TargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\TargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\TopDownIqResultExporter.cs" />
+    <Compile Include="Backend\FileIO\TopDownTargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\TopDownTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\FileIO\BasicIqTargetImporter.cs" />
+    <Compile Include="Backend\FileIO\UnlabelledTargetedResultFromTextImporter.cs" />
+    <Compile Include="Backend\FileIO\UnlabelledTargetedResultToTextExporter.cs" />
+    <Compile Include="Backend\Globals.cs" />
+    <Compile Include="Backend\IqMassAndNetAligner.cs" />
+    <Compile Include="Backend\Results\AlignmentResult.cs" />
+    <Compile Include="Backend\Results\DeconToolsResultDTO.cs" />
+    <Compile Include="Backend\Results\DeuteratedTargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\N14N15TargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\O16O18TargetedResultDTO.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Backend\Results\ResultDTOFactory.cs" />
+    <Compile Include="Backend\Results\SipperLcmsFeatureTargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\TargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\TargetedResultRepository.cs" />
+    <Compile Include="Backend\Results\TopDownTargetedResultDTO.cs" />
+    <Compile Include="Backend\Results\UnlabelledTargetedResultDTO.cs" />
+    <Compile Include="Backend\Utilities\DatasetUtilities.cs" />
+    <Compile Include="Backend\Utilities\FileUtilities.cs" />
+    <Compile Include="Backend\Utilities\IqCodeParser\IqCodeParser.cs" />
+    <Compile Include="Backend\Utilities\MathUtilities.cs" />
+    <Compile Include="Backend\Utilities\PeakMatchedResultUtilities.cs" />
+    <Compile Include="Backend\Utilities\ResultUtilities.cs" />
+    <Compile Include="Backend\Utilities\SipperDataDump.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Backend\Core\SipperWorkflowExecutorParameters.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Backend\Parameters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PNNLOmicsElementData.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend_x64.csproj">
+      <Project>{479f410f-0456-4d09-9b3e-e69002f8d619}</Project>
+      <Name>DeconTools.Backend_x64</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
