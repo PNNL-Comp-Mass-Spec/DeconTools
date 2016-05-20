@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.Workflows_x64", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowConsoleDMS_x64", "DeconTools.Workflows\TargetedWorkflowConsoleDMS\TargetedWorkflowConsoleDMS_x64.csproj", "{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconToolsAutoProcessV1_x64", "DeconToolsAutoProcessV1\DeconToolsAutoProcessV1_x64.csproj", "{BBDDF8AA-5E55-44A8-879F-BB6108503845}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -42,6 +44,12 @@ Global
 		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.NoDeconEngine_Release|x64.Build.0 = NoDeconEngine_Release|x64
 		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Release|x64.ActiveCfg = Release|x64
 		{A91C5900-6F9B-413C-BE42-C73C4FF7EFA5}.Release|x64.Build.0 = Release|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Debug|x64.ActiveCfg = Debug|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Debug|x64.Build.0 = Debug|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.NoDeconEngine_Release|x64.ActiveCfg = NoDeconEngine_Release|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.NoDeconEngine_Release|x64.Build.0 = NoDeconEngine_Release|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Release|x64.ActiveCfg = Release|x64
+		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
