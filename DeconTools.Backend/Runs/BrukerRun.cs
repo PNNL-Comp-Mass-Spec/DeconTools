@@ -6,7 +6,7 @@ using DeconTools.Utilities;
 namespace DeconTools.Backend.Runs
 {
 #if !Disable_DeconToolsV2
-
+    [Obsolete("Not used in DeconTools; Use BrukerRunV3", true)]
     public class BrukerRun : Run
     {
 

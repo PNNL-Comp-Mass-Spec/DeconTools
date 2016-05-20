@@ -20,13 +20,13 @@ namespace DeconTools.Backend.ProcessingTasks
                 case Globals.DeconvolutionType.None:
                     return new NullDeconvolutor();
                 case Globals.DeconvolutionType.ThrashV1:
-#if Disable_DeconToolsV2
-                    throw new NotSupportedException(
-                        "Deconvolution method ThrashV1 is not supported since support for C++ based DeconToolsV2 is disabled; update the parameter file to use <DeconvolutionType>ThrashV2</DeconvolutionType>");
-#else
+//#if Disable_DeconToolsV2
+//                    throw new NotSupportedException(
+//                        "Deconvolution method ThrashV1 is not supported since support for C++ based DeconToolsV2 is disabled; update the parameter file to use <DeconvolutionType>ThrashV2</DeconvolutionType>");
+//#else
                     decon = new HornDeconvolutor(parameters);
                     return decon;
-#endif
+//#endif
                 case Globals.DeconvolutionType.ThrashV2:
                     decon = new InformedThrashDeconvolutor(parameters.ThrashParameters);
                     return decon;

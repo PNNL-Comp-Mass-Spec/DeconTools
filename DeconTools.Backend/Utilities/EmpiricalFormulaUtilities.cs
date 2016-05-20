@@ -236,7 +236,11 @@ namespace DeconTools.Backend.Utilities
 
         private static string GetRegexStringForNonUnimodFormat()
         {
-            return @"([A-Z][a-z]*)([0-9\.]*)";
+            // This has a bug - the following would pass: Brrrrrrrrrrrrr0.0.19.23.5
+            //return @"([A-Z][a-z]*)([0-9\.]*)";
+            // This version will not allow multiple decimal points, and restrict lowercase letters to 2
+            // (1 lowercase letter is probably all that's necessary, I don't think we will see synthetically produced elements in Mass Spec)
+            return @"([A-Z][a-z]{0,2})(\d*\.?\d*)";
         }
 
         private static string GetRegexStringForUnimodFormat()

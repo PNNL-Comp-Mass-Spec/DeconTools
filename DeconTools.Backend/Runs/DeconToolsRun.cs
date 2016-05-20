@@ -1,7 +1,6 @@
 ﻿using System;
 using DeconTools.Backend.Core;
 
-
 namespace DeconTools.Backend.Runs
 {
 #if !Disable_DeconToolsV2

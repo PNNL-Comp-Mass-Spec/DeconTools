@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
+#if !Disable_DeconToolsV2
     [TestFixture]
     public class IMFRun_tests
     {
@@ -75,4 +76,5 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
     }
+#endif
 }

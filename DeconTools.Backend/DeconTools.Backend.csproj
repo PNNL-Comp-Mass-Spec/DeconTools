@@ -38,6 +38,25 @@
     <RegisterForComInterop>false</RegisterForComInterop>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NoDeconEngine_Release|x86' ">
+    <OutputPath>bin\x86\NoDeconEngine_Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NeDeconEngine_Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\NeDeconEngine_Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Disable_DeconToolsV2</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="alglibnet2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -158,6 +177,25 @@
     <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\AutoCorrelationChargeDetermination.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\AtomicCount.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\Averagine.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\ElementIsotopes.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\MolecularFormula.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\AreaFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\ChiSqFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\IsotopicProfileFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\FitScoring\PeakFitScorer.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryCache.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\Mercury\MercuryIsotopeDistribution.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakData.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakFitter.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakIndex.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakProcessor.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\PeakStatistician.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\PeakProcessing\ThrashV1Peak.cs" />
+    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\HornTransformResults.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflow.cs" />
     <Compile Include="Workflows\PeakDetectAndExportWorkflowParameters.cs" />
     <Compile Include="ProcessingTasks\ChargeStateDeciders\ChargeStateDecider.cs" />
@@ -515,6 +553,7 @@
     <Content Include="Interop.MSFileReaderLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ThrashV1_Readme.txt" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

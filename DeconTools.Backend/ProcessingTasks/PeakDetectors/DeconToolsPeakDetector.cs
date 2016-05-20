@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Utilities;
 #if !Disable_DeconToolsV2
@@ -228,8 +229,15 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             base.Execute(resultList);
 
-            resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
 
+            //resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
+            resultList.Run.DeconToolsPeakList = new ThrashV1Peak[DeconEnginePeakList.Length];
+            for (int i = 0; i < DeconEnginePeakList.Length; i++)
+            {
+                var pk = DeconEnginePeakList[i];
+                resultList.Run.DeconToolsPeakList[i] = new ThrashV1Peak(
+                    pk.mdbl_mz, pk.mdbl_intensity, pk.mdbl_SN, pk.mint_peak_index, pk.mint_data_index, pk.mdbl_FWHM);
+            }
             
         }
 

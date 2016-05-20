@@ -34,7 +34,6 @@ namespace DeconTools.Backend.Parameters
             IsotopicProfileFitType = Globals.IsotopicProfileFitType.AREA;
             LeftFitStringencyFactor = 1;
             RightFitStringencyFactor = 1;
-            AreAllTheoreticalProfilesCachedBeforeStarting = false;
         }
 
 
