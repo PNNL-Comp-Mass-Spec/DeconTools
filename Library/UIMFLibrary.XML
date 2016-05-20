@@ -2098,6 +2098,20 @@
             Gets or sets the t 0.
             </summary>
         </member>
+        <member name="T:UIMFLibrary.ReaderWriterExtensions">
+            <summary>
+            Extension methods that use functionality specific to .NET 4.5 and above
+            </summary>
+        </member>
+        <member name="M:UIMFLibrary.ReaderWriterExtensions.InsertFrameAsync(UIMFLibrary.DataWriter,System.Int32,System.Collections.Generic.Dictionary{UIMFLibrary.FrameParamKeyType,System.String})">
+            <summary>
+            Asynchronously insert a frame
+            </summary>
+            <param name="dataWriter"></param>
+            <param name="frameNum"></param>
+            <param name="frameParameters"></param>
+            <returns></returns>
+        </member>
         <member name="T:UIMFLibrary.ScanInfo">
             <summary>
             Class for tracking pre-computed information about a given scan
@@ -2421,7 +2435,7 @@
             Looks for the given column on the given table in the SqLite database
             Note that table names are case sensitive
             </summary>
-            <param name="oConnection">
+            <param name="uimfConnection">
             </param>
             <param name="tableName">
             </param>
@@ -2493,7 +2507,7 @@
             <summary>
             Get global parameters from table.
             </summary>
-            <param name="oUimfDatabaseConnection">
+            <param name="uimfConnection">
             UIMF database connection.
             </param>
             <returns>
@@ -2507,7 +2521,7 @@
             Looks for the given table in the SqLite database
             Note that table names are case sensitive
             </summary>
-            <param name="oConnection">
+            <param name="uimfConnection">
             </param>
             <param name="tableName">
             </param>
@@ -2520,7 +2534,7 @@
             Looks for the given index in the SqLite database
             Note that index names are case sensitive
             </summary>
-            <param name="uimfWriterConnection">
+            <param name="uimfConnection">
             </param>
             <param name="indexName">
             </param>
@@ -2532,7 +2546,7 @@
             <summary>
             Check whether a table has a column
             </summary>
-            <param name="oConnection">
+            <param name="uimfConnection">
             Sqlite connection
             </param>
             <param name="tableName">
@@ -3720,6 +3734,14 @@
             Optional argument that should be set to true if calibration is automatic. Defaults to false.
             </param>
         </member>
+        <member name="M:UIMFLibrary.DataReader.CacheGlobalParameters(System.Data.SQLite.SQLiteConnection)">
+            <summary>
+            Read either the global params (or the legacy global parameters) and return a GlobalParams object with the parameters
+            </summary>
+            <param name="uimfConnection"></param>
+            <remarks>The writer uses this function to read the global parameters when appending data to an existing .UIMF file</remarks>
+            <returns></returns>
+        </member>
         <member name="M:UIMFLibrary.DataReader.DeterminePressureUnits(System.Int32)">
             <summary>
             Examines the pressure columns to determine whether they are in torr or mTorr
@@ -4281,7 +4303,7 @@
             <param name="fileName">
             Full path to the data file
             </param>
-            <remarks>When creating a brand new .UIMF file, you must call CreateTables() after insantiating the writer</remarks>
+            <remarks>When creating a brand new .UIMF file, you must call CreateTables() after instantiating the writer</remarks>
         </member>
         <member name="M:UIMFLibrary.DataWriter.#ctor(System.String,System.Boolean)">
             <summary>
@@ -4294,7 +4316,7 @@
             <param name="createLegacyParametersTables">
             When true, then will create and populate tables Global_Parameters and Frame_Parameters
             </param>
-            <remarks>When creating a brand new .UIMF file, you must call CreateTables() after insantiating the writer</remarks>
+            <remarks>When creating a brand new .UIMF file, you must call CreateTables() after instantiating the writer</remarks>
         </member>
         <member name="M:UIMFLibrary.DataWriter.ConvertLegacyGlobalParameters">
             <summary>
@@ -4612,7 +4634,7 @@
             <param name="tic">Total ion intensity</param>
             <param name="spectra">Mass spectra intensities</param>
         </member>
-        <member name="M:UIMFLibrary.DataWriter.InsertScanStoreBytes(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Double,System.Int32,System.Int32,System.Double,System.Int64,System.Byte[])">
+        <member name="M:UIMFLibrary.DataWriter.InsertScanStoreBytes(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Double,System.Int32,System.Int32,System.Int32,System.Int64,System.Byte[])">
             <summary>
             Write out the compressed intensity data to the UIMF file
             </summary>
@@ -4640,6 +4662,19 @@
             <param name="intensities">Array of intensities, including all zeros</param>
             <param name="binWidth">Bin width (in nanoseconds, used to compute m/z value of the BPI data point)</param>
             <returns>Number of non-zero data points</returns>
+            <remarks>The intensities array should contain an intensity for every bin, including all of the zeroes</remarks>
+        </member>
+        <member name="M:UIMFLibrary.DataWriter.InsertScan(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Collections.Generic.IList{System.Int32},System.Double,System.Int32@)">
+            <summary>Insert a new scan using an array of intensities (as ints) along with binWidth</summary>
+            <param name="frameNumber">Frame Number</param>
+            <param name="frameParameters">Frame parameters</param>
+            <param name="scanNum">
+            Scan number
+            Traditionally the first scan in a frame has been scan 0, but we switched to start with Scan 1 in 2015.
+            </param>
+            <param name="intensities">Array of intensities, including all zeros</param>
+            <param name="binWidth">Bin width (in nanoseconds, used to compute m/z value of the BPI data point)</param>
+            <param name="nonZeroCount">Number of non-zero data points (output)</param>
             <remarks>The intensities array should contain an intensity for every bin, including all of the zeroes</remarks>
         </member>
         <member name="M:UIMFLibrary.DataWriter.InsertScan(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.Int32,System.Int32}},System.Double,System.Int32)">
