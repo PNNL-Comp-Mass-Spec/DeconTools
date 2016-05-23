@@ -110,9 +110,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         /// <param name="pk">is the peak that we want to add to our processing list.</param>
         /// <remarks>
-        ///     The processing list is really the set of
-        ///     peaks that are unprocessed and the way these are tracked, are by puttting these indices in the processing maps
-        ///     <see cref="_peakIntensityToIndexDict" /> and <see cref="_peakMzToIndexDict" />
+        ///     The processing list is really the set of peaks that are unprocessed and the way these are tracked, are by putting
+        ///     these indices in the processing maps <see cref="_peakIntensityToIndexDict" /> and <see cref="_peakMzToIndexDict" />
         /// </remarks>
         public void AddPeakToProcessingList(ThrashV1Peak pk)
         {
@@ -126,15 +125,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var intensity = (int) pk.Intensity;
             PeakTops[peakIndex] = new ThrashV1Peak(pk);
             _peakMzToIndexDict.Add(mz, peakIndex);
-            //mmap_pk_intensity_index.insert(std.pair<int,int> (intensity, peak_index));
-            if (_peakIntensityToIndexDict.ContainsKey(intensity))
-            {
-                _peakIntensityToIndexDict[intensity].Add(peakIndex);
-            }
-            else
-            {
-                _peakIntensityToIndexDict.Add(intensity, new List<int> {peakIndex});
-            }
+            AddIntensityToPeakMapping(intensity, peakIndex);
         }
 
         /// <summary>
@@ -165,18 +156,31 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 // check the intensity to see if this might be the case
                 if (intensity != -1)
                 {
-                    _peakMzToIndexDict.Add(mz, i);
-                    //mmap_pk_intensity_index.insert(std.pair<int, int>(intensity, i));
-                    if (_peakIntensityToIndexDict.ContainsKey(intensity))
+                    if (!_peakMzToIndexDict.ContainsKey(mz))
                     {
-                        _peakIntensityToIndexDict[intensity].Add(i);
+                        // Sometimes we do have duplicate m/zs in the same scan; the C++ code ignored
+                        // all but the first occurrance, as does this code.
+                        _peakMzToIndexDict.Add(mz, i);
                     }
-                    else
-                    {
-                        _peakIntensityToIndexDict.Add(intensity, new List<int> {i});
-                    }
+                    AddIntensityToPeakMapping(intensity, i);
                 }
-                _allPeakMzToIndexDict.Add(mz, i);
+                if (!_allPeakMzToIndexDict.ContainsKey(mz))
+                {
+                    _allPeakMzToIndexDict.Add(mz, i);
+                }
+            }
+        }
+
+        private void AddIntensityToPeakMapping(int intensity, int peakIndex)
+        {
+            //mmap_pk_intensity_index.insert(std.pair<int,int> (intensity, peak_index));
+            if (_peakIntensityToIndexDict.ContainsKey(intensity))
+            {
+                _peakIntensityToIndexDict[intensity].Add(peakIndex);
+            }
+            else
+            {
+                _peakIntensityToIndexDict.Add(intensity, new List<int> { peakIndex });
             }
         }
 
