@@ -25,9 +25,9 @@ namespace DeconTools.Backend.Workflows
         private readonly MSGenerator _msGenerator;
         private readonly DeconToolsPeakDetectorV2 _peakDetector;
 
-#if !Disable_DeconToolsV2
+//#if !Disable_DeconToolsV2
         private readonly HornDeconvolutor _deconvolutor;
-#endif
+//#endif
         private readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private readonly BasicTFF _basicFeatureFinder = new BasicTFF();
         private DeconToolsFitScoreCalculator _fitScoreCalculator = new DeconToolsFitScoreCalculator();
@@ -50,15 +50,15 @@ namespace DeconTools.Backend.Workflows
             _peakDetector = new DeconToolsPeakDetectorV2(5, 3, Globals.PeakFitType.QUADRATIC, false);
             _zeroFiller = new DeconToolsZeroFiller();
 
-#if Disable_DeconToolsV2
-            throw new NotImplementedException("Cannot use class SaturationIMSScanBasedWorkflow since support for C++ based DeconToolsV2 is disabled");
-#else
+//#if Disable_DeconToolsV2
+//            throw new NotImplementedException("Cannot use class SaturationIMSScanBasedWorkflow since support for C++ based DeconToolsV2 is disabled");
+//#else
             _deconvolutor = new HornDeconvolutor(parameters)
             {
                 MaxFitAllowed = 0.9,
                 MinPeptideBackgroundRatio = _peakDetector.PeakToBackgroundRatio
             };
-#endif
+//#endif
 
             AdjustMonoIsotopicMasses = true;
 
@@ -135,11 +135,11 @@ namespace DeconTools.Backend.Workflows
 
                     if (!SKIP_DECONVOLUTION)
                     {
-#if Disable_DeconToolsV2
-                        throw new NotImplementedException("Cannot use class SaturationIMSScanBasedWorkflow since support for C++ based DeconToolsV2 is disabled");
-#else
+//#if Disable_DeconToolsV2
+//                        throw new NotImplementedException("Cannot use class SaturationIMSScanBasedWorkflow since support for C++ based DeconToolsV2 is disabled");
+//#else
                         _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
-#endif
+//#endif
                         //Note: the deconvolutor automatically increases the MSFeatureCounter. 
                         //Here, we don't want this, since this data is used only for saturation correction,
                         //not for generating the official MSFeatures list. So we need to 
