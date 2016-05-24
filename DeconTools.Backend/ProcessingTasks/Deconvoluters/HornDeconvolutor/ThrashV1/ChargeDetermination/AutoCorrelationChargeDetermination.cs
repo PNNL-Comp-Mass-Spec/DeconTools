@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing;
 using MathNet.Numerics.Interpolation;
 
@@ -20,28 +21,24 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="iv">function for which we want to calculate autocorrelation.</param>
         /// <returns>autocorrelation values. ov[i] is the autocorrelation at distance i.</returns>
         /// <remarks>It is assumed that the x values for this function are equally spaced.</remarks>
-        public static List<double> ACss(List<double> iv)
+        private static List<double> ACss(double[] iv)
         {
-            int i, j;
-            var ivN = iv.Count;
+            var ivN = iv.Length;
             var ov = new List<double>(ivN);
 
-            var ave = 0.0;
-            for (j = 0; j < ivN; j++)
-                ave += iv[j];
-            ave = ave / ivN;
+            var average = iv.Average();
             //  for(i=0;i<IvN/2;i++)  GAA 09/27/03
-            for (i = 0; i < ivN; i++)
+            for (var i = 0; i < ivN; i++)
             {
                 var sum = 0.0;
                 var topIndex = ivN - i - 1;
-                for (j = 0; j < topIndex; j++)
-                    sum += (iv[j] - ave) * (iv[j + i] - ave);
+                for (var j = 0; j < topIndex; j++)
+                    sum += (iv[j] - average) * (iv[j + i] - average);
 
-                if (j > 0)
+                if (topIndex > 0)
                 {
                     // too much weight given to high charges this way. DJ Jan 07 2007
-                    ov.Add((float) (sum / ivN));
+                    ov.Add(sum / ivN);
                     //Ov.Add(sum/j);
                 }
                 else
@@ -108,7 +105,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             // List to store the autocorrelation values at the points in the region.
-            var autocorrelationScores = ACss(iv);
+            var autocorrelationScores = ACss(iv.ToArray());
             if (debug)
             {
                 Console.Error.WriteLine("AutoCorrelation values");
