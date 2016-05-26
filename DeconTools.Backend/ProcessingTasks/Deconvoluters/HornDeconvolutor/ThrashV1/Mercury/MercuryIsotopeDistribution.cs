@@ -508,7 +508,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var x3 = x2 + 1.0 / PointsPerAmu;
             var y1 = _intensityList[maxIndex - 1];
             var y2 = _intensityList[maxIndex];
-            var y3 = _intensityList[maxIndex + 1];
+            var y3 = 0.0;
+            if (maxIndex + 1 < _intensityList.Count)
+            {
+                y3 = _intensityList[maxIndex + 1];
+            }
 
             var d = (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1);
 
