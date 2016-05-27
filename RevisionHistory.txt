@@ -1,5 +1,12 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.5990; May 26, 2016      mem
+	- Remove dependency on DeconEngineV2.dll, since the code has been ported from C++ to C# and the results validated to match
+		- See the files with namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1
+		- HornDeconvolutor in namespace DeconTools.Backend.ProcessingTasks uses the new C#-based ThrashV1
+		- Specifying <DeconvolutionType>ThrashV1</DeconvolutionType> in the DeconTools parameter file will use the new C#-based ThrashV1
+	- Note that ThrashDeconvolutorV2 was a previous attempt to port the C++ code to C#, but the results from ThrashDeconvolutorV2 do not match the C++ results
+
 Version 1.0.5945; April 11, 2016    mem
 	- Remove reference to pwiz_bindings_cli.dll since the presence of that file can interfere with ProteowizardWrapper searching for ProteoWizard DLLs
 
