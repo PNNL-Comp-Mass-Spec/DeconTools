@@ -7,7 +7,7 @@ using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Workflows;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
-using ThermoRawFileReaderDLL.FinniganFileIO;
+using ThermoRawFileReader;
 
 
 namespace DeconTools.Backend.Runs
@@ -250,7 +250,7 @@ namespace DeconTools.Backend.Runs
 
             string scanInfo = this.GetScanInfo(scanNum);
             XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
-            FinniganFileReaderBaseClass.IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
+            IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
 
             PrecursorInfo precursor = new PrecursorInfo();
 
@@ -308,7 +308,7 @@ namespace DeconTools.Backend.Runs
                 precursor.FragmentationType = FragmentionType.None;
             }
 
-            precursor.IonizationMode = ionMode.Equals(FinniganFileReaderBaseClass.IonModeConstants.Positive) ? IonizationMode.Positive : IonizationMode.Negative;
+            precursor.IonizationMode = ionMode.Equals(IonModeConstants.Positive) ? IonizationMode.Positive : IonizationMode.Negative;
 
             //TODO: we still need to get charge
             //precursor.PrecursorCharge = 1;

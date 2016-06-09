@@ -38,7 +38,7 @@ Source: Library\PNNLOmics.dll                                                   
 Source: Library\PNNLOmicsElementData.xml                                                                                                          ; DestDir: {app}
 Source: Library\ProteowizardWrapper.dll                                                                                                           ; DestDir: {app}
 Source: Library\System.Data.SQLite.dll                                                                                                            ; DestDir: {app}
-Source: Library\ThermoRawFileReaderDLL.dll                                                                                                        ; DestDir: {app}
+Source: Library\ThermoRawFileReader.dll                                                                                                           ; DestDir: {app}
 Source: Library\UIMFLibrary.dll                                                                                                                   ; DestDir: {app}
 Source: Library\xerces-c_2_8.dll                                                                                                                  ; DestDir: {app}
 Source: Library\YafmsLibrary.dll                                                                                                                  ; DestDir: {app}
