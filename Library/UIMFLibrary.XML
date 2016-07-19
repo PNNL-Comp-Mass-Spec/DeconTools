@@ -34,6 +34,21 @@
             Bin size
             </summary>
         </member>
+        <member name="E:UIMFLibrary.BinCentricTableCreation.OnError">
+            <summary>
+            Error event handler
+            </summary>
+        </member>
+        <member name="E:UIMFLibrary.BinCentricTableCreation.Message">
+            <summary>
+            Message event handler.
+            </summary>
+        </member>
+        <member name="E:UIMFLibrary.BinCentricTableCreation.OnProgress">
+            <summary>
+            Progress event handler.
+            </summary>
+        </member>
         <member name="M:UIMFLibrary.BinCentricTableCreation.CreateBinCentricTable(System.Data.SQLite.SQLiteConnection,UIMFLibrary.DataReader)">
             <summary>
             Create the bin centric table.
@@ -240,7 +255,7 @@
             Update progress.
             </summary>
             <param name="percentComplete">
-            Percent complete.
+            Percent complete; value between 0 and 100
             </param>
         </member>
         <member name="M:UIMFLibrary.BinCentricTableCreation.UpdateProgress(System.Double,System.String)">
@@ -248,30 +263,25 @@
             Update progress.
             </summary>
             <param name="percentComplete">
-            Percent complete.
+            Percent complete; value between 0 and 100
             </param>
             <param name="currentTask">
             Current task.
             </param>
         </member>
-        <member name="E:UIMFLibrary.BinCentricTableCreation.OnError">
-            <summary>
-            Error event handler
-            </summary>
-        </member>
-        <member name="E:UIMFLibrary.BinCentricTableCreation.Message">
-            <summary>
-            Message event handler.
-            </summary>
-        </member>
-        <member name="E:UIMFLibrary.BinCentricTableCreation.OnProgress">
-            <summary>
-            Progress event handler.
-            </summary>
-        </member>
         <member name="T:UIMFLibrary.FrameParam">
             <summary>
             Frame parameter container
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParam.Definition">
+            <summary>
+            Frame parameter definition
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParam.Value">
+            <summary>
+            Parameter value
             </summary>
         </member>
         <member name="M:UIMFLibrary.FrameParam.#ctor(UIMFLibrary.FrameParamDef,System.String)">
@@ -286,16 +296,6 @@
             Customized ToString()
             </summary>
             <returns></returns>
-        </member>
-        <member name="P:UIMFLibrary.FrameParam.Definition">
-            <summary>
-            Frame parameter definition
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.FrameParam.Value">
-            <summary>
-            Parameter value
-            </summary>
         </member>
         <member name="T:UIMFLibrary.FrameParamKeyType">
             <summary>
@@ -567,6 +567,26 @@
             Frame parameter definition
             </summary>
         </member>
+        <member name="P:UIMFLibrary.FrameParamDef.ParamType">
+            <summary>
+            Parameter Type
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParamDef.Name">
+            <summary>
+            Parameter Name
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParamDef.DataType">
+            <summary>
+            .NET data type
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParamDef.Description">
+            <summary>
+            Parameter Description
+            </summary>
+        </member>
         <member name="M:UIMFLibrary.FrameParamDef.#ctor(UIMFLibrary.FrameParamKeyType)">
             <summary>
             Constructor
@@ -605,29 +625,44 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:UIMFLibrary.FrameParamDef.ParamType">
-            <summary>
-            Parameter Type
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.FrameParamDef.Name">
-            <summary>
-            Parameter Name
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.FrameParamDef.DataType">
-            <summary>
-            .NET data type
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.FrameParamDef.Description">
-            <summary>
-            Parameter Description
-            </summary>
-        </member>
         <member name="T:UIMFLibrary.FrameParams">
             <summary>
             Container for a set of frame parameters
+            </summary>
+        </member>
+        <member name="T:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType">
+            <summary>
+            Mass Calibration Coefficients
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.a2">
+            <summary>
+            Calibration Coefficient a2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.b2">
+            <summary>
+            Calibration Coefficient b2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.c2">
+            <summary>
+            Calibration Coefficient c2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.d2">
+            <summary>
+            Calibration Coefficient d2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.e2">
+            <summary>
+            Calibration Coefficient e2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.f2">
+            <summary>
+            Calibration Coefficient f2
             </summary>
         </member>
         <member name="F:UIMFLibrary.FrameParams.mFrameParameters">
@@ -640,6 +675,42 @@
             <summary>
             Mass calibration coefficients are cached to allow for fast lookup via external classes
             </summary>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.Values">
+            <summary>
+            Frame parameters dictionary
+            </summary>
+            <remarks>Key is parameter type; value is the frame parameter container (<see cref="T:UIMFLibrary.FrameParam"/> class)</remarks>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.CalibrationSlope">
+            <summary>
+            Calibration slope
+            </summary>
+            <remarks>Returns 0 if not defined</remarks>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.CalibrationIntercept">
+            <summary>
+            Calibration intercept
+            </summary>
+            <remarks>Returns 0 if not defined</remarks>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.FrameType">
+            <summary>
+            Frame type
+            </summary>
+            <remarks>Returns MS1 if not defined</remarks>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.MassCalibrationCoefficients">
+            <summary>
+            Mass calibration coefficients
+            </summary>
+            <remarks>Provided for quick reference to avoid having to access the dictionary and convert from string to double</remarks>
+        </member>
+        <member name="P:UIMFLibrary.FrameParams.Scans">
+            <summary>
+            Scans per frame
+            </summary>
+            <remarks>Returns 0 if not defined</remarks>
         </member>
         <member name="M:UIMFLibrary.FrameParams.#ctor">
             <summary>
@@ -742,77 +813,6 @@
             </summary>
             <param name="paramType">Parameter type</param>
             <returns>True if defined, otherwise false</returns>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.Values">
-            <summary>
-            Frame parameters dictionary
-            </summary>
-            <remarks>Key is parameter type; value is the frame parameter container (<see cref="T:UIMFLibrary.FrameParam"/> class)</remarks>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.CalibrationSlope">
-            <summary>
-            Calibration slope
-            </summary>
-            <remarks>Returns 0 if not defined</remarks>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.CalibrationIntercept">
-            <summary>
-            Calibration intercept
-            </summary>
-            <remarks>Returns 0 if not defined</remarks>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.FrameType">
-            <summary>
-            Frame type
-            </summary>
-            <remarks>Returns MS1 if not defined</remarks>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.MassCalibrationCoefficients">
-            <summary>
-            Mass calibration coefficients
-            </summary>
-            <remarks>Provided for quick reference to avoid having to access the dictionary and convert from string to double</remarks>
-        </member>
-        <member name="P:UIMFLibrary.FrameParams.Scans">
-            <summary>
-            Scans per frame
-            </summary>
-            <remarks>Returns 0 if not defined</remarks>
-        </member>
-        <member name="T:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType">
-            <summary>
-            Mass Calibration Coefficients
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.a2">
-            <summary>
-            Calibration Coefficient a2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.b2">
-            <summary>
-            Calibration Coefficient b2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.c2">
-            <summary>
-            Calibration Coefficient c2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.d2">
-            <summary>
-            Calibration Coefficient d2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.e2">
-            <summary>
-            Calibration Coefficient e2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.FrameParams.MassCalibrationCoefficientsType.f2">
-            <summary>
-            Calibration Coefficient f2
-            </summary>
         </member>
         <member name="T:UIMFLibrary.FrameParamUtilities">
             <summary>
@@ -1005,25 +1005,6 @@
             Global parameters
             </summary>
         </member>
-        <member name="M:UIMFLibrary.GlobalParam.#ctor(UIMFLibrary.GlobalParamKeyType,System.String)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="paramType">Frame parameter definition</param>
-            <param name="value">Parameter value</param>
-        </member>
-        <member name="M:UIMFLibrary.GlobalParam.ToString">
-            <summary>
-            Customized ToString()
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:UIMFLibrary.GlobalParam.InitializeByType(UIMFLibrary.GlobalParamKeyType)">
-            <summary>
-            Initialize this global parameter using the param type enum value
-            </summary>
-            <param name="paramType">Param key type enum</param>
-        </member>
         <member name="P:UIMFLibrary.GlobalParam.ParamType">
             <summary>
             Parameter Type
@@ -1049,6 +1030,25 @@
             Parameter value
             </summary>
         </member>
+        <member name="M:UIMFLibrary.GlobalParam.#ctor(UIMFLibrary.GlobalParamKeyType,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="paramType">Frame parameter definition</param>
+            <param name="value">Parameter value</param>
+        </member>
+        <member name="M:UIMFLibrary.GlobalParam.ToString">
+            <summary>
+            Customized ToString()
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:UIMFLibrary.GlobalParam.InitializeByType(UIMFLibrary.GlobalParamKeyType)">
+            <summary>
+            Initialize this global parameter using the param type enum value
+            </summary>
+            <param name="paramType">Param key type enum</param>
+        </member>
         <member name="T:UIMFLibrary.GlobalParams">
             <summary>
             Global parameters container
@@ -1059,6 +1059,37 @@
             Global parameters dictionary
             </summary>
             <remarks>Key is parameter type; value is the Global parameter container (<see cref="T:UIMFLibrary.GlobalParam"/> class)</remarks>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.Values">
+            <summary>
+            Global parameters dictionary
+            </summary>
+            <remarks>Key is parameter type; value is the global parameter container (<see cref="T:UIMFLibrary.GlobalParam"/> class)</remarks>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.Bins">
+            <summary>
+            Total number of TOF bins in frame
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.BinWidth">
+            <summary>
+            Width of TOF bins (in ns)
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.IsPpmBinBased">
+            <summary>
+            Returns True if storing data using the ppm bin-based mode
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.NumFrames">
+            <summary>
+            Number of frames in the dataset
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.GlobalParams.TOFCorrectionTime">
+            <summary>
+            TOF correction time
+            </summary>
         </member>
         <member name="M:UIMFLibrary.GlobalParams.#ctor">
             <summary>
@@ -1147,37 +1178,6 @@
             </summary>
             <param name="paramType">Parameter type</param>
             <returns>True if defined, otherwise false</returns>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.Values">
-            <summary>
-            Global parameters dictionary
-            </summary>
-            <remarks>Key is parameter type; value is the global parameter container (<see cref="T:UIMFLibrary.GlobalParam"/> class)</remarks>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.Bins">
-            <summary>
-            Total number of TOF bins in frame
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.BinWidth">
-            <summary>
-            Width of TOF bins (in ns)
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.IsPpmBinBased">
-            <summary>
-            Returns True if storing data using the ppm bin-based mode
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.NumFrames">
-            <summary>
-            Number of frames in the dataset
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.GlobalParams.TOFCorrectionTime">
-            <summary>
-            TOF correction time
-            </summary>
         </member>
         <member name="T:UIMFLibrary.GlobalParamUtilities">
             <summary>
@@ -1642,14 +1642,6 @@
             <param name="dtRunStartTime">
             </param>
         </member>
-        <member name="M:UIMFLibrary.FrameParameters.CopyTo(UIMFLibrary.FrameParameters@)">
-            <summary>
-            Copy the frame parameters to a target (deep copy)
-            </summary>
-            <param name="Target">
-            Output: target object
-            </param>
-        </member>
         <member name="P:UIMFLibrary.FrameParameters.voltEntranceIFTIn">
             <summary>
             Included for backwards compatibility
@@ -1669,6 +1661,14 @@
             <summary>
             Included for backwards compatibility
             </summary>
+        </member>
+        <member name="M:UIMFLibrary.FrameParameters.CopyTo(UIMFLibrary.FrameParameters@)">
+            <summary>
+            Copy the frame parameters to a target (deep copy)
+            </summary>
+            <param name="Target">
+            Output: target object
+            </param>
         </member>
         <member name="T:UIMFLibrary.MessageEventArgs">
             <summary>
@@ -1719,14 +1719,6 @@
             Number of frames in the file.
             </param>
         </member>
-        <member name="M:UIMFLibrary.FrameSetContainer.AddFrame(System.Int32)">
-            <summary>
-            Add a frame.
-            </summary>
-            <param name="frameNumber">
-            Frame number.
-            </param>
-        </member>
         <member name="P:UIMFLibrary.FrameSetContainer.FrameIndexes">
             <summary>
             Mapping between frame number and frame index
@@ -1737,6 +1729,14 @@
             <summary>
             Gets the num frames.
             </summary>
+        </member>
+        <member name="M:UIMFLibrary.FrameSetContainer.AddFrame(System.Int32)">
+            <summary>
+            Add a frame.
+            </summary>
+            <param name="frameNumber">
+            Frame number.
+            </param>
         </member>
         <member name="M:UIMFLibrary.IntensityConverterDouble.Encode(System.Double[],System.Byte[]@,System.Double@,System.Double@,System.Int32@)">
             <summary>
@@ -1809,6 +1809,26 @@
             Intensity
             </param>
         </member>
+        <member name="P:UIMFLibrary.IntensityPoint.Intensity">
+            <summary>
+            Gets or sets the intensity.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.IntensityPoint.IsSaturated">
+            <summary>
+            Gets or sets a value indicating whether is saturated.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.IntensityPoint.ScanIms">
+            <summary>
+            Gets the IMS scan
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.IntensityPoint.ScanLc">
+            <summary>
+            Gets the LC scan number
+            </summary>
+        </member>
         <member name="M:UIMFLibrary.IntensityPoint.op_Equality(UIMFLibrary.IntensityPoint,UIMFLibrary.IntensityPoint)">
             <summary>
             Overload the equals operator
@@ -1877,26 +1897,6 @@
             <returns>
             Hash code for this instance<see cref="T:System.Int32"/>.
             </returns>
-        </member>
-        <member name="P:UIMFLibrary.IntensityPoint.Intensity">
-            <summary>
-            Gets or sets the intensity.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.IntensityPoint.IsSaturated">
-            <summary>
-            Gets or sets a value indicating whether is saturated.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.IntensityPoint.ScanIms">
-            <summary>
-            Gets the IMS scan
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.IntensityPoint.ScanLc">
-            <summary>
-            Gets the LC scan number
-            </summary>
         </member>
         <member name="T:UIMFLibrary.LogEntry">
             <summary>
@@ -2033,6 +2033,21 @@
             mass = (k * (t-t0))^2
             </remarks>
         </member>
+        <member name="P:UIMFLibrary.MzCalibrator.Description">
+            <summary>
+            Gets the description.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.MzCalibrator.k">
+            <summary>
+            Gets or sets the k.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.MzCalibrator.t0">
+            <summary>
+            Gets or sets the t 0.
+            </summary>
+        </member>
         <member name="M:UIMFLibrary.MzCalibrator.MZtoTOF(System.Double)">
             <summary>
             Convert m/z to TOF value
@@ -2083,21 +2098,6 @@
             <param name="TOF"></param>
             <returns></returns>
         </member>
-        <member name="P:UIMFLibrary.MzCalibrator.Description">
-            <summary>
-            Gets the description.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.MzCalibrator.k">
-            <summary>
-            Gets or sets the k.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.MzCalibrator.t0">
-            <summary>
-            Gets or sets the t 0.
-            </summary>
-        </member>
         <member name="T:UIMFLibrary.ReaderWriterExtensions">
             <summary>
             Extension methods that use functionality specific to .NET 4.5 and above
@@ -2116,13 +2116,6 @@
             <summary>
             Class for tracking pre-computed information about a given scan
             </summary>
-        </member>
-        <member name="M:UIMFLibrary.ScanInfo.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="frameNumber">Frame number</param>
-            <param name="scanNumber">Scan number</param>
         </member>
         <member name="P:UIMFLibrary.ScanInfo.Frame">
             <summary>
@@ -2163,6 +2156,13 @@
             <summary>
             Drift time of data in this scan (not normalized for pressure)
             </summary>
+        </member>
+        <member name="M:UIMFLibrary.ScanInfo.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="frameNumber">Frame number</param>
+            <param name="scanNumber">Scan number</param>
         </member>
         <member name="T:UIMFLibrary.SpectrumCache">
             <summary>
@@ -2205,16 +2205,6 @@
             <param name="firstScan">The scan number of the first entry in listOfIntensityDictionaries that has non-zero intensities</param>
             <param name="lastScan">The scan number of the last entry in listOfIntensityDictionaries that has non-zero intensities</param>
         </member>
-        <member name="M:UIMFLibrary.SpectrumCache.UpdateMemoryUsageEstimate">
-            <summary>
-            Estimates the amount of memory used by SummedIntensityDictionary and ListOfIntensityDictionaries
-            </summary>
-            <remarks>
-            SummedIntensityDictionary is an int,int dictionary, so each entry takes up 8 bytes.  
-            However, given the overhead inerhent in a dictionary, we need to multiply by 5 to get a realistic estimate of the size.
-            ListOfIntensityDictionaries used to be a list of dictionaries, but it is now a list of SortedList objects.
-            Each entry nominally takes up 8 bytes, but in reality each entry takes up 16 bytes.</remarks>
-        </member>
         <member name="P:UIMFLibrary.SpectrumCache.EndFrameNumber">
             <summary>
             Gets the end frame number.
@@ -2256,6 +2246,16 @@
             Estimated MB of data tracked by this cached spectrum
             </summary>
         </member>
+        <member name="M:UIMFLibrary.SpectrumCache.UpdateMemoryUsageEstimate">
+            <summary>
+            Estimates the amount of memory used by SummedIntensityDictionary and ListOfIntensityDictionaries
+            </summary>
+            <remarks>
+            SummedIntensityDictionary is an int,int dictionary, so each entry takes up 8 bytes.  
+            However, given the overhead inerhent in a dictionary, we need to multiply by 5 to get a realistic estimate of the size.
+            ListOfIntensityDictionaries used to be a list of dictionaries, but it is now a list of SortedList objects.
+            Each entry nominally takes up 8 bytes, but in reality each entry takes up 16 bytes.</remarks>
+        </member>
         <member name="T:UIMFLibrary.DataReader">
             <summary>
             UIMF Data Reader Class
@@ -2274,6 +2274,16 @@
         <member name="F:UIMFLibrary.DataReader.TIC">
             <summary>
             TIC text
+            </summary>
+        </member>
+        <member name="E:UIMFLibrary.DataReader.ErrorEvent">
+            <summary>
+            Error event
+            </summary>
+        </member>
+        <member name="E:UIMFLibrary.DataReader.MessageEvent">
+            <summary>
+            Message event
             </summary>
         </member>
         <member name="F:UIMFLibrary.DataReader.m_errMessageCounter">
@@ -2331,7 +2341,7 @@
         </member>
         <member name="F:UIMFLibrary.DataReader.m_UsingLegacyFrameParameters">
             <summary>
-            True when the .UIMF file has table Frame_Params (which takes precedence over any existing Frame_Parameters table)
+            True when the .UIMF file has table Frame_Parameters (note that the Frame_Params table takes precedence over an existing Frame_Parameters table)
             </summary>
         </member>
         <member name="F:UIMFLibrary.DataReader.m_LegacyFrameParametersMissingColumns">
@@ -2413,6 +2423,17 @@
             Spectra are removed from the cache if the memory usage exceeds MaxSpectrumCacheMemoryMB
             </remarks>
         </member>
+        <member name="P:UIMFLibrary.DataReader.MaxSpectrumCacheMemoryMB">
+            <summary>
+            Maximum memory to allow the spectrum cache to utilize (defaults to 750 MB)
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.SpectraToCache">
+            <summary>
+            Number of spectra to cache (defaults to 10)
+            </summary>
+            <remarks>Set this to a smaller value if you are encountering OutOfMemory exceptions</remarks>
+        </member>
         <member name="F:UIMFLibrary.DataReader.m_uimfFilePath">
             <summary>
             UIMF file path
@@ -2429,6 +2450,76 @@
             </exception>
             <exception cref="T:System.IO.FileNotFoundException">
             </exception>
+        </member>
+        <member name="T:UIMFLibrary.DataReader.FrameType">
+            <summary>
+            Frame type.
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.FrameType.MS1">
+            <summary>
+            MS1
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.FrameType.MS2">
+            <summary>
+            MS2
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.FrameType.Calibration">
+            <summary>
+            Calibration
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.FrameType.Prescan">
+            <summary>
+            Prescan
+            </summary>
+        </member>
+        <member name="T:UIMFLibrary.DataReader.ToleranceType">
+            <summary>
+            Tolerance type.
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.ToleranceType.PPM">
+            <summary>
+            Parts per million
+            </summary>
+        </member>
+        <member name="F:UIMFLibrary.DataReader.ToleranceType.Thomson">
+            <summary>
+            Thomsons
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.DBConnection">
+            <summary>
+            The connection to the SQLite database
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.HasFrameParamsTable">
+            <summary>
+            Whether the database has a "FrameParams" table
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.HasLegacyFrameParameters">
+            <summary>
+            Whether the database is using a legacy frame parameter table
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.PressureIsMilliTorr">
+            <summary>
+            Gets or sets a value indicating whether pressure is millitorr.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.TenthsOfNanoSecondsPerBin">
+            <summary>
+            Gets the tenths of nano seconds per bin.
+            </summary>
+        </member>
+        <member name="P:UIMFLibrary.DataReader.UimfFilePath">
+            <summary>
+            Gets the uimf file path.
+            </summary>
         </member>
         <member name="M:UIMFLibrary.DataReader.ColumnExists(System.Data.SQLite.SQLiteConnection,System.String,System.String)">
             <summary>
@@ -3007,9 +3098,10 @@
             Array of intensities; dimensions are Frame, Scan, Bin
             </returns>
         </member>
-        <member name="M:UIMFLibrary.DataReader.GetIntensityBlockForDemultiplexing(System.Int32,UIMFLibrary.DataReader.FrameType,System.Int32,System.Collections.Generic.Dictionary{System.Int32,System.Int32},System.Boolean,System.Int32)">
+        <member name="M:UIMFLibrary.DataReader.GetIntensityBlockForDemultiplexing(System.Int32,UIMFLibrary.DataReader.FrameType,System.Int32,System.Collections.Generic.Dictionary{System.Int32,System.Int32},System.Boolean,System.Int32,System.Int32,System.Int32)">
             <summary>
             Gets a set of intensity values that will be used for demultiplexing.
+            Optionally limit the bin range using binStart and binEnd
             </summary>
             <param name="frameNumber">
             The frame where the intensity data should come from.
@@ -3025,6 +3117,12 @@
             </param>
             <param name="doReorder">
             Whether to re-order the data or not. This can be used to speed up the demultiplexing process.
+            </param>
+            <param name="pagingFilterStartBin">
+            Start bin for filtering data; ignored if pagingFilterCount is 0
+            </param>
+            <param name="pagingFilterCount">
+            Number of bins to return when using pagingFilterStartBin
             </param>
             <param name="numFramesToSum">
             Number of frames to sum. Must be an odd number greater than 0.\ne.g. numFramesToSum of 3 will be +- 1 around the given frameNumber.
@@ -3703,7 +3801,7 @@
             True if the table has a column<see cref="T:System.Boolean"/>.
             </returns>
         </member>
-        <member name="M:UIMFLibrary.DataReader.UpdateAllCalibrationCoefficients(System.Single,System.Single,System.Boolean)">
+        <member name="M:UIMFLibrary.DataReader.UpdateAllCalibrationCoefficients(System.Double,System.Double,System.Boolean)">
             <summary>
             /// Update the calibration coefficients for all frames
             </summary>
@@ -3717,7 +3815,7 @@
             Optional argument that should be set to true if calibration is automatic. Defaults to false.
             </param>
         </member>
-        <member name="M:UIMFLibrary.DataReader.UpdateCalibrationCoefficients(System.Int32,System.Single,System.Single,System.Boolean)">
+        <member name="M:UIMFLibrary.DataReader.UpdateCalibrationCoefficients(System.Int32,System.Double,System.Double,System.Boolean)">
             <summary>
             Update the calibration coefficients for a single frame
             </summary>
@@ -4047,97 +4145,6 @@
             Message event args
             </param>
         </member>
-        <member name="E:UIMFLibrary.DataReader.ErrorEvent">
-            <summary>
-            Error event
-            </summary>
-        </member>
-        <member name="E:UIMFLibrary.DataReader.MessageEvent">
-            <summary>
-            Message event
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.MaxSpectrumCacheMemoryMB">
-            <summary>
-            Maximum memory to allow the spectrum cache to utilize (defaults to 750 MB)
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.SpectraToCache">
-            <summary>
-            Number of spectra to cache (defaults to 10)
-            </summary>
-            <remarks>Set this to a smaller value if you are encountering OutOfMemory exceptions</remarks>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.DBConnection">
-            <summary>
-            The connection to the SQLite database
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.HasFrameParamsTable">
-            <summary>
-            Whether the database has a "FrameParams" table
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.HasLegacyFrameParameters">
-            <summary>
-            Whether the database is using a legacy frame parameter table
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.PressureIsMilliTorr">
-            <summary>
-            Gets or sets a value indicating whether pressure is millitorr.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.TenthsOfNanoSecondsPerBin">
-            <summary>
-            Gets the tenths of nano seconds per bin.
-            </summary>
-        </member>
-        <member name="P:UIMFLibrary.DataReader.UimfFilePath">
-            <summary>
-            Gets the uimf file path.
-            </summary>
-        </member>
-        <member name="T:UIMFLibrary.DataReader.FrameType">
-            <summary>
-            Frame type.
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.FrameType.MS1">
-            <summary>
-            MS1
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.FrameType.MS2">
-            <summary>
-            MS2
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.FrameType.Calibration">
-            <summary>
-            Calibration
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.FrameType.Prescan">
-            <summary>
-            Prescan
-            </summary>
-        </member>
-        <member name="T:UIMFLibrary.DataReader.ToleranceType">
-            <summary>
-            Tolerance type.
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.ToleranceType.PPM">
-            <summary>
-            Parts per million
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.DataReader.ToleranceType.Thomson">
-            <summary>
-            Thomsons
-            </summary>
-        </member>
         <member name="T:UIMFLibrary.UIMFDataUtilities">
             <summary>
             The uimf data utilities.
@@ -4295,6 +4302,23 @@
             This list tracks the frame numbers that are present in the Frame_Parameters table
             </summary>
         </member>
+        <member name="P:UIMFLibrary.DataWriter.HasFrameParamsTable">
+            <summary>
+            True if the UIMF file has table Frame_Params
+            </summary>
+            <remarks>When opening a .UIMF file without the Frame_Params table, the writer will auto-add it</remarks>
+        </member>
+        <member name="P:UIMFLibrary.DataWriter.HasGlobalParamsTable">
+            <summary>
+            True if the UIMF file has table Global_Params
+            </summary>
+            <remarks>When opening a .UIMF file without the Global_Params table, the writer will auto-add it</remarks>
+        </member>
+        <member name="P:UIMFLibrary.DataWriter.HasLegacyParameterTables">
+            <summary>
+            True if the UIMF file has tables Global_Parameters and Frame_Parameters
+            </summary>
+        </member>
         <member name="M:UIMFLibrary.DataWriter.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:UIMFLibrary.DataWriter"/> class. 
@@ -4314,7 +4338,7 @@
             Full path to the data file
             </param>
             <param name="createLegacyParametersTables">
-            When true, then will create and populate tables Global_Parameters and Frame_Parameters
+            When true, then will create and populate legacy tables Global_Parameters and Frame_Parameters
             </param>
             <remarks>When creating a brand new .UIMF file, you must call CreateTables() after instantiating the writer</remarks>
         </member>
@@ -4708,7 +4732,22 @@
             The Log_Entries table will be created if it doesn't exist
             </remarks>
         </member>
-        <member name="M:UIMFLibrary.DataWriter.UpdateAllCalibrationCoefficients(System.Data.SQLite.SQLiteConnection,System.Single,System.Single,System.Boolean)">
+        <member name="M:UIMFLibrary.DataWriter.UpdateAllCalibrationCoefficients(System.Double,System.Double,System.Boolean)">
+            <summary>
+            Update the slope and intercept for all frames
+            </summary>
+            <param name="slope">
+            The slope value for the calibration.
+            </param>
+            <param name="intercept">
+            The intercept for the calibration.
+            </param>
+            <param name="isAutoCalibrating">
+            Optional argument that should be set to true if calibration is automatic. Defaults to false.
+            </param>
+            <remarks>This function is called by the AutoCalibrateUIMF DLL</remarks>
+        </member>
+        <member name="M:UIMFLibrary.DataWriter.UpdateAllCalibrationCoefficients(System.Data.SQLite.SQLiteConnection,System.Double,System.Double,System.Boolean)">
             <summary>
             Update the slope and intercept for all frames
             </summary>
@@ -4724,7 +4763,7 @@
             </param>
             <remarks>This function is called by the AutoCalibrateUIMF DLL</remarks>
         </member>
-        <member name="M:UIMFLibrary.DataWriter.UpdateCalibrationCoefficients(System.Int32,System.Single,System.Single)">
+        <member name="M:UIMFLibrary.DataWriter.UpdateCalibrationCoefficients(System.Int32,System.Double,System.Double)">
             <summary>
             </summary>
             <param name="frameNumber">
@@ -4734,7 +4773,7 @@
             <param name="intercept">
             </param>
         </member>
-        <member name="M:UIMFLibrary.DataWriter.UpdateCalibrationCoefficients(System.Data.SQLite.SQLiteConnection,System.Int32,System.Single,System.Single,System.Boolean)">
+        <member name="M:UIMFLibrary.DataWriter.UpdateCalibrationCoefficients(System.Data.SQLite.SQLiteConnection,System.Int32,System.Double,System.Double,System.Boolean)">
             <summary>
             Update the slope and intercept for the given frame
             </summary>
