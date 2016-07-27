@@ -255,7 +255,7 @@ namespace DeconTools.Backend.Core
 								var framesToSum = new List<int>();
 
 								var uimfrun = uimfRun;
-								var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames();
+								var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
 
 								for (var j = 0; j < numberOfConsecutiveMs2Frames; j++)
 								{
@@ -275,7 +275,7 @@ namespace DeconTools.Backend.Core
 						{
 							var uimfrun = uimfRun;
 
-							var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames();
+							var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
 
 							var indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
 

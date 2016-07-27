@@ -87,7 +87,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 else
                 {
                     // TODO: This is hard-coded to work with the "sum all consecutive MS2 frames mode" but we should really look these up by going through the IMSScanCollection
-                    lcscanset = new ScanSet(bestLCScan + 1, bestLCScan + 1, bestLCScan + uimfrun.GetNumberOfConsecutiveMs2Frames());
+                    lcscanset = new ScanSet(bestLCScan + 1, bestLCScan + 1, bestLCScan + uimfrun.GetNumberOfConsecutiveMs2Frames(bestLCScan));
                 }
 
                 return lcscanset;

@@ -24,8 +24,10 @@ namespace DeconTools.Backend.Runs
         //private UIMFLibrary.DataReader m_reader;
         private readonly Dictionary<int, double> _framePressuresUnsmoothed;
 
-        // In IMS experiments that are a set number of MS2 frames with different collision energies that are run after each MS1 frame. This number will be the same for all MS1 frames.
-        private int _numOfConsecutiveMs2Frames;
+        /// <summary>
+        /// Stores the list of all frame numbers and their corresponding frame type
+        /// </summary>
+        private SortedDictionary<int, DataReader.FrameType> _frameList;
 
         #region Constructors
         public UIMFRun()
@@ -83,12 +85,9 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-
         private void GetMSLevelInfo()
         {
-
-            //TODO:  use GetMasterFrameList() from the UIMF library
+            _frameList = new SortedDictionary<int, DataReader.FrameType>(UIMFLibraryAdapter.getInstance(Filename).Datareader.GetMasterFrameList());
 
             MS1Frames = new List<int>();
             MS2Frames = new List<int>();
@@ -104,44 +103,6 @@ namespace DeconTools.Backend.Runs
             {
                 MS2Frames = ms2Frames.ToList();
             }
-
-            // Figure out the number of consecutive MS2 frames associated with each MS1 frame
-            _numOfConsecutiveMs2Frames = 0;
-            var numMs1Frames = MS1Frames.Count;
-            var numMs2Frames = MS2Frames.Count;
-
-            if (numMs2Frames > 0)
-            {
-                if (numMs1Frames == 1)
-                {
-                    // If there is only 1 MS1 frame, then there is only 1 set of MS2 frames, so we use the count of MS2 frames
-                    _numOfConsecutiveMs2Frames = numMs2Frames;
-                }
-                else
-                {
-                    // Subtract the frame numbers of the first 2 MS1 frames to figure out how many MS2 frame are in between
-                    _numOfConsecutiveMs2Frames = MS1Frames[1] - MS1Frames[0] - 1;
-                }
-
-                ValidateMSMSConsistency(MS1Frames);
-            }
-        }
-
-        /// <summary>
-        /// This method will verify that the number of MS/MS frame in between each MS1 frame stays constant throughout the UIMF file.
-        /// </summary>
-        /// <returns>True if the MS/MS data is valid. Otherwise, an exception is thrown.</returns>
-        private bool ValidateMSMSConsistency(IList<int> ms1Frames)
-        {
-            for (var i = 1; i < ms1Frames.Count; i++)
-            {
-                if (ms1Frames[i] - ms1Frames[i - 1] - 1 != _numOfConsecutiveMs2Frames)
-                {
-                    throw new InvalidOperationException("The number of MS2 frames associated with each MS1 frame must remain constant for the entire run.\n\tERROR: An incorrect number of MS/MS frames were detected between MS1 Frame #s " + ms1Frames[i - 1] + " and " + ms1Frames[i] + ".");
-                }
-            }
-
-            return true;
         }
 
         private bool CheckRunForMSMSData()
@@ -185,6 +146,10 @@ namespace DeconTools.Backend.Runs
 
         #region Public Methods
 
+        /// <summary>
+        /// The total number of frames in the run
+        /// </summary>
+        /// <returns></returns>
         public int GetNumFrames()
         {
             if (_globalParams == null)
@@ -356,9 +321,30 @@ namespace DeconTools.Backend.Runs
             return time;
         }
 
-        public int GetNumberOfConsecutiveMs2Frames()
+        /// <summary>
+        /// Gets the number of consecutive MS2 frames including (if MS2) or following (if MS1) the specified frame number
+        /// </summary>
+        /// <param name="frameNumber"></param>
+        /// <returns></returns>
+        public int GetNumberOfConsecutiveMs2Frames(int frameNumber)
         {
-            return _numOfConsecutiveMs2Frames;
+            var count = 0;
+            if (_frameList[frameNumber] == DataReader.FrameType.MS2)
+            {
+                count = 1;
+            }
+            foreach (var kvp in _frameList.Where(x => x.Key > frameNumber))
+            {
+                if (kvp.Value == DataReader.FrameType.MS2)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
         }
 
         public double GetDriftTime(int frameNum, int scanNum)
