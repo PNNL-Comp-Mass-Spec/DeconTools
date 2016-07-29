@@ -29,6 +29,11 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
+            var startTime = DateTime.UtcNow;
+            var maxRuntimeHours = NewDeconToolsParameters.MiscMSProcessingParameters.MaxHoursPerDataset;
+            if (maxRuntimeHours <= 0)
+                maxRuntimeHours = int.MaxValue;
+            
             _scanCounter = 1;
             foreach (var scanset in Run.ScanSetCollection.ScanSetList)
             {
@@ -48,6 +53,15 @@ namespace DeconTools.Backend.Workflows
                 
                 _scanCounter++;
 
+                if (DateTime.UtcNow.Subtract(startTime).TotalHours >= maxRuntimeHours)
+                {
+                    Console.WriteLine(
+                        "Aborted processing because {0} hours have elapsed; ScanCount processed = {1}",
+                        (int)DateTime.UtcNow.Subtract(startTime).TotalHours,
+                        _scanCounter);
+
+                    break;
+                }
             }
         }
 

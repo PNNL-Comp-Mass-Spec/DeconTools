@@ -19,6 +19,12 @@ namespace DeconTools.Backend.Parameters
             ZeroFillingNumZerosToFill = 3;
 
             SaturationThreshold = 50000;
+
+            MaxMinutesPerScan = 4;
+            MaxMinutesPerFrame = 20;
+
+            // Default to a max of 14 days processing time
+            MaxHoursPerDataset = 336;
         }
         #endregion
 
@@ -40,6 +46,9 @@ namespace DeconTools.Backend.Parameters
 
         public double SaturationThreshold { get; set; }
 
+        public int MaxMinutesPerScan { get; set; }
+        public int MaxMinutesPerFrame { get; set; }
+        public int MaxHoursPerDataset { get; set; }
 
         #endregion
 
@@ -63,6 +72,10 @@ namespace DeconTools.Backend.Parameters
             ZeroFillingNumZerosToFill = GetIntValue(xElement, "NumZerosToFill", ZeroFillingNumZerosToFill);
 
             SaturationThreshold = GetDoubleValue(xElement, "SaturationThreshold", SaturationThreshold);
+
+            MaxMinutesPerScan = GetIntValue(xElement, "MaxMinutesPerScan", MaxMinutesPerScan);
+            MaxMinutesPerFrame = GetIntValue(xElement, "MaxMinutesPerFrame", MaxMinutesPerFrame);
+            MaxHoursPerDataset = GetIntValue(xElement, "MaxHoursPerDataset", MaxHoursPerDataset);
 
         }
     }

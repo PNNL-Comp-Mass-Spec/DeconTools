@@ -89,11 +89,16 @@ namespace DeconTools.Backend.Workflows
             const bool SKIP_DECONVOLUTION = false;
 
             var uimfRun = (UIMFRun)Run;
+
+            var startTime = DateTime.UtcNow;
             var dtLastProgress = DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0));
 
-            //uimfRun.IMSScanSetCollection.ScanSetList =uimfRun.IMSScanSetCollection.ScanSetList.Where(p => p.PrimaryScanNumber == 153).ToList();
+            var frameCountProcessed = 0;
+            var maxRuntimeHours = NewDeconToolsParameters.MiscMSProcessingParameters.MaxHoursPerDataset;
 
-            //Iterate over unsummed data and fix saturated isotopic profiles. Unsummed will be used during a second iteration (over summed data)
+            // uimfRun.IMSScanSetCollection.ScanSetList =uimfRun.IMSScanSetCollection.ScanSetList.Where(p => p.PrimaryScanNumber == 153).ToList();
+
+            // Iterate over unsummed data and fix saturated isotopic profiles. Unsummed will be used during a second iteration (over summed data)
             foreach (var lcScanSet in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.ResultCollection.MSPeakResultList.Clear();
@@ -101,10 +106,16 @@ namespace DeconTools.Backend.Workflows
 
                 var unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
 
-                //get saturated MSFeatures for unsummed data
+                // Get saturated MSFeatures for unsummed data
                 uimfRun.CurrentScanSet = unsummedFrameSet;
 
-                var forceProgressMessage = true;
+                var forceProgressMessage = true;                
+                var imsScanCountProcessed = 0;
+
+                var maxMinutesPerFrame = NewDeconToolsParameters.MiscMSProcessingParameters.MaxMinutesPerFrame;
+                var frameStartTime = DateTime.UtcNow;
+                var timeoutReached = false;
+
                 foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
 
@@ -113,6 +124,19 @@ namespace DeconTools.Backend.Workflows
                         dtLastProgress = DateTime.UtcNow;
                         forceProgressMessage = false;
                         Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Unsummed)");
+                    }
+
+                    if (DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes >= maxMinutesPerFrame)
+                    {
+                        Console.WriteLine(
+                            "Aborted processing of frame {0} because {1} minutes have elapsed (processing unsummed features); IMSScanCount processed = {2}",
+                            lcScanSet.PrimaryScanNumber,
+                            (int)DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes,
+                            imsScanCountProcessed);
+
+                        timeoutReached = true;
+
+                        break;
                     }
 
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
@@ -124,71 +148,91 @@ namespace DeconTools.Backend.Workflows
 
                     _zeroFiller.Execute(Run.ResultCollection);
 
-                    //For debugging....
-                    //if (scanset.PrimaryScanNumber == 123)
-                    //{
+                    // For debugging....
+                    // if (scanset.PrimaryScanNumber == 123)
+                    // {
                     //    Console.WriteLine(scanset + "\t being processed!");
-                    //}
-
+                    // }
 
                     _peakDetector.Execute(Run.ResultCollection);
 
-                    if (!SKIP_DECONVOLUTION)
-                    {
+                    imsScanCountProcessed++;
+
+                    if (SKIP_DECONVOLUTION)
+                        continue;
+
+                    // Deconvolute Unsummed MSFeatures
+                    // This is a preliminary step for Saturation Detection
+
 //#if Disable_DeconToolsV2
 //                        throw new NotImplementedException("Cannot use class SaturationIMSScanBasedWorkflow since support for C++ based DeconToolsV2 is disabled");
 //#else
-                        _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
+                    _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
 //#endif
-                        //Note: the deconvolutor automatically increases the MSFeatureCounter. 
-                        //Here, we don't want this, since this data is used only for saturation correction,
-                        //not for generating the official MSFeatures list. So we need to 
-                        //correct the MSFeatureCounter value. 
-                        Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
-                                                                Run.ResultCollection.IsosResultBin.Count;
 
-                        _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
+                    // Note: the deconvolutor automatically increases the MSFeatureCounter. 
+                    // Here, we don't want this, since this data is used only for saturation correction,
+                    // not for generating the official MSFeatures list. So we need to 
+                    // correct the MSFeatureCounter value. 
+                    Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
+                                                            Run.ResultCollection.IsosResultBin.Count;
 
-                        //iterate over unsummed MSFeatures and check for saturation
-                        foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
+                    _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
+
+                    // Iterate over unsummed MSFeatures and check for saturation
+                    foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
+                    {
+                        var msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
+                                                                  isosResult.IsotopicProfile.MonoPeakMZ + 10);
+
+                        var tempMZ = isosResult.IsotopicProfile.MonoPeakMZ;
+                        var currentScan = scanset.PrimaryScanNumber;
+
+                        var isPossiblySaturated = isosResult.IntensityAggregate >
+                                                  NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
+
+
+                        // For debugging... 
+                        // UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
+
+                        // if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
+                        // {
+                        //    Console.WriteLine(tempIsosResult + "\t being processed!");
+                        // }
+
+                        if (isPossiblySaturated)
                         {
-                            var msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
-                                                                         isosResult.IsotopicProfile.MonoPeakMZ + 10);
+                            IsotopicProfile theorIso;
 
-                            var tempMZ = isosResult.IsotopicProfile.MonoPeakMZ;
-                            var currentScan = scanset.PrimaryScanNumber;
-
-                            var isPossiblySaturated = isosResult.IntensityAggregate >
-                                                       NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
-
-
-                            //For debugging... 
-                            //UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
-
-                            //if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
-                            //{
-                            //    Console.WriteLine(tempIsosResult + "\t being processed!");
-                            //}
-
-                            if (isPossiblySaturated)
-                            {
-                                IsotopicProfile theorIso;
-
-                                RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, uimfRun.PeakList, out theorIso);
-                                AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
-                            }
-
-
+                            RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, uimfRun.PeakList, out theorIso);
+                            AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
                         }
+
 
                     }
                 }
 
 
-                //DisplayMSFeatures(_unsummedMSFeatures);
+                // DisplayMSFeatures(_unsummedMSFeatures);
 
-                //now sum across IMSScans, deconvolute and adjust
+                // Now sum across IMSScans, deconvolute and adjust using saturation detection
                 forceProgressMessage = true;
+                imsScanCountProcessed = 0;
+
+                // Compute a buffer using .MaxMinutesPerFrame times 20%
+                double maxFrameMinutesAddon = 0;
+                var bufferMinutes = maxMinutesPerFrame * 0.2;
+                if (bufferMinutes < 1)
+                    bufferMinutes = 1;
+
+                if (timeoutReached ||
+                    DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes + bufferMinutes >= maxMinutesPerFrame)
+                {
+                    // Maximum time per frame has been reached (or has almost been reached)
+                    // Allow the next step to run for an additional bufferMinutes
+                    maxFrameMinutesAddon = bufferMinutes;
+                }
+
                 foreach (var scanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
                     var scanset = (IMSScanSet)scanSet;
@@ -199,10 +243,20 @@ namespace DeconTools.Backend.Workflows
                         Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Summed)");
                     }
 
+                    if (DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes >= maxMinutesPerFrame + maxFrameMinutesAddon)
+                    {
+                        Console.WriteLine(
+                            "Aborted processing of frame {0} because {1} minutes have elapsed (processing summed features); IMSScanCount processed = {2}",
+                            lcScanSet.PrimaryScanNumber,
+                            (int)DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes,
+                            imsScanCountProcessed);
+
+                        break;
+                    }
+
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
-
-                    //get the summed isotopic profile
+                    // Get the summed isotopic profile
                     uimfRun.CurrentScanSet = lcScanSet;
                     uimfRun.CurrentIMSScanSet = scanset;
 
@@ -219,6 +273,8 @@ namespace DeconTools.Backend.Workflows
                     }
 
                     ExecuteTask(PeakDetector);
+
+                    imsScanCountProcessed++;
 
                     if (!SKIP_DECONVOLUTION)
                     {
@@ -265,9 +321,9 @@ namespace DeconTools.Backend.Workflows
                     }
 
 
-                    //need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
-                    //Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
-                    //is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
+                    // Need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
+                    // Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
+                    // is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
                         double ppmToleranceForDuplicate = 20;
@@ -314,12 +370,12 @@ namespace DeconTools.Backend.Workflows
                         ExecuteTask(FitScoreCalculator);
                     }
 
-                    //Allows derived classes to execute additional tasks
+                    // Allows derived classes to execute additional tasks
                     ExecuteOtherTasksHook();
 
                     if (ExportData)
                     {
-                        //the following exporting tasks should be last
+                        // The following exporting tasks should be last
                         if (NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData)
                         {
                             ExecuteTask(PeakToMSFeatureAssociator);
@@ -333,6 +389,18 @@ namespace DeconTools.Backend.Workflows
                     }
 
                     ReportProgress();
+                }
+
+                frameCountProcessed++;
+
+                if (DateTime.UtcNow.Subtract(startTime).TotalHours >= maxRuntimeHours)
+                {
+                    Console.WriteLine(
+                        "Aborted processing because {0} hours have elapsed; Frames processed = {1}",
+                        (int)DateTime.UtcNow.Subtract(startTime).TotalHours,
+                        frameCountProcessed);
+
+                    break;
                 }
             }
 

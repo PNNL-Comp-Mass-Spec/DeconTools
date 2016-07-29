@@ -1,5 +1,11 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6053; July 28, 2016     mem
+	- The Miscellaneous section of the parameter file now has 3 new parameters for specifying runtime limits
+		MaxMinutesPerScan,  default   4 minutes
+		MaxMinutesPerFrame, default  20 minutes
+		MaxHoursPerDataset, default 400 hours		
+
 Version 1.1.5990; May 26, 2016      mem
 	- Remove dependency on DeconEngineV2.dll, since the code has been ported from C++ to C# and the results validated to match
 		- See the files with namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1

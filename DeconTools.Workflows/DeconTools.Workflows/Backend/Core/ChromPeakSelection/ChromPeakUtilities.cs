@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         public ScanSet GetLCScanSetForChromPeakUIMF(Peak chromPeak, Run run, int numLCScansToSum)
         {
 
-            if (chromPeak == null || chromPeak.XValue == 0)
+            if (chromPeak == null || Math.Abs(chromPeak.XValue) < float.Epsilon)
             {
                 return null;
                 //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
