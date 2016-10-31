@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Workflows
 
         PeakDetectAndExportWorkflowParameters _workflowParameters;
         private BackgroundWorker backgroundWorker;
-	    private PeakProgressInfo peakProgressInfo;
+        private PeakProgressInfo peakProgressInfo;
 
         PeakListTextExporter peakExporter;
 
@@ -51,7 +51,7 @@ namespace DeconTools.Backend.Workflows
             : this(run, parameters)
         {
             this.backgroundWorker = bw;
-			peakProgressInfo = new PeakProgressInfo();
+            peakProgressInfo = new PeakProgressInfo();
         }
 
 
@@ -103,88 +103,88 @@ namespace DeconTools.Backend.Workflows
 
             string outputPeaksFilePath = getOutputPeaksFilename();
 
-			peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFilePath);
+            peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFilePath);
 
             int numTotalScans = LcScanSetCollection.ScanSetList.Count;
             int scanCounter = 0;
 
-	        using (var sw = new StreamWriter(new FileStream(outputPeaksFilePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
-	        {
+            using (var sw = new StreamWriter(new FileStream(outputPeaksFilePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
+            {
 
 
-		        if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
-		        {
-			        var uimfrun = Run as UIMFRun;
+                if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+                {
+                    var uimfrun = Run as UIMFRun;
 
-			        int numTotalFrames = LcScanSetCollection.ScanSetList.Count;
-			        int frameCounter = 0;
+                    int numTotalFrames = LcScanSetCollection.ScanSetList.Count;
+                    int frameCounter = 0;
 
-			        foreach (var frameSet in LcScanSetCollection.ScanSetList)
-			        {
-				        frameCounter++;
-				        uimfrun.CurrentScanSet = frameSet;
-				        uimfrun.ResultCollection.MSPeakResultList.Clear();
+                    foreach (var frameSet in LcScanSetCollection.ScanSetList)
+                    {
+                        frameCounter++;
+                        uimfrun.CurrentScanSet = frameSet;
+                        uimfrun.ResultCollection.MSPeakResultList.Clear();
 
-				        foreach (var scanSet in IMSScanSetCollection.ScanSetList)
-				        {
-					        uimfrun.CurrentIMSScanSet = (IMSScanSet)scanSet;
-					        MSGenerator.Execute(uimfrun.ResultCollection);
-					        this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
+                        foreach (var scanSet in IMSScanSetCollection.ScanSetList)
+                        {
+                            uimfrun.CurrentIMSScanSet = (IMSScanSet)scanSet;
+                            MSGenerator.Execute(uimfrun.ResultCollection);
+                            this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
 
-				        }
-						peakExporter.WriteOutPeaks(sw, uimfrun.ResultCollection.MSPeakResultList);
+                        }
+                        peakExporter.WriteOutPeaks(sw, uimfrun.ResultCollection.MSPeakResultList);
 
-				        if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
-				        {
-					        double percentProgress = frameCounter * 100 / (double)numTotalFrames;
-					        reportProgress(percentProgress);
-				        }
+                        if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
+                        {
+                            double percentProgress = frameCounter * 100 / (double)numTotalFrames;
+                            reportProgress(percentProgress);
+                        }
 
-			        }
+                    }
 
-		        }
-		        else
-		        {
-			        foreach (var scan in LcScanSetCollection.ScanSetList)
-			        {
-				        scanCounter++;
+                }
+                else
+                {
+                    foreach (var scan in LcScanSetCollection.ScanSetList)
+                    {
+                        scanCounter++;
 
-				        Run.CurrentScanSet = scan;
+                        Run.CurrentScanSet = scan;
 
-				        Run.ResultCollection.MSPeakResultList.Clear();
+                        Run.ResultCollection.MSPeakResultList.Clear();
 
-				        MSGenerator.Execute(Run.ResultCollection);
-				        if (Run.GetMSLevel(scan.PrimaryScanNumber) == 1)
-				        {
-					        this._ms1PeakDetector.Execute(Run.ResultCollection);
-				        }
-				        else
-				        {
-					        var dataIsCentroided = Run.IsDataCentroided(scan.PrimaryScanNumber);
-					        if (dataIsCentroided)
-					        {
-						        _ms2PeakDetectorForCentroidedData.Execute(Run.ResultCollection);
-					        }
-					        else
-					        {
-						        _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
-					        }
-				        }
+                        MSGenerator.Execute(Run.ResultCollection);
+                        if (Run.GetMSLevel(scan.PrimaryScanNumber) == 1)
+                        {
+                            this._ms1PeakDetector.Execute(Run.ResultCollection);
+                        }
+                        else
+                        {
+                            var dataIsCentroided = Run.IsDataCentroided(scan.PrimaryScanNumber);
+                            if (dataIsCentroided)
+                            {
+                                _ms2PeakDetectorForCentroidedData.Execute(Run.ResultCollection);
+                            }
+                            else
+                            {
+                                _ms2PeakDetectorForProfileData.Execute(Run.ResultCollection);
+                            }
+                        }
 
-						peakExporter.WriteOutPeaks(sw, Run.ResultCollection.MSPeakResultList);
+                        peakExporter.WriteOutPeaks(sw, Run.ResultCollection.MSPeakResultList);
 
-				        if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
-				        {
-					        double percentProgress = scanCounter * 100 / (double)numTotalScans;
-					        reportProgress(percentProgress);
-				        }
+                        if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
+                        {
+                            double percentProgress = scanCounter * 100 / (double)numTotalScans;
+                            reportProgress(percentProgress);
+                        }
 
-			        }
-		        }
+                    }
+                }
 
-	        }
+            }
 
-	        Run.ResultCollection.MSPeakResultList.Clear();
+            Run.ResultCollection.MSPeakResultList.Clear();
 
         }
 
@@ -234,7 +234,7 @@ namespace DeconTools.Backend.Workflows
         {
             if (backgroundWorker != null)
             {
-				peakProgressInfo.ProgressInfoString = "Creating Peaks File ";
+                peakProgressInfo.ProgressInfoString = "Creating Peaks File ";
                 backgroundWorker.ReportProgress((int)percentProgress, peakProgressInfo);
             }
             else

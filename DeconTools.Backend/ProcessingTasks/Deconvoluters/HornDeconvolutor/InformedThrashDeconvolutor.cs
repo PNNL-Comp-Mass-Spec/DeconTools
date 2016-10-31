@@ -619,8 +619,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             double relIntensityUseForFitting = 0;
 
-	        int ionCountUsed;
-			double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
+            int ionCountUsed;
+            double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
 
             if (fitval < bestFitVal)
             {

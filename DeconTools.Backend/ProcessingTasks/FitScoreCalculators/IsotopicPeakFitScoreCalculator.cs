@@ -96,15 +96,15 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             float minCuttoffTheorPeakIntensityFraction = 0.1f;
  
             var peakFitter = new PeakLeastSquaresFitter();
-			int ionCountUsed;
+            int ionCountUsed;
 
-	        double fitval = peakFitter.GetFit(
-		        theorPeakList,
-		        observedPeakList,
-		        minCuttoffTheorPeakIntensityFraction,
-		        massErrorPPMBetweenPeaks,
-		        numberOfPeaksToLeftForPenalty,
-		        out ionCountUsed);
+            double fitval = peakFitter.GetFit(
+                theorPeakList,
+                observedPeakList,
+                minCuttoffTheorPeakIntensityFraction,
+                massErrorPPMBetweenPeaks,
+                numberOfPeaksToLeftForPenalty,
+                out ionCountUsed);
 
             if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
             return fitval;

@@ -39,7 +39,7 @@ namespace DeconTools.Backend.Data
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
         {
-			Check.Require(File.Exists(binaryResultCollectionFilename), "Can't write _isos; binaryResultFile doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(binaryResultCollectionFilename));
+            Check.Require(File.Exists(binaryResultCollectionFilename), "Can't write _isos; binaryResultFile doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(binaryResultCollectionFilename));
 
             try
             {

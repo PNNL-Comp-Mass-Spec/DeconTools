@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
-	[Serializable]
+    [Serializable]
     public class DeconToolsParameters
     {
 
@@ -40,12 +40,12 @@ namespace DeconTools.Backend.Parameters
 
         #region Public Methods
 
-		public DeconToolsParameters Clone()
-		{
-			var newParams = DeconTools.Backend.Utilities.ObjectCopier.Clone(this);
-		
-			return newParams;
-		}
+        public DeconToolsParameters Clone()
+        {
+            var newParams = DeconTools.Backend.Utilities.ObjectCopier.Clone(this);
+        
+            return newParams;
+        }
 
         public void LoadFromOldDeconToolsParameterFile(string xmlFilename)
         {
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.Parameters
 
             if (parameterBaseElement == null)
             {
-				throw new IOException("Problem reading xml file " + xmlFilename + "; Expected element 'parameters' but it was not found");
+                throw new IOException("Problem reading xml file " + xmlFilename + "; Expected element 'parameters' but it was not found");
             }
 
             ParameterFilename = xmlFilename;

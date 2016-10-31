@@ -80,9 +80,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //theorXYData.Display();
 
             var areafitter = new AreaFitter();
-			int ionCountUsed;
+            int ionCountUsed;
 
-			double fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1, out ionCountUsed);
+            double fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1, out ionCountUsed);
 
             if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
             return fitval;

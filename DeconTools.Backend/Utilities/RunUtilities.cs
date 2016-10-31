@@ -134,24 +134,24 @@ namespace DeconTools.Backend.Utilities
             return CreateAndAlignRun(filename, null);
         }
 
-		public static void GetPeaks(Run run, string expectedPeaksFile, BackgroundWorker bw = null)
+        public static void GetPeaks(Run run, string expectedPeaksFile, BackgroundWorker bw = null)
         {
-			if (bw == null)
-			{
-			    bw = new BackgroundWorker
-			    {
-			        WorkerReportsProgress = true,
-			        WorkerSupportsCancellation = true
-			    };
-			}
+            if (bw == null)
+            {
+                bw = new BackgroundWorker
+                {
+                    WorkerReportsProgress = true,
+                    WorkerSupportsCancellation = true
+                };
+            }
 
             var peakImporter = new PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-			if (!run.PrimaryLcScanNumbers.Any())
-			{
-				run.PrimaryLcScanNumbers = FindPrimaryLcScanNumbers(run.ResultCollection.MSPeakResultList);
-			}
+            if (!run.PrimaryLcScanNumbers.Any())
+            {
+                run.PrimaryLcScanNumbers = FindPrimaryLcScanNumbers(run.ResultCollection.MSPeakResultList);
+            }
         }
 
         #endregion
@@ -355,7 +355,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-		public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
+        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
         {
             var rf = new RunFactory();
             var run = rf.CreateRun(rawdataFilename);
@@ -375,21 +375,21 @@ namespace DeconTools.Backend.Utilities
 
             GetPeaks(run, sourcePeaksFile, bw);
 
-        	// Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
+            // Console.WriteLine("Peaks loaded = " + run.ResultCollection.MSPeakResultList.Count);
             return run;
         }
 
-		public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
-		{
-			var primaryLcScanNumbers = new HashSet<int>();
-			
+        public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
+        {
+            var primaryLcScanNumbers = new HashSet<int>();
+            
             foreach (var msPeakResult in msPeaks)
-			{
-				var scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
-				primaryLcScanNumbers.Add(scan);
-			}
+            {
+                var scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;
+                primaryLcScanNumbers.Add(scan);
+            }
 
-			return primaryLcScanNumbers.ToList();
-		}
+            return primaryLcScanNumbers.ToList();
+        }
     }
 }

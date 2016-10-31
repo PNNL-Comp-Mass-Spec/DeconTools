@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (lcscanSet == null || imsScanset == null) return null;
             
-			var xydata = uimfRun.GetMassSpectrum(lcscanSet, imsScanset,MinMZ,MaxMZ);
+            var xydata = uimfRun.GetMassSpectrum(lcscanSet, imsScanset,MinMZ,MaxMZ);
 
             if (xydata.Xvalues == null || xydata.Xvalues.Length == 0)
             {

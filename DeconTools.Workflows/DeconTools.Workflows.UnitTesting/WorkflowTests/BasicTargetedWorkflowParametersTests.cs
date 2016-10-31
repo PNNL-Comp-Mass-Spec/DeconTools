@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
 
-			Assert.That(File.Exists(exportedParametersFile), "Parameter file doesn't exist: " + exportedParametersFile);
+            Assert.That(File.Exists(exportedParametersFile), "Parameter file doesn't exist: " + exportedParametersFile);
 
 
         }

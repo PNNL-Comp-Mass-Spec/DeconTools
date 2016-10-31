@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.Backend.Core
     public class IqExecutor
     {
         protected BackgroundWorker _backgroundWorker;
-		protected TargetedWorkflowExecutorProgressInfo _progressInfo;
+        protected TargetedWorkflowExecutorProgressInfo _progressInfo;
 
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
@@ -28,30 +28,30 @@ namespace DeconTools.Workflows.Backend.Core
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run)
         {
-			Results = new List<IqResult>();
-			IsDataExported = true;
-			DisposeResultDetails = true;
+            Results = new List<IqResult>();
+            IsDataExported = true;
+            DisposeResultDetails = true;
             _parameters = parameters;
-	        _run = run;
-			SetupLogging();
-			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
-			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+            _run = run;
+            SetupLogging();
+            IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
+            IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
 
-		public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
-		{
-			Results = new List<IqResult>();
-			IsDataExported = true;
-			DisposeResultDetails = true;
-			_parameters = parameters;
-			_run = run;
-			SetupLogging();
-			IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
-			IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+        public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
+        {
+            Results = new List<IqResult>();
+            IsDataExported = true;
+            DisposeResultDetails = true;
+            _parameters = parameters;
+            _run = run;
+            SetupLogging();
+            IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
+            IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
 
-			_backgroundWorker = backgroundWorker;
-			_progressInfo = new TargetedWorkflowExecutorProgressInfo();
-		}
+            _backgroundWorker = backgroundWorker;
+            _progressInfo = new TargetedWorkflowExecutorProgressInfo();
+        }
 
         #endregion
 
@@ -60,44 +60,44 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IqMassAndNetAligner IqMassAndNetAligner { get; set; }
 
-	    private Run _run;
-		protected Run Run { 
-			get { return _run; }
-			set 
-			{ 
-				_run = value;
-				SetupLogging();
-			} 
-		}
+        private Run _run;
+        protected Run Run { 
+            get { return _run; }
+            set 
+            { 
+                _run = value;
+                SetupLogging();
+            } 
+        }
 
         private WorkflowExecutorBaseParameters _parameters;
         
 
         protected WorkflowExecutorBaseParameters Parameters 
-		{ 
-			get { return _parameters; }
-			set
-			{
-				_parameters = value;
-				SetupLogging();
-			}
-		}
+        { 
+            get { return _parameters; }
+            set
+            {
+                _parameters = value;
+                SetupLogging();
+            }
+        }
 
-		protected bool IsDataExported { get; set; }
+        protected bool IsDataExported { get; set; }
 
         public bool DisposeResultDetails { get; set; }
 
         public IqTargetImporter TargetImporter { get; set; }
 
-		public string ChromSourceDataFilePath { get; set; }
+        public string ChromSourceDataFilePath { get; set; }
 
-		public List<IqResult> Results { get; set; }
+        public List<IqResult> Results { get; set; }
 
-		public List<IqTarget> Targets { get; set; }
+        public List<IqTarget> Targets { get; set; }
 
-		protected IqResultExporter IqResultExporter { get; set; }
+        protected IqResultExporter IqResultExporter { get; set; }
         
-		public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
+        public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
 
         /// <summary>
         /// We need this setting when targets are being created. Indicates whether a target is cysteine-modified (reduced & alkylated, +57). 
@@ -105,25 +105,25 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public bool IqTargetsAreCysteineModified { get; set; }
 
-		protected bool ChromDataIsLoaded
-		{
-			get
-			{
-				if (Run != null)
-				{
-					return Run.ResultCollection.MSPeakResultList.Count > 0;
-				}
+        protected bool ChromDataIsLoaded
+        {
+            get
+            {
+                if (Run != null)
+                {
+                    return Run.ResultCollection.MSPeakResultList.Count > 0;
+                }
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		protected bool RunIsInitialized
-		{
-			get { throw new NotImplementedException(); }
-		}
+        protected bool RunIsInitialized
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-	
+    
         #endregion
 
         #region Public Methods
@@ -246,12 +246,12 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-	        int totalTargets = targets.Count;
-	        int targetCount = 1;
-			IqLogger.Log.Info("Total targets being processed: " + totalTargets);
-			IqLogger.Log.Info("Processing...");
+            int totalTargets = targets.Count;
+            int targetCount = 1;
+            IqLogger.Log.Info("Total targets being processed: " + totalTargets);
+            IqLogger.Log.Info("Processing...");
 
-	        foreach (var target in targets)
+            foreach (var target in targets)
             {
                 Run = target.GetRun();
 
@@ -260,7 +260,7 @@ namespace DeconTools.Workflows.Backend.Core
                     LoadChromData(Run);
                 }
 
-				ReportGeneralProgress(targetCount, totalTargets);
+                ReportGeneralProgress(targetCount, totalTargets);
 
                 target.DoWorkflow();
                 var result = target.GetResult();
@@ -276,14 +276,14 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     result.Dispose();
                 }
-	            targetCount++;
+                targetCount++;
             }
 
-			IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
+            IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
         }
 
 
-	    public virtual void LoadAndInitializeTargets()
+        public virtual void LoadAndInitializeTargets()
         {
             LoadAndInitializeTargets(Parameters.TargetsFilePath);
 
@@ -299,7 +299,7 @@ namespace DeconTools.Workflows.Backend.Core
                 TargetImporter = new BasicIqTargetImporter(targetsFilePath);
             }
 
-			IqLogger.Log.Info("Target Loading Started...");
+            IqLogger.Log.Info("Target Loading Started...");
 
             Targets = TargetImporter.Import();
 
@@ -316,7 +316,7 @@ namespace DeconTools.Workflows.Backend.Core
             _targetUtilities.CreateChildTargets(Targets, Parameters.MinMzForDefiningChargeStateTargets,
                 Parameters.MaxMzForDefiningChargeStateTargets, Parameters.MaxNumberOfChargeStateTargetsToCreate, IqTargetsAreCysteineModified);
 
-			IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
+            IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
         }
 
 
@@ -326,9 +326,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
-	        var exportedResults = orderedResults.Where(orderedResult => orderedResult.IsExported).ToList();
+            var exportedResults = orderedResults.Where(orderedResult => orderedResult.IsExported).ToList();
 
-	        if (IqResultExporter == null)
+            if (IqResultExporter == null)
             {
                 IqResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
@@ -383,20 +383,20 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-		protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets)
-		{
-			double currentProgress = (currentTarget / (double)totalTargets);
+        protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets)
+        {
+            double currentProgress = (currentTarget / (double)totalTargets);
 
-			if (currentTarget % 50 == 0)
-			{
-				IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
-			}
+            if (currentTarget % 50 == 0)
+            {
+                IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
+            }
 
-			if (_backgroundWorker != null)
-			{
-				_backgroundWorker.ReportProgress(Convert.ToInt16(currentProgress * 100));
-			}
-		}
+            if (_backgroundWorker != null)
+            {
+                _backgroundWorker.ReportProgress(Convert.ToInt16(currentProgress * 100));
+            }
+        }
 
 
         private void SetupResultsFolder()
@@ -417,10 +417,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-		#region Private Methods
+        #region Private Methods
 
 
-		private string CreatePeaksForChromSourceData()
+        private string CreatePeaksForChromSourceData()
         {
             var parameters = new PeakDetectAndExportWorkflowParameters();
 
@@ -429,8 +429,8 @@ namespace DeconTools.Workflows.Backend.Core
             parameters.SigNoiseThreshold = Parameters.ChromGenSourceDataSigNoise;
             parameters.ProcessMSMS = Parameters.ChromGenSourceDataProcessMsMs;
             parameters.IsDataThresholded = Parameters.ChromGenSourceDataIsThresholded;
-			parameters.LCScanMin = this.Run.GetMinPossibleLCScanNum();
-			parameters.LCScanMax = this.Run.GetMaxPossibleLCScanNum();
+            parameters.LCScanMin = this.Run.GetMinPossibleLCScanNum();
+            parameters.LCScanMax = this.Run.GetMaxPossibleLCScanNum();
 
             var peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
@@ -470,27 +470,27 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
                 Console.WriteLine("Creating _Peaks.txt file for " + this.Run.DatasetName + " at " + this.Run.DataSetPath);
-				IqLogger.Log.Info("Creating _Peaks.txt");
+                IqLogger.Log.Info("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }
             else
             {
-				IqLogger.Log.Info("Using Existing _Peaks.txt");
+                IqLogger.Log.Info("Using Existing _Peaks.txt");
             }
 
-			IqLogger.Log.Info("Peak Loading Started...");
+            IqLogger.Log.Info("Peak Loading Started...");
 
             PeakImporterFromText peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
             peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
 
-			IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
+            IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
         }
 
 
-		
-		private void SetupLogging()
-		{
-		    string loggingFolder;
+        
+        private void SetupLogging()
+        {
+            string loggingFolder;
             if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
             {
                 loggingFolder = GetDefaultOutputFolder();
@@ -504,9 +504,9 @@ namespace DeconTools.Workflows.Backend.Core
             if (!Directory.Exists(loggingFolder)) Directory.CreateDirectory(loggingFolder);
 
 
-			IqLogger.LogDirectory = loggingFolder;
-			IqLogger.InitializeIqLog(_run.DatasetName);
-		}
+            IqLogger.LogDirectory = loggingFolder;
+            IqLogger.InitializeIqLog(_run.DatasetName);
+        }
 
         private string GetDefaultOutputFolder()
         {

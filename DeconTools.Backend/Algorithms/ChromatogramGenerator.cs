@@ -61,11 +61,11 @@ namespace DeconTools.Backend.Algorithms
         /// <param name="toleranceUnit"></param>
         /// <returns></returns>
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
-		{
-			var defaultChromID = 0;
+        {
+            var defaultChromID = 0;
 
-			return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
-		}
+            return GenerateChromatogram(msPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
+        }
 
         /// <summary>
         /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
@@ -83,80 +83,80 @@ namespace DeconTools.Backend.Algorithms
         {
             var defaultChromID = 0;
 
-			return GenerateChromatogram(groupedMsPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
+            return GenerateChromatogram(groupedMsPeakList, minScan, maxScan, targetMZList, tolerance, defaultChromID, toleranceUnit);
         }
 
         //TODO:  make a ChromatogramObject that will help handle my MSPeakResults, etc.
-		public XYData GenerateChromatogram(Dictionary<int, List<MSPeakResult>> groupedMsPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
-		{
-			Check.Require(groupedMsPeakList != null && groupedMsPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+        public XYData GenerateChromatogram(Dictionary<int, List<MSPeakResult>> groupedMsPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
+        {
+            Check.Require(groupedMsPeakList != null && groupedMsPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
 
-			var scanTolerance = 5;     // TODO:   keep an eye on this
+            var scanTolerance = 5;     // TODO:   keep an eye on this
 
-		    // PNNLOmics.Generic.AnonymousComparer<MSPeakResult> comparer = new PNNLOmics.Generic.AnonymousComparer<MSPeakResult>((x, y) => x.MSPeak.XValue.CompareTo(y.MSPeak.XValue));
-		    var comparer = new MSPeakResultComparer();
+            // PNNLOmics.Generic.AnonymousComparer<MSPeakResult> comparer = new PNNLOmics.Generic.AnonymousComparer<MSPeakResult>((x, y) => x.MSPeak.XValue.CompareTo(y.MSPeak.XValue));
+            var comparer = new MSPeakResultComparer();
 
-			var tempPeakList = new List<MSPeakResult>();
+            var tempPeakList = new List<MSPeakResult>();
 
-			for (var i = minScan - scanTolerance; i < maxScan + scanTolerance; i++)
-			{
-			    List<MSPeakResult> msPeakResultList;
-			    if (groupedMsPeakList == null || !groupedMsPeakList.TryGetValue(i, out msPeakResultList))
-			    {
-			        continue;
-			    }
+            for (var i = minScan - scanTolerance; i < maxScan + scanTolerance; i++)
+            {
+                List<MSPeakResult> msPeakResultList;
+                if (groupedMsPeakList == null || !groupedMsPeakList.TryGetValue(i, out msPeakResultList))
+                {
+                    continue;
+                }
 
-			    foreach (var targetMZ in targetMZList)
-			    {
-			        double lowerMZ;
-			        double upperMZ;
+                foreach (var targetMZ in targetMZList)
+                {
+                    double lowerMZ;
+                    double upperMZ;
 
-			        if (toleranceUnit == Globals.ToleranceUnit.PPM)
-			        {
-			            lowerMZ = targetMZ - tolerance*targetMZ/1e6;
-			            upperMZ = targetMZ + tolerance*targetMZ/1e6;
-			        }
-			        else if (toleranceUnit == Globals.ToleranceUnit.MZ)
-			        {
-			            lowerMZ = targetMZ - tolerance;
-			            upperMZ = targetMZ + tolerance;
-			        }
-			        else
-			        {
-			            throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the " + toleranceUnit +
-			                                                  " unit isn't supported");
-			        }
+                    if (toleranceUnit == Globals.ToleranceUnit.PPM)
+                    {
+                        lowerMZ = targetMZ - tolerance*targetMZ/1e6;
+                        upperMZ = targetMZ + tolerance*targetMZ/1e6;
+                    }
+                    else if (toleranceUnit == Globals.ToleranceUnit.MZ)
+                    {
+                        lowerMZ = targetMZ - tolerance;
+                        upperMZ = targetMZ + tolerance;
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the " + toleranceUnit +
+                                                              " unit isn't supported");
+                    }
 
-			        var lowMsPeak = new MSPeak {XValue = lowerMZ};
-			        var lowMsPeakResult = new MSPeakResult {MSPeak = lowMsPeak};
+                    var lowMsPeak = new MSPeak {XValue = lowerMZ};
+                    var lowMsPeakResult = new MSPeakResult {MSPeak = lowMsPeak};
 
-			        var binarySearchResult = msPeakResultList.BinarySearch(lowMsPeakResult, comparer);
-			        var nearestSearchResult = binarySearchResult >= 0 ? binarySearchResult : ~binarySearchResult;
+                    var binarySearchResult = msPeakResultList.BinarySearch(lowMsPeakResult, comparer);
+                    var nearestSearchResult = binarySearchResult >= 0 ? binarySearchResult : ~binarySearchResult;
 
                     for (var j = nearestSearchResult; j < msPeakResultList.Count; j++)
-			        {
-			            var msPeakResult = msPeakResultList[j];
-			            if(msPeakResult.MSPeak.XValue <= upperMZ)
-			            {
-			                tempPeakList.Add(msPeakResult);
-			            }
-			        }
-			    }
-			}
+                    {
+                        var msPeakResult = msPeakResultList[j];
+                        if(msPeakResult.MSPeak.XValue <= upperMZ)
+                        {
+                            tempPeakList.Add(msPeakResult);
+                        }
+                    }
+                }
+            }
 
-		    XYData chromData = null;
+            XYData chromData = null;
 
-			if (!tempPeakList.Any())
-			{
-				//TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
-			}
-			else
-			{
-				chromData = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
-			}
+            if (!tempPeakList.Any())
+            {
+                //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
+            }
+            else
+            {
+                chromData = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+            }
 
-			return chromData;
-		}
+            return chromData;
+        }
 
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
@@ -189,20 +189,20 @@ namespace DeconTools.Backend.Algorithms
                     throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the "  + toleranceUnit +" unit isn't supported");
                 }
 
-				var tempPeakList = new List<MSPeakResult>();
+                var tempPeakList = new List<MSPeakResult>();
 
-				for (var i = indexOfLowerScan; i <= indexOfUpperScan; i++)
-				{
-					var msPeakResult = msPeakList[i];
-					var xValue = msPeakResult.MSPeak.XValue;
+                for (var i = indexOfLowerScan; i <= indexOfUpperScan; i++)
+                {
+                    var msPeakResult = msPeakList[i];
+                    var xValue = msPeakResult.MSPeak.XValue;
 
-					if (xValue >= lowerMZ && xValue <= upperMZ)
-					{
-						tempPeakList.Add(msPeakResult);
-					}
-				}
+                    if (xValue >= lowerMZ && xValue <= upperMZ)
+                    {
+                        tempPeakList.Add(msPeakResult);
+                    }
+                }
 
-            	if (!tempPeakList.Any())
+                if (!tempPeakList.Any())
                 {
                     //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
                 }
@@ -353,7 +353,7 @@ namespace DeconTools.Backend.Algorithms
 
         private XYData getChromDataAndFillInZerosAndAssignChromID(List<MSPeakResult> filteredPeakList, int chromID)
         {
-			var filteredPeakListCount = filteredPeakList.Count;
+            var filteredPeakListCount = filteredPeakList.Count;
 
             var leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
             var rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
@@ -369,40 +369,40 @@ namespace DeconTools.Backend.Algorithms
             if (peakListMinScan < 0) peakListMinScan = 0;
 
             //populate dictionary with zero intensities.
-			var xyValues = new Dictionary<int, double>(peakListMaxScan - peakListMinScan + 1);
+            var xyValues = new Dictionary<int, double>(peakListMaxScan - peakListMinScan + 1);
             for (var i = peakListMinScan; i <= peakListMaxScan; i++)
             {
-				xyValues.Add(i, 0);
+                xyValues.Add(i, 0);
             }
 
-			//iterate over the peaklist, assign chromID,  and extract intensity values
-			for (var i = 0; i < filteredPeakListCount; i++)
-			{
-				var peakResult = filteredPeakList[i];
+            //iterate over the peaklist, assign chromID,  and extract intensity values
+            for (var i = 0; i < filteredPeakListCount; i++)
+            {
+                var peakResult = filteredPeakList[i];
 
-				//NOTE:   we assign the chromID here. 
-				peakResult.ChromID = chromID;
+                //NOTE:   we assign the chromID here. 
+                peakResult.ChromID = chromID;
 
-				double intensity = peakResult.MSPeak.Height;
-				var scanNumber = peakResult.Scan_num;
+                double intensity = peakResult.MSPeak.Height;
+                var scanNumber = peakResult.Scan_num;
 
-				//because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
+                //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
 
-				if (!xyValues.ContainsKey(scanNumber))
-				{
-					var errorString = "Unexpected error in chromatogram generator!! Scan= " + scanNumber +
-										"; num filtered peaks = " + filteredPeakListCount;
+                if (!xyValues.ContainsKey(scanNumber))
+                {
+                    var errorString = "Unexpected error in chromatogram generator!! Scan= " + scanNumber +
+                                        "; num filtered peaks = " + filteredPeakListCount;
 
-					Console.WriteLine(errorString);
+                    Console.WriteLine(errorString);
 
-					throw new InvalidProgramException(errorString);
-				}
+                    throw new InvalidProgramException(errorString);
+                }
 
-				if (intensity > xyValues[scanNumber])
-				{
-					xyValues[scanNumber] = intensity;
-				}
-			}
+                if (intensity > xyValues[scanNumber])
+                {
+                    xyValues[scanNumber] = intensity;
+                }
+            }
 
             var outputXYData = new XYData
             {
@@ -465,13 +465,13 @@ namespace DeconTools.Backend.Algorithms
             if (leftIndex < rightIndex)
             {
                 var middle = (leftIndex + rightIndex) / 2;
-            	var scanNumber = peakList[middle].Scan_num;
+                var scanNumber = peakList[middle].Scan_num;
 
-				if (Math.Abs(targetScan - scanNumber) <= scanTolerance)
+                if (Math.Abs(targetScan - scanNumber) <= scanTolerance)
                 {
                     return middle;
                 }
-				else if (targetScan < scanNumber)
+                else if (targetScan < scanNumber)
                 {
                     return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
                 }

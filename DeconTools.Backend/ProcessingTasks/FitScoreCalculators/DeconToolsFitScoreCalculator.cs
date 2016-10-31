@@ -63,8 +63,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 //XYData theorXYData = distributionCreator.Data;
 
                 AreaFitter areafitter = new AreaFitter();
-				int ionCountUsed;
-				double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
+                int ionCountUsed;
+                double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
 
                 if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
 

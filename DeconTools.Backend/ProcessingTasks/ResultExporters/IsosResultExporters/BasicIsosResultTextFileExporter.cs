@@ -63,9 +63,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
             sb.Append(Delimiter);
             sb.Append(DblToString(result.InterferenceScore, 5));
-			// Uncomment to write out the fit_count_basis
-			//sb.Append(Delimiter);
-			//sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
+            // Uncomment to write out the fit_count_basis
+            //sb.Append(Delimiter);
+            //sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
             return sb.ToString();
         }
         protected override string buildHeaderLine()
@@ -98,9 +98,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             sb.Append("flag");
             sb.Append(Delimiter);
             sb.Append("interference_score");
-			// Uncomment to write out the fit_count_basis
-			//sb.Append(Delimiter);
-			//sb.Append("fit_basis_count");
+            // Uncomment to write out the fit_count_basis
+            //sb.Append(Delimiter);
+            //sb.Append("fit_basis_count");
             sb.Append(Environment.NewLine);
             return sb.ToString();
         }

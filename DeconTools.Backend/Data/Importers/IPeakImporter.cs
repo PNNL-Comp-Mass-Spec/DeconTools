@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Data
     {
         protected int numRecords;
         protected BackgroundWorker backgroundWorker;
-	    protected PeakProgressInfo peakProgressInfo;
+        protected PeakProgressInfo peakProgressInfo;
 
         #region Constructors
         #endregion
@@ -36,7 +36,7 @@ namespace DeconTools.Backend.Data
 
                 if (this.backgroundWorker != null)
                 {
-	                peakProgressInfo.ProgressInfoString = "Loading Peaks ";
+                    peakProgressInfo.ProgressInfoString = "Loading Peaks ";
                     backgroundWorker.ReportProgress(percentProgress);
                 }
                 else

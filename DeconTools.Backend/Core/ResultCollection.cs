@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Core
             this.ResultList = new List<IsosResult>();
             this.MassTagResultList = new Dictionary<TargetBase, TargetedResultBase>();
             this.scanResultList = new List<ScanResult>();
-			this.msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
+            this.msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
             this.MSPeakResultList = new List<MSPeakResult>();
             this.m_IsosResultBin = new List<IsosResult>(10);
             this.logMessageList = new List<string>();
@@ -39,8 +39,8 @@ namespace DeconTools.Backend.Core
             get { return mSPeakResultList; }
             set
             {
-            	mSPeakResultList = value;
-            	msPeakResultsGroupedAndMzOrdered.Clear();
+                mSPeakResultList = value;
+                msPeakResultsGroupedAndMzOrdered.Clear();
             }
         }
 
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.Core
 
         public int PeakCounter { get; set; }
 
-    	private Dictionary<int, List<MSPeakResult>> msPeakResultsGroupedAndMzOrdered;
+        private Dictionary<int, List<MSPeakResult>> msPeakResultsGroupedAndMzOrdered;
         #endregion
 
         #region Public Methods
@@ -101,26 +101,26 @@ namespace DeconTools.Backend.Core
             return this.scanResultList[scanResultList.Count - 1];
         }
 
-		public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
-		{
-			if(msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
-			{
-				msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
+        public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
+        {
+            if(msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
+            {
+                msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
 
-				if(mSPeakResultList != null)
-				{
-					// Group by scan number
-					foreach (var grouping in mSPeakResultList.GroupBy(x => x.Scan_num))
-					{
-						// Order by m/z
-						List<MSPeakResult> msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
-						msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, msPeakResultList);
-					}
-				}
-			}
+                if(mSPeakResultList != null)
+                {
+                    // Group by scan number
+                    foreach (var grouping in mSPeakResultList.GroupBy(x => x.Scan_num))
+                    {
+                        // Order by m/z
+                        List<MSPeakResult> msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
+                        msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, msPeakResultList);
+                    }
+                }
+            }
 
-			return msPeakResultsGroupedAndMzOrdered;
-		}
+            return msPeakResultsGroupedAndMzOrdered;
+        }
 
         public int getTotalIsotopicProfiles()
         {
@@ -175,8 +175,8 @@ namespace DeconTools.Backend.Core
             this.MSPeakResultList.Clear();
             this.ResultList.Clear();
             this.ScanResultList.Clear();
-			this.MassTagResultList.Clear();
-			this.msPeakResultsGroupedAndMzOrdered.Clear();
+            this.MassTagResultList.Clear();
+            this.msPeakResultsGroupedAndMzOrdered.Clear();
         }
 
         public TargetedResultBase CreateMassTagResult(TargetBase massTag)
@@ -197,9 +197,9 @@ namespace DeconTools.Backend.Core
                 case Globals.ResultType.SIPPER_TARGETED_RESULT:
                     result = new SipperLcmsTargetedResult(massTag);
                     break;
-				case Globals.ResultType.TOPDOWN_TARGETED_RESULT:
-					result = new TopDownTargetedResult(massTag);
-            		break;
+                case Globals.ResultType.TOPDOWN_TARGETED_RESULT:
+                    result = new TopDownTargetedResult(massTag);
+                    break;
                 case Globals.ResultType.DEUTERATED_TARGETED_RESULT:
                     result = new DeuteratedTargetedResultObject(massTag);
                     break;

@@ -178,8 +178,8 @@ namespace DeconTools.Backend.Runs
                 //adjust scan number if needed
                 precursor.PrecursorScan = scanNum;
 
-				// TODO: Only CID possible in Aglent files?
-				precursor.FragmentationType = FragmentionType.CID;
+                // TODO: Only CID possible in Aglent files?
+                precursor.FragmentationType = FragmentionType.CID;
             }
             else if (precursorMassCount > 1)
             {
@@ -195,7 +195,7 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorScan = scanNum;
             }
 
-			precursor.IonizationMode = m_spec.IonPolarity == IonPolarity.Negative ? IonizationMode.Negative : IonizationMode.Positive;
+            precursor.IonizationMode = m_spec.IonPolarity == IonPolarity.Negative ? IonizationMode.Negative : IonizationMode.Positive;
 
             return precursor;
         }

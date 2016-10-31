@@ -47,25 +47,25 @@ namespace DeconTools.Backend.Utilities
             return GetEmpiricalFormulaFromElementTable(baseElementTable);
         }
         public static string SubtractFormula(string baseFormula, string formulaToBeSubtracted)
-		{
-			var baseElementTable = ParseDoubleEmpiricalFormulaString(baseFormula);
-			var subtractedTable = ParseDoubleEmpiricalFormulaString(formulaToBeSubtracted);
+        {
+            var baseElementTable = ParseDoubleEmpiricalFormulaString(baseFormula);
+            var subtractedTable = ParseDoubleEmpiricalFormulaString(formulaToBeSubtracted);
 
-			foreach (var item in subtractedTable)
-			{
-				if (baseElementTable.ContainsKey(item.Key))
-				{
-					baseElementTable[item.Key] = baseElementTable[item.Key] - item.Value;
-				}
-				else
-				{
-					baseElementTable.Add(item.Key, item.Value);
-				}
+            foreach (var item in subtractedTable)
+            {
+                if (baseElementTable.ContainsKey(item.Key))
+                {
+                    baseElementTable[item.Key] = baseElementTable[item.Key] - item.Value;
+                }
+                else
+                {
+                    baseElementTable.Add(item.Key, item.Value);
+                }
 
-			}
+            }
 
-			return GetEmpiricalFormulaFromElementTable(baseElementTable);
-		}
+            return GetEmpiricalFormulaFromElementTable(baseElementTable);
+        }
 
         public static Dictionary<string, int> ParseEmpiricalFormulaString(string empiricalFormula)
         {
@@ -80,14 +80,14 @@ namespace DeconTools.Backend.Utilities
             return parsedFormula;
         }
         public static Dictionary<string, double> ParseDoubleEmpiricalFormulaString (string empiricalFormula)
-		{
-			var parsedFormula = new Dictionary<string, double>();
+        {
+            var parsedFormula = new Dictionary<string, double>();
             if (string.IsNullOrEmpty(empiricalFormula)) return parsedFormula;
 
-		    bool formulaIsUnimodFormat = empiricalFormula.Contains("(");
+            bool formulaIsUnimodFormat = empiricalFormula.Contains("(");
 
-		    string regexString;
-		    if (formulaIsUnimodFormat)
+            string regexString;
+            if (formulaIsUnimodFormat)
             {
                
                     string[] elementArray = empiricalFormula.Split(' ');
@@ -147,35 +147,35 @@ namespace DeconTools.Backend.Utilities
                 }
                 return parsedFormula;
             }
-		    regexString = GetRegexStringForNonUnimodFormat();
-		    var re = new Regex(regexString);    
-		    var mc = re.Matches(empiricalFormula);
+            regexString = GetRegexStringForNonUnimodFormat();
+            var re = new Regex(regexString);    
+            var mc = re.Matches(empiricalFormula);
 
 
-		    foreach (Match item in mc)
-		    {
-		        double numAtoms;
-		        string elementSymbol = item.Groups[1].Value;
+            foreach (Match item in mc)
+            {
+                double numAtoms;
+                string elementSymbol = item.Groups[1].Value;
 
-		        string elementCountString = item.Groups[2].Value;
+                string elementCountString = item.Groups[2].Value;
 
-		        if (elementCountString.Length > 0)
-		        {
-		            numAtoms = Double.Parse(elementCountString);
-		        }
-		        else
-		        {
-		            numAtoms = 1;
-		        }
+                if (elementCountString.Length > 0)
+                {
+                    numAtoms = Double.Parse(elementCountString);
+                }
+                else
+                {
+                    numAtoms = 1;
+                }
 
-		        bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-		        Check.Require(!formulaContainsDuplicateElements,
-		                      "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
+                bool formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
+                Check.Require(!formulaContainsDuplicateElements,
+                              "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
-		        parsedFormula.Add(elementSymbol, numAtoms);
-		    }
-		    return parsedFormula;
-		}
+                parsedFormula.Add(elementSymbol, numAtoms);
+            }
+            return parsedFormula;
+        }
         
         public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
         {
@@ -215,17 +215,17 @@ namespace DeconTools.Backend.Utilities
                 {
                     sb.Append(item.Key);
 
-	                double lowerLimitForRounding = 1e-4;
+                    double lowerLimitForRounding = 1e-4;
                     if (item.Value < lowerLimitForRounding)
                     {
-	                    string roundedValueString = item.Value.ToString("#.#######");
-	                    sb.Append(roundedValueString);
+                        string roundedValueString = item.Value.ToString("#.#######");
+                        sb.Append(roundedValueString);
                     }
                     else
                     {
-						sb.Append(item.Value); 
+                        sb.Append(item.Value); 
                     }
-					
+                    
                 }
 
             }

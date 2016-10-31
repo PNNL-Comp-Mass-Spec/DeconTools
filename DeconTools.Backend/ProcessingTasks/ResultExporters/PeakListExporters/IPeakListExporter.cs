@@ -12,9 +12,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         public abstract int TriggerToWriteValue { get; set; }
         public abstract int[] MSLevelsToExport { get; set; }
 
-		public abstract void WriteOutPeaks(List<MSPeakResult> peakList);
-		public abstract void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList);
-		
+        public abstract void WriteOutPeaks(List<MSPeakResult> peakList);
+        public abstract void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList);
+        
         public override void Execute(ResultCollection resultList)
         {
             if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0) return;

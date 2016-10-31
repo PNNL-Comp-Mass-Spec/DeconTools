@@ -82,13 +82,13 @@ namespace DeconTools.Backend.Core
 
         public string ToStringWithDetails()
         {
-			StringBuilder data = new StringBuilder();
+            StringBuilder data = new StringBuilder();
             var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
             foreach (var validItem in validItems)
             {
-	            data.Append(validItem + " ");
+                data.Append(validItem + " ");
             }
-	        return data.ToString();
+            return data.ToString();
         }
 
         #endregion

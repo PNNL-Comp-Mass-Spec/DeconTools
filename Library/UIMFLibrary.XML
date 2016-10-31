@@ -1232,6 +1232,22 @@
             <param name="paramName"></param>
             <returns>Specific GlobalParamKeyType enum, or GlobalParamKeyType.Unknown</returns>
         </member>
+        <member name="T:UIMFLibrary.IntensityEncoderUtilities">
+            <summary>
+            Utilities for encoding intensity using run length encoding
+            </summary>
+        </member>
+        <member name="M:UIMFLibrary.IntensityEncoderUtilities.Encode(System.Int16[],System.Byte[]@,System.Double@,System.Double@,System.Int32@,System.Int32@)">
+            <summary>
+            Encode the list of intensity values using run length encoding
+            </summary>
+            <param name="intensities">Intensities</param>
+            <param name="spectra">Encoded intensities, as bytes</param>
+            <param name="tic">Sum of all intensities</param>
+            <param name="bpi">Largest intensity</param>
+            <param name="indexOfMaxIntensity">Data index for the BPI</param>
+            <param name="nonZeroCount">Number of non-zero values in intensities</param>
+        </member>
         <member name="M:UIMFLibrary.IntensityBinConverterInt32.Encode(System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.Int32,System.Int32}},System.Int32,System.Byte[]@,System.Double@,System.Double@,System.Int32@)">
             <summary>
             Convert a list of intensity information by bin to a zero length encoded byte array
@@ -2006,16 +2022,6 @@
             Calibrate TOF to m/z according to formula: mass = (k * (t-t0))^2
             </remarks>
         </member>
-        <member name="F:UIMFLibrary.MzCalibrator.K">
-            <summary>
-            k
-            </summary>
-        </member>
-        <member name="F:UIMFLibrary.MzCalibrator.T0">
-            <summary>
-            t0
-            </summary>
-        </member>
         <member name="M:UIMFLibrary.MzCalibrator.#ctor(System.Double,System.Double,System.Double)">
             <summary>
             Initializes a new instance of the <see cref="T:UIMFLibrary.MzCalibrator"/> class.
@@ -2035,15 +2041,15 @@
         </member>
         <member name="P:UIMFLibrary.MzCalibrator.Description">
             <summary>
-            Gets the description.
+            Returns the calibration equation
             </summary>
         </member>
-        <member name="P:UIMFLibrary.MzCalibrator.k">
+        <member name="P:UIMFLibrary.MzCalibrator.K">
             <summary>
             Gets or sets the k.
             </summary>
         </member>
-        <member name="P:UIMFLibrary.MzCalibrator.t0">
+        <member name="P:UIMFLibrary.MzCalibrator.T0">
             <summary>
             Gets or sets the t 0.
             </summary>
@@ -2097,6 +2103,56 @@
             </summary>
             <param name="TOF"></param>
             <returns></returns>
+        </member>
+        <member name="T:UIMFLibrary.MzCalibratorFtms">
+            <summary>
+            Extends MzCalibrator to add support for a scaling factor
+            </summary>
+        </member>
+        <member name="M:UIMFLibrary.MzCalibratorFtms.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:UIMFLibrary.MzCalibratorFtms"/> class.
+            </summary>
+            <param name="k">
+            k
+            </param>
+            <param name="t0">
+            t0
+            </param>
+            <param name="binWidthNs">
+            bin width, in nanoseconds
+            </param>
+            <remarks>
+            mass = (k * (t-t0))^2
+            </remarks>
+        </member>
+        <member name="M:UIMFLibrary.MzCalibratorFtms.MZtoTOF(System.Double,System.Double)">
+            <summary>
+            Convert m/z to TOF value
+            </summary>
+            <param name="mz">
+            mz
+            </param>
+            <param name="factor">
+            The scaling factor
+            </param>
+            <returns>
+            TOF value<see cref="T:System.Int32"/>.
+            </returns>
+        </member>
+        <member name="M:UIMFLibrary.MzCalibratorFtms.ToftoMz(System.Double,System.Double)">
+            <summary>
+            Convert TOF value to m/z
+            </summary>
+            <param name="tofValue">
+            The tof value
+            </param>
+            <param name="factor">
+            The scaling factor
+            </param>
+            <returns>
+            m/z<see cref="T:System.Double"/>.
+            </returns>
         </member>
         <member name="T:UIMFLibrary.ReaderWriterExtensions">
             <summary>

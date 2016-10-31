@@ -203,26 +203,26 @@ namespace DeconTools.Backend.Utilities
             return filteredMSPeaklist;
         }
 
-		public static List<double> GetTopNMZValues(List<MSPeak> msPeaklist, int topNPeaks)
-		{
-			var sortedPeakList = msPeaklist.OrderByDescending(x => x.Height);
-			List<double> mzList = new List<double>();
+        public static List<double> GetTopNMZValues(List<MSPeak> msPeaklist, int topNPeaks)
+        {
+            var sortedPeakList = msPeaklist.OrderByDescending(x => x.Height);
+            List<double> mzList = new List<double>();
 
-			int count = 0;
-			foreach (var peak in sortedPeakList)
-			{
-				if (count < topNPeaks)
-				{
-					mzList.Add(peak.XValue);
-				}
-				else
-				{
-					break;
-				}
-				count++;
-			}
+            int count = 0;
+            foreach (var peak in sortedPeakList)
+            {
+                if (count < topNPeaks)
+                {
+                    mzList.Add(peak.XValue);
+                }
+                else
+                {
+                    break;
+                }
+                count++;
+            }
 
-			return mzList;
-		}
+            return mzList;
+        }
     }
 }

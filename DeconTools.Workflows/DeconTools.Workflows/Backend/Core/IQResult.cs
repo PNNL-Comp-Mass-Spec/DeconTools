@@ -21,19 +21,19 @@ namespace DeconTools.Workflows.Backend.Core
 
             Target = target;
             IqResultDetail = new IqResultDetail();
-			CorrelationData = new ChromCorrelationData();
-	        FitScore = 1;
-	        InterferenceScore = 1;
-	        IsExported = true;
+            CorrelationData = new ChromCorrelationData();
+            FitScore = 1;
+            InterferenceScore = 1;
+            IsExported = true;
         }
 
         #endregion
 
         #region Properties
 
-		public IqResult ParentResult { get; set; }
+        public IqResult ParentResult { get; set; }
 
-		public IqTarget Target { get; set; }
+        public IqTarget Target { get; set; }
 
         public double MonoMassObs { get; set; }
 
@@ -68,19 +68,19 @@ namespace DeconTools.Workflows.Backend.Core
 
         public IqResultDetail IqResultDetail { get; set; }
 
-		public bool IsIsotopicProfileFlagged { get; set; }
+        public bool IsIsotopicProfileFlagged { get; set; }
 
-		public bool IsotopicProfileFound { get; set; }
+        public bool IsotopicProfileFound { get; set; }
 
-		public ChromCorrelationData CorrelationData { get; set; }
+        public ChromCorrelationData CorrelationData { get; set; }
 
-		public double MassErrorBefore { get; set; }
+        public double MassErrorBefore { get; set; }
 
         public double MassErrorAfter { get; set; }
 
-		public double NETError { get; set; }
+        public double NETError { get; set; }
 
-		public bool IsExported { get; set; }
+        public bool IsExported { get; set; }
 
         #endregion
 
@@ -136,15 +136,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-		public void RemoveResult(IqResult result)
-		{
-			foreach (var childResult in result._childResults)
-			{
-				childResult.ParentResult = result.ParentResult;
-				result.ParentResult._childResults.Add(childResult);
-			}
-			result.ParentResult._childResults.Remove(result);
-		}
+        public void RemoveResult(IqResult result)
+        {
+            foreach (var childResult in result._childResults)
+            {
+                childResult.ParentResult = result.ParentResult;
+                result.ParentResult._childResults.Add(childResult);
+            }
+            result.ParentResult._childResults.Remove(result);
+        }
 
         public virtual void Dispose()
         {

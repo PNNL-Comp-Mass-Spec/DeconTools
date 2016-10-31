@@ -26,9 +26,9 @@ namespace DeconTools.Workflows.Backend
             BasicTargetedWorkflowExecutor1,
             LcmsFeatureTargetedWorkflowExecutor1,
             SipperWorkflowExecutor1,
-			TopDownTargeted1,
-			TopDownTargetedWorkflowExecutor1,
-			UIMFTargetedMSMSWorkflowCollapseIMS,
+            TopDownTargeted1,
+            TopDownTargetedWorkflowExecutor1,
+            UIMFTargetedMSMSWorkflowCollapseIMS,
             IQMillionWorkflow,
             Deuterated
         }

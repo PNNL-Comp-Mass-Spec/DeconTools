@@ -6,10 +6,10 @@ namespace DeconTools.Workflows.Backend.FileIO
     public class BasicIqTargetImporter : IqTargetImporter
     {
 
-		/// <summary>
-		/// Constructo
-		/// </summary>
-		/// <param name="filename">Name or full path to the file to import</param>
+        /// <summary>
+        /// Constructo
+        /// </summary>
+        /// <param name="filename">Name or full path to the file to import</param>
         public BasicIqTargetImporter(string filename)
         {
             Filename = filename;

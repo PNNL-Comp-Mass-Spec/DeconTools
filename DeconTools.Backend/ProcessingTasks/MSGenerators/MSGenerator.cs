@@ -21,21 +21,21 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         public float GetTIC(XYData xydata, double minMZ, double maxMZ)
         {
-			if (xydata == null) return -1;
+            if (xydata == null) return -1;
 
-        	double[] xValues = xydata.Xvalues;
-        	double[] yValues = xydata.Yvalues;
+            double[] xValues = xydata.Xvalues;
+            double[] yValues = xydata.Yvalues;
 
-			if (xValues == null || yValues == null) return -1;
+            if (xValues == null || yValues == null) return -1;
 
             double summedIntensities = 0;
-			for (int i = 0; i < yValues.Length; i++)
-			{
-				double xValue = xValues[i];
+            for (int i = 0; i < yValues.Length; i++)
+            {
+                double xValue = xValues[i];
 
-				if (xValue > minMZ && xValue < maxMZ)
+                if (xValue > minMZ && xValue < maxMZ)
                 {
-					summedIntensities += yValues[i];
+                    summedIntensities += yValues[i];
                 }
             }
 

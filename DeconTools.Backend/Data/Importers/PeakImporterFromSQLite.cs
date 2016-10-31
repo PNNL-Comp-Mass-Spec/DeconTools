@@ -30,7 +30,7 @@ namespace DeconTools.Backend.Data
 
             if (!File.Exists(sqliteFilename))
             {
-				throw new System.IO.IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqliteFilename));
+                throw new System.IO.IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqliteFilename));
             }
             this.sqliteFilename = sqliteFilename;
         }

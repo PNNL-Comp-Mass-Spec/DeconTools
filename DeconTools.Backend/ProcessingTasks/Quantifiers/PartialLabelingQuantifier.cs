@@ -145,9 +145,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     //}
 
 
-					const int numPeaksToTheLeftForScoring = 0;
-	                int ionCountUsed;
-					fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, obsPeakListForFitter, 0, 30, numPeaksToTheLeftForScoring, out ionCountUsed);
+                    const int numPeaksToTheLeftForScoring = 0;
+                    int ionCountUsed;
+                    fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, obsPeakListForFitter, 0, 30, numPeaksToTheLeftForScoring, out ionCountUsed);
 
                     //if (double.IsNaN(fitScore) || fitScore > 1) fitScore = 1;
                 }

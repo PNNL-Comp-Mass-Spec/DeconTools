@@ -24,27 +24,27 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-		/// <summary>
-		/// Returns the absolute path to the file or folder
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns>If the path is empty or invalid, then will return a message describing the problem</returns>
-		public static string GetFullPathSafe(string path) 
-		{
-			if (String.IsNullOrWhiteSpace(path))
-				return "Error: Empty Path";
+        /// <summary>
+        /// Returns the absolute path to the file or folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>If the path is empty or invalid, then will return a message describing the problem</returns>
+        public static string GetFullPathSafe(string path) 
+        {
+            if (String.IsNullOrWhiteSpace(path))
+                return "Error: Empty Path";
 
-			try
-			{
-				return System.IO.Path.GetFullPath(path);
-			}
-			catch (Exception ex)
-			{ 
-				return ex.Message + ": " + path;
-			}
-		
-		}
-			
+            try
+            {
+                return System.IO.Path.GetFullPath(path);
+            }
+            catch (Exception ex)
+            { 
+                return ex.Message + ": " + path;
+            }
+        
+        }
+            
 
         #region Constructors
         #endregion

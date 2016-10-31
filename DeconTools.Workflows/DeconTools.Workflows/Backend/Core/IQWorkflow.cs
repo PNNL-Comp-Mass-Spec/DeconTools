@@ -263,7 +263,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void Execute(IqResult result)
         {
-			Check.Require(this.Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
+            Check.Require(this.Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
 
 
             if (!IsWorkflowInitialized)
@@ -277,7 +277,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-				string errorMessage = "Critical error!!!! " + ex.Message + "; processing IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
+                string errorMessage = "Critical error!!!! " + ex.Message + "; processing IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
                                       "; sequence= " + result.Target.Code + "; ScanLC= " + result.Target.ScanLC;
 
                 Console.WriteLine(errorMessage);

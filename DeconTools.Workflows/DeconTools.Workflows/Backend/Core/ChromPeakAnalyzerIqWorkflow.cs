@@ -13,50 +13,50 @@ using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	/// <summary>
-	/// ChromPeakAnalyzerIqWorkflow calculates metrics based on a single peak passed in VIA ChromPeakIqTarget. 
-	/// MUST BE USED WITH ChromPeakIqTarget
-	/// </summary>
-	public class ChromPeakAnalyzerIqWorkflow : BasicIqWorkflow
-	{
-		protected bool _headerLogged;
+    /// <summary>
+    /// ChromPeakAnalyzerIqWorkflow calculates metrics based on a single peak passed in VIA ChromPeakIqTarget. 
+    /// MUST BE USED WITH ChromPeakIqTarget
+    /// </summary>
+    public class ChromPeakAnalyzerIqWorkflow : BasicIqWorkflow
+    {
+        protected bool _headerLogged;
 
-		#region Constructors
+        #region Constructors
 
-		public ChromPeakAnalyzerIqWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run, parameters)
-		{
-			IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
-			TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
+        public ChromPeakAnalyzerIqWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run, parameters)
+        {
+            IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
+            TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
             PeakFitter = new PeakLeastSquaresFitter();
-		}
+        }
 
-		public ChromPeakAnalyzerIqWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
-		{
-			IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
-			TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
+        public ChromPeakAnalyzerIqWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
+        {
+            IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
+            TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
             PeakFitter = new PeakLeastSquaresFitter();
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		protected IterativeTFF TargetedMSFeatureFinder;
+        protected IterativeTFF TargetedMSFeatureFinder;
 
-	    protected PeakLeastSquaresFitter PeakFitter;
+        protected PeakLeastSquaresFitter PeakFitter;
 
-	    protected ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
+        protected ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
 
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Calculates Metrics based on ChromPeakIqTarget
-		/// NET Error, Mass Error, Isotopic Fit, & Isotope Correlation
-		/// </summary>
-		protected override void ExecuteWorkflow(IqResult result)
-		{
+        /// <summary>
+        /// Calculates Metrics based on ChromPeakIqTarget
+        /// NET Error, Mass Error, Isotopic Fit, & Isotope Correlation
+        /// </summary>
+        protected override void ExecuteWorkflow(IqResult result)
+        {
 
-			result.IsExported = false;
+            result.IsExported = false;
 
             if (MSGenerator == null)
             {
@@ -64,31 +64,31 @@ namespace DeconTools.Workflows.Backend.Core
                 MSGenerator.IsTICRequested = false;
             }
 
-			var target = result.Target as ChromPeakIqTarget;
-			if (target == null)
-			{
-				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
-			}
+            var target = result.Target as ChromPeakIqTarget;
+            if (target == null)
+            {
+                throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
+            }
 
-			MSGenerator.MinMZ = target.MZTheor - 2;
-			MSGenerator.MaxMZ = target.MZTheor + 5;
+            MSGenerator.MinMZ = target.MZTheor - 2;
+            MSGenerator.MaxMZ = target.MZTheor + 5;
 
-			//Sums Scan
+            //Sums Scan
 
-			var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
+            var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
 
-			//Generate a mass spectrum
-			var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
+            //Generate a mass spectrum
+            var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
 
-		    //massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
+            //massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
 
-			//Find isotopic profile
-			List<Peak> mspeakList;
-			result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
+            //Find isotopic profile
+            List<Peak> mspeakList;
+            result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
 
-			//Get NET Error
-			double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
+            //Get NET Error
+            double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
 
 
             LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
@@ -97,70 +97,70 @@ namespace DeconTools.Workflows.Backend.Core
             bool hasPeakTotheLeft = peakToTheLeft != null;
 
             if (result.ObservedIsotopicProfile == null)
-			{
-				result.IsotopicProfileFound = false;
-			    result.FitScore = 1;
-			}
-			else
-			{
+            {
+                result.IsotopicProfileFound = false;
+                result.FitScore = 1;
+            }
+            else
+            {
                 //Get fit score
                 List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
-				double minIntensityForScore = 0.05;
-				double fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
+                double minIntensityForScore = 0.05;
+                double fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
-				//get i_score
-				double iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
+                //get i_score
+                double iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
-				//get ppm error
+                //get ppm error
                 double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
-				double ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
+                double ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
 
                 //Get Isotope Correlation
                 int scan = lcscanset.PrimaryScanNumber;
                 double chromScanWindowWidth = target.ChromPeak.Width * 2;
 
-				//Determines where to start and stop chromatogram correlation
+                //Determines where to start and stop chromatogram correlation
                 int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
                 int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
                 result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
-			    result.LcScanObs = lcscanset.PrimaryScanNumber;
-			    result.ChromPeakSelected = target.ChromPeak;
-				result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
-				result.IsotopicProfileFound = true;
-				result.FitScore = fitScore;
-				result.InterferenceScore = iscore;
-				result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
-				result.NETError = netError;
-				result.MassErrorBefore = ppmError;
-				result.IqResultDetail.MassSpectrum = massSpectrumXYData;
-				result.Abundance = GetAbundance(result);
-			}
+                result.LcScanObs = lcscanset.PrimaryScanNumber;
+                result.ChromPeakSelected = target.ChromPeak;
+                result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
+                result.IsotopicProfileFound = true;
+                result.FitScore = fitScore;
+                result.InterferenceScore = iscore;
+                result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
+                result.NETError = netError;
+                result.MassErrorBefore = ppmError;
+                result.IqResultDetail.MassSpectrum = massSpectrumXYData;
+                result.Abundance = GetAbundance(result);
+            }
 
-			Display(result);
+            Display(result);
 
         }
 
-		//Writes IqResult Data to Console
-		private void Display(IqResult result)
-		{
-			ChromPeakIqTarget target = result.Target as ChromPeakIqTarget;
-			if (target == null)
-			{
-				throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget. "
-					+ "Due to an inherent shortcoming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error. "
-					+ "Please change the IqTarget to ChromPeakIqTarget for proper use of the ChromPeakAnalyzerIqWorkflow.");
-			}
+        //Writes IqResult Data to Console
+        private void Display(IqResult result)
+        {
+            ChromPeakIqTarget target = result.Target as ChromPeakIqTarget;
+            if (target == null)
+            {
+                throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget. "
+                    + "Due to an inherent shortcoming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error. "
+                    + "Please change the IqTarget to ChromPeakIqTarget for proper use of the ChromPeakAnalyzerIqWorkflow.");
+            }
 
-			if (!_headerLogged)
-			{
-				_headerLogged = true;
-				IqLogger.Log.Debug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
-			}
+            if (!_headerLogged)
+            {
+                _headerLogged = true;
+                IqLogger.Log.Debug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
+            }
 
-			IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" + 
-				result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
-		}
+            IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" + 
+                result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
+        }
 
-	}
+    }
 }

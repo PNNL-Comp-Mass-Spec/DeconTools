@@ -610,7 +610,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             double relIntensityUseForFitting = 0;
 
 
-			int ionCountUsed;
+            int ionCountUsed;
             double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
 
             if (fitval < bestFitVal)

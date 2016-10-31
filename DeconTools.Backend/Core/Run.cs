@@ -181,15 +181,15 @@ namespace DeconTools.Backend.Core
             return sb.ToString();
         }
 
-		/// <summary>
-		/// Returns the MSLevel for the given scan
-		/// </summary>
-		/// <param name="scanNum">Scan number (or frame number for UIMF files)</param>
-		/// <returns>1 for MS1, 2 for MS2</returns>
-		/// <remarks>UIMF calibration frames will be reported as MSLevel 0</remarks>
+        /// <summary>
+        /// Returns the MSLevel for the given scan
+        /// </summary>
+        /// <param name="scanNum">Scan number (or frame number for UIMF files)</param>
+        /// <returns>1 for MS1, 2 for MS2</returns>
+        /// <remarks>UIMF calibration frames will be reported as MSLevel 0</remarks>
         public virtual int GetMSLevel(int scanNum)
-		{
-			byte msLevel;
+        {
+            byte msLevel;
 
             // check to see if we have a value already stored
             if (this.MSLevelList.TryGetValue(scanNum, out msLevel))
@@ -199,12 +199,12 @@ namespace DeconTools.Backend.Core
             }
             
             // Look up MSLevel from Raw data
-		    var mslevel = GetMSLevelFromRawData(scanNum);
+            var mslevel = GetMSLevelFromRawData(scanNum);
 
-		    this.MSLevelList.Add(scanNum, (byte)mslevel);
+            this.MSLevelList.Add(scanNum, (byte)mslevel);
 
-		    return mslevel;
-		}
+            return mslevel;
+        }
 
         public virtual PrecursorInfo GetPrecursorInfo(int scanNum)
         {

@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Core
             this.ElementLookupTable = new Dictionary<string, int>();
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
             ChargeStateTargets = new List<int>();
-        	this.MsLevel = 1; // Default to MS1 Target
+            this.MsLevel = 1; // Default to MS1 Target
         }
 
         protected TargetBase(TargetBase copiedTarget)
@@ -47,7 +47,7 @@ namespace DeconTools.Backend.Core
         public double MonoIsotopicMass { get; set; }
         public short ChargeState { get; set; }
         public double MZ { get; set; }
-		public int MsLevel { get; set; }
+        public int MsLevel { get; set; }
         public List<int> ChargeStateTargets { get; set; }
 
         /// <summary>

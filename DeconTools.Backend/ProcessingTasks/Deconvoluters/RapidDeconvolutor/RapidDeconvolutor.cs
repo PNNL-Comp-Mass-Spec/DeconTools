@@ -15,19 +15,19 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-	// To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
-	// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
+    // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
+    // Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
 #if INCLUDE_RAPID	
 
-	/// <summary>
-	/// This class uses the Rapid method for deconvoluting peaks
-	/// The Rapid method is implemented in Visual C++ 2003 code in DeconEngine.dll
-	/// That DLL depends on DLLs MSVCP71.dll and MSVCR71.dll, plus also xerces-c_2_8.dll
-	/// </summary>
-	/// <remarks>
-	/// By default, this class will not be compiled when DeconTools.Backend.dll is compiled
-	/// To enable compilation, define Conditional Compilation Constant INCLUDE_RAPID
-	/// </remarks>
+    /// <summary>
+    /// This class uses the Rapid method for deconvoluting peaks
+    /// The Rapid method is implemented in Visual C++ 2003 code in DeconEngine.dll
+    /// That DLL depends on DLLs MSVCP71.dll and MSVCR71.dll, plus also xerces-c_2_8.dll
+    /// </summary>
+    /// <remarks>
+    /// By default, this class will not be compiled when DeconTools.Backend.dll is compiled
+    /// To enable compilation, define Conditional Compilation Constant INCLUDE_RAPID
+    /// </remarks>
     public class RapidDeconvolutor : Deconvolutor
     {
         RapidEngine.Decon2LS.Peaks.clsPeak[] rapidPeakList;
@@ -49,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
         private double minPeptideToBackgroundRatio;
-	#region Properties
+    #region Properties
 
         public bool IsNewFitCalculationPerformed { get; set; }
 
@@ -77,10 +77,10 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             set { transformer = value; }
         }
-	#endregion
+    #endregion
 
 
-	#region Constructors
+    #region Constructors
         public RapidDeconvolutor()
             : this(5, DeconResultComboMode.simplyAddIt)
         {
@@ -102,10 +102,10 @@ namespace DeconTools.Backend.ProcessingTasks
             this.targetedFeatureFinder = new BasicTFF();
         }
 
-	#endregion
+    #endregion
 
 
-	#region Public Methods
+    #region Public Methods
         public override void Deconvolute(ResultCollection resultList)
         {
             float[] xvals = new float[1];
@@ -183,8 +183,8 @@ namespace DeconTools.Backend.ProcessingTasks
                     offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
                     AreaFitter areafitter = new AreaFitter();
-					int ionCountUsed;
-					double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
+                    int ionCountUsed;
+                    double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
 
                     if (fitval == double.NaN || fitval > 1) fitval = 1;
 
@@ -251,10 +251,10 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-	#endregion
+    #endregion
 
 
-	#region Private Methods
+    #region Private Methods
         private int getNumIsotopicProfiles(int[] chargeResults)
         {
             int counter = 0;
@@ -520,7 +520,7 @@ namespace DeconTools.Backend.ProcessingTasks
             return rapidPeaklist;
         }
 
-	#endregion
+    #endregion
 
 
     }

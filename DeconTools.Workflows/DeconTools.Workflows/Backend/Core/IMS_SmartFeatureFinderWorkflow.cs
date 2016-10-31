@@ -943,7 +943,7 @@ int endFrame = 0;
 
 for (int i = 0; i < uimfRun.ScanSetCollection.ScanSetList.Count; i++)
 {
-			 
+             
     //start with an individual scan
     uimfRun.CurrentScanSet = uimfRun.ScanSetCollection.ScanSetList[i];
 

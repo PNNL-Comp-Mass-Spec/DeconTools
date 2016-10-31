@@ -190,11 +190,11 @@ namespace DeconTools.Backend.Core
             var minPossibleScanIndex = GetMinScan(run);
             var maxPossibleScanIndex = GetMaxScan(run);
 
-			if (scanStart < 0 && scanStop < 0)
-			{
-				scanStart = minPossibleScanIndex;
-				scanStop = maxPossibleScanIndex;
-			}
+            if (scanStart < 0 && scanStop < 0)
+            {
+                scanStart = minPossibleScanIndex;
+                scanStop = maxPossibleScanIndex;
+            }
 
             if (scanStart < minPossibleScanIndex)
             {
@@ -208,7 +208,7 @@ namespace DeconTools.Backend.Core
 
             if (scanStop < minPossibleScanIndex)
             {
-				scanStop = maxPossibleScanIndex;
+                scanStop = maxPossibleScanIndex;
             }
 
             if (scanStop > maxPossibleScanIndex)
@@ -216,13 +216,13 @@ namespace DeconTools.Backend.Core
                 scanStop = maxPossibleScanIndex;
             }
 
-        	var haveProcessedCurrentMsMsSet = false;
+            var haveProcessedCurrentMsMsSet = false;
 
             for (var i = scanStart; i <= scanStop; i+= scanIncrement)
             {
                 var currentMSLevel = run.GetMSLevel(i);
 
-				if (run is UIMFRun && currentMSLevel == 0) continue;  // This is a calibration frame; skip it
+                if (run is UIMFRun && currentMSLevel == 0) continue;  // This is a calibration frame; skip it
 
                 if (!processMSMS && currentMSLevel > 1) continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
 
@@ -238,7 +238,7 @@ namespace DeconTools.Backend.Core
 
                     scanSet = ScanSetFactory.CreateScanSet(run, i, scansToSum);
 
-                	haveProcessedCurrentMsMsSet = false;
+                    haveProcessedCurrentMsMsSet = false;
                 }
                 else
                 {
@@ -247,71 +247,71 @@ namespace DeconTools.Backend.Core
                     var uimfRun = run as UIMFRun;
                     if (uimfRun != null)
                     {
-						// TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
-						if (sumConsecutiveMsMs)
-						{
-							if(!haveProcessedCurrentMsMsSet)
-							{
-								var framesToSum = new List<int>();
+                        // TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
+                        if (sumConsecutiveMsMs)
+                        {
+                            if(!haveProcessedCurrentMsMsSet)
+                            {
+                                var framesToSum = new List<int>();
 
-								var uimfrun = uimfRun;
-								var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
+                                var uimfrun = uimfRun;
+                                var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
 
-								for (var j = 0; j < numberOfConsecutiveMs2Frames; j++)
-								{
-									framesToSum.Add(i + j);
-								}
+                                for (var j = 0; j < numberOfConsecutiveMs2Frames; j++)
+                                {
+                                    framesToSum.Add(i + j);
+                                }
 
-								scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
+                                scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
 
-								haveProcessedCurrentMsMsSet = true;
-							}
-							else
-							{
-								continue;
-							}
-						}
-						else
-						{
-							var uimfrun = uimfRun;
+                                haveProcessedCurrentMsMsSet = true;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            var uimfrun = uimfRun;
 
-							var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
+                            var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
 
-							var indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
+                            var indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
 
-							if (indexOfCurrentFrame < 0) continue;
+                            if (indexOfCurrentFrame < 0) continue;
 
-							var lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
-							var upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
+                            var lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
+                            var upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
 
-							var framesToSum = new List<int>();
-							var numLowerFramesToGet = (numScansSummed - 1) / 2;
-							var numUpperFramesToGet = (numScansSummed - 1) / 2;
+                            var framesToSum = new List<int>();
+                            var numLowerFramesToGet = (numScansSummed - 1) / 2;
+                            var numUpperFramesToGet = (numScansSummed - 1) / 2;
 
-							//get lower frames
-							var framesCounter = 0;
-							while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
-							{
-								framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
-								lowerIndex -= numberOfFrameIndexesToSkip;
-								framesCounter++;
-							}
+                            //get lower frames
+                            var framesCounter = 0;
+                            while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
+                            {
+                                framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
+                                lowerIndex -= numberOfFrameIndexesToSkip;
+                                framesCounter++;
+                            }
 
-							//get middle frame
-							framesToSum.Add(i);
+                            //get middle frame
+                            framesToSum.Add(i);
 
-							//get upper frames
-							framesCounter = 0;
-							var maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
-							while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
-							{
-								framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
-								upperIndex += numberOfFrameIndexesToSkip;
-								framesCounter++;
-							}
+                            //get upper frames
+                            framesCounter = 0;
+                            var maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
+                            while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
+                            {
+                                framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
+                                upperIndex += numberOfFrameIndexesToSkip;
+                                framesCounter++;
+                            }
 
-							scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
-						}
+                            scanSet = ScanSetFactory.CreateScanSet(uimfRun, i, framesToSum.ToArray());
+                        }
                     }
                     else
                     {
@@ -320,7 +320,7 @@ namespace DeconTools.Backend.Core
                 }
 
                 ScanSetList.Add(scanSet);
-				run.PrimaryLcScanNumbers.Add(scanSet.PrimaryScanNumber);
+                run.PrimaryLcScanNumbers.Add(scanSet.PrimaryScanNumber);
             }
 
         }

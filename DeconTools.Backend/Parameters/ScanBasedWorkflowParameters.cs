@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
 {
-	[Serializable]
+    [Serializable]
     public class ScanBasedWorkflowParameters : ParametersBase
     {
 

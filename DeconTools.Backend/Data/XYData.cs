@@ -215,41 +215,41 @@ namespace DeconTools.Backend
         public XYData TrimData(double xmin, double xmax, double tolerance = 0.1)
         {
 
-		
-			if (xvalues == null || yvalues == null || xvalues.Length == 0 || yvalues.Length == 0) return this;
+        
+            if (xvalues == null || yvalues == null || xvalues.Length == 0 || yvalues.Length == 0) return this;
 
-			double currentMinXValue = xvalues[0];
-			double currentMaxXValue = xvalues[xvalues.Length - 1];
+            double currentMinXValue = xvalues[0];
+            double currentMaxXValue = xvalues[xvalues.Length - 1];
 
-			//if it doesn't need trimming, return it.
-			if (xmin < currentMinXValue && xmax > currentMaxXValue)
-			{
-				return this;
-			}
+            //if it doesn't need trimming, return it.
+            if (xmin < currentMinXValue && xmax > currentMaxXValue)
+            {
+                return this;
+            }
 
 
-			XYData data = new XYData();
-			int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin, tolerance);
+            XYData data = new XYData();
+            int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin, tolerance);
 
-			int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax, tolerance);
+            int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax, tolerance);
 
-			int numPoints = indexClosestXValMax - indexClosestXValMin + 1;
+            int numPoints = indexClosestXValMax - indexClosestXValMin + 1;
 
-			if (numPoints <= 0)
-				throw new InvalidOperationException("indexClosestXValMin > indexClosestXValMax in XYData.TrimData; xvalues are likely not sorted");
+            if (numPoints <= 0)
+                throw new InvalidOperationException("indexClosestXValMin > indexClosestXValMax in XYData.TrimData; xvalues are likely not sorted");
 
-			data.Xvalues = new double[numPoints];
-			data.Yvalues = new double[numPoints];
+            data.Xvalues = new double[numPoints];
+            data.Yvalues = new double[numPoints];
 
-			for (int i = indexClosestXValMin; i <= indexClosestXValMax; i++)
-			{
+            for (int i = indexClosestXValMin; i <= indexClosestXValMax; i++)
+            {
 
-				data.Xvalues[i - indexClosestXValMin] = xvalues[i];
-				data.Yvalues[i - indexClosestXValMin] = yvalues[i];
+                data.Xvalues[i - indexClosestXValMin] = xvalues[i];
+                data.Yvalues[i - indexClosestXValMin] = yvalues[i];
 
-			}
+            }
 
-			return data;
+            return data;
 
         }
 

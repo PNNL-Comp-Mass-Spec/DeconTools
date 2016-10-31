@@ -7,20 +7,20 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class TopDownTargetedWorkflow : TargetedWorkflow
-	{
-		public Dictionary<int, TargetedResultBase> TargetResults { get; set; }
+    public class TopDownTargetedWorkflow : TargetedWorkflow
+    {
+        public Dictionary<int, TargetedResultBase> TargetResults { get; set; }
 
-		
-		public TopDownTargetedWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
-		{
-		    
+        
+        public TopDownTargetedWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
+        {
+            
         }
 
-		public TopDownTargetedWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
-		{
+        public TopDownTargetedWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
+        {
 
-		}
+        }
 
         protected override void DoPostInitialization()
         {
@@ -33,9 +33,9 @@ namespace DeconTools.Workflows.Backend.Core
             _iterativeTFFParameters.MinimumRelIntensityForForPeakInclusion = 0.4;   //TODO: add comment why we need this
             _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
         }
-		
+        
 
-		
+        
         protected override DeconTools.Backend.Globals.ResultType GetResultType()
         {
             return DeconTools.Backend.Globals.ResultType.TOPDOWN_TARGETED_RESULT;
@@ -49,5 +49,5 @@ namespace DeconTools.Workflows.Backend.Core
                 Result.ChromValues = new XYData { Xvalues = ChromatogramXYData.Xvalues, Yvalues = ChromatogramXYData.Yvalues };
             }
         }
-	}
+    }
 }

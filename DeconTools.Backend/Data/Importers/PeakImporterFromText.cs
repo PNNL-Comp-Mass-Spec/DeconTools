@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Data
 
         public PeakImporterFromText(string filename, BackgroundWorker bw)
         {
-			if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
+            if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
 
             FileInfo fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
@@ -35,7 +35,7 @@ namespace DeconTools.Backend.Data
             this.filename = filename;
             this.delimiter = '\t';
             this.backgroundWorker = bw;
-			this.peakProgressInfo = new PeakProgressInfo();
+            this.peakProgressInfo = new PeakProgressInfo();
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace DeconTools.Backend.Data
 
                 if (this.backgroundWorker != null)
                 {
-	                peakProgressInfo.ProgressInfoString = "Loading Peaks ";
+                    peakProgressInfo.ProgressInfoString = "Loading Peaks ";
                     backgroundWorker.ReportProgress(percentProgress, peakProgressInfo);
                 }
                 else

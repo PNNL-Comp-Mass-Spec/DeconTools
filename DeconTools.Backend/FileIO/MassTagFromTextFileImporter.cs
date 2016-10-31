@@ -19,7 +19,7 @@ namespace DeconTools.Backend.FileIO
 
         public MassTagFromTextFileImporter(string filename)
         {
-			if (!File.Exists(filename)) throw new System.IO.IOException("MassTagImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
+            if (!File.Exists(filename)) throw new System.IO.IOException("MassTagImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
             this.m_filename = filename;
             this.delimiter = '\t';
             

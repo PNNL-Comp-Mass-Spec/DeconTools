@@ -44,10 +44,10 @@ namespace DeconTools.Backend.Core
             sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));		// Fit Score
             sb.Append(delim);
             sb.Append(this.InterferenceScore.ToString("0.0000"));
-			// Uncomment to write out the fit_count_basis
-			//sb.Append(delim);
-			//sb.Append(this.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
-			
+            // Uncomment to write out the fit_count_basis
+            //sb.Append(delim);
+            //sb.Append(this.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
+            
             return sb.ToString();
         }
         

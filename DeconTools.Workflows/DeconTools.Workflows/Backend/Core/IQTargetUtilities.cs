@@ -11,7 +11,7 @@ namespace DeconTools.Workflows.Backend.Core
     public class IqTargetUtilities
     {
         private PeptideUtils _peptideUtils = new PeptideUtils();
-		protected IqCodeParser IqCodeParser = new IqCodeParser();
+        protected IqCodeParser IqCodeParser = new IqCodeParser();
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
         #region Public Methods
@@ -279,7 +279,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     //Create empirical formula based on code. Assume it is an unmodified peptide
                     //target.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(target.Code);
-	                target.EmpiricalFormula = IqCodeParser.GetEmpiricalFormulaFromSequence(target.Code, cysteinesAreModified);
+                    target.EmpiricalFormula = IqCodeParser.GetEmpiricalFormulaFromSequence(target.Code, cysteinesAreModified);
                 }
                 else
                 {
@@ -360,10 +360,10 @@ namespace DeconTools.Workflows.Backend.Core
                              ? null
                              : sourceTarget.TheorIsotopicProfile.CloneIsotopicProfile();
 
-	        if (updateWorkflow)
-	        {
-		        targetForUpdate.Workflow = sourceTarget.Workflow;
-	        }
+            if (updateWorkflow)
+            {
+                targetForUpdate.Workflow = sourceTarget.Workflow;
+            }
 
         }
 

@@ -15,27 +15,27 @@ using NUnit.Framework;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class TopDownTargetedWorkflowExecutor : TargetedWorkflowExecutor
-	{
-		private Dictionary<int, PrsmData> _prsmData;
+    public class TopDownTargetedWorkflowExecutor : TargetedWorkflowExecutor
+    {
+        private Dictionary<int, PrsmData> _prsmData;
 
-		private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
+        private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
-		#region Constructors
-		public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        #region Constructors
+        public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, datasetPath, backgroundWorker)
-		{
-		}
-		public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
-			: base(parameters, workflowParameters, datasetPath, backgroundWorker)
-		{
-		}
+        {
+        }
+        public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+            : base(parameters, workflowParameters, datasetPath, backgroundWorker)
+        {
+        }
 
-	
-		#endregion
+    
+        #endregion
         
-		
-		#region Public Methods
+        
+        #region Public Methods
 
         protected override void ExecutePreProcessingHook()
         {
@@ -79,21 +79,21 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-	    private void ExportChromatogramDataForEachProtein()
-	    {
-	        var allResults = TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
+        private void ExportChromatogramDataForEachProtein()
+        {
+            var allResults = TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
 
-	        var proteoformList = allResults.Select(p => p.Target.Code).Distinct();
+            var proteoformList = allResults.Select(p => p.Target.Code).Distinct();
 
 
-	        int counter = 0;
+            int counter = 0;
             foreach (var proteoform in proteoformList)
             {
                 counter++;
 
                 var resultsForProtein = allResults.Where(p => p.Target.Code == proteoform).ToList();
 
-	            
+                
 
 
                 StringBuilder sb = new StringBuilder();
@@ -105,65 +105,65 @@ namespace DeconTools.Workflows.Backend.Core
                 sb.Append(Environment.NewLine);
                 sb.Append(Environment.NewLine);
 
-	            string tableHeader = "z\tmz\tscan\tscore\tintensity";
-	            sb.Append(tableHeader);
-	            sb.Append(Environment.NewLine);
+                string tableHeader = "z\tmz\tscan\tscore\tintensity";
+                sb.Append(tableHeader);
+                sb.Append(Environment.NewLine);
 
-	            foreach (TopDownTargetedResult result in resultsForProtein)
-	            {
+                foreach (TopDownTargetedResult result in resultsForProtein)
+                {
                     
 
                     sb.Append(result.Target.ChargeState);
-	                sb.Append(delimiter);
-	                sb.Append(result.Target.MZ);
-	                sb.Append(delimiter);
-	                
-	                sb.Append(result.ChromPeakSelected == null ? 0 : result.ChromPeakSelected.XValue);
-	                sb.Append(delimiter);
-	                sb.Append(result.Score);
-	                sb.Append(delimiter);
-	                sb.Append(result.IsotopicProfile == null ? 0 : result.IntensityAggregate);
+                    sb.Append(delimiter);
+                    sb.Append(result.Target.MZ);
+                    sb.Append(delimiter);
+                    
+                    sb.Append(result.ChromPeakSelected == null ? 0 : result.ChromPeakSelected.XValue);
+                    sb.Append(delimiter);
+                    sb.Append(result.Score);
+                    sb.Append(delimiter);
+                    sb.Append(result.IsotopicProfile == null ? 0 : result.IntensityAggregate);
 
-	                sb.Append(Environment.NewLine);
+                    sb.Append(Environment.NewLine);
 
-	            }
+                }
 
-	            sb.Append(Environment.NewLine);
+                sb.Append(Environment.NewLine);
 
 
-	            TopdownChromData topdownChromData = new TopdownChromData();
+                TopdownChromData topdownChromData = new TopdownChromData();
                 
 
                 foreach (TopDownTargetedResult result in resultsForProtein)
-	            {
+                {
                     if (result.ChromValues!=null)
                     {
                         topdownChromData.AddChromDataItem(result.ChromValues);
                     }
-	                
-	            }
+                    
+                }
 
-	            var allChromVals = topdownChromData.GetChromData();
+                var allChromVals = topdownChromData.GetChromData();
 
-	            int lengthOfScanArray = allChromVals.First().Xvalues.Length;
+                int lengthOfScanArray = allChromVals.First().Xvalues.Length;
 
 
 
                 //add headers
-	            for (int i = 0; i < resultsForProtein.Count; i++)
-	            {
-	                if (i==0)
-	                {
-	                    sb.Append("Scan");
-	                    sb.Append(delimiter);
-	                }
+                for (int i = 0; i < resultsForProtein.Count; i++)
+                {
+                    if (i==0)
+                    {
+                        sb.Append("Scan");
+                        sb.Append(delimiter);
+                    }
 
-	                sb.Append(resultsForProtein[i].Target.ChargeState.ToString("0") + "+");
-	                sb.Append(delimiter);
+                    sb.Append(resultsForProtein[i].Target.ChargeState.ToString("0") + "+");
+                    sb.Append(delimiter);
 
-	            }
+                }
 
-	            sb.Append(Environment.NewLine);
+                sb.Append(Environment.NewLine);
 
 
 
@@ -209,13 +209,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-	        
+            
 
 
 
-	    }
+        }
 
-	    protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
+        protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
             return GetMSAlignTargets(targetsFilePath);
         }
@@ -239,11 +239,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-	    private TargetCollection GetMSAlignTargets(string massTagFileName)
+        private TargetCollection GetMSAlignTargets(string massTagFileName)
         {
             if (string.IsNullOrEmpty(massTagFileName))
             {
@@ -281,77 +281,77 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-		private void PostProcessResults(List<TargetedResultDTO> results)
-		{
-			for (int i = 0; i < results.Count; i++)
-			{
-				var result = (TopDownTargetedResultDTO) results[i];
-				result.PrsmList = new HashSet<int>();
-				if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
+        private void PostProcessResults(List<TargetedResultDTO> results)
+        {
+            for (int i = 0; i < results.Count; i++)
+            {
+                var result = (TopDownTargetedResultDTO) results[i];
+                result.PrsmList = new HashSet<int>();
+                if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
 
-				result.ChargeStateList = new List<int>();
-				if (result.ChromPeakSelectedHeight > 0) result.ChargeStateList.Add(result.ChargeState);
+                result.ChargeStateList = new List<int>();
+                if (result.ChromPeakSelectedHeight > 0) result.ChargeStateList.Add(result.ChargeState);
 
-				bool havePrsmData = false;
-				if (_prsmData.ContainsKey(result.MatchedMassTagID))
-				{
-					havePrsmData = true;
-					result.ProteinName = _prsmData[result.MatchedMassTagID].ProteinName;
-					result.ProteinMass = _prsmData[result.MatchedMassTagID].ProteinMass;
-				}
+                bool havePrsmData = false;
+                if (_prsmData.ContainsKey(result.MatchedMassTagID))
+                {
+                    havePrsmData = true;
+                    result.ProteinName = _prsmData[result.MatchedMassTagID].ProteinName;
+                    result.ProteinMass = _prsmData[result.MatchedMassTagID].ProteinMass;
+                }
 
-				// Find other results with same target code
-				for (int j = i + 1; j < results.Count; j++)
-				{
-					var otherResult = (TopDownTargetedResultDTO) results[j];
+                // Find other results with same target code
+                for (int j = i + 1; j < results.Count; j++)
+                {
+                    var otherResult = (TopDownTargetedResultDTO) results[j];
 
-					if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
-					{
-						// Add other Prsm
-						if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
+                    if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
+                    {
+                        // Add other Prsm
+                        if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
 
-						// Add other charge state to list and chrom peak to quantitation
-						if (otherResult.ChromPeakSelectedHeight > 0)
-						{
-							result.ChargeStateList.Add(otherResult.ChargeState);
-							result.Quantitation += otherResult.ChromPeakSelectedHeight;
-						}
+                        // Add other charge state to list and chrom peak to quantitation
+                        if (otherResult.ChromPeakSelectedHeight > 0)
+                        {
+                            result.ChargeStateList.Add(otherResult.ChargeState);
+                            result.Quantitation += otherResult.ChromPeakSelectedHeight;
+                        }
 
-						// Update most abundant charge state & scan apex
-						if (otherResult.ChromPeakSelectedHeight > result.ChromPeakSelectedHeight)
-						{
-							result.MostAbundantChargeState = otherResult.ChargeState;
-							result.ScanLC = otherResult.ScanLC;
-						}
+                        // Update most abundant charge state & scan apex
+                        if (otherResult.ChromPeakSelectedHeight > result.ChromPeakSelectedHeight)
+                        {
+                            result.MostAbundantChargeState = otherResult.ChargeState;
+                            result.ScanLC = otherResult.ScanLC;
+                        }
 
-						// Add name and mass if we don't have already
-						if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
-						{
-							result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;
-							result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
-						}
+                        // Add name and mass if we don't have already
+                        if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+                        {
+                            result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;
+                            result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
+                        }
 
-						// Update Prsm_ID if it doesn't exist
-						if (result.MatchedMassTagID < 0 && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
-						{
-							result.MatchedMassTagID = otherResult.MatchedMassTagID;
-						}
-						// Or if this spectrum is better than the current one, update Prsm_ID
-						if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
-							_prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
-						{
-							result.MatchedMassTagID = otherResult.MatchedMassTagID;
-						}
+                        // Update Prsm_ID if it doesn't exist
+                        if (result.MatchedMassTagID < 0 && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+                        {
+                            result.MatchedMassTagID = otherResult.MatchedMassTagID;
+                        }
+                        // Or if this spectrum is better than the current one, update Prsm_ID
+                        if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
+                            _prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
+                        {
+                            result.MatchedMassTagID = otherResult.MatchedMassTagID;
+                        }
 
-						results.RemoveAt(j--);
-					}
-				}
-			}
-		}
+                        results.RemoveAt(j--);
+                    }
+                }
+            }
+        }
         
         
         
-		#endregion
+        #endregion
 
-	}
+    }
 }
