@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         }
 
-		[Test]
+        [Test]
         public void NewPeakDetectorTest2()
         {
 
@@ -57,62 +57,62 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             msgen.Execute(run.ResultCollection);
 
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, 400, 1000);
-			var expectedPeaks = new List<Peak>();
+            var expectedPeaks = new List<Peak>();
 
-			// 3 most abundant peaks
-			expectedPeaks.Add(new Peak(481.274, 13084440F, 0.0079F));
-			expectedPeaks.Add(new Peak(639.822, 9063344F, 0.0119F));
-			expectedPeaks.Add(new Peak(579.63, 7917913F, 0.0104F));
+            // 3 most abundant peaks
+            expectedPeaks.Add(new Peak(481.274, 13084440F, 0.0079F));
+            expectedPeaks.Add(new Peak(639.822, 9063344F, 0.0119F));
+            expectedPeaks.Add(new Peak(579.63, 7917913F, 0.0104F));
 
-			// 3 medium abundance peaks
-			expectedPeaks.Add(new Peak(907.961, 416092.1F, 0.0187F));
-			expectedPeaks.Add(new Peak(607.305, 415606.4F, 0.0114F));
-			expectedPeaks.Add(new Peak(515.945, 415311F, 0.0086F));
+            // 3 medium abundance peaks
+            expectedPeaks.Add(new Peak(907.961, 416092.1F, 0.0187F));
+            expectedPeaks.Add(new Peak(607.305, 415606.4F, 0.0114F));
+            expectedPeaks.Add(new Peak(515.945, 415311F, 0.0086F));
 
-			// 3 least abundant peaks
-			expectedPeaks.Add(new Peak(861.366, 199058.3F, 0.0192F));
-			expectedPeaks.Add(new Peak(479.754, 198565.2F, 0.0071F));
-			expectedPeaks.Add(new Peak(935.447, 198530.2F, 0.0206F));
+            // 3 least abundant peaks
+            expectedPeaks.Add(new Peak(861.366, 199058.3F, 0.0192F));
+            expectedPeaks.Add(new Peak(479.754, 198565.2F, 0.0071F));
+            expectedPeaks.Add(new Peak(935.447, 198530.2F, 0.0206F));
 
             StringBuilder sb = new StringBuilder();
 
-			sb.Append("Looking for " + expectedPeaks.Count + " expected peaks" + Environment.NewLine);
-			sb.Append("Index\tXVal    \tYVal    \tWidth" + Environment.NewLine);
+            sb.Append("Looking for " + expectedPeaks.Count + " expected peaks" + Environment.NewLine);
+            sb.Append("Index\tXVal    \tYVal    \tWidth" + Environment.NewLine);
 
-			// Look for each expected peak in the actual peaks
-			foreach (var expectedPeak in (from peak in expectedPeaks orderby peak.XValue select peak))
+            // Look for each expected peak in the actual peaks
+            foreach (var expectedPeak in (from peak in expectedPeaks orderby peak.XValue select peak))
             {
-				bool found = false;
-				foreach (var peak in peaks)
+                bool found = false;
+                foreach (var peak in peaks)
                 {
-					if (Math.Abs(expectedPeak.XValue - peak.XValue) < 0.01)
+                    if (Math.Abs(expectedPeak.XValue - peak.XValue) < 0.01)
                     {
-						bool widthIsDifferent = Math.Abs(expectedPeak.Width - peak.Width) > 0.001;
+                        bool widthIsDifferent = Math.Abs(expectedPeak.Width - peak.Width) > 0.001;
 
-						sb.Append(peak.DataIndex + "\t" + peak.XValue.ToString("0.000").PadRight(8) + "\t" + peak.Height.ToString("0").PadRight(8) + "\t" + peak.Width.ToString("0.0000") + Environment.NewLine);
+                        sb.Append(peak.DataIndex + "\t" + peak.XValue.ToString("0.000").PadRight(8) + "\t" + peak.Height.ToString("0").PadRight(8) + "\t" + peak.Width.ToString("0.0000") + Environment.NewLine);
                         found = true;
                         break;
                     }
 
                 }
 
-				if (!found)
-				{
-					sb.Append("Expected peak not found: ");
-					sb.Append(expectedPeak.DataIndex + "\t" + expectedPeak.XValue + "\t" + expectedPeak.Height + "\t" + expectedPeak.Width.ToString("0.0000"));
-				}
+                if (!found)
+                {
+                    sb.Append("Expected peak not found: ");
+                    sb.Append(expectedPeak.DataIndex + "\t" + expectedPeak.XValue + "\t" + expectedPeak.Height + "\t" + expectedPeak.Width.ToString("0.0000"));
+                }
 
-				Assert.IsTrue(found);
+                Assert.IsTrue(found);
             }
 
             Console.WriteLine(sb.ToString());
 
-			// Console.WriteLine("Full peak list");
-			// TestUtilities.DisplayPeaks(peaks);
-		
+            // Console.WriteLine("Full peak list");
+            // TestUtilities.DisplayPeaks(peaks);
+        
         }
 
-		[Test]
+        [Test]
         public void NewPeakDetectorExecuteTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -248,7 +248,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.RawDataType = Globals.RawDataType.Centroided;
-			peakDetector.IsDataThresholded = true;
+            peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
 
@@ -266,39 +266,39 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
         }
 
-		[Test]
-		public void PeakDetectorOnCentroidedDataTest2()
-		{
-			Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+        [Test]
+        public void PeakDetectorOnCentroidedDataTest2()
+        {
+            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-			ScanSet scan = new ScanSet(6006);   //this is a MS2 scan
-
-
-			MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-			
-			// Note that setting the PeakFitType to Apex will not matter since RawDataType is Centroided
-			// It would only matter if the RawDataType was Profile
-
-			var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.APEX, true);
-			peakDetector.RawDataType = Globals.RawDataType.Centroided;
-			peakDetector.SignalToNoiseThreshold = 0;
-			peakDetector.PeakToBackgroundRatio = 0;
-			peakDetector.IsDataThresholded = true;
-
-			run.CurrentScanSet = scan;
-
-			msgen.Execute(run.ResultCollection);
-
-			peakDetector.Execute(run.ResultCollection);
-
-			Console.WriteLine("Num XY datapoints in mass spectrum= " + run.XYData.Xvalues.Length);
-			Console.WriteLine("numPeaks = " + run.PeakList.Count);
-
-			Assert.AreEqual(run.XYData.Xvalues.Length, run.PeakList.Count);
-			//TestUtilities.DisplayXYValues(run.XYData);
-			//TestUtilities.DisplayPeaks(run.PeakList);
+            ScanSet scan = new ScanSet(6006);   //this is a MS2 scan
 
 
-		}
+            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            
+            // Note that setting the PeakFitType to Apex will not matter since RawDataType is Centroided
+            // It would only matter if the RawDataType was Profile
+
+            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.APEX, true);
+            peakDetector.RawDataType = Globals.RawDataType.Centroided;
+            peakDetector.SignalToNoiseThreshold = 0;
+            peakDetector.PeakToBackgroundRatio = 0;
+            peakDetector.IsDataThresholded = true;
+
+            run.CurrentScanSet = scan;
+
+            msgen.Execute(run.ResultCollection);
+
+            peakDetector.Execute(run.ResultCollection);
+
+            Console.WriteLine("Num XY datapoints in mass spectrum= " + run.XYData.Xvalues.Length);
+            Console.WriteLine("numPeaks = " + run.PeakList.Count);
+
+            Assert.AreEqual(run.XYData.Xvalues.Length, run.PeakList.Count);
+            //TestUtilities.DisplayXYValues(run.XYData);
+            //TestUtilities.DisplayPeaks(run.PeakList);
+
+
+        }
     }
 }

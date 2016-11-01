@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,87 +10,87 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class UIMFTargetedWorkflowExecutor : TargetedWorkflowExecutor
-	{
-		public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters, datasetPath) { }
-		public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath) : base(workflowExecutorParameters, workflowParameters, datasetPath) { }
+    public class UIMFTargetedWorkflowExecutor : TargetedWorkflowExecutor
+    {
+        public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters, datasetPath) { }
+        public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath) : base(workflowExecutorParameters, workflowParameters, datasetPath) { }
 
-		public new void InitializeWorkflow()
-		{
-			_resultsFolder = string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase) ? RunUtilities.GetDatasetParentFolder(DatasetPath) : GetResultsFolder(ExecutorParameters.OutputFolderBase);
+        public new void InitializeWorkflow()
+        {
+            _resultsFolder = string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase) ? RunUtilities.GetDatasetParentFolder(DatasetPath) : GetResultsFolder(ExecutorParameters.OutputFolderBase);
 
-			MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
+            MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
 
-			bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
-			string currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
+            string currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
 
-			Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
+            Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
 
-			if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
-			{
-				UpdateTargetMissingInfo();
-			}
+            if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
+            {
+                UpdateTargetMissingInfo();
+            }
 
-			if (_workflowParameters == null)
-			{
-				_workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
-				_workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
-			}
+            if (_workflowParameters == null)
+            {
+                _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
+                _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
+            }
 
-			if (ExecutorParameters.TargetedAlignmentIsPerformed)
-			{
-				if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
-				{
-					throw new FileNotFoundException(
-						"Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
-				}
+            if (ExecutorParameters.TargetedAlignmentIsPerformed)
+            {
+                if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
+                {
+                    throw new FileNotFoundException(
+                        "Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
+                }
 
 
-				TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
-				TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
-			}
+                TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
+                TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
+            }
 
-			TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
-		}
+            TargetedWorkflow = TargetedWorkflow.CreateWorkflow(_workflowParameters);
+        }
 
-		public override void Execute()
-		{
-			SetupLogging();
+        public override void Execute()
+        {
+            SetupLogging();
 
-			SetupAlignment();
+            SetupAlignment();
 
-			ReportGeneralProgress("Started Processing....");
-			ReportGeneralProgress("Dataset = " + DatasetPath);
+            ReportGeneralProgress("Started Processing....");
+            ReportGeneralProgress("Dataset = " + DatasetPath);
 
-			if (!RunIsInitialized)
-			{
-				InitializeRun(DatasetPath);
-			}
+            if (!RunIsInitialized)
+            {
+                InitializeRun(DatasetPath);
+            }
 
-			ExecutePreProcessingHook();
+            ExecutePreProcessingHook();
 
-			ProcessDataset();
+            ProcessDataset();
 
-			ExecutePostProcessingHook();
+            ExecutePostProcessingHook();
 
-			ExportData();
+            ExportData();
 
-			HandleAlignmentInfoFiles();
-		}
+            HandleAlignmentInfoFiles();
+        }
 
-		protected override void ExecutePreProcessingHook()
-		{
-			var uimfTargetedMsmsWorkflowCollapseIMS = this.TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
-			if (uimfTargetedMsmsWorkflowCollapseIMS != null)
-			{
-				if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)
-				{
-					uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.MassTagResultList.Clear();	
-				}
-				
-				uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap.Clear();
-			}
-		}
-	}
+        protected override void ExecutePreProcessingHook()
+        {
+            var uimfTargetedMsmsWorkflowCollapseIMS = this.TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
+            if (uimfTargetedMsmsWorkflowCollapseIMS != null)
+            {
+                if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)
+                {
+                    uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.MassTagResultList.Clear();	
+                }
+                
+                uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap.Clear();
+            }
+        }
+    }
 }

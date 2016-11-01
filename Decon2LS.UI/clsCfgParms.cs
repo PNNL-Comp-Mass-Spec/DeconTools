@@ -12,29 +12,29 @@ using System;
 
 namespace Decon2LS
 {
-	/// <summary>
-	/// Summary description for clsCfgParms.
-	/// </summary>
-	public class clsCfgParms
-	{
-		private string mstr_last_open_dir ; 
+    /// <summary>
+    /// Summary description for clsCfgParms.
+    /// </summary>
+    public class clsCfgParms
+    {
+        private string mstr_last_open_dir ; 
 
-		public string OpenDir
-		{
-			get
-			{
-				return mstr_last_open_dir ; 
-			}
-			set
-			{
-				mstr_last_open_dir = value ; 
-			}
-		}
-		public clsCfgParms()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
+        public string OpenDir
+        {
+            get
+            {
+                return mstr_last_open_dir ; 
+            }
+            set
+            {
+                mstr_last_open_dir = value ; 
+            }
+        }
+        public clsCfgParms()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -80,13 +80,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             int level=  run.GetMSLevel(testscan);
 
-			var scanTime = run.GetTime(testscan);
+            var scanTime = run.GetTime(testscan);
 
 
-			Assert.AreEqual(1, run.GetMSLevel(testscan));
-			Assert.AreEqual(2, run.GetMSLevel(testscan2));
+            Assert.AreEqual(1, run.GetMSLevel(testscan));
+            Assert.AreEqual(2, run.GetMSLevel(testscan2));
 
-			Assert.AreEqual(1961.65, (decimal)run.GetTime(testscan));
+            Assert.AreEqual(1961.65, (decimal)run.GetTime(testscan));
 
         }
 
@@ -224,8 +224,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             string testfile2 =
              @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
 
-			//string testfile3 =
-			//@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
+            //string testfile3 =
+            //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
 
             Run run = new MzRun(testfile2);
 

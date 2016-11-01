@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.IO;
 using DeconTools.Backend.Core;
@@ -95,14 +95,14 @@ namespace DeconTools.Workflows.Backend.Core
                     uimfrun.CurrentScanSet = frameSet;
                     uimfrun.ResultCollection.MSPeakResultList.Clear();
 
-					foreach (var scanSet in uimfrun.IMSScanSetCollection.ScanSetList)
+                    foreach (var scanSet in uimfrun.IMSScanSetCollection.ScanSetList)
                     {
-						uimfrun.CurrentIMSScanSet = (IMSScanSet) scanSet;
-						MSGenerator.Execute(uimfrun.ResultCollection);
-						this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
+                        uimfrun.CurrentIMSScanSet = (IMSScanSet) scanSet;
+                        MSGenerator.Execute(uimfrun.ResultCollection);
+                        this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
 
                     }
-					peakExporter.WriteOutPeaks(uimfrun.ResultCollection.MSPeakResultList);
+                    peakExporter.WriteOutPeaks(uimfrun.ResultCollection.MSPeakResultList);
 
                     if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
                     {

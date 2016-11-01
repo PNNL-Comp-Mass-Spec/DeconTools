@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
@@ -101,26 +101,26 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Assert.AreEqual("15 {10, 15}", uimfRun.ScanSetCollection.ScanSetList[14].ToString());
         }
 
-		[Test]
-		public void CreateFrameSetCollectionSumAllConsecutiveMSMSFrames()
-		{
-			RunFactory rf = new RunFactory();
-			Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
+        [Test]
+        public void CreateFrameSetCollectionSumAllConsecutiveMSMSFrames()
+        {
+            RunFactory rf = new RunFactory();
+            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
 
-			int numFramesToSum = 3;
+            int numFramesToSum = 3;
 
-			UIMFRun uimfRun = (UIMFRun)run;
+            UIMFRun uimfRun = (UIMFRun)run;
 
-			uimfRun.ScanSetCollection.Create(uimfRun, numFramesToSum, 1, true);
+            uimfRun.ScanSetCollection.Create(uimfRun, numFramesToSum, 1, true);
 
-			Assert.AreEqual(6, uimfRun.ScanSetCollection.ScanSetList.Count);
-			Assert.AreEqual("1 {1, 6}", uimfRun.ScanSetCollection.ScanSetList[0].ToString());
-			Assert.AreEqual("2 {2, 3, 4, 5}", uimfRun.ScanSetCollection.ScanSetList[1].ToString());
-			Assert.AreEqual("6 {1, 6, 11}", uimfRun.ScanSetCollection.ScanSetList[2].ToString());
-			Assert.AreEqual("7 {7, 8, 9, 10}", uimfRun.ScanSetCollection.ScanSetList[3].ToString());
-			Assert.AreEqual("11 {6, 11}", uimfRun.ScanSetCollection.ScanSetList[4].ToString());
-			Assert.AreEqual("12 {12, 13, 14, 15}", uimfRun.ScanSetCollection.ScanSetList[5].ToString());
-		}
+            Assert.AreEqual(6, uimfRun.ScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual("1 {1, 6}", uimfRun.ScanSetCollection.ScanSetList[0].ToString());
+            Assert.AreEqual("2 {2, 3, 4, 5}", uimfRun.ScanSetCollection.ScanSetList[1].ToString());
+            Assert.AreEqual("6 {1, 6, 11}", uimfRun.ScanSetCollection.ScanSetList[2].ToString());
+            Assert.AreEqual("7 {7, 8, 9, 10}", uimfRun.ScanSetCollection.ScanSetList[3].ToString());
+            Assert.AreEqual("11 {6, 11}", uimfRun.ScanSetCollection.ScanSetList[4].ToString());
+            Assert.AreEqual("12 {12, 13, 14, 15}", uimfRun.ScanSetCollection.ScanSetList[5].ToString());
+        }
 
         [Test]
         public void CreateFrameSetCollectionProcessMS1_Only()

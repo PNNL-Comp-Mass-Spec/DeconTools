@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
@@ -27,8 +27,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-			bool isTicRequested = false;
-			Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
+            bool isTicRequested = false;
+            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
@@ -75,8 +75,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
         }
 
-		// To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
-		// Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
+        // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
+        // Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
 #if INCLUDE_RAPID
 
         [Test]
@@ -87,7 +87,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-			bool isTicRequested = false;
+            bool isTicRequested = false;
             Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
@@ -138,8 +138,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-			bool isTicRequested = false;
-			Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
+            bool isTicRequested = false;
+            Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
@@ -197,8 +197,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             ResultCollection results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-			bool isTicRequested = false;
-			Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
+            bool isTicRequested = false;
+            Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
             msGen.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();

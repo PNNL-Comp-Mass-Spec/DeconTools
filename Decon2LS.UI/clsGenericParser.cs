@@ -34,1158 +34,1158 @@ using System.Collections.Specialized;
 
 namespace Decon2LS
 {
-	
-	public class clsGenericParser : IDisposable
-	{
-	    private const char NULL_CHAR = '\0';
+    
+    public class clsGenericParser : IDisposable
+    {
+        private const char NULL_CHAR = '\0';
 
-		/// <summary>
-		/// The current internal state of the parser.
-		/// </summary>
-		public enum ParserState
-		{
-			/// <summary>Indicates that the parser has no datasource and is not properly setup.</summary>
-			NoDataSource = 0,
-			/// <summary>Indicates that the parser is ready to begin parsing.</summary>
-			Ready = 1,
-			/// <summary>Indicates that the parser is currently parsing the datasource.</summary>
-			Parsing = 2,
-			/// <summary>Indicates that the parser has finished parsing the datasource.</summary>
-			Finished = 3
-		}
+        /// <summary>
+        /// The current internal state of the parser.
+        /// </summary>
+        public enum ParserState
+        {
+            /// <summary>Indicates that the parser has no datasource and is not properly setup.</summary>
+            NoDataSource = 0,
+            /// <summary>Indicates that the parser is ready to begin parsing.</summary>
+            Ready = 1,
+            /// <summary>Indicates that the parser is currently parsing the datasource.</summary>
+            Parsing = 2,
+            /// <summary>Indicates that the parser has finished parsing the datasource.</summary>
+            Finished = 3
+        }
 
-		private enum RowState
-		{
-		GetRowType = 0,
-		CommentRow = 1,
-		HeaderRow = 2,
-		SkippedRow = 3,
-		DataRow = 4
-		}
+        private enum RowState
+        {
+        GetRowType = 0,
+        CommentRow = 1,
+        HeaderRow = 2,
+        SkippedRow = 3,
+        DataRow = 4
+        }
 
-		private enum BufferState
-		{
-		NoAction = 0,
-		FetchData = 1,
-		NoFetchableData = 2,
-		NoDataLeft = 3
-		}
+        private enum BufferState
+        {
+        NoAction = 0,
+        FetchData = 1,
+        NoFetchableData = 2,
+        NoDataLeft = 3
+        }
 
-		private const int DEFAULT_MAX_BUFFER_SIZE = 1024;
-		private const int DEFAULT_MAX_ROWS = 0;
-		private const int DEFAULT_SKIP_DATA_ROWS = 0;
-		private const int DEFAULT_EXPECTED_COLUMN_COUNT = 0;
-		private const bool DEFAULT_FIRST_ROW_HAS_HEADER = false;
-		private const bool DEFAULT_TRIM_RESULTS = false;
-		private const bool DEFAULT_FIXED_WIDTH = false;
-		private const string DEFAULT_ROW_DELIMITER = ",";
-		private const char DEFAULT_TEXT_QUALIFIER = '\"';
-		private const char DEFAULT_ESCAPE_CHARACTER = NULL_CHAR;
-		private const char DEFAULT_COMMENT_CHARACTER = '#';
+        private const int DEFAULT_MAX_BUFFER_SIZE = 1024;
+        private const int DEFAULT_MAX_ROWS = 0;
+        private const int DEFAULT_SKIP_DATA_ROWS = 0;
+        private const int DEFAULT_EXPECTED_COLUMN_COUNT = 0;
+        private const bool DEFAULT_FIRST_ROW_HAS_HEADER = false;
+        private const bool DEFAULT_TRIM_RESULTS = false;
+        private const bool DEFAULT_FIXED_WIDTH = false;
+        private const string DEFAULT_ROW_DELIMITER = ",";
+        private const char DEFAULT_TEXT_QUALIFIER = '\"';
+        private const char DEFAULT_ESCAPE_CHARACTER = NULL_CHAR;
+        private const char DEFAULT_COMMENT_CHARACTER = '#';
 
-	    private const string XML_ROOT_NODE = "GenericParser";
-		private const string XML_COLUMN_WIDTH = "ColumnWidth";
-		private const string XML_COLUMN_WIDTHS = "ColumnWidths";
-		private const string XML_MAX_BUFFER_SIZE = "MaxBufferSize";
-		private const string XML_MAX_ROWS = "MaxRows";
-		private const string XML_SKIP_DATA_ROWS = "SkipDataRows";
-		private const string XML_EXPECTED_COLUMN_COUNT = "ExpectedColumnCount";
-		private const string XML_FIRST_ROW_HAS_HEADER = "FirstRowHasHeader";
-		private const string XML_TRIM_RESULTS = "TrimResults";
-		private const string XML_FIXED_WIDTH = "FixedWidth";
-		private const string XML_ROW_DELIMITER = "RowDelimiter";
-		private const string XML_COLUMN_DELIMITER = "ColumnDelimiter";
-		private const string XML_TEXT_QUALIFIER = "TextQualifier";
-		private const string XML_ESCAPE_CHARACTER = "EscapeCharacter";
-		private const string XML_COMMENT_CHARACTER = "CommentCharacter";
+        private const string XML_ROOT_NODE = "GenericParser";
+        private const string XML_COLUMN_WIDTH = "ColumnWidth";
+        private const string XML_COLUMN_WIDTHS = "ColumnWidths";
+        private const string XML_MAX_BUFFER_SIZE = "MaxBufferSize";
+        private const string XML_MAX_ROWS = "MaxRows";
+        private const string XML_SKIP_DATA_ROWS = "SkipDataRows";
+        private const string XML_EXPECTED_COLUMN_COUNT = "ExpectedColumnCount";
+        private const string XML_FIRST_ROW_HAS_HEADER = "FirstRowHasHeader";
+        private const string XML_TRIM_RESULTS = "TrimResults";
+        private const string XML_FIXED_WIDTH = "FixedWidth";
+        private const string XML_ROW_DELIMITER = "RowDelimiter";
+        private const string XML_COLUMN_DELIMITER = "ColumnDelimiter";
+        private const string XML_TEXT_QUALIFIER = "TextQualifier";
+        private const string XML_ESCAPE_CHARACTER = "EscapeCharacter";
+        private const string XML_COMMENT_CHARACTER = "CommentCharacter";
 
-		private const string XML_SAFE_STRING_DELIMITER = ",";
+        private const string XML_SAFE_STRING_DELIMITER = ",";
 
     
 
    
 
-		/// <summary>
-		///   Constructs an instance of a <see cref="GenericParser"/> with the default settings.
-		/// </summary>
-		/// <remarks>
-		///   If you use this constructor, you must set the datasource
-		///   prior to using the parser (using <see cref="SetDataSource"/>), otherwise an
-		///   exception will be thrown.
-		/// </remarks>
-		public clsGenericParser()
-		{
-			this.m_ParserState = ParserState.NoDataSource;
-			this.m_txtReader = null;
-			this.m_blnDisposed = false;
+        /// <summary>
+        ///   Constructs an instance of a <see cref="GenericParser"/> with the default settings.
+        /// </summary>
+        /// <remarks>
+        ///   If you use this constructor, you must set the datasource
+        ///   prior to using the parser (using <see cref="SetDataSource"/>), otherwise an
+        ///   exception will be thrown.
+        /// </remarks>
+        public clsGenericParser()
+        {
+            this.m_ParserState = ParserState.NoDataSource;
+            this.m_txtReader = null;
+            this.m_blnDisposed = false;
 
-			this.m_iaColumnWidths = null;
-			this.m_intMaxBufferSize = DEFAULT_MAX_BUFFER_SIZE;
-			this.m_intMaxRows = DEFAULT_MAX_ROWS;
-			this.m_intSkipDataRows = DEFAULT_SKIP_DATA_ROWS;
-			this.m_intExpectedColumnCount = DEFAULT_EXPECTED_COLUMN_COUNT;
-			this.m_blnFirstRowHasHeader = DEFAULT_FIRST_ROW_HAS_HEADER;
-			this.m_blnTrimResults = DEFAULT_TRIM_RESULTS;
-			this.m_blnFixedWidth = DEFAULT_FIXED_WIDTH;
-			this.m_caRowDelimiter = Environment.NewLine.ToCharArray();
-			this.m_caColumnDelimiter = DEFAULT_ROW_DELIMITER.ToCharArray();
-			this.m_chTextQualifier = DEFAULT_TEXT_QUALIFIER;
-			this.m_chEscapeCharacter = DEFAULT_ESCAPE_CHARACTER;
-			this.m_chCommentCharacter = DEFAULT_COMMENT_CHARACTER;
-		}
+            this.m_iaColumnWidths = null;
+            this.m_intMaxBufferSize = DEFAULT_MAX_BUFFER_SIZE;
+            this.m_intMaxRows = DEFAULT_MAX_ROWS;
+            this.m_intSkipDataRows = DEFAULT_SKIP_DATA_ROWS;
+            this.m_intExpectedColumnCount = DEFAULT_EXPECTED_COLUMN_COUNT;
+            this.m_blnFirstRowHasHeader = DEFAULT_FIRST_ROW_HAS_HEADER;
+            this.m_blnTrimResults = DEFAULT_TRIM_RESULTS;
+            this.m_blnFixedWidth = DEFAULT_FIXED_WIDTH;
+            this.m_caRowDelimiter = Environment.NewLine.ToCharArray();
+            this.m_caColumnDelimiter = DEFAULT_ROW_DELIMITER.ToCharArray();
+            this.m_chTextQualifier = DEFAULT_TEXT_QUALIFIER;
+            this.m_chEscapeCharacter = DEFAULT_ESCAPE_CHARACTER;
+            this.m_chCommentCharacter = DEFAULT_COMMENT_CHARACTER;
+        }
 
-		/// <summary>
-		///   Constructs an instance of a <see cref="GenericParser"/> and sets the initial datasource
-		///   as the file referenced by the string passed in.
-		/// </summary>
-		/// <param name="strFileName">The file name to set as the initial datasource.</param>
-		public clsGenericParser(string strFileName) : this()
-		{
-			this.SetDataSource(strFileName);
-		}
+        /// <summary>
+        ///   Constructs an instance of a <see cref="GenericParser"/> and sets the initial datasource
+        ///   as the file referenced by the string passed in.
+        /// </summary>
+        /// <param name="strFileName">The file name to set as the initial datasource.</param>
+        public clsGenericParser(string strFileName) : this()
+        {
+            this.SetDataSource(strFileName);
+        }
 
-		/// <summary>
-		///   Constructs an instance of a <see cref="GenericParser"/> and sets the initial datasource
-		///   as the <see cref="TextReader"/> passed in.
-		/// </summary>
-		/// <param name="txtReader">The <see cref="TextReader"/> containing the data to be parsed.</param>
-		public clsGenericParser(TextReader txtReader) : this()
-		{
-			this.SetDataSource(txtReader);
-		}
+        /// <summary>
+        ///   Constructs an instance of a <see cref="GenericParser"/> and sets the initial datasource
+        ///   as the <see cref="TextReader"/> passed in.
+        /// </summary>
+        /// <param name="txtReader">The <see cref="TextReader"/> containing the data to be parsed.</param>
+        public clsGenericParser(TextReader txtReader) : this()
+        {
+            this.SetDataSource(txtReader);
+        }
 
    
 
-		/// <summary>
-		///	  Indicates whether or not the instance has been disposed of.
-		/// </summary>
-		/// <value>
-		///   <para>
-		///     <see langword="true"/> - Indicates the instance has be disposed of.
-		///   </para>
-		///   <para>
-		///     <see langword="false"/> - Indicates the instance has not be disposed of.
-		///   </para>
-		/// </value>
-		[System.ComponentModel.Browsable(false)]
-		public bool IsDisposed
-	    {
-			get
-			{
-				return this.m_blnDisposed;
-			}
-		}
+        /// <summary>
+        ///	  Indicates whether or not the instance has been disposed of.
+        /// </summary>
+        /// <value>
+        ///   <para>
+        ///     <see langword="true"/> - Indicates the instance has be disposed of.
+        ///   </para>
+        ///   <para>
+        ///     <see langword="false"/> - Indicates the instance has not be disposed of.
+        ///   </para>
+        /// </value>
+        [System.ComponentModel.Browsable(false)]
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.m_blnDisposed;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     An integer array indicating the number of spaces needed for each
-		///     column.
-		///   </para>
-		///   <para>
-		///     By setting this properly, you automatically set the <see cref="GenericParser"/>
-		///     for <see cref="FixedWidth"/> format and the <see cref="ExpectedColumnCount"/> is set.
-		///   </para>
-		/// </summary>
-		/// <value>An int[] containing the number of spaces for each column.</value>
-		/// <remarks>If you have already started parsing, you cannot update this value.</remarks>
-		/// <exception cref="ArgumentOutOfRangeException">Passing in an empty array or an
-		/// array of values that have a number less than one.</exception>
-		public int[] ColumnWidths
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     An integer array indicating the number of spaces needed for each
+        ///     column.
+        ///   </para>
+        ///   <para>
+        ///     By setting this properly, you automatically set the <see cref="GenericParser"/>
+        ///     for <see cref="FixedWidth"/> format and the <see cref="ExpectedColumnCount"/> is set.
+        ///   </para>
+        /// </summary>
+        /// <value>An int[] containing the number of spaces for each column.</value>
+        /// <remarks>If you have already started parsing, you cannot update this value.</remarks>
+        /// <exception cref="ArgumentOutOfRangeException">Passing in an empty array or an
+        /// array of values that have a number less than one.</exception>
+        public int[] ColumnWidths
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_iaColumnWidths;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_iaColumnWidths;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_iaColumnWidths = value;
+                this.m_iaColumnWidths = value;
 
-				if (value == null)
-				this.m_blnFixedWidth = false;
-				else
-				{
-				if (this.m_iaColumnWidths.Length < 1)
-					throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of ColumnWidths to an empty array.");
+                if (value == null)
+                this.m_blnFixedWidth = false;
+                else
+                {
+                if (this.m_iaColumnWidths.Length < 1)
+                    throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of ColumnWidths to an empty array.");
 
-				// Make sure all of the ColumnWidths are valid.
-				for (int intColumnIndex = 0; intColumnIndex < this.m_iaColumnWidths.Length; ++intColumnIndex)
-				{
-					if (this.m_iaColumnWidths[intColumnIndex] < 1)
-					throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of a ColumnWidth to a number less than one.");
-				}
+                // Make sure all of the ColumnWidths are valid.
+                for (int intColumnIndex = 0; intColumnIndex < this.m_iaColumnWidths.Length; ++intColumnIndex)
+                {
+                    if (this.m_iaColumnWidths[intColumnIndex] < 1)
+                    throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of a ColumnWidth to a number less than one.");
+                }
 
-				this.m_blnFixedWidth = true;
-				this.m_intExpectedColumnCount = this.m_iaColumnWidths.Length;
-				}
-			}
-		}
+                this.m_blnFixedWidth = true;
+                this.m_intExpectedColumnCount = this.m_iaColumnWidths.Length;
+                }
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Determines the maximum size of the internal buffer used to cache the
-		///     data.  The <see cref="MaxBufferSize"/> must be atleast the size of one column of data,
-		///     plus the Max(column delimiter width, row delimiter width).
-		///   </para>
-		///   <para>
-		///     Maintaining the smallest number possible here improves memory usage, but
-		///     trades it off for higher CPU usage.
-		///   </para>
-		///   <para>
-		///     Default: 1024
-		///   </para>
-		/// </summary>
-		/// <value>The maximum size of the internal buffer to cache data from the
-		/// datasource.</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		/// <exception cref="ArgumentOutOfRangeException">Setting the value to something less than one.</exception>
-		public int MaxBufferSize
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Determines the maximum size of the internal buffer used to cache the
+        ///     data.  The <see cref="MaxBufferSize"/> must be atleast the size of one column of data,
+        ///     plus the Max(column delimiter width, row delimiter width).
+        ///   </para>
+        ///   <para>
+        ///     Maintaining the smallest number possible here improves memory usage, but
+        ///     trades it off for higher CPU usage.
+        ///   </para>
+        ///   <para>
+        ///     Default: 1024
+        ///   </para>
+        /// </summary>
+        /// <value>The maximum size of the internal buffer to cache data from the
+        /// datasource.</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        /// <exception cref="ArgumentOutOfRangeException">Setting the value to something less than one.</exception>
+        public int MaxBufferSize
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intMaxBufferSize;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_intMaxBufferSize;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				if (value > 0)
-				this.m_intMaxBufferSize = value;
-				else
-				throw new ArgumentOutOfRangeException("MaxBufferSize", value, "The value must be greater than 0.");
-			}
-		 }
+                if (value > 0)
+                this.m_intMaxBufferSize = value;
+                else
+                throw new ArgumentOutOfRangeException("MaxBufferSize", value, "The value must be greater than 0.");
+            }
+         }
 
-		/// <summary>
-		///   <para>
-		///     Indicates the maximum number of rows you wish to parse.
-		///   </para>
-		///   <para>
-		///     Setting the value to zero will cause all of the rows to be returned.
-		///   </para>
-		///  <para>
-		///    Default: 0
-		///  </para>
-		/// </summary>
-		/// <value>The maximum number of rows you wish to parse.</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		public int MaxRows
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Indicates the maximum number of rows you wish to parse.
+        ///   </para>
+        ///   <para>
+        ///     Setting the value to zero will cause all of the rows to be returned.
+        ///   </para>
+        ///  <para>
+        ///    Default: 0
+        ///  </para>
+        /// </summary>
+        /// <value>The maximum number of rows you wish to parse.</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        public int MaxRows
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intMaxRows;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_intMaxRows;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_intMaxRows = value;
+                this.m_intMaxRows = value;
 
-				if (this.m_intMaxRows < 0)
-				this.m_intMaxRows = 0;
-			}
-		}
+                if (this.m_intMaxRows < 0)
+                this.m_intMaxRows = 0;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Indicates the number of rows of data you wish to ignore at the beginning of
-		///     the file. So, the header row (if present) and comment rows will not be taken
-		///     into account when determining the number of rows to skip.
-		///   </para>
-		///   <para>
-		///     Setting the value to zero will indicate you do not wish to ignore any rows.
-		///   </para>
-		///   <para>
-		///     Default: 0
-		///   </para>
-		/// </summary>
-		/// <value>The number of data rows to initially skip in the datasource</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		public int SkipDataRows
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Indicates the number of rows of data you wish to ignore at the beginning of
+        ///     the file. So, the header row (if present) and comment rows will not be taken
+        ///     into account when determining the number of rows to skip.
+        ///   </para>
+        ///   <para>
+        ///     Setting the value to zero will indicate you do not wish to ignore any rows.
+        ///   </para>
+        ///   <para>
+        ///     Default: 0
+        ///   </para>
+        /// </summary>
+        /// <value>The number of data rows to initially skip in the datasource</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        public int SkipDataRows
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intSkipDataRows;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_intSkipDataRows;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
-		        
-				this.m_intSkipDataRows = value;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
+                
+                this.m_intSkipDataRows = value;
 
-				if (this.m_intSkipDataRows < 0)
-				this.m_intSkipDataRows = 0;
-			}
-		}
+                if (this.m_intSkipDataRows < 0)
+                this.m_intSkipDataRows = 0;
+            }
+        }
 
     /// <summary>
     ///   Indicates the number of rows of data that have currently been parsed.
     /// </summary>
     /// <value>The number of rows of data that have been parsed.</value>
     /// <remarks>The DataRowNumber property is read-only.</remarks>
-		public int DataRowNumber
-		{
-			get
-			{
-				this._CheckDiposed();
+        public int DataRowNumber
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intDataRowNumber;
-			}
-		}
+                return this.m_intDataRowNumber;
+            }
+        }
 
-		/// <summary>
-		///   Indicates how many rows in the file have been parsed.
-		/// </summary>
-		/// <value>The number of rows in the file that have been parsed.</value>
-		/// <remarks>The <see cref="FileRowNumber"/> property is read-only and includes all
-		/// rows possible (header, comment, and data).</remarks>
-		public int FileRowNumber
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Indicates how many rows in the file have been parsed.
+        /// </summary>
+        /// <value>The number of rows in the file that have been parsed.</value>
+        /// <remarks>The <see cref="FileRowNumber"/> property is read-only and includes all
+        /// rows possible (header, comment, and data).</remarks>
+        public int FileRowNumber
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intFileRowNumber;
-			}
-		}
+                return this.m_intFileRowNumber;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Indicates the expected number of columns to find in the data.  If
-		///     the number of columns differs, an exception will be thrown.
-		///   </para>
-		///   <para>
-		///     By setting <see cref="ColumnWidths"/>, this property is automatically set.
-		///   </para>
-		///   <para>
-		///     Setting the value to zero will cause the <see cref="GenericParser"/> to ignore
-		///     the column count in case the number changes per row.
-		///   </para>
-		///   <para>
-		///     Default: 0
-		///   </para>
-		/// </summary>
-		/// <value>The number of columns expected per row of data.</value>
-		/// <remarks>
-		///   If you have already started parsing, you cannot update this
-		///   value.
-		/// </remarks>
-		public int ExpectedColumnCount
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Indicates the expected number of columns to find in the data.  If
+        ///     the number of columns differs, an exception will be thrown.
+        ///   </para>
+        ///   <para>
+        ///     By setting <see cref="ColumnWidths"/>, this property is automatically set.
+        ///   </para>
+        ///   <para>
+        ///     Setting the value to zero will cause the <see cref="GenericParser"/> to ignore
+        ///     the column count in case the number changes per row.
+        ///   </para>
+        ///   <para>
+        ///     Default: 0
+        ///   </para>
+        /// </summary>
+        /// <value>The number of columns expected per row of data.</value>
+        /// <remarks>
+        ///   If you have already started parsing, you cannot update this
+        ///   value.
+        /// </remarks>
+        public int ExpectedColumnCount
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_intExpectedColumnCount;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_intExpectedColumnCount;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_intExpectedColumnCount = value;
+                this.m_intExpectedColumnCount = value;
 
-				// Make sure the ExpectedColumnCount matches the column width's
-				// supplied.
-				if (this.m_blnFixedWidth
-				&& (this.m_iaColumnWidths != null)
-				&& (this.m_iaColumnWidths.Length != this.m_intExpectedColumnCount))
-				{
-				// Null it out to force the proper column width's to be supplied.
-				this.m_iaColumnWidths = null;
-				this.m_blnFixedWidth = false;
-				}
-				else if (this.m_intExpectedColumnCount < 0)
-				this.m_intExpectedColumnCount = 0;
-			}
-		}
+                // Make sure the ExpectedColumnCount matches the column width's
+                // supplied.
+                if (this.m_blnFixedWidth
+                && (this.m_iaColumnWidths != null)
+                && (this.m_iaColumnWidths.Length != this.m_intExpectedColumnCount))
+                {
+                // Null it out to force the proper column width's to be supplied.
+                this.m_iaColumnWidths = null;
+                this.m_blnFixedWidth = false;
+                }
+                else if (this.m_intExpectedColumnCount < 0)
+                this.m_intExpectedColumnCount = 0;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Indicates whether or not the first row of data in the file contains
-		///     the header information.
-		///   </para>
-		///   <para>
-		///     Default: <see langword="false"/>
-		///   </para>
-		/// </summary>
-		/// <value>
-		///   <para>
-		///     <see langword="true"/> - Header found on first 'datarow'.
-		///   </para>
-		///   <para>
-		///     <see langword="false"/> - Header row does not exist.
-		///   </para>
-		/// </value>
-		/// <remarks>
-		///   If you have already started parsing, you cannot update this value.
-		/// </remarks>
-		public bool FirstRowHasHeader
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Indicates whether or not the first row of data in the file contains
+        ///     the header information.
+        ///   </para>
+        ///   <para>
+        ///     Default: <see langword="false"/>
+        ///   </para>
+        /// </summary>
+        /// <value>
+        ///   <para>
+        ///     <see langword="true"/> - Header found on first 'datarow'.
+        ///   </para>
+        ///   <para>
+        ///     <see langword="false"/> - Header row does not exist.
+        ///   </para>
+        /// </value>
+        /// <remarks>
+        ///   If you have already started parsing, you cannot update this value.
+        /// </remarks>
+        public bool FirstRowHasHeader
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_blnFirstRowHasHeader;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_blnFirstRowHasHeader;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_blnFirstRowHasHeader = value;
-			}
-		}
+                this.m_blnFirstRowHasHeader = value;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Indicates whether or not to trim the values for each column.
-		///   </para>
-		///   <para>
-		///     Default: <see langword="false"/>
-		///   </para>
-		/// </summary>
-		/// <value>
-		///   <para>
-		///     <see langword="true"/> - Indicates to trim the resulting strings.
-		///   </para>
-		///   <para>
-		///     <see langword="false"/> - Indicates to not trim the resulting strings.
-		///   </para>
-		/// </value>
-		/// <remarks>
-		///   <para>
-		///     If you have already started parsing, you cannot update this value.
-		///   </para>
-		///   <para>
-		///     Trimming only occurs on the strings if they are not text qualified.
-		///     So by placing values in quotes, it preserves all whitespace within
-		///     quotes.
-		///   </para>
-		/// </remarks>
-		public bool TrimResults
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Indicates whether or not to trim the values for each column.
+        ///   </para>
+        ///   <para>
+        ///     Default: <see langword="false"/>
+        ///   </para>
+        /// </summary>
+        /// <value>
+        ///   <para>
+        ///     <see langword="true"/> - Indicates to trim the resulting strings.
+        ///   </para>
+        ///   <para>
+        ///     <see langword="false"/> - Indicates to not trim the resulting strings.
+        ///   </para>
+        /// </value>
+        /// <remarks>
+        ///   <para>
+        ///     If you have already started parsing, you cannot update this value.
+        ///   </para>
+        ///   <para>
+        ///     Trimming only occurs on the strings if they are not text qualified.
+        ///     So by placing values in quotes, it preserves all whitespace within
+        ///     quotes.
+        ///   </para>
+        /// </remarks>
+        public bool TrimResults
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_blnTrimResults;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_blnTrimResults;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_blnTrimResults = value;
-			}
-		}
+                this.m_blnTrimResults = value;
+            }
+        }
 
-		/// <summary>
-		///   Indicates that the data to be parsed is delimited into columns by
-		///   a fixed width of characters.
-		/// </summary>
-		/// <value>
-		///   <para>
-		///     <see langword="true"/> - Indicates the file's format is fixed width.
-		///   </para>
-		///   <para>
-		///     <see langword="false"/> - Indicates the file's format is delimited.
-		///   </para>
-		/// </value>
-		/// <remarks>
-		///   <para>
-		///     By setting <see cref="ColumnWidths"/>, this property is automatically set.
-		///   </para>
-		///   <para>
-		///     If you have already started parsing, you cannot update this value.
-		///   </para>
-		/// </remarks>
-		 public bool FixedWidth
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Indicates that the data to be parsed is delimited into columns by
+        ///   a fixed width of characters.
+        /// </summary>
+        /// <value>
+        ///   <para>
+        ///     <see langword="true"/> - Indicates the file's format is fixed width.
+        ///   </para>
+        ///   <para>
+        ///     <see langword="false"/> - Indicates the file's format is delimited.
+        ///   </para>
+        /// </value>
+        /// <remarks>
+        ///   <para>
+        ///     By setting <see cref="ColumnWidths"/>, this property is automatically set.
+        ///   </para>
+        ///   <para>
+        ///     If you have already started parsing, you cannot update this value.
+        ///   </para>
+        /// </remarks>
+         public bool FixedWidth
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_blnFixedWidth;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_blnFixedWidth;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_blnFixedWidth = value;
+                this.m_blnFixedWidth = value;
 
-				if (this.m_blnFixedWidth)
-				this.m_caColumnDelimiter = null;
-				else
-				this.m_iaColumnWidths = null;
-			}
-		}
+                if (this.m_blnFixedWidth)
+                this.m_caColumnDelimiter = null;
+                else
+                this.m_iaColumnWidths = null;
+            }
+        }
 
-		/// <summary>
-		///   Retrieves the <see cref="ParserState"/> value indicating the current
-		///   internal state of the parser.
-		/// </summary>
-		/// <value>The <see cref="State"/> property is read-only and is used to return
-		/// information about the internal state of the parser.</value>
-		public ParserState State
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Retrieves the <see cref="ParserState"/> value indicating the current
+        ///   internal state of the parser.
+        /// </summary>
+        /// <value>The <see cref="State"/> property is read-only and is used to return
+        /// information about the internal state of the parser.</value>
+        public ParserState State
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_ParserState;
-			}
-		}
+                return this.m_ParserState;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Contains the character array used to match the end of a row of data.
-		///   </para>
-		///   <para>
-		///     Default: <see cref="System.Environment.NewLine"/>
-		///   </para>
-		/// </summary>
-		/// <value>It is the char[] of the row delimiter used in the data-source.</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		/// <exception cref="ArgumentNullException">Passing in <see langword="null"/>.</exception>
-		/// <exception cref="ArgumentException">Passing in an empty char[].</exception>
-		public char[] RowDelimiter
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Contains the character array used to match the end of a row of data.
+        ///   </para>
+        ///   <para>
+        ///     Default: <see cref="System.Environment.NewLine"/>
+        ///   </para>
+        /// </summary>
+        /// <value>It is the char[] of the row delimiter used in the data-source.</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        /// <exception cref="ArgumentNullException">Passing in <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Passing in an empty char[].</exception>
+        public char[] RowDelimiter
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_caRowDelimiter;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_caRowDelimiter;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				if (value == null)
-				throw new ArgumentNullException("RowDelimiter", "You cannot set the value of RowDelimiter to null.");
-				else if (value.Length < 1)
-				throw new ArgumentException("You cannot set the value of RowDelimiter to an empty array.", "RowDelimiter");
-				else
-				this.m_caRowDelimiter = value;          
-			}
-		}
+                if (value == null)
+                throw new ArgumentNullException("RowDelimiter", "You cannot set the value of RowDelimiter to null.");
+                else if (value.Length < 1)
+                throw new ArgumentException("You cannot set the value of RowDelimiter to an empty array.", "RowDelimiter");
+                else
+                this.m_caRowDelimiter = value;          
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Contains the char[] used to match the end of a column of data.
-		///   </para>
-		///   <para>
-		///     This is only meaningful when performing delimited parsing.
-		///   </para>
-		///   <para>
-		///     Default: ","
-		///   </para>
-		/// </summary>
-		/// <value>Contains the char's that are used to delimit a column.</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		/// <exception cref="ArgumentNullException">Passing in <see langword="null"/>.</exception>
-		/// <exception cref="ArgumentException">Passing in an empty char[].</exception>
-		public char[] ColumnDelimiter
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Contains the char[] used to match the end of a column of data.
+        ///   </para>
+        ///   <para>
+        ///     This is only meaningful when performing delimited parsing.
+        ///   </para>
+        ///   <para>
+        ///     Default: ","
+        ///   </para>
+        /// </summary>
+        /// <value>Contains the char's that are used to delimit a column.</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        /// <exception cref="ArgumentNullException">Passing in <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Passing in an empty char[].</exception>
+        public char[] ColumnDelimiter
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_caColumnDelimiter;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_caColumnDelimiter;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				if (value == null)
-				throw new ArgumentNullException("ColumnDelimiter", "You cannot set the value of ColumnDelimiter to null.");
-				else if (value.Length < 1)
-				throw new ArgumentException("You cannot set the value of ColumnDelimiter to an empty array.", "ColumnDelimiter");
-				else
-				this.m_caColumnDelimiter = value;          
-			}
-	   }
+                if (value == null)
+                throw new ArgumentNullException("ColumnDelimiter", "You cannot set the value of ColumnDelimiter to null.");
+                else if (value.Length < 1)
+                throw new ArgumentException("You cannot set the value of ColumnDelimiter to an empty array.", "ColumnDelimiter");
+                else
+                this.m_caColumnDelimiter = value;          
+            }
+       }
 
-		/// <summary>
-		///   <para>
-		///     Contains the character that is used to enclose a string that would otherwise
-		///     be potentially trimmed (Ex. "  this  ").
-		///   </para>
-		///   <para>
-		///     Default: '\"'
-		///   </para>
-		/// </summary>
-		/// <value>The character used to enclose a string, so that row/column delimiters are
-		/// ignored and whitespace is preserved.</value>
-		/// <remarks>If you have already started parsing, you cannot update this
-		/// value.</remarks>
-		public char TextQualifier
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Contains the character that is used to enclose a string that would otherwise
+        ///     be potentially trimmed (Ex. "  this  ").
+        ///   </para>
+        ///   <para>
+        ///     Default: '\"'
+        ///   </para>
+        /// </summary>
+        /// <value>The character used to enclose a string, so that row/column delimiters are
+        /// ignored and whitespace is preserved.</value>
+        /// <remarks>If you have already started parsing, you cannot update this
+        /// value.</remarks>
+        public char TextQualifier
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_chTextQualifier;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_chTextQualifier;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_chTextQualifier = value;
-			}
-		}
+                this.m_chTextQualifier = value;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Contains the character that is used to escape a character (Ex. "\"This\"").
-		///   </para>
-		///   <para>
-		///     Upon parsing the file, the escaped characters will be stripped out, leaving
-		///     the desired character in place.  To produce the escaped character, use the
-		///     escaped character twice (Ex. \\).
-		///   </para>
-		///   <para>
-		///     Default: '\0'
-		///   </para>
-		/// </summary>
-		/// <value>The character used to escape row/column delimiters and the text qualifier.</value>
-		/// <remarks>
-		///   <para>
-		///     If you have already started parsing, you cannot update this value.
-		///   </para>
-		///   <para>
-		///     Setting this to <see langword="null"/> causes a performance boost, if none of the values are
-		///     expected to require escaping.
-		///   </para>
-		/// </remarks>
-		public char EscapeCharacter
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Contains the character that is used to escape a character (Ex. "\"This\"").
+        ///   </para>
+        ///   <para>
+        ///     Upon parsing the file, the escaped characters will be stripped out, leaving
+        ///     the desired character in place.  To produce the escaped character, use the
+        ///     escaped character twice (Ex. \\).
+        ///   </para>
+        ///   <para>
+        ///     Default: '\0'
+        ///   </para>
+        /// </summary>
+        /// <value>The character used to escape row/column delimiters and the text qualifier.</value>
+        /// <remarks>
+        ///   <para>
+        ///     If you have already started parsing, you cannot update this value.
+        ///   </para>
+        ///   <para>
+        ///     Setting this to <see langword="null"/> causes a performance boost, if none of the values are
+        ///     expected to require escaping.
+        ///   </para>
+        /// </remarks>
+        public char EscapeCharacter
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_chEscapeCharacter;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_chEscapeCharacter;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_chEscapeCharacter = value;
-			}
-		}
+                this.m_chEscapeCharacter = value;
+            }
+        }
 
-		/// <summary>
-		///   <para>
-		///     Contains the character that is used to mark the beginning of a row that contains
-		///     purely comments and that should not be parsed.
-		///   </para>
-		///   <para>
-		///     Default: '#'
-		///   </para>
-		/// </summary>
-		/// <value>
-		///   The character used to indicate the current row is to be ignored as a comment.
-		/// </value>
-		/// <remarks>
-		///   If you have already started parsing, you cannot update this value.
-		/// </remarks>
-		public char CommentCharacter
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   <para>
+        ///     Contains the character that is used to mark the beginning of a row that contains
+        ///     purely comments and that should not be parsed.
+        ///   </para>
+        ///   <para>
+        ///     Default: '#'
+        ///   </para>
+        /// </summary>
+        /// <value>
+        ///   The character used to indicate the current row is to be ignored as a comment.
+        /// </value>
+        /// <remarks>
+        ///   If you have already started parsing, you cannot update this value.
+        /// </remarks>
+        public char CommentCharacter
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_chCommentCharacter;
-			}
-			set
-			{
-				this._CheckDiposed();
+                return this.m_chCommentCharacter;
+            }
+            set
+            {
+                this._CheckDiposed();
 
-				if (this.m_ParserState == ParserState.Parsing)
-				return;
+                if (this.m_ParserState == ParserState.Parsing)
+                return;
 
-				this.m_chCommentCharacter = value;
-			}
-		}
+                this.m_chCommentCharacter = value;
+            }
+        }
 
-		/// <summary>
-		///   Accesses the data found in the current row of data by the column index.
-		/// </summary>
-		/// <value>The value of the column at the given index.</value>
-		/// <param name="intColumnIndex">The index of the Column to retreive.</param>
-		/// <remarks>
-		///   If the column is outside the bounds of the columns found or the column
-		///   does not possess a name, it will return <see langword="null"/>.
-		/// </remarks>
-		public string this[int intColumnIndex]
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Accesses the data found in the current row of data by the column index.
+        /// </summary>
+        /// <value>The value of the column at the given index.</value>
+        /// <param name="intColumnIndex">The index of the Column to retreive.</param>
+        /// <remarks>
+        ///   If the column is outside the bounds of the columns found or the column
+        ///   does not possess a name, it will return <see langword="null"/>.
+        /// </remarks>
+        public string this[int intColumnIndex]
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				if ((intColumnIndex > -1) && (intColumnIndex < this.m_scData.Count))
-				return this.m_scData[intColumnIndex];
-				else
-				return null;
-			}
-		}
+                if ((intColumnIndex > -1) && (intColumnIndex < this.m_scData.Count))
+                return this.m_scData[intColumnIndex];
+                else
+                return null;
+            }
+        }
 
-		/// <summary>
-		///   Accesses the data found in the current row of data by the column name.
-		/// </summary>
-		/// <value>The value of the column with the given column name.</value>
-		/// <param name="strColumnName">The name of the Column to retreive.</param>
-		/// <remarks>
-		///   If the header has yet to be parsed (or no header exists), the property will
-		///   return <see langword="null"/>.
-		/// </remarks>
-		public string this[string strColumnName]
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Accesses the data found in the current row of data by the column name.
+        /// </summary>
+        /// <value>The value of the column with the given column name.</value>
+        /// <param name="strColumnName">The name of the Column to retreive.</param>
+        /// <remarks>
+        ///   If the header has yet to be parsed (or no header exists), the property will
+        ///   return <see langword="null"/>.
+        /// </remarks>
+        public string this[string strColumnName]
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this[this._GetColumnIndex(strColumnName)];
-			}
-		}
+                return this[this._GetColumnIndex(strColumnName)];
+            }
+        }
 
-		/// <summary>
-		///   Returns the number of columns found in the current row
-		///   that was read.
-		/// </summary>
-		/// <value>The number of columns found in the current row.</value>
-		/// <remarks>The <see cref="ColumnCount"/> property is read-only.</remarks>
-		public int ColumnCount
-		{
-			get
-			{
-				this._CheckDiposed();
+        /// <summary>
+        ///   Returns the number of columns found in the current row
+        ///   that was read.
+        /// </summary>
+        /// <value>The number of columns found in the current row.</value>
+        /// <remarks>The <see cref="ColumnCount"/> property is read-only.</remarks>
+        public int ColumnCount
+        {
+            get
+            {
+                this._CheckDiposed();
 
-				return this.m_scData.Count;
-			}
-		}
+                return this.m_scData.Count;
+            }
+        }
 
 
-		
-		/// <summary>
-		///   Sets the file as the datasource.
-		/// </summary>
-		/// <remarks>
-		///   If the parser is currently parsing a file, all data associated
-		///   with the previous file is lost and the parser is reset back to
-		///   its initial values.
-		/// </remarks>
-		/// <param name="strFileName">The <see cref="string"/> containing the name of the file
-		/// to set as the data source.</param>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     GenericParser p = new GenericParser();
-		///     p.SetDataSource(@"C:\MyData.txt");
-		///   </code>
-		/// </example>
-		/// <exception cref="ArgumentNullException">Supplying <see langword="null"/>.</exception>
-		/// <exception cref="ArgumentException">Supplying a filename to a file that does not exist.</exception>
-		public void SetDataSource(string strFileName)
-		{
-			this._CheckDiposed();
+        
+        /// <summary>
+        ///   Sets the file as the datasource.
+        /// </summary>
+        /// <remarks>
+        ///   If the parser is currently parsing a file, all data associated
+        ///   with the previous file is lost and the parser is reset back to
+        ///   its initial values.
+        /// </remarks>
+        /// <param name="strFileName">The <see cref="string"/> containing the name of the file
+        /// to set as the data source.</param>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     GenericParser p = new GenericParser();
+        ///     p.SetDataSource(@"C:\MyData.txt");
+        ///   </code>
+        /// </example>
+        /// <exception cref="ArgumentNullException">Supplying <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Supplying a filename to a file that does not exist.</exception>
+        public void SetDataSource(string strFileName)
+        {
+            this._CheckDiposed();
 
-			if (strFileName == null)
-				throw new ArgumentNullException("strFileName", "You cannot supply a null for the value of strFileName.");
+            if (strFileName == null)
+                throw new ArgumentNullException("strFileName", "You cannot supply a null for the value of strFileName.");
 
-			if (!File.Exists(strFileName))
-				throw new ArgumentException(string.Format("File, {0}, does not exist.", strFileName), "strFileName");
+            if (!File.Exists(strFileName))
+                throw new ArgumentException(string.Format("File, {0}, does not exist.", strFileName), "strFileName");
 
-			this.m_ParserState = ParserState.Ready;
-			this.m_txtReader = new StreamReader(strFileName);
-		}
+            this.m_ParserState = ParserState.Ready;
+            this.m_txtReader = new StreamReader(strFileName);
+        }
 
-		/// <summary>
-		///   Sets the <see cref="TextReader"/> as the datasource.
-		/// </summary>
-		/// <param name="txtReader">The <see cref="TextReader"/> that contains the data to be parsed.</param>
-		/// <remarks>
-		///   If the parser is currently parsing a file, all data associated with the
-		///   previous file is lost and the parser is reset back to its initial values.
-		/// </remarks>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     GenericParser p = new GenericParser();
-		///     StreamReader srReader = new StreamReader(@"C:\MyData.txt");
-		///     p.SetDataSource(srReader);
-		///   </code>
-		/// </example>
-		/// <exception cref="ArgumentNullException">Supplying <see langword="null"/>.</exception>
-		public void SetDataSource(TextReader txtReader)
-		{
-			this._CheckDiposed();
+        /// <summary>
+        ///   Sets the <see cref="TextReader"/> as the datasource.
+        /// </summary>
+        /// <param name="txtReader">The <see cref="TextReader"/> that contains the data to be parsed.</param>
+        /// <remarks>
+        ///   If the parser is currently parsing a file, all data associated with the
+        ///   previous file is lost and the parser is reset back to its initial values.
+        /// </remarks>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     GenericParser p = new GenericParser();
+        ///     StreamReader srReader = new StreamReader(@"C:\MyData.txt");
+        ///     p.SetDataSource(srReader);
+        ///   </code>
+        /// </example>
+        /// <exception cref="ArgumentNullException">Supplying <see langword="null"/>.</exception>
+        public void SetDataSource(TextReader txtReader)
+        {
+            this._CheckDiposed();
 
-			if (txtReader == null)
-				throw new ArgumentNullException("txtReader", "You cannot supply a null for the value of txtReader.");
+            if (txtReader == null)
+                throw new ArgumentNullException("txtReader", "You cannot supply a null for the value of txtReader.");
 
-			this.m_ParserState = ParserState.Ready;
-			this.m_txtReader = txtReader;
-		}
+            this.m_ParserState = ParserState.Ready;
+            this.m_txtReader = txtReader;
+        }
 
 
   
 
-		 /// <summary>
-		///   <para>
-		///     Parses the data-source till it arrives at one row of data.
-		///   </para>
-		/// </summary>
-		/// <returns>
-		///   <para>
-		///     <see langword="true"/> - Successfully parsed a new data row.
-		///   </para>
-		///   <para>
-		///     <see langword="false"/> - No new data rows were found.
-		///   </para>
-		/// </returns>
-		/// <remarks>
-		///   <para>
-		///     If it finds a header, and its expecting a header row, it will not stop
-		///     at the row and continue on till it has found a row of data.
-		///   </para>
-		///   <para>
-		///     Internally, the header row is treated as a data row, but will not cause
-		///     the parser to stop after finding it.
-		///   </para>
-		/// </remarks>
-		/// <exception cref="ParserSetupException">Attempting to read without properly
-		/// setting up the <see cref="GenericParser"/>.</exception>
-		/// <exception cref="ParsingException">Thrown in the situations where the <see cref="GenericParser"/>
-		/// cannot continue due to a conflict between the setup and the data being parsed.</exception>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     GenericParser p = new GenericParser();
-		///     p.SetDataSource(@"C:\MyData.txt");
-		///     
-		///     while(p.Read())
-		///     {
-		///       // Put code here to retrieve results of the read.
-		///     }
-		///     
-		///     p.Close();
-		///   </code>
-		/// </example>
-		public bool Read()
-		{
-			this._CheckDiposed();
+         /// <summary>
+        ///   <para>
+        ///     Parses the data-source till it arrives at one row of data.
+        ///   </para>
+        /// </summary>
+        /// <returns>
+        ///   <para>
+        ///     <see langword="true"/> - Successfully parsed a new data row.
+        ///   </para>
+        ///   <para>
+        ///     <see langword="false"/> - No new data rows were found.
+        ///   </para>
+        /// </returns>
+        /// <remarks>
+        ///   <para>
+        ///     If it finds a header, and its expecting a header row, it will not stop
+        ///     at the row and continue on till it has found a row of data.
+        ///   </para>
+        ///   <para>
+        ///     Internally, the header row is treated as a data row, but will not cause
+        ///     the parser to stop after finding it.
+        ///   </para>
+        /// </remarks>
+        /// <exception cref="ParserSetupException">Attempting to read without properly
+        /// setting up the <see cref="GenericParser"/>.</exception>
+        /// <exception cref="ParsingException">Thrown in the situations where the <see cref="GenericParser"/>
+        /// cannot continue due to a conflict between the setup and the data being parsed.</exception>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     GenericParser p = new GenericParser();
+        ///     p.SetDataSource(@"C:\MyData.txt");
+        ///     
+        ///     while(p.Read())
+        ///     {
+        ///       // Put code here to retrieve results of the read.
+        ///     }
+        ///     
+        ///     p.Close();
+        ///   </code>
+        /// </example>
+        public bool Read()
+        {
+            this._CheckDiposed();
 
-			// Setup some internal variables for the parsing.
-			this._InitializeParse();
+            // Setup some internal variables for the parsing.
+            this._InitializeParse();
 
-			// Do we need to stop parsing rows.
-			if (this.m_ParserState == ParserState.Finished)
-				return false;
+            // Do we need to stop parsing rows.
+            if (this.m_ParserState == ParserState.Finished)
+                return false;
 
-			// Read chunks of the data into the buffer, then parse each chunk for data.
-			while (this._ReadDataIntoBuffer())
-			{
-				while (this.m_intCurrentIndex < this.m_intCharactersInBuffer)
-				{
-				// If we're in the state of parsing the row type, it means we're at the beginning of a row.
-				if (this.m_ParserRowState == RowState.GetRowType)
-				{
-					this._ParseRowType();
+            // Read chunks of the data into the buffer, then parse each chunk for data.
+            while (this._ReadDataIntoBuffer())
+            {
+                while (this.m_intCurrentIndex < this.m_intCharactersInBuffer)
+                {
+                // If we're in the state of parsing the row type, it means we're at the beginning of a row.
+                if (this.m_ParserRowState == RowState.GetRowType)
+                {
+                    this._ParseRowType();
 
-					// In the event that we read in a comment row, we need to skip
-					// the comment character, just in case they use it for something
-					// else in the file (row delimiter possibly).
-					if (this.m_ParserRowState == RowState.CommentRow)
-					{
-					++this.m_intCurrentIndex;
-					continue;
-					}
-				}
+                    // In the event that we read in a comment row, we need to skip
+                    // the comment character, just in case they use it for something
+                    // else in the file (row delimiter possibly).
+                    if (this.m_ParserRowState == RowState.CommentRow)
+                    {
+                    ++this.m_intCurrentIndex;
+                    continue;
+                    }
+                }
 
-				////////////////////////////////////////////////
-				// At this point, we're parsing character by  //
-				// character to find the end of a row/column. //
-				////////////////////////////////////////////////
+                ////////////////////////////////////////////////
+                // At this point, we're parsing character by  //
+                // character to find the end of a row/column. //
+                ////////////////////////////////////////////////
 
-				// If we're in comment, we want to bypass any special considerations and just
-				// find the end.
-				if (this.m_ParserRowState != RowState.CommentRow)
-				{
-					if (this.m_blnEscapeCharacterFound)
-					{
-					this.m_blnEscapeCharacterFound = false;
-					++this.m_intCurrentIndex;
-					continue;
-					}
+                // If we're in comment, we want to bypass any special considerations and just
+                // find the end.
+                if (this.m_ParserRowState != RowState.CommentRow)
+                {
+                    if (this.m_blnEscapeCharacterFound)
+                    {
+                    this.m_blnEscapeCharacterFound = false;
+                    ++this.m_intCurrentIndex;
+                    continue;
+                    }
 
-					// Skip this character and then the next one, so that we ignore the escaped character.
-					if (this.m_caBuffer[this.m_intCurrentIndex] == this.m_chEscapeCharacter)
-					{
-					this.m_blnEscapeCharacterFound = true;
-					++this.m_intCurrentIndex;
-					continue;
-					}
+                    // Skip this character and then the next one, so that we ignore the escaped character.
+                    if (this.m_caBuffer[this.m_intCurrentIndex] == this.m_chEscapeCharacter)
+                    {
+                    this.m_blnEscapeCharacterFound = true;
+                    ++this.m_intCurrentIndex;
+                    continue;
+                    }
 
-					// Text qualifiers cause us to ignore row/column delimiters.
-					if (this.m_caBuffer[this.m_intCurrentIndex] == this.m_chTextQualifier)
-					{
-					this.m_blnInText = !this.m_blnInText;
-					++this.m_intCurrentIndex;
-					continue;
-					}
+                    // Text qualifiers cause us to ignore row/column delimiters.
+                    if (this.m_caBuffer[this.m_intCurrentIndex] == this.m_chTextQualifier)
+                    {
+                    this.m_blnInText = !this.m_blnInText;
+                    ++this.m_intCurrentIndex;
+                    continue;
+                    }
 
-					// If we're still within text, so we don't care about the row/column delimiters.
-					if (this.m_blnInText)
-					{
-					++this.m_intCurrentIndex;
-					continue;
-					}
-				}
+                    // If we're still within text, so we don't care about the row/column delimiters.
+                    if (this.m_blnInText)
+                    {
+                    ++this.m_intCurrentIndex;
+                    continue;
+                    }
+                }
 
-				if (this._IsEndOfRow())
-				{
-					// Move back one character to get the last character in the column
-					// (ended with row delimiter).
-					if (!this._IsEmptyRow(this.m_intCurrentIndex))
-					{
-					if ((this.m_ParserRowState == RowState.DataRow)
-					|| (this.m_ParserRowState == RowState.SkippedRow))
-						++this.m_intDataRowNumber;
+                if (this._IsEndOfRow())
+                {
+                    // Move back one character to get the last character in the column
+                    // (ended with row delimiter).
+                    if (!this._IsEmptyRow(this.m_intCurrentIndex))
+                    {
+                    if ((this.m_ParserRowState == RowState.DataRow)
+                    || (this.m_ParserRowState == RowState.SkippedRow))
+                        ++this.m_intDataRowNumber;
 
-					if ((this.m_ParserRowState == RowState.DataRow)
-					|| (this.m_ParserRowState == RowState.HeaderRow))
-						this._ExtractColumn(this.m_intCurrentIndex - 1);
-					}
+                    if ((this.m_ParserRowState == RowState.DataRow)
+                    || (this.m_ParserRowState == RowState.HeaderRow))
+                        this._ExtractColumn(this.m_intCurrentIndex - 1);
+                    }
 
-					// Add the length of the RowDelimiter to the CurrentIndex to move us along.
-					this.m_intCurrentIndex += this.m_caRowDelimiter.Length;
-					this.m_intCurrentColumnStartIndex = this.m_intCurrentIndex;
-					this.m_blnEndOfRowFound = true;
+                    // Add the length of the RowDelimiter to the CurrentIndex to move us along.
+                    this.m_intCurrentIndex += this.m_caRowDelimiter.Length;
+                    this.m_intCurrentColumnStartIndex = this.m_intCurrentIndex;
+                    this.m_blnEndOfRowFound = true;
 
-					// Ensure that we have some data, before trying to do something with it.
-					// This prevents problems with empty rows.
-					if (this.m_scData.Count > 0)
-					{
-					// Have we got a row that meets our expected number of columns.
-					if ((this.m_intExpectedColumnCount > 0) && (this.m_scData.Count != this.m_intExpectedColumnCount))
-						throw new ParsingException(string.Format("Number of columns ({0}) differs from the expected column count ({1}).",
-						this.m_scData.Count,
-						this.m_intExpectedColumnCount),
-						this.m_intFileRowNumber);
+                    // Ensure that we have some data, before trying to do something with it.
+                    // This prevents problems with empty rows.
+                    if (this.m_scData.Count > 0)
+                    {
+                    // Have we got a row that meets our expected number of columns.
+                    if ((this.m_intExpectedColumnCount > 0) && (this.m_scData.Count != this.m_intExpectedColumnCount))
+                        throw new ParsingException(string.Format("Number of columns ({0}) differs from the expected column count ({1}).",
+                        this.m_scData.Count,
+                        this.m_intExpectedColumnCount),
+                        this.m_intFileRowNumber);
 
-					// If we were in a data row, we need to stop.
-					if (this.m_ParserRowState == RowState.DataRow)
-						break;
-					else if (this.m_ParserRowState == RowState.HeaderRow)
-						this._SetColumnNames();
-					}
+                    // If we were in a data row, we need to stop.
+                    if (this.m_ParserRowState == RowState.DataRow)
+                        break;
+                    else if (this.m_ParserRowState == RowState.HeaderRow)
+                        this._SetColumnNames();
+                    }
 
-					this.m_ParserRowState = RowState.GetRowType;
-					continue;
-				}
-				else if ((this.m_ParserRowState != RowState.CommentRow) && this._IsEndOfColumn())
-				{
-					// Mark that this row has an end of column (ensures that we didn't find an empty row).
-					this.m_blnEndOfColumnFound = true;
+                    this.m_ParserRowState = RowState.GetRowType;
+                    continue;
+                }
+                else if ((this.m_ParserRowState != RowState.CommentRow) && this._IsEndOfColumn())
+                {
+                    // Mark that this row has an end of column (ensures that we didn't find an empty row).
+                    this.m_blnEndOfColumnFound = true;
 
-					// Move back one character to get the last character in the column
-					// (ended with column delimiter).
-					if ((this.m_ParserRowState == RowState.DataRow)
-					|| (this.m_ParserRowState == RowState.HeaderRow))
-					this._ExtractColumn(this.m_intCurrentIndex - 1);
+                    // Move back one character to get the last character in the column
+                    // (ended with column delimiter).
+                    if ((this.m_ParserRowState == RowState.DataRow)
+                    || (this.m_ParserRowState == RowState.HeaderRow))
+                    this._ExtractColumn(this.m_intCurrentIndex - 1);
 
-					// Add the length of the ColumnDelimiter to the CurrentIndex to move us along.
-					if (!this.m_blnFixedWidth)
-					this.m_intCurrentIndex += this.m_caColumnDelimiter.Length;
+                    // Add the length of the ColumnDelimiter to the CurrentIndex to move us along.
+                    if (!this.m_blnFixedWidth)
+                    this.m_intCurrentIndex += this.m_caColumnDelimiter.Length;
 
-					// Set the start of the column indice at the start of a new column.
-					this.m_intCurrentColumnStartIndex = this.m_intCurrentIndex;
-					continue;
-				}
-				else
-					++this.m_intCurrentIndex;
-				}
+                    // Set the start of the column indice at the start of a new column.
+                    this.m_intCurrentColumnStartIndex = this.m_intCurrentIndex;
+                    continue;
+                }
+                else
+                    ++this.m_intCurrentIndex;
+                }
 
-				// We found the end of a row..return normally.
-				if (this.m_blnEndOfRowFound)
-				return (this.m_scData.Count > 0);
-				else
-				{
-				//////////////////////////////////////////////////
-				// At this point, the buffer has been expended. //
-				//////////////////////////////////////////////////
+                // We found the end of a row..return normally.
+                if (this.m_blnEndOfRowFound)
+                return (this.m_scData.Count > 0);
+                else
+                {
+                //////////////////////////////////////////////////
+                // At this point, the buffer has been expended. //
+                //////////////////////////////////////////////////
 
-				// We ran out of data, flush out the last column and return.
-				if (this.m_BufferState == BufferState.NoFetchableData)
-				{
-					this.m_BufferState = BufferState.NoDataLeft;
-					this.m_ParserState = ParserState.Finished;
+                // We ran out of data, flush out the last column and return.
+                if (this.m_BufferState == BufferState.NoFetchableData)
+                {
+                    this.m_BufferState = BufferState.NoDataLeft;
+                    this.m_ParserState = ParserState.Finished;
 
-					if (!this._IsEmptyRow(this.m_intCurrentIndex))
-					{
-					if ((this.m_ParserRowState == RowState.DataRow)
-					|| (this.m_ParserRowState == RowState.SkippedRow))
-						++this.m_intDataRowNumber;
+                    if (!this._IsEmptyRow(this.m_intCurrentIndex))
+                    {
+                    if ((this.m_ParserRowState == RowState.DataRow)
+                    || (this.m_ParserRowState == RowState.SkippedRow))
+                        ++this.m_intDataRowNumber;
 
-					// Move back one character to get the last character in the column (ended with EOF).
-					if (this.m_ParserRowState == RowState.DataRow)
-					{
-						// There's one column left to extract.
-						this._ExtractColumn(this.m_intCurrentIndex - 1);
-						return (this.m_scData.Count > 0);
-					}
-					}
-		            
-					// There's nothing left to extract.
-					return false;
-				}
-				else
-				{
-					// Move the leftover data in the buffer to the front and start over.
-					this._CopyRemainingDataToFront(this.m_intCurrentColumnStartIndex);
+                    // Move back one character to get the last character in the column (ended with EOF).
+                    if (this.m_ParserRowState == RowState.DataRow)
+                    {
+                        // There's one column left to extract.
+                        this._ExtractColumn(this.m_intCurrentIndex - 1);
+                        return (this.m_scData.Count > 0);
+                    }
+                    }
+                    
+                    // There's nothing left to extract.
+                    return false;
+                }
+                else
+                {
+                    // Move the leftover data in the buffer to the front and start over.
+                    this._CopyRemainingDataToFront(this.m_intCurrentColumnStartIndex);
 
-					// Indicate that we need to fetch more data.
-					this.m_BufferState = BufferState.FetchData;
-					continue;
-				}
-				}
-			}
+                    // Indicate that we need to fetch more data.
+                    this.m_BufferState = BufferState.FetchData;
+                    continue;
+                }
+                }
+            }
 
-			this.m_ParserState = ParserState.Finished;
-			return false;
-		}
+            this.m_ParserState = ParserState.Finished;
+            return false;
+        }
 
-
-    
 
     
 
-		/// <summary>
-		/// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="XmlReader"/>.
-		/// </summary>
-		/// <param name="xrConfigXmlFile">The <see cref="XmlReader"/> containing the XmlConfig file to load configuration from.</param>
-		/// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentNullException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     FileStream fs = new FileStream(@"C:\MyData.txt", FileMode.Open);
-		///     XmlTextReader xmlTextReader = new XmlTextReader(fs);
-		///
-		///     GenericParser p = new GenericParser();
-		///     p.Load(xmlTextReader);
-		///   </code>
-		/// </example>
-		public void Load(XmlReader xrConfigXmlFile)
-		{
-			XmlDocument xmlConfig = new XmlDocument();
+    
 
-			xmlConfig.Load(xrConfigXmlFile);
+        /// <summary>
+        /// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="xrConfigXmlFile">The <see cref="XmlReader"/> containing the XmlConfig file to load configuration from.</param>
+        /// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentNullException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     FileStream fs = new FileStream(@"C:\MyData.txt", FileMode.Open);
+        ///     XmlTextReader xmlTextReader = new XmlTextReader(fs);
+        ///
+        ///     GenericParser p = new GenericParser();
+        ///     p.Load(xmlTextReader);
+        ///   </code>
+        /// </example>
+        public void Load(XmlReader xrConfigXmlFile)
+        {
+            XmlDocument xmlConfig = new XmlDocument();
 
-			this.Load(xmlConfig);
-		}
+            xmlConfig.Load(xrConfigXmlFile);
 
-		/// <summary>
-		/// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="TextReader"/>.
-		/// </summary>
-		/// <param name="trConfigXmlFile">The <see cref="TextReader"/> containing the XmlConfig file to load configuration from.</param>
-		/// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentNullException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     StreamReader sr = new StreamReader(@"C:\MyData.txt");
-		///
-		///     GenericParser p = new GenericParser();
-		///     p.Load(sr);
-		///   </code>
-		/// </example>
-		public void Load(TextReader trConfigXmlFile)
-		{
-			XmlDocument xmlConfig = new XmlDocument();
+            this.Load(xmlConfig);
+        }
 
-			xmlConfig.Load(trConfigXmlFile);
+        /// <summary>
+        /// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="trConfigXmlFile">The <see cref="TextReader"/> containing the XmlConfig file to load configuration from.</param>
+        /// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentNullException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     StreamReader sr = new StreamReader(@"C:\MyData.txt");
+        ///
+        ///     GenericParser p = new GenericParser();
+        ///     p.Load(sr);
+        ///   </code>
+        /// </example>
+        public void Load(TextReader trConfigXmlFile)
+        {
+            XmlDocument xmlConfig = new XmlDocument();
 
-			this.Load(xmlConfig);
-		}
+            xmlConfig.Load(trConfigXmlFile);
 
-		/// <summary>
-		/// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="Stream"/>.
-		/// </summary>
-		/// <param name="sConfigXmlFile">The <see cref="Stream"/> containing the XmlConfig file to load configuration from.</param>
-		/// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentNullException"/> could be thrown.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
-		/// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
-		/// <example>
-		///   <code lang="C#" escaped="true">
-		///     FileStream fs = new FileStream(@"C:\MyData.txt", FileMode.Open);
-		///
-		///     GenericParser p = new GenericParser();
-		///     p.Load(fs);
-		///   </code>
-		/// </example>
-		public void Load(Stream sConfigXmlFile)
-		{
-			XmlDocument xmlConfig = new XmlDocument();
+            this.Load(xmlConfig);
+        }
 
-			xmlConfig.Load(sConfigXmlFile);
+        /// <summary>
+        /// Loads the configuration of the <see cref="GenericParser"/> object from an <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="sConfigXmlFile">The <see cref="Stream"/> containing the XmlConfig file to load configuration from.</param>
+        /// <exception cref="ArgumentException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentNullException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentNullException"/> could be thrown.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">In the event that the XmlConfig file contains a value that is invalid,
+        /// an <see cref="ArgumentOutOfRangeException"/> could be thrown.</exception>
+        /// <example>
+        ///   <code lang="C#" escaped="true">
+        ///     FileStream fs = new FileStream(@"C:\MyData.txt", FileMode.Open);
+        ///
+        ///     GenericParser p = new GenericParser();
+        ///     p.Load(fs);
+        ///   </code>
+        /// </example>
+        public void Load(Stream sConfigXmlFile)
+        {
+            XmlDocument xmlConfig = new XmlDocument();
 
-			this.Load(xmlConfig);
-		}
+            xmlConfig.Load(sConfigXmlFile);
+
+            this.Load(xmlConfig);
+        }
 
     /// <summary>
     /// Loads the configuration of the <see cref="GenericParser"/> object from a file on the file system.

@@ -31,13 +31,13 @@ namespace Decon2LS
             AgilentCategory = CategoryForType("Agilent", IconUtils.GetIconForFileType("wiff", IconSize.Small, false, false, false));
             MicromassCategory = CategoryForType("Micromass",
                 IconUtils.AttemptIconForFile(new String[] {@"C:\MassLynx\mlynx.exe", 
-															  @"C:\MassLynx\mlynx3.exe",
-															  @"C:\MassLynx\mlynx4.exe",
-															  @"C:\MassLynx\mlynx5.exe",
-															  @"C:\Program Files\MassLynx\mlynx.exe", 
-															  @"C:\Program Files\MassLynx\mlynx3.exe",
-															  @"C:\Program Files\MassLynx\mlynx4.exe",
-															  @"C:\Program Files\MassLynx\mlynx5.exe"},
+                                                              @"C:\MassLynx\mlynx3.exe",
+                                                              @"C:\MassLynx\mlynx4.exe",
+                                                              @"C:\MassLynx\mlynx5.exe",
+                                                              @"C:\Program Files\MassLynx\mlynx.exe", 
+                                                              @"C:\Program Files\MassLynx\mlynx3.exe",
+                                                              @"C:\Program Files\MassLynx\mlynx4.exe",
+                                                              @"C:\Program Files\MassLynx\mlynx5.exe"},
                 IconSize.Small, false, false, false));
             // Who knows what's associated with .s files
             SFileCategory = CategoryForType("S-File", IconUtils.LoadIconFromAssembly(typeof(frmSpectra), "Icons.SFile.ico", 16, 16));

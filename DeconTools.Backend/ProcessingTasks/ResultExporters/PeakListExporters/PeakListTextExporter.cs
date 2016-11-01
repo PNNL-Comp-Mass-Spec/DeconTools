@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -85,33 +85,33 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         #region Public Methods
 
-		/// <summary>
-		/// Append the peaks to the _peaks.txt file
-		/// </summary>
-		/// <param name="peakList">Peak list to write</param>
-	    public override void WriteOutPeaks(List<MSPeakResult> peakList)
-	    {
-		    using (var sw = new StreamWriter(new FileStream(this.FileName, FileMode.Append, FileAccess.Write, FileShare.Read)))
-		    {
-			    WriteOutPeaks(sw, peakList);
-			    sw.Close();
-		    }
-	    }
-
-		/// <summary>
-		/// Append the peaks to the _peaks.txt file
-		/// </summary>
-		/// <param name="sw">Filestream object</param>
-		/// <param name="peakList">Peak list to write</param>
-		public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
+        /// <summary>
+        /// Append the peaks to the _peaks.txt file
+        /// </summary>
+        /// <param name="peakList">Peak list to write</param>
+        public override void WriteOutPeaks(List<MSPeakResult> peakList)
         {
-			
+            using (var sw = new StreamWriter(new FileStream(this.FileName, FileMode.Append, FileAccess.Write, FileShare.Read)))
+            {
+                WriteOutPeaks(sw, peakList);
+                sw.Close();
+            }
+        }
+
+        /// <summary>
+        /// Append the peaks to the _peaks.txt file
+        /// </summary>
+        /// <param name="sw">Filestream object</param>
+        /// <param name="peakList">Peak list to write</param>
+        public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
+        {
+            
             foreach (var peak in peakList)
             {                    
                 string lineOfPeakData = buildPeakString(peak);
                 sw.Write(lineOfPeakData);
             }
-			sw.Flush();
+            sw.Flush();
             
         }
 

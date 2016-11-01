@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +6,17 @@ using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-	public class TopDownIqResult : IqResult
-	{
-		public TopDownIqResult(IqTarget target)
-			: base(target)
-		{
-			ChargeCorrelationData = new ChargeCorrelationData();
-			SelectedCorrelationGroup = new ChargeCorrelationItem();
-		}
+    public class TopDownIqResult : IqResult
+    {
+        public TopDownIqResult(IqTarget target)
+            : base(target)
+        {
+            ChargeCorrelationData = new ChargeCorrelationData();
+            SelectedCorrelationGroup = new ChargeCorrelationItem();
+        }
 
-		public ChargeCorrelationData ChargeCorrelationData { get; set; }
+        public ChargeCorrelationData ChargeCorrelationData { get; set; }
 
-		public ChargeCorrelationItem SelectedCorrelationGroup { get; set; }
-	}
+        public ChargeCorrelationItem SelectedCorrelationGroup { get; set; }
+    }
 }

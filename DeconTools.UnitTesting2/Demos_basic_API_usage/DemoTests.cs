@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
@@ -77,7 +77,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 
 
 
-		[Test]
+        [Test]
         public void tempGetMSMSDataTest2()
         {
             DeconToolsV2.Readers.clsRawData run = new DeconToolsV2.Readers.clsRawData(FileRefs.RawDataMSFiles.OrbitrapStdFile1, DeconToolsV2.Readers.FileType.FINNIGAN);

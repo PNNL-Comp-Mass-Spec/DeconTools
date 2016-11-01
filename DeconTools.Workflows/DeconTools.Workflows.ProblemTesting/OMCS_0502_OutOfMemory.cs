@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.ProblemTesting
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.CopyRawFileLocal = true;
             executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
-			executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
            
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
             executorParameters.WorkflowParameterFile =
@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.ProblemTesting
             executorParameters.TargetsBaseFolder = Path.Combine(baseFolder, "Targets");
             executorParameters.WorkflowParameterFile = Path.Combine(baseFolder, "Parameters", "O16O18WorkflowParameters_2011_08_23_sum5.xml");
 
-			executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
            

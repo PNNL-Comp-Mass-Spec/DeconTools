@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var run = new RunFactory().CreateRun(testFile1);
 
             var expectedResultsFile1 = Path.Combine(run.DataSetPath, run.DatasetName + ".mgf");
-			var expectedResultsFile2 = Path.Combine(run.DataSetPath, run.DatasetName + "_DeconMSn_log.txt");
+            var expectedResultsFile2 = Path.Combine(run.DataSetPath, run.DatasetName + "_DeconMSn_log.txt");
             var expectedResultsFile3 = Path.Combine(run.DataSetPath, run.DatasetName + "_profile.txt");
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             string datasetName= RunUtilities.GetDatasetName(rawdataFile);
 
             var expectedResultsFile1 = Path.Combine(outputFolder, datasetName + ".mgf");
-			var expectedResultsFile2 = Path.Combine(outputFolder, datasetName + "_DeconMSn_log.txt");
+            var expectedResultsFile2 = Path.Combine(outputFolder, datasetName + "_DeconMSn_log.txt");
             var expectedResultsFile3 = Path.Combine(outputFolder, datasetName + "_profile.txt");
 
             if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);

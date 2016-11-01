@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -17,7 +17,7 @@ namespace IQ.ConsoleManager
                 ReportSyntax();
             }
 
-        	string targetFile = GetTargetFile(args);
+            string targetFile = GetTargetFile(args);
 
             if (args.Length == 2 || !String.IsNullOrEmpty(targetFile))
             {
@@ -68,15 +68,15 @@ namespace IQ.ConsoleManager
 
                         processStartInfo.FileName = @"IQConsole.exe";
 
-						var argString = new StringBuilder();
-                    	argString.Append("\"" + currentDatasetPath + "\"");
-                    	argString.Append(" ");
-						argString.Append("\"" + parameterFile + "\"");
-						if (!String.IsNullOrEmpty(targetFile))
-						{
-							argString.Append(" ");
-							argString.Append(targetFile);
-						}
+                        var argString = new StringBuilder();
+                        argString.Append("\"" + currentDatasetPath + "\"");
+                        argString.Append(" ");
+                        argString.Append("\"" + parameterFile + "\"");
+                        if (!String.IsNullOrEmpty(targetFile))
+                        {
+                            argString.Append(" ");
+                            argString.Append(targetFile);
+                        }
 
                         processStartInfo.Arguments = argString.ToString();
 
@@ -109,10 +109,10 @@ namespace IQ.ConsoleManager
 
         }
 
-		private static string GetTargetFile(string[] args)
-		{
-			return (args.Length == 4 && args[2].Equals("-targets")) ? args[3] : String.Empty;
-		}
+        private static string GetTargetFile(string[] args)
+        {
+            return (args.Length == 4 && args[2].Equals("-targets")) ? args[3] : String.Empty;
+        }
 
         private static void reportFileProblem(string p)
         {

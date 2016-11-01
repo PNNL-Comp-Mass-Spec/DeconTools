@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
@@ -232,58 +232,58 @@ namespace DeconTools.UnitTesting2.Utilities
 
             double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
             double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-			double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
             Console.WriteLine(formula + "\t" + massUnmodified);
             Console.WriteLine(empiricalFormula + "\t" + massModified);
 
             Console.WriteLine("diff= " + diff);
 
-			Assert.AreEqual(42.0, diff);
+            Assert.AreEqual(42.0, diff);
         }
 
-		[Test]
-		public void PyroglutamateTest1()
-		{
-			const string testPeptide = "SAMPLER";
-			var peptideUtils = new PeptideUtils();
-			string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+        [Test]
+        public void PyroglutamateTest1()
+        {
+            const string testPeptide = "SAMPLER";
+            var peptideUtils = new PeptideUtils();
+            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-			const string pyroglutamateMod = "H3N1";
+            const string pyroglutamateMod = "H3N1";
 
-			string empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(formula, pyroglutamateMod);
+            string empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(formula, pyroglutamateMod);
 
-			double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
-			double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-			double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
-			Console.WriteLine(formula + "\t" + massUnmodified);
-			Console.WriteLine(empiricalFormula + "\t" + massModified);
-			Console.WriteLine("diff= " + diff);
+            Console.WriteLine(formula + "\t" + massUnmodified);
+            Console.WriteLine(empiricalFormula + "\t" + massModified);
+            Console.WriteLine("diff= " + diff);
 
-			Assert.AreEqual(-17.0, diff);
-		}
+            Assert.AreEqual(-17.0, diff);
+        }
 
-		[Test]
-		public void AddPhosphorylationTest1()
-		{
-			const string testPeptide = "SAMPLER";
-			var peptideUtils = new PeptideUtils();
-			string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+        [Test]
+        public void AddPhosphorylationTest1()
+        {
+            const string testPeptide = "SAMPLER";
+            var peptideUtils = new PeptideUtils();
+            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-			const string phosphorylationMod = "HPO3";
+            const string phosphorylationMod = "HPO3";
 
-			string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, phosphorylationMod);
+            string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, phosphorylationMod);
 
-			double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
-			double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-			double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
-			Console.WriteLine(formula + "\t" + massUnmodified);
-			Console.WriteLine(empiricalFormula + "\t" + massModified);
-			Console.WriteLine("diff= " + diff);
-			
-			Assert.AreEqual(80.0, diff);
-		}
+            Console.WriteLine(formula + "\t" + massUnmodified);
+            Console.WriteLine(empiricalFormula + "\t" + massModified);
+            Console.WriteLine("diff= " + diff);
+            
+            Assert.AreEqual(80.0, diff);
+        }
     }
 }

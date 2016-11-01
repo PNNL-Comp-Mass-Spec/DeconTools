@@ -19,238 +19,238 @@ using PRISM;
 
 namespace Decon2LS
 {
-	/// <summary>
-	/// Summary description for frmProcess.
-	/// </summary>
-	public class frmProcess : System.Windows.Forms.Form
-	{
-		enum enmProcessType { DECON, TIC, RAW2D, DTA } ;
-		private enmProcessType menm_process_type ;
-		private System.Windows.Forms.Label mlabel_process_type;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button mbtn_file_open;
-		private System.Windows.Forms.Button mbtn_add_files;
-		private System.Windows.Forms.Button mbtn_process;
-		private System.Windows.Forms.Button mbtn_cancel;
-		private clsCfgParms mobj_config ; 
+    /// <summary>
+    /// Summary description for frmProcess.
+    /// </summary>
+    public class frmProcess : System.Windows.Forms.Form
+    {
+        enum enmProcessType { DECON, TIC, RAW2D, DTA } ;
+        private enmProcessType menm_process_type ;
+        private System.Windows.Forms.Label mlabel_process_type;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button mbtn_file_open;
+        private System.Windows.Forms.Button mbtn_add_files;
+        private System.Windows.Forms.Button mbtn_process;
+        private System.Windows.Forms.Button mbtn_cancel;
+        private clsCfgParms mobj_config ; 
 
-		public string mstr_param_file_name ;
-		private System.Windows.Forms.ComboBox mcmb_process_type;
-		private System.Windows.Forms.TextBox mtxt_param_file; 
-		private bool mbln_processing = false ; 
-		private Thread mthrd_process = null ; 
-		private PNNL.Controls.ArrayChartDataProvider data_provider ;
+        public string mstr_param_file_name ;
+        private System.Windows.Forms.ComboBox mcmb_process_type;
+        private System.Windows.Forms.TextBox mtxt_param_file; 
+        private bool mbln_processing = false ; 
+        private Thread mthrd_process = null ; 
+        private PNNL.Controls.ArrayChartDataProvider data_provider ;
 
-		private string mstr_current_file_name ; 
-		private DeconToolsV2.Readers.FileType menm_current_file_type ; 
-		private string mstr_current_out_file_name ; 
-		private System.Windows.Forms.Button mbtn_add_sfolder;
-		private System.Windows.Forms.DataGrid mdatagrid_files;
-		private System.Windows.Forms.Button mbtn_display; 
-		private EventHandler mStatusUpdateDelegate = null;
+        private string mstr_current_file_name ; 
+        private DeconToolsV2.Readers.FileType menm_current_file_type ; 
+        private string mstr_current_out_file_name ; 
+        private System.Windows.Forms.Button mbtn_add_sfolder;
+        private System.Windows.Forms.DataGrid mdatagrid_files;
+        private System.Windows.Forms.Button mbtn_display; 
+        private EventHandler mStatusUpdateDelegate = null;
 
-		private DeconToolsV2.clsProcRunner mobj_proc_runner ;
-		private DeconToolsV2.HornTransform.clsHornTransformParameters mobj_transform_parameters ; 
-		private DeconToolsV2.Readers.clsRawDataPreprocessOptions mobj_fticr_preprocess_parameters ; 
-		private DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobj_dta_parameters ; 
+        private DeconToolsV2.clsProcRunner mobj_proc_runner ;
+        private DeconToolsV2.HornTransform.clsHornTransformParameters mobj_transform_parameters ; 
+        private DeconToolsV2.Readers.clsRawDataPreprocessOptions mobj_fticr_preprocess_parameters ; 
+        private DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobj_dta_parameters ; 
 
-		private DeconToolsV2.Peaks.clsPeakProcessorParameters mobj_peak_parameters ; 
-		private int mint_current_scan_in_preview = -1 ; 
+        private DeconToolsV2.Peaks.clsPeakProcessorParameters mobj_peak_parameters ; 
+        private int mint_current_scan_in_preview = -1 ; 
 
-		public DeconToolsV2.HornTransform.clsHornTransformParameters MassTransformParameters
-		{
-			get
-			{
-				return mobj_transform_parameters ; 
-			}
-			set
-			{
-				mobj_transform_parameters = value ; 
-			}
-		} 
+        public DeconToolsV2.HornTransform.clsHornTransformParameters MassTransformParameters
+        {
+            get
+            {
+                return mobj_transform_parameters ; 
+            }
+            set
+            {
+                mobj_transform_parameters = value ; 
+            }
+        } 
 
-		public DeconToolsV2.Peaks.clsPeakProcessorParameters PeakProcessorParameters
-		{
-			get
-			{
-				return mobj_peak_parameters ; 
-			}
-			set
-			{
-				mobj_peak_parameters = value ; 
-			}
-		}
+        public DeconToolsV2.Peaks.clsPeakProcessorParameters PeakProcessorParameters
+        {
+            get
+            {
+                return mobj_peak_parameters ; 
+            }
+            set
+            {
+                mobj_peak_parameters = value ; 
+            }
+        }
 
-		public DeconToolsV2.Readers.clsRawDataPreprocessOptions FTICRPreProcessParameters
-		{
-			get
-			{
-				return mobj_fticr_preprocess_parameters ; 
-			}
-			set
-			{
-				mobj_fticr_preprocess_parameters = value ; 
-			}
-		}
+        public DeconToolsV2.Readers.clsRawDataPreprocessOptions FTICRPreProcessParameters
+        {
+            get
+            {
+                return mobj_fticr_preprocess_parameters ; 
+            }
+            set
+            {
+                mobj_fticr_preprocess_parameters = value ; 
+            }
+        }
 
-		public DeconToolsV2.DTAGeneration.clsDTAGenerationParameters DTAGenerationParameters
-		{
-			get
-			{
-				return mobj_dta_parameters ; 
-			}
-			set
-			{
-				mobj_dta_parameters = value ; 
-			}
-		}
-
-
+        public DeconToolsV2.DTAGeneration.clsDTAGenerationParameters DTAGenerationParameters
+        {
+            get
+            {
+                return mobj_dta_parameters ; 
+            }
+            set
+            {
+                mobj_dta_parameters = value ; 
+            }
+        }
 
 
 
 
-		/// <summary>
-		/// Object for reading a raw data for showing status update figures 
-		/// when performing a deisotoping.
-		/// </summary>
-		private DeconToolsV2.Readers.clsRawData mobj_raw_data ; 
 
-		private bool mbln_display_on = false ;
-		private int mint_display_panel_default_height = 250 ; 
-		private System.Windows.Forms.Panel mpanel_display;
-		private System.Windows.Forms.Timer mStatusTimer;
-		private System.Windows.Forms.Panel panelProcType;
-		private System.Windows.Forms.Panel panelParamFile;
-		private System.Windows.Forms.Panel panelButtons;
-		private System.Windows.Forms.Panel panelMain;
-		private System.Windows.Forms.Splitter splitter1;
+
+        /// <summary>
+        /// Object for reading a raw data for showing status update figures 
+        /// when performing a deisotoping.
+        /// </summary>
+        private DeconToolsV2.Readers.clsRawData mobj_raw_data ; 
+
+        private bool mbln_display_on = false ;
+        private int mint_display_panel_default_height = 250 ; 
+        private System.Windows.Forms.Panel mpanel_display;
+        private System.Windows.Forms.Timer mStatusTimer;
+        private System.Windows.Forms.Panel panelProcType;
+        private System.Windows.Forms.Panel panelParamFile;
+        private System.Windows.Forms.Panel panelButtons;
+        private System.Windows.Forms.Panel panelMain;
+        private System.Windows.Forms.Splitter splitter1;
 //		private PNNL.Controls.ctlLineChart mctl_spectra;
-		private System.Windows.Forms.Panel panelPBar;
-		private System.Windows.Forms.ProgressBar mpbar_process;
-		private System.Windows.Forms.Button mbtn_add_imsfolder;
-		private PNNL.Controls.MS.ctlSpectrum mctl_spectra;
-		private System.Windows.Forms.CheckBox chkUseParameterFile;
-		private System.Windows.Forms.ToolTip toolTip1;
-		private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.Panel panelPBar;
+        private System.Windows.Forms.ProgressBar mpbar_process;
+        private System.Windows.Forms.Button mbtn_add_imsfolder;
+        private PNNL.Controls.MS.ctlSpectrum mctl_spectra;
+        private System.Windows.Forms.CheckBox chkUseParameterFile;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.ComponentModel.IContainer components;
 
-		public frmProcess(ref clsCfgParms config)
-		{
-			try
-			{
-				InitializeComponent();
-				mobj_config = config ; 
-				SetDataTable() ; 
-				mobj_proc_runner = new DeconToolsV2.clsProcRunner() ; 
-				mbln_processing = false ; 
-				mbln_display_on = false ; 
-				if (this.Height > mpanel_display.Height)
-					this.Height = this.Height - mpanel_display.Height ; 
-				mpanel_display.Height = 0 ; 
-				mobj_raw_data = new DeconToolsV2.Readers.clsRawData() ; 
-				mobj_transform_parameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
-				mobj_peak_parameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ; 
-				mobj_dta_parameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ; 
+        public frmProcess(ref clsCfgParms config)
+        {
+            try
+            {
+                InitializeComponent();
+                mobj_config = config ; 
+                SetDataTable() ; 
+                mobj_proc_runner = new DeconToolsV2.clsProcRunner() ; 
+                mbln_processing = false ; 
+                mbln_display_on = false ; 
+                if (this.Height > mpanel_display.Height)
+                    this.Height = this.Height - mpanel_display.Height ; 
+                mpanel_display.Height = 0 ; 
+                mobj_raw_data = new DeconToolsV2.Readers.clsRawData() ; 
+                mobj_transform_parameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
+                mobj_peak_parameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ; 
+                mobj_dta_parameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ; 
 
-				mcmb_process_type.SelectedIndex=0;
+                mcmb_process_type.SelectedIndex=0;
 
 
-				loadSettings();
+                loadSettings();
 
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		private void loadSettings()
-		{
+        private void loadSettings()
+        {
 //			this.mtxt_param_file.Text=System.Configuration.ConfigurationSettings.AppSettings.Get("frmProcessUserParamFile");
 
 
-		}
-		private void saveSettings()
-		{
-			//this doesn't work in .net 1.1;  have to build own saving class;
+        }
+        private void saveSettings()
+        {
+            //this doesn't work in .net 1.1;  have to build own saving class;
 //		if (this.mtxt_param_file.Text!=null && this.mtxt_param_file.Text.Length>0)
 //		{
 //			System.Configuration.ConfigurationSettings.AppSettings.Set("frmProcessUserParamFile",this.mtxt_param_file.Text);
 //
 //		}
 
-		}
+        }
 
 
 
-		private void SetDataTable()
-		{
-			try
-			{
-				DataGridTableStyle tb_style = new DataGridTableStyle() ; 
-				tb_style.AlternatingBackColor = Color.LightGray ; 
+        private void SetDataTable()
+        {
+            try
+            {
+                DataGridTableStyle tb_style = new DataGridTableStyle() ; 
+                tb_style.AlternatingBackColor = Color.LightGray ; 
 
-				DataGridTextBoxColumn filename_column = new DataGridTextBoxColumn() ; 
-				filename_column.Width = mdatagrid_files.Width/3 ;
-				filename_column.HeaderText = "Filename" ;
+                DataGridTextBoxColumn filename_column = new DataGridTextBoxColumn() ; 
+                filename_column.Width = mdatagrid_files.Width/3 ;
+                filename_column.HeaderText = "Filename" ;
 
-				DataGridTextBoxColumn outfilename_column = new DataGridTextBoxColumn() ; 
-				outfilename_column.Width = mdatagrid_files.Width/3 ;
-				outfilename_column.HeaderText = "Output File" ;
+                DataGridTextBoxColumn outfilename_column = new DataGridTextBoxColumn() ; 
+                outfilename_column.Width = mdatagrid_files.Width/3 ;
+                outfilename_column.HeaderText = "Output File" ;
 
-				DataGridTextBoxColumn filetype_column = new DataGridTextBoxColumn() ; 
-				filetype_column.Width = mdatagrid_files.Width - 10 - filename_column.Width - outfilename_column.Width ; 
-				filetype_column.HeaderText = "File type" ;
+                DataGridTextBoxColumn filetype_column = new DataGridTextBoxColumn() ; 
+                filetype_column.Width = mdatagrid_files.Width - 10 - filename_column.Width - outfilename_column.Width ; 
+                filetype_column.HeaderText = "File type" ;
 
 
-				DataTable table = new DataTable() ; 
-				table.Columns.Add("Filename"); 
-				table.Columns.Add("Output Filename") ; 
-				table.Columns.Add("Type") ; 
-				table.TableName = "Files" ; 
+                DataTable table = new DataTable() ; 
+                table.Columns.Add("Filename"); 
+                table.Columns.Add("Output Filename") ; 
+                table.Columns.Add("Type") ; 
+                table.TableName = "Files" ; 
 
-				mdatagrid_files.DataSource = table ; 
-				tb_style.MappingName = table.TableName ; 
+                mdatagrid_files.DataSource = table ; 
+                tb_style.MappingName = table.TableName ; 
 
-				filename_column.MappingName = table.Columns[0].ColumnName ; 
-				outfilename_column.MappingName = table.Columns[1].ColumnName ; 
-				filetype_column.MappingName = table.Columns[2].ColumnName ; 
+                filename_column.MappingName = table.Columns[0].ColumnName ; 
+                outfilename_column.MappingName = table.Columns[1].ColumnName ; 
+                filetype_column.MappingName = table.Columns[2].ColumnName ; 
 
-				tb_style.GridColumnStyles.Add(filename_column) ; 
-				tb_style.GridColumnStyles.Add(outfilename_column) ; 
-				tb_style.GridColumnStyles.Add(filetype_column) ; 
-				mdatagrid_files.TableStyles.Add(tb_style) ; 
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
+                tb_style.GridColumnStyles.Add(filename_column) ; 
+                tb_style.GridColumnStyles.Add(outfilename_column) ; 
+                tb_style.GridColumnStyles.Add(filetype_column) ; 
+                mdatagrid_files.TableStyles.Add(tb_style) ; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			saveSettings();
-			
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            saveSettings();
+            
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
             PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
@@ -610,167 +610,167 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).EndInit();
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void mbtn_file_open_Click(object sender, System.EventArgs e)
-		{
-			try
-			{
-				OpenFileDialog openFileDialog1 = new OpenFileDialog();
-				openFileDialog1.Filter = "Parameter files (*.xml)|*.xml" ;
-				openFileDialog1.FilterIndex = 1 ;
-				openFileDialog1.RestoreDirectory = true ;
-				openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
+        private void mbtn_file_open_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "Parameter files (*.xml)|*.xml" ;
+                openFileDialog1.FilterIndex = 1 ;
+                openFileDialog1.RestoreDirectory = true ;
+                openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
 
-				if(openFileDialog1.ShowDialog() == DialogResult.OK)
-				{
-					mstr_param_file_name = openFileDialog1.FileName ; 
-					this.mtxt_param_file.Text = mstr_param_file_name ; 
-				}
-				else
-				{
-					return ; 
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString()) ; 
-			}
-		
-		}
+                if(openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    mstr_param_file_name = openFileDialog1.FileName ; 
+                    this.mtxt_param_file.Text = mstr_param_file_name ; 
+                }
+                else
+                {
+                    return ; 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString()) ; 
+            }
+        
+        }
 
-		private void mbtn_add_files_Click(object sender, System.EventArgs e)
-		{
-			try
-			{
-				OpenFileDialog openFileDialog1 = new OpenFileDialog();
-				openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|PNNL IMF files (*.IMF)|*.IMF|PNNL UIMF files (*.UIMF)|*.UIMF|Bruker files(acqu)|acqu|MZ XML files (*.mzxml)|*.mzXML|S files(*.*)|*.*" ;
-				openFileDialog1.FilterIndex = 1 ;
-				openFileDialog1.Multiselect = true ; 
-				openFileDialog1.RestoreDirectory = true ;
-				openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
+        private void mbtn_add_files_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|PNNL IMF files (*.IMF)|*.IMF|PNNL UIMF files (*.UIMF)|*.UIMF|Bruker files(acqu)|acqu|MZ XML files (*.mzxml)|*.mzXML|S files(*.*)|*.*" ;
+                openFileDialog1.FilterIndex = 1 ;
+                openFileDialog1.Multiselect = true ; 
+                openFileDialog1.RestoreDirectory = true ;
+                openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
 
-				if(openFileDialog1.ShowDialog() == DialogResult.OK)
-				{
-					DataTable table = (DataTable) mdatagrid_files.DataSource ; 
-					int num_files = openFileDialog1.FileNames.Length ; 
-					for (int i = 0 ; i < num_files ; i++)
-					{
-						string file_name = openFileDialog1.FileNames[i] ; 
-						int index = file_name.LastIndexOf("\\") ;
-						string path_dir = "" ; 
+                if(openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    DataTable table = (DataTable) mdatagrid_files.DataSource ; 
+                    int num_files = openFileDialog1.FileNames.Length ; 
+                    for (int i = 0 ; i < num_files ; i++)
+                    {
+                        string file_name = openFileDialog1.FileNames[i] ; 
+                        int index = file_name.LastIndexOf("\\") ;
+                        string path_dir = "" ; 
 
-						if (index > 0)
-						{
-							path_dir = file_name.Substring(0, index) ; 
-							mobj_config.OpenDir = path_dir ; 
-						}
+                        if (index > 0)
+                        {
+                            path_dir = file_name.Substring(0, index) ; 
+                            mobj_config.OpenDir = path_dir ; 
+                        }
 
-						DataRow row = table.NewRow() ; 
-						string outfile_name ; 
-						string file_dir = System.IO.Path.GetDirectoryName(file_name) ; 
+                        DataRow row = table.NewRow() ; 
+                        string outfile_name ; 
+                        string file_dir = System.IO.Path.GetDirectoryName(file_name) ; 
 
-						switch (openFileDialog1.FilterIndex)
-						{
-							case 1:
-								// Open Xcalibur File.
-								outfile_name = file_name.Substring(0, file_name.Length - 4) ;
-								row[0] = file_name ; 
-								row[1] = outfile_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.FINNIGAN.ToString() ; 
-								break ; 
-							case 2:
-								// Open Agilent File
-								outfile_name = file_name.Substring(0, file_name.Length - 4) ;
-								row[0] = file_name ; 
-								row[1] = outfile_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.AGILENT_TOF.ToString() ; 
-								break ; 
-							case 3:
-								// Open Micromass File
-								outfile_name = path_dir.Substring(0, path_dir.Length - 4) ;
-								row[0] = path_dir ; 
-								row[1] = path_dir ; 
-								row[2] = DeconToolsV2.Readers.FileType.MICROMASSRAWDATA.ToString() ; 
-								break ; 
-							case 4:
-								// Open PNNL IMF File
-								outfile_name = file_name.Substring(0, file_name.Length - 4) ;
-								row[0] = file_name ; 
-								row[1] = outfile_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.PNNL_IMS.ToString() ; 
-								break ; 
-							case 5:
-								// Open PNNL UIMF File
-								outfile_name = file_name.Substring(0, file_name.Length - 4) ;
-								row[0] = file_name ; 
-								row[1] = outfile_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.PNNL_UIMF.ToString() ; 
-								break ; 
-							case 6:
-								// Open Bruker File
-								outfile_name = file_dir ;
-								row[0] = file_dir ; 
-								row[1] = outfile_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.BRUKER.ToString() ; 
-								break ; 
-							case 7:
-								// Open MZXML file
-								outfile_name = file_name ;
-								row[0] = file_name ; 
-								row[1] = file_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.MZXMLRAWDATA.ToString() ; 
-								break ; 
-							case 8:
-								// Open S file (ICR2LS format) file
-								outfile_name = file_name ;
-								row[0] = file_name ; 
-								row[1] = file_name ; 
-								row[2] = DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString() ; 
-								break ; 
-							default:
-								break ; 
-						}
-						table.Rows.Add(row) ; 
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString()) ; 
-			}
-		}
+                        switch (openFileDialog1.FilterIndex)
+                        {
+                            case 1:
+                                // Open Xcalibur File.
+                                outfile_name = file_name.Substring(0, file_name.Length - 4) ;
+                                row[0] = file_name ; 
+                                row[1] = outfile_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.FINNIGAN.ToString() ; 
+                                break ; 
+                            case 2:
+                                // Open Agilent File
+                                outfile_name = file_name.Substring(0, file_name.Length - 4) ;
+                                row[0] = file_name ; 
+                                row[1] = outfile_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.AGILENT_TOF.ToString() ; 
+                                break ; 
+                            case 3:
+                                // Open Micromass File
+                                outfile_name = path_dir.Substring(0, path_dir.Length - 4) ;
+                                row[0] = path_dir ; 
+                                row[1] = path_dir ; 
+                                row[2] = DeconToolsV2.Readers.FileType.MICROMASSRAWDATA.ToString() ; 
+                                break ; 
+                            case 4:
+                                // Open PNNL IMF File
+                                outfile_name = file_name.Substring(0, file_name.Length - 4) ;
+                                row[0] = file_name ; 
+                                row[1] = outfile_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.PNNL_IMS.ToString() ; 
+                                break ; 
+                            case 5:
+                                // Open PNNL UIMF File
+                                outfile_name = file_name.Substring(0, file_name.Length - 4) ;
+                                row[0] = file_name ; 
+                                row[1] = outfile_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.PNNL_UIMF.ToString() ; 
+                                break ; 
+                            case 6:
+                                // Open Bruker File
+                                outfile_name = file_dir ;
+                                row[0] = file_dir ; 
+                                row[1] = outfile_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.BRUKER.ToString() ; 
+                                break ; 
+                            case 7:
+                                // Open MZXML file
+                                outfile_name = file_name ;
+                                row[0] = file_name ; 
+                                row[1] = file_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.MZXMLRAWDATA.ToString() ; 
+                                break ; 
+                            case 8:
+                                // Open S file (ICR2LS format) file
+                                outfile_name = file_name ;
+                                row[0] = file_name ; 
+                                row[1] = file_name ; 
+                                row[2] = DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString() ; 
+                                break ; 
+                            default:
+                                break ; 
+                        }
+                        table.Rows.Add(row) ; 
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString()) ; 
+            }
+        }
 
-		
-	
+        
+    
 
-		private void mbtn_add_imsfolder_Click(object sender, System.EventArgs e)
-		{
-			
-			int num_files_loaded ; 
-			PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
-			
-			if (!fb.BrowseForFolder(""))
-			{
-				return;
-			}
-			else
-			{
-				System.IO.DirectoryInfo ims_dir = new System.IO.DirectoryInfo(fb.FolderPath) ;
-				num_files_loaded = LoadIMFFilesIntoTable(ims_dir) ; 				
-				if (num_files_loaded == 0 )
-				{
-					System.IO.DirectoryInfo[] ims_all_dirs  = ims_dir.GetDirectories() ; 
-					for (int dir_num = 0 ; dir_num < ims_all_dirs.Length ; dir_num++)
-					{
-						ims_dir  = ims_all_dirs[dir_num] ; 
-						num_files_loaded = LoadIMFFilesIntoTable(ims_dir) ; 
-					}
-				}
+        private void mbtn_add_imsfolder_Click(object sender, System.EventArgs e)
+        {
+            
+            int num_files_loaded ; 
+            PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
+            
+            if (!fb.BrowseForFolder(""))
+            {
+                return;
+            }
+            else
+            {
+                System.IO.DirectoryInfo ims_dir = new System.IO.DirectoryInfo(fb.FolderPath) ;
+                num_files_loaded = LoadIMFFilesIntoTable(ims_dir) ; 				
+                if (num_files_loaded == 0 )
+                {
+                    System.IO.DirectoryInfo[] ims_all_dirs  = ims_dir.GetDirectories() ; 
+                    for (int dir_num = 0 ; dir_num < ims_all_dirs.Length ; dir_num++)
+                    {
+                        ims_dir  = ims_all_dirs[dir_num] ; 
+                        num_files_loaded = LoadIMFFilesIntoTable(ims_dir) ; 
+                    }
+                }
 
 
-			}
+            }
 //			
 //			try
 //			{
@@ -799,61 +799,61 @@ namespace Decon2LS
 //			{
 //				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
 //			}			
-		}
+        }
 
-		private int LoadIMFFilesIntoTable(System.IO.DirectoryInfo path_ims_dir)
-		{
-			//loads all imf files into datagrid, return num of imf_files loaded
-			try
-			{
-				System.IO.FileInfo[] ims_files;		
-				System.IO.FileSystemInfo ims_single_file ; 
-				ims_files = path_ims_dir.GetFiles() ; 
+        private int LoadIMFFilesIntoTable(System.IO.DirectoryInfo path_ims_dir)
+        {
+            //loads all imf files into datagrid, return num of imf_files loaded
+            try
+            {
+                System.IO.FileInfo[] ims_files;		
+                System.IO.FileSystemInfo ims_single_file ; 
+                ims_files = path_ims_dir.GetFiles() ; 
 
-				DataTable table = (DataTable) mdatagrid_files.DataSource ; 
-				int num_files = ims_files.Length ; 
-				int num_imf_files =  0 ; 
-					
-				for (int i = 0 ; i < num_files ; i++)
-				{						
-					ims_single_file = ims_files[i] ; 
-					if (ims_single_file.Extension.ToUpper() == ".IMF")
-					{
-						string file_name = ims_single_file.FullName;
-						num_imf_files++ ; 
-						DataRow row = table.NewRow() ; 
-						string outfile_name ; 
-						// Open PNNL IMF File
-						outfile_name = file_name.Substring(0, file_name.Length - 4) ;
-						row[0] = file_name ; 
-						row[1] = outfile_name ; 
-						row[2] = DeconToolsV2.Readers.FileType.PNNL_IMS.ToString() ; 
-						table.Rows.Add(row) ; 
-					}
-				}
+                DataTable table = (DataTable) mdatagrid_files.DataSource ; 
+                int num_files = ims_files.Length ; 
+                int num_imf_files =  0 ; 
+                    
+                for (int i = 0 ; i < num_files ; i++)
+                {						
+                    ims_single_file = ims_files[i] ; 
+                    if (ims_single_file.Extension.ToUpper() == ".IMF")
+                    {
+                        string file_name = ims_single_file.FullName;
+                        num_imf_files++ ; 
+                        DataRow row = table.NewRow() ; 
+                        string outfile_name ; 
+                        // Open PNNL IMF File
+                        outfile_name = file_name.Substring(0, file_name.Length - 4) ;
+                        row[0] = file_name ; 
+                        row[1] = outfile_name ; 
+                        row[2] = DeconToolsV2.Readers.FileType.PNNL_IMS.ToString() ; 
+                        table.Rows.Add(row) ; 
+                    }
+                }
 
-				return num_imf_files ; 
-			}
-			catch(Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-				return 0 ; 
-			}	
-		}
+                return num_imf_files ; 
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                return 0 ; 
+            }	
+        }
 
 
-		
-		private void mbtn_add_sfolder_Click(object sender, System.EventArgs e)
-		{
-			try
-			{
-				add_S_Folder();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Error selecting folder\n\nDetails:\n"+ex.Message);
+        
+        private void mbtn_add_sfolder_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                add_S_Folder();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error selecting folder\n\nDetails:\n"+ex.Message);
 
-			}
+            }
 
 //			try
 //			{
@@ -877,260 +877,260 @@ namespace Decon2LS
 //			{
 //				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
 //			}
-		}
+        }
 
-		private void FinishOrAbortProcessing(bool abort) 
-		{
-			try
-			{
-				if (mbln_processing)
-				{
-					this.mStatusTimer.Stop();
-					// doing its business.. someone wants to abort. 
-					if (mthrd_process != null && mthrd_process.IsAlive)
-					{
-						if (abort) 
-						{
-							mthrd_process.Abort();
-						}
-						// wait until it to fully terminate or abort
-						mthrd_process.Join();
-					}
-					if (mobj_proc_runner != null)
-					{
-						mobj_proc_runner.Reset() ; 
-					}
-					mbln_processing = false ;
-					mbtn_process.Text = "Process" ;
-					mpbar_process.Value = 0;
-					this.mdatagrid_files.ReadOnly = false;
-					this.mtxt_param_file.ReadOnly = false;					
-					return ;
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
+        private void FinishOrAbortProcessing(bool abort) 
+        {
+            try
+            {
+                if (mbln_processing)
+                {
+                    this.mStatusTimer.Stop();
+                    // doing its business.. someone wants to abort. 
+                    if (mthrd_process != null && mthrd_process.IsAlive)
+                    {
+                        if (abort) 
+                        {
+                            mthrd_process.Abort();
+                        }
+                        // wait until it to fully terminate or abort
+                        mthrd_process.Join();
+                    }
+                    if (mobj_proc_runner != null)
+                    {
+                        mobj_proc_runner.Reset() ; 
+                    }
+                    mbln_processing = false ;
+                    mbtn_process.Text = "Process" ;
+                    mpbar_process.Value = 0;
+                    this.mdatagrid_files.ReadOnly = false;
+                    this.mtxt_param_file.ReadOnly = false;					
+                    return ;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		private void mbtn_process_Click(object sender, System.EventArgs e)
-		{
-			
-			try
-			{
-				if (this.chkUseParameterFile.Checked)
-				{
-					if(validateParameterFile(this.mtxt_param_file.Text))
-					{
-						updateCurrentParameters(this.mtxt_param_file.Text);
-					}
-					else
-					{
-						MessageBox.Show("Parameter file doesn't exist - check the file path\n\n" + this.mtxt_param_file.Text);
-						return;
+        private void mbtn_process_Click(object sender, System.EventArgs e)
+        {
+            
+            try
+            {
+                if (this.chkUseParameterFile.Checked)
+                {
+                    if(validateParameterFile(this.mtxt_param_file.Text))
+                    {
+                        updateCurrentParameters(this.mtxt_param_file.Text);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Parameter file doesn't exist - check the file path\n\n" + this.mtxt_param_file.Text);
+                        return;
 
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
 
-			}
-
-
-		
-
-			
-			
-			try
-			{
-				if (this.mbln_processing) 
-				{
-					this.FinishOrAbortProcessing(true);
-					return;
-				}
-
-				if (mcmb_process_type.SelectedIndex < 0)
-				{
-					MessageBox.Show("Please select the type of processing you would like to perform") ; 
-					return ; 
-				}
-				switch (mcmb_process_type.SelectedIndex)
-				{
-					case 0:
-						menm_process_type = enmProcessType.DECON ; 
-						break ; 
-					case 1:
-						menm_process_type = enmProcessType.TIC ; 
-						break ; 
-					case 2:
-						menm_process_type = enmProcessType.RAW2D ; 
-						break ; 
-					case 3: 
-						menm_process_type = enmProcessType.DTA;
-						break;
-					default:
-						break ; 
-				}
-
-				mbln_processing = true ; 
-				mbtn_process.Text = "Abort" ; 
-				ProcessFiles();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
-
-		private void ProcessFiles()
-		{
-			try
-			{
-				
-			
-				
-				this.mctl_spectra.SeriesCollection.Clear();
-
-				data_provider = new PNNL.Controls.ArrayChartDataProvider();
-				PNNL.Controls.DiamondShape shape = new PNNL.Controls.DiamondShape(3, false) ; 
-				PNNL.Controls.clsPlotParams plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red) ; 
-				PNNL.Controls.clsSeries series = new PNNL.Controls.clsSeries(data_provider, plt_params);
-				this.mctl_spectra.SeriesCollection.Add(series);
-
-				DataTable table = (DataTable) this.mdatagrid_files.DataSource ; 
-				this.mdatagrid_files.ReadOnly = true;
-				this.mtxt_param_file.ReadOnly = true;
-
-				if (this.mStatusUpdateDelegate != null) 
-				{
-					this.mStatusTimer.Tick -= this.mStatusUpdateDelegate;
-				}
-
-				switch (menm_process_type)
-				{
-					case enmProcessType.DECON:
-						this.mStatusUpdateDelegate = new EventHandler(this.CheckDeconStatusHandler);
-						break;
-					case enmProcessType.TIC:
-						this.mStatusUpdateDelegate = new EventHandler(this.CheckTicStatusHandler);
-						break ; 
-					case enmProcessType.RAW2D:
-						this.mStatusUpdateDelegate = new EventHandler(this.CheckDeconStatusHandler);
-						break ; 
-					case enmProcessType.DTA:
-						this.mStatusUpdateDelegate = new EventHandler(this.CheckMassRefineStatusHandler);
-						break;
-					default:
-						return ;  
-				}
-				this.mStatusTimer.Tick += this.mStatusUpdateDelegate;
-				this.mStatusTimer.Start();
-
-				//this.mthrd_status.Start();
-				ThreadStart processThreadStart = new ThreadStart(ProcessFilesThreaded);
-				mthrd_process = new Thread(processThreadStart);
-				mthrd_process.Name = "Process Files";
-				mthrd_process.IsBackground = true;
-				mthrd_process.Start();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
-
-		
-		private bool validateParameterFile(string filename)
-		{
-			if(System.IO.File.Exists(filename)) return true;
-			return false;
-			
-
-		}
-
-		private void updateCurrentParameters(string filename)
-		{
-
-			try
-			{
-				clsParameterLoader paramLoader = new clsParameterLoader() ; 
-				paramLoader.LoadParametersFromFile(filename);
-				this.mobj_dta_parameters=paramLoader.DTAParameters;
-				this.mobj_fticr_preprocess_parameters=paramLoader.FTICRPreprocessOptions;
-				this.mobj_peak_parameters=paramLoader.PeakParameters;
-				this.mobj_transform_parameters=paramLoader.TransformParameters;
+            }
 
 
-				
-			}
-			catch (Exception ex)
-			{
-				throw new System.IO.IOException("Could not load the parameters.\nDetails:"+ex.Message);
-			}
+        
+
+            
+            
+            try
+            {
+                if (this.mbln_processing) 
+                {
+                    this.FinishOrAbortProcessing(true);
+                    return;
+                }
+
+                if (mcmb_process_type.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Please select the type of processing you would like to perform") ; 
+                    return ; 
+                }
+                switch (mcmb_process_type.SelectedIndex)
+                {
+                    case 0:
+                        menm_process_type = enmProcessType.DECON ; 
+                        break ; 
+                    case 1:
+                        menm_process_type = enmProcessType.TIC ; 
+                        break ; 
+                    case 2:
+                        menm_process_type = enmProcessType.RAW2D ; 
+                        break ; 
+                    case 3: 
+                        menm_process_type = enmProcessType.DTA;
+                        break;
+                    default:
+                        break ; 
+                }
+
+                mbln_processing = true ; 
+                mbtn_process.Text = "Abort" ; 
+                ProcessFiles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
+
+        private void ProcessFiles()
+        {
+            try
+            {
+                
+            
+                
+                this.mctl_spectra.SeriesCollection.Clear();
+
+                data_provider = new PNNL.Controls.ArrayChartDataProvider();
+                PNNL.Controls.DiamondShape shape = new PNNL.Controls.DiamondShape(3, false) ; 
+                PNNL.Controls.clsPlotParams plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red) ; 
+                PNNL.Controls.clsSeries series = new PNNL.Controls.clsSeries(data_provider, plt_params);
+                this.mctl_spectra.SeriesCollection.Add(series);
+
+                DataTable table = (DataTable) this.mdatagrid_files.DataSource ; 
+                this.mdatagrid_files.ReadOnly = true;
+                this.mtxt_param_file.ReadOnly = true;
+
+                if (this.mStatusUpdateDelegate != null) 
+                {
+                    this.mStatusTimer.Tick -= this.mStatusUpdateDelegate;
+                }
+
+                switch (menm_process_type)
+                {
+                    case enmProcessType.DECON:
+                        this.mStatusUpdateDelegate = new EventHandler(this.CheckDeconStatusHandler);
+                        break;
+                    case enmProcessType.TIC:
+                        this.mStatusUpdateDelegate = new EventHandler(this.CheckTicStatusHandler);
+                        break ; 
+                    case enmProcessType.RAW2D:
+                        this.mStatusUpdateDelegate = new EventHandler(this.CheckDeconStatusHandler);
+                        break ; 
+                    case enmProcessType.DTA:
+                        this.mStatusUpdateDelegate = new EventHandler(this.CheckMassRefineStatusHandler);
+                        break;
+                    default:
+                        return ;  
+                }
+                this.mStatusTimer.Tick += this.mStatusUpdateDelegate;
+                this.mStatusTimer.Start();
+
+                //this.mthrd_status.Start();
+                ThreadStart processThreadStart = new ThreadStart(ProcessFilesThreaded);
+                mthrd_process = new Thread(processThreadStart);
+                mthrd_process.Name = "Process Files";
+                mthrd_process.IsBackground = true;
+                mthrd_process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
+
+        
+        private bool validateParameterFile(string filename)
+        {
+            if(System.IO.File.Exists(filename)) return true;
+            return false;
+            
+
+        }
+
+        private void updateCurrentParameters(string filename)
+        {
+
+            try
+            {
+                clsParameterLoader paramLoader = new clsParameterLoader() ; 
+                paramLoader.LoadParametersFromFile(filename);
+                this.mobj_dta_parameters=paramLoader.DTAParameters;
+                this.mobj_fticr_preprocess_parameters=paramLoader.FTICRPreprocessOptions;
+                this.mobj_peak_parameters=paramLoader.PeakParameters;
+                this.mobj_transform_parameters=paramLoader.TransformParameters;
 
 
-		}
-
-		
-		private void ProcessFilesThreaded() 
-		{
-			try
-			{
-				DataTable table = (DataTable) this.mdatagrid_files.DataSource ; 
-				String paramFile = this.mtxt_param_file.Text;
-				for (int i = 0 ; i < table.Rows.Count ; i++)
-				{
-					DataRow row = table.Rows[i] ; 
-					String fileName = (string) row[0] ;
-					String outFileName = (string) row[1] ; 
-					mstr_current_file_name = fileName ; 
-					mstr_current_out_file_name = outFileName ; 
-					mstr_param_file_name = paramFile ; 
-					menm_current_file_type = GetFileType((string)row[2]) ;
-					this.Text = "Processing " + mstr_current_file_name ; 
-					this.mdatagrid_files.Select(i) ;
-					ProcessCurrentFile(fileName, paramFile, outFileName, menm_current_file_type);
-				}
-				this.BeginInvoke(new FinishedDelegate(this.FinishOrAbortProcessing), new Object[] {false});
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-		}
-
-		private delegate void FinishedDelegate(bool abort);
-
-		private void add_S_Folder()
-		{
-			PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
-			
-			if (!fb.BrowseForFolder(""))
-			{
-				return;
-			}
-			else
-			{
-				DataTable table = (DataTable) mdatagrid_files.DataSource ; 
-				DataRow row = table.NewRow() ; 
-				row[0] = fb.FolderPath; 
-				row[1] = fb.FolderPath; 
-				row[2] = DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString() ; 
-				table.Rows.Add(row) ; 
-
-			}
-		}
+                
+            }
+            catch (Exception ex)
+            {
+                throw new System.IO.IOException("Could not load the parameters.\nDetails:"+ex.Message);
+            }
 
 
+        }
 
-		private void CheckTicStatusHandler(object sender, EventArgs args) 
-		{
-			try 
-			{
+        
+        private void ProcessFilesThreaded() 
+        {
+            try
+            {
+                DataTable table = (DataTable) this.mdatagrid_files.DataSource ; 
+                String paramFile = this.mtxt_param_file.Text;
+                for (int i = 0 ; i < table.Rows.Count ; i++)
+                {
+                    DataRow row = table.Rows[i] ; 
+                    String fileName = (string) row[0] ;
+                    String outFileName = (string) row[1] ; 
+                    mstr_current_file_name = fileName ; 
+                    mstr_current_out_file_name = outFileName ; 
+                    mstr_param_file_name = paramFile ; 
+                    menm_current_file_type = GetFileType((string)row[2]) ;
+                    this.Text = "Processing " + mstr_current_file_name ; 
+                    this.mdatagrid_files.Select(i) ;
+                    ProcessCurrentFile(fileName, paramFile, outFileName, menm_current_file_type);
+                }
+                this.BeginInvoke(new FinishedDelegate(this.FinishOrAbortProcessing), new Object[] {false});
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+        }
+
+        private delegate void FinishedDelegate(bool abort);
+
+        private void add_S_Folder()
+        {
+            PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
+            
+            if (!fb.BrowseForFolder(""))
+            {
+                return;
+            }
+            else
+            {
+                DataTable table = (DataTable) mdatagrid_files.DataSource ; 
+                DataRow row = table.NewRow() ; 
+                row[0] = fb.FolderPath; 
+                row[1] = fb.FolderPath; 
+                row[2] = DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString() ; 
+                table.Rows.Add(row) ; 
+
+            }
+        }
+
+
+
+        private void CheckTicStatusHandler(object sender, EventArgs args) 
+        {
+            try 
+            {
 //				float []scan_values = new float[1] ; 
 //				float []intensity_values = new float[1] ; 
 //			
@@ -1143,306 +1143,306 @@ namespace Decon2LS
 //				}
 //				Console.WriteLine("status = " + Convert.ToString(mobj_decon.MassTransformProgress)); 
 //				//Thread.Sleep(300) ;
-			
-			} 
-			catch (Exception e) 
-			{
-				Console.WriteLine(e);
-			}
-		}
+            
+            } 
+            catch (Exception e) 
+            {
+                Console.WriteLine(e);
+            }
+        }
 
-		private void CheckMassRefineStatusHandler(object sender, EventArgs args)
-		{
-			try
-			{			
+        private void CheckMassRefineStatusHandler(object sender, EventArgs args)
+        {
+            try
+            {			
 
-				mpbar_process.Value = mobj_proc_runner.PercentDone ;
-				
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-			}
-		}
+                mpbar_process.Value = mobj_proc_runner.PercentDone ;
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
 
-		private void CheckDeconStatusHandler(object sender, EventArgs args) 
-		{
-			try 
-			{
-				float []mz_values = new float[1] ; 
-				float []intensity_values = new float[1] ; 
+        private void CheckDeconStatusHandler(object sender, EventArgs args) 
+        {
+            try 
+            {
+                float []mz_values = new float[1] ; 
+                float []intensity_values = new float[1] ; 
 
-				mpbar_process.Value = mobj_proc_runner.PercentDone ;
-				if (mbln_display_on && menm_current_file_type != DeconToolsV2.Readers.FileType.AGILENT_TOF)
-				{
-					string current_file = mobj_raw_data.FileName ; 
-					bool just_loaded = false ; 
-					if (current_file == null || current_file.CompareTo(mstr_current_file_name) != 0)
-					{
-						mobj_raw_data = new DeconToolsV2.Readers.clsRawData(mstr_current_file_name, menm_current_file_type) ; 
-						just_loaded = true ; 
-					}
-					int current_scan = mobj_proc_runner.CurrentScanNum ; 
-					if (current_scan == mint_current_scan_in_preview)
-						return ; 
-					mint_current_scan_in_preview = current_scan ; 
-					lock (this) 
-					{
+                mpbar_process.Value = mobj_proc_runner.PercentDone ;
+                if (mbln_display_on && menm_current_file_type != DeconToolsV2.Readers.FileType.AGILENT_TOF)
+                {
+                    string current_file = mobj_raw_data.FileName ; 
+                    bool just_loaded = false ; 
+                    if (current_file == null || current_file.CompareTo(mstr_current_file_name) != 0)
+                    {
+                        mobj_raw_data = new DeconToolsV2.Readers.clsRawData(mstr_current_file_name, menm_current_file_type) ; 
+                        just_loaded = true ; 
+                    }
+                    int current_scan = mobj_proc_runner.CurrentScanNum ; 
+                    if (current_scan == mint_current_scan_in_preview)
+                        return ; 
+                    mint_current_scan_in_preview = current_scan ; 
+                    lock (this) 
+                    {
 
-						double[] xvals = XYValueConverter.ConvertFloatsToDoubles(mz_values);
-						double[] yvals = XYValueConverter.ConvertFloatsToDoubles(intensity_values);
+                        double[] xvals = XYValueConverter.ConvertFloatsToDoubles(mz_values);
+                        double[] yvals = XYValueConverter.ConvertFloatsToDoubles(intensity_values);
 
-						mobj_raw_data.GetSpectrum(current_scan, ref xvals, ref yvals) ; 
+                        mobj_raw_data.GetSpectrum(current_scan, ref xvals, ref yvals) ; 
 
-						XYValueConverter.ConvertDoublesToFloats(xvals,ref mz_values);
-						XYValueConverter.ConvertDoublesToFloats(yvals,ref intensity_values);
-					}
+                        XYValueConverter.ConvertDoublesToFloats(xvals,ref mz_values);
+                        XYValueConverter.ConvertDoublesToFloats(yvals,ref intensity_values);
+                    }
 
-					data_provider.SetData(mz_values, intensity_values) ; 
-					mctl_spectra.Title = "Scan# " + current_scan.ToString() ; 
-					mctl_spectra.AutoViewPortY() ; 
+                    data_provider.SetData(mz_values, intensity_values) ; 
+                    mctl_spectra.Title = "Scan# " + current_scan.ToString() ; 
+                    mctl_spectra.AutoViewPortY() ; 
 //					mctl_spectra.Invalidate() ; 
 
-					if (just_loaded)
-					{
-						mctl_spectra.ViewPortHistory.Clear() ; 
-						mctl_spectra.AutoViewPort() ; 
-						if (menm_current_file_type == DeconToolsV2.Readers.FileType.BRUKER || menm_current_file_type == DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
-						{
-							// set the mz range. 
-							mctl_spectra.ViewPort = new RectangleF(400, mctl_spectra.ViewPort.Y, 1600, mctl_spectra.ViewPort.Height) ; 
-						}
-					}
-				}
-			}
-			catch (Exception e) 
-			{
-				Console.WriteLine(e);
-			}
-		}
+                    if (just_loaded)
+                    {
+                        mctl_spectra.ViewPortHistory.Clear() ; 
+                        mctl_spectra.AutoViewPort() ; 
+                        if (menm_current_file_type == DeconToolsV2.Readers.FileType.BRUKER || menm_current_file_type == DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
+                        {
+                            // set the mz range. 
+                            mctl_spectra.ViewPort = new RectangleF(400, mctl_spectra.ViewPort.Y, 1600, mctl_spectra.ViewPort.Height) ; 
+                        }
+                    }
+                }
+            }
+            catch (Exception e) 
+            {
+                Console.WriteLine(e);
+            }
+        }
 
 
-		private DeconToolsV2.Readers.FileType GetFileType(string file_type)
-		{
-			try
-			{
-				if(file_type == DeconToolsV2.Readers.FileType.FINNIGAN.ToString())
-					return DeconToolsV2.Readers.FileType.FINNIGAN ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.AGILENT_TOF.ToString())
-					return DeconToolsV2.Readers.FileType.AGILENT_TOF ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.MICROMASSRAWDATA.ToString())
-					return DeconToolsV2.Readers.FileType.MICROMASSRAWDATA ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.PNNL_IMS.ToString())
-					return DeconToolsV2.Readers.FileType.PNNL_IMS ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.BRUKER.ToString())
-					return DeconToolsV2.Readers.FileType.BRUKER ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString())
-					return DeconToolsV2.Readers.FileType.ICR2LSRAWDATA ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.MZXMLRAWDATA.ToString())
-					return DeconToolsV2.Readers.FileType.MZXMLRAWDATA ; 
-				else if (file_type == DeconToolsV2.Readers.FileType.PNNL_UIMF.ToString())
-					return DeconToolsV2.Readers.FileType.PNNL_UIMF ; 
-				return DeconToolsV2.Readers.FileType.UNDEFINED ; 
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-			return DeconToolsV2.Readers.FileType.UNDEFINED ; 
-		}
+        private DeconToolsV2.Readers.FileType GetFileType(string file_type)
+        {
+            try
+            {
+                if(file_type == DeconToolsV2.Readers.FileType.FINNIGAN.ToString())
+                    return DeconToolsV2.Readers.FileType.FINNIGAN ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.AGILENT_TOF.ToString())
+                    return DeconToolsV2.Readers.FileType.AGILENT_TOF ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.MICROMASSRAWDATA.ToString())
+                    return DeconToolsV2.Readers.FileType.MICROMASSRAWDATA ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.PNNL_IMS.ToString())
+                    return DeconToolsV2.Readers.FileType.PNNL_IMS ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.BRUKER.ToString())
+                    return DeconToolsV2.Readers.FileType.BRUKER ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString())
+                    return DeconToolsV2.Readers.FileType.ICR2LSRAWDATA ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.MZXMLRAWDATA.ToString())
+                    return DeconToolsV2.Readers.FileType.MZXMLRAWDATA ; 
+                else if (file_type == DeconToolsV2.Readers.FileType.PNNL_UIMF.ToString())
+                    return DeconToolsV2.Readers.FileType.PNNL_UIMF ; 
+                return DeconToolsV2.Readers.FileType.UNDEFINED ; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+            return DeconToolsV2.Readers.FileType.UNDEFINED ; 
+        }
 
-		private string RemoveExtension(string fileName, DeconToolsV2.Readers.FileType fileType)
-		{
-			try
-			{
-				int last_pos = fileName.LastIndexOf(".") ;
-				if (last_pos == -1)
-					return fileName ; 
-				return fileName.Substring(0, last_pos) ; 
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
-			}
-			return null ; 
-		}
+        private string RemoveExtension(string fileName, DeconToolsV2.Readers.FileType fileType)
+        {
+            try
+            {
+                int last_pos = fileName.LastIndexOf(".") ;
+                if (last_pos == -1)
+                    return fileName ; 
+                return fileName.Substring(0, last_pos) ; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+            }
+            return null ; 
+        }
 
-		private void ProcessCurrentFile(string fileName, string paramFile, string outFileName, DeconToolsV2.Readers.FileType fileType)
-		{
+        private void ProcessCurrentFile(string fileName, string paramFile, string outFileName, DeconToolsV2.Readers.FileType fileType)
+        {
 
-			try
-			{
-				System.DateTime start_time = DateTime.Now ; 
-				if (mobj_proc_runner == null)
-					mobj_proc_runner = new DeconToolsV2.clsProcRunner() ; 
-				switch (menm_process_type)
-				{
-					case enmProcessType.DECON:
-						mobj_proc_runner.HornTransformParameters = mobj_transform_parameters ; 
-						mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters ;
-						mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
-						mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
-						mobj_proc_runner.FileName = fileName ; 
-						mobj_proc_runner.FileType = menm_current_file_type ; 
-						mobj_proc_runner.CreateTransformResults() ; 
-						if (fileType != DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
-							mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), false) ; 
-						else
-							mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), true) ; 						
-						break;
-					case enmProcessType.TIC:
-						break ; 
-					case enmProcessType.RAW2D:
-						mobj_proc_runner.HornTransformParameters = mobj_transform_parameters ; 
-						mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters ;
-						mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
-						mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
-						mobj_proc_runner.FileName = fileName ; 
-						mobj_proc_runner.FileType = menm_current_file_type ; 
-						mobj_proc_runner.CreateTransformResultWithPeaksOnly() ; 
-						if (fileType != DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
-							mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), false) ; 
-						else
-							mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), true) ; 
-						break;
-					case enmProcessType.DTA:
-						mobj_proc_runner.HornTransformParameters = mobj_transform_parameters;
-						mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters;
-						mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
-						mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
-						mobj_proc_runner.FileName = fileName ; 
-						mobj_proc_runner.FileType = menm_current_file_type ;					
-						mobj_proc_runner.CreateDTAFile() ; 					
-						break;				
-					default:
-						break ; 
-				}
-				System.DateTime stop_time = DateTime.Now ; 
-				System.TimeSpan span = new System.TimeSpan(stop_time.Ticks - start_time.Ticks) ; 
-				Console.WriteLine("Processed file: " + fileName + " in " + Convert.ToString(span.TotalMilliseconds) + " ms") ; 
-				GC.Collect() ; 
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message + ex.StackTrace) ;
-				mobj_proc_runner = null ; 
-			}
-		}
+            try
+            {
+                System.DateTime start_time = DateTime.Now ; 
+                if (mobj_proc_runner == null)
+                    mobj_proc_runner = new DeconToolsV2.clsProcRunner() ; 
+                switch (menm_process_type)
+                {
+                    case enmProcessType.DECON:
+                        mobj_proc_runner.HornTransformParameters = mobj_transform_parameters ; 
+                        mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters ;
+                        mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
+                        mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
+                        mobj_proc_runner.FileName = fileName ; 
+                        mobj_proc_runner.FileType = menm_current_file_type ; 
+                        mobj_proc_runner.CreateTransformResults() ; 
+                        if (fileType != DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
+                            mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), false) ; 
+                        else
+                            mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), true) ; 						
+                        break;
+                    case enmProcessType.TIC:
+                        break ; 
+                    case enmProcessType.RAW2D:
+                        mobj_proc_runner.HornTransformParameters = mobj_transform_parameters ; 
+                        mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters ;
+                        mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
+                        mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
+                        mobj_proc_runner.FileName = fileName ; 
+                        mobj_proc_runner.FileType = menm_current_file_type ; 
+                        mobj_proc_runner.CreateTransformResultWithPeaksOnly() ; 
+                        if (fileType != DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)
+                            mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), false) ; 
+                        else
+                            mobj_proc_runner.HornTransformResults.WriteResults(RemoveExtension(fileName, fileType), true) ; 
+                        break;
+                    case enmProcessType.DTA:
+                        mobj_proc_runner.HornTransformParameters = mobj_transform_parameters;
+                        mobj_proc_runner.PeakProcessorParameters = mobj_peak_parameters;
+                        mobj_proc_runner.FTICRPreprocessOptions = mobj_fticr_preprocess_parameters ; 
+                        mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters ; 
+                        mobj_proc_runner.FileName = fileName ; 
+                        mobj_proc_runner.FileType = menm_current_file_type ;					
+                        mobj_proc_runner.CreateDTAFile() ; 					
+                        break;				
+                    default:
+                        break ; 
+                }
+                System.DateTime stop_time = DateTime.Now ; 
+                System.TimeSpan span = new System.TimeSpan(stop_time.Ticks - start_time.Ticks) ; 
+                Console.WriteLine("Processed file: " + fileName + " in " + Convert.ToString(span.TotalMilliseconds) + " ms") ; 
+                GC.Collect() ; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+                mobj_proc_runner = null ; 
+            }
+        }
 
-		protected override void OnResize(EventArgs e)
-		{
-			try
-			{
-				if (this.mdatagrid_files != null && this.mdatagrid_files.TableStyles.Count > 0)
-				{
+        protected override void OnResize(EventArgs e)
+        {
+            try
+            {
+                if (this.mdatagrid_files != null && this.mdatagrid_files.TableStyles.Count > 0)
+                {
 
-					if (this.mdatagrid_files.TableStyles[0].GridColumnStyles.Count > 0)
-					{
-						this.mdatagrid_files.TableStyles[0].GridColumnStyles[0].Width = (this.Width*3)/ 8 ;
-						this.mdatagrid_files.TableStyles[0].GridColumnStyles[1].Width = (this.Width*3)/ 8 ;
-						this.mdatagrid_files.TableStyles[0].GridColumnStyles[2].Width = this.Width - (this.Width*3)/ 4 - 5 ;
-					}
-				}
-				this.mbtn_file_open.Left = this.Width - 45 ; 
-				this.mtxt_param_file.Width = this.mbtn_file_open.Left - 10 - this.mtxt_param_file.Left ; 
-				base.OnResize (e);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message + ex.StackTrace) ;
-			}
-		}
+                    if (this.mdatagrid_files.TableStyles[0].GridColumnStyles.Count > 0)
+                    {
+                        this.mdatagrid_files.TableStyles[0].GridColumnStyles[0].Width = (this.Width*3)/ 8 ;
+                        this.mdatagrid_files.TableStyles[0].GridColumnStyles[1].Width = (this.Width*3)/ 8 ;
+                        this.mdatagrid_files.TableStyles[0].GridColumnStyles[2].Width = this.Width - (this.Width*3)/ 4 - 5 ;
+                    }
+                }
+                this.mbtn_file_open.Left = this.Width - 45 ; 
+                this.mtxt_param_file.Width = this.mbtn_file_open.Left - 10 - this.mtxt_param_file.Left ; 
+                base.OnResize (e);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		private void mbtn_cancel_Click(object sender, System.EventArgs e)
-		{
-			try
-			{
-				this.Close();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message + ex.StackTrace) ;
-			}
-		}
+        private void mbtn_cancel_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		protected override void OnClosing(CancelEventArgs e)
-		{
-			try
-			{
-				this.FinishOrAbortProcessing(true);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message + ex.StackTrace) ;
-			}
-		}
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            try
+            {
+                this.FinishOrAbortProcessing(true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		private void mbtn_display_Click(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if (mbln_display_on == false)
-				{
-					mpanel_display.Height = mint_display_panel_default_height ; 
-					this.Height = this.Height + mint_display_panel_default_height ; 
-					mbtn_display.Text = "Display Off" ; 
-				}
-				else
-				{
-					mpanel_display.Height = 0 ; 
-					this.Height = this.Height - mint_display_panel_default_height ; 
-					mbtn_display.Text = "Display On" ; 
-				}
-				mbln_display_on = !mbln_display_on ; 
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message + ex.StackTrace) ;
-			}
-		}
+        private void mbtn_display_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (mbln_display_on == false)
+                {
+                    mpanel_display.Height = mint_display_panel_default_height ; 
+                    this.Height = this.Height + mint_display_panel_default_height ; 
+                    mbtn_display.Text = "Display Off" ; 
+                }
+                else
+                {
+                    mpanel_display.Height = 0 ; 
+                    this.Height = this.Height - mint_display_panel_default_height ; 
+                    mbtn_display.Text = "Display On" ; 
+                }
+                mbln_display_on = !mbln_display_on ; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+            }
+        }
 
-		private void frmProcess_Load(object sender, System.EventArgs e)
-		{
-		
-		}
+        private void frmProcess_Load(object sender, System.EventArgs e)
+        {
+        
+        }
 
-		private void mcmb_process_type_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-		
-		}
+        private void mcmb_process_type_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+        
+        }
 
-		private void mpbar_process_Click(object sender, System.EventArgs e)
-		{
-		}
+        private void mpbar_process_Click(object sender, System.EventArgs e)
+        {
+        }
 
-		private void chkUseParameterFile_CheckedChanged(object sender, System.EventArgs e)
-		{
-			if (!this.chkUseParameterFile.Checked)   // in this case, the user unchecks the box
-			{
-				if (this.Parent==null || this.Parent.Parent==null) return;
-				
-				//Apply frmDecon2LS's settings back to this form
-				if (this.Parent.Parent is frmDecon2LS)
-				{
-					this.mobj_peak_parameters=((frmDecon2LS)(this.Parent.Parent)).PeakProcessorParameters;
-					this.mobj_dta_parameters=((frmDecon2LS)(this.Parent.Parent)).DTAGenerationParameters;
-					this.mobj_fticr_preprocess_parameters=((frmDecon2LS)(this.Parent.Parent)).FTICRPreProcessParameters;
-					this.mobj_transform_parameters=((frmDecon2LS)(this.Parent.Parent)).MassTransformParameters;
+        private void chkUseParameterFile_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (!this.chkUseParameterFile.Checked)   // in this case, the user unchecks the box
+            {
+                if (this.Parent==null || this.Parent.Parent==null) return;
+                
+                //Apply frmDecon2LS's settings back to this form
+                if (this.Parent.Parent is frmDecon2LS)
+                {
+                    this.mobj_peak_parameters=((frmDecon2LS)(this.Parent.Parent)).PeakProcessorParameters;
+                    this.mobj_dta_parameters=((frmDecon2LS)(this.Parent.Parent)).DTAGenerationParameters;
+                    this.mobj_fticr_preprocess_parameters=((frmDecon2LS)(this.Parent.Parent)).FTICRPreProcessParameters;
+                    this.mobj_transform_parameters=((frmDecon2LS)(this.Parent.Parent)).MassTransformParameters;
 
-					MessageBox.Show("FYI - Parameters from 'Options' on the DeconTools main form have been re-applied here.");
-				}
-				else
-				{
-					MessageBox.Show("Original parameters were not applied. You should re-open this form to apply original parameters.");
-				}
-			}
+                    MessageBox.Show("FYI - Parameters from 'Options' on the DeconTools main form have been re-applied here.");
+                }
+                else
+                {
+                    MessageBox.Show("Original parameters were not applied. You should re-open this form to apply original parameters.");
+                }
+            }
 
 //			MessageBox.Show("Smoothing = " + this.MassTransformParameters.UseSavitzkyGolaySmooth.ToString());
 
-			
+            
 
 
-		
-		}
-	}
+        
+        }
+    }
 }

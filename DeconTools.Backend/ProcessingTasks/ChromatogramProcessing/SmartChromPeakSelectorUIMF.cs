@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -81,9 +81,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             TargetBase currentTarget = resultList.Run.CurrentMassTag;
 
             // Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
-			List<MSPeak> theoIsotopicPeakList = currentTarget.IsotopicProfile.Peaklist.Where(x => x.Height > 0.1).OrderBy(x => x.XValue).ToList();
-			msgen.MinMZ = theoIsotopicPeakList[0].XValue - 1.1;
-			msgen.MaxMZ = theoIsotopicPeakList[theoIsotopicPeakList.Count - 1].XValue + 1.1;
+            List<MSPeak> theoIsotopicPeakList = currentTarget.IsotopicProfile.Peaklist.Where(x => x.Height > 0.1).OrderBy(x => x.XValue).ToList();
+            msgen.MinMZ = theoIsotopicPeakList[0].XValue - 1.1;
+            msgen.MaxMZ = theoIsotopicPeakList[theoIsotopicPeakList.Count - 1].XValue + 1.1;
 
             float normalizedElutionTime;
 
@@ -175,71 +175,71 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         }
 
-		protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
-		{
-			var filteredList1 = (from n in peakQualityList
-								 where n.IsotopicProfileFound == true &&
-								 n.FitScore < 1 && n.InterferenceScore < 1
-								 select n).ToList();
+        protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
+        {
+            var filteredList1 = (from n in peakQualityList
+                                 where n.IsotopicProfileFound == true &&
+                                 n.FitScore < 1 && n.InterferenceScore < 1
+                                 select n).ToList();
 
-			ChromPeak bestpeak;
+            ChromPeak bestpeak;
 
-			currentResult.NumQualityChromPeaks = filteredList1.Count;
+            currentResult.NumQualityChromPeaks = filteredList1.Count;
 
-			if (filteredList1.Count == 0)
-			{
-				bestpeak = null;
-				currentResult.FailedResult = true;
-				currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
-			}
-			else if (filteredList1.Count == 1)
-			{
-				bestpeak = filteredList1[0].Peak;
-			}
-			else
-			{
-				filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
+            if (filteredList1.Count == 0)
+            {
+                bestpeak = null;
+                currentResult.FailedResult = true;
+                currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+            }
+            else if (filteredList1.Count == 1)
+            {
+                bestpeak = filteredList1[0].Peak;
+            }
+            else
+            {
+                filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
-				double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
-				bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
-				if (differenceIsSmall)
-				{
-					if (_parameters.MultipleHighQualityMatchesAreAllowed)
-					{
+                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                if (differenceIsSmall)
+                {
+                    if (_parameters.MultipleHighQualityMatchesAreAllowed)
+                    {
 
-						if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
-						{
-							bestpeak = filteredList1[0].Peak;
-						}
-						else
-						{
-							bestpeak = filteredList1[1].Peak;
-						}
-					}
-					else
-					{
-						bestpeak = null;
-						currentResult.FailedResult = true;
-						currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
-					}
-				}
-				else
-				{
-					bestpeak = filteredList1[0].Peak;
-				}
-			}
+                        if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
+                        {
+                            bestpeak = filteredList1[0].Peak;
+                        }
+                        else
+                        {
+                            bestpeak = filteredList1[1].Peak;
+                        }
+                    }
+                    else
+                    {
+                        bestpeak = null;
+                        currentResult.FailedResult = true;
+                        currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+                    }
+                }
+                else
+                {
+                    bestpeak = filteredList1[0].Peak;
+                }
+            }
 
-			// If any of the peaks were good, then we want to make sure to not consider the result an error. 
-			// I added this because if the last peak checked had an error, the entire result was still flagged as having an error.
-			if(bestpeak != null)
-			{
-				currentResult.FailedResult = false;
-				currentResult.FailureType = Globals.TargetedResultFailureType.None;
-			}
+            // If any of the peaks were good, then we want to make sure to not consider the result an error. 
+            // I added this because if the last peak checked had an error, the entire result was still flagged as having an error.
+            if(bestpeak != null)
+            {
+                currentResult.FailedResult = false;
+                currentResult.FailureType = Globals.TargetedResultFailureType.None;
+            }
 
-			return bestpeak;
-		}
+            return bestpeak;
+        }
 
     }
 }
