@@ -44,15 +44,15 @@
 		<UseMercuryCaching>True</UseMercuryCaching>
 		<!-- Set to True to sum all of the spectra in the file together prior to processing -->
 		<SumSpectra>False</SumSpectra>
+		<!-- Set to True to sum the specified number of IMS scans within a frame (centered on the IMS scan of interest) -->
+		<SumSpectraAcrossIms>True</SumSpectraAcrossIms>
+		<!-- This means to sum 7 IMS scans total -->
+		<NumberOfImsScansToSumOver>7</NumberOfImsScansToSumOver>
 		<!-- Set to True to sum the specified number of frames (across the elution time range, centered on the frame of interest) -->
 		<!-- Note: Do not sum across frames when applying saturation correction -->
 		<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
 		<!-- Not summing frames -->
 		<NumberOfScansToSumOver>1</NumberOfScansToSumOver>
-		<!-- Set to True to sum the specified number of IMS scans within a frame (centered on the IMS scan of interest) -->
-		<SumSpectraAcrossIms>True</SumSpectraAcrossIms>
-		<!-- This means to sum 7 IMS scans total -->
-		<NumberOfImsScansToSumOver>7</NumberOfImsScansToSumOver>
 		<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
 		<LeftFitStringencyFactor>2.5</LeftFitStringencyFactor>
 		<RightFitStringencyFactor>0.5</RightFitStringencyFactor>
@@ -66,8 +66,8 @@
 	<Miscellaneous>
 		<!-- Set to True to process a limited LC scan range -->
 		<UseScanRange>False</UseScanRange>
-		<MinScan>-2147483648</MinScan>
-		<MaxScan>2147483647</MaxScan>
+		<MinScan>0</MinScan>
+		<MaxScan>4000</MaxScan>
 		<!-- Set to True to process a limited m/z range -->
 		<UseMZRange>False</UseMZRange>
 		<MinMZ>100</MinMZ>
@@ -90,5 +90,10 @@
 		<ScanBasedWorkflowType>uimf_saturation_repair</ScanBasedWorkflowType>
 		<!-- Threshold to use when the workflow is uimf_saturation_repair -->
 		<SaturationThreshold>50000</SaturationThreshold>
+		<!-- Thresholds to prevent DeconTools from running indefinitely or from getting hung up
+		     on a noisy scan or frame. MaxMinutesPerFrame only applies to IMS datasets -->
+		<MaxMinutesPerScan>4</MaxMinutesPerScan>
+		<MaxMinutesPerFrame>20</MaxMinutesPerFrame>
+		<MaxHoursPerDataset>400</MaxHoursPerDataset>
 	</Miscellaneous>
 </parameters>

@@ -88,5 +88,10 @@
 		<ScanBasedWorkflowType>standard</ScanBasedWorkflowType>
 		<!-- Threshold to use when the workflow is uimf_saturation_repair -->
 		<SaturationThreshold>90000</SaturationThreshold>
+		<!-- Thresholds to prevent DeconTools from running indefinitely or from getting hung up
+		     on a noisy scan or frame. MaxMinutesPerFrame only applies to IMS datasets -->
+		<MaxMinutesPerScan>4</MaxMinutesPerScan>
+		<MaxMinutesPerFrame>20</MaxMinutesPerFrame>
+		<MaxHoursPerDataset>400</MaxHoursPerDataset>
 	</Miscellaneous>
 </parameters>
