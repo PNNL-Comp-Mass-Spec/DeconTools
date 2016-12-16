@@ -6,11 +6,12 @@ reduction, peak detection, prediction of theoretical isotopic envelope and scori
 the quality of signature observed in the data.
 
 == Running DeconTools ==
+
 DeconTools can read the following file formats.  However, some of the file formats require that you 
 install the vendor-supplied data browsing software so that DeconTools has access to the necessary DLLs.
-* mzXML files   (Requires 32-bit ProteoWizard installation)
-* mzML files    (Requires 32-bit ProteoWizard installation)
-* mz5 files     (Requires 32-bit ProteoWizard installation)
+* mzXML files   (Requires ProteoWizard installation)
+* mzML files    (Requires ProteoWizard installation)
+* mz5 files     (Requires ProteoWizard installation)
 * Thermo Finnigan .Raw files (requires Xcalibur or MSFileReader)
   * Download MSFileReader from http://sjsupport.thermofinnigan.com/public/detail.asp?id=703
   * When the installer offers you the option of the version to install, be sure to install the 32-bit version.
@@ -21,6 +22,9 @@ install the vendor-supplied data browsing software so that DeconTools has access
 * IMS .IMF and .UIMF files
 
 DeconTools has both a GUI version (DeconToolsAutoProcessor) and a command-line version (DeconConsole).  
+
+Download ProteoWizard from http://proteowizard.sourceforge.net/
+You typically will need the 64-bit version.
 
 == Results files ==
 
