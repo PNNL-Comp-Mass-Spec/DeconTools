@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class ThrashParameters : ParametersBase
     {
-
         #region Constructors
 
         public ThrashParameters()
@@ -16,8 +15,7 @@ namespace DeconTools.Backend.Parameters
             MaxFit = 0.25;
             MinIntensityForDeletion = 10;
             MinIntensityForScore = 10;
-            
-            
+
             IsO16O18Data = false;
             NumPeaksForShoulder = 1;
             ChargeCarrierMass = Globals.PROTON_MASS;
@@ -36,8 +34,6 @@ namespace DeconTools.Backend.Parameters
             RightFitStringencyFactor = 1;
         }
 
-
-
         #endregion
 
         #region Properties
@@ -55,7 +51,6 @@ namespace DeconTools.Backend.Parameters
         /// intensity falls below this value
         /// </summary>
         public double MinMSFeatureToBackgroundRatio { get; set; }
-
 
         public double MaxFit { get; set; }
 
@@ -114,6 +109,7 @@ namespace DeconTools.Backend.Parameters
 
             AbsolutePeptideIntensity = GetDoubleValue(thrashElement, "AbsolutePeptideIntensity");
             ChargeCarrierMass = GetDoubleValue(thrashElement, "CCMass", ChargeCarrierMass);
+            CheckAllPatternsAgainstChargeState1 = GetBoolVal(thrashElement, "CheckAllPatternsAgainstCharge1", CheckAllPatternsAgainstChargeState1); // Old parameter name; check first, then overwrite if current name is present
             CheckAllPatternsAgainstChargeState1 = GetBoolVal(thrashElement, "CheckAllPatternsAgainstChargeState1", CheckAllPatternsAgainstChargeState1);
 
             CompleteFit = GetBoolVal(thrashElement, "CompleteFit", CompleteFit);
@@ -139,7 +135,6 @@ namespace DeconTools.Backend.Parameters
             TagFormula = GetStringValue(thrashElement, "TagFormula", TagFormula);
             UseAbsoluteIntensity = GetBoolVal(thrashElement, "UseAbsolutePeptideIntensity", UseAbsoluteIntensity);
             AreAllTheoreticalProfilesCachedBeforeStarting = GetBoolVal(thrashElement, "UseMercuryCache", AreAllTheoreticalProfilesCachedBeforeStarting);
-
         }
     }
 }

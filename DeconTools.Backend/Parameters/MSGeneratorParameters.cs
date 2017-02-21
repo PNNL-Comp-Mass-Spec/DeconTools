@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class MSGeneratorParameters : ParametersBase
     {
-
         public MSGeneratorParameters()
         {
             UseMZRange = false;
@@ -20,14 +19,13 @@ namespace DeconTools.Backend.Parameters
             UseLCScanRange = false;
             MinLCScan = 0;
             MaxLCScan = int.MaxValue;
-            
+
             NumLCScansToSum = 1;
             NumImsScansToSum = 1;
 
             UseImsScanRange = false;
             MinImsScan = 0;
             MaxImsScan = int.MaxValue;
-
         }
 
         public MSGeneratorParameters(double minMZ, double maxMZ)
@@ -35,7 +33,6 @@ namespace DeconTools.Backend.Parameters
         {
             MinMZ = minMZ;
             MaxMZ = maxMZ;
-
         }
 
         public bool UseMZRange { get; set; }
@@ -52,7 +49,7 @@ namespace DeconTools.Backend.Parameters
         public int NumLCScansToSum { get; set; }
         public int NumImsScansToSum { get; set; }
 
-   
+
         public bool UseImsScanRange { get; set; }
         public int MinImsScan { get; set; }
         public int MaxImsScan { get; set; }
@@ -75,21 +72,27 @@ namespace DeconTools.Backend.Parameters
             MaxLCScan = GetIntValue(xElement, "MaxScan", MaxLCScan);
 
             //TODO: add these parameters to parameter file
-            UseImsScanRange = GetBoolVal(xElement, "UseImsScanRange", UseImsScanRange);  
+            UseImsScanRange = GetBoolVal(xElement, "UseImsScanRange", UseImsScanRange);
             MinImsScan = GetIntValue(xElement, "MinImsScan", MinImsScan);
             MaxImsScan = GetIntValue(xElement, "MaxImsScan", MaxImsScan);
 
             //TODO:  change how IMS-parameters are loaded and used in this case
             SumAllSpectra = GetBoolVal(xElement, "SumSpectra", SumAllSpectra);
             SumSpectraAcrossLC = GetBoolVal(xElement, "SumSpectraAcrossScanRange", SumSpectraAcrossLC);
-            SumSpectraAcrossIms = GetBoolVal(xElement, "SumSpectraAcrossIms", SumSpectraAcrossIms);      
+            SumSpectraAcrossIms = GetBoolVal(xElement, "SumSpectraAcrossIms", SumSpectraAcrossIms);
             NumLCScansToSum = GetIntValue(xElement, "NumberOfScansToSumOver", NumLCScansToSum);
             NumImsScansToSum = GetIntValue(xElement, "NumberOfImsScansToSumOver", NumImsScansToSum);
-            
+
             GetTicInfo = GetBoolVal(xElement, "GetTicInfo", GetTicInfo); //doesn't exist yet
 
-
-
+            var oldImsParamCheck = xElement.Element("SumSpectraAcrossFrameRange");
+            if (oldImsParamCheck != null)
+            {
+                SumSpectraAcrossIms = SumSpectraAcrossLC;
+                SumSpectraAcrossLC = GetBoolVal(xElement, "SumSpectraAcrossFrameRange", SumSpectraAcrossIms);
+                NumImsScansToSum = NumLCScansToSum * 2 + 1; // Old format was +/- x scans, new format is x scans, must be odd number.
+                NumLCScansToSum = GetIntValue(xElement, "NumberOfFramesToSumOver", NumLCScansToSum);
+            }
         }
     }
 }
