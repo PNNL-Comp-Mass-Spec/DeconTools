@@ -8,12 +8,13 @@ namespace DeconTools.Backend.Core
     public abstract class TargetedResultBase : IsosResult
     {
         #region Constructors
-        public TargetedResultBase()
+
+        protected TargetedResultBase()
         {
             this.ChromPeakQualityList = new List<ChromPeakQualityData>();
         }
 
-        public TargetedResultBase(TargetBase target)
+        protected TargetedResultBase(TargetBase target)
         {
             this.Target = target;
             this.IsotopicProfile = new IsotopicProfile();
