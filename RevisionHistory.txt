@@ -1,5 +1,9 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6262; February 22, 2017 mem
+	- Replace PRISM.dll with ShFolderBrowser.dll
+	- Remove references to obsolete file format .yafms
+
 Version 1.1.6261; February 21, 2017 bcg
 	- Add support/translation from the old IMS parameter files.
 

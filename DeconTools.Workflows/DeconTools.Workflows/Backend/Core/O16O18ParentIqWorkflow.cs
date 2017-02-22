@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected PeakLeastSquaresFitter PeakFitter;
 
-        private DeconTools.Backend.ProcessingTasks.PeakDetectors.DeconToolsPeakDetectorV2 _mspeakDetector;
+        private readonly DeconTools.Backend.ProcessingTasks.PeakDetectors.DeconToolsPeakDetectorV2 _mspeakDetector;
         private bool _headerLogged;
         private BasicGraphControl _graphGenerator;
 
