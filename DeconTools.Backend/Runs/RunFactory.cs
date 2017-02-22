@@ -88,9 +88,10 @@ namespace DeconTools.Backend.Runs
                     run = new AgilentDRun(fullfileName);
                     break;
 
-                case ".yafms":
-                    run = new YAFMSRun(fullfileName);
-                    break;
+                // Deprecated in February 2017
+                // case ".yafms":
+                //     run = new YAFMSRun(fullfileName);
+                //     break;
 
                 default:
                     throw new ApplicationException("File type - "+ extension + " -  is not supported in DeconTools");
@@ -159,9 +160,11 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
-                case Globals.MSFileType.YAFMS:
-                    run = new YAFMSRun(fileName);
-                    break;
+                
+                // Deprecated in February 2017
+                // case Globals.MSFileType.YAFMS:
+                //    run = new YAFMSRun(fileName);
+                //    break;
                 default:
                     run = null;
                     break;

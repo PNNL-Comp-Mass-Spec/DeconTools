@@ -64,50 +64,42 @@ namespace DeconToolsAutoProcessV1
                 }
 
 
-
-                if (File.Exists(filename))
-                {
-                    string extension = Path.GetExtension(filename);
-                    if (extension.ToLower() == ".d")
-                    {
-                        return Globals.MSFileType.Agilent_D;
-                    }
-                    if (extension.ToLower() == ".raw")
-                    {
-                        return Globals.MSFileType.Finnigan;
-                    }
-                    else if (extension.ToLower() == ".imf")
-                    {   
-                        return Globals.MSFileType.PNNL_IMS;
-                    }
-                    else if (extension.ToLower() == ".uimf")
-                    {
-                        return Globals.MSFileType.PNNL_UIMF;
-                    }
-                    else if (extension.ToLower() == ".mzxml")
-                    {
-                        return Globals.MSFileType.MZXML_Rawdata;
-                    }
-                    else if (extension.ToLower() == ".yafms")
-                    {
-                        return Globals.MSFileType.YAFMS;
-                    }
-                    else if (Path.GetFileName(filename).ToLower() == "acqus")
-                    {
-                        return Globals.MSFileType.Bruker;
-                    }
-                   
-                    else
-                    {
-                        return Globals.MSFileType.Undefined;
-                    }
-
-                }
-                else
-                {
+                if (!File.Exists(filename))
+                {                
                     return Globals.MSFileType.Undefined;
                 }
+                
+                string extension = Path.GetExtension(filename);
+                if (extension == null)
+                    return Globals.MSFileType.Undefined;
 
+                switch (extension.ToLower())
+                {
+                    case ".d":
+                        return Globals.MSFileType.Agilent_D;
+                    case ".raw":
+                        return Globals.MSFileType.Finnigan;
+                    case ".imf":
+                        return Globals.MSFileType.PNNL_IMS;
+                    case ".uimf":
+                        return Globals.MSFileType.PNNL_UIMF;
+                    case ".mzxml":
+                        return Globals.MSFileType.MZXML_Rawdata;
+
+                    // Deprecated in February 2017
+                    // case ".yafms":
+                    //    return Globals.MSFileType.YAFMS;
+
+                    default:
+                        var fileName = Path.GetFileName(filename);
+                        if (fileName != null && fileName.ToLower() == "acqus")
+                        {
+                            return Globals.MSFileType.Bruker;
+                        }
+                        break;
+                }
+
+                return Globals.MSFileType.Undefined;
             }
             catch (Exception)
             {

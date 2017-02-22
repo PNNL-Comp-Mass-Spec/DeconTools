@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace DeconTools.Backend
 {
     public class Globals
@@ -33,6 +35,7 @@ namespace DeconTools.Backend
             PNNL_IMS,
             PNNL_UIMF,
             SUNEXTREL,
+            [Obsolete("Yafms is an unsupported file format")]
             YAFMS,
             Bruker_V2
         }

@@ -8,6 +8,7 @@ using YafmsLibrary;
 
 namespace DeconTools.Backend.Runs
 {
+    [Obsolete("Unsupported file format")]
     public sealed class YAFMSRun : Run
     {
         YafmsReader m_reader;
