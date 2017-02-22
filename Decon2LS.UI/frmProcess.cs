@@ -10,12 +10,11 @@
 
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data ; 
 using System.Threading ; 
-using PRISM;
+using ShFolderBrowser.FolderBrowser;
 
 namespace Decon2LS
 {
@@ -749,7 +748,7 @@ namespace Decon2LS
         {
             
             int num_files_loaded ; 
-            PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
+            var fb = new FolderBrowser();
             
             if (!fb.BrowseForFolder(""))
             {
@@ -1107,7 +1106,7 @@ namespace Decon2LS
 
         private void add_S_Folder()
         {
-            PRISM.Files.FolderBrowser fb=new PRISM.Files.FolderBrowser();
+            var fb = new FolderBrowser();
             
             if (!fb.BrowseForFolder(""))
             {

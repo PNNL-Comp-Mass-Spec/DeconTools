@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -81,9 +81,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\PNNL.Controls.MS.dll</HintPath>
     </Reference>
-    <Reference Include="PRISM, Version=1.0.2523.23438, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\PRISM.dll</HintPath>
+    <Reference Include="ShFolderBrowser">
+      <HintPath>..\Library\ShFolderBrowser.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
