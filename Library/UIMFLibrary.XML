@@ -1265,6 +1265,23 @@
             This function assumes that all data in binToIntensityMap has positive (non-zero) intensities
             </remarks>
         </member>
+        <member name="M:UIMFLibrary.IntensityBinConverterInt32.Encode(System.Collections.Generic.IList{System.Tuple{System.Int32,System.Int32}},System.Int32,System.Byte[]@,System.Double@,System.Double@,System.Int32@)">
+            <summary>
+            Convert a list of intensity information by bin to a zero length encoded byte array
+            </summary>
+            <param name="binToIntensityMap">Keys are bin numbers and values are intensity values; intensity values are assumed to all be non-zero</param>
+            <param name="timeOffset">Time offset</param>
+            <param name="spectra">Spectra intensity bytes (output)</param>
+            <param name="tic">TIC (output)</param>
+            <param name="bpi">Base peak intensity (output)</param>
+            <param name="binNumberMaxIntensity">Bin number of the BPI</param>
+            <returns>
+            Number of non-zero data points
+            </returns>
+            <remarks>
+            This function assumes that all data in binToIntensityMap has positive (non-zero) intensities
+            </remarks>
+        </member>
         <member name="T:UIMFLibrary.GlobalParameters">
             <summary>
             The global parameters.
@@ -2220,6 +2237,12 @@
             <param name="frameNumber">Frame number</param>
             <param name="scanNumber">Scan number</param>
         </member>
+        <member name="M:UIMFLibrary.ScanInfo.ToString">
+            <summary>
+            Summarize the data tracked by this class
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:UIMFLibrary.SpectrumCache">
             <summary>
             The spectrum cache.
@@ -2592,6 +2615,7 @@
             <returns>
             True if the column exists<see cref="T:System.Boolean"/>.
             </returns>
+            <remarks>This function does not work with Views; use method TableHasColumn instead</remarks>
         </member>
         <member name="M:UIMFLibrary.DataReader.GetDeltaMz(System.Int32)">
             <summary>
@@ -2663,6 +2687,20 @@
             <exception cref="T:System.Exception">
             </exception>
         </member>
+        <member name="M:UIMFLibrary.DataReader.GetTableColumnNames(System.Data.SQLite.SQLiteConnection,System.String)">
+            <summary>
+            Determine the columns in a table or view
+            </summary>
+            <param name="uimfConnection">
+            Sqlite connection
+            </param>
+            <param name="tableName">
+            Table name
+            </param>
+            <returns>
+            List of column names in the table.
+            </returns>
+        </member>
         <member name="M:UIMFLibrary.DataReader.TableExists(System.Data.SQLite.SQLiteConnection,System.String)">
             <summary>
             Looks for the given table in the SqLite database
@@ -2673,7 +2711,7 @@
             <param name="tableName">
             </param>
             <returns>
-            True if the table exists<see cref="T:System.Boolean"/>.
+            True if the table or view exists<see cref="T:System.Boolean"/>.
             </returns>
         </member>
         <member name="M:UIMFLibrary.DataReader.IndexExists(System.Data.SQLite.SQLiteConnection,System.String)">
@@ -2703,8 +2741,11 @@
             Column name.
             </param>
             <returns>
-            True if the table contains the specified column<see cref="T:System.Boolean"/>.
+            True if the table or view has the specified column<see cref="T:System.Boolean"/>.
             </returns>
+            <remarks>
+            This method works properly with tables that have no rows of data
+            </remarks>
         </member>
         <member name="M:UIMFLibrary.DataReader.AccumulateFrameData(System.Int32,System.Int32,System.Boolean,System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Double)">
             <summary>
@@ -3840,7 +3881,7 @@
             Table name.
             </param>
             <returns>
-            True if the table exists<see cref="T:System.Boolean"/>.
+            True if the table or view exists<see cref="T:System.Boolean"/>.
             </returns>
         </member>
         <member name="M:UIMFLibrary.DataReader.TableHasColumn(System.String,System.String)">
@@ -3854,12 +3895,15 @@
             Column name.
             </param>
             <returns>
-            True if the table has a column<see cref="T:System.Boolean"/>.
+            True if the table or view has the specified column<see cref="T:System.Boolean"/>.
             </returns>
+            <remarks>
+            This method works properly with tables that have no rows of data
+            </remarks>
         </member>
         <member name="M:UIMFLibrary.DataReader.UpdateAllCalibrationCoefficients(System.Double,System.Double,System.Boolean)">
             <summary>
-            /// Update the calibration coefficients for all frames
+            Update the calibration coefficients for all frames
             </summary>
             <param name="slope">
             The slope value for the calibration.
@@ -4758,6 +4802,20 @@
             <remarks>The intensities array should contain an intensity for every bin, including all of the zeroes</remarks>
         </member>
         <member name="M:UIMFLibrary.DataWriter.InsertScan(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.Int32,System.Int32}},System.Double,System.Int32)">
+            <summary>
+            This method takes in a list of intensity information by bin and converts the data to a run length encoded array
+            which is later compressed at the byte level for reduced size
+            </summary>
+            <param name="frameNumber">Frame number</param>
+            <param name="frameParameters">FrameParams</param>
+            <param name="scanNum">Scan number</param>
+            <param name="binToIntensityMap">Keys are bin numbers and values are intensity values; intensity values are assumed to all be non-zero</param>
+            <param name="binWidth">Bin width (in ns)</param>
+            <param name="timeOffset">Time offset</param>
+            <returns>Non-zero data count<see cref="T:System.Int32"/></returns>
+            <remarks>Assumes that all data in binToIntensityMap has positive (non-zero) intensities</remarks>
+        </member>
+        <member name="M:UIMFLibrary.DataWriter.InsertScan(System.Int32,UIMFLibrary.FrameParams,System.Int32,System.Collections.Generic.IList{System.Tuple{System.Int32,System.Int32}},System.Double,System.Int32)">
             <summary>
             This method takes in a list of intensity information by bin and converts the data to a run length encoded array
             which is later compressed at the byte level for reduced size
