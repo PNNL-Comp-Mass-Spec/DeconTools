@@ -1,5 +1,11 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6261; February 21, 2017 bcg
+	- Add support/translation from the old IMS parameter files.
+
+Version 1.1.6148; October 31, 2016  mem
+	- Update app.config files to map SQLite versions to 1.0.97
+
 Version 1.1.6053; July 28, 2016     mem
 	- The Miscellaneous section of the parameter file now has 3 new parameters for specifying runtime limits
 		MaxMinutesPerScan,  default   4 minutes
