@@ -18,8 +18,10 @@ Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll               
 Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe                                                                       ; DestDir: {app}
 Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe.config                                                                ; DestDir: {app}
 
-Source: DeconTools.Backend\x64\SQLite.Interop.dll                                                                                                 ; DestDir: {app}\x64
-Source: DeconTools.Backend\x86\SQLite.Interop.dll                                                                                                 ; DestDir: {app}\x86
+Source: DeconTools.Backend\bin\x64\Release\x64\SQLite.Interop.dll                                                                                 ; DestDir: {app}\x64
+Source: DeconTools.Backend\bin\x64\Release\x86\SQLite.Interop.dll                                                                                 ; DestDir: {app}\x86
+Source: DeconTools.Backend\bin\x64\Release\System.Data.SQLite.dll                                                                                 ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\UIMFLibrary.dll                                                                                        ; DestDir: {app}
 
 Source: Library\alglibnet2.dll                                                                                                                    ; DestDir: {app}
 Source: Library\BrukerDataReader.dll                                                                                                              ; DestDir: {app}
@@ -37,9 +39,7 @@ Source: Library\x64\MultiAlignEngine.dll                                        
 Source: Library\PNNLOmics.dll                                                                                                                     ; DestDir: {app}
 Source: Library\PNNLOmicsElementData.xml                                                                                                          ; DestDir: {app}
 Source: Library\ProteowizardWrapper.dll                                                                                                           ; DestDir: {app}
-Source: Library\System.Data.SQLite.dll                                                                                                            ; DestDir: {app}
 Source: Library\ThermoRawFileReader.dll                                                                                                           ; DestDir: {app}
-Source: Library\UIMFLibrary.dll                                                                                                                   ; DestDir: {app}
 ;Source: Library\xerces-c_2_8.dll                                                                                                                  ; DestDir: {app}
 Source: Library\YafmsLibrary.dll                                                                                                                  ; DestDir: {app}
 
