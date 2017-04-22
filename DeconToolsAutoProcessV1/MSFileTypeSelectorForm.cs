@@ -41,7 +41,7 @@ namespace DeconToolsAutoProcessV1
         {
 
             RunFactory runFactory = new RunFactory();
-            
+
             Run run = runFactory.CreateRun(filename);
 
             if (run != null)
@@ -65,10 +65,10 @@ namespace DeconToolsAutoProcessV1
 
 
                 if (!File.Exists(filename))
-                {                
+                {
                     return Globals.MSFileType.Undefined;
                 }
-                
+
                 string extension = Path.GetExtension(filename);
                 if (extension == null)
                     return Globals.MSFileType.Undefined;
@@ -105,7 +105,7 @@ namespace DeconToolsAutoProcessV1
             {
                 return Globals.MSFileType.Undefined;
             }
-           
+
 
         }
 
