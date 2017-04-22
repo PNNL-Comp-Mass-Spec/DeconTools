@@ -1,0 +1,3 @@
+Compile the DMS version of DeconConsole.exe using DeconTools_x64.sln
+
+Compile in x64 Release mode
