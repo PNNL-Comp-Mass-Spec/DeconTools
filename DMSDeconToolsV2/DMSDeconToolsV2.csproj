@@ -54,9 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Decon2LSRemoter.vb" />
-    <Content Include="..\Library\xerces-c_2_8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">

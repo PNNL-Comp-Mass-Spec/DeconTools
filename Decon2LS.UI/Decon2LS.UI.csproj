@@ -117,9 +117,6 @@
     <Content Include="ErrorProviderIconYellow.ico" />
     <Content Include="Icons\Spectrum_Fit.bmp" />
     <Content Include="Icons\Spectrum_Fit.ico" />
-    <Content Include="..\Library\xerces-c_2_8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -154,9 +154,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Library\xerces-c_2_8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Folder Include="ProcessingTasksTests\O16O18\" />
   </ItemGroup>
   <ItemGroup>

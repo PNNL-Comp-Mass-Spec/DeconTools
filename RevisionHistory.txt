@@ -1,5 +1,11 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6321; April 22, 2017 mem
+	- Updated to .NET 4.6.2
+	- Updated UIMFLibrary, obtained from NuGet
+	  - See https://www.nuget.org/packages/UIMFLibrary
+	- Still using System.Data.SQLite v1.0.97, but obtaining from NuGet
+
 Version 1.1.6262; February 22, 2017 mem
 	- Replace PRISM.dll with ShFolderBrowser.dll
 	- Remove references to obsolete file format .yafms
