@@ -78,7 +78,7 @@ namespace DeconTools.Backend.Workflows
 
         /// <summary>
         /// Use non-saturated peaks to adjust the reported monoisotopic mass of the isotopic profile. Normally, the mono
-        /// isotopic mass is based on the most abundant peak. But for saturated profiles, this is not a good thing. 
+        /// isotopic mass is based on the most abundant peak. But for saturated profiles, this is not a good thing.
         /// </summary>
         public bool AdjustMonoIsotopicMasses { get; set; }
 
@@ -109,10 +109,15 @@ namespace DeconTools.Backend.Workflows
                 // Get saturated MSFeatures for unsummed data
                 uimfRun.CurrentScanSet = unsummedFrameSet;
 
-                var forceProgressMessage = true;                
+                var forceProgressMessage = true;
                 var imsScanCountProcessed = 0;
 
                 var maxMinutesPerFrame = NewDeconToolsParameters.MiscMSProcessingParameters.MaxMinutesPerFrame;
+                if (uimfRun.GetNumFrames() <= 10)
+                {
+                    // Disable the per-frame timeout if we have 10 or fewer frames
+                    maxMinutesPerFrame = int.MaxValue;
+                }
                 var frameStartTime = DateTime.UtcNow;
                 var timeoutReached = false;
 
@@ -170,10 +175,10 @@ namespace DeconTools.Backend.Workflows
                     _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
 //#endif
 
-                    // Note: the deconvolutor automatically increases the MSFeatureCounter. 
+                    // Note: the deconvolutor automatically increases the MSFeatureCounter.
                     // Here, we don't want this, since this data is used only for saturation correction,
-                    // not for generating the official MSFeatures list. So we need to 
-                    // correct the MSFeatureCounter value. 
+                    // not for generating the official MSFeatures list. So we need to
+                    // correct the MSFeatureCounter value.
                     Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
                                                             Run.ResultCollection.IsosResultBin.Count;
 
@@ -192,7 +197,7 @@ namespace DeconTools.Backend.Workflows
                                                   NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
 
-                        // For debugging... 
+                        // For debugging...
                         // UIMFIsosResult tempIsosResult = (UIMFIsosResult) isosResult;
 
                         // if (tempIsosResult.IMSScanSet.PrimaryScanNumber == 123)
@@ -321,9 +326,9 @@ namespace DeconTools.Backend.Workflows
                     }
 
 
-                    // Need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built). 
+                    // Need to remove any duplicate MSFeatures (this occurs when incorrectly deisotoped profiles are built).
                     // Will do this by making the MSFeatureID the same. Then the Exporter will ensure that only one MSFeature per MSFeatureID
-                    // is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits. 
+                    // is exported. This isn't ideal. Better to remove the features but this proves to be quite hard to do without large performance hits.
                     foreach (var isosResult in Run.ResultCollection.IsosResultBin)
                     {
                         double ppmToleranceForDuplicate = 20;
@@ -353,7 +358,7 @@ namespace DeconTools.Backend.Workflows
                                 //here we have found a duplicate
                                 dup.MSFeatureID = minMSFeatureID;
 
-                                //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will 
+                                //because there are duplicates, we need to maintain the MSFeatureCounter so it doesn't skip values, as will
                                 //happen when there are duplicates
                                 //Run.ResultCollection.MSFeatureCounter--;
                             }
@@ -707,7 +712,7 @@ namespace DeconTools.Backend.Workflows
 
 
         /// <summary>
-        /// The idea is to check for deisotoping errors (common in saturated data) and fix them. This inspects 
+        /// The idea is to check for deisotoping errors (common in saturated data) and fix them. This inspects
         /// the isotopic profile and then looks for major peaks 'to-the-left'(from the PeakList) that should
         /// have been part of the isotopic profile
         /// </summary>
@@ -722,13 +727,13 @@ namespace DeconTools.Backend.Workflows
 
             var needToTestForPeakToTheLeft = true;
 
-            //this loop starts at monoisotopic peak and keeps looking left for a peak, 
-            //as long as peak-to-the-left has a relative intensity > 0.5 
+            //this loop starts at monoisotopic peak and keeps looking left for a peak,
+            //as long as peak-to-the-left has a relative intensity > 0.5
             while (needToTestForPeakToTheLeft)
             {
                 var peakToTheLeft = GetPeakToTheLeftIfExists(saturatedFeature.IsotopicProfile,
                                                                 Run.PeakList);
-                //for very very saturated data, no peak is detected. Need to check the corresponding XY data point and see if it is highly saturated. 
+                //for very very saturated data, no peak is detected. Need to check the corresponding XY data point and see if it is highly saturated.
                 if (peakToTheLeft == null)
                 {
 
@@ -857,9 +862,9 @@ namespace DeconTools.Backend.Workflows
             //NOTE: This is critical to choosing the optimum peak of the observed isotopic profile
             //A value of 0.001 will leave more peaks in the theor profile. This
             //can be bad with co-eluting peptides, so that a peak of the interfering peptide
-            //is used to correct the intensity of our target peptide. 
+            //is used to correct the intensity of our target peptide.
             //A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
-            //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide. 
+            //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide.
             PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, lowerIntensityCutoff);
 
             return theorTarget.IsotopicProfile;
