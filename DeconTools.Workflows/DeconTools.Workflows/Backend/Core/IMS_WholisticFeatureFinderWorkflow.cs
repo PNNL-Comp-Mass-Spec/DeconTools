@@ -29,7 +29,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-        DeconToolsPeakDetector MasterPeakListPeakDetector { get; set; }
+        DeconToolsPeakDetectorV2 MasterPeakListPeakDetector { get; set; }
 
         public SavitzkyGolaySmoother ChromSmoother { get; set; }
         public ChromPeakDetector ChromPeakDetector { get; set; }
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.Backend.Core
         public double DriftTimeProfileExtractionPPMTolerance { get; set; }
 
         public MSGenerator MSgen { get; set; }
-        public DeconToolsPeakDetector MSPeakDetector { get; set; }
+        public DeconToolsPeakDetectorV2 MSPeakDetector { get; set; }
         public Deconvolutor Deconvolutor { get; set; }
 
         public int NumMSScansToSumWhenBuildingMasterPeakList { get; set; }
@@ -80,7 +80,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
 
-            MasterPeakListPeakDetector = new DeconToolsPeakDetector();
+            MasterPeakListPeakDetector = new DeconToolsPeakDetectorV2();
             MasterPeakListPeakDetector.PeakToBackgroundRatio = 4;
             MasterPeakListPeakDetector.SignalToNoiseThreshold = 3;
             MasterPeakListPeakDetector.IsDataThresholded = false;

@@ -5,6 +5,7 @@ using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -26,7 +27,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakDetector = new DeconToolsPeakDetector();
+            var peakDetector = new DeconToolsPeakDetectorV2();
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -62,7 +63,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             msgen.Execute(run.ResultCollection);
 
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
             peakDet.PeaksAreStored = true;
 
             var peakList=  peakDet.FindPeaks(run.XYData, 0, 50000);
@@ -94,7 +95,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(peakBR, sigNoise, peakfitType, isThresholded);
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
             peakDet.PeaksAreStored = true;
 
             foreach (var scan in run.ScanSetCollection.ScanSetList)

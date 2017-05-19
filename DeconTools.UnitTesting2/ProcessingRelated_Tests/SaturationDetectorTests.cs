@@ -4,6 +4,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
             DeconToolsZeroFiller zeroFiller = new DeconToolsZeroFiller();
          
 
-           DeconToolsPeakDetector peakDetector =new DeconToolsPeakDetector(4,3,Globals.PeakFitType.QUADRATIC,false);
+           DeconToolsPeakDetectorV2 peakDetector =new DeconToolsPeakDetectorV2(4,3,Globals.PeakFitType.QUADRATIC,false);
         
             HornDeconvolutor decon = new HornDeconvolutor();
             decon.LeftFitStringencyFactor = 2.5;

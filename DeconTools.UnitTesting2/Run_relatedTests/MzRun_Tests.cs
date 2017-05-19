@@ -177,7 +177,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 Assert.AreEqual(mz5run.XYData.Xvalues[i], thermoRun.XYData.Xvalues[i]);
             }
 
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector();
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 3;
             peakDetector.SignalToNoiseThreshold = 2;
 

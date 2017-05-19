@@ -7,6 +7,7 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.NETAlignment;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
@@ -51,7 +52,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
             Task zeroFill = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
-            Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
+            Task msPeakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
     
             ChromPeakSelectorParameters basicChromPeakSelParam = new ChromPeakSelectorParameters();
             basicChromPeakSelParam.NETTolerance = 0.1f;
@@ -131,7 +132,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
             Task zeroFill = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
-            Task msPeakDet = new DeconTools.Backend.ProcessingTasks.DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
+            Task msPeakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             ChromPeakSelectorParameters basicChromPeakSelParam = new ChromPeakSelectorParameters();
             basicChromPeakSelParam.NETTolerance = 0.1f;

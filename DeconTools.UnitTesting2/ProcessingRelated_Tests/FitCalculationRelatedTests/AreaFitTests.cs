@@ -2,11 +2,14 @@ using System;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
+using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
+using DeconToolsV2.Peaks;
 using NUnit.Framework;
 
 
@@ -31,20 +34,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 0.5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
-
-            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
             peakDetector.Execute(results);
 
+            var deconParameters = new DeconToolsParameters();
+            deconParameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 2;     // PeptideMinBackgroundRatio
 
-            DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
-            hornParameters.PeptideMinBackgroundRatio = 2;
-
-            Task decon = new HornDeconvolutor(hornParameters);
+            Task decon = new HornDeconvolutor(deconParameters);
             decon.Execute(results);
 
 
@@ -97,7 +93,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             detectorParams.SignalToNoiseThreshold = 3;
             detectorParams.ThresholdedData = false;
 
-            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+            Task peakDetector = new DeconToolsPeakDetectorV2(detectorParams);
             peakDetector.Execute(results);
 
 
@@ -142,13 +138,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
             msGen.Execute(results);
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 0.5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
-
-            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
             peakDetector.Execute(results);
 
 
@@ -201,13 +191,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
             msGen.Execute(results);
 
-            DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            detectorParams.PeakBackgroundRatio = 0.5;
-            detectorParams.PeakFitType = DeconToolsV2.Peaks.PEAK_FIT_TYPE.QUADRATIC;
-            detectorParams.SignalToNoiseThreshold = 3;
-            detectorParams.ThresholdedData = false;
-
-            Task peakDetector = new DeconToolsPeakDetector(detectorParams);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
             peakDetector.Execute(results);
 
 
@@ -251,7 +235,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             //Console.Write(sb.ToString());
         }
-        
+
 
     }
 }

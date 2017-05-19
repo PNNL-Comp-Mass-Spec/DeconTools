@@ -3,6 +3,7 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -30,7 +31,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 1.3;
             peakDet.SignalToNoiseThreshold = 2;
 

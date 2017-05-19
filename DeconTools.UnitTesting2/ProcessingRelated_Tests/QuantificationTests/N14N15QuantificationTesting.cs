@@ -4,6 +4,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Algorithms.Quantifiers;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
@@ -37,7 +38,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
             //get ms peaks
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
             List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
             //TestUtilities.DisplayPeaks(msPeakList);
@@ -123,7 +124,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
             //get ms peaks
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
             List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
 

@@ -2,6 +2,7 @@
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             HornDeconvolutor decon = new HornDeconvolutor();
 

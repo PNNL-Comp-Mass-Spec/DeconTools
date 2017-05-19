@@ -6,6 +6,7 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.Core;
@@ -94,7 +95,7 @@ namespace DeconTools.UnitTesting2
             run.ScanSetCollection .Create(run, 6000, 6020, 1, 1);
             
             Task msgen = new GenericMSGenerator();
-            Task peakDet = new DeconToolsPeakDetector();
+            Task peakDet = new DeconToolsPeakDetectorV2();
             Task decon = new HornDeconvolutor();
 
 
@@ -416,7 +417,7 @@ namespace DeconTools.UnitTesting2
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            DeconToolsPeakDetector peakDet = new DeconToolsPeakDetector();
+            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 1.3;
             peakDet.SignalToNoiseThreshold = 2;
             peakDet.IsDataThresholded = true;

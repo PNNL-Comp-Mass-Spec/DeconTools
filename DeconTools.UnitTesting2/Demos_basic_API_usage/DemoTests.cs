@@ -2,6 +2,7 @@ using System;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
+using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 
@@ -53,7 +54,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             //Create the task
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakdetector = new DeconToolsPeakDetector();
+            var peakdetector = new DeconToolsPeakDetectorV2();
 
             int startScan = 6000;
             int stopScan = 7000;

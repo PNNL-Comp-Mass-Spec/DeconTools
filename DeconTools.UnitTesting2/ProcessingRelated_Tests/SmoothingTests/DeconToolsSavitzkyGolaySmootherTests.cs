@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             Assert.IsTrue(File.Exists(sampleXYDataFile));
 
-            DeconToolsSavitzkyGolaySmoother smoother = new DeconToolsSavitzkyGolaySmoother(3, 3, 1);
+            SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 3, true);
 
             var xydata =TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
             var smoothedXYData = smoother.Smooth(xydata);

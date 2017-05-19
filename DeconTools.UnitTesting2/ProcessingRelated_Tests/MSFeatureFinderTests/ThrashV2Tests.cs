@@ -170,7 +170,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             HornDeconvolutor deconvolutor = new HornDeconvolutor();
             deconvolutor.MinPeptideBackgroundRatio = 3;
@@ -396,7 +396,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
             var thrashParameters = new ThrashParameters();
@@ -612,6 +612,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+#if !Disable_DeconToolsV2
             OldDecon2LSParameters parameters = new OldDecon2LSParameters();
             string paramFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_MaxFit1.xml";
@@ -620,7 +621,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             ScanSet scanSet = new ScanSetFactory().CreateScanSet(run, 6005, 1);
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var deconvolutor = new HornDeconvolutor(parameters.HornTransformParameters);
             run.CurrentScanSet = scanSet;
@@ -638,7 +639,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
             //TestUtilities.DisplayPeaks(run.PeakList);
-
+#endif
 
 
         }

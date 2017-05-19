@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetector peakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -150,7 +150,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetector oldPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -177,7 +177,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetector oldPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -215,7 +215,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetector oldPeakDetector = new DeconToolsPeakDetector(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
