@@ -15,9 +15,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var testFile = FileRefs.PeakDataFiles.OrbitrapOldDecon2LSPeakFile;
 
-            List<MSPeakResult>msPeakList=new List<MSPeakResult>();
-
-            DeconTools.Backend.Data.Importers.PeakImporterFromOldPeakDatFile importer = new DeconTools.Backend.Data.Importers.PeakImporterFromOldPeakDatFile(testFile);
+            var msPeakList=new List<MSPeakResult>();
+#if !Disable_DeconToolsV2
+            var importer = new DeconTools.Backend.Data.Importers.PeakImporterFromOldPeakDatFile(testFile);
             importer.ImportPeaks(msPeakList);
 
             Assert.AreEqual(1934153, msPeakList.Count);
@@ -37,6 +37,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 sb.Append(Environment.NewLine);
             }
             Console.Write(sb.ToString());
+#endif
         }
 
 
