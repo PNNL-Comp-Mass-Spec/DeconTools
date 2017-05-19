@@ -20,17 +20,17 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             //Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCS-832
 
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24800;
+            var testMassTagID = 24800;
             var oldStyleTarget = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             Assert.IsTrue(File.Exists(@"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqResults.txt"));
             using (var reader = new StreamReader(@"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqResults.txt"))
             {
-                string temp = reader.ReadLine();
+                var temp = reader.ReadLine();
                 Assert.AreEqual(
                     "TargetID\tCode\tEmpiricalFormula\tChargeState\tMonomassTheor\tMZTheor\tElutionTimeTheor\tMonoMassObs\tMZObs\tElutionTimeObs\tChromPeaksWithinTolerance\tScan\tAbundance\tIsoFitScore\tInterferenceScore",
                     temp);
@@ -77,15 +77,15 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void ImportUnlabeledIqTargetsTest1()
         {
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var importer = new BasicIqTargetImporter(targetsFile);
 
             var targets=  importer.Import();
             Assert.IsNotNull(targets);
             Assert.IsTrue(targets.Any());
 
             Assert.IsTrue(targets.Count > 10);
-            foreach (IqTarget iqTarget in targets.Take(10))
+            foreach (var iqTarget in targets.Take(10))
             {
                 Console.WriteLine(iqTarget.ToString());
             }
@@ -95,15 +95,15 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void ImportIqTargetsFromMsgfTest1()
         {
-            string targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
-            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
+            var targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
+            var importer = new BasicIqTargetImporter(targetsFile);
 
             var targets = importer.Import();
             Assert.IsNotNull(targets);
             Assert.IsTrue(targets.Any());
 
 
-            IqTargetUtilities utilities = new IqTargetUtilities();
+            var utilities = new IqTargetUtilities();
 
             foreach (var iqTarget in targets)
             {
@@ -112,7 +112,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
 
             Assert.IsTrue(targets.Count > 10);
-            foreach (IqTarget iqTarget in targets.Take(10))
+            foreach (var iqTarget in targets.Take(10))
             {
                 Console.WriteLine(iqTarget.ToString() + "\t"+ iqTarget.ScanLC + "\t" +  iqTarget.QualityScore);
             }
@@ -124,17 +124,17 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void ImportUnlabeledIqTargetsFromResultsFileTest1()
         {
-            string targetsFile =
+            var targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ForImportOnly_iqResults.txt";
 
-            BasicIqTargetImporter importer = new BasicIqTargetImporter(targetsFile);
+            var importer = new BasicIqTargetImporter(targetsFile);
 
             var targets = importer.Import();
             Assert.IsNotNull(targets);
             Assert.IsTrue(targets.Any());
 
             Assert.IsTrue(targets.Count > 0);
-            foreach (IqTarget iqTarget in targets.Take(10))
+            foreach (var iqTarget in targets.Take(10))
             {
                 Console.WriteLine(iqTarget.ToString());
             }
@@ -145,12 +145,12 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             //Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCR-184
 
-            string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_e4pvalue.txt";
+            var targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon_MSAlign_ResultTable_e4pvalue.txt";
 
-            MSAlignIqTargetImporter importer = new MSAlignIqTargetImporter(targetsFile);
-            List<IqTarget> Targets = importer.Import();
+            var importer = new MSAlignIqTargetImporter(targetsFile);
+            var Targets = importer.Import();
 
-            foreach (IqTarget target in Targets)
+            foreach (var target in Targets)
             {
                 Console.WriteLine("Parent: " + target);
                 Console.WriteLine("Children: ");

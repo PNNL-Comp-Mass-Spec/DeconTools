@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void Isotest1()
         {
-            double inputMass = 15.567;
+            var inputMass = 15.567;
             var empForumla = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(inputMass, false);
             Console.WriteLine(empForumla);
 
@@ -32,14 +32,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void ExecutorCreatingTargetsTest1()
         {
             var util = new IqTargetUtilities();
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            string resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
+            var resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
 
-            string expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
+            var expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //create no more than two charge state targets per peptide
             executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
 
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             foreach (var iqTarget in executor.Targets)
             {
-                int numChildTargets = iqTarget.GetChildCount();
+                var numChildTargets = iqTarget.GetChildCount();
 
                 Assert.IsTrue(numChildTargets <= 2);    //MaxNumberOfChargeStateTargetsToCreate = 2;
 
@@ -82,10 +82,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void ExecuteMultipleTargetsTest1()
         {
             var util = new IqTargetUtilities();
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -93,12 +93,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
-            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
                                                           "IqResults", 
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
@@ -113,7 +113,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var parentWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -123,14 +123,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //Test the results...
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
-            int numResultsInResultsFile = 0;
-            bool outputToConsole = true;
+            var numResultsInResultsFile = 0;
+            var outputToConsole = true;
 
-            using (StreamReader reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedResultsFilename))
             {
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     numResultsInResultsFile++;
 
                     if (outputToConsole)
@@ -156,10 +156,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void ExecuteMultipleTargetsTest2()
         {
             var util = new IqTargetUtilities();
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -169,12 +169,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
 
-            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
                                                           "IqResults", 
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
             
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
@@ -188,7 +188,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var parentWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -203,14 +203,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //Test the results...
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
-            int numResultsInResultsFile = 0;
-            bool outputToConsole = true;
+            var numResultsInResultsFile = 0;
+            var outputToConsole = true;
 
-            using (StreamReader reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedResultsFilename))
             {
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     numResultsInResultsFile++;
 
                     if (outputToConsole)
@@ -237,9 +237,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void ExecutorTest1()
         {
             var util = new IqTargetUtilities();
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -248,13 +248,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
 
-            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
@@ -271,7 +271,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new ChargeStateChildIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -281,14 +281,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //Test the results...
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
-            int numResultsInResultsFile = 0;
-            bool outputToConsole = true;
+            var numResultsInResultsFile = 0;
+            var outputToConsole = true;
 
-            using (StreamReader reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedResultsFilename))
             {
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     numResultsInResultsFile++;
 
                     if (outputToConsole)
@@ -310,10 +310,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void Executor_loadAlignment_Test1()
         {
             var util = new IqTargetUtilities();
-            string testFile =
+            var testFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            string peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
-            string targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
@@ -321,10 +321,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
 
-            string expectedResultsFilename = executorBaseParameters.OutputFolderBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            var expectedResultsFilename = executorBaseParameters.OutputFolderBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -348,7 +348,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new ChargeStateChildIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -358,14 +358,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //Test the results...
             Assert.IsTrue(File.Exists(expectedResultsFilename), "results file doesn't exist");
-            int numResultsInResultsFile = 0;
-            bool outputToConsole = true;
+            var numResultsInResultsFile = 0;
+            var outputToConsole = true;
 
-            using (StreamReader reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedResultsFilename))
             {
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     numResultsInResultsFile++;
 
                     if (outputToConsole)

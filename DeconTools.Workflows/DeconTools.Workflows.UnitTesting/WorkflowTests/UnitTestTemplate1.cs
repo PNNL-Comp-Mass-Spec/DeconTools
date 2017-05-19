@@ -25,11 +25,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void createPeaksTest1()
         {
-             string testFile =
+             var testFile =
                 @"D:\Data\Orbitrap\BrianIQTesting\QC_Shew_11_02_pt5-b_6Jun11_Sphinx_11-03-27.RAW";
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
-            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
+            var parameters = new PeakDetectAndExportWorkflowParameters();
             TargetedWorkflowParameters deconParam = new BasicTargetedWorkflowParameters();
             deconParam.ChromGenSourceDataPeakBR = 3;
 
@@ -37,7 +37,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.PeakBR = deconParam.ChromGenSourceDataPeakBR;
             parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
             parameters.SigNoiseThreshold = deconParam.ChromGenSourceDataSigNoise;
-            PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(run, parameters);
+            var peakCreator = new PeakDetectAndExportWorkflow(run, parameters);
             peakCreator.Execute();
         }
         
@@ -47,15 +47,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
 
 
-            string testFile =
+            var testFile =
                 @"D:\Data\Orbitrap\BrianIQTesting\QC_Shew_11_02_pt5-b_6Jun11_Sphinx_11-03-27.RAW";
-            string peaksTestFile =
+            var peaksTestFile =
                 @"D:\Data\Orbitrap\BrianIQTesting\QC_Shew_11_02_pt5-b_6Jun11_Sphinx_11-03-27_peaks.txt";
 
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
-            LcmsFeatureTarget target = new LcmsFeatureTarget();
+            var target = new LcmsFeatureTarget();
             target.ID = 0;
 
 
@@ -67,7 +67,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             double chromPeakGeneratorTolInPPM = 20;
-            Globals.ChromatogramGeneratorMode chromGeneratorMode = Globals.ChromatogramGeneratorMode.MZ_BASED;
+            var chromGeneratorMode = Globals.ChromatogramGeneratorMode.MZ_BASED;
 
             var chromGen = new PeakChromatogramGenerator(chromPeakGeneratorTolInPPM, chromGeneratorMode);
             // If we want to use the Execute Command 
@@ -75,23 +75,23 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             chromGen.ChromWindowWidthForNonAlignedData = .02F;
 
 
-            int pointsToSmooth = 5;
+            var pointsToSmooth = 5;
             var chromSmoother = new SavitzkyGolaySmoother(pointsToSmooth, 2);
 
             //BLL We also tried to set the BR and SIG NOISE to 0.  This did not work 
-            double chromPeakDetectorPeakBR = 0.5;
-            double chromPeakDetectorSigNoise = 0.5;
+            var chromPeakDetectorPeakBR = 0.5;
+            var chromPeakDetectorSigNoise = 0.5;
             var chromPeakDetector = new ChromPeakDetector(chromPeakDetectorPeakBR, chromPeakDetectorSigNoise);
 
 
-            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
             chromPeakSelectorParameters.PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
             var chromPeakSelector = new BasicChromPeakSelector(chromPeakSelectorParameters);
 
-            SmartChromPeakSelectorParameters smartChromPeakParameters = new SmartChromPeakSelectorParameters();
+            var smartChromPeakParameters = new SmartChromPeakSelectorParameters();
             
 
-            SmartChromPeakSelector smartChromPeakSelector = new SmartChromPeakSelector(smartChromPeakParameters);
+            var smartChromPeakSelector = new SmartChromPeakSelector(smartChromPeakParameters);
 
 
             //this generates an extracted ion chromatogram

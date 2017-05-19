@@ -17,22 +17,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void testVladsData()
         {
-            string testFile =
+            var testFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-            string massTagFile =
+            var massTagFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
-            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
+            var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
-            Run run = RunUtilities.CreateAndAlignRun(testFile, peakTestFile);
+            var run = RunUtilities.CreateAndAlignRun(testFile, peakTestFile);
 
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24653;
+            var testMassTagID = 24653;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromPeakDetectorPeakBR = 1;
             parameters.ChromatogramCorrelationIsPerformed = true;
 
-            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
+            var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as O16O18TargetedResultObject;
@@ -81,27 +81,27 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleMassTag_test1()
         {
-            string testFile = @"D:\Data\O16O18\Weijun\TechTest_O18_02\TechTest_O18_02_RunA_10Dec09_Doc_09-11-08.RAW";
+            var testFile = @"D:\Data\O16O18\Weijun\TechTest_O18_02\TechTest_O18_02_RunA_10Dec09_Doc_09-11-08.RAW";
 
-            string massTagFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\O16O18_TargetedProcessing\Targets\MassTags_MousePlasma_1709_allChargeStates_nonRedundant.txt";
+            var massTagFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\O16O18_TargetedProcessing\Targets\MassTags_MousePlasma_1709_allChargeStates_nonRedundant.txt";
 
-            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
+            var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 6643962;
+            var testMassTagID = 6643962;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
             parameters.ChromNETTolerance = 0.1;
             parameters.MSToleranceInPPM = 10;
 
-            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
+            var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
 
@@ -125,20 +125,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //
 
-            string testFile = @"D:\Data\O16O18\Weijun\TechTest_O18_02\TechTest_O18_02_RunA_10Dec09_Doc_09-11-08.RAW";
+            var testFile = @"D:\Data\O16O18\Weijun\TechTest_O18_02\TechTest_O18_02_RunA_10Dec09_Doc_09-11-08.RAW";
 
-            string massTagFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\O16O18_TargetedProcessing\Targets\MassTags_MousePlasma_1709_allChargeStates_nonRedundant.txt";
+            var massTagFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\O16O18_TargetedProcessing\Targets\MassTags_MousePlasma_1709_allChargeStates_nonRedundant.txt";
 
-            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
+            var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 20746149;
+            var testMassTagID = 20746149;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
@@ -148,7 +148,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromPeakDetectorPeakBR = 1;
 
 
-            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
+            var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);

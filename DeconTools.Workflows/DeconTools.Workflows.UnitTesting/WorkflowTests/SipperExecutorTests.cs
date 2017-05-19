@@ -20,39 +20,39 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipper()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
             //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
 
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+            var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
 
-            int[] targetsOfInterest = new int[]{5555};
+            var targetsOfInterest = new int[]{5555};
 
             executor.Targets.TargetList =
                 (executor.Targets.TargetList.Where(n => targetsOfInterest.Contains(n.ID))).ToList();
 
             executor.Execute();
 
-            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+            var workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
 
 
 
-            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+            var result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.ChromCorrelationData);
@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipperUsingStandardExecutorClass1()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\ExecutorParameters1.xml";
 
             var parameters = new BasicTargetedWorkflowExecutorParameters();
@@ -88,11 +88,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+            var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
             
 
-            int[] targetsOfInterest = new int[] { 5555 };
+            var targetsOfInterest = new int[] { 5555 };
 
             //targetsOfInterest = new int[] { 5905 };   //throwing error in Chromcorr
 
@@ -123,14 +123,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+            var workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
             workflow.WorkflowParameters.SaveParametersToXML(
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperTargetedWorkflowParameters_Sum5 - copy.xml");
 
 
             
 
-            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+            var result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.ChromCorrelationData);
@@ -155,7 +155,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipperOnMSGFOutputTest1()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\DataPkgs\Public\2013\788_Sipper_C13_Analysis_Hot_Lake_SNC_Ana_preliminary\Parameters\ExecutorParameters1.xml";
 
 
@@ -165,11 +165,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.FolderPathForCopiedRawDataset = @"D:\Data\Sipper\HLP_Ana";
 
 
-            string testDataset =
+            var testDataset =
                 @"D:\Data\Sipper\HLP_Ana\HLP_Ana_SIP_02_19APR13_Frodo_12-12-04.raw";
 
 
-            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+            var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
@@ -180,8 +180,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            SipperTargetedWorkflow workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
-            SipperLcmsTargetedResult result = workflow.Result as SipperLcmsTargetedResult;
+            var workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
+            var result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.ChromCorrelationData);
@@ -207,10 +207,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams_importedFeaturesWithEmpFormula.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
             parameters.TargetsToFilterOn = String.Empty;
@@ -220,10 +220,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             parameters.ReferenceDataForTargets = String.Empty;
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
                           Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
@@ -235,10 +235,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess2()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams_importedFeaturesWithEmpFormula.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
             parameters.TargetsToFilterOn = String.Empty;
@@ -248,10 +248,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             parameters.ReferenceDataForTargets = String.Empty;
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
                           Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
@@ -268,10 +268,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void loadPreviousResultsAndReProcess()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams_importedFeaturesWithEmpFormula.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
             parameters.TargetsFilePath =
@@ -281,10 +281,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
             //parameters.SaveParametersToXML(exportedParameterFile);
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
             
 
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
@@ -299,20 +299,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void tempUpdateLCMSFeaturesWithEmpiricalFormulaTest1()
         {
-            string testLCMSFile1 =
+            var testLCMSFile1 =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_allWithIDs_LCMSFeatures.txt";
 
-            string massTagFileName =
+            var massTagFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
 
-            LcmsTargetFromFeaturesFileImporter importer =
+            var importer =
               new LcmsTargetFromFeaturesFileImporter(testLCMSFile1);
 
             var features = importer.Import();
 
 
-            MassTagFromTextFileImporter mtImporter = new MassTagFromTextFileImporter(massTagFileName);
+            var mtImporter = new MassTagFromTextFileImporter(massTagFileName);
             var massTags = mtImporter.Import();
 
             massTags.TargetList = (from n in massTags.TargetList
@@ -330,18 +330,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            string outputLCMSFeaturesFile =
+            var outputLCMSFeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_withEmpFormulas_LCMSFeatures.txt";
 
-            using (StreamWriter writer = new StreamWriter(outputLCMSFeaturesFile))
+            using (var writer = new StreamWriter(outputLCMSFeaturesFile))
             {
-                string headerLine = "TargetID\tScan\tMonoIsotopicMass\tChargeState\tMatchedMassTagID\tEmpiricalFormula";
+                var headerLine = "TargetID\tScan\tMonoIsotopicMass\tChargeState\tMatchedMassTagID\tEmpiricalFormula";
                 writer.WriteLine(headerLine);
 
                 foreach (var targetBase in features.TargetList)
                 {
                     UpdateTargetsUsingMassTagInfo(massTagIDList, features, massTags);
-                    StringBuilder stringBuilder = new StringBuilder();
+                    var stringBuilder = new StringBuilder();
                     stringBuilder.Append(targetBase.ID);
                     stringBuilder.Append("\t");
                     stringBuilder.Append(targetBase.ScanLCTarget);
@@ -399,16 +399,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void test2()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Data\Yellowstone\SIPPER\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
            
-            string testDataset =
+            var testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
 
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
@@ -424,14 +424,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void dbTest1()
         {
-            string[] datasetNames = new string[]
+            var datasetNames = new string[]
                                         {
                                             "Yellow_C13_068_30Mar10_Griffin_10-01-28",
                                             "Yellow_C13_064_30Mar10_Griffin_10-03-01",
                                             "Yellow_C13_063_30Mar10_Griffin_10-01-13"
                                         };
 
-            DatasetUtilities utilities = new DatasetUtilities();
+            var utilities = new DatasetUtilities();
             var path=   utilities.GetDatasetPath(datasetNames[0]);
 
             Console.WriteLine(path);
@@ -442,10 +442,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipper_FindAssociatedTargetsFile()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.DbName = String.Empty;
             parameters.DbServer = String.Empty;
@@ -460,16 +460,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Targets";
 
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+            var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
 
 
@@ -479,10 +479,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipper_UsingSpecifiedTargets()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.DbName = String.Empty;
             parameters.DbServer = String.Empty;
@@ -494,9 +494,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
           
             parameters.TargetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets.txt";
 
-            string testDataset = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
+            var testDataset = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
 
 
@@ -506,10 +506,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecuteSipper_UsingTargetsWithEmpiricalFormulaOnly()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.DbName = String.Empty;
             parameters.DbServer = String.Empty;
@@ -521,10 +521,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets_empFormula_noMonoMass.txt";
 
             
-            string testDataset =
+            var testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
 
 
@@ -533,25 +533,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void temp_ExecuteSipper()
         {
-            string paramFile =
+            var paramFile =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperExecutorParams1.xml";
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
             parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
 
 
-            string testDataset =
+            var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
 
-            string outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
+            var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
 
-            SipperWorkflowExecutor executor = new SipperWorkflowExecutor(parameters, testDataset);
+            var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
 
 

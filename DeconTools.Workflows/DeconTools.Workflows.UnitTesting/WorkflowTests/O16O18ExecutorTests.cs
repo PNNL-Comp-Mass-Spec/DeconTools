@@ -23,16 +23,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
 
-            string executorParametersFile =
+            var executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
             executorParameters.OutputFolderBase =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz";
 
-            string testDatasetPath =
+            var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
             executorParameters.IsMassAlignmentPerformed = true;
@@ -42,19 +42,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
 
 
-            string expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
 
-            string autoSavedExecutorParametersFile =
+            var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
 
-            Run run = new RunFactory().CreateRun(testDatasetPath);
+            var run = new RunFactory().CreateRun(testDatasetPath);
             var executor = new IqExecutor(executorParameters, run);
 
-            string targetsFile =
+            var targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
             targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
 
-            int testTarget = 9282;
+            var testTarget = 9282;
             executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
@@ -74,7 +74,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parentWorkflow = new O16O18ParentIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new O16O18IqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -98,9 +98,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
 
 
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
 
-            string testDatasetPath =
+            var testDatasetPath =
                 @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1B_8Apr13_Cougar_13-03-25.raw";
 
             executorParameters.IsMassAlignmentPerformed = true;
@@ -109,16 +109,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.ReferenceTargetsFilePath =
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set3_P892_targets.txt";
 
-            Run run = new RunFactory().CreateRun(testDatasetPath);
+            var run = new RunFactory().CreateRun(testDatasetPath);
             var executor = new IqExecutor(executorParameters, run);
 
-            string targetsFile =
+            var targetsFile =
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set3_P892_targets.txt";
 
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
 
-            int testTarget = 6955012;
+            var testTarget = 6955012;
             executor.Targets = (from n in executor.Targets where n.ID == testTarget select n).ToList();
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
@@ -128,7 +128,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parentWorkflow = new O16O18ParentIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new O16O18IqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -145,16 +145,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
 
-            string executorParametersFile =
+            var executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
-            string testDatasetPath =
+            var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-            string autoSavedExecutorParametersFile =
+            var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
             executorParameters.OutputFolderBase =
@@ -162,7 +162,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 
-            int testTarget = 9282;
+            var testTarget = 9282;
             executor.Targets.TargetList =
                 executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
@@ -183,12 +183,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            string expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_Results.txt");
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
-            Backend.Results.TargetedResultRepository repository = importer.Import();
+            var repository = importer.Import();
 
             Assert.AreEqual(3, repository.Results.Count);
             var result1 = repository.Results[1] as O16O18TargetedResultDTO;
@@ -210,7 +210,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void tempTest1()
         {
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\MT_Mouse_MHP_O18_Set1_P890_targets.txt";
 
@@ -244,28 +244,28 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //7673789
 
-            string executorParametersFile =
+            var executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
-            string testDatasetPath =
+            var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-            string autoSavedExecutorParametersFile =
+            var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 
-            int testTarget = 7415;
+            var testTarget = 7415;
             executor.Targets.TargetList =
                 executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
             executor.Execute();
 
-            string expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_results.txt");
 
@@ -283,20 +283,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void O16O18Workflow_ProblemCaseTesting2()
         {
 
-            string executorParametersFile =
+            var executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
-            BasicTargetedWorkflowExecutorParameters executorParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
             executorParameters.TargetsFilePath =
                 @"\\protoapps\DataPkgs\Public\2012\641_Alz_O16O18_dataprocessing2\Targets\MT_Human_ALZ_O18_P852\MassTags_PMT2.txt";
 
 
-            string testDatasetPath =
+            var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
 
-            string autoSavedExecutorParametersFile =
+            var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
 
@@ -307,7 +307,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            string expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "Results",
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "Results",
                                              executor.TargetedWorkflow.Run.DatasetName + "_results.txt");
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);

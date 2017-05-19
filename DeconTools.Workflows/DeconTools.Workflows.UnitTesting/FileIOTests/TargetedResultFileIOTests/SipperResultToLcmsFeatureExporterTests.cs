@@ -21,37 +21,37 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void executeWorkflowTest1()
         {
-            string testFile = FileRefs.SipperRawDataFile;
+            var testFile = FileRefs.SipperRawDataFile;
 
 
-            string exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "ExportedSipperResults1.txt");
+            var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "ExportedSipperResults1.txt");
 
 
-            string peaksFile =
+            var peaksFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
 
 
-            string lcmsfeaturesFile =
+            var lcmsfeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
             // load LCMSFeatures as targets
-            LcmsTargetFromFeaturesFileImporter importer =
+            var importer =
                 new LcmsTargetFromFeaturesFileImporter(lcmsfeaturesFile);
 
             var lcmsTargetCollection = importer.Import();
 
 
             // load MassTags
-            string massTagFile1 =
+            var massTagFile1 =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();
 
             //enriched
-            int[] testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
+            var testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
 
 
             var filteredLcmsFeatureTargets = (from n in lcmsTargetCollection.TargetList
@@ -65,7 +65,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
 
-            SipperTargetedWorkflow workflow = new SipperTargetedWorkflow(run, parameters);
+            var workflow = new SipperTargetedWorkflow(run, parameters);
 
 
             foreach (var target in filteredLcmsFeatureTargets)
@@ -82,10 +82,10 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 
             var results = run.ResultCollection.GetMassTagResults();
 
-            TargetedResultRepository repo = new TargetedResultRepository();
+            var repo = new TargetedResultRepository();
             repo.AddResults(run.ResultCollection.GetMassTagResults());
 
-            SipperResultToLcmsFeatureExporter exporter = new SipperResultToLcmsFeatureExporter(exportedResultFile);
+            var exporter = new SipperResultToLcmsFeatureExporter(exportedResultFile);
             exporter.ExportResults(repo.Results);
 
 

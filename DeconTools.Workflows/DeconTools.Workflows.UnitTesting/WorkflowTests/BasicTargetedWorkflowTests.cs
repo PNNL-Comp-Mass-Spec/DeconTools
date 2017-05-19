@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void constructor_noRun_test1()
         {
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(parameters);
+            var workflow = new BasicTargetedWorkflow(parameters);
             
             //workflow.Execute();
         }
@@ -45,7 +45,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.NumMSScansToSum = 5;
             parameters.SmartChromPeakSelectorNumMSSummed = 3;
 
-            string exportedParameterFilename =
+            var exportedParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Parameters\BasicTargetedWorkflowParameters1_autoexported.xml";
             parameters.SaveParametersToXML(exportedParameterFilename);
         }
@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             var parameters = new BasicTargetedWorkflowParameters();
 
-            string importTestFile =
+            var importTestFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Parameters\BasicTargetedWorkflowParameters1_forImportTesting.xml";
 
             parameters.LoadParameters(importTestFile);
@@ -75,17 +75,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //see  https://jira.pnnl.gov/jira/browse/OMCS-709
 
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            Run run= RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
+            var run= RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24800;
+            var testMassTagID = 24800;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters= new BasicTargetedWorkflowParameters();
@@ -95,7 +95,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromPeakDetectorSigNoise = 1;
 
 
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
             Assert.IsNotNull(workflow.ChromatogramXYData, "Chrom XY data is empty");
@@ -118,7 +118,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
           
 
-            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
 
             if (result.FailedResult)
             {
@@ -152,29 +152,29 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void InvestigateIQFailures()
         {
-            string executorParamFile =
+            var executorParamFile =
               @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Parameters\ExecutorParameters1 - Copy.xml";
 
-            DeconTools.Workflows.Backend.Core.BasicTargetedWorkflowExecutorParameters executorParameters =
+            var executorParameters =
                 new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParamFile);
 
-            string testFile =
+            var testFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Expo_Sample_SC_9_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-35.raw";
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
 
-            string iqparameterFile =
+            var iqparameterFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\IQWorkflowParameters1.xml";
 
-            BasicTargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
+            var workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.LoadParameters(iqparameterFile);
             workflowParameters.MSToleranceInPPM = 10;
             workflowParameters.ChromPeakDetectorPeakBR = 0.25;
             workflowParameters.ChromPeakDetectorSigNoise = 2;
 
-            BasicTargetedWorkflow targetedWorkflow = new BasicTargetedWorkflow(run, workflowParameters);
-            BasicTargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, targetedWorkflow, testFile);
+            var targetedWorkflow = new BasicTargetedWorkflow(run, workflowParameters);
+            var executor = new BasicTargetedWorkflowExecutor(executorParameters, targetedWorkflow, testFile);
 
             //int[] testTargets = {349959971, 349951038,349954483 };    
             //int[] testTargets = { 349951038 };
@@ -183,7 +183,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //int[] testTargets = { 2911730 };
 
             int[] testTargets = { 349946881 };
-            int chargeState = 3;
+            var chargeState = 3;
 
             executor.Targets.TargetList = (from n in executor.Targets.TargetList where testTargets.Contains(n.ID) select n).ToList();
             executor.Targets.TargetList = (from n in executor.Targets.TargetList where n.ChargeState == chargeState select n).ToList();
@@ -201,16 +201,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleModifiedMassTagTest1()
         {
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 189685150;
+            var testMassTagID = 189685150;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             Assert.AreEqual(true,run.CurrentMassTag.ContainsMods);
@@ -218,10 +218,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromatogramCorrelationIsPerformed = true;
 
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             Assert.AreEqual(false, result.FailedResult);
 
             result.DisplayToConsole();
@@ -244,24 +244,24 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleMassTag_checkAlignmentData_test1()
         {
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24800;
+            var testMassTagID = 24800;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             Assert.AreEqual(false, result.FailedResult);
             
             result.DisplayToConsole();
@@ -295,27 +295,27 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void cannotFindMassTag_test1()
         {
             //
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
 
-            Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 26523;
+            var testMassTagID = 26523;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
            
             Assert.IsNull(result.IsotopicProfile);
             Assert.IsNull(result.ScanSet);
@@ -333,19 +333,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void findSingleMassTag_alternateQCShew()
         {
-            string testFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
-            string peaksTestFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
-            string massTagFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peakMatchedFeatures.txt";
+            var testFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
+            var peaksTestFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
+            var massTagFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peakMatchedFeatures.txt";
 
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24709;
+            var testMassTagID = 24709;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
 
 
@@ -354,10 +354,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MSToleranceInPPM = 25;
             parameters.ChromatogramCorrelationIsPerformed = true;
 
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            MassTagResult result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             result.DisplayToConsole();
 
             Assert.IsNotNull(result.IsotopicProfile);
@@ -373,7 +373,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             double maxIntensity = result.IsotopicProfile.Peaklist.Max(p => p.Height);
 
-            for (int i = 0; i < result.IsotopicProfile.Peaklist.Count; i++)
+            for (var i = 0; i < result.IsotopicProfile.Peaklist.Count; i++)
             {
                 
                 double correctedRatio=0;
@@ -388,7 +388,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                     correctedRatio = 0;
                 }
 
-                double observedRelIntensity = result.IsotopicProfile.Peaklist[i].Height/maxIntensity;
+                var observedRelIntensity = result.IsotopicProfile.Peaklist[i].Height/maxIntensity;
 
                 Console.WriteLine(i + "\t" + observedRelIntensity + "\t" + correctedRatio);
 

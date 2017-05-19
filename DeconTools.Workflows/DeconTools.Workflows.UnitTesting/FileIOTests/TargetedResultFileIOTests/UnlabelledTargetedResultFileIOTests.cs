@@ -18,28 +18,28 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void exporterTest1()
         {
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
-            string exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
+            var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
 
             if (File.Exists(exportedResultFile)) File.Delete(exportedResultFile);
 
 
-            Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             
-            List<TargetBase> selectedMassTags = mtc.TargetList.OrderBy(p => p.ID).Take(10).ToList();
+            var selectedMassTags = mtc.TargetList.OrderBy(p => p.ID).Take(10).ToList();
             
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
 
             foreach (var mt in selectedMassTags)
             {
@@ -47,12 +47,12 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
                 workflow.Execute();
             }
 
-            TargetedResultRepository repo = new TargetedResultRepository();
+            var repo = new TargetedResultRepository();
             repo.AddResults(run.ResultCollection.GetMassTagResults());
             
 
 
-            UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportedResultFile);
+            var exporter = new UnlabelledTargetedResultToTextExporter(exportedResultFile);
             exporter.ExportResults(repo.Results);
             
 
@@ -65,16 +65,16 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         public void importerTest1()
         {
            
-            string importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
+            var importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
 
-            UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(importedResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var importer = new UnlabelledTargetedResultFromTextImporter(importedResultFile);
+            var repo = importer.Import();
 
 
             Assert.IsNotNull(repo);
             Assert.IsTrue(repo.Results.Count > 0);
 
-            TargetedResultDTO testResult1 = repo.Results[0];
+            var testResult1 = repo.Results[0];
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", testResult1.DatasetName);
             Assert.AreEqual(24698, testResult1.TargetID);

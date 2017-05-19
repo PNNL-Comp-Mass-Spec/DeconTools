@@ -15,9 +15,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void Test1()
         {
 
-            string outputFile = Path.Combine(FileRefs.OutputFolderPath, "SipperExecutorParameters1.xml");
+            var outputFile = Path.Combine(FileRefs.OutputFolderPath, "SipperExecutorParameters1.xml");
 
-            SipperWorkflowExecutorParameters parameters = new SipperWorkflowExecutorParameters();
+            var parameters = new SipperWorkflowExecutorParameters();
             parameters.DeleteLocalDatasetAfterProcessing = false;
             parameters.FolderPathForCopiedRawDataset = String.Empty;
             parameters.ReferenceDataForTargets = @"C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt";

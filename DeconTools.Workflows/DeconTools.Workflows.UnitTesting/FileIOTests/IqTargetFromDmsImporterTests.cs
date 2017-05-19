@@ -14,12 +14,12 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
         [Test]
         public void ImportMassTagsByPmtQualityScore()
         {
-            string server = "pogo";
-            string db = "MT_Mouse_MHP_O18_Set1_P890";
+            var server = "pogo";
+            var db = "MT_Mouse_MHP_O18_Set1_P890";
 
-            IqTargetFromDmsImporter importer = new IqTargetFromDmsImporter(server, db);
+            var importer = new IqTargetFromDmsImporter(server, db);
 
-            List<IqTarget> targets=  importer.Import();
+            var targets=  importer.Import();
 
             int[] testTargets = {20822620, 47328056};
 
@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
                                      select grp.OrderByDescending(p => ((IqTargetDms)p).PmtQualityScore).First()).ToList();    //take the one with the highest pmtQualityScore 
 
 
-            string targetsFilename =
+            var targetsFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\" + db + "_targets.txt";
 
             var pmtQualScoreFiltered = (from n in duplicatesRemoved where ((IqTargetDms) n).PmtQualityScore > 0 select n).ToList();

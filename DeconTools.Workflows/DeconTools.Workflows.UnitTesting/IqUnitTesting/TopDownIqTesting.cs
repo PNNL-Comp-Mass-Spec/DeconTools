@@ -21,9 +21,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void MSAlignTargetDataTest()
         {
-            string testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
-            string targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\salmonella_top_target.txt";
-            string resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
+            var testFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\SBEP_STM_001_02222012_Aragon.raw";
+            var targetsFile = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\salmonella_top_target.txt";
+            var resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
 
             //Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\detailed_results.txt");
             
@@ -35,7 +35,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.OutputFolderBase = resultsFolder;
 
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new TopDownMSAlignExecutor(executorBaseParameters, run);
 
@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var parentWorkflow = new ChromPeakDeciderTopDownIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new ChargeStateChildTopDownIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -75,13 +75,13 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void Get3DElutionAndExportToFileTest1()
         {
-            string rawFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\SBEP_STM_004_02272012_Aragon.raw";
-            string peaksFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\SBEP_STM_004_02272012_Aragon_peaks.txt";
+            var rawFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\SBEP_STM_004_02272012_Aragon.raw";
+            var peaksFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\SBEP_STM_004_02272012_Aragon_peaks.txt";
 
             var run = RunUtilities.CreateAndLoadPeaks(rawFile, peaksFile);
             //var run = new RunFactory().CreateRun(rawFile);
 
-            string outputFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\3D_PLOT\3DelutionProfile.txt";
+            var outputFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\3D_PLOT\3DelutionProfile.txt";
 
 
             Assert.IsNotNull(run);
@@ -89,8 +89,8 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             var extractor = new IsotopicProfileElutionExtractor();
 
-            int minScan = 3270;
-            int maxScan = 3350;
+            var minScan = 3270;
+            var maxScan = 3350;
             double minMZ = 700;
             double maxMZ = 1700;
 

@@ -12,10 +12,10 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
         [Test]
         public void Test1()
         {
-            string filename =
+            var filename =
                 @"\\proto-7\VOrbi05\2013_2\mhp_plat_test_1_14April13_Frodo_12-12-04\MSG201305011339_Auto939903\mhp_plat_test_1_14April13_Frodo_12-12-04_msgfdb_fht.txt";
 
-            IqTargetsFromFirstHitsFileImporter importer = new IqTargetsFromFirstHitsFileImporter(filename);
+            var importer = new IqTargetsFromFirstHitsFileImporter(filename);
 
             var targets = importer.Import().Take(50).ToList();
 

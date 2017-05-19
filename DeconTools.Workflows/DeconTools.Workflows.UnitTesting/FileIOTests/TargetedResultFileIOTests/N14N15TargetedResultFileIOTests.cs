@@ -12,10 +12,10 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void ImporterTest1()
         {
-            string importedResultFile = Path.Combine(FileRefs.ImportedData, "N14N15TargetedResultsImportedData1.txt");
+            var importedResultFile = Path.Combine(FileRefs.ImportedData, "N14N15TargetedResultsImportedData1.txt");
 
             var importer = new N14N15TargetedResultFromTextImporter(importedResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var repo = importer.Import();
 
             Assert.IsNotNull(repo);
             Assert.IsTrue(repo.Results.Count > 0);
@@ -55,11 +55,11 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         [Test]
         public void ImporterTest2_newerFormat()
         {
-            string importedResultFile =
+            var importedResultFile =
                 @"\\protoapps\UserData\Slysz\Data\N14N15\2012_07_09_VelosOrbi Ponly datasets\Results\RSPH_Ponly_15_A_8May12_Earth_12-03-11_results.txt";
 
             var importer = new N14N15TargetedResultFromTextImporter(importedResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var repo = importer.Import();
 
             Assert.IsNotNull(repo);
             Assert.IsTrue(repo.Results.Count > 0);

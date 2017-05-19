@@ -15,16 +15,16 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void featuresLoadedFromFile_test1()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
+            var deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
-            TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
+            var parameters = new TargetedAlignerWorkflowParameters();
             parameters.ImportedFeaturesFilename = deconToolsResultFile;
 
-            TargetedAlignerWorkflow aligner = new TargetedAlignerWorkflow(run, parameters);
+            var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.SetMassTags(massTagFile);
 
             aligner.Execute();
@@ -34,9 +34,9 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void featuresFoundByTargetedProcessing_thenAligned_test1()
         {
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1;
-            Run run = RunUtilities.CreateAndLoadPeaks(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, peaksTestFile);
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1;
+            var run = RunUtilities.CreateAndLoadPeaks(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, peaksTestFile);
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
             var parameters = new TargetedAlignerWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;

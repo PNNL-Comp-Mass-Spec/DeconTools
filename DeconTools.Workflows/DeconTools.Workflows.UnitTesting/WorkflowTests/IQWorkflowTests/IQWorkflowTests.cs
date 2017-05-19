@@ -16,17 +16,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         {
             //see  https://jira.pnnl.gov/jira/browse/OMCS-709
 
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            Run run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24800;
+            var testMassTagID = 24800;
             var oldStyleTarget = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -54,7 +54,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Assert.IsNotNull(result, "result is null");
 
-            string reportString = result.ToStringWithDetailedReport();
+            var reportString = result.ToStringWithDetailedReport();
             Console.WriteLine(reportString);
 
         }
@@ -63,11 +63,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void FailureToFindAnyChromatogramDataTest1()
         {
-            string testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
@@ -90,7 +90,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Assert.IsTrue(result != null);
             Assert.IsTrue(result.IqResultDetail.Chromatogram == null);
 
-            string reportString = result.ToStringWithDetailedReport();
+            var reportString = result.ToStringWithDetailedReport();
             Console.WriteLine(reportString);
 
 

@@ -17,37 +17,37 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //mass error in this dataset is typically ~50ppm.
 
-            string datasetFile = @"D:\Data\Orbitrap\Subissue01\QC_Shew_10_01-pt5-1_8Feb10_Doc_09-12-24.RAW";
+            var datasetFile = @"D:\Data\Orbitrap\Subissue01\QC_Shew_10_01-pt5-1_8Feb10_Doc_09-12-24.RAW";
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
-            string workflowParameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
+            var workflowParameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
 
 
-            Run run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
+            var run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
             RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
             Assert.IsTrue(run.MassIsAligned);
             Assert.IsTrue(run.NETIsAligned);
 
 
-            BasicTargetedWorkflowParameters parameters=new BasicTargetedWorkflowParameters();
+            var parameters=new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(parameters);
+            var workflow = new BasicTargetedWorkflow(parameters);
 
 
             workflow.Run = run;
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            TargetBase mt1 = (from n in mtc.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
+            var mt1 = (from n in mtc.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
 
             run.CurrentMassTag = mt1;
 
             workflow.Execute();
 
-            TargetedResultRepository repo = new TargetedResultRepository();
+            var repo = new TargetedResultRepository();
             repo.AddResult(workflow.Result);
 
            
@@ -73,34 +73,34 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //mass error in this dataset is typically ~50ppm.
 
-            string datasetFile = @"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW";
+            var datasetFile = @"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW";
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
-            string workflowParameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
+            var workflowParameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
+            var run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
             RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
             Assert.IsTrue(run.MassIsAligned);
             Assert.IsTrue(run.NETIsAligned);
 
-            BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            var parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(parameters);
+            var workflow = new BasicTargetedWorkflow(parameters);
 
             workflow.Run = run;
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            TargetBase mt1 = (from n in mtc.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
+            var mt1 = (from n in mtc.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
 
             run.CurrentMassTag = mt1;
 
             workflow.Execute();
 
-            TargetedResultRepository repo = new TargetedResultRepository();
+            var repo = new TargetedResultRepository();
             repo.AddResult(workflow.Result);
 
             Console.WriteLine("theor mono mass = " + mt1.MonoIsotopicMass);

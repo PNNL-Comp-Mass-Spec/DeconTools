@@ -12,12 +12,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         public void exportParametersTest1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowParameters.xml");
 
             if (File.Exists(exportedParametersFile)) File.Delete(exportedParametersFile);
 
 
-            BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            var parameters = new BasicTargetedWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
 
             Assert.That(File.Exists(exportedParametersFile), "Parameter file doesn't exist: " + exportedParametersFile);
@@ -28,9 +28,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
 
-            BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            var parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
 
             Assert.AreEqual("O16O18_TARGETED_RESULT", parameters.ResultType.ToString());
@@ -40,9 +40,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest2()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedParameters_MostIntenseChromPeakSelection.xml");
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedParameters_MostIntenseChromPeakSelection.xml");
 
-            BasicTargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
+            var parameters = new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
 
             Assert.AreEqual("BASIC_TARGETED_RESULT", parameters.ResultType.ToString());
@@ -52,8 +52,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void createParametersObjectTest1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
-            WorkflowParameters wp = WorkflowParameters.CreateParameters(importedParametersFile);
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowParameters.xml");
+            var wp = WorkflowParameters.CreateParameters(importedParametersFile);
 
             Assert.AreEqual("UnlabelledTargeted1", wp.WorkflowType.ToString());
             Assert.IsTrue(wp is BasicTargetedWorkflowParameters);

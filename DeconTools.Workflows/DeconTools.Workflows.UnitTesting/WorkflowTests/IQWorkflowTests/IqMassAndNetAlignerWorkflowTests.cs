@@ -21,28 +21,28 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void AlignUsingMsgfOutputFullProcessingTest1()
         {
-            string targetsFileName =
+            var targetsFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_msgfdb_fht.txt";
 
 
-            string massTagFilename =
+            var massTagFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_ProdTest_Formic_P823_PMT3.txt";
 
-            string rawFile =
+            var rawFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
             parameters.ReferenceTargetsFilePath = massTagFilename;
 
-            Run run = new RunFactory().CreateRun(rawFile);
+            var run = new RunFactory().CreateRun(rawFile);
 
-            IqMassAndNetAligner massAndNetAligner = new IqMassAndNetAligner(parameters, run);
+            var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
             massAndNetAligner.LoadAndInitializeTargets();
 
             massAndNetAligner.Targets = massAndNetAligner.Targets.Take(2000).ToList();
 
-            string exportedAlignmentResultsFile =
+            var exportedAlignmentResultsFile =
              @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
             if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
@@ -59,9 +59,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             massAndNetAligner.ExecuteAlignment();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            List<IqResult> usefulResults = new List<IqResult>();
+            var usefulResults = new List<IqResult>();
 
             massAndNetAligner.ExportResults(exportedAlignmentResultsFile);
 
@@ -109,9 +109,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             }
             
-            double averageMassError = usefulResults.Average(p => p.MassErrorBefore);
+            var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
 
-            double stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
+            var stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
 
             Console.WriteLine(sb.ToString());
 
@@ -131,23 +131,23 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void AlignUsingMsgfOutputFullProcessingTest2()
         {
-            string targetsFileName =
+            var targetsFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_msgfdb_fht.txt";
 
 
-            string massTagFilename =
+            var massTagFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_ProdTest_Formic_P823_PMT3.txt";
 
-            string rawFile =
+            var rawFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
             parameters.ReferenceTargetsFilePath = massTagFilename;
 
-            Run run = new RunFactory().CreateRun(rawFile);
+            var run = new RunFactory().CreateRun(rawFile);
 
-            IqMassAndNetAligner massAndNetAligner = new IqMassAndNetAligner(parameters, run);
+            var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
             massAndNetAligner.LoadAndInitializeTargets();
 
             massAndNetAligner.Targets = massAndNetAligner.Targets.Where(p => p.Code.Contains("FEQDGENYTGTIDGNMGAYAR")).ToList();
@@ -156,7 +156,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var massTagRefs = massTagImporter.Import();
 
 
-            string exportedAlignmentResultsFile =
+            var exportedAlignmentResultsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
             if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
@@ -169,9 +169,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             
             massAndNetAligner.ExecuteAlignment();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            List<IqResult> usefulResults = new List<IqResult>();
+            var usefulResults = new List<IqResult>();
 
            
             massAndNetAligner.ExportResults(exportedAlignmentResultsFile);
@@ -220,9 +220,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             }
 
-            double averageMassError = usefulResults.Average(p => p.MassErrorBefore);
+            var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
 
-            double stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
+            var stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
 
             Console.WriteLine(sb.ToString());
 
@@ -243,22 +243,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void AlignUsingPreviouslyProcessedOutputTest1()
         {
-            string rawFile =
+            var rawFile =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
-            string previouslyProcessedResultsFile =
+            var previouslyProcessedResultsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
-            Run run = new RunFactory().CreateRun(rawFile);
+            var run = new RunFactory().CreateRun(rawFile);
 
-            IqMassAndNetAligner massAndNetAligner = new IqMassAndNetAligner(parameters, run);
+            var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
             massAndNetAligner.LoadPreviousIqResults(previouslyProcessedResultsFile);
 
             massAndNetAligner.ExecuteAlignment();
 
-            string baseFilenameForImageExport =
+            var baseFilenameForImageExport =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
             massAndNetAligner.ExportGraphs(baseFilenameForImageExport);
         }
@@ -266,21 +266,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void Test1()
         {
-            string targetsFileName =
+            var targetsFileName =
                 @"\\proto-7\VOrbi05\2013_2\mhp_plat_test_1_14April13_Frodo_12-12-04\MSG201305011339_Auto939903\mhp_plat_test_1_14April13_Frodo_12-12-04_msgfdb_fht.txt";
 
 
-            string massTagFilename =
+            var massTagFilename =
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set1_P890_targets.txt";
 
-            string rawFile = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
+            var rawFile = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
 
-            Run run = new RunFactory().CreateRun(rawFile);
+            var run = new RunFactory().CreateRun(rawFile);
 
-            IqMassAndNetAligner massAndNetAligner = new IqMassAndNetAligner(parameters, run);
+            var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
 
 
             massAndNetAligner.LoadAndInitializeTargets();
@@ -294,9 +294,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             massAndNetAligner.ExecuteAlignment();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            List<IqResult> usefulResults = new List<IqResult>();
+            var usefulResults = new List<IqResult>();
 
             foreach (var iqResult in massAndNetAligner.Results)
             {
@@ -342,9 +342,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             }
 
 
-            double averageMassError = usefulResults.Average(p => p.MassErrorBefore);
+            var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
 
-            double stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
+            var stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
             
             //Console.WriteLine(sb.ToString());
 
@@ -362,7 +362,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
         private static void DisplayNetAlignmentInfo(NetAlignmentInfo netAlignmentInfo)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             foreach (var pair in netAlignmentInfo.ScanToNETAlignmentData)
             {
                 stringBuilder.Append(pair.Key + "\t" + pair.Value + Environment.NewLine);
@@ -375,13 +375,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void JoinTargetsTest1()
         {
-            string targetsFileName =
+            var targetsFileName =
            @"\\proto-7\VOrbi05\2013_2\mhp_plat_test_1_14April13_Frodo_12-12-04\MSG201305011339_Auto939903\mhp_plat_test_1_14April13_Frodo_12-12-04_msgfdb_fht.txt";
 
-            string massTagFilename =
+            var massTagFilename =
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set1_P890_targets.txt";
 
-            string rawFile = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
+            var rawFile = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
 
 
 
@@ -391,12 +391,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.TargetsFilePath = targetsFileName;
 
-            Run run = new RunFactory().CreateRun(rawFile);
+            var run = new RunFactory().CreateRun(rawFile);
 
-            IqMassAndNetAligner massAndNetAligner = new IqMassAndNetAligner(parameters, run);
+            var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
             massAndNetAligner.LoadAndInitializeTargets();
 
-            double testNET = massAndNetAligner.Targets.First().ElutionTimeTheor;
+            var testNET = massAndNetAligner.Targets.First().ElutionTimeTheor;
 
             var query = (from massTag in massTagRefs
                          join target in massAndNetAligner.Targets on massTag.Code equals target.Code
@@ -417,7 +417,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var targets = query.Select(p => p.MSGFTarget).ToList();
 
-          double testNETAfter = massAndNetAligner.Targets.First().ElutionTimeTheor;
+          var testNETAfter = massAndNetAligner.Targets.First().ElutionTimeTheor;
             Console.WriteLine("NET before= " + testNET);
             Console.WriteLine("NET before= " + testNETAfter);
 
@@ -427,11 +427,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void TempTest1()
         {
-            string code = "FEQDGENYTGTIDGNMGAYAR";
+            var code = "FEQDGENYTGTIDGNMGAYAR";
 
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
 
-            string empiricalFormula= peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
+            var empiricalFormula= peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
 
             var monomass = peptideUtils.GetMonoIsotopicMassForPeptideSequence(code);
 

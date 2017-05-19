@@ -20,10 +20,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             Console.WriteLine(Environment.CurrentDirectory);
             var util = new IqTargetUtilities();
-            string testFile = @"\\proto-5\External_Waters_TOF_Xfer\MzML_Files\130716_iPRG14_004.mzML";
+            var testFile = @"\\proto-5\External_Waters_TOF_Xfer\MzML_Files\130716_iPRG14_004.mzML";
             //string peaksTestFile =
                 //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
-            string targetsFile = @"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\msgfPlus\C~~data~iPRG 2014~130716_iPRG14_004.raw.-1_Filtered.tsv";
+            var targetsFile = @"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\msgfPlus\C~~data~iPRG 2014~130716_iPRG14_004.raw.-1_Filtered.tsv";
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -33,13 +33,13 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                 @"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\Results";
 
 
-            string expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             //executor.ChromSourceDataFilePath = peaksTestFile;
@@ -53,7 +53,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, targetedWorkflowParameters);
             var childWorkflow = new ChargeStateChildIqWorkflow(run, targetedWorkflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
@@ -63,14 +63,14 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             executor.Execute();
 
             //Test the results...
-            int numResultsInResultsFile = 0;
-            bool outputToConsole = true;
+            var numResultsInResultsFile = 0;
+            var outputToConsole = true;
 
-            using (StreamReader reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedResultsFilename))
             {
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     numResultsInResultsFile++;
 
                     if (outputToConsole)

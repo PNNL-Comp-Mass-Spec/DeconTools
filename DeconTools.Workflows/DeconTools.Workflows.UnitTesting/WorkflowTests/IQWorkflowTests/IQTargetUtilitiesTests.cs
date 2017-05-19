@@ -13,21 +13,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void CreateTargetsFromEmpiricalFormulaOnlyTest1()
         {
-            IqTargetUtilities util = new IqTargetUtilities();
+            var util = new IqTargetUtilities();
 
 
-            string[] formulas = new string[]{"C133H213N29O44","C95H155N29O39","C126H198N32O42","C109H168N24O37","C103H165N29O35"};
+            var formulas = new string[]{"C133H213N29O44","C95H155N29O39","C126H198N32O42","C109H168N24O37","C103H165N29O35"};
 
 
             var targets=  util.CreateTargets(formulas);
 
             
-            foreach (IqTarget parentTarget in targets)
+            foreach (var parentTarget in targets)
             {
                 Console.WriteLine(parentTarget.ID + "\t" + parentTarget.MonoMassTheor.ToString("0.00000") + "\tNumChildren= " + parentTarget.ChildTargets().Count());
                 if (parentTarget.HasChildren())
                 {
-                    foreach (IqTarget childTarget in parentTarget.ChildTargets())
+                    foreach (var childTarget in parentTarget.ChildTargets())
                     {
                         Console.WriteLine("\t\t\t" + childTarget.ID + "\t" + childTarget.MonoMassTheor.ToString("0.000") + "\t" +
                                           childTarget.MZTheor.ToString("0.000") + "\t" + childTarget.ChargeState);
@@ -43,9 +43,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void CreateTargetsFromEmpiricalFormulaOnlyLargePeptideTest1()
         {
-            IqTargetUtilities util = new IqTargetUtilities();
+            var util = new IqTargetUtilities();
 
-            string peptideSequence =
+            var peptideSequence =
                 "PEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDEPEPITIDE";
 
             var peptideUtil = new PeptideUtils();
@@ -53,18 +53,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
 
 
-            string[] formulas = new string[] { empiricalFormula };
+            var formulas = new string[] { empiricalFormula };
 
 
             var targets = util.CreateTargets(formulas);
 
 
-            foreach (IqTarget parentTarget in targets)
+            foreach (var parentTarget in targets)
             {
                 Console.WriteLine(parentTarget.ID + "\t" + parentTarget.MonoMassTheor.ToString("0.00000") + "\tNumChildren= " + parentTarget.ChildTargets().Count());
                 if (parentTarget.HasChildren())
                 {
-                    foreach (IqTarget childTarget in parentTarget.ChildTargets())
+                    foreach (var childTarget in parentTarget.ChildTargets())
                     {
                         Console.WriteLine("\t\t\t" + childTarget.ID + "\t" + childTarget.MonoMassTheor.ToString("0.00000") + "\t" +
                                           childTarget.MZTheor.ToString("0.00000") + "\t" + childTarget.ChargeState + "\t" + (1.00235d/childTarget.ChargeState).ToString("0.0000"));
@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         [Test]
         public void NodeLevelTest1()
         {
-            IqTargetUtilities util = new IqTargetUtilities();
+            var util = new IqTargetUtilities();
 
             IqTarget iqTarget1 = new IqChargeStateTarget();
             IqTarget iqTarget2 = new IqChargeStateTarget();
@@ -122,7 +122,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Assert.AreEqual(5, nodeLevelCount);
 
-            List<IqTarget> targetList = new List<IqTarget>();
+            var targetList = new List<IqTarget>();
             targetList.Add(iqTarget1);
 
             var level2Targets=  util.GetTargetsFromNodelLevel(targetList, 2);

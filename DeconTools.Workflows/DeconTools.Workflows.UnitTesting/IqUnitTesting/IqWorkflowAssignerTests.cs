@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             parentTarget.AddTarget(childTarget2);
             parentTarget.AddTarget(childTarget3);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
 
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, parentTarget);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, parentTarget);

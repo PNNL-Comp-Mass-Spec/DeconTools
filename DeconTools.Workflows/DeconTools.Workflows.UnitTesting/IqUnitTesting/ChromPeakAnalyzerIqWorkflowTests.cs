@@ -16,8 +16,8 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             //Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCS-884
 
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            Run run = new RunFactory().CreateRun(testFile);
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var run = new RunFactory().CreateRun(testFile);
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             IqTarget testTarget = new IqChargeStateTarget();
             testTarget.SetWorkflow(new ChromPeakAnalyzerIqWorkflow(run, parameters));
@@ -29,20 +29,20 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             //Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCS-884
 
-            string testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            string peaksTestFile = UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            Run run = new RunFactory().CreateRun(testFile);
+            var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksTestFile = UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var run = new RunFactory().CreateRun(testFile);
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
-            ChromPeakIqTarget testTarget = new ChromPeakIqTarget();
+            var testTarget = new ChromPeakIqTarget();
             ITheorFeatureGenerator TheorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
-            ChromPeak testPeak = new ChromPeak(5184, 840963, 50, 0);
+            var testPeak = new ChromPeak(5184, 840963, 50, 0);
 
-            BasicTargetedWorkflowExecutorParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
+            var executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             var executor = new TopDownMSAlignExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
 
-            ChromPeakAnalyzerIqWorkflow workflow = new ChromPeakAnalyzerIqWorkflow(run, parameters);
+            var workflow = new ChromPeakAnalyzerIqWorkflow(run, parameters);
             testTarget.SetWorkflow(workflow);
 
             testTarget.ID = 1;

@@ -10,9 +10,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowExecutorParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowExecutorParameters.xml");
 
-            BasicTargetedWorkflowExecutorParameters parameters = new BasicTargetedWorkflowExecutorParameters();
+            var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.CopyRawFileLocal = true;
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
@@ -33,9 +33,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest2()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedLcmsTargetedWorkflowExecutorParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedLcmsTargetedWorkflowExecutorParameters.xml");
 
-            LcmsFeatureTargetedWorkflowExecutorParameters parameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
+            var parameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
             parameters.CopyRawFileLocal = true;
             parameters.DeleteLocalDatasetAfterProcessing = true;
             parameters.FolderPathForCopiedRawDataset = @"d:\temp\rawdata";
@@ -55,9 +55,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowExecutorParameters_defaults.xml");
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedBasicTargetedWorkflowExecutorParameters_defaults.xml");
 
-            BasicTargetedWorkflowExecutorParameters parameters = new BasicTargetedWorkflowExecutorParameters();
+            var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(importedParametersFile);
 
             Assert.AreEqual(true, parameters.CopyRawFileLocal);

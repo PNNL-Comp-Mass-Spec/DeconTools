@@ -25,35 +25,35 @@ namespace DeconTools.Workflows.UnitTesting
         {
             //see  https://jira.pnnl.gov/jira/browse/OMCS-870
 
-            string testFile =
+            var testFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Stat_Sample_SC_28_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-36.raw";
-            Run run = new RunFactory().CreateRun(testFile);
+            var run = new RunFactory().CreateRun(testFile);
 
-            ViperMassCalibrationData calibrationData = new ViperMassCalibrationData();
+            var calibrationData = new ViperMassCalibrationData();
             calibrationData.MassError = 4.8;
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(calibrationData);
 
             run.MassAlignmentInfo = massAlignmentInfo;
 
-            double observedMZ = 440.5887078;
-            double theorMZ = 440.5858315;
+            var observedMZ = 440.5887078;
+            var theorMZ = 440.5858315;
 
-            double calibratedMZ = run.GetAlignedMZ(observedMZ);
+            var calibratedMZ = run.GetAlignedMZ(observedMZ);
 
             Assert.AreEqual(440.5866m, (decimal)Math.Round(calibratedMZ, 4));
 
-            double ppmDiffBefore = (observedMZ - theorMZ) / theorMZ * 1e6;
-            double ppmDiffAfter = (calibratedMZ - theorMZ) / theorMZ * 1e6;
+            var ppmDiffBefore = (observedMZ - theorMZ) / theorMZ * 1e6;
+            var ppmDiffAfter = (calibratedMZ - theorMZ) / theorMZ * 1e6;
 
             Console.WriteLine("input m/z= " + observedMZ);
             Console.WriteLine("calibrated m/z= " + calibratedMZ);
             Console.WriteLine("ppmDiffBeforeCalibration= " + ppmDiffBefore);
             Console.WriteLine("ppmDiffAftereCalibration= " + ppmDiffAfter);
 
-            double theorMZToLookForInRawData = run.GetTargetMZAligned(theorMZ);
-            double ppmDiffTheor = (theorMZToLookForInRawData - theorMZ) / theorMZ * 1e6;
+            var theorMZToLookForInRawData = run.GetTargetMZAligned(theorMZ);
+            var ppmDiffTheor = (theorMZToLookForInRawData - theorMZ) / theorMZ * 1e6;
 
             Console.WriteLine();
             Console.WriteLine("Theor m/z = " + theorMZ);
@@ -71,20 +71,20 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void doAlignmentTest1()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
+            var deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
-            UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
+            var repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            NETAndMassAligner aligner = new NETAndMassAligner();
+            var aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
@@ -104,33 +104,33 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ExportNET_andMass_AlignmentDataTest1()
         {
-            string exportNETFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedNETAlignmentInfo1.txt");
-            string exportMassFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedMassAlignmentInfo1.txt");
+            var exportNETFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedNETAlignmentInfo1.txt");
+            var exportMassFilename = Path.Combine(FileRefs.OutputFolderPath, "exportedMassAlignmentInfo1.txt");
 
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
+            var deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
-            UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
+            var repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            NETAndMassAligner aligner = new NETAndMassAligner();
+            var aligner = new NETAndMassAligner();
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
             aligner.Execute(run);
 
-            NETAlignmentInfoToTextExporter exporter = new NETAlignmentInfoToTextExporter(exportNETFilename);
+            var exporter = new NETAlignmentInfoToTextExporter(exportNETFilename);
             exporter.ExportAlignmentInfo(run.AlignmentInfo);
 
-            MassAlignmentInfoToTextExporter massInfoexporter = new MassAlignmentInfoToTextExporter(exportMassFilename);
+            var massInfoexporter = new MassAlignmentInfoToTextExporter(exportMassFilename);
             massInfoexporter.ExportAlignmentInfo(run.AlignmentInfo);
         }
 
@@ -138,17 +138,17 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ImportNET_and_Try_Alignment_Test1()
         {
-            string importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
+            var importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            NETAlignmentFromTextImporter importer = new NETAlignmentFromTextImporter(importFilename);
-            List<ScanNETPair> scanNETdata = importer.Import();
+            var importer = new NETAlignmentFromTextImporter(importFilename);
+            var scanNETdata = importer.Import();
 
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
 
-            int testScan = 6005;
+            var testScan = 6005;
             var testNET1 = run.NetAlignmentInfo.GetNETValueForScan(testScan);
 
             
@@ -162,16 +162,16 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ImportNET_and_Try_Alignment_Test2()
         {
-            string importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
+            var importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            NETAlignmentFromTextImporter importer = new NETAlignmentFromTextImporter(importFilename);
+            var importer = new NETAlignmentFromTextImporter(importFilename);
             importer.Execute(run);
 
 
-            int testScan = 6005;
+            var testScan = 6005;
             var testNET1 = run.NetAlignmentInfo.GetNETValueForScan(testScan);
 
             Assert.AreEqual(0.3252918m, (decimal)Math.Round(testNET1,7));
@@ -182,21 +182,21 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ImportMassAndTimePPMCorrections_and_Try_Alignment_Test1()
         {
-            string importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
+            var importFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(importFilename);
-            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            var importer = new MassAlignmentInfoFromTextImporter(importFilename);
+            var massAlignmentData = importer.Import();
 
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
 
             float testScan = 6439;
-            float testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)    See Redmine issue 627:  http://redmine.pnl.gov/issues/627
+            var testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)    See Redmine issue 627:  http://redmine.pnl.gov/issues/627
 
             var ppmshift = run.MassAlignmentInfo.GetPpmShift(testMZ,  (int) testScan);
             Console.WriteLine("ppm shift = " + ppmshift);
@@ -212,25 +212,25 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void Import_NET_And_MassAlignment_Test1()
         {
-            string mzAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
-            string NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
+            var mzAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
+            var NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
+            var massAlignmentData = importer.Import();
             
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
 
-            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            var scanNETdata = netAlignmentInfoImporter.Import();
 
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
             float testScan = 6439;
-            float testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
+            var testMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
 
             var ppmshift = run.MassAlignmentInfo.GetPpmShift(testMZ, (int) testScan);
             Console.WriteLine("ppm shift = " + ppmshift);
@@ -247,19 +247,19 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void checkRetrievalOfScanValueForAGivenNET()
         {
-            string NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
+            var NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             
-            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            var scanNETdata = netAlignmentInfoImporter.Import();
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
 
-            float testNET1 = 0.95f;
-            float testNET2 = 0.08f;
-            int scan1 =  (int) run.NetAlignmentInfo.GetScanForNet(testNET1);
-            int scan2 = (int)run.NetAlignmentInfo.GetScanForNet(testNET2);
+            var testNET1 = 0.95f;
+            var testNET2 = 0.08f;
+            var scan1 =  (int) run.NetAlignmentInfo.GetScanForNet(testNET1);
+            var scan2 = (int)run.NetAlignmentInfo.GetScanForNet(testNET2);
 
             Assert.AreEqual(18231, scan1);
             Assert.AreEqual(1113, scan2);
@@ -280,36 +280,36 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void check_alignment_of_MZ()
         {
-            string mzAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
-            string NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
+            var mzAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MZAlignment.txt");
+            var NETAlignmentInfoFilename = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_ScanNetAlignment.txt");
 
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
+            var massAlignmentData = importer.Import();
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
 
 
-            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            var scanNETdata = netAlignmentInfoImporter.Import();
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
 
 
             float testScan = 6439;
-            float theorMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
+            var theorMZ = 698.875137f;    //QCSHEW massTag 37003; m/z 698.875137 (2+)   See Redmine issue 627:  http://redmine.pnl.gov/issues/627
 
             var ppmshift = run.MassAlignmentInfo.GetPpmShift(theorMZ, (int) testScan);
             Console.WriteLine("ppm shift = " + ppmshift);
 
            
-            double observedMZ = 698.8721;
-            double alignedTargetMZ = run.GetTargetMZAligned(theorMZ);
+            var observedMZ = 698.8721;
+            var alignedTargetMZ = run.GetTargetMZAligned(theorMZ);
 
-            double differenceInMZ = Math.Abs(observedMZ - alignedTargetMZ);
+            var differenceInMZ = Math.Abs(observedMZ - alignedTargetMZ);
 
 
             Console.WriteLine("theor m/z of monoisotopic peak = " + theorMZ.ToString("0.0000"));
@@ -330,28 +330,28 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ensure_alignmentIsBeingUsed_duringProcessing_test1()
         {
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            string mzAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_MZAlignment.txt";
-            string NETAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_NETAlignment.txt";
-            string rawDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
-            string peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var mzAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_MZAlignment.txt";
+            var NETAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_NETAlignment.txt";
+            var rawDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
+            var peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
 
-            Run run =  DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
+            var run =  DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
           
           
-            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
+            var massAlignmentData = importer.Import();
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
 
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24817;
+            var testMassTagID = 24817;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             //first will execute workflow on a dataset that was NOT aligned
@@ -361,25 +361,25 @@ namespace DeconTools.Workflows.UnitTesting
             parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            TargetedResultBase result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.Target.NormalizedElutionTime - result.GetNET();
+            var netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
             
-            decimal expectedNETDiff = 0.057m;
+            var expectedNETDiff = 0.057m;
             Assert.AreEqual(expectedNETDiff, (decimal)Math.Round(netDiff, 3));
 
 
             //import NET alignment information
-            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            var scanNETdata = netAlignmentInfoImporter.Import();
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
 
             parameters = new BasicTargetedWorkflowParameters();
@@ -398,7 +398,7 @@ namespace DeconTools.Workflows.UnitTesting
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
             
-            double expectedNETDiffMaximum = 0.01;
+            var expectedNETDiffMaximum = 0.01;
             Assert.IsTrue(netDiff < expectedNETDiffMaximum);
 
             
@@ -407,27 +407,27 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ensure_alignmentIsBeingUsed_duringProcessing_test2()
         {
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            string mzAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_MZAlignment.txt";
-            string NETAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_NETAlignment.txt";
-            string rawDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
-            string peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            var mzAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_MZAlignment.txt";
+            var NETAlignmentInfoFilename = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_NETAlignment.txt";
+            var rawDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16.RAW";
+            var peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
 
-            Run run = DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
+            var run = DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
 
 
-            MassAlignmentInfoFromTextImporter importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
-            List<MassAlignmentDataItem> massAlignmentData = importer.Import();
+            var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
+            var massAlignmentData = importer.Import();
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
 
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 24730;
+            var testMassTagID = 24730;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             //first will execute workflow on a dataset that was NOT aligned
@@ -437,25 +437,25 @@ namespace DeconTools.Workflows.UnitTesting
             parameters.ChromGenTolerance = 5;
             parameters.MSToleranceInPPM = 15;
 
-            BasicTargetedWorkflow workflow = new BasicTargetedWorkflow(run, parameters);
+            var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
-            TargetedResultBase result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
+            var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(9367, (int)result.ChromPeakSelected.XValue);
 
 
-            double netDiff = result.Target.NormalizedElutionTime - result.GetNET();
+            var netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
 
-            decimal expectedNETDiff = 0.071m;
+            var expectedNETDiff = 0.071m;
             Assert.AreEqual(expectedNETDiff, (decimal)Math.Round(netDiff, 3));
 
 
             //import NET alignment information
-            NETAlignmentFromTextImporter netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
-            List<ScanNETPair> scanNETdata = netAlignmentInfoImporter.Import();
+            var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
+            var scanNETdata = netAlignmentInfoImporter.Import();
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
 
             parameters = new BasicTargetedWorkflowParameters();
@@ -473,7 +473,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             
-            double expectedNETDiffMaximum = 0.01;
+            var expectedNETDiffMaximum = 0.01;
             Assert.IsTrue(netDiff < expectedNETDiffMaximum);
 
 
@@ -485,20 +485,20 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void ApplyViperMassAlignmentDataFromViperTest1()
         {
-            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            Run run = new RunFactory().CreateRun(testFile);
+            var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var run = new RunFactory().CreateRun(testFile);
 
-            ViperMassCalibrationData calibrationData = new ViperMassCalibrationData();
+            var calibrationData = new ViperMassCalibrationData();
             calibrationData.MassError = -3.6;
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(calibrationData);
 
             run.MassAlignmentInfo = massAlignmentInfo;
 
-            double testMZ = 974.504343924692;
-            double alignedMZ = run.GetAlignedMZ(testMZ);
-            double ppmDiff = (testMZ - alignedMZ) / testMZ * 1e6;
+            var testMZ = 974.504343924692;
+            var alignedMZ = run.GetAlignedMZ(testMZ);
+            var ppmDiff = (testMZ - alignedMZ) / testMZ * 1e6;
 
             Console.WriteLine("input m/z= " + testMZ);
             Console.WriteLine("aligned m/z= " + alignedMZ);
@@ -514,12 +514,12 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void LoadAndApplyMassAlignmentFromViperDataTest1()
         {
-            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            Run run = new RunFactory().CreateRun(testFile);
+            var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var run = new RunFactory().CreateRun(testFile);
 
-            string viperMassAlignmentFile =
+            var viperMassAlignmentFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_MassAndGANETErrors_BeforeRefinement.txt";
-            ViperMassCalibrationLoader loader = new ViperMassCalibrationLoader(viperMassAlignmentFile);
+            var loader = new ViperMassCalibrationLoader(viperMassAlignmentFile);
 
             /*
              * From unit test: targetedWorkflow_alignUsingDataFromFiles     
@@ -544,14 +544,14 @@ namespace DeconTools.Workflows.UnitTesting
 
             var calibrationData = loader.ImportMassCalibrationData();
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(calibrationData);
 
             run.MassAlignmentInfo = massAlignmentInfo;
 
-            double testMZ = 974.504343924692;
-            double alignedMZ =  run.GetAlignedMZ(testMZ);
-            double ppmDiff = (testMZ - alignedMZ)/testMZ*1e6;
+            var testMZ = 974.504343924692;
+            var alignedMZ =  run.GetAlignedMZ(testMZ);
+            var ppmDiff = (testMZ - alignedMZ)/testMZ*1e6;
             
             Console.WriteLine("input m/z= " + testMZ);
             Console.WriteLine("aligned m/z= "+ alignedMZ);

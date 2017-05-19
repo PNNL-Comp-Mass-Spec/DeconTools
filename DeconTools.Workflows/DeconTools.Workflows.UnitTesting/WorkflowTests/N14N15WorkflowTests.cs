@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedN14N15WorkflowParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedN14N15WorkflowParameters.xml");
 
             exportedParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1.xml";
@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml");
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml");
 
             var wp = WorkflowParameters.CreateParameters(importedParametersFile);
 
@@ -61,19 +61,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             // See:  https://jira.pnnl.gov/jira/browse/OMCS-409
 
-            Run run = RunUtilities.CreateAndAlignRun(bruker9t_samplefile1, bruker9t_peaksfile1);
+            var run = RunUtilities.CreateAndAlignRun(bruker9t_samplefile1, bruker9t_peaksfile1);
 
-            string targetsFile =
+            var targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets_Filtered0.45-0.47NET_first18.txt";
 
 
-            MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(targetsFile);
+            var importer = new MassTagFromTextFileImporter(targetsFile);
             var targetCollection = importer.Import();
 
 
             run.CurrentMassTag = targetCollection.TargetList.FirstOrDefault(p => p.ChargeState == 1);
 
-            N14N15Workflow2Parameters parameters = new N14N15Workflow2Parameters();
+            var parameters = new N14N15Workflow2Parameters();
             parameters.LoadParameters(Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml"));
             parameters.ChromGenTolerance = 25;
             parameters.MSToleranceInPPM = 25;
@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
-            N14N15Workflow2 workflow = new N14N15Workflow2(run, parameters);
+            var workflow = new N14N15Workflow2(run, parameters);
             workflow.Execute();
             Assert.IsTrue(run.ResultCollection.ResultType == Globals.ResultType.N14N15_TARGETED_RESULT);
 

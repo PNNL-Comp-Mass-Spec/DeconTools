@@ -25,20 +25,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void Test1()
         {
-            string testDatasetPath = uimfTestfile1;
+            var testDatasetPath = uimfTestfile1;
 
-            string executorParameterFilename =
+            var executorParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_O16O18Testing\Parameters\WorkflowExecutorParameters.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
 
             executorParameters.LoadParameters(executorParameterFilename);
 
-            string outputExecutorParameterFilename = executorParameterFilename.Replace(".xml", "_autoGen.xml");
+            var outputExecutorParameterFilename = executorParameterFilename.Replace(".xml", "_autoGen.xml");
             executorParameters.SaveParametersToXML(outputExecutorParameterFilename);
 
 
-            int testTarget = 7563580;
+            var testTarget = 7563580;
 
             var executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
@@ -50,9 +50,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void TestUIMFTargetedMSMSWorkflowSingleTarget()
         {
-            string datasetPath = uimfMsMsFile;
+            var datasetPath = uimfMsMsFile;
 
-            string executorParameterFilename =
+            var executorParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Parameters\UIMFTargetedMSMSWorkflowExecutorParameters.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
@@ -67,9 +67,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void TestUIMFTargetedMSMSWorkflow()
         {
-            string datasetPath = uimfMsMsFile;
+            var datasetPath = uimfMsMsFile;
 
-            string executorParameterFilename =
+            var executorParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Parameters\UIMFTargetedMSMSWorkflowExecutorParametersMostConfidentMassTags.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
@@ -96,9 +96,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void TestUIMFTargetedMSMSWorkflowLotsOfTargets()
         {
-            string datasetPath = uimfMsMsFile;
+            var datasetPath = uimfMsMsFile;
 
-            string executorParameterFilename =
+            var executorParameterFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Parameters\UIMFTargetedMSMSWorkflowExecutorParametersLotsOfMassTags.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
@@ -111,9 +111,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void TestUIMFTargetedMSMSWorkflowCreateParametersManually()
         {
-            string currentDirectory = Directory.GetCurrentDirectory();
+            var currentDirectory = Directory.GetCurrentDirectory();
 
-            string datasetPath = uimfMsMsFile;
+            var datasetPath = uimfMsMsFile;
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.CopyRawFileLocal = false;

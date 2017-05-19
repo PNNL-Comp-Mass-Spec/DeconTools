@@ -16,7 +16,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_filtered_peaks.txt";
     //        string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_filteredIssue383_peaks.txt";
 
-            string masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_MZfiltered_peaks.txt";
+            var masterPeaksFilepath = @"\\protoapps\UserData\Shah\TestFiles\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_MZfiltered_peaks.txt";
 
 
             Run run = new UIMFRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.sarcUIMFFile1);

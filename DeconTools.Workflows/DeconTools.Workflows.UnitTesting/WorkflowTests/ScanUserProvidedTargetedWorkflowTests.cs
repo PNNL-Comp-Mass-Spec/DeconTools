@@ -16,12 +16,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void Test1()
         {
-            string testFile = @"\\protoapps\UserData\Slysz\Data\O16O18\BSA\BSA_18O_99_8Jan11_Falcon_10-12-09.RAW";
+            var testFile = @"\\protoapps\UserData\Slysz\Data\O16O18\BSA\BSA_18O_99_8Jan11_Falcon_10-12-09.RAW";
 
-            string massTagFile =
+            var massTagFile =
                 @"\\protoapps\UserData\Slysz\Data\O16O18\BSA\Targets\BSAmassTags_MinimalInfo_withScans.txt";
 
-            string peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
+            var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
@@ -30,7 +30,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            int testMassTagID = 3;
+            var testMassTagID = 3;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
             TargetedWorkflowParameters parameters = new O16O18WorkflowParameters();
@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromSmootherNumPointsInSmooth = 31;
 
-            O16O18Workflow workflow = new O16O18Workflow(run, parameters);
+            var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
             Assert.IsTrue(workflow.Result.Target.ScanLCTarget > 0);

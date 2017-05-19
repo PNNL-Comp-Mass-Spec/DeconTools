@@ -19,17 +19,17 @@ namespace DeconTools.Workflows.UnitTesting
         [TestFixtureSetUp]
         public void setupTests()
         {
-            RunFactory rf = new RunFactory();
+            var rf = new RunFactory();
             run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            string deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
+            var deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
-            UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
-            TargetedResultRepository repo = importer.Import();
+            var importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
+            var repo = importer.Import();
 
-            string massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
-            TargetCollection mtc = new TargetCollection();
-            MassTagFromTextFileImporter mtimporter = new MassTagFromTextFileImporter(massTagFile);
+            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";
+            var mtc = new TargetCollection();
+            var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
             aligner = new NETAndMassAligner();
@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.UnitTesting
         public void outputAlignmentHeatmapData_Test1()
         {
            
-            StringBuilder sb=new StringBuilder();
+            var sb=new StringBuilder();
 
             foreach (var scan in aligner.Result.ScanLCValues)
             {
@@ -70,10 +70,10 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void outputMassErrorData()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("scan\tbefore\tafter");
-            for (int i = 0; i < aligner.Result.Mass_vs_scan_ResidualsBeforeAlignment.Length; i++)
+            for (var i = 0; i < aligner.Result.Mass_vs_scan_ResidualsBeforeAlignment.Length; i++)
             {
                 sb.Append(aligner.Result.Mass_vs_scan_ResidualsScanValues[i]);
                 sb.Append("\t");
@@ -90,11 +90,11 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void outputMass_vs_MZResidualsData()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("scan\tbefore\tafter");
             sb.Append(Environment.NewLine);
-            for (int i = 0; i < aligner.Result.Mass_vs_mz_ResidualsMZValues.Length; i++)
+            for (var i = 0; i < aligner.Result.Mass_vs_mz_ResidualsMZValues.Length; i++)
             {
                 sb.Append(aligner.Result.Mass_vs_mz_ResidualsMZValues[i]);
                 sb.Append("\t");
@@ -125,11 +125,11 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void getMassErrorHistogramTest1()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < aligner.Result.massHistogramData.GetLength(0); i++)
+            for (var i = 0; i < aligner.Result.massHistogramData.GetLength(0); i++)
             {
-                for (int k = 0; k < aligner.Result.massHistogramData.GetLength(1); k++)
+                for (var k = 0; k < aligner.Result.massHistogramData.GetLength(1); k++)
                 {
                     sb.Append(aligner.Result.massHistogramData[i,k]);
                     sb.Append("\t");
@@ -148,11 +148,11 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void getNETErrorHistogramTest1()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < aligner.Result.NETHistogramData.GetLength(0); i++)
+            for (var i = 0; i < aligner.Result.NETHistogramData.GetLength(0); i++)
             {
-                for (int k = 0; k < aligner.Result.NETHistogramData.GetLength(1); k++)
+                for (var k = 0; k < aligner.Result.NETHistogramData.GetLength(1); k++)
                 {
                     sb.Append(aligner.Result.NETHistogramData[i, k]);
                     sb.Append("\t");
@@ -170,11 +170,11 @@ namespace DeconTools.Workflows.UnitTesting
 
         private string displayHeatMapData(AlignmentResult alignmentResult)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = alignmentResult.AlignmentHeatmapScores.GetLength(1)-1; i >=0 ; i--)
+            for (var i = alignmentResult.AlignmentHeatmapScores.GetLength(1)-1; i >=0 ; i--)
             {
-                for (int k = 0; k < alignmentResult.AlignmentHeatmapScores.GetLength(0); k++)
+                for (var k = 0; k < alignmentResult.AlignmentHeatmapScores.GetLength(0); k++)
                 {
                     sb.Append(alignmentResult.AlignmentHeatmapScores[k, i]);
                     sb.Append("\t");

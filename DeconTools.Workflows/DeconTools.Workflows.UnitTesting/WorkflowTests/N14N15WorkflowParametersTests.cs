@@ -10,7 +10,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParametersTest1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedN14N15WorkflowParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedN14N15WorkflowParameters.xml");
 
             var parameters = new N14N15Workflow2Parameters();
             parameters.SaveParametersToXML(exportedParametersFile);
@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void importParametersTest1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml");
+            var importedParametersFile = Path.Combine(FileRefs.ImportedData, "importedN14N15WorkflowParameters.xml");
 
             var wp = WorkflowParameters.CreateParameters(importedParametersFile);
 

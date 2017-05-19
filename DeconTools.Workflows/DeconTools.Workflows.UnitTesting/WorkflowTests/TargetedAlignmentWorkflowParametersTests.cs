@@ -10,17 +10,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportParameterTests1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
 
-            TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
+            var parameters = new TargetedAlignerWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
         }
 
         [Test]
         public void importParameterTests1()
         {
-            string importedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
-            TargetedAlignerWorkflowParameters parameters = new TargetedAlignerWorkflowParameters();
+            var importedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedTargetedAlignmentWorkflowParameters.xml");
+            var parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
         }
 

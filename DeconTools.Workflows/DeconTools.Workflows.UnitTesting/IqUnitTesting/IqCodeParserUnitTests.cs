@@ -17,10 +17,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void PtmMassFromCodeMsgfTest ()
         {
-            IqCodeParser parser = new IqCodeParser();
-            string msgfexample = "+144.102PRYRK+144.102RTPVSLY+79.966QK+144.102T+79.966PNGEK+144.102PYEC+57.021GEC+57.021GK+144.102-202";
+            var parser = new IqCodeParser();
+            var msgfexample = "+144.102PRYRK+144.102RTPVSLY+79.966QK+144.102T+79.966PNGEK+144.102PYEC+57.021GEC+57.021GK+144.102-202";
 
-            double Mass = parser.PtmMassFromCode(msgfexample);
+            var Mass = parser.PtmMassFromCode(msgfexample);
             Assert.AreEqual(792.484, Mass, 0.0005);
         }
 
@@ -29,10 +29,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void PtmMassFromCodeMsAlignTest()
         {
-            IqCodeParser parser = new IqCodeParser();
-            string msalignexample = "A.AENVVHHKLDGMPISEAVEINAGNNLVF(LSGKVPTKKSADAPEGELASYGNTE)[-713.72]EQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVA(K)[1.02]LANPAWRVEIEVIAVRPAK.";
+            var parser = new IqCodeParser();
+            var msalignexample = "A.AENVVHHKLDGMPISEAVEINAGNNLVF(LSGKVPTKKSADAPEGELASYGNTE)[-713.72]EQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVA(K)[1.02]LANPAWRVEIEVIAVRPAK.";
 
-            double Mass = parser.PtmMassFromCode(msalignexample);
+            var Mass = parser.PtmMassFromCode(msalignexample);
             Assert.AreEqual(-712.7, Mass, 0.0005);
         }
 
@@ -40,21 +40,21 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void MsgfCodeParserTest()
         {
-            IqCodeParser parser = new IqCodeParser();
-            string examplemod =
+            var parser = new IqCodeParser();
+            var examplemod =
                 "+144.102PRYRK+144.102RTPVSLY+79.966QK+144.102T+79.966PNGEK+144.102PYEC+57.021GEC+57.021GK+144.102-202";
-            string checkmass = "+792.484";
-            string examplenomod = "PRYRKRTPVSLYQKTPNGEKPYECGECGK";
+            var checkmass = "+792.484";
+            var examplenomod = "PRYRKRTPVSLYQKTPNGEKPYECGECGK";
 
-            string examplemodresult = parser.GetEmpiricalFormulaFromSequence(examplemod);
-            string checkmassresult = parser.GetEmpiricalFormulaFromSequence(checkmass);
-            string examplenomodresult = parser.GetEmpiricalFormulaFromSequence(examplenomod);
+            var examplemodresult = parser.GetEmpiricalFormulaFromSequence(examplemod);
+            var checkmassresult = parser.GetEmpiricalFormulaFromSequence(checkmass);
+            var examplenomodresult = parser.GetEmpiricalFormulaFromSequence(examplenomod);
 
             Console.WriteLine(examplemodresult);
             Console.WriteLine(checkmassresult);
             Console.WriteLine(examplenomodresult);
 
-            string difference = EmpiricalFormulaUtilities.SubtractFormula(examplemodresult, checkmassresult);
+            var difference = EmpiricalFormulaUtilities.SubtractFormula(examplemodresult, checkmassresult);
 
             Assert.AreEqual(examplenomodresult, difference);
         }
@@ -63,21 +63,21 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void MsAlignCodeParserTest()
         {
-            IqCodeParser parser = new IqCodeParser();
-            string examplemod =
+            var parser = new IqCodeParser();
+            var examplemod =
                 "A.AENVVHHKLDGMPISEAVEINAGNNLVF(LSGKVPTKKSADAPEGELASYGNTE)[713.72]EQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVA(K)[1.02]LANPAWRVEIEVIAVRPAK.";
-            string checkmass = "[714.74]";
-            string examplenomod = "A.AENVVHHKLDGMPISEAVEINAGNNLVLSGKVPTKKSADAPEGELASYGNTEFEQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVAKLANPAWRVEIEVIAVRPAK.";
+            var checkmass = "[714.74]";
+            var examplenomod = "A.AENVVHHKLDGMPISEAVEINAGNNLVLSGKVPTKKSADAPEGELASYGNTEFEQTINVLEQIKTNLNNLGLDMKDVVKMQVFLVGGEENNGTMDFKGFMNGYSKFYDASKTNQLPARSAFQVAKLANPAWRVEIEVIAVRPAK.";
 
-            string examplemodresult = parser.GetEmpiricalFormulaFromSequence(examplemod);
-            string checkmassresult = parser.GetEmpiricalFormulaFromSequence(checkmass);
-            string examplenomodresult = parser.GetEmpiricalFormulaFromSequence(examplenomod);
+            var examplemodresult = parser.GetEmpiricalFormulaFromSequence(examplemod);
+            var checkmassresult = parser.GetEmpiricalFormulaFromSequence(checkmass);
+            var examplenomodresult = parser.GetEmpiricalFormulaFromSequence(examplenomod);
 
             Console.WriteLine(examplemodresult);
             Console.WriteLine(checkmassresult);
             Console.WriteLine(examplenomodresult);
 
-            string difference = EmpiricalFormulaUtilities.SubtractFormula(examplemodresult, checkmassresult);
+            var difference = EmpiricalFormulaUtilities.SubtractFormula(examplemodresult, checkmassresult);
 
             Assert.AreEqual(examplenomodresult, difference);
         }
@@ -86,10 +86,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void EmpiricalFormulaCalculatorTest()
         {
-            IqCodeParser parser = new IqCodeParser();
+            var parser = new IqCodeParser();
 
-            string exampleSequence = @"A.ADLEDNMDILNDNLKVVEKTDSAPELKAALTKMRAAALDAQKATPPKLEDKAPDSPEMKDFRHGFDILVGQIDGALKLANEGNVKEAKAAAEALKTTRNTYHKKYR.";
-            string empiricalFormula = parser.GetEmpiricalFormulaFromSequence(exampleSequence);
+            var exampleSequence = @"A.ADLEDNMDILNDNLKVVEKTDSAPELKAALTKMRAAALDAQKATPPKLEDKAPDSPEMKDFRHGFDILVGQIDGALKLANEGNVKEAKAAAEALKTTRNTYHKKYR.";
+            var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(exampleSequence);
             Console.WriteLine(empiricalFormula);
             Assert.AreEqual("C507H832N144O163S3", empiricalFormula);
         }
@@ -98,11 +98,11 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void EmpiricalFormulaCalculatorRoundingTest()
         {
-            IqCodeParser parser = new IqCodeParser();
+            var parser = new IqCodeParser();
 
-            string testSequence = @".MITGIQITKA(AN)[1.02]DDLLNSFWLLDSEKGEARCIVAKAGYAEDEVVAVSKLGDIEYREVPVEVKPEVRVEGGQHLNVNVLRRETLEDAVKHPEKYPQLTI(RV)[-.99]S.G";
+            var testSequence = @".MITGIQITKA(AN)[1.02]DDLLNSFWLLDSEKGEARCIVAKAGYAEDEVVAVSKLGDIEYREVPVEVKPEVRVEGGQHLNVNVLRRETLEDAVKHPEKYPQLTI(RV)[-.99]S.G";
 
-            string empiricalFormula = parser.GetEmpiricalFormulaFromSequence(testSequence);
+            var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(testSequence);
             Console.WriteLine(empiricalFormula);
             Assert.IsTrue(!empiricalFormula.Contains("E"));
         }
@@ -110,18 +110,18 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void AveragineRoundTripTest()
         {
-            IqCodeParser parser = new IqCodeParser();
+            var parser = new IqCodeParser();
 
-            double ptmDouble = -11849.17;
-            string ptmMass = "[" + ptmDouble.ToString() + "]"; // this is done just for formatting of the function call below
-            double absPtmDouble = Math.Abs(ptmDouble); //this is done because the emperical formula returns a positive amount of atoms (not negative)
+            var ptmDouble = -11849.17;
+            var ptmMass = "[" + ptmDouble.ToString() + "]"; // this is done just for formatting of the function call below
+            var absPtmDouble = Math.Abs(ptmDouble); //this is done because the emperical formula returns a positive amount of atoms (not negative)
                     //so in the assert comparison we have to use the positive mass value
 
-            string empiricalFormula = parser.GetEmpiricalFormulaFromSequence(ptmMass);
+            var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(ptmMass);
         
             Console.WriteLine("This is my emperical formula:" + empiricalFormula + ":");
 
-            double returnedMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            var returnedMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 
             Console.WriteLine(empiricalFormula);
             Console.WriteLine(returnedMass);
@@ -133,37 +133,37 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void ProteinSequenceToMassHugePTMTest()
         {
-            IqCodeParser parser = new IqCodeParser();
+            var parser = new IqCodeParser();
 
-            string proteoform =
+            var proteoform =
                 "M.V(HLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVC)[-11849.17]VLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH.";
-            double trueMass = 4008.08; // only one significant decimal really.  could be 4008.07 or .08 Can't tell yet
-            string unmodifiedProteoform =
+            var trueMass = 4008.08; // only one significant decimal really.  could be 4008.07 or .08 Can't tell yet
+            var unmodifiedProteoform =
                 "M.VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH.";
-            string ptm = "[-11849.17]";
+            var ptm = "[-11849.17]";
 
-            string proteoformComposition = parser.GetEmpiricalFormulaFromSequence(proteoform);
+            var proteoformComposition = parser.GetEmpiricalFormulaFromSequence(proteoform);
 
-            string unmodifiedProteoformComposition = parser.GetEmpiricalFormulaFromSequence(unmodifiedProteoform);
+            var unmodifiedProteoformComposition = parser.GetEmpiricalFormulaFromSequence(unmodifiedProteoform);
 
-            string ptmComposition = parser.GetEmpiricalFormulaFromSequence(ptm);
+            var ptmComposition = parser.GetEmpiricalFormulaFromSequence(ptm);
 
-            string difference = EmpiricalFormulaUtilities.SubtractFormula(unmodifiedProteoformComposition, ptmComposition);
+            var difference = EmpiricalFormulaUtilities.SubtractFormula(unmodifiedProteoformComposition, ptmComposition);
 
             Console.WriteLine(proteoformComposition);
             Console.WriteLine(difference);
 
             Assert.AreEqual(proteoformComposition, difference);
 
-            double differenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(difference);
-            double proteformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(proteoformComposition);
+            var differenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(difference);
+            var proteformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(proteoformComposition);
 
-            double unmodifiedProteoformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(unmodifiedProteoformComposition);
+            var unmodifiedProteoformMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(unmodifiedProteoformComposition);
             Console.WriteLine(unmodifiedProteoformMass);
-            double ptmMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(ptmComposition);
+            var ptmMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(ptmComposition);
             Console.WriteLine(ptmMass);
 
-            double conversionFirst = unmodifiedProteoformMass - ptmMass;
+            var conversionFirst = unmodifiedProteoformMass - ptmMass;
             Console.WriteLine(conversionFirst);
 
             Assert.AreEqual(trueMass, conversionFirst, 0.1);

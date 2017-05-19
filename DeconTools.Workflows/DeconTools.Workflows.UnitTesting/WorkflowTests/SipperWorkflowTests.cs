@@ -21,9 +21,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void exportSipperWorkflowParametersTest1()
         {
-            string exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedSipperTargetedWorkflowParameters.xml");
+            var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedSipperTargetedWorkflowParameters.xml");
 
-            SipperTargetedWorkflowParameters parameters = new SipperTargetedWorkflowParameters();
+            var parameters = new SipperTargetedWorkflowParameters();
 
             parameters.SaveParametersToXML(exportedParametersFile);
 
@@ -35,21 +35,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void loadLCMSFeatures_and_massTags()
         {
 
-            string lcmsfeaturesFile =
+            var lcmsfeaturesFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
             // load LCMSFeatures as targets
-            LcmsTargetFromFeaturesFileImporter importer =
+            var importer =
                 new LcmsTargetFromFeaturesFileImporter(lcmsfeaturesFile);
 
             var lcmsTargetCollection = importer.Import();
 
 
             // load MassTags
-            string massTagFile1 =
+            var massTagFile1 =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();
 
 
@@ -96,31 +96,31 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void executeWorkflowTest1()
         {
-            string testFile = FileRefs.SipperRawDataFile;
-            string peaksFile =
+            var testFile = FileRefs.SipperRawDataFile;
+            var peaksFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
 
             peaksFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
 
-            Run run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
+            var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
 
 
-            string lcmsfeaturesFile =
+            var lcmsfeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
             // load LCMSFeatures as targets
-            LcmsTargetFromFeaturesFileImporter importer =
+            var importer =
                 new LcmsTargetFromFeaturesFileImporter(lcmsfeaturesFile);
 
             var lcmsTargetCollection = importer.Import();
 
 
             // load MassTags
-            string massTagFile1 =
+            var massTagFile1 =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();
 
 
@@ -193,10 +193,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
 
-            SipperTargetedWorkflow workflow = new SipperTargetedWorkflow(run, parameters);
+            var workflow = new SipperTargetedWorkflow(run, parameters);
 
 
-            string outputFolder = @"C:\data\temp\SipperOutput";
+            var outputFolder = @"C:\data\temp\SipperOutput";
 
             if (!Directory.Exists(outputFolder))
             {
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             }
 
 
-            Stopwatch stopwatch = new Stopwatch();
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
             foreach (var target in filteredLcmsFeatureTargets)
             {
@@ -250,13 +250,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             msGraphGenerator.GenerateGraph(massSpectrumXYData.Xvalues, massSpectrumXYData.Yvalues, target.MZ - 2,
                                            target.MZ + 6);
 
-            string annotation = "fractionC13= " + sipperLcmsTargetedResult.PercentCarbonsLabelled.ToString("0.000") + "\n" +
+            var annotation = "fractionC13= " + sipperLcmsTargetedResult.PercentCarbonsLabelled.ToString("0.000") + "\n" +
                                 "populationFraction= " + sipperLcmsTargetedResult.PercentPeptideLabelled.ToString("0.000");
 
 
             msGraphGenerator.AddAnnotationRelativeAxis(annotation, 0.45, 0.05);
 
-            string outputFilename = Path.Combine(outputFolder, target.ID + "_MS.png");
+            var outputFilename = Path.Combine(outputFolder, target.ID + "_MS.png");
             msGraphGenerator.SaveGraph(outputFilename);
 
         }

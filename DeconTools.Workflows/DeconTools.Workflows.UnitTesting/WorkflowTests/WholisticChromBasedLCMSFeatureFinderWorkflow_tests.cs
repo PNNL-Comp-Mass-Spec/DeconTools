@@ -21,21 +21,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void processOrbiWithNewWorkflowTest1()
         {
 
-            int minScan = 200;
-            int maxScan = 18400;
+            var minScan = 200;
+            var maxScan = 18400;
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
 
-            WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
+            var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
 
 
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
             //run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue > 771 && p.MSPeak.XValue < 775).ToList();
 
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
             workflow.ExecuteWorkflow2(run);
             sw.Stop();
@@ -51,21 +51,21 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void processOrbiWithNewWorkflowTest2()
         {
-            int minScan = 5500;
-            int maxScan = 6500;
+            var minScan = 5500;
+            var maxScan = 6500;
 
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
-            WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
+            var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             //run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
             run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue > 771 && p.MSPeak.XValue < 775).ToList();
 
 
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
             workflow.Execute();
             sw.Stop();
@@ -82,14 +82,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void processOrbi_Scans3000_6000_Test1()
         {
-            int minScan = 5500;
-            int maxScan = 6500;
+            var minScan = 5500;
+            var maxScan = 6500;
 
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
-            WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
+            var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
            
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             //run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
@@ -109,14 +109,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void processOrbi_Scans5500_6500_Test1()
         {
-            int minScan = 5500;
-            int maxScan = 6500;
+            var minScan = 5500;
+            var maxScan = 6500;
 
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
-            WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
+            var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
            
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.ResultCollection.MSPeakResultList = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan).ToList();
@@ -140,14 +140,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void processOrbi_Refining_Case01_whatHappensTo_PeakID_396293()
         {
-            int minScan = 200;
-            int maxScan = 18000;
+            var minScan = 200;
+            var maxScan = 18000;
 
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            WholisticChromBasedLCMSFeatureFinderWorkflow workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
+            var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
            
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
@@ -163,7 +163,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
 
-            List<MSPeakResult> filteredPeakResults = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue > 771 && p.MSPeak.XValue < 775).ToList();
+            var filteredPeakResults = run.ResultCollection.MSPeakResultList.Where(p => p.Scan_num > minScan && p.Scan_num < maxScan && p.MSPeak.XValue > 771 && p.MSPeak.XValue < 775).ToList();
 
             //TestUtilities.DisplayMSPeakResults(filteredPeakResults);
 

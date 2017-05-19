@@ -19,14 +19,14 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
         [Test]
         public void ChromCorrelatorTest1()
         {
-            string rawFilename = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
-            Run run = new RunFactory().CreateRun(rawFilename);
+            var rawFilename = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
+            var run = new RunFactory().CreateRun(rawFilename);
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
-            IqExecutor executor = new IqExecutor(executorBaseParameters, run);
+            var executor = new IqExecutor(executorBaseParameters, run);
             executor.LoadChromData(run);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
 
             TargetedWorkflowParameters workflowParameters = new O16O18WorkflowParameters();
             IqWorkflow workflow = new O16O18IqWorkflow(run,workflowParameters);
@@ -37,10 +37,10 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
             iqTarget.ID = 1093;
             iqTarget.ChargeState = 0;
             
-            List<IqTarget> iqTargetList = new List<IqTarget>();
+            var iqTargetList = new List<IqTarget>();
             iqTargetList.Add(iqTarget);
 
-            IqTargetUtilities utilities = new IqTargetUtilities();
+            var utilities = new IqTargetUtilities();
             utilities.CreateChildTargets(iqTargetList);
 
             
@@ -48,7 +48,7 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
             workflowAssigner.AssignWorkflowToParent(workflow, iqTargetList);
             workflowAssigner.AssignWorkflowToChildren(workflow, iqTargetList);
 
-            JoshTheorFeatureGenerator theorFeatureGenerator = new JoshTheorFeatureGenerator();
+            var theorFeatureGenerator = new JoshTheorFeatureGenerator();
             foreach (var target in iqTarget.ChildTargets())
             {
                 utilities.UpdateTargetMissingInfo(target);
@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
             foreach (var childTarget in iqTarget.ChildTargets())
             {
                 var result = childTarget.CreateResult();
-                O16O18ChromCorrelator correlator = new O16O18ChromCorrelator(7, 0.1, 20, Globals.ToleranceUnit.PPM);
+                var correlator = new O16O18ChromCorrelator(7, 0.1, 20, Globals.ToleranceUnit.PPM);
                 var corrData = correlator.CorrelateData(run, result, 5700, 6500);
 
                 var corrDataItem1 = corrData.CorrelationDataItems.First();
