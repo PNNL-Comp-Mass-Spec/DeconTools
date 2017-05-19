@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6347; May 18, 2017 bcg
+	- Disable the IMS per-frame timeout if there are 10 or fewer frames
+
 Version 1.1.6321; April 22, 2017 mem
 	- Updated to .NET 4.6.2
 	- Updated UIMFLibrary, obtained from NuGet
