@@ -32,7 +32,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                 File.Delete(Outfile);
             }
 
-            using (StreamWriter sipper = File.AppendText(Outfile))
+            using (var sipper = File.AppendText(Outfile))
             {
                 sipper.WriteLine("TargetID" + "\t" + "PRSM_ID" + "\t" + "ChargeState" + "\t" + "Code" + "\t" + "EmpiricalFormula" + "\t" + "MonoMZ" +
                                  "\t" + "MonoisotopicMass" + "\t" + "TargetScan" + "\t" + "ObservedScan" +
@@ -51,9 +51,9 @@ namespace DeconTools.Workflows.Backend.Utilities
         {
             //Temporary Data Dumping Point
             //Data Dump also in TopDownIqTesting and ChromCorrelationData
-            ChromPeakIqTarget target = input as ChromPeakIqTarget;
-            string status = "UNK";
-            IqResult result = target.GetResult();
+            var target = input as ChromPeakIqTarget;
+            var status = "UNK";
+            var result = target.GetResult();
             var parent = result.Target.ParentTarget as IqChargeStateTarget;
             if (parent.ObservedScan != -1)
             {
@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
 
 
-            using (StreamWriter sipper = File.AppendText(Outfile))
+            using (var sipper = File.AppendText(Outfile))
             {
                 sipper.WriteLine(target.ID + "\t" + parent.AlternateID + "\t" + target.ChargeState + "\t" + target.Code + "\t" + target.EmpiricalFormula + "\t" +
                                  target.MZTheor.ToString("0.0000") + "\t" + target.MonoMassTheor + "\t" +

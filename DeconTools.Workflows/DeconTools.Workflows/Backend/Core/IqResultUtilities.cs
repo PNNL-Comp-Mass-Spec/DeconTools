@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqResult> FlattenOutResultTree(IqResult iqResult)
         {
-            List<IqResult> flattenedResults = new List<IqResult>();
+            var flattenedResults = new List<IqResult>();
 
             if (iqResult.HasChildren())
             {

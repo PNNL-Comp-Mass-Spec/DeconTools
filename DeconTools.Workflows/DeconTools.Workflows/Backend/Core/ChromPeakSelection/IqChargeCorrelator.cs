@@ -40,19 +40,19 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// <returns></returns>
         public ChargeCorrelationData CorrelateData(List<ChromPeakIqTarget> targetList, Run run, double correlationThreshold = 0.8, int peaksToCorrelate = 3)
         {
-            List<ChargeCorrelationItem> correlationList = new List<ChargeCorrelationItem>();
-            List<ChromPeakIqTarget> availableTargets = new List<ChromPeakIqTarget>(targetList);
+            var correlationList = new List<ChargeCorrelationItem>();
+            var availableTargets = new List<ChromPeakIqTarget>(targetList);
             //Sorts target list by fit score
             //Lowest to Highest
             var sortedTargetList = targetList.OrderBy(n => n.GetResult().FitScore);
 
-            foreach (ChromPeakIqTarget referenceTarget in sortedTargetList)
+            foreach (var referenceTarget in sortedTargetList)
             {
                 //Checks to see if reference peak is in availableTargets list
                 if (!availableTargets.Contains(referenceTarget)) continue;
 
                 //New ChargeCorrelationItem for the reference peak
-                ChargeCorrelationItem referenceCorrelationData = new ChargeCorrelationItem(referenceTarget);
+                var referenceCorrelationData = new ChargeCorrelationItem(referenceTarget);
 
                 //Gets the ChromPeaks base width in scans for correlation
                 int startScan, stopScan;
@@ -60,10 +60,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                 //Generates an array of XICs for the reference peak
                 var referenceMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
-                XYData[] referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
+                var referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
 
                 //Iterates through the rest of the available targets
-                foreach (ChromPeakIqTarget correlatingTarget in targetList)
+                foreach (var correlatingTarget in targetList)
                 {
                     //Checks if target is available
                     if (!availableTargets.Contains(correlatingTarget)) continue;
@@ -75,11 +75,11 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                         var correlationMZList =
                             DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(
                                 correlatingTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
-                        XYData[] correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
+                        var correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
 
                         //Generates new correlation data item for current correlation
-                        ChromCorrelationData correlationData = new ChromCorrelationData();
-                        for (int i = 0; i < peaksToCorrelate; i++)
+                        var correlationData = new ChromCorrelationData();
+                        for (var i = 0; i < peaksToCorrelate; i++)
                         {
                             //Checks if either of the XICs are null
                             if (referenceXIC[i] != null && correlationXIC[i] != null)
@@ -111,7 +111,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 availableTargets.Remove(referenceTarget);
                 correlationList.Add(referenceCorrelationData);
             }
-            ChargeCorrelationData chargeCorrelationData = new ChargeCorrelationData();
+            var chargeCorrelationData = new ChargeCorrelationData();
             chargeCorrelationData.CorrelationData = correlationList;
             return chargeCorrelationData;
         }
@@ -132,17 +132,17 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //Generates an array of XICs for the reference peak
             var referenceMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
-            XYData[] referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
+            var referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
 
             if (compTarget.ChromPeak.XValue > startScan && compTarget.ChromPeak.XValue < stopScan)
             {
                 //Generates an XIC array for the peak being correlated. 
                 var correlationMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(compTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
-                XYData[] correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
+                var correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
 
                 //Generates new correlation data item for current correlation
-                double[] rsquaredVals = new double[peaksToCorrelate];
-                for (int i = 0; i < peaksToCorrelate; i++)
+                var rsquaredVals = new double[peaksToCorrelate];
+                for (var i = 0; i < peaksToCorrelate; i++)
                 {
                     //Checks if either of the XICs are null
                     if (referenceXIC[i] != null && correlationXIC[i] != null)
@@ -175,7 +175,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// <param name="stopScan"></param>
         private void GetBaseScanRange(ChromPeak referencePeak, out int startScan, out int stopScan)
         {
-            double baseWidth = (4 * (referencePeak.Width / 2.35));
+            var baseWidth = (4 * (referencePeak.Width / 2.35));
             startScan = Convert.ToInt32(Math.Floor(referencePeak.XValue - (0.5 * baseWidth)));
             stopScan = Convert.ToInt32(Math.Ceiling(referencePeak.XValue + (0.5 * baseWidth)));
         }
@@ -192,9 +192,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// <returns></returns>
         private XYData[] GetCorrelationXICs(int peaksToCorrelate, IEnumerable<double> MZList, Run run, int startScan, int stopScan)
         {
-            XYData[] XICArray = new XYData[peaksToCorrelate];
-            int index = 0;
-            foreach (double mz in MZList)
+            var XICArray = new XYData[peaksToCorrelate];
+            var index = 0;
+            foreach (var mz in MZList)
             {
                 XICArray[index] = Smoother.Smooth(_chromGen.GenerateChromatogram(run, startScan, stopScan, mz, 20));
                 index++;

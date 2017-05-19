@@ -25,14 +25,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         public ChromPeakAnalyzerIqWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run, parameters)
         {
-            IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
+            var iterativeTffParameters = new IterativeTFFParameters();
             TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
             PeakFitter = new PeakLeastSquaresFitter();
         }
 
         public ChromPeakAnalyzerIqWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
         {
-            IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
+            var iterativeTffParameters = new IterativeTFFParameters();
             TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
             PeakFitter = new PeakLeastSquaresFitter();
         }
@@ -88,13 +88,13 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             //Get NET Error
-            double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
+            var netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
 
 
-            LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
+            var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, mspeakList);
 
-            bool hasPeakTotheLeft = peakToTheLeft != null;
+            var hasPeakTotheLeft = peakToTheLeft != null;
 
             if (result.ObservedIsotopicProfile == null)
             {
@@ -104,24 +104,24 @@ namespace DeconTools.Workflows.Backend.Core
             else
             {
                 //Get fit score
-                List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
-                double minIntensityForScore = 0.05;
-                double fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
+                var observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
+                var minIntensityForScore = 0.05;
+                var fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
                 //get i_score
-                double iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
+                var iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
                 //get ppm error
-                double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
-                double ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
+                var massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
+                var ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
 
                 //Get Isotope Correlation
-                int scan = lcscanset.PrimaryScanNumber;
+                var scan = lcscanset.PrimaryScanNumber;
                 double chromScanWindowWidth = target.ChromPeak.Width * 2;
 
                 //Determines where to start and stop chromatogram correlation
-                int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
-                int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
                 result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
                 result.LcScanObs = lcscanset.PrimaryScanNumber;
@@ -144,7 +144,7 @@ namespace DeconTools.Workflows.Backend.Core
         //Writes IqResult Data to Console
         private void Display(IqResult result)
         {
-            ChromPeakIqTarget target = result.Target as ChromPeakIqTarget;
+            var target = result.Target as ChromPeakIqTarget;
             if (target == null)
             {
                 throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget. "

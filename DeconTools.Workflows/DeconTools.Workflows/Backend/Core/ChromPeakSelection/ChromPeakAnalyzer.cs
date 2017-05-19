@@ -29,7 +29,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
             Parameters = parameters;
 
-            IterativeTFFParameters iterativeTffParameters = new IterativeTFFParameters();
+            var iterativeTffParameters = new IterativeTFFParameters();
 
             TargetedMSFeatureFinder = new IterativeTFF(iterativeTffParameters);
             InterferenceScorer = new InterferenceScorer();
@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public List<ChromPeakQualityData> GetChromPeakQualityData(Run run, IqTarget target, List<Peak> chromPeakList)
         {
-            List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
+            var peakQualityList = new List<ChromPeakQualityData>();
 
 
             if (MSGenerator == null)
@@ -63,9 +63,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
-            int tempMinScanWithinTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor - Parameters.ChromNETTolerance);
-            int tempMaxScanWithinTol = (int)run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor + Parameters.ChromNETTolerance);
-            int tempCenterTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor);
+            var tempMinScanWithinTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor - Parameters.ChromNETTolerance);
+            var tempMaxScanWithinTol = (int)run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor + Parameters.ChromNETTolerance);
+            var tempCenterTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor);
 
 
             Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.ChromNETTolerance + ";  chromMinCenterMax= " +
@@ -89,7 +89,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 var massSpectrumXYData = MSGenerator.GenerateMS(run, lcscanset);
 
                 //find isotopic profile
-                List<Peak> mspeakList = new List<Peak>();
+                var mspeakList = new List<Peak>();
                 var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
 
                 double fitScore = 1;
@@ -102,17 +102,17 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 //get i_score
                 iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
 
-                LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
+                var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
                 var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState,
                                                                     mspeakList);
 
 
-                bool hasPeakTotheLeft = peakToTheLeft != null;
+                var hasPeakTotheLeft = peakToTheLeft != null;
 
                 //collect the results together
 
 
-                ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
+                var pq = new ChromPeakQualityData(chromPeak);
 
                 if (observedIso == null)
                 {

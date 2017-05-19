@@ -21,9 +21,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
 
-            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
-            string currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
+            var currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
 
             Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
 

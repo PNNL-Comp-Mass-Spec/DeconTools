@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             var sipperResult = (SipperLcmsFeatureTargetedResultDTO)result;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(Delimiter);
             sb.Append(sipperResult.MatchedMassTagID);
             sb.Append(Delimiter);
@@ -65,8 +65,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             if (sipperResult.LabelDistributionVals == null || sipperResult.LabelDistributionVals.Length == 0)
                 return string.Empty;
 
-            StringBuilder sb = new StringBuilder();
-            char delim = ',';
+            var sb = new StringBuilder();
+            var delim = ',';
             foreach (var labelDistributionVal in sipperResult.LabelDistributionVals)
             {
                 sb.Append(labelDistributionVal.ToString("0.#####"));
@@ -80,7 +80,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(base.buildHeaderLine());
             sb.Append(Delimiter);

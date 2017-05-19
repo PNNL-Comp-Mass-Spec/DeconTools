@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override Results.TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
-            SipperLcmsFeatureTargetedResultDTO result = new SipperLcmsFeatureTargetedResultDTO();
+            var result = new SipperLcmsFeatureTargetedResultDTO();
             result.DatasetName = LookupData(processedData, datasetHeaders);
 
             if (result.DatasetName == "-1")
@@ -63,10 +63,10 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             if (string.IsNullOrEmpty(labelDistString))return null;
 
-            char delim = ',';
+            var delim = ',';
             var parsedLabelDistString = labelDistString.Split(delim);
 
-            List<double> labelDistVals = new List<double>();
+            var labelDistVals = new List<double>();
 
             foreach (var s in parsedLabelDistString)
             {

@@ -67,9 +67,9 @@ namespace DeconTools.Workflows.Backend.Core
             ChromPeakDetector.CalculateElutionTimes(Run, result.ChromPeakList);
             ChromPeakDetector.FilterPeaksOnNET(WorkflowParameters.ChromNETTolerance, result.Target.ElutionTimeTheor, result.ChromPeakList);
 
-            int tempMinScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance);
-            int tempMaxScanWithinTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor + WorkflowParameters.ChromNETTolerance);
-            int tempCenterTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor);
+            var tempMinScanWithinTol = (int) Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor - WorkflowParameters.ChromNETTolerance);
+            var tempMaxScanWithinTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor + WorkflowParameters.ChromNETTolerance);
+            var tempCenterTol = (int)Run.NetAlignmentInfo.GetScanForNet(result.Target.ElutionTimeTheor);
 
             result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.Core
             //Creates a ChromPeakIqTarget for each peak found
             foreach (ChromPeak peak in result.ChromPeakList)
             {
-                ChromPeakIqTarget target = new ChromPeakIqTarget(new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters));
+                var target = new ChromPeakIqTarget(new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters));
                 TargetUtilities.CopyTargetProperties(result.Target, target, false);
                 target.ChromPeak = peak;
                 result.Target.AddTarget(target);
@@ -110,14 +110,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void ShiftIsotopicProfile (IsotopicProfile profile, double monoMass, int chargeState)
         {
-            double monoMZ = (monoMass/chargeState) + DeconTools.Backend.Globals.PROTON_MASS;
+            var monoMZ = (monoMass/chargeState) + DeconTools.Backend.Globals.PROTON_MASS;
 
-            double mzDifference = profile.MonoPeakMZ - monoMZ;
+            var mzDifference = profile.MonoPeakMZ - monoMZ;
 
             profile.MonoIsotopicMass = monoMass;
             profile.MonoPeakMZ = monoMZ;
             
-            foreach (MSPeak peak in profile.Peaklist)
+            foreach (var peak in profile.Peaklist)
             {
                 peak.XValue = peak.XValue - mzDifference;
             }

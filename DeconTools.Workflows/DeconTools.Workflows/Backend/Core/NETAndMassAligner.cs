@@ -61,10 +61,10 @@ namespace DeconTools.Workflows.Backend.Core
         public clsAlignmentFunction GetAlignment(List<TargetBase> massTagList, List<TargetedResultDTO> featuresToAlign)
         {
 
-            clsMassTagDB multialignMassTagDB = new clsMassTagDB();
+            var multialignMassTagDB = new clsMassTagDB();
 
             //TODO: I might be able to dynamically update these values. Take my foundFeatures and calculate their avg PPMDiff. Then use that info here. 
-            clsAlignmentOptions alignmentOptions = new clsAlignmentOptions();
+            var alignmentOptions = new clsAlignmentOptions();
              alignmentOptions.MassCalibrationWindow = this.AlignerParameters.MassCalibrationWindow;  //note -  it seems that 50 ppm is used as a default setting in VIPER. 
             alignmentOptions.ContractionFactor = this.AlignerParameters.ContractionFactor;
             alignmentOptions.IsAlignmentBaselineAMasstagDB = this.AlignerParameters.IsAlignmentBaselineAMassTagDB;
@@ -85,16 +85,16 @@ namespace DeconTools.Workflows.Backend.Core
             alignmentOptions.NumTimeSections = this.AlignerParameters.NumTimeSections;
             alignmentOptions.UsePromiscuousPoints = this.AlignerParameters.UsePromiscuousPoints;
        
-            clsAlignmentProcessor processor = new clsAlignmentProcessor();
+            var processor = new clsAlignmentProcessor();
             processor.AlignmentOptions = alignmentOptions;
 
 
-            clsMassTag[] multiAlignMassTags = convertDeconToolsMassTagsToMultialignMassTags(massTagList);
+            var multiAlignMassTags = convertDeconToolsMassTagsToMultialignMassTags(massTagList);
 
             multialignMassTagDB.AddMassTags(multiAlignMassTags);
             processor.SetReferenceDatasetFeatures(multialignMassTagDB);
 
-            List<clsUMC> multialignUMCs = convertDeconToolsLCMSFeaturesToMultialignFeatures(featuresToAlign);
+            var multialignUMCs = convertDeconToolsLCMSFeaturesToMultialignFeatures(featuresToAlign);
 
             processor.SetAligneeDatasetFeatures(multialignUMCs, alignmentOptions.MZBoundaries[0]);
             processor.PerformAlignmentToMSFeatures();
@@ -116,14 +116,14 @@ namespace DeconTools.Workflows.Backend.Core
 
             processor.GetAlignmentHeatMap(ref scores, ref scanLCValues, ref NETValues);
 
-            AlignmentResult result = new AlignmentResult();
+            var result = new AlignmentResult();
             result.ScanLCValues = scanLCValues;
             result.NETValues = NETValues;
             result.AlignmentHeatmapScores = scores;
 
 
             //get massResiduals_vs_scan and massResiduals_vs_m/z
-            classAlignmentResidualData residuals = processor.GetResidualData();
+            var residuals = processor.GetResidualData();
             
 
             result.Mass_vs_scan_ResidualsBeforeAlignment = residuals.massError;
@@ -170,7 +170,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var lcmswarpAlignmentInfo = GetAlignment(_massTagList, _featuresToBeAligned.Results);
 
-            MassAlignmentInfoLcmsWarp massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
+            var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.AlignmentInfo = lcmswarpAlignmentInfo;
 
             run.MassAlignmentInfo = massAlignmentInfo;
@@ -184,12 +184,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<clsUMC> convertDeconToolsLCMSFeaturesToMultialignFeatures(List<TargetedResultDTO> featuresToAlign)
         {
-            List<clsUMC> umcs = new List<clsUMC>();
+            var umcs = new List<clsUMC>();
 
-            int umcIndexCounter = 0;
+            var umcIndexCounter = 0;
             foreach (var feature in featuresToAlign)
             {
-                clsUMC umc = convertDeconToolsTargetedFeatureToUMC(feature);
+                var umc = convertDeconToolsTargetedFeatureToUMC(feature);
 
 
                 umc.mint_umc_index = umcIndexCounter;
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private clsUMC convertDeconToolsTargetedFeatureToUMC(TargetedResultDTO result)
         {
-            clsUMC umc = new clsUMC();
+            var umc = new clsUMC();
             umc.AbundanceMax = result.Intensity;
             umc.AbundanceSum = (long)result.Intensity;
             umc.AverageDeconFitScore = result.FitScore;
@@ -237,11 +237,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         private clsMassTag[] convertDeconToolsMassTagsToMultialignMassTags(List<TargetBase> massTagList)
         {
-            List<clsMassTag> massTags = new List<clsMassTag>();
+            var massTags = new List<clsMassTag>();
 
             foreach (var mt in massTagList)
             {
-                clsMassTag multialignMassTag = convertDeconToolsMassTagToMultialignMassTag(mt);
+                var multialignMassTag = convertDeconToolsMassTagToMultialignMassTag(mt);
                 massTags.Add(multialignMassTag);
 
             }
@@ -252,7 +252,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private clsMassTag convertDeconToolsMassTagToMultialignMassTag(TargetBase mt)
         {
-            clsMassTag multialignMassTag = new clsMassTag();
+            var multialignMassTag = new clsMassTag();
 
             multialignMassTag.Id = mt.ID;
             multialignMassTag.Charge1FScore = 0;

@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.Backend.Core
             var proteoformList = allResults.Select(p => p.Target.Code).Distinct();
 
 
-            int counter = 0;
+            var counter = 0;
             foreach (var proteoform in proteoformList)
             {
                 counter++;
@@ -96,8 +96,8 @@ namespace DeconTools.Workflows.Backend.Core
                 
 
 
-                StringBuilder sb = new StringBuilder();
-                char delimiter = '\t';
+                var sb = new StringBuilder();
+                var delimiter = '\t';
 
                 sb.Append("Unique identifier= \t" + proteoform);
                 sb.Append(Environment.NewLine);
@@ -105,7 +105,7 @@ namespace DeconTools.Workflows.Backend.Core
                 sb.Append(Environment.NewLine);
                 sb.Append(Environment.NewLine);
 
-                string tableHeader = "z\tmz\tscan\tscore\tintensity";
+                var tableHeader = "z\tmz\tscan\tscore\tintensity";
                 sb.Append(tableHeader);
                 sb.Append(Environment.NewLine);
 
@@ -131,7 +131,7 @@ namespace DeconTools.Workflows.Backend.Core
                 sb.Append(Environment.NewLine);
 
 
-                TopdownChromData topdownChromData = new TopdownChromData();
+                var topdownChromData = new TopdownChromData();
                 
 
                 foreach (TopDownTargetedResult result in resultsForProtein)
@@ -145,12 +145,12 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var allChromVals = topdownChromData.GetChromData();
 
-                int lengthOfScanArray = allChromVals.First().Xvalues.Length;
+                var lengthOfScanArray = allChromVals.First().Xvalues.Length;
 
 
 
                 //add headers
-                for (int i = 0; i < resultsForProtein.Count; i++)
+                for (var i = 0; i < resultsForProtein.Count; i++)
                 {
                     if (i==0)
                     {
@@ -168,9 +168,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 //add data from multiple chrom data arrays
-                for (int i = 0; i < lengthOfScanArray; i++)
+                for (var i = 0; i < lengthOfScanArray; i++)
                 {
-                    bool isFirstIteration = true;
+                    var isFirstIteration = true;
                     foreach (var val in allChromVals)
                     {
                         if (isFirstIteration)
@@ -190,12 +190,12 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
-                string outputDebugFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Testing");
+                var outputDebugFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Testing");
                 if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
 
-                string chromDataFilename = Path.Combine(outputDebugFolder, "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt");
+                var chromDataFilename = Path.Combine(outputDebugFolder, "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt");
 
-                using (StreamWriter writer = new StreamWriter(chromDataFilename))
+                using (var writer = new StreamWriter(chromDataFilename))
                 {
                     writer.Write(sb.ToString());
                     writer.Close();
@@ -283,7 +283,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void PostProcessResults(List<TargetedResultDTO> results)
         {
-            for (int i = 0; i < results.Count; i++)
+            for (var i = 0; i < results.Count; i++)
             {
                 var result = (TopDownTargetedResultDTO) results[i];
                 result.PrsmList = new HashSet<int>();
@@ -292,7 +292,7 @@ namespace DeconTools.Workflows.Backend.Core
                 result.ChargeStateList = new List<int>();
                 if (result.ChromPeakSelectedHeight > 0) result.ChargeStateList.Add(result.ChargeState);
 
-                bool havePrsmData = false;
+                var havePrsmData = false;
                 if (_prsmData.ContainsKey(result.MatchedMassTagID))
                 {
                     havePrsmData = true;
@@ -301,7 +301,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
                 // Find other results with same target code
-                for (int j = i + 1; j < results.Count; j++)
+                for (var j = i + 1; j < results.Count; j++)
                 {
                     var otherResult = (TopDownTargetedResultDTO) results[j];
 

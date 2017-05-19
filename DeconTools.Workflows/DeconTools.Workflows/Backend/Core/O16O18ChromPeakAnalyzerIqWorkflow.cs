@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected override void DoPostInitialization()
         {
             base.DoPostInitialization();
-            double minRelIntensityForCorr = 0.025;
+            var minRelIntensityForCorr = 0.025;
             this.ChromatogramCorrelator = new O16O18ChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, minRelIntensityForCorr,
                                                                     WorkflowParameters.ChromGenTolerance,
                                                                     WorkflowParameters.ChromGenToleranceUnit);
@@ -71,13 +71,13 @@ namespace DeconTools.Workflows.Backend.Core
             double iscore = 1;
 
             //Get NET Error
-            double netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
+            var netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
 
 
-            LeftOfMonoPeakLooker leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
+            var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, mspeakList);
 
-            bool hasPeakTotheLeft = peakToTheLeft != null;
+            var hasPeakTotheLeft = peakToTheLeft != null;
 
             if (result.ObservedIsotopicProfile == null)
             {
@@ -87,12 +87,12 @@ namespace DeconTools.Workflows.Backend.Core
             else
             {
                 //Get fit score O16 profile
-                List<Peak> observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
+                var observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
                 var theorPeakList = target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
                 result.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                 // fit score O18 profile
-                IsotopicProfile o18Iso = ((O16O18IqResult)result).ConvertO16ProfileToO18(target.TheorIsotopicProfile, 4);
+                var o18Iso = ((O16O18IqResult)result).ConvertO16ProfileToO18(target.TheorIsotopicProfile, 4);
                 theorPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
                 observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
                 ((O16O18IqResult) result).FitScoreO18Profile = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
@@ -101,18 +101,18 @@ namespace DeconTools.Workflows.Backend.Core
                 iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
 
                 //get ppm error
-                double massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
-                double ppmError = (massErrorInDaltons / target.MonoMassTheor) * 1e6;
+                var massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
+                var ppmError = (massErrorInDaltons / target.MonoMassTheor) * 1e6;
 
                 //Get Isotope Correlation
-                int scan = lcscanset.PrimaryScanNumber;
+                var scan = lcscanset.PrimaryScanNumber;
 
-                double sigma = target.ChromPeak.Width/2.35;
-                double chromScanWindowWidth = 4 * sigma;
+                var sigma = target.ChromPeak.Width/2.35;
+                var chromScanWindowWidth = 4 * sigma;
 
                 //Determines where to start and stop chromatogram correlation
-                int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
-                int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
                 result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
                 result.LcScanObs = lcscanset.PrimaryScanNumber;

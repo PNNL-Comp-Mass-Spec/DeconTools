@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public override void RefineChildTargets()
         {
-            List<int> chargeStates= new List<int>();
+            var chargeStates= new List<int>();
             var children = ChildTargets();
             var removeList = new List<IqTarget>();
 
@@ -37,16 +37,16 @@ namespace DeconTools.Workflows.Backend.Core
                     removeList.Add(child);
                 }
             }
-            foreach (IqTarget removal in removeList)
+            foreach (var removal in removeList)
             {
                 RemoveTarget(removal);
             }
 
             chargeStates.Sort();
-            int minCharge = chargeStates.Min() - 3;
-            int maxCharge = chargeStates.Max() + 3;
+            var minCharge = chargeStates.Min() - 3;
+            var maxCharge = chargeStates.Max() + 3;
 
-            for (int charge = minCharge; charge <= maxCharge; charge++)
+            for (var charge = minCharge; charge <= maxCharge; charge++)
             {
                 if (!chargeStates.Contains(charge))
                 {
@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            foreach (IqTarget remove in removalList)
+            foreach (var remove in removalList)
             {
                 RemoveTarget(remove);
             }

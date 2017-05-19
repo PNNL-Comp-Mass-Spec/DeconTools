@@ -131,9 +131,9 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(this.Run.ResultCollection != null && this.Run.ResultCollection.MSPeakResultList != null && this.Run.ResultCollection.MSPeakResultList.Count > 0,
                 String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
 
-            List<MSPeakResult> sortedMSPeakResultList = this.Run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
+            var sortedMSPeakResultList = this.Run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
-            bool msGeneratorNeedsInitializing = (this.MSgen == null);
+            var msGeneratorNeedsInitializing = (this.MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
                 this.MSgen = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
@@ -141,23 +141,23 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            List<long> deconTimes = new List<long>();
+            var sw = new System.Diagnostics.Stopwatch();
+            var deconTimes = new List<long>();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            int totalPeaks = sortedMSPeakResultList.Count;
+            var totalPeaks = sortedMSPeakResultList.Count;
 
-            int counter = -1;
-
-
+            var counter = -1;
 
 
-            Dictionary<int, string> whatPeakWentWhere = new Dictionary<int, string>();
 
-            MSPeakResult lastPeakResult = sortedMSPeakResultList.Last();
 
-            int chromPeaksCounter = 0;
+            var whatPeakWentWhere = new Dictionary<int, string>();
+
+            var lastPeakResult = sortedMSPeakResultList.Last();
+
+            var chromPeaksCounter = 0;
 
             foreach (var peakResult in sortedMSPeakResultList)
             {
@@ -173,7 +173,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
 
 
-                    string logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
+                    var logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
                     Logger.Instance.AddEntry(logEntry, m_logFileName);
                     Console.WriteLine(logEntry);
                     chromPeaksCounter = 0;
@@ -185,9 +185,9 @@ namespace DeconTools.Workflows.Backend.Core
                 //}
 
 
-                string peakFate = "Undefined";
+                var peakFate = "Undefined";
 
-                bool peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
+                var peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
                 if (peakResultAlreadyIncludedInChromatogram)
                 {
                     peakFate = "Chrom_Already";
@@ -195,7 +195,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (!peakResultAlreadyIncludedInChromatogram)
                 {
-                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(this.Run.ResultCollection.ResultList, peakResult, scanTolerance);
+                    var peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(this.Run.ResultCollection.ResultList, peakResult, scanTolerance);
                     if (peakResultAlreadyFoundInAnMSFeature)
                     {
                         peakFate = "MSFeature_Already";
@@ -213,7 +213,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (peakFate == "CHROM")
                     {
                         //generate chromatogram & tag MSPeakResults
-                        XYData chromatogram = this.ChromGenerator.GenerateChromatogram(this.Run.ResultCollection.MSPeakResultList, this.Run.MinLCScan, this.Run.MaxLCScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
+                        var chromatogram = this.ChromGenerator.GenerateChromatogram(this.Run.ResultCollection.MSPeakResultList, this.Run.MinLCScan, this.Run.MaxLCScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
 
                         if (chromatogram == null) continue;
 
@@ -228,19 +228,19 @@ namespace DeconTools.Workflows.Backend.Core
                         chromatogram = this.ChromSmoother.Smooth(chromatogram);
 
                         //detect peaks in chromatogram
-                        List<Peak> chromPeakList = this.ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
+                        var chromPeakList = this.ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
 
                         //sort chrompeak list so it is decending.
                         chromPeakList = chromPeakList.OrderByDescending(p => p.Height).ToList();
 
                         //this is the temporary results that are collected for MSFeatures found over each chromPeak of the ChromPeakList
-                        List<IsosResult> tempChromPeakMSFeatures = new List<IsosResult>();
+                        var tempChromPeakMSFeatures = new List<IsosResult>();
 
                         //store each chrom peak (which, here, is an ElutingPeak)
 
                         foreach (var chromPeak in chromPeakList)
                         {
-                            int diffBetweenSourcePeakAndChromPeak = Math.Abs(peakResult.Scan_num - (int)chromPeak.XValue);
+                            var diffBetweenSourcePeakAndChromPeak = Math.Abs(peakResult.Scan_num - (int)chromPeak.XValue);
 
                             //TODO: examine whether or not we should iterate over the chromPeakList or not....
                             chromPeaksCounter++;
@@ -283,7 +283,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-                int triggerToExport = 10;
+                var triggerToExport = 10;
                 if (this.Run.ResultCollection.ResultList.Count > triggerToExport || peakResult == lastPeakResult)
                 {
 
@@ -334,9 +334,9 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(run.ResultCollection != null && run.ResultCollection.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
                 String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
 
-            List<MSPeakResult> sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
+            var sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
-            bool msGeneratorNeedsInitializing = (this.MSgen == null);
+            var msGeneratorNeedsInitializing = (this.MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
                 this.MSgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
@@ -344,23 +344,23 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            List<long> deconTimes = new List<long>();
+            var sw = new System.Diagnostics.Stopwatch();
+            var deconTimes = new List<long>();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            int totalPeaks = sortedMSPeakResultList.Count;
+            var totalPeaks = sortedMSPeakResultList.Count;
 
-            int counter = -1;
-
-
+            var counter = -1;
 
 
-            Dictionary<int, string> whatPeakWentWhere = new Dictionary<int, string>();
 
-            MSPeakResult lastPeakResult = sortedMSPeakResultList.Last();
 
-            int chromPeaksCounter = 0;
+            var whatPeakWentWhere = new Dictionary<int, string>();
+
+            var lastPeakResult = sortedMSPeakResultList.Last();
+
+            var chromPeaksCounter = 0;
             
 
             foreach (var peakResult in sortedMSPeakResultList)
@@ -377,7 +377,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
 
 
-                    string logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
+                    var logEntry = DateTime.Now + "\tWorking on peak " + counter + " of " + totalPeaks + "\tMSFeaturesCount =\t" + m_msFeatureCounter + "\tChomPeaks =\t" + chromPeaksCounter;
                     Logger.Instance.AddEntry(logEntry, m_logFileName);
                     Console.WriteLine(logEntry);
                     chromPeaksCounter = 0;
@@ -389,16 +389,16 @@ namespace DeconTools.Workflows.Backend.Core
                 //}
 
 
-                string peakFate = "Undefined";
+                var peakFate = "Undefined";
 
-                bool peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
+                var peakResultAlreadyIncludedInChromatogram = (peakResult.ChromID != -1);
                 if (peakResultAlreadyIncludedInChromatogram)
                 {
                     peakFate = "Chrom_Already";
                 }
                 else
                 {
-                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
+                    var peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
                     if (peakResultAlreadyFoundInAnMSFeature)
                     {
                         peakFate = "MSFeature_Already";
@@ -418,13 +418,13 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         //generate chromatogram & tag MSPeakResults
 
-                        int minScanForChrom = peakResult.Scan_num - (int)scanTolerance;
+                        var minScanForChrom = peakResult.Scan_num - (int)scanTolerance;
                         if (minScanForChrom < run.MinLCScan)
                         {
                             minScanForChrom = run.MinLCScan;
                         }
 
-                        int maxScanForChrom = peakResult.Scan_num + (int)scanTolerance;
+                        var maxScanForChrom = peakResult.Scan_num + (int)scanTolerance;
                         if (maxScanForChrom > run.MaxLCScan)
                         {
                             maxScanForChrom = run.MaxLCScan;
@@ -459,20 +459,20 @@ namespace DeconTools.Workflows.Backend.Core
 
                         if (!chrom.PeakDataIsNullOrEmpty)
                         {
-                            Peak chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
+                            var chromPeak = chrom.GetChromPeakForGivenSource(peakResult);
                             if (chromPeak == null)
                             {
                                 continue;
                             }
 
-                            double peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+                            var peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
 
                             //now mark all peakResults that are members of this chromPeak
                             chrom.GetMSPeakMembersForGivenChromPeakAndAssignChromID(chromPeak, peakWidthSigma * 4, peakResult.PeakID);
 
                             run.CurrentScanSet = createScanSetFromChromatogramPeak(run, chromPeak);
 
-                            List<IsosResult> tempChromPeakMSFeatures = new List<IsosResult>();
+                            var tempChromPeakMSFeatures = new List<IsosResult>();
 
                             MSgen.Execute(run.ResultCollection);
 
@@ -499,7 +499,7 @@ namespace DeconTools.Workflows.Backend.Core
                             this.Validator.Execute(run.ResultCollection);
 
                             //now, look in the isosResultBin and see what IsosResult (if any) the source peak is a member of
-                            IsosResult msfeature = getMSFeatureForCurrentSourcePeak(peakResult, run);
+                            var msfeature = getMSFeatureForCurrentSourcePeak(peakResult, run);
 
                             //Console.WriteLine("source peak -> peakID= " + peakResult.PeakID + ";scan= " + peakResult.Scan_num + "; m/z= " + peakResult.MSPeak.XValue);
 
@@ -513,7 +513,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                                 double toleranceInMZ = peakResult.MSPeak.Width / 2;
 
-                                bool msFeatureAlreadyExists = checkIfMSFeatureAlreadyExists(msfeature, run.ResultCollection.ResultList, toleranceInMZ, peakWidthSigma);
+                                var msFeatureAlreadyExists = checkIfMSFeatureAlreadyExists(msfeature, run.ResultCollection.ResultList, toleranceInMZ, peakWidthSigma);
 
                                 if (msFeatureAlreadyExists)
                                 {
@@ -559,7 +559,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-                int triggerToExport = 10;
+                var triggerToExport = 10;
                 if (run.ResultCollection.ResultList.Count > triggerToExport)
                 {
                     isosExporter.ExportResults(run.ResultCollection.ResultList);
@@ -633,23 +633,23 @@ namespace DeconTools.Workflows.Backend.Core
                 return null;
             }
 
-            Dictionary<IsosResult, double> isosResultPossiblyContainingSourcePeak = new Dictionary<IsosResult, double>();    //store possible isosResult, along with it's difference with the peakResult
+            var isosResultPossiblyContainingSourcePeak = new Dictionary<IsosResult, double>();    //store possible isosResult, along with it's difference with the peakResult
 
-            for (int i = 0; i < run.ResultCollection.IsosResultBin.Count; i++)
+            for (var i = 0; i < run.ResultCollection.IsosResultBin.Count; i++)
             {
-                IsosResult msfeature = run.ResultCollection.IsosResultBin[i];
+                var msfeature = run.ResultCollection.IsosResultBin[i];
 
                 double toleranceInMZ = peakResult.MSPeak.Width / 2;
 
 
-                List<MSPeak> peaksWithinTolerance = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
+                var peaksWithinTolerance = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
                 if (peaksWithinTolerance == null || peaksWithinTolerance.Count == 0)
                 {
 
                 }
                 else
                 {
-                    double diff = Math.Abs(peaksWithinTolerance[0].XValue - peakResult.MSPeak.XValue);
+                    var diff = Math.Abs(peaksWithinTolerance[0].XValue - peakResult.MSPeak.XValue);
                     isosResultPossiblyContainingSourcePeak.Add(msfeature, diff);
                 }
             }
@@ -678,9 +678,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void exportPeakData(Run run, string outputFilename, Dictionary<int, string> whatPeakWentWhere)
         {
-            StringBuilder peaksb = new StringBuilder();
+            var peaksb = new StringBuilder();
 
-            using (StreamWriter outputStream = new StreamWriter(new System.IO.FileStream(outputFilename, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var outputStream = new StreamWriter(new System.IO.FileStream(outputFilename, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Read)))
             {
                 foreach (var item in whatPeakWentWhere)
                 {
@@ -688,7 +688,7 @@ namespace DeconTools.Workflows.Backend.Core
                     peaksb.Append(item.Key);
                     peaksb.Append("\t");
 
-                    MSPeakResult peak = run.ResultCollection.MSPeakResultList.Find(p => p.PeakID == item.Key);
+                    var peak = run.ResultCollection.MSPeakResultList.Find(p => p.PeakID == item.Key);
 
                     peaksb.Append(peak.Scan_num);
                     peaksb.Append("\t");
@@ -710,17 +710,17 @@ namespace DeconTools.Workflows.Backend.Core
         private bool findPeakWithinMSFeatureResults(List<IsosResult> msFeatureList, MSPeakResult peakResult, double scanTolerance)
         {
             double toleranceInPPM = 5;
-            double toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
+            var toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
 
             foreach (var msfeature in msFeatureList)
             {
                 if (msfeature.IsotopicProfile == null || msfeature.IsotopicProfile.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
 
                 //check target peak is within an allowable scan tolerance
-                bool targetPeakIsWithinScanTol = Math.Abs(msfeature.ScanSet.PrimaryScanNumber - peakResult.Scan_num) <= scanTolerance;
+                var targetPeakIsWithinScanTol = Math.Abs(msfeature.ScanSet.PrimaryScanNumber - peakResult.Scan_num) <= scanTolerance;
                 if (!targetPeakIsWithinScanTol) continue;
 
-                List<MSPeak> peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
+                var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
 
                 if (peaksWithinTol.Count == 0)
                 {
@@ -743,18 +743,18 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double toleranceInPPM = 5;
 
-            double toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
-            bool foundPeakWithinMSFeature = false;
+            var toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
+            var foundPeakWithinMSFeature = false;
 
-            IList<IsosResult> msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak. 
+            var msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak. 
 
 
-            for (int i = 0; i < msFeatureList.Count; i++)
+            for (var i = 0; i < msFeatureList.Count; i++)
             {
-                IsosResult msfeature = msFeatureList[i];
+                var msfeature = msFeatureList[i];
                 if (msfeature.IsotopicProfile == null || msfeature.IsotopicProfile.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
 
-                List<MSPeak> peaksWithinTol = DeconTools.Backend.Utilities.PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
+                var peaksWithinTol = DeconTools.Backend.Utilities.PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
 
                 if (peaksWithinTol.Count == 0)
                 {
@@ -764,7 +764,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     foundPeakWithinMSFeature = true;
 
-                    bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(chromPeakBasedMSFeatures, peakResult, scanTolerance);
+                    var peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(chromPeakBasedMSFeatures, peakResult, scanTolerance);
                     if (!peakResultAlreadyFoundInAnMSFeature)
                     {
                         run.ResultCollection.ResultList.Add(msfeature);   // add it to the big long list of MSFeatures found
@@ -786,31 +786,31 @@ namespace DeconTools.Workflows.Backend.Core
 
         private ScanSet createScanSetFromChromatogramPeak(Run run, Peak chromPeak)
         {
-            double sigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
-            double centerXVal = chromPeak.XValue;
+            var sigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+            var centerXVal = chromPeak.XValue;
 
-            int leftMostScan = (int)Math.Floor(centerXVal - sigma);
-            int rightMostScan = (int)Math.Ceiling(centerXVal + sigma);
-            int centerScan = (int)Math.Round(centerXVal);
+            var leftMostScan = (int)Math.Floor(centerXVal - sigma);
+            var rightMostScan = (int)Math.Ceiling(centerXVal + sigma);
+            var centerScan = (int)Math.Round(centerXVal);
 
             centerScan = run.GetClosestMSScan(centerScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
             leftMostScan = run.GetClosestMSScan(leftMostScan, DeconTools.Backend.Globals.ScanSelectionMode.DESCENDING);
             rightMostScan = run.GetClosestMSScan(rightMostScan, DeconTools.Backend.Globals.ScanSelectionMode.ASCENDING);
 
-            List<int> scanIndexList = new List<int>();
+            var scanIndexList = new List<int>();
 
 
             //the idea is to start at the center scan and add scans to the left and right.  It is easier to set a maximum number of scans to add this way.
 
-            int maxScansToAddToTheLeft = 0;
-            int maxScansToAddToTheRight = 0;
+            var maxScansToAddToTheLeft = 0;
+            var maxScansToAddToTheRight = 0;
 
             //add center scan
             scanIndexList.Add(centerScan);
 
             //add to the left of center
-            int numScansAdded = 0;
-            for (int i = (centerScan - 1); i >= leftMostScan; i--)
+            var numScansAdded = 0;
+            for (var i = (centerScan - 1); i >= leftMostScan; i--)
             {
                 if (run.GetMSLevel(i) == 1)
                 {
@@ -829,7 +829,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //add to the right of center
             numScansAdded = 0;
-            for (int i = (centerScan + 1); i <= rightMostScan; i++)
+            for (var i = (centerScan + 1); i <= rightMostScan; i++)
             {
                 if (run.GetMSLevel(i) == 1)
                 {
@@ -850,7 +850,7 @@ namespace DeconTools.Workflows.Backend.Core
             scanIndexList.Sort();
 
             //ScanSet scanSet = new ScanSet(centerScan, scanIndexList.ToArray());
-            ScanSet scanSet = new ScanSet(centerScan);
+            var scanSet = new ScanSet(centerScan);
 
             return scanSet;
 
@@ -860,14 +860,14 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (chromatogram == null) return null;
 
-            XYData output = new XYData();
-            Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+            var output = new XYData();
+            var filteredChromVals = new Dictionary<int, double>();
 
 
 
-            for (int i = 0; i < chromatogram.Xvalues.Length; i++)
+            for (var i = 0; i < chromatogram.Xvalues.Length; i++)
             {
-                int currentScanVal = (int)chromatogram.Xvalues[i];
+                var currentScanVal = (int)chromatogram.Xvalues[i];
                 if (currentScanVal > run.MaxLCScan)
                 {
                     break;

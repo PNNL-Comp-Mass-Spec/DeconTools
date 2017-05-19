@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
             using (var reader = new StreamReader(filename))
             {
-                int counter = 0;
+                var counter = 0;
                 while (reader.Peek() != -1)
                 {
                     if (containsHeader)
@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                     }
 
                     counter++;
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     list.Add(line);
                 }
 
@@ -49,16 +49,16 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
 
             // Copy each file into it's new directory.
-            foreach (FileInfo fi in source.GetFiles())
+            foreach (var fi in source.GetFiles())
             {
                 //Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
                 fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
             }
 
             // Copy each subdirectory using recursion.
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            foreach (var diSourceSubDir in source.GetDirectories())
             {
-                DirectoryInfo nextTargetSubDir =
+                var nextTargetSubDir =
                     target.CreateSubdirectory(diSourceSubDir.Name);
                 CopyAll(diSourceSubDir, nextTargetSubDir);
             }

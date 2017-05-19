@@ -13,7 +13,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
-            UnlabelledTargetedResultDTO result = new UnlabelledTargetedResultDTO();
+            var result = new UnlabelledTargetedResultDTO();
 
             result.DatasetName = LookupData(processedData, datasetHeaders);
 

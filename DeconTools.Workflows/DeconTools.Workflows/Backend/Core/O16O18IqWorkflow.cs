@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.Core
             //Creates a ChromPeakIqTarget for each peak found
             foreach (ChromPeak peak in result.ChromPeakList)
             {
-                ChromPeakIqTarget target = new ChromPeakIqTarget(ChromPeakAnalyzerIqWorkflow);
+                var target = new ChromPeakIqTarget(ChromPeakAnalyzerIqWorkflow);
                 TargetUtilities.CopyTargetProperties(result.Target, target, false);
                 target.ChromPeak = peak;
                 result.Target.AddTarget(target);
@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //Executes each grandchild ChromPeakAnalyzerIqWorkflow
             var children = result.Target.ChildTargets();
-            List<IqTarget> targetRemovalList = new List<IqTarget>();
+            var targetRemovalList = new List<IqTarget>();
             foreach (var child in children)
             {
                 child.DoWorkflow();

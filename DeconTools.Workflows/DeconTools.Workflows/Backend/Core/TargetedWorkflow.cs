@@ -102,7 +102,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(_workflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
 
-            bool pointsInSmoothIsEvenNumber = (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
+            var pointsInSmoothIsEvenNumber = (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
             if (pointsInSmoothIsEvenNumber)
             {
                 throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
@@ -181,7 +181,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //only
 
-            bool allowNegativeValues = false;
+            var allowNegativeValues = false;
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
             _chromPeakDetector = new ChromPeakDetectorMedianBased(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
             
@@ -259,8 +259,8 @@ namespace DeconTools.Workflows.Backend.Core
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
 
             
-            double leftTrimValue = targetVal - leftTrimAmount;
-            double rightTrimValue = targetVal + rightTrimAmount;
+            var leftTrimValue = targetVal - leftTrimAmount;
+            var rightTrimValue = targetVal + rightTrimAmount;
 
 
             return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
@@ -298,7 +298,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                string errorMessage = " Error during 'ExecutePostWorkflowHook': " + ex.Message;
+                var errorMessage = " Error during 'ExecutePostWorkflowHook': " + ex.Message;
 
                 WorkflowStatusMessage = WorkflowStatusMessage + errorMessage;
                 Result.ErrorDescription = Result.ErrorDescription + errorMessage;
@@ -339,7 +339,7 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new ApplicationException("There was a critical failure! Error info: " + ex.Message);
             }
 
-            TargetedResultBase result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            var result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
             result.ErrorDescription = "CRITICAL ERROR: " + ex.Message  ;
             result.FailedResult = true;
         }
@@ -434,7 +434,7 @@ namespace DeconTools.Workflows.Backend.Core
         public static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
-            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
             chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
             chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
             chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;

@@ -37,16 +37,16 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         public List<TargetedResultDTO> LoadResultsForDataset(string datasetName)
         {
-            List<TargetedResultDTO> importedResults = new List<TargetedResultDTO>();
+            var importedResults = new List<TargetedResultDTO>();
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            using (DbConnection cnn = fact.CreateConnection())
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            using (var cnn = fact.CreateConnection())
             {
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     string queryString;
 
@@ -56,7 +56,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(importedResults, reader);
 
@@ -77,7 +77,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         {
             while (reader.Read())
             {
-                TargetedResultDTO result = new TargetedResultDTO();
+                var result = new TargetedResultDTO();
 
                 result.DatasetName = readString(reader, "Dataset");
                 result.TargetID = readInt(reader, "UMC_Ind");
@@ -120,7 +120,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         private string buildConnectionString()
         {
-            System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
             builder.UserID = "mtuser";
             builder.DataSource = DbServer;
             builder.Password = "mt4fun";

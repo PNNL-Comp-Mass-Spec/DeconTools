@@ -20,9 +20,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
             var correlationData = new ChromCorrelationData();
 
-            double o16MzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[0].XValue;
-            double o18SingleLabelMzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[2].XValue;
-            double o18DoubleLabelMzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[4].XValue;
+            var o16MzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[0].XValue;
+            var o18SingleLabelMzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[2].XValue;
+            var o18DoubleLabelMzValue = iqResult.Target.TheorIsotopicProfile.Peaklist[4].XValue;
 
             var o16ChromXyData = GetBaseChromXYData(run, startScan, stopScan, o16MzValue);
             var o18SingleLabelChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18SingleLabelMzValue);

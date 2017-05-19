@@ -47,12 +47,12 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(WorkflowParameters is SipperWorkflowExecutorParameters, "Parameters are not of the right type.");
 
 
-            string db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
-            string server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
-            string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
+            var db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
+            var server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
+            var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 
 
-            List<int> massTagIDsForFiltering =
+            var massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
             _loggingFileName = Path.Combine(ExecutorParameters.OutputFolderBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
 
-            bool targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
 
             if (TargetsAreFromPeakMatchingDataBase)
@@ -71,7 +71,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 if (targetsFilePathIsEmpty)
                 {
-                    string currentTargetsFilePath = TryFindTargetsForCurrentDataset();     //check for a _targets file specifically associated with dataset
+                    var currentTargetsFilePath = TryFindTargetsForCurrentDataset();     //check for a _targets file specifically associated with dataset
 
                     if (String.IsNullOrEmpty(currentTargetsFilePath))
                     {
@@ -110,7 +110,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
-                MassTagFromSqlDbImporter mtImporter = new MassTagFromSqlDbImporter(db, server, MassTagIDsinTargets);
+                var mtImporter = new MassTagFromSqlDbImporter(db, server, MassTagIDsinTargets);
                 MassTagsForReference = mtImporter.Import();
             }
             else
@@ -152,19 +152,19 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<int> GetMassTagsToFilterOn(string fileRefForMassTagsToFilterOn)
         {
-            List<int> masstagList = new List<int>();
+            var masstagList = new List<int>();
 
-            bool fileRefIsOk = !String.IsNullOrEmpty(fileRefForMassTagsToFilterOn) &&
+            var fileRefIsOk = !String.IsNullOrEmpty(fileRefForMassTagsToFilterOn) &&
                                File.Exists(fileRefForMassTagsToFilterOn);
             if (fileRefIsOk)
             {
-                using (StreamReader reader = new StreamReader(fileRefForMassTagsToFilterOn))
+                using (var reader = new StreamReader(fileRefForMassTagsToFilterOn))
                 {
                     while (reader.Peek() != -1)
                     {
-                        string line = reader.ReadLine();
-                        int mtid = -1;
-                        bool parsedOK = Int32.TryParse(line, out mtid);
+                        var line = reader.ReadLine();
+                        var mtid = -1;
+                        var parsedOK = Int32.TryParse(line, out mtid);
 
                         if (parsedOK)
                         {
@@ -184,22 +184,22 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetCollection LoadAllTargetsFromPeakMatchingResults()
         {
-            string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
+            var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 
 
-            TargetCollection targetCollection = new TargetCollection();
+            var targetCollection = new TargetCollection();
 
 
 
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            using (DbConnection cnn = fact.CreateConnection())
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            using (var cnn = fact.CreateConnection())
             {
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     string queryString;
 
@@ -208,7 +208,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(targetCollection, reader);
 
@@ -224,22 +224,22 @@ namespace DeconTools.Workflows.Backend.Core
 
         public TargetCollection LoadTargetsFromPeakMatchingResultsForGivenDataset(string datasetName)
         {
-            string table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
+            var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 
 
-            TargetCollection targetCollection = new TargetCollection();
+            var targetCollection = new TargetCollection();
 
 
 
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            using (DbConnection cnn = fact.CreateConnection())
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            using (var cnn = fact.CreateConnection())
             {
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     string queryString;
 
@@ -249,7 +249,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(targetCollection, reader);
 
@@ -269,11 +269,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string buildConnectionString()
         {
-            string db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
-            string server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
+            var db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
+            var server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
 
 
-            System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
             builder.UserID = "mtuser";
             builder.DataSource = server;
             builder.Password = "mt4fun";
@@ -338,7 +338,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             while (reader.Read())
             {
-                LcmsFeatureTarget result = new LcmsFeatureTarget();
+                var result = new LcmsFeatureTarget();
 
 
                 result.ID = readInt(reader, "UMC_Ind");

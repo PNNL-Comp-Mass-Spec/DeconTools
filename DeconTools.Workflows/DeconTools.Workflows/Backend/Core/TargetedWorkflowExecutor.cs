@@ -227,9 +227,9 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual void UpdateTargetMissingInfo()
         {
 
-            bool canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
+            var canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
 
-            List<int> massTagIDsAvailableForLookup = new List<int>();
+            var massTagIDsAvailableForLookup = new List<int>();
 
             if (canUseReferenceMassTags)
             {
@@ -241,7 +241,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (LcmsFeatureTarget target in Targets.TargetList)
             {
-                bool isMissingMonoMass = target.MonoIsotopicMass <= 0;
+                var isMissingMonoMass = target.MonoIsotopicMass <= 0;
 
                 if (String.IsNullOrEmpty(target.EmpiricalFormula))
                 {
@@ -308,7 +308,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected string TryFindTargetsForCurrentDataset()
         {
-            string datasetName = RunUtilities.GetDatasetName(DatasetPath);
+            var datasetName = RunUtilities.GetDatasetName(DatasetPath);
 
             string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfdb_fht.txt" };
 
@@ -346,7 +346,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
                 sb.Append("Error in getting IQ target file. Multiple files were found for the dataset: " + datasetName + Environment.NewLine);
                 sb.Append("Candidate IQ target files: " + Environment.NewLine);
@@ -459,7 +459,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //first look for _fht.txt file (MSGF output)
-            string targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgf_fht.txt");
+            var targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgf_fht.txt");
 
             if (File.Exists(targetsForAlignmentFilePath))
             {
@@ -537,7 +537,7 @@ namespace DeconTools.Workflows.Backend.Core
             PerformAlignment();
 
 
-            bool runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
+            var runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
 
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
             if (runIsNotAligned && this.ExecutorParameters.TargetedAlignmentIsPerformed)
@@ -579,8 +579,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             ResultRepository.Results.Clear();
 
-            int mtCounter = 0;
-            int totalTargets = Targets.TargetList.Count;
+            var mtCounter = 0;
+            var totalTargets = Targets.TargetList.Count;
 
             ReportGeneralProgress("Processing...", 0);
 
@@ -589,7 +589,7 @@ namespace DeconTools.Workflows.Backend.Core
                 mtCounter++;
 
 #if DEBUG
-                System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+                var stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
 
 #endif
@@ -604,7 +604,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 catch (Exception ex)
                 {
-                    string errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
+                    var errorString = "Error on MT\t" + massTag.ID + "\tchargeState\t" + massTag.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
                     ReportGeneralProgress(errorString, mtCounter);
 
                     throw;
@@ -616,7 +616,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 #endif
 
-                string progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
+                var progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
 
 
                 if (_backgroundWorker != null)
@@ -644,10 +644,10 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual void ExportData()
         {
 
-            string outputFileName = GetOutputFileName();
+            var outputFileName = GetOutputFileName();
             backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
 
-            TargetedResultToTextExporter exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
+            var exporter = TargetedResultToTextExporter.CreateExporter(this._workflowParameters, outputFileName);
             exporter.ExportResults(ResultRepository.Results);
         }
 
@@ -780,9 +780,9 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected List<string> GetListDatasetPaths(string fileContainingDatasetPaths)
         {
-            List<string> datasetPathList = new List<string>();
+            var datasetPathList = new List<string>();
 
-            using (StreamReader sr = new StreamReader(fileContainingDatasetPaths))
+            using (var sr = new StreamReader(fileContainingDatasetPaths))
             {
 
                 while (sr.Peek() != -1)
@@ -837,7 +837,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                int progressPercent = (int)(progressCounter * 100 / (double)Targets.TargetList.Count);
+                var progressPercent = (int)(progressCounter * 100 / (double)Targets.TargetList.Count);
 
                 _progressInfo.ProgressInfoString = reportString;
                 _progressInfo.IsGeneralProgress = false;
@@ -867,7 +867,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (!string.IsNullOrEmpty(this._loggingFileName))
             {
-                using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
+                using (var sw = new StreamWriter(new System.IO.FileStream(this._loggingFileName, System.IO.FileMode.Append,
                               System.IO.FileAccess.Write, System.IO.FileShare.Read)))
                 {
                     sw.AutoFlush = true;
@@ -881,14 +881,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void HandleAlignmentInfoFiles()
         {
-            FileAttributes attr = File.GetAttributes(Run.Filename);
+            var attr = File.GetAttributes(Run.Filename);
 
 
             FileInfo[] datasetRelatedFiles;
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(Run.Filename);
+                var dirInfo = new DirectoryInfo(Run.Filename);
                 datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
 
@@ -896,8 +896,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                FileInfo fi = new FileInfo(Run.Filename);
-                DirectoryInfo dirInfo = fi.Directory;
+                var fi = new FileInfo(Run.Filename);
+                var dirInfo = fi.Directory;
                 datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
             }
@@ -906,9 +906,9 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 if (file.Name.Contains("_alignedFeatures") || file.Name.Contains("_MZAlignment") || file.Name.Contains("_NETAlignment"))
                 {
-                    bool allowOverwrite = false;
+                    var allowOverwrite = false;
 
-                    string targetCopiedFilename = Path.Combine(_alignmentFolder, file.Name);
+                    var targetCopiedFilename = Path.Combine(_alignmentFolder, file.Name);
 
                     //upload alignment data only if it doesn't already exist
                     if (!File.Exists(targetCopiedFilename))
@@ -937,7 +937,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 ReportGeneralProgress("Started copying raw data to local folder: " + this.ExecutorParameters.FolderPathForCopiedRawDataset);
 
-                FileAttributes attr = File.GetAttributes(dataset);
+                var attr = File.GetAttributes(dataset);
 
                 DirectoryInfo sourceDirInfo;
                 DirectoryInfo targetDirInfo;
@@ -951,7 +951,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 else
                 {
-                    FileInfo fileinfo = new FileInfo(dataset);
+                    var fileinfo = new FileInfo(dataset);
                     sourceDirInfo = fileinfo.Directory;
                     runFilename = Path.Combine(this.ExecutorParameters.FolderPathForCopiedRawDataset, Path.GetFileName(dataset));
 
@@ -977,10 +977,10 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //create Run
-            RunFactory rf = new RunFactory();
+            var rf = new RunFactory();
             Run = rf.CreateRun(runFilename);
 
-            bool runInstantiationFailed = (Run == null);
+            var runInstantiationFailed = (Run == null);
             if (runInstantiationFailed)
             {
                 ReportGeneralProgress("Run initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
@@ -999,7 +999,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             //check and load chrom source data (_peaks.txt)
-            bool peaksFileExists = CheckForPeaksFile();
+            var peaksFileExists = CheckForPeaksFile();
             if (!peaksFileExists)
             {
                 ReportGeneralProgress("Creating _Peaks.txt file for extracted ion chromatogram (XIC) source data ... takes 1-5 minutes");
@@ -1018,7 +1018,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
-            string possibleFilename1 = baseFileName + "_peaks.txt";
+            var possibleFilename1 = baseFileName + "_peaks.txt";
 
             if (File.Exists(possibleFilename1))
             {
@@ -1028,7 +1028,7 @@ namespace DeconTools.Workflows.Backend.Core
                 //bw.WorkerReportsProgress = true;
 
                 //TODO: keep an eye on errors connected to background worker here.
-                PeakImporterFromText peakImporter = new PeakImporterFromText(possibleFilename1, _backgroundWorker);
+                var peakImporter = new PeakImporterFromText(possibleFilename1, _backgroundWorker);
 
                 peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
             }
@@ -1052,12 +1052,12 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (String.IsNullOrEmpty(_alignmentFolder)) return;
 
-            DirectoryInfo dirInfo = new DirectoryInfo(_alignmentFolder);
+            var dirInfo = new DirectoryInfo(_alignmentFolder);
 
             if (dirInfo.Exists)
             {
 
-                FileInfo[] datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
+                var datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
                 foreach (var file in datasetRelatedFiles)
                 {
@@ -1106,14 +1106,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void CreatePeaksForChromSourceData()
         {
-            PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
-            TargetedWorkflowParameters deconParam = (TargetedWorkflowParameters)this._workflowParameters;
+            var parameters = new PeakDetectAndExportWorkflowParameters();
+            var deconParam = (TargetedWorkflowParameters)this._workflowParameters;
 
             parameters.PeakBR = deconParam.ChromGenSourceDataPeakBR;
             parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
             parameters.SigNoiseThreshold = deconParam.ChromGenSourceDataSigNoise;
             parameters.ProcessMSMS = deconParam.ProcessMsMs;
-            PeakDetectAndExportWorkflow peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
+            var peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
             peakCreator.Execute();
         }
 
@@ -1155,11 +1155,11 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (targetsFilePath.ToLower().Contains("_msgf") )
             {
-                BasicIqTargetImporter iqTargetImporter = new BasicIqTargetImporter(targetsFilePath);
+                var iqTargetImporter = new BasicIqTargetImporter(targetsFilePath);
                 var iqTargets = iqTargetImporter.Import();
 
-                IqTargetUtilities targetUtilities = new IqTargetUtilities();
-                TargetCollection targetCollection = new TargetCollection();
+                var targetUtilities = new IqTargetUtilities();
+                var targetCollection = new TargetCollection();
                 targetCollection.TargetList = new List<TargetBase>();
 
                 foreach (var iqTarget in iqTargets)
@@ -1184,7 +1184,7 @@ namespace DeconTools.Workflows.Backend.Core
                 return targetCollection;
             }
 
-            LcmsTargetFromFeaturesFileImporter importer =
+            var importer =
                new LcmsTargetFromFeaturesFileImporter(targetsFilePath);
 
             var lcmsTargetCollection = importer.Import();

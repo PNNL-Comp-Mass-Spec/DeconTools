@@ -31,11 +31,11 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public double ChargeCorrelationMedian()
         {
-            List<double> corrList = new List<double>();
+            var corrList = new List<double>();
 
-            foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in PeakCorrelationData)
+            foreach (var entry in PeakCorrelationData)
             {
-                double eMedian = (entry.Value.RSquaredValsMedian.HasValue) ? entry.Value.RSquaredValsMedian.Value : 0;
+                var eMedian = (entry.Value.RSquaredValsMedian.HasValue) ? entry.Value.RSquaredValsMedian.Value : 0;
                 corrList.Add(eMedian);
             }
 

@@ -141,8 +141,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             SetupAlignmentFolder(alignmentFolder);
 
-            string expectedAlignmentFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
-            bool alignmentResultsExist = (File.Exists(expectedAlignmentFilename));
+            var expectedAlignmentFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
+            var alignmentResultsExist = (File.Exists(expectedAlignmentFilename));
 
             if (alignmentResultsExist)
             {
@@ -154,7 +154,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //Get a suitable targets file for alignment. These are grabbed from the ..\AlignmentInfo folder. 
-            string targetFileForAlignment = GetTargetFilePathForIqAlignment();
+            var targetFileForAlignment = GetTargetFilePathForIqAlignment();
 
 
             if (string.IsNullOrEmpty(targetFileForAlignment))
@@ -169,7 +169,7 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-            bool isFirstHitsFile = targetFileForAlignment.EndsWith("_fht.txt");
+            var isFirstHitsFile = targetFileForAlignment.EndsWith("_fht.txt");
 
             if (!isFirstHitsFile)
             {
@@ -218,11 +218,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (Parameters.IsMassAlignmentPerformed || Parameters.IsMassAlignmentPerformed)
             {
-                string exportedAlignmentIqResultsFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
+                var exportedAlignmentIqResultsFilename = Path.Combine(_alignmentFolder, Run.DatasetName + "_iqAlignmentResults.txt");
 
                 IqMassAndNetAligner.ExportResults(exportedAlignmentIqResultsFilename);
 
-                string exportedGraphBaseFilename = Path.Combine(_alignmentFolder, Run.DatasetName);
+                var exportedGraphBaseFilename = Path.Combine(_alignmentFolder, Run.DatasetName);
 
                 IqMassAndNetAligner.ExportGraphs(exportedGraphBaseFilename);
 
@@ -246,8 +246,8 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-            int totalTargets = targets.Count;
-            int targetCount = 1;
+            var totalTargets = targets.Count;
+            var targetCount = 1;
             IqLogger.Log.Info("Total targets being processed: " + totalTargets);
             IqLogger.Log.Info("Processing...");
 
@@ -322,7 +322,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void ExportResults(IqResult iqResult)
         {
-            List<IqResult> resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
+            var resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
@@ -372,7 +372,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //first look for _fht.txt file (MSGF output)
-            string targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgfdb_fht.txt");
+            var targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgfdb_fht.txt");
 
             if (File.Exists(targetsForAlignmentFilePath))
             {
@@ -385,7 +385,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets)
         {
-            double currentProgress = (currentTarget / (double)totalTargets);
+            var currentProgress = (currentTarget / (double)totalTargets);
 
             if (currentTarget % 50 == 0)
             {
@@ -446,7 +446,7 @@ namespace DeconTools.Workflows.Backend.Core
             string baseFileName;
             baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
 
-            string possibleFilename1 = baseFileName + "_peaks.txt";
+            var possibleFilename1 = baseFileName + "_peaks.txt";
 
             if (File.Exists(possibleFilename1))
             {
@@ -480,7 +480,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             IqLogger.Log.Info("Peak Loading Started...");
 
-            PeakImporterFromText peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
+            var peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
             peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
 
             IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
@@ -510,7 +510,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string GetDefaultOutputFolder()
         {
-            string defaultOutputFolder = _run.DataSetPath;
+            var defaultOutputFolder = _run.DataSetPath;
             return defaultOutputFolder;
         }
 

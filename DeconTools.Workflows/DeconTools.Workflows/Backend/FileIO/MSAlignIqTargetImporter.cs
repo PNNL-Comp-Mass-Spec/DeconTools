@@ -46,7 +46,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public override List<IqTarget> Import()
         {
-            List<IqTarget> allTargets = new List<IqTarget>();
+            var allTargets = new List<IqTarget>();
 
             StreamReader reader;
 
@@ -67,7 +67,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             //Sequence is the key and processed line is the value
             var parentTargetGroup = new Dictionary<string, List<List<string>>>();
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -76,17 +76,17 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -95,7 +95,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     //Implement EValueCutoff
-                    double EValueCutoff = 1.0E-3;
+                    var EValueCutoff = 1.0E-3;
                     if (ParseDoubleField(processedData, EValueHeader) < EValueCutoff)
                     {
                         if (!parentTargetGroup.ContainsKey(ParseStringField(processedData, PeptideHeader)))
@@ -110,9 +110,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                 sr.Close();
             }
 
-            int target_id = 1;
+            var target_id = 1;
 
-            foreach (KeyValuePair<string, List<List<string>>> keyValuePair in parentTargetGroup)
+            foreach (var keyValuePair in parentTargetGroup)
             {
                 IqTarget target = CreateParentTarget(keyValuePair.Value);
                 target.ID = target_id;
@@ -136,17 +136,17 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected TopDownIqTarget CreateParentTarget(List<List<string>> processedGroup)
         {
-            TopDownIqTarget target = new TopDownIqTarget();
-            IqCodeParser parser = new IqCodeParser();
+            var target = new TopDownIqTarget();
+            var parser = new IqCodeParser();
 
             target.DatabaseReference = ParseStringField(processedGroup[0], ProteinNameHeader);
             target.Code = ParseStringField(processedGroup[0] ,PeptideHeader);
             target.EmpiricalFormula = parser.GetEmpiricalFormulaFromSequence(target.Code);
             target.PTMList = parser.GetPTMList(target.Code);
             target.MonoMassTheor = ParseDoubleField(processedGroup[0], AdjustedPrecursorMassHeader);
-            List<IqTarget> children = new List<IqTarget>();
+            var children = new List<IqTarget>();
 
-            foreach (List<string> line in processedGroup)
+            foreach (var line in processedGroup)
             {
                 children.Add(ConvertTextToIqTarget(line));
             }

@@ -66,7 +66,7 @@ namespace DeconTools.Workflows.Backend.FileIO
    
         protected override string buildResultOutput(TargetedResultDTO result)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(addBasicTargetedResult(result));
 
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected virtual string addBasicTargetedResult(TargetedResultDTO result)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(result.DatasetName);
             sb.Append(Delimiter);
@@ -140,7 +140,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("Dataset");
             sb.Append(Delimiter);
             sb.Append("TargetID");

@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
             var rsquaredvalList = new List<double>();
 
 
-            int counter = 0;
+            var counter = 0;
             foreach (var val in _quantifier.ChromatogramRSquaredVals)
             {
                 peakNumList.Add(counter);

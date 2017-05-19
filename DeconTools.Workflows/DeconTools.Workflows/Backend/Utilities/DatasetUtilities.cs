@@ -32,24 +32,24 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         public string GetDatasetPath(string datasetName)
         {
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
-            string datasetPath = "";
+            var datasetPath = "";
 
-            using (DbConnection cnn = fact.CreateConnection())
+            using (var cnn = fact.CreateConnection())
             {
-                string query =
+                var query =
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
-                    string queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
+                    var queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
@@ -72,24 +72,24 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         public string GetDatasetID(string datasetName)
         {
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
-            string datasetPath = "";
+            var datasetPath = "";
 
-            using (DbConnection cnn = fact.CreateConnection())
+            using (var cnn = fact.CreateConnection())
             {
-                string query =
+                var query =
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
-                    string queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
+                    var queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                    
                     while (reader.Read())
@@ -114,24 +114,24 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         public string GetDatasetPathArchived(string datasetName)
         {
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
-            string datasetPath = "";
+            var datasetPath = "";
 
-            using (DbConnection cnn = fact.CreateConnection())
+            using (var cnn = fact.CreateConnection())
             {
-                string query = 
+                var query = 
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
-                    string queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
+                    var queryString = "SELECT [Experiment],[Dataset],[Comment],[Rating],[Folder Name],[Dataset Folder Path],[Archive Folder Path] FROM [V_Dataset_Detail_Report_Ex] where (Dataset = '" + datasetName + "')";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
@@ -160,7 +160,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         #region Private Methods
         private string buildConnectionString()
         {
-            System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
             builder.UserID = DbUsername;
             builder.DataSource = DbServerName;
             builder.Password = DbUserPassWord;

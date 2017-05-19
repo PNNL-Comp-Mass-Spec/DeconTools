@@ -92,9 +92,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
-                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
-                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)
@@ -130,7 +130,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
 
-            TargetedResultBase currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            var currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
             if (msgen == null)
             {
@@ -138,7 +138,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 msgen.IsTICRequested = false;
             }
 
-            TargetBase mt = resultList.Run.CurrentMassTag;
+            var mt = resultList.Run.CurrentMassTag;
 
             float normalizedElutionTime;
 
@@ -152,7 +152,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             //collect Chrom peaks that fall within the NET tolerance
-            List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
+            var peaksWithinTol = new List<ChromPeak>(); // 
 
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
@@ -162,13 +162,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 }
             }
 
-            List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
+            var peakQualityList = new List<ChromPeakQualityData>();
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 
-            int tempMinScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
-            int tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
-            int tempCenterTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
+            var tempMinScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
+            var tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
+            var tempCenterTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
 
             IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
@@ -186,7 +186,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 foreach (var chromPeak in peaksWithinTol)
                 {
-                    ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
+                    var pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
                     var lcscanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, _parameters.NumMSSummedInSmartSelector);
@@ -267,7 +267,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 pq.FitScore = currentResult.Score;
                 pq.InterferenceScore = currentResult.InterferenceScore;
                 pq.IsotopicProfile = currentResult.IsotopicProfile;
-                bool resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
+                var resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
                 pq.IsIsotopicProfileFlagged = resultHasFlags;
 
                 pq.ScanLc = currentResult.Run.CurrentScanSet.PrimaryScanNumber;
@@ -287,7 +287,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
             //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
-            bool goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() < 5;
+            var goodToFilterOnFlaggedIsotopicProfiles = currentResult.Target.IsotopicProfile.GetIndexOfMostIntensePeak() < 5;
 
 
             var filteredList1 = (from n in peakQualityList
@@ -319,13 +319,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
-                int numCandidatesWithLowFitScores = filteredList1.Count(p => p.FitScore < _parameters.UpperLimitOfGoodFitScore);
+                var numCandidatesWithLowFitScores = filteredList1.Count(p => p.FitScore < _parameters.UpperLimitOfGoodFitScore);
                 currentResult.NumQualityChromPeaks = numCandidatesWithLowFitScores;
 
 
-                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
-                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)

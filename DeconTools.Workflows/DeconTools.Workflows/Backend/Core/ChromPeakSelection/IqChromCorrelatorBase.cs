@@ -153,9 +153,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         public ChromCorrelationData CorrelatePeaksWithinIsotopicProfile(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
             var correlationData = new ChromCorrelationData();
-            int indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
+            var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
-            double baseMZValue = iso.Peaklist[indexMostAbundantPeak].XValue;
+            var baseMZValue = iso.Peaklist[indexMostAbundantPeak].XValue;
             bool baseChromDataIsOK;
             var basePeakChromXYData = GetBaseChromXYData(run, startScan, stopScan, baseMZValue);
 
@@ -163,11 +163,11 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 //&&basePeakChromXYData.Xvalues.Length > 3;
 
 
-            double minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
+            var minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
                                  MinimumRelativeIntensityForChromCorr;
 
 
-            for (int i = 0; i < iso.Peaklist.Count; i++)
+            for (var i = 0; i < iso.Peaklist.Count; i++)
             {
                 if (!baseChromDataIsOK)
                 {
@@ -185,7 +185,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 }
                 else if (iso.Peaklist[i].Height >= minIntensity)
                 {
-                    double correlatedMZValue = iso.Peaklist[i].XValue;
+                    var correlatedMZValue = iso.Peaklist[i].XValue;
                     bool chromDataIsOK;
                     var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, basePeakChromXYData, correlatedMZValue);
 
@@ -278,7 +278,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 basePeakChromXYData = Smoother.Smooth(xydata);
             }    
             
-            ScanSetCollection scanSetCollection =new ScanSetCollection();
+            var scanSetCollection =new ScanSetCollection();
             scanSetCollection.Create(run, startScan, stopScan, 1, 1, false);
 
             var validScanNums = scanSetCollection.ScanSetList.Select(p => (double)p.PrimaryScanNumber).ToArray();
@@ -302,7 +302,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var filledInData = new SortedDictionary<int, double>();
 
             //first fill with zeros
-            for (int i = 0; i < scanList.Length; i++)
+            for (var i = 0; i < scanList.Length; i++)
             {
                 filledInData.Add((int)scanList[i], 0);
             }
@@ -319,9 +319,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             //then fill in other values
-            for (int i = 0; i < chromPeakXyData.Xvalues.Length; i++)
+            for (var i = 0; i < chromPeakXyData.Xvalues.Length; i++)
             {
-                int currentScan = (int)chromPeakXyData.Xvalues[i];
+                var currentScan = (int)chromPeakXyData.Xvalues[i];
                 if (filledInData.ContainsKey(currentScan))
                 {
                     filledInData[currentScan] = chromPeakXyData.Yvalues[i];

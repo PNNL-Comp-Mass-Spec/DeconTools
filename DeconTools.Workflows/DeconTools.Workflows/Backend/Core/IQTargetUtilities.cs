@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public int GetTotalNodelLevels(IqTarget inputTarget)
         {
-            int levels = 0;
+            var levels = 0;
 
             var target = inputTarget.RootTarget;
 
@@ -45,9 +45,9 @@ namespace DeconTools.Workflows.Backend.Core
         public List<IqTarget> GetTargetsFromNodelLevel(List<IqTarget> inputTargets, int level)
         {
 
-            List<IqTarget> iqtargets = new List<IqTarget>(inputTargets);
+            var iqtargets = new List<IqTarget>(inputTargets);
 
-            int currentlevel = 0;
+            var currentlevel = 0;
 
             while (currentlevel!=level)
             {
@@ -66,7 +66,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqTarget>GetAllTargetsOnNextLevel(List<IqTarget>inputTargets)
         {
-            List<IqTarget> iqtargets = new List<IqTarget>();
+            var iqtargets = new List<IqTarget>();
 
             foreach (var target in inputTargets)
             {
@@ -81,7 +81,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void CreateChildTargets(List<IqTarget> targets, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100, bool cysteinesAreModified = false)
         {
-            foreach (IqTarget iqTarget in targets)
+            foreach (var iqTarget in targets)
             {
                 UpdateTargetMissingInfo(iqTarget,true, cysteinesAreModified);
 
@@ -92,16 +92,16 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqTarget> CreateChargeStateTargets(IqTarget iqTarget, double minMZObs = 400, double maxMZObserved = 1500, int maxChargeStatesToCreate = 100)
         {
-            int minCharge = 1;
-            int maxCharge = 100;
+            var minCharge = 1;
+            var maxCharge = 100;
 
             UpdateTargetMissingInfo(iqTarget);
 
-            List<IqTarget> targetList = new List<IqTarget>();
+            var targetList = new List<IqTarget>();
 
-            for (int charge = minCharge; charge <= maxCharge; charge++)
+            for (var charge = minCharge; charge <= maxCharge; charge++)
             {
-                double mz = iqTarget.MonoMassTheor / charge + DeconTools.Backend.Globals.PROTON_MASS;
+                var mz = iqTarget.MonoMassTheor / charge + DeconTools.Backend.Globals.PROTON_MASS;
 
                 if (mz < maxMZObserved)
                 {
@@ -148,11 +148,11 @@ namespace DeconTools.Workflows.Backend.Core
             if (iso != null)
             {
                 //step 1, scale origional iso from mz to mono incease the input target is allready charged
-                double massProton = DeconTools.Backend.Globals.PROTON_MASS;
+                var massProton = DeconTools.Backend.Globals.PROTON_MASS;
 
                 if (existingCharge > 0)
                 {
-                    foreach (MSPeak peak in iso.Peaklist)
+                    foreach (var peak in iso.Peaklist)
                     {
                         peak.XValue = (peak.XValue * existingCharge) - massProton * existingCharge; //gives us a monoisotopic mass
                     }
@@ -160,7 +160,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 //step 2, scale to mono back to mz using new charge 
                 iso.ChargeState = chargeNew;
-                foreach (MSPeak peak in iso.Peaklist)
+                foreach (var peak in iso.Peaklist)
                 {
                     peak.XValue = (peak.XValue + chargeNew * massProton) / chargeNew;//gives us m/z
                 }
@@ -172,12 +172,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqTarget> CreateTargets(IEnumerable<string> empiricalFormulaList, double minMZObs = 400, double maxMZObserved = 1500)
         {
-            int targetIDCounter = 0;
+            var targetIDCounter = 0;
 
             var targetList = new List<IqTarget>();
 
 
-            foreach (string formula in empiricalFormulaList)
+            foreach (var formula in empiricalFormulaList)
             {
                 IqTarget parentTarget = new IqTargetBasic();
 
@@ -214,7 +214,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// <returns></returns>
         public IqTarget DeepClone(IqTarget target)
         {
-            IqTargetUtilities util = new IqTargetUtilities();
+            var util = new IqTargetUtilities();
 
             //basic copy
 
@@ -223,7 +223,7 @@ namespace DeconTools.Workflows.Backend.Core
             CopyTargetProperties(target, copiedTarget);
             
             //this returnes the copied tree
-            IqTarget deepCopy = CloneIqTrees(target);
+            var deepCopy = CloneIqTrees(target);
 
             //set root via private set
             copiedTarget.RootTarget = deepCopy.RootTarget;
@@ -232,10 +232,10 @@ namespace DeconTools.Workflows.Backend.Core
             copiedTarget.ParentTarget = deepCopy.ParentTarget;
 
             //set the child targets
-            List<IqTarget> childTargets = deepCopy.ChildTargets().ToList();
+            var childTargets = deepCopy.ChildTargets().ToList();
             if (deepCopy.HasChildren() && childTargets.Count > 0)
             {
-                foreach (IqTarget subtarget in childTargets)
+                foreach (var subtarget in childTargets)
                 {
                     copiedTarget.AddTarget(subtarget);
                 }
@@ -256,12 +256,12 @@ namespace DeconTools.Workflows.Backend.Core
             CopyTargetProperties(target,tempTarget);
 
             //child targets
-            List<IqTarget> childTargets = target.ChildTargets().ToList();
+            var childTargets = target.ChildTargets().ToList();
             if (target.HasChildren() && childTargets.Count > 0)
             {
-                foreach (IqTarget child in childTargets)
+                foreach (var child in childTargets)
                 {
-                    IqTarget clone = Clone(child);
+                    var clone = Clone(child);
                     clone.ParentTarget = target;
                     tempTarget.AddTarget(clone);
                 }
@@ -271,7 +271,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void UpdateTargetMissingInfo(IqTarget target, bool calcAveragineForMissingEmpiricalFormula = true, bool cysteinesAreModified = false)
         {
-            bool isMissingMonoMass = target.MonoMassTheor <= 0;
+            var isMissingMonoMass = target.MonoMassTheor <= 0;
 
             if (String.IsNullOrEmpty(target.EmpiricalFormula))
             {
@@ -320,24 +320,24 @@ namespace DeconTools.Workflows.Backend.Core
         private static IqTarget CloneIqTrees(IqTarget target)
         {
             //initialize utilities
-            IqTargetUtilities util = new IqTargetUtilities();
+            var util = new IqTargetUtilities();
 
             //find root
             var rootNode = target.RootTarget;
 
             //this returnes the copied tree
-            IqTarget tempTarget = util.Clone(rootNode);
+            var tempTarget = util.Clone(rootNode);
 
             //select current node along the tree.  we need to mangle the charge and the ID to ensure uniqueness
-            int selectID = target.ID;
-            int selectChargeState = target.ChargeState;
+            var selectID = target.ID;
+            var selectChargeState = target.ChargeState;
 
-            List<IqTarget> targetList = new List<IqTarget>();
+            var targetList = new List<IqTarget>();
             targetList.Add(tempTarget);
 
-            List<IqTarget> nodeLevelTargets = util.GetTargetsFromNodelLevel(targetList, target.NodeLevel);
+            var nodeLevelTargets = util.GetTargetsFromNodelLevel(targetList, target.NodeLevel);
 
-            List<IqTarget> s = (from n in nodeLevelTargets where n.ID == selectID && n.ChargeState == selectChargeState select n).Take(1).ToList();
+            var s = (from n in nodeLevelTargets where n.ID == selectID && n.ChargeState == selectChargeState select n).Take(1).ToList();
 
             return s[0];
         }

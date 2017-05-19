@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     using (var writer = new StreamWriter(fileName + targetFileExt))
                     {
-                        string header = GetTargetHeader();
+                        var header = GetTargetHeader();
                         writer.WriteLine(header);
                         TargetOutputHeaderWritten = true;
                     }
@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
             try
             {
-                using (StreamWriter writer = File.AppendText(fileName + targetFileExt))
+                using (var writer = File.AppendText(fileName + targetFileExt))
                 {
                     var resultAsString = GetTargetResultAsString(results);
                     writer.WriteLine(resultAsString);
@@ -90,7 +90,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     using (var writer = new StreamWriter(fileName + chargeFileExt))
                     {
-                        string header = GetChargeHeader();
+                        var header = GetChargeHeader();
                         writer.WriteLine(header);
                         ChargeOutputHeaderWritten = true;
                     }
@@ -105,7 +105,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 try
                 {
-                    using (StreamWriter writer = File.AppendText(fileName + chargeFileExt))
+                    using (var writer = File.AppendText(fileName + chargeFileExt))
                     {
                         var resultAsString = GetChargeResultAsString(result);
                         if (resultAsString != null)
@@ -129,7 +129,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetTargetHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("TargetID");
             sb.Append(Delimiter);
@@ -147,7 +147,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("MedianChargeCorrelation");
 
-            string outString = sb.ToString();
+            var outString = sb.ToString();
             return outString;
 
         }
@@ -159,7 +159,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetChargeHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("TargetID");
             sb.Append(Delimiter);
@@ -191,7 +191,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("IsotopeCorrelation");
 
-            string outString = sb.ToString();
+            var outString = sb.ToString();
             return outString;
 
         }
@@ -205,22 +205,22 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetTargetResultAsString(IEnumerable<IqResult> results, bool includeHeader = false)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (includeHeader)
             {
-                string header = GetHeader();
+                var header = GetHeader();
                 sb.Append(header);
                 sb.Append(Environment.NewLine);
             }
 
             double abundance = 0, correlationMedian = 0;
-            string chargeStateList = "";
-            List<double> fitScoreList = new List<double>();
-            bool isFirst = true;
+            var chargeStateList = "";
+            var fitScoreList = new List<double>();
+            var isFirst = true;
             IqTarget target = new TopDownIqTarget();
 
-            foreach (IqResult result in results)
+            foreach (var result in results)
             {
                 //Sums abundance from each result
                 abundance += result.Abundance;
@@ -241,7 +241,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
                 //Looks for parent level target for information
-                TopDownIqResult parentResult = result as TopDownIqResult;
+                var parentResult = result as TopDownIqResult;
                 if (parentResult != null)
                 {
                     target = parentResult.Target;
@@ -274,7 +274,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(correlationMedian);
 
-            string outString = sb.ToString();
+            var outString = sb.ToString();
             return outString;
         }
 
@@ -290,11 +290,11 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             if (!(result.Target.ChargeState == 0 || result.Abundance <= 0))
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
                 if (includeHeader)
                 {
-                    string header = GetHeader();
+                    var header = GetHeader();
                     sb.Append(header);
                     sb.Append(Environment.NewLine);
                 }
@@ -328,7 +328,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 sb.Append(Delimiter);
                 sb.Append(result.CorrelationData.RSquaredValsMedian);
 
-                string outString = sb.ToString();
+                var outString = sb.ToString();
                 return outString;
             }
             else

@@ -111,7 +111,7 @@ namespace DeconTools.Workflows.Backend.Core
             ExecuteTask(chromPeakSelectorN15);
 
             //even if we don't find anything, we want to create a mass spectrum and pull out values of N15 data
-            N14N15_TResult n14n15result = (N14N15_TResult)this.Result;
+            var n14n15result = (N14N15_TResult)this.Result;
             if (n14n15result.ChromPeakSelectedN15 == null)
             {
                 n14n15result.ScanSetForN15Profile = this.Result.ScanSet;
@@ -154,11 +154,11 @@ namespace DeconTools.Workflows.Backend.Core
             chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, DeconTools.Backend.Globals.IsotopicProfileType.LABELLED);
             chromGenN15.TopNPeaksLowerCutOff = 0.333;
 
-            int pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;
+            var pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;
             chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-            SmartChromPeakSelectorParameters smartchrompeakSelectorParams = new SmartChromPeakSelectorParameters();
+            var smartchrompeakSelectorParams = new SmartChromPeakSelectorParameters();
             smartchrompeakSelectorParams.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
             smartchrompeakSelectorParams.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
             smartchrompeakSelectorParams.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
@@ -172,7 +172,7 @@ namespace DeconTools.Workflows.Backend.Core
             chromPeakSelectorN14 = new SmartChromPeakSelector(smartchrompeakSelectorParams);
 
 
-            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
             chromPeakSelectorParameters.NumScansToSum = _workflowParameters.NumMSScansToSum;
             chromPeakSelectorParameters.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
             chromPeakSelectorParameters.PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode;
@@ -201,7 +201,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
-            double minRelativeIntensityForScore = 0.2;
+            var minRelativeIntensityForScore = 0.2;
             resultValidatorN14 = new ResultValidatorTask(minRelativeIntensityForScore, true);
 
             resultValidatorN15 = new LabelledIsotopicProfileScorer(minRelativeIntensityForScore);

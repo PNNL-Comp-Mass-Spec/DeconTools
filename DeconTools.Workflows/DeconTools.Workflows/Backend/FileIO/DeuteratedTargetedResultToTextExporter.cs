@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             var deuteratedResult = (DeuteratedTargetedResultDTO)result;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(Delimiter);
             sb.Append(deuteratedResult.HydrogenI0);
             sb.Append(Delimiter);
@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(base.buildHeaderLine());
 

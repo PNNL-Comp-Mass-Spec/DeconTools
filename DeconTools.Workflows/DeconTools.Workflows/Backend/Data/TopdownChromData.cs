@@ -31,10 +31,10 @@ namespace DeconTools.Workflows.Backend.Data
         public List<XYData> GetChromData()
         {
 
-            List<XYData> allData = new List<XYData>();
+            var allData = new List<XYData>();
 
 
-            List<List<int>> listOfScanLists = new List<List<int>>();
+            var listOfScanLists = new List<List<int>>();
 
 
 
@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.Backend.Data
                    
                 
 
-                XYData data = new XYData();
+                var data = new XYData();
                 data.Xvalues = topdownChromDataItem.ChromData.Keys.Select(key => (double) key).ToArray();
                 data.Yvalues = topdownChromDataItem.ChromData.Values.ToArray();
 
@@ -110,10 +110,10 @@ namespace DeconTools.Workflows.Backend.Data
         {
             if (chromData == null || chromData.Xvalues == null || chromData.Xvalues.Length < 1) return;
 
-            TopdownChromDataItem chromDataItem = new TopdownChromDataItem();
+            var chromDataItem = new TopdownChromDataItem();
             chromDataItem.ChromData = new SortedDictionary<int, double>();
 
-            for (int i = 0; i < chromData.Xvalues.Length; i++)
+            for (var i = 0; i < chromData.Xvalues.Length; i++)
             {
                 chromDataItem.ChromData.Add((int)chromData.Xvalues[i], chromData.Yvalues[i]);
             }

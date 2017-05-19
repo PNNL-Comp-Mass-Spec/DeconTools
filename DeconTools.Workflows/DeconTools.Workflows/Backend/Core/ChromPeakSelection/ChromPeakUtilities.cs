@@ -21,16 +21,16 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #region Public Methods
         public static XYData GetXYDataForChromPeak(ChromPeak peak, Run run)
         {
-            double apex = peak.XValue;
+            var apex = peak.XValue;
             double width = peak.Width;
-            double peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
-            double sixSigma = 6 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
-            double halfSixSigma = sixSigma / 2.0;
+            var peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
+            var sixSigma = 6 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
+            var halfSixSigma = sixSigma / 2.0;
 
-            double minScan = apex - halfSixSigma;
-            double maxScan = apex + halfSixSigma;
+            var minScan = apex - halfSixSigma;
+            var maxScan = apex + halfSixSigma;
 
-            XYData filteredXYData = run.XYData.TrimData(minScan, maxScan);
+            var filteredXYData = run.XYData.TrimData(minScan, maxScan);
             return filteredXYData;
         }
 
@@ -93,7 +93,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 return lcscanset;
 
                 // TODO: Hard coded to sum across all IMS Scans.
-                int centerScan = (uimfrun.MinIMSScan + uimfrun.MaxIMSScan + 1) / 2;
+                var centerScan = (uimfrun.MinIMSScan + uimfrun.MaxIMSScan + 1) / 2;
                 uimfrun.CurrentIMSScanSet = new IMSScanSet(centerScan, uimfrun.MinIMSScan, uimfrun.MaxIMSScan);
             }
 
@@ -125,13 +125,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
-            double sigma = chromPeak.Width / 2.35;
+            var sigma = chromPeak.Width / 2.35;
             
-            int lowerScan = (int)Math.Round(chromPeak.XValue - (peakWidthInSigma * sigma / 2));
-            int closestLowerScan = run.GetClosestMSScan(lowerScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
+            var lowerScan = (int)Math.Round(chromPeak.XValue - (peakWidthInSigma * sigma / 2));
+            var closestLowerScan = run.GetClosestMSScan(lowerScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
-            int upperScan = (int)Math.Round(chromPeak.XValue + (peakWidthInSigma * sigma / 2));
-            int closestUpperScan = run.GetClosestMSScan(upperScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
+            var upperScan = (int)Math.Round(chromPeak.XValue + (peakWidthInSigma * sigma / 2));
+            var closestUpperScan = run.GetClosestMSScan(upperScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
             scanset = _scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
             _scansetFactory.TrimScans(scanset, maxScansToSum);

@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         private static void addAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
         {
-            SipperLcmsFeatureTargetedResultDTO r = (SipperLcmsFeatureTargetedResultDTO)tr;
+            var r = (SipperLcmsFeatureTargetedResultDTO)tr;
             r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
             r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
@@ -112,7 +112,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {
-            N14N15TargetedResultDTO r = tr as N14N15TargetedResultDTO;
+            var r = tr as N14N15TargetedResultDTO;
             r.FitScoreN15 = (float)result.ScoreN15;
             r.IScoreN15 = (float)result.InterferenceScoreN15;
             r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IntensityAggregate;
@@ -131,7 +131,7 @@ namespace DeconTools.Workflows.Backend.Results
 
             if (result.ChromPeakSelectedN15 != null)
             {
-                double sigma = result.ChromPeakSelectedN15.Width / 2.35;
+                var sigma = result.ChromPeakSelectedN15.Width / 2.35;
                 r.ScanN15Start = (int)Math.Round(result.ChromPeakSelectedN15.XValue - sigma);
                 r.ScanN15End = (int)Math.Round(result.ChromPeakSelectedN15.XValue + sigma);
             }
@@ -143,7 +143,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         private static void addAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
         {
-            O16O18TargetedResultDTO r = (O16O18TargetedResultDTO)tr;
+            var r = (O16O18TargetedResultDTO)tr;
             r.IntensityI0 = getIntensityFromIso(result.IsotopicProfile, 0);
             r.IntensityI2 = getIntensityFromIso(result.IsotopicProfile, 2);
             r.IntensityI4 = getIntensityFromIso(result.IsotopicProfile, 4);
@@ -161,7 +161,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         private static void addAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
         {
-            DeuteratedTargetedResultDTO r = (DeuteratedTargetedResultDTO)tr;
+            var r = (DeuteratedTargetedResultDTO)tr;
             r.HydrogenI0 = result.HydrogenI0;
             r.HydrogenI1 = result.HydrogenI1;
             r.HydrogenI2 = result.HydrogenI2;
@@ -254,7 +254,7 @@ namespace DeconTools.Workflows.Backend.Results
 
             if (result.ChromPeakSelected != null)
             {
-                double sigma = result.ChromPeakSelected.Width / 2.35;
+                var sigma = result.ChromPeakSelected.Width / 2.35;
                 tr.ScanLCStart = (int)Math.Round(result.ChromPeakSelected.XValue - sigma);
                 tr.ScanLCEnd = (int)Math.Round(result.ChromPeakSelected.XValue + sigma);
             }

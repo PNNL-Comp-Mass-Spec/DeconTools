@@ -105,7 +105,7 @@ namespace DeconTools.Workflows.Backend.Core
         public override void Execute()
         {
 
-            UIMFRun uimfRun = (UIMFRun)this.Run;
+            var uimfRun = (UIMFRun)this.Run;
 
             //for each frame
 
@@ -115,7 +115,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 // detect all peaks in frame
-                List<MSPeakResult> masterPeakList = getAllPeaksInFrame(uimfRun, NumMSScansToSumWhenBuildingMasterPeakList);
+                var masterPeakList = getAllPeaksInFrame(uimfRun, NumMSScansToSumWhenBuildingMasterPeakList);
 
                 // sort peaks
                 masterPeakList.Sort(delegate(MSPeakResult peak1, MSPeakResult peak2)
@@ -125,8 +125,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 // for each peak
-                int peakCounter = 0;
-                int peaksThatGenerateAChromatogram = 0;
+                var peakCounter = 0;
+                var peaksThatGenerateAChromatogram = 0;
                 foreach (var peak in masterPeakList)
                 {
                     peakCounter++;
@@ -135,9 +135,9 @@ namespace DeconTools.Workflows.Backend.Core
                     if (peak.MSPeak.Height < 1000) break;
 
 
-                    string peakFate = "Undefined";
+                    var peakFate = "Undefined";
 
-                    bool peakResultAlreadyIncludedInChromatogram = (peak.ChromID != -1);
+                    var peakResultAlreadyIncludedInChromatogram = (peak.ChromID != -1);
                     if (peakResultAlreadyIncludedInChromatogram)
                     {
                         peakFate = "Chrom_Already";
@@ -169,12 +169,12 @@ namespace DeconTools.Workflows.Backend.Core
                     PeakChrom chrom = new BasicPeakChrom();
 
                     // create drift profile from raw data
-                    double driftTimeProfileMZTolerance = this.DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
+                    var driftTimeProfileMZTolerance = this.DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
                     
                     //TODO: Fix this: update to use UIMF library and not DeconTools
                     //uimfRun.GetDriftTimeProfile  (frame.PrimaryFrame, this.Run.MinScan, this.Run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
 
-                    bool driftTimeProfileIsEmpty = (uimfRun.XYData.Xvalues == null);
+                    var driftTimeProfileIsEmpty = (uimfRun.XYData.Xvalues == null);
                     if (driftTimeProfileIsEmpty)
                     {
                         addPeakToProcessedPeakList(peak);
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     // find which drift profile peak,  if any, the source peak is a member of
-                    Peak chromPeak = chrom.GetChromPeakForGivenSource(peak);
+                    var chromPeak = chrom.GetChromPeakForGivenSource(peak);
                     if (chromPeak == null)
                     {
                         addPeakToProcessedPeakList(peak);
@@ -218,14 +218,14 @@ namespace DeconTools.Workflows.Backend.Core
                  
                     // find other peaks in the master peaklist that are members of the found drift profile peak
                     // tag these peaks with the source peak's ID
-                    double peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+                    var peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
 
-                    int minScanForChrom = (int)Math.Floor(chromPeak.XValue - peakWidthSigma * 4);
-                    int maxScanForChrom = (int)Math.Floor(chromPeak.XValue + peakWidthSigma * 4);
+                    var minScanForChrom = (int)Math.Floor(chromPeak.XValue - peakWidthSigma * 4);
+                    var maxScanForChrom = (int)Math.Floor(chromPeak.XValue + peakWidthSigma * 4);
 
-                    double peakToleranceInMZ = driftTimeProfileMZTolerance;
-                    double minMZForChromFilter = peak.MSPeak.XValue - peakToleranceInMZ;
-                    double maxMZForChromFilter = peak.MSPeak.XValue + peakToleranceInMZ;
+                    var peakToleranceInMZ = driftTimeProfileMZTolerance;
+                    var minMZForChromFilter = peak.MSPeak.XValue - peakToleranceInMZ;
+                    var maxMZForChromFilter = peak.MSPeak.XValue + peakToleranceInMZ;
 
                     
                     chrom.ChromSourceData = (from n in masterPeakList
@@ -277,7 +277,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void displayPeakInfoAndFate(MSPeakResult peak, string peakFate)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(peak.PeakID);
             sb.Append('\t');
             sb.Append(peak.Scan_num);

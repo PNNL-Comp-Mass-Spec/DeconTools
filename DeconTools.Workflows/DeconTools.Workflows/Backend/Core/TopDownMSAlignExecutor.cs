@@ -59,7 +59,7 @@ namespace DeconTools.Workflows.Backend.Core
         public void setParentNetFromChildren(IqTarget target)
         {
             var children = target.ChildTargets();
-            List<int> scanList = new List<int>();
+            var scanList = new List<int>();
             foreach (IqChargeStateTarget chargeStateTarget in children)
             {
                 scanList.Add(chargeStateTarget.ObservedScan);
@@ -73,7 +73,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void ReportGeneralProgress(int currentTarget, int totalTargets)
         {
-            double currentProgress = (currentTarget / (double)totalTargets);
+            var currentProgress = (currentTarget / (double)totalTargets);
 
             if (currentTarget % 50 == 0)
             {
@@ -90,7 +90,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void ExportResults(IqResult iqResult)
         {
-            List<IqResult> resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
+            var resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
 
             var orderedResults = resultsForExport.OrderBy(p => p.Target.ChargeState).ToList();
 
@@ -129,7 +129,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string GetDefaultOutputFolder()
         {
-            string defaultOutputFolder = Run.DataSetPath;
+            var defaultOutputFolder = Run.DataSetPath;
             return defaultOutputFolder;
         }
 

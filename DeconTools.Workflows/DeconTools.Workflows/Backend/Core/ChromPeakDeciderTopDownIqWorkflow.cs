@@ -51,15 +51,15 @@ namespace DeconTools.Workflows.Backend.Core
         protected override void ExecuteWorkflow(IqResult result)
         {
             //Executes the ChargeState level children workflows
-            IEnumerable<IqTarget> children = result.Target.ChildTargets();
+            var children = result.Target.ChildTargets();
 
-            foreach (IqTarget child in children)
+            foreach (var child in children)
             {
                 child.DoWorkflow();
             }
 
             PerformChargeCorrelation(result);
-            ChromPeakIqTarget referenceTarget = TargetSelector((TopDownIqResult) result);
+            var referenceTarget = TargetSelector((TopDownIqResult) result);
 
             ExpandChargeRange((TopDownIqTarget) result.Target, referenceTarget);
         }
@@ -75,9 +75,9 @@ namespace DeconTools.Workflows.Backend.Core
         /// <returns></returns>
         private List<ChromPeakIqTarget> GetAllChromPeakIqTargets(IqResult result)
         {
-            List<ChromPeakIqTarget> chromPeakTargets = new List<ChromPeakIqTarget>();
+            var chromPeakTargets = new List<ChromPeakIqTarget>();
             var children = result.Target.ChildTargets();
-            foreach (IqTarget child in children)
+            foreach (var child in children)
             {
                 var grandchildTargets = child.ChildTargets();
                 foreach (ChromPeakIqTarget target in grandchildTargets)
@@ -97,23 +97,23 @@ namespace DeconTools.Workflows.Backend.Core
         /// <param name="referenceTarget"></param>
         private void ExpandChargeRange(TopDownIqTarget parentTarget, ChromPeakIqTarget referenceTarget)
         {
-            ChargeStateChildTopDownIqWorkflow childWorkflow = new ChargeStateChildTopDownIqWorkflow(Run, WorkflowParameters);
+            var childWorkflow = new ChargeStateChildTopDownIqWorkflow(Run, WorkflowParameters);
 
             var childTargets = parentTarget.ChildTargets().ToArray();
 
-            double fitTolerance = 0.5;
-            double correlationTolerance = 0.95;
+            var fitTolerance = 0.5;
+            var correlationTolerance = 0.95;
 
-            IqChargeStateTarget minCharge = (IqChargeStateTarget) childTargets.First();
-            IqChargeStateTarget maxCharge = (IqChargeStateTarget) childTargets.Last();
+            var minCharge = (IqChargeStateTarget) childTargets.First();
+            var maxCharge = (IqChargeStateTarget) childTargets.Last();
             
             if (minCharge.GetResult().IqResultDetail.Chromatogram != null)
             {
-                int charge = minCharge.ChargeState;
-                bool extendDown = true;
+                var charge = minCharge.ChargeState;
+                var extendDown = true;
                 while (extendDown)
                 {
-                    IqChargeStateTarget extend = new IqChargeStateTarget(childWorkflow);
+                    var extend = new IqChargeStateTarget(childWorkflow);
                     charge = charge - 1;
                     extend.ChargeState = charge;
                     parentTarget.AddTarget(extend);
@@ -125,11 +125,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (maxCharge.GetResult().IqResultDetail.Chromatogram != null)
             {
-                int charge = maxCharge.ChargeState;
-                bool extendUp = true;
+                var charge = maxCharge.ChargeState;
+                var extendUp = true;
                 while (extendUp)
                 {
-                    IqChargeStateTarget extend = new IqChargeStateTarget(childWorkflow);
+                    var extend = new IqChargeStateTarget(childWorkflow);
                     charge = charge + 1;
                     extend.ChargeState = charge;
                     parentTarget.AddTarget(extend);
@@ -163,16 +163,16 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 if (referenceTarget.ChromPeak != null)
                 {
-                    double minScan = referenceTarget.ChromPeak.XValue - (0.5*referenceTarget.ChromPeak.Width);
-                    double maxScan = referenceTarget.ChromPeak.XValue + (0.5*+referenceTarget.ChromPeak.Width);
+                    var minScan = referenceTarget.ChromPeak.XValue - (0.5*referenceTarget.ChromPeak.Width);
+                    var maxScan = referenceTarget.ChromPeak.XValue + (0.5*+referenceTarget.ChromPeak.Width);
                     if ((target.ChromPeak.XValue > minScan) && (target.ChromPeak.XValue < maxScan))
                     {
-                        double correlation = iqChargeCorrelator.PairWiseChargeCorrelation(referenceTarget, target, Run, 3);
+                        var correlation = iqChargeCorrelator.PairWiseChargeCorrelation(referenceTarget, target, Run, 3);
                         if (correlation > correlationCutoff && target.GetResult().FitScore < fitCutoff)
                         {
                             UpdateSelection(target);
-                            TopDownIqResult parentResult = parentTarget.GetResult() as TopDownIqResult;
-                            foreach (ChargeCorrelationItem item in parentResult.ChargeCorrelationData.CorrelationData)
+                            var parentResult = parentTarget.GetResult() as TopDownIqResult;
+                            foreach (var item in parentResult.ChargeCorrelationData.CorrelationData)
                             {
                                 if (referenceTarget == item.ReferenceTarget)
                                 {
@@ -218,14 +218,14 @@ namespace DeconTools.Workflows.Backend.Core
         private ChromPeakIqTarget TargetSelector(TopDownIqResult result)
         {
             double bestScore = 0;
-            ChargeCorrelationItem bestScoringGroup = new ChargeCorrelationItem();
-            List<ChargeCorrelationItem> corrData = result.ChargeCorrelationData.CorrelationData;
+            var bestScoringGroup = new ChargeCorrelationItem();
+            var corrData = result.ChargeCorrelationData.CorrelationData;
 
-            foreach (ChargeCorrelationItem group in corrData)
+            foreach (var group in corrData)
             {
                 double groupScore = 0;
                 var entries = group.PeakCorrelationData;
-                foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in entries)
+                foreach (var entry in entries)
                 {
                     groupScore += (entry.Value.RSquaredValsMedian.HasValue) ? entry.Value.RSquaredValsMedian.Value : 0;
                     groupScore += (1 - entry.Key.GetResult().FitScore);
@@ -240,7 +240,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             bestScoringGroup.SelectedTargetGrouping = true;
             result.SelectedCorrelationGroup = bestScoringGroup;
-            foreach (KeyValuePair<ChromPeakIqTarget, ChromCorrelationData> entry in bestScoringGroup.PeakCorrelationData)
+            foreach (var entry in bestScoringGroup.PeakCorrelationData)
             {
                 UpdateSelection(entry.Key);
             }
@@ -256,9 +256,9 @@ namespace DeconTools.Workflows.Backend.Core
         private void UpdateSelection(ChromPeakIqTarget chromPeakTarget)
         {
 
-            IqResult childResult = chromPeakTarget.ParentTarget.GetResult();
+            var childResult = chromPeakTarget.ParentTarget.GetResult();
 
-            IqResult chromPeakResult = chromPeakTarget.GetResult();
+            var chromPeakResult = chromPeakTarget.GetResult();
 
             childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
 

@@ -49,7 +49,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public override TargetedResultRepository Import()
         {
-            TargetedResultRepository repos = new TargetedResultRepository();
+            var repos = new TargetedResultRepository();
 
               StreamReader reader;
 
@@ -67,7 +67,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 throw new System.IO.IOException("There was a problem importing from the file.");
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -76,10 +76,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -88,13 +88,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
 
-                    TargetedResultDTO result = ConvertTextToDataObject(processedData);
+                    var result = ConvertTextToDataObject(processedData);
                     repos.Results.Add(result);
                     lineCounter++;
 
@@ -152,7 +152,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             
 
 
-            string validationCode = LookupData(rowData, validationCodeHeaders);
+            var validationCode = LookupData(rowData, validationCodeHeaders);
             if (String.IsNullOrEmpty(validationCode))
             {
                 result.ValidationCode = ValidationCode.None;
@@ -177,7 +177,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected string TryGetDatasetNameFromFileName()
         {
-            string datasetName = Path.GetFileName(_filename).Replace("_UMCs.txt", String.Empty);
+            var datasetName = Path.GetFileName(_filename).Replace("_UMCs.txt", String.Empty);
 
             datasetName = datasetName.Replace("_LCMSFeatures.txt", String.Empty);
             datasetName = datasetName.Replace("_TargetedFeatures.txt", String.Empty);

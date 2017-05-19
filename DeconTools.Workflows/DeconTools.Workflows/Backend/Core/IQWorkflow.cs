@@ -130,7 +130,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(WorkflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
 
-            bool pointsInSmoothIsEvenNumber = (WorkflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
+            var pointsInSmoothIsEvenNumber = (WorkflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
             if (pointsInSmoothIsEvenNumber)
             {
                 throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
@@ -174,7 +174,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //only
 
-            bool allowNegativeValues = false;
+            var allowNegativeValues = false;
             ChromSmoother = new SavitzkyGolaySmoother(WorkflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
             ChromPeakDetector = new ChromPeakDetector(WorkflowParameters.ChromPeakDetectorPeakBR, WorkflowParameters.ChromPeakDetectorSigNoise);
             ChromPeakSelector = CreateChromPeakSelector(WorkflowParameters);
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
         public virtual ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
-            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
             chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
             chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
             chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;
@@ -277,7 +277,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             catch (Exception ex)
             {
-                string errorMessage = "Critical error!!!! " + ex.Message + "; processing IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
+                var errorMessage = "Critical error!!!! " + ex.Message + "; processing IqTargetID = " + result.Target.ID + "; charge = " + result.Target.ChargeState +
                                       "; sequence= " + result.Target.Code + "; ScanLC= " + result.Target.ScanLC;
 
                 Console.WriteLine(errorMessage);
@@ -302,7 +302,7 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new ApplicationException("There was a critical failure! Error info: " + ex.Message);
             }
 
-            TargetedResultBase result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            var result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
             result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
             result.FailedResult = true;
         }
@@ -363,7 +363,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             result.IqResultDetail.ChromPeakQualityData = ChromPeakAnalyzer.GetChromPeakQualityData(Run, result.Target, result.ChromPeakList);
 
-            bool filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+            var filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
             result.ChromPeakSelected = ChromPeakSelector.SelectBestPeak(result.IqResultDetail.ChromPeakQualityData, filterOutFlagged);
 
 
@@ -418,7 +418,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (result.ObservedIsotopicProfile == null) return 0;
 
-            int indexMostAbundantPeakTheor = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak();
+            var indexMostAbundantPeakTheor = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak();
 
             if (result.ObservedIsotopicProfile.Peaklist.Count > indexMostAbundantPeakTheor)
             {
@@ -440,8 +440,8 @@ namespace DeconTools.Workflows.Backend.Core
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
 
 
-            double leftTrimValue = targetVal - leftTrimAmount;
-            double rightTrimValue = targetVal + rightTrimAmount;
+            var leftTrimValue = targetVal - leftTrimAmount;
+            var rightTrimValue = targetVal + rightTrimAmount;
 
 
             return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
@@ -454,10 +454,10 @@ namespace DeconTools.Workflows.Backend.Core
         /// If no peak is detected, we return the mass error 999999.  This should be interpreted as a null value.</returns>
         protected double TheorMostIntensePeakMassError(IsotopicProfile theoreticalIso, IsotopicProfile observedIso, int chargeState)
         {
-            MSPeak theoreticalMostIntensePeak = theoreticalIso.getMostIntensePeak();
+            var theoreticalMostIntensePeak = theoreticalIso.getMostIntensePeak();
 
             //find peak in obs data
-            double mzTolerance = WorkflowParameters.MSToleranceInPPM * theoreticalMostIntensePeak.XValue / 1e6;
+            var mzTolerance = WorkflowParameters.MSToleranceInPPM * theoreticalMostIntensePeak.XValue / 1e6;
             var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(new List<Peak>(observedIso.Peaklist), theoreticalMostIntensePeak.XValue, mzTolerance);
 
             if (foundPeaks.Count == 0)
@@ -465,7 +465,7 @@ namespace DeconTools.Workflows.Backend.Core
                 return 999999;
             }
 
-            double obsXValue = foundPeaks.OrderByDescending(p => p.Height).First().XValue; //order the peaks and take the first (most intense) one.
+            var obsXValue = foundPeaks.OrderByDescending(p => p.Height).First().XValue; //order the peaks and take the first (most intense) one.
             return ((theoreticalMostIntensePeak.XValue * chargeState) - (obsXValue * chargeState));
         }
 

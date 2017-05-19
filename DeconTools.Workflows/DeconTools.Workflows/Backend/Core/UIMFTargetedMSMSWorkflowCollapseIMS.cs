@@ -79,16 +79,16 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (ChromPeak peak in Run.PeakList)
             {
-                double apex = peak.XValue;
+                var apex = peak.XValue;
                 double width = peak.Width;
-                double peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
-                double fourSigma = 4 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
-                double halfFourSigma = fourSigma / 2.0;
+                var peakWidthSigma = width / 2.35;    // width@half-height = 2.35σ (Gaussian peak theory)
+                var fourSigma = 4 * peakWidthSigma;	// width@base = 4σ (Gaussian peak theory)
+                var halfFourSigma = fourSigma / 2.0;
 
-                double minScan = apex - halfFourSigma;
-                double maxScan = apex + halfFourSigma;
+                var minScan = apex - halfFourSigma;
+                var maxScan = apex + halfFourSigma;
 
-                XYData filteredXYData = Run.XYData.TrimData(minScan, maxScan);
+                var filteredXYData = Run.XYData.TrimData(minScan, maxScan);
                 this.ChromPeakToXYDataMap.Add(peak, filteredXYData);
             }
         }

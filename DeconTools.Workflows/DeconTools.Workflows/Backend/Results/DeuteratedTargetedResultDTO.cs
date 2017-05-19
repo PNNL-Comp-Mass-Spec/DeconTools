@@ -53,9 +53,9 @@ namespace DeconTools.Workflows.Backend.Results
 
         public override string ToStringWithDetailsAsRow()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string delim = "\t";
+            var delim = "\t";
 
             sb.Append(this.TargetID);
             sb.Append(delim);

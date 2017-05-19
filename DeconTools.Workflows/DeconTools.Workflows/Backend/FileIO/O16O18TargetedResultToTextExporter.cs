@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             var o16o18result = (O16O18TargetedResultDTO)result;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(Delimiter);
             sb.Append(o16o18result.IntensityTheorI0);
             sb.Append(Delimiter);
@@ -50,7 +50,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(base.buildHeaderLine());
 

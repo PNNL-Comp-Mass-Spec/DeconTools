@@ -43,11 +43,11 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
         //Adds or subtracts the PTM formula from the sequence formula based on the overall mass of the PTMs
         public string GetEmpiricalFormulaFromSequence(string code, bool cysteinesAreModified = false)
         {
-            string ptmFormula = "";
-            string sequenceFormula = "";
-            string empiricalFormula = "";
+            var ptmFormula = "";
+            var sequenceFormula = "";
+            var empiricalFormula = "";
 
-            double ptmMass = PtmMassFromCode(code);
+            var ptmMass = PtmMassFromCode(code);
             ptmFormula = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(Math.Abs(ptmMass), false);
 
             sequenceFormula = SequenceToEmpiricalFormula(code, cysteinesAreModified);
@@ -74,8 +74,8 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
         //Uses the regex PTMExpression to parse for the PTM in a give input format.
         public double PtmMassFromCode(string code)
         {
-            double ptmMass = 0.0;
-            MatchCollection masses = Regex.Matches(code, PtmExpression);
+            var ptmMass = 0.0;
+            var masses = Regex.Matches(code, PtmExpression);
             foreach (Match match in masses)
             {
                 ptmMass += Convert.ToDouble(match.Value);
@@ -90,14 +90,14 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             //TODO:  this doesn't work with:  '
 
 
-            string sequence = "";
+            var sequence = "";
 
             //Removes the . start and stop notation
-            string front = Regex.Replace(code, @"^[A-Z\-_]?[\.]", "");
-            string rear = Regex.Replace(front, @"[\.]+[A-Z\-_]?$", "");
-            string[] test = Regex.Split(rear, SequenceExpression);
+            var front = Regex.Replace(code, @"^[A-Z\-_]?[\.]", "");
+            var rear = Regex.Replace(front, @"[\.]+[A-Z\-_]?$", "");
+            var test = Regex.Split(rear, SequenceExpression);
 
-            foreach (string s in test)
+            foreach (var s in test)
             {
                 sequence += Regex.Match(s, "^[A-Z]*[A-Z]$").Value;
             }
@@ -108,9 +108,9 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 
         public bool CheckSequenceIntegrity(string sequence)
         {
-            double ptmMass = PtmMassFromCode(sequence);
-            string sequenceFormula = SequenceToEmpiricalFormula(sequence);
-            double sequenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(sequenceFormula);
+            var ptmMass = PtmMassFromCode(sequence);
+            var sequenceFormula = SequenceToEmpiricalFormula(sequence);
+            var sequenceMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(sequenceFormula);
             if ((ptmMass < 0) && (Math.Abs(ptmMass) > (sequenceMass / 2)))
             {
                 return false;
@@ -120,8 +120,8 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 
         public List<double> GetPTMList(string code)
         {
-            List<double> ptmMasses = new List<double>();
-            MatchCollection masses = Regex.Matches(code, PtmExpression);
+            var ptmMasses = new List<double>();
+            var masses = Regex.Matches(code, PtmExpression);
             foreach (Match match in masses)
             {
                 ptmMasses.Add(Convert.ToDouble(match.Value));

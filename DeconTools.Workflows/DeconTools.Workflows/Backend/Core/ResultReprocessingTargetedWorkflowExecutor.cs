@@ -58,14 +58,14 @@ namespace DeconTools.Workflows.Backend.Core
 
             var resultsSortedByDataset = allresults.Results.OrderBy(p => p.DatasetName);
 
-            int totalResults = resultsSortedByDataset.Count();
+            var totalResults = resultsSortedByDataset.Count();
 
 
             ResultRepository.Clear();
 
             //iterate over results
 
-            int resultCounter = 0;
+            var resultCounter = 0;
             foreach (var result in resultsSortedByDataset)
             {
                 resultCounter++;
@@ -101,13 +101,13 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 catch (Exception ex)
                 {
-                    string errorString = "Error on MT\t" + result.TargetID + "\tchargeState\t" + result.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
+                    var errorString = "Error on MT\t" + result.TargetID + "\tchargeState\t" + result.ChargeState + "\t" + ex.Message + "\t" + ex.StackTrace;
                     ReportProcessingProgress(errorString, resultCounter);
 
                     throw;
                 }
 
-                string progressString = "Processed " + resultCounter + " of " + totalResults ;
+                var progressString = "Processed " + resultCounter + " of " + totalResults ;
                
                 if (_backgroundWorker != null)
                 {

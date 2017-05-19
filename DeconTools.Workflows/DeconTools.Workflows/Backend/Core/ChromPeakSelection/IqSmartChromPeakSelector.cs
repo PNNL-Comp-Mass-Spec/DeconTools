@@ -47,9 +47,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 filteredList1 = filteredList1.OrderBy(p => p.GetResult().FitScore).ToList();
 
-                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].GetResult().FitScore - filteredList1[1].GetResult().FitScore);
+                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].GetResult().FitScore - filteredList1[1].GetResult().FitScore);
 
-                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)

@@ -10,7 +10,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class SmartChromPeakSelectorUIMF : SmartChromPeakSelector
     {
-        
+
 
         #region Constructors
         public SmartChromPeakSelectorUIMF(SmartChromPeakSelectorParameters parameters)
@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         }
         #endregion
 
-  
+
         protected override void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
             var uimfRun = result.Run as UIMFRun;
@@ -34,7 +34,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
 
-            TargetedResultBase currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            var currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
             if (msgen == null)
             {
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 msgen.IsTICRequested = false;
             }
 
-            TargetBase currentTarget = resultList.Run.CurrentMassTag;
+            var currentTarget = resultList.Run.CurrentMassTag;
 
             // Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
             msgen.MinMZ = currentTarget.MZ - 10;
@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             //collect Chrom peaks that fall within the NET tolerance
-            List<ChromPeak> peaksWithinTol = new List<ChromPeak>(); // 
+            var peaksWithinTol = new List<ChromPeak>(); //
 
             foreach (ChromPeak peak in resultList.Run.PeakList)
             {
@@ -70,13 +70,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 }
             }
 
-            List<ChromPeakQualityData> peakQualityList = new List<ChromPeakQualityData>();
+            var peakQualityList = new List<ChromPeakQualityData>();
 
             //iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
-            int tempMinScanWithinTol = (int) resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
-            int tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
-            int tempCenterTol = (int) resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
+            var tempMinScanWithinTol = (int) resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
+            var tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
+            var tempCenterTol = (int) resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
 
 
             Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
@@ -96,7 +96,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 foreach (var chromPeak in peaksWithinTol)
                 {
-                    ChromPeakQualityData pq = new ChromPeakQualityData(chromPeak);
+                    var pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
                     // TODO: Currently hard-coded to sum only 1 scan
@@ -125,7 +125,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 #endif
                 }
 
-                //run a algorithm that decides, based on fit score mostly. 
+                //run a algorithm that decides, based on fit score mostly.
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 
@@ -163,9 +163,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             {
                 filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
 
-                double diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
 
-                bool differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
                 if (differenceIsSmall)
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)
@@ -193,7 +193,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 }
             }
 
-            // If any of the peaks were good, then we want to make sure to not consider the result an error. 
+            // If any of the peaks were good, then we want to make sure to not consider the result an error.
             // I added this because if the last peak checked had an error, the entire result was still flagged as having an error.
             if (bestpeak != null)
             {

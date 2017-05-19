@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.Backend.Core
         public IsotopicProfile ConvertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
         {
             var o18Iso = new IsotopicProfile { ChargeState = theorFeature.ChargeState, Peaklist = new List<MSPeak>() };
-            double mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
+            var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
 
             foreach (var theorpeak in theorFeature.Peaklist)
             {

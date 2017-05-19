@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override IqTarget ConvertTextToIqTarget(List<string> processedRow)
         {
-            IqTargetMsgfFirstHit target = new IqTargetMsgfFirstHit();
+            var target = new IqTargetMsgfFirstHit();
             target.ID = ParseIntField(processedRow, TargetIDHeaders, -1);
 
             if (target.ID == -1)
@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             target.MonoMassTheor = (target.MZTheor - DeconTools.Backend.Globals.PROTON_MASS)*target.ChargeState;
 
 
-            IqTargetUtilities targetUtilities = new IqTargetUtilities();
+            var targetUtilities = new IqTargetUtilities();
 
            
 

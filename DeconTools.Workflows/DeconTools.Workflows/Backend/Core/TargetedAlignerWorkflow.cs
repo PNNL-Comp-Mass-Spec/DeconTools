@@ -94,12 +94,12 @@ namespace DeconTools.Workflows.Backend.Core
             _targetedResultRepository = new TargetedResultRepository();
 
 
-            bool featuresAreImportedFromFile = !string.IsNullOrEmpty(AlignerParameters.ImportedFeaturesFilename);
+            var featuresAreImportedFromFile = !string.IsNullOrEmpty(AlignerParameters.ImportedFeaturesFilename);
             if (featuresAreImportedFromFile)
             {
                 //load them from the Features file
-                UnlabelledTargetedResultFromTextImporter importer = new UnlabelledTargetedResultFromTextImporter(AlignerParameters.ImportedFeaturesFilename);
-                TargetedResultRepository repo = importer.Import();
+                var importer = new UnlabelledTargetedResultFromTextImporter(AlignerParameters.ImportedFeaturesFilename);
+                var repo = importer.Import();
                 _targetedResultRepository.Results = repo.Results;
             }
             else
@@ -110,12 +110,12 @@ namespace DeconTools.Workflows.Backend.Core
 
                 _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
 
-                double netGrouping = 0.2;
+                var netGrouping = 0.2;
                 double chromTolerance = 5;  //in ppm
 
-                string progressString = "First trying to find alignment targets using narrow mass tolerances.... ";
+                var progressString = "First trying to find alignment targets using narrow mass tolerances.... ";
                 ReportProgress(0, progressString);
-                List<TargetedResultBase> firstPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping,chromTolerance);
+                var firstPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping,chromTolerance);
 
                 if (firstPassResults.Count<10)
                 {
@@ -125,7 +125,7 @@ namespace DeconTools.Workflows.Backend.Core
                     chromTolerance = 20;
                     progressString = "Couldn't find enough. Now trying wider mass tolerance = "+ chromTolerance;
                     ReportProgress(0, progressString);
-                    List<TargetedResultBase> secondPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
+                    var secondPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
                     firstPassResults.AddRange(secondPassResults);
 
                 }
@@ -137,16 +137,16 @@ namespace DeconTools.Workflows.Backend.Core
 
                     progressString = "Ok this is a tough one. Now going even wider. Mass tolerance = " + chromTolerance;
                     ReportProgress(0, progressString);
-                    List<TargetedResultBase> thirdPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
+                    var thirdPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
                     firstPassResults.AddRange(thirdPassResults);
 
                 }
                 
-                List<double> ppmErrors = getMassErrors(firstPassResults);
-                List<double> filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
+                var ppmErrors = getMassErrors(firstPassResults);
+                var filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
 
-                bool canUseNarrowTolerances = executeDecisionOnUsingTightTolerances(filteredUsingGrubbsPPMErrors);
+                var canUseNarrowTolerances = executeDecisionOnUsingTightTolerances(filteredUsingGrubbsPPMErrors);
 
 
 
@@ -154,10 +154,10 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (canUseNarrowTolerances)
                 {
-                    double avgPPMError = filteredUsingGrubbsPPMErrors.Average();
-                    double stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
+                    var avgPPMError = filteredUsingGrubbsPPMErrors.Average();
+                    var stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
 
-                    double tolerance = Math.Abs(avgPPMError) + 2 * stdev;
+                    var tolerance = Math.Abs(avgPPMError) + 2 * stdev;
                     this.AlignerParameters.ChromGenTolerance = (int)Math.Ceiling(tolerance);
                     this.AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
@@ -200,7 +200,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            bool canDoAlignment = _targetedResultRepository.Results.Count > 0;
+            var canDoAlignment = _targetedResultRepository.Results.Count > 0;
 
             if (canDoAlignment)
             {
@@ -213,7 +213,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (ppmErrors.Count < 5) return false;
 
-            double avgPPMError = ppmErrors.Average();
+            var avgPPMError = ppmErrors.Average();
 
             if (avgPPMError > 10) return false;
 
@@ -223,18 +223,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<double> getMassErrors(List<TargetedResultBase> firstPassResults)
         {
-            List<double> ppmErrors = new List<double>();
+            var ppmErrors = new List<double>();
 
 
             foreach (var result in firstPassResults)
             {
 
 
-                double theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
-                double observedMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+                var theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
+                var observedMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
 
 
-                double ppmError = (theorMZ - observedMZ) / theorMZ * 1e6;
+                var ppmError = (theorMZ - observedMZ) / theorMZ * 1e6;
 
                 ppmErrors.Add(ppmError);
 
@@ -254,7 +254,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             
 
-            List<TargetedResultBase> resultsPassingCriteria = new List<TargetedResultBase>();
+            var resultsPassingCriteria = new List<TargetedResultBase>();
 
             var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
 
@@ -263,8 +263,8 @@ namespace DeconTools.Workflows.Backend.Core
                                     orderby n.ObsCount descending
                                     select n);
 
-            int numPassingMassTagsInGrouping = 0;
-            int numFailingMassTagsInGrouping = 0;
+            var numPassingMassTagsInGrouping = 0;
+            var numFailingMassTagsInGrouping = 0;
 
 
             foreach (var massTag in filteredMasstags)
@@ -277,11 +277,11 @@ namespace DeconTools.Workflows.Backend.Core
                 if (resultPassesStrictCriteria(result))
                 {
 
-                    double theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
-                    double obsMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
-                    double ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
+                    var theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
+                    var obsMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+                    var ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
 
-                    string progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
+                    var progressInfo = "STRICT MATCH: " + massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum() + "; PPMError= " + ppmError.ToString("0.00");
                     ReportProgress(0, progressInfo);
 
                     //ReportProgress(progressPercentage, progressInfo);
@@ -322,16 +322,16 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
-            List<TargetedResultBase> resultsPassingCriteria = new List<TargetedResultBase>();
+            var resultsPassingCriteria = new List<TargetedResultBase>();
 
-            int netGroupingCounter = 0;
+            var netGroupingCounter = 0;
             foreach (var netGrouping in _netGroupings)
             {
                 netGroupingCounter++;
 
-                int progressPercentage = netGroupingCounter * 100 / _netGroupings.Count;
+                var progressPercentage = netGroupingCounter * 100 / _netGroupings.Count;
 
-                string progressString = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper;
+                var progressString = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper;
                 ReportProgress(progressPercentage, progressString);
 
 
@@ -341,8 +341,8 @@ namespace DeconTools.Workflows.Backend.Core
                                         orderby n.ObsCount descending
                                         select n);
 
-                int numPassingMassTagsInGrouping = 0;
-                int numFailingMassTagsInGrouping = 0;
+                var numPassingMassTagsInGrouping = 0;
+                var numFailingMassTagsInGrouping = 0;
 
 
                 foreach (var massTag in filteredMasstags)
@@ -355,7 +355,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (resultPassesCriteria(result))
                     {
 
-                        string progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum();
+                        var progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum();
 
                         ReportProgress(progressPercentage, progressInfo);
                         resultsPassingCriteria.Add(result);   //where passing results are added
@@ -381,7 +381,7 @@ namespace DeconTools.Workflows.Backend.Core
                 NumFailuresPerNETGrouping.Add(numFailingMassTagsInGrouping);
                 NumSuccessesPerNETGrouping.Add(numPassingMassTagsInGrouping);
 
-                string progressInfo2 = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper + " COMPLETE. Found massTags= " + numPassingMassTagsInGrouping + "; Missing massTags = " + numFailingMassTagsInGrouping;
+                var progressInfo2 = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper + " COMPLETE. Found massTags= " + numPassingMassTagsInGrouping + "; Missing massTags = " + numFailingMassTagsInGrouping;
                 ReportProgress(progressPercentage, progressInfo2);
 
                 if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
@@ -409,8 +409,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SetMassTags(string massTagFilename)
         {
-            MassTagFromTextFileImporter importer = new MassTagFromTextFileImporter(massTagFilename);
-            TargetCollection mtc = importer.Import();
+            var importer = new MassTagFromTextFileImporter(massTagFilename);
+            var mtc = importer.Import();
             MassTagList = mtc.TargetList;
         }
 
@@ -424,22 +424,22 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SaveFeaturesToTextfile(string outputFolder)
         {
-            string exportTargetedFeaturesFile = Path.Combine(outputFolder, Run.DatasetName + "_alignedFeatures.txt");
+            var exportTargetedFeaturesFile = Path.Combine(outputFolder, Run.DatasetName + "_alignedFeatures.txt");
 
-            UnlabelledTargetedResultToTextExporter exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
+            var exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
         }
 
         public void SaveAlignmentData(string outputFolder)
         {
 
-            string exportNETAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_NETAlignment.txt");
-            string exportMZAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_MZAlignment.txt");
+            var exportNETAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_NETAlignment.txt");
+            var exportMZAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_MZAlignment.txt");
 
-            MassAlignmentInfoToTextExporter mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
+            var mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
             mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
 
-            NETAlignmentInfoToTextExporter netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
+            var netAlignmentExporter = new NETAlignmentInfoToTextExporter(exportNETAlignmentFilename);
             netAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);
         }
 
@@ -453,12 +453,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<NETGrouping> createNETGroupings()
         {
-            double[] netDivisions = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
-            List<NETGrouping> netgroupings = new List<NETGrouping>();
+            var netDivisions = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+            var netgroupings = new List<NETGrouping>();
 
-            for (int i = 0; i < netDivisions.Length - 1; i++)
+            for (var i = 0; i < netDivisions.Length - 1; i++)
             {
-                NETGrouping grouping = new NETGrouping();
+                var grouping = new NETGrouping();
                 grouping.Lower = netDivisions[i];
                 grouping.Upper = netDivisions[i + 1];
 
@@ -493,7 +493,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private bool resultPassesStrictCriteria(TargetedResultBase result)
         {
-            bool passesCriteria = true;
+            var passesCriteria = true;
 
             if (result.FailedResult) return false;
 
@@ -517,7 +517,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private bool resultPassesCriteria(TargetedResultBase result)
         {
-            bool passesCriteria = true;
+            var passesCriteria = true;
 
             if (result.FailedResult) return false;
 
@@ -549,10 +549,10 @@ namespace DeconTools.Workflows.Backend.Core
             if (this.NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return String.Empty;
 
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("NETGrouping\tSuccesses\tFailures\n");
 
-            for (int i = 0; i < this._netGroupings.Count; i++)
+            for (var i = 0; i < this._netGroupings.Count; i++)
             {
                 sb.Append(_netGroupings[i].Lower + "-" + _netGroupings[i].Upper);
                 sb.Append("\t");

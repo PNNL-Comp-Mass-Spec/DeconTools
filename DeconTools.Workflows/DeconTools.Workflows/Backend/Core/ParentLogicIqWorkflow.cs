@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             //Executes the ChargeState level children workflows
             var children = result.Target.ChildTargets();
-            foreach (IqTarget child in children)
+            foreach (var child in children)
             {
                 child.DoWorkflow();
             }

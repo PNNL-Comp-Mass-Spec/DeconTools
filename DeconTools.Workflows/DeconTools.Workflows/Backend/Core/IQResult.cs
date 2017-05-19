@@ -89,8 +89,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string ToStringWithDetailedReport()
         {
-            StringBuilder sb = new StringBuilder();
-            string delim = "\t";
+            var sb = new StringBuilder();
+            var delim = "\t";
 
             sb.Append("---------------------------------------------" + Environment.NewLine);
             sb.Append("TargetID" + delim + Target.ID + delim + Environment.NewLine);
@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
             sb.Append("Chromatogram length" + delim + (IqResultDetail.Chromatogram == null ? "[null]" : IqResultDetail.Chromatogram.Xvalues.Length.ToString()) + Environment.NewLine);
             sb.Append("Num chom peaks" + delim + ChromPeakList.Count + Environment.NewLine);
 
-            string chromPeakSelectedString = ChromPeakSelected == null
+            var chromPeakSelectedString = ChromPeakSelected == null
                                                  ? "[null]"
                                                  : "Scan= " + ChromPeakSelected.XValue.ToString("0.0") + "; Intensity= " +
                                                    ChromPeakSelected.Height + "; Width=" + ChromPeakSelected.Width;

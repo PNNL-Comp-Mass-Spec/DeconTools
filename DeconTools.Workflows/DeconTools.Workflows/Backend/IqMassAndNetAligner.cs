@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend
 
             //Targets = Targets.Where(p => p.Code.Contains("FEQDGENYTGTIDGNMGAYAR")).ToList();
 
-            List<IqTarget> filteredList = new List<IqTarget>();
+            var filteredList = new List<IqTarget>();
             //calculate empirical formula for targets using Code and then monoisotopic mass
 
             foreach (var iqTarget in Targets)
@@ -94,10 +94,10 @@ namespace DeconTools.Workflows.Backend
                 if (_peptideUtils.ValidateSequence(iqTarget.Code))
                 {
                     iqTarget.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(iqTarget.Code, true, true);
-                    double calcMonoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(iqTarget.EmpiricalFormula);
-                    double monoMassFromFirstHitsFile = iqTarget.MonoMassTheor;
+                    var calcMonoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(iqTarget.EmpiricalFormula);
+                    var monoMassFromFirstHitsFile = iqTarget.MonoMassTheor;
 
-                    bool massCalculationsAgree = Math.Abs(monoMassFromFirstHitsFile - calcMonoMass) < 0.02;
+                    var massCalculationsAgree = Math.Abs(monoMassFromFirstHitsFile - calcMonoMass) < 0.02;
                     if (massCalculationsAgree)
                     {
                         iqTarget.MonoMassTheor = calcMonoMass;
@@ -106,7 +106,7 @@ namespace DeconTools.Workflows.Backend
                         filteredList.Add(iqTarget);
                         _targetUtilities.UpdateTargetMissingInfo(iqTarget, true);
 
-                        IqTargetMsgfFirstHit chargeStateTarget = new IqTargetMsgfFirstHit();
+                        var chargeStateTarget = new IqTargetMsgfFirstHit();
 
                         _targetUtilities.CopyTargetProperties(iqTarget, chargeStateTarget);
 
@@ -136,7 +136,7 @@ namespace DeconTools.Workflows.Backend
             var parentWorkflow = new ChromPeakDeciderIqWorkflow(Run, workflowParameters);
             var childWorkflow = new ChargeStateChildIqWorkflow(Run, workflowParameters);
 
-            IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
+            var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, Targets);
 
@@ -189,13 +189,13 @@ namespace DeconTools.Workflows.Backend
             line.Symbol.Type = SymbolType.Circle;
             line.Color = Color.HotPink;
 
-            PointPairList pointPairList = new PointPairList();
+            var pointPairList = new PointPairList();
             foreach (var iqResult in IqResultsForNetAlignment)
             {
-                PointPair pointPair = new PointPair(iqResult.LcScanObs, iqResult.Target.ElutionTimeTheor);
+                var pointPair = new PointPair(iqResult.LcScanObs, iqResult.Target.ElutionTimeTheor);
                 pointPairList.Add(pointPair);
             }
-            LineItem curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
+            var curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
             curveItem.Symbol.Size = 8;
             curveItem.Line.IsVisible = false;
 
@@ -218,7 +218,7 @@ namespace DeconTools.Workflows.Backend
 
 
             graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            string outputGraphFilename = baseFilename + "_netAlignment.png";
+            var outputGraphFilename = baseFilename + "_netAlignment.png";
 
             graphGenerator.SaveGraph(outputGraphFilename);
         }
@@ -237,13 +237,13 @@ namespace DeconTools.Workflows.Backend
             line.Symbol.Type = SymbolType.Circle;
             line.Color = Color.HotPink;
 
-            PointPairList pointPairList = new PointPairList();
+            var pointPairList = new PointPairList();
             foreach (var iqResult in IqResultsForAlignment)
             {
-                PointPair pointPair = new PointPair(iqResult.LcScanObs, iqResult.MassErrorBefore);
+                var pointPair = new PointPair(iqResult.LcScanObs, iqResult.MassErrorBefore);
                 pointPairList.Add(pointPair);
             }
-            LineItem curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
+            var curveItem = new LineItem("", pointPairList, Color.Black, SymbolType.Diamond);
             curveItem.Symbol.Size = 8;
             curveItem.Line.IsVisible = false;
 
@@ -266,7 +266,7 @@ namespace DeconTools.Workflows.Backend
 
 
             graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            string outputGraphFilename = baseFilename + "_massAlignment.png";
+            var outputGraphFilename = baseFilename + "_massAlignment.png";
 
             graphGenerator.SaveGraph(outputGraphFilename);
         }
@@ -313,7 +313,7 @@ namespace DeconTools.Workflows.Backend
 
         public MassAlignmentInfo DoMassAlignment(bool recollectResultsIfAlreadyPresent = false)
         {
-            bool needToProcessResults = (recollectResultsIfAlreadyPresent ||
+            var needToProcessResults = (recollectResultsIfAlreadyPresent ||
                                          (IqResultsForAlignment == null || IqResultsForAlignment.Count == 0));
 
             if (needToProcessResults)
@@ -325,10 +325,10 @@ namespace DeconTools.Workflows.Backend
 
 
 
-            XYData massAlignmentDataForLoess = PrepareMassAlignmentDataForLoessSmoothing(IqResultsForAlignment);
+            var massAlignmentDataForLoess = PrepareMassAlignmentDataForLoessSmoothing(IqResultsForAlignment);
 
 
-            int iterationsForMassAlignment = 2;
+            var iterationsForMassAlignment = 2;
             var loessInterpolatorForMassAlignment = new LoessInterpolator(LoessBandwidthMassAlignment, iterationsForMassAlignment);
 
 
@@ -372,7 +372,7 @@ namespace DeconTools.Workflows.Backend
 
         public NetAlignmentInfo DoNetAlignment(bool recollectResultsIfAlreadyPresent = false)
         {
-            bool needToProcessResults = (recollectResultsIfAlreadyPresent ||
+            var needToProcessResults = (recollectResultsIfAlreadyPresent ||
                                        (IqResultsForAlignment == null || IqResultsForAlignment.Count == 0));
 
             if (needToProcessResults)
@@ -390,7 +390,7 @@ namespace DeconTools.Workflows.Backend
            
 
 
-            int iterationsForNetAlignment = 2;
+            var iterationsForNetAlignment = 2;
 
             var loessInterpolatorForNetAlignment = new LoessInterpolator(LoessBandwidthNetAlignment, iterationsForNetAlignment);
             var loessSmoothedData = new XYData();
@@ -399,7 +399,7 @@ namespace DeconTools.Workflows.Backend
                                                                                  netAlignmentDataForLoess.Select(p => p.NET).ToArray());
 
             var scanToNetVals = new List<ScanNETPair>();
-            for (int i = 0; i < loessSmoothedData.Xvalues.Length; i++)
+            for (var i = 0; i < loessSmoothedData.Xvalues.Length; i++)
             {
                 var xval = loessSmoothedData.Xvalues[i];
                 var yval = loessSmoothedData.Yvalues[i];
@@ -434,7 +434,7 @@ namespace DeconTools.Workflows.Backend
         {
             var scanMassVals = new Dictionary<decimal, double>();
 
-            foreach (IqResult iqResult in iqResultsForAlignment)
+            foreach (var iqResult in iqResultsForAlignment)
             {
 
                 decimal lcScan;
@@ -449,7 +449,7 @@ namespace DeconTools.Workflows.Backend
 
 
                 
-                double yval = iqResult.MassErrorBefore;
+                var yval = iqResult.MassErrorBefore;
 
                 if (!scanMassVals.ContainsKey(lcScan))
                 {
@@ -457,7 +457,7 @@ namespace DeconTools.Workflows.Backend
                 }
             }
 
-            XYData xyDataForInterpolator = new XYData();
+            var xyDataForInterpolator = new XYData();
             xyDataForInterpolator.Xvalues = scanMassVals.Keys.Select(p => (double)p).ToArray();
             xyDataForInterpolator.Yvalues = scanMassVals.Values.ToArray();
 
@@ -470,7 +470,7 @@ namespace DeconTools.Workflows.Backend
         {
             var scanNetDictionary = new SortedDictionary<decimal, double>();
 
-            foreach (IqResult iqResult in IqResultsForNetAlignment)
+            foreach (var iqResult in IqResultsForNetAlignment)
             {
 
                 decimal lcScan;
@@ -483,7 +483,7 @@ namespace DeconTools.Workflows.Backend
                     lcScan = (decimal)Math.Round(iqResult.ChromPeakSelected.XValue, 2);
                 }
 
-                double yval = iqResult.Target.ElutionTimeTheor;
+                var yval = iqResult.Target.ElutionTimeTheor;
 
                 if (!scanNetDictionary.ContainsKey(lcScan))
                 {
@@ -507,7 +507,7 @@ namespace DeconTools.Workflows.Backend
 
         private List<IqResult> FilterAlignmentResults()
         {
-            List<IqResult> filteredResults = new List<IqResult>();
+            var filteredResults = new List<IqResult>();
 
             foreach (var iqResult in Results)
             {

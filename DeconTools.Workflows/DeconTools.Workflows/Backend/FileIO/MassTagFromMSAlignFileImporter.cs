@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             // Group LcmsFeatureTargets by their code
             var proteinSpeciesGroups = new Dictionary<string, List<LcmsFeatureTarget>>();
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -112,10 +112,10 @@ namespace DeconTools.Workflows.Backend.FileIO
                     throw new InvalidDataException("There is no data in the file we are trying to read.");
                 }
 
-                List<string> columnHeaders = sr.ReadLine().Split('\t').ToList();
-                Dictionary<string, int> columnMapping = GetColumnMapping(columnHeaders);
+                var columnHeaders = sr.ReadLine().Split('\t').ToList();
+                var columnMapping = GetColumnMapping(columnHeaders);
 
-                int lineCounter = 0; //used for tracking which line is being processed.
+                var lineCounter = 0; //used for tracking which line is being processed.
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
@@ -123,7 +123,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     ++lineCounter;
                     _dataRowsProcessed = lineCounter;
 
-                    List<string> processedData = sr.ReadLine().Split('\t').ToList();
+                    var processedData = sr.ReadLine().Split('\t').ToList();
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != columnHeaders.Count)
@@ -154,7 +154,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     // Get code
-                    string code = processedData[columnMapping[PEPTIDE_HEADER]];
+                    var code = processedData[columnMapping[PEPTIDE_HEADER]];
 
                     string empiricalFormula;
                     // Modified species, try to get empirical formula
@@ -174,7 +174,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     // Get monoisotopic mass
-                    double monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+                    var monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 
                     // Get Protein_mass
                     double proteinMass;
@@ -184,7 +184,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     // Get protein name
-                    string proteinName = processedData[columnMapping[PROTEIN_NAME_HEADER]];
+                    var proteinName = processedData[columnMapping[PROTEIN_NAME_HEADER]];
 
                     // Get score
                     double eValueDbl;
@@ -257,14 +257,14 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             // Loop through each protein species group and add in the missing charge states
-            int idCounter = 0;
-            foreach (KeyValuePair<string, List<LcmsFeatureTarget>> keyValuePair in proteinSpeciesGroups)
+            var idCounter = 0;
+            foreach (var keyValuePair in proteinSpeciesGroups)
             {
-                IEnumerable<LcmsFeatureTarget> targetGroup = AddChargeStates(keyValuePair.Value, EXTEND_CHARGE_RANGE);
+                var targetGroup = AddChargeStates(keyValuePair.Value, EXTEND_CHARGE_RANGE);
 
                 var chargeStates = new List<short> {0};
                 // Add all targets in group and IDs to list
-                foreach (LcmsFeatureTarget target in targetGroup)
+                foreach (var target in targetGroup)
                 {
                     if (!chargeStates.Contains(target.ChargeState))
                     {
@@ -286,10 +286,10 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return new List<LcmsFeatureTarget>();
             }
 
-            LcmsFeatureTarget minChargeTarget = targets[0];
-            LcmsFeatureTarget maxChargeTarget = targets[0];
+            var minChargeTarget = targets[0];
+            var maxChargeTarget = targets[0];
 
-            foreach (LcmsFeatureTarget target in targets)
+            foreach (var target in targets)
             {
                 if (target.ChargeState < minChargeTarget.ChargeState)
                 {
@@ -302,7 +302,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             // Extend charge range
-            for (int i = 1; i <= offsetMax; i++)
+            for (var i = 1; i <= offsetMax; i++)
             {
                 var newCharge = (short) (minChargeTarget.ChargeState - i);
                 targets.Add(new LcmsFeatureTarget(minChargeTarget)
@@ -320,9 +320,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             // Fill in gaps
             targets = targets.OrderBy(target => target.ChargeState).ToList();
-            for (int i = 1; i < targets.Count; i++)
+            for (var i = 1; i < targets.Count; i++)
             {
-                LcmsFeatureTarget prevTarget = targets[i - 1];
+                var prevTarget = targets[i - 1];
                 var expectedCharge = (short) (prevTarget.ChargeState + 1);
                 if (targets[i].ChargeState > expectedCharge)
                 {
@@ -342,33 +342,33 @@ namespace DeconTools.Workflows.Backend.FileIO
         public string GetEmpiricalFormulaForSequenceWithMods(string code)
         {
             // Check for pyroglutamate modification
-            bool containsPyroglutamateMod = false;
+            var containsPyroglutamateMod = false;
             if (_modPyroglutamate.IsMatch(code))
             {
                 containsPyroglutamateMod = true;
                 // Remove the modification from the string
-                GroupCollection pieces = _modPyroglutamate.Match(code).Groups;
+                var pieces = _modPyroglutamate.Match(code).Groups;
                 code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
             }
 
             // Check for acetylation modification
-            bool containsAcetylationMod = false;
+            var containsAcetylationMod = false;
             if (_modAcetylation.IsMatch(code))
             {
                 containsAcetylationMod = true;
                 // Remove the modification from the string
-                GroupCollection pieces = _modAcetylation.Match(code).Groups;
+                var pieces = _modAcetylation.Match(code).Groups;
                 code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
             }
 
             // Check for phosphorylation modification
             // TODO: this function does not account for the fact that phosphorylation could occur multiple times
-            bool containsPhosphorylationMod = false;
+            var containsPhosphorylationMod = false;
             if (_modPhosphorylation.IsMatch(code))
             {
                 containsPhosphorylationMod = true;
                 // Remove the modification from the string
-                GroupCollection pieces = _modPhosphorylation.Match(code).Groups;
+                var pieces = _modPhosphorylation.Match(code).Groups;
                 code = pieces["prefix"].Value + pieces["modified"].Value + pieces["suffix"].Value;
             }
 
@@ -379,7 +379,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             // Get the empirical formula as if the peptide sequence was unmodified
-            string empiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
+            var empiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(code);
             // Apply modifications to empirical formula
             if (containsPyroglutamateMod)
             {
@@ -400,9 +400,9 @@ namespace DeconTools.Workflows.Backend.FileIO
         private Dictionary<string, int> GetColumnMapping(List<string> columnHeaders)
         {
             var columnMapping = new Dictionary<string, int>();
-            for (int i = 0; i < columnHeaders.Count(); i++)
+            for (var i = 0; i < columnHeaders.Count(); i++)
             {
-                string header = columnHeaders[i];
+                var header = columnHeaders[i];
                 if (!columnMapping.ContainsKey(header))
                 {
                     columnMapping.Add(header, i);

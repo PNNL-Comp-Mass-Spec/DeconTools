@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             var n14result = (N14N15TargetedResultDTO)result;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(Delimiter);
             sb.Append(n14result.ScanN15);
             sb.Append(Delimiter);
@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(base.buildHeaderLine());
 

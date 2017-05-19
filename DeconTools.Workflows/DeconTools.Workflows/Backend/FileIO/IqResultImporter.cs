@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 throw new IOException("There was a problem importing from the file.");
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -77,10 +77,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -88,13 +88,13 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
 
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
-                    string line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var line = sr.ReadLine();
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != _columnHeaders.Count)
@@ -160,7 +160,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             var fileName = Path.GetFileName(Filename);
             if (fileName != null)
             {
-                string datasetName = fileName.Replace("_iqResults.txt", String.Empty);
+                var datasetName = fileName.Replace("_iqResults.txt", String.Empty);
 
                 return datasetName;
             }
@@ -189,9 +189,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             _columnIndexTable = new Dictionary<string, int>();
 
 
-            for (int i = 0; i < _columnHeaders.Count; i++)
+            for (var i = 0; i < _columnHeaders.Count; i++)
             {
-                string header = _columnHeaders[i].ToLower();
+                var header = _columnHeaders[i].ToLower();
 
                 if (!_columnIndexTable.ContainsKey(header))
                 {
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string ParseStringField(List<string> rowData, IEnumerable<string> headers, string defaultVal = "")
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty);
+            var rowValueString = LookupData(rowData, headers, string.Empty);
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -216,7 +216,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private int ParseIntField(List<string> rowData, IEnumerable<string> headers, int defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -234,7 +234,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private long ParseLongField(List<string> rowData, IEnumerable<string> headers, long defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -252,7 +252,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private float ParseFloatField(List<string> rowData, IEnumerable<string> headers, float defaultVal = float.NaN)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -270,7 +270,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private double ParseDoubleField(List<string> rowData, IEnumerable<string> headers, double defaultVal = double.NaN)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -288,7 +288,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private short ParseShortField(List<string> rowData, IEnumerable<string> headers, short defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -309,7 +309,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private bool ParseBoolField(List<string> rowData, IEnumerable<string> headers, bool defaultVal = false)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -337,7 +337,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             foreach (var possibleHeader in possibleColumnHeaders)
             {
-                int columnIndex = GetColumnIndexForHeader(possibleHeader);
+                var columnIndex = GetColumnIndexForHeader(possibleHeader);
                 if (columnIndex != -1)
                 {
                     return row[columnIndex];

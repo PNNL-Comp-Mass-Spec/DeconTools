@@ -31,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
-            ChromPeakSelectorParameters chromPeakSelectorParameters = new ChromPeakSelectorParameters();
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
             chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
             chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
             chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;
@@ -58,26 +58,26 @@ namespace DeconTools.Workflows.Backend.Core
 
             //Executes the ChargeState level children workflows
             var children = result.Target.ChildTargets();
-            foreach (IqTarget child in children)
+            foreach (var child in children)
             {
                 child.DoWorkflow();
-                IqResult childResult = child.GetResult();
+                var childResult = child.GetResult();
 
-                List<ChromPeakIqTarget> peakTargetList = new List<ChromPeakIqTarget>();
+                var peakTargetList = new List<ChromPeakIqTarget>();
                 var peakTargets = child.ChildTargets();
                 foreach (ChromPeakIqTarget target in peakTargets)
                 {
                     peakTargetList.Add(target);
                 }
 
-                bool filterOutFlagged = childResult.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
+                var filterOutFlagged = childResult.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
 
-                ChromPeakIqTarget chromPeakTarget = peakSelector.SelectBestPeak(peakTargetList, filterOutFlagged);
+                var chromPeakTarget = peakSelector.SelectBestPeak(peakTargetList, filterOutFlagged);
 
                 if (chromPeakTarget != null)
                 {
 
-                    IqResult chromPeakResult = chromPeakTarget.GetResult();
+                    var chromPeakResult = chromPeakTarget.GetResult();
 
                     childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
 

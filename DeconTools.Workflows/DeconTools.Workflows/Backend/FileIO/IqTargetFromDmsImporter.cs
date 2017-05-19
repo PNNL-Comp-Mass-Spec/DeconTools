@@ -75,19 +75,19 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 GetModDataFromDb(_targetsContainingMods);
 
-                PeptideUtils peptideUtils = new PeptideUtils();
+                var peptideUtils = new PeptideUtils();
 
                 foreach (IqTargetDms iqTarget in targets)
                 {
-                    string baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(iqTarget.Code);
+                    var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(iqTarget.Code);
                     if (!string.IsNullOrEmpty(iqTarget.ModDescription))
                     {
-                        IqTargetDms target = iqTarget;
+                        var target = iqTarget;
                         var mods = (from n in _massTagModData where n.Item1 == target.ID select n);
 
                         foreach (var tuple in mods)
                         {
-                            string modString = tuple.Item4;
+                            var modString = tuple.Item4;
 
                             try
                             {
@@ -125,14 +125,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public void SaveIqTargetsToFile(string fileName, List<IqTarget>targets  )
         {
-            using (StreamWriter writer=new StreamWriter(fileName))
+            using (var writer=new StreamWriter(fileName))
             {
-                string header = GetHeaderLine();
+                var header = GetHeaderLine();
                 writer.WriteLine(header);
 
                 foreach (IqTargetDms iqTarget in targets)
                 {
-                    string targetString = GetTargetStringForExport(iqTarget);
+                    var targetString = GetTargetStringForExport(iqTarget);
                     writer.WriteLine(targetString);
                 }
 
@@ -143,9 +143,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string GetTargetStringForExport(IqTargetDms iqTarget)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string delim = "\t";
+            var delim = "\t";
 
             sb.Append(iqTarget.ID);
             sb.Append(delim);
@@ -168,9 +168,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string GetHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string delim = "\t";
+            var delim = "\t";
 
             sb.Append("TargetID");
             sb.Append(delim);
@@ -207,7 +207,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private List<IqTarget> GetMassTagDataFromDb()
         {
 
-            List<IqTarget> iqTargetList = new List<IqTarget>();
+            var iqTargetList = new List<IqTarget>();
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
@@ -216,22 +216,22 @@ namespace DeconTools.Workflows.Backend.FileIO
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
-                int progressCounter = 0;
+                var progressCounter = 0;
 
-                string queryString = CreateQueryString(MinPmtQualityScore);
+                var queryString = CreateQueryString(MinPmtQualityScore);
                 //Console.WriteLine(queryString);
 
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = queryString;
                     command.CommandTimeout = 120;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
 
                     while (reader.Read())
                     {
-                        IqTargetDms target = new IqTargetDms();
+                        var target = new IqTargetDms();
 
                         progressCounter++;
 
@@ -296,19 +296,19 @@ namespace DeconTools.Workflows.Backend.FileIO
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = getModDataQueryString(massTagsToBeRetrivedList);
 
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        int mtid = 0;
-                        string modName = "";
-                        int modPosition = 0;
-                        string empiricalFormula = "";
+                        var mtid = 0;
+                        var modName = "";
+                        var modPosition = 0;
+                        var empiricalFormula = "";
 
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
                             mtid = Convert.ToInt32(reader["Mass_Tag_ID"]);
@@ -373,7 +373,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string CreateQueryString(int minPmtQualityScore)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID, 
                            dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass, 
                            dbo.t_mass_tags_net.avg_ganet					AS NET, 
@@ -396,36 +396,36 @@ namespace DeconTools.Workflows.Backend.FileIO
         private List<IqTarget> GetMassTagDataFromDb(List<int> massTagsToBeRetrivedList)
         {
 
-            List<IqTarget> iqTargetList = new List<IqTarget>();
+            var iqTargetList = new List<IqTarget>();
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            int currentListPos = 0;
+            var currentListPos = 0;
 
             using (var cnn = fact.CreateConnection())
             {
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
-                int progressCounter = 0;
+                var progressCounter = 0;
                 while (currentListPos < massTagsToBeRetrivedList.Count)
                 {
-                    List<int> nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
+                    var nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
                     currentListPos += (ChunkSize - 1);
 
-                    string queryString = CreateQueryString(nextGroupOfMassTagIDs);
+                    var queryString = CreateQueryString(nextGroupOfMassTagIDs);
                     //Console.WriteLine(queryString);
 
 
-                    using (DbCommand command = cnn.CreateCommand())
+                    using (var command = cnn.CreateCommand())
                     {
                         command.CommandText = queryString;
                         command.CommandTimeout = 120;
-                        DbDataReader reader = command.ExecuteReader();
+                        var reader = command.ExecuteReader();
 
 
                         while (reader.Read())
                         {
-                            IqTargetDms target = new IqTargetDms();
+                            var target = new IqTargetDms();
 
                             progressCounter++;
 
@@ -488,7 +488,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string CreateQueryString(List<int> massTagsToBeRetrieved)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID, 
                            dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass, 
                            dbo.t_mass_tags_net.avg_ganet					AS NET, 
@@ -507,7 +507,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
             sb.Append("Mass_Tag_ID in (");
 
-            for (int i = 0; i < massTagsToBeRetrieved.Count; i++)
+            for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
             {
                 sb.Append(massTagsToBeRetrieved[i]);    //Appends the mass_tag_id
 

@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.Results
 
         public void AddResult(TargetedResultBase resultToConvert)
         {
-            TargetedResultDTO result = ResultDTOFactory.CreateTargetedResult(resultToConvert);
+            var result = ResultDTOFactory.CreateTargetedResult(resultToConvert);
             this.Results.Add(result);
         }
 
@@ -36,7 +36,7 @@ namespace DeconTools.Workflows.Backend.Results
         {
             foreach (var item in resultsToConvert)
             {
-                TargetedResultDTO result = ResultDTOFactory.CreateTargetedResult(item);
+                var result = ResultDTOFactory.CreateTargetedResult(item);
                 this.Results.Add(result);
             }
         }

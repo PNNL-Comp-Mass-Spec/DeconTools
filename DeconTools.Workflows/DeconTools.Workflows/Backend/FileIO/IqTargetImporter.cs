@@ -94,7 +94,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public override List<IqTarget> Import()
         {
-            List<IqTarget> allTargets = new List<IqTarget>();
+            var allTargets = new List<IqTarget>();
 
             StreamReader reader;
 
@@ -112,7 +112,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 throw new System.IO.IOException("There was a problem importing from the file: " + ex.Message);
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -121,10 +121,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -139,7 +139,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -147,7 +147,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                         throw new InvalidDataException("In File: " + Path.GetFileName(Filename) + "; Data in row # " + _lineCounter + " is NOT valid - \nThe number of columns does not match that of the header line");
                     }
 
-                    IqTarget target = ConvertTextToIqTarget(processedData);
+                    var target = ConvertTextToIqTarget(processedData);
 
                     allTargets.Add(target);
                     _lineCounter++;
@@ -188,7 +188,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sectionsToCheck.Add(HeaderSection.Charge, ChargeStateHeaders);
 
             var dummyData = new List<string>();
-            for (int i = 0; i < m_columnHeaders.Count; i++)
+            for (var i = 0; i < m_columnHeaders.Count; i++)
             {
                 dummyData.Add("Defined");
             }
@@ -196,7 +196,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             _HeaderSections.Clear();
             foreach (var item in sectionsToCheck)
             {
-                string value = LookupData(dummyData, item.Value, "Missing");
+                var value = LookupData(dummyData, item.Value, "Missing");
 
                 if (value == "Defined")
                     _HeaderSections.Add(item.Key, true);

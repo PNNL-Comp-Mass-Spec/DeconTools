@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     using (var writer = new StreamWriter(fileName))
                     {
-                        string header = GetHeader();
+                        var header = GetHeader();
                         writer.WriteLine(header);
                         HeaderWasWritten = true;
                     }
@@ -35,7 +35,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 try
                 {
-                    using (StreamWriter writer = File.AppendText(fileName))
+                    using (var writer = File.AppendText(fileName))
                     {
                         var resultAsString = GetResultAsString(result);
                         writer.WriteLine(resultAsString);
@@ -55,7 +55,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public virtual string GetHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             
 
@@ -95,7 +95,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append("InterferenceScore");
 
-            string outString = sb.ToString();
+            var outString = sb.ToString();
             return outString;
 
         }
@@ -111,12 +111,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public virtual string GetResultAsString(IqResult result, bool includeHeader = false)
         {
-            StringBuilder sb = new StringBuilder();
-            string delim = "\t";
+            var sb = new StringBuilder();
+            var delim = "\t";
 
             if (includeHeader)
             {
-                string header = GetHeader();
+                var header = GetHeader();
                 sb.Append(header);
                 sb.Append(Environment.NewLine);
             }
@@ -156,7 +156,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(delim);
             sb.Append(result.InterferenceScore.ToString("0.000"));
 
-            string outString = sb.ToString();
+            var outString = sb.ToString();
             return outString;
         }
 
