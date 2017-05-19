@@ -82,6 +82,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ThermoRawFileReader">
+      <HintPath>..\Library\ThermoRawFileReader.dll</HintPath>
+    </Reference>
     <Reference Include="ZedGraph">
       <HintPath>..\Library\ZedGraph.dll</HintPath>
     </Reference>
