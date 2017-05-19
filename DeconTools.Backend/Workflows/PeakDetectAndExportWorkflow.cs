@@ -223,7 +223,7 @@ namespace DeconTools.Backend.Workflows
                 catch (Exception ex)
                 {
 
-                    throw new DirectoryNotFoundException("PeakExporter cannot create output folder.\n\nDetails: " + ex.Message + "\n" + ex.StackTrace, ex);
+                    throw new DirectoryNotFoundException("PeakExporter cannot create output folder.\n\nDetails: " + ex.Message, ex);
 
                 }
             }

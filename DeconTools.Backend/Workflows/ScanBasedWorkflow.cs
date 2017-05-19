@@ -90,11 +90,11 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
                 Logger.Instance.AddEntry("ERROR message= " + ex.Message, Logger.Instance.OutputFilename);
                 Logger.Instance.AddEntry("ERROR type= " + ex, Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry("STACKTRACE = " + ex.StackTrace, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Logger.Instance.OutputFilename);
 
                 throw new ApplicationException(
                     "A fatal error occured when connecting to the instrument data file. Could not create the Run object. Internal error message: " +
-                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+                    ex.Message + Environment.NewLine + Environment.NewLine + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
 
             DeconToolsParameters newParameters;
@@ -108,7 +108,7 @@ namespace DeconTools.Backend.Workflows
             {
                 throw new ApplicationException(
                     "Error loading the parameter file: " +
-                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+                    ex.Message + Environment.NewLine + Environment.NewLine + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
 
             try
@@ -119,7 +119,7 @@ namespace DeconTools.Backend.Workflows
             {
                 throw new ApplicationException(
                     "Error creating the workflow: " +
-                    ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+                    ex.Message + Environment.NewLine + Environment.NewLine + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
 
         }
@@ -362,10 +362,10 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        private void LogError(Exception exception, string simpleErrorMessage)
+        private void LogError(Exception ex, string simpleErrorMessage)
         {
             Logger.Instance.AddEntry(simpleErrorMessage, Logger.Instance.OutputFilename);
-            Logger.Instance.AddEntry(exception.StackTrace, Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Logger.Instance.OutputFilename);
         }
 
         private void LoadPeaks(string userProvidedOutputFolderPath = null)
@@ -544,7 +544,7 @@ namespace DeconTools.Backend.Workflows
             sb.Append("; errorObject details: ");
             sb.Append(ex.Message);
             sb.Append("; ");
-            sb.Append(ex.StackTrace);
+            sb.Append(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
             return sb.ToString();
 
@@ -658,7 +658,7 @@ namespace DeconTools.Backend.Workflows
                     "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
 
                 Logger.Instance.AddEntry(errorMessage, Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry(errorMessage, ex.StackTrace);
+                Logger.Instance.AddEntry(errorMessage, PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
                 throw new DirectoryNotFoundException(
                     "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,

@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Workflows
             var maxRuntimeHours = NewDeconToolsParameters.MiscMSProcessingParameters.MaxHoursPerDataset;
             if (maxRuntimeHours <= 0)
                 maxRuntimeHours = int.MaxValue;
-            
+
             _scanCounter = 1;
             foreach (var scanset in Run.ScanSetCollection.ScanSetList)
             {
@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Workflows
 
                 }
                 ReportProgress();
-                
+
                 _scanCounter++;
 
                 if (DateTime.UtcNow.Subtract(startTime).TotalHours >= maxRuntimeHours)
@@ -76,7 +76,7 @@ namespace DeconTools.Backend.Workflows
             sb.Append("; errorObject details: ");
             sb.Append(ex.Message);
             sb.Append("; ");
-            sb.Append(ex.StackTrace);
+            sb.Append(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
             return sb.ToString();
 
@@ -93,7 +93,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-      
+
 
 
         public override void ReportProgress()
@@ -127,7 +127,7 @@ namespace DeconTools.Backend.Workflows
 
         #endregion
 
-   
+
 
 
 

@@ -136,7 +136,8 @@ namespace DeconTools.Backend.Core
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
         }
 

@@ -45,7 +45,7 @@ namespace DeconConsole
                     catch (Exception exception)
                     {
 
-                        Console.WriteLine("ERROR! Couldn't create output folder. Message: " + exception.Message);
+                        Console.WriteLine("ERROR! Couldn't create output folder (" + outputFolder + "): " + exception.Message);
                         return 3;
 
                     }
@@ -78,6 +78,8 @@ namespace DeconConsole
                 Console.WriteLine("-------------------------------------------- ERROR! -------------------------------------------------");
 
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
+
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("** NOTE: See log file for more details.");

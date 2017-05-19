@@ -66,7 +66,8 @@ namespace DeconTools.Backend.FileIO
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + "; STACKTRACE = " + ex.StackTrace, this.Name), Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + 
+                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), this.Name), Logger.Instance.OutputFilename);
                 throw;
             }
 

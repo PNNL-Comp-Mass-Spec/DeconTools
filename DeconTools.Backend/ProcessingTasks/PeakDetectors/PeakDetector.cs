@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     sb.Append("; additional details: ");
                     sb.Append(ex.Message);
                     sb.Append("; ");
-                    sb.Append(ex.StackTrace);
+                    sb.Append(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
                     if (Logger.Instance.OutputFilename==null)
                     {
