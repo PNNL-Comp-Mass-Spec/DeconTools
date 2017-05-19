@@ -15,17 +15,17 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void checkDeconEngineDllsInAllProjects()
         {
-            string baseFolder = @"..\\..\\..\\..\\..\\DeconTools";
+            var baseFolder = @"..\\..\\..\\..\\..\\DeconTools";
 
-            string deconEngineVersion = "DeconEngineV2, Version=1.0.4724.25548, Culture=neutral, processorArchitecture=x86";
-            string hintPath = @"..\Library\DeconEngineV2.dll";
-            string specificVersion = "False";
+            var deconEngineVersion = "DeconEngineV2, Version=1.0.4724.25548, Culture=neutral, processorArchitecture=x86";
+            var hintPath = @"..\Library\DeconEngineV2.dll";
+            var specificVersion = "False";
 
-            string outputFolder = @"d:\temp\DeconToolsDllTesting";
+            var outputFolder = @"d:\temp\DeconToolsDllTesting";
             if (!Directory.Exists(outputFolder)) Directory.CreateDirectory(outputFolder);
 
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(baseFolder);
+            var directoryInfo = new DirectoryInfo(baseFolder);
             if (directoryInfo.Exists)
             {
                 var fileList=  GetFileList("*.csproj", baseFolder);
@@ -34,8 +34,8 @@ namespace DeconTools.UnitTesting2.Utilities
                 {
                     //Console.WriteLine(file);
 
-                    XDocument xDocument = new XDocument();
-                    XDocument xml = XDocument.Load(File.OpenRead(file));
+                    var xDocument = new XDocument();
+                    var xml = XDocument.Load(File.OpenRead(file));
 
                     //if (!file.Contains("Backend.csproj")) continue;
 
@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting2.Utilities
                     var referenceItems = itemGroup.Descendants().Where(y => y.Name == msbuild + "Reference");
 
                     Console.WriteLine(Path.GetFileName(file));
-                    foreach (XElement referenceItem in referenceItems)
+                    foreach (var referenceItem in referenceItems)
                     {
                         var xAttribute = referenceItem.Attribute("Include");
                         if (xAttribute != null && xAttribute.Value.Contains("DeconEngineV2"))
@@ -123,19 +123,19 @@ namespace DeconTools.UnitTesting2.Utilities
 
         public static IEnumerable<string> GetFileList(string fileSearchPattern, string rootFolderPath)
         {
-            Queue<string> pending = new Queue<string>();
+            var pending = new Queue<string>();
             pending.Enqueue(rootFolderPath);
             string[] tmp;
             while (pending.Count > 0)
             {
                 rootFolderPath = pending.Dequeue();
                 tmp = Directory.GetFiles(rootFolderPath, fileSearchPattern);
-                for (int i = 0; i < tmp.Length; i++)
+                for (var i = 0; i < tmp.Length; i++)
                 {
                     yield return tmp[i];
                 }
                 tmp = Directory.GetDirectories(rootFolderPath);
-                for (int i = 0; i < tmp.Length; i++)
+                for (var i = 0; i < tmp.Length; i++)
                 {
                     pending.Enqueue(tmp[i]);
                 }

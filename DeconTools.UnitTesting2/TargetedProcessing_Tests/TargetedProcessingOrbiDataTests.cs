@@ -31,22 +31,22 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         public void find_targetMassTag_131959Test1()
         {
 
-            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+            var run = new RunFactory().CreateRun(xcaliburTestfile);
 
-            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            var masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             var massTagColl = masstagImporter.Import();
 
             Assert.AreEqual(2719, massTagColl.TargetList.Count);
 
-            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
             //int mtID = 635428;
-            int mtID = 131959;
+            var mtID = 131959;
 
             Task peakChromGen = new PeakChromatogramGenerator(20);
             Task smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
     
-            ChromPeakSelectorParameters basicChromPeakSelParam = new ChromPeakSelectorParameters();
+            var basicChromPeakSelParam = new ChromPeakSelectorParameters();
             basicChromPeakSelParam.NETTolerance = 0.1f;
             basicChromPeakSelParam.PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
             Task chromPeakSel = new BasicChromPeakSelector(basicChromPeakSelParam);
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
             run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
-            TargetBase mt = run.CurrentMassTag;
+            var mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
@@ -94,7 +94,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             targetedFeatureFinder.Execute(run.ResultCollection);
             fitScoreCalc.Execute(run.ResultCollection);
 
-            TargetedResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
+            var massTagResult = run.ResultCollection.MassTagResultList[mt];
             massTagResult.DisplayToConsole();
 
 
@@ -110,22 +110,22 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void find_targetMassTag_635428_wrong_ChromPeakSelected_Test1()
         {
-            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+            var run = new RunFactory().CreateRun(xcaliburTestfile);
 
-            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            var masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             var massTagColl = masstagImporter.Import();
 
             Assert.AreEqual(2719, massTagColl.TargetList.Count);
 
-            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(xcaliburAllPeaksFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
 
-            int mtID = 635428;
+            var mtID = 635428;
             //int mtID = 131959;
 
             Task peakChromGen = new PeakChromatogramGenerator(20);
@@ -134,7 +134,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task peakDet = new DeconTools.Backend.ProcessingTasks.PeakDetectors.ChromPeakDetector(0.5, 1);
             Task msPeakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            ChromPeakSelectorParameters basicChromPeakSelParam = new ChromPeakSelectorParameters();
+            var basicChromPeakSelParam = new ChromPeakSelectorParameters();
             basicChromPeakSelParam.NETTolerance = 0.1f;
             basicChromPeakSelParam.PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
             Task chromPeakSel = new BasicChromPeakSelector(basicChromPeakSelParam);
@@ -143,7 +143,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
             run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
-            TargetBase mt = run.CurrentMassTag;
+            var mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
             Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
@@ -175,7 +175,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             targetedFeatureFinder.Execute(run.ResultCollection);
             fitScoreCalc.Execute(run.ResultCollection);
 
-            TargetedResultBase massTagResult = run.ResultCollection.MassTagResultList[mt];
+            var massTagResult = run.ResultCollection.MassTagResultList[mt];
             //massTagResult.DisplayToConsole();
 
 

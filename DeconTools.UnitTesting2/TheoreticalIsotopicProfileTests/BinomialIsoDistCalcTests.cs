@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void Test1()
         {
-            BionomialExpansionIsotopicProfileCalculator calc = new BionomialExpansionIsotopicProfileCalculator();
+            var calc = new BionomialExpansionIsotopicProfileCalculator();
 
                  calc.LoadElementData();
 

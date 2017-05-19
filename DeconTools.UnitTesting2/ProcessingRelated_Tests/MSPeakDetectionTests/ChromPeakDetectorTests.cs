@@ -15,19 +15,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         public void DetectPeaks1()
         {
             //see https://jira.pnnl.gov/jira/browse/OMCS-634
-            string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
+            var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
             Assert.IsNotNull(xydata);
 
 
-            ChromPeakDetector peakDetector = new ChromPeakDetector();
+            var peakDetector = new ChromPeakDetector();
             peakDetector.PeakToBackgroundRatio = 0.5;
             peakDetector.SignalToNoiseThreshold = 0.5;
             peakDetector.IsDataThresholded = true;
 
 
-            ChromPeakDetectorOld oldChromPeakDetector = new ChromPeakDetectorOld();
+            var oldChromPeakDetector = new ChromPeakDetectorOld();
             oldChromPeakDetector.PeakBackgroundRatio = 0.5;
             oldChromPeakDetector.SigNoise = 0.5;
       
@@ -47,14 +47,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         [Test]
         public void ExecutePeakDetectorTest1()
         {
-            string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
+            var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
             Assert.IsNotNull(xydata);
 
             Run run = new ConcreteXYDataRun(xydata.Xvalues, xydata.Yvalues);
 
-            ChromPeakDetector peakDetector = new ChromPeakDetector();
+            var peakDetector = new ChromPeakDetector();
             peakDetector.PeakToBackgroundRatio = 0.5;
             peakDetector.SignalToNoiseThreshold = 0.5;
             peakDetector.IsDataThresholded = true;

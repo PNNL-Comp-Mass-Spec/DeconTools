@@ -20,11 +20,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -44,10 +44,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 1.3;
             peakDetector.SignalToNoiseThreshold = 2;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
@@ -74,7 +74,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             expectedPeaks.Add(new Peak(479.754, 198565.2F, 0.0071F));
             expectedPeaks.Add(new Peak(935.447, 198530.2F, 0.0206F));
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("Looking for " + expectedPeaks.Count + " expected peaks" + Environment.NewLine);
             sb.Append("Index\tXVal    \tYVal    \tWidth" + Environment.NewLine);
@@ -82,12 +82,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             // Look for each expected peak in the actual peaks
             foreach (var expectedPeak in (from peak in expectedPeaks orderby peak.XValue select peak))
             {
-                bool found = false;
+                var found = false;
                 foreach (var peak in peaks)
                 {
                     if (Math.Abs(expectedPeak.XValue - peak.XValue) < 0.01)
                     {
-                        bool widthIsDifferent = Math.Abs(expectedPeak.Width - peak.Width) > 0.001;
+                        var widthIsDifferent = Math.Abs(expectedPeak.Width - peak.Width) > 0.001;
 
                         sb.Append(peak.DataIndex + "\t" + peak.XValue.ToString("0.000").PadRight(8) + "\t" + peak.Height.ToString("0").PadRight(8) + "\t" + peak.Width.ToString("0.0000") + Environment.NewLine);
                         found = true;
@@ -117,10 +117,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 1.3;
             peakDetector.SignalToNoiseThreshold = 2;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
@@ -140,17 +140,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 1.3;
             peakDetector.SignalToNoiseThreshold = 2;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -167,26 +167,26 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 1.3;
             peakDetector.SignalToNoiseThreshold = 2;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
 
             msgen.Execute(run.ResultCollection);
 
-            double mzStart = 585.30;
+            var mzStart = 585.30;
 
-            double mzStop = 585.35;
+            var mzStop = 585.35;
 
 
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, mzStart, mzStop);
@@ -205,26 +205,26 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6005);
+            var scan = new ScanSet(6005);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2();
             peakDetector.PeakToBackgroundRatio = 1.3;
             peakDetector.SignalToNoiseThreshold = 2;
             peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
             peakDetector.IsDataThresholded = true;
 
 
-            DeconToolsPeakDetectorV2 oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
 
             msgen.Execute(run.ResultCollection);
 
-            double mzStart = 692.8;
+            var mzStart = 692.8;
 
-            double mzStop = 693.2;
+            var mzStop = 693.2;
 
 
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, mzStart, mzStop);
@@ -240,12 +240,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         [Test]
         public void PeakDetectorOnCentroidedDataTest1()
         {
-            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6006);   //this is a centroided MS2 scan
+            var scan = new ScanSet(6006);   //this is a centroided MS2 scan
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.RawDataType = Globals.RawDataType.Centroided;
             peakDetector.IsDataThresholded = true;
@@ -269,12 +269,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         [Test]
         public void PeakDetectorOnCentroidedDataTest2()
         {
-            Run run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scan = new ScanSet(6006);   //this is a MS2 scan
+            var scan = new ScanSet(6006);   //this is a MS2 scan
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             
             // Note that setting the PeakFitType to Apex will not matter since RawDataType is Centroided
             // It would only matter if the RawDataType was Profile

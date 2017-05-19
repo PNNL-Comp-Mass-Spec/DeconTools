@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest1()
         {
-            string formula = @"H(-3) N(-1)";
+            var formula = @"H(-3) N(-1)";
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
             Assert.AreEqual(-3, formulaDictionary["H"]);
@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2()
         {
-            string formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = @"H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2A()
         {
-            string formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = @"H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2B()
         {
-            string formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = @"H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
 
@@ -85,7 +85,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest3()
         {
-            string formula = @"H32 C34 N4 O4 Fe";
+            var formula = @"H32 C34 N4 O4 Fe";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -98,7 +98,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest4()
         {
-            string formula = @"H32C34N4O4Fe";
+            var formula = @"H32C34N4O4Fe";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -112,7 +112,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void ParseUnimodStyleTest5()
         {
-            string formula = "H(-3) 2H(3) C(-1) 13C O 15N(10)";
+            var formula = "H(-3) 2H(3) C(-1) 13C O 15N(10)";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -127,7 +127,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void ParseUnimodStyleTest5B()
         {
-            string formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
+            var formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -141,7 +141,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void ParseUnimodStyleTest5C()
         {
-            string formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
+            var formula = "H(-3) 2H(3) C(-1.5) 13C O 15N(10.343)";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
 
@@ -156,12 +156,12 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void addUnimodFormulaTest1()
         {
-            string testPeptide = "SAMPLER";
+            var testPeptide = "SAMPLER";
 
-            PeptideUtils peptideUtils = new PeptideUtils();
-            string baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var peptideUtils = new PeptideUtils();
+            var baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-            string mod = "H3 C2 N O";
+            var mod = "H3 C2 N O";
             var modFormula = EmpiricalFormulaUtilities.AddFormula(baseFormula, mod);
 
             Console.WriteLine("Unmodified peptide= " + baseFormula);
@@ -174,14 +174,14 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void addUnimodFormulaTest2()
         {
-            string testPeptide = "SAMPLER";
+            var testPeptide = "SAMPLER";
 
-            PeptideUtils peptideUtils = new PeptideUtils();
-            string baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var peptideUtils = new PeptideUtils();
+            var baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
             
 
-            string mod = "H(-3) N(-1)";
+            var mod = "H(-3) N(-1)";
             var modFormula = EmpiricalFormulaUtilities.AddFormula(baseFormula, mod);
 
             Console.WriteLine("Unmodified peptide= " + baseFormula);
@@ -196,11 +196,11 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void GetMonoisotopicMassFromEmpiricalFormulaTest1()
         {
-            string testPeptide = "SAMPLER";
-            PeptideUtils peptideUtils = new PeptideUtils();
-            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var testPeptide = "SAMPLER";
+            var peptideUtils = new PeptideUtils();
+            var formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-            double monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            var monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
 
             Assert.IsTrue(monomass > 0);
             Console.WriteLine("SAMPLER monoisotopic mass= \t" + monomass);
@@ -211,8 +211,8 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void GetMonoisotopicMassForEmpiricalFormulaWithIronTest1()
         {
-            string formula = "C145 H208 N39 O40 S2 Fe1";
-            double monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            var formula = "C145 H208 N39 O40 S2 Fe1";
+            var monomass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
 
             Assert.IsTrue(monomass > 0);
             Console.WriteLine("monoisotopic mass= \t" + monomass);
@@ -222,17 +222,17 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void AddAcetylationTest1()
         {
-            string testPeptide = "SAMPLER";
-            PeptideUtils peptideUtils = new PeptideUtils();
-            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var testPeptide = "SAMPLER";
+            var peptideUtils = new PeptideUtils();
+            var formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-            string acetylationFormula = "C2H2O";
+            var acetylationFormula = "C2H2O";
 
-            string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, acetylationFormula);
+            var empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, acetylationFormula);
 
-            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
-            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            var massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            var massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            var diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
             Console.WriteLine(formula + "\t" + massUnmodified);
             Console.WriteLine(empiricalFormula + "\t" + massModified);
@@ -247,15 +247,15 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             const string testPeptide = "SAMPLER";
             var peptideUtils = new PeptideUtils();
-            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
             const string pyroglutamateMod = "H3N1";
 
-            string empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(formula, pyroglutamateMod);
+            var empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(formula, pyroglutamateMod);
 
-            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
-            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            var massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            var massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            var diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
             Console.WriteLine(formula + "\t" + massUnmodified);
             Console.WriteLine(empiricalFormula + "\t" + massModified);
@@ -269,15 +269,15 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             const string testPeptide = "SAMPLER";
             var peptideUtils = new PeptideUtils();
-            string formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
+            var formula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
             const string phosphorylationMod = "HPO3";
 
-            string empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, phosphorylationMod);
+            var empiricalFormula = EmpiricalFormulaUtilities.AddFormula(formula, phosphorylationMod);
 
-            double massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
-            double massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
-            double diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
+            var massUnmodified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(formula);
+            var massModified = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            var diff = Math.Round(massModified - massUnmodified, 1, MidpointRounding.AwayFromZero);
 
             Console.WriteLine(formula + "\t" + massUnmodified);
             Console.WriteLine(empiricalFormula + "\t" + massModified);

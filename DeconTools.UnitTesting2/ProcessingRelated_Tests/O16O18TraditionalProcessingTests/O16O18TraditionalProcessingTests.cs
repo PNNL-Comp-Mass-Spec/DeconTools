@@ -15,12 +15,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
         [Test]
         public void Test1()
         {
-            string rawfilename = @"D:\Data\O16O18\GlueGrant\GG_MO_Trauma_374020_20May11_Sphinx_11-03-28.RAW";
-            string exportedIsos = Path.Combine(Path.GetDirectoryName(rawfilename),  Path.GetFileName(rawfilename).Replace(".RAW", "_test_isos.csv"));
+            var rawfilename = @"D:\Data\O16O18\GlueGrant\GG_MO_Trauma_374020_20May11_Sphinx_11-03-28.RAW";
+            var exportedIsos = Path.Combine(Path.GetDirectoryName(rawfilename),  Path.GetFileName(rawfilename).Replace(".RAW", "_test_isos.csv"));
 
             if (File.Exists(exportedIsos)) File.Delete(exportedIsos);
 
-            Run run = new RunFactory().CreateRun(rawfilename);
+            var run = new RunFactory().CreateRun(rawfilename);
 
             run.ResultCollection.ResultType = Backend.Globals.ResultType.O16O18_TRADITIONAL_RESULT;
 
@@ -29,16 +29,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             run.CurrentScanSet = run.ScanSetCollection.ScanSetList[0];
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2();
+            var peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 1.3;
             peakDet.SignalToNoiseThreshold = 2;
 
-            HornDeconvolutor decon = new HornDeconvolutor();
+            var decon = new HornDeconvolutor();
             decon.IsO16O18Data = true;
 
-            O16O18PeakDataAppender appender = new O16O18PeakDataAppender();
+            var appender = new O16O18PeakDataAppender();
 
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Backend.Globals.ExporterType.Text, exportedIsos);
 
@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
             decon.Execute(run.ResultCollection);
             appender.Execute(run.ResultCollection);
 
-            O16O18IsosResult testResult = (O16O18IsosResult)run.ResultCollection.ResultList[1];
+            var testResult = (O16O18IsosResult)run.ResultCollection.ResultList[1];
 
             Assert.AreEqual(DeconTools.Backend.Globals.ResultType.O16O18_TRADITIONAL_RESULT, run.ResultCollection.ResultType);
             Assert.AreEqual(5905390, testResult.IsotopicProfile.GetMonoAbundance());

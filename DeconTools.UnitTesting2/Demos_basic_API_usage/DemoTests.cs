@@ -5,6 +5,7 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
+using ThermoRawFileReader;
 
 namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 {
@@ -16,18 +17,18 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         {
             //Create the run
             var runFactory = new RunFactory();
-            Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
             //Create the task
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            
-            //Create the target scan list (MS1 scans from 6005 - 6020). 
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+
+            //Create the target scan list (MS1 scans from 6005 - 6020).
             run.ScanSetCollection .Create(run, 6005, 6020, 1, 1);
-            
 
 
-            //iterate over each scan in the target collection get the mass spectrum 
+
+            //iterate over each scan in the target collection get the mass spectrum
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
                 Console.WriteLine("Working on Scan " + scan.PrimaryScanNumber);
@@ -48,22 +49,22 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         public void getMSMSDataTest1()
         {
             //Create the run
-            RunFactory runFactory = new RunFactory();
-            Run run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var runFactory = new RunFactory();
+            var run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             //Create the task
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakdetector = new DeconToolsPeakDetectorV2();
 
-            int startScan = 6000;
-            int stopScan = 7000;
+            var startScan = 6000;
+            var stopScan = 7000;
 
-            for (int i = startScan; i < stopScan; i++)
+            for (var i = startScan; i < stopScan; i++)
             {
                 if (run.GetMSLevel(i) == 2)
                 {
-                    ScanSet scanset = new ScanSet(i);
+                    var scanset = new ScanSet(i);
                     run.CurrentScanSet = scanset;
                     msgen.Execute(run.ResultCollection);
                     peakdetector.Execute(run.ResultCollection);
@@ -81,23 +82,22 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         [Test]
         public void tempGetMSMSDataTest2()
         {
-            DeconToolsV2.Readers.clsRawData run = new DeconToolsV2.Readers.clsRawData(FileRefs.RawDataMSFiles.OrbitrapStdFile1, DeconToolsV2.Readers.FileType.FINNIGAN);
+            var reader = new ThermoRawFileReader.XRawFileIO(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int startScan = 6000;
-            int stopScan = 7000;
+            var startScan = 6000;
+            var stopScan = 7000;
 
-            for (int i = startScan; i < stopScan; i++)
+            for (var i = startScan; i < stopScan; i++)
             {
-                string scanInfo = run.GetScanDescription(i);
-                int scanLevel = run.GetMSLevel(i);
+                ThermoRawFileReader.clsScanInfo scanInfo;
+                var success = reader.GetScanInfo(i, out scanInfo);
 
                 Console.Write("Working on Scan " + i);
-                Console.WriteLine("; Scan info = " + scanInfo);
+                Console.WriteLine("; Scan info = " + scanInfo.ToString());
 
             }
 
 
-            
         }
 
     }

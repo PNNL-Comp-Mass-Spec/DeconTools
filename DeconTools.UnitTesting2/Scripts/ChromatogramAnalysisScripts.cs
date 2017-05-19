@@ -25,27 +25,27 @@ namespace DeconTools.UnitTesting2.Scripts
         [Test]
         public void ChromAnalysisForAllSelectedPrecursors()
         {
-            bool isDataSmoothed = true;
+            var isDataSmoothed = true;
 
-            int numPointsInSmoothing = 9;
+            var numPointsInSmoothing = 9;
             var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(numPointsInSmoothing, 2);
 
             var graphGenerator = new BasicGraphControl();
 
-            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            Run run = new RunFactory().CreateRun(thermoFile1);
+            var thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var run = new RunFactory().CreateRun(thermoFile1);
 
-            string outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
+            var outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
             if (!Directory.Exists(outputFolderForChromGraphs)) Directory.CreateDirectory(outputFolderForChromGraphs);
 
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
-            int scanStart = run.MinLCScan;
-            int scanStop = run.MaxLCScan;
+            var scanSetCollection = new ScanSetCollection();
+            var scanStart = run.MinLCScan;
+            var scanStop = run.MaxLCScan;
 
             scanSetCollection.Create(run,scanStart,scanStop,1, 1, true);
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (!File.Exists(expectedPeaksFile))
             {
                 var peakCreatorParams = new PeakDetectAndExportWorkflowParameters();
@@ -55,20 +55,20 @@ namespace DeconTools.UnitTesting2.Scripts
                 peakCreator.Execute();
             }
 
-            PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
+            var peakImporter = new PeakImporterFromText(expectedPeaksFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             double ppmTol = 50;
             var peakChromatogramGenerator = new PeakChromatogramGenerator(ppmTol, Globals.ChromatogramGeneratorMode.MZ_BASED);
             var scansetList = scanSetCollection.ScanSetList;
 
-            int scanCounter = 0;
-            int currentBin = 0;
+            var scanCounter = 0;
+            var currentBin = 0;
             foreach (var scanSet in scansetList)
             {
                 run.CurrentScanSet = scanSet;
 
-                int currentScanLevel = run.GetMSLevel(scanSet.PrimaryScanNumber);
+                var currentScanLevel = run.GetMSLevel(scanSet.PrimaryScanNumber);
 
 
                 if (currentScanLevel > 1)
@@ -78,9 +78,9 @@ namespace DeconTools.UnitTesting2.Scripts
 
                     var scanInfo = run.GetScanInfo(scanSet.PrimaryScanNumber);
 
-                    int scanWindowSize = 400;
-                    int startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
-                    int stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
+                    var scanWindowSize = 400;
+                    var startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
+                    var stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
 
                     run.XYData=   peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
 
@@ -126,11 +126,11 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
 
                     }
-                    string currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
+                    var currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
                     if (!Directory.Exists(currentOutputFolder)) Directory.CreateDirectory(currentOutputFolder);
 
 
-                    string baseFilename =  Path.Combine(currentOutputFolder,
+                    var baseFilename =  Path.Combine(currentOutputFolder,
                                                         scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ);
 
                     string outputGraphFilename;
@@ -165,19 +165,19 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var graphGenerator = new BasicGraphControl();
 
-            string thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            Run run = new RunFactory().CreateRun(thermoFile1);
+            var thermoFile1 = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var run = new RunFactory().CreateRun(thermoFile1);
 
-            string outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
+            var outputFolderForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
             if (!Directory.Exists(outputFolderForChromGraphs)) Directory.CreateDirectory(outputFolderForChromGraphs);
 
 
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
+            var scanSetCollection = new ScanSetCollection();
             scanSetCollection.Create(run, 1, 1, true);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
 
 
             if (!File.Exists(expectedPeaksFile))
@@ -190,14 +190,14 @@ namespace DeconTools.UnitTesting2.Scripts
 
             }
 
-            PeakImporterFromText peakImporter = new PeakImporterFromText(expectedPeaksFile);
+            var peakImporter = new PeakImporterFromText(expectedPeaksFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
             double ppmTol = 50;
             var peakChromatogramGenerator = new PeakChromatogramGenerator(ppmTol, Globals.ChromatogramGeneratorMode.MZ_BASED);
 
-            int numPointsInSmoothing=9;
+            var numPointsInSmoothing=9;
             var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(numPointsInSmoothing,2);
 
 
@@ -209,13 +209,13 @@ namespace DeconTools.UnitTesting2.Scripts
             var scansetList = scanSetCollection.ScanSetList;
 
 
-            int scanCounter = 0;
-            int currentBin = 0;
+            var scanCounter = 0;
+            var currentBin = 0;
             foreach (var scanSet in scansetList)
             {
                 run.CurrentScanSet = scanSet;
 
-                int currentScanLevel = run.GetMSLevel(scanSet.PrimaryScanNumber);
+                var currentScanLevel = run.GetMSLevel(scanSet.PrimaryScanNumber);
 
 
                 if (currentScanLevel > 1)
@@ -226,9 +226,9 @@ namespace DeconTools.UnitTesting2.Scripts
                     var scanInfo = run.GetScanInfo(scanSet.PrimaryScanNumber);
 
 
-                    int scanWindowSize = 400;
-                    int startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
-                    int stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
+                    var scanWindowSize = 400;
+                    var startScan = scanSet.PrimaryScanNumber - scanWindowSize / 2;
+                    var stopScan = scanSet.PrimaryScanNumber + scanWindowSize / 2;
 
                     run.XYData=   peakChromatogramGenerator.GenerateChromatogram(run, startScan, stopScan, precursorInfo.PrecursorMZ, ppmTol);
 
@@ -286,11 +286,11 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
 
                     }
-                    string currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
+                    var currentOutputFolder = Path.Combine(outputFolderForChromGraphs, "bin" + currentBin);
                     if (!Directory.Exists(currentOutputFolder)) Directory.CreateDirectory(currentOutputFolder);
 
 
-                    string outputGraphFilename = Path.Combine(currentOutputFolder,
+                    var outputGraphFilename = Path.Combine(currentOutputFolder,
                                                               scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png");
                                                               
                     graphGenerator.SaveGraph(outputGraphFilename);

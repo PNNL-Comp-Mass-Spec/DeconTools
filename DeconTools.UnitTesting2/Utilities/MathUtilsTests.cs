@@ -10,7 +10,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void MedianTest1()
         {
-            List<double> testVals = new List<double>();
+            var testVals = new List<double>();
 
             var median=  MathUtils.GetMedian(testVals);
             Assert.AreEqual(double.NaN, median);

@@ -11,8 +11,8 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void Get3DElutionTest1()
         {
-            string peaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string orbiFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var orbiFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             var run = RunUtilities.CreateAndLoadPeaks(orbiFile, peaksFile);
 
@@ -21,8 +21,8 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var extractor = new IsotopicProfileElutionExtractor();
 
-            int minScan = 5900;
-            int maxScan = 6300;
+            var minScan = 5900;
+            var maxScan = 6300;
             double minMZ = 749;
             double maxMZ = 754;
 
@@ -40,15 +40,15 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void Get3DElutionAndExportToFileTest1()
         {
-            string peaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            string orbiFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var peaksFile = FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
+            var orbiFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
 
 
 
             var run = RunUtilities.CreateAndLoadPeaks(orbiFile, peaksFile);
 
-            string outputFile = Path.Combine(run.DataSetPath, run.DatasetName + "_sample3DelutionProfile.txt");
+            var outputFile = Path.Combine(run.DataSetPath, run.DatasetName + "_sample3DelutionProfile.txt");
 
 
             Assert.IsNotNull(run);
@@ -56,8 +56,8 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var extractor = new IsotopicProfileElutionExtractor();
 
-            int minScan = 5900;
-            int maxScan = 6300;
+            var minScan = 5900;
+            var maxScan = 6300;
             double minMZ = 749;
             double maxMZ = 754;
 

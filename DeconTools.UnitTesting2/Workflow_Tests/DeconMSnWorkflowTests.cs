@@ -51,14 +51,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void WorkflowTestUsingParameterFile1()
         {
-            string parameterFile =
+            var parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\ParameterFiles\DeconMSn_LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_scans6000_6050.xml";
 
-            string rawdataFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var rawdataFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
-            string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\Output";
+            var outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\Output";
 
-            string datasetName= RunUtilities.GetDatasetName(rawdataFile);
+            var datasetName= RunUtilities.GetDatasetName(rawdataFile);
 
             var expectedResultsFile1 = Path.Combine(outputFolder, datasetName + ".mgf");
             var expectedResultsFile2 = Path.Combine(outputFolder, datasetName + "_DeconMSn_log.txt");
@@ -81,10 +81,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void ProblemTesting()
         {
-            string parameterFile =
+            var parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\ParameterFiles\DeconMSn_LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_scans6000_6050.xml";
 
-            string rawdataFile = @"D:\Data\DeconMSn_testing\CPTAC_CompRef_test_iTRAQ_NiNTA_08_17Jan13_Frodo_12-12-50.raw";
+            var rawdataFile = @"D:\Data\DeconMSn_testing\CPTAC_CompRef_test_iTRAQ_NiNTA_08_17Jan13_Frodo_12-12-50.raw";
             
             var workflow = ScanBasedWorkflow.CreateWorkflow(rawdataFile, parameterFile);
             workflow.Execute();
@@ -95,7 +95,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void LowIntensityButGoodFeatureTest1()
         {
-            string rawDataFile = @"D:\Data\DeconMSn_testing\QC_Shew_13_01_pt5_b_23Jan13_Cougar_12-02-27.raw";
+            var rawDataFile = @"D:\Data\DeconMSn_testing\QC_Shew_13_01_pt5_b_23Jan13_Cougar_12-02-27.raw";
 
 
             var parameters = new DeconToolsParameters();
@@ -125,15 +125,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void WorkflowTestUsingParameterFile_Sum5_Test1()
         {
-            string parameterFile =
+            var parameterFile =
                 @"C:\Users\d3x720\Documents\Data\QCShew\DeconMSn_LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_LCSum5.xml";
 
-            string localTestFile =
+            var localTestFile =
                 @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
 
 
-            string outputFolder = @"C:\Users\d3x720\Documents\Data\QCShew\Output";
+            var outputFolder = @"C:\Users\d3x720\Documents\Data\QCShew\Output";
 
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(localTestFile, parameterFile, outputFolder);
@@ -147,7 +147,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void WorkflowTesting2_SumLC5()
         {
 
-            string localTestFile =
+            var localTestFile =
                 @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
 

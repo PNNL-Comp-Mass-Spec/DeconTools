@@ -11,8 +11,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void importPeaksFromOrbitrapFileTest1()
         {
-            List<MSPeakResult> mspeaks = new List<MSPeakResult>();
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var mspeaks = new List<MSPeakResult>();
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(mspeaks);
 
             Assert.AreEqual(105540, mspeaks.Count);
@@ -22,16 +22,16 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void importPeaksFromUIMFFileTest1()     //NOTE:  2012_11_15 - The importer imports UIMF peaks as if they were orbi peaks.  All IMS scan info is ignored
         {
-            string testPeakFile =
+            var testPeakFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_O16O18Testing\RawData\Alz_O18_Run03_7Sep12_Cheetah_11-12-23_peaks.txt";
 
-            List<MSPeakResult> mspeaks = new List<MSPeakResult>();
+            var mspeaks = new List<MSPeakResult>();
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(testPeakFile);
             peakImporter.ImportPeaks(mspeaks);
 
             Assert.AreEqual(202928, mspeaks.Count);
 
-            MSPeakResult testResult = mspeaks[0];
+            var testResult = mspeaks[0];
             Assert.AreEqual(1, testResult.PeakID);
             Assert.AreEqual(-1, testResult.FrameNum);
             Assert.AreEqual(1, testResult.Scan_num);

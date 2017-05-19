@@ -16,15 +16,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void test1()
         {
-            TargetCollection mtc = new TargetCollection();
+            var mtc = new TargetCollection();
 
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
+            var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
             mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(101, mtc.TargetList.Count);
 
-            PeptideTarget testMassTag = (PeptideTarget)mtc.TargetList[0];
+            var testMassTag = (PeptideTarget)mtc.TargetList[0];
 
 
             Assert.AreEqual("AVAFGEALRPEFK", testMassTag.Code);
@@ -52,7 +52,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(1868, mtc.TargetList.Count);
 
-            PeptideTarget testMassTag = (PeptideTarget)mtc.TargetList[1021];
+            var testMassTag = (PeptideTarget)mtc.TargetList[1021];
             Assert.AreEqual(testMassTag.EmpiricalFormula, "C56H82N10O13");
             Assert.AreEqual(1, testMassTag.ModCount);
             Assert.AreEqual(testMassTag.ModDescription, "NH3_Loss:1");
@@ -66,7 +66,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void ImportPeptidesContainingOnlySequenceInfo()
         {
-            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_MinimalInfo1.txt";
+            var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_MinimalInfo1.txt";
 
             var mtc = new TargetCollection();
 
@@ -90,7 +90,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void ImportTargetsContainingOnlyEmpiricalFormula()
         {
-            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\QCShew_Bin10_Top10_empiricalFormula_NET_only.txt";
+            var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\QCShew_Bin10_Top10_empiricalFormula_NET_only.txt";
 
             var mtc = new TargetCollection();
 
@@ -109,7 +109,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         public void ImportTargetsContainingEmpiricalFormulaAndScanNumber()
         {
 
-            string testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_EmpiricalFormula_and_scans.txt";
+            var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_EmpiricalFormula_and_scans.txt";
             var mtc = new TargetCollection();
 
             var massTagImporter = new MassTagFromTextFileImporter(testfile);

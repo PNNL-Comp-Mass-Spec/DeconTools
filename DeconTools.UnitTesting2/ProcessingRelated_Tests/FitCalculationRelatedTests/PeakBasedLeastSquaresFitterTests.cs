@@ -24,7 +24,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
       [Test]
         public void ComparePeakFitterVsAreaFitter()
         {
-            string massTagFile1 = Path.Combine(FileRefs.RawDataBasePath, "TargetedWorkflowStandards", "QCShew_peptidesWithObsCountGreaterThan1000.txt");
+            var massTagFile1 = Path.Combine(FileRefs.RawDataBasePath, "TargetedWorkflowStandards", "QCShew_peptidesWithObsCountGreaterThan1000.txt");
 
             //load target 
             var masstagImporter = new MassTagFromTextFileImporter(massTagFile1);
@@ -54,17 +54,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
 
 
-            XYData theorXYdata =
+            var theorXYdata =
                 TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData(selectedTarget.IsotopicProfile,
                                                                                     peakForFWHM.Width);
 
             theorXYdata.NormalizeYData();
 
-            AreaFitter areaFitter = new AreaFitter();
+            var areaFitter = new AreaFitter();
             var areaFitScore=  areaFitter.GetFit(theorXYdata, run.XYData, 0.1);
 
 
-            PeakLeastSquaresFitter peakLeastSquaresFitter = new PeakLeastSquaresFitter();
+            var peakLeastSquaresFitter = new PeakLeastSquaresFitter();
             var peakBasedFitScore = peakLeastSquaresFitter.GetFit(new List<Peak>(selectedTarget.IsotopicProfile.Peaklist), run.PeakList, 0.1, 25);
 
 

@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void TempTest1()
         {
-            using (XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
+            using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
 
                 run.GetTuneData();
@@ -64,9 +64,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getNumSpectraTest1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int numScans= run.GetNumMSScans();
+            var numScans= run.GetNumMSScans();
             Assert.AreEqual(18505, numScans);
             Assert.AreEqual(1, run.MinLCScan);
             Assert.AreEqual(18505, run.MaxLCScan);
@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void checkDataSetNamesAndPathsTest()
         {
-            string testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun2(testFile);
 
@@ -88,7 +88,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void initializeVelosOrbiFile_Test1()
         {
-            string testFile = FileRefs.RawDataMSFiles.VOrbiFile1;
+            var testFile = FileRefs.RawDataMSFiles.VOrbiFile1;
 
             Run run = new XCaliburRun2(testFile);
 
@@ -100,9 +100,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public  void GetIonInjectionTimeTest1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int scan = 6005;
+            var scan = 6005;
             var ionInjectionTime = run.GetIonInjectionTimeInMilliseconds(scan);
 
             Assert.AreEqual(2.84m, (decimal) Math.Round(ionInjectionTime, 2));
@@ -115,9 +115,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetMS2IsolationWidthTest1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int scan = 6006;
+            var scan = 6006;
             var isolationWidth = run.GetMS2IsolationWidth(scan);
 
             Assert.AreEqual(3.0m, (decimal)Math.Round(isolationWidth,1));
@@ -130,7 +130,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getSpectrum_Test1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var xydata=  run.GetMassSpectrum(new Backend.Core.ScanSet(6005));
 
@@ -145,10 +145,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getSummedSpectrum_Test1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 
-            ScanSet scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
+            var scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
             var xydata= run.GetMassSpectrum(scanset);
             Assert.IsTrue(xydata.Xvalues.Length > 1000);
@@ -161,17 +161,17 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getSummedSpectrum_SpeedTest1()
         {
-            using (XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
+            using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
 
-                ScanSet scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
+                var scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
-                int numIterations = 50;
+                var numIterations = 50;
 
-                Stopwatch watch = new Stopwatch();
-                List<long> timeStats = new List<long>();
+                var watch = new Stopwatch();
+                var timeStats = new List<long>();
 
-                for (int i = 0; i < numIterations; i++)
+                for (var i = 0; i < numIterations; i++)
                 {
                     watch.Start();
                     run.GetMassSpectrum(scanset);
@@ -192,7 +192,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetMSLevel_Test1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             Assert.AreEqual(1, run.GetMSLevel(6005));
             Assert.AreEqual(2, run.GetMSLevel(6006));
@@ -209,11 +209,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int msmsScanNum1 = 6000;
+            var msmsScanNum1 = 6000;
 
-            ScanSet scan = new ScanSet(msmsScanNum1);
+            var scan = new ScanSet(msmsScanNum1);
 
-            string scanInfoString = run.GetScanInfo(scan.PrimaryScanNumber);
+            var scanInfoString = run.GetScanInfo(scan.PrimaryScanNumber);
             Assert.AreEqual(@"ITMS + c NSI d Full ms2 543.80@cid35.00 [135.00-2000.00]", scanInfoString);
 
         }
@@ -221,7 +221,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetPrecursorInfo()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             
             PrecursorInfo precursor;
@@ -247,9 +247,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetTICFromInstrumentInfoTest1()
         {
-            XCaliburRun2 run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int scan = 6005;
+            var scan = 6005;
 
            var ticIntensity =   run.GetTICFromInstrumentInfo(scan);
 

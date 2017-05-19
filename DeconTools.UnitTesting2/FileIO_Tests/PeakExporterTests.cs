@@ -17,20 +17,20 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void ExportPeakDataToTextFileTest1()
         {
-            string outputFile = FileRefs.OutputFolderPath + "ExportPeakDataToTextFileTest1.txt";
+            var outputFile = FileRefs.OutputFolderPath + "ExportPeakDataToTextFileTest1.txt";
 
             if (File.Exists(outputFile))
             {
                 File.Delete(outputFile);
             }
 
-            Run run = TestDataCreationUtilities.CreatePeakDataFromStandardOrbitrapData();
+            var run = TestDataCreationUtilities.CreatePeakDataFromStandardOrbitrapData();
             NUnit.Framework.Assume.That(5608==run.ResultCollection.MSPeakResultList.Count);
 
-            PeakListTextExporter peakExporter = new PeakListTextExporter(run.MSFileType, outputFile);
+            var peakExporter = new PeakListTextExporter(run.MSFileType, outputFile);
             peakExporter.WriteOutPeaks(run.ResultCollection.MSPeakResultList);
 
-            FileInfo fi=new FileInfo(outputFile);
+            var fi=new FileInfo(outputFile);
 
             Assert.AreEqual(true, fi.Exists);
             Assert.AreNotEqual(0, fi.Length);

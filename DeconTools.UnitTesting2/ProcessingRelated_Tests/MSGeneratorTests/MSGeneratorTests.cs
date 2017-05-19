@@ -21,11 +21,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
         [Test]
         public void MSGeneratorOnOrbiTest1()
         {
-            string testfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            Run run = new RunFactory().CreateRun(testfile);
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var testfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+            var run = new RunFactory().CreateRun(testfile);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            int testLCScan=6005;
+            var testLCScan=6005;
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
             var xydata= msgen.GenerateMS(run, scanSet);
@@ -37,10 +37,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
         [Test]
         public void MSGeneratorOnUIMFTest1()
         {
-            string uimfFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
+            var uimfFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
 
-            Run run = new RunFactory().CreateRun(uimfFile);
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var run = new RunFactory().CreateRun(uimfFile);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
@@ -50,11 +50,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
 
-            int testLCScan = 500;
-            int testIMSScan = 120;
-            int numIMSScanSummed = 7;
-            int lowerIMSScan = testIMSScan - (numIMSScanSummed - 1) / 2;
-            int upperIMSScan = testIMSScan + (numIMSScanSummed - 1) / 2;
+            var testLCScan = 500;
+            var testIMSScan = 120;
+            var numIMSScanSummed = 7;
+            var lowerIMSScan = testIMSScan - (numIMSScanSummed - 1) / 2;
+            var upperIMSScan = testIMSScan + (numIMSScanSummed - 1) / 2;
 
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 

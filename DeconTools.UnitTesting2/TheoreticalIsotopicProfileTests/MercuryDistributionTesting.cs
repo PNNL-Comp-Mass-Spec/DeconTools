@@ -31,11 +31,11 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             var timeVals = new List<long>();
 
-            int numIterations = 100;
-            Stopwatch sw = new Stopwatch();
+            var numIterations = 100;
+            var sw = new Stopwatch();
             sw.Start();
 
-            for (int i = 0; i < numIterations; i++)
+            for (var i = 0; i < numIterations; i++)
             {
                 iso = mercury.GetIsotopePattern("C66H114N20O21S2", 2);
             }

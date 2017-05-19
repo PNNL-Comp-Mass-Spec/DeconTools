@@ -13,7 +13,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void importDataFromOldDatFileTest1()
         {
-            string testFile = FileRefs.PeakDataFiles.OrbitrapOldDecon2LSPeakFile;
+            var testFile = FileRefs.PeakDataFiles.OrbitrapOldDecon2LSPeakFile;
 
             List<MSPeakResult>msPeakList=new List<MSPeakResult>();
 
@@ -22,9 +22,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(1934153, msPeakList.Count);
 
-            List<MSPeakResult>peaksForScan6005 = (from p in msPeakList where p.Scan_num==6005 select p).ToList();
+            var peaksForScan6005 = (from p in msPeakList where p.Scan_num==6005 select p).ToList();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var peak in peaksForScan6005)
             {
                 sb.Append(peak.PeakID);

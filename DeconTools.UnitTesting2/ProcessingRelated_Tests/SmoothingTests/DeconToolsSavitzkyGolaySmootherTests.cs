@@ -43,11 +43,11 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         [Test]
         public void SmoothWithOldDeconToolsSmootherTest1()
         {
-            string sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
+            var sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
 
             Assert.IsTrue(File.Exists(sampleXYDataFile));
 
-            SavitzkyGolaySmoother smoother = new SavitzkyGolaySmoother(3, 3, true);
+            var smoother = new SavitzkyGolaySmoother(3, 3, true);
 
             var xydata =TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
             var smoothedXYData = smoother.Smooth(xydata);
@@ -56,9 +56,9 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             Assert.AreEqual(xydata.Xvalues.Length , smoothedXYData.Xvalues.Length);
 
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
 
                 sb.Append(xydata.Xvalues[i] + "\t" + xydata.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);
@@ -75,7 +75,7 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         [Test]
         public void SmoothWithNewDeconToolsSmootherTest1()
         {
-            string sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
+            var sampleXYDataFile = Path.Combine(FileRefs.TestFileBasePath, "sampleXYData1.txt");
 
             Assert.IsTrue(File.Exists(sampleXYDataFile));
 
@@ -83,14 +83,14 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             var xydata = TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
 
-            int numSmooths = 2000;
+            var numSmooths = 2000;
 
-            Stopwatch stopwatch = new Stopwatch();
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
 
 
-            XYData smoothedXYData=new XYData(); 
-            for (int i = 0; i < numSmooths; i++ )
+            var smoothedXYData=new XYData(); 
+            for (var i = 0; i < numSmooths; i++ )
             {
                 smoothedXYData = smoother.Smooth(xydata);
             }
@@ -103,9 +103,9 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             Assert.AreEqual(xydata.Xvalues.Length, smoothedXYData.Xvalues.Length);
 
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
 
                 sb.Append(xydata.Xvalues[i] + "\t" + xydata.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);

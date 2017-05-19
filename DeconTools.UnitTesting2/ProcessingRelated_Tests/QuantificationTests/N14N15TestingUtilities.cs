@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z2_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum1);
-            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
             return xydata;
         }
 
@@ -40,7 +40,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z2_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum3);
-            XYData xydata=   run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            var xydata=   run.GetMassSpectrum(new ScanSet(1), 0, 50000);
             return xydata;
 
         }
@@ -48,7 +48,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z3_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum1);
-            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
             return xydata;
         }
 
@@ -56,7 +56,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z3_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum3);
-            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
             return xydata;
 
         }
@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public static XYData GetTestSpectrum(string xydataFileName)
         {
             Run run = new MSScanFromTextFileRun(xydataFileName);
-            XYData xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
             return xydata;
         }
 
@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
         public PeptideTarget CreateMT23085904_Z2()
         {
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ChargeState = 2;
             mt.Code = "AMPIDLSNLALLDANGK";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
@@ -92,7 +92,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         
         public PeptideTarget CreateMT23140708_Z2()
         {
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ChargeState = 2;
             mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
@@ -105,7 +105,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
         public PeptideTarget CreateMT23140708_Z3()
         {
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ChargeState = 3;
             mt.Code = "IVKVNVDENPESPAMLGVR";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();

@@ -23,13 +23,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             msgen.Execute(run.ResultCollection);
 
             // Delete data points such that we only retain 50% of the data
-            double fractionToKeep = 0.50;
-            int distanceBetweenPoints = (int)(run.XYData.Xvalues.Length / (run.XYData.Xvalues.Length * fractionToKeep));
+            var fractionToKeep = 0.50;
+            var distanceBetweenPoints = (int)(run.XYData.Xvalues.Length / (run.XYData.Xvalues.Length * fractionToKeep));
 
             var newXVals = new List<double>();
             var newYVals = new List<double>();
 
-            for (int i = 0; i < run.XYData.Xvalues.Length; i += distanceBetweenPoints)
+            for (var i = 0; i < run.XYData.Xvalues.Length; i += distanceBetweenPoints)
             {
                 if (i < run.XYData.Xvalues.Length)
                 {
@@ -41,7 +41,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             run.XYData.Xvalues = newXVals.ToArray();
             run.XYData.Yvalues = newYVals.ToArray();
 
-            int numZerosToFill = 3;
+            var numZerosToFill = 3;
             var newZeroFilled = zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
 
             double lowerMZ = 1000;
@@ -69,17 +69,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             var zeroFiller = new DeconToolsZeroFiller(3);
 
             msgen.Execute(run.ResultCollection);
-            int numZerosToFill=3;
+            var numZerosToFill=3;
             var newZeroFilled=  zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
-            var oldZeroFilled = zeroFiller.ZeroFillOld(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
+            // var oldZeroFilled = zeroFiller.ZeroFillOld(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
 
 
-            double lowerMZ = 625.48;
-            double upperMZ = 626.18;
+            var lowerMZ = 625.48;
+            var upperMZ = 626.18;
 
             run.XYData = run.XYData.TrimData(lowerMZ, upperMZ);
             newZeroFilled = newZeroFilled.TrimData(lowerMZ, upperMZ);
-            oldZeroFilled = oldZeroFilled.TrimData(lowerMZ, upperMZ);
+            // oldZeroFilled = oldZeroFilled.TrimData(lowerMZ, upperMZ);
 
             Console.WriteLine("---------- before zerofilling ---------------");
             TestUtilities.DisplayXYValues(run.XYData);
@@ -87,8 +87,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             Console.WriteLine("---------- after zerofilling ---------------");
             TestUtilities.DisplayXYValues(newZeroFilled);
 
-            Console.WriteLine("---------- after zerofilling using DeconEngine ---------------");
-            TestUtilities.DisplayXYValues(oldZeroFilled);
+            // Console.WriteLine("---------- after zerofilling using DeconEngine ---------------");
+            // TestUtilities.DisplayXYValues(oldZeroFilled);
 
 
         }

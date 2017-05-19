@@ -13,10 +13,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void constructorTest1()
         {
-            string path =
+            var path =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
             Assert.IsNotNull(run);
             Assert.AreEqual("2012_05_15_MN9_A_000001", run.DatasetName);
@@ -27,10 +27,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetNumMSTest1()
         {
-            string path =
+            var path =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
             Assert.AreEqual(1131, run.GetNumMSScans());
         }
@@ -38,10 +38,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetFirstAndLastMassSpectrumTest1()
         {
-            string path =
+            var path =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
             run.GetMassSpectrum(new ScanSet(1));
 
@@ -56,12 +56,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetMassSpectrumTest1()
         {
-            string path =
+            var path =
              @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
-            ScanSet scan = new ScanSet(_testScan);
+            var scan = new ScanSet(_testScan);
 
 
             var xydata=   run.GetMassSpectrum(scan);
@@ -82,11 +82,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetRetentionTimeTest1()
         {
-            string path =
+            var path =
            @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
             //for (int i = 478; i < 600; i++)
             //{
@@ -103,13 +103,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetMSLevelTest1()
         {
-            string path =
+            var path =
              @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
 
-            BrukerTOF run = new BrukerTOF(path);
+            var run = new BrukerTOF(path);
 
-            for (int i = 478; i < 600; i++)
+            for (var i = 478; i < 600; i++)
             {
                 Console.WriteLine(i + "\t" + run.GetMSLevel(i));
 

@@ -15,20 +15,20 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
         public void Test1()
         {
 
-            PeakToMSFeatureAssociator peakAssociator = new PeakToMSFeatureAssociator();
+            var peakAssociator = new PeakToMSFeatureAssociator();
 
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            ScanSet scanSet = new ScanSet(6005);
+            var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
-            HornDeconvolutor decon = new HornDeconvolutor();
+            var decon = new HornDeconvolutor();
 
 
             msgen.Execute(run.ResultCollection);
@@ -37,7 +37,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
 
             peakAssociator.Execute(run.ResultCollection);
 
-            int numPeaksAssociatedWithFeatures = 0;
+            var numPeaksAssociatedWithFeatures = 0;
             foreach (var msfeature in run.ResultCollection.ResultList)
             {
                 foreach (var peak in msfeature.IsotopicProfile.Peaklist)
@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.Post_MSFeatureDetectio
             }
 
 
-            int numPeaksInPeakListWithAssociations = 0;
+            var numPeaksInPeakListWithAssociations = 0;
             foreach (MSPeak peak in run.PeakList)
             {
                 Console.WriteLine(peak.MSFeatureID + "\t" + peak.XValue + "\t" + peak.Height + "\t");

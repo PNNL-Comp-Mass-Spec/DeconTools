@@ -23,13 +23,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 File.Delete(exporterFactoryUIMFTextFile1);
             }
             
-            ExporterBase<IsosResult> exporter =
+            var exporter =
                     MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
                     DeconTools.Backend.Globals.MSFileType.PNNL_UIMF, exporterFactoryUIMFTextFile1);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterUIMF), exporter.GetType());
 
-            bool fileWasCreated = (File.Exists(exporterFactoryUIMFTextFile1));
+            var fileWasCreated = (File.Exists(exporterFactoryUIMFTextFile1));
             Assert.AreEqual(true, fileWasCreated);
         }
 
@@ -37,40 +37,40 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void create_IMF_IsosTextExporterTest1()
         {
-            string x = exporterFactoryIMFTextFile1;
+            var x = exporterFactoryIMFTextFile1;
 
             if (File.Exists(x))
             {
                 File.Delete(x);
             }
 
-            ExporterBase<IsosResult> exporter = 
+            var exporter = 
                 MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
                 DeconTools.Backend.Globals.MSFileType.PNNL_IMS, x);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterIMF), exporter.GetType());
 
-            bool fileWasCreated = (File.Exists(x));
+            var fileWasCreated = (File.Exists(x));
             Assert.AreEqual(true, fileWasCreated);
         }
 
         [Test]
         public void create_basic_IsosTextExporterTest1()
         {
-            string x = exporterFactoryBasicTextFile1;
+            var x = exporterFactoryBasicTextFile1;
 
             if (File.Exists(x))
             {
                 File.Delete(x);
             }
 
-            ExporterBase<IsosResult> exporter =
+            var exporter =
                 MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
                 DeconTools.Backend.Globals.MSFileType.Finnigan, x);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterBasic), exporter.GetType());
 
-            bool fileWasCreated = (File.Exists(x));
+            var fileWasCreated = (File.Exists(x));
             Assert.AreEqual(true, fileWasCreated);
         }
 

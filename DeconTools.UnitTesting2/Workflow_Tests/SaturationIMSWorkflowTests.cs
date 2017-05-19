@@ -18,9 +18,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingOnMelittinTest0()
         {
-            string uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
+            var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
@@ -51,16 +51,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 100;
-            int maxScan = 160;
+            var minScan = 100;
+            var maxScan = 160;
 
-            double melettinMonoMass = 2844.75417;
-            int chargestate = 4;
+            var melettinMonoMass = 2844.75417;
+            var chargestate = 4;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -112,9 +112,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingOnLeucinEncaphalinTest0()
         {
-            string uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
+            var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
@@ -145,16 +145,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 130;
-            int maxScan = 200;
+            var minScan = 130;
+            var maxScan = 200;
 
-            double melettinMonoMass = 555.2693;
-            int chargestate = 1;
+            var melettinMonoMass = 555.2693;
+            var chargestate = 1;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
@@ -163,7 +163,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -205,9 +205,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void GetDataForAngioTensin1()
         {
-            string uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
+            var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 0.0;
@@ -239,16 +239,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 90;
-            int maxScan = 150;
+            var minScan = 90;
+            var maxScan = 150;
 
-            double peptideMonoMass = 1295.67749;
-            int chargestate = 3;
+            var peptideMonoMass = 1295.67749;
+            var chargestate = 3;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
@@ -257,7 +257,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -303,10 +303,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void TempSaturationFixingTestOnYehiaBSAData()
         {
-            string uimfFile =
+            var uimfFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\BSA_30N2_30ms_gate_10tof_Padjust_0000.UIMF";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
@@ -337,9 +337,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingTest1()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 2;
@@ -378,15 +378,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 102;
-            int maxScan = 125;
+            var minScan = 102;
+            var maxScan = 125;
 
             //this one elutes ScanLC at 180 - 195
-            double targetMass = 860.3987;
-            int chargestate = 2;
+            var targetMass = 860.3987;
+            var chargestate = 2;
 
             //targetMass = 1444.748171;
             //chargestate = 3;
@@ -407,7 +407,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //minScan = 220;
             //maxScan = 228;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -416,7 +416,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -429,9 +429,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixing_TempTest1()
         {
-            string uimfFile = @"D:\Data\UIMF\QC_Shew_13_04_Run-06_12Jul13_Methow_13-05-25.uimf";
+            var uimfFile = @"D:\Data\UIMF\QC_Shew_13_04_Run-06_12Jul13_Methow_13-05-25.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.PeakDetectorParameters.PeakToBackgroundRatio = 2;
@@ -470,15 +470,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 102;
-            int maxScan = 125;
+            var minScan = 102;
+            var maxScan = 125;
 
             //this one elutes ScanLC at 180 - 195
-            double targetMass = 860.3987;
-            int chargestate = 2;
+            var targetMass = 860.3987;
+            var chargestate = 2;
 
             //targetMass = 1444.748171;
             //chargestate = 3;
@@ -499,7 +499,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //minScan = 220;
             //maxScan = 228;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -508,7 +508,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -523,9 +523,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingTest2()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.LoadFromOldDeconToolsParameterFile(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
@@ -547,18 +547,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 102;
-            int maxScan = 125;
+            var minScan = 102;
+            var maxScan = 125;
 
-            double targetMass = 819.48169;    //elutes at 199 - 205
-            int chargestate = 2;
+            var targetMass = 819.48169;    //elutes at 199 - 205
+            var chargestate = 2;
 
 
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -567,7 +567,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -581,9 +581,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingTest_peaksNotExporting()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.LoadFromOldDeconToolsParameterFile(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR2_PeptideBR3_SN3_SumScans3_NoLCSum_Sat50000_2012-02-27_frames_180_195.xml");
@@ -606,18 +606,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 102;
-            int maxScan = 125;
+            var minScan = 102;
+            var maxScan = 125;
 
-            double targetMass = 819.48169;    //elutes at 199 - 205
-            int chargestate = 2;
+            var targetMass = 819.48169;    //elutes at 199 - 205
+            var chargestate = 2;
 
 
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -626,7 +626,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -639,9 +639,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixingTest3()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.LoadFromOldDeconToolsParameterFile(
@@ -665,18 +665,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 102;
-            int maxScan = 127;
+            var minScan = 102;
+            var maxScan = 127;
 
-            double targetMass = 1059.55169;
-            int chargestate = 2;
+            var targetMass = 1059.55169;
+            var chargestate = 2;
 
 
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -685,7 +685,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -699,12 +699,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void saturatedFixing_RedmineIssue966()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
-            string parameterFile =
+            var parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_saturationRepair_Frame_1-500.xml";
 
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
@@ -740,16 +740,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
 
-            int minFrame = parameters.MSGeneratorParameters.MinLCScan;
-            int maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
+            var minFrame = parameters.MSGeneratorParameters.MinLCScan;
+            var maxFrame = parameters.MSGeneratorParameters.MaxLCScan;
 
-            int minScan = 117;
-            int maxScan = 131;
+            var minScan = 117;
+            var maxScan = 131;
 
-            int chargestate = 2;
-            double targetMass = (605.82 - 1.00727649) * chargestate;
+            var chargestate = 2;
+            var targetMass = (605.82 - 1.00727649) * chargestate;
 
-            double tolerance = 0.3;
+            var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
@@ -758,7 +758,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
 
-            MathUtils mathUtils = new MathUtils();
+            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -774,9 +774,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void noFixingTest1()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
 
@@ -801,9 +801,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void WorkflowTypeIsCorrectTest1()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "standard";
@@ -823,9 +823,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         [Test]
         public void WorkflowTypeIsWrongTest1()
         {
-            string uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
+            var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
-            Run run = new RunFactory().CreateRun(uimfFile);
+            var run = new RunFactory().CreateRun(uimfFile);
             var parameters = new DeconToolsParameters();
 
 
@@ -843,13 +843,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
 
-            StringBuilder sb = new StringBuilder();
-            for (int scan = minScan; scan <= maxScan; scan++)
+            var sb = new StringBuilder();
+            for (var scan = minScan; scan <= maxScan; scan++)
             {
 
 
 
-                for (int frame = minFrame; frame <= maxFrame; frame++)
+                for (var frame = minFrame; frame <= maxFrame; frame++)
                 {
 
                     if (frame == minFrame)

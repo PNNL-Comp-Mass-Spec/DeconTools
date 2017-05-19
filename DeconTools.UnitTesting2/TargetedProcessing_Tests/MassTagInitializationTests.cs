@@ -9,7 +9,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void initializeFromEmpiricalFormula()
         {
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
 
             mt.Code = "SAMPLER";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();

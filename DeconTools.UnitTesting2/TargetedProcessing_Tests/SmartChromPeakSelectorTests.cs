@@ -26,7 +26,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void SmartChromPeakSelectorParameterTest1()
         {
-            SmartChromPeakSelectorParameters parameters = new SmartChromPeakSelectorParameters();
+            var parameters = new SmartChromPeakSelectorParameters();
             Assert.AreEqual(20, parameters.NumChromPeaksAllowed);
             Assert.AreEqual(0.05m, (decimal)parameters.NETTolerance);
         }
@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         public void smartChromPeakSelectorTest_noSumming()
         {
 
-            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+            var run = new RunFactory().CreateRun(xcaliburTestfile);
             run.Close();
 
             run = new RunFactory().CreateRun(xcaliburTestfile);
@@ -44,20 +44,20 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var massTagColl = new TargetCollection();
 
-            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            var masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             massTagColl = masstagImporter.Import();
 
-            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
             var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
             var chromPeakDet = new ChromPeakDetector(0.5, 1);
 
-            SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
+            var smartchromParam = new SmartChromPeakSelectorParameters();
             var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
-            ChromPeakSelectorParameters basicChromParam = new ChromPeakSelectorParameters();
+            var basicChromParam = new ChromPeakSelectorParameters();
             var basicChromPeakSelector = new BasicChromPeakSelector(basicChromParam);
 
 
@@ -70,9 +70,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
 
-            string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
+            var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
             Assert.IsNotNull(xydata);
 
             run.XYData = xydata;
@@ -120,21 +120,21 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
         [Test]
         public void smartChromPeakSelectorTest_withDynamicSumming()
         {
-            Run run = new RunFactory().CreateRun(xcaliburTestfile);
+            var run = new RunFactory().CreateRun(xcaliburTestfile);
 
             var massTagColl = new TargetCollection();
 
-            MassTagFromTextFileImporter masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
+            var masstagImporter = new MassTagFromTextFileImporter(massTagTestList1);
             massTagColl = masstagImporter.Import();
 
-            ChromAlignerUsingVIPERInfo chromAligner = new ChromAlignerUsingVIPERInfo();
+            var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
             var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
 
             var chromPeakDet = new ChromPeakDetector(0.5, 1);
 
-            SmartChromPeakSelectorParameters smartchromParam = new SmartChromPeakSelectorParameters();
+            var smartchromParam = new SmartChromPeakSelectorParameters();
             var smartChromPeakSelector = new SmartChromPeakSelector(smartchromParam);
 
             var basicChromPeakSelector = new BasicChromPeakSelector(new ChromPeakSelectorParameters());
@@ -149,9 +149,9 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
 
-            string testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
+            var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
             Assert.IsNotNull(xydata);
 
             run.XYData = new XYData();

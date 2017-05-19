@@ -42,13 +42,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTest1()
         {
-            int testScan = 6009;
+            var testScan = 6009;
 
             Run run = new YAFMSRun(m_testFile);
 
-            ScanSet scanset = new ScanSet(testScan);
+            var scanset = new ScanSet(testScan);
 
-            XYData xydata= run.GetMassSpectrum(scanset);
+            var xydata= run.GetMassSpectrum(scanset);
 
             Assert.AreNotEqual(xydata, null);
             Assert.AreNotEqual(xydata.Xvalues, null);
@@ -62,13 +62,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTest2_WideMZRange()
         {
-            int testScan = 6009;
+            var testScan = 6009;
             double minMZ = 0;
             double maxMZ = 50000;
 
             Run run = new YAFMSRun(m_testFile);
 
-            ScanSet scanset = new ScanSet(testScan);
+            var scanset = new ScanSet(testScan);
 
             var xydata =run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
@@ -80,13 +80,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTest3_NarrowMZRange()
         {
-            int testScan = 6009;
+            var testScan = 6009;
             double minMZ = 800;
             double maxMZ = 850;
 
             Run run = new YAFMSRun(m_testFile);
 
-            ScanSet scanset = new ScanSet(testScan);
+            var scanset = new ScanSet(testScan);
 
             var  xydata =run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
@@ -99,13 +99,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrumTest4_SummedSpectra()
         {
-            int testScan = 6009;
+            var testScan = 6009;
             double minMZ = 800;
             double maxMZ = 850;
 
             Run run = new YAFMSRun(m_testFile);
 
-            ScanSet scanset = new ScanSet(testScan, 6009, 6020);
+            var scanset = new ScanSet(testScan, 6009, 6020);
 
             var xydata=  run.GetMassSpectrum(scanset, minMZ, maxMZ);
 
@@ -143,12 +143,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getPrecursorScanAndMZTest1()
         {
-            YAFMSRun run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
+            var run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
 
-            int testScan = 2000;
+            var testScan = 2000;
 
 
-            int scanLevel = run.GetMSLevel(testScan);
+            var scanLevel = run.GetMSLevel(testScan);
 
             Assert.AreEqual(1, scanLevel);
 
@@ -159,7 +159,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getPrecursorScanAndMZTest2()
         {
-            YAFMSRun run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
+            var run = new YAFMSRun(FileRefs.RawDataMSFiles.YAFMSStandardFile3);
 
             //for (int i = 2000; i < 3000; i++)
             //{

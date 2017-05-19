@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
 
-            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scan;
                 msgen.Execute(run.ResultCollection);
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
 
-            foreach (ScanSet scan in run.ScanSetCollection.ScanSetList)
+            foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scan;
                 msgen.Execute(run.ResultCollection);
@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting2
 
         public static Run CreateResultsFromTwoFramesOfStandardUIMFData()
         {
-            UIMFRun run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
+            var run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1);
 
             run.ResultCollection.ResultType = Globals.ResultType.UIMF_TRADITIONAL_RESULT;
             run.ScanSetCollection .Create(run, 500, 501, 3, 1);
@@ -111,9 +111,9 @@ namespace DeconTools.UnitTesting2
 
         public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
-            List<PeptideTarget> mtList = new List<PeptideTarget>();
+            var mtList = new List<PeptideTarget>();
 
-            PeptideTarget mt1 = new PeptideTarget();
+            var mt1 = new PeptideTarget();
             mt1.ID = 23085473;
             mt1.NormalizedElutionTime = 0.3807834F;
             mt1.MonoIsotopicMass = 2538.33284203802;
@@ -125,7 +125,7 @@ namespace DeconTools.UnitTesting2
             mtList.Add(mt1);
 
 
-            PeptideTarget mt2 = new PeptideTarget();
+            var mt2 = new PeptideTarget();
             mt2.ID = 23085470;
             mt2.NormalizedElutionTime = 0.6053093f;
             mt2.MonoIsotopicMass = 2329.24291507994;

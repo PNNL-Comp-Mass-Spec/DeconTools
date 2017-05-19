@@ -11,13 +11,13 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void createScanSets_processMSMS_test1()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int startScan = 6000;
-            int stopScan = 6020;
+            var startScan = 6000;
+            var stopScan = 6020;
 
-            bool processMSMS = true;
+            var processMSMS = true;
 
             run.ScanSetCollection.Create(run, startScan, stopScan, 1, 1, processMSMS);
 
@@ -29,13 +29,13 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void createScanSets_MS1_test1()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int startScan = 6000;
-            int stopScan = 6020;
+            var startScan = 6000;
+            var stopScan = 6020;
 
-            bool processMSMS = false;
+            var processMSMS = false;
 
             run.ScanSetCollection .Create(run, startScan, stopScan, 1, 1, processMSMS);
 
@@ -47,15 +47,15 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void createScanSets_summed_MS1_test1()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int startScan = 6000;
-            int stopScan = 6020;
+            var startScan = 6000;
+            var stopScan = 6020;
 
-            int numSummed = 5;
+            var numSummed = 5;
 
-            bool processMSMS = false;
+            var processMSMS = false;
             run.ScanSetCollection .Create(run, startScan, stopScan, numSummed, 1, processMSMS);
 
             Assert.AreEqual(3, run.ScanSetCollection.ScanSetList.Count);
@@ -71,15 +71,15 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void CreateScanSetsSummedMS1UnsummedMS2Test2()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            int startScan = 6000;
-            int stopScan = 6020;
+            var startScan = 6000;
+            var stopScan = 6020;
 
-            int numSummed = 5;
+            var numSummed = 5;
 
-            bool processMSMS = true;
+            var processMSMS = true;
             run.ScanSetCollection .Create(run, startScan, stopScan, numSummed, 1, processMSMS);
 
             Assert.AreEqual(21, run.ScanSetCollection.ScanSetList.Count);
@@ -94,8 +94,8 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void CreateSingleScansetThatSumsAll()
         {
-            RunFactory rf = new RunFactory();
-            Run run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            var rf = new RunFactory();
+            var run = rf.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             run.ScanSetCollection .Create(run, true, true);
 

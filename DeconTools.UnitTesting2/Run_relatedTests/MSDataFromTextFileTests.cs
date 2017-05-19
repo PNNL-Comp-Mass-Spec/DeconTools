@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void test1()
         {
 
-            MSScanFromTextFileRun textfiledata = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
+            var textfiledata = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
             var xydata=  textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0),0,2000);
 
             TestUtilities.DisplayXYValues(xydata);
@@ -58,7 +58,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_multipleDelimiters,' ');
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             msgen.Execute(run.ResultCollection);
 

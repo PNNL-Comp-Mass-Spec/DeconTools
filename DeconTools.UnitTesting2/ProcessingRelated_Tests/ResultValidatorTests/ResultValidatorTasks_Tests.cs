@@ -16,14 +16,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
         public void deconWithTHRASH_Then_ValidateTest1()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            ScanSet scanSet = new ScanSet(6005);
+            var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-            HornDeconvolutor decon = new HornDeconvolutor();
-            ResultValidatorTask validator = new ResultValidatorTask();
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var decon = new HornDeconvolutor();
+            var validator = new ResultValidatorTask();
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             validator.Execute(run.ResultCollection);
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
-            IsosResult testResult = run.ResultCollection.ResultList[0];
+            var testResult = run.ResultCollection.ResultList[0];
             Assert.AreEqual(0.0532199478712594m, (decimal)testResult.InterferenceScore);
 
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);

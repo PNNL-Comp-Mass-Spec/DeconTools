@@ -14,12 +14,12 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan\tRT\n");
 
-            for (int i = run.MinLCScan; i <= run.MaxLCScan; i++)
+            for (var i = run.MinLCScan; i <= run.MaxLCScan; i++)
             {
-                double retentionTime = run.GetTime(i);
+                var retentionTime = run.GetTime(i);
                 sb.Append(i);
                 sb.Append("\t");
                 sb.Append(retentionTime.ToString("0.000"));

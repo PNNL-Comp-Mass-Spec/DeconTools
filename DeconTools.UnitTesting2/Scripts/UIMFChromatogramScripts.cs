@@ -23,45 +23,45 @@ namespace DeconTools.UnitTesting2.Scripts
         [Test]
         public void BasePeakChromatogramTests()
         {
-            string filename = @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06.uimf";
-            Run run = new RunFactory().CreateRun(filename);
+            var filename = @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06.uimf";
+            var run = new RunFactory().CreateRun(filename);
 
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
+            var scanSetCollection = new ScanSetCollection();
             //scanSetCollection.Create(run, 500, 550,1,1);
             scanSetCollection.Create(run, run.MinLCScan, run.MaxLCScan, 1, 1);
 
-            IMSScanSetCollection imsScanSetCollection = new IMSScanSetCollection();
+            var imsScanSetCollection = new IMSScanSetCollection();
             imsScanSetCollection.Create(run, 60, 250, 1, 1);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 4;
             peakDet.SignalToNoiseThreshold = 2;
             peakDet.IsDataThresholded = true;
 
-            string outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuput.txt";
+            var outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuput.txt";
 
-            using (StreamWriter writer = new StreamWriter(outputFile))
+            using (var writer = new StreamWriter(outputFile))
             {
 
-                for (int lcscan = 0; lcscan < scanSetCollection.ScanSetList.Count; lcscan++)
+                for (var lcscan = 0; lcscan < scanSetCollection.ScanSetList.Count; lcscan++)
                 {
                     Console.WriteLine("lcscan= " + lcscan);
 
                     var scanSet = scanSetCollection.ScanSetList[lcscan];
                     run.CurrentScanSet = scanSet;
 
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
 
-                    int numImsScans = imsScanSetCollection.ScanSetList.Count;
+                    var numImsScans = imsScanSetCollection.ScanSetList.Count;
 
-                    for (int imsScan = 0; imsScan < numImsScans; imsScan++)
+                    for (var imsScan = 0; imsScan < numImsScans; imsScan++)
                     {
-                        IMSScanSet imsscanSet = (IMSScanSet)imsScanSetCollection.ScanSetList[imsScan];
+                        var imsscanSet = (IMSScanSet)imsScanSetCollection.ScanSetList[imsScan];
                         ((UIMFRun)run).CurrentIMSScanSet = imsscanSet;
 
-                        int basePeakIntensity = 0;
+                        var basePeakIntensity = 0;
 
                         try
                         {
@@ -102,14 +102,14 @@ namespace DeconTools.UnitTesting2.Scripts
         public void BPISaturationCorrectedTest1()
         {
 
-            string filename = @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06.uimf";
-            Run run = new RunFactory().CreateRun(filename);
+            var filename = @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06.uimf";
+            var run = new RunFactory().CreateRun(filename);
 
             run.ScanSetCollection = new ScanSetCollection();
             //scanSetCollection.Create(run, 500, 550,1,1);
 
-            int startFrame = 477;
-            int stopFrame = 477;
+            var startFrame = 477;
+            var stopFrame = 477;
 
             //startFrame = run.MinLCScan;
             //stopFrame = run.MaxLCScan;
@@ -123,7 +123,7 @@ namespace DeconTools.UnitTesting2.Scripts
             ((UIMFRun)run).IMSScanSetCollection = new IMSScanSetCollection();
             ((UIMFRun)run).IMSScanSetCollection.Create(run, 122, 122, 1, 1);
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 2;
@@ -142,12 +142,12 @@ namespace DeconTools.UnitTesting2.Scripts
 
 
 
-            string outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuputSatCorrected.txt";
+            var outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuputSatCorrected.txt";
 
-            using (StreamWriter writer = new StreamWriter(outputFile))
+            using (var writer = new StreamWriter(outputFile))
             {
 
-                UIMFRun uimfRun = (UIMFRun)run;
+                var uimfRun = (UIMFRun)run;
 
 
                 var _unsummedMSFeatures = new List<IsosResult>();
@@ -161,16 +161,16 @@ namespace DeconTools.UnitTesting2.Scripts
                     _unsummedMSFeatures.Clear();
 
 
-                    ScanSet unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
+                    var unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                     //get saturated MSFeatures for unsummed data
                     uimfRun.CurrentScanSet = unsummedFrameSet;
 
 
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
 
-                    bool errorInFrame = false;
-                    int numIMSScans = uimfRun.IMSScanSetCollection.ScanSetList.Count;
-                    for (int imsScanNum = 0; imsScanNum < numIMSScans; imsScanNum++)
+                    var errorInFrame = false;
+                    var numIMSScans = uimfRun.IMSScanSetCollection.ScanSetList.Count;
+                    for (var imsScanNum = 0; imsScanNum < numIMSScans; imsScanNum++)
                     {
 
 
@@ -198,11 +198,11 @@ namespace DeconTools.UnitTesting2.Scripts
                         _unsummedMSFeatures.AddRange(run.ResultCollection.IsosResultBin);
 
 
-                        int basePeakIntensity = 0;
+                        var basePeakIntensity = 0;
                         //iterate over unsummed MSFeatures and check for saturation
                         foreach (var isosResult in uimfRun.ResultCollection.IsosResultBin)
                         {
-                            bool isPossiblySaturated = isosResult.IntensityAggregate > 1e7;
+                            var isPossiblySaturated = isosResult.IntensityAggregate > 1e7;
 
                             if (isPossiblySaturated)
                             {
@@ -217,7 +217,7 @@ namespace DeconTools.UnitTesting2.Scripts
                             TestUtilities.DisplayIsotopicProfileData(isosResult.IsotopicProfile);
 
 
-                            int height = (int)isosResult.IsotopicProfile.getMostIntensePeak().Height;
+                            var height = (int)isosResult.IsotopicProfile.getMostIntensePeak().Height;
                             if (height > basePeakIntensity)
                             {
                                 basePeakIntensity = height;
@@ -227,7 +227,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
                         sb.Append(basePeakIntensity);
 
-                        bool isNotLastIMSScan = imsScanNum != numIMSScans - 1;
+                        var isNotLastIMSScan = imsScanNum != numIMSScans - 1;
                         if (isNotLastIMSScan)
                         {
                             sb.Append("\t");
@@ -278,44 +278,44 @@ namespace DeconTools.UnitTesting2.Scripts
         [Test]
         public void Generate3dBpiFromIsosFile1()
         {
-            bool outputOrigIntensity = false;
-            bool outputToConsole = true;
+            var outputOrigIntensity = false;
+            var outputToConsole = true;
 
-            string isosFile =
+            var isosFile =
                 @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06_isos.csv";
 
-            string outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuputSatCorrected.txt";
+            var outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuputSatCorrected.txt";
 
-            int lcScanStart = 450;
-            int lcScanStop = 550;
+            var lcScanStart = 450;
+            var lcScanStop = 550;
 
 
-            IsosResultUtilities isosResultUtilities = new IsosResultUtilities();
+            var isosResultUtilities = new IsosResultUtilities();
             var filteredIsos = isosResultUtilities.getUIMFResults(isosFile, lcScanStart, lcScanStop);
 
 
-            string outputIsosFilename = isosFile.Replace("_isos.csv", "_frame450-550_isos.csv");
+            var outputIsosFilename = isosFile.Replace("_isos.csv", "_frame450-550_isos.csv");
 
-            int indexFrameCol = 1;
+            var indexFrameCol = 1;
             isosResultUtilities.FilterAndOutputIsos(isosFile, indexFrameCol, lcScanStart, lcScanStop, outputIsosFilename);
 
 
-            int imsScanStart = 60;
-            int imsScanStop = 250;
+            var imsScanStart = 60;
+            var imsScanStop = 250;
 
 
-            int startFrameIndex = 0;
+            var startFrameIndex = 0;
 
-            using (StreamWriter writer = new StreamWriter(outputFile))
+            using (var writer = new StreamWriter(outputFile))
             {
-                for (int scan = lcScanStart; scan <= lcScanStop; scan++)
+                for (var scan = lcScanStart; scan <= lcScanStop; scan++)
                 {
                     //Console.WriteLine("Frame = " + scan);
 
                     var lcScanResults = (from n in filteredIsos where n.ScanSet.PrimaryScanNumber == scan select n).ToList();
 
-                    StringBuilder sb = new StringBuilder();
-                    for (int imsScan = imsScanStart; imsScan <= imsScanStop; imsScan++)
+                    var sb = new StringBuilder();
+                    for (var imsScan = imsScanStart; imsScan <= imsScanStop; imsScan++)
                     {
 
                         var imsScanResults =
@@ -324,7 +324,7 @@ namespace DeconTools.UnitTesting2.Scripts
                              orderby ((UIMFIsosResult)n).IntensityAggregate descending
                              select n).ToList();
 
-                        int basePeakIntensity = 0;
+                        var basePeakIntensity = 0;
                         if (imsScanResults.Count == 0)
                         {
 
@@ -367,10 +367,10 @@ namespace DeconTools.UnitTesting2.Scripts
 
         private int GetMaxPeak(List<Peak> peakList)
         {
-            int maxIntensity = 0;
-            for (int i = 0; i < peakList.Count; i++)
+            var maxIntensity = 0;
+            for (var i = 0; i < peakList.Count; i++)
             {
-                int currentIntensity = (int)peakList[i].Height;
+                var currentIntensity = (int)peakList[i].Height;
                 if (currentIntensity > maxIntensity)
                 {
                     maxIntensity = currentIntensity;

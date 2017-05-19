@@ -10,13 +10,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void MedianBasedChromPeakDetectorTest1()
         {
-            ChromPeakDetectorMedianBased chromPeakDetector = new ChromPeakDetectorMedianBased();
+            var chromPeakDetector = new ChromPeakDetectorMedianBased();
             chromPeakDetector.PeakToBackgroundRatio = 3;
             chromPeakDetector.SignalToNoiseThreshold = 1;
 
 
 
-            string testDataFile =
+            var testDataFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\ChromatogramAlgorithmTesting\SampleChromatogram_Highpeak_lowpeak.txt";
 
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);
@@ -36,13 +36,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void MedianBasedChromPeakDetectorTest2()
         {
-            ChromPeakDetectorMedianBased chromPeakDetector = new ChromPeakDetectorMedianBased();
+            var chromPeakDetector = new ChromPeakDetectorMedianBased();
             chromPeakDetector.PeakToBackgroundRatio = 3;
             chromPeakDetector.SignalToNoiseThreshold = 1;
 
 
 
-            string testDataFile =
+            var testDataFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\ChromatogramAlgorithmTesting\SampleChromatogram02_Lots of candidate peaks.txt";
 
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);

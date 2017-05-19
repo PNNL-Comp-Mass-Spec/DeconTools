@@ -27,10 +27,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            ResultCollection results = new ResultCollection(run);
+            var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-            bool isTicRequested = false;
+            var isTicRequested = false;
             Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
             msGen.Execute(results);
 
@@ -44,25 +44,25 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             decon.Execute(results);
 
 
-            IsosResult result1 = results.ResultList[0];
+            var result1 = results.ResultList[0];
 
 
-            MercuryDistributionCreator distcreator = new MercuryDistributionCreator();
-            double resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
+            var distcreator = new MercuryDistributionCreator();
+            var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
             distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
             distcreator.OffsetDistribution(result1.IsotopicProfile);
 
 
 
-            XYData theorXYData = distcreator.Data;
+            var theorXYData = distcreator.Data;
 
             //StringBuilder sb = new StringBuilder();
             //TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
 
             //Console.WriteLine(sb.ToString());
 
-            AreaFitter areafitter = new AreaFitter();
-            double fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
+            var areafitter = new AreaFitter();
+            var fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
 
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score);
@@ -131,10 +131,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            ResultCollection results = new ResultCollection(run);
+            var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            bool isTicRequested = false;
+            var isTicRequested = false;
             Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
             msGen.Execute(results);
 
@@ -146,13 +146,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             decon.Execute(results);
 
 
-            IsosResult result1 = results.ResultList[1];
-            double resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
+            var result1 = results.ResultList[1];
+            var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
 
-            MercuryDistributionCreator distcreator = new MercuryDistributionCreator();
+            var distcreator = new MercuryDistributionCreator();
             distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-            StringBuilder sb = new StringBuilder();
-            XYData theorXYData = distcreator.Data;
+            var sb = new StringBuilder();
+            var theorXYData = distcreator.Data;
 
             //TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
 
@@ -168,8 +168,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             //Console.WriteLine(sb.ToString());
 
-            AreaFitter areafitter = new AreaFitter();
-            double fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
+            var areafitter = new AreaFitter();
+            var fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
 
             Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
@@ -184,10 +184,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            ResultCollection results = new ResultCollection(run);
+            var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            bool isTicRequested = false;
+            var isTicRequested = false;
             Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
             msGen.Execute(results);
 
@@ -198,26 +198,26 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task decon = new HornDeconvolutor();
             decon.Execute(results);
 
-            IsosResult result1 = results.ResultList[0];
-            double resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
+            var result1 = results.ResultList[0];
+            var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
 
 
 
-            MercuryDistributionCreator distcreator = new MercuryDistributionCreator();
+            var distcreator = new MercuryDistributionCreator();
             distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
             distcreator.OffsetDistribution(result1.IsotopicProfile);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            AreaFitter areafitter = new AreaFitter();
-            double fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
+            var areafitter = new AreaFitter();
+            var fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
 
             sb.Append(resolution);
             sb.Append("\t");
             sb.Append(fitval);
             sb.Append("\n");
 
-            for (double fwhm = 0.001; fwhm < 0.050; fwhm = fwhm + 0.0005)
+            for (var fwhm = 0.001; fwhm < 0.050; fwhm = fwhm + 0.0005)
             {
                 distcreator = new MercuryDistributionCreator();
                 resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / fwhm;

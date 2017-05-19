@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var parameters = new DeconToolsParameters();
 
 
-            List<string> datasetList = new List<string>();
+            var datasetList = new List<string>();
                datasetList.Add(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\JuliaLaskinRunMergingWorkflow\b-LSOA_HPLC_ESIbox_pos_res60k_RT92-98.raw");
             datasetList.Add(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\JuliaLaskinRunMergingWorkflow\b-LSOA_HPLC_ESIbox_pos_res60k_RT1255-1282.raw");
             datasetList.Add(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\JuliaLaskinRunMergingWorkflow\b-LSOA_HPLC_ESIbox_pos_res60k_RT1400-1500.raw");

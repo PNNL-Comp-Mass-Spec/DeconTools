@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2
         public static void GetXYValuesToStringBuilder(StringBuilder sb, double[] xvals, double[] yvals)
         {
             if (sb == null) return;
-            for (int i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xvals.Length; i++)
             {
                 sb.Append(xvals[i]);
                 sb.Append("\t");
@@ -38,9 +38,9 @@ namespace DeconTools.UnitTesting2
         {
             if (resultList1.Count != resultList2.Count) return false;     //counts are different
 
-            for (int i = 0; i < resultList1.Count; i++)
+            for (var i = 0; i < resultList1.Count; i++)
             {
-                bool resultIsTheSame = (resultList1[i].IsotopicProfile.ChargeState == resultList2[i].IsotopicProfile.ChargeState &&
+                var resultIsTheSame = (resultList1[i].IsotopicProfile.ChargeState == resultList2[i].IsotopicProfile.ChargeState &&
                     resultList1[i].IntensityAggregate == resultList2[i].IntensityAggregate &&
                     //resultList1[i].IsotopicProfile.MonoIsotopicMass == resultList2[i].IsotopicProfile.MonoIsotopicMass &&
                     resultList1[i].IsotopicProfile.MonoPeakMZ == resultList2[i].IsotopicProfile.MonoPeakMZ &&
@@ -69,9 +69,9 @@ namespace DeconTools.UnitTesting2
 
         public static void IsotopicProfileDataToStringBuilder(StringBuilder sb, IsotopicProfile profile)
         {
-            int counter = 0;
+            var counter = 0;
 
-            foreach (MSPeak peak in profile.Peaklist)
+            foreach (var peak in profile.Peaklist)
             {
                 sb.Append(counter);
                 sb.Append("\t");
@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2
 
 
 
-            foreach (ScanSet scanset in run.ScanSetCollection.ScanSetList)
+            foreach (var scanset in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanset;
                 msgen.Execute(run.ResultCollection);
@@ -115,12 +115,12 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayPeaks(List<Peak> peakList)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("--------- Peaks found -----------------\n");
             sb.Append("x_value\ty_value\twidth\n");
 
 
-            foreach (Peak peak in peakList)
+            foreach (var peak in peakList)
             {
                 sb.Append(peak.XValue);
                 sb.Append("\t");
@@ -142,12 +142,12 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayXYValues(ResultCollection resultCollection, double lowerX, double upperX)
         {
-            double[] xvals = resultCollection.Run.XYData.Xvalues;
-            double[] yvals = resultCollection.Run.XYData.Yvalues;
+            var xvals = resultCollection.Run.XYData.Xvalues;
+            var yvals = resultCollection.Run.XYData.Yvalues;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("--------- XYData found in Run " + resultCollection.Run.Filename + "-----------------\n");
-            for (int i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xvals.Length; i++)
             {
                 if (xvals[i] >= lowerX && xvals[i] <= upperX)
                 {
@@ -169,9 +169,9 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayXYValues(XYData xydata, double lowerX, double upperX)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
                 if (xydata.Xvalues[i] >= lowerX && xydata.Xvalues[i] <= upperX)
                 {
@@ -189,10 +189,10 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
-            StringBuilder sb = new StringBuilder();
-            int counter = 0;
+            var sb = new StringBuilder();
+            var counter = 0;
 
-            foreach (MSPeak peak in profile.Peaklist)
+            foreach (var peak in profile.Peaklist)
             {
                 sb.Append(counter);
                 sb.Append("\t");
@@ -213,7 +213,7 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayMSFeatures(List<IsosResult> resultList)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("------------MSFeatures ---------------\n");
             sb.Append("id\tscanNum\tmonomass\tmz\tz\tintens\tscore\tinterferenceScore\n");
@@ -248,8 +248,8 @@ namespace DeconTools.UnitTesting2
 
         public static string DisplayRunInformation(Run run)
         {
-            StringBuilder sb = new StringBuilder();
-            string delim = Environment.NewLine;
+            var sb = new StringBuilder();
+            var delim = Environment.NewLine;
 
             sb.Append("Dataset name = " + run.DatasetName);
             sb.Append(delim);
@@ -288,7 +288,7 @@ namespace DeconTools.UnitTesting2
             target.MZTheor = target.MonoMassTheor/target.ChargeState + Globals.PROTON_MASS;
 
 
-            JoshTheorFeatureGenerator theorFeatureGenerator = new JoshTheorFeatureGenerator();
+            var theorFeatureGenerator = new JoshTheorFeatureGenerator();
             target.TheorIsotopicProfile = theorFeatureGenerator.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
 
             return target;
@@ -299,7 +299,7 @@ namespace DeconTools.UnitTesting2
 
         public static PeptideTarget GetMassTagStandard(int standardNum)
         {
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ID = 86963986;
             mt.MonoIsotopicMass = 1516.791851;
             mt.Code = "AAKEGISCEIIDLR";
@@ -316,9 +316,9 @@ namespace DeconTools.UnitTesting2
 
         public static List<PeptideTarget> CreateTestMassTagList()
         {
-            List<PeptideTarget> mtList = new List<PeptideTarget>();
+            var mtList = new List<PeptideTarget>();
 
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ID = 24769;
             mt.MonoIsotopicMass = 2086.0595;
             mt.ChargeState = 2;
@@ -332,9 +332,9 @@ namespace DeconTools.UnitTesting2
 
         public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
-            List<PeptideTarget> mtList = new List<PeptideTarget>();
+            var mtList = new List<PeptideTarget>();
 
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ID = 23085473;
             mt.NormalizedElutionTime = 0.3807834F;
             mt.MonoIsotopicMass = 2538.33284203802;
@@ -357,10 +357,10 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayMSLevelData(Run run)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan\tMSLevel\n");
 
-            for (int i = run.MinLCScan; i <= run.MaxLCScan; i++)
+            for (var i = run.MinLCScan; i <= run.MaxLCScan; i++)
             {
                 sb.Append(i);
                 sb.Append("\t");
@@ -378,7 +378,7 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayScanSetData(List<ScanSet> scanSetlist)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("--------------- ScanSetCollection details ---------------------- \n");
 
@@ -386,7 +386,7 @@ namespace DeconTools.UnitTesting2
             {
                 sb.Append(scan.PrimaryScanNumber);
                 sb.Append("\t{");
-                for (int i = 0; i < scan.IndexValues.Count; i++)
+                for (var i = 0; i < scan.IndexValues.Count; i++)
                 {
                     sb.Append(scan.IndexValues[i]);
                     if (i == scan.IndexValues.Count - 1)
@@ -417,7 +417,7 @@ namespace DeconTools.UnitTesting2
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2();
+            var peakDet = new DeconToolsPeakDetectorV2();
             peakDet.PeakToBackgroundRatio = 1.3;
             peakDet.SignalToNoiseThreshold = 2;
             peakDet.IsDataThresholded = true;
@@ -439,7 +439,7 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayInfoForProcess(System.Diagnostics.Process currentProcess)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("Process Name =\t" + currentProcess.ProcessName);
             sb.Append(Environment.NewLine);
             sb.Append("Private bytes =\t" + String.Format("{0:N0}", currentProcess.PrivateMemorySize64));
@@ -452,9 +452,9 @@ namespace DeconTools.UnitTesting2
 
         public static List<PeptideTarget> CreateO16O18TestMassTagList1()
         {
-            List<PeptideTarget> mtList = new List<PeptideTarget>();
+            var mtList = new List<PeptideTarget>();
 
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ID = 1142;
             mt.MonoIsotopicMass = 921.4807035;
             mt.ChargeState = 2;
@@ -468,10 +468,10 @@ namespace DeconTools.UnitTesting2
 
         public static void WriteToFile(XYData xydata, string outputFile)
         {
-            using (StreamWriter sw = new StreamWriter(outputFile))
+            using (var sw = new StreamWriter(outputFile))
             {
                 sw.WriteLine("mz\tintensity");
-                for (int i = 0; i < xydata.Xvalues.Length; i++)
+                for (var i = 0; i < xydata.Xvalues.Length; i++)
                 {
                     sw.Write(xydata.Xvalues[i]);
                     sw.Write("\t");
@@ -487,7 +487,7 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayMSPeakResults(List<DeconTools.Backend.DTO.MSPeakResult> list)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("peakID\tframe\tscan\tChromID\tmz\tintens\tfwhm\n");
             foreach (var peak in list)
             {
@@ -516,7 +516,7 @@ namespace DeconTools.UnitTesting2
         public static XYData LoadXYDataFromFile(string testChromatogramDataFile)
         {
             var tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
-            XYData xydata=   tempRun.GetMassSpectrum(new ScanSet(0));
+            var xydata=   tempRun.GetMassSpectrum(new ScanSet(0));
 
             return xydata;
 

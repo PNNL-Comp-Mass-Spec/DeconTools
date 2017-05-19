@@ -72,7 +72,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Assert.AreEqual(0.0704222, Math.Round(solvedYvals[3]), 7);
             Assert.AreEqual(-0.0053473, Math.Round(solvedYvals[4]), 7);
          
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = solvedXVals;
             xydata.Yvalues = solvedYvals;
 
@@ -101,7 +101,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             //------------------------load theor data ------------------------------------
 
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
 
             var peptide = new PeptideTarget();
             peptide.Code = "LFLASACLYGAALAGV";
@@ -109,13 +109,13 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             var theorFeatureGenerator = new JoshTheorFeatureGenerator();
             theorFeatureGenerator.GenerateTheorFeature(peptide);
-            IsotopicProfile theorProfile = peptide.IsotopicProfile;
-            List<double> theorIntensities = theorProfile.Peaklist.Select(p => (double)p.Height).ToList();
+            var theorProfile = peptide.IsotopicProfile;
+            var theorIntensities = theorProfile.Peaklist.Select(p => (double)p.Height).ToList();
 
             Console.WriteLine("Total carbons = " + peptideUtils.GetNumAtomsForElement("C", peptide.EmpiricalFormula));
 
 
-            List<double> obsIntensities = new List<double>(new[]
+            var obsIntensities = new List<double>(new[]
                                      {
                                          1, 0.8335001, 0.4029815, 0.1846439, 0.1116047, 0.09458135, 0.07157851, 0.04972008,
                                          0.03036686, 0.01545749, 0.008299164, 0.004003931, 0.001711554, 0.000766305,
@@ -123,7 +123,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
                      });
 
 
-            List<double> relexCorrectedIntensities = new List<double>(new[]
+            var relexCorrectedIntensities = new List<double>(new[]
                                      {
                                          1, 0.84416, 0.4174013, 0.1843375, 0.1073706, 0.09557419, 0.07190877, 0.04823519,
                                          0.02991197, 0.01456759, 0.008299164, 0.004003931, 0.001711554, 0.000766305,
@@ -156,16 +156,16 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
              */
 
 
-            LabelingDistributionCalculator labelDistCalc = new LabelingDistributionCalculator();
+            var labelDistCalc = new LabelingDistributionCalculator();
             double[] solvedXVals;
             double[] solvedYvals;
 
 
-            double d = 0.1;
+            var d = 0.1;
             labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out solvedXVals, out solvedYvals);
 
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = solvedXVals;
             xydata.Yvalues = solvedYvals;
 

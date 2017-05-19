@@ -17,12 +17,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
             // see https://jira.pnnl.gov/jira/browse/OMCS-743
 
 
-            string peptideSeq = "SAMPLERSAMPLER";
-             LabeledIsotopicProfileUtilities isoCreator = new LabeledIsotopicProfileUtilities();
+            var peptideSeq = "SAMPLERSAMPLER";
+             var isoCreator = new LabeledIsotopicProfileUtilities();
 
-            string elementLabelled = "C";
-            int lightIsotope = 12;
-            int heavyIsotope = 13;
+            var elementLabelled = "C";
+            var lightIsotope = 12;
+            var heavyIsotope = 13;
 
             var target = new PeptideTarget();
             target.Code = peptideSeq;
@@ -54,13 +54,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
 
 
 
-            List<Peak> peakList = obsMZVals.Select((t, i) => new Peak(t, (float) obsIntensities[i], 0)).ToList();
+            var peakList = obsMZVals.Select((t, i) => new Peak(t, (float) obsIntensities[i], 0)).ToList();
 
-            PartialLabelingQuantifier partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
+            var partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
 
             var bestIso=  partialLabelingQuantifier.FindBestLabeledProfile(target, peakList, null);
 
-            int counter = 0;
+            var counter = 0;
             foreach (var currentFitScore in partialLabelingQuantifier.FitScoreData)
             {
                 Console.WriteLine(currentFitScore.Key + "\t" + currentFitScore.Value);

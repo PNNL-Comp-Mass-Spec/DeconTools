@@ -15,17 +15,17 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
         public void LoessOnMassAlignmentData1()
         {
 
-            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanPpmErrorValues1.txt";
+            var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanPpmErrorValues1.txt";
 
-            XYData xydata=  TestUtilities.LoadXYDataFromFile(testFile);
+            var xydata=  TestUtilities.LoadXYDataFromFile(testFile);
 
 
 
-            LoessInterpolator loessInterpolator = new LoessInterpolator();
+            var loessInterpolator = new LoessInterpolator();
 
             var smoothedData= loessInterpolator.Smooth(xydata.Xvalues, xydata.Yvalues);
 
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
                 Console.WriteLine(xydata.Xvalues[i] +"\t"+  xydata.Yvalues[i] +  "\t" + smoothedData[i]);
             }
@@ -36,16 +36,16 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
         public void LoessOnNETAlignmentData1()
         {
 
-            string testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanToNetTheorData1.txt";
+            var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanToNetTheorData1.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testFile);
 
-            Dictionary<decimal, double> scanNetVals = new Dictionary<decimal, double>();
+            var scanNetVals = new Dictionary<decimal, double>();
 
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
-                decimal xval =  (decimal) Math.Round(xydata.Xvalues[i],1);
-                double yval = xydata.Yvalues[i];
+                var xval =  (decimal) Math.Round(xydata.Xvalues[i],1);
+                var yval = xydata.Yvalues[i];
 
                 if (!scanNetVals.ContainsKey(xval))
                 {
@@ -55,20 +55,20 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             
             }
 
-            XYData xyDataForInterpolator = new XYData();
+            var xyDataForInterpolator = new XYData();
             xyDataForInterpolator.Xvalues = scanNetVals.Keys.Select(p => (double) p).ToArray();
             xyDataForInterpolator.Yvalues = scanNetVals.Values.ToArray();
 
-            double bandwidth = 0.005;
-            int robustIter = 4;
-            LoessInterpolator loessInterpolator = new LoessInterpolator(bandwidth, robustIter);
+            var bandwidth = 0.005;
+            var robustIter = 4;
+            var loessInterpolator = new LoessInterpolator(bandwidth, robustIter);
             
 
             var smoothedData = loessInterpolator.Smooth(xyDataForInterpolator.Xvalues, xyDataForInterpolator.Yvalues);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < xyDataForInterpolator.Xvalues.Length; i++)
+            for (var i = 0; i < xyDataForInterpolator.Xvalues.Length; i++)
             {
                 sb.Append(xyDataForInterpolator.Xvalues[i] + "\t" + xyDataForInterpolator.Yvalues[i] + "\t" + smoothedData[i]);
                 sb.Append(Environment.NewLine);
@@ -83,17 +83,17 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
         public void LoessOnNETAlignmentData2()
         {
 
-            string testFile =
+            var testFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\IQ\2013_06_04_Using MSGF for IQ alignment - part2\QCShew_ScanVsTheorNetValues.txt";
 
-            XYData xydata = TestUtilities.LoadXYDataFromFile(testFile);
+            var xydata = TestUtilities.LoadXYDataFromFile(testFile);
 
-            Dictionary<decimal, double> scanNetVals = new Dictionary<decimal, double>();
+            var scanNetVals = new Dictionary<decimal, double>();
 
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
-                decimal xval = (decimal)Math.Round(xydata.Xvalues[i], 1);
-                double yval = xydata.Yvalues[i];
+                var xval = (decimal)Math.Round(xydata.Xvalues[i], 1);
+                var yval = xydata.Yvalues[i];
 
                 if (!scanNetVals.ContainsKey(xval))
                 {
@@ -103,20 +103,20 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             }
 
-            XYData xyDataForInterpolator = new XYData();
+            var xyDataForInterpolator = new XYData();
             xyDataForInterpolator.Xvalues = scanNetVals.Keys.Select(p => (double)p).ToArray();
             xyDataForInterpolator.Yvalues = scanNetVals.Values.ToArray();
 
-            double bandwidth = 0.1;
-            int robustIter = 2;
-            LoessInterpolator loessInterpolator = new LoessInterpolator(bandwidth, robustIter);
+            var bandwidth = 0.1;
+            var robustIter = 2;
+            var loessInterpolator = new LoessInterpolator(bandwidth, robustIter);
 
 
             var smoothedData = loessInterpolator.Smooth(xyDataForInterpolator.Xvalues, xyDataForInterpolator.Yvalues);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < xyDataForInterpolator.Xvalues.Length; i++)
+            for (var i = 0; i < xyDataForInterpolator.Xvalues.Length; i++)
             {
                 sb.Append(xyDataForInterpolator.Xvalues[i] + "\t" + xyDataForInterpolator.Yvalues[i] + "\t" + smoothedData[i]);
                 sb.Append(Environment.NewLine);

@@ -11,21 +11,21 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void GetEmpiricalFormulaForAminoAcidTest1()
         {
-            PeptideUtils utils = new PeptideUtils();
+            var utils = new PeptideUtils();
 
-            char testAminoAcid = 'A';
+            var testAminoAcid = 'A';
             Assert.AreEqual("C3H5NO", utils.GetEmpiricalFormulaForAminoAcidResidue(testAminoAcid));
         }
 
         [Test]
         public void GetEmpiricalFormulaForPeptideSequenceTest1()
         {
-            PeptideUtils utils = new PeptideUtils();
+            var utils = new PeptideUtils();
 
-            string testSequence1 = "SAMPLER";
-            string testSequence2 = "GRDIESLYSR";
-            string testSequence3 = "ANKYLSRRH";
-            string testSequence4 = "ARNDCEQGHILKMFPSTWYV";
+            var testSequence1 = "SAMPLER";
+            var testSequence2 = "GRDIESLYSR";
+            var testSequence3 = "ANKYLSRRH";
+            var testSequence4 = "ARNDCEQGHILKMFPSTWYV";
 
             Assert.AreEqual("C33H58N10O11S", utils.GetEmpiricalFormulaForPeptideSequence(testSequence1));
             Assert.AreEqual(802.40071m, (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence1), 5));
@@ -42,16 +42,16 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void GetEmpiricalFormulaForPeptideSequenceTest2()
         {
-            PeptideUtils utils = new PeptideUtils();
+            var utils = new PeptideUtils();
 
-            string testSequence1 = "IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR";
+            var testSequence1 = "IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR";
 
-            string testSequence2 = "K.IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR*.V";
+            var testSequence2 = "K.IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR*.V";
 
 
-            string empiricalFormula1 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence1);
+            var empiricalFormula1 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence1);
 
-            string empiricalFormula2 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence2);
+            var empiricalFormula2 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence2);
 
 
             Assert.AreEqual(empiricalFormula1, empiricalFormula2);

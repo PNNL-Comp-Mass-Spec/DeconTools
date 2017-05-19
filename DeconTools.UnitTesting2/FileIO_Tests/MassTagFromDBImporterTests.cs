@@ -27,10 +27,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
 
-            MassTagFromSqlDbImporter importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
+            var importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
             var targetCollection = importer.Import();
 
-            PeptideTarget testPeptide1 = (PeptideTarget)targetCollection.TargetList[2];
+            var testPeptide1 = (PeptideTarget)targetCollection.TargetList[2];
 
             Assert.AreEqual(72, targetCollection.TargetList.Count);
             Assert.AreEqual(24917, testPeptide1.ID);
@@ -48,10 +48,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void checkModImport_Test1()
         {
-            MassTagFromSqlDbImporter importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
+            var importer = new MassTagFromSqlDbImporter("MT_Shewanella_ProdTest_P352", "porky", _targetIDList);
             var targetCollection = importer.Import();
 
-            PeptideTarget testPeptide1 = (PeptideTarget)targetCollection.TargetList[70];
+            var testPeptide1 = (PeptideTarget)targetCollection.TargetList[70];
 
             Assert.AreEqual(72, targetCollection.TargetList.Count);
             Assert.AreEqual(189684639, testPeptide1.ID);
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(696, testPeptide1.ObsCount);
 
 
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
             Assert.AreEqual("C97H159N27O33", peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide1.Code));
 
 

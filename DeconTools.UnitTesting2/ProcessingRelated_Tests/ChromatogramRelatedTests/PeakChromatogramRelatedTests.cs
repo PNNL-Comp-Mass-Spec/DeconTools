@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void GetPeakChromatogram_IQStyle_Test1()
         {
 
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                       FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
             var target = TestUtilities.GetIQTargetStandard(1);
@@ -55,14 +55,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void GetPeakChromatogram_useMZTolerance_Test1()
         {
 
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                       FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
-            double targetMZ = 759.4032;
-            int startScan = 5500;
-            int stopScan = 6500;
+            var targetMZ = 759.4032;
+            var startScan = 5500;
+            var stopScan = 6500;
 
-            double toleranceInMZ = 0.02;
+            var toleranceInMZ = 0.02;
 
             var chromGen = new PeakChromatogramGenerator();
             var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
@@ -76,14 +76,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void GetPeakChromatogram_wideMZTolerance_Test1()
         {
 
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                       FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
-            double targetMZ = 759.4032;
-            int startScan = 5500;
-            int stopScan = 6500;
+            var targetMZ = 759.4032;
+            var startScan = 5500;
+            var stopScan = 6500;
 
-            double toleranceInMZ = 1.0;
+            var toleranceInMZ = 1.0;
 
             var chromGen = new PeakChromatogramGenerator();
             var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
@@ -99,12 +99,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void GetPeakChromatogram_usePPMTolerance_Test1()
         {
 
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                       FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
-            double targetMZ = 759.4032;
-            int startScan = 5500;
-            int stopScan = 6500;
+            var targetMZ = 759.4032;
+            var startScan = 5500;
+            var stopScan = 6500;
 
             double toleranceInPPM = 20;
 
@@ -121,19 +121,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramTest1()
         {
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                     FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
-            double targetMZ = 759.4032;
-            int startScan = 5500;
-            int stopScan = 6500;
+            var targetMZ = 759.4032;
+            var startScan = 5500;
+            var stopScan = 6500;
 
             
             double toleranceInPPM = 20;
 
             var chromGen = new PeakChromatogramGenerator();
 
-            PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
+            var mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;
 
             var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
@@ -156,7 +156,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void GetPeakChromatogram_IQStyle_Test2()
         {
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
             var target = TestUtilities.GetIQTargetStandard(1);
 
@@ -165,8 +165,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             chromGen.TopNPeaksLowerCutOff = 0.4;
             chromGen.Tolerance = 100;
 
-            int lowerScan = 6087;
-            int upperScan = 6418;
+            var lowerScan = 6087;
+            var upperScan = 6418;
 
             var chromXYData = chromGen.GenerateChromatogram(run, target.TheorIsotopicProfile, lowerScan, upperScan, chromGen.Tolerance, chromGen.ToleranceUnit);
             Assert.IsNotNull(chromXYData);
@@ -180,7 +180,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void GetPeakChromatogram_IQStyle_Test3()
         {
 
-            Run run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1, FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
 
             var target = TestUtilities.GetIQTargetStandard(1);
 
@@ -189,9 +189,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             chromGen.TopNPeaksLowerCutOff = 0.4;
             chromGen.Tolerance = 100;
 
-            int lowerScan = 6087;
-            int upperScan = 6418;
-            List<double> massOfInterest = new List<double>();
+            var lowerScan = 6087;
+            var upperScan = 6418;
+            var massOfInterest = new List<double>();
             massOfInterest.Add(target.TheorIsotopicProfile.Peaklist[0].XValue);
             massOfInterest.Add(target.TheorIsotopicProfile.Peaklist[1].XValue);
 
@@ -206,17 +206,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void getPeakChromatogramInTheFormOfMSPeakResult_Test1()
         {
             double chromToleranceInPPM = 20;
-            double targetMZ = 831.48;
+            var targetMZ = 831.48;
 
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
-            List<MSPeakResult> filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
+            var chromGen = new ChromatogramGenerator();
+            var filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
 
             //Assert.AreEqual(56, filteredMSPeaks.Count);
 
@@ -228,15 +228,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void getPeakChromAndStoreInPeakChromObject_Test1()
         {
             double chromToleranceInPPM = 20;
-            double targetMZ = 831.48;
+            var targetMZ = 831.48;
 
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            var chromGen = new ChromatogramGenerator();
 
             PeakChrom chrom = new BasicPeakChrom();
             chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
@@ -249,19 +249,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramTest2()
         {
-            PeptideTarget mt = TestUtilities.GetMassTagStandard(1);
+            var mt = TestUtilities.GetMassTagStandard(1);
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
             run.CurrentMassTag = mt;
 
-            TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
+            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
-            PeakChromatogramGenerator peakChromGen = new PeakChromatogramGenerator(10, Globals.ChromatogramGeneratorMode.TOP_N_PEAKS);
+            var peakChromGen = new PeakChromatogramGenerator(10, Globals.ChromatogramGeneratorMode.TOP_N_PEAKS);
             peakChromGen.TopNPeaksLowerCutOff = 0.4;
             peakChromGen.Execute(run.ResultCollection);
 
@@ -277,18 +277,18 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void getPeakChromatogramUsingChromGenTest1()
         {
-            double targetMZ = 831.48;
+            var targetMZ = 831.48;
             double toleranceInPPM = 20;
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            var chromGen = new ChromatogramGenerator();
             run.XYData = chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, toleranceInPPM, 1);
 
-            for (int i = 0; i < run.XYData.Xvalues.Length; i++)
+            for (var i = 0; i < run.XYData.Xvalues.Length; i++)
             {
                 run.XYData.Xvalues[i] = run.GetTime(i);
             }
@@ -296,8 +296,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             // run.XYData.Display();
 
 
-            int counter = 0;
-            StringBuilder sb = new StringBuilder();
+            var counter = 0;
+            var sb = new StringBuilder();
             var sortedList = run.ResultCollection.MSPeakResultList.OrderBy(p => p.MSPeak.XValue);
             foreach (var peak in sortedList)
             {
@@ -333,28 +333,28 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         public void getChromatogramsSpeedTest1()
         {
 
-            double targetMZ = 831.48;
+            var targetMZ = 831.48;
             double toleranceInPPM = 20;
 
-            int totalIterations = 40;
+            var totalIterations = 40;
 
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            PeakImporterFromText peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
+            var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            var chromGen = new ChromatogramGenerator();
 
-            List<long> speedResults = new List<long>();
+            var speedResults = new List<long>();
 
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
 
-            int startScan = 5500;
-            int stopScan = 8500;
+            var startScan = 5500;
+            var stopScan = 8500;
 
 
-            for (int i = 0; i < totalIterations; i++)
+            for (var i = 0; i < totalIterations; i++)
             {
                 sw.Reset();
                 sw.Start();

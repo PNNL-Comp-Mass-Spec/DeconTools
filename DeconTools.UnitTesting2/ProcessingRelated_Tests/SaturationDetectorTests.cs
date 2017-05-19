@@ -18,37 +18,37 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
         public void Test1()
         {
 
-            SaturationDetector saturationDetector = new SaturationDetector();
+            var saturationDetector = new SaturationDetector();
 
-            string testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
+            var testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
           
 
             var run = (UIMFRun)new RunFactory().CreateRun(testFile);
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            DeconToolsZeroFiller zeroFiller = new DeconToolsZeroFiller();
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var zeroFiller = new DeconToolsZeroFiller();
          
 
-           DeconToolsPeakDetectorV2 peakDetector =new DeconToolsPeakDetectorV2(4,3,Globals.PeakFitType.QUADRATIC,false);
+           var peakDetector =new DeconToolsPeakDetectorV2(4,3,Globals.PeakFitType.QUADRATIC,false);
         
-            HornDeconvolutor decon = new HornDeconvolutor();
+            var decon = new HornDeconvolutor();
             decon.LeftFitStringencyFactor = 2.5;
             decon.RightFitStringencyFactor = 0.5;
 
 
-            int startScan = 100;
-            int stopScan = 200;
+            var startScan = 100;
+            var stopScan = 200;
 
 
-            for (int i = startScan; i < stopScan; i++)
+            for (var i = startScan; i < stopScan; i++)
             {
 
                 var frame = new ScanSet(500);
 
-                int primaryScan = i;
+                var primaryScan = i;
 
-                ScanSet scan = new ScanSet(primaryScan, primaryScan - 3 , primaryScan +3);
+                var scan = new ScanSet(primaryScan, primaryScan - 3 , primaryScan +3);
 
 
                 run.CurrentScanSet = frame;

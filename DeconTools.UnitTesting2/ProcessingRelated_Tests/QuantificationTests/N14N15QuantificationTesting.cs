@@ -21,12 +21,12 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public void test01_mt230140708_z3()
         {
             double featureFinderTol = 15;
-            bool featureFinderRequiresMonoPeak = false;
-            int numPeaksUsedInQuant = 3;
+            var featureFinderRequiresMonoPeak = false;
+            var numPeaksUsedInQuant = 3;
 
-            N14N15TestingUtilities n14n15Util = new N14N15TestingUtilities();
+            var n14n15Util = new N14N15TestingUtilities();
             //get MS
-            XYData massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
+            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
 
 
            var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(3, 2);
@@ -34,38 +34,38 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             
 
             //get target MT
-            PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z3();
+            var mt23140708 = n14n15Util.CreateMT23140708_Z3();
 
 
             //get ms peaks
-            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
+            var msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
             //TestUtilities.DisplayPeaks(msPeakList);
 
-            TomTheorFeatureGenerator featureGen = new TomTheorFeatureGenerator();
+            var featureGen = new TomTheorFeatureGenerator();
             featureGen.GenerateTheorFeature(mt23140708);
 
             TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
 
-            JoshTheorFeatureGenerator featureGen2 = new JoshTheorFeatureGenerator();
+            var featureGen2 = new JoshTheorFeatureGenerator();
             featureGen2.GenerateTheorFeature(mt23140708);
 
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
 
-            N15IsotopeProfileGenerator gen = new N15IsotopeProfileGenerator();
+            var gen = new N15IsotopeProfileGenerator();
 
-            IsotopicProfile theorN15Profile = gen.GetN15IsotopicProfile(mt23140708, 0.005);
-
-
+            var theorN15Profile = gen.GetN15IsotopicProfile(mt23140708, 0.005);
 
 
-            BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
 
 
-            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
+            var bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
+            var n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
+
+
+            var n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
@@ -82,7 +82,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TestUtilities.DisplayIsotopicProfileData(n15Profile);
 
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(featureFinderTol);
+            var quant = new BasicN14N15Quantifier(featureFinderTol);
             double ratioContribIso1;
             double ratioContribIso2;
             double ratio;
@@ -108,15 +108,15 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public void test01_mt230140708_z2()
         {
             double featureFinderTol = 15;
-            bool featureFinderRequiresMonoPeak = false;
-            int numPeaksUsedInQuant = 3;
+            var featureFinderRequiresMonoPeak = false;
+            var numPeaksUsedInQuant = 3;
 
-            N14N15TestingUtilities n14n15Util = new N14N15TestingUtilities();
+            var n14n15Util = new N14N15TestingUtilities();
             //get MS
-            XYData massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z2_Sum3();  //scan 1428 of 
+            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z2_Sum3();  //scan 1428 of 
 
             //get target MT
-            PeptideTarget mt23140708 = n14n15Util.CreateMT23140708_Z2();
+            var mt23140708 = n14n15Util.CreateMT23140708_Z2();
 
 
             var smoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(3, 2);
@@ -124,25 +124,25 @@ namespace DeconTools.UnitTesting2.QuantificationTests
 
 
             //get ms peaks
-            DeconToolsPeakDetectorV2 peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            List<Peak> msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
+            var msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
 
 
 
 
             TestUtilities.DisplayPeaks(msPeakList);
 
-            TomTheorFeatureGenerator featureGen = new TomTheorFeatureGenerator();
+            var featureGen = new TomTheorFeatureGenerator();
             featureGen.GenerateTheorFeature(mt23140708);
 
-            N15IsotopeProfileGenerator profileGen = new N15IsotopeProfileGenerator();
-            IsotopicProfile theorN15Profile = profileGen.GetN15IsotopicProfile(mt23140708, 0.005);
+            var profileGen = new N15IsotopeProfileGenerator();
+            var theorN15Profile = profileGen.GetN15IsotopicProfile(mt23140708, 0.005);
 
 
 
-            BasicTFF bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
-            IsotopicProfile n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
-            IsotopicProfile n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
+            var bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
+            var n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
+            var n15Profile = bff.FindMSFeature(msPeakList, theorN15Profile);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
@@ -159,7 +159,7 @@ namespace DeconTools.UnitTesting2.QuantificationTests
             TestUtilities.DisplayIsotopicProfileData(n15Profile);
 
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(featureFinderTol);
+            var quant = new BasicN14N15Quantifier(featureFinderTol);
             double ratioContribIso1;
             double ratioContribIso2;
             double ratio;

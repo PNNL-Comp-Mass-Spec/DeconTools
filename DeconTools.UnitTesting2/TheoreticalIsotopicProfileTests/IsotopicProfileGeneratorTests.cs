@@ -14,13 +14,13 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void GenerateIsotopicProfileTest1()
         {
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
 
 
-            string empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
+            var empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
 
 
-            JoshTheorFeatureGenerator featureGenerator = new JoshTheorFeatureGenerator();
+            var featureGenerator = new JoshTheorFeatureGenerator();
             
 
         }
@@ -30,9 +30,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void TomGenerateTheorProfileTest1()
         {
-            PeptideTarget mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
 
-            TomTheorFeatureGenerator theorGenerator = new TomTheorFeatureGenerator();
+            var theorGenerator = new TomTheorFeatureGenerator();
             theorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
@@ -45,9 +45,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void JoshGenerateTheorProfileTest1()
         {
-            PeptideTarget mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
 
-            JoshTheorFeatureGenerator theorGenerator = new JoshTheorFeatureGenerator();
+            var theorGenerator = new JoshTheorFeatureGenerator();
             theorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
@@ -59,13 +59,13 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void TomGenerateN15LabelledTheorProfileTest1()
         {
-            PeptideTarget mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
 
-            TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
+            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
 
-            TomTheorFeatureGenerator n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabelled);
@@ -78,17 +78,17 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void TomGenerateN15LabelledTheorProfileTest2()
         {
-            PeptideTarget mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
            mt.EmpiricalFormula=   mt.GetEmpiricalFormulaFromTargetCode();
 
             Console.WriteLine("Total nitrogens = "+mt.GetAtomCountForElement("N"));
 
 
-            TomTheorFeatureGenerator unlabelledTheorGenerator = new TomTheorFeatureGenerator();
+            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
 
-            TomTheorFeatureGenerator n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
 
             //TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
@@ -101,19 +101,19 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void JoshGenerateN15LabelledTheorProfileTest2()
         {
-            PeptideTarget mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
 
             Console.WriteLine("Total nitrogens = " + mt.GetAtomCountForElement("N"));
 
 
-            JoshTheorFeatureGenerator unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
+            var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
             unlabelledTheorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
             Console.WriteLine();
 
-            JoshTheorFeatureGenerator n15theorGenerator = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var n15theorGenerator = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
 
             unlabelledTheorGenerator.GenerateTheorFeature(mt);

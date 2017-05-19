@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fiParameterFile = new FileInfo(@"..\..\..\TestFiles\SampleParameterFile.xml");
 
             Assert.IsTrue(fiParameterFile.Exists);
-            DeconToolsParameters parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(fiParameterFile.FullName);
 
             Assert.IsNotNullOrEmpty(parameters.ThrashParameters.AveragineFormula);
@@ -55,11 +55,11 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void LoadParametersForIMSDataprocessingTest2()
         {
-            string parameterFile =
+            var parameterFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\IMS\IMS_UIMF_PeakBR4_PeptideBR4_SN3_SumScans3_NoLCSum_Sat90000_newFormat.xml";
 
             Assert.IsTrue(File.Exists(parameterFile));
-            DeconToolsParameters parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
 
             Assert.IsNotNullOrEmpty(parameters.ThrashParameters.AveragineFormula);

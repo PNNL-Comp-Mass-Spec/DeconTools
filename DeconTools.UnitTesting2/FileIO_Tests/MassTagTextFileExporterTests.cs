@@ -16,9 +16,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         public void exportMassTagsToTextFile_Test1()
         {
             //first, import some data
-            TargetCollection mtc = new TargetCollection();
-            string massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
-            MassTagFromTextFileImporter massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
+            var mtc = new TargetCollection();
+            var massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
+            var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
             mtc = massTagImporter.Import();
 
             //second, export it
@@ -29,10 +29,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 File.Delete(testOutput1);
             }
             
-            MassTagTextFileExporter exporter = new MassTagTextFileExporter(testOutput1);
+            var exporter = new MassTagTextFileExporter(testOutput1);
             exporter.ExportResults(mtc.TargetList);
 
-            FileInfo fi = new FileInfo(testOutput1);
+            var fi = new FileInfo(testOutput1);
             Assert.IsTrue(fi.Exists);
 
             //Assert.AreEqual(13716, fi.Length);

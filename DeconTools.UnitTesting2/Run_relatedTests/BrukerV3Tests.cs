@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker9T_test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(599, run.MaxLCScan);
             Assert.AreEqual("SWT_9t_TestDS216_Small", run.DatasetName);
@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker9T_test2()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(4274, run.MaxLCScan);
             Assert.AreEqual("RSPH_Aonly_01_run1_11Oct07_Andromeda_07-09-02", run.DatasetName);
@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker12T_ser_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(7, run.MaxLCScan);
             Assert.AreEqual(8, run.GetNumMSScans());
@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker12T_fid_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(0, run.MaxLCScan);
             Assert.AreEqual(1, run.GetNumMSScans());
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker12T_dotD_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_dotD_File1);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_dotD_File1);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(0, run.MaxLCScan);
             Assert.AreEqual(1, run.GetNumMSScans());
@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void runInitiation_Bruker15T_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(17, run.MaxLCScan);
             Assert.AreEqual(18, run.GetNumMSScans());
@@ -77,9 +77,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker9T_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(300);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(300);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -90,11 +90,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker9T_Test2()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
 
-            ScanSet scanSet = new ScanSet(1000);
+            var scanSet = new ScanSet(1000);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -105,11 +105,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void Get_summed_Spectrum_Bruker9T_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile2);
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
 
-            ScanSet scanSet = new ScanSet(1000,999,1001);
+            var scanSet = new ScanSet(1000,999,1001);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -121,9 +121,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker12T_fid_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(0);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(0);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -134,9 +134,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker12T_fid_Test2()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(0);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(0);
             double minMZ = 700;
             double maxMZ = 701;
 
@@ -150,9 +150,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker12T_ser_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(2);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(2);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -163,9 +163,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker15T_ser_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(2);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(2);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
@@ -178,9 +178,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void GetSpectrum_Bruker15T_SummedMS_Test1()
         {
-            BrukerV3Run run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
-            XYData xydata = new XYData();
-            ScanSet scanSet = new ScanSet(2,1,3);
+            var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
+            var xydata = new XYData();
+            var scanSet = new ScanSet(2,1,3);
             xydata =run.GetMassSpectrum(scanSet);
             Assert.That(xydata.Xvalues != null);
             Assert.That(xydata.Xvalues.Length > 0);
