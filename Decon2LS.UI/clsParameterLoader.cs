@@ -72,7 +72,7 @@ namespace Decon2LS
         public void LoadParametersFromFile(string fileName)
         {
 
-            XmlTextReader rdr = new XmlTextReader(fileName);
+            var rdr = new XmlTextReader(fileName);
 
             //Read each node in the tree.
             while (rdr.Read())
@@ -119,7 +119,7 @@ namespace Decon2LS
             {
                 //Create a new XmlTextWriter.
                 //				XmlTextWriter xwriter = new XmlTextWriter(Console.Out);
-                XmlTextWriter xwriter = new XmlTextWriter(fileName,System.Text.Encoding.UTF8);
+                var xwriter = new XmlTextWriter(fileName,System.Text.Encoding.UTF8);
                 xwriter.Formatting = Formatting.None;
                 xwriter.IndentChar = '\t' ;
                 xwriter.Indentation = 1 ; 

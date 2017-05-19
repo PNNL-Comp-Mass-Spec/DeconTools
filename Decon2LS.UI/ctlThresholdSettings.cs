@@ -72,7 +72,7 @@ namespace Decon2LS
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ctlThresholdSettings));
+            var resources = new System.Resources.ResourceManager(typeof(ctlThresholdSettings));
             this.label3 = new System.Windows.Forms.Label();
             this.mTextMaxFit = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();

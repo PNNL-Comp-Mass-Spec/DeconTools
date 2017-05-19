@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Utilities
 #if !Disable_DeconToolsV2
         public DeconToolsV2.Peaks.clsPeak lookupPeak(double mz, DeconToolsV2.Peaks.clsPeak[] peaklist, double mzVar)
         {
-            for (int i = 0; i < peaklist.Length; i++)
+            for (var i = 0; i < peaklist.Length; i++)
             {
                 if (Math.Abs(mz - peaklist[i].mdbl_mz) <= mzVar)
                 {
@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Utilities
 
         public int lookupPeakIndex(double mz, DeconToolsV2.Peaks.clsPeak[] peaklist, double mzVar)
         {
-            for (int i = 0; i < peaklist.Length; i++)
+            for (var i = 0; i < peaklist.Length; i++)
             {
                 if (Math.Abs(mz - peaklist[i].mdbl_mz) <= mzVar)
                 {
@@ -38,9 +38,9 @@ namespace DeconTools.Backend.Utilities
         //TODO: I'm duplicating code here to make room for List<MSPeak>;  not good... there has to be a better way... 
         public static List<MSPeak> GetMSPeaksWithinTolerance(List<MSPeak> inputList, double targetVal, double toleranceInMZ)
         {
-            List<MSPeak> outputList = new List<MSPeak>();
+            var outputList = new List<MSPeak>();
 
-            int targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
+            var targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
             // look to the left for other peaks within the tolerance
 
             if (targetIndex == -1) return outputList;
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.Utilities
             if (targetIndex > 0)
             {
 
-                for (int i = (targetIndex - 1); i >= 0; i--)
+                for (var i = (targetIndex - 1); i >= 0; i--)
                 {
                     if (Math.Abs(targetVal - inputList[i].XValue) <= toleranceInMZ)
                     {
@@ -67,7 +67,7 @@ namespace DeconTools.Backend.Utilities
             // look to the right for other peaks within the tolerance. 
             if (targetIndex < inputList.Count - 1)   // ensure we aren't at the end of the peak list
             {
-                for (int i = (targetIndex + 1); i < inputList.Count; i++)
+                for (var i = (targetIndex + 1); i < inputList.Count; i++)
                 {
                     if (Math.Abs(targetVal - inputList[i].XValue) <= toleranceInMZ)
                     {
@@ -82,11 +82,11 @@ namespace DeconTools.Backend.Utilities
 
         public static List<Peak> CreatePeakDataFromXYData(XYData xydata, double peakWidth)
         {
-            List<Peak> mspeakList = new List<Peak>();
+            var mspeakList = new List<Peak>();
 
-            for (int i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xydata.Xvalues.Length; i++)
             {
-                MSPeak peak = new MSPeak(xydata.Xvalues[i], (float)xydata.Yvalues[i], (float)peakWidth, 0);
+                var peak = new MSPeak(xydata.Xvalues[i], (float)xydata.Yvalues[i], (float)peakWidth, 0);
                 mspeakList.Add(peak);
             }
 
@@ -100,18 +100,18 @@ namespace DeconTools.Backend.Utilities
         {
             // assuming peaklist is in order 
 
-            List<Peak> outputList = new List<Peak>();
+            var outputList = new List<Peak>();
 
             // find a peak within the tolerance using a binary search method
-            int targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
+            var targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
             if (targetIndex == -1) return outputList;
 
             // look to the left for other peaks within the tolerance
             if (targetIndex > 0)
             {
-                for (int i = (targetIndex - 1); i >= 0; i--)
+                for (var i = (targetIndex - 1); i >= 0; i--)
                 {
-                    Peak peak = inputList[i];
+                    var peak = inputList[i];
 
                     // Once we we reach a certain m/z, we can stop looking
                     if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
@@ -126,9 +126,9 @@ namespace DeconTools.Backend.Utilities
             // look to the right for other peaks within the tolerance. 
             if (targetIndex < inputList.Count - 1)   // ensure we aren't at the end of the peak list
             {
-                for (int i = (targetIndex + 1); i < inputList.Count; i++)
+                for (var i = (targetIndex + 1); i < inputList.Count; i++)
                 {
-                    Peak peak = inputList[i];
+                    var peak = inputList[i];
 
                     // Once we we reach a certain m/z, we can stop looking
                     if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
@@ -150,7 +150,7 @@ namespace DeconTools.Backend.Utilities
             maxPeak = peakList[0];
 
 
-            foreach (Peak peak in peakList)
+            foreach (var peak in peakList)
             {
                 if (peak.Height >= maxPeak.Height)
                 {
@@ -166,9 +166,9 @@ namespace DeconTools.Backend.Utilities
         {
             if (leftIndex <= rightIndex)
             {
-                int middle = (leftIndex + rightIndex) / 2;
+                var middle = (leftIndex + rightIndex) / 2;
 
-                double xValue = inputList[middle].XValue;
+                var xValue = inputList[middle].XValue;
 
                 if (Math.Abs(targetVal - xValue) <= toleranceInMZ)
                 {
@@ -192,7 +192,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (leftIndex <= rightIndex)
             {
-                int middle = (leftIndex + rightIndex) / 2;
+                var middle = (leftIndex + rightIndex) / 2;
 
                 if (Math.Abs(targetVal - inputList[middle].XValue) <= toleranceInMZ)
                 {
@@ -215,14 +215,14 @@ namespace DeconTools.Backend.Utilities
         {
             if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
 
-            int indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
-            List<MSPeak> trimmedPeakList = new List<MSPeak>();
+            var indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
+            var trimmedPeakList = new List<MSPeak>();
 
 
             //Trim left
             if (indexOfMaxPeak > 0)   // if max peak is not the first peak, then trim
             {
-                for (int i = indexOfMaxPeak - 1; i >= 0; i--)
+                for (var i = indexOfMaxPeak - 1; i >= 0; i--)
                 {
                     if (isotopicProfile.Peaklist[i].Height >= cutOff || neverTrimLeft)
                     {
@@ -237,7 +237,7 @@ namespace DeconTools.Backend.Utilities
             //Trim right
             if (indexOfMaxPeak < isotopicProfile.Peaklist.Count - 1)  // if max peak is not the last peak (rare condition)
             {
-                for (int i = indexOfMaxPeak + 1; i < isotopicProfile.Peaklist.Count; i++)
+                for (var i = indexOfMaxPeak + 1; i < isotopicProfile.Peaklist.Count; i++)
                 {
                     if (isotopicProfile.Peaklist[i].Height >= cutOff || neverTrimRight)
                     {
@@ -254,12 +254,12 @@ namespace DeconTools.Backend.Utilities
         public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
         {
             if (inputList == null || inputList.Count == 0) return null;
-            List<MSPeak> outputList = new List<MSPeak>();
+            var outputList = new List<MSPeak>();
 
             outputList.Add(inputList[0]);
             if (inputList.Count > 1)
             {
-                for (int i = 1; i < inputList.Count; i++)
+                for (var i = 1; i < inputList.Count; i++)
                 {
                     if (inputList[i].Height > outputList[0].Height)
                     {
@@ -285,7 +285,7 @@ namespace DeconTools.Backend.Utilities
         {
             double sum = 0;
 
-            for (int i = 0; i < inputPeaks.Count; i++)
+            for (var i = 0; i < inputPeaks.Count; i++)
             {
                 sum += inputPeaks[i].Height - backgroundIntensity;
             }
@@ -298,13 +298,13 @@ namespace DeconTools.Backend.Utilities
         public static XYData GetChromatogram(List<DeconTools.Backend.DTO.MSPeakResult> peakList, double targetMZ, double toleranceInMZ)
         {
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
 
-            double lowerMZ = targetMZ - toleranceInMZ;
-            double upperMZ = targetMZ + toleranceInMZ;
+            var lowerMZ = targetMZ - toleranceInMZ;
+            var upperMZ = targetMZ + toleranceInMZ;
 
 
-            List<MSPeakResult> filteredPeakList = peakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
+            var filteredPeakList = peakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
             if (filteredPeakList == null || filteredPeakList.Count == 0)
             {
@@ -312,22 +312,22 @@ namespace DeconTools.Backend.Utilities
             }
 
 
-            int minScan = filteredPeakList.First().Scan_num;
-            int maxScan = filteredPeakList.Last().Scan_num;
+            var minScan = filteredPeakList.First().Scan_num;
+            var maxScan = filteredPeakList.Last().Scan_num;
 
-            Dictionary<int, double> scanAndIntensityList = new Dictionary<int, double>();
+            var scanAndIntensityList = new Dictionary<int, double>();
 
-            for (int i = minScan; i <= maxScan; i++)
+            for (var i = minScan; i <= maxScan; i++)
             {
                 scanAndIntensityList.Add(i, 0);
 
             }
 
-            for (int i = 0; i < filteredPeakList.Count; i++)
+            for (var i = 0; i < filteredPeakList.Count; i++)
             {
-                MSPeakResult pr = filteredPeakList[i];
+                var pr = filteredPeakList[i];
 
-                double storedIntensity = scanAndIntensityList[pr.Scan_num];
+                var storedIntensity = scanAndIntensityList[pr.Scan_num];
 
                 if (pr.MSPeak.Height > storedIntensity)
                 {

@@ -9,15 +9,15 @@ namespace DeconTools.Utilities
 
         public void loadDataFromFile(string filename, ref float[] xdata, ref float[] ydata)
         {
-            System.IO.StreamReader sr = new System.IO.StreamReader(filename);
+            var sr = new System.IO.StreamReader(filename);
 
-            List<float> xvals = new List<float>();
-            List<float> yvals = new List<float>();
+            var xvals = new List<float>();
+            var yvals = new List<float>();
 
             while (sr.Peek() != -1)
             {
-                string line = sr.ReadLine();
-                List<string> vals = processLine(line);
+                var line = sr.ReadLine();
+                var vals = processLine(line);
 
                 xvals.Add(parseFloatField(vals[0]));
                 yvals.Add(parseFloatField(vals[1]));
@@ -51,10 +51,10 @@ namespace DeconTools.Utilities
         private List<string> processLine(string inputLine)
         {
             char[] splitter = { '\t' };
-            List<string> returnedList = new List<string>();
+            var returnedList = new List<string>();
 
-            string[] arr = inputLine.Split(splitter);
-            foreach (string str in arr)
+            var arr = inputLine.Split(splitter);
+            foreach (var str in arr)
             {
                 returnedList.Add(str);
             }

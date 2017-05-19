@@ -3,8 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov
 // Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -39,8 +40,8 @@ namespace Decon2LS
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            this.mtxt_value.Text = default_value ; 
-            this.mlabel.Text = label ; 
+            this.mtxt_value.Text = default_value ;
+            this.mlabel.Text = label ;
         }
 
         /// <summary>
@@ -70,42 +71,42 @@ namespace Decon2LS
             this.mbtn_OK = new System.Windows.Forms.Button();
             this.mbtn_cancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // mlabel
-            // 
+            //
             this.mlabel.Location = new System.Drawing.Point(8, 16);
             this.mlabel.Name = "mlabel";
             this.mlabel.Size = new System.Drawing.Size(152, 16);
             this.mlabel.TabIndex = 0;
-            // 
+            //
             // mtxt_value
-            // 
+            //
             this.mtxt_value.Location = new System.Drawing.Point(183, 10);
             this.mtxt_value.Name = "mtxt_value";
             this.mtxt_value.Size = new System.Drawing.Size(80, 20);
             this.mtxt_value.TabIndex = 1;
             this.mtxt_value.Text = "";
-            // 
+            //
             // mbtn_OK
-            // 
+            //
             this.mbtn_OK.Location = new System.Drawing.Point(56, 48);
             this.mbtn_OK.Name = "mbtn_OK";
             this.mbtn_OK.Size = new System.Drawing.Size(80, 24);
             this.mbtn_OK.TabIndex = 2;
             this.mbtn_OK.Text = "OK";
             this.mbtn_OK.Click += new System.EventHandler(this.mbtn_OK_Click);
-            // 
+            //
             // mbtn_cancel
-            // 
+            //
             this.mbtn_cancel.Location = new System.Drawing.Point(168, 48);
             this.mbtn_cancel.Name = "mbtn_cancel";
             this.mbtn_cancel.Size = new System.Drawing.Size(80, 24);
             this.mbtn_cancel.TabIndex = 3;
             this.mbtn_cancel.Text = "Cancel";
             this.mbtn_cancel.Click += new System.EventHandler(this.mbtn_cancel_Click);
-            // 
+            //
             // frmSimpleDialogBox
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(296, 78);
             this.Controls.Add(this.mbtn_cancel);
@@ -121,36 +122,36 @@ namespace Decon2LS
 
         private void mbtn_OK_Click(object sender, System.EventArgs e)
         {
-            this.DialogResult = DialogResult.OK ; 
-            this.Hide() ; 
+            this.DialogResult = DialogResult.OK ;
+            this.Hide() ;
         }
 
         private void mbtn_cancel_Click(object sender, System.EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel ; 
-            this.Hide() ; 		
+            this.DialogResult = DialogResult.Cancel ;
+            this.Hide() ;
         }
 
         public string Value
         {
             get
             {
-                return this.mtxt_value.Text ; 
+                return this.mtxt_value.Text ;
             }
             set
             {
-                this.mtxt_value.Text = value ; 
+                this.mtxt_value.Text = value ;
             }
         }
         public string Label
         {
             get
             {
-                return this.mlabel.Text ; 
+                return this.mlabel.Text ;
             }
             set
             {
-                this.mlabel.Text = value ; 
+                this.mlabel.Text = value ;
             }
         }
     }

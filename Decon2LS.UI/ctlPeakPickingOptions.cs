@@ -82,7 +82,7 @@ namespace Decon2LS
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ctlPeakPickingOptions));
+            var resources = new System.Resources.ResourceManager(typeof(ctlPeakPickingOptions));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mcmbPeakFitType = new System.Windows.Forms.ComboBox();
             this.splitter1 = new System.Windows.Forms.Splitter();

@@ -215,7 +215,7 @@ namespace Decon2LS
                     throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of ColumnWidths to an empty array.");
 
                 // Make sure all of the ColumnWidths are valid.
-                for (int intColumnIndex = 0; intColumnIndex < this.m_iaColumnWidths.Length; ++intColumnIndex)
+                for (var intColumnIndex = 0; intColumnIndex < this.m_iaColumnWidths.Length; ++intColumnIndex)
                 {
                     if (this.m_iaColumnWidths[intColumnIndex] < 1)
                     throw new ArgumentOutOfRangeException("ColumnWidths", "You cannot set the value of a ColumnWidth to a number less than one.");
@@ -1126,7 +1126,7 @@ namespace Decon2LS
         /// </example>
         public void Load(XmlReader xrConfigXmlFile)
         {
-            XmlDocument xmlConfig = new XmlDocument();
+            var xmlConfig = new XmlDocument();
 
             xmlConfig.Load(xrConfigXmlFile);
 
@@ -1153,7 +1153,7 @@ namespace Decon2LS
         /// </example>
         public void Load(TextReader trConfigXmlFile)
         {
-            XmlDocument xmlConfig = new XmlDocument();
+            var xmlConfig = new XmlDocument();
 
             xmlConfig.Load(trConfigXmlFile);
 
@@ -1180,7 +1180,7 @@ namespace Decon2LS
         /// </example>
         public void Load(Stream sConfigXmlFile)
         {
-            XmlDocument xmlConfig = new XmlDocument();
+            var xmlConfig = new XmlDocument();
 
             xmlConfig.Load(sConfigXmlFile);
 
@@ -1205,7 +1205,7 @@ namespace Decon2LS
     /// </example>
     public void Load(string strConfigXmlFile)
     {
-      XmlDocument xmlConfig = new XmlDocument();
+      var xmlConfig = new XmlDocument();
 
       xmlConfig.Load(strConfigXmlFile);
 
@@ -1234,7 +1234,7 @@ namespace Decon2LS
     public virtual void Load(XmlDocument xmlConfig)
     {
       XmlElement xmlElement;
-      ArrayList alBuffer = new ArrayList();
+      var alBuffer = new ArrayList();
       char[] caDelimiter;
 
       this._CheckDiposed();
@@ -1372,7 +1372,7 @@ namespace Decon2LS
     /// </example>
     public void Save(XmlWriter xwXmlConfig)
     {
-      XmlDocument xmlConfig = this.Save();
+      var xmlConfig = this.Save();
 
       xmlConfig.Save(xwXmlConfig);
     }
@@ -1391,7 +1391,7 @@ namespace Decon2LS
     /// </example>
     public void Save(TextWriter twXmlConfig)
     {
-      XmlDocument xmlConfig = this.Save();
+      var xmlConfig = this.Save();
 
       xmlConfig.Save(twXmlConfig);
     }
@@ -1410,7 +1410,7 @@ namespace Decon2LS
     /// </example>
     public void Save(Stream sXmlConfig)
     {
-      XmlDocument xmlConfig = this.Save();
+      var xmlConfig = this.Save();
 
       xmlConfig.Save(sXmlConfig);
     }
@@ -1427,7 +1427,7 @@ namespace Decon2LS
     /// </example>
     public void Save(string strConfigXmlFile)
     {
-      XmlDocument xmlConfig = this.Save();
+      var xmlConfig = this.Save();
 
       xmlConfig.Save(strConfigXmlFile);
     }
@@ -1445,7 +1445,7 @@ namespace Decon2LS
     /// </example>
     public virtual XmlDocument Save()
     {
-      XmlDocument xmlConfig = new XmlDocument();
+      var xmlConfig = new XmlDocument();
       XmlDeclaration xmlDeclaration;
       XmlElement xmlRoot, xmlElement, xmlSubElement;
 
@@ -1470,7 +1470,7 @@ namespace Decon2LS
         xmlRoot.AppendChild(xmlElement);
 
         // Create the column width elements underneath the column widths node.
-        foreach (int intColumnWidth in this.m_iaColumnWidths)
+        foreach (var intColumnWidth in this.m_iaColumnWidths)
         {
           xmlSubElement = xmlConfig.CreateElement(XML_COLUMN_WIDTH);
           xmlSubElement.InnerText = intColumnWidth.ToString();
@@ -1922,7 +1922,7 @@ namespace Decon2LS
     {
       // Move the strings in the data array into the string collection
       // because they are the header names.
-      for (int intColumnIndex = 0; intColumnIndex < this.m_scData.Count; ++intColumnIndex)
+      for (var intColumnIndex = 0; intColumnIndex < this.m_scData.Count; ++intColumnIndex)
         this.m_scColumnNames.Add(this.m_scData[intColumnIndex]);
 
       this.m_blnHeaderRowFound = true;
@@ -2021,7 +2021,7 @@ namespace Decon2LS
     {
       int intStartOfDataIndex;
       string strUnescaped;
-      bool blnTrimResults = this.m_blnTrimResults;
+      var blnTrimResults = this.m_blnTrimResults;
 
       // Make sure we haven't exceeded our expected column count.
       if ((this.m_intExpectedColumnCount > 0) && (this.m_scData.Count > this.m_intExpectedColumnCount))
@@ -2186,12 +2186,12 @@ namespace Decon2LS
     /// characters in the character array.</returns>
     private string _ConvertToSafeString(char[] caArray)
     {
-      string strResult = string.Empty;
-      bool blnFirstValue = true;
+      var strResult = string.Empty;
+      var blnFirstValue = true;
 
       if (caArray != null)
       {
-        foreach (char c in caArray)
+        foreach (var c in caArray)
         {
           strResult += string.Format("{0}{1}",
             (blnFirstValue) ? string.Empty : XML_SAFE_STRING_DELIMITER,
@@ -2220,7 +2220,7 @@ namespace Decon2LS
         alChars = new ArrayList();
         saValues = strSafeString.Split(XML_SAFE_STRING_DELIMITER.ToCharArray());
 
-        foreach (string s in saValues)
+        foreach (var s in saValues)
           alChars.Add(Convert.ToChar(Convert.ToInt32(s)));
 
         return ((char[]) alChars.ToArray(typeof(char)));
@@ -2247,7 +2247,7 @@ namespace Decon2LS
     {
       if (this.m_blnHeaderRowFound && (strColumnName != null))
       {
-        for (int intColumnIndex = 0; intColumnIndex < this.m_scColumnNames.Count; ++intColumnIndex)
+        for (var intColumnIndex = 0; intColumnIndex < this.m_scColumnNames.Count; ++intColumnIndex)
         {
           if (this.m_scColumnNames[intColumnIndex] == strColumnName)
             return intColumnIndex;
@@ -2584,7 +2584,7 @@ namespace Decon2LS
       this._CheckDiposed();
 
       DataRow drRow;
-      DataTable dtData = new DataTable();
+      var dtData = new DataTable();
       int intColumnIndex, intFoundColumns = 0, intCurrentColumnCount;
 
       dtData.BeginLoadData();
@@ -2653,7 +2653,7 @@ namespace Decon2LS
         else
         {
           string strNewColumnName;
-          int intCount = 0;
+          var intCount = 0;
 
           // Looks like we need to generate a new column name.
           do
@@ -2709,7 +2709,7 @@ namespace Decon2LS
     /// </returns>
     public override XmlDocument Save()
     {
-      XmlDocument xmlConfig = base.Save ();
+      var xmlConfig = base.Save ();
       XmlElement xmlElement;
 
       ///////////////////////////////////////////////////////////////

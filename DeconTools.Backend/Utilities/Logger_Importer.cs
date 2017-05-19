@@ -20,15 +20,15 @@ namespace DeconTools.Backend.Utilities
                 throw new FileNotFoundException("Log file couldn't be loaded. Check path");
 
             }
-            StreamReader sr = new StreamReader(logtestfile);
+            var sr = new StreamReader(logtestfile);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             while (sr.Peek()!=-1)
             {
-                string currentLine = sr.ReadLine();
+                var currentLine = sr.ReadLine();
 
-                Match match= Regex.Match(currentLine, @"(?<date>.+)\tProcessed scan/frame\s+(?<scan>\d+),\s+(?<percentcomplete>[0-9.]+)%\s+complete,\s+(?<features>\d+)");
+                var match= Regex.Match(currentLine, @"(?<date>.+)\tProcessed scan/frame\s+(?<scan>\d+),\s+(?<percentcomplete>[0-9.]+)%\s+complete,\s+(?<features>\d+)");
                 if (match.Success)
                 {
                     sb.Append(match.Groups["date"].Value);

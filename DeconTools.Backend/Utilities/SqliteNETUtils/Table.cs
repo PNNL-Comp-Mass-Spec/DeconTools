@@ -20,12 +20,12 @@ namespace DeconTools.Utilities.SqliteUtils
         #region Public Methods
         public virtual string BuildCreateTableString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
             sb.Append(this.Name);
             sb.Append(" (");
 
-            foreach (Field fieldItem in FieldList)
+            foreach (var fieldItem in FieldList)
             {
                 sb.Append(fieldItem.ToString());
                 if (fieldItem == FieldList[FieldList.Count - 1])  //if last one...
@@ -45,7 +45,7 @@ namespace DeconTools.Utilities.SqliteUtils
 
         public virtual string BuildInsertionHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("INSERT INTO ");
             sb.Append(this.Name);
 

@@ -66,7 +66,7 @@ namespace Decon2LS
             try
             {
                 
-                PNNL.Controls.DiamondShape shape = new PNNL.Controls.DiamondShape(3, false) ; 
+                var shape = new PNNL.Controls.DiamondShape(3, false) ; 
                 mobj_tic_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red, false, true, true) ; 
                 mobj_bpi_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Blue, false, true, true) ; 
                 m_tic_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider() ; 
@@ -86,7 +86,7 @@ namespace Decon2LS
             {				
                 mobjRawData.LoadFile(mFileName, DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)  ; 
                 mobjRawData.GetTicFromFile(ref marr_tic_values, ref marr_scans, true) ; 
-                clsPlotParams plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
+                var plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
                 plotParams.Name = "TIC" ;				
 
                 mobj_tic_series = 
@@ -110,7 +110,7 @@ namespace Decon2LS
             try
             {
                 mdata_tbl = new System.Data.DataTable() ; 
-                using (clsGenericParserAdapter parser = new clsGenericParserAdapter())
+                using (var parser = new clsGenericParserAdapter())
                 {
                     parser.SetDataSource(mFileName) ; 
                     parser.ColumnDelimiter = ",".ToCharArray() ; 
@@ -118,10 +118,10 @@ namespace Decon2LS
                     parser.MaxBufferSize = 4096 ; 
                     parser.TextQualifier  = '\'';
                     mdata_tbl = parser.GetDataTable() ; 
-                    int scan_num_col = parser.GetColumnIndex("scan_num") ; 
-                    int tic_col = parser.GetColumnIndex("tic") ; 
-                    int bpi_col = parser.GetColumnIndex("bpi") ; 
-                    int num_entries  = mdata_tbl.Rows.Count ; 
+                    var scan_num_col = parser.GetColumnIndex("scan_num") ; 
+                    var tic_col = parser.GetColumnIndex("tic") ; 
+                    var bpi_col = parser.GetColumnIndex("bpi") ; 
+                    var num_entries  = mdata_tbl.Rows.Count ; 
                     double scan ; 
                     double tic ; 
                     double bpi ; 
@@ -130,9 +130,9 @@ namespace Decon2LS
                     marr_scans = new float[num_entries] ; 
                     marr_bpi_values = new float[num_entries] ; 
                     
-                    for (int entry_num = 0 ; entry_num < num_entries ; entry_num++)
+                    for (var entry_num = 0 ; entry_num < num_entries ; entry_num++)
                     {
-                        DataRow row = mdata_tbl.Rows[entry_num] ; 
+                        var row = mdata_tbl.Rows[entry_num] ; 
                         scan =  Convert.ToDouble(row[scan_num_col].ToString())  ; 
                         tic = Convert.ToDouble(row[tic_col].ToString())  ; 
                         bpi = Convert.ToDouble(row[bpi_col].ToString()) ; 
@@ -144,14 +144,14 @@ namespace Decon2LS
 
                     parser.Close() ; 
 
-                    clsPlotParams plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
+                    var plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
                     plotParams.Name = "TIC" ;
 
                     mobj_tic_series = 
                         new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_tic_values), 
                         plotParams, mFileNameForHeader) ; 
 
-                    clsPlotParams plotParams1 = (clsPlotParams) mobj_bpi_plt_params.Clone() ;
+                    var plotParams1 = (clsPlotParams) mobj_bpi_plt_params.Clone() ;
                     plotParams1.Name = "BPI"  ; 
 
                     mobj_bpi_series = 
@@ -202,12 +202,12 @@ namespace Decon2LS
         /// </summary>
         private void InitializeComponent()
         {
-            PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
-            PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmTICViewer));
-            PNNL.Controls.PenProvider penProvider3 = new PNNL.Controls.PenProvider();
-            PNNL.Controls.PenProvider penProvider4 = new PNNL.Controls.PenProvider();
-            System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+            var penProvider1 = new PNNL.Controls.PenProvider();
+            var penProvider2 = new PNNL.Controls.PenProvider();
+            var resources = new System.Resources.ResourceManager(typeof(frmTICViewer));
+            var penProvider3 = new PNNL.Controls.PenProvider();
+            var penProvider4 = new PNNL.Controls.PenProvider();
+            var configurationAppSettings = new System.Configuration.AppSettingsReader();
             this.mctl_bpi = new PNNL.Controls.ctlLineChart();
             this.mctl_tic = new PNNL.Controls.ctlLineChart();
             ((System.ComponentModel.ISupportInitialize)(this.mctl_bpi)).BeginInit();
@@ -434,7 +434,7 @@ namespace Decon2LS
 
             public override clsSeries CopySeries()
             {
-                clsSeries series = base.CopySeries();
+                var series = base.CopySeries();
                 series.PlotParams.Name += " (" + new System.IO.FileInfo(mFilename).Name + ")";
                 return series;
             }

@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             AddElementsToReferenceTable();
 
 
-            double[] frequencyData = new double[2 * _mercuryArraySize + 1];
+            var frequencyData = new double[2 * _mercuryArraySize + 1];
 
             double monoIsotopicMass = 0;
             double averageMass = 0;
@@ -68,23 +68,23 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
             Realft(ref frequencyData);
 
-            List<double> intensityVals = new List<double>();
-            List<double> mzVals = new List<double>();
+            var intensityVals = new List<double>();
+            var mzVals = new List<double>();
 
 
-            for (int i = _mercuryArraySize / 2 + 1; i <= _mercuryArraySize; i++)
+            for (var i = _mercuryArraySize / 2 + 1; i <= _mercuryArraySize; i++)
             {
-                double mz = (i - _mercuryArraySize - 1) / _pointsPerAtomicMassUnit + monoIsotopicMass / chargeState + Globals.PROTON_MASS;
-                double intensity = frequencyData[2 * i - 1];
+                var mz = (i - _mercuryArraySize - 1) / _pointsPerAtomicMassUnit + monoIsotopicMass / chargeState + Globals.PROTON_MASS;
+                var intensity = frequencyData[2 * i - 1];
 
                 mzVals.Add(mz);
                 intensityVals.Add(intensity);
             }
 
-            for (int i = 1; i <= _mercuryArraySize / 2; i++)
+            for (var i = 1; i <= _mercuryArraySize / 2; i++)
             {
-                double mz = (i - 1) / _pointsPerAtomicMassUnit + monoIsotopicMass / chargeState + Globals.PROTON_MASS;
-                double intensity = frequencyData[2 * i - 1];
+                var mz = (i - 1) / _pointsPerAtomicMassUnit + monoIsotopicMass / chargeState + Globals.PROTON_MASS;
+                var intensity = frequencyData[2 * i - 1];
 
                 mzVals.Add(mz);
                 intensityVals.Add(intensity);
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
         {
             var sb = new StringBuilder();
 
-            for (int j = 1; j <= _mercuryArraySize; j++)
+            for (var j = 1; j <= _mercuryArraySize; j++)
             {
                 var index1 = 2 * j - 1;
                 var index2 = 2 * j;
@@ -145,7 +145,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             double expDenominator;
 
 
-            double apodizationSubscript = averageMass / (Resolution * Math.Abs(chargeState)) * _mercuryArraySize * 2 / _massRange;
+            var apodizationSubscript = averageMass / (Resolution * Math.Abs(chargeState)) * _mercuryArraySize * 2 / _massRange;
             expDenominator = numPoints / apodizationSubscript * numPoints / apodizationSubscript;
 
             switch (apodizationType)
@@ -153,7 +153,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 case MercuryApodizationType.Gaussian:
 
                     //TODO: make this zero-based (I copied what was done in DeconEngine - which was sloppy)
-                    for (int j = 1; j <= numPoints; j++)
+                    for (var j = 1; j <= numPoints; j++)
                     {
 
                         if (j <= numPoints / 2)
@@ -180,7 +180,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 case MercuryApodizationType.Lorentzian:
 
                     //TODO: make the loop zero-based
-                    for (int j = 1; j <= numPoints; j++)
+                    for (var j = 1; j <= numPoints; j++)
                     {
                         if (j <= numPoints / 2)
                         {
@@ -211,8 +211,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
         private int Realft(ref double[] data)
         {
-            int isign = 1;
-            int n = data.Length;
+            var isign = 1;
+            var n = data.Length;
 
             int i, i1, i2, i3, i4, n2p3;
             double c1 = 0.5, c2, hir, h1i, h2r, h2i;
@@ -290,9 +290,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             long mmax = 2;
             while (n > mmax)
             {
-                long istep = 2 * mmax;
+                var istep = 2 * mmax;
                 theta = 6.28318530717959 / (isign * mmax);
-                double wtemp = Math.Sin(0.5 * theta);
+                var wtemp = Math.Sin(0.5 * theta);
                 wpr = -2.0 * wtemp * wtemp;
                 wpi = Math.Sin(theta);
                 wr = 1.0;
@@ -302,10 +302,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                     for (i = m; i <= n; i += istep)
                     {
                         j = i + mmax;
-                        long jm1 = j - 1;
-                        long im1 = i - 1;
-                        double tempr = (wr * data[jm1] - wi * data[j]);
-                        double tempi = (wr * data[j] + wi * data[jm1]);
+                        var jm1 = j - 1;
+                        var im1 = i - 1;
+                        var tempr = (wr * data[jm1] - wi * data[j]);
+                        var tempi = (wr * data[j] + wi * data[jm1]);
                         data[jm1] = (data[im1] - tempr);
                         data[j] = (data[i] - tempi);
                         data[im1] += tempr;
@@ -330,9 +330,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
         {
 
 
-            for (int i = 1; i < numPoints / 2; i++)
+            for (var i = 1; i < numPoints / 2; i++)
             {
-                double freq = (i - 1) / _massRange;
+                var freq = (i - 1) / _massRange;
 
                 double realVal;
                 double imagVal;
@@ -342,9 +342,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 frequencyData[2 * i] = imagVal;
             }
 
-            for (int i = numPoints / 2 + 1; i <= numPoints; i++)
+            for (var i = numPoints / 2 + 1; i <= numPoints; i++)
             {
-                double freq = (i - numPoints - 1) / _massRange;
+                var freq = (i - numPoints - 1) / _massRange;
 
                 double realVal;
                 double imagVal;
@@ -392,12 +392,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
             foreach (var element in _elementTable)
             {
-                int numAtoms = element.Value;
+                var numAtoms = element.Value;
 
-                Element elementObject = _elementList[element.Key];
+                var elementObject = _elementList[element.Key];
 
 
-                int numIsotopes = elementObject.IsotopeDictionary.Count;
+                var numIsotopes = elementObject.IsotopeDictionary.Count;
 
                 var averageMass = elementObject.MassAverage;
 
@@ -419,13 +419,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                         }
                     }
 
-                    double x = 2 * Math.PI * wrapFrequency * freq;
+                    var x = 2 * Math.PI * wrapFrequency * freq;
 
                     real += isotope.NaturalAbundance * Math.Cos(x);
                     imag += isotope.NaturalAbundance * Math.Sin(x);
                 }
 
-                double tempR = Math.Sqrt(real * real + imag * imag);
+                var tempR = Math.Sqrt(real * real + imag * imag);
                 r *= Math.Pow(tempR, numAtoms);
 
                 if (real > 0)

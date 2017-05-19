@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
        
         public N15IsotopeProfileGenerator(double N14LabelingAmount = 0.02, double N15LabelingAmount = 0.98)
         {
-            decimal sumOfLabelingAmounts = (decimal)(Math.Round(N14LabelingAmount,2) + Math.Round(N15LabelingAmount,2));
+            var sumOfLabelingAmounts = (decimal)(Math.Round(N14LabelingAmount,2) + Math.Round(N15LabelingAmount,2));
 
             Check.Require(sumOfLabelingAmounts == 1.00m, "N14 and N15 labelling amounts do not add up to 1.00 - which they should.");
 
@@ -53,9 +53,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
-            int numNitrogens = mt.GetAtomCountForElement("N");
+            var numNitrogens = mt.GetAtomCountForElement("N");
 
-            IsotopicProfile labeledTheorProfile = _TomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _TomIsotopicPatternGenerator.aafN15Isos);
+            var labeledTheorProfile = _TomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _TomIsotopicPatternGenerator.aafN15Isos);
             addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, numNitrogens, mt.ChargeState);
 
             PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
@@ -74,10 +74,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
-            int numNitrogens = mt.GetAtomCountForElement("N");
+            var numNitrogens = mt.GetAtomCountForElement("N");
 
             _isotopicDistributionCalculator.SetLabeling("N", N14ISOTOPE_NUMBER, this.N14LabellingAmount, N15ISOTOPE_NUMBER, this.N15LabellingAmount);
-            IsotopicProfile labeledTheorProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
+            var labeledTheorProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
             addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, numNitrogens, mt.ChargeState);
 
             _isotopicDistributionCalculator.ResetToUnlabeled();
@@ -109,8 +109,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
 
             //Assign m/z values to the left of the monoN15Mass
-            int counter = 1;
-            for (int i = numNitrogens - 1; i >= 0; i--)
+            var counter = 1;
+            for (var i = numNitrogens - 1; i >= 0; i--)
             {
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numNitrogens].XValue - (double)counter * (1.003 / (double)chargeState);
                 counter++;
@@ -118,7 +118,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             //Assign m/z values to the right of the monoN15Mass
             counter = 1;
-            for (int i = numNitrogens + 1; i < labeledTheorProfile.Peaklist.Count; i++)
+            for (var i = numNitrogens + 1; i < labeledTheorProfile.Peaklist.Count; i++)
             {
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numNitrogens].XValue + (double)counter * (1.003 / (double)chargeState);
                 counter++;

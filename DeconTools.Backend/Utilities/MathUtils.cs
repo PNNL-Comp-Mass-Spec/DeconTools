@@ -12,9 +12,9 @@ namespace DeconTools.Backend.Utilities
 
             if (x1 == x2) return y1;
 
-            double slope = (y2 - y1) / (x2 - x1);
-            double yintercept = y1 - (slope * x1);
-            double interpolatedVal = targetXvalue * slope + yintercept;
+            var slope = (y2 - y1) / (x2 - x1);
+            var yintercept = y1 - (slope * x1);
+            var interpolatedVal = targetXvalue * slope + yintercept;
             return interpolatedVal;
         }
 
@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (values == null || values.Length == 0) return double.NaN;
             double sum = 0;
-            foreach (double val in values)
+            foreach (var val in values)
             {
                 sum += val;
             }
@@ -47,11 +47,11 @@ namespace DeconTools.Backend.Utilities
                 return double.NaN;
             }
 
-            double average = GetAverage(values);
+            var average = GetAverage(values);
 
             double sum = 0;
 
-            foreach (double val in values)
+            foreach (var val in values)
             {
                 sum += ((average - val) * (average - val));
             }
@@ -74,7 +74,7 @@ namespace DeconTools.Backend.Utilities
 
             var sortedVals = values.OrderBy(d => d).ToList();
 
-            int middleIndex = (sortedVals.Count-1)/2;
+            var middleIndex = (sortedVals.Count-1)/2;
 
             double medianVal;
 
@@ -98,20 +98,20 @@ namespace DeconTools.Backend.Utilities
         {
             if (data.Length == 0) return -1;
 
-            int binarySearchIndex = BinarySearchWithTolerance(data, targetVal, 0, data.Length - 1, tolerance);
+            var binarySearchIndex = BinarySearchWithTolerance(data, targetVal, 0, data.Length - 1, tolerance);
             if (binarySearchIndex == -1) binarySearchIndex = 0;
 
-            bool indexIsBelowTarget = (data[binarySearchIndex] < targetVal);
+            var indexIsBelowTarget = (data[binarySearchIndex] < targetVal);
 
-            int indexOfClosest = -1;
+            var indexOfClosest = -1;
 
 
             if (indexIsBelowTarget)
             {
-                double diff = double.MaxValue;
-                for (int i = binarySearchIndex; i < data.Length; i++)
+                var diff = double.MaxValue;
+                for (var i = binarySearchIndex; i < data.Length; i++)
                 {
-                    double currentDiff = Math.Abs(data[i] - targetVal);
+                    var currentDiff = Math.Abs(data[i] - targetVal);
                     if (currentDiff < diff)
                     {
                         diff = currentDiff;
@@ -128,10 +128,10 @@ namespace DeconTools.Backend.Utilities
             }
             else
             {
-                double diff = double.MaxValue;
-                for (int i = binarySearchIndex; i >= 0; i--)
+                var diff = double.MaxValue;
+                for (var i = binarySearchIndex; i >= 0; i--)
                 {
-                    double currentDiff = Math.Abs(data[i] - targetVal);
+                    var currentDiff = Math.Abs(data[i] - targetVal);
                     if (currentDiff < diff)
                     {
                         diff = currentDiff;
@@ -157,7 +157,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (leftIndex <= rightIndex)
             {
-                int middle = (leftIndex + rightIndex) / 2;
+                var middle = (leftIndex + rightIndex) / 2;
                 if (Math.Abs(targetVal - data[middle]) <= tolerance)
                 {
                     return middle;
@@ -181,7 +181,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (leftIndex <= rightIndex)
             {
-                int middle = (leftIndex + rightIndex) / 2;
+                var middle = (leftIndex + rightIndex) / 2;
                 if (targetVal== data[middle] )
                 {
                     return middle;
@@ -203,16 +203,16 @@ namespace DeconTools.Backend.Utilities
 
         public static void GetLinearRegression(double[] xvals, double[] yvals, out double slope, out double intercept, out double rsquaredVal)
         {
-            double[,] inputData = new double[xvals.Length, 2];
+            var inputData = new double[xvals.Length, 2];
 
-            for (int i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xvals.Length; i++)
             {
                 inputData[i, 0] = xvals[i];
                 inputData[i, 1] = yvals[i];
             }
 
-            int numIndependentVariables = 1;
-            int numPoints = yvals.Length;
+            var numIndependentVariables = 1;
+            var numPoints = yvals.Length;
 
             alglib.linearmodel linearModel;
             int info;
@@ -241,22 +241,22 @@ namespace DeconTools.Backend.Utilities
             slope = regressionLineInfo[0];
             intercept = regressionLineInfo[1];
 
-            List<double> squaredResiduals = new List<double>();
-            List<double> calculatedYVals = new List<double>();
-            List<double> squaredMeanResiduals = new List<double>();
+            var squaredResiduals = new List<double>();
+            var calculatedYVals = new List<double>();
+            var squaredMeanResiduals = new List<double>();
 
-            double averageY = yvals.Average();
+            var averageY = yvals.Average();
 
 
-            for (int i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xvals.Length; i++)
             {
-                double calcYVal = alglib.lrprocess(linearModel, new double[] { xvals[i] });
+                var calcYVal = alglib.lrprocess(linearModel, new double[] { xvals[i] });
                 calculatedYVals.Add(calcYVal);
 
-                double residual = yvals[i] - calcYVal;
+                var residual = yvals[i] - calcYVal;
                 squaredResiduals.Add(residual * residual);
 
-                double meanResidual = yvals[i] - averageY;
+                var meanResidual = yvals[i] - averageY;
                 squaredMeanResiduals.Add(meanResidual * meanResidual);
             }
 

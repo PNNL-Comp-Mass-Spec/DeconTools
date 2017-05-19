@@ -316,9 +316,9 @@ namespace Decon2LS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
-            PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmMercury));
+            var penProvider1 = new PNNL.Controls.PenProvider();
+            var penProvider2 = new PNNL.Controls.PenProvider();
+            var resources = new System.Resources.ResourceManager(typeof(frmMercury));
             this.mApodizationTypeOptGaussian = new System.Windows.Forms.RadioButton();
             this.mApodizationTypeOptLorentzian = new System.Windows.Forms.RadioButton();
             this.mChargeStateTextBox = new System.Windows.Forms.TextBox();
@@ -1676,7 +1676,7 @@ namespace Decon2LS
         {
             try
             {
-                DeconToolsV2.ApodizationType apType = this.mMercuryIsotopeDistribution.ApodizationType;
+                var apType = this.mMercuryIsotopeDistribution.ApodizationType;
                 if (apType == DeconToolsV2.ApodizationType.Gaussian) 
                 {
                     this.mApodizationTypeOptGaussian.Checked = true;
@@ -1769,13 +1769,13 @@ namespace Decon2LS
                     }
                     return;
                 }
-                System.Drawing.PointF[] points = 
+                var points = 
                     this.mMercuryIsotopeDistribution.CalculateDistribution(
                     this.mMolecularFormula.ToElementTable());
 
-                float maxAbundance = float.NegativeInfinity ; 
+                var maxAbundance = float.NegativeInfinity ; 
                 float sum = 0 ; 
-                for (int ptNum = 0 ; ptNum < points.Length ; ptNum++)
+                for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
                 {
                     sum += points[ptNum].Y ; 
                     if (maxAbundance < points[ptNum].Y)
@@ -1783,12 +1783,12 @@ namespace Decon2LS
                         maxAbundance = points[ptNum].Y ; 
                     }
                 }
-                float ratio = (100*maxAbundance)/sum ; 
+                var ratio = (100*maxAbundance)/sum ; 
                 mtextBoxMostAbundant.Text = ratio.ToString("F2") ; 
 
                 if (!mcheckBoxAbsolute.Checked)
                 {
-                    for (int ptNum = 0 ; ptNum < points.Length ; ptNum++)
+                    for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
                     {
                         points[ptNum].Y = (points[ptNum].Y*100)/sum ; 
                     }
@@ -1825,15 +1825,15 @@ namespace Decon2LS
                 if (this.mResolutionMode == ResolutionMode.FWHM) 
                 {
                     //take FWHM
-                    double mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
+                    var mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
                     this.mMercuryIsotopeDistribution.Resolution = mass / this.mFWHM;
                     this.LoadResolutionFromMercuryIsotopeDistribution();
                 }
                 else 
                 {
                     //Using Resolution, so update FWHM text box based on mass of current formula
-                    double mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
-                    double resolution = this.mMercuryIsotopeDistribution.Resolution;
+                    var mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
+                    var resolution = this.mMercuryIsotopeDistribution.Resolution;
                     this.mFWHM  = mass/resolution;
                     this.LoadFWHM();
                 }
@@ -1945,7 +1945,7 @@ namespace Decon2LS
         {
             try 
             {
-                double cc_mass = double.Parse(this.mChargeCarrierMassTextBox.Text);
+                var cc_mass = double.Parse(this.mChargeCarrierMassTextBox.Text);
                 this.mMercuryIsotopeDistribution.ChargeCarrierMass = cc_mass;
                 this.LoadChargeCarrierMassFromMercuryIsotopeDistribution();
                 SetError(this.mChargeCarrierMassTextBox, NO_ERROR_MESSAGE);
@@ -1965,7 +1965,7 @@ namespace Decon2LS
         {
             try 
             {
-                short charge = short.Parse(this.mChargeStateTextBox.Text);
+                var charge = short.Parse(this.mChargeStateTextBox.Text);
                 this.mMercuryIsotopeDistribution.ChargeState = charge;
                 this.LoadChargeStateFromMercuryIsotopeDistribution();
                 SetError(this.mChargeStateTextBox, NO_ERROR_MESSAGE);
@@ -2028,7 +2028,7 @@ namespace Decon2LS
         {
             try 
             {
-                double resolution = double.Parse(this.mResolutionTextBox.Text);
+                var resolution = double.Parse(this.mResolutionTextBox.Text);
                 this.mMercuryIsotopeDistribution.Resolution = resolution;
                 this.LoadResolutionFromMercuryIsotopeDistribution();
                 SetError(this.mResolutionTextBox, NO_ERROR_MESSAGE);
@@ -2153,7 +2153,7 @@ namespace Decon2LS
         /// </summary>
         private void SyncDetails() 
         {
-            PNNL.Controls.DetailInfo[] details = new PNNL.Controls.DetailInfo[1];
+            var details = new PNNL.Controls.DetailInfo[1];
             details[0] = new PNNL.Controls.DetailInfo(frmMercury.DetailFormula + this.mMolecularFormula.ToString());
             this.Details = details;
         }
@@ -2170,10 +2170,10 @@ namespace Decon2LS
                 if (this.mProteinOrDNATab.SelectedTab == this.mProteinEditorTab) 
                 {
                     // update using protein translation
-                    MolecularFormulaTranslator translator = mProteinTranslator;
-                    MolecularFormula mf = translator.Translate(this.mProteinDNAEditorTextBox.Text, ".");
-                    MolecularFormula nEnd = (MolecularFormula) cmbNterm.SelectedItem;
-                    MolecularFormula cEnd = (MolecularFormula) cmbCterm.SelectedItem;
+                    var translator = mProteinTranslator;
+                    var mf = translator.Translate(this.mProteinDNAEditorTextBox.Text, ".");
+                    var nEnd = (MolecularFormula) cmbNterm.SelectedItem;
+                    var cEnd = (MolecularFormula) cmbCterm.SelectedItem;
                     mf = mf.Add(nEnd, 1).Add(cEnd, 1);
 
                     SetFormula(mf, updatePreview);
@@ -2181,15 +2181,15 @@ namespace Decon2LS
                 else 
                 {
                     // update using DNA translation
-                    MolecularFormulaTranslator translator = mDNATranslator;
-                    String input = this.mProteinDNAEditorTextBox.Text;
+                    var translator = mDNATranslator;
+                    var input = this.mProteinDNAEditorTextBox.Text;
                     if (this.mComplementCheckBox.Checked) 
                     {
-                        String original = input;
+                        var original = input;
                         input = "";
-                        foreach (char ch in original.ToCharArray()) 
+                        foreach (var ch in original.ToCharArray()) 
                         {
-                            char c = ch;
+                            var c = ch;
                             if (c == 'A') 
                             {
                                 c = 'T';
@@ -2209,8 +2209,8 @@ namespace Decon2LS
                             input += c;
                         }
                     }
-                    MolecularFormula mf = translator.Translate(input, ".");
-                    int numBases = input.Length;
+                    var mf = translator.Translate(input, ".");
+                    var numBases = input.Length;
                     mf = mf.Add(MolecularFormula.Hydrogen, -1 * (numBases - 1), true);
                     mf = mf.Add(MolecularFormula.Phosphorus, (numBases - 1));
                     mf = mf.Add(MolecularFormula.Oxygen, 2 * (numBases - 1));
@@ -2288,9 +2288,9 @@ namespace Decon2LS
 
         private void ProteinOrDNAButtonClickHandler(object sender, EventArgs args) 
         {
-            Button source = (Button) sender;
+            var source = (Button) sender;
             // Get the amino acid abbreviation from the tag of the button
-            String aminoAcid = (String) source.Tag;
+            var aminoAcid = (String) source.Tag;
             this.mProteinDNAEditorTextBox.Text += aminoAcid;
             this.UpdateFormulaFromProteinOrDNA(true);
         }
@@ -2377,7 +2377,7 @@ namespace Decon2LS
         /// <returns></returns>
         public override PNNL.Controls.clsSeries CopySeries()
         {
-            clsMercurySeries newSeries = new clsMercurySeries(
+            var newSeries = new clsMercurySeries(
                 (MercuryDataProvider) this.CloneChartDataProvider(), 
                 (PNNL.Controls.clsPlotParams) this.PlotParams.Clone(), null);
             
@@ -2388,7 +2388,7 @@ namespace Decon2LS
         {
             try 
             {
-                frmFloatDialog form = new frmFloatDialog();
+                var form = new frmFloatDialog();
                 form.Text = "Adjust Height Multiplier";
                 form.Prompt = "Multiplier";
                 form.EditingValue = ((MercuryDataProvider) this.DataProvider).HeightMultiplier;
@@ -2408,7 +2408,7 @@ namespace Decon2LS
             Console.WriteLine("Changing Mercury Series {0} {1}", this, this.GetHashCode());
             try 
             {
-                frmFloatDialog form = new frmFloatDialog();
+                var form = new frmFloatDialog();
                 form.Text = "Adjust m/z Offset";
                 form.Prompt = "m/z Offset";
                 form.EditingValue = ((MercuryDataProvider) this.DataProvider).MZOffset;
@@ -2479,7 +2479,7 @@ namespace Decon2LS
 //			for (int i = 0; i < x.Length; i++) 
 //			{
 //			}
-            for (int i = 0; i < x.Length; i++) 
+            for (var i = 0; i < x.Length; i++) 
             {
                 x[i] = x[i] + this.MZOffset;
                 y[i] = y[i] * this.HeightMultiplier;

@@ -64,7 +64,7 @@ namespace Decon2LS
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmFloatDialog));
+            var resources = new System.Resources.ResourceManager(typeof(frmFloatDialog));
             this.mPromptLabel = new System.Windows.Forms.Label();
             this.mFloatInputTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();

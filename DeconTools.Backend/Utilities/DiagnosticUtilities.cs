@@ -12,9 +12,9 @@ namespace DeconTools.Backend.Utilities
 
         public static string GetCurrentProcessInfo()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            Process currentProcess = Process.GetCurrentProcess();
+            var currentProcess = Process.GetCurrentProcess();
 
             sb.Append("Process Name =\t" + currentProcess.ProcessName);
             sb.Append("; Private bytes =\t" + String.Format("{0:N0}", currentProcess.PrivateMemorySize64));

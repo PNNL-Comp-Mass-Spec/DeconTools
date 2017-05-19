@@ -277,8 +277,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             //looks through the peak list and finds the closest peak to peakMz
             var minScore = 1.00727638; //enough for one charge away
-            peak = new ThrashV1Peak();
-            peak.Mz = 0.0;
+            peak = new ThrashV1Peak {
+                Mz = 0.0
+            };
 
             try
             {
@@ -294,12 +295,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 peak.Mz = 0.0;
                 peak.Intensity = 0.0;
 #if DEBUG
-                throw e;
+                throw;
 #endif
             }
 

@@ -144,7 +144,7 @@ namespace Decon2LS
             }
             try
             {
-                clsParameterLoader paramLoader = new clsParameterLoader() ; 
+                var paramLoader = new clsParameterLoader() ; 
                 if (System.IO.File.Exists(Application.ExecutablePath + mstrDEFAULTPARAMFILE))
                 {
                     mstrParamFile = Application.ExecutablePath + mstrDEFAULTPARAMFILE ; 
@@ -194,7 +194,7 @@ namespace Decon2LS
             if( disposing )
             {
                 //write out parameters to file. 
-                clsParameterLoader paramLoader = new clsParameterLoader() ; 
+                var paramLoader = new clsParameterLoader() ; 
                 paramLoader.PeakParameters = mobjPeakParameters ; 
                 paramLoader.TransformParameters = mobjTransformParameters ; 
                 paramLoader.FTICRPreprocessOptions = mobjFTICRRawPreProcessParameters ; 
@@ -223,8 +223,8 @@ namespace Decon2LS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDecon2LS));
-            System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDecon2LS));
+            var configurationAppSettings = new System.Configuration.AppSettingsReader();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.menuItem_File = new System.Windows.Forms.MenuItem();
             this.menuItem_open = new System.Windows.Forms.MenuItem();
@@ -430,7 +430,7 @@ namespace Decon2LS
         {
             try
             {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|Bruker files(acqu)|acqu|S files ICR2LS Format(*.*)|*.*|S files SUN Extrel Format(*.*)|*.*|MZ Xml File(*.mzXML)|*.mzXML|PNNL IMF File(*.IMF)|*.IMF|PNNL UIMF File(*.UIMF)|*.UIMF|Bruker Ascii peak File(*.ascii)|*.ascii|Raw Ascii File(*.txt)|*.txt|All files(*.*)|*.*" ;
                 openFileDialog1.FilterIndex = 1 ;
                 openFileDialog1.RestoreDirectory = true ;
@@ -438,9 +438,9 @@ namespace Decon2LS
 
                 if(openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    string file_name = openFileDialog1.FileName ; 
-                    int index = file_name.LastIndexOf("\\") ;
-                    string path_dir = "" ; 
+                    var file_name = openFileDialog1.FileName ; 
+                    var index = file_name.LastIndexOf("\\") ;
+                    var path_dir = "" ; 
 
                     if (index > 0)
                     {
@@ -621,7 +621,7 @@ namespace Decon2LS
         {
             try
             {
-                frmProcess process_frm = new frmProcess(ref mobj_config) ; 
+                var process_frm = new frmProcess(ref mobj_config) ; 
                 process_frm.PeakProcessorParameters = mobjPeakParameters ; 
                 process_frm.MassTransformParameters = mobjTransformParameters ; 
                     process_frm.FTICRPreProcessParameters = mobjFTICRRawPreProcessParameters ; 
@@ -673,7 +673,7 @@ namespace Decon2LS
         {
             try 
             {
-                Form form = (Form) sender;
+                var form = (Form) sender;
                 // Propogate event to mediator
                 if (form is ICategorizedItem) 
                 {
@@ -702,7 +702,7 @@ namespace Decon2LS
         {
             try
             {
-                frmAbout aboutForm = new frmAbout() ; 
+                var aboutForm = new frmAbout() ; 
                 aboutForm.ShowDialog(this) ; 
             }
             catch (Exception ex)
@@ -715,7 +715,7 @@ namespace Decon2LS
         {
             try
             {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Raw Peak Files (*.dat)|*.dat" ;
                 openFileDialog1.FilterIndex = 1 ;
                 openFileDialog1.RestoreDirectory = true ;
@@ -725,18 +725,18 @@ namespace Decon2LS
 
                 if(openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    string file_name = openFileDialog1.FileName ; 
-                    int index = file_name.LastIndexOf("\\") ;
-                    string path_dir = "" ; 
+                    var file_name = openFileDialog1.FileName ; 
+                    var index = file_name.LastIndexOf("\\") ;
+                    var path_dir = "" ; 
 
                     if (index > 0)
                     {
                         path_dir = file_name.Substring(0, index) ; 
                         mobj_config.OpenDir = path_dir ; 
                     }
-                    DeconToolsV2.Results.clsTransformResults transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
+                    var transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
                     transformResults.ReadResults(file_name) ; 
-                    frm2DPeakProcessing frmTwoD = new frm2DPeakProcessing(transformResults) ;
+                    var frmTwoD = new frm2DPeakProcessing(transformResults) ;
                     frmTwoD.HornTransformParameters = mobjTransformParameters ; 
                     frmTwoD.PeakProcessorParameters = mobjPeakParameters ;
                     frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ;
@@ -753,7 +753,7 @@ namespace Decon2LS
         {
             try
             {
-                frmMercury mercury = new frmMercury();
+                var mercury = new frmMercury();
                 mercury.ElementIsotopes = mobjTransformParameters.ElementIsotopeComposition ; 
                 mMediator.RequestFormOpen(mercury);		
             }
@@ -768,7 +768,7 @@ namespace Decon2LS
             try
             {
 
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Scans CSV File (*_scans.csv)|*.csv|ICR2LS TIC File (*.*)|*.tic" ;
                 openFileDialog1.FilterIndex = 1 ;
                 openFileDialog1.RestoreDirectory = true ;
@@ -776,17 +776,17 @@ namespace Decon2LS
 
                 if(openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    string file_name = openFileDialog1.FileName ; 
-                    int index = file_name.LastIndexOf("\\") ;
+                    var file_name = openFileDialog1.FileName ; 
+                    var index = file_name.LastIndexOf("\\") ;
                     index++ ; 
-                    string file_name_without_path = "" ; 
+                    var file_name_without_path = "" ; 
 
                     if (index > 0)
                     {
                         file_name_without_path = file_name.Substring(index, file_name.Length-index) ; 							
                     }
                     
-                    frmTICViewer frmTIC = new frmTICViewer() ; 
+                    var frmTIC = new frmTICViewer() ; 
                     frmTIC.mFileName = file_name  ; 
                     frmTIC.mFileNameForHeader = file_name_without_path ; 
                     switch(openFileDialog1.FilterIndex)
@@ -811,11 +811,11 @@ namespace Decon2LS
 
         private void frmDecon2LS_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            foreach (string fileName in (string[])e.Data.GetData(DataFormats.FileDrop) )
+            foreach (var fileName in (string[])e.Data.GetData(DataFormats.FileDrop) )
             {
 
-                int index = fileName.LastIndexOf("\\") ;
-                string path_dir = "" ; 			
+                var index = fileName.LastIndexOf("\\") ;
+                var path_dir = "" ; 			
 
                 if (index > 0)
                 {
@@ -826,14 +826,14 @@ namespace Decon2LS
                 if (fileName.EndsWith("_scans.csv"))
                 {					
                     index++ ; 
-                    string file_name_without_path = "" ; 
+                    var file_name_without_path = "" ; 
 
                     if (index > 0)
                     {
                         file_name_without_path = fileName.Substring(index, fileName.Length-index) ; 							
                     }
                     
-                    frmTICViewer frmTIC = new frmTICViewer() ; 
+                    var frmTIC = new frmTICViewer() ; 
                     frmTIC.mFileName = fileName  ; 
                     frmTIC.mFileNameForHeader = file_name_without_path ; 
                     frmTIC.LoadScansTICFile() ; 					
@@ -841,9 +841,9 @@ namespace Decon2LS
                 }
                 else if (fileName.EndsWith(".dat"))
                 {	
-                    DeconToolsV2.Results.clsTransformResults transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
+                    var transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
                     transformResults.ReadResults(fileName) ; 
-                    frm2DPeakProcessing frmTwoD = new frm2DPeakProcessing(transformResults) ;
+                    var frmTwoD = new frm2DPeakProcessing(transformResults) ;
                     frmTwoD.HornTransformParameters = mobjTransformParameters ; 
                     frmTwoD.PeakProcessorParameters = mobjPeakParameters ;
                     frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ;
@@ -852,14 +852,14 @@ namespace Decon2LS
                 else if(fileName.EndsWith(".tic"))
                 {
                     index++ ; 
-                    string file_name_without_path = "" ; 
+                    var file_name_without_path = "" ; 
 
                     if (index > 0)
                     {
                         file_name_without_path = fileName.Substring(index, fileName.Length-index) ; 							
                     }
                     
-                    frmTICViewer frmTIC = new frmTICViewer() ; 
+                    var frmTIC = new frmTICViewer() ; 
                     frmTIC.mFileName = fileName  ; 
                     frmTIC.mFileNameForHeader = file_name_without_path ; 
                     frmTIC.LoadIcr2lsTICFile() ; 				
@@ -886,9 +886,9 @@ namespace Decon2LS
             try
             {
                     // time to expose the options. 
-                    frmTransformOptions frmOptions = new frmTransformOptions(mobjPeakParameters, mobjTransformParameters, 
+                    var frmOptions = new frmTransformOptions(mobjPeakParameters, mobjTransformParameters, 
                         mobjFTICRRawPreProcessParameters, mobjDTAGenerationParameters) ; 
-                    DialogResult result = frmOptions.ShowDialog(this) ; 
+                    var result = frmOptions.ShowDialog(this) ; 
                     if (result == DialogResult.Cancel)
                         return ; 
                 

@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Utilities
         {
 
             DbConnection cnn;
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + filePath;
 
@@ -29,7 +29,7 @@ namespace DeconTools.Backend.Utilities
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw ex;
+                throw;
             }
 
 
@@ -47,9 +47,9 @@ namespace DeconTools.Backend.Utilities
             addTOFCorrectionTimeIfAbsent(cnn);
 
 
-            using (DbTransaction mytransaction = cnn.BeginTransaction())
+            using (var mytransaction = cnn.BeginTransaction())
             {
-                using (DbCommand cmd = cnn.CreateCommand())
+                using (var cmd = cnn.CreateCommand())
                 {
                     cmd.CommandText = "UPDATE Global_Parameters SET TOFCorrectionTime = " + tofCorrectionTime.ToString() + ";";
                     cmd.ExecuteNonQuery();
@@ -63,8 +63,8 @@ namespace DeconTools.Backend.Utilities
         private static void addTOFCorrectionTimeIfAbsent(DbConnection cnn)
         {
 
-            List<string> columnNames = SqliteNETUtils.SqliteNETUtils.GetColumnNames(cnn, "Global_Parameters");
-            string targetColumn = "TOFCorrectionTime";
+            var columnNames = SqliteNETUtils.SqliteNETUtils.GetColumnNames(cnn, "Global_Parameters");
+            var targetColumn = "TOFCorrectionTime";
 
             if (!columnNames.Contains(targetColumn))
             {
@@ -78,7 +78,7 @@ namespace DeconTools.Backend.Utilities
         {
 
             DbConnection cnn;
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + filePath;
 
@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Utilities
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw ex;
+                throw;
             }
 
             add_a2b2c2d2e2f2ColumnsIfAbsent(cnn);
@@ -105,9 +105,9 @@ namespace DeconTools.Backend.Utilities
 
         private static void modifyPolynomialConstants(DbConnection cnn, double a2, double b2, double c2, double d2, double e2, double f2)
         {
-            using (DbTransaction mytransaction = cnn.BeginTransaction())
+            using (var mytransaction = cnn.BeginTransaction())
             {
-                using (DbCommand cmd = cnn.CreateCommand())
+                using (var cmd = cnn.CreateCommand())
                 {
                     cmd.CommandText = "UPDATE Frame_Parameters SET a2 = " + a2.ToString() + ";";
                     cmd.ExecuteNonQuery();
@@ -136,9 +136,9 @@ namespace DeconTools.Backend.Utilities
         private static void modifySlopeAndIntercept(DbConnection cnn, double calSlope, double calIntercept)
         {
            
-            using (DbTransaction mytransaction = cnn.BeginTransaction())
+            using (var mytransaction = cnn.BeginTransaction())
             {
-                using (DbCommand cmd = cnn.CreateCommand())
+                using (var cmd = cnn.CreateCommand())
                 {
                     cmd.CommandText = "UPDATE Frame_Parameters SET CalibrationSlope = " + calSlope.ToString() + ";";
                     cmd.ExecuteNonQuery();
@@ -157,7 +157,7 @@ namespace DeconTools.Backend.Utilities
         private static void add_a2b2c2d2e2f2ColumnsIfAbsent(DbConnection cnn)
         {
 
-            List<string> columnNames = SqliteNETUtils.SqliteNETUtils.GetColumnNames(cnn, "Frame_Parameters");
+            var columnNames = SqliteNETUtils.SqliteNETUtils.GetColumnNames(cnn, "Frame_Parameters");
             string[] targetColumns = { "a2", "b2", "c2", "d2", "e2", "f2" };
 
             foreach (var col in targetColumns)
@@ -175,10 +175,10 @@ namespace DeconTools.Backend.Utilities
 
         private static void addNewColumn(DbConnection cnn, string tableName, string col, string variableType)
         {
-            using (DbTransaction mytransaction = cnn.BeginTransaction())
+            using (var mytransaction = cnn.BeginTransaction())
             {
 
-                using (DbCommand cmd = cnn.CreateCommand())
+                using (var cmd = cnn.CreateCommand())
                 {
                     cmd.CommandText = "ALTER TABLE " + tableName + " ADD COLUMN " + col + " " + variableType + ";";
                     cmd.ExecuteNonQuery();

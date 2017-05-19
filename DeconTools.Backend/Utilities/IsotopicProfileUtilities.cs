@@ -26,11 +26,11 @@ namespace DeconTools.Backend.Utilities
                 //define start m/z and stop m/z based on peak m/z and width
 
 
-                double peakSigma = peak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
-                double startMZ = peak.XValue - peakSigma * 2;   // width at base = 4σ;  
-                double stopMZ = peak.XValue + peakSigma * 2;
+                var peakSigma = peak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+                var startMZ = peak.XValue - peakSigma * 2;   // width at base = 4σ;  
+                var stopMZ = peak.XValue + peakSigma * 2;
 
-                for (int i = startingIndex; i < xvals.Length; i++)
+                for (var i = startingIndex; i < xvals.Length; i++)
                 {
                     startingIndex = i;    // move the starting point along so that next peak will start at the end of the last peak
 
@@ -40,10 +40,10 @@ namespace DeconTools.Backend.Utilities
                         {
                             if (i == xvals.Length - 1) break;   // rare circumstance that m/z value is the last of the raw data points
 
-                            double x1 = xvals[i];
-                            double y1 = yvals[i];
-                            double x2 = xvals[i + 1];
-                            double y2 = yvals[i + 1];
+                            var x1 = xvals[i];
+                            var y1 = yvals[i];
+                            var x2 = xvals[i + 1];
+                            var y2 = yvals[i + 1];
 
                             area += (x2 - x1) * (y1 - backgroundIntensity) + (x2 - x1) * (y2 - y1) * 0.5;    //area of square + area of triangle (semi-trapazoid)
                         }
@@ -79,7 +79,7 @@ namespace DeconTools.Backend.Utilities
 
             var maxIntensity = profile.getMostIntensePeak().Height;
             
-            for (int i = 0; i < profile.Peaklist.Count; i++)
+            for (var i = 0; i < profile.Peaklist.Count; i++)
             {
                 profile.Peaklist[i].Height = profile.Peaklist[i].Height/maxIntensity*intensityForNormalization;
             }
@@ -101,7 +101,7 @@ namespace DeconTools.Backend.Utilities
 
             var intensityTargetPeak = profile.Peaklist[indexOfPeakUsedForNormalization].Height;
 
-            for (int i = 0; i < profile.Peaklist.Count; i++)
+            for (var i = 0; i < profile.Peaklist.Count; i++)
             {
                 profile.Peaklist[i].Height = profile.Peaklist[i].Height/intensityTargetPeak*intensityForNormalization;
             }
@@ -119,16 +119,16 @@ namespace DeconTools.Backend.Utilities
             double offset = 0;
             if (iso2 == null || iso2.Peaklist == null || iso2.Peaklist.Count == 0) return;
 
-            MSPeak mostIntensePeak = iso2.getMostIntensePeak();
-            int indexOfMostIntensePeak = iso2.Peaklist.IndexOf(mostIntensePeak);
+            var mostIntensePeak = iso2.getMostIntensePeak();
+            var indexOfMostIntensePeak = iso2.Peaklist.IndexOf(mostIntensePeak);
 
             if (iso1.Peaklist == null || iso1.Peaklist.Count == 0) return;
 
-            bool enoughPeaksInTarget = (indexOfMostIntensePeak <= iso1.Peaklist.Count - 1);
+            var enoughPeaksInTarget = (indexOfMostIntensePeak <= iso1.Peaklist.Count - 1);
 
             if (enoughPeaksInTarget)
             {
-                MSPeak targetPeak = iso1.Peaklist[indexOfMostIntensePeak];
+                var targetPeak = iso1.Peaklist[indexOfMostIntensePeak];
                 offset = targetPeak.XValue - mostIntensePeak.XValue;
                 //offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
 
@@ -153,10 +153,10 @@ namespace DeconTools.Backend.Utilities
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
-            StringBuilder sb = new StringBuilder();
-            int counter = 0;
+            var sb = new StringBuilder();
+            var counter = 0;
 
-            foreach (MSPeak peak in profile.Peaklist)
+            foreach (var peak in profile.Peaklist)
             {
                 sb.Append(counter);
                 sb.Append("\t");
@@ -179,7 +179,7 @@ namespace DeconTools.Backend.Utilities
         {
 
             //given the size of an isotopic distribution, we can use a linear (slow) search
-            for (int i = 0; i < iso1.Peaklist.Count; i++)
+            for (var i = 0; i < iso1.Peaklist.Count; i++)
             {
                 if (Math.Abs(iso1.Peaklist[i].XValue-targetMZ)<=mzTolerance)
                 {
@@ -191,7 +191,7 @@ namespace DeconTools.Backend.Utilities
 
         public static List<MSPeak> GetTopMSPeaks(List<MSPeak> msPeaklist, double intensityCutoff)
         {
-            List<MSPeak> filteredMSPeaklist = new List<MSPeak>();
+            var filteredMSPeaklist = new List<MSPeak>();
 
             foreach (var peak in msPeaklist)
             {
@@ -206,9 +206,9 @@ namespace DeconTools.Backend.Utilities
         public static List<double> GetTopNMZValues(List<MSPeak> msPeaklist, int topNPeaks)
         {
             var sortedPeakList = msPeaklist.OrderByDescending(x => x.Height);
-            List<double> mzList = new List<double>();
+            var mzList = new List<double>();
 
-            int count = 0;
+            var count = 0;
             foreach (var peak in sortedPeakList)
             {
                 if (count < topNPeaks)

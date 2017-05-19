@@ -55,9 +55,12 @@ namespace DeconTools.Backend.Utilities
 
         public void AddEntry(string desc)
         {
-            LogEntry entry = new LogEntry();
-            entry.LogTime = DateTime.Now;
-            entry.LogDescription = desc;
+            var entry = new LogEntry
+            {
+                LogTime = DateTime.Now,
+                LogDescription = desc
+            };
+
             this.LogEntryBuffer.Add(entry);
             this.logEntries.Add(entry);
             TimeOfLastUpdate = DateTime.Now;
@@ -83,15 +86,15 @@ namespace DeconTools.Backend.Utilities
 
         public TimeSpan GetTimeDifference(string string1, string string2)
         {
-            LogEntry logentry1 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string1; });
-            LogEntry logentry2 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string2; });
+            var logentry1 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string1; });
+            var logentry2 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string2; });
 
             if (logentry1.LogDescription == null || logentry2.LogDescription == null)
             {
                 return new TimeSpan(-1);
             }
 
-            TimeSpan span = logentry2.LogTime.Subtract(logentry1.LogTime);
+            var span = logentry2.LogTime.Subtract(logentry1.LogTime);
             return span;
 
 
@@ -100,7 +103,7 @@ namespace DeconTools.Backend.Utilities
 
         public void Display()
         {
-            foreach (LogEntry entry in LogEntryBuffer)
+            foreach (var entry in LogEntryBuffer)
             {
                 Console.WriteLine(entry.LogTime.ToString() + "\t" + entry.LogDescription);
 
@@ -111,12 +114,12 @@ namespace DeconTools.Backend.Utilities
 
         public void WriteToFile(string outputfilename)
         {
-            using (StreamWriter sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Append,
+            using (var sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Append,
                           System.IO.FileAccess.Write, System.IO.FileShare.Read)))
             {
                 sw.AutoFlush = true;
 
-                foreach (LogEntry entry in LogEntryBuffer)
+                foreach (var entry in LogEntryBuffer)
                 {
                     sw.WriteLine(entry.LogTime.ToString() + "\t" + entry.LogDescription);
 

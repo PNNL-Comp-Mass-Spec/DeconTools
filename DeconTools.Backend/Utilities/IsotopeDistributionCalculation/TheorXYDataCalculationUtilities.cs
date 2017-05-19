@@ -24,23 +24,23 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         public static XYData GetTheorPeakData(double centerXValue, double peakHeight, double peakWidth, int numPointsPerPeak)
         {
-            XYData xydata = new XYData();
-            double one_over_sqrt_of_2_pi = 0.3989423;
-            double sigma = peakWidth / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
-            double sixsigma = 3 * peakWidth;
-            double mz_per_point = sixsigma / (double)(numPointsPerPeak - 1);
+            var xydata = new XYData();
+            var one_over_sqrt_of_2_pi = 0.3989423;
+            var sigma = peakWidth / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
+            var sixsigma = 3 * peakWidth;
+            var mz_per_point = sixsigma / (double)(numPointsPerPeak - 1);
 
-            int startPoint = 0 - (numPointsPerPeak - 1) / 2;
-            int stopPoint = 0 + (numPointsPerPeak - 1) / 2;
+            var startPoint = 0 - (numPointsPerPeak - 1) / 2;
+            var stopPoint = 0 + (numPointsPerPeak - 1) / 2;
 
             xydata.Xvalues = new double[numPointsPerPeak];
             xydata.Yvalues = new double[numPointsPerPeak];
 
-            int counter = 0;
-            for (int i = startPoint; i <= stopPoint; i++)
+            var counter = 0;
+            for (var i = startPoint; i <= stopPoint; i++)
             {
-                double mz = centerXValue + mz_per_point * (i);
-                double intens = (1 / sigma) * one_over_sqrt_of_2_pi * Math.Exp(-1 * ((mz - centerXValue) * (mz - centerXValue)) / (2 * sigma * sigma));
+                var mz = centerXValue + mz_per_point * (i);
+                var intens = (1 / sigma) * one_over_sqrt_of_2_pi * Math.Exp(-1 * ((mz - centerXValue) * (mz - centerXValue)) / (2 * sigma * sigma));
 
                 xydata.Xvalues[counter] = mz;
                 xydata.Yvalues[counter] = intens;
@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             xydata.NormalizeYData();
 
 
-            for (int i = 0; i < xydata.Yvalues.Length; i++)
+            for (var i = 0; i < xydata.Yvalues.Length; i++)
             {
                 xydata.Yvalues[i] = xydata.Yvalues[i] * peakHeight;
             }
@@ -63,13 +63,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             Check.Require(isotopicProfile != null && isotopicProfile.Peaklist != null &&
             isotopicProfile.Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
 
-            XYData xydata = new XYData();
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
+            var xydata = new XYData();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
-            for (int i = 0; i < isotopicProfile.Peaklist.Count; i++)
+            for (var i = 0; i < isotopicProfile.Peaklist.Count; i++)
             {
-                XYData tempXYData = GetTheorPeakData(isotopicProfile.Peaklist[i], fwhm);
+                var tempXYData = GetTheorPeakData(isotopicProfile.Peaklist[i], fwhm);
                 xvals.AddRange(tempXYData.Xvalues);
                 yvals.AddRange(tempXYData.Yvalues);
 

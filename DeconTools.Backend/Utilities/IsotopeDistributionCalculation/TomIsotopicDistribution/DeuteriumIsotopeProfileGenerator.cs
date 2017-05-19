@@ -20,9 +20,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         //default
         public DeuteriumIsotopeProfileGenerator()
         {
-            double hLabelingAmount = 0.5;
-            double dLabelingAmount = 0.5;
-            decimal sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
+            var hLabelingAmount = 0.5;
+            var dLabelingAmount = 0.5;
+            var sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
 
             Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labelling amounts do not add up to 1.00 - which they should.");
 
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         public DeuteriumIsotopeProfileGenerator(double hLabelingAmount, double dLabelingAmount)
         {
-            decimal sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
+            var sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
 
             Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labelling amounts do not add up to 1.00 - which they should.");
 
@@ -66,9 +66,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
             //int numNitrogens = mt.GetAtomCountForElement("N");
-            int numDeuterium = 1;
+            var numDeuterium = 1;
 
-            IsotopicProfile labeledTheorProfile = _TomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _TomIsotopicPatternGenerator.aafIsos);
+            var labeledTheorProfile = _TomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _TomIsotopicPatternGenerator.aafIsos);
             addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, numDeuterium, mt.ChargeState);
 
             PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
@@ -88,19 +88,19 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
             //int numNitrogens = mt.GetAtomCountForElement("N");
-            int numDeuterium = 0;
+            var numDeuterium = 0;
 
             //_isotopicDistributionCalculator.SetLabeling("H", H_ISOTOPE_NUMBER, this.HLabellingAmount, D_ISOTOPE_NUMBER, this.DLabellingAmount);
-            IsotopicProfile hydrogenTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
+            var hydrogenTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
-            IsotopicProfile deuteriumTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
+            var deuteriumTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
             HLabellingAmount = molarMixingofH;
             DLabellingAmount = 1 - molarMixingofH;
             //convert to floats
-            float labelingAmountfraction = Convert.ToSingle(fractionLabeling);
-            float HLabellingAmountMix = Convert.ToSingle(HLabellingAmount);
-            float DLabellingAmountMix = Convert.ToSingle(DLabellingAmount);
+            var labelingAmountfraction = Convert.ToSingle(fractionLabeling);
+            var HLabellingAmountMix = Convert.ToSingle(HLabellingAmount);
+            var DLabellingAmountMix = Convert.ToSingle(DLabellingAmount);
 
             //initialization
             float maxHeightForNormalization = 0;
@@ -110,9 +110,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             }
 
             //add deuterated peaks as an offset index
-            for (int i = 0; i < hydrogenTheoreticalProfile.Peaklist.Count; i++)
+            for (var i = 0; i < hydrogenTheoreticalProfile.Peaklist.Count; i++)
             {
-                MSPeak peakH = hydrogenTheoreticalProfile.Peaklist[i];
+                var peakH = hydrogenTheoreticalProfile.Peaklist[i];
                 MSPeak peakD;
                 if(i==0)//initial peak where there is no D contribution
                 {
@@ -123,8 +123,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                     peakD = deuteriumTheoreticalProfile.Peaklist[i-1];
                 }
 
-                float contributionH = peakH.Height * HLabellingAmountMix;
-                float contributionD = (1 - labelingAmountfraction) * peakD.Height * DLabellingAmountMix + labelingAmountfraction * peakD.Height * DLabellingAmountMix;
+                var contributionH = peakH.Height * HLabellingAmountMix;
+                var contributionD = (1 - labelingAmountfraction) * peakD.Height * DLabellingAmountMix + labelingAmountfraction * peakD.Height * DLabellingAmountMix;
 
                 peakH.Height = contributionH + contributionD;
                 
@@ -138,10 +138,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             }
 
             //rename for clarity
-            IsotopicProfile labeledTheoreticalProfile = hydrogenTheoreticalProfile;
+            var labeledTheoreticalProfile = hydrogenTheoreticalProfile;
 
             //normalize to 1
-            foreach (MSPeak peak in labeledTheoreticalProfile.Peaklist)
+            foreach (var peak in labeledTheoreticalProfile.Peaklist)
             {
                 peak.Height /= maxHeightForNormalization;
             }
@@ -179,8 +179,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
 
             //Assign m/z values to the left of the monoDMass
-            int counter = 1;
-            for (int i = numDeuteriums - 1; i >= 0; i--)
+            var counter = 1;
+            for (var i = numDeuteriums - 1; i >= 0; i--)
             {
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numDeuteriums].XValue - (double)counter * (1.003 / (double)chargeState);
                 counter++;
@@ -188,7 +188,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             //Assign m/z values to the right of the monoDMass
             counter = 1;
-            for (int i = numDeuteriums + 1; i < labeledTheorProfile.Peaklist.Count; i++)
+            for (var i = numDeuteriums + 1; i < labeledTheorProfile.Peaklist.Count; i++)
             {
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numDeuteriums].XValue + (double)counter * (1.003 / (double)chargeState);
                 counter++;

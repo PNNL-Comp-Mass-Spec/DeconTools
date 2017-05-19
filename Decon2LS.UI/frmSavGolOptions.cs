@@ -183,7 +183,7 @@ namespace Decon2LS
         {
             try
             {
-                short val = Convert.ToInt16(mtxtLeft.Text) ; 
+                var val = Convert.ToInt16(mtxtLeft.Text) ; 
             }
             catch(Exception ex)
             {
@@ -193,7 +193,7 @@ namespace Decon2LS
             }
             try
             {
-                short val = Convert.ToInt16(mtxtRight.Text) ; 
+                var val = Convert.ToInt16(mtxtRight.Text) ; 
             }
             catch(Exception ex)
             {
@@ -203,7 +203,7 @@ namespace Decon2LS
             }
             try
             {
-                short val = Convert.ToInt16(mtxtOrder.Text) ; 
+                var val = Convert.ToInt16(mtxtOrder.Text) ; 
             }
             catch(FormatException ex)
             {
@@ -238,7 +238,7 @@ namespace Decon2LS
             if (NumLeft + NumRight < Order)
             {
                 MessageBox.Show(this, "Order can be at most equal to # left plus # right") ; 
-                short val = NumLeft ;
+                var val = NumLeft ;
                 val += NumRight ; 
                 Order = val ; 
                 return ; 

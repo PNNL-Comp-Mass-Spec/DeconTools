@@ -11,9 +11,9 @@ namespace Decon2LS
         public static double[] ConvertFloatsToDoubles(float[] vals)
         {
             if (vals == null) return null;
-            double[] outputVals = new double[vals.Length];
+            var outputVals = new double[vals.Length];
 
-            for (int i = 0; i < vals.Length; i++)
+            for (var i = 0; i < vals.Length; i++)
             {
                 outputVals[i] = (double)vals[i];
             }
@@ -24,7 +24,7 @@ namespace Decon2LS
         {
             if (inputVals == null) return;
             outputVals = new float[inputVals.Length];
-            for (int i = 0; i < inputVals.Length; i++)
+            for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = (float)inputVals[i];
                 

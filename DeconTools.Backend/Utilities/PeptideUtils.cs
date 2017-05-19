@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Utilities
 
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
 
-            bool sequenceIsValid = ValidateSequence(peptideSequence);
+            var sequenceIsValid = ValidateSequence(peptideSequence);
             if (!sequenceIsValid)
             {
                 throw new ArgumentException("Inputted peptide sequence contains illegal characters.");
@@ -76,13 +76,13 @@ namespace DeconTools.Backend.Utilities
 
             foreach (var aminoAcid in peptideSequence)
             {
-                double aminoAcidResideMass = GetMonoisotopicMassForAminoAcidResidue(aminoAcid);
+                var aminoAcidResideMass = GetMonoisotopicMassForAminoAcidResidue(aminoAcid);
 
                 outputMonoisotopicMass += aminoAcidResideMass;
 
                 if (cysteinesAreModified &&  aminoAcid=='C')
                 {
-                    double iodoacetamideMass = 57.021463725623;
+                    var iodoacetamideMass = 57.021463725623;
 
                     outputMonoisotopicMass += iodoacetamideMass;
 
@@ -102,14 +102,14 @@ namespace DeconTools.Backend.Utilities
         {
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
 
-            bool sequenceIsValid = ValidateSequence(peptideSequence);
+            var sequenceIsValid = ValidateSequence(peptideSequence);
             if (!sequenceIsValid) return string.Empty;
 
-            string outputEmpiricalFormula = "";
+            var outputEmpiricalFormula = "";
 
             foreach (var aminoAcid in peptideSequence)
             {
-                string aminoAcidFormula = GetEmpiricalFormulaForAminoAcidResidue(aminoAcid);
+                var aminoAcidFormula = GetEmpiricalFormulaForAminoAcidResidue(aminoAcid);
 
                 outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, aminoAcidFormula);
 
@@ -122,8 +122,8 @@ namespace DeconTools.Backend.Utilities
             if (includeAmineHydrogenAndFreeAcid)
             {
 
-                string nterminalHydrogen = "H";
-                string cterminalFreeAcid = "OH";
+                var nterminalHydrogen = "H";
+                var cterminalFreeAcid = "OH";
 
                 outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, nterminalHydrogen);
                 outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, cterminalFreeAcid);
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Utilities
         {
             if (peptideSequence.Contains("."))
             {
-                int numberDotChars = peptideSequence.Count(p => p == '.');
+                var numberDotChars = peptideSequence.Count(p => p == '.');
 
                 if (numberDotChars == 1)
                 {
@@ -144,8 +144,8 @@ namespace DeconTools.Backend.Utilities
                 }
                 else if (numberDotChars == 2)
                 {
-                    int indexFirstDot = peptideSequence.IndexOf('.');
-                    int indexSecondDot = peptideSequence.LastIndexOf('.');
+                    var indexFirstDot = peptideSequence.IndexOf('.');
+                    var indexSecondDot = peptideSequence.LastIndexOf('.');
 
                     peptideSequence = peptideSequence.Substring(indexFirstDot+1, indexSecondDot - indexFirstDot-1);
                 }

@@ -176,7 +176,7 @@ namespace Decon2LS
         {
             try
             {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|PNNL IMF files (*.IMF)|*.IMF|Bruker files(acqu)|acqu|MZ XML files (*.mzxml)|*.mzXML|S files(*.*)|*.*|PNNL UIMF files (*.UIMF)|*.UIMF" ;
                 openFileDialog1.FilterIndex = 1 ;
                 openFileDialog1.Multiselect = true ; 
@@ -184,12 +184,12 @@ namespace Decon2LS
 
                 if(openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    int num_files = openFileDialog1.FileNames.Length ; 
-                    for (int i = 0 ; i < num_files ; i++)
+                    var num_files = openFileDialog1.FileNames.Length ; 
+                    for (var i = 0 ; i < num_files ; i++)
                     {
-                        string file_name = openFileDialog1.FileNames[i] ; 
-                        int index = file_name.LastIndexOf("\\") ;
-                        string path_dir = "" ; 
+                        var file_name = openFileDialog1.FileNames[i] ; 
+                        var index = file_name.LastIndexOf("\\") ;
+                        var path_dir = "" ; 
 
                         if (index > 0)
                         {
@@ -256,10 +256,10 @@ namespace Decon2LS
         }
         private void mbtnAddSFolder_Click(object sender, System.EventArgs e)
         {
-            FolderBrowserDialog fld_browser = new FolderBrowserDialog()  ; 
+            var fld_browser = new FolderBrowserDialog()  ; 
             fld_browser.Description = "Please select S file folder" ; 
             fld_browser.ShowNewFolderButton = false ; 
-            DialogResult res = fld_browser.ShowDialog(this) ; 
+            var res = fld_browser.ShowDialog(this) ; 
             if (res != DialogResult.OK)
                 return ; 
 
@@ -308,10 +308,10 @@ namespace Decon2LS
 
         private void mbtnAddMicromass_Click(object sender, System.EventArgs e)
         {
-            FolderBrowserDialog fld_browser = new FolderBrowserDialog()  ; 
+            var fld_browser = new FolderBrowserDialog()  ; 
             fld_browser.Description = "Please select Micromass .raw folder" ; 
             fld_browser.ShowNewFolderButton = false ; 
-            DialogResult res = fld_browser.ShowDialog(this) ; 
+            var res = fld_browser.ShowDialog(this) ; 
             if (res != DialogResult.OK)
                 return ; 
 

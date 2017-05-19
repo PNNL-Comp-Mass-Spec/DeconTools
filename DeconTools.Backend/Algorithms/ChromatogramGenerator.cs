@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Algorithms
         #region Public Methods
 
         /// <summary>
-        /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans. 
+        /// Generates chromatogram based on a single m/z value and a given tolerance for a range of scans.
         /// </summary>
         /// <param name="msPeakList"></param>
         /// <param name="minScan"></param>
@@ -49,9 +49,9 @@ namespace DeconTools.Backend.Algorithms
         }
 
         /// <summary>
-        /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
+        /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values.
         /// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
-        /// that encompass individual peaks of an isotopic profile. 
+        /// that encompass individual peaks of an isotopic profile.
         /// </summary>
         /// <param name="msPeakList"></param>
         /// <param name="minScan"></param>
@@ -68,9 +68,9 @@ namespace DeconTools.Backend.Algorithms
         }
 
         /// <summary>
-        /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values. 
+        /// Will generate a chromatogram that is in fact a combination of chromatograms based on user-supplied target m/z values.
         /// This is geared for producing a chromatogram for an isotopic profile, but only using narrow mass ranges
-        /// that encompass individual peaks of an isotopic profile. 
+        /// that encompass individual peaks of an isotopic profile.
         /// </summary>
         /// <param name="groupedMsPeakList"></param>
         /// <param name="minScan"></param>
@@ -100,8 +100,7 @@ namespace DeconTools.Backend.Algorithms
 
             for (var i = minScan - scanTolerance; i < maxScan + scanTolerance; i++)
             {
-                List<MSPeakResult> msPeakResultList;
-                if (groupedMsPeakList == null || !groupedMsPeakList.TryGetValue(i, out msPeakResultList))
+                if (groupedMsPeakList == null || !groupedMsPeakList.TryGetValue(i, out var msPeakResultList))
                 {
                     continue;
                 }
@@ -148,11 +147,11 @@ namespace DeconTools.Backend.Algorithms
 
             if (!tempPeakList.Any())
             {
-                //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
+                //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change.
             }
             else
             {
-                chromData = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+                chromData = GetChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
             }
 
             return chromData;
@@ -164,8 +163,8 @@ namespace DeconTools.Backend.Algorithms
 
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
-            var indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
-            var indexOfUpperScan = getIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
+            var indexOfLowerScan = GetIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
+            var indexOfUpperScan = GetIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
 
             XYData chromData = null;
 
@@ -177,7 +176,7 @@ namespace DeconTools.Backend.Algorithms
                 if (toleranceUnit==Globals.ToleranceUnit.PPM)
                 {
                     lowerMZ = targetMZ - tolerance * targetMZ / 1e6;
-                    upperMZ = targetMZ + tolerance * targetMZ / 1e6;                    
+                    upperMZ = targetMZ + tolerance * targetMZ / 1e6;
                 }
                 else if (toleranceUnit == Globals.ToleranceUnit.MZ)
                 {
@@ -204,11 +203,11 @@ namespace DeconTools.Backend.Algorithms
 
                 if (!tempPeakList.Any())
                 {
-                    //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change. 
+                    //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change.
                 }
                 else
                 {
-                    var currentChromdata = getChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+                    var currentChromdata = GetChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
                     chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromdata);
                 }
             }
@@ -242,7 +241,7 @@ namespace DeconTools.Backend.Algorithms
                 var scanset = new ScanSet(scan);
                 run.GetMassSpectrum(scanset);
 
-                var chromDataPointIntensity = getChromDataPoint(run.XYData, targetMZ, toleranceInPPM);
+                var chromDataPointIntensity = GetChromDataPoint(run.XYData, targetMZ, toleranceInPPM);
 
                 xvals.Add(scan);
                 yvals.Add(chromDataPointIntensity);
@@ -254,7 +253,7 @@ namespace DeconTools.Backend.Algorithms
             return xydata;
         }
 
-        private double getChromDataPoint(XYData xydata, double targetMZ, double toleranceInPPM)
+        private double GetChromDataPoint(XYData xydata, double targetMZ, double toleranceInPPM)
         {
             var dataIsEmpty = (xydata == null || xydata.Xvalues.Length == 0);
             if (dataIsEmpty)
@@ -304,8 +303,8 @@ namespace DeconTools.Backend.Algorithms
         {
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
-            var indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
-            var indexOfUpperScan = getIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
+            var indexOfLowerScan = GetIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);
+            var indexOfUpperScan = GetIndexOfClosestScanValue(msPeakList, maxScan, 0, msPeakList.Count - 1, scanTolerance);
 
             var currentIndex = indexOfLowerScan;
             var filteredPeakList = new List<MSPeakResult>();
@@ -351,7 +350,7 @@ namespace DeconTools.Backend.Algorithms
             return GeneratePeakChromatogram(msPeakList, minScan, maxScan, targetMZList, toleranceInPPM);
         }
 
-        private XYData getChromDataAndFillInZerosAndAssignChromID(List<MSPeakResult> filteredPeakList, int chromID)
+        private XYData GetChromDataAndFillInZerosAndAssignChromID(IReadOnlyList<MSPeakResult> filteredPeakList, int chromID)
         {
             var filteredPeakListCount = filteredPeakList.Count;
 
@@ -380,7 +379,7 @@ namespace DeconTools.Backend.Algorithms
             {
                 var peakResult = filteredPeakList[i];
 
-                //NOTE:   we assign the chromID here. 
+                //NOTE:   we assign the chromID here.
                 peakResult.ChromID = chromID;
 
                 double intensity = peakResult.MSPeak.Height;
@@ -460,7 +459,7 @@ namespace DeconTools.Backend.Algorithms
         #endregion
 
         #region Private Methods
-        private int getIndexOfClosestScanValue(List<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
+        private int GetIndexOfClosestScanValue(IReadOnlyList<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
         {
             if (leftIndex < rightIndex)
             {
@@ -471,16 +470,16 @@ namespace DeconTools.Backend.Algorithms
                 {
                     return middle;
                 }
-                else if (targetScan < scanNumber)
+
+                if (targetScan < scanNumber)
                 {
-                    return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
+                    return GetIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
                 }
-                else
-                {
-                    return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
-                }
+
+                return GetIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
             }
-            else if (leftIndex == rightIndex)
+
+            if (leftIndex == rightIndex)
             {
                 {
                     return leftIndex;
@@ -494,7 +493,7 @@ namespace DeconTools.Backend.Algorithms
 
     class MSPeakResultComparer : Comparer<MSPeakResult>
     {
-        // Compares by Length, Height, and Width. 
+        // Compares by Length, Height, and Width.
         public override int Compare(MSPeakResult x, MSPeakResult y)
         {
             if (x == null)

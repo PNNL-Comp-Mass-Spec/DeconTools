@@ -13,11 +13,11 @@ namespace DeconTools.Backend.Utilities
         {
             try
             {
-                System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(classType);
-                Match match = Regex.Match(assembly.ToString(), "Version=(?<versionNum>.*), Culture");
+                var assembly = System.Reflection.Assembly.GetAssembly(classType);
+                var match = Regex.Match(assembly.ToString(), "Version=(?<versionNum>.*), Culture");
                 if (match.Success)
                 {
-                    string versionString = match.Groups["versionNum"].Value;
+                    var versionString = match.Groups["versionNum"].Value;
 
                     if (showExtendedInfo)
                     {
@@ -25,7 +25,7 @@ namespace DeconTools.Backend.Utilities
                     }
                     else
                     {
-                        int posOfLastDot = versionString.LastIndexOf(".");
+                        var posOfLastDot = versionString.LastIndexOf(".");
                         if (posOfLastDot > 1)
                         {
                             return ("v" + versionString.Substring(0, posOfLastDot));

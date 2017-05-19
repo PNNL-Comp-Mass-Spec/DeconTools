@@ -21,15 +21,15 @@ namespace DeconTools.Backend.Utilities.SqliteNETUtils
         public static List<string> GetColumnNames(DbConnection cnn, string tableName)
         {
 
-            List<string>columnNames=new List<string>();
+            var columnNames=new List<string>();
 
             Check.Assert(cnn is SQLiteConnection, "Method is for SQLite databases only.");
             
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
                     mycommand.CommandText = "PRAGMA table_info("+tableName+");";
 

@@ -36,7 +36,7 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
 
         public MercuryDistCollection CreateMercuryDistCollection(double startMass, double stopMass, double stepSize, double fwhm)
         {
-            MercuryDistCollection mercDistCollection = new MercuryDistCollection();
+            var mercDistCollection = new MercuryDistCollection();
             mercDistCreator = new MercuryDistributionCreator();
 
 
@@ -44,9 +44,9 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
             Check.Require(stopMass >= startMass, "Stop MZ must be greater than Start MZ");
             Check.Require(startMass > 0, "Starting MZ must be greater than 0");
 
-            for (double mass = startMass; mass <= stopMass; mass=mass+stepSize)
+            for (var mass = startMass; mass <= stopMass; mass=mass+stepSize)
             {
-                MercuryDist mercdist = new MercuryDist();
+                var mercdist = new MercuryDist();
                 mercDistCreator.CreateDistribution(mass,1, fwhm);
                 mercdist.Xydata = mercDistCreator.Data;
                 mercDistCollection.mercDistList.Add(mercdist);

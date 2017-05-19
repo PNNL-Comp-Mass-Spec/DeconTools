@@ -179,7 +179,7 @@ namespace Decon2LS
             {
                 if (!IsHandleCreated)
                     return ; 
-                int percent_done = (int) event_args ; 
+                var percent_done = (int) event_args ; 
                 Console.WriteLine(Convert.ToString(percent_done)) ; 
                 // if the new status is greater, or if its been reset to a newer value then update
                 if (mint_percent_done + mint_step_size < percent_done || mint_percent_done > percent_done)
@@ -242,7 +242,7 @@ namespace Decon2LS
             {
                 if (!IsHandleCreated)
                     return ; 
-                string status_str = (string) event_args ; 
+                var status_str = (string) event_args ; 
                 Invoke(new SetControlString(this.SetStatusString), new object [] {status_str}) ; 
             }
             catch (Exception e)

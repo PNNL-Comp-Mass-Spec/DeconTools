@@ -28,7 +28,7 @@ namespace DeconTools.Backend.Data.Importers
         {
             if (!File.Exists(filename)) throw new System.IO.IOException("PeakImporter failed. File doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
 
-            FileInfo fi = new FileInfo(filename);
+            var fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 26);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
 
             this.m_filename = filename;
@@ -46,14 +46,14 @@ namespace DeconTools.Backend.Data.Importers
         {
             m_peakIndex = 0;
 
-             DeconToolsV2.Peaks.clsPeakProcessor oldProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();
-             DeconToolsV2.Results.clsTransformResults oldPeakResults = new DeconToolsV2.Results.clsTransformResults();
-             DeconToolsV2.Results.clsLCMSPeak[] importedPeaks = null;
+             var oldProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();
+             var oldPeakResults = new DeconToolsV2.Results.clsTransformResults();
+            Engine.Results.LcmsPeak[] importedPeaks = null;
 
              try
              {
                  oldPeakResults.ReadResults(this.m_filename);
-                 oldPeakResults.GetRawData(ref importedPeaks);
+                 oldPeakResults.GetRawData(out importedPeaks);
 
              }
              catch (Exception ex)
@@ -63,7 +63,7 @@ namespace DeconTools.Backend.Data.Importers
 
              foreach (var p in importedPeaks)
              {
-                 MSPeakResult peak = convertOldDecon2LSPeakToPeakResult(p);
+                 var peak = ConvertDecon2LSPeakToPeakResult(p);
                  m_peakIndex++;
 
                  peakList.Add(peak);
@@ -85,15 +85,25 @@ namespace DeconTools.Backend.Data.Importers
             base.reportProgress(progressCounter);
         }
 
-        private MSPeakResult convertOldDecon2LSPeakToPeakResult(DeconToolsV2.Results.clsLCMSPeak p)
+        private MSPeakResult ConvertDecon2LSPeakToPeakResult(Engine.Results.LcmsPeak p)
         {
-            MSPeakResult peakResult = new MSPeakResult();
-            peakResult.MSPeak = new MSPeak();
-            peakResult.MSPeak.XValue = p.mflt_mz;
-            peakResult.MSPeak.Height = p.mflt_intensity;
+            float intensity;
+            if (p.Intensity > float.MaxValue)
+                intensity = float.MaxValue;
+            else
+                intensity = (float)p.Intensity;
 
-            peakResult.Scan_num = p.mint_scan;
-            peakResult.PeakID = m_peakIndex;
+            var peakResult = new MSPeakResult
+            {
+                MSPeak = new MSPeak
+                {
+                    XValue = p.Mz,
+                    Height = intensity
+                },
+                Scan_num = p.ScanNum,
+                PeakID = m_peakIndex
+            };
+
 
             return peakResult;
 

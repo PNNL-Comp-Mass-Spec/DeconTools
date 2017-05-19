@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Utilities
         {
             using (Stream stream = File.Open(outputFilename, filemode))
             {
-                BinaryFormatter b = new BinaryFormatter();
+                var b = new BinaryFormatter();
                 b.Serialize(stream, o);
             }
         }

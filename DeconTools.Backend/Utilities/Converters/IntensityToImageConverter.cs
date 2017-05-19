@@ -29,7 +29,7 @@ namespace DeconTools.Backend.Utilities.Converters
             color_positions = new float[] { COLOR_POS[0], COLOR_POS[1], COLOR_POS[2], COLOR_POS[3], COLOR_POS[4], COLOR_POS[5], COLOR_POS[6], COLOR_POS[7]};
             color_blend.Colors = new Color[] { Color.Purple, Color.Red, Color.Yellow, Color.GreenYellow, Color.Lime, Color.SkyBlue, Color.Blue, Color.DarkBlue};
             color_blend.Positions = new float[color_positions.Length];
-            for (int i = 0; i < color_positions.Length; i++)
+            for (var i = 0; i < color_positions.Length; i++)
             {
                 color_blend.Positions[i] = color_positions[i];
             }
@@ -53,12 +53,12 @@ namespace DeconTools.Backend.Utilities.Converters
         /// <returns></returns>
         public List<MSPeakResult> getFrameAndScanNumberListFromIntensityMap(int[][] intensityMap, int maxIntensity, float threshold, ushort startFrameInMap, ushort startScanInMap, ushort startFrame, ushort startScan, Dictionary<ushort, List<ushort>> frameAndScanNumbers, out ushort minimumScanNumber, out ushort maximumScanNumber, out ushort totalSummed)
         {
-            List<MSPeakResult> peaksForCurveFitting = new List<MSPeakResult>(3000);
-            int peakId = 0;
-            ushort frameIndex = startFrameInMap;
-            ushort scanIndex = startScanInMap;
-            ushort scanNumber = startScan;
-            ushort frameNumber = startFrame;
+            var peaksForCurveFitting = new List<MSPeakResult>(3000);
+            var peakId = 0;
+            var frameIndex = startFrameInMap;
+            var scanIndex = startScanInMap;
+            var scanNumber = startScan;
+            var frameNumber = startFrame;
             totalSummed = 0;
             //multiply the threshold by max intensity for now
              threshold *= maxIntensity;
@@ -70,16 +70,16 @@ namespace DeconTools.Backend.Utilities.Converters
                 //go up from the start frame value
                 while (frameIndex > 0 && intensityMap[frameIndex][startScanInMap] >= threshold )
                 {
-                    List<ushort> scanNumberList = new List<ushort>(200);
-                    int end = intensityMap[frameIndex].Length;
+                    var scanNumberList = new List<ushort>(200);
+                    var end = intensityMap[frameIndex].Length;
                     scanIndex = startScanInMap;
                     scanNumber = startScan;
                     //go left to determine the first value taht's below the threshold
                     while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold)
                     {
-                        MSPeak peak = new MSPeak();
+                        var peak = new MSPeak();
                         peak.Height = intensityMap[frameIndex][scanIndex];
-                        MSPeakResult msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
                         peaksForCurveFitting.Add(msPeak);
 
                         if (scanNumber < minimumScanNumber)
@@ -104,9 +104,9 @@ namespace DeconTools.Backend.Utilities.Converters
                     //go right to determine the next value that's below the threshold
                     while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold )
                     {
-                        MSPeak peak = new MSPeak();
+                        var peak = new MSPeak();
                         peak.Height = intensityMap[frameIndex][scanIndex];
-                        MSPeakResult msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
                         peaksForCurveFitting.Add(msPeak);
                         if (scanNumber < minimumScanNumber)
                         {
@@ -149,18 +149,18 @@ namespace DeconTools.Backend.Utilities.Converters
                 {
                     //processing frame
                     // Console.WriteLine("processing frame " + frameIndex);
-                    List<ushort> scanNumberList = new List<ushort>(200);
+                    var scanNumberList = new List<ushort>(200);
                     
 
-                    int end = intensityMap[frameIndex].Length;
+                    var end = intensityMap[frameIndex].Length;
                     scanIndex = startScanInMap;
                     scanNumber = startScan;
                     //go left to determine the first value taht's below the threshold
                     while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold )
                     {
-                        MSPeak peak = new MSPeak();
+                        var peak = new MSPeak();
                         peak.Height = intensityMap[frameIndex][scanIndex];
-                        MSPeakResult msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
                         peaksForCurveFitting.Add(msPeak);
                         if (scanNumber < minimumScanNumber)
                         {
@@ -182,9 +182,9 @@ namespace DeconTools.Backend.Utilities.Converters
                     //go right to determine the next value that's below the threshold
                     while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold )
                     {
-                        MSPeak peak = new MSPeak();
+                        var peak = new MSPeak();
                         peak.Height = intensityMap[frameIndex][scanIndex];
-                        MSPeakResult msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
                         peaksForCurveFitting.Add(msPeak);
                         if (scanNumber < minimumScanNumber)
                         {
@@ -227,13 +227,13 @@ namespace DeconTools.Backend.Utilities.Converters
         {
 
             //the x dimension for intensities here is SCANS and the y dimension is FRAMES
-            Bitmap imageFile = new Bitmap(frames, scans);
+            var imageFile = new Bitmap(frames, scans);
 
 
             //go through the frames first
-            for (int i = 0; i < frames; i++)
+            for (var i = 0; i < frames; i++)
             {
-                for (int j = 0; j < scans; j++)
+                for (var j = 0; j < scans; j++)
                 {
                     if (intensities[i][j] == 0)
                     {
@@ -241,7 +241,7 @@ namespace DeconTools.Backend.Utilities.Converters
                     }
                     else
                     {
-                        float intensity = (float)intensities[i][j] / maxIntensity;
+                        var intensity = (float)intensities[i][j] / maxIntensity;
 
                         if (intensity < threshold)
                         {
@@ -263,11 +263,11 @@ namespace DeconTools.Backend.Utilities.Converters
         }
 
         public Color getColorFroomIntensity (int colorAsInt) {
-            int red = (int)((colorAsInt >> 0x18) & 0xff);
+            var red = (int)((colorAsInt >> 0x18) & 0xff);
             Console.WriteLine(red);
-            int green = (int)((colorAsInt >> 0x10) & 0xff);
+            var green = (int)((colorAsInt >> 0x10) & 0xff);
             Console.WriteLine(green);
-            int blue = (int)(colorAsInt & 0xff);
+            var blue = (int)(colorAsInt & 0xff);
             Console.WriteLine(blue);
             return Color.FromArgb((byte)((colorAsInt >> 0x18) & 0xff), 
                           (byte)((colorAsInt >> 0x10) & 0xff), 
@@ -281,7 +281,7 @@ namespace DeconTools.Backend.Utilities.Converters
             float interp;
             int red=0, green=0, blue=0;
 
-            for (int i = 1; i < this.color_blend.Positions.Length; i++)
+            for (var i = 1; i < this.color_blend.Positions.Length; i++)
             {
                 if (((float)1.0 - intensity) <= this.color_blend.Positions[i])
                 {

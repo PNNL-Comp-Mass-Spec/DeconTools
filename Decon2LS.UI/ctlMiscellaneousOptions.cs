@@ -693,7 +693,7 @@ namespace Decon2LS
             if (SGNumLeft + SGNumRight < SGOrder)
             {
                 MessageBox.Show(this, "Savitzky Golay Order can be at most equal to # left plus # right. Using updated value.") ; 
-                short val = SGNumLeft ;
+                var val = SGNumLeft ;
                 val += SGNumRight ; 
                 SGOrder = val ; 
             }

@@ -15,19 +15,19 @@ namespace DeconTools.Backend.Utilities
 
         public static XYData NormalizeXYData(XYData xydata)
         {
-            XYData normalized = new XYData();
+            var normalized = new XYData();
 
             normalized.Xvalues = xydata.Xvalues;
             normalized.Yvalues = xydata.Yvalues;
 
-            double maxYValue = double.MinValue;
+            var maxYValue = double.MinValue;
 
 
 
 
-            for (int i = 0; i < normalized.Yvalues.Length; i++)
+            for (var i = 0; i < normalized.Yvalues.Length; i++)
             {
-                double currentVal = normalized.Yvalues[i];
+                var currentVal = normalized.Yvalues[i];
 
                 if (currentVal>maxYValue)
                 {
@@ -36,7 +36,7 @@ namespace DeconTools.Backend.Utilities
             }
 
 
-            for (int i = 0; i < normalized.Yvalues.Length; i++)
+            for (var i = 0; i < normalized.Yvalues.Length; i++)
             {
                 normalized.Yvalues[i] = normalized.Yvalues[i]/maxYValue;
             }
@@ -52,23 +52,23 @@ namespace DeconTools.Backend.Utilities
         public static XYData SubtractXYData(XYData xydata1, XYData xydata2, double minX, double maxX, double tolerance)
         {
 
-            int startIndex1 = MathUtils.GetClosest(xydata1.Xvalues, minX, tolerance);
-            int stopIndex1 = MathUtils.GetClosest(xydata1.Xvalues, maxX, tolerance);
+            var startIndex1 = MathUtils.GetClosest(xydata1.Xvalues, minX, tolerance);
+            var stopIndex1 = MathUtils.GetClosest(xydata1.Xvalues, maxX, tolerance);
 
-            int startIndex2 = MathUtils.GetClosest(xydata2.Xvalues, minX, tolerance);
-            int stopIndex2 = MathUtils.GetClosest(xydata2.Xvalues, maxX, tolerance);
+            var startIndex2 = MathUtils.GetClosest(xydata2.Xvalues, minX, tolerance);
+            var stopIndex2 = MathUtils.GetClosest(xydata2.Xvalues, maxX, tolerance);
 
 
-            XYData subtracted = new XYData();
+            var subtracted = new XYData();
             subtracted.Xvalues = xydata1.Xvalues;
             subtracted.Yvalues = xydata1.Yvalues;
 
 
-            for (int i = startIndex1; i <= stopIndex1; i++)
+            for (var i = startIndex1; i <= stopIndex1; i++)
             {
-                double currentXVal = subtracted.Xvalues[i];
+                var currentXVal = subtracted.Xvalues[i];
 
-                int indexOfClosest = MathUtils.GetClosest(xydata2.Xvalues, currentXVal, tolerance);
+                var indexOfClosest = MathUtils.GetClosest(xydata2.Xvalues, currentXVal, tolerance);
                 subtracted.Yvalues[i] = subtracted.Yvalues[i] - xydata2.Yvalues[indexOfClosest];
 
 

@@ -184,7 +184,7 @@ namespace Decon2LS
 
         public void RaiseItemOpen(object sender, ICategorizedItem item) 
         {
-            PNNL.Controls.ItemChangedEventArgs event_args = new PNNL.Controls.ItemChangedEventArgs(item);
+            var event_args = new PNNL.Controls.ItemChangedEventArgs(item);
             if (ItemOpen != null) 
             {
                 ItemOpen(sender, event_args);
@@ -197,7 +197,7 @@ namespace Decon2LS
 
         public void RaiseItemClose(object sender, ICategorizedItem item) 
         {
-            PNNL.Controls.ItemChangedEventArgs event_args = new PNNL.Controls.ItemChangedEventArgs(item);
+            var event_args = new PNNL.Controls.ItemChangedEventArgs(item);
             if (ItemClose != null) 
             {
                 ItemClose(sender, event_args);
@@ -267,7 +267,7 @@ namespace Decon2LS
         public Decon2LSMediator(frmDecon2LS form) : base(form) 
         {
             mFormClosedHandler = new EventHandler(this.FormClosed);
-            ArrayList list = new ArrayList();
+            var list = new ArrayList();
             list.Add(form);
             mLastActiveFormByType[form.GetType()] = list;
             form.MdiChildActivate += new EventHandler(MainForm_MdiChildActivate);
@@ -292,7 +292,7 @@ namespace Decon2LS
 
         public override Form RequestLastActiveFormForType(Type type)
         {
-            ArrayList formsForType = (ArrayList) mLastActiveFormByType[type];
+            var formsForType = (ArrayList) mLastActiveFormByType[type];
             if (formsForType == null || formsForType.Count <= 0) 
             {
                 return null;
@@ -308,12 +308,12 @@ namespace Decon2LS
         /// <param name="e"></param>
         private void FormClosed(object sender, EventArgs e)
         {
-            Form form = (Form) sender;
+            var form = (Form) sender;
             if (form is ICategorizedItem) 
             {
                 this.RaiseItemClose(this, (ICategorizedItem) form);
             }
-            ArrayList formList = (ArrayList) mLastActiveFormByType[sender.GetType()];
+            var formList = (ArrayList) mLastActiveFormByType[sender.GetType()];
             if (formList != null) 
             {
                 formList.Remove(sender);
@@ -324,10 +324,10 @@ namespace Decon2LS
 
         private void MainForm_MdiChildActivate(object sender, EventArgs e)
         {
-            Form activeMdiChild = this.MainForm.ActiveMdiChild;
+            var activeMdiChild = this.MainForm.ActiveMdiChild;
             if (activeMdiChild != null) 
             {
-                ArrayList formList = (ArrayList) mLastActiveFormByType[activeMdiChild.GetType()];
+                var formList = (ArrayList) mLastActiveFormByType[activeMdiChild.GetType()];
                 if (formList == null) 
                 {
                     formList = new ArrayList();

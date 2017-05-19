@@ -25,7 +25,7 @@ namespace Decon2LS
         static frmSpectra()
         {
             // Load up category info, attempt to find icons registered with the operating system.
-            Icon mainIcon = IconUtils.LoadIconFromAssembly(typeof(frmSpectra), "Icons.Spectra.ico", 16, 16);
+            var mainIcon = IconUtils.LoadIconFromAssembly(typeof(frmSpectra), "Icons.Spectra.ico", 16, 16);
             MainCategory = new CategoryInfo("Files", mainIcon);
             XCaliburCategory = CategoryForType("XCalibur", IconUtils.GetIconForFileType("raw", IconSize.Small, false, false, false));
             AgilentCategory = CategoryForType("Agilent", IconUtils.GetIconForFileType("wiff", IconSize.Small, false, false, false));
@@ -60,7 +60,7 @@ namespace Decon2LS
 
         private static CategoryInfo[] CategoryForType(String name, Icon icon)
         {
-            CategoryInfo[] info = new CategoryInfo[2];
+            var info = new CategoryInfo[2];
             info[0] = MainCategory;
             info[1] = new CategoryInfo(name, icon);
             return info;
@@ -149,7 +149,7 @@ namespace Decon2LS
                 this.m_tic_current_scan_pen_provider = new PenProvider();
                 m_tic_current_scan_pen_provider.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
 
-                PNNL.Controls.DiamondShape shape = new PNNL.Controls.DiamondShape(3, false);
+                var shape = new PNNL.Controls.DiamondShape(3, false);
                 mobj_tic_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.DarkSlateGray, false, true, true);
 
                 this.KeyDown += new KeyEventHandler(frmSpectra_KeyDown);
@@ -270,10 +270,10 @@ namespace Decon2LS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
-            PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmSpectra));
-            System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+            var penProvider1 = new PNNL.Controls.PenProvider();
+            var penProvider2 = new PNNL.Controls.PenProvider();
+            var resources = new System.Resources.ResourceManager(typeof(frmSpectra));
+            var configurationAppSettings = new System.Configuration.AppSettingsReader();
             this.mctl_tic = new PNNL.Controls.ctlLineChart();
             this.mimg_list_toolbar = new System.Windows.Forms.ImageList(this.components);
             this.mStatusTimer = new System.Windows.Forms.Timer(this.components);
@@ -433,8 +433,8 @@ namespace Decon2LS
                 mctl_spectrum.RawData = mobjRawData;
 
                 // Add the ability to read in the tic over here.
-                float[] ticIntensities = new float[1];
-                float[] ticTimes = new float[1];
+                var ticIntensities = new float[1];
+                var ticTimes = new float[1];
                 if (menmFileType != DeconToolsV2.Readers.FileType.BRUKER)
                     mobjRawData.GetTicFromFile(ref marr_tic_values, ref marr_scan_times, false);
                 else
@@ -445,7 +445,7 @@ namespace Decon2LS
                 this.CategorizedIcon = IconUtils.GetIconForFile(file_name, IconSize.Small, false, false, false);
                 this.CategorizedText = file_name;
 
-                clsPlotParams plotParams = (clsPlotParams)mobj_tic_plt_params.Clone();
+                var plotParams = (clsPlotParams)mobj_tic_plt_params.Clone();
                 plotParams.Name = "TIC";
 
                 mobj_tic_series =
@@ -579,7 +579,7 @@ namespace Decon2LS
             this.mFileName = file_name;
             this.menmFileType = file_type;
 
-            ThreadStart processThreadStart = new ThreadStart(GetTic);
+            var processThreadStart = new ThreadStart(GetTic);
             mthrd_tic = new Thread(processThreadStart);
             mthrd_tic.Name = "Create Tic";
             mthrd_tic.IsBackground = true;
@@ -588,7 +588,7 @@ namespace Decon2LS
             this.mStatusUpdateDelegate = new EventHandler(this.CheckTicLoadingStatusHandler);
             this.mStatusTimer.Tick += this.mStatusUpdateDelegate;
             this.mStatusTimer.Start();
-            DialogResult result = mMediator.StatusForm.ShowDialog(this);
+            var result = mMediator.StatusForm.ShowDialog(this);
 
             mStatusTimer.Tick -= new EventHandler(this.mStatusUpdateDelegate);
             mStatusTimer.Stop();
@@ -623,7 +623,7 @@ namespace Decon2LS
             {
                 if (!mMediator.StatusForm.IsHandleCreated || mobjRawData == null)
                     return;
-                bool cancel = false;
+                var cancel = false;
                 mMediator.RaiseProgressMessage(sender, mobjRawData.PercentDone, ref cancel);
                 mMediator.RaiseStatusMessage(sender, mobjRawData.StatusMessage, ref cancel);
             }
@@ -696,7 +696,7 @@ namespace Decon2LS
         {
             try
             {
-                bool reset_viewport = true;
+                var reset_viewport = true;
                 Console.WriteLine("Key Press {0} {1}", e.KeyCode, e.Modifiers);
                 if (e.KeyCode == Keys.Right && !e.Handled && e.Modifiers == Keys.None)
                 {
@@ -774,11 +774,11 @@ namespace Decon2LS
                     if (this.mint_spectrum_num <= 0)
                         return;
                     // Get the time that the spectrum occurs in the overall run
-                    double spectrumTime = mdbl_spectrum_time;
+                    var spectrumTime = mdbl_spectrum_time;
                     // Convert into a pixel offset relative to the left of the charting area
-                    float xChartValue = this.mctl_tic.GetScreenPixelX((float)spectrumTime);
+                    var xChartValue = this.mctl_tic.GetScreenPixelX((float)spectrumTime);
                     // Draw the line onto the chart
-                    using (Pen p = this.m_tic_current_scan_pen_provider.Pen)
+                    using (var p = this.m_tic_current_scan_pen_provider.Pen)
                     {
                         args.Graphics.DrawLine(p, xChartValue, 0, xChartValue,
                             this.mctl_tic.MaxChartAreaYPixel);
@@ -854,15 +854,15 @@ namespace Decon2LS
 
         private void mctl_spectrum_mevntScanChanged(object sender, int new_scan)
         {
-            bool reset_viewport = true;
+            var reset_viewport = true;
             mint_spectrum_num = new_scan;
             ShowSpectrumInSpectralChart(mint_spectrum_num, true, reset_viewport);
         }
 
         private int GetScanIndex(float scan_time)
         {
-            int startIndex = 0;
-            int stopIndex = marr_scan_times.Length - 1;
+            var startIndex = 0;
+            var stopIndex = marr_scan_times.Length - 1;
             int midIndex;
 
             if (scan_time <= marr_scan_times[0])
@@ -886,8 +886,8 @@ namespace Decon2LS
         private void TicDefaultZoomHandler_SingleClickNoZoomPerformed(object sender, MouseEventArgs e)
         {
             // mz value will be drawn along the x axis. 
-            float time_focus = mctl_tic.GetChartX(mctl_tic.GetChartAreaX(e.X));
-            int scanIndex = GetScanIndex(time_focus) + 1;
+            var time_focus = mctl_tic.GetChartX(mctl_tic.GetChartAreaX(e.X));
+            var scanIndex = GetScanIndex(time_focus) + 1;
             if (scanIndex >= mobjRawData.GetFirstScanNum() && scanIndex < mobjRawData.GetNumScans())
                 ShowSpectrumInSpectralChart(scanIndex, true, true);
             // Anoop: changed back to true, happened with .imf data
@@ -937,7 +937,7 @@ namespace Decon2LS
 
         public override clsSeries CopySeries()
         {
-            clsSeries series = base.CopySeries();
+            var series = base.CopySeries();
             series.PlotParams.Name += " (" + new System.IO.FileInfo(mFilename).Name + ")";
             return series;
         }

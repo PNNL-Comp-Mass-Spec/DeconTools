@@ -102,7 +102,7 @@ namespace Decon2LS
             this.mlinkLabelDownload.Size = new System.Drawing.Size(224, 32);
             this.mlinkLabelDownload.TabIndex = 1;
             this.mlinkLabelDownload.TabStop = true;
-            this.mlinkLabelDownload.Text = "http://ncrr.pnl.gov/software";
+            this.mlinkLabelDownload.Text = "http://omics.pnl.gov/software or http://panomics.pnnl.gov";
             this.mlinkLabelDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel1
@@ -221,8 +221,8 @@ namespace Decon2LS
 
         private void frmAbout_Load(object sender, System.EventArgs e)
         {
-            System.Reflection.Assembly assem = System.Reflection.Assembly.GetExecutingAssembly() ; 
-            System.Reflection.AssemblyName assemName = assem.GetName() ; 
+            var assem = System.Reflection.Assembly.GetExecutingAssembly() ; 
+            var assemName = assem.GetName() ; 
             label2.Text = "Version " + assemName.Version.Major + "." + assemName.Version.Minor + " Download Latest version from:"  ; 
         }
 

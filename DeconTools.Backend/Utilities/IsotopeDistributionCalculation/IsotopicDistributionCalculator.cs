@@ -118,7 +118,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         public IsotopicProfile GetIsotopePattern(string empiricalFormula)
         {
-            Dictionary<string, int> elementLookupTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
+            var elementLookupTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
             return GetIsotopePattern(elementLookupTable);
         }
 
@@ -132,25 +132,25 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             double smallestProbability = 0.001f; //Smallest probability we care about.
             double logTotal = 0;
             double logTotalLast = 0;
-            double[][] jaggedProbability = new double[formula.Count][];//Store Isotope probability for each element
-            int elementCount = 0;
-            foreach (KeyValuePair<string, int> iso in formula)
+            var jaggedProbability = new double[formula.Count][];//Store Isotope probability for each element
+            var elementCount = 0;
+            foreach (var iso in formula)
             {
-                List<double> ionProbability = new List<double>();
-                List<Isotope> currentElement = GetMostAbundant(iso.Key);
+                var ionProbability = new List<double>();
+                var currentElement = GetMostAbundant(iso.Key);
                 if (currentElement.Count > 1)
                 {
-                    int isotopeDifference = currentElement[1].IsotopeNumber - currentElement[0].IsotopeNumber;
-                    double logAmtLight = (double)System.Math.Log10((double)currentElement[0].NaturalAbundance);
-                    double logAmtHeavy = (double)System.Math.Log10((double)currentElement[1].NaturalAbundance);
+                    var isotopeDifference = currentElement[1].IsotopeNumber - currentElement[0].IsotopeNumber;
+                    var logAmtLight = (double)System.Math.Log10((double)currentElement[0].NaturalAbundance);
+                    var logAmtHeavy = (double)System.Math.Log10((double)currentElement[1].NaturalAbundance);
 
-                    for (int i = 0; i <= iso.Value; i++)
+                    for (var i = 0; i <= iso.Value; i++)
                     {
 
                         logTotal = logAmtLight * (iso.Value - i) + logAmtHeavy * i;
                         logTotal += (double)LogAChooseB(iso.Value, i);
                         ionProbability.Add((double)(System.Math.Pow(10, logTotal)));
-                        for (int k = 1; k < isotopeDifference; k++)
+                        for (var k = 1; k < isotopeDifference; k++)
                         {
                             ionProbability.Add(0.0);
                         }
@@ -172,23 +172,23 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             
             
             //normalize the probabilities
-            double max = 0.0;
-            foreach (double f in probabilities)
+            var max = 0.0;
+            foreach (var f in probabilities)
             {
                 if (f > max)
                 {
                     max = f;
                 }
             }
-            for (int i = 0; i < probabilities.Length; i++)
+            for (var i = 0; i < probabilities.Length; i++)
             {
                 
                 probabilities[i] = probabilities[i] / max;
             }
 
             
-            IsotopicProfile isoCluster = new IsotopicProfile();
-            for (int l = 0; l < probabilities.Length; l++)
+            var isoCluster = new IsotopicProfile();
+            for (var l = 0; l < probabilities.Length; l++)
             {
                 if (probabilities[l] == 0)    // avoid adding all the zero probability peaks
                 {
@@ -209,8 +209,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns></returns>
         public IsotopicProfile GetAveraginePattern(double inputMass)
         {
-            Dictionary<string, int> formula = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
-            IsotopicProfile profile = GetIsotopePattern(formula);
+            var formula = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
+            var profile = GetIsotopePattern(formula);
             return profile;
 
         }
@@ -251,7 +251,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         private double GetBasePeakMass(Dictionary<string, double> averagineDictionary)
         {
             double basePeak = 0;
-            foreach (string element in averagineDictionary.Keys)
+            foreach (var element in averagineDictionary.Keys)
             {
                 basePeak += GetMostAbundant(element)[0].Mass * averagineDictionary[element];
             }
@@ -266,12 +266,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns>Averagine formula</returns>
         public Dictionary<string, int> GetAveragineFormulaAsTableRoundedToInteger(double inputMass)
         {
-            Dictionary<string, double> averagineDict = GetAveragineDictionary();
-            double averagineUnitMass = GetBasePeakMass(averagineDict);
+            var averagineDict = GetAveragineDictionary();
+            var averagineUnitMass = GetBasePeakMass(averagineDict);
             // get closest pattern to mass 
-            double numberOfAveraginesInInput = inputMass / averagineUnitMass;
-            Dictionary<string, int> formula = new Dictionary<string, int>();
-            foreach (string element in averagineDict.Keys)
+            var numberOfAveraginesInInput = inputMass / averagineUnitMass;
+            var formula = new Dictionary<string, int>();
+            foreach (var element in averagineDict.Keys)
             {
                 formula.Add(element, (int)System.Math.Round(averagineDict[element] * numberOfAveraginesInInput));
             }
@@ -281,12 +281,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         public Dictionary<string, double> GetAveragineFormulaAsTable(double inputMass)
         {
-            Dictionary<string, double> averagineDict = GetAveragineDictionary();
-            double averagineUnitMass = GetBasePeakMass(averagineDict);
+            var averagineDict = GetAveragineDictionary();
+            var averagineUnitMass = GetBasePeakMass(averagineDict);
             // get closest pattern to mass 
-            double numberOfAveraginesInInput = inputMass / averagineUnitMass;
-            Dictionary<string, double> formula = new Dictionary<string, double>();
-            foreach (string element in averagineDict.Keys)
+            var numberOfAveraginesInInput = inputMass / averagineUnitMass;
+            var formula = new Dictionary<string, double>();
+            foreach (var element in averagineDict.Keys)
             {
                 formula.Add(element, (averagineDict[element] * numberOfAveraginesInInput));
             }
@@ -346,7 +346,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 }
                 else
                 {
-                    int retval = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
+                    var retval = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
 
                     if (retval != 0)
                     {
@@ -399,7 +399,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns></returns>
         private List<Isotope> GetMostAbundant(string element)
         {
-            List<Isotope> s = Constants.Elements[element].IsotopeDictionary.Values.ToList();
+            var s = Constants.Elements[element].IsotopeDictionary.Values.ToList();
             s.Sort(CompareNaturalAbundance);
             while (s.Count > 2)
             {
@@ -422,7 +422,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             if (a == 0) return 0.0f;
             if (b == 0) return 0.0f;
             if (a == b) return 0.0f;
-            double total = 0.0;
+            var total = 0.0;
             total += LogFactorial(a);
             total -= LogFactorial(b);
             total -= LogFactorial(a - b);
@@ -466,11 +466,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns></returns>
         private bool ProbabilityCalculator(double[][] jaggedProbabilities, int level, int isotopeNum, List<double> probabilitySet)
         {
-            int arrayRowCount = jaggedProbabilities.GetLength(0);
+            var arrayRowCount = jaggedProbabilities.GetLength(0);
             if (level == arrayRowCount)
             {
                 double product = 1;
-                foreach (double prob in probabilitySet)
+                foreach (var prob in probabilitySet)
                 {
                     product *= prob;
                 }
@@ -479,7 +479,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             else
             {
-                for (int j = 0; j < jaggedProbabilities[level].Length; j++)
+                for (var j = 0; j < jaggedProbabilities[level].Length; j++)
                 {
                     probabilitySet.Add(jaggedProbabilities[level][j]);
                     ProbabilityCalculator(jaggedProbabilities, level + 1, isotopeNum + j, probabilitySet);

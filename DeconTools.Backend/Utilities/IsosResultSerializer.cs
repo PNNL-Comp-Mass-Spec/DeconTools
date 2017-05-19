@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Data
 
         public void Serialize(ResultCollection resultCollection)
         {
-            BinaryFormatter b = new BinaryFormatter();
+            var b = new BinaryFormatter();
             b.Serialize(stream, resultCollection);
         }
 

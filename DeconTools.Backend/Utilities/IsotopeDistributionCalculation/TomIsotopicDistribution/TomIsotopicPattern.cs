@@ -110,7 +110,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         public double GetBasePeakMass(int[] afFormula)
         {
             double fBase = 0f;
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 fBase += aafIsosm[i][0] * afFormula[i];
             return fBase;
         }
@@ -119,10 +119,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         {
             double fBase = 0f;
             if (bLabel == false)
-                for (int i = 0; i < 5; i++)
+                for (var i = 0; i < 5; i++)
                     fBase += aafIsosm[i][0] * afFormula[i];
             else
-                for (int i = 0; i < 5; i++)
+                for (var i = 0; i < 5; i++)
                     if (i == 2)
                         fBase += fN15m * afFormula[i];
                     else
@@ -132,17 +132,17 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         }
         public string GetClosestAvnFormula(double inputMass, bool hasLabel)
         {
-            double fAvnMass = GetBasePeakMass(afAvn, hasLabel);
+            var fAvnMass = GetBasePeakMass(afAvn, hasLabel);
             // get closest pattern to mass 
-            double fNumAvn = inputMass / fAvnMass;
-            int[] averagineIntArray = new int[5];
-            for (int i = 0; i < 5; i++)
+            var fNumAvn = inputMass / fAvnMass;
+            var averagineIntArray = new int[5];
+            for (var i = 0; i < 5; i++)
                 averagineIntArray[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
 
 
             //I will reverse these to report  C H N O S
-            int numHydrogens = averagineIntArray[0];
-            int numCarbons = averagineIntArray[1];
+            var numHydrogens = averagineIntArray[0];
+            var numCarbons = averagineIntArray[1];
 
             averagineIntArray[0] = numCarbons;
             averagineIntArray[1] = numHydrogens;
@@ -154,7 +154,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         public IsotopicProfile GetAvnPattern(double fInputMass, bool bLabel)
         {
-            string averagineFormula = GetClosestAvnFormula(fInputMass, bLabel);
+            var averagineFormula = GetClosestAvnFormula(fInputMass, bLabel);
 
 
             if (bLabel == false)
@@ -173,9 +173,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         public IsotopicProfile GetIsotopePattern(string empiricalFormula, double[][] aafIsoLocal)
         {
 
-            Dictionary<string,int>elementTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
+            var elementTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
 
-            int[] formulaArray = new int[5];
+            var formulaArray = new int[5];
             formulaArray[0] = getAtomCount(elementTable, "C");
             formulaArray[1] = getAtomCount(elementTable, "H");
             formulaArray[2] = getAtomCount(elementTable, "N");
@@ -186,17 +186,17 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             double EPS = 0.001f;
 
-            double[] afIonIntensity = new double[100]; // store structure here
-            double[,] aafIons = new double[5, 100];
+            var afIonIntensity = new double[100]; // store structure here
+            var aafIons = new double[5, 100];
 
             double fLogTotal = 0;
             double fLogTotalLast = 0;
-            int[] maxIndices = new int[5];
-            for (int i0 = 0; i0 < 5; i0++)
+            var maxIndices = new int[5];
+            for (var i0 = 0; i0 < 5; i0++)
             { // iterate thru elements
-                double fLogAmtLight = (double)System.Math.Log10((double)aafIsoLocal[i0][0]);
-                double fLogAmtHeavy = (double)System.Math.Log10((double)aafIsoLocal[i0][1]);
-                for (int i1 = 0; i1 <= formulaArray[i0]; i1++)
+                var fLogAmtLight = (double)System.Math.Log10((double)aafIsoLocal[i0][0]);
+                var fLogAmtHeavy = (double)System.Math.Log10((double)aafIsoLocal[i0][1]);
+                for (var i1 = 0; i1 <= formulaArray[i0]; i1++)
                 {
                     fLogTotal = fLogAmtLight * (formulaArray[i0] - i1) + fLogAmtHeavy * i1;
                     fLogTotal += (double)LogAChooseB(formulaArray[i0], i1);
@@ -209,14 +209,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             }
 
             double fIntTmp;
-            int maxOffset = 1;
-            for (int i = 0; i <= maxIndices[0]; i++)
-                for (int j = 0; j <= maxIndices[1]; j++)
-                    for (int k = 0; k <= maxIndices[2]; k++)
-                        for (int l = 0; l <= maxIndices[3]; l++)
-                            for (int m = 0; m <= maxIndices[4]; m++)
+            var maxOffset = 1;
+            for (var i = 0; i <= maxIndices[0]; i++)
+                for (var j = 0; j <= maxIndices[1]; j++)
+                    for (var k = 0; k <= maxIndices[2]; k++)
+                        for (var l = 0; l <= maxIndices[3]; l++)
+                            for (var m = 0; m <= maxIndices[4]; m++)
                             {
-                                int offset = i + j + k + 2 * l + 2 * m; // O and S are +2
+                                var offset = i + j + k + 2 * l + 2 * m; // O and S are +2
                                 fIntTmp = aafIons[0, i] * aafIons[1, j] *
                                     aafIons[2, k] * aafIons[3, l] * aafIons[4, m];
                                 if (offset > maxOffset) maxOffset = offset;
@@ -224,11 +224,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                             }
             // normalize
             double max = 0;
-            int j1 = 0;
+            var j1 = 0;
             for (j1 = 0; j1 <= maxOffset; j1++)
                 if (afIonIntensity[j1] > max) max = afIonIntensity[j1];
             for (j1 = 0; j1 <= maxOffset; j1++) afIonIntensity[j1] /= max;
-            IsotopicProfile isoCluster = new IsotopicProfile();
+            var isoCluster = new IsotopicProfile();
 
             for (j1 = 0; j1 < afIonIntensity.Length && j1 <= maxOffset; j1++)
                 isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)afIonIntensity[j1], 0.0f, 0.0f));
@@ -253,7 +253,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             if (a == 0) return 0.0f;
             if (b == 0) return 0.0f;
             if (a == b) return 0.0f;
-            double total = 0.0;
+            var total = 0.0;
             total += LogFactorial(a);
             total -= LogFactorial(b);
             total -= LogFactorial(a - b);

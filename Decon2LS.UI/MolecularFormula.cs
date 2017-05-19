@@ -26,12 +26,12 @@ namespace Decon2LS
         {
             try 
             {
-                Regex regex = new Regex(partRegex);
-                MolecularFormula formula = new MolecularFormula();
-                MatchCollection matches = regex.Matches(input) ;
+                var regex = new Regex(partRegex);
+                var formula = new MolecularFormula();
+                var matches = regex.Matches(input) ;
                 foreach (Match match in matches) 
                 {
-                    MolecularFormula partFormula = (MolecularFormula) this.partFormulas[match.Value];
+                    var partFormula = (MolecularFormula) this.partFormulas[match.Value];
                     if (partFormula == null) 
                     {
                         throw new ApplicationException("Formula for part " + match.Value + " is unknown.");
@@ -174,24 +174,24 @@ namespace Decon2LS
             {
                 throw new ArgumentNullException("formula");
             }
-            Match match = parsingRegex.Match(formula);
+            var match = parsingRegex.Match(formula);
             if (!match.Success) 
             {
                 throw new ApplicationException("Formula can not be parsed");
             }
             
-            MolecularFormula mf = new MolecularFormula();
-            int matched = match.Groups["element"].Captures.Count;
+            var mf = new MolecularFormula();
+            var matched = match.Groups["element"].Captures.Count;
             //Console.WriteLine("Num Groups {0}", matched);
             // Iterate through the matched groups, updating element counts
-            for (int i = 0; i < matched; i++) 
+            for (var i = 0; i < matched; i++) 
             {
-                String element = match.Groups["element"].Captures[i].Value;
-                String count = match.Groups["count"].Captures[i].Value;
+                var element = match.Groups["element"].Captures[i].Value;
+                var count = match.Groups["count"].Captures[i].Value;
                 //Console.WriteLine("Element {0}, Count {1}", element, count);
                 // If the symbol is unknown, throw an exception.
                 // The multiple defaults to 1 if not found.  So CHHCHH is C2 H4.
-                int multiple = 1;
+                var multiple = 1;
                 if (count != "")
                 {
                     try 
@@ -235,7 +235,7 @@ namespace Decon2LS
             }
             else 
             {
-                int currentCount = (int) this.elementCounts[element];
+                var currentCount = (int) this.elementCounts[element];
                 this.elementCounts[element] = currentCount + count;
             }
         }
@@ -256,7 +256,7 @@ namespace Decon2LS
         /// <returns></returns>
         public String ToSimpleElementalString() 
         {
-            String formula = "";
+            var formula = "";
             foreach (String	element in KNOWN_ELEMENTS) 
             {
                 if (this.elementCounts.Contains(element)) 
@@ -283,7 +283,7 @@ namespace Decon2LS
         /// <returns></returns>
         public String ToSimpleOrganicElementalString() 
         {
-            String formula = "";
+            var formula = "";
             foreach (String s in ORGANIC_PREFERENCE_ELEMENTS) 
             {
                 if (this.elementCounts.Contains(s)) 
@@ -344,7 +344,7 @@ namespace Decon2LS
             {
                 throw new ArgumentOutOfRangeException("multiple", multiple, "Multiple must be >= 0");
             }
-            MolecularFormula newFormula = new MolecularFormula(this);
+            var newFormula = new MolecularFormula(this);
             newFormula.name = null;
             newFormula.formulaString = null;
             Add(newFormula, mf, multiple);
@@ -365,7 +365,7 @@ namespace Decon2LS
                 return false;
             }
 
-            MolecularFormula mf = (MolecularFormula) obj;
+            var mf = (MolecularFormula) obj;
             if (mf.elementCounts.Count != this.elementCounts.Count) 
             {
                 return false;

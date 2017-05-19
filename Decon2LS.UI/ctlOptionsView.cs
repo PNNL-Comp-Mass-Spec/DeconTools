@@ -140,7 +140,7 @@ namespace Decon2LS
         private void treeView1_Click(object sender, System.EventArgs e)
         {
 
-            bool set_visibility = Choose();
+            var set_visibility = Choose();
             //ctlPeakPickingOptions1.Visible = set_visibility;
         
         }

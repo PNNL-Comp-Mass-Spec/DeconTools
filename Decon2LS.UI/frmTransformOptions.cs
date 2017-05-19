@@ -508,7 +508,7 @@ namespace Decon2LS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmTransformOptions));
+            var resources = new System.Resources.ResourceManager(typeof(frmTransformOptions));
             this.mbtnOK = new System.Windows.Forms.Button();
             this.mbtnCancel = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -670,7 +670,7 @@ namespace Decon2LS
         {
             try
             {
-                System.Windows.Forms.TreeNode selectedNode = e.Node ; 
+                var selectedNode = e.Node ; 
                 if (nodePeakPicking.IsSelected)
                 {
                     if(!first_click)					
@@ -964,24 +964,24 @@ namespace Decon2LS
         {
             try
             {
-                clsParameterLoader paramLoader = new clsParameterLoader() ; 
+                var paramLoader = new clsParameterLoader() ; 
 
-                DeconToolsV2.Peaks.clsPeakProcessorParameters peakOptions = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+                var peakOptions = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
                 GetPeakPickingOptions(peakOptions) ; 
                 paramLoader.PeakParameters = peakOptions ; 
 
-                DeconToolsV2.DTAGeneration.clsDTAGenerationParameters dtaOptions = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ;
+                var dtaOptions = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ;
                 GetDTASettings(dtaOptions) ; 
                 paramLoader.DTAParameters = dtaOptions ; 
 
-                DeconToolsV2.HornTransform.clsHornTransformParameters transformOptions = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
+                var transformOptions = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
                 GetTransformOptions(transformOptions) ; 
                 GetMiscellaneousOptions(transformOptions) ; 
                 // And the isotope abundances.
                 transformOptions.ElementIsotopeComposition = mctlElementalIsotopeDisplay.ElementIsotopes ; 
                 paramLoader.TransformParameters = transformOptions ; 
 
-                DeconToolsV2.Readers.clsRawDataPreprocessOptions fticrPreProcessOptions = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ; 
+                var fticrPreProcessOptions = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ; 
                 GetFTICRRawPreProcessing(fticrPreProcessOptions) ; 
                 paramLoader.FTICRPreprocessOptions = fticrPreProcessOptions ; 
 
@@ -997,7 +997,7 @@ namespace Decon2LS
         {
             try
             {
-                clsParameterLoader paramLoader = new clsParameterLoader() ; 
+                var paramLoader = new clsParameterLoader() ; 
                 paramLoader.LoadParametersFromFile(file_name) ; 
                 SetPeakPickingOptions(paramLoader.PeakParameters) ; 
                 SetTransformOptions(paramLoader.TransformParameters) ; 
@@ -1016,7 +1016,7 @@ namespace Decon2LS
         {
             try
             {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Parameter files (*.xml)|*.xml" ;
                 openFileDialog1.FilterIndex = 1 ;
                 openFileDialog1.RestoreDirectory = true ;
@@ -1042,7 +1042,7 @@ namespace Decon2LS
             {
                 mctlMiscellaneousOptions.SanityCheck() ; 
 
-                SaveFileDialog saveDialog = new SaveFileDialog(); 
+                var saveDialog = new SaveFileDialog(); 
                 saveDialog.Title = "Specify Parameter File to Save to";
                 saveDialog.Filter = "Parameter File (*.xml)|*.xml";
                 saveDialog.FilterIndex = 1;

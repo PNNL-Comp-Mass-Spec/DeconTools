@@ -17,16 +17,16 @@ namespace Decon2LS
         public static void CopyXYValuesToClipboard(double[] xvals, double[] yvals)
         {
             
-            int maxLength=0;
+            var maxLength=0;
             if (xvals.Length == 0 || yvals.Length==0)return;
             
             if (xvals.Length>=yvals.Length)	maxLength=yvals.Length;
             else maxLength=xvals.Length;
 
-            System.Text.StringBuilder sb=new System.Text.StringBuilder();
+            var sb=new System.Text.StringBuilder();
 
 
-            for (int i=0;i<maxLength;i++)
+            for (var i=0;i<maxLength;i++)
             {
                 sb.Append(xvals[i]);
                 sb.Append("\t");
@@ -48,8 +48,8 @@ namespace Decon2LS
             if (xvals==null || yvals==null)return;
             if (xvals.Length==0 || yvals.Length==0)return;
             
-            double[]convertedxvals=new double[xvals.Length];
-            double[]convertedyvals=new double[yvals.Length];
+            var convertedxvals=new double[xvals.Length];
+            var convertedyvals=new double[yvals.Length];
             
             xvals.CopyTo(convertedxvals,0);
             yvals.CopyTo(convertedyvals,0);

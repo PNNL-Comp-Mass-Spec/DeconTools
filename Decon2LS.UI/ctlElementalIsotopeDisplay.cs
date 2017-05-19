@@ -83,30 +83,30 @@ namespace Decon2LS
 
         public void ReadFromDataGrid()
         {
-            string element_symbol = "" ;
-            string element_name = "";
+            var element_symbol = "" ;
+            var element_name = "";
             
-            int atomicity  = 0 ;	
+            var atomicity  = 0 ;	
             int next_row_atomicity;
 
-            int isotope_num = 0;
+            var isotope_num = 0;
             double isotope_mass ;
             double isotope_probability ;
             
-            int row_index = 0;
-            int element_index = 0;
+            var row_index = 0;
+            var element_index = 0;
             
-            int colNumAtomcity = 0;
-            int colNumName = 1;
-            int colNumSymbol = 2;
-            int colNumMass = 3;
-            int colNumProb = 4;
+            var colNumAtomcity = 0;
+            var colNumName = 1;
+            var colNumSymbol = 2;
+            var colNumMass = 3;
+            var colNumProb = 4;
             
             
 
-            int num_elements = mobj_isotope.GetNumberOfElements();			
+            var num_elements = mobj_isotope.GetNumberOfElements();			
 
-            int num_rows = table.Rows.Count;
+            var num_rows = table.Rows.Count;
 
             DataRow row, next_row;
             
@@ -166,16 +166,16 @@ namespace Decon2LS
 
         public bool CheckData(ref string element_name)
         {
-            int num_elements = mobj_isotope.GetNumberOfElements();
-            int row_index = 0;
-            int colNumAtomcity = 0;			
-            int colNumProb = 4;
-            int colName = 1;
+            var num_elements = mobj_isotope.GetNumberOfElements();
+            var row_index = 0;
+            var colNumAtomcity = 0;			
+            var colNumProb = 4;
+            var colName = 1;
 
-            int atomicity = 0;
-            int next_row_atomicity = 0;
+            var atomicity = 0;
+            var next_row_atomicity = 0;
 
-            bool set_check = true;
+            var set_check = true;
 
             double sum_prob = 0;
             
@@ -185,7 +185,7 @@ namespace Decon2LS
 
             row = table.Rows[row_index];
 
-            int num_rows = table.Rows.Count;
+            var num_rows = table.Rows.Count;
 
             while (row_index < num_rows-1)
             {
@@ -226,27 +226,27 @@ namespace Decon2LS
         }
         private void UpdateIsotopeTable()
         {
-            string elementSymbol = "" ;
-            string elementName = "";
-            int atomicity = 0 ;
-            int numIsotopes = 0 ;
-            float []isotope_mass = new float[1];
-            float []isotope_probability = new float[1];
+            var elementSymbol = "" ;
+            var elementName = "";
+            var atomicity = 0 ;
+            var numIsotopes = 0 ;
+            var isotope_mass = new float[1];
+            var isotope_probability = new float[1];
             float average_mass = 0 ;
             float mass_variance = 0 ;
 
             table.Rows.Clear() ; 
-            int num_elements = mobj_isotope.GetNumberOfElements();			
-            for (int element_num = 0; element_num<num_elements; element_num++)
+            var num_elements = mobj_isotope.GetNumberOfElements();			
+            for (var element_num = 0; element_num<num_elements; element_num++)
             {
                 mobj_isotope.GetElementalIsotope(element_num, ref atomicity, 
                     ref numIsotopes, ref elementName, ref elementSymbol,
                     ref average_mass, ref mass_variance, ref isotope_mass, 
                     ref isotope_probability );
                 
-                for (int isotope_num=0; isotope_num<numIsotopes; isotope_num++)
+                for (var isotope_num=0; isotope_num<numIsotopes; isotope_num++)
                 {
-                    DataRow row = table.NewRow() ; 					
+                    var row = table.NewRow() ; 					
                     row[0] = atomicity.ToString();						
                     row[1] =  elementName; 
                     row[2] = elementSymbol;
@@ -443,7 +443,7 @@ namespace Decon2LS
         
         private void button_Save_Click(object sender, System.EventArgs e)
         {
-            String fileName1 = mstr_composition_file_name;
+            var fileName1 = mstr_composition_file_name;
             SaveXML(fileName1);	
         }
 
@@ -451,7 +451,7 @@ namespace Decon2LS
         {
             try
             {
-                SaveFileDialog savefileDialog1 = new SaveFileDialog();
+                var savefileDialog1 = new SaveFileDialog();
                 savefileDialog1.Title = "Specify Destination Filename";
                 savefileDialog1.Filter = "Composition files (*.xml)|*.xml";
                 savefileDialog1.FilterIndex = 1;
@@ -481,7 +481,7 @@ namespace Decon2LS
 
             try
             {
-                OpenFileDialog openfileDialog1 = new OpenFileDialog();
+                var openfileDialog1 = new OpenFileDialog();
                 openfileDialog1.Filter = "Composition files (*.xml)|*.xml" ;
                 openfileDialog1.FilterIndex = 1;
                 openfileDialog1.RestoreDirectory = true;
@@ -509,8 +509,8 @@ namespace Decon2LS
 
         private void dataGrid1_Leave(object sender, System.EventArgs e)
         {
-            string elementName = "";			
-            bool check = CheckData(ref elementName);
+            var elementName = "";			
+            var check = CheckData(ref elementName);
             if (check)
             {
                 ReadFromDataGrid();	
@@ -518,7 +518,7 @@ namespace Decon2LS
             }
             else	
             {
-                string msg = String.Format("The Probabilities of isotopes of {0} don't add up to one", elementName);
+                var msg = String.Format("The Probabilities of isotopes of {0} don't add up to one", elementName);
                 //throw new Exception(msg);			
                 MessageBox.Show(msg);
                 UpdateIsotopeTable() ;

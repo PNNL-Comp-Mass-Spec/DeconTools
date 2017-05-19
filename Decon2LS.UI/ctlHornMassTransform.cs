@@ -98,7 +98,7 @@ namespace Decon2LS
             private void InitializeComponent()
             {
                 this.components = new System.ComponentModel.Container();
-                System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ctlHornMassTransform));
+                var resources = new System.Resources.ResourceManager(typeof(ctlHornMassTransform));
                 this.label1 = new System.Windows.Forms.Label();
                 this.label2 = new System.Windows.Forms.Label();
                 this.mCheckO16O18 = new System.Windows.Forms.CheckBox();

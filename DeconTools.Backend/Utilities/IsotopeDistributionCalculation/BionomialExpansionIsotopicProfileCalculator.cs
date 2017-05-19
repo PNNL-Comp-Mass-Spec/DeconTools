@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         public void LoadElementData()
         {
 
-            ElementLibrary _elementLibrary=   Constants.Elements;
+            var _elementLibrary=   Constants.Elements;
             var carbon = _elementLibrary["C"];
             
 

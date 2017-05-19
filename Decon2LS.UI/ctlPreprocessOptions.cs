@@ -460,7 +460,7 @@ namespace Decon2LS
                 if (mcmbApodizationType.SelectedIndex == -1)
                     return DeconToolsV2.Readers.ApodizationType.NOAPODIZATION ; 
 
-                string selectedType = mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString() ; 
+                var selectedType = mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString() ; 
                 foreach (DeconToolsV2.Readers.ApodizationType type in Enum.GetValues(typeof(DeconToolsV2.Readers.ApodizationType)))
                 {
                     if (type.ToString() == selectedType)
@@ -471,8 +471,8 @@ namespace Decon2LS
             set
             {
                 mcmbApodizationType.SelectedIndex = -1 ;
-                string selectedType = value.ToString() ; 
-                for (int i = 0 ; i < mcmbApodizationType.Items.Count ; i++)
+                var selectedType = value.ToString() ; 
+                for (var i = 0 ; i < mcmbApodizationType.Items.Count ; i++)
                 {
                     if (mcmbApodizationType.Items[i].ToString() == selectedType)
                     {
@@ -545,13 +545,13 @@ namespace Decon2LS
                 if (mcmbCalibrationType.SelectedIndex == -1)
                     return DeconToolsV2.Readers.CalibrationType.UNDEFINED ; 
 
-                string selectedType = mcmbCalibrationType.Items[mcmbCalibrationType.SelectedIndex].ToString() ; 
+                var selectedType = mcmbCalibrationType.Items[mcmbCalibrationType.SelectedIndex].ToString() ; 
                 return (DeconToolsV2.Readers.CalibrationType) Enum.Parse(typeof(DeconToolsV2.Readers.CalibrationType), selectedType)  ;
             }
             set
             {
-                string selectedType = value.ToString() ; 
-                for (int i = 0 ; i < mcmbCalibrationType.Items.Count ; i++)
+                var selectedType = value.ToString() ; 
+                for (var i = 0 ; i < mcmbCalibrationType.Items.Count ; i++)
                 {
                     if (mcmbCalibrationType.Items[i].ToString() == selectedType)
                     {
