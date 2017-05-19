@@ -115,7 +115,7 @@ namespace DeconTools.Backend.Data.Structures
             {
                 get
                 {
-                    int count = 0;
+                    var count = 0;
 
                     if (this.LeftChild != null)
                         count++;
@@ -228,7 +228,7 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual void Add(T value)
             {
-                BinaryTreeNode<T> node = new BinaryTreeNode<T>(value);
+                var node = new BinaryTreeNode<T>(value);
                 this.Add(node);
             }
 
@@ -249,17 +249,17 @@ namespace DeconTools.Backend.Data.Structures
                         node.Parent = head; //start at head
 
                     //Node is inserted on the left side if it is smaller or equal to the parent
-                    int matchValue = comparer((IComparable)node.Value, (IComparable)node.Parent.Value);
+                    var matchValue = comparer((IComparable)node.Value, (IComparable)node.Parent.Value);
                     if ( matchValue == 0 ){
                         //this means that the mass was within the tolerance, we should have to update the frame and scans map for this 
                         //peak
 
                         //at this node we have a MSResultPeakWithLocation, . 
-                        MSResultPeakWithLocation peakWithLoc = node.Value as MSResultPeakWithLocation;
+                        var peakWithLoc = node.Value as MSResultPeakWithLocation;
 
                     }
 
-                    bool insertLeftSide = matchValue < 0;
+                    var insertLeftSide = matchValue < 0;
 
                     if (insertLeftSide) //insert on the left
                     {
@@ -294,14 +294,14 @@ namespace DeconTools.Backend.Data.Structures
 
             public BinaryTreeNode<T> FindFeatureWithGivenMass(double massValue, int toleranceInPPM)
             {
-                BinaryTreeNode<T> node = this.head;
+                var node = this.head;
 
 
                 while (node != null)
                 {
-                    MSResultPeakWithLocation thisFeature = node.Value as MSResultPeakWithLocation;
-                    double ppmDifference = 1000000 * (massValue - thisFeature.XValue) / massValue;
-                    double absolutePPMDifference = Math.Abs(ppmDifference);
+                    var thisFeature = node.Value as MSResultPeakWithLocation;
+                    var ppmDifference = 1000000 * (massValue - thisFeature.XValue) / massValue;
+                    var absolutePPMDifference = Math.Abs(ppmDifference);
 
                     //if (node.Value.Equals(value)) //parameter value found
                     if (absolutePPMDifference <= toleranceInPPM)
@@ -328,21 +328,21 @@ namespace DeconTools.Backend.Data.Structures
 
             public bool FindPeakWithinFeatures(Peak value, int frameNum, int scanNum, int toleranceInPPM, int netTolRange, int driftTolRange)
             {
-                BinaryTreeNode<T> node = this.head;
+                var node = this.head;
                 while (node != null)
                 {
                     try
                     {
-                        MSResultPeakWithLocation thisFeature = node.Value as MSResultPeakWithLocation;
+                        var thisFeature = node.Value as MSResultPeakWithLocation;
 
                         //now check if the peak value is within the mass tolerance of this UMC
                         //int number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
-                        bool hasMass = thisFeature.containsMass(value.XValue, toleranceInPPM);
+                        var hasMass = thisFeature.containsMass(value.XValue, toleranceInPPM);
 
                         if (hasMass)
                         {
 
-                            int number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
+                            var number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
 
                             if (number == 0)
                             {
@@ -383,16 +383,16 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual BinaryTreeNode<T> Find(T value)
             {
-                BinaryTreeNode<T> node = this.head; //start at head
+                var node = this.head; //start at head
                 while (node != null)
                 {
                     try
                     {
-                        Peak msPeak1 = node.Value as Peak;
-                        Peak msPeak2 = value as Peak;
+                        var msPeak1 = node.Value as Peak;
+                        var msPeak2 = value as Peak;
 
-                        double ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
-                        double absolutePPMDifference = Math.Abs(ppmDifference);
+                        var ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
+                        var absolutePPMDifference = Math.Abs(ppmDifference);
 
                         //if (node.Value.Equals(value)) //parameter value found
                         if (absolutePPMDifference <= toleranceInPPM)
@@ -436,7 +436,7 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual bool Remove(T value)
             {
-                BinaryTreeNode<T> removeNode = Find(value);
+                var removeNode = Find(value);
 
                 return this.Remove(removeNode);
             }
@@ -450,7 +450,7 @@ namespace DeconTools.Backend.Data.Structures
                     return false; //value doesn't exist or not of this tree
 
                 //Note whether the node to be removed is the root of the tree
-                bool wasHead = (removeNode == head);
+                var wasHead = (removeNode == head);
 
                 if (this.Count == 1)
                 {
@@ -511,7 +511,7 @@ namespace DeconTools.Backend.Data.Structures
                 else //Case 3: Two Children
                 {
                     //Find inorder predecessor (right-most node in left subtree)
-                    BinaryTreeNode<T> successorNode = removeNode.LeftChild;
+                    var successorNode = removeNode.LeftChild;
                     while (successorNode.RightChild != null)
                     {
                         successorNode = successorNode.RightChild;
@@ -533,7 +533,7 @@ namespace DeconTools.Backend.Data.Structures
             {
                 //Remove children first, then parent
                 //(Post-order traversal)
-                IEnumerator<T> enumerator = GetPostOrderEnumerator();
+                var enumerator = GetPostOrderEnumerator();
                 while (enumerator.MoveNext())
                 {
                     this.Remove(enumerator.Current);
@@ -555,7 +555,7 @@ namespace DeconTools.Backend.Data.Structures
             public virtual int GetHeight(T value)
             {
                 //Find the value's node in tree
-                BinaryTreeNode<T> valueNode = this.Find(value);
+                var valueNode = this.Find(value);
                 if (value != null)
                     return this.GetHeight(valueNode);
                 else
@@ -578,7 +578,7 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual int GetDepth(T value)
             {
-                BinaryTreeNode<T> node = this.Find(value);
+                var node = this.Find(value);
                 return this.GetDepth(node);
             }
 
@@ -587,12 +587,12 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual int GetDepth(BinaryTreeNode<T> startNode)
             {
-                int depth = 0;
+                var depth = 0;
 
                 if (startNode == null)
                     return depth;
 
-                BinaryTreeNode<T> parentNode = startNode.Parent; //start a node above
+                var parentNode = startNode.Parent; //start a node above
                 while (parentNode != null)
                 {
                     depth++;
@@ -667,9 +667,9 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public virtual void CopyTo(T[] array, int startIndex)
             {
-                IEnumerator<T> enumerator = this.GetEnumerator();
+                var enumerator = this.GetEnumerator();
 
-                for (int i = startIndex; i < array.Length; i++)
+                for (var i = startIndex; i < array.Length; i++)
                 {
                     if (enumerator.MoveNext())
                         array[i] = enumerator.Current;

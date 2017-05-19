@@ -60,10 +60,10 @@ namespace DeconTools.Backend.Runs
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
-            FileInfo fiSettingsFile = findSettingsFile();
+            var fiSettingsFile = findSettingsFile();
             if (fiSettingsFile == null)
             {
-                FileInfo fiAcqusFile = findAcqusFile();
+                var fiAcqusFile = findAcqusFile();
 
                 if (fiAcqusFile == null)
                 {
@@ -167,9 +167,9 @@ namespace DeconTools.Backend.Runs
             float[] xvals;
             float[] yvals;
 
-            int[] scanValues = scanset.IndexValues.ToArray();
+            var scanValues = scanset.IndexValues.ToArray();
 
-            double maximumMzToUse = maxMZ;
+            var maximumMzToUse = maxMZ;
 
             if (m_rawDataReader.Parameters.AcquiredMZMaximum > 0 && maxMZ > m_rawDataReader.Parameters.AcquiredMZMaximum)
             {
@@ -193,7 +193,7 @@ namespace DeconTools.Backend.Runs
             float[] xvals;
             float[] yvals;
 
-            int[] scanValues = scanset.IndexValues.ToArray();
+            var scanValues = scanset.IndexValues.ToArray();
 
             m_rawDataReader.GetMassSpectrum(scanValues, out xvals, out yvals);
             var xydata = new XYData
@@ -213,7 +213,7 @@ namespace DeconTools.Backend.Runs
         private string getDatasetName(string fullFolderPath)
         {
 
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
 
             if (dirInfo.Name.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
             {
@@ -228,7 +228,7 @@ namespace DeconTools.Backend.Runs
 
         private string getDatasetfolderName(string fullFolderPath)
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
         private void validateSelectionIsFolder(string folderName)
@@ -253,7 +253,7 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findFIDFile()
         {
-            string[] fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -261,7 +261,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (fidFiles.Length == 1)
             {
-                FileInfo fidFileInfo = new FileInfo(fidFiles[0]);
+                var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
             else
@@ -271,7 +271,7 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findSerFile()
         {
-            string[] serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -279,14 +279,14 @@ namespace DeconTools.Backend.Runs
             }
             else if (serFiles.Length == 1)
             {
-                FileInfo serFileInfo = new FileInfo(serFiles[0]);
+                var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
             else
             {
                 foreach (var serFile in serFiles)
                 {
-                    FileInfo fi = new FileInfo(serFile);
+                    var fi = new FileInfo(serFile);
 
                     if (fi.Directory.Name == "0.ser")
                     {
@@ -304,14 +304,14 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            string[] dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
                 return null;
             }
 
-            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (acquistionMethodFiles.Count == 0)
             {
@@ -331,7 +331,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findAcqusFile()
         {
-            string[] acqusFiles = Directory.GetFiles(this.Filename, "acqus", SearchOption.AllDirectories);
+            var acqusFiles = Directory.GetFiles(this.Filename, "acqus", SearchOption.AllDirectories);
 
             if (acqusFiles == null || acqusFiles.Length == 0)
             {

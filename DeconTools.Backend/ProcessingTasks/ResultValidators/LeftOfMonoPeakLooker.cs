@@ -34,9 +34,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
 
             if (currentResult.IsotopicProfile == null) return;
-            MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
+            var monoPeak = currentResult.IsotopicProfile.getMonoPeak();
 
-            MSPeak peakToTheLeft = LookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
+            var peakToTheLeft = LookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
             if (peakToTheLeft == null) return;  // no peak found... so no problem.
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)    //if peak-to-the-left exceeds min Ratio, then flag it
@@ -63,7 +63,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             double mzTol = monoPeak.Width;
 
-            double targetMZ = monoPeak.XValue - (1.003 / (double)chargeState);
+            var targetMZ = monoPeak.XValue - (1.003 / (double)chargeState);
 
 
             var foundLeftOfMonoPeaks = PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
@@ -76,7 +76,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             }
 
 
-            MSPeak peakToTheLeft = foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() as MSPeak;
+            var peakToTheLeft = foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() as MSPeak;
 
             if (peakToTheLeft == null) return null;
 

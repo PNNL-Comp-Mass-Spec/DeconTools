@@ -47,7 +47,7 @@ namespace DeconTools.Backend.Data
         public override List<IsosResult> Import()
         {
 
-            List<IsosResult> results = new List<IsosResult>();
+            var results = new List<IsosResult>();
 
 
             if (reader.Peek() == -1)
@@ -57,21 +57,21 @@ namespace DeconTools.Backend.Data
 
             }
 
-            string headerLine = reader.ReadLine();
-            List<string> headers = processLine(headerLine);
+            var headerLine = reader.ReadLine();
+            var headers = processLine(headerLine);
 
             string line;
-            int counter = 1;
+            var counter = 1;
             while (reader.Peek() > -1)
             {
                 line = reader.ReadLine();
-                List<string> processedData = processLine(line);
+                var processedData = processLine(line);
                 if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                 {
                     throw new InvalidDataException("Data in row #" + counter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                 }
 
-                IsosResult result = convertTextToIsosResult(processedData, headers);
+                var result = convertTextToIsosResult(processedData, headers);
                 if (result is UIMFIsosResult)   //GORD:  see if I can remove this conditional
                 {
                     if (result.ScanSet.PrimaryScanNumber >= minVal)
@@ -119,11 +119,11 @@ namespace DeconTools.Backend.Data
             //result.Run = getRunFromIsosFilename(this.importFilename, this.fileType); AM commenting this out since this gives me an error
 
             //get scanset number from file
-            int scan_num = 0;
+            var scan_num = 0;
             if (this.fileType == Globals.MSFileType.PNNL_UIMF)
             {
-                int imsScanNum = parseIntField(lookup(processedData, headers, "ims_scan_num"));
-                int frame_num = parseIntField(lookup(processedData, headers, "frame_num"));
+                var imsScanNum = parseIntField(lookup(processedData, headers, "ims_scan_num"));
+                var frame_num = parseIntField(lookup(processedData, headers, "frame_num"));
                 ((UIMFIsosResult)result).DriftTime = parseDoubleField(lookup(processedData, headers, "drift_time"));
                 result.ScanSet = new LCScanSetIMS(frame_num);
                 ((UIMFIsosResult) result).IMSScanSet = new IMSScanSet(imsScanNum);
@@ -148,24 +148,24 @@ namespace DeconTools.Backend.Data
             result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
             result.IsotopicProfile.OriginalIntensity = parseDoubleField(lookup(processedData, headers, "unsummed_intensity"));
             
-            string saturationFlagString = lookup(processedData, headers, "saturation_flag");
+            var saturationFlagString = lookup(processedData, headers, "saturation_flag");
             result.IsotopicProfile.IsSaturated = saturationFlagString == "1";
             
 
-            MSPeak peak = new MSPeak();
+            var peak = new MSPeak();
             peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));
             peak.Width = parseFloatField(lookup(processedData, headers, "fwhm"));
             peak.XValue = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
             peak.SignalToNoise = parseFloatField(lookup(processedData, headers, "signal_noise"));
 
-            string flagString= lookup(processedData, headers, "flag");
+            var flagString= lookup(processedData, headers, "flag");
 
             if (flagString == null || flagString == string.Empty)
             {
             }
             else
             {
-                int flagNum = parseIntField(flagString);
+                var flagNum = parseIntField(flagString);
                 if (flagNum == 1) result.Flags.Add(new DeconTools.Backend.Core.PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
             }
 
@@ -179,8 +179,8 @@ namespace DeconTools.Backend.Data
 
         private Run getRunFromIsosFilename(string p, DeconTools.Backend.Globals.MSFileType filetype)
         {
-            string runFilename = p.Replace("_isos", "");
-            string replacementExtension = "";
+            var runFilename = p.Replace("_isos", "");
+            var replacementExtension = "";
 
             switch (filetype)
             {
@@ -222,7 +222,7 @@ namespace DeconTools.Backend.Data
 
             runFilename.Replace(".csv", replacementExtension);
 
-            RunFactory factory = new RunFactory();
+            var factory = new RunFactory();
             Run run;
             try
             {

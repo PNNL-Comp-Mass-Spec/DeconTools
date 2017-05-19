@@ -35,14 +35,14 @@ namespace DeconTools.Backend.Data
             //Insert records in bulk mood, 500 records each time
             //this is significantly faster than inserting one record at a time
             //500 records are the maximum number sqlite3 can handle
-            ArrayList records = new ArrayList();
-            int count = 0;
-            foreach (ScanResult result in results.ScanResultList)
+            var records = new ArrayList();
+            var count = 0;
+            foreach (var result in results.ScanResultList)
             {
                 Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
-                UimfScanResult uimfResult = (UimfScanResult)result;
+                var uimfResult = (UimfScanResult)result;
 
-                IMS_Frames fp = new IMS_Frames();
+                var fp = new IMS_Frames();
                 fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
                 fp.frame_time = (float)uimfResult.ScanTime;
                 fp.type = (ushort)uimfResult.SpectrumType;

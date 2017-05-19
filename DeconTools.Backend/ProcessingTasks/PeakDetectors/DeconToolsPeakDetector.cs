@@ -146,11 +146,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private List<DeconTools.Backend.Core.Peak> ConvertDeconEnginePeakList(DeconToolsV2.Peaks.clsPeak[] peaklist)
         {
-            List<Peak> returnedList = new List<Peak>();
+            var returnedList = new List<Peak>();
 
-            for (int i = 0; i < peaklist.Length; i++)
+            for (var i = 0; i < peaklist.Length; i++)
             {
-                MSPeak peak = new MSPeak();
+                var peak = new MSPeak();
                 peak.XValue = peaklist[i].mdbl_mz;
                 peak.Height = (int)peaklist[i].mdbl_intensity;
                 peak.SignalToNoise = (float)peaklist[i].mdbl_SN;
@@ -180,7 +180,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (xydata == null || xydata.Xvalues == null || xydata.Xvalues.Length == 0) return null;
 
 
-            List<Peak> peakList = new List<Peak>();
+            var peakList = new List<Peak>();
 
             //initialize DeconEngine's peakFinding class
             peakProcessor = new DeconToolsV2.Peaks.clsPeakProcessor();
@@ -192,8 +192,8 @@ namespace DeconTools.Backend.ProcessingTasks
             peakProcessor.SetOptions(this.deconEngineParameters);
 
             //Find peaks using DeconEngine
-            float[] xvals = new float[1];
-            float[] yvals = new float[1];
+            var xvals = new float[1];
+            var yvals = new float[1];
 
             xydata.GetXYValuesAsSingles(ref xvals, ref yvals);
 
@@ -232,7 +232,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             //resultList.Run.DeconToolsPeakList = DeconEnginePeakList;
             resultList.Run.DeconToolsPeakList = new ThrashV1Peak[DeconEnginePeakList.Length];
-            for (int i = 0; i < DeconEnginePeakList.Length; i++)
+            for (var i = 0; i < DeconEnginePeakList.Length; i++)
             {
                 var pk = DeconEnginePeakList[i];
                 resultList.Run.DeconToolsPeakList[i] = new ThrashV1Peak(

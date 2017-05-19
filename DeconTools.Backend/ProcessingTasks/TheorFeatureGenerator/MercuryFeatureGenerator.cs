@@ -25,12 +25,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             Check.Require(resultColl.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag hasn't been declared");
 
-            TargetBase mt = resultColl.Run.CurrentMassTag;
+            var mt = resultColl.Run.CurrentMassTag;
 
-            TargetedResultBase result = resultColl.CurrentTargetedResult;
+            var result = resultColl.CurrentTargetedResult;
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
-            double fwhm = result.IsotopicProfile.GetFWHM();
+            var fwhm = result.IsotopicProfile.GetFWHM();
 
             
         }

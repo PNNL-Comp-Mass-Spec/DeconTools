@@ -49,8 +49,8 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
 
-                ScanResultFactory srf = new ScanResultFactory();
-                ScanResult scanresult = srf.CreateScanResult(resultList.Run);
+                var srf = new ScanResultFactory();
+                var scanresult = srf.CreateScanResult(resultList.Run);
 
                 if (scanresult != null)
                 {

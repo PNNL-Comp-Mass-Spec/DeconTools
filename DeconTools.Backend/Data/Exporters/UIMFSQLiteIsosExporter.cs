@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Data
             }
 
             ResultCollection results;
-            IsosResultDeSerializer deserializer = new IsosResultDeSerializer(binaryResultCollectionFilename);
+            var deserializer = new IsosResultDeSerializer(binaryResultCollectionFilename);
 
             do
             {
@@ -94,13 +94,13 @@ namespace DeconTools.Backend.Data
             //Insert records in bulk mood, 500 records each time
             //this is significantly faster than inserting one record at a time
             //500 records are the maximum number sqlite3 can handle
-            ArrayList records = new ArrayList();
-            int count = 0;
-            foreach (IsosResult result in results.ResultList)
+            var records = new ArrayList();
+            var count = 0;
+            foreach (var result in results.ResultList)
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
-                UIMFIsosResult uimfResult = (UIMFIsosResult)result;
-                MS_Features fp = new MS_Features();
+                var uimfResult = (UIMFIsosResult)result;
+                var fp = new MS_Features();
                 fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
                 fp.ims_scan_num = (ushort)uimfResult.IMSScanSet.PrimaryScanNumber;
                 fp.charge = (byte)uimfResult.IsotopicProfile.ChargeState;

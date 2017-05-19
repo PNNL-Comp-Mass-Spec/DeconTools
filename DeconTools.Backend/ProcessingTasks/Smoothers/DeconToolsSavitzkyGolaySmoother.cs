@@ -67,14 +67,14 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             //    resultList.Run.XYData.Yvalues != null && resultList.Run.XYData.Xvalues.Length > 0 &&
             //    resultList.Run.XYData.Yvalues.Length > 0, "Smoother failed. Problem: Empty XY values");
 
-            float[] xvals = new float[1];
-            float[] yvals = new float[1];
+            var xvals = new float[1];
+            var yvals = new float[1];
 
             inputData.GetXYValuesAsSingles(ref xvals, ref yvals);
 
             DeconEngine.Utils.SavitzkyGolaySmooth((short)this.leftParam, (short)this.rightParam, (short)this.order, ref xvals, ref yvals);
 
-            XYData outData = new XYData();
+            var outData = new XYData();
             outData.SetXYValues(ref xvals, ref yvals);
             return outData;
         }

@@ -28,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             this.TriggerToExport = triggerValue;
 
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             this.cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + fileName;
 
@@ -58,7 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         protected override void buildTables()
         {
             Table isosResultTable = new UIMFIsosResult_SqliteTable("T_MSFeatures");
-            DbCommand command = cnn.CreateCommand();
+            var command = cnn.CreateCommand();
 
             command.CommandText = isosResultTable.BuildCreateTableString();
             command.ExecuteNonQuery();
@@ -66,30 +66,30 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected override void addIsosResults(List<IsosResult> isosResultList)
         {
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    SQLiteParameter featureIDParam = new SQLiteParameter();
-                    SQLiteParameter frameNumParam = new SQLiteParameter();
-                    SQLiteParameter scanNumParam = new SQLiteParameter();
-                    SQLiteParameter chargeParam = new SQLiteParameter();
-                    SQLiteParameter abundanceParam = new SQLiteParameter();
-                    SQLiteParameter mzParam = new SQLiteParameter();
-                    SQLiteParameter fitParam = new SQLiteParameter();
-                    SQLiteParameter averageMWParam = new SQLiteParameter();
-                    SQLiteParameter monoIsotopicMWParam = new SQLiteParameter();
-                    SQLiteParameter mostAbundantMWParam = new SQLiteParameter();
-                    SQLiteParameter fwhmParam = new SQLiteParameter();
-                    SQLiteParameter sigNoiseParam = new SQLiteParameter();
-                    SQLiteParameter monoAbundanceParam = new SQLiteParameter();
-                    SQLiteParameter monoPlus2AbundParam = new SQLiteParameter();
-                    SQLiteParameter driftTimeParam = new SQLiteParameter();
-                    SQLiteParameter origIntensParam = new SQLiteParameter();
-                    SQLiteParameter tia_origIntensParam = new SQLiteParameter();
-                    SQLiteParameter flagCodeParam = new SQLiteParameter();
+                    var featureIDParam = new SQLiteParameter();
+                    var frameNumParam = new SQLiteParameter();
+                    var scanNumParam = new SQLiteParameter();
+                    var chargeParam = new SQLiteParameter();
+                    var abundanceParam = new SQLiteParameter();
+                    var mzParam = new SQLiteParameter();
+                    var fitParam = new SQLiteParameter();
+                    var averageMWParam = new SQLiteParameter();
+                    var monoIsotopicMWParam = new SQLiteParameter();
+                    var mostAbundantMWParam = new SQLiteParameter();
+                    var fwhmParam = new SQLiteParameter();
+                    var sigNoiseParam = new SQLiteParameter();
+                    var monoAbundanceParam = new SQLiteParameter();
+                    var monoPlus2AbundParam = new SQLiteParameter();
+                    var driftTimeParam = new SQLiteParameter();
+                    var origIntensParam = new SQLiteParameter();
+                    var tia_origIntensParam = new SQLiteParameter();
+                    var flagCodeParam = new SQLiteParameter();
 
 
                     int n;

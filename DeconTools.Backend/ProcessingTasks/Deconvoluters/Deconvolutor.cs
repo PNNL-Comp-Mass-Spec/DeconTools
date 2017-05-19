@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             foreach (var msfeature in resultList.IsosResultBin)
             {
-                foreach (MSPeak peak in msfeature.IsotopicProfile.Peaklist)
+                foreach (var peak in msfeature.IsotopicProfile.Peaklist)
                 {
                     peak.MSFeatureID = msfeature.MSFeatureID;
                     
@@ -95,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             else
             {
-                for (int i = resultList.IsosResultBin.Count - 1; i >= 0; i--)
+                for (var i = resultList.IsosResultBin.Count - 1; i >= 0; i--)
                 {
                     if (resultList.IsosResultBin[i].ScanSet.PrimaryScanNumber != resultList.Run.CurrentScanSet.PrimaryScanNumber)
                     {
@@ -154,7 +154,7 @@ namespace DeconTools.Backend.ProcessingTasks
             MSPeak addedMonoPeak;
             MSPeak baseMonoPeak;
 
-            foreach (IsosResult result in scanSetIsosResults)
+            foreach (var result in scanSetIsosResults)
             {
                 addedMonoPeak = addedResult.IsotopicProfile.Peaklist[0];
                 baseMonoPeak = result.IsotopicProfile.Peaklist[0];

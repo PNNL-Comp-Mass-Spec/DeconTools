@@ -29,7 +29,7 @@ namespace DeconTools.Backend.Data
         {
             if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
 
-            FileInfo fi = new FileInfo(filename);
+            var fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
 
             this.filename = filename;
@@ -69,7 +69,7 @@ namespace DeconTools.Backend.Data
      
         public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
         {
-            using (StreamReader reader = new StreamReader(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            using (var reader = new StreamReader(new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
                 _header =reader.ReadLine();    //first line is the header line.  
 
@@ -77,11 +77,11 @@ namespace DeconTools.Backend.Data
 
                 _containsMSFeatureIDColumn = _header != null && _header.Contains("MSFeatureID");
 
-                int progressCounter = 0;
+                var progressCounter = 0;
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
-                    MSPeakResult peak = convertTextToPeakResult(line);
+                    var line = reader.ReadLine();
+                    var peak = convertTextToPeakResult(line);
                     peakList.Add(peak);
 
                     progressCounter++;
@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Data
             if (progressCounter % 10000 == 0)
             {
 
-                int percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
+                var percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
 
                 if (this.backgroundWorker != null)
                 {
@@ -121,11 +121,11 @@ namespace DeconTools.Backend.Data
         //TODO: use column header lookup instead of hard coded values
         private MSPeakResult convertTextToPeakResult(string line)
         {
-            MSPeakResult peakresult = new MSPeakResult();
+            var peakresult = new MSPeakResult();
 
-            int columnCounter = 0;
+            var columnCounter = 0;
 
-            List<string> processedLine = processLine(line);
+            var processedLine = processLine(line);
             peakresult.PeakID = Convert.ToInt32(processedLine[columnCounter]);
             
             
@@ -147,7 +147,7 @@ namespace DeconTools.Backend.Data
 
             if (_containsMSFeatureIDColumn)
             {
-                int currentCounter = ++columnCounter;
+                var currentCounter = ++columnCounter;
                 peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[currentCounter]);
             }
 
@@ -161,8 +161,8 @@ namespace DeconTools.Backend.Data
 
         private MSPeakResult convertTextToPeakUIMFResult(string line)
         {
-            MSPeakResult peakresult = new MSPeakResult();
-            List<string> processedLine = processLine(line);
+            var peakresult = new MSPeakResult();
+            var processedLine = processLine(line);
             if (processedLine.Count < 7)
             {
                 throw new System.IO.IOException("Trying to import peak data into UIMF data object, but not enough columns are present in the source text file");
@@ -193,10 +193,10 @@ namespace DeconTools.Backend.Data
         private List<string> processLine(string inputLine)
         {
             char[] splitter = { delimiter };
-            List<string> returnedList = new List<string>();
+            var returnedList = new List<string>();
 
-            string[] arr = inputLine.Split(splitter);
-            foreach (string str in arr)
+            var arr = inputLine.Split(splitter);
+            foreach (var str in arr)
             {
                 returnedList.Add(str);
             }

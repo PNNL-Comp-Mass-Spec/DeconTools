@@ -92,7 +92,7 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             //m_reader=new MassSpecDataReader();
-            IBDAMSScanFileInformation msscan = m_reader.FileInformation.MSScanFileInformation;
+            var msscan = m_reader.FileInformation.MSScanFileInformation;
             return (int)msscan.TotalScansPresent;
         }
 
@@ -107,7 +107,7 @@ namespace DeconTools.Backend.Runs
 
             if (m_spec == null) return -1;
 
-            IRange[] timeRangeArr = m_spec.AcquiredTimeRange;
+            var timeRangeArr = m_spec.AcquiredTimeRange;
             if (timeRangeArr != null && timeRangeArr.Length == 1)
             {
                 time = timeRangeArr[0].Start;
@@ -317,7 +317,7 @@ namespace DeconTools.Backend.Runs
 
             //long minXLong = (long)(minMZ * precision + 0.5);
             //long maxXLong = (long)(maxMZ * precision + 0.5);
-            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
             {
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
                 //m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);

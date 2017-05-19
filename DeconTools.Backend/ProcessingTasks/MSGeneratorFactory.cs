@@ -70,7 +70,7 @@ namespace DeconTools.Backend.ProcessingTasks
 #if !Disable_DeconToolsV2
         internal Core.Task CreateMSGenerator(Globals.MSFileType fileType, DeconTools.Backend.Core.OldDecon2LSParameters oldDecon2LSParameters)
         {
-            MSGenerator msgenerator = CreateMSGenerator(fileType);
+            var msgenerator = CreateMSGenerator(fileType);
 
             if (oldDecon2LSParameters.HornTransformParameters.UseMZRange)
             {

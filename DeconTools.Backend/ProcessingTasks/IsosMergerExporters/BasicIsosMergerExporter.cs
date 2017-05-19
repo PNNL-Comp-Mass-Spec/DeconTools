@@ -102,7 +102,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private string buildHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan_num");
             sb.Append(delimiter);
             sb.Append("charge");

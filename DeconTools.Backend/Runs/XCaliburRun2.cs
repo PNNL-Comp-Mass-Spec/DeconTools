@@ -63,7 +63,7 @@ namespace DeconTools.Backend.Runs
 
         public override bool IsDataCentroided(int scanNum)
         {
-            int isCentroided = 0;
+            var isCentroided = 0;
             _msfileReader.IsCentroidScanForScanNum(scanNum, ref isCentroided);
 
             return isCentroided != 0;
@@ -105,7 +105,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetNumMSScans()
         {
-            int numSpectra = 0;
+            var numSpectra = 0;
 
             _msfileReader.GetNumSpectra(ref numSpectra);
             return numSpectra;
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleLCScanNum()
         {
-            int maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
+            var maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
             if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;
 
             return maxpossibleScanIndex;
@@ -145,21 +145,21 @@ namespace DeconTools.Backend.Runs
             string filter = null;
             _msfileReader.GetFilterForScanNum(scanNum, ref filter);
 
-            int msLevel = 1;
+            var msLevel = 1;
 
             if (filter == null)
             {
                 return 1;
             }
 
-            int indexOfMSReference = filter.IndexOf("ms");
+            var indexOfMSReference = filter.IndexOf("ms");
             if (indexOfMSReference == -1)
             {
                 msLevel = 1;
             }
             else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string 
             {
-                char mslevelFromFilter = filter[indexOfMSReference + 2];
+                var mslevelFromFilter = filter[indexOfMSReference + 2];
 
                 switch (mslevelFromFilter)
                 {
@@ -218,13 +218,13 @@ namespace DeconTools.Backend.Runs
             {
 
                 object pvarLabels = null, pvarValues = null;
-                int pnArraySize = 0;
+                var pnArraySize = 0;
                 _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
 
                 var labels = (string[])pvarLabels;
                 var values = (string[])pvarValues;
 
-                for (int index = 0; index < labels.Length; index++)
+                for (var index = 0; index < labels.Length; index++)
                 {
                     var label = labels[index];
                     var value = values[index];
@@ -248,11 +248,11 @@ namespace DeconTools.Backend.Runs
             int msLevel;
             string fragmentationType;
 
-            string scanInfo = this.GetScanInfo(scanNum);
+            var scanInfo = this.GetScanInfo(scanNum);
             XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
-            IonModeConstants ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
+            var ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
 
-            PrecursorInfo precursor = new PrecursorInfo();
+            var precursor = new PrecursorInfo();
 
             //Get MS Level
             precursor.MSLevel = msLevel;
@@ -270,12 +270,12 @@ namespace DeconTools.Backend.Runs
             //Get the Parent scan if MS level is not MS1
             if (precursor.MSLevel > 1)
             {
-                int stepBack = 0;
+                var stepBack = 0;
                 while (scanNum - stepBack > 0)
                 {
                     if (scanNum - stepBack > 0)
                     {
-                        int testScanLevel = GetMSLevel(scanNum - stepBack);
+                        var testScanLevel = GetMSLevel(scanNum - stepBack);
                         stepBack++;
                         if (testScanLevel == 1) //the first precursor scan prior
                         {
@@ -329,9 +329,9 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
             double[,] vals = null;
-            bool spectraAreSummed = scanset.IndexValues.Count > 1;
-            int scanNumFirst = scanset.IndexValues[0];
-            int scanNumLast = scanset.IndexValues[scanset.IndexValues.Count - 1];
+            var spectraAreSummed = scanset.IndexValues.Count > 1;
+            var scanNumFirst = scanset.IndexValues[0];
+            var scanNumLast = scanset.IndexValues[scanset.IndexValues.Count - 1];
 
             string scanDescription;
             if (spectraAreSummed)
@@ -349,10 +349,10 @@ namespace DeconTools.Backend.Runs
 
                 if (spectraAreSummed)
                 {
-                    int backgroundScan1First = 0;
-                    int backgroundScan1Last = 0;
-                    int backgroundScan2First = 0;
-                    int backgroundScan2Last = 0;
+                    var backgroundScan1First = 0;
+                    var backgroundScan1Last = 0;
+                    var backgroundScan2First = 0;
+                    var backgroundScan2Last = 0;
                     const string filter = "p full ms"; //only sum MS1 data
 
                     const int intensityCutoffType = 0;
@@ -362,7 +362,7 @@ namespace DeconTools.Backend.Runs
                     double centVal = 0;
                     object massList = null;
                     object peakFlags = null;
-                    int arraySize = 0;
+                    var arraySize = 0;
 
                     _msfileReader.GetAverageMassList(
                         ref scanNumFirst, 
@@ -385,7 +385,7 @@ namespace DeconTools.Backend.Runs
                 }
                 else
                 {
-                    int scanNum = scanset.PrimaryScanNumber;
+                    var scanNum = scanset.PrimaryScanNumber;
                     string filter = null;
                     const int intensityCutoffType = 0;
                     const int intensityCutoffValue = 0;
@@ -395,7 +395,7 @@ namespace DeconTools.Backend.Runs
                     double centVal = 0;
                     object massList = null;
                     object peakFlags = null;
-                    int arraySize = 0;
+                    var arraySize = 0;
 
                     _msfileReader.GetMassListFromScanNum(
                         ref scanNum,
@@ -429,7 +429,7 @@ namespace DeconTools.Backend.Runs
 
             if (vals == null) return null;
 
-            int length = vals.GetLength(1);
+            var length = vals.GetLength(1);
 
             var xvals = new List<double>();
             var yvals = new List<double>();
@@ -438,15 +438,15 @@ namespace DeconTools.Backend.Runs
             // GetMassListFromScanNum generally returns the data sorted by m/z ascending
             // However, there are edge cases for certain spectra in certain datasets where adjacent data points are out of order and need to be swapped
             // Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xydata.Xvalues and xydata.Yvalues
-            bool sortRequired = false;
+            var sortRequired = false;
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                double xValue = vals[0, i];
+                var xValue = vals[0, i];
 
                 if (xValue < minMZ || xValue > maxMZ) continue;
 
-                double yValue = vals[1, i];
+                var yValue = vals[1, i];
 
                 if (i > 0 && xValue < vals[0, i - 1])
                 {
@@ -481,10 +481,10 @@ namespace DeconTools.Backend.Runs
         {
             if (!ParentScanList.ContainsKey(scanLC))
             {
-                int testScan = scanLC;
+                var testScan = scanLC;
                 while (testScan >= MinLCScan)
                 {
-                    int currentMSLevel = GetMSLevel(testScan);
+                    var currentMSLevel = GetMSLevel(testScan);
 
                     if (currentMSLevel == 1)
                     {

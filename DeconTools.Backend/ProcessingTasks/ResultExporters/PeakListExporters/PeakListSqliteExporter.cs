@@ -31,7 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         {
             if (File.Exists(sqliteFilename)) File.Delete(sqliteFilename);
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
 
             cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + sqliteFilename;
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private void createMSPeakTable()
         {
             Table mspeakTable = new MSPeakTable("T_Peaks");
-            DbCommand command = cnn.CreateCommand();
+            var command = cnn.CreateCommand();
 
             command.CommandText = mspeakTable.BuildCreateTableString();
             if (createIndexOnMZ)
@@ -109,18 +109,18 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         /// <param name="peakList">Peak list to write</param>
         public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
         {
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    SQLiteParameter peakIDParam = new SQLiteParameter();
-                    SQLiteParameter scanIDParam = new SQLiteParameter();
-                    SQLiteParameter mzParam = new SQLiteParameter();
-                    SQLiteParameter intensParam = new SQLiteParameter();
-                    SQLiteParameter fwhmParam = new SQLiteParameter();
-                    SQLiteParameter msfeatureParam = new SQLiteParameter();
+                    var peakIDParam = new SQLiteParameter();
+                    var scanIDParam = new SQLiteParameter();
+                    var mzParam = new SQLiteParameter();
+                    var intensParam = new SQLiteParameter();
+                    var fwhmParam = new SQLiteParameter();
+                    var msfeatureParam = new SQLiteParameter();
 
                                        mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
                     mycommand.Parameters.Add(peakIDParam);

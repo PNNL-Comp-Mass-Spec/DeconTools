@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Runs
 
             Filename = filename;
 
-            string baseFilename = Path.GetFileName(Filename);
+            var baseFilename = Path.GetFileName(Filename);
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(filename);
 
@@ -61,11 +61,11 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
             
-            int totScans = this.GetNumMSScans();
+            var totScans = this.GetNumMSScans();
 
 
-            double[] xvals = new double[0];
-            double[] yvals = new double[0];
+            var xvals = new double[0];
+            var yvals = new double[0];
 
             //if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             //{
@@ -78,13 +78,13 @@ namespace DeconTools.Backend.Runs
             //    this.rawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
             //}
 
-            int upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
-            int lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
+            var upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
+            var lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
             
             //TODO:  Old DeconTools reference!! remove this
             this.RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
 
-            XYData xydata=new XYData();
+            var xydata=new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
             return xydata;

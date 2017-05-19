@@ -59,7 +59,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         //TODO: remove code duplication (see DeconToolsPeakDetector)
         public override List<Peak> FindPeaks(XYData xydata, double xMin, double xMax)
         {
-            List<Peak> peakList = new List<Peak>();
+            var peakList = new List<Peak>();
             
             if (xydata == null)
             {
@@ -97,11 +97,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
 
                 //Find peaks using DeconEngine
-                float[] xvals = new float[1];
-                float[] yvals = new float[1];
+                var xvals = new float[1];
+                var yvals = new float[1];
 
                 xydata.GetXYValuesAsSingles(ref xvals, ref yvals);
-                double largestXValue = xydata.Xvalues[xydata.Xvalues.Length - 1];
+                var largestXValue = xydata.Xvalues[xydata.Xvalues.Length - 1];
 
                 _oldDeconEnginePeaklist = new DeconToolsV2.Peaks.clsPeak[0];
                 try
@@ -114,9 +114,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     throw ex;
                 }
 
-                foreach (DeconToolsV2.Peaks.clsPeak peak in _oldDeconEnginePeaklist)
+                foreach (var peak in _oldDeconEnginePeaklist)
                 {
-                    ChromPeak chromPeak = new ChromPeak();
+                    var chromPeak = new ChromPeak();
                     chromPeak.XValue = peak.mdbl_mz;          // here,  mz is actually the scan / or NET 
                     chromPeak.Height = (float)peak.mdbl_intensity;
                     chromPeak.SignalToNoise = (float)peak.mdbl_SN;

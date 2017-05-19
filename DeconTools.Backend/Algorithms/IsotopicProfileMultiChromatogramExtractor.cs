@@ -44,22 +44,22 @@ namespace DeconTools.Backend.Algorithms
 
         public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult> peakList, IsotopicProfile theorIso, bool filterOutMSMSScans, List<int> ms1LevelScanTable)
         {
-            IList<Peak> topTheorIsoPeaks = getTopPeaks(theorIso, m_numPeaks);
-            ChromatogramGenerator chromGen = new ChromatogramGenerator();
+            var topTheorIsoPeaks = getTopPeaks(theorIso, m_numPeaks);
+            var chromGen = new ChromatogramGenerator();
 
-            Dictionary<MSPeak, XYData> chromatogramsForIsotopicProfiles = new Dictionary<MSPeak, XYData>();
+            var chromatogramsForIsotopicProfiles = new Dictionary<MSPeak, XYData>();
 
             foreach (var peak in topTheorIsoPeaks)
             {
-                XYData xydata = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
+                var xydata = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
 
                 if (filterOutMSMSScans && ms1LevelScanTable!=null)
                 {
-                    Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+                    var filteredChromVals = new Dictionary<int, double>();
 
-                    for (int i = 0; i < xydata.Xvalues.Length; i++)
+                    for (var i = 0; i < xydata.Xvalues.Length; i++)
                     {
-                        int currentScanVal = (int)xydata.Xvalues[i];
+                        var currentScanVal = (int)xydata.Xvalues[i];
 
                         if (ms1LevelScanTable.Contains(currentScanVal))
                         {
@@ -83,7 +83,7 @@ namespace DeconTools.Backend.Algorithms
 
         public void SmoothChromatograms(Dictionary<MSPeak, XYData> chromatograms, Smoother smoother)
         {
-            foreach (MSPeak peak in chromatograms.Keys.ToList())
+            foreach (var peak in chromatograms.Keys.ToList())
             {
                 chromatograms[peak] = smoother.Smooth(chromatograms[peak]);
             }
@@ -102,7 +102,7 @@ namespace DeconTools.Backend.Algorithms
             IList<Peak> sortedList = new List<Peak>();
             sortedList.Add(theorIso1.Peaklist[0]);
 
-            for (int i = 1; i < theorIso1.Peaklist.Count; i++)
+            for (var i = 1; i < theorIso1.Peaklist.Count; i++)
             {
                 if (theorIso1.Peaklist[i].Height > sortedList[0].Height)
                 {

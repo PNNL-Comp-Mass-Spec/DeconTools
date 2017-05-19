@@ -106,16 +106,16 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             if (o16O18TargetedResultObject.ChromCorrelationData == null) return -1;
 
-            bool noO16PeakPresent = !o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Any();
+            var noO16PeakPresent = !o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Any();
             if (noO16PeakPresent )
             {
                 ratio = 0;
             }
             else
             {
-                double ratioSingleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[0].CorrelationSlope??0d;
+                var ratioSingleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[0].CorrelationSlope??0d;
 
-                double ratioDoubleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[1].CorrelationSlope ?? 0d;
+                var ratioDoubleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[1].CorrelationSlope ?? 0d;
 
                 double adjRatioI0I4;
                 var tempIntensity = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, 1.0, ratioSingleO18ToO16,

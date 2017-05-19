@@ -70,7 +70,7 @@ namespace DeconTools.Backend.Core
         
         public void AddCorrelationData(double correlationSlope, double correlationIntercept, double correlationRSquaredVal)
         {
-            ChromCorrelationDataItem data = new ChromCorrelationDataItem(correlationSlope,correlationIntercept,correlationRSquaredVal);
+            var data = new ChromCorrelationDataItem(correlationSlope,correlationIntercept,correlationRSquaredVal);
             CorrelationDataItems.Add(data);
         }
 
@@ -82,7 +82,7 @@ namespace DeconTools.Backend.Core
 
         public string ToStringWithDetails()
         {
-            StringBuilder data = new StringBuilder();
+            var data = new StringBuilder();
             var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
             foreach (var validItem in validItems)
             {

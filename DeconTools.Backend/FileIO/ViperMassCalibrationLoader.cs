@@ -35,20 +35,20 @@ namespace DeconTools.Backend.FileIO
         public ViperMassCalibrationData ImportMassCalibrationData()
         {
 
-            ViperMassCalibrationData viperMassCalibrationData = new ViperMassCalibrationData();
+            var viperMassCalibrationData = new ViperMassCalibrationData();
 
 
             var massCalibrationDataItems = new List<ViperMassCalibrationDataItem>();
 
             using (var reader=new StreamReader(Filename))
             {
-                string headerLine = reader.ReadLine();
+                var headerLine = reader.ReadLine();
 
                 Check.Require(headerLine == "MassErrorPPM\tCount\tSmoothed_Count\tComment","Error reading Viper's mass calibration data. Header line is weird. Header= " + headerLine);
 
                 while (reader.Peek()!=-1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     if (string.IsNullOrEmpty(line))
                     {
                         break;

@@ -19,10 +19,10 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildResultOutput(TargetBase target)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             Check.Require(target is LcmsFeatureTarget, "Exported result is of the wrong type.");
 
-            LcmsFeatureTarget lcmsFeature = (LcmsFeatureTarget)target;
+            var lcmsFeature = (LcmsFeatureTarget)target;
 
             sb.Append(lcmsFeature.ID);
             sb.Append(Delimiter);

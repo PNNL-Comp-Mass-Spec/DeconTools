@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Algorithms
             {
                 throw new ApplicationException(string.Format("Loess expects the abscissa and ordinate arrays to be of the same size, but got {0} abscisssae and {1} ordinatae", xval.Length, yval.Length));
             }
-            int n = xval.Length;
+            var n = xval.Length;
             if (n == 0)
             {
                 throw new ApplicationException("Loess expects at least 1 point");
@@ -85,7 +85,7 @@ namespace DeconTools.Backend.Algorithms
                 return new double[] { yval[0], yval[1] };
             }
 
-            int bandwidthInPoints = (int)(bandwidth * n);
+            var bandwidthInPoints = (int)(bandwidth * n);
 
             if (bandwidthInPoints < 2)
             {
@@ -95,24 +95,24 @@ namespace DeconTools.Backend.Algorithms
                 ));
             }
 
-            double[] res = new double[n];
+            var res = new double[n];
 
-            double[] residuals = new double[n];
-            double[] sortedResiduals = new double[n];
+            var residuals = new double[n];
+            var sortedResiduals = new double[n];
 
-            double[] robustnessWeights = new double[n];
+            var robustnessWeights = new double[n];
 
             // Do an initial fit and 'robustnessIters' robustness iterations.
             // This is equivalent to doing 'robustnessIters+1' robustness iterations
             // starting with all robustness weights set to 1.
-            for (int i = 0; i < robustnessWeights.Length; i++) robustnessWeights[i] = 1;
-            for (int iter = 0; iter <= robustnessIters; ++iter)
+            for (var i = 0; i < robustnessWeights.Length; i++) robustnessWeights[i] = 1;
+            for (var iter = 0; iter <= robustnessIters; ++iter)
             {
                 int[] bandwidthInterval = { 0, bandwidthInPoints - 1 };
                 // At each x, compute a local weighted linear regression
-                for (int i = 0; i < n; ++i)
+                for (var i = 0; i < n; ++i)
                 {
-                    double x = xval[i];
+                    var x = xval[i];
 
                     // Find out the interval of source points on which
                     // a regression is to be made.
@@ -121,8 +121,8 @@ namespace DeconTools.Backend.Algorithms
                         updateBandwidthInterval(xval, i, bandwidthInterval);
                     }
 
-                    int ileft = bandwidthInterval[0];
-                    int iright = bandwidthInterval[1];
+                    var ileft = bandwidthInterval[0];
+                    var iright = bandwidthInterval[1];
 
                     // Compute the point of the bandwidth interval that is
                     // farthest from x
@@ -145,11 +145,11 @@ namespace DeconTools.Backend.Algorithms
                     // (section "Weighted least squares")
                     double sumWeights = 0;
                     double sumX = 0, sumXSquared = 0, sumY = 0, sumXY = 0;
-                    double denom = Math.Abs(1.0 / (xval[edge] - x));
-                    for (int k = ileft; k <= iright; ++k)
+                    var denom = Math.Abs(1.0 / (xval[edge] - x));
+                    for (var k = ileft; k <= iright; ++k)
                     {
-                        double xk = xval[k];
-                        double yk = yval[k];
+                        var xk = xval[k];
+                        var yk = yval[k];
                         double dist;
                         if (k < i)
                         {
@@ -159,8 +159,8 @@ namespace DeconTools.Backend.Algorithms
                         {
                             dist = (xk - x);
                         }
-                        double w = tricube(dist * denom) * robustnessWeights[k];
-                        double xkw = xk * w;
+                        var w = tricube(dist * denom) * robustnessWeights[k];
+                        var xkw = xk * w;
                         sumWeights += w;
                         sumX += xkw;
                         sumXSquared += xk * xkw;
@@ -168,10 +168,10 @@ namespace DeconTools.Backend.Algorithms
                         sumXY += yk * xkw;
                     }
 
-                    double meanX = sumX / sumWeights;
-                    double meanY = sumY / sumWeights;
-                    double meanXY = sumXY / sumWeights;
-                    double meanXSquared = sumXSquared / sumWeights;
+                    var meanX = sumX / sumWeights;
+                    var meanY = sumY / sumWeights;
+                    var meanXY = sumXY / sumWeights;
+                    var meanXSquared = sumXSquared / sumWeights;
 
                     double beta;
                     if (meanXSquared == meanX * meanX)
@@ -183,7 +183,7 @@ namespace DeconTools.Backend.Algorithms
                         beta = (meanXY - meanX * meanY) / (meanXSquared - meanX * meanX);
                     }
 
-                    double alpha = meanY - beta * meanX;
+                    var alpha = meanY - beta * meanX;
 
                     res[i] = beta * x + alpha;
                     residuals[i] = Math.Abs(yval[i] - res[i]);
@@ -204,16 +204,16 @@ namespace DeconTools.Backend.Algorithms
                 System.Array.Copy(residuals, sortedResiduals, n);
                 //System.arraycopy(residuals, 0, sortedResiduals, 0, n);
                 Array.Sort<double>(sortedResiduals);
-                double medianResidual = sortedResiduals[n / 2];
+                var medianResidual = sortedResiduals[n / 2];
 
                 if (medianResidual == 0)
                 {
                     break;
                 }
 
-                for (int i = 0; i < n; ++i)
+                for (var i = 0; i < n; ++i)
                 {
-                    double arg = residuals[i] / (6 * medianResidual);
+                    var arg = residuals[i] / (6 * medianResidual);
                     robustnessWeights[i] = (arg >= 1) ? 0 : Math.Pow(1 - arg * arg, 2);
                 }
             }
@@ -236,8 +236,8 @@ namespace DeconTools.Backend.Algorithms
          */
         private static void updateBandwidthInterval(double[] xval, int i, int[] bandwidthInterval)
         {
-            int left = bandwidthInterval[0];
-            int right = bandwidthInterval[1];
+            var left = bandwidthInterval[0];
+            var right = bandwidthInterval[1];
             // The right edge should be adjusted if the next point to the right
             // is closer to xval[i] than the leftmost point of the current interval
             if (right < xval.Length - 1 &&
@@ -258,7 +258,7 @@ namespace DeconTools.Backend.Algorithms
          */
         private static double tricube(double x)
         {
-            double tmp = 1 - x * x * x;
+            var tmp = 1 - x * x * x;
             return tmp * tmp * tmp;
         }
 
@@ -272,12 +272,12 @@ namespace DeconTools.Backend.Algorithms
          */
         private static void checkAllFiniteReal(double[] values, bool isAbscissae)
         {
-            for (int i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Length; i++)
             {
-                double x = values[i];
+                var x = values[i];
                 if (Double.IsInfinity(x) || Double.IsNaN(x))
                 {
-                    string pattern = isAbscissae ?
+                    var pattern = isAbscissae ?
                             "all abscissae must be finite real numbers, but {0}-th is {1}" :
                             "all ordinatae must be finite real numbers, but {0}-th is {1}";
                     throw new ApplicationException(string.Format(pattern, i, x));
@@ -295,7 +295,7 @@ namespace DeconTools.Backend.Algorithms
          */
         private static void checkStrictlyIncreasing(double[] xval)
         {
-            for (int i = 0; i < xval.Length; ++i)
+            for (var i = 0; i < xval.Length; ++i)
             {
                 if (i >= 1 && xval[i - 1] >= xval[i])
                 {

@@ -32,7 +32,7 @@ namespace DeconTools.Backend.Data
             if (progressCounter % 10000 == 0)
             {
 
-                int percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
+                var percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
 
                 if (this.backgroundWorker != null)
                 {

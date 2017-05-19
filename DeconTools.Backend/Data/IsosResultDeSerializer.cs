@@ -37,7 +37,7 @@ namespace DeconTools.Backend.Data
         public ResultCollection GetNextSetOfResults()
         {
             ResultCollection resultcollection= null;
-            BinaryFormatter formatter = new BinaryFormatter();
+            var formatter = new BinaryFormatter();
 
             if (streamPosition < stream.Length)
             {

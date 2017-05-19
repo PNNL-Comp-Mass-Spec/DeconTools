@@ -160,12 +160,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, this.Name + " failed; Isotopic profile is null.");
 
 
-            int scan = resultList.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
+            var scan = resultList.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
 
             var chromScanWindowWidth = resultList.CurrentTargetedResult.ChromPeakSelected.Width * 2;
 
-            int startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
-            int stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
+            var startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
+            var stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
 
             resultList.CurrentTargetedResult.ChromCorrelationData = CorrelateData(resultList.Run,
@@ -182,9 +182,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
 
             var correlationData = new ChromCorrelationData();
-            int indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
+            var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
-            double baseMZValue = iso.Peaklist[indexMostAbundantPeak].XValue;
+            var baseMZValue = iso.Peaklist[indexMostAbundantPeak].XValue;
             bool baseChromDataIsOK;
             var basePeakChromXYData = GetBaseChromXYData(run, startScan, stopScan, baseMZValue);
 
@@ -192,11 +192,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 //&&basePeakChromXYData.Xvalues.Length > 3;
 
 
-            double minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
+            var minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
                                  MinimumRelativeIntensityForChromCorr;
 
 
-            for (int i = 0; i < iso.Peaklist.Count; i++)
+            for (var i = 0; i < iso.Peaklist.Count; i++)
             {
                 if (!baseChromDataIsOK)
                 {
@@ -214,7 +214,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 }
                 else if (iso.Peaklist[i].Height >= minIntensity)
                 {
-                    double correlatedMZValue = iso.Peaklist[i].XValue;
+                    var correlatedMZValue = iso.Peaklist[i].XValue;
                     bool chromDataIsOK;
                     var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, basePeakChromXYData, correlatedMZValue);
 
@@ -293,7 +293,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             var basePeakChromXYData = Smoother.Smooth(xydata);
 
-            bool baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
+            var baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
                                      basePeakChromXYData.Xvalues.Length > 3;
 
             if (baseChromDataIsOK)
@@ -318,15 +318,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var filledInData = new SortedDictionary<int, double>();
 
             //first fill with zeros
-            for (int i = 0; i < basePeakChromXYData.Xvalues.Length; i++)
+            for (var i = 0; i < basePeakChromXYData.Xvalues.Length; i++)
             {
                 filledInData.Add((int)basePeakChromXYData.Xvalues[i], 0);
             }
 
             //then fill in other values
-            for (int i = 0; i < chromPeakXYData.Xvalues.Length; i++)
+            for (var i = 0; i < chromPeakXYData.Xvalues.Length; i++)
             {
-                int currentScan = (int)chromPeakXYData.Xvalues[i];
+                var currentScan = (int)chromPeakXYData.Xvalues[i];
                 if (filledInData.ContainsKey(currentScan))
                 {
                     filledInData[currentScan] = chromPeakXYData.Yvalues[i];

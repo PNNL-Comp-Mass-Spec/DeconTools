@@ -56,20 +56,20 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         #endregion
         public override void Execute(ResultCollection resultList)
         {
-            TargetBase mt = resultList.Run.CurrentMassTag;
+            var mt = resultList.Run.CurrentMassTag;
             Check.Require(mt != null, "Current mass tag is not defined.");
 
-            TargetedResultBase currentResult = resultList.CurrentTargetedResult;
+            var currentResult = resultList.CurrentTargetedResult;
 
             Check.Require(currentResult != null, "Quantifier failed. Result doesn't exist for current mass tag.");
             Check.Require(currentResult is N14N15_TResult, "Quantifier failed. Result is not of the N14N15 type.");
 
-            N14N15_TResult n14n15Result = ((N14N15_TResult)currentResult);
+            var n14n15Result = ((N14N15_TResult)currentResult);
 
-            BasicN14N15Quantifier quant = new BasicN14N15Quantifier(this.MSToleranceInPPM,this.RatioType);
+            var quant = new BasicN14N15Quantifier(this.MSToleranceInPPM,this.RatioType);
 
-            IsotopicProfile iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
-            IsotopicProfile iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
+            var iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
+            var iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
 
             if (iso1 == null || iso2 == null)
             {

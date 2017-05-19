@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Core
 
             foreach (var mtCurrent in this.TargetList)
             {
-                TargetBase current = mtCurrent;
+                var current = mtCurrent;
                 if (massTagsNonRedundant.Where(p => p.ID == current.ID && p.ChargeState == current.ChargeState).Count() == 0)
                 {
                     massTagsNonRedundant.Add(mtCurrent);
@@ -54,12 +54,12 @@ namespace DeconTools.Backend.Core
             }
 
 
-            List<int> uniqueMTIDs = (from n in massTagsNonRedundant select n.ID).Distinct().ToList();
+            var uniqueMTIDs = (from n in massTagsNonRedundant select n.ID).Distinct().ToList();
 
 
-            foreach (int mtID in uniqueMTIDs)
+            foreach (var mtID in uniqueMTIDs)
             {
-                List<TargetBase> topChargeStatesOfMassTag = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).Take(3).ToList();
+                var topChargeStatesOfMassTag = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).Take(3).ToList();
                 filteredMassTagList.AddRange(topChargeStatesOfMassTag);
 
             }

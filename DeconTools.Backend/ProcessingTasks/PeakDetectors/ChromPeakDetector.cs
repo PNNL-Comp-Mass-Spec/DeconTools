@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         public void FilterPeaksOnNET(double chromNetTolerance, double elutionTime, List<Peak> peakList)
         {
-            List<Peak> outOfRange = new List<Peak>();
+            var outOfRange = new List<Peak>();
             foreach (ChromPeak peak in peakList)
             {
                 if (Math.Abs(peak.NETValue - elutionTime) >= chromNetTolerance)

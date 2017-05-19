@@ -52,7 +52,7 @@ namespace DeconTools.Backend.FileIO
          
             foreach (var possibleHeader in possibleColumnHeaders)
             {
-                int columnIndex = GetColumnIndexForHeader(possibleHeader);
+                var columnIndex = GetColumnIndexForHeader(possibleHeader);
                 if (columnIndex != -1)
                 {
                     return row[columnIndex];
@@ -70,7 +70,7 @@ namespace DeconTools.Backend.FileIO
           
             foreach (var possibleHeader in possibleColumnHeaders)
             {
-                int columnIndex = GetColumnIndexForHeader(possibleHeader);
+                var columnIndex = GetColumnIndexForHeader(possibleHeader);
                 if (columnIndex != -1)
                 {
                     return row[columnIndex];
@@ -85,7 +85,7 @@ namespace DeconTools.Backend.FileIO
         {
 
 
-            int columnIndex = GetColumnIndexForHeader(targetColumn);
+            var columnIndex = GetColumnIndexForHeader(targetColumn);
             if (columnIndex == -1) 
             {
               return DEFAULT_RETURN_STRING;
@@ -105,9 +105,9 @@ namespace DeconTools.Backend.FileIO
             this.columnIndexTable = new Dictionary<string, int>();
 
 
-            for (int i = 0; i < m_columnHeaders.Count; i++)
+            for (var i = 0; i < m_columnHeaders.Count; i++)
             {
-                string header = m_columnHeaders[i].ToLower();
+                var header = m_columnHeaders[i].ToLower();
 
                 if (!this.columnIndexTable.ContainsKey(header))
                 {
@@ -121,7 +121,7 @@ namespace DeconTools.Backend.FileIO
 
         protected string ParseStringField(List<string> rowData, string[] headers, string defaultVal = "")
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty);
+            var rowValueString = LookupData(rowData, headers, string.Empty);
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.FileIO
 
         protected bool ParseBoolField(string inputstring)
         {
-            bool result = false;
+            var result = false;
             if (bool.TryParse(inputstring, out result))
                 return result;
             else return false;
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.FileIO
 
         protected bool ParseBoolField(List<string>rowData, string[]headers, bool defaultVal = false)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -177,7 +177,7 @@ namespace DeconTools.Backend.FileIO
 
         protected short ParseShortField(List<string>rowData, string[]headers, short defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -211,7 +211,7 @@ namespace DeconTools.Backend.FileIO
 
         protected double ParseDoubleField(List<string>rowData, string[]headers, double defaultVal = double.NaN)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -241,7 +241,7 @@ namespace DeconTools.Backend.FileIO
 
         protected float ParseFloatField(List<string> rowData, string[] headers, float defaultVal = float.NaN)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -263,12 +263,12 @@ namespace DeconTools.Backend.FileIO
 
         protected int ParseIntField(string inputstring)
         {
-            int result = 0;
+            var result = 0;
             if (Int32.TryParse(inputstring, out result))
                 return result;
             else
             {
-                double secondAttempt = ParseDoubleField(inputstring);
+                var secondAttempt = ParseDoubleField(inputstring);
                 if (secondAttempt != double.NaN)
                 {
                     return Convert.ToInt32(secondAttempt);
@@ -282,7 +282,7 @@ namespace DeconTools.Backend.FileIO
 
         protected int ParseIntField(List<string> rowData, string[] headers, int defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -313,7 +313,7 @@ namespace DeconTools.Backend.FileIO
 
         protected long ParseLongField(List<string> rowData, string[] headers, long defaultVal = -1)
         {
-            string rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
+            var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
             if (string.IsNullOrEmpty(rowValueString))
             {
@@ -339,10 +339,10 @@ namespace DeconTools.Backend.FileIO
         protected List<string> ProcessLine(string inputLine)
         {
             char[] splitter = { m_delimiter };
-            List<string> parsedLine = new List<string>();
+            var parsedLine = new List<string>();
 
-            string[] arr = inputLine.Split(splitter);
-            foreach (string str in arr)
+            var arr = inputLine.Split(splitter);
+            foreach (var str in arr)
             {
                 parsedLine.Add(str);
             }
@@ -355,7 +355,7 @@ namespace DeconTools.Backend.FileIO
         protected int GetColumnIndexForHeader(string target)
         {
 
-            string t = target.ToLower();
+            var t = target.ToLower();
 
 
             if (this.columnIndexTable.ContainsKey(t))

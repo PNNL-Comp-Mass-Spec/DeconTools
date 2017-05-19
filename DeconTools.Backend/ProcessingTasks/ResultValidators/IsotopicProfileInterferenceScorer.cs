@@ -42,21 +42,21 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             }
 
             
-            MSPeak monoPeak = currentResult.IsotopicProfile.getMonoPeak();
-            MSPeak lastPeak = currentResult.IsotopicProfile.Peaklist[currentResult.IsotopicProfile.Peaklist.Count - 1];
+            var monoPeak = currentResult.IsotopicProfile.getMonoPeak();
+            var lastPeak = currentResult.IsotopicProfile.Peaklist[currentResult.IsotopicProfile.Peaklist.Count - 1];
 
-            double leftMZBoundary = monoPeak.XValue - 1.1;
-            double rightMZBoundary = lastPeak.XValue + lastPeak.Width / 2.35 * 2;      // 2 sigma
+            var leftMZBoundary = monoPeak.XValue - 1.1;
+            var rightMZBoundary = lastPeak.XValue + lastPeak.Width / 2.35 * 2;      // 2 sigma
 
             double interferenceVal = -1;
             if (UsePeakBasedInterferenceValue)
             {
-                List<MSPeak> scanPeaks = resultColl.Run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+                var scanPeaks = resultColl.Run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
                 interferenceVal = m_scorer.GetInterferenceScore(scanPeaks, currentResult.IsotopicProfile.Peaklist, leftMZBoundary, rightMZBoundary);
             }
             else
             {
-                int startIndexOfXYData = MathUtils.BinarySearchWithTolerance(resultColl.Run.XYData.Xvalues, monoPeak.XValue - 3, 0, (resultColl.Run.XYData.Xvalues.Length - 1), 2);
+                var startIndexOfXYData = MathUtils.BinarySearchWithTolerance(resultColl.Run.XYData.Xvalues, monoPeak.XValue - 3, 0, (resultColl.Run.XYData.Xvalues.Length - 1), 2);
                 if (startIndexOfXYData < 0)
                 {
                     startIndexOfXYData = 0;

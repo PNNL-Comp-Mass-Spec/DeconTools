@@ -108,7 +108,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             
             foreach (var peak in peakList)
             {                    
-                string lineOfPeakData = buildPeakString(peak);
+                var lineOfPeakData = buildPeakString(peak);
                 sw.Write(lineOfPeakData);
             }
             sw.Flush();
@@ -126,7 +126,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #region Private Methods
         private string buildPeakString(MSPeakResult peak)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(peak.PeakID);
             sb.Append(m_delimiter);
@@ -161,7 +161,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         private string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("peak_index");
             sb.Append(m_delimiter);
             if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
@@ -206,7 +206,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             using (var writer = new StreamWriter(new FileStream(this.FileName, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
-                string headerLine = buildHeaderLine();
+                var headerLine = buildHeaderLine();
                 writer.Write(headerLine);
                 writer.Flush();
                 writer.Close();

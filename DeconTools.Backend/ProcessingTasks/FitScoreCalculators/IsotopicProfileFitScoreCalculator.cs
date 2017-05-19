@@ -30,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
             Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
 
-            IsotopicProfile theorProfile = new IsotopicProfile();
+            var theorProfile = new IsotopicProfile();
             switch (IsotopicProfileType)
             {
                 case DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED:
@@ -60,8 +60,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 
             }
 
-            int indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
-            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist,
+            var indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
+            var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist,
                 theorProfile.getMostIntensePeak().XValue, 0, observedProfile.Peaklist.Count - 1, 0.1);
 
 
@@ -70,9 +70,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 return 1.0;
             }
 
-            double mzOffset = observedProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+            var mzOffset = observedProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-            XYData theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(observedProfile.GetFWHM());
+            var theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(observedProfile.GetFWHM());
             //theorXYData.Display();
 
             theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
@@ -82,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var areafitter = new AreaFitter();
             int ionCountUsed;
 
-            double fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1, out ionCountUsed);
+            var fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1, out ionCountUsed);
 
             if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
             return fitval;

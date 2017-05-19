@@ -13,7 +13,7 @@ namespace DeconTools.Backend
 
         public void Execute(ResultCollection resultList)
         {
-            DeconToolsV2.Readers.clsRawData reader = new DeconToolsV2.Readers.clsRawData();
+            var reader = new DeconToolsV2.Readers.clsRawData();
             
         }
     }

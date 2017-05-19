@@ -119,14 +119,14 @@ namespace DeconTools.Backend.Core
                 return null;
             }
 
-            int numNitrogens = this.Target.GetAtomCountForElement("N");
+            var numNitrogens = this.Target.GetAtomCountForElement("N");
 
-            MSPeak monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
+            var monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
             if (monoPeakForUnlabelled == null) return null;
 
-            double expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / this.IsotopicProfile.ChargeState;
+            var expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / this.IsotopicProfile.ChargeState;
 
-            MSPeak monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(this.IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
+            var monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(this.IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
 
             return monoPeakOfLabelled;
 

@@ -113,7 +113,7 @@ namespace DeconTools.Backend.Runs
 
 
             spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out mzVals, out intensityVals);
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = (double[]) mzVals;
             xydata.Yvalues = (double[]) intensityVals;
             return xydata;
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Runs
         private string getDatasetName(string fullFolderPath)
         {
 
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
 
             if (dirInfo.Name.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
             {
@@ -150,7 +150,7 @@ namespace DeconTools.Backend.Runs
 
         private string getDatasetfolderName(string fullFolderPath)
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
 

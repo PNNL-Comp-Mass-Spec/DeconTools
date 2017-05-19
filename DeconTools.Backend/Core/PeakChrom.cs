@@ -58,20 +58,20 @@ namespace DeconTools.Backend.Core
         {
         
             //populate array with zero intensities.
-            SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
-            for (int i = minScan; i <= maxScan; i++)
+            var xyValues = new SortedDictionary<int, double>();
+            for (var i = minScan; i <= maxScan; i++)
             {
                 xyValues.Add(i, 0);
             }
 
 
-            bool msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
+            var msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
             if (!msPeakDataIsEmpty)
             {
                 //iterate over the peaklist, assign chromID,  and extract intensity values
-                for (int i = 0; i < this.ChromSourceData.Count; i++)
+                for (var i = 0; i < this.ChromSourceData.Count; i++)
                 {
-                    MSPeakResult p = this.ChromSourceData[i];
+                    var p = this.ChromSourceData[i];
                     double intensity = p.MSPeak.Height;
 
                     //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Core
             }
 
 
-            XYData outputXYData = new XYData();
+            var outputXYData = new XYData();
 
             outputXYData.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
             outputXYData.Yvalues = xyValues.Values.ToArray();
@@ -115,19 +115,19 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public List<MSPeakResult> GetMSPeakMembersForGivenChromPeak(Peak chromPeak, double scanTolerance)
         {
-            bool msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
+            var msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
             if (msPeakDataIsEmpty) return null;
 
-            int minScan = (int)Math.Floor(chromPeak.XValue - scanTolerance);
-            int maxScan = (int)Math.Ceiling(chromPeak.XValue + scanTolerance);
+            var minScan = (int)Math.Floor(chromPeak.XValue - scanTolerance);
+            var maxScan = (int)Math.Ceiling(chromPeak.XValue + scanTolerance);
 
-            List<MSPeakResult> filteredMSPeaks = (from n in this.ChromSourceData where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
+            var filteredMSPeaks = (from n in this.ChromSourceData where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
             return filteredMSPeaks;
         }
 
         public List<MSPeakResult> GetMSPeakMembersForGivenChromPeakAndAssignChromID(Peak chromPeak, double scanTolerance, int id)
         {
-            List<MSPeakResult> peaksToBeAssignedID = GetMSPeakMembersForGivenChromPeak(chromPeak, scanTolerance);
+            var peaksToBeAssignedID = GetMSPeakMembersForGivenChromPeak(chromPeak, scanTolerance);
             foreach (var peak in peaksToBeAssignedID)
             {
                 peak.ChromID = id;
@@ -150,9 +150,9 @@ namespace DeconTools.Backend.Core
             if (this.PeakDataIsNullOrEmpty) return null;
 
             double averagePeakWidth = this.PeakList.Average(p => p.Width);
-            double peakWidthSigma = averagePeakWidth / 2.35;    //   width@half-height =  2.35σ   (Gaussian peak theory)
+            var peakWidthSigma = averagePeakWidth / 2.35;    //   width@half-height =  2.35σ   (Gaussian peak theory)
 
-            double fourSigma = 4 * peakWidthSigma;
+            var fourSigma = 4 * peakWidthSigma;
 
             return GetChromPeakForGivenSource(peakResult, fourSigma);
 
@@ -167,7 +167,7 @@ namespace DeconTools.Backend.Core
       
             var peakQuery = (from n in this.PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n);
 
-            int peaksWithinTol = peakQuery.Count();
+            var peaksWithinTol = peakQuery.Count();
             if (peaksWithinTol == 0)
             {
                 return null;

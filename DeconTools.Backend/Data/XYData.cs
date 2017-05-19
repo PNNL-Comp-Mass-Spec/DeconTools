@@ -41,7 +41,7 @@ namespace DeconTools.Backend
                 xvals = new float[this.xvalues.Length];
                 yvals = new float[this.yvalues.Length];
 
-                for (int i = 0; i < this.xvalues.Length; i++)
+                for (var i = 0; i < this.xvalues.Length; i++)
                 {
                     xvals[i] = (float)this.xvalues[i];
                     yvals[i] = (float)this.yvalues[i];
@@ -69,7 +69,7 @@ namespace DeconTools.Backend
 
             this.xvalues = new double[xvals.Length];
             this.yvalues = new double[yvals.Length];
-            for (int i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xvals.Length; i++)
             {
                 this.xvalues[i] = xvals[i];
                 this.yvalues[i] = yvals[i];
@@ -96,7 +96,7 @@ namespace DeconTools.Backend
 
             this.xvalues = xvals;
             this.yvalues = new double[yvals.Length];
-            for (int i = 0; i < yvals.Length; i++)
+            for (var i = 0; i < yvals.Length; i++)
             {
                 this.yvalues[i] = yvals[i];
             }
@@ -106,9 +106,9 @@ namespace DeconTools.Backend
         {
             if (inputVals == null) return null;
             if (inputVals.Length == 0) return null;
-            double[] outputVals = new double[inputVals.Length];
+            var outputVals = new double[inputVals.Length];
 
-            for (int i = 0; i < inputVals.Length; i++)
+            for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = (double)inputVals[i];
 
@@ -120,9 +120,9 @@ namespace DeconTools.Backend
         {
             if (inputVals == null) return null;
             if (inputVals.Length == 0) return null;
-            double[] outputVals = new double[inputVals.Length];
+            var outputVals = new double[inputVals.Length];
 
-            for (int i = 0; i < inputVals.Length; i++)
+            for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = (double)inputVals[i];
 
@@ -132,15 +132,15 @@ namespace DeconTools.Backend
 
         public int GetClosestXVal(double targetXVal)
         {
-            double minDiff = 1e10;
+            var minDiff = 1e10;
 
 
-            int indexOfClosest = -1;
-            int numWrongDirection = 0;
+            var indexOfClosest = -1;
+            var numWrongDirection = 0;
 
-            for (int i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < this.xvalues.Length; i++)
             {
-                double currentDiff = Math.Abs(targetXVal - this.xvalues[i]);
+                var currentDiff = Math.Abs(targetXVal - this.xvalues[i]);
 
 
                 if (currentDiff < minDiff)
@@ -163,10 +163,10 @@ namespace DeconTools.Backend
 
         public double getMaxY()
         {
-            double maxY = double.MinValue;
+            var maxY = double.MinValue;
 
 
-            for (int i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < this.xvalues.Length; i++)
             {
                 if (this.yvalues[i] > maxY)
                 {
@@ -180,9 +180,9 @@ namespace DeconTools.Backend
 
         public double getMaxY(double xMin, double xMax)
         {
-            double maxY = double.MinValue;
+            var maxY = double.MinValue;
 
-            for (int i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < this.xvalues.Length; i++)
             {
                 if (this.xvalues[i] >= xMin && this.xvalues[i] <= xMax)
                 {
@@ -199,11 +199,11 @@ namespace DeconTools.Backend
 
         public static XYData ConvertDrawingPoints(System.Drawing.PointF[] points)
         {
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = new double[points.Length];
             xydata.Yvalues = new double[points.Length];
 
-            for (int i = 0; i < points.Length; i++)
+            for (var i = 0; i < points.Length; i++)
             {
                 xydata.Xvalues[i] = (double)points[i].X;
                 xydata.Yvalues[i] = (double)points[i].Y;
@@ -218,8 +218,8 @@ namespace DeconTools.Backend
         
             if (xvalues == null || yvalues == null || xvalues.Length == 0 || yvalues.Length == 0) return this;
 
-            double currentMinXValue = xvalues[0];
-            double currentMaxXValue = xvalues[xvalues.Length - 1];
+            var currentMinXValue = xvalues[0];
+            var currentMaxXValue = xvalues[xvalues.Length - 1];
 
             //if it doesn't need trimming, return it.
             if (xmin < currentMinXValue && xmax > currentMaxXValue)
@@ -228,12 +228,12 @@ namespace DeconTools.Backend
             }
 
 
-            XYData data = new XYData();
-            int indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin, tolerance);
+            var data = new XYData();
+            var indexClosestXValMin = MathUtils.GetClosest(xvalues, xmin, tolerance);
 
-            int indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax, tolerance);
+            var indexClosestXValMax = MathUtils.GetClosest(xvalues, xmax, tolerance);
 
-            int numPoints = indexClosestXValMax - indexClosestXValMin + 1;
+            var numPoints = indexClosestXValMax - indexClosestXValMin + 1;
 
             if (numPoints <= 0)
                 throw new InvalidOperationException("indexClosestXValMin > indexClosestXValMax in XYData.TrimData; xvalues are likely not sorted");
@@ -241,7 +241,7 @@ namespace DeconTools.Backend
             data.Xvalues = new double[numPoints];
             data.Yvalues = new double[numPoints];
 
-            for (int i = indexClosestXValMin; i <= indexClosestXValMax; i++)
+            for (var i = indexClosestXValMin; i <= indexClosestXValMax; i++)
             {
 
                 data.Xvalues[i - indexClosestXValMin] = xvalues[i];
@@ -255,11 +255,11 @@ namespace DeconTools.Backend
 
         public XYData GetNonZeroXYData()
         {
-            XYData data = new XYData();
-            List<double> tempxvals = new List<double>();
-            List<double> tempyvals = new List<double>();
+            var data = new XYData();
+            var tempxvals = new List<double>();
+            var tempyvals = new List<double>();
 
-            for (int i = 0; i < xvalues.Length; i++)
+            for (var i = 0; i < xvalues.Length; i++)
             {
                 if (yvalues[i] > 0)
                 {
@@ -278,9 +278,9 @@ namespace DeconTools.Backend
 
         public void NormalizeYData()
         {
-            double maxVal = this.getMaxY();
+            var maxVal = this.getMaxY();
 
-            for (int i = 0; i < this.Yvalues.Length; i++)
+            for (var i = 0; i < this.Yvalues.Length; i++)
             {
                 yvalues[i] = yvalues[i] / maxVal;
 
@@ -289,7 +289,7 @@ namespace DeconTools.Backend
 
         public void OffSetXValues(double offset)
         {
-            for (int i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < this.xvalues.Length; i++)
             {
                 this.xvalues[i] = this.xvalues[i] + offset;
 
@@ -303,11 +303,11 @@ namespace DeconTools.Backend
 
             if (data == null || startingIndex > data.Xvalues.Length - 1) return null;
 
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
 
-            for (int i = startingIndex; i < data.Xvalues.Length; i++)
+            for (var i = startingIndex; i < data.Xvalues.Length; i++)
             {
                 if (data.Xvalues[i] >= minX)
                 {
@@ -333,7 +333,7 @@ namespace DeconTools.Backend
 
             if (xvals.Count == 0) return null;
 
-            XYData returnedData = new XYData();
+            var returnedData = new XYData();
             returnedData.Xvalues = xvals.ToArray();
             returnedData.Yvalues = yvals.ToArray();
 
@@ -348,9 +348,9 @@ namespace DeconTools.Backend
 
         public void Display()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
-            for (int i = 0; i < this.Xvalues.Length; i++)
+            for (var i = 0; i < this.Xvalues.Length; i++)
             {
                 sb.Append(this.Xvalues[i]);
                 sb.Append("\t");

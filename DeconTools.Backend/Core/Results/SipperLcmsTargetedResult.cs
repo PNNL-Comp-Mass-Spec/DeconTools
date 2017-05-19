@@ -57,9 +57,9 @@ namespace DeconTools.Backend.Core.Results
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string delim = "; ";
+            var delim = "; ";
 
             sb.Append(this.Target.ID);
             sb.Append(delim);

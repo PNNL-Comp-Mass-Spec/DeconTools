@@ -28,11 +28,11 @@ namespace DeconTools.Backend.DTO
             Check.Require(resultList2 != null, "resultList2 is null");
             Check.Require(resultList1.GetType() == resultList2.GetType(), "resultLists are not the same Type");
 
-            List<IsosResult> intersectedResults = new List<IsosResult>();
-            foreach (IsosResult result in resultList1)
+            var intersectedResults = new List<IsosResult>();
+            foreach (var result in resultList1)
             {
-                double lowerMassLimit = result.IsotopicProfile.MonoIsotopicMass - result.IsotopicProfile.GetFWHM() * result.IsotopicProfile.ChargeState;
-                double upperMassLimit = result.IsotopicProfile.MonoIsotopicMass + result.IsotopicProfile.GetFWHM() * result.IsotopicProfile.ChargeState;
+                var lowerMassLimit = result.IsotopicProfile.MonoIsotopicMass - result.IsotopicProfile.GetFWHM() * result.IsotopicProfile.ChargeState;
+                var upperMassLimit = result.IsotopicProfile.MonoIsotopicMass + result.IsotopicProfile.GetFWHM() * result.IsotopicProfile.ChargeState;
 
                 //IsosResult targetResult = findTargetResult(result, resultList2);
                 //if (targetResult != null) intersectedResults.Add(targetResult);
@@ -43,7 +43,7 @@ namespace DeconTools.Backend.DTO
                             where p.IsotopicProfile.MonoPeakMZ == result.IsotopicProfile.MonoPeakMZ
                             select p;
 
-                List<IsosResult> resultsWithinMassTol = query.ToList();
+                var resultsWithinMassTol = query.ToList();
 
                 if (resultsWithinMassTol.Count > 1) Console.WriteLine("Scan = " + result.ScanSet.PrimaryScanNumber + "; m/z = " + result.IsotopicProfile.MonoPeakMZ);
                 if (resultsWithinMassTol.Count > 0) intersectedResults.Add(resultsWithinMassTol[0]);
@@ -69,16 +69,16 @@ namespace DeconTools.Backend.DTO
             Check.Require(resultList1 != null, "resultList1 is null");
             Check.Require(resultList2 != null, "resultList2 is null");
             Check.Require(resultList1.GetType() == resultList2.GetType(), "resultLists are not the same Type");
-            List<IsosResult> intersectedResults = resultList1.Intersect(resultList2, this).ToList();
+            var intersectedResults = resultList1.Intersect(resultList2, this).ToList();
             return intersectedResults;
         }
 
         private IsosResult findTargetResult(IsosResult targetResult, List<IsosResult> resultList)
         {
-            foreach (IsosResult item in resultList)
+            foreach (var item in resultList)
             {
-                double massTol = targetResult.IsotopicProfile.GetFWHM() * targetResult.IsotopicProfile.ChargeState * 2;
-                bool isWithinMassTol = (Math.Abs(item.IsotopicProfile.MonoIsotopicMass - targetResult.IsotopicProfile.MonoIsotopicMass) <= massTol);
+                var massTol = targetResult.IsotopicProfile.GetFWHM() * targetResult.IsotopicProfile.ChargeState * 2;
+                var isWithinMassTol = (Math.Abs(item.IsotopicProfile.MonoIsotopicMass - targetResult.IsotopicProfile.MonoIsotopicMass) <= massTol);
 
                 if (item.IsotopicProfile.ChargeState == targetResult.IsotopicProfile.ChargeState &&
                     item.ScanSet.PrimaryScanNumber == targetResult.ScanSet.PrimaryScanNumber &&
@@ -103,7 +103,7 @@ namespace DeconTools.Backend.DTO
             Check.Require(resultList1 != null, "resultList1 is null");
             Check.Require(resultList2 != null, "resultList2 is null");
             Check.Require(resultList1.GetType() == resultList2.GetType(), "resultLists are not the same Type");
-            List<IsosResult> uniqueResults = resultList1.Except(resultList2, this).ToList();
+            var uniqueResults = resultList1.Except(resultList2, this).ToList();
             return uniqueResults;
 
         }

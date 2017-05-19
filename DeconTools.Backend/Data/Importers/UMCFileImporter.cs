@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Data
         #endregion
         public override UMCCollection Import()
         {
-            UMCCollection umcCollection = new UMCCollection();
+            var umcCollection = new UMCCollection();
 
             umcCollection.UMCList= getUMCs();
             return umcCollection;
@@ -55,9 +55,9 @@ namespace DeconTools.Backend.Data
 
         private List<UMC> getUMCs()
         {
-            List<UMC> umcList = new List<UMC>();
+            var umcList = new List<UMC>();
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -65,8 +65,8 @@ namespace DeconTools.Backend.Data
                     throw new InvalidDataException("There is no data in the UMC data object");
 
                 }
-                string headerLine = sr.ReadLine();
-                List<string> headers = processLine(headerLine);
+                var headerLine = sr.ReadLine();
+                var headers = processLine(headerLine);
 
                 if (!validateHeaders(headers))
                 {
@@ -76,17 +76,17 @@ namespace DeconTools.Backend.Data
 
 
                 string line;
-                int counter = 1;
+                var counter = 1;
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = processLine(line);
+                    var processedData = processLine(line);
                     if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                     {
                         throw new InvalidDataException("Data in UMC row #" + counter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    UMC row = convertTextToUMCData(processedData, headers);
+                    var row = convertTextToUMCData(processedData, headers);
                     umcList.Add(row);
                     counter++;
 
@@ -99,7 +99,7 @@ namespace DeconTools.Backend.Data
 
         private UMC convertTextToUMCData(List<string> processedData, List<string> headers)
         {
-            UMC row = new UMC();
+            var row = new UMC();
 
             row.UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex"));
             row.ScanStart = parseIntField(lookup(processedData, headers, "ScanStart"));

@@ -17,9 +17,9 @@ namespace DeconTools.Backend.FileIO
         protected override string buildResultOutput(IsosResult result)
         {
             Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
-            UIMFIsosResult uimfResult = (UIMFIsosResult)result;
+            var uimfResult = (UIMFIsosResult)result;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
             sb.Append(uimfResult.IMSScanSet.PrimaryScanNumber + 1);    //adds 1 to PrimaryScanNumber (which is 0-based)
@@ -62,7 +62,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("frame_num");
             sb.Append(Delimiter);

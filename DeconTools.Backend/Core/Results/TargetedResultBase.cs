@@ -61,19 +61,19 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public virtual void DisplayToConsole()
         {
-            string info = buildBasicConsoleInfo();
+            var info = buildBasicConsoleInfo();
             Console.Write(info);
         }
 
         protected string buildBasicConsoleInfo()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("****** Match ******\n");
             sb.Append("NET = \t" + Target.NormalizedElutionTime.ToString("0.000") + "\n");
             sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString() + "\n");
             sb.Append("ChromPeak NETVal = " + ChromPeakSelected.NETValue.ToString("0.000") + "\n");
             sb.Append("ScanSet = { ");
-            foreach (int scanNum in ScanSet.IndexValues)
+            foreach (var scanNum in ScanSet.IndexValues)
             {
                 sb.Append(scanNum);
                 sb.Append(", ");
@@ -123,19 +123,19 @@ namespace DeconTools.Backend.Core
         public virtual double GetNETAlignmentError()
         {
             double theorNET = this.Target.NormalizedElutionTime;
-            double obsNET = this.Run.NetAlignmentInfo.GetNETValueForScan(GetScanNum());
+            var obsNET = this.Run.NetAlignmentInfo.GetNETValueForScan(GetScanNum());
 
-            double netError = obsNET - theorNET;
+            var netError = obsNET - theorNET;
             return netError;
 
         }
 
         public double GetMassErrorBeforeAlignmentInPPM()
         {
-            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
-            double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+            var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+            var observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
             
-            double massErrorInPPM = (observedMZ - theorMZ) / theorMZ * 1e6;
+            var massErrorInPPM = (observedMZ - theorMZ) / theorMZ * 1e6;
             return massErrorInPPM;
             
         }
@@ -144,12 +144,12 @@ namespace DeconTools.Backend.Core
         public double GetMassErrorAfterAlignmentInPPM()
         {
             double massErrorInPPM = 0;
-            double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
-            double observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
+            var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+            var observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
 
-            int scan = GetScanNum();
+            var scan = GetScanNum();
             
-            double alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
+            var alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
             massErrorInPPM = (alignedMZ - theorMZ) / theorMZ * 1e6;
             
             return massErrorInPPM;
@@ -161,15 +161,15 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual double GetCalibratedMonoisotopicMass()
         {
-           double monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
+           var monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
 
             if (Run.MassIsAligned)
             {
-                double theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
-                int scan = GetScanNum();
-                double ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
+                var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
+                var scan = GetScanNum();
+                var ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
                 
-                double alignedMono = monoMass - (ppmShift * monoMass / 1e6);
+                var alignedMono = monoMass - (ppmShift * monoMass / 1e6);
                 return alignedMono;
             }
 
@@ -202,7 +202,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                int indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(this.IsotopicProfile.Peaklist, targetMZ, 0, this.IsotopicProfile.Peaklist.Count - 1, 0.1);
+                var indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(this.IsotopicProfile.Peaklist, targetMZ, 0, this.IsotopicProfile.Peaklist.Count - 1, 0.1);
                 if (indexOfTargetPeak != -1)
                 {
                     return this.IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
@@ -246,7 +246,7 @@ namespace DeconTools.Backend.Core
                 
                 
 
-                bool failedChromPeakSelection = (ChromPeakSelected == null || ChromPeakSelected.XValue == 0);
+                var failedChromPeakSelection = (ChromPeakSelected == null || ChromPeakSelected.XValue == 0);
                 if (failedChromPeakSelection)
                 {
                     FailedResult = true;

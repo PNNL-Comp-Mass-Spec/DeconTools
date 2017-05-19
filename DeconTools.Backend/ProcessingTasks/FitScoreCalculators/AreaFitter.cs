@@ -34,11 +34,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
-            double xmin = theorXYData.Xvalues[0] + offset;
-            double xmax = theorXYData.Xvalues.Max() + offset;
+            var xmin = theorXYData.Xvalues[0] + offset;
+            var xmax = theorXYData.Xvalues.Max() + offset;
 
 
-            XYData trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
+            var trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
             //XYData trimmedObservedXYData = observedXYData;
             
             //trimmedObservedXYData.Display();
@@ -48,14 +48,14 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var theoreticalValues = new List<double>();
 
 
-            for (int i = 0; i < theorXYData.Xvalues.Length; i++)
+            for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
 
                 if (theorXYData.Yvalues[i] >= minIntensityForScore)
                 {
-                    double currentTheorMZ = theorXYData.Xvalues[i] + offset;
+                    var currentTheorMZ = theorXYData.Xvalues[i] + offset;
 
-                    int indexOfClosest = MathUtils.GetClosest(trimmedObservedXYData.Xvalues, currentTheorMZ, 0.1);
+                    var indexOfClosest = MathUtils.GetClosest(trimmedObservedXYData.Xvalues, currentTheorMZ, 0.1);
 
                     if (indexOfClosest == -1)
                     {
@@ -64,7 +64,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     }
 
                     //findout if closest is above or below
-                    bool closestIsBelow = (trimmedObservedXYData.Xvalues[indexOfClosest] < currentTheorMZ);
+                    var closestIsBelow = (trimmedObservedXYData.Xvalues[indexOfClosest] < currentTheorMZ);
 
                     double mz1 = 0;
                     double mz2 = 0;
@@ -105,7 +105,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     }
 
 
-                    double interopolatedIntensity = MathUtils.getInterpolatedValue(mz1, mz2, intensity1, intensity2, currentTheorMZ);
+                    var interopolatedIntensity = MathUtils.getInterpolatedValue(mz1, mz2, intensity1, intensity2, currentTheorMZ);
 
                     interpolatedValues.Add(interopolatedIntensity);
                     theoreticalValues.Add(theorXYData.Yvalues[i]);
@@ -126,17 +126,17 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             }
 
-            double maxTheoreticalIntens = getMax(theoreticalValues);
-            double maxObservIntens = getMax(interpolatedValues);
+            var maxTheoreticalIntens = getMax(theoreticalValues);
+            var maxObservIntens = getMax(interpolatedValues);
 
 
-            for (int i = 0; i < theoreticalValues.Count; i++)
+            for (var i = 0; i < theoreticalValues.Count; i++)
             {
-                double normalizedObservedIntensity = interpolatedValues[i] / maxObservIntens;
+                var normalizedObservedIntensity = interpolatedValues[i] / maxObservIntens;
 
-                double normalizedTheorIntensity = theoreticalValues[i] / maxTheoreticalIntens;
+                var normalizedTheorIntensity = theoreticalValues[i] / maxTheoreticalIntens;
 
-                double diff = normalizedTheorIntensity - normalizedObservedIntensity;
+                var diff = normalizedTheorIntensity - normalizedObservedIntensity;
 
                 sumOfSquaredDiff += diff * diff;
 
@@ -164,9 +164,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         private double getMax(List<double> values)
         {
-            double max = double.MinValue;
+            var max = double.MinValue;
 
-            foreach (double d in values)
+            foreach (var d in values)
             {
                 if (d > max) max = d;
             }

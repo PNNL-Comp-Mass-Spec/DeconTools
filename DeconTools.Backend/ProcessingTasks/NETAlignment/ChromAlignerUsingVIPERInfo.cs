@@ -38,17 +38,17 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 
             if (m_targetUMCFileStoringAlignmentInfo == null)
             {
-                string baseFileName = Path.Combine(run.DataSetPath, run.DatasetName);
+                var baseFileName = Path.Combine(run.DataSetPath, run.DatasetName);
                 m_targetUMCFileStoringAlignmentInfo = baseFileName + "_UMCs.txt";
             }
             Check.Require(File.Exists(m_targetUMCFileStoringAlignmentInfo), "ChromAligner failed. The UMC file from which alignment data is extracted does not exist.");
 
-            UMCCollection umcs = new UMCCollection();
+            var umcs = new UMCCollection();
 
-            UMCFileImporter importer = new UMCFileImporter(m_targetUMCFileStoringAlignmentInfo, '\t');
+            var importer = new UMCFileImporter(m_targetUMCFileStoringAlignmentInfo, '\t');
             umcs = importer.Import();
 
-            List<ScanNETPair> scannetPairs = umcs.GetScanNETLookupTable();
+            var scannetPairs = umcs.GetScanNETLookupTable();
 
             run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);

@@ -45,12 +45,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             resultList.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
             featureGenerator.GenerateTheorFeature(resultList.Run.CurrentMassTag);   //generate theor profile for unlabeled feature
-            IsotopicProfile labeledProfile = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(resultList.Run.CurrentMassTag, 0.005);
+            var labeledProfile = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(resultList.Run.CurrentMassTag, 0.005);
 
-            IsotopicProfileMultiChromatogramExtractor chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
+            var chromExtractor = new IsotopicProfileMultiChromatogramExtractor(
                 NumPeaksForGeneratingChrom, ToleranceInPPM);
 
-            TargetedResultBase massTagresult = resultList.CurrentTargetedResult;
+            var massTagresult = resultList.CurrentTargetedResult;
 
             N14N15_TResult n14n15result;
 

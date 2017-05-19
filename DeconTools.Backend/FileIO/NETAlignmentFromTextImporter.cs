@@ -66,7 +66,7 @@ namespace DeconTools.Backend.FileIO
                 throw new System.IO.IOException("There was a problem importing from the file.");
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -75,10 +75,10 @@ namespace DeconTools.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -87,13 +87,13 @@ namespace DeconTools.Backend.FileIO
 
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -101,7 +101,7 @@ namespace DeconTools.Backend.FileIO
                         throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    ScanNETPair scanNETPair = ConvertTextToDataObject(processedData);
+                    var scanNETPair = ConvertTextToDataObject(processedData);
                     _scanNETPairs.Add(scanNETPair);
                     lineCounter++;
 
@@ -113,8 +113,8 @@ namespace DeconTools.Backend.FileIO
 
         private ScanNETPair ConvertTextToDataObject(List<string> processedData)
         {
-            float scan = ParseFloatField(LookupData(processedData, scanHeaders));
-            float net = ParseFloatField(LookupData(processedData, netHeaders));
+            var scan = ParseFloatField(LookupData(processedData, scanHeaders));
+            var net = ParseFloatField(LookupData(processedData, netHeaders));
 
             return new ScanNETPair(scan, net);
         }

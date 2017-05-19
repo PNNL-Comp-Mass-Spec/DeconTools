@@ -53,13 +53,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
 
-            for (int i = 0; i < MaxPeaksToInclude; i++)
+            for (var i = 0; i < MaxPeaksToInclude; i++)
             {
                 if (i >= iso.Peaklist.Count)
                 {
-                    MSPeak lastPeak = iso.Peaklist[iso.Peaklist.Count - 1];
+                    var lastPeak = iso.Peaklist[iso.Peaklist.Count - 1];
 
-                    MSPeak newPeak = new MSPeak();
+                    var newPeak = new MSPeak();
                     newPeak.XValue = lastPeak.XValue + Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / iso.ChargeState;
                     newPeak.Height = _valueForAppendedTheorPeaks;
                     newPeak.Width = lastPeak.Width;
@@ -75,7 +75,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //adjust the target m/z based on the alignment information
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < iso.Peaklist.Count; i++)
+                for (var i = 0; i < iso.Peaklist.Count; i++)
                 {
                     iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
 
@@ -100,12 +100,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
 
             peakList = new List<Peak>();
-            for (double d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
+            for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
                 MSPeakDetector.PeakToBackgroundRatio = d;
 
                 peakList = MSPeakDetector.FindPeaks(massSpecXyData.Xvalues, massSpecXyData.Yvalues);
-                IsotopicProfile iso = FindMSFeature(peakList, theorIso);
+                var iso = FindMSFeature(peakList, theorIso);
 
                 if (foundIso == null)
                 {
@@ -120,7 +120,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 //TODO: decide that iso is good enough when a peak is found that is less than a certain relative intensity
 
-                bool isoIsGoodEnough = (foundIso != null && foundIso.Peaklist.Count>=MaxPeaksToInclude );
+                var isoIsGoodEnough = (foundIso != null && foundIso.Peaklist.Count>=MaxPeaksToInclude );
 
                 if (isoIsGoodEnough)
                 {
@@ -160,12 +160,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         private void combineIsotopicProfiles(IsotopicProfile baseIso, IsotopicProfile addedIso, double toleranceInPPM = 50)
         {
 
-            double toleranceInMZ = toleranceInPPM*baseIso.MonoPeakMZ/1e6;
+            var toleranceInMZ = toleranceInPPM*baseIso.MonoPeakMZ/1e6;
 
 
             foreach (var msPeak in addedIso.Peaklist)
             {
-                int indexOfPeakInBaseIos = PeakUtilities.getIndexOfClosestValue(baseIso.Peaklist, msPeak.XValue, 0, baseIso.Peaklist.Count - 1,
+                var indexOfPeakInBaseIos = PeakUtilities.getIndexOfClosestValue(baseIso.Peaklist, msPeak.XValue, 0, baseIso.Peaklist.Count - 1,
                                                      toleranceInMZ);
 
                 if (indexOfPeakInBaseIos == -1)

@@ -60,9 +60,9 @@ namespace DeconTools.Backend.Core
         {
             if (this.IsotopicProfile == null || this.IsotopicProfile.Peaklist == null) return;
 
-            for (int i = 0; i < this.IsotopicProfile.Peaklist.Count; i++)
+            for (var i = 0; i < this.IsotopicProfile.Peaklist.Count; i++)
             {
-                double calcMZ = this.MonoIsotopicMass / chargeState + Globals.PROTON_MASS + i * 1.00235 / chargeState;
+                var calcMZ = this.MonoIsotopicMass / chargeState + Globals.PROTON_MASS + i * 1.00235 / chargeState;
                 this.IsotopicProfile.Peaklist[i].XValue = calcMZ;
             }
 

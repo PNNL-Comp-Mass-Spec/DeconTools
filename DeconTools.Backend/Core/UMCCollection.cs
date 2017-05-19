@@ -29,15 +29,15 @@ namespace DeconTools.Backend.Core
 
         public List<ScanNETPair> GetScanNETLookupTable()
         {
-            List<ScanNETPair> lookupTable = new List<ScanNETPair>();
+            var lookupTable = new List<ScanNETPair>();
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());    //this creates a list of UMCs distinct with reference to the ScanClassRep field
-            List<UMC> tempUMCs = distinctItems.ToList();
+            var tempUMCs = distinctItems.ToList();
 
 
 
-            foreach (UMC umc in tempUMCs)
+            foreach (var umc in tempUMCs)
             {
-                ScanNETPair scannetpair = new ScanNETPair((float)umc.ScanClassRep, (float)umc.NETClassRep);
+                var scannetpair = new ScanNETPair((float)umc.ScanClassRep, (float)umc.NETClassRep);
 
                 lookupTable.Add(scannetpair);
             }
@@ -54,11 +54,11 @@ namespace DeconTools.Backend.Core
 
 
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());
-            List<UMC> tempUMCs = distinctItems.ToList();
+            var tempUMCs = distinctItems.ToList();
             //create a temp copy of list
 
 
-            UMC umcWithSameScanNum = tempUMCs.Find(p => p.ScanClassRep == scanNum);
+            var umcWithSameScanNum = tempUMCs.Find(p => p.ScanClassRep == scanNum);
             if (umcWithSameScanNum != null)
             {
                 return umcWithSameScanNum.NETClassRep;
@@ -81,9 +81,9 @@ namespace DeconTools.Backend.Core
         {
             if (this.UMCList == null || this.UMCList.Count == 0) return this.UMCList;
 
-            List<UMC> filteredUMCs = new List<UMC>();
+            var filteredUMCs = new List<UMC>();
 
-            List<int> alreadyAddedMassTags = new List<int>();
+            var alreadyAddedMassTags = new List<int>();
 
             foreach (var umc in this.UMCList)
             {
@@ -110,9 +110,9 @@ namespace DeconTools.Backend.Core
         public List<UMC> FilterOutPairedData()
         {
             if (this.UMCList == null || this.UMCList.Count == 0) return this.UMCList;
-            List<UMC> filteredUMCs = new List<UMC>();
+            var filteredUMCs = new List<UMC>();
 
-            List<int> alreadyAddedMassTags = new List<int>();
+            var alreadyAddedMassTags = new List<int>();
             foreach (var umc in this.UMCList)
             {
                 if (umc.PairIndex != -1)
@@ -132,7 +132,7 @@ namespace DeconTools.Backend.Core
 
         public void DisplayBasicInfo()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("umcIndex\tnet\tscan\tumc_mw\tumc_Z\tumc_mz\tumc_Abundance\tumc_Fit\tumc_members\tslic\tdelSlic\tmass_tag_id\n");
             foreach (var umc in this.UMCList)
@@ -170,7 +170,7 @@ namespace DeconTools.Backend.Core
 
         public void DisplayUMCExpressionInfo()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("umcIndex\tscan\tumc_mw\tumc_Z\tumc_mz\tslic\tdelSlic\tmass_tag_id\tRatio\n");
             foreach (var umc in this.UMCList)

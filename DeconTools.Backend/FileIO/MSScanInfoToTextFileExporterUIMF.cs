@@ -16,9 +16,9 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected override string buildResultOutput(ScanResult result)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            UimfScanResult uimfScanResult = (UimfScanResult)result;
+            var uimfScanResult = (UimfScanResult)result;
             sb.Append(uimfScanResult.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
             sb.Append(DblToString(uimfScanResult.ScanTime, 3));
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("frame_num");
             sb.Append(Delimiter);
             sb.Append("frame_time");

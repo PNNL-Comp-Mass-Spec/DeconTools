@@ -31,9 +31,9 @@ namespace DeconTools.Backend.Algorithms
             double maxIntensity = 0;
             Peak mostIntensePeak = null;
 
-            for (int i = 0; i < peaksWithinTol.Count; i++)
+            for (var i = 0; i < peaksWithinTol.Count; i++)
             {
-                float obsIntensity = peaksWithinTol[i].Height;
+                var obsIntensity = peaksWithinTol[i].Height;
                 if (obsIntensity > maxIntensity)
                 {
                     maxIntensity = obsIntensity;
@@ -46,13 +46,13 @@ namespace DeconTools.Backend.Algorithms
 
         private Peak findClosestToXValue(List<Peak> peaksWithinTol, double targetVal)
         {
-            double diff = double.MaxValue;
+            var diff = double.MaxValue;
             Peak closestPeak = null;
 
-            for (int i = 0; i < peaksWithinTol.Count; i++)
+            for (var i = 0; i < peaksWithinTol.Count; i++)
             {
 
-                double obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
+                var obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
 
                 if (obsDiff < diff)
                 {

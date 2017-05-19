@@ -122,10 +122,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
-            int lowerScan = (int) Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
+            var lowerScan = (int) Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
             if (lowerScan == -1) lowerScan = resultList.Run.MinLCScan;
 
-            int upperScan = (int) Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
+            var upperScan = (int) Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
             if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
 
             XYData chromValues;
@@ -134,21 +134,21 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
-                double currentTargetMZ = resultList.Run.CurrentMassTag.MZ;
+                var currentTargetMZ = resultList.Run.CurrentMassTag.MZ;
                 targetMZList = new List<double> { currentTargetMZ };
             }
             else
             {
-                IsotopicProfile theorIso = resultList.Run.CurrentMassTag.IsotopicProfile;
+                var theorIso = resultList.Run.CurrentMassTag.IsotopicProfile;
                 targetMZList = GetTargetMzList(theorIso);
 
             }
 
-            int midScan = (int) ((lowerScan + (double)upperScan)/2);
+            var midScan = (int) ((lowerScan + (double)upperScan)/2);
 
             if (resultList.Run.MassIsAligned)
             {
-                for (int i = 0; i < targetMZList.Count; i++)
+                for (var i = 0; i < targetMZList.Count; i++)
                 {
                     targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run,midScan);
                 }
@@ -156,7 +156,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             chromValues = _chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
-            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
 
             resultList.Run.XYData = chromValues;
@@ -198,13 +198,13 @@ namespace DeconTools.Backend.ProcessingTasks
                     break;
                 case Globals.ChromatogramGeneratorMode.MONOISOTOPIC_PEAK:
                     {
-                        double targetMZ = theorIso.getMonoPeak().XValue;
+                        var targetMZ = theorIso.getMonoPeak().XValue;
                         targetMZList = new List<double> { targetMZ };
                         break;
                     }
                 case Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK:
                     {
-                        double targetMZ = theorIso.getMostIntensePeak().XValue;
+                        var targetMZ = theorIso.getMostIntensePeak().XValue;
                         targetMZList = new List<double> { targetMZ };
                         break;
                     }
@@ -222,8 +222,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
            
 
-            int lowerScan = run.MinLCScan;
-            int upperScan = run.MaxLCScan;
+            var lowerScan = run.MinLCScan;
+            var upperScan = run.MaxLCScan;
 
             if (elutionTimeUnit == Globals.ElutionTimeUnit.NormalizedElutionTime)
             {
@@ -269,17 +269,17 @@ namespace DeconTools.Backend.ProcessingTasks
             if (upperScan == -1) upperScan = run.MaxLCScan;
 
 
-            int midScan = (int) ((lowerScan + (double)upperScan)/2);
+            var midScan = (int) ((lowerScan + (double)upperScan)/2);
 
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < targetMzList.Count; i++)
+                for (var i = 0; i < targetMzList.Count; i++)
                 {
                     targetMzList[i] = getAlignedMZValue(targetMzList[i], run,midScan);
                 }
             }
 
-            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
+            var chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1,false);
 
@@ -296,17 +296,17 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData GenerateChromatogram(Run run, List<double> targetMzList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            int midScan =  (int) ((lowerScan + (double)upperScan)/2);
+            var midScan =  (int) ((lowerScan + (double)upperScan)/2);
 
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < targetMzList.Count; i++)
+                for (var i = 0; i < targetMzList.Count; i++)
                 {
                     targetMzList[i] = getAlignedMZValue(targetMzList[i], run, midScan);
                 }
             }
 
-            XYData chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.GetMsPeakResultsGroupedAndMzOrdered(), lowerScan, upperScan, targetMzList, tolerance, toleranceUnit);
+            var chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.GetMsPeakResultsGroupedAndMzOrdered(), lowerScan, upperScan, targetMzList, tolerance, toleranceUnit);
 
             chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1, false);
 
@@ -353,19 +353,19 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
 
-            XYData filteredXyData = new XYData();
+            var filteredXyData = new XYData();
             filteredXyData.Xvalues = xyData.Xvalues;
             filteredXyData.Yvalues = xyData.Yvalues;
 
             if (run.ContainsMSMSData)
             {
-                Dictionary<int, double> filteredChromVals = new Dictionary<int, double>();
+                var filteredChromVals = new Dictionary<int, double>();
 
-                bool usePrimaryLcScanNumbers = usePrimaryLcScanNumberCache && run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
+                var usePrimaryLcScanNumbers = usePrimaryLcScanNumberCache && run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
 
-                for (int i = 0; i < xyData.Xvalues.Length; i++)
+                for (var i = 0; i < xyData.Xvalues.Length; i++)
                 {
-                    int currentScanVal = (int)xyData.Xvalues[i];
+                    var currentScanVal = (int)xyData.Xvalues[i];
 
                     //TODO: this has a problem of cutting off ChromXYData that falls outside the range defined by PrimaryLcScanNumbers. Not good, since this is expected to filter only on MSMS Level
                     //
@@ -375,7 +375,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         continue;
                     }
 
-                    int msLevel = run.GetMSLevel(currentScanVal);
+                    var msLevel = run.GetMSLevel(currentScanVal);
                     if (msLevel == msLevelToUse)
                     {
                         filteredChromVals.Add(currentScanVal, xyData.Yvalues[i]);
@@ -440,7 +440,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
 
-            List<double> targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
+            var targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
             return targetMZList;
         }
 
@@ -448,16 +448,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private XYData getChromValues(List<MSPeakResult> filteredPeakList, Run run)
         {
-            XYData data = new XYData();
+            var data = new XYData();
 
-            SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
-            foreach (MSPeakResult peak in filteredPeakList)
+            var xyValues = new SortedDictionary<int, double>();
+            foreach (var peak in filteredPeakList)
             {
                 //find reference points within the MS-Level scan list.  These are the scans for which we will make sure there is some value declared
-                int centerScanPtr = msScanList.IndexOf(peak.Scan_num);
+                var centerScanPtr = msScanList.IndexOf(peak.Scan_num);
 
-                int leftScanPtr = centerScanPtr - maxZerosToAdd;
-                int rightScanptr = centerScanPtr + maxZerosToAdd;
+                var leftScanPtr = centerScanPtr - maxZerosToAdd;
+                var rightScanptr = centerScanPtr + maxZerosToAdd;
 
                 //handle the rare case of having a point at the end of the scan list
                 if (rightScanptr >= msScanList.Count)
@@ -470,9 +470,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
                 //this loop adds zeros to the left of a chrom value
-                for (int i = leftScanPtr; i < centerScanPtr; i++)
+                for (var i = leftScanPtr; i < centerScanPtr; i++)
                 {
-                    int targetScan = msScanList[i];
+                    var targetScan = msScanList[i];
                     if (filteredPeakList.Exists(p => p.Scan_num == targetScan))
                     {
                         // do nothing
@@ -507,14 +507,14 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 //add zeros to the right of a peak
-                for (int i = centerScanPtr; i <= rightScanptr; i++)
+                for (var i = centerScanPtr; i <= rightScanptr; i++)
                 {
                     if (i >= msScanList.Count)
                     {
                         Console.WriteLine("something wrong here");
                     }
 
-                    int targetScan = msScanList[i];
+                    var targetScan = msScanList[i];
                     if (filteredPeakList.Exists(p => p.Scan_num == targetScan))
                     {
                         // do nothing
@@ -538,13 +538,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData getChromValues2(List<MSPeakResult> filteredPeakList, Run run)
         {
-            XYData xydata = new XYData();
+            var xydata = new XYData();
 
-            int leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
-            int rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+            var leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+            var rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
 
-            int peakListMinScan = filteredPeakList[0].Scan_num;
-            int peakListMaxScan = filteredPeakList[filteredPeakList.Count - 1].Scan_num;
+            var peakListMinScan = filteredPeakList[0].Scan_num;
+            var peakListMaxScan = filteredPeakList[filteredPeakList.Count - 1].Scan_num;
 
             //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
 
@@ -555,8 +555,8 @@ namespace DeconTools.Backend.ProcessingTasks
             if (peakListMaxScan > run.MaxLCScan) peakListMaxScan = run.MaxLCScan;
 
             //populate array with zero intensities.
-            SortedDictionary<int, double> xyValues = new SortedDictionary<int, double>();
-            for (int i = peakListMinScan; i <= peakListMaxScan; i++)
+            var xyValues = new SortedDictionary<int, double>();
+            for (var i = peakListMinScan; i <= peakListMaxScan; i++)
             {
                 //add only MS1 level scans
                 if (msScanList.Contains(i))
@@ -577,7 +577,7 @@ namespace DeconTools.Backend.ProcessingTasks
             //    }
             //}
 
-            for (int i = 0; i < filteredPeakList.Count; i++)
+            for (var i = 0; i < filteredPeakList.Count; i++)
             {
                 double intensity = filteredPeakList[i].MSPeak.Height;
 

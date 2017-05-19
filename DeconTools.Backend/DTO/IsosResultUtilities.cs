@@ -44,7 +44,7 @@ namespace DeconTools.Backend.DTO
 
         public void LoadResults(string isosTextFile, Globals.MSFileType fileType)
         {
-            bool fileExists = false;
+            var fileExists = false;
             try
             {
                 fileExists = System.IO.File.Exists(isosTextFile);
@@ -56,9 +56,9 @@ namespace DeconTools.Backend.DTO
             }
             Check.Require(fileExists, "IsosResultUtilities cannot open input file");
 
-            List<IsosResult> isosResults = new List<IsosResult>();
+            var isosResults = new List<IsosResult>();
 
-            IsosImporter importer = new IsosImporter(isosTextFile, fileType);
+            var importer = new IsosImporter(isosTextFile, fileType);
             isosResults= importer.Import();
 
             this.results = isosResults;
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.DTO
 
         public void LoadResults(string isosTextFile, Globals.MSFileType fileType, int minVal, int maxVal)
         {
-            bool fileExists = false;
+            var fileExists = false;
             try
             {
                 fileExists = System.IO.File.Exists(isosTextFile);
@@ -78,9 +78,9 @@ namespace DeconTools.Backend.DTO
             }
             Check.Require(fileExists, "IsosResultUtilities cannot open input file");
 
-            List<IsosResult> isosResults = new List<IsosResult>();
+            var isosResults = new List<IsosResult>();
 
-            IsosImporter importer = new IsosImporter(isosTextFile, fileType, minVal, maxVal);
+            var importer = new IsosImporter(isosTextFile, fileType, minVal, maxVal);
             isosResults = importer.Import();
 
             this.results = isosResults;
@@ -95,26 +95,26 @@ namespace DeconTools.Backend.DTO
 
         public void FilterAndOutputIsos(string inputIsosFileName, int colIndex, double minVal, double maxVal, string outputIsosFilename)
         {
-            using (StreamReader sr = new StreamReader(inputIsosFileName))
+            using (var sr = new StreamReader(inputIsosFileName))
             {
 
-                using (StreamWriter sw = new StreamWriter(outputIsosFilename))
+                using (var sw = new StreamWriter(outputIsosFilename))
                 {
-                    string header = sr.ReadLine();
+                    var header = sr.ReadLine();
                     sw.WriteLine(header);
 
 
-                    int msFeatureIndex = 0;
+                    var msFeatureIndex = 0;
                     while (sr.Peek() != -1)
                     {
-                        string currentLine = sr.ReadLine();
+                        var currentLine = sr.ReadLine();
 
-                        string[] splitLine = currentLine.Split(',');
+                        var splitLine = currentLine.Split(',');
 
                         double parsedVal = -1;
-                        bool parsedOK = double.TryParse(splitLine[colIndex], out parsedVal);
+                        var parsedOK = double.TryParse(splitLine[colIndex], out parsedVal);
 
-                        bool writeOutCurrentLine = true;
+                        var writeOutCurrentLine = true;
 
                         if (parsedOK)
                         {
@@ -165,7 +165,7 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> getUIMFResults(string uimfInputFile, int minFrame, int maxFrame)
         {
-            IsosResultUtilities uimfisoUtil = new IsosResultUtilities();
+            var uimfisoUtil = new IsosResultUtilities();
             uimfisoUtil.LoadResults(uimfInputFile, DeconTools.Backend.Globals.MSFileType.PNNL_UIMF,minFrame,maxFrame);
 
            // List<IsosResult> filteredIsos = new List<IsosResult>();
@@ -185,11 +185,11 @@ namespace DeconTools.Backend.DTO
 
         public List<UIMFIsosResult> convertToUIMFIsosResults(List<IsosResult> inputList, int minFrame, int maxFrame)
         {
-            List<UIMFIsosResult> returnedResults = new List<UIMFIsosResult>();
+            var returnedResults = new List<UIMFIsosResult>();
 
-            foreach (IsosResult result in inputList)
+            foreach (var result in inputList)
             {
-                UIMFIsosResult uimfResult = (UIMFIsosResult)result;
+                var uimfResult = (UIMFIsosResult)result;
                 if (uimfResult.ScanSet.PrimaryScanNumber >= minFrame && uimfResult.ScanSet.PrimaryScanNumber <= maxFrame)
                 {
                     returnedResults.Add(uimfResult);
@@ -200,25 +200,25 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> getIMFResults(string imfInputFolder, int minFrame, int maxFrame)
         {
-            List<IsosResult> returnedResults = new List<IsosResult>();
+            var returnedResults = new List<IsosResult>();
 
             System.IO.FileInfo[] files = null;
 
-            System.IO.DirectoryInfo imfFolder = new DirectoryInfo(imfInputFolder);
+            var imfFolder = new DirectoryInfo(imfInputFolder);
             files = imfFolder.GetFiles("*_isos.csv");
 
-            foreach (FileInfo file in files)
+            foreach (var file in files)
             {
-                int currentFrame = getFrameFromFilename(file.Name);
+                var currentFrame = getFrameFromFilename(file.Name);
                 if (currentFrame >= minFrame && currentFrame <= maxFrame)
                 {
-                    IsosResultUtilities isoutil = new IsosResultUtilities();
+                    var isoutil = new IsosResultUtilities();
 
-                    string isosFileName = file.FullName;
+                    var isosFileName = file.FullName;
                     //string isosFileName = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + "_isos.csv");
                     isoutil.LoadResults(isosFileName, DeconTools.Backend.Globals.MSFileType.PNNL_IMS);
 
-                    List<IsosResult> isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoutil.Results);
+                    var isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoutil.Results);
 
                     returnedResults.AddRange(isosResultsForFrame);
 
@@ -236,7 +236,7 @@ namespace DeconTools.Backend.DTO
         private int getFrameFromFilename(string imfFileName)
         {
             //35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000.Accum_500.imf
-            Match match = Regex.Match(imfFileName, @".*Accum_(?<frameNum>\d+)");
+            var match = Regex.Match(imfFileName, @".*Accum_(?<frameNum>\d+)");
 
             if (match.Success)
             {
@@ -252,11 +252,11 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> convertIMFResultsToUIMFResults(int currentFrame, List<IsosResult> list)
         {
-            List<IsosResult> returnedResults = new List<IsosResult>();
+            var returnedResults = new List<IsosResult>();
 
-            foreach (IsosResult result in list)
+            foreach (var result in list)
             {
-                UIMFIsosResult uimfResult = new UIMFIsosResult();
+                var uimfResult = new UIMFIsosResult();
                 uimfResult.ScanSet = new LCScanSetIMS(currentFrame);
                 uimfResult.IsotopicProfile = result.IsotopicProfile;
                 uimfResult.Run = result.Run;
@@ -270,7 +270,7 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> getIsosResults(string isosInputFile, DeconTools.Backend.Globals.MSFileType filetype, int minScan, int maxScan)
         {
-            IsosResultUtilities isoutil = new IsosResultUtilities();
+            var isoutil = new IsosResultUtilities();
             isoutil.LoadResults(isosInputFile, filetype);
             return isoutil.Results.Where(p => p.ScanSet.PrimaryScanNumber >= minScan && p.ScanSet.PrimaryScanNumber <= maxScan).ToList();
 
@@ -279,7 +279,7 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> getIsosResults(string isosInputFile, DeconTools.Backend.Globals.MSFileType filetype)
         {
-            IsosResultUtilities isoutil = new IsosResultUtilities();
+            var isoutil = new IsosResultUtilities();
             isoutil.LoadResults(isosInputFile, filetype);
             return isoutil.Results;
 
@@ -287,7 +287,7 @@ namespace DeconTools.Backend.DTO
 
         public void replaceAbundanceWithMonoAbundance(List<IsosResult> isosResults)
         {
-            foreach (IsosResult result in isosResults)
+            foreach (var result in isosResults)
             {
                 result.IntensityAggregate = result.IsotopicProfile.GetMonoAbundance();
             }
@@ -296,18 +296,18 @@ namespace DeconTools.Backend.DTO
 
         public static List<IsosResult>GetIsosResultsByScan(List<IsosResult>inputList, int scanNum)
         {
-            List<IsosResult> results = new List<IsosResult>();
+            var results = new List<IsosResult>();
 
             var query = from n in inputList select n.ScanSet.PrimaryScanNumber;
 
-            int[] scanNums = query.ToArray();
+            var scanNums = query.ToArray();
 
 
-            int indexOfScanNum = MathUtils.BinarySearch(scanNums, scanNum, 0, scanNums.Length - 1);
+            var indexOfScanNum = MathUtils.BinarySearch(scanNums, scanNum, 0, scanNums.Length - 1);
             if (indexOfScanNum == -1) return results;
 
             //the found index might point to a isos result line that is mid way through the scan list.  So need to find the starting index
-            int currentIdx = indexOfScanNum;
+            var currentIdx = indexOfScanNum;
             if (indexOfScanNum > 0)
             {
 
@@ -335,13 +335,13 @@ namespace DeconTools.Backend.DTO
 
         public static List<IsosResult> GetIntersection(List<IsosResult> list1, List<IsosResult> list2)
         {
-            List<IsosResult> intersectedResults = new List<IsosResult>();
+            var intersectedResults = new List<IsosResult>();
 
-            double tolerance = 0.005;
+            var tolerance = 0.005;
 
-            for (int i = 0; i < list1.Count; i++)
+            for (var i = 0; i < list1.Count; i++)
             {
-                for (int i2 = 0; i2 < list2.Count ; i2++)
+                for (var i2 = 0; i2 < list2.Count ; i2++)
                 {
                     if (list1[i].ScanSet == list2[i2].ScanSet &&
                         list1[i].IsotopicProfile.ChargeState == list2[i2].IsotopicProfile.ChargeState &&
@@ -366,17 +366,17 @@ namespace DeconTools.Backend.DTO
 
         public string buildStatsForSingleIsosResultSet(List<IsosResult> resultList)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            IsosResultStats allResults = new IsosResultStats(resultList);
+            var allResults = new IsosResultStats(resultList);
 
-            IsosResultStats cs1results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 1, IsosResultUtilities.enumLinqOperator.EqualTo));
-            IsosResultStats cs2results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 2, IsosResultUtilities.enumLinqOperator.EqualTo));
-            IsosResultStats cs3results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 3, IsosResultUtilities.enumLinqOperator.EqualTo));
-            IsosResultStats cs4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.EqualTo));
-            IsosResultStats greaterThanCS4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.greaterThan));
+            var cs1results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 1, IsosResultUtilities.enumLinqOperator.EqualTo));
+            var cs2results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 2, IsosResultUtilities.enumLinqOperator.EqualTo));
+            var cs3results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 3, IsosResultUtilities.enumLinqOperator.EqualTo));
+            var cs4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.EqualTo));
+            var greaterThanCS4results = new IsosResultStats(IsosResultUtilities.getIsosResultsByChargeState(resultList, 4, IsosResultUtilities.enumLinqOperator.greaterThan));
 
-            List<IsosResultStats> stats = new List<IsosResultStats>();
+            var stats = new List<IsosResultStats>();
             stats.Add(allResults);
             stats.Add(cs1results);
             stats.Add(cs2results);
@@ -402,7 +402,7 @@ namespace DeconTools.Backend.DTO
             sb.Append("StdDevFit");
             sb.Append(Environment.NewLine);
 
-            foreach (IsosResultStats statItem in stats)
+            foreach (var statItem in stats)
             {
 
                 statItem.FitAverage = IsosResultUtilities.getAverageScore(statItem.Results);
@@ -435,7 +435,7 @@ namespace DeconTools.Backend.DTO
 
         public static List<IsosResult> getIsosResultsByChargeState(List<IsosResult> inputList, int chargeState, enumLinqOperator chargeOperator)
         {
-            List<IsosResult> results = new List<IsosResult>();
+            var results = new List<IsosResult>();
 
             switch (chargeOperator)
             {
@@ -503,7 +503,7 @@ namespace DeconTools.Backend.DTO
 
 
 
-            double[] scoreArray = query.ToArray();
+            var scoreArray = query.ToArray();
 
 
             //List<double> vals = new List<double>();
@@ -574,7 +574,7 @@ namespace DeconTools.Backend.DTO
 
         public static void DisplayResults(StringBuilder sb, List<IsosResult> list)
         {
-            foreach (IsosResult result in list)
+            foreach (var result in list)
             {
                 sb.Append(result.ScanSet.PrimaryScanNumber);
                 sb.Append("\t");

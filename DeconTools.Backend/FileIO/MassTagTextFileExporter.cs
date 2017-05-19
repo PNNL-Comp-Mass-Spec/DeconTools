@@ -16,10 +16,10 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildResultOutput(TargetBase target)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             Check.Require(target is PeptideTarget, "Exported result is of the wrong type.");
 
-            PeptideTarget result = (PeptideTarget)target;
+            var result = (PeptideTarget)target;
 
             sb.Append(target.ID);
             sb.Append(this.Delimiter);

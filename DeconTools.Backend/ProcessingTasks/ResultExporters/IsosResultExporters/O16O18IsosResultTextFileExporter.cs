@@ -35,10 +35,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         {
             Check.Require(result is O16O18IsosResult, "Cannot use this O16O18ResultExporter with this type of result: " + result);
 
-            O16O18IsosResult o16o18result = (O16O18IsosResult)result;
+            var o16o18result = (O16O18IsosResult)result;
 
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
 
 
@@ -79,7 +79,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan_num");
             sb.Append(Delimiter);
             sb.Append("charge");

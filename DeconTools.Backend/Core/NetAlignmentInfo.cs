@@ -45,7 +45,7 @@ namespace DeconTools.Backend.Core
             {
                 CreateDefaultScanToNETAlignmentData();
 
-                bool scanToNETTableIsStillEmpty = ScanToNETAlignmentData == null || ScanToNETAlignmentData.Count == 0;
+                var scanToNETTableIsStillEmpty = ScanToNETAlignmentData == null || ScanToNETAlignmentData.Count == 0;
                 if (scanToNETTableIsStillEmpty)
                 {
                     throw new ArgumentException("Scan-to-NET table is empty. Tried to create it from Dataset but failed.");
@@ -69,8 +69,8 @@ namespace DeconTools.Backend.Core
             var closestNETPair = new KeyValuePair<int, float>();
 
 
-            int lowerScan = MinLcScan;
-            int upperScan = MaxLcScan;
+            var lowerScan = MinLcScan;
+            var upperScan = MaxLcScan;
 
             float lowerNET = 0;
             float upperNET = 1;
@@ -89,15 +89,15 @@ namespace DeconTools.Backend.Core
             }
 
             //we found either the point above the inputted NET or below. Need to fill the appropriate lower and upper scan/NET
-            bool isLowerThanInputNET = closestNETPair.Value <= net;
+            var isLowerThanInputNET = closestNETPair.Value <= net;
 
             if (isLowerThanInputNET)
             {
                 lowerScan = closestNETPair.Key;
                 lowerNET = closestNETPair.Value;
 
-                bool found = false;
-                int currentScan = lowerScan + 1; //add one and then start looking for next higher scan
+                var found = false;
+                var currentScan = lowerScan + 1; //add one and then start looking for next higher scan
                 while (!found && currentScan <= MaxLcScan)
                 {
                     currentScan++;
@@ -114,8 +114,8 @@ namespace DeconTools.Backend.Core
                 upperScan = closestNETPair.Key;
                 upperNET = closestNETPair.Value;
 
-                bool found = false;
-                int currentScan = upperScan - 1;
+                var found = false;
+                var currentScan = upperScan - 1;
 
                 while (!found && currentScan >= MinLcScan)
                 {
@@ -136,8 +136,8 @@ namespace DeconTools.Backend.Core
                 return lowerScan;
             }
 
-            float slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            float yintercept = (upperNET - slope * upperScan);
+            var slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            var yintercept = (upperNET - slope * upperScan);
 
             var xvalue = (net - yintercept) / slope;
 
@@ -166,7 +166,7 @@ namespace DeconTools.Backend.Core
 
             var scanNETList = new List<ScanNETPair>();
 
-            for (int i = MinLcScan; i <= MaxLcScan; i++)
+            for (var i = MinLcScan; i <= MaxLcScan; i++)
             {
                 var snp = new ScanNETPair(i, i/(float) MaxLcScan);
                 scanNETList.Add(snp);
@@ -193,7 +193,7 @@ namespace DeconTools.Backend.Core
             ScanToNETAlignmentData.Clear();
 
 
-            for (int i = 0; i < scanVals.Length; i++)
+            for (var i = 0; i < scanVals.Length; i++)
             {
                 var scanToAdd = (int) (Math.Round(scanVals[i]));
 
@@ -211,17 +211,17 @@ namespace DeconTools.Backend.Core
         private double GetInterpolatedNet(int scanNum)
         {
             if (scanNum < MinLcScan) return MinLcScan;
-            int maxScan = MaxLcScan;
+            var maxScan = MaxLcScan;
 
 
             double lowerNET = 0;
             double upperNET = 1;
-            int lowerScan = MinLcScan;
-            int upperScan = maxScan;
+            var lowerScan = MinLcScan;
+            var upperScan = maxScan;
 
 
-            bool found = false;
-            int currentScan = scanNum;
+            var found = false;
+            var currentScan = scanNum;
 
             while (!found && currentScan >= MinLcScan)
             {
@@ -248,8 +248,8 @@ namespace DeconTools.Backend.Core
 
             }
 
-            double slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            double yintercept = (upperNET - slope * upperScan);
+            var slope = (upperNET - lowerNET) / (upperScan - lowerScan);
+            var yintercept = (upperNET - slope * upperScan);
 
             return (scanNum * slope + yintercept);
 

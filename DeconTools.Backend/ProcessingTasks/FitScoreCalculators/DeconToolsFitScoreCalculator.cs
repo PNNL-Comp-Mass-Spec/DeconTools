@@ -34,10 +34,10 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         public override void GetFitScores(IEnumerable<IsosResult> isosResults)
         {
 
-            foreach (IsosResult result in isosResults)
+            foreach (var result in isosResults)
             {
                 //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
-                PeptideTarget mt = new PeptideTarget();
+                var mt = new PeptideTarget();
 
                 mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
                 mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
@@ -51,7 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
-                XYData theorXYData = mt.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(result.IsotopicProfile.GetFWHM());
+                var theorXYData = mt.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(result.IsotopicProfile.GetFWHM());
 
                 offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
@@ -62,9 +62,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 //distributionCreator.OffsetDistribution(result.IsotopicProfile);
                 //XYData theorXYData = distributionCreator.Data;
 
-                AreaFitter areafitter = new AreaFitter();
+                var areafitter = new AreaFitter();
                 int ionCountUsed;
-                double fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
+                var fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
 
                 if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
 
@@ -79,16 +79,16 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             double offset = 0;
             if (theorIsotopicProfile == null || theorIsotopicProfile.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
 
-            MSPeak mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
-            int indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
+            var mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
+            var indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
 
             if (observedIsotopicProfile.Peaklist == null || observedIsotopicProfile.Peaklist.Count == 0) return;
 
-            bool enoughPeaksInTarget = (indexOfMostIntensePeak <= observedIsotopicProfile.Peaklist.Count - 1);
+            var enoughPeaksInTarget = (indexOfMostIntensePeak <= observedIsotopicProfile.Peaklist.Count - 1);
 
             if (enoughPeaksInTarget)
             {
-                MSPeak targetPeak = observedIsotopicProfile.Peaklist[indexOfMostIntensePeak];
+                var targetPeak = observedIsotopicProfile.Peaklist[indexOfMostIntensePeak];
                 offset = targetPeak.XValue - mostIntensePeak.XValue;
                 //offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
 
@@ -98,7 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 offset = observedIsotopicProfile.Peaklist[0].XValue - theorIsotopicProfile.Peaklist[0].XValue;
             }
 
-            for (int i = 0; i < theorXYData.Xvalues.Length; i++)
+            for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
                 theorXYData.Xvalues[i] = theorXYData.Xvalues[i] + offset;
             }

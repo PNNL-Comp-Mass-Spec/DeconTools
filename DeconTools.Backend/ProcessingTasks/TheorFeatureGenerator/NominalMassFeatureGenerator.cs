@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, "FeatureGenerator failed. Target must not be null.");
-            IsotopicProfile iso = IsotopicDistCalculator.GetAveraginePattern(mt.MZ);
+            var iso = IsotopicDistCalculator.GetAveraginePattern(mt.MZ);
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
             mt.IsotopicProfile = iso;

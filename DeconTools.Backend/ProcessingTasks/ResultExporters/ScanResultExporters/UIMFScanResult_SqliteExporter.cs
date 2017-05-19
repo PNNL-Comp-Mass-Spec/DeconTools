@@ -15,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             if (File.Exists(fileName)) File.Delete(fileName);
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             this.cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + fileName;
 
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         protected override void buildTables()
         {
             Table scanResultTable = new UIMFScanResult_SqliteTable("T_IMS_Frames");
-            DbCommand command = cnn.CreateCommand();
+            var command = cnn.CreateCommand();
 
             command.CommandText = scanResultTable.BuildCreateTableString();
             command.ExecuteNonQuery();
@@ -52,22 +52,22 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         protected override void addScanResults(DeconTools.Backend.Core.ResultCollection rc)
         {
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    SQLiteParameter frameNumParam = new SQLiteParameter();
-                    SQLiteParameter frameTimeParam = new SQLiteParameter();
-                    SQLiteParameter typeParam = new SQLiteParameter();
-                    SQLiteParameter bpiParam = new SQLiteParameter();
-                    SQLiteParameter bpiMZParam = new SQLiteParameter();
-                    SQLiteParameter ticParam = new SQLiteParameter();
-                    SQLiteParameter num_peaksParam = new SQLiteParameter();
-                    SQLiteParameter num_deisotopedParam = new SQLiteParameter();
-                    SQLiteParameter framePressureUnsmoothed = new SQLiteParameter();
-                    SQLiteParameter framePressureSmoothed = new SQLiteParameter();
+                    var frameNumParam = new SQLiteParameter();
+                    var frameTimeParam = new SQLiteParameter();
+                    var typeParam = new SQLiteParameter();
+                    var bpiParam = new SQLiteParameter();
+                    var bpiMZParam = new SQLiteParameter();
+                    var ticParam = new SQLiteParameter();
+                    var num_peaksParam = new SQLiteParameter();
+                    var num_deisotopedParam = new SQLiteParameter();
+                    var framePressureUnsmoothed = new SQLiteParameter();
+                    var framePressureSmoothed = new SQLiteParameter();
 
 
                     mycommand.CommandText = "INSERT INTO T_IMS_Frames ([frame_num],[frame_time],[type],[bpi],[bpi_mz],[tic],[num_peaks],[num_deisotoped],[frame_pressure_unsmoothed],[frame_pressure_smoothed]) VALUES(?,?,?,?,?,?,?,?,?,?)";
@@ -83,9 +83,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(framePressureSmoothed);
 
 
-                    for (int n = 0; n < rc.ScanResultList.Count; n++)
+                    for (var n = 0; n < rc.ScanResultList.Count; n++)
                     {
-                        UimfScanResult r = (UimfScanResult)rc.ScanResultList[n];
+                        var r = (UimfScanResult)rc.ScanResultList[n];
 
                         frameNumParam.Value = r.LCScanNum;
                         frameTimeParam.Value = r.ScanTime;

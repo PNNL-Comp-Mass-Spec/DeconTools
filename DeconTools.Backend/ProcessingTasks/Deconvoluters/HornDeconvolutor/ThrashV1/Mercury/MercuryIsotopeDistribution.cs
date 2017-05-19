@@ -312,7 +312,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             /* Normalize intensity to 0%-100% scale */
             maxInt = _frequencyData.Max(h => h.Real);
-            for (int i = 0; i < _frequencyData.Length; i++)
+            for (var i = 0; i < _frequencyData.Length; i++)
             {
                 _frequencyData[i] /= maxInt / 100;
             }
@@ -324,7 +324,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 charge = 1;
 
             //[gord] fill mz and intensity arrays, ignoring minimum thresholds
-            for (int i = numPoints / 2 + 1; i <= numPoints; i++)
+            for (var i = numPoints / 2 + 1; i <= numPoints; i++)
             {
                 var mz = (double)(i - numPoints - 1) / PointsPerAmu + AverageMw / charge +
                          (ChargeCarrierMass - MercuryCache.ElectronMass);
@@ -332,7 +332,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 _mzList.Add(mz);
                 _intensityList.Add(intensity);
             }
-            for (int i = 1; i <= numPoints / 2; i++)
+            for (var i = 1; i <= numPoints / 2; i++)
             {
                 var mz = (double)(i - 1) / PointsPerAmu + AverageMw / charge +
                          (ChargeCarrierMass - MercuryCache.ElectronMass);
@@ -356,7 +356,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             double y3 = 0;
 
             var lastIntensity = double.MaxValue * -1;
-            for (int i = 0; i < numPoints; i++)
+            for (var i = 0; i < numPoints; i++)
             {
                 var intensity = _intensityList[i];
                 var mz = _mzList[i];

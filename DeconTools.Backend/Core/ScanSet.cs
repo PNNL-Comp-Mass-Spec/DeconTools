@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Core
             : this()
         {
             PrimaryScanNumber = primaryScanNum;
-            foreach (int indexItem in indexArray)
+            foreach (var indexItem in indexArray)
             {
                 IndexValues.Add(indexItem);
             }
@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Core
             Check.Require(lowerScan <= upperScan, "Lower scan number must be less than or equal to the upper scan number");
             this.PrimaryScanNumber = primaryScanNum;
 
-            for (int i = lowerScan; i <= upperScan; i++)
+            for (var i = lowerScan; i <= upperScan; i++)
             {
                 this.IndexValues.Add(i);
             }
@@ -95,9 +95,9 @@ namespace DeconTools.Backend.Core
 
         internal virtual int getLowestScanNumber()
         {
-            int lowVal = int.MaxValue;
+            var lowVal = int.MaxValue;
 
-            for (int i = 0; i < IndexValues.Count; i++)
+            for (var i = 0; i < IndexValues.Count; i++)
             {
                 if (IndexValues[i] < lowVal) lowVal = indexValues[i];
 
@@ -107,8 +107,8 @@ namespace DeconTools.Backend.Core
 
         internal int getHighestScanNumber()
         {
-            int highVal = -1;
-            for (int i = 0; i < IndexValues.Count; i++)
+            var highVal = -1;
+            for (var i = 0; i < IndexValues.Count; i++)
             {
                 if (IndexValues[i] > highVal) highVal = indexValues[i];
             }
@@ -118,15 +118,15 @@ namespace DeconTools.Backend.Core
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(PrimaryScanNumber);
 
             if (indexValues.Count > 1)    //if there is summing, will show these scans in the string
             {
                 sb.Append(" {");
-                for (int i = 0; i < indexValues.Count; i++)
+                for (var i = 0; i < indexValues.Count; i++)
                 {
-                    bool isLast = (i == indexValues.Count - 1);
+                    var isLast = (i == indexValues.Count - 1);
                     sb.Append(indexValues[i]);
                     if (isLast)
                     {

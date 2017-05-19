@@ -28,16 +28,16 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 if (msFeature.IsotopicProfile == null) continue;
 
-                double monoMZ = msFeature.IsotopicProfile.GetMZ();
+                var monoMZ = msFeature.IsotopicProfile.GetMZ();
 
-                double mzMinusDaltons = monoMZ - (MASSUNIT_BETWEEN_ISO * 4 / msFeature.IsotopicProfile.ChargeState);
-                double mzPlusDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *4 / msFeature.IsotopicProfile.ChargeState);
-                double mzPlusTwoDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *2 / msFeature.IsotopicProfile.ChargeState);
+                var mzMinusDaltons = monoMZ - (MASSUNIT_BETWEEN_ISO * 4 / msFeature.IsotopicProfile.ChargeState);
+                var mzPlusDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *4 / msFeature.IsotopicProfile.ChargeState);
+                var mzPlusTwoDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *2 / msFeature.IsotopicProfile.ChargeState);
 
                 double toleranceInPPM = 50;
 
 
-                double toleranceInMZ = toleranceInPPM * monoMZ / 1e6;
+                var toleranceInMZ = toleranceInPPM * monoMZ / 1e6;
 
 
                 var minusPeaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, mzMinusDaltons, toleranceInMZ);
@@ -46,10 +46,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-                Peak fourDaltonsMinusPeak = GetBestPeak(minusPeaksWithinTol, mzMinusDaltons);
-                Peak fourDaltonsPlusPeak = GetBestPeak(plusPeaksWithinTol, mzPlusDaltons);
+                var fourDaltonsMinusPeak = GetBestPeak(minusPeaksWithinTol, mzMinusDaltons);
+                var fourDaltonsPlusPeak = GetBestPeak(plusPeaksWithinTol, mzPlusDaltons);
 
-                Peak twoDaltonsPlusPeak = GetBestPeak(twoDaltonsPlusPeaksWithinTol, mzPlusTwoDaltons);
+                var twoDaltonsPlusPeak = GetBestPeak(twoDaltonsPlusPeaksWithinTol, mzPlusTwoDaltons);
 
                 if (fourDaltonsMinusPeak!=null)
                 {
@@ -95,12 +95,12 @@ namespace DeconTools.Backend.ProcessingTasks
             if (peaksWithinTol.Count == 1) return peaksWithinTol[0];
 
 
-            double diff = double.MaxValue;
+            var diff = double.MaxValue;
             Peak bestPeak = null;
 
             foreach (var peak in peaksWithinTol)
             {
-                double currentDiff = Math.Abs(peak.XValue - targetMZ);
+                var currentDiff = Math.Abs(peak.XValue - targetMZ);
 
                 if (currentDiff < diff)
                 {

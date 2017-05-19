@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         protected override double GetBackgroundIntensity(double[] yvalues, double[]xvalues=null)
         {
-            double[] copiedYValues = new double[yvalues.Length];
+            var copiedYValues = new double[yvalues.Length];
             Array.Copy(yvalues, copiedYValues, yvalues.Length);
 
             if (xvalues!=null)
@@ -61,13 +61,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     {
                         var widthAtBase = peak.Width / 2.35 * 2;
 
-                        double valuePeakStart = peak.XValue - widthAtBase;
-                        double valuePeakEnd = peak.XValue + widthAtBase;
+                        var valuePeakStart = peak.XValue - widthAtBase;
+                        var valuePeakEnd = peak.XValue + widthAtBase;
 
-                        int indexOfStartOfPeak = MathUtils.GetClosest(xvalues, valuePeakStart, 1);
-                        int indexOfEndOfPeak = MathUtils.GetClosest(xvalues, valuePeakEnd, 1);
+                        var indexOfStartOfPeak = MathUtils.GetClosest(xvalues, valuePeakStart, 1);
+                        var indexOfEndOfPeak = MathUtils.GetClosest(xvalues, valuePeakEnd, 1);
 
-                        for (int index = indexOfStartOfPeak; index < indexOfEndOfPeak; index++)
+                        for (var index = indexOfStartOfPeak; index < indexOfEndOfPeak; index++)
                         {
                             copiedYValues[index] = 0;     //zero-out the intensities of the largest peak. 
                         }

@@ -53,7 +53,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             if (!observedMSPeaks.Any()) return 1.0;
             
-            List<MSPeak> scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+            var scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
 
             return GetInterferenceScore(scanPeaks, observedIso.Peaklist, minMz, maxMz);
         }
@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         public double GetInterferenceScore(XYData xydata, List<MSPeak> peakList, double leftBoundary, double rightBoundary, int startIndex = 0)
         {
             
-            int currentIndex = startIndex;
+            var currentIndex = startIndex;
             if (currentIndex < 0)
             {
                 currentIndex = 0;
@@ -81,27 +81,27 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             double sumIntensities = 0;
             double sumPeakIntensities = 0;
-            int currentPeakIndex = 0;
+            var currentPeakIndex = 0;
 
             while (xydata.Xvalues[currentIndex] < rightBoundary && currentPeakIndex < peakList.Count)
             {
 
-                bool isWithinRange = (!(xydata.Xvalues[currentIndex] < leftBoundary));
+                var isWithinRange = (!(xydata.Xvalues[currentIndex] < leftBoundary));
 
                 if (isWithinRange)
                 {
                     sumIntensities += xydata.Yvalues[currentIndex];
 
-                    double sigma = peakList[currentPeakIndex].Width / 2.35;
-                    double threeSigma = sigma * 3;
+                    var sigma = peakList[currentPeakIndex].Width / 2.35;
+                    var threeSigma = sigma * 3;
 
-                    double leftPeakValue = peakList[currentPeakIndex].XValue - threeSigma;
-                    double rightPeakValue = peakList[currentPeakIndex].XValue + threeSigma;
+                    var leftPeakValue = peakList[currentPeakIndex].XValue - threeSigma;
+                    var rightPeakValue = peakList[currentPeakIndex].XValue + threeSigma;
 
                     if (xydata.Xvalues[currentIndex] > leftPeakValue)
                     {
 
-                        bool wentPastPeak = (xydata.Xvalues[currentIndex] > rightPeakValue);
+                        var wentPastPeak = (xydata.Xvalues[currentIndex] > rightPeakValue);
                         if (wentPastPeak)
                         {
                             currentPeakIndex++;
@@ -120,7 +120,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 if (currentIndex >= xydata.Xvalues.Length) break;
             }
 
-            double interferenceScore = 1 - (sumPeakIntensities / sumIntensities);
+            var interferenceScore = 1 - (sumPeakIntensities / sumIntensities);
             return interferenceScore;
         }
 
@@ -139,12 +139,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double sumAllPeakIntensities = 0;
             double sumTargetPeakIntensities = 0;
 
-            MSPeak maxPeak = GetMaxPeak(targetPeaks);
+            var maxPeak = GetMaxPeak(targetPeaks);
  
             if (maxPeak == null) return -1;
 
 
-            for (int i = 0; i < allPeaks.Count; i++)
+            for (var i = 0; i < allPeaks.Count; i++)
             {
                 var currentPeak = allPeaks[i];
 
@@ -176,7 +176,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 
             }
 
-            double interferenceScore = 1 - (sumTargetPeakIntensities / sumAllPeakIntensities);
+            var interferenceScore = 1 - (sumTargetPeakIntensities / sumAllPeakIntensities);
             return interferenceScore;
         }
 

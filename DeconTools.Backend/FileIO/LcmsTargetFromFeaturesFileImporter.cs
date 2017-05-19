@@ -34,7 +34,7 @@ namespace DeconTools.Backend.FileIO
 
         public override TargetCollection Import()
         {
-            TargetCollection repos = new TargetCollection();
+            var repos = new TargetCollection();
 
             StreamReader reader;
 
@@ -47,7 +47,7 @@ namespace DeconTools.Backend.FileIO
                 throw new System.IO.IOException("There was a problem importing from the file.");
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -56,10 +56,10 @@ namespace DeconTools.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -68,13 +68,13 @@ namespace DeconTools.Backend.FileIO
 
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -82,7 +82,7 @@ namespace DeconTools.Backend.FileIO
                         throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    TargetBase target = ConvertTextToDataObject(processedData);
+                    var target = ConvertTextToDataObject(processedData);
                     repos.TargetList.Add(target);
                     lineCounter++;
 
@@ -103,13 +103,13 @@ namespace DeconTools.Backend.FileIO
 
         private TargetBase ConvertTextToDataObject(List<string> processedData)
         {
-            LcmsFeatureTarget target = new LcmsFeatureTarget();
+            var target = new LcmsFeatureTarget();
             target.DatabaseName = LookupData(processedData, datasetHeaders);
             target.ID = ParseIntField(LookupData(processedData, targetIDHeaders));
             target.ChargeState = (short)ParseIntField(LookupData(processedData, chargeStateHeaders));
             target.ChargeStateTargets = new List<int>();
-            int lowerChargeState = ParseIntField(LookupData(processedData, chargeStateLowerHeaders));
-            int upperChargeState = ParseIntField(LookupData(processedData, chargeStateUpperHeaders));
+            var lowerChargeState = ParseIntField(LookupData(processedData, chargeStateLowerHeaders));
+            var upperChargeState = ParseIntField(LookupData(processedData, chargeStateUpperHeaders));
 
             if (lowerChargeState == -1 || upperChargeState == -1)
             {
@@ -117,7 +117,7 @@ namespace DeconTools.Backend.FileIO
             }
             else
             {
-                for (int i = lowerChargeState; i <= upperChargeState; i++)
+                for (var i = lowerChargeState; i <= upperChargeState; i++)
                 {
                     target.ChargeStateTargets.Add(i);
 

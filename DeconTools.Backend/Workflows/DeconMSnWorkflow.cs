@@ -60,8 +60,8 @@ namespace DeconTools.Backend.Workflows
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
 
 
-            double moreSensitivePeakToBackgroundRatio = NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio / 2;
-            double moreSensitiveSigNoiseThresh = NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold;
+            var moreSensitivePeakToBackgroundRatio = NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio / 2;
+            var moreSensitiveSigNoiseThresh = NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold;
             _moreSensitiveMS1PeakDetector = new DeconToolsPeakDetectorV2(moreSensitivePeakToBackgroundRatio,
                                              moreSensitiveSigNoiseThresh, NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
                                              NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
@@ -131,7 +131,7 @@ namespace DeconTools.Backend.Workflows
             DeconMSnResults.Clear();
             _scanCounter = 0;
 
-            int resultCounter = 0;
+            var resultCounter = 0;
 
             foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
             {
@@ -146,7 +146,7 @@ namespace DeconTools.Backend.Workflows
                 }
 
                 //check ms level
-                int currentMSLevel = Run.GetMSLevel(scanSet.PrimaryScanNumber);
+                var currentMSLevel = Run.GetMSLevel(scanSet.PrimaryScanNumber);
 
                 if (currentMSLevel == 1)
                 {
@@ -179,7 +179,7 @@ namespace DeconTools.Backend.Workflows
 
                     var precursorInfo = Run.GetPrecursorInfo(scanSet.PrimaryScanNumber);
                     Run.CurrentScanSet = scanSet;
-                    double inaccurateParentMZ = precursorInfo.PrecursorMZ;
+                    var inaccurateParentMZ = precursorInfo.PrecursorMZ;
 
                     resultCounter++;
                     var deconMSnResult = new DeconMSnResult();
@@ -191,8 +191,8 @@ namespace DeconTools.Backend.Workflows
 
                     MSGenerator.Execute(Run.ResultCollection);
 
-                    double lowerMZ = inaccurateParentMZ - 1.1;
-                    double upperMZ = inaccurateParentMZ + 1.1;
+                    var lowerMZ = inaccurateParentMZ - 1.1;
+                    var upperMZ = inaccurateParentMZ + 1.1;
 
                     var dataIsCentroided = Run.IsDataCentroided(scanSet.PrimaryScanNumber);
                     if (dataIsCentroided)
@@ -208,7 +208,7 @@ namespace DeconTools.Backend.Workflows
                     var filteredMS1Peaks = _currentMS1Peaks.Where(p => p.XValue > lowerMZ && p.XValue < upperMZ).ToList();
 
                     IsotopicProfile selectedMS1Feature = null;
-                    for (int attemptNum = 0; attemptNum < NumMaxAttemptsAtLowIntensitySpecies; attemptNum++)
+                    for (var attemptNum = 0; attemptNum < NumMaxAttemptsAtLowIntensitySpecies; attemptNum++)
                     {
                         var candidateMS1Features = GetCandidateMS1Features(inaccurateParentMZ, filteredMS1Peaks);
 
@@ -216,17 +216,17 @@ namespace DeconTools.Backend.Workflows
                         if (candidateMS1Features.Count == 0)
                         {
 
-                            int numSummed = attemptNum * 2 + 3;
-                            int ms1Scan = precursorInfo.PrecursorScan;
+                            var numSummed = attemptNum * 2 + 3;
+                            var ms1Scan = precursorInfo.PrecursorScan;
 
-                            ScanSet ms1scanset = new ScanSetFactory().CreateScanSet(Run, ms1Scan, numSummed);
+                            var ms1scanset = new ScanSetFactory().CreateScanSet(Run, ms1Scan, numSummed);
 
                             //get MS1 mass spectrum again. This time sum spectra
                             Run.CurrentScanSet = ms1scanset;
                             MSGenerator.Execute(Run.ResultCollection);
 
                             //run MS1 peak detector, with greater sensitivity
-                            bool isLastAttempt = attemptNum >= NumMaxAttemptsAtLowIntensitySpecies - 2;    //need to do -2 because of the way the loop advances the counter. 
+                            var isLastAttempt = attemptNum >= NumMaxAttemptsAtLowIntensitySpecies - 2;    //need to do -2 because of the way the loop advances the counter. 
 
                             if (isLastAttempt)
                             {
@@ -282,9 +282,9 @@ namespace DeconTools.Backend.Workflows
 
                         foreach (var peak in filteredMS1Peaks)
                         {
-                            double currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
+                            var currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
 
-                            double toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
+                            var toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
 
                             if (currentDiff < toleranceInMZ)
                             {
@@ -329,12 +329,12 @@ namespace DeconTools.Backend.Workflows
                     }
 
                     //Build export data. 
-                    string outputString = GetMGFOutputString(Run, scanSet.PrimaryScanNumber, deconMSnResult, ms2Peaks);
+                    var outputString = GetMGFOutputString(Run, scanSet.PrimaryScanNumber, deconMSnResult, ms2Peaks);
 
-                    bool includeHeader = resultCounter == 1;
-                    string summaryString = GetSummaryString(deconMSnResult, includeHeader);
+                    var includeHeader = resultCounter == 1;
+                    var summaryString = GetSummaryString(deconMSnResult, includeHeader);
 
-                    string parentProfileString = GetParentProfileString(deconMSnResult, includeHeader);
+                    var parentProfileString = GetParentProfileString(deconMSnResult, includeHeader);
 
 
 
@@ -374,7 +374,7 @@ namespace DeconTools.Backend.Workflows
 
         protected override void CreateOutputFileNames()
         {
-            string basefileName = GetBaseFileName(Run);
+            var basefileName = GetBaseFileName(Run);
 
             Logger.Instance.OutputFilename = basefileName + "_log.txt";
             _outputFileName = basefileName + ".mgf";
@@ -395,12 +395,12 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
 
-            float percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
+            var percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
-            string logText = "Scan= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " +
+            var logText = "Scan= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " +
                              percentDone.ToString("0.0");
 
             if (BackgroundWorker != null)
@@ -492,7 +492,7 @@ namespace DeconTools.Backend.Workflows
         }
         private string GetMGFOutputString(Run run, int scanNum, DeconMSnResult deconMSnResult, IEnumerable<Peak> ms2Peaks)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("BEGIN IONS");
             sb.Append(Environment.NewLine);
@@ -564,7 +564,7 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
 
-            string formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
             Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
@@ -576,16 +576,16 @@ namespace DeconTools.Backend.Workflows
 
         private List<IsotopicProfile> GetCandidateMS1Features(double inaccurateParentMZ, List<Peak> filteredMS1Peaks)
         {
-            List<IsotopicProfile> candidateMS1Features = new List<IsotopicProfile>();
+            var candidateMS1Features = new List<IsotopicProfile>();
             var ms1Features = ((ThrashDeconvolutorV2)Deconvolutor).PerformThrash(_currentMS1XYValues, filteredMS1Peaks, 0, 0, 0);
 
             foreach (var msfeature in ms1Features)
             {
                 foreach (var peak in msfeature.Peaklist)
                 {
-                    double currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
+                    var currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
 
-                    double toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
+                    var toleranceInMZ = ToleranceInPPM * peak.XValue / 1e6;
 
                     if (currentDiff < toleranceInMZ)
                     {

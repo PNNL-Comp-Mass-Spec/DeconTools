@@ -16,9 +16,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             if (resultList.ScanResultList == null || resultList.ScanResultList.Count == 0) return;
 
-            int currentScanResultIndex = resultList.ScanResultList.Count - 1;
+            var currentScanResultIndex = resultList.ScanResultList.Count - 1;
             
-            bool resultNotWritten = (currentScanResultIndex != _indexOfLastScanResultWritten);
+            var resultNotWritten = (currentScanResultIndex != _indexOfLastScanResultWritten);
             if (resultNotWritten)
             {
                 ExportScanResult(resultList.ScanResultList[currentScanResultIndex]);

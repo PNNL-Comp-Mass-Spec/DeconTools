@@ -28,10 +28,10 @@ namespace DeconTools.Backend.Core
 
         public void SetMassAlignmentData(List<MassAlignmentDataItem> massAlignmentData)
         {
-            float[] mzVals = massAlignmentData.Select(p => p.mz).ToArray();
-            float[] mzPPMCorrVals = massAlignmentData.Select(p => p.mzPPMCorrection).ToArray();
-            float[] scanVals = massAlignmentData.Select(p => p.scan).ToArray();
-            float[] scanPPMCorrVals = massAlignmentData.Select(p => p.scanPPMCorrection).ToArray();
+            var mzVals = massAlignmentData.Select(p => p.mz).ToArray();
+            var mzPPMCorrVals = massAlignmentData.Select(p => p.mzPPMCorrection).ToArray();
+            var scanVals = massAlignmentData.Select(p => p.scan).ToArray();
+            var scanPPMCorrVals = massAlignmentData.Select(p => p.scanPPMCorrection).ToArray();
 
             if (this.AlignmentInfo == null) this.AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
 
@@ -47,16 +47,16 @@ namespace DeconTools.Backend.Core
 
         public void SetMassAlignmentData(ViperMassCalibrationData viperCalibrationData)
         {
-            int numDataPoints = 3;
+            var numDataPoints = 3;
 
-            float[] mzVals = new float[numDataPoints];
-            float[] mzPPMCorrVals = new float[numDataPoints];
+            var mzVals = new float[numDataPoints];
+            var mzPPMCorrVals = new float[numDataPoints];
 
             mzVals[0] = 0;
             mzVals[1] = 1000;
             mzVals[2] = 2000;
 
-            for (int index = 0; index < mzPPMCorrVals.Length; index++)
+            for (var index = 0; index < mzPPMCorrVals.Length; index++)
             {
                 mzPPMCorrVals[index] = (float)viperCalibrationData.MassError;
             }
@@ -93,10 +93,10 @@ namespace DeconTools.Backend.Core
         {
             if (AlignmentInfo == null) return 0;
 
-            bool alignmentInfoContainsScanInfo = (this.AlignmentInfo.marrMassFncTimeInput != null && this.AlignmentInfo.marrMassFncTimeInput.Length > 0);
-            bool alignmentInfoContainsMZInfo = (this.AlignmentInfo.marrMassFncMZInput != null && this.AlignmentInfo.marrMassFncMZInput.Length > 0);
+            var alignmentInfoContainsScanInfo = (this.AlignmentInfo.marrMassFncTimeInput != null && this.AlignmentInfo.marrMassFncTimeInput.Length > 0);
+            var alignmentInfoContainsMZInfo = (this.AlignmentInfo.marrMassFncMZInput != null && this.AlignmentInfo.marrMassFncMZInput.Length > 0);
 
-            bool canUseScanWhenGettingPPMShift = alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo && scan >= 0;
+            var canUseScanWhenGettingPPMShift = alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo && scan >= 0;
 
             float mzForGettingAlignmentInfo;
             if (alignmentInfoContainsMZInfo)

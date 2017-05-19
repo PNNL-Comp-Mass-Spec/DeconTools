@@ -47,25 +47,25 @@ namespace DeconTools.Backend.FileIO
         public TargetCollection Import(List<int>TargetIDsToFilterOn)
         {
 
-            bool filterOnTargetIDs = TargetIDsToFilterOn != null && TargetIDsToFilterOn.Count > 0;
+            var filterOnTargetIDs = TargetIDsToFilterOn != null && TargetIDsToFilterOn.Count > 0;
 
             var data = new TargetCollection();
 
-            using (StreamReader reader = new StreamReader(m_filename))
+            using (var reader = new StreamReader(m_filename))
             {
-                string headerLine = reader.ReadLine();    //first line is the header line.   
+                var headerLine = reader.ReadLine();    //first line is the header line.   
 
                 _headers = processLine(headerLine);
 
-                int lineCounter = 1;
+                var lineCounter = 1;
                 while (reader.Peek() != -1)
                 {
-                    string line = reader.ReadLine();
+                    var line = reader.ReadLine();
                     lineCounter++;
 
 
 
-                    List<string> lineData = processLine(line);
+                    var lineData = processLine(line);
 
                     PeptideTarget massTag;
                     try
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.FileIO
                     }
                     catch (Exception ex)
                     {
-                        string msg = "Importer failed. Error reading line: " + lineCounter.ToString() + "\nDetails: " + ex.Message;
+                        var msg = "Importer failed. Error reading line: " + lineCounter.ToString() + "\nDetails: " + ex.Message;
                         throw new Exception(msg);
                     }
 
@@ -97,9 +97,9 @@ namespace DeconTools.Backend.FileIO
                     }
 
 
-                    bool massTagMassInfoMissing = (Math.Abs(massTag.MonoIsotopicMass - 0) < double.Epsilon);
+                    var massTagMassInfoMissing = (Math.Abs(massTag.MonoIsotopicMass - 0) < double.Epsilon);
 
-                    bool chargeStateInfoIsAvailable = massTag.ChargeState != 0;
+                    var chargeStateInfoIsAvailable = massTag.ChargeState != 0;
                     if (massTagMassInfoMissing)
                     {
                         if (!String.IsNullOrEmpty(massTag.EmpiricalFormula))
@@ -121,9 +121,9 @@ namespace DeconTools.Backend.FileIO
                         double minMZToConsider = 400;
                         double maxMZToConsider = 1500;
 
-                        List<PeptideTarget> targetList = new List<PeptideTarget>();
+                        var targetList = new List<PeptideTarget>();
 
-                        for (int chargeState = 1; chargeState < 100; chargeState++)
+                        for (var chargeState = 1; chargeState < 100; chargeState++)
                         {
                             var calcMZ = massTag.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
                             if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)
@@ -173,23 +173,23 @@ namespace DeconTools.Backend.FileIO
         private PeptideTarget convertTextToMassTag(List<string> lineData)
         {
 
-            PeptideTarget mt = new PeptideTarget();
+            var mt = new PeptideTarget();
             mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" ,"charge"}, lineData, "0"));
 
             mt.ID = parseIntField(getValue(new string[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1"));
             mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
 
-            int scanNum = parseIntField(getValue(new string[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
+            var scanNum = parseIntField(getValue(new string[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
             mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet", "ElutionTimeTheor" }, lineData, "-1"));
 
-            bool neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
+            var neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
             if (neitherScanOrNETIsProvided)
             {
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
                 mt.NormalizedElutionTime = 0.5f;  // set the NET mid-way between 0 and 1. 
             }
             
-            bool useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
+            var useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
             if (useScanNum)
             {
                 mt.ScanLCTarget = scanNum;
@@ -232,8 +232,8 @@ namespace DeconTools.Backend.FileIO
             {
 
 
-                int indexOfHeader = getIndexForTableHeader(_headers, possibleHeader, true);
-                bool foundHeader = (indexOfHeader != -1);
+                var indexOfHeader = getIndexForTableHeader(_headers, possibleHeader, true);
+                var foundHeader = (indexOfHeader != -1);
 
                 if (foundHeader)
                 {
@@ -247,7 +247,7 @@ namespace DeconTools.Backend.FileIO
 
         private List<string> getHeaders(string headerLine)
         {
-            List<string> processedLine = headerLine.Split(new char[] { delimiter }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var processedLine = headerLine.Split(new char[] { delimiter }, StringSplitOptions.RemoveEmptyEntries).ToList();
             return processedLine;
         }
     }

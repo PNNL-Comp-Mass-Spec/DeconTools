@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public static string GetStringFlagCode(IList<ResultFlag> resultFlags)
         {
-            int flagCode =  GetFlagCode(resultFlags);
+            var flagCode =  GetFlagCode(resultFlags);
             if (flagCode == -1) return String.Empty;
             else
             {

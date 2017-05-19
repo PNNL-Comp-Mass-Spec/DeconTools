@@ -93,7 +93,7 @@ namespace DeconTools.Backend.Core
             {
                 //Create a new XmlTextWriter.
                 //				XmlTextWriter xwriter = new XmlTextWriter(Console.Out);
-                XmlTextWriter xwriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8);
+                var xwriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8);
                 xwriter.Formatting = Formatting.None;
                 xwriter.IndentChar = '\t';
                 xwriter.Indentation = 1;

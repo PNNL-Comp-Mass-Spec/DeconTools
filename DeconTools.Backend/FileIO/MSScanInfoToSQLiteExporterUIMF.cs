@@ -42,7 +42,7 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
         {
-            List<Field> fieldList = new List<Field>();
+            var fieldList = new List<Field>();
 
             fieldList.Add(new Field("frame_num", "INTEGER Primary Key"));
             fieldList.Add(new Field("frame_time", "FLOAT"));

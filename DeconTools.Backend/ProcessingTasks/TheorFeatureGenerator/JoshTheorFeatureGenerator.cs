@@ -38,7 +38,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             this.LowPeakCutOff = lowPeakCutOff;
             this.FractionLabeling = fractionLabeling;
             this.MolarMixingFraction = molarMixingFraction;
-            DeuteriumIsotopeProfileGenerator _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator(molarMixingFraction, 1 - molarMixingFraction);
+            var _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator(molarMixingFraction, 1 - molarMixingFraction);
         }
 
         #endregion
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         public override IsotopicProfile GenerateTheorProfile (string empiricalFormula, int chargeState)
         {
-            IsotopicProfile  iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
+            var  iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
             iso.ChargeState = chargeState;
 
             var monoMass=  EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
@@ -122,7 +122,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
-            IsotopicProfile iso = new IsotopicProfile();
+            var iso = new IsotopicProfile();
 
             try
             {
@@ -155,9 +155,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             if (iso == null || iso.Peaklist == null) return;
 
-            for (int i = 0; i < iso.Peaklist.Count; i++)
+            for (var i = 0; i < iso.Peaklist.Count; i++)
             {
-                double calcMZ = targetMonoMass/ targetChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / targetChargeState;
+                var calcMZ = targetMonoMass/ targetChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / targetChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
 

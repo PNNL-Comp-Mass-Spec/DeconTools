@@ -52,9 +52,9 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             Check.Require(run != null, String.Format("{0} failed. Run has not been defined.", this.Name));
             Check.Require(run.PeakList != null && run.PeakList.Count > 0, String.Format("{0} failed. Run has not been defined.", this.Name));
 
-            XYData syntheticMSData = new XYData();
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
+            var syntheticMSData = new XYData();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
             foreach (MSPeak peak in run.PeakList)
             {
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 yvals.AddRange(generatedXYData.Yvalues);
             }
 
-            XYData xydata=new XYData();
+            var xydata=new XYData();
             xydata.Xvalues = xvals.ToArray();
             xydata.Yvalues = yvals.ToArray();
             return xydata;

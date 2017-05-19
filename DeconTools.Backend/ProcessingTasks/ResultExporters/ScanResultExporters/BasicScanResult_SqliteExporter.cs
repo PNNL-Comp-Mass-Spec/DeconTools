@@ -16,7 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         {
             if (File.Exists(fileName)) File.Delete(fileName);
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             this.cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + fileName;
 
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         protected override void buildTables()
         {
             Table scanResultTable = new BasicScanResult_SqliteTable("T_MS_ScanSummary");
-            DbCommand command = cnn.CreateCommand();
+            var command = cnn.CreateCommand();
 
             command.CommandText = scanResultTable.BuildCreateTableString();
             command.ExecuteNonQuery();
@@ -53,20 +53,20 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         protected override void addScanResults(DeconTools.Backend.Core.ResultCollection rc)
         {
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    SQLiteParameter scanNumParam = new SQLiteParameter();
-                    SQLiteParameter scanTimeParam = new SQLiteParameter();
-                    SQLiteParameter typeParam = new SQLiteParameter();
-                    SQLiteParameter bpiParam = new SQLiteParameter();
-                    SQLiteParameter bpiMZParam = new SQLiteParameter();
-                    SQLiteParameter ticParam = new SQLiteParameter();
-                    SQLiteParameter num_peaksParam = new SQLiteParameter();
-                    SQLiteParameter num_deisotopedParam = new SQLiteParameter();
+                    var scanNumParam = new SQLiteParameter();
+                    var scanTimeParam = new SQLiteParameter();
+                    var typeParam = new SQLiteParameter();
+                    var bpiParam = new SQLiteParameter();
+                    var bpiMZParam = new SQLiteParameter();
+                    var ticParam = new SQLiteParameter();
+                    var num_peaksParam = new SQLiteParameter();
+                    var num_deisotopedParam = new SQLiteParameter();
 
                     mycommand.CommandText = "INSERT INTO T_MS_ScanSummary ([scan_num],[scan_time],[type],[bpi],[bpi_mz],[tic],[num_peaks],[num_deisotoped]) VALUES(?,?,?,?,?,?,?,?)";
                     mycommand.Parameters.Add(scanNumParam);
@@ -79,9 +79,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(num_deisotopedParam);
 
                     
-                    for (int n = 0; n < rc.ScanResultList.Count; n++)
+                    for (var n = 0; n < rc.ScanResultList.Count; n++)
                     {
-                        ScanResult item = rc.ScanResultList[n];
+                        var item = rc.ScanResultList[n];
 
                         scanNumParam.Value = item.ScanSet.PrimaryScanNumber;
                         scanTimeParam.Value = item.ScanTime;

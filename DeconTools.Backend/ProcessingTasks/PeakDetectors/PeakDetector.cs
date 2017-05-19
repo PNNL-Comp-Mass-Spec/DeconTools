@@ -37,9 +37,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 return;
             }
            
-            bool isSuccess = false;
+            var isSuccess = false;
 
-            int counter = 1;
+            var counter = 1;
 
 
             //[gord] I'm adding a loop here, because we are experiencing an infrequent and seemingly random failure with the peak detector on data from UIMF files
@@ -56,8 +56,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
                 catch (Exception ex)
                 {
-                    string frameAndScanInfo = resultList.Run.GetCurrentScanOrFrameInfo();
-                    StringBuilder sb = new StringBuilder();
+                    var frameAndScanInfo = resultList.Run.GetCurrentScanOrFrameInfo();
+                    var sb = new StringBuilder();
                     sb.Append("Attempt ");
                     sb.Append(counter);
                     sb.Append("; PeakDetector is throwing an error; ");

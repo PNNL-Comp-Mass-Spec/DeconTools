@@ -18,7 +18,7 @@ namespace DeconTools.Backend.DTO
             this.frameNumber = (ushort) peak.FrameNum;
             this.scanNumber = (ushort) peak.Scan_num;
             frameAndScansRange = new Dictionary<ushort, List<ushort>>();
-            List<ushort> numbers = new List<ushort>();
+            var numbers = new List<ushort>();
             numbers.Add(this.scanNumber);
             frameAndScansRange.Add(this.frameNumber, numbers);
         }
@@ -122,12 +122,12 @@ namespace DeconTools.Backend.DTO
         */
         private List<ushort> mergeSortUnique(List<ushort> list1, List<ushort> list2)
         {
-            Dictionary<ushort, ushort> valueMap = new Dictionary<ushort, ushort>();
-            int end1 = list1.Count;
-            int end2 = list2.Count;
+            var valueMap = new Dictionary<ushort, ushort>();
+            var end1 = list1.Count;
+            var end2 = list2.Count;
 
             int index1 = 0, index2 = 0;
-            List<ushort> mergedArray = new List<ushort>();
+            var mergedArray = new List<ushort>();
             while (index1 < end1 && index2 < end2)
             {
 
@@ -155,7 +155,7 @@ namespace DeconTools.Backend.DTO
             if (index1 == end1)
             {
                 //then array 2 is remaining
-                for (int i = index2; i < end2; i++)
+                for (var i = index2; i < end2; i++)
                 {
                     if (!valueMap.ContainsKey(list2[i]))
                     {
@@ -165,7 +165,7 @@ namespace DeconTools.Backend.DTO
             }
             else
             {
-                for (int i = index1; i < end1; i++)
+                for (var i = index1; i < end1; i++)
                 {
                     if (!valueMap.ContainsKey(list1[i]))
                     {
@@ -181,13 +181,13 @@ namespace DeconTools.Backend.DTO
         public void updateFrameScansRange( Dictionary<ushort, List<ushort>> newRangeValues)
         {
 
-            foreach (ushort key in newRangeValues.Keys.ToList<ushort>())
+            foreach (var key in newRangeValues.Keys.ToList<ushort>())
             {
                 if (frameAndScansRange.ContainsKey(key))
                 {
                     //then we need to merge the two scan lists in sorted order
-                    List<ushort> prevSortedList = frameAndScansRange[key];
-                    List<ushort> newList = mergeSortUnique(prevSortedList, newRangeValues[key]);
+                    var prevSortedList = frameAndScansRange[key];
+                    var newList = mergeSortUnique(prevSortedList, newRangeValues[key]);
 
                     frameAndScansRange[key] = newList;
 
@@ -206,7 +206,7 @@ namespace DeconTools.Backend.DTO
         //checks if the given mass is within a tolerance of this feature
         public bool containsMass(double massValue, int toleranceInPPM)
         {
-                double differenceInPPM = Math.Abs(1000000 * (this.XValue - massValue) / this.XValue);
+                var differenceInPPM = Math.Abs(1000000 * (this.XValue - massValue) / this.XValue);
 
                 if (differenceInPPM <= toleranceInPPM)
                 {
@@ -232,21 +232,21 @@ namespace DeconTools.Backend.DTO
                 //TODO:: two peaks are the same if they are within a tolerance of each other in
                 //terms of mz, scan and lc frame. in this case we're only implementing mz values
                 //
-                double differenceInPPM = Math.Abs(1000000 * (peak.XValue- this.XValue) / this.XValue);
+                var differenceInPPM = Math.Abs(1000000 * (peak.XValue- this.XValue) / this.XValue);
 
                 if (differenceInPPM <= toleranceInPPM)
                 {
                     //it's within the mass tolerance of our peak
                     //now check for net tolerance
                     //check if the frameScansRange bit is set for the frame number and a few other scans within tolerance
-                    for (ushort i = (ushort)(frameNum - netRange); i < frameNum + netRange; i++)
+                    for (var i = (ushort)(frameNum - netRange); i < frameNum + netRange; i++)
                     {
                         if (frameAndScansRange.ContainsKey(i))
                         {
                             //then we have to check for the scans in that list and look for our scan values in that list
                             //we have to keep that list sorted for fast searching
-                            List<ushort> scanList = frameAndScansRange[i];
-                            for (ushort j = (ushort)(scanNum - driftRange); j < scanNum + driftRange; j++)
+                            var scanList = frameAndScansRange[i];
+                            for (var j = (ushort)(scanNum - driftRange); j < scanNum + driftRange; j++)
                             {
                                 if (scanList.BinarySearch(j) >= 0)
                                 {
@@ -263,7 +263,7 @@ namespace DeconTools.Backend.DTO
                       
                     }
 
-                    int netDiff = this.frameNumber.CompareTo(frameNum);
+                    var netDiff = this.frameNumber.CompareTo(frameNum);
                     if ( netDiff  == 0 ){
                         //now compare on scan range
                         return this.scanNumber.CompareTo( scanNumber );

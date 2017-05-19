@@ -33,7 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             this.TriggerToExport = triggerValue;
 
 
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             this.cnn = fact.CreateConnection();
             cnn.ConnectionString = "Data Source=" + fileName;
 
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
         {
 
             Table isosResultTable = new MassTagResult_SqliteTable("T_MassTagResults");
-            DbCommand command = cnn.CreateCommand();
+            var command = cnn.CreateCommand();
 
             command.CommandText = isosResultTable.BuildCreateTableString();
             command.ExecuteNonQuery();
@@ -75,31 +75,31 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
         #region Private Methods
         protected override void addResults(DeconTools.Backend.Core.ResultCollection rc)
         {
-            SQLiteConnection myconnection = (SQLiteConnection)cnn;
+            var myconnection = (SQLiteConnection)cnn;
 
-            using (SQLiteTransaction mytransaction = myconnection.BeginTransaction())
+            using (var mytransaction = myconnection.BeginTransaction())
             {
-                using (SQLiteCommand mycommand = new SQLiteCommand(myconnection))
+                using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    SQLiteParameter featureIDParam = new SQLiteParameter();
-                    SQLiteParameter scanNumParam = new SQLiteParameter();
-                    SQLiteParameter chargeParam = new SQLiteParameter();
-                    SQLiteParameter abundanceParam = new SQLiteParameter();
-                    SQLiteParameter mzParam = new SQLiteParameter();
-                    SQLiteParameter fitParam = new SQLiteParameter();
-                    SQLiteParameter averageMWParam = new SQLiteParameter();
-                    SQLiteParameter monoIsotopicMWParam = new SQLiteParameter();
-                    SQLiteParameter mostAbundantMWParam = new SQLiteParameter();
-                    SQLiteParameter fwhmParam = new SQLiteParameter();
-                    SQLiteParameter sigNoiseParam = new SQLiteParameter();
-                    SQLiteParameter monoAbundanceParam = new SQLiteParameter();
-                    SQLiteParameter monoPlus2AbundParam = new SQLiteParameter();
+                    var featureIDParam = new SQLiteParameter();
+                    var scanNumParam = new SQLiteParameter();
+                    var chargeParam = new SQLiteParameter();
+                    var abundanceParam = new SQLiteParameter();
+                    var mzParam = new SQLiteParameter();
+                    var fitParam = new SQLiteParameter();
+                    var averageMWParam = new SQLiteParameter();
+                    var monoIsotopicMWParam = new SQLiteParameter();
+                    var mostAbundantMWParam = new SQLiteParameter();
+                    var fwhmParam = new SQLiteParameter();
+                    var sigNoiseParam = new SQLiteParameter();
+                    var monoAbundanceParam = new SQLiteParameter();
+                    var monoPlus2AbundParam = new SQLiteParameter();
 
-                    SQLiteParameter netParam = new SQLiteParameter();
-                    SQLiteParameter massTagIDParam = new SQLiteParameter();
-                    SQLiteParameter massTagMZParam = new SQLiteParameter();
-                    SQLiteParameter massTagNETParam = new SQLiteParameter();
-                    SQLiteParameter massTagSequenceParam = new SQLiteParameter();
+                    var netParam = new SQLiteParameter();
+                    var massTagIDParam = new SQLiteParameter();
+                    var massTagMZParam = new SQLiteParameter();
+                    var massTagNETParam = new SQLiteParameter();
+                    var massTagSequenceParam = new SQLiteParameter();
 
                     
                     mycommand.CommandText = @"INSERT INTO T_MassTagResults ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],
@@ -195,7 +195,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             {
                 try
                 {
-                    using (DbConnection tempConn = cnn )
+                    using (var tempConn = cnn )
                     {
                         if (tempConn.State != System.Data.ConnectionState.Closed)
                         {

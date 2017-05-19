@@ -43,7 +43,7 @@ namespace DeconTools.Backend.Data
 
             sw.WriteLine(headerLine);
 
-            foreach (ScanResult result in results.ScanResultList)
+            foreach (var result in results.ScanResultList)
             {
                 var sb = new StringBuilder();
                 sb.Append(result.ScanSet.PrimaryScanNumber);   

@@ -49,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (run is UIMFRun)
             {
-                UIMFRun uimfRun = (UIMFRun)run;
+                var uimfRun = (UIMFRun)run;
 
                 if (uimfRun.CurrentScanSet == null) throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
                 if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
@@ -72,20 +72,20 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (run.CurrentScanSet == null)throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
 
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
-                ScanSet scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
+                var scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
 
                 run.CurrentScanSet = scanset;
 
                 _msGenerator.Execute(run.ResultCollection);
             }
-            foreach (IsosResult result in resultList)
+            foreach (var result in resultList)
             {
 
-                int indexOfObsMostAbundant = result.IsotopicProfile.GetIndexOfMostIntensePeak();
+                var indexOfObsMostAbundant = result.IsotopicProfile.GetIndexOfMostIntensePeak();
 
-                double mzOfMostAbundant = result.IsotopicProfile.Peaklist[indexOfObsMostAbundant].XValue;
+                var mzOfMostAbundant = result.IsotopicProfile.Peaklist[indexOfObsMostAbundant].XValue;
 
-                int indexOfUnsummedMostAbundantMZ = run.XYData.GetClosestXVal(mzOfMostAbundant);
+                var indexOfUnsummedMostAbundantMZ = run.XYData.GetClosestXVal(mzOfMostAbundant);
                 if (indexOfUnsummedMostAbundantMZ >= 0)
                 {
                     result.IsotopicProfile.OriginalIntensity = run.XYData.Yvalues[indexOfUnsummedMostAbundantMZ];
@@ -97,7 +97,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         //problem is that with these saturated profiles, they are often trucated because another
                         //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should 
                         //belong to the saturated profile. 
-                        PeptideTarget theorTarget = new PeptideTarget();
+                        var theorTarget = new PeptideTarget();
 
                         theorTarget.ChargeState = (short)result.IsotopicProfile.ChargeState;
                         theorTarget.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
@@ -113,13 +113,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
                         //goal is to find the index of the isotopic profile peaks of a peak that is not saturated
 
-                        int indexOfGoodUnsaturatedPeak = -1;
+                        var indexOfGoodUnsaturatedPeak = -1;
 
-                        for (int i = indexOfObsMostAbundant+1; i < result.IsotopicProfile.Peaklist.Count; i++)
+                        for (var i = indexOfObsMostAbundant+1; i < result.IsotopicProfile.Peaklist.Count; i++)
                         {
 
 
-                            int indexUnsummedData = run.XYData.GetClosestXVal(result.IsotopicProfile.Peaklist[i].XValue);
+                            var indexUnsummedData = run.XYData.GetClosestXVal(result.IsotopicProfile.Peaklist[i].XValue);
 
                             var unsummedIntensity = run.XYData.Yvalues[indexUnsummedData];
 
@@ -159,12 +159,12 @@ namespace DeconTools.Backend.ProcessingTasks
         {
 
 
-            int indexOfMostAbundantTheorPeak = theorIsotopicProfile.GetIndexOfMostIntensePeak();
+            var indexOfMostAbundantTheorPeak = theorIsotopicProfile.GetIndexOfMostIntensePeak();
 
             //find index of peaks lower than 0.3
-            int indexOfReferenceTheorPeak = -1;
+            var indexOfReferenceTheorPeak = -1;
 
-            for (int i = indexOfMostAbundantTheorPeak; i < theorIsotopicProfile.Peaklist.Count; i++)
+            for (var i = indexOfMostAbundantTheorPeak; i < theorIsotopicProfile.Peaklist.Count; i++)
             {
                 if (theorIsotopicProfile.Peaklist[i].Height < _minRelIntTheorProfile)
                 {
@@ -174,7 +174,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             }
 
-            bool useProvidedPeakIndex = (indexOfPeakUsedInExtrapolation >= 0);
+            var useProvidedPeakIndex = (indexOfPeakUsedInExtrapolation >= 0);
 
             double intensityObsPeakUsedForExtrapolation;
             double intensityTheorPeak;
@@ -214,18 +214,18 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private void AssignMissingPeaksToSaturatedProfile(List<Peak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
         {
-            double toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(isotopicProfile);
+            var toleranceInPPM = calcToleranceInPPMFromIsotopicProfile(isotopicProfile);
 
             //this finds the isotopic profile based on the theor. isotopic profile.
             _basicFeatureFinder.ToleranceInPPM = toleranceInPPM;
             _basicFeatureFinder.NeedMonoIsotopicPeak = false;
 
-            IsotopicProfile iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile);
+            var iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile);
 
             if (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 1)
             {
                 //add the newly found peaks to the saturated isotopic profile
-                for (int i = isotopicProfile.Peaklist.Count; i < iso.Peaklist.Count; i++)
+                for (var i = isotopicProfile.Peaklist.Count; i < iso.Peaklist.Count; i++)
                 {
                     isotopicProfile.Peaklist.Add(iso.Peaklist[i]);
                 }
@@ -242,8 +242,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 return toleranceInPPM;
             }
 
-            double fwhm = isotopicProfile.GetFWHM();
-            double toleranceInMZ = fwhm / 2;
+            var fwhm = isotopicProfile.GetFWHM();
+            var toleranceInMZ = fwhm / 2;
 
             toleranceInPPM = toleranceInMZ / isotopicProfile.MonoPeakMZ * 1e6;
 

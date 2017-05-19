@@ -74,7 +74,7 @@ namespace DeconTools.Backend.Data.Structures
                     throw new System.ArgumentOutOfRangeException("row");
                 }
 
-                int pos = (row * _width) + col;
+                var pos = (row * _width) + col;
                 this.BitArray[pos] = b;
             }
 
@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Data.Structures
                     throw new System.ArgumentOutOfRangeException("row");
                 }
 
-                int pos = (row * _width) + col;
+                var pos = (row * _width) + col;
                 return this.BitArray[pos];
             }
 
@@ -112,7 +112,7 @@ namespace DeconTools.Backend.Data.Structures
             {
                 var new_bitarray2d = new BitArray2D(this._width, this._height);
 
-                for (int i = 0; i < this.BitArray.Length; i++)
+                for (var i = 0; i < this.BitArray.Length; i++)
                 {
                     new_bitarray2d.BitArray[i] = this.BitArray[i];
                 }
@@ -148,7 +148,7 @@ namespace DeconTools.Backend.Data.Structures
                     throw new System.ArgumentException("must have at least length 1", "bitarray");
                 }
 
-                int num_bytes = bitarray.Length / 8;
+                var num_bytes = bitarray.Length / 8;
 
                 if (bitarray.Length % 8 != 0)
                 {

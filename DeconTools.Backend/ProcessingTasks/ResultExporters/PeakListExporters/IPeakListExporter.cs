@@ -21,10 +21,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             // check if peak results exceeds Trigger value or is the last Scan 
 
-            int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+            var lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
-            bool isLastScan=true;
-            bool writeOutPeaksNoMatterWhat = false;
+            var isLastScan=true;
+            var writeOutPeaksNoMatterWhat = false;
 
             if (resultList.Run is UIMFRun)
             {

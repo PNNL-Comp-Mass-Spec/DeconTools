@@ -31,7 +31,7 @@ namespace DeconTools.Backend.Runs
             Check.Require(File.Exists(filename), "Cannot find file - does not exist.");
 
             this.Filename = filename;
-            string baseFilename = Path.GetFileName(this.Filename);
+            var baseFilename = Path.GetFileName(this.Filename);
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(filename);
 
@@ -118,7 +118,7 @@ namespace DeconTools.Backend.Runs
                 this.getSummedSpectrum(scanset, ref xvals, ref yvals);
             }
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
             return xydata;
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.Runs
                 this.getSummedSpectrum(scanset, ref xvals, ref yvals, minMZ, maxMZ);
             }
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
             return xydata;
@@ -156,23 +156,23 @@ namespace DeconTools.Backend.Runs
             //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
             //the integer is added to a dictionary generic list (sorted)
 
-            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
-            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            var mz_intensityPair = new SortedDictionary<long, float>();
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
             //double[] tempXvals = new double[0];
             //float[] tempYvals = new float[0];
             double[] tempXvals = null;
             float[] tempYvals = null;
 
-            long minXLong = (long)(minX * precision + 0.5);
-            long maxXLong = (long)(maxX * precision + 0.5);
-            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            var minXLong = (long)(minX * precision + 0.5);
+            var maxXLong = (long)(maxX * precision + 0.5);
+            for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
             {
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
                 m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
 
-                for (int i = 0; i < tempXvals.Length; i++)
+                for (var i = 0; i < tempXvals.Length; i++)
                 {
-                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    var tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
                     if (tempmz < minXLong || tempmz > maxXLong) continue;
 
                     if (mz_intensityPair.ContainsKey(tempmz))
@@ -187,12 +187,12 @@ namespace DeconTools.Backend.Runs
             }
 
             if (mz_intensityPair.Count == 0) return;
-            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+            var summedXVals = mz_intensityPair.Keys.ToList();
 
             xvals = new double[summedXVals.Count];
             yvals = mz_intensityPair.Values.ToArray();
 
-            for (int i = 0; i < summedXVals.Count; i++)
+            for (var i = 0; i < summedXVals.Count; i++)
             {
                 xvals[i] = summedXVals[i] / precision;
             }
@@ -206,8 +206,8 @@ namespace DeconTools.Backend.Runs
             //the integer is added to a dictionary generic list (sorted)
             //
 
-            SortedDictionary<long, float> mz_intensityPair = new SortedDictionary<long, float>();
-            double precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            var mz_intensityPair = new SortedDictionary<long, float>();
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
             //double[] tempXvals = new double[0];
             //float[] tempYvals = new float[0];
             double[] tempXvals = null;
@@ -215,14 +215,14 @@ namespace DeconTools.Backend.Runs
 
             //long minXLong = (long)(minX * precision + 0.5);
             //long maxXLong = (long)(maxX * precision + 0.5);
-            for (int scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
             {
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
                 m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
 
-                for (int i = 0; i < tempXvals.Length; i++)
+                for (var i = 0; i < tempXvals.Length; i++)
                 {
-                    long tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
+                    var tempmz = (long)Math.Floor(tempXvals[i] * precision + 0.5);
                     //if (tempmz < minXLong || tempmz > maxXLong) continue;
 
                     if (mz_intensityPair.ContainsKey(tempmz))
@@ -237,12 +237,12 @@ namespace DeconTools.Backend.Runs
             }
 
             if (mz_intensityPair.Count == 0) return;
-            List<long> summedXVals = mz_intensityPair.Keys.ToList();
+            var summedXVals = mz_intensityPair.Keys.ToList();
 
             xvals = new double[summedXVals.Count];
             yvals = mz_intensityPair.Values.ToArray();
 
-            for (int i = 0; i < summedXVals.Count; i++)
+            for (var i = 0; i < summedXVals.Count; i++)
             {
                 xvals[i] = summedXVals[i] / precision;
             }
@@ -250,7 +250,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetNumMSScans()
         {
-            int numScans = m_reader.GetTotalNumberScans();
+            var numScans = m_reader.GetTotalNumberScans();
             return numScans;
         }
 
@@ -272,7 +272,7 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int scanNum)
         {
 
-            int msLevel = m_reader.GetMSLevel(this.SpectraID, scanNum);
+            var msLevel = m_reader.GetMSLevel(this.SpectraID, scanNum);
 
             return msLevel;
         }

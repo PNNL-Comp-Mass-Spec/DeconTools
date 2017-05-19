@@ -43,10 +43,10 @@ namespace DeconTools.Backend.Data
         #region Public Methods
         public override void ImportPeaks(List<MSPeakResult> peakList)
         {
-            DbProviderFactory fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            string queryString = "SELECT peak_id, scan_num, mz, intensity, fwhm FROM T_Peaks;";
+            var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
+            var queryString = "SELECT peak_id, scan_num, mz, intensity, fwhm FROM T_Peaks;";
 
-            using (DbConnection cnn = fact.CreateConnection())
+            using (var cnn = fact.CreateConnection())
             {
                 cnn.ConnectionString = "Data Source=" + this.sqliteFilename;
                 try
@@ -58,26 +58,26 @@ namespace DeconTools.Backend.Data
                     throw new Exception("Peak import failed. Couldn't connect to SQLite database. \n\nDetails: " + ex.Message);
                 }
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = "SELECT COUNT(*) FROM T_Peaks;";
                     numRecords = Convert.ToInt32(command.ExecuteScalar());
                 }
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = queryString;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
 
                     MSPeakResult peakresult;
 
-                    int progressCounter = 0;
+                    var progressCounter = 0;
                     while (reader.Read())
                     {
                         peakresult = new MSPeakResult();
 
-                        long test = (long)reader["peak_id"];
+                        var test = (long)reader["peak_id"];
 
                         peakresult.PeakID = (int)(long)reader["peak_id"];
                         peakresult.Scan_num = (int)(long)reader["scan_num"];

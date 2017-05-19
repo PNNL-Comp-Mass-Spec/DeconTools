@@ -23,15 +23,15 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         {
             if (xydata == null) return -1;
 
-            double[] xValues = xydata.Xvalues;
-            double[] yValues = xydata.Yvalues;
+            var xValues = xydata.Xvalues;
+            var yValues = xydata.Yvalues;
 
             if (xValues == null || yValues == null) return -1;
 
             double summedIntensities = 0;
-            for (int i = 0; i < yValues.Length; i++)
+            for (var i = 0; i < yValues.Length; i++)
             {
-                double xValue = xValues[i];
+                var xValue = xValues[i];
 
                 if (xValue > minMZ && xValue < maxMZ)
                 {

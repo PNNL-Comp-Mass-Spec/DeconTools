@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Data
             ScanResult scanresult;
             if (run is UIMFRun)
             {
-                UIMFRun uimfRun = (UIMFRun)run;
+                var uimfRun = (UIMFRun)run;
                 scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
             }
             else
@@ -61,12 +61,12 @@ namespace DeconTools.Backend.Data
 
             UimfScanResult scanresult;
 
-            int totPeaks = 0;
-            int totIsotopicProfiles = 0;
+            var totPeaks = 0;
+            var totIsotopicProfiles = 0;
             float tic = 0;
-            Peak basepeak = new Peak();
+            var basepeak = new Peak();
 
-            bool currentScanListIsLastOne = (scanSet == run.IMSScanSetCollection.ScanSetList[run.IMSScanSetCollection.ScanSetList.Count - 1]);
+            var currentScanListIsLastOne = (scanSet == run.IMSScanSetCollection.ScanSetList[run.IMSScanSetCollection.ScanSetList.Count - 1]);
 
             if (currentScanListIsLastOne)
             {

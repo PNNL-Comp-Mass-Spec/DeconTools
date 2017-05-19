@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
             Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
 
-            IsotopicProfile theorProfile = new IsotopicProfile();
+            var theorProfile = new IsotopicProfile();
             switch (IsotopicProfileType)
             {
                 case DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED:
@@ -75,30 +75,30 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 return 1.0;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
             }
 
-            int indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
-            int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist, theorProfile.getMostIntensePeak().XValue, 0, observedProfile.Peaklist.Count - 1, 0.1);
+            var indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
+            var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist, theorProfile.getMostIntensePeak().XValue, 0, observedProfile.Peaklist.Count - 1, 0.1);
 
             if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
                 return 1.0;
             }
 
-            double mzOffset = observedProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
+            var mzOffset = observedProfile.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorProfile.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-            List<Peak> observedPeakList = observedProfile.Peaklist.Cast<Peak>().ToList();
-            List<Peak> theorPeakList = theorProfile.Peaklist.Cast<Peak>().ToList();
+            var observedPeakList = observedProfile.Peaklist.Cast<Peak>().ToList();
+            var theorPeakList = theorProfile.Peaklist.Cast<Peak>().ToList();
 
             foreach (var peak in theorPeakList)//May want to avoid this offset if the masses have been aligned using LCMS Warp
             {
                 peak.XValue += mzOffset;
             }
 
-            float minCuttoffTheorPeakIntensityFraction = 0.1f;
+            var minCuttoffTheorPeakIntensityFraction = 0.1f;
  
             var peakFitter = new PeakLeastSquaresFitter();
             int ionCountUsed;
 
-            double fitval = peakFitter.GetFit(
+            var fitval = peakFitter.GetFit(
                 theorPeakList,
                 observedPeakList,
                 minCuttoffTheorPeakIntensityFraction,

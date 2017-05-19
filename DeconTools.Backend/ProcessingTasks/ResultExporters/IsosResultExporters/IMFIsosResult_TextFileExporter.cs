@@ -62,7 +62,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected override string buildIsosResultOutput(DeconTools.Backend.Core.IsosResult result)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(result.ScanSet.PrimaryScanNumber);
             sb.Append(delimiter);
             sb.Append(result.IsotopicProfile.ChargeState);
@@ -100,7 +100,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan_num");
             sb.Append(Delimiter);
             sb.Append("charge");

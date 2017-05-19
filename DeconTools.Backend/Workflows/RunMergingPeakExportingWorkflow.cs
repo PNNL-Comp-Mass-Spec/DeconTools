@@ -119,7 +119,7 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
 
-            string formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
             Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
@@ -132,7 +132,7 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
-            foreach (ScanSet scanset in Run.ScanSetCollection.ScanSetList)
+            foreach (var scanset in Run.ScanSetCollection.ScanSetList)
             {
                 Run.ResultCollection.MSPeakResultList.Clear();
 
@@ -204,12 +204,12 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
 
-            float percentDone = (_datasetCounter+1) / (float)(DatasetFileNameList.Count()) * 100;
+            var percentDone = (_datasetCounter+1) / (float)(DatasetFileNameList.Count()) * 100;
             userstate.PercentDone = percentDone;
 
-            string logText = "Dataset= \t" + Run.DatasetName + "; PercentComplete= \t" + percentDone.ToString("0.0") + "; Total peaks= \t" + _peaksProcessedInLastDataset;
+            var logText = "Dataset= \t" + Run.DatasetName + "; PercentComplete= \t" + percentDone.ToString("0.0") + "; Total peaks= \t" + _peaksProcessedInLastDataset;
 
             if (BackgroundWorker != null)
             {

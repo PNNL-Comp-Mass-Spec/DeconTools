@@ -62,8 +62,8 @@ namespace DeconTools.Backend.Parameters
             UseSmoothing = GetBoolVal(xElement, "ApplySavitzkyGolay", UseSmoothing);
             SmoothingType = (Globals.SmoothingType) GetEnum(xElement, "SmoothingType", SmoothingType.GetType(), SmoothingType);  //Smoothing type does not yet exist in parameter file
 
-            int smoothLeft = GetIntValue(xElement, "SGNumLeft", (SavitzkyGolayNumPointsInSmooth-1)/2);
-            int smoothRight = GetIntValue(xElement, "SGNumRight", (SavitzkyGolayNumPointsInSmooth - 1) / 2);
+            var smoothLeft = GetIntValue(xElement, "SGNumLeft", (SavitzkyGolayNumPointsInSmooth-1)/2);
+            var smoothRight = GetIntValue(xElement, "SGNumRight", (SavitzkyGolayNumPointsInSmooth - 1) / 2);
 
             SavitzkyGolayNumPointsInSmooth = smoothLeft + smoothRight + 1;
             SavitzkyGolayOrder = GetIntValue(xElement, "SGOrder", SavitzkyGolayOrder);

@@ -26,9 +26,9 @@ namespace DeconTools.Backend.Core
             if (this.IsotopicProfile == null) 
                 return base.ToString();
 
-            string delim = "; ";
+            var delim = "; ";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(this.MSFeatureID);
             sb.Append(delim);
             sb.Append(this.ScanSet.PrimaryScanNumber);

@@ -51,7 +51,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
         {
-            List<Field> fieldList = new List<Field>();
+            var fieldList = new List<Field>();
             fieldList.Add(new Field("scan_num", "INTEGER Primary Key"));
             fieldList.Add(new Field("scan_time", "FLOAT"));
             fieldList.Add(new Field("type", "USHORT"));

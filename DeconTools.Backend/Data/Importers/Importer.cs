@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Data
 
         protected string lookup(List<string> data, List<string> headers, string targetHeader)
         {
-            int columnIndex = getIndexForTableHeader(headers, targetHeader,false);
+            var columnIndex = getIndexForTableHeader(headers, targetHeader,false);
             if (columnIndex == -1) return "";
 
             return data[columnIndex];
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Data
 
         protected bool parseBoolField(string inputstring)
         {
-            bool result = false;
+            var result = false;
             if (bool.TryParse(inputstring, out result))
                 return result;
             else return false;     //TODO:  need to figure out the default value
@@ -65,12 +65,12 @@ namespace DeconTools.Backend.Data
 
             if (String.IsNullOrEmpty(inputstring)) return -1;
 
-            int result = 0;
+            var result = 0;
             if (Int32.TryParse(inputstring, out result))
                 return result;
             else
             {
-                double secondAttempt = parseDoubleField(inputstring);
+                var secondAttempt = parseDoubleField(inputstring);
                 if (secondAttempt != double.NaN)
                 {
                     return Convert.ToInt32(secondAttempt);
@@ -89,10 +89,10 @@ namespace DeconTools.Backend.Data
         protected List<string> processLine(string inputLine)
         {
             char[] splitter = { delimiter };
-            List<string> returnedList = new List<string>();
+            var returnedList = new List<string>();
 
-            string[] arr = inputLine.Split(splitter);
-            foreach (string str in arr)
+            var arr = inputLine.Split(splitter);
+            foreach (var str in arr)
             {
                 returnedList.Add(str);
             }
@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Data
         }
         protected int getIndexForTableHeader(List<string> tableHeaders, string target, bool ignoreCase)
         {
-            for (int i = 0; i < tableHeaders.Count; i++)
+            for (var i = 0; i < tableHeaders.Count; i++)
             {
                 string columnHeader;
 

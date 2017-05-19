@@ -47,11 +47,11 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             if (PointsForSmoothing % 2 == 0)
                 throw new ArgumentOutOfRangeException("savGolayPoints must be an odd number 3 or higher");
             
-            int colCount = inputValues.Length;
-            double[] returnYValues = new double[colCount];
+            var colCount = inputValues.Length;
+            var returnYValues = new double[colCount];
 
-            int newPointsForSmoothing = PointsForSmoothing > colCount ? colCount : PointsForSmoothing;
-            int m = (newPointsForSmoothing - 1) / 2;
+            var newPointsForSmoothing = PointsForSmoothing > colCount ? colCount : PointsForSmoothing;
+            var m = (newPointsForSmoothing - 1) / 2;
             
             if (_smoothingFilters == null || _smoothingFilters.ColumnCount != newPointsForSmoothing) 
             {
@@ -60,12 +60,12 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             var conjTransposeMatrix = _smoothingFilters.ConjugateTranspose();
 
-            for (int i = 0; i <= m; i++)
+            for (var i = 0; i <= m; i++)
             {
                 var conjTransposeColumn = conjTransposeMatrix.Column(i);
 
                 double multiplicationResult = 0;
-                for (int z = 0; z < newPointsForSmoothing; z++)
+                for (var z = 0; z < newPointsForSmoothing; z++)
                 {
                     multiplicationResult += (conjTransposeColumn[z] * inputValues[z]);
                 }
@@ -75,22 +75,22 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             var conjTransposeColumnResult = conjTransposeMatrix.Column(m);
 
-            for (int i = m + 1; i < colCount - m - 1; i++)
+            for (var i = m + 1; i < colCount - m - 1; i++)
             {
                 double multiplicationResult = 0;
-                for (int z = 0; z < newPointsForSmoothing; z++)
+                for (var z = 0; z < newPointsForSmoothing; z++)
                 {
                     multiplicationResult += (conjTransposeColumnResult[z] * inputValues[i - m + z]);
                 }
                 returnYValues[i] = multiplicationResult;
             }
 
-            for (int i = 0; i <= m; i++)
+            for (var i = 0; i <= m; i++)
             {
                 var conjTransposeColumn = conjTransposeMatrix.Column(m + i);
 
                 double multiplicationResult = 0;
-                for (int z = 0; z < newPointsForSmoothing; z++)
+                for (var z = 0; z < newPointsForSmoothing; z++)
                 {
                     multiplicationResult += (conjTransposeColumn[z] * inputValues[colCount - newPointsForSmoothing + z]);
                 }
@@ -99,7 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             if (!AllowNegativeValues)
             {
-                for (int i = 0; i < returnYValues.Length; i++)
+                for (var i = 0; i < returnYValues.Length; i++)
                 {
                     if (returnYValues[i] < 0) returnYValues[i] = 0;
                 }
@@ -116,7 +116,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             var smoothedData = Smooth(xyData.Yvalues);
 
-            XYData returnVals = new XYData();
+            var returnVals = new XYData();
             returnVals.Xvalues = xyData.Xvalues;
             returnVals.Yvalues = smoothedData;
            
@@ -127,12 +127,12 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
         private DenseMatrix CalculateSmoothingFilters(int polynomialOrder, int filterLength )
         {
-            int m = (filterLength - 1) / 2;
+            var m = (filterLength - 1) / 2;
             var denseMatrix = new DenseMatrix(filterLength, polynomialOrder + 1);
 
-            for (int i = -m; i <= m; i++)
+            for (var i = -m; i <= m; i++)
             {
-                for (int j = 0; j <= polynomialOrder; j++)
+                for (var j = 0; j <= polynomialOrder; j++)
                 {
                     denseMatrix[i + m, j] = Math.Pow(i, j);
                 }

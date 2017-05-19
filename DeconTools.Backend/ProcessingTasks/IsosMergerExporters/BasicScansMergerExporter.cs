@@ -43,7 +43,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
         private string buildHeader()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append("scan_num");
             sb.Append(delimiter);
@@ -70,8 +70,8 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
             Check.Require(resultList != null, "Scans merger failed. ResultCollection is null");
             Check.Require(resultList.ScanResultList != null && resultList.ScanResultList.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");
 
-            StringBuilder sb = new StringBuilder();
-            ScanResult scanresult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
+            var sb = new StringBuilder();
+            var scanresult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
 
             sb.Append(getScanNumber(scanresult.ScanSet.PrimaryScanNumber));
             sb.Append(delimiter);

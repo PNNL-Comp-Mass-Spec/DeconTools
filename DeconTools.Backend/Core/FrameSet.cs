@@ -39,7 +39,7 @@ namespace DeconTools.Backend.Core
             this.primaryFrame = primaryFrame;
             this.IndexValues = new List<int>();
 
-            foreach (int indexItem in indexArray)
+            foreach (var indexItem in indexArray)
             {
                 this.IndexValues.Add(indexItem);
             }
@@ -53,7 +53,7 @@ namespace DeconTools.Backend.Core
             Check.Require(lowerFrame <= upperFrame, "Lower frame number must be less than or equal to the frame scan number");
             this.IndexValues = new List<int>();
 
-            for (int i = lowerFrame; i <= upperFrame; i++)
+            for (var i = lowerFrame; i <= upperFrame; i++)
             {
                 this.IndexValues.Add(i);
             }
@@ -103,9 +103,9 @@ namespace DeconTools.Backend.Core
 
         internal virtual int getLowestFrameNumber()
         {
-            int lowVal = int.MaxValue;
+            var lowVal = int.MaxValue;
 
-            for (int i = 0; i < IndexValues.Count; i++)
+            for (var i = 0; i < IndexValues.Count; i++)
             {
                 if (IndexValues[i] < lowVal) lowVal = indexValues[i];
 
@@ -115,8 +115,8 @@ namespace DeconTools.Backend.Core
 
         internal int getHighestFrameNumber()
         {
-            int highVal = -1;
-            for (int i = 0; i < IndexValues.Count; i++)
+            var highVal = -1;
+            for (var i = 0; i < IndexValues.Count; i++)
             {
                 if (IndexValues[i] > highVal) highVal = indexValues[i];
             }
@@ -133,7 +133,7 @@ namespace DeconTools.Backend.Core
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var item in IndexValues)
             {
                 sb.Append(item);

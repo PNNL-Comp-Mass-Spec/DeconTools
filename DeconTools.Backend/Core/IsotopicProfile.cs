@@ -114,14 +114,14 @@ namespace DeconTools.Backend.Core
 
         public double GetMZofMostAbundantPeak()
         {
-            MSPeak mostIntensePeak = getMostIntensePeak();
+            var mostIntensePeak = getMostIntensePeak();
             if (mostIntensePeak == null) return -1;
             return mostIntensePeak.XValue;
         }
 
         public double GetFWHM()
         {
-            MSPeak mostIntensePeak = getMostIntensePeak();
+            var mostIntensePeak = getMostIntensePeak();
             if (mostIntensePeak == null)
             {
                 return -1;
@@ -134,10 +134,10 @@ namespace DeconTools.Backend.Core
         {
             if (_peaklist == null || _peaklist.Count == 0) return -1;
 
-            int indexOfMaxPeak = -1;
+            var indexOfMaxPeak = -1;
             float maxIntensity = 0;
 
-            for (int i = 0; i < _peaklist.Count; i++)
+            for (var i = 0; i < _peaklist.Count; i++)
             {
                 if (_peaklist[i].Height > maxIntensity)
                 {
@@ -153,8 +153,8 @@ namespace DeconTools.Backend.Core
         {
             if (_peaklist == null || _peaklist.Count == 0) return null;
 
-            MSPeak maxPeak = new MSPeak();
-            foreach (MSPeak peak in _peaklist)
+            var maxPeak = new MSPeak();
+            foreach (var peak in _peaklist)
             {
                 if (peak.Height >= maxPeak.Height)
                 {
@@ -168,7 +168,7 @@ namespace DeconTools.Backend.Core
 
         public double GetSignalToNoise()
         {
-            MSPeak mostIntensePeak = getMostIntensePeak();
+            var mostIntensePeak = getMostIntensePeak();
             if (mostIntensePeak == null)
             {
                 return -1;
@@ -222,7 +222,7 @@ namespace DeconTools.Backend.Core
         {
             if (_peaklist == null) return -1;
             double summedIntensity = 0;
-            foreach (MSPeak peak in _peaklist)
+            foreach (var peak in _peaklist)
             {
                 summedIntensity += (double)peak.Height;
 
@@ -233,7 +233,7 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile CloneIsotopicProfile()
         {
-            IsotopicProfile iso = new IsotopicProfile();
+            var iso = new IsotopicProfile();
             iso.AverageMass = AverageMass;
             iso.ChargeState = ChargeState;
             iso.IntensityMostAbundant = IntensityMostAbundant;
@@ -249,7 +249,7 @@ namespace DeconTools.Backend.Core
 
             foreach (var mspeak in Peaklist)
             {
-                MSPeak peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SignalToNoise);
+                var peak = new MSPeak(mspeak.XValue, mspeak.Height, mspeak.Width, mspeak.SignalToNoise);
                 iso.Peaklist.Add(peak);
             }
 
@@ -266,13 +266,13 @@ namespace DeconTools.Backend.Core
             Check.Require(this != null && Peaklist != null &&
                           Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
 
-            XYData xydata = new XYData();
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
+            var xydata = new XYData();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
-            for (int i = 0; i < Peaklist.Count; i++)
+            for (var i = 0; i < Peaklist.Count; i++)
             {
-                XYData tempXYData = Peaklist[i].GetTheorPeakData(fwhm);
+                var tempXYData = Peaklist[i].GetTheorPeakData(fwhm);
                 xvals.AddRange(tempXYData.Xvalues);
                 yvals.AddRange(tempXYData.Yvalues);
 

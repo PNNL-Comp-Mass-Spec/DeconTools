@@ -50,15 +50,15 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, String.Format("{0} failed. Connection to database is not open", this.Name));
 
 
-            using (DbTransaction myTransaction = m_dbConnection.BeginTransaction())
+            using (var myTransaction = m_dbConnection.BeginTransaction())
             {
-                using (DbCommand myCommand = m_dbConnection.CreateCommand())
+                using (var myCommand = m_dbConnection.CreateCommand())
                 {
                     createParameterList(myCommand);
 
                     myCommand.CommandText = createInsertionCommandString();
                     Console.WriteLine(myCommand.CommandText);
-                    foreach (T result in resultList)
+                    foreach (var result in resultList)
                     {
                         AddResults(myCommand.Parameters, result);
                         myCommand.ExecuteNonQuery();
@@ -96,7 +96,7 @@ namespace DeconTools.Backend.FileIO
 
         protected virtual void buildTable()
         {
-            DbCommand command = m_dbConnection.CreateCommand();
+            var command = m_dbConnection.CreateCommand();
             command.CommandText = buildCreateTableSQLiteCommandString();
             command.ExecuteNonQuery();
         }
@@ -108,12 +108,12 @@ namespace DeconTools.Backend.FileIO
         {
             //for example..."INSERT INTO T_MSFeatures ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[flag]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("INSERT INTO ");
             sb.Append(this.TableName);
             sb.Append(" (");
 
-            foreach (Field fieldItem in FieldList)
+            foreach (var fieldItem in FieldList)
             {
                 sb.Append(fieldItem.Name);
                 if (fieldItem == FieldList[FieldList.Count - 1])  //if last one...
@@ -127,7 +127,7 @@ namespace DeconTools.Backend.FileIO
             }
 
             sb.Append("VALUES(");
-            foreach (Field fieldItem in FieldList)
+            foreach (var fieldItem in FieldList)
             {
                 sb.Append("?");
                 if (fieldItem == FieldList[FieldList.Count - 1])  //if last one...
@@ -150,12 +150,12 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(!string.IsNullOrEmpty(this.TableName), String.Format("SQLite TableName has not been declared within {0}.", this.Name));
             Check.Assert(this.FieldList != null && this.FieldList.Count > 0, String.Format("SQLite Table fields have not been declared within {0}.", this.Name));
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
             sb.Append(this.TableName);
             sb.Append(" (");
 
-            foreach (Field fieldItem in FieldList)
+            foreach (var fieldItem in FieldList)
             {
                 sb.Append(fieldItem.ToString());
                 if (fieldItem == FieldList[FieldList.Count - 1])  //if last one...
@@ -177,7 +177,7 @@ namespace DeconTools.Backend.FileIO
         {
             foreach (var field in FieldList)
             {
-                DbParameter param = cmd.CreateParameter();
+                var param = cmd.CreateParameter();
                 cmd.Parameters.Add(param);
             }
 

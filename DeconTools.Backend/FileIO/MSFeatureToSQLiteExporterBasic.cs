@@ -74,7 +74,7 @@ namespace DeconTools.Backend.FileIO
         
         protected override List<Field> CreateFieldList()
         {
-            List<Field> fieldList = new List<Field>();
+            var fieldList = new List<Field>();
             fieldList.Add(new Field("feature_id", "INTEGER Primary key"));
             fieldList.Add(new Field("scan_num", "INTEGER"));
             fieldList.Add(new Field("charge", "BYTE"));

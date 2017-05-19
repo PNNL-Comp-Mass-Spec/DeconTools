@@ -84,16 +84,16 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public override void Add(T value)
             {
-                AVLTreeNode<T> node = new AVLTreeNode<T>(value);
+                var node = new AVLTreeNode<T>(value);
 
                 base.Add(node); //add normally
 
                 //Balance every node going up, starting with the parent
-                AVLTreeNode<T> parentNode = node.Parent;
+                var parentNode = node.Parent;
 
                 while (parentNode != null)
                 {
-                    int balance = this.getBalance(parentNode);
+                    var balance = this.getBalance(parentNode);
                     if (Math.Abs(balance) == 2) //-2 or 2 is unbalanced
                     {
                         //Rebalance tree
@@ -109,7 +109,7 @@ namespace DeconTools.Backend.Data.Structures
             /// </summary>
             public override bool Remove(T value)
             {
-                AVLTreeNode<T> valueNode = this.Find(value);
+                var valueNode = this.Find(value);
                 return this.Remove(valueNode);
             }
 
@@ -127,10 +127,10 @@ namespace DeconTools.Backend.Data.Structures
             public bool Remove(AVLTreeNode<T> valueNode)
             {
                 //Save reference to the parent node to be removed
-                AVLTreeNode<T> parentNode = valueNode.Parent;
+                var parentNode = valueNode.Parent;
 
                 //Remove the node as usual
-                bool removed = base.Remove(valueNode);
+                var removed = base.Remove(valueNode);
 
                 if (!removed)
                     return false; //removing failed, no need to rebalance
@@ -139,7 +139,7 @@ namespace DeconTools.Backend.Data.Structures
                     //Balance going up the tree
                     while (parentNode != null)
                     {
-                        int balance = this.getBalance(parentNode);
+                        var balance = this.getBalance(parentNode);
 
                         if (Math.Abs(balance) == 1) //1, -1
                             break; //height hasn't changed, can stop
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.Data.Structures
             {
                 if (balance == 2) //right outweighs
                 {
-                    int rightBalance = getBalance(node.RightChild);
+                    var rightBalance = getBalance(node.RightChild);
 
                     if (rightBalance == 1 || rightBalance == 0)
                     {
@@ -181,7 +181,7 @@ namespace DeconTools.Backend.Data.Structures
                 }
                 else if (balance == -2) //left outweighs
                 {
-                    int leftBalance = getBalance(node.LeftChild);
+                    var leftBalance = getBalance(node.LeftChild);
                     if (leftBalance == 1)
                     {
                         //Left rotation needed
@@ -215,15 +215,15 @@ namespace DeconTools.Backend.Data.Structures
                 if (root == null)
                     return;
 
-                AVLTreeNode<T> pivot = root.RightChild;
+                var pivot = root.RightChild;
 
                 if (pivot == null)
                     return;
                 else
                 {
-                    AVLTreeNode<T> rootParent = root.Parent; //original parent of root node
-                    bool isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
-                    bool makeTreeRoot = root.Tree.Root == root; //whether the root was the root of the entire tree
+                    var rootParent = root.Parent; //original parent of root node
+                    var isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
+                    var makeTreeRoot = root.Tree.Root == root; //whether the root was the root of the entire tree
 
                     //Rotate
                     root.RightChild = pivot.LeftChild;
@@ -257,15 +257,15 @@ namespace DeconTools.Backend.Data.Structures
                 if (root == null)
                     return;
 
-                AVLTreeNode<T> pivot = root.LeftChild;
+                var pivot = root.LeftChild;
 
                 if (pivot == null)
                     return;
                 else
                 {
-                    AVLTreeNode<T> rootParent = root.Parent; //original parent of root node
-                    bool isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
-                    bool makeTreeRoot = root.Tree.Root == root; //whether the root was the root of the entire tree
+                    var rootParent = root.Parent; //original parent of root node
+                    var isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
+                    var makeTreeRoot = root.Tree.Root == root; //whether the root was the root of the entire tree
 
                     //Rotate
                     root.LeftChild = pivot.RightChild;

@@ -49,7 +49,7 @@ namespace DeconTools.Backend.Parameters
 
         public void LoadFromOldDeconToolsParameterFile(string xmlFilename)
         {
-            XDocument xdocument = XDocument.Load(xmlFilename);
+            var xdocument = XDocument.Load(xmlFilename);
             var parameterBaseElement = xdocument.Element("parameters");
 
             if (parameterBaseElement == null)

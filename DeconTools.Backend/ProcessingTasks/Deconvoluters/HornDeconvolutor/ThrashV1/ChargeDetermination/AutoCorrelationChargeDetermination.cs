@@ -134,7 +134,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var charges = GenerateChargeStates(minMz, maxMz, minN, autocorrelationScores, MaxCharge, bestAcScore);
 
             // Get the final CS value to be returned
-            int returnChargeStateVal = -1;
+            var returnChargeStateVal = -1;
             // TODO: PattersonChargeStateCalculator really doesn't match the following code.
             var fwhm = peak.FWHM; // Store a copy of the FWHM to avoid modifying the actual value
             if (fwhm > 0.1)
@@ -219,7 +219,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 if (i < 2)
                     continue;
-                bool goingUp = autocorrelationScores[i] > autocorrelationScores[i - 1];
+                var goingUp = autocorrelationScores[i] > autocorrelationScores[i - 1];
 
                 if (wasGoingUp && !goingUp)
                 {

@@ -64,10 +64,10 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            int totScans = GetNumMSScans();
+            var totScans = GetNumMSScans();
 
-            double[] xvals = new double[0];
-            double[] yvals = new double[0];
+            var xvals = new double[0];
+            var yvals = new double[0];
 
             if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
@@ -79,7 +79,7 @@ namespace DeconTools.Backend.Runs
                 //this.rawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
             }
 
-            XYData xydata=new XYData();
+            var xydata=new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
             return xydata;

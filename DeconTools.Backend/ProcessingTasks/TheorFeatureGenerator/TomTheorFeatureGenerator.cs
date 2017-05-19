@@ -69,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
-            IsotopicProfile iso = new IsotopicProfile();
+            var iso = new IsotopicProfile();
 
             try
             {
@@ -100,9 +100,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
           
 
-            for (int i = 0; i < iso.Peaklist.Count; i++)
+            for (var i = 0; i < iso.Peaklist.Count; i++)
             {
-                double calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / mt.ChargeState;
+                var calcMZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / mt.ChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
 

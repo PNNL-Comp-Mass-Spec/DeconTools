@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             _theorLabeledProfiles = new List<IsotopicProfile>();
 
-            IterativeTFFParameters tffParameters = new IterativeTFFParameters();
+            var tffParameters = new IterativeTFFParameters();
             tffParameters.ToleranceInPPM = 30;
             _iterativeTff = new IterativeTFF(tffParameters);
 
@@ -82,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public IsotopicProfileComponent FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
         {
             IsotopicProfile bestIso = null;
-            double bestFitScore = 1.0;
+            var bestFitScore = 1.0;
             double bestLabelAmount = -1;
 
             Check.Require(target != null, "Target is null. You need a valid target in order to quantify it.");
@@ -92,7 +92,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _theorLabeledProfiles.Clear();
             FitScoreData.Clear();
 
-            for (double labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount = labelAmount + StepAmountForIterator)
+            for (var labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount = labelAmount + StepAmountForIterator)
             {
                 var theorIso = _isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula,
                                                                                      _elementLabeled, _lightIsotope,
@@ -101,13 +101,13 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 
 
-                int indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
-                int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(massSpectrumPeakList,
+                var indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
+                var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(massSpectrumPeakList,
                     theorIso.getMostIntensePeak().XValue, 0, massSpectrumPeakList.Count - 1, 0.1);
 
                 double fitScore;
 
-                List<Peak> obsPeakListForFitter = new List<Peak>();
+                var obsPeakListForFitter = new List<Peak>();
                 if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
                 {
                     fitScore = 1;
@@ -116,7 +116,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 {
                     //double mzOffset = massSpectrumPeakList[indexOfCorrespondingObservedPeak].XValue - theorIso.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-                    double minIntensityForFitting = 0.02;
+                    var minIntensityForFitting = 0.02;
                     var theorPeakListForFitter = new List<Peak>(theorIso.Peaklist).Where(p => p.Height > minIntensityForFitting).ToList();
 
                     obsPeakListForFitter = FilterPeaksBasedOnBasePeakList(theorPeakListForFitter, massSpectrumPeakList);
@@ -198,7 +198,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             foreach (var peak in basePeaklist)
             {
-                double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
+                var mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
                 var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(inputPeakList, peak.XValue,
                                                                        mzTolerance);
 
@@ -227,10 +227,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             var mzInitial = theorPeakListForFitter.Last().XValue;
 
-            for (int i = 0; i < numRightZeroPads; i++)
+            for (var i = 0; i < numRightZeroPads; i++)
             {
 
-                double mzForAddedPeak = mzInitial + (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                var mzForAddedPeak = mzInitial + (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 theorPeakListForFitter.Add(new Peak(mzForAddedPeak, 0, 0));
             }
 
@@ -240,9 +240,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             var mzInitial = theorPeakListForFitter.First().XValue;
 
-            for (int i = 0; i < numLeftZeroPads; i++)
+            for (var i = 0; i < numLeftZeroPads; i++)
             {
-                double mzForAddedPeak = mzInitial - (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                var mzForAddedPeak = mzInitial - (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 theorPeakListForFitter.Insert(0, new Peak(mzForAddedPeak, 0, 0));
             }
         }
@@ -254,7 +254,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             foreach (var peak in theorPeakList)
             {
-                double mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
+                var mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
                 var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(massSpectrumPeakList, peak.XValue,
                                                                        mzTolerance);
                 if (foundPeaks.Any())

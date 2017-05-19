@@ -59,7 +59,7 @@ namespace DeconTools.Backend.Data
             sw.WriteLine(headerLine);
 
             ResultCollection results;
-            IsosResultDeSerializer deserializer = new IsosResultDeSerializer(binaryResultCollectionFilename);
+            var deserializer = new IsosResultDeSerializer(binaryResultCollectionFilename);
 
             do
             {
@@ -99,10 +99,10 @@ namespace DeconTools.Backend.Data
             if (results == null) return;
             StringBuilder sb;
 
-            foreach (IsosResult result in results.ResultList)
+            foreach (var result in results.ResultList)
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
-                UIMFIsosResult uimfResult = (UIMFIsosResult)result;
+                var uimfResult = (UIMFIsosResult)result;
 
                 sb = new StringBuilder();
                 sb.Append(uimfResult.ScanSet.PrimaryScanNumber);

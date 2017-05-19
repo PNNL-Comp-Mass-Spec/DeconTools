@@ -74,7 +74,7 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         private string buildConnectionString()
         {
-            System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
             builder.UserID = DbUsername;
             builder.DataSource = DbServerName;
             builder.Password = DbUserPassWord;
@@ -87,30 +87,30 @@ namespace DeconTools.Backend.FileIO
         public override DeconTools.Backend.Core.TargetCollection Import()
         {
 
-            DeconTools.Backend.Core.TargetCollection targetCollection = new TargetCollection();
+            var targetCollection = new TargetCollection();
             targetCollection.TargetList.Clear();
 
             GetMassTagDataFromDB(targetCollection, MassTagsToBeRetrieved);
 
             GetModDataFromDB(targetCollection, MassTagsToBeRetrieved);
 
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
 
-            List<TargetBase> troubleSomePeptides = new List<TargetBase>();
+            var troubleSomePeptides = new List<TargetBase>();
 
 
             foreach (PeptideTarget peptide in targetCollection.TargetList)
             {
-                string baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
+                var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
 
                 if (peptide.ContainsMods)
                 {
-                    PeptideTarget peptide1 = peptide;
+                    var peptide1 = peptide;
                     var mods = (from n in _massTagModData where n.Item1 == peptide1.ID select n);
 
                     foreach (var tuple in mods)
                     {
-                        string modString = tuple.Item4;
+                        var modString = tuple.Item4;
 
                         try
                         {
@@ -163,16 +163,16 @@ namespace DeconTools.Backend.FileIO
             }
             else
             {
-                List<TargetBase> chargeStateTargets = new List<TargetBase>();
+                var chargeStateTargets = new List<TargetBase>();
 
                 foreach (var targetBase in targetCollection.TargetList)
                 {
-                    int minCharge = 1;
-                    int maxCharge = 100;
+                    var minCharge = 1;
+                    var maxCharge = 100;
 
-                    for (int charge = minCharge; charge <= maxCharge; charge++)
+                    for (var charge = minCharge; charge <= maxCharge; charge++)
                     {
-                        double mz = targetBase.MonoIsotopicMass / charge + DeconTools.Backend.Globals.PROTON_MASS;
+                        var mz = targetBase.MonoIsotopicMass / charge + DeconTools.Backend.Globals.PROTON_MASS;
 
                         if (mz < MaxMZForChargeStateRange)
                         {
@@ -208,10 +208,10 @@ namespace DeconTools.Backend.FileIO
 
         private void CalculateEmpiricalFormulas(TargetCollection data)
         {
-            PeptideUtils peptideUtils = new PeptideUtils();
+            var peptideUtils = new PeptideUtils();
             foreach (PeptideTarget peptide in data.TargetList)
             {
-                string baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
+                var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
 
                 if (peptide.ContainsMods)
                 {
@@ -232,7 +232,7 @@ namespace DeconTools.Backend.FileIO
         private void GetModDataFromDB(TargetCollection data, List<long> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            string queryString = createQueryString(this.ImporterMode, massTagsToBeRetrivedList);
+            var queryString = createQueryString(this.ImporterMode, massTagsToBeRetrivedList);
             //Console.WriteLine(queryString);
 
             var modContainingPeptides = (from n in data.TargetList where n.ModCount > 0 select n).ToList();
@@ -246,19 +246,19 @@ namespace DeconTools.Backend.FileIO
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                using (DbCommand command = cnn.CreateCommand())
+                using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = getModDataQueryString(modContainingPeptides.Select(p => p.ID).Distinct());
 
                     command.CommandTimeout = 60;
-                    DbDataReader reader = command.ExecuteReader();
+                    var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        int mtid = 0;
-                        string modName = "";
-                        int modPosition = 0;
-                        string empiricalFormula = "";
+                        var mtid = 0;
+                        var modName = "";
+                        var modPosition = 0;
+                        var empiricalFormula = "";
 
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
                             mtid = Convert.ToInt32(reader["Mass_Tag_ID"]);
@@ -306,7 +306,7 @@ namespace DeconTools.Backend.FileIO
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
 
-            int currentListPos = 0;
+            var currentListPos = 0;
             
 
             using (var cnn = fact.CreateConnection())
@@ -314,26 +314,26 @@ namespace DeconTools.Backend.FileIO
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
-                int progressCounter = 0;
+                var progressCounter = 0;
                 while (currentListPos < massTagsToBeRetrivedList.Count )
                 {
-                    List<long> nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
+                    var nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
                     currentListPos += (ChunkSize-1);
 
-                    string queryString = createQueryString(this.ImporterMode,nextGroupOfMassTagIDs);
+                    var queryString = createQueryString(this.ImporterMode,nextGroupOfMassTagIDs);
                     //Console.WriteLine(queryString);
 
                     
-                    using (DbCommand command = cnn.CreateCommand())
+                    using (var command = cnn.CreateCommand())
                     {
                         command.CommandText = queryString;
                         command.CommandTimeout = 120;
-                        DbDataReader reader = command.ExecuteReader();
+                        var reader = command.ExecuteReader();
 
                         
                         while (reader.Read())
                         {
-                            PeptideTarget massTag = new PeptideTarget();
+                            var massTag = new PeptideTarget();
 
                             progressCounter++;
 
@@ -409,7 +409,7 @@ namespace DeconTools.Backend.FileIO
 
         private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode, List<long> massTagsToBeRetrieved)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(@"SELECT * FROM ( SELECT Mass_Tag_ID,
               Monoisotopic_Mass,
               Peptide,
@@ -461,7 +461,7 @@ namespace DeconTools.Backend.FileIO
                     Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
 
-                    for (int i = 0; i < massTagsToBeRetrieved.Count; i++)
+                    for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
                     {
                         sb.Append(massTagsToBeRetrieved[i]);    //Appends the mass_tag_id
 

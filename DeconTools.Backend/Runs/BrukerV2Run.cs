@@ -49,7 +49,7 @@ namespace DeconTools.Backend.Runs
             m_serFileInfo = findSerFile();
             m_fidFileInfo = findFIDFile();
 
-            string filePathForDeconEngine = "";
+            var filePathForDeconEngine = "";
 
             if (m_serFileInfo == null && m_fidFileInfo == null)
             {
@@ -117,7 +117,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findFIDFile()
         {
-            string[] fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (fidFiles.Length == 1)
             {
-                FileInfo fidFileInfo = new FileInfo(fidFiles[0]);
+                var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
             else
@@ -136,14 +136,14 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            string[] dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
                 return null;
             }
 
-            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (acquistionMethodFiles.Count == 0)
             {
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSerFile()
         {
-            string[] serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -171,7 +171,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (serFiles.Length == 1)
             {
-                FileInfo serFileInfo = new FileInfo(serFiles[0]);
+                var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
             else
@@ -233,10 +233,10 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            int totScans = this.GetNumMSScans();
+            var totScans = this.GetNumMSScans();
 
-            double[] xvals = new double[0];
-            double[] yvals = new double[0];
+            var xvals = new double[0];
+            var yvals = new double[0];
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
@@ -250,14 +250,14 @@ namespace DeconTools.Backend.Runs
                 this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
 
                 //
-                double[] summedYvals = new double[xvals.Length];
+                var summedYvals = new double[xvals.Length];
                 yvals.CopyTo(summedYvals, 0);
 
-                for (int i = 1; i < scanSet.IndexValues.Count; i++)
+                for (var i = 1; i < scanSet.IndexValues.Count; i++)
                 {
                     this.RawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals);
 
-                    for (int n = 0; n < xvals.Length; n++)
+                    for (var n = 0; n < xvals.Length; n++)
                     {
                         summedYvals[n] += yvals[n];
                     }
@@ -266,7 +266,7 @@ namespace DeconTools.Backend.Runs
                 yvals = summedYvals;
             }
 
-            XYData xydata=new XYData();
+            var xydata=new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
 
@@ -314,7 +314,7 @@ namespace DeconTools.Backend.Runs
         #region Private Methods
         private void applySettings()
         {
-            DeconToolsV2.CalibrationSettings deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(this.CalibrationData);
+            var deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(this.CalibrationData);
             this.RawData.SetFFTCalibrationValues(deconEngineCalibrationSettings);
         }
 
@@ -359,31 +359,31 @@ namespace DeconTools.Backend.Runs
 
         private string validateDataFolderStructureAndFindSettingsFilePath()
         {
-            string settingsFilePath = "";
+            var settingsFilePath = "";
 
-            FileInfo fi = new FileInfo(this.Filename);
-            DirectoryInfo parentDirInfo = fi.Directory;
+            var fi = new FileInfo(this.Filename);
+            var parentDirInfo = fi.Directory;
 
-            DirectoryInfo[] folderList = parentDirInfo.GetDirectories();
+            var folderList = parentDirInfo.GetDirectories();
 
             if (folderList == null || folderList.Length == 0)
             {
                 throw new System.IO.IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
             }
 
-            DirectoryInfo settingsFolder = folderList.First(p => p.Name.ToLower() == "xmass_method.m");
+            var settingsFolder = folderList.First(p => p.Name.ToLower() == "xmass_method.m");
             if (settingsFolder == null)
             {
                 throw new System.IO.IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
             }
 
-            FileInfo[] filesWithinSettingsFolder = settingsFolder.GetFiles();
+            var filesWithinSettingsFolder = settingsFolder.GetFiles();
             if (filesWithinSettingsFolder == null || filesWithinSettingsFolder.Length == 0)
             {
                 throw new System.IO.IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
             }
 
-            FileInfo settingsFile = filesWithinSettingsFolder.First(p => p.Name.ToLower() == "apexacquisition.method");
+            var settingsFile = filesWithinSettingsFolder.First(p => p.Name.ToLower() == "apexacquisition.method");
             if (settingsFile == null)
             {
                 throw new System.IO.IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
@@ -398,28 +398,28 @@ namespace DeconTools.Backend.Runs
         private string getDatasetName(string fullFolderPath)
         {
 
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.Name;
 
         }
 
         private string getDatasetfolderName(string fullFolderPath)
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(fullFolderPath);
+            var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
 
 
         public void loadSettings(string settingsFileName)
         {
-            XDocument xdoc = XDocument.Load(settingsFileName);
+            var xdoc = XDocument.Load(settingsFileName);
             var paramList = new List<brukerNameValuePair>();
 
             var paramNodes = (from node in xdoc.Element("method").Element("paramlist").Elements() select node);
 
             foreach (var node in paramNodes)
             {
-                brukerNameValuePair nameValuePair = new brukerNameValuePair();
+                var nameValuePair = new brukerNameValuePair();
                 nameValuePair.Name = getNameFromNode(node);
                 nameValuePair.Value = getValueFromNode(node);
 
@@ -454,9 +454,9 @@ namespace DeconTools.Backend.Runs
             var elementNames = (from n in node.Elements() select n.Name.LocalName);
             var attributeNames = (from n in node.Attributes() select n.Name.LocalName);
 
-            bool nameIsAnXMLElement = elementNames.Contains("name");
+            var nameIsAnXMLElement = elementNames.Contains("name");
 
-            bool nameIsAnAttribute = attributeNames.Contains("name");
+            var nameIsAnAttribute = attributeNames.Contains("name");
 
             string nameValue;
             if (nameIsAnXMLElement)
@@ -479,7 +479,7 @@ namespace DeconTools.Backend.Runs
         {
             var elementNames = (from n in node.Elements() select n.Name.LocalName);
 
-            bool isAnXMLElement = elementNames.Contains("value") || elementNames.Contains("Value");
+            var isAnXMLElement = elementNames.Contains("value") || elementNames.Contains("Value");
 
             string valueString;
             if (isAnXMLElement)

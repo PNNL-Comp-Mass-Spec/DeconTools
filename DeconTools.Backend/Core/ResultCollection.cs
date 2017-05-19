@@ -113,7 +113,7 @@ namespace DeconTools.Backend.Core
                     foreach (var grouping in mSPeakResultList.GroupBy(x => x.Scan_num))
                     {
                         // Order by m/z
-                        List<MSPeakResult> msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
+                        var msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
                         msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, msPeakResultList);
                     }
                 }
@@ -126,8 +126,8 @@ namespace DeconTools.Backend.Core
         {
             if (this.ScanResultList == null) return 0;
 
-            int totIsotopicProfiles = 0;
-            foreach (ScanResult scanResult in this.ScanResultList)
+            var totIsotopicProfiles = 0;
+            foreach (var scanResult in this.ScanResultList)
             {
                 totIsotopicProfiles += scanResult.NumIsotopicProfiles;
 
@@ -154,7 +154,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                TargetedResultBase result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+                var result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
                 CurrentTargetedResult = result;
                 return result;
             }
@@ -244,16 +244,16 @@ namespace DeconTools.Backend.Core
 
             //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
 
-            List<TargetedResultBase> resultList = this.MassTagResultList.Values.ToList();
-            HashSet<int> massTagIDs = new HashSet<int>();
-            for (int i = 0; i < resultList.Count; i++)
+            var resultList = this.MassTagResultList.Values.ToList();
+            var massTagIDs = new HashSet<int>();
+            for (var i = 0; i < resultList.Count; i++)
             {
                 massTagIDs.Add(resultList[i].Target.ID);
             }
-            List<TargetedResultBase> filteredResults = new List<TargetedResultBase>(massTagIDs.Count);
+            var filteredResults = new List<TargetedResultBase>(massTagIDs.Count);
             foreach (var mtID in massTagIDs)
             {
-                List<TargetedResultBase> tempResults = resultList.Where(p => p.Score < 0.15 && p.Target.ID == mtID).ToList();
+                var tempResults = resultList.Where(p => p.Score < 0.15 && p.Target.ID == mtID).ToList();
                 if (tempResults.Count > 0)
                 {
                     filteredResults.Add(tempResults.OrderByDescending(p => p.Score).First());
@@ -276,7 +276,7 @@ namespace DeconTools.Backend.Core
                 foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, uimfrun.CurrentScanSet.PrimaryScanNumber, 
+                    var peakResult = new MSPeakResult(PeakCounter, uimfrun.CurrentScanSet.PrimaryScanNumber, 
                         uimfrun.CurrentIMSScanSet.PrimaryScanNumber, peak);
                     this.MSPeakResultList.Add(peakResult);
                 }
@@ -286,7 +286,7 @@ namespace DeconTools.Backend.Core
                 foreach (MSPeak peak in this.Run.PeakList)
                 {
                     PeakCounter++;
-                    MSPeakResult peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
+                    var peakResult = new MSPeakResult(PeakCounter, this.Run.CurrentScanSet.PrimaryScanNumber, peak);
                     this.MSPeakResultList.Add(peakResult);
                 }
             }
@@ -308,7 +308,7 @@ namespace DeconTools.Backend.Core
                     break;
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
                     Check.Require(this.Run is UIMFRun, "Tried to create an IMS_TRADITIONAL_RESULT but the Dataset is not a UIMF file.");
-                    UIMFRun uimfRun = (UIMFRun)run;
+                    var uimfRun = (UIMFRun)run;
                     result = new UIMFIsosResult(this.Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);  
                     break;
                 case Globals.ResultType.O16O18_TRADITIONAL_RESULT:

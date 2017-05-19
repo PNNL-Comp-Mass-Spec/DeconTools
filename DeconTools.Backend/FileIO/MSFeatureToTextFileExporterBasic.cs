@@ -19,7 +19,7 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected override string buildResultOutput(IsosResult result)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(result.ScanSet.PrimaryScanNumber);
             sb.Append(Delimiter);
@@ -53,7 +53,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("scan_num");
             sb.Append(Delimiter);
             sb.Append("charge");

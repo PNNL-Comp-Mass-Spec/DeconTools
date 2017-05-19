@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Core
         {
             if (scan == -1) return AveragePpmShift;
 
-            int indexOfClosestScanVal=  MathUtils.GetClosest(ScanAndPpmShiftVals.Xvalues, scan);
+            var indexOfClosestScanVal=  MathUtils.GetClosest(ScanAndPpmShiftVals.Xvalues, scan);
             return ScanAndPpmShiftVals.Yvalues[indexOfClosestScanVal];
 
         }

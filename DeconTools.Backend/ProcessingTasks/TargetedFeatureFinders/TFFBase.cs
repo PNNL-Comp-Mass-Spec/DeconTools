@@ -48,27 +48,27 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
 
-            IsotopicProfile outFeature = new IsotopicProfile();
+            var outFeature = new IsotopicProfile();
             outFeature.ChargeState = theorFeature.ChargeState;
 
-            int indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
+            var indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
 
 
-            double toleranceInMZ = theorFeature.getMonoPeak().XValue * ToleranceInPPM / 1e6;
+            var toleranceInMZ = theorFeature.getMonoPeak().XValue * ToleranceInPPM / 1e6;
 
-            bool foundMatchingMaxPeak = false;
+            var foundMatchingMaxPeak = false;
             double massDefect = 0;   // this is the m/z diff between the max peak of theor feature and the max peak of the experimental feature
 
 
-            bool failedResult = false;
+            var failedResult = false;
 
 
-            for (int i = indexOfMaxTheorPeak; i >= 0; i--)
+            for (var i = indexOfMaxTheorPeak; i >= 0; i--)
             {
 
 
                 //find experimental peak(s) within range
-                List<Peak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
+                var peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
 
                 if (i == indexOfMaxTheorPeak)
                 {
@@ -144,9 +144,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
             //------------------------- look right -------------------------------------------
-            for (int i = indexOfMaxTheorPeak + 1; i < theorFeature.Peaklist.Count; i++)     //start one peak to the right of the max intense theor peak
+            for (var i = indexOfMaxTheorPeak + 1; i < theorFeature.Peaklist.Count; i++)     //start one peak to the right of the max intense theor peak
             {
-                List<Peak> peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
+                var peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
                 if (peaksWithinTol.Count == 0)
                 {
                     if (i == indexOfMaxTheorPeak + 1)  // first peak to the right of the max peak.  We need this one or we declare it to be a failure (= null)
@@ -192,16 +192,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private void addMassInfoToIsotopicProfile(IsotopicProfile theorFeature, IsotopicProfile outFeature)
         {
-            int indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.1);
+            var indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.1);
             outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
 
 
             double monopeakMZ = 0;
             double monoIsotopicMass = 0;
-            bool monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
+            var monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
             if (monoPeakFoundInObservedIso)
             {
-                MSPeak monoPeak = outFeature.Peaklist[outFeature.MonoIsotopicPeakIndex];
+                var monoPeak = outFeature.Peaklist[outFeature.MonoIsotopicPeakIndex];
 
                 monopeakMZ = monoPeak.XValue;
                 monoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
@@ -211,17 +211,17 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             else
             {
 
-                int indexOfMostAbundantTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
-                int indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
+                var indexOfMostAbundantTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
+                var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
 
                 if (indexOfCorrespondingObservedPeak != -1)
                 {
 
                     //double mzOffset = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
-                    int locationOfMonoPeakRelativeToTheorMaxPeak = theorFeature.MonoIsotopicPeakIndex - indexOfMostAbundantTheorPeak;
+                    var locationOfMonoPeakRelativeToTheorMaxPeak = theorFeature.MonoIsotopicPeakIndex - indexOfMostAbundantTheorPeak;
 
-                    double mzOfObservedMostAbundantPeak = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue;
+                    var mzOfObservedMostAbundantPeak = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue;
 
                     monopeakMZ = mzOfObservedMostAbundantPeak + (locationOfMonoPeakRelativeToTheorMaxPeak * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / outFeature.ChargeState);
                     monoIsotopicMass = (monopeakMZ - Globals.PROTON_MASS) * outFeature.ChargeState;
@@ -253,7 +253,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultList.CurrentTargetedResult;
+            var result = resultList.CurrentTargetedResult;
 
             IsotopicProfile iso;
 
@@ -261,7 +261,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             this.RunIsAligned = resultList.Run.MassIsAligned;
 
-            IsotopicProfile targetedIso = CreateTargetIso(resultList.Run);
+            var targetedIso = CreateTargetIso(resultList.Run);
             iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
 
 
@@ -279,7 +279,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     break;
             }
 
-            bool isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
+            var isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
                 //GORD: check this later
@@ -320,7 +320,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //adjust the target m/z based on the alignment information
             if (run.MassIsAligned)
             {
-                for (int i = 0; i < iso.Peaklist.Count; i++)
+                for (var i = 0; i < iso.Peaklist.Count; i++)
                 {
                     iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
 
@@ -350,9 +350,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             double maxIntensity = 0;
             Peak mostIntensePeak = null;
 
-            for (int i = 0; i < peaksWithinTol.Count; i++)
+            for (var i = 0; i < peaksWithinTol.Count; i++)
             {
-                float obsIntensity = peaksWithinTol[i].Height;
+                var obsIntensity = peaksWithinTol[i].Height;
                 if (obsIntensity > maxIntensity)
                 {
                     maxIntensity = obsIntensity;
@@ -370,13 +370,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private Peak findClosestToXValue(List<Peak> peaksWithinTol, double targetVal)
         {
-            double diff = double.MaxValue;
+            var diff = double.MaxValue;
             Peak closestPeak = null;
 
-            for (int i = 0; i < peaksWithinTol.Count; i++)
+            for (var i = 0; i < peaksWithinTol.Count; i++)
             {
 
-                double obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
+                var obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
 
                 if (obsDiff < diff)
                 {
@@ -393,8 +393,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
         {
             if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
-            List<float> peakListIntensities = new List<float>();
-            foreach (MSPeak peak in profile.Peaklist)
+            var peakListIntensities = new List<float>();
+            foreach (var peak in profile.Peaklist)
             {
                 peakListIntensities.Add(peak.Height);
 
@@ -403,7 +403,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
             double summedIntensities = 0;
 
-            for (int i = 0; i < peakListIntensities.Count; i++)
+            for (var i = 0; i < peakListIntensities.Count; i++)
             {
                 if (i < numPeaksUsedInAbundance)
                 {

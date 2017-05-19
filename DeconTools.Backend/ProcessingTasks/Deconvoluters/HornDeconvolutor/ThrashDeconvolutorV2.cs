@@ -78,7 +78,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                            backgroundIntensity, Parameters.MinMSFeatureToBackgroundRatio);
 
             //Create DeconTools-type results. Get the representative abundance. 
-            foreach (IsotopicProfile isotopicProfile in msFeatures)
+            foreach (var isotopicProfile in msFeatures)
             {
                 var result = resultList.CreateIsosResult();
                 result.IsotopicProfile = isotopicProfile;
@@ -111,11 +111,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             minMSFeatureToBackgroundRatio = 3)
         {
 
-            List<IsotopicProfile> isotopicProfiles = new List<IsotopicProfile>();
+            var isotopicProfiles = new List<IsotopicProfile>();
             #region Paul Addition
 
-            List<IsotopicProfile> myIsotopicProfiles = new List<IsotopicProfile>();
-            List<IsotopicProfile> otherIsotopicProfiles = new List<IsotopicProfile>();
+            var myIsotopicProfiles = new List<IsotopicProfile>();
+            var otherIsotopicProfiles = new List<IsotopicProfile>();
             #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
@@ -124,27 +124,27 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             }
 
 
-            double minMSFeatureIntensity = backgroundIntensity * minMSFeatureToBackgroundRatio;
+            var minMSFeatureIntensity = backgroundIntensity * minMSFeatureToBackgroundRatio;
 
 
-            XYData xyData = new XYData();
+            var xyData = new XYData();
             xyData.Xvalues = originalXYData.Xvalues;
             xyData.Yvalues = originalXYData.Yvalues;
 
 
-            Dictionary<Peak, bool> peaksThatWereProcessedInfo = new Dictionary<Peak, bool>();
+            var peaksThatWereProcessedInfo = new Dictionary<Peak, bool>();
 
-            List<Peak> sortedPeaklist = new List<Peak>(mspeakList).OrderByDescending(p => p.Height).ToList();
+            var sortedPeaklist = new List<Peak>(mspeakList).OrderByDescending(p => p.Height).ToList();
             var peaksAlreadyProcessed = new HashSet<Peak>();
 
 
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             var listOfMonoMZs = new SortedDictionary<int, double>();
-            int currentUniqueMSFeatureIDNum = 0;
+            var currentUniqueMSFeatureIDNum = 0;
 
 
-            int peakCounter = -1;
+            var peakCounter = -1;
             foreach (var msPeak in sortedPeaklist)
             {
 
@@ -152,7 +152,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 //{
                 //    int x = 90;
                 //}
-                int indexOfCurrentPeak = mspeakList.IndexOf(msPeak);
+                var indexOfCurrentPeak = mspeakList.IndexOf(msPeak);
 
                 if (peaksAlreadyProcessed.Contains(msPeak))
                 {
@@ -180,7 +180,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 HashSet<int> potentialChargeStatesbyPaul;
                 if (UseAutocorrelationChargeDetermination)
                 {
-                    int chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
+                    var chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
                     potentialChargeStates = new HashSet<int>();
                     potentialChargeStates.Add(chargeState);
                 }
@@ -189,23 +189,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     IqLogger.Log.Debug("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
-                    ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
+                    var chargeDecider= new ChromCorrelatingChargeDecider(_run);
                     potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
 
                     #endregion
                 }
-                string reportString201="potentialChargeStates: ";
-                foreach (int charge in potentialChargeStates)
+                var reportString201="potentialChargeStates: ";
+                foreach (var charge in potentialChargeStates)
                 {
                     reportString201+=charge + "\t";
                     
                 }
                 IqLogger.Log.Debug(reportString201 + "\n");
 
-                List<IsotopicProfile> potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
-                foreach (int potentialChargeState in potentialChargeStates)
+                var potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
+                foreach (var potentialChargeState in potentialChargeStates)
                 {
-                    double bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
+                    var bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
 
                     IsotopicProfile theorIso;
 
@@ -217,7 +217,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         msFeature.Score = bestFitVal;
                         msFeature.IntensityMostAbundant = msFeature.getMostIntensePeak().Height;
 
-                        int indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
+                        var indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
 
                         //Paul edit. "&& indexMostAbundantPeakTheor>=0"
                         if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor>=0)
@@ -231,7 +231,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         }
 
 
-                        bool msFeatureAlreadyPresentInAnotherChargeState = listOfMonoMZs.ContainsValue(msFeature.MonoPeakMZ);
+                        var msFeatureAlreadyPresentInAnotherChargeState = listOfMonoMZs.ContainsValue(msFeature.MonoPeakMZ);
 
                         if (!msFeatureAlreadyPresentInAnotherChargeState)
                         {
@@ -265,7 +265,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     stringBuilder.Append("Multiple candidates found...." + "\n");
 
-                    foreach (IsotopicProfile isotopicProfile in potentialMSFeaturesForGivenChargeState)
+                    foreach (var isotopicProfile in potentialMSFeaturesForGivenChargeState)
                     {
                         stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\t" +
                                     isotopicProfile.MonoPeakMZ.ToString("0.0000") + "\t" +
@@ -282,11 +282,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         #region Paul addition
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
                         //We need some test cases to capture this problem.                         
-   Stopwatch stopwatch = new Stopwatch();
+   var stopwatch = new Stopwatch();
 
                         if (doPaulMethod)
                         {
-                            bool peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
+                            var peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
                                                   _run.ResultCollection.MSPeakResultList.Count == 0;
                             if (peaksNotLoaded)
                             {
@@ -321,7 +321,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                             #region Paul Addition
                         }
                         //line outputs.
-                        string reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
+                        var reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
                                 "\nCHOSEN CHARGE: " + msfeature.ChargeState + "\n\n";
                         IqLogger.Log.Debug(reportString309);
 
@@ -413,7 +413,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             var basePeak = mspeakList[indexOfCurrentPeak];
             // determine max charge state possible by getting nearest candidate peak
-            for (int i = indexOfCurrentPeak - 1; i >= 0; i--)
+            for (var i = indexOfCurrentPeak - 1; i >= 0; i--)
             {
                 var comparePeak = mspeakList[i];
 
@@ -422,12 +422,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     break;
                 }
 
-                for (int j = 1; j <= maxCharge; j++)
+                for (var j = 1; j <= maxCharge; j++)
                 {
-                    double expectedMZ = basePeak.XValue - Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
+                    var expectedMZ = basePeak.XValue - Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
 
-                    double diff = Math.Abs(comparePeak.XValue - expectedMZ);
-                    double toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
+                    var diff = Math.Abs(comparePeak.XValue - expectedMZ);
+                    var toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
 
                     if (diff < toleranceInMZ)
                     {
@@ -438,7 +438,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             }
 
-            for (int i = indexOfCurrentPeak + 1; i < mspeakList.Count; i++)
+            for (var i = indexOfCurrentPeak + 1; i < mspeakList.Count; i++)
             {
                 var comparePeak = mspeakList[i];
 
@@ -447,12 +447,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     break;
                 }
 
-                for (int j = 1; j <= maxCharge; j++)
+                for (var j = 1; j <= maxCharge; j++)
                 {
-                    double expectedMZ = basePeak.XValue + Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
+                    var expectedMZ = basePeak.XValue + Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / j;
 
-                    double diff = Math.Abs(comparePeak.XValue - expectedMZ);
-                    double toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
+                    var diff = Math.Abs(comparePeak.XValue - expectedMZ);
+                    var toleranceInMZ = toleranceInPPM * expectedMZ / 1e6;
 
                     if (diff < toleranceInMZ)
                     {
@@ -480,9 +480,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         /// <param name="stopMass"></param>
         private void CreateAllTheoreticalProfilesForMassRange(int startMass = 400, int stopMass = 5000)
         {
-            for (int i = startMass; i <= stopMass; i++)
+            for (var i = startMass; i <= stopMass; i++)
             {
-                IsotopicProfile profile = _isotopicDistCalculator.GetAveraginePattern(i);
+                var profile = _isotopicDistCalculator.GetAveraginePattern(i);
 
                 _averagineProfileLookupTable.Add(i, profile);
 
@@ -500,7 +500,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         {
             var peakList = new Dictionary<int, Peak>();
 
-            for (int i = 0; i < iso.Peaklist.Count; i++)
+            for (var i = 0; i < iso.Peaklist.Count; i++)
             {
                 peakList.Add(i, iso.Peaklist[i]);
             }
@@ -534,13 +534,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private IsotopicProfile GetMSFeature(List<Peak> mspeakList, XYData xyData, int chargeState, Peak msPeak, ref double bestFitVal, out IsotopicProfile theorIso)
         {
-            double obsPeakMass = (msPeak.XValue - Globals.PROTON_MASS) * chargeState;
+            var obsPeakMass = (msPeak.XValue - Globals.PROTON_MASS) * chargeState;
             theorIso = GetTheoreticalProfile(obsPeakMass);
             theorIso.ChargeState = chargeState;
             theorIso.MostAbundantIsotopeMass = obsPeakMass;
 
             CalculateMassesForIsotopicProfile(theorIso);
-            XYData theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width, Parameters.MinIntensityForScore / 100);
+            var theorXYData = GetTheoreticalIsotopicProfileXYData(theorIso, msPeak.Width, Parameters.MinIntensityForScore / 100);
 
             //TODO: check how many theor peaks are being used in the fit score calculation. We should reduce this to a reasonable number.
             PerformIterativeFittingAndGetAlignedProfile(xyData, theorXYData, chargeState, ref theorIso, ref bestFitVal);
@@ -558,7 +558,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         public IsotopicProfile GetTheoreticalProfile(double mass)
         {
-            int massUsedForLookup = (int)Math.Round(mass, 0);
+            var massUsedForLookup = (int)Math.Round(mass, 0);
 
             if (!_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
             {
@@ -566,7 +566,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 _averagineProfileLookupTable.Add(massUsedForLookup, newtheorIso);
             }
 
-            IsotopicProfile theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
+            var theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
             return theorIso;
         }
 
@@ -580,11 +580,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         {
             if (!isotopicProfiles.Any()) return isotopicProfiles;
 
-            int lastindex = isotopicProfiles.Count - 1;
+            var lastindex = isotopicProfiles.Count - 1;
 
             var sortedIsos = isotopicProfiles.OrderBy(p => p.MonoIsotopicMass).ThenBy(p => p.ChargeState).ThenBy(p => p.Score).ToList();
 
-            for (int i = lastindex; i > 0; i--)
+            for (var i = lastindex; i > 0; i--)
             {
                 if (Math.Abs(sortedIsos[i].MonoIsotopicMass - sortedIsos[i - 1].MonoIsotopicMass) < double.Epsilon && sortedIsos[i].ChargeState == sortedIsos[i - 1].ChargeState)
                 {
@@ -611,7 +611,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
             int ionCountUsed;
-            double fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
+            var fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
 
             if (fitval < bestFitVal)
             {
@@ -621,9 +621,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             double bestOffsetForTheorProfile = 0;
 
             // move fitting window to the left
-            for (int numPeaksToTheLeft = 1; numPeaksToTheLeft < 10; numPeaksToTheLeft++)
+            for (var numPeaksToTheLeft = 1; numPeaksToTheLeft < 10; numPeaksToTheLeft++)
             {
-                double offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                var offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 //negative offset
 
                 fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
@@ -638,9 +638,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             }
 
             //move fitting window to the right
-            for (int numPeaksToTheRight = 1; numPeaksToTheRight < 10; numPeaksToTheRight++)
+            for (var numPeaksToTheRight = 1; numPeaksToTheRight < 10; numPeaksToTheRight++)
             {
-                double offsetForTheorProfile = numPeaksToTheRight * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
+                var offsetForTheorProfile = numPeaksToTheRight * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
 
 
 
@@ -674,17 +674,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             //start with most abundant peak.
 
-            int indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
+            var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
 
-            double mzMostAbundantPeak = iso.MostAbundantIsotopeMass / iso.ChargeState + Globals.PROTON_MASS;
+            var mzMostAbundantPeak = iso.MostAbundantIsotopeMass / iso.ChargeState + Globals.PROTON_MASS;
 
             //start with most abundant peak and move to the LEFT and calculate m/z values
-            for (int peakIndex = indexMostAbundantPeak; peakIndex >= 0; peakIndex--)
+            for (var peakIndex = indexMostAbundantPeak; peakIndex >= 0; peakIndex--)
             {
 
-                int numPeaksToLeft = indexMostAbundantPeak - peakIndex;
-                double calcMZ = mzMostAbundantPeak - numPeaksToLeft * 1.00235 / iso.ChargeState;
+                var numPeaksToLeft = indexMostAbundantPeak - peakIndex;
+                var calcMZ = mzMostAbundantPeak - numPeaksToLeft * 1.00235 / iso.ChargeState;
 
                 iso.Peaklist[peakIndex].XValue = calcMZ;
 
@@ -692,11 +692,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
             //move to the RIGHT and calculate m/z values
-            for (int peakIndex = indexMostAbundantPeak + 1; peakIndex < iso.Peaklist.Count; peakIndex++)
+            for (var peakIndex = indexMostAbundantPeak + 1; peakIndex < iso.Peaklist.Count; peakIndex++)
             {
 
-                int numPeaksToRight = peakIndex - indexMostAbundantPeak;
-                double calcMZ = mzMostAbundantPeak + numPeaksToRight * 1.00235 / iso.ChargeState;
+                var numPeaksToRight = peakIndex - indexMostAbundantPeak;
+                var calcMZ = mzMostAbundantPeak + numPeaksToRight * 1.00235 / iso.ChargeState;
 
                 iso.Peaklist[peakIndex].XValue = calcMZ;
 
@@ -718,9 +718,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             var yvals = new List<double>();
 
 
-            List<MSPeak> mspeaks = new List<MSPeak>(iso.Peaklist);
+            var mspeaks = new List<MSPeak>(iso.Peaklist);
 
-            MSPeak zeroIntensityPeakToTheLeft = new MSPeak();
+            var zeroIntensityPeakToTheLeft = new MSPeak();
             zeroIntensityPeakToTheLeft.XValue = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
             zeroIntensityPeakToTheLeft.Height = 0;
 
@@ -729,12 +729,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             //TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData()
 
 
-            for (int peakIndex = 0; peakIndex < mspeaks.Count; peakIndex++)
+            for (var peakIndex = 0; peakIndex < mspeaks.Count; peakIndex++)
             {
-                MSPeak msPeak = mspeaks[peakIndex];
-                XYData tempXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(msPeak, fwhm, NumPointsPerTheorPeak);
+                var msPeak = mspeaks[peakIndex];
+                var tempXYData = TheorXYDataCalculationUtilities.GetTheorPeakData(msPeak, fwhm, NumPointsPerTheorPeak);
 
-                for (int j = 0; j < tempXYData.Xvalues.Length; j++)
+                for (var j = 0; j < tempXYData.Xvalues.Length; j++)
                 {
                     //First peak is a zero-intensity peak. We always want to add that one. For the others,
                     //add intensity points that are above a certain intensity

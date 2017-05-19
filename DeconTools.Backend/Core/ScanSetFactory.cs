@@ -33,11 +33,11 @@ namespace DeconTools.Backend.Core
 
         public ScanSet CreateScanSet(Run run, int primaryScan, int startScan, int stopScan)
         {
-            int currentLevel = run.GetMSLevel(primaryScan);
+            var currentLevel = run.GetMSLevel(primaryScan);
 
             var scansToSum = new List<int>();
 
-            for (int i = startScan; i <= stopScan; i++)
+            for (var i = startScan; i <= stopScan; i++)
             {
                 if (run.GetMSLevel(i) == currentLevel)
                 {
@@ -54,12 +54,12 @@ namespace DeconTools.Backend.Core
 
         public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
         {
-            int currentLevel = run.GetMSLevel(scan);
+            var currentLevel = run.GetMSLevel(scan);
 
-            List<int> lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
-            List<int> upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            var lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            var upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
 
-            List<int> scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
+            var scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
             scansToSum.Add(scan);
             scansToSum.AddRange(upperScansToSum);
             //scansToSum.Sort();
@@ -78,11 +78,11 @@ namespace DeconTools.Backend.Core
 
             if (scanset.IndexValues.Count > maxScansAllowed)
             {
-                int numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed + 1) / 2;
+                var numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed + 1) / 2;
 
-                List<int> newScans = new List<int>();
+                var newScans = new List<int>();
 
-                for (int i = numScansToBeRemoved; i < (scanset.IndexValues.Count - numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
+                for (var i = numScansToBeRemoved; i < (scanset.IndexValues.Count - numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
                 {
                     newScans.Add(scanset.IndexValues[i]);
 
@@ -107,10 +107,10 @@ namespace DeconTools.Backend.Core
 
         private List<int> getLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
         {
-            int currentScan = startingScan - 1;
-            List<int> lowerScans = new List<int>();
+            var currentScan = startingScan - 1;
+            var lowerScans = new List<int>();
 
-            int scansCounter = 0;
+            var scansCounter = 0;
             while (currentScan >= 1 && numLowerScansToGet > scansCounter)
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
@@ -127,11 +127,11 @@ namespace DeconTools.Backend.Core
         }
         private List<int> getUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
         {
-            int currentScan = startingScan + 1;
-            List<int> scans = new List<int>();
+            var currentScan = startingScan + 1;
+            var scans = new List<int>();
 
-            int scansCounter = 0;
-            int scanUppperLimit = run.GetNumMSScans();
+            var scansCounter = 0;
+            var scanUppperLimit = run.GetNumMSScans();
 
             while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
             {

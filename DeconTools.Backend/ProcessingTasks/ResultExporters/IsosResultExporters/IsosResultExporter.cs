@@ -49,15 +49,15 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
                 var lcScanSet = resultList.Run.ScanSetCollection.ScanSetList;
 
-                int lastFrameNum = lcScanSet[lcScanSet.Count - 1].PrimaryScanNumber;
-                int lastIMSScanNum = uimfRun.IMSScanSetCollection.ScanSetList[uimfRun.IMSScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+                var lastFrameNum = lcScanSet[lcScanSet.Count - 1].PrimaryScanNumber;
+                var lastIMSScanNum = uimfRun.IMSScanSetCollection.ScanSetList[uimfRun.IMSScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
                 isLastScan = uimfRun.CurrentScanSet.PrimaryScanNumber == lastFrameNum &&
                     uimfRun.CurrentIMSScanSet.PrimaryScanNumber == lastIMSScanNum;
             }
             else
             {
-                int lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
+                var lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
                 isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
 

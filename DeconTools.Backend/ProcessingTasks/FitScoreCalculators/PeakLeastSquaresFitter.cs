@@ -44,8 +44,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
            
             //first gather all the intensities from theor and obs peaks
 
-            double maxTheorIntensity = double.MinValue;
-            for (int i = 0; i < theorPeakList.Count; i++)
+            var maxTheorIntensity = double.MinValue;
+            for (var i = 0; i < theorPeakList.Count; i++)
             {
                 if (theorPeakList[i].Height > maxTheorIntensity)
                 {
@@ -53,11 +53,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 }
             }
 
-            for (int index = 0; index < theorPeakList.Count; index++)
+            for (var index = 0; index < theorPeakList.Count; index++)
             {
                 var peak = theorPeakList[index];
 
-                bool overrideMinIntensityCutoff = index < numPeaksToTheLeftForScoring;
+                var overrideMinIntensityCutoff = index < numPeaksToTheLeftForScoring;
 
                 if (peak.Height > minIntensityForScore || overrideMinIntensityCutoff)
                 {
@@ -66,7 +66,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     Utilities.IqLogger.IqLogger.SamPayneLog("Theoretical Peak Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue);
 
                     //find peak in obs data
-                    double mzTolerance = toleranceInPPM*peak.XValue/1e6;
+                    var mzTolerance = toleranceInPPM*peak.XValue/1e6;
                     var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
 
                     double obsIntensity;
@@ -102,14 +102,14 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 return 1.0;
             }
 
-            double maxObs = observedIntensitiesUsedInCalc.Max();
+            var maxObs = observedIntensitiesUsedInCalc.Max();
             if (Math.Abs(maxObs - 0) < float.Epsilon) maxObs = double.PositiveInfinity;
             Utilities.IqLogger.IqLogger.SamPayneLog("Max Observed Intensity: " + maxObs);
 
-            List<double> normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
+            var normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
 
-            double maxTheor = theorIntensitiesUsedInCalc.Max();
-            List<double> normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
+            var maxTheor = theorIntensitiesUsedInCalc.Max();
+            var normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
             Utilities.IqLogger.IqLogger.SamPayneLog("Max Theoretical Intensity: " + maxTheor + Environment.NewLine);
 
 
@@ -127,7 +127,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             double sumSquareOfDiffs = 0;
             double sumSquareOfTheor = 0;
-            for (int i = 0; i < normalizedTheo.Count; i++)
+            for (var i = 0; i < normalizedTheo.Count; i++)
             {
                 var diff = normalizedObs[i] - normalizedTheo[i];
 
@@ -140,7 +140,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             ionCountUsed = normalizedTheo.Count;
 
-            double fitScore = sumSquareOfDiffs / sumSquareOfTheor;
+            var fitScore = sumSquareOfDiffs / sumSquareOfTheor;
             if (double.IsNaN(fitScore) || fitScore > 1)
             {
                 fitScore = 1;

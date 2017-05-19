@@ -56,7 +56,7 @@ namespace DeconTools.Backend.FileIO
                 throw new System.IO.IOException("There was a problem importing from the file.");
             }
 
-            using (StreamReader sr = reader)
+            using (var sr = reader)
             {
                 if (sr.Peek() == -1)
                 {
@@ -65,10 +65,10 @@ namespace DeconTools.Backend.FileIO
 
                 }
 
-                string headerLine = sr.ReadLine();
+                var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                bool areHeadersValid = ValidateHeaders();
+                var areHeadersValid = ValidateHeaders();
 
                 if (!areHeadersValid)
                 {
@@ -77,13 +77,13 @@ namespace DeconTools.Backend.FileIO
 
 
                 string line;
-                int lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
                 while (sr.Peek() > -1)
                 {
                     line = sr.ReadLine();
-                    List<string> processedData = ProcessLine(line);
+                    var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.FileIO
                         throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
-                    MassAlignmentDataItem massAndTimePPMCorrItem = ConvertTextToDataObject(processedData);
+                    var massAndTimePPMCorrItem = ConvertTextToDataObject(processedData);
                     _massAndTimeCorrectionData.Add(massAndTimePPMCorrItem);
                     lineCounter++;
                 }
@@ -102,12 +102,12 @@ namespace DeconTools.Backend.FileIO
 
         private MassAlignmentDataItem ConvertTextToDataObject(List<string> processedData)
         {
-            float mz = ParseFloatField(LookupData(processedData, mzHeaders));
-            float mzPPMCorrection = ParseFloatField(LookupData(processedData, mzPPMCorrectionHeaders));
-            float scan = ParseFloatField(LookupData(processedData, scanHeaders));
-            float scanPPMCorrection = ParseFloatField(LookupData(processedData, scanPPMCorrectionHeaders));
+            var mz = ParseFloatField(LookupData(processedData, mzHeaders));
+            var mzPPMCorrection = ParseFloatField(LookupData(processedData, mzPPMCorrectionHeaders));
+            var scan = ParseFloatField(LookupData(processedData, scanHeaders));
+            var scanPPMCorrection = ParseFloatField(LookupData(processedData, scanPPMCorrectionHeaders));
 
-            MassAlignmentDataItem item = new MassAlignmentDataItem(mz, mzPPMCorrection, scan, scanPPMCorrection);
+            var item = new MassAlignmentDataItem(mz, mzPPMCorrection, scan, scanPPMCorrection);
             return item;
         }
 

@@ -72,7 +72,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
         {
-            List<Field> fieldList = new List<Field>();
+            var fieldList = new List<Field>();
 
             fieldList.Add(new Field("feature_id", "INTEGER Primary key"));
             fieldList.Add(new Field("frame_num", "INTEGER"));

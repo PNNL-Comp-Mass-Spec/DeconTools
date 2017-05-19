@@ -95,10 +95,10 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            int totScans = this.GetNumMSScans();
+            var totScans = this.GetNumMSScans();
 
-            double[] xvals = new double[0];
-            double[] yvals = new double[0];
+            var xvals = new double[0];
+            var yvals = new double[0];
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
@@ -112,14 +112,14 @@ namespace DeconTools.Backend.Runs
                 this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
 
                 //
-                double[] summedYvals = new double[xvals.Length];
+                var summedYvals = new double[xvals.Length];
                 yvals.CopyTo(summedYvals, 0);
 
-                for (int i = 1; i < scanSet.IndexValues.Count; i++)
+                for (var i = 1; i < scanSet.IndexValues.Count; i++)
                 {
                     this.rawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals);
 
-                    for (int n = 0; n < xvals.Length; n++)
+                    for (var n = 0; n < xvals.Length; n++)
                     {
                         summedYvals[n] += yvals[n];
                     }
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.Runs
                 yvals = summedYvals;
             }
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = xvals;
             xydata.Yvalues = yvals;
             return xydata;
@@ -175,9 +175,9 @@ namespace DeconTools.Backend.Runs
             //check if the datasetPath is the same as the FileName, if so, change the Filename, or else DeconEngine will fail
             if (this.DataSetPath == this.Filename)
             {
-                DirectoryInfo dirinfo = new DirectoryInfo(this.Filename);
+                var dirinfo = new DirectoryInfo(this.Filename);
 
-                DirectoryInfo[] childFolders = dirinfo.GetDirectories();
+                var childFolders = dirinfo.GetDirectories();
 
                 DirectoryInfo serFolder = null;
 
@@ -202,16 +202,16 @@ namespace DeconTools.Backend.Runs
 
         private string getDataSetFolderName(string p)
         {
-            string trimmedPath = p.TrimEnd('\\');
+            var trimmedPath = p.TrimEnd('\\');
 
             if (trimmedPath.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
-                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                var dirinfo = new DirectoryInfo(p);
                 return dirinfo.Parent.FullName;
             }
             else if (trimmedPath.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
             {
-                DirectoryInfo dirinfo = new DirectoryInfo(p);
+                var dirinfo = new DirectoryInfo(p);
                 return dirinfo.Parent.FullName;
             }
             else
@@ -226,24 +226,24 @@ namespace DeconTools.Backend.Runs
         {
 
 
-            string trimmedfilename = filename.TrimEnd(new char[] { '\\' });
+            var trimmedfilename = filename.TrimEnd(new char[] { '\\' });
 
             if (trimmedfilename.EndsWith("0.ser", StringComparison.OrdinalIgnoreCase))
             {
-                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                var dirinfo = new DirectoryInfo(trimmedfilename);
                 trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
             }
 
 
             if (trimmedfilename.EndsWith("acqus", StringComparison.OrdinalIgnoreCase))
             {
-                DirectoryInfo dirinfo = new DirectoryInfo(trimmedfilename);
+                var dirinfo = new DirectoryInfo(trimmedfilename);
                 trimmedfilename = dirinfo.Parent.FullName.TrimEnd('\\');
             }
 
 
 
-            int pathIndex = trimmedfilename.LastIndexOf('\\');
+            var pathIndex = trimmedfilename.LastIndexOf('\\');
             if (pathIndex == -1) return String.Empty;
 
 

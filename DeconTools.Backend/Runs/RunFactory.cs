@@ -16,9 +16,9 @@ namespace DeconTools.Backend.Runs
         {
             Run run;
 
-            string fullfileName = getFullPath(filename);
+            var fullfileName = getFullPath(filename);
 
-            string extension = Path.GetExtension(fullfileName).ToLower();
+            var extension = Path.GetExtension(fullfileName).ToLower();
             if (extension.Equals(".mzxml") || extension.Equals(".mzml") || extension.Equals(".mz5"))
             {
                 pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
@@ -26,17 +26,17 @@ namespace DeconTools.Backend.Runs
 
 #if !Disable_DeconToolsV2
             //check for ICR2LS type extension....
-            Match match = Regex.Match(extension, @"\.\d\d\d\d\d$");
+            var match = Regex.Match(extension, @"\.\d\d\d\d\d$");
             if (match.Success)
             {
                 return new ICR2LSRun(fullfileName);
             }
 #endif
 
-            string fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
+            var fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
 
-            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
-            bool isFolder = dirInfo.Exists;
+            var dirInfo = new DirectoryInfo(fullfileName);
+            var isFolder = dirInfo.Exists;
 
             if (isFolder)
             {
@@ -109,7 +109,7 @@ namespace DeconTools.Backend.Runs
                 pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
             }
 
-            string fileName = getFullPath(f);
+            var fileName = getFullPath(f);
 
             switch (filetype)
             {
@@ -176,10 +176,10 @@ namespace DeconTools.Backend.Runs
 
         private string getFullPath(string filename)
         {
-            string fullfileName = filename.Trim(new char[] { ' ', '"' });
+            var fullfileName = filename.Trim(new char[] { ' ', '"' });
 
-            DirectoryInfo dirInfo = new DirectoryInfo(fullfileName);
-            FileInfo fileInfo = new FileInfo(fullfileName);
+            var dirInfo = new DirectoryInfo(fullfileName);
+            var fileInfo = new FileInfo(fullfileName);
 
             if (!dirInfo.Exists && !fileInfo.Exists)
             {
@@ -205,15 +205,15 @@ namespace DeconTools.Backend.Runs
             Run run = null;
 
 
-            FileInfo serFileInfo = findSerFile(folderName);
-            FileInfo fidFileInfo = findFIDFile(folderName);
+            var serFileInfo = findSerFile(folderName);
+            var fidFileInfo = findFIDFile(folderName);
             
 
-            FileInfo apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
-            List<FileInfo> acqusFileInfos = findAcqusFile(folderName);
+            var apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
+            var acqusFileInfos = findAcqusFile(folderName);
 
-            bool hasSerOrFid = (serFileInfo != null || fidFileInfo != null);
-            bool hasSettingFile = (apexAcquisitionMethodFileInfo != null || acqusFileInfos != null);
+            var hasSerOrFid = (serFileInfo != null || fidFileInfo != null);
+            var hasSettingFile = (apexAcquisitionMethodFileInfo != null || acqusFileInfos != null);
 
             if (hasSerOrFid && hasSettingFile)
             {
@@ -221,8 +221,8 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                FileInfo analysisBafFileInfo = findAnalysisBafFile(folderName);
-                FileInfo maxAcquisitionFileInfo = findMaxAcquisitionMethodFile(folderName);
+                var analysisBafFileInfo = findAnalysisBafFile(folderName);
+                var maxAcquisitionFileInfo = findMaxAcquisitionMethodFile(folderName);
 
                 if (analysisBafFileInfo!=null && maxAcquisitionFileInfo!=null)
                 {
@@ -243,14 +243,14 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findMaxAcquisitionMethodFile(string folderName)
         {
-            string[] dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
                 return null;
             }
 
-            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("Acquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("Acquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (acquistionMethodFiles.Count == 0)
             {
@@ -268,7 +268,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findAnalysisBafFile(string folderName)
         {
-            string[] analysisBafFiles = Directory.GetFiles(folderName, "analysis.baf", SearchOption.TopDirectoryOnly);
+            var analysisBafFiles = Directory.GetFiles(folderName, "analysis.baf", SearchOption.TopDirectoryOnly);
 
             if (analysisBafFiles.Length == 0)
             {
@@ -276,7 +276,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (analysisBafFiles.Length == 1)
             {
-                FileInfo fileInfo = new FileInfo(analysisBafFiles[0]);
+                var fileInfo = new FileInfo(analysisBafFiles[0]);
                 return fileInfo;
             }
             else
@@ -287,7 +287,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findFIDFile(string folderName)
         {
-            string[] fidFiles = Directory.GetFiles(folderName, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(folderName, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -295,7 +295,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (fidFiles.Length == 1)
             {
-                FileInfo fidFileInfo = new FileInfo(fidFiles[0]);
+                var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
             else
@@ -306,9 +306,9 @@ namespace DeconTools.Backend.Runs
 
         private List<FileInfo> findAcqusFile(string folderName)
         {
-            string[] acqusFiles = Directory.GetFiles(folderName, "acqus", SearchOption.AllDirectories);
+            var acqusFiles = Directory.GetFiles(folderName, "acqus", SearchOption.AllDirectories);
 
-            List<FileInfo> acqusFileInfoList = new List<FileInfo>();
+            var acqusFileInfoList = new List<FileInfo>();
 
             if (acqusFiles == null || acqusFiles.Length == 0)
             {
@@ -318,7 +318,7 @@ namespace DeconTools.Backend.Runs
             {
                 foreach (var file in acqusFiles)
                 {
-                    FileInfo fi = new FileInfo(file);
+                    var fi = new FileInfo(file);
                     acqusFileInfoList.Add(fi);
                 }
             }
@@ -329,14 +329,14 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findAcquisitionMethodFile(string folderName)
         {
-            string[] dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
                 return null;
             }
 
-            List<string> acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (acquistionMethodFiles.Count == 0)
             {
@@ -355,7 +355,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSerFile(string folderName)
         {
-            string[] serFiles = Directory.GetFiles(folderName, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(folderName, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -363,7 +363,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (serFiles.Length == 1)
             {
-                FileInfo serFileInfo = new FileInfo(serFiles[0]);
+                var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
             else
@@ -371,7 +371,7 @@ namespace DeconTools.Backend.Runs
 
                 foreach (var file in serFiles)
                 {
-                    FileInfo serFileInfo = new FileInfo(file);
+                    var serFileInfo = new FileInfo(file);
                     if (serFileInfo.Directory.Name.ToLower() == "0.ser")
                     {
                         return serFileInfo;

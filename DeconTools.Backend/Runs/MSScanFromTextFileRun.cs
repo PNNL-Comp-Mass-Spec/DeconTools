@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Runs
             this.Filename = Path.GetFullPath(fileName);
 
             this.MSFileType = Globals.MSFileType.Ascii;
-            string baseFilename = Path.GetFileName(this.Filename);
+            var baseFilename = Path.GetFileName(this.Filename);
             this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             this.DataSetPath = Path.GetDirectoryName(this.Filename);
             this.XYData = new XYData();
@@ -50,22 +50,22 @@ namespace DeconTools.Backend.Runs
         {
             if (m_delimiter == 0) m_delimiter = determineDelimiter(filename);
 
-            System.IO.StreamReader sr = new System.IO.StreamReader(filename);
+            var sr = new System.IO.StreamReader(filename);
 
-            List<double> xvals = new List<double>();
-            List<double> yvals = new List<double>();
+            var xvals = new List<double>();
+            var yvals = new List<double>();
 
-            bool foundStartOfXYData = false;
+            var foundStartOfXYData = false;
 
             while (sr.Peek() != -1)
             {
-                string line = sr.ReadLine();
+                var line = sr.ReadLine();
 
 
 
                 if (!foundStartOfXYData)     //contains header, but haven't found start of numerical data
                 {
-                    Match match = Regex.Match(line, @"^\d+");
+                    var match = Regex.Match(line, @"^\d+");
                     if (match.Success)
                     {
                         foundStartOfXYData = true;     //found a line that starts with numbers. 
@@ -85,12 +85,12 @@ namespace DeconTools.Backend.Runs
                     break;
                 }
 
-                List<string> vals = processLine(line);
+                var vals = processLine(line);
 
 
                 if (m_yvalsColumnIndex >= vals.Count)
                 {
-                    using (StreamReader tempSr = sr)
+                    using (var tempSr = sr)
                     {
                         try
                         {
@@ -110,7 +110,7 @@ namespace DeconTools.Backend.Runs
                 yvals.Add(parseDoubleField(vals[m_yvalsColumnIndex]));
             }
 
-            XYData xydata = new XYData();
+            var xydata = new XYData();
             xydata.Xvalues = xvals.ToArray();
             xydata.Yvalues = yvals.ToArray();
 
@@ -138,10 +138,10 @@ namespace DeconTools.Backend.Runs
         private List<string> processLine(string inputLine)
         {
             char[] splitter = { m_delimiter };
-            List<string> returnedList = new List<string>();
+            var returnedList = new List<string>();
 
-            string[] arr = inputLine.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string str in arr)
+            var arr = inputLine.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var str in arr)
             {
                 returnedList.Add(str);
             }
@@ -151,26 +151,26 @@ namespace DeconTools.Backend.Runs
         private char determineDelimiter(string fileName)
         {
 
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(fileName))
+            using (var sr = new System.IO.StreamReader(fileName))
             {
 
-                List<double> xvals = new List<double>();
-                List<double> yvals = new List<double>();
+                var xvals = new List<double>();
+                var yvals = new List<double>();
 
-                bool foundStartOfXYData = false;
+                var foundStartOfXYData = false;
 
-                int counter = 0;
+                var counter = 0;
 
-                Dictionary<char, int> delimiterCount = new Dictionary<char, int>();
+                var delimiterCount = new Dictionary<char, int>();
 
                 while (sr.Peek() != -1 && counter < 100)
                 {
-                    string line = sr.ReadLine();
+                    var line = sr.ReadLine();
                     counter++;
 
                     if (!foundStartOfXYData)
                     {
-                        Match match = Regex.Match(line, @"^\d+");
+                        var match = Regex.Match(line, @"^\d+");
                         if (match.Success)
                         {
                             foundStartOfXYData = true;     //found a line that starts with numbers. 
@@ -184,15 +184,15 @@ namespace DeconTools.Backend.Runs
                     }
 
                     //we found the start of the data, now figure out the delimiter
-                    Match linematch = Regex.Match(line, @"^[0-9\.-]+(?<delim>\D+)[0-9\.-]+");
+                    var linematch = Regex.Match(line, @"^[0-9\.-]+(?<delim>\D+)[0-9\.-]+");
 
                     if (linematch.Success)
                     {
-                        string matchedString = linematch.Groups["delim"].Value;
+                        var matchedString = linematch.Groups["delim"].Value;
 
                         if (matchedString.Length > 0)
                         {
-                            char delim = matchedString[0];
+                            var delim = matchedString[0];
 
                             if (!delimiterCount.ContainsKey(delim))
                             {
@@ -209,8 +209,8 @@ namespace DeconTools.Backend.Runs
 
                 }
 
-                char mostCommonDelimiter = '\t';
-                int delimCounter = 0;
+                var mostCommonDelimiter = '\t';
+                var delimCounter = 0;
 
                 foreach (var item in delimiterCount)
                 {
@@ -240,7 +240,7 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
         {
-            XYData xydata = new XYData();
+            var xydata = new XYData();
 
             try
             {

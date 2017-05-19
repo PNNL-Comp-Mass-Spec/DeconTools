@@ -101,12 +101,12 @@ namespace DeconTools.Backend.Workflows
 
             PrepareOutputFolder(_workflowParameters.OutputFolder);
 
-            string outputPeaksFilePath = getOutputPeaksFilename();
+            var outputPeaksFilePath = getOutputPeaksFilename();
 
             peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFilePath);
 
-            int numTotalScans = LcScanSetCollection.ScanSetList.Count;
-            int scanCounter = 0;
+            var numTotalScans = LcScanSetCollection.ScanSetList.Count;
+            var scanCounter = 0;
 
             using (var sw = new StreamWriter(new FileStream(outputPeaksFilePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
@@ -116,8 +116,8 @@ namespace DeconTools.Backend.Workflows
                 {
                     var uimfrun = Run as UIMFRun;
 
-                    int numTotalFrames = LcScanSetCollection.ScanSetList.Count;
-                    int frameCounter = 0;
+                    var numTotalFrames = LcScanSetCollection.ScanSetList.Count;
+                    var frameCounter = 0;
 
                     foreach (var frameSet in LcScanSetCollection.ScanSetList)
                     {
@@ -136,7 +136,7 @@ namespace DeconTools.Backend.Workflows
 
                         if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
                         {
-                            double percentProgress = frameCounter * 100 / (double)numTotalFrames;
+                            var percentProgress = frameCounter * 100 / (double)numTotalFrames;
                             reportProgress(percentProgress);
                         }
 
@@ -175,7 +175,7 @@ namespace DeconTools.Backend.Workflows
 
                         if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
                         {
-                            double percentProgress = scanCounter * 100 / (double)numTotalScans;
+                            var percentProgress = scanCounter * 100 / (double)numTotalScans;
                             reportProgress(percentProgress);
                         }
 
@@ -192,7 +192,7 @@ namespace DeconTools.Backend.Workflows
 
         private ScanSetCollection CreateLcScanSetCollection()
         {
-            ScanSetCollection scanSetCollection = new ScanSetCollection();
+            var scanSetCollection = new ScanSetCollection();
             scanSetCollection.Create(Run, WorkflowParameters.LCScanMin, WorkflowParameters.LCScanMax,
                                      WorkflowParameters.Num_LC_TimePointsSummed, 1, WorkflowParameters.ProcessMSMS);
 
@@ -298,12 +298,12 @@ namespace DeconTools.Backend.Workflows
                                                                        _workflowParameters.ProcessMSMS);
 
 
-                    bool sumAllIMSScans = (_workflowParameters.NumIMSScansSummed == -1 ||
+                    var sumAllIMSScans = (_workflowParameters.NumIMSScansSummed == -1 ||
                                         _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan);
 
                     if (sumAllIMSScans)
                     {
-                        int primaryIMSScan = Run.MinLCScan;
+                        var primaryIMSScan = Run.MinLCScan;
 
                         uimfRun.IMSScanSetCollection.ScanSetList.Clear();
                         var imsScanset = new IMSScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);

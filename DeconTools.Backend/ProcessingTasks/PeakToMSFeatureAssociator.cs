@@ -36,16 +36,16 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 foreach (var peak in msfeature.IsotopicProfile.Peaklist)
                 {
-                    double targetMZ = peak.XValue;
+                    var targetMZ = peak.XValue;
                     toleranceInPPM = 0.1d;
 
-                    double toleranceInMZ = toleranceInPPM * targetMZ / 1e6;
+                    var toleranceInMZ = toleranceInPPM * targetMZ / 1e6;
 
                     //binary search to find peak
-                    int indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultList.Run.PeakList, targetMZ, 0, resultList.Run.PeakList.Count - 1, toleranceInMZ);
+                    var indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultList.Run.PeakList, targetMZ, 0, resultList.Run.PeakList.Count - 1, toleranceInMZ);
                     if (indexOfPeak != -1)
                     {
-                        Peak foundpeak = resultList.Run.PeakList[indexOfPeak];
+                        var foundpeak = resultList.Run.PeakList[indexOfPeak];
 
                         if (foundpeak is MSPeak)
                         {

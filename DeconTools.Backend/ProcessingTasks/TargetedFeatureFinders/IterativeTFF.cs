@@ -80,14 +80,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
             Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
 
-            TargetedResultBase result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
-            IsotopicProfile theorFeature = CreateTargetIso(resultList.Run);
+            var theorFeature = CreateTargetIso(resultList.Run);
             resultList.IsosResultBin.Clear();
 
 
             var msPeakList = new List<Peak>();
-            IsotopicProfile iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, out msPeakList);
+            var iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, out msPeakList);
             
             result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here. 
 
@@ -95,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             AddFeatureToResult(result, iso);
 
 
-            bool isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
+            var isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
                 //GORD: check here if there is an error in IQ intensities
@@ -115,8 +115,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
         {
             if (profile.Peaklist == null || profile.Peaklist.Count < numPeaksUsedInAbundance) return defaultVal;
-            List<float> peakListIntensities = new List<float>();
-            foreach (MSPeak peak in profile.Peaklist)
+            var peakListIntensities = new List<float>();
+            foreach (var peak in profile.Peaklist)
             {
                 peakListIntensities.Add(peak.Height);
 
@@ -125,7 +125,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
             double summedIntensities = 0;
 
-            for (int i = 0; i < peakListIntensities.Count; i++)
+            for (var i = 0; i < peakListIntensities.Count; i++)
             {
                 if (i < numPeaksUsedInAbundance)
                 {
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso)
         {
 
-            List<Peak> peakList = new List<Peak>();
+            var peakList = new List<Peak>();
             return IterativelyFindMSFeature(massSpecXyData, theorIso, out peakList);
 
         }
@@ -169,7 +169,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
             peakList = new List<Peak>();
             
-            for (double d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
+            for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
                 this.MSPeakDetector.PeakToBackgroundRatio = d;
 

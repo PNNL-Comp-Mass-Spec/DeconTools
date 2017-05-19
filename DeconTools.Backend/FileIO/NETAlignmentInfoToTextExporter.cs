@@ -27,14 +27,14 @@ namespace DeconTools.Backend.FileIO
         public void ExportAlignmentInfo(clsAlignmentFunction alignmentInfo)
         {
             Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (StreamWriter writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(this.FileName))
             {
 
 
 
                 //StringBuilder sb = new StringBuilder();
 
-                for (int i = 0; i < alignmentInfo.marrNETFncTimeInput.Length; i++)
+                for (var i = 0; i < alignmentInfo.marrNETFncTimeInput.Length; i++)
                 {
 
                     writer.WriteLine(alignmentInfo.marrNETFncTimeInput[i] + "\t" + alignmentInfo.marrNETFncNETOutput[i]);
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildResultOutput(KeyValuePair<int, float> scanNetPair)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(scanNetPair.Key);
             sb.Append(Delimiter);
             sb.Append(scanNetPair.Value);

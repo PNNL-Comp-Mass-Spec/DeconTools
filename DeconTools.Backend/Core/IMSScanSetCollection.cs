@@ -28,19 +28,19 @@ namespace DeconTools.Backend.Core
         {
                ScanSetList = new List<ScanSet>();
 
-               int minPossibleScanIndex = GetMinScan(run);
-               int maxPossibleScanIndex = GetMaxScan(run);
+               var minPossibleScanIndex = GetMinScan(run);
+               var maxPossibleScanIndex = GetMaxScan(run);
 
 
-               int numLowerScansToGet = (numScansSummed - 1) / 2;
-               int numUpperScansToGet = (numScansSummed - 1) / 2;
+               var numLowerScansToGet = (numScansSummed - 1) / 2;
+               var numUpperScansToGet = (numScansSummed - 1) / 2;
 
-               for (int currentScan = scanStart; currentScan <= scanStop; currentScan++)
+               for (var currentScan = scanStart; currentScan <= scanStop; currentScan++)
                {
                    //add lower scans
-                   int lowerScan = currentScan - 1;
-                   List<int> scansToSum = new List<int>();
-                   int scansCounter = 0;
+                   var lowerScan = currentScan - 1;
+                   var scansToSum = new List<int>();
+                   var scansCounter = 0;
                    while (lowerScan >= minPossibleScanIndex && numLowerScansToGet > scansCounter)
                    {
                        scansToSum.Insert(0, lowerScan);
@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Core
 
                    //add upper scans
                    scansCounter = 0;
-                   int upperScan = currentScan + 1;
+                   var upperScan = currentScan + 1;
                    while (upperScan <= maxPossibleScanIndex && numUpperScansToGet > scansCounter)
                    {
                        scansToSum.Add(upperScan);

@@ -39,7 +39,7 @@ namespace DeconTools.Backend.Workflows
 
         protected override void CreateTargetMassSpectra()
         {
-            UIMFRun uimfRun = (UIMFRun)Run;
+            var uimfRun = (UIMFRun)Run;
             uimfRun.ScanSetCollection = new ScanSetCollection();
             uimfRun.IMSScanSetCollection = new IMSScanSetCollection();
 
@@ -67,11 +67,11 @@ namespace DeconTools.Backend.Workflows
 
 
 
-            bool sumAllIMSScansInAFrame = (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra);
+            var sumAllIMSScansInAFrame = (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra);
             if (sumAllIMSScansInAFrame)
             {
 
-                int centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
+                var centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
 
                 uimfRun.IMSScanSetCollection.ScanSetList.Clear();
                 var scanset = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
@@ -80,7 +80,7 @@ namespace DeconTools.Backend.Workflows
             else
             {
 
-                bool sumAcrossIMSScans = NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossIms;
+                var sumAcrossIMSScans = NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossIms;
 
                 int numIMSScanToSum;
                 if (sumAcrossIMSScans)
@@ -133,28 +133,28 @@ namespace DeconTools.Backend.Workflows
 
         public override void ReportProgress()
         {
-            UIMFRun uimfRun = (UIMFRun)Run;
+            var uimfRun = (UIMFRun)Run;
             if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            ScanBasedProgressInfo userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
-            int framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
+            var userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+            var framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
 
-            int scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
-            int scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
+            var scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
+            var scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
 
-            int frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
+            var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
 
 
 
-            double percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal) * 100;
+            var percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal) * 100;
             userstate.PercentDone = (float)percentDone;
 
 
-            string logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
-            int numScansBetweenProgress = 1;
+            var numScansBetweenProgress = 1;
 
-            bool imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
+            var imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
             if (imsScanIsLastInFrame)
             {
                 Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
