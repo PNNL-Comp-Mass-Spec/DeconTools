@@ -67,12 +67,12 @@ namespace TestConsole1
 
         public void SpeedTest1()
         {
-            string fileName = @"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            Run run = new RunFactory().CreateRun(fileName);
+            var fileName = @"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            double peakBr = 0.5;
+            var peakBr = 0.5;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -81,7 +81,7 @@ namespace TestConsole1
 
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
 
-            Stopwatch watch = new Stopwatch();
+            var watch = new Stopwatch();
             watch.Start();
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
@@ -138,11 +138,11 @@ namespace TestConsole1
 
             var timeVals = new List<long>();
 
-            int numIterations = 200;
-            Stopwatch sw = new Stopwatch();
+            var numIterations = 200;
+            var sw = new Stopwatch();
             sw.Start();
 
-            for (int i = 0; i < numIterations; i++)
+            for (var i = 0; i < numIterations; i++)
             {
                 iso = mercury.GetIsotopePattern("C66H114N20O21S2", 2);
             }

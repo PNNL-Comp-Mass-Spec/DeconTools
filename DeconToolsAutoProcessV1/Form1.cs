@@ -89,7 +89,7 @@ namespace DeconToolsAutoProcessV1
 
         private string getParameterFileName()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
+            var ofd = new OpenFileDialog();
             ofd.Multiselect = false;
             ofd.Title = "Step 2:  Select Parameter File";
 
@@ -108,7 +108,7 @@ namespace DeconToolsAutoProcessV1
 
         private string[] getInputFilenames()
         {
-            MultiFileSelectionForm frm = new MultiFileSelectionForm(this._startingFolderPath, "*.*");
+            var frm = new MultiFileSelectionForm(this._startingFolderPath, "*.*");
             frm.Text = "Select files for processing...";
             frm.StartPosition = FormStartPosition.Manual;
             frm.Location = this.Location;
@@ -231,11 +231,11 @@ namespace DeconToolsAutoProcessV1
             this.progressBar1.Value = e.ProgressPercentage;
 
 
-            ScanBasedProgressInfo currentState = (ScanBasedProgressInfo)(e.UserState);
+            var currentState = (ScanBasedProgressInfo)(e.UserState);
 
             this.txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
 
-            int numIsotopicProfilesFoundInScan = currentState.CurrentRun.ResultCollection.IsosResultBin.Count;
+            var numIsotopicProfilesFoundInScan = currentState.CurrentRun.ResultCollection.IsosResultBin.Count;
             this.progressBar2.Value = setProgress2Value(numIsotopicProfilesFoundInScan);
 
 
@@ -294,7 +294,7 @@ namespace DeconToolsAutoProcessV1
                 }
                 else
                 {
-                    foreach (string file in _inputFileList)
+                    foreach (var file in _inputFileList)
                     {
                         _currentFile = file;
                         var workflow = ScanBasedWorkflow.CreateWorkflow(file, _parameterFileName, _outputPath, bw);
@@ -309,7 +309,7 @@ namespace DeconToolsAutoProcessV1
             {
                // bool isFile =   RunUtilities.RunIsFileOrFolder(_currentFile);
 
-                string errorMessage =
+                var errorMessage =
                     "A 'COMException' has occurred. This can happen when the vendor library has not been installed.\n\n";
 
                 errorMessage +=
@@ -391,7 +391,7 @@ namespace DeconToolsAutoProcessV1
 
         private void btnSetOutputPath_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 this.txtOutputPath.Text = fbd.SelectedPath;
@@ -409,18 +409,18 @@ namespace DeconToolsAutoProcessV1
 
         private void txtOutputPath_DragDrop(object sender, DragEventArgs e)
         {
-            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            var droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            string firstFile = droppedFiles.First();
+            var firstFile = droppedFiles.First();
 
 
-            bool isFile = !Directory.Exists(firstFile) &&
+            var isFile = !Directory.Exists(firstFile) &&
                          File.Exists(firstFile);
 
 
 
 
-            bool isDir = (File.GetAttributes(firstFile) & FileAttributes.Directory)
+            var isDir = (File.GetAttributes(firstFile) & FileAttributes.Directory)
                  == FileAttributes.Directory;
 
 
