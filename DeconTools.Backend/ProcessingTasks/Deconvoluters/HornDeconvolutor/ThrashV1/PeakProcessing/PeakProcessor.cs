@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing
 {
@@ -396,6 +397,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             var index = PeakIndex.GetNearest(mzList, peak, 0);
             return PeakStatistician.FindSignalToNoise(intensityList[index], intensityList, index);
+        }
+
+        public double GetBackgroundIntensity(List<double> intensities)
+        {
+            var thres = intensities.Average();
+            return intensities.Where(x => x > 0 && x <= 5 * thres).Average();
         }
     }
 }

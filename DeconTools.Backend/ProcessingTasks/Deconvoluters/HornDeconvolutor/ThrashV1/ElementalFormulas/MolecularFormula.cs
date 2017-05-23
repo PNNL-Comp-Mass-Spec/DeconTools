@@ -218,5 +218,18 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             AverageMass += avgMass;
             TotalAtomCount += cnt.NumCopies;
         }
+
+        public static MolecularFormula ConvertFromString(string formulaStr, ElementIsotopes elements = null)
+        {
+            var formula = new MolecularFormula();
+            if (elements == null)
+            {
+                elements = new ElementIsotopes();
+            }
+
+            formula.SetMolecularFormula(formulaStr, elements);
+
+            return formula;
+        }
     }
 }
