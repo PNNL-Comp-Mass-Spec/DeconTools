@@ -74,7 +74,7 @@ namespace DeconTools.Backend.Runs
             {
 
                 //TODO:  Old DeconTools reference!!
-                this.RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals, false);
             }
             else
             {

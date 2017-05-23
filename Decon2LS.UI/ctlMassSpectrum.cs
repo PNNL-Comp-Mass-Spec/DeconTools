@@ -290,7 +290,7 @@ namespace Decon2LS
 //					(DeconToolsV2.HornTransform.clsHornTransformParameters) value.Clone() ;
                 mobjTransformParameters = value;
                 mMercuryIsotopeDistribution.ElementIsotopes = mobjTransformParameters.ElementIsotopeComposition ;
-                mobjAveragine.ElementIsotopeComposition = mobjTransformParameters.ElementIsotopeComposition ;
+                mobjAveragine.SetElementalIsotopeComposition(mobjTransformParameters.ElementIsotopeComposition);
                 updateFormTransformParameters();
             }
         }
@@ -437,7 +437,7 @@ namespace Decon2LS
             var xvals = XYValueConverter.ConvertFloatsToDoubles(mz_values);
             var yvals = XYValueConverter.ConvertFloatsToDoubles(intensity_values);
 
-            mobjRawData.GetSpectrum(scan_num, ref xvals, ref yvals) ;
+            mobjRawData.GetSpectrum(scan_num, ref xvals, ref yvals, false) ;
 
             XYValueConverter.ConvertDoublesToFloats(xvals,ref mz_values);
             XYValueConverter.ConvertDoublesToFloats(yvals,ref intensity_values);
@@ -1908,7 +1908,7 @@ namespace Decon2LS
                 var xvals = XYValueConverter.ConvertFloatsToDoubles(marr_current_mzs);
                 var yvals = XYValueConverter.ConvertFloatsToDoubles(marr_current_intensities);
 
-                mobjRawData.GetSpectrum(mint_spectrum_num, ref xvals, ref yvals) ;
+                mobjRawData.GetSpectrum(mint_spectrum_num, ref xvals, ref yvals, false) ;
 
                 XYValueConverter.ConvertDoublesToFloats(xvals,ref marr_current_mzs);
                 XYValueConverter.ConvertDoublesToFloats(yvals,ref marr_current_intensities);

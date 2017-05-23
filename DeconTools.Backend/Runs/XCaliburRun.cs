@@ -93,7 +93,7 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
             }
             else
             {
@@ -124,7 +124,7 @@ namespace DeconTools.Backend.Runs
             var maxXLong = (long)(maxX * precision + 0.5);
             for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
             {
-                this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals, false);
 
                 for (var i = 0; i < tempXvals.Length; i++)
                 {

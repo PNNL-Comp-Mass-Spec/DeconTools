@@ -71,7 +71,7 @@ namespace DeconTools.Backend.Runs
 
             if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals);
+                RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals, false);
             }
             else
             {

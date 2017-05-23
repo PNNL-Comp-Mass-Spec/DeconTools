@@ -240,14 +240,14 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
             }
             else    // need to sum spectra
             {
                 //assume:  each scan has exactly same x values
 
                 //get first spectrum
-                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
 
                 //
                 var summedYvals = new double[xvals.Length];
@@ -255,7 +255,7 @@ namespace DeconTools.Backend.Runs
 
                 for (var i = 1; i < scanSet.IndexValues.Count; i++)
                 {
-                    this.RawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals);
+                    this.RawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals, false);
 
                     for (var n = 0; n < xvals.Length; n++)
                     {
