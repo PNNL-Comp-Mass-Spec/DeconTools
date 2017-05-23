@@ -93,6 +93,8 @@
     <Compile Include="Algorithm_tests\LabelingDistributionCalculatorTests.cs" />
     <Compile Include="Algorithm_tests\LoessTests.cs" />
     <Compile Include="Algorithm_tests\PattersonAlgorithmTests.cs" />
+    <Compile Include="DeconEngineClasses\OldDecon2LSParameters.cs" />
+    <Compile Include="DeconEngineClasses\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
     <Compile Include="Demos_basic_API_usage\DemoTests.cs" />
     <Compile Include="FileIO_Tests\DeconToolsParameterTests.cs" />

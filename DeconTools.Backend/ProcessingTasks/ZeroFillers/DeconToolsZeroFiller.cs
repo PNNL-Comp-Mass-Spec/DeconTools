@@ -7,7 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 {
     public class DeconToolsZeroFiller : ZeroFiller
     {
-
         public DeconToolsZeroFiller()
             : this(DEFAULT_POINTS_TO_ADD, DEFAULT_MAX_ZERO_FILL_DISTANCE)
         {
@@ -24,7 +23,6 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
             MaxNumPointsToAdd = maxNumPointsToAdd;
             MaxZeroFillDistance = maxZeroFillDistance;
         }
-
 
         public override XYData ZeroFill(double[] x, double[] y, int maxPointsToAdd)
         {
@@ -124,7 +122,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
                     if (currentDiff > differenceFactor * diffThreshold)
                     {
-                        // insert points. 
+                        // insert points.
                         var numPointsToAdd = ((int)(currentDiff / diffThreshold + 0.5)) - 1;
                         if (numPointsToAdd > 2 * maxPointsToAdd)
                         {
@@ -197,28 +195,6 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 throw new Exception("Exception in ZeroFill: " + ex.Message, ex);
             }
         }
-
-#if !Disable_DeconToolsV2
-        [Obsolete("Don't use this one. The other works fine")]
-        public XYData ZeroFillOld(double[] x, double[] y, int maxPointsToAdd)
-        {
-
-            var floatXVals = x.Select(p => (float)p).ToArray();
-            var floatYVals = y.Select(p => (float)p).ToArray();
-
-            DeconEngine.Utils.ZeroFillUnevenData(ref floatXVals, ref floatYVals, maxPointsToAdd);
-
-            var zeroFilledData = new XYData
-            {
-                Xvalues = floatXVals.Select(p => (double)p).ToArray(),
-                Yvalues = floatYVals.Select(p => (double)p).ToArray()
-            };
-
-            return zeroFilledData;
-
-        }
-#endif
-
     }
 }
 

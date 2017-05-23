@@ -1,19 +1,15 @@
-﻿using System;
+﻿#if !Disable_DeconToolsV2
+using System;
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-#if !Disable_DeconToolsV2
 using DeconToolsV2.Readers;
-#endif
 
 namespace DeconTools.Backend.Runs
 {
-#if !Disable_DeconToolsV2
-
     [Serializable]
     public sealed class IMFRun : DeconToolsRun
     {
-
         public IMFRun()
         {
             this.XYData = new XYData();
@@ -43,7 +39,6 @@ namespace DeconTools.Backend.Runs
             this.MaxLCScan = maxScan;
         }
 
-
         public override int GetMinPossibleLCScanNum()
         {
             return 0;
@@ -54,15 +49,12 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans() - 1;
         }
 
-
-  
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
-            
-            var totScans = this.GetNumMSScans();
 
+            var totScans = this.GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];
@@ -80,7 +72,7 @@ namespace DeconTools.Backend.Runs
 
             var upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
             var lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
-            
+
             //TODO:  Old DeconTools reference!! remove this
             this.RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
 
@@ -89,8 +81,6 @@ namespace DeconTools.Backend.Runs
             xydata.Yvalues = yvals;
             return xydata;
         }
-
     }
-
-#endif
 }
+#endif

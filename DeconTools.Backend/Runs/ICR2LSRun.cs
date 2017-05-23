@@ -1,22 +1,17 @@
-﻿using System;
+﻿#if !Disable_DeconToolsV2
+using System;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
-#if !Disable_DeconToolsV2
 using DeconToolsV2.Readers;
-#endif
 
 namespace DeconTools.Backend.Runs
 {
-#if !Disable_DeconToolsV2
-
     public class ICR2LSRun : DeconToolsRun
     {
-
         #region Constructors
         public ICR2LSRun()
         {
             this.IsDataThresholded = false;   //TODO: check this
-
         }
 
         public ICR2LSRun(string filename)
@@ -34,15 +29,12 @@ namespace DeconTools.Backend.Runs
             }
             MinLCScan = 1; //  remember that DeconEngine is 1-based
             MaxLCScan = GetMaxPossibleLCScanNum();
-
-
         }
 
         public ICR2LSRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
             throw new NotImplementedException("Can't define scanRange yet - needs further development");
-
         }
         #endregion
 
@@ -58,14 +50,12 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans();
         }
 
-
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
             var totScans = this.GetNumMSScans();
-
 
             var xvals = new double[0];
             var yvals = new double[0];
@@ -90,8 +80,6 @@ namespace DeconTools.Backend.Runs
             return xydata;
         }
         #endregion
-
-
     }
-#endif
 }
+#endif

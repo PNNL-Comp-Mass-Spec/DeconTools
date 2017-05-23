@@ -1,34 +1,27 @@
-﻿using System;
+﻿#if !Disable_DeconToolsV2
+using System;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Runs
 {
-#if !Disable_DeconToolsV2
-
     [Serializable]
     public abstract class DeconToolsRun : Run
     {
-
         public DeconToolsV2.Readers.clsRawData RawData { get; set; }
-
 
         public DeconToolsRun()
         {
             XYData = new XYData();
-
         }
 
-
         public override XYData XYData {get;set;}
-        
+
 
         public override int GetNumMSScans()
         {
             if (RawData == null) return 0;
             return this.RawData.GetNumScans();
-
         }
-
 
         public override string GetScanInfo(int scanNum)
         {
@@ -65,7 +58,6 @@ namespace DeconTools.Backend.Runs
                 {
                     throw ex;
                 }
-                
             }
         }
 
@@ -74,5 +66,5 @@ namespace DeconTools.Backend.Runs
             throw new NotImplementedException();
         }
     }
-#endif
 }
+#endif

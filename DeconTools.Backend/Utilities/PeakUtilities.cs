@@ -8,33 +8,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class PeakUtilities
     {
-#if !Disable_DeconToolsV2
-        public DeconToolsV2.Peaks.clsPeak lookupPeak(double mz, DeconToolsV2.Peaks.clsPeak[] peaklist, double mzVar)
-        {
-            for (var i = 0; i < peaklist.Length; i++)
-            {
-                if (Math.Abs(mz - peaklist[i].mdbl_mz) <= mzVar)
-                {
-                    return peaklist[i];
-                }
-            }
-            return null;      //couldn't find a peak
-        }
-
-        public int lookupPeakIndex(double mz, DeconToolsV2.Peaks.clsPeak[] peaklist, double mzVar)
-        {
-            for (var i = 0; i < peaklist.Length; i++)
-            {
-                if (Math.Abs(mz - peaklist[i].mdbl_mz) <= mzVar)
-                {
-                    return i;
-                }
-            }
-            return -1;      //couldn't find a peak
-
-        }
-#endif
-
         //TODO: I'm duplicating code here to make room for List<MSPeak>;  not good... there has to be a better way... 
         public static List<MSPeak> GetMSPeaksWithinTolerance(List<MSPeak> inputList, double targetVal, double toleranceInMZ)
         {

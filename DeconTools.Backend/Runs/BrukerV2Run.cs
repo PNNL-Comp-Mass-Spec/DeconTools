@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !Disable_DeconToolsV2
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +10,6 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
-#if !Disable_DeconToolsV2
-
     [Obsolete("No path to access; use BrukerV3Run.", false)]
     public sealed class BrukerV2Run : Run
     {
@@ -22,12 +21,9 @@ namespace DeconTools.Backend.Runs
         {
             internal string Name { get; set; }
             internal string Value { get; set; }
-
         }
 
         //C++ engine calibration settings
-
-
 
         #region Constructors
 
@@ -56,7 +52,7 @@ namespace DeconTools.Backend.Runs
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
-            //if there is a ser file, 'fid' files will be ignored.  
+            //if there is a ser file, 'fid' files will be ignored.
             if (m_serFileInfo != null)
             {
                 filePathForDeconEngine = m_serFileInfo.FullName;
@@ -70,8 +66,6 @@ namespace DeconTools.Backend.Runs
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
-
-
             m_settingsfileInfo = findSettingsFile();
             if (m_settingsfileInfo == null)
             {
@@ -82,7 +76,6 @@ namespace DeconTools.Backend.Runs
 
             this.DatasetName = getDatasetName(this.Filename);
             this.DataSetPath = getDatasetfolderName(this.Filename);
-
 
             loadSettings(this.SettingsFilePath);
 
@@ -157,8 +150,6 @@ namespace DeconTools.Backend.Runs
             {
                 throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
             }
-
-
         }
 
         private FileInfo findSerFile()
@@ -182,9 +173,6 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-
-
         #endregion
 
         #region Properties
@@ -193,8 +181,6 @@ namespace DeconTools.Backend.Runs
         /// .NET framework Calibration settings
         /// </summary>
         public DeconTools.Backend.Runs.CalibrationData.BrukerCalibrationData CalibrationData { get; set; }
-
-
 
         [field: NonSerialized]
         private XYData xyData;
@@ -296,7 +282,6 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans();
         }
 
-
         public override int GetMSLevelFromRawData(int scanNum)
         {
             if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
@@ -308,8 +293,6 @@ namespace DeconTools.Backend.Runs
         }
 
         #endregion
-
-
 
         #region Private Methods
         private void applySettings()
@@ -354,7 +337,6 @@ namespace DeconTools.Backend.Runs
 
             Check.Require(!isFile, "Could not initialize Dataset. Looking for a folder path, but user supplied a file path.");
             Check.Require(isDirectory, "Could not initialize Dataset. Target dataset folder not found.");
-
         }
 
         private string validateDataFolderStructureAndFindSettingsFilePath()
@@ -392,7 +374,6 @@ namespace DeconTools.Backend.Runs
             settingsFilePath = settingsFile.FullName;
 
             return settingsFilePath;
-
         }
 
         private string getDatasetName(string fullFolderPath)
@@ -400,7 +381,6 @@ namespace DeconTools.Backend.Runs
 
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.Name;
-
         }
 
         private string getDatasetfolderName(string fullFolderPath)
@@ -408,7 +388,6 @@ namespace DeconTools.Backend.Runs
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
-
 
         public void loadSettings(string settingsFileName)
         {
@@ -426,7 +405,6 @@ namespace DeconTools.Backend.Runs
                 paramList.Add(nameValuePair);
             }
 
-
             this.CalibrationData = new BrukerCalibrationData
             {
                 ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value),
@@ -439,14 +417,12 @@ namespace DeconTools.Backend.Runs
 
             //this.CalibrationData.NF = Convert.ToInt32(paramList.First(p => p.Name == "NF").Value);
 
-
             if (this.CalibrationData.SampleRate > this.CalibrationData.FR_Low)
             {
                 this.CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
             }
 
             this.CalibrationData.Display();
-
         }
 
         private string getNameFromNode(XElement node)
@@ -492,7 +468,6 @@ namespace DeconTools.Backend.Runs
                 {
                     valueString = node.Element("Value").Value;
                 }
-
             }
             else
             {
@@ -502,10 +477,7 @@ namespace DeconTools.Backend.Runs
             return valueString;
         }
 
-
-
         #endregion
     }
-
-#endif
 }
+#endif

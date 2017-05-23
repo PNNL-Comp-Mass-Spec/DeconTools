@@ -238,9 +238,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             thrashParameters.MaxFit = 0.4;
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
-            
+
             var scanset = new ScanSet(6005);
-            
+
             //For summing mass spectra:
             //scanset = new ScanSetFactory().CreateScanSet(run, 6005, 5);
 
@@ -594,7 +594,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
-            //6	500	728.6907	729.69800	1	34678	0.252	0.000	
+            //6	500	728.6907	729.69800	1	34678	0.252	0.000
 
             run.PeakList = (from n in run.PeakList where n.XValue > 729 && n.XValue < 731 select n).ToList();
 
@@ -613,7 +613,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 #if !Disable_DeconToolsV2
-            var parameters = new OldDecon2LSParameters();
+            var parameters = new DeconEngineClasses.OldDecon2LSParameters();
             var paramFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\ParameterFiles\LTQ_Orb_SN2_PeakBR1pt3_PeptideBR1_Thrash_MaxFit1.xml";
             parameters.Load(paramFile);
@@ -623,7 +623,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
-            var deconvolutor = new HornDeconvolutor(parameters.HornTransformParameters);
+            var deconvolutor = new HornDeconvolutor(parameters.GetDeconToolsParameters());
             run.CurrentScanSet = scanSet;
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);

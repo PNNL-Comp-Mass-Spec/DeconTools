@@ -280,57 +280,6 @@ namespace DeconTools.Backend.ProcessingTasks
             // ------------------ end HornTransformParameters defaults ---------------------------------
         }
 
-#if !Disable_DeconToolsV2
-        [Obsolete(
-            "Not needed - this workflow no longer uses DeconEngineV2; use DeconToolsParameters or properties instead",
-            false)]
-        public HornDeconvolutor(DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters)
-        {
-            SetDefaults();
-            AbsoluteThresholdPeptideIntensity = hornParameters.AbsolutePeptideIntensity;
-            AveragineFormula = hornParameters.AveragineFormula;
-            ChargeCarrierMass = hornParameters.CCMass;
-            CheckPatternsAgainstChargeOne = hornParameters.CheckAllPatternsAgainstCharge1;
-            DeleteIntensityThreshold = hornParameters.DeleteIntensityThreshold;
-            IsAbsolutePepIntensityUsed = hornParameters.UseAbsolutePeptideIntensity;
-            IsActualMonoMZUsed = hornParameters.IsActualMonoMZUsed;
-            IsCompleteFit = hornParameters.CompleteFit;
-            IsMercuryCachingUsed = hornParameters.UseMercuryCaching;
-            IsMSMSProcessed = hornParameters.ProcessMSMS;
-            IsMZRangeUsed = hornParameters.UseMZRange;
-            IsO16O18Data = hornParameters.O16O18Media;
-            switch (hornParameters.IsotopeFitType)
-            {
-                case DeconToolsV2.enmIsotopeFitType.AREA:
-                    IsotopicProfileFitType = Globals.IsotopicProfileFitType.AREA;
-                    break;
-                case DeconToolsV2.enmIsotopeFitType.CHISQ:
-                    IsotopicProfileFitType = Globals.IsotopicProfileFitType.CHISQ;
-                    break;
-                case DeconToolsV2.enmIsotopeFitType.PEAK:
-                    IsotopicProfileFitType = Globals.IsotopicProfileFitType.PEAK;
-                    break;
-                default:
-                    IsotopicProfileFitType = Globals.IsotopicProfileFitType.Undefined;
-                    break;
-            }
-            IsThrashed = hornParameters.ThrashOrNot;
-            LeftFitStringencyFactor = hornParameters.LeftFitStringencyFactor;
-            MaxChargeAllowed = hornParameters.MaxCharge;
-            MaxFitAllowed = hornParameters.MaxFit;
-            MaxMWAllowed = hornParameters.MaxMW;
-            MaxMZ = hornParameters.MaxMZ; //TODO: review this later
-            MinMZ = hornParameters.MinMZ; //TODO: review this later
-            MinIntensityForScore = hornParameters.MinIntensityForScore;
-            MinPeptideBackgroundRatio = hornParameters.PeptideMinBackgroundRatio;
-            NumAllowedShoulderPeaks = hornParameters.NumPeaksForShoulder;
-            RightFitStringencyFactor = hornParameters.RightFitStringencyFactor;
-            TagFormula = hornParameters.TagFormula;
-            NumPeaksUsedInAbundance = hornParameters.NumPeaksUsedInAbundance;
-            SetIsotopeFitScorerOptions();
-        }
-#endif
-
         public HornDeconvolutor(DeconToolsParameters deconParameters)
         {
             SetDefaults();
@@ -979,7 +928,7 @@ namespace DeconTools.Backend.ProcessingTasks
                                       currentScanset.getLowestScanNumber(),
                                       currentScanset.getHighestScanNumber());
                 }
-               
+
             }
 
             Console.WriteLine("{0}; runtime exceeded {1} minutes. IsotopicProfileCount={2}",
@@ -1022,7 +971,7 @@ namespace DeconTools.Backend.ProcessingTasks
             profile.Peaklist.Add(deconMonopeak);
 
             if (peakIndexList.Count == 1)
-                return; //only one peak in the DeconEngine's profile    
+                return; //only one peak in the DeconEngine's profile
 
             for (var i = 1; i < peakIndexList.Count; i++) //start with second peak and add each peak to profile
             {

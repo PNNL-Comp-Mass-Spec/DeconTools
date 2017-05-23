@@ -105,10 +105,6 @@
     <Reference Include="MultiAlignEngine">
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="PNNLOmics, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\PNNLOmics.dll</HintPath>
@@ -220,7 +216,6 @@
     <Compile Include="Data\BitArray2D.cs" />
     <Compile Include="FileIO\DeconToolsParameterFileReader.cs" />
     <Compile Include="FileIO\MassTagFromTextFileImporter.cs" />
-    <Compile Include="Data\Importers\PeakImporterFromOldPeakDatFile.cs" />
     <Compile Include="Data\Importers\PeakImporterFromText2.cs" />
     <Compile Include="DTO\MassTagMiniDTO.cs" />
     <Compile Include="DTO\MSResultPeakWithLocation.cs">
@@ -292,7 +287,6 @@
     <Compile Include="Core\Results\MassTagResult.cs" />
     <Compile Include="Core\MSPeak.cs" />
     <Compile Include="Core\Results\N14N15_TResult.cs" />
-    <Compile Include="Core\OldDecon2LSParameters.cs" />
     <Compile Include="Core\OldDeconFormatResult.cs" />
     <Compile Include="Core\PeakToTheLeftResultFlag.cs" />
     <Compile Include="Core\ResultCollection.cs" />
@@ -357,7 +351,6 @@
     <Compile Include="DTO\MSPeakResult.cs" />
     <Compile Include="DTO\OriginalIntensitiesDTO.cs" />
     <Compile Include="Data\N14N15IsosResult.cs" />
-    <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutorParameters.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\Deconvolutor.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\RapidDeconvolutor\RapidDeconvolutor.cs" />
     <Compile Include="ProcessingTasks\DeconvolutorFactory.cs" />
@@ -436,21 +429,16 @@
     <Compile Include="Utilities\SqliteNETUtils\SqliteNETUtils.cs" />
     <Compile Include="Utilities\SqliteNETUtils\Table.cs" />
     <Compile Include="ProcessingTasks\ScanResultUpdater.cs" />
-    <Compile Include="ProcessingTasks\Smoothers\DeconToolsSavitzkyGolaySmoother.cs" />
     <Compile Include="ProcessingTasks\Smoothers\ISmoother.cs" />
     <Compile Include="ProcessingTasks\UIMFDriftTimeExtractor.cs" />
     <Compile Include="ProcessingTasks\UIMF_TICExtractor.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\DeconToolsZeroFiller.cs" />
     <Compile Include="ProcessingTasks\ZeroFillers\ZeroFiller.cs" />
-    <Compile Include="Runs\BrukerRun.cs" />
     <Compile Include="Runs\ConcreteXYDataRun.cs" />
     <Compile Include="Runs\DeconToolsRun.cs" />
     <Compile Include="Runs\ICR2LSRun.cs" />
     <Compile Include="Runs\MSScanFromTextFileRun.cs" />
-    <Compile Include="Runs\MZXMLRun.cs" />
     <Compile Include="Runs\UIMFRun.cs" />
-    <Compile Include="Runs\XCaliburRun.cs" />
-    <Compile Include="FileLoader.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Runs\IMFRun.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\HornDeconvolutor.cs" />

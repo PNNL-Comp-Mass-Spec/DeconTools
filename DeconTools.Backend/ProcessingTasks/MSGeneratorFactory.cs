@@ -7,16 +7,10 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class MSGeneratorFactory
     {
-
-        public MSGeneratorFactory()
-        {
-
-        }
-        
         public static MSGenerator CreateMSGenerator(Globals.MSFileType filetype)
         {
             MSGenerator msGenerator;
-            
+
             switch (filetype)
             {
                 case Globals.MSFileType.Undefined:
@@ -64,23 +58,6 @@ namespace DeconTools.Backend.ProcessingTasks
                     break;
             }
             return msGenerator;
-
         }
-
-#if !Disable_DeconToolsV2
-        internal Core.Task CreateMSGenerator(Globals.MSFileType fileType, DeconTools.Backend.Core.OldDecon2LSParameters oldDecon2LSParameters)
-        {
-            var msgenerator = CreateMSGenerator(fileType);
-
-            if (oldDecon2LSParameters.HornTransformParameters.UseMZRange)
-            {
-                msgenerator.MinMZ = oldDecon2LSParameters.HornTransformParameters.MinMZ;
-                msgenerator.MaxMZ = oldDecon2LSParameters.HornTransformParameters.MaxMZ;
-            }
-            return msgenerator;
-            
-        }
-#endif
-
     }
 }

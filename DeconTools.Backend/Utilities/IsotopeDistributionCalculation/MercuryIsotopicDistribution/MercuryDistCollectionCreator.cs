@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ElementalFormulas;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
@@ -10,20 +11,17 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
 
     public class MercuryDistCollectionCreator
     {
-        private DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters;
+        private Averagine averagine;
         private MercuryDistributionCreator mercDistCreator;
         private string averagineFormula;
         private string tagFormula;
 
-
-
         public MercuryDistCollectionCreator()
         {
-            this.hornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
-            
-            this.averagineFormula = this.hornParameters.AveragineFormula;
-            this.tagFormula = this.hornParameters.TagFormula;
+            this.averagine = new Averagine();
 
+            this.averagineFormula = this.averagine.AveragineFormula;
+            this.tagFormula = this.averagine.TagFormula;
         }
 
         public MercuryDistCollectionCreator(string averagineFormula, string tagFormula)
@@ -32,13 +30,10 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
             this.tagFormula = tagFormula;
         }
 
-        
-
         public MercuryDistCollection CreateMercuryDistCollection(double startMass, double stopMass, double stepSize, double fwhm)
         {
             var mercDistCollection = new MercuryDistCollection();
             mercDistCreator = new MercuryDistributionCreator();
-
 
             Check.Require(stepSize > 0, "Step size must be greater than 0");
             Check.Require(stopMass >= startMass, "Stop MZ must be greater than Start MZ");
@@ -52,13 +47,9 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
                 mercDistCollection.mercDistList.Add(mercdist);
             }
 
-
             return mercDistCollection;
-
         }
-
     }
 
 #endif
-
 }

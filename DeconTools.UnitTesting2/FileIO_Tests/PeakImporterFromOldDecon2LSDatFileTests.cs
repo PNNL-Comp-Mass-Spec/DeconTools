@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var msPeakList=new List<MSPeakResult>();
 #if !Disable_DeconToolsV2
-            var importer = new DeconTools.Backend.Data.Importers.PeakImporterFromOldPeakDatFile(testFile);
+            var importer = new DeconEngineClasses.PeakImporterFromOldPeakDatFile(testFile);
             importer.ImportPeaks(msPeakList);
 
             Assert.AreEqual(1934153, msPeakList.Count);
