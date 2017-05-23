@@ -527,6 +527,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="PRISM-Library">
+      <Version>1.0.4</Version>
+    </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.97" />
     <PackageReference Include="UIMFLibrary">
       <Version>1.0.4</Version>
