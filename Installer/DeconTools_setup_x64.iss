@@ -14,6 +14,7 @@ Source: DeconConsole\bin\x64\Release\DeconConsole.exe                           
 Source: DeconConsole\bin\x64\Release\DeconConsole.exe.config                                                                                      ; DestDir: {app}
 
 Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll                                                                                 ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\MathNet.Numerics.dll                                                                                   ; DestDir: {app}
 
 Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe                                                                       ; DestDir: {app}
 Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe.config                                                                ; DestDir: {app}
@@ -32,7 +33,6 @@ Source: Library\DLLsToBeCopied\Interop.HSREADWRITELib.SxS.manifest              
 Source: Library\log4net.dll                                                                                                                       ; DestDir: {app}
 Source: Library\Mapack.dll                                                                                                                        ; DestDir: {app}
 Source: Library\MassLynxRaw.dll                                                                                                                   ; DestDir: {app}
-Source: Library\MathNet.Numerics.dll                                                                                                              ; DestDir: {app}
 Source: Library\MSDBLibrary.dll                                                                                                                   ; DestDir: {app}
 Source: Library\DLLsToBeCopied\MSFileReader.XRawfile2.SxS.manifest                                                                                ; DestDir: {app}
 Source: Library\x64\MultiAlignEngine.dll                                                                                                          ; DestDir: {app}
@@ -40,7 +40,6 @@ Source: Library\PNNLOmics.dll                                                   
 Source: Library\PNNLOmicsElementData.xml                                                                                                          ; DestDir: {app}
 Source: Library\ProteowizardWrapper.dll                                                                                                           ; DestDir: {app}
 Source: Library\ThermoRawFileReader.dll                                                                                                           ; DestDir: {app}
-;Source: Library\xerces-c_2_8.dll                                                                                                                  ; DestDir: {app}
 Source: Library\YafmsLibrary.dll                                                                                                                  ; DestDir: {app}
 
 Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\agtsampleinforw.dll"              ; DestDir: {app}
@@ -53,26 +52,6 @@ Source: Readme.txt                                                              
 Source: RevisionHistory.txt                                                                                                                       ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFile.xml                                                                                                   ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFileIMS.xml                                                                                                ; DestDir: {app}
-
-;Source: Library\msvc71\atl71.dll                                                                                                                  ; DestDir: {app}
-;Source: Library\msvc71\mfc71.dll                                                                                                                  ; DestDir: {app}
-;Source: Library\msvc71\mfc71u.dll                                                                                                                 ; DestDir: {app}
-;Source: Library\msvc71\msvcp71.dll                                                                                                                ; DestDir: {app}
-;Source: Library\msvc71\msvcr71.dll                                                                                                                ; DestDir: {app}
-;Source: Library\msvc71\MFC71CHS.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71CHT.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71DEU.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71ENU.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71ESP.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71FRA.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71ITA.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71JPN.DLL                                                                                                               ; DestDir: {app}
-;Source: Library\msvc71\MFC71KOR.DLL                                                                                                               ; DestDir: {app}
-
-; MSVC 100 for DeconEngineV2
-;Source: Library\msvc100\msvcp100.dll                                                                                                                ; DestDir: {app}
-;Source: Library\msvc100\msvcr100.dll                                                                                                                ; DestDir: {app}
-
 
 [Dirs]
 Name: {commonappdata}\DeconTools; Flags: uninsalwaysuninstall
