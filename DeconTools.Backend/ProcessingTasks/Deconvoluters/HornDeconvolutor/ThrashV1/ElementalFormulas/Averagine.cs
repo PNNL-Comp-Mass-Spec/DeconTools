@@ -183,10 +183,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             return empiricalFormula;
         }
 
-        public string GenerateAveragineFormula(double averageMass, string averagineFormula, string tagFormula)
+        public string GenerateAveragineFormula(double averageMass, string averagineFormula = null, string tagFormula = null)
         {
-            AveragineFormula = averagineFormula;
-            TagFormula = tagFormula;
+            if (!string.IsNullOrWhiteSpace(averagineFormula))
+            {
+                AveragineFormula = averagineFormula;
+            }
+            if (!string.IsNullOrWhiteSpace(tagFormula))
+            {
+                TagFormula = tagFormula;
+            }
+
             var empiricalFormula = GetAverageFormulaForMass(averageMass);
             // Convert to String.
             //string empiricalFormulaStr = "";

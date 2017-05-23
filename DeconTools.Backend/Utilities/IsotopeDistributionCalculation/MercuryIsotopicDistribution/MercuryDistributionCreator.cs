@@ -10,7 +10,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class MercuryDistributionCreator
     {
-        private DeconToolsV2.HornTransform.clsHornTransformParameters hornParameters;
         private Averagine averagineFormulaCreator;
         private ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury.MercuryIsotopeDistribution decon2LSMercuryDistribution;
         private DeconToolsPeakDetector peakDetector;
@@ -26,12 +25,9 @@ namespace DeconTools.Backend.Utilities
 
         public IsotopicProfile IsotopicProfile { get; set; }
 
-        public DeconToolsV2.HornTransform.clsHornTransformParameters HornParameters { get; set; }
-
         public MercuryDistributionCreator()
         {
             averagineFormulaCreator = new Averagine();
-            hornParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
             decon2LSMercuryDistribution = new ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury.MercuryIsotopeDistribution();
             peakDetector = new DeconToolsPeakDetector();
         }
@@ -78,8 +74,8 @@ namespace DeconTools.Backend.Utilities
 
         public MolecularFormula GetAveragineFormula(double mz, int chargeState)
         {
-            var monoIsotopicMass = mz * chargeState - chargeState * hornParameters.CCMass;
-            var empiricalFormula = averagineFormulaCreator.GenerateAveragineFormula(monoIsotopicMass, hornParameters.AveragineFormula, hornParameters.TagFormula);
+            var monoIsotopicMass = mz * chargeState - chargeState * decon2LSMercuryDistribution.ChargeCarrierMass;
+            var empiricalFormula = averagineFormulaCreator.GenerateAveragineFormula(monoIsotopicMass);
             return MolecularFormula.Parse(empiricalFormula);
         }
 
@@ -101,7 +97,7 @@ namespace DeconTools.Backend.Utilities
 
         public void CreateDistribution(double mass, int chargeState, double resolution)
         {
-            var empiricalFormula = averagineFormulaCreator.GenerateAveragineFormula(mass, hornParameters.AveragineFormula, hornParameters.TagFormula);
+            var empiricalFormula = averagineFormulaCreator.GenerateAveragineFormula(mass);
             this.MolecularFormula = MolecularFormula.Parse(empiricalFormula);
             this.Resolution = resolution;
             this.ChargeState = chargeState;
@@ -110,8 +106,8 @@ namespace DeconTools.Backend.Utilities
 
         //public void CreateDistribution(double mz, int chargeState, double fwhm)
         //{
-        //    double monoIsotopicMass = mz * chargeState - chargeState * hornParameters.CCMass;
-        //    string empiricalFormula = avergineFormulaCreator.GenerateAveragineFormula(monoIsotopicMass, hornParameters.AveragineFormula, hornParameters.TagFormula);
+        //    double monoIsotopicMass = mz * chargeState - chargeState * decon2LSMercuryDistribution.ChargeCarrierMass;
+        //    string empiricalFormula = avergineFormulaCreator.GenerateAveragineFormula(monoIsotopicMass);
         //    this.MolecularFormula = MolecularFormula.Parse(empiricalFormula);
         //    this.Resolution = mz / fwhm;
         //    this.ChargeState = chargeState;
