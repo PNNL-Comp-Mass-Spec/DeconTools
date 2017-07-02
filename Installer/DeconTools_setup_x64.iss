@@ -70,6 +70,8 @@ Name: {group}\Uninstall DeconTools; Filename: {uninstallexe}
 Name: {commondesktop}\DeconToolsAutoProcessor; Filename: {app}\DeconToolsAutoProcessV1.exe; Tasks: desktopicon; Comment: Decon Tools Auto Processor
 
 [Setup]
+ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed=x64
 AppName=DeconTools_64bit
 AppVersion={#ApplicationVersion}
 ;AppVerName=DeconTools
