@@ -1,5 +1,11 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6395; July 5, 2017 bcg
+	- Update the ProteowizardWrapper and fix the usages of the DependencyLoader
+	- Fix the 64-bit installer directory
+	- Remove some obsolete classes
+	- Pull some DLLs from NuGet instead of local copies
+
 Version 1.1.6347; May 18, 2017 bcg
 	- Disable the IMS per-frame timeout if there are 10 or fewer frames
 
@@ -23,7 +29,7 @@ Version 1.1.6053; July 28, 2016     mem
 	- The Miscellaneous section of the parameter file now has 3 new parameters for specifying runtime limits
 		MaxMinutesPerScan,  default   4 minutes
 		MaxMinutesPerFrame, default  20 minutes
-		MaxHoursPerDataset, default 400 hours		
+		MaxHoursPerDataset, default 400 hours
 
 Version 1.1.5990; May 26, 2016      mem
 	- Remove dependency on DeconEngineV2.dll, since the code has been ported from C++ to C# and the results validated to match
