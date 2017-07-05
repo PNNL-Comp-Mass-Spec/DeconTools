@@ -10,8 +10,6 @@ namespace DeconTools.Backend.Runs
 {
     public class RunFactory
     {
-
-       
         public Run CreateRun(string filename)
         {
             Run run;
@@ -21,7 +19,7 @@ namespace DeconTools.Backend.Runs
             var extension = Path.GetExtension(fullfileName).ToLower();
             if (extension.Equals(".mzxml") || extension.Equals(".mzml") || extension.Equals(".mz5"))
             {
-                pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
+                pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
             }
 
 #if !Disable_DeconToolsV2
@@ -49,10 +47,9 @@ namespace DeconTools.Backend.Runs
                 else
                 {
                     // there was likely some problem... but will let the remaining code execute and see if ms filetype can
-                    // be determined from the extension. 
+                    // be determined from the extension.
                 }
             }
-
 
             switch (extension)
             {
@@ -106,7 +103,7 @@ namespace DeconTools.Backend.Runs
             Run run;
             if (filetype == Globals.MSFileType.MZXML_Rawdata)
             {
-                pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader();
+                pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
             }
 
             var fileName = getFullPath(f);
@@ -160,7 +157,7 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.SUNEXTREL:
                     run = null;
                     break;
-                
+
                 // Deprecated in February 2017
                 // case Globals.MSFileType.YAFMS:
                 //    run = new YAFMSRun(fileName);
@@ -172,7 +169,6 @@ namespace DeconTools.Backend.Runs
 
             return run;
         }
-
 
         private string getFullPath(string filename)
         {
@@ -207,7 +203,7 @@ namespace DeconTools.Backend.Runs
 
             var serFileInfo = findSerFile(folderName);
             var fidFileInfo = findFIDFile(folderName);
-            
+
 
             var apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
             var acqusFileInfos = findAcqusFile(folderName);
@@ -232,13 +228,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return run;
-
-
-
-
-
-
-
         }
 
         private FileInfo findMaxAcquisitionMethodFile(string folderName)
@@ -324,7 +313,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return acqusFileInfoList;
-
         }
 
         private FileInfo findAcquisitionMethodFile(string folderName)
@@ -351,7 +339,6 @@ namespace DeconTools.Backend.Runs
                 throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
             }
         }
-
 
         private FileInfo findSerFile(string folderName)
         {
@@ -382,11 +369,6 @@ namespace DeconTools.Backend.Runs
 
                 throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
             }
-
-
         }
-
-
-
     }
 }

@@ -9,24 +9,24 @@
             ProteoWizard Dependency Loader
             </summary>
             <remarks>This class provides a custom AssemblyResolver to find an installation of ProteoWizard, specified in ProteoWizardReaderImplementation.
-            This class is a wrapper around ProteoWizardReaderImplementation to encapsulate the usage of the custom AssemblyResolver, which must be 
+            This class is a wrapper around ProteoWizardReaderImplementation to encapsulate the usage of the custom AssemblyResolver, which must be
             added to the AppDomain.CurrentDomain.AssemblyResolve event before the class is instantiated.</remarks>
-        </member>
-        <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.TargetDllName">
-            <summary>
-            Name of the DLL we are checking for
-            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver">
             <summary>
             Add the Assembly Resolver to the system assembly resolver chain
             </summary>
-            <remarks>This should be called early in the program, so that the ProteoWizard Assembly Resolver will 
+            <remarks>This should be called early in the program, so that the ProteoWizard Assembly Resolver will
             already be in the resolver chain before any other use of ProteoWizardWrapper.
             Also, <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader"/> should be used to make sure a meaningful error message is thrown if ProteoWizard is not available.</remarks>
             <remarks>This must be called before any portion of <see cref="T:pwiz.ProteowizardWrapper.MsDataFileImpl"/> is used. It cannot be called in the same function
             as a constructor to that class; it must be called from at least 1 step higher on the call stack, to be in place before the
             program attempts to load the DLL</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.RemoveAssemblyResolver">
+            <summary>
+            Remove the Assembly Resolver from the system assembly resolver chain
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.ProteoWizardAssemblyResolver(System.Object,System.ResolveEventArgs)">
             <summary>
@@ -35,6 +35,11 @@
             <param name="sender"></param>
             <param name="args"></param>
             <returns></returns>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.TargetDllName">
+            <summary>
+            Name of the DLL we are checking for
+            </summary>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.PwizPath">
             <summary>
@@ -48,16 +53,16 @@
             PwizPath is populated from this, but only causes a single search.
             </summary>
             <returns></returns>
-            <remarks>Paths searched, in order: 
-            "%ProteoWizard%" or "%ProteoWizard%_x86" environment variable data, 
-            "C:\DMS_Programs\ProteoWizard" or "C:\DMS_Programs\ProteoWizard_x86", 
+            <remarks>Paths searched, in order:
+            "%ProteoWizard%" or "%ProteoWizard%_x86" environment variable data,
+            "C:\DMS_Programs\ProteoWizard" or "C:\DMS_Programs\ProteoWizard_x86",
             "%ProgramFiles%\ProteoWizard\(highest sorted)"</remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.ValidateLoader">
             <summary>
             Checks to make sure the path to ProteoWizard files is set. If not, throws an exception.
             </summary>
-            <remarks>This function should generally only be called inside of a conditional statement to prevent the 
+            <remarks>This function should generally only be called inside of a conditional statement to prevent the
             exception from being thrown when the ProteoWizard dlls will not be needed.</remarks>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.MsDataFileImpl">
@@ -69,21 +74,6 @@
             When performance measurement is enabled, the GetLog() method can be called
             after read operations have been completed. This returns a handy CSV-formatted
             report on file read performance.
-            </summary>
-        </member>
-        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.VendorCentroiding">
-            <summary>
-            Uses the centroiding/peak picking algorithm that the vendor libraries provide, if available; otherwise uses a low-quality centroiding algorithm.
-            </summary>
-        </member>
-        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.CwtCentroiding">
-            <summary>
-            Continuous Wavelet Transform peak picker - high-quality peak picking, may be slow with some high-res data.
-            </summary>
-        </member>
-        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.DuplicateSpectrumReadThreshold">
-            <summary>
-            The maximum number of time a single spectrum can be read twice in a row before we enable a cache for sanity.
             </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#cctor">
@@ -147,6 +137,26 @@
             List of MSConvert-style filter strings to apply to the spectrum list.
             </summary>
             <remarks>If the filter count is greater than 0, the default handling of the spectrumList using the optional constructor parameters is disabled.</remarks>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.VendorCentroiding">
+            <summary>
+            Uses the centroiding/peak picking algorithm that the vendor libraries provide, if available; otherwise uses a low-quality centroiding algorithm.
+            </summary>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.CwtCentroiding">
+            <summary>
+            Continuous Wavelet Transform peak picker - high-quality peak picking, may be slow with some high-res data.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.UseVendorCentroiding">
+            <summary>
+            Add/remove Vendor Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.RedoFilters"/> if calling this after reading any spectra.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.UseCwtCentroiding">
+            <summary>
+            Add/remove CWT Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.RedoFilters"/> if calling this after reading any spectra.
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.RedoFilters">
             <summary>
@@ -227,6 +237,11 @@
             How many times a single spectrum has been read twice in a row
             </summary>
         </member>
+        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.DuplicateSpectrumReadThreshold">
+            <summary>
+            The maximum number of time a single spectrum can be read twice in a row before we enable a cache for sanity.
+            </summary>
+        </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetPwizSpectrum(System.Int32,System.Boolean)">
             <summary>
             Read the native ProteoWizard spectrum, using caching if enabled, and enabling a 1-spectrum cache if the number of sequential duplicate reads passes a certain threshold.
@@ -269,16 +284,6 @@
             </summary>
             <param name="precursor"></param>
             <returns></returns>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.UseVendorCentroiding">
-            <summary>
-            Add/remove Vendor Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.UseCwtCentroiding">
-            <summary>
-            Add/remove CWT Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.LockMassParameters">
             <summary>
@@ -489,6 +494,32 @@
             Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)"/> or the GetSpectrum method that returns an <see cref="T:pwiz.ProteowizardWrapper.MsDataSpectrum"/> object
             </remarks>
         </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.Filters">
+            <summary>
+            List of MSConvert-style filter strings to apply to the spectrum list.
+            </summary>
+            <remarks>If the filter count is greater than 0, the default handling of the spectrumList using the optional constructor parameters is disabled.</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.VendorCentroiding">
+            <summary>
+            Uses the centroiding/peak picking algorithm that the vendor libraries provide, if available; otherwise uses a low-quality centroiding algorithm.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.CwtCentroiding">
+            <summary>
+            Continuous Wavelet Transform peak picker - high-quality peak picking, may be slow with some high-res data.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseVendorCentroiding">
+            <summary>
+            Add/remove Vendor Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseCwtCentroiding">
+            <summary>
+            Add/remove CWT Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
+            </summary>
+        </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters">
             <summary>
             Force the reload of the spectrum list, reapplying any specified filters.
@@ -500,6 +531,21 @@
             </summary>
             <param name="path"></param>
             <returns></returns>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_TOTAL">
+            <summary>
+            Constant that corresponds to "SRM TIC "
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_SINGLE">
+            <summary>
+            Constant that corresponds to "SRM SIC "
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_PRECURSOR">
+            <summary>
+            Constant that corresponds to "SIM SIC "
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsNegativeChargeIdNullable(System.String)">
             <summary>
@@ -541,6 +587,21 @@
             Disable the spectrum data caching (NOTE: May result in slower reading)
             </summary>
         </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunId">
+            <summary>
+            The Run ID
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunStartTime">
+            <summary>
+            The run start time
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ConfigInfo">
+            <summary>
+            Data and Instrument Configuration information
+            </summary>
+        </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsProcessedBy(System.String)">
             <summary>
             Check if the file has be processed by the specified software
@@ -558,6 +619,46 @@
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstrumentConfigInfoList">
             <summary>
             Record any instrument info found in the file, along with any Waters lockmass info we have
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsABFile">
+            <summary>
+            If the file is an AB Sciex file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsMzWiffXml">
+            <summary>
+            If the file is a MzWiff file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsAgilentFile">
+            <summary>
+            If the file is an Agilent file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsThermoFile">
+            <summary>
+            If the file is a Thermo/Finnigan .raw file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersFile">
+            <summary>
+            If the file is a Waters file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersLockmassCorrectionCandidate">
+            <summary>
+            If the file is a candidate for Waters Lockmass Correction
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsShimadzuFile">
+            <summary>
+            If the file is a Shimadzu file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ChromatogramCount">
+            <summary>
+            Number of chromatograms
             </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramId(System.Int32,System.Int32@)">
@@ -609,6 +710,11 @@
             <param name="times">Output: scan times (in minutes)</param>
             <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
             <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.SpectrumCount">
+            <summary>
+            Get the spectrum count
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCount">
             <summary>
@@ -670,6 +776,21 @@
             <remarks>
             Works for Thermo .raw files, Bruker .D folders, Bruker/Agilent .yep files, Agilent MassHunter data, Waters .raw folders, and Shimadzu data
             For UIMF files use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetUimfFrameScanPairToIndexMapping"/></remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasSrmSpectra">
+            <summary>
+            Check if the file has SRR Spectra
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasDriftTimeSpectra">
+            <summary>
+            Check if the file has drift time spectra
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasChromatogramData">
+            <summary>
+            Check if the file contains chromatogram data
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSrmSpectrum(System.Int32)">
             <summary>
@@ -743,122 +864,6 @@
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.Dispose">
             <summary>
             Cleanup the objects; Chains to cleanup all held unmanaged objects
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.Filters">
-            <summary>
-            List of MSConvert-style filter strings to apply to the spectrum list.
-            </summary>
-            <remarks>If the filter count is greater than 0, the default handling of the spectrumList using the optional constructor parameters is disabled.</remarks>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.VendorCentroiding">
-            <summary>
-            Uses the centroiding/peak picking algorithm that the vendor libraries provide, if available; otherwise uses a low-quality centroiding algorithm.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.CwtCentroiding">
-            <summary>
-            Continuous Wavelet Transform peak picker - high-quality peak picking, may be slow with some high-res data.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseVendorCentroiding">
-            <summary>
-            Add/remove Vendor Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseCwtCentroiding">
-            <summary>
-            Add/remove CWT Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_TOTAL">
-            <summary>
-            Constant that corresponds to "SRM TIC "
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_SINGLE">
-            <summary>
-            Constant that corresponds to "SRM SIC "
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_PRECURSOR">
-            <summary>
-            Constant that corresponds to "SIM SIC "
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunId">
-            <summary>
-            The Run ID
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunStartTime">
-            <summary>
-            The run start time
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ConfigInfo">
-            <summary>
-            Data and Instrument Configuration information
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsABFile">
-            <summary>
-            If the file is an AB Sciex file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsMzWiffXml">
-            <summary>
-            If the file is a MzWiff file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsAgilentFile">
-            <summary>
-            If the file is an Agilent file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsThermoFile">
-            <summary>
-            If the file is a Thermo/Finnigan .raw file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersFile">
-            <summary>
-            If the file is a Waters file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersLockmassCorrectionCandidate">
-            <summary>
-            If the file is a candidate for Waters Lockmass Correction
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsShimadzuFile">
-            <summary>
-            If the file is a Shimadzu file
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ChromatogramCount">
-            <summary>
-            Number of chromatograms
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.SpectrumCount">
-            <summary>
-            Get the spectrum count
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasSrmSpectra">
-            <summary>
-            Check if the file has SRR Spectra
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasDriftTimeSpectra">
-            <summary>
-            Check if the file has drift time spectra
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasChromatogramData">
-            <summary>
-            Check if the file contains chromatogram data
             </summary>
         </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.FilePath">

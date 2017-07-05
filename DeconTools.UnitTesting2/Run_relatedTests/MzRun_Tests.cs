@@ -13,6 +13,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class MzRun_Tests
     {
+        [TestFixtureSetUp]
+        public void ConfigureDllLookup()
+        {
+            pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
+        }
+
         [Test]
         public void constructorTest1()
         {
