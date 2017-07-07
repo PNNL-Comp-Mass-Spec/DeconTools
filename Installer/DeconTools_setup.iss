@@ -23,6 +23,7 @@ Source: DeconTools.Backend\bin\x86\Release\x64\SQLite.Interop.dll               
 Source: DeconTools.Backend\bin\x86\Release\x86\SQLite.Interop.dll                                                                                 ; DestDir: {app}\x86
 Source: DeconTools.Backend\bin\x86\Release\System.Data.SQLite.dll                                                                                 ; DestDir: {app}
 Source: DeconTools.Backend\bin\x86\Release\UIMFLibrary.dll                                                                                        ; DestDir: {app}
+Source: DeconTools.Backend\bin\x86\Release\PRISM.dll                                                                                              ; DestDir: {app}
 
 Source: Library\alglibnet2.dll                                                                                                                    ; DestDir: {app}
 Source: Library\BrukerDataReader.dll                                                                                                              ; DestDir: {app}
