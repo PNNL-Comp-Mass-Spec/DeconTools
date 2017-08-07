@@ -13,8 +13,9 @@ install the vendor-supplied data browsing software so that DeconTools has access
 * mzML files    (Requires ProteoWizard installation)
 * mz5 files     (Requires ProteoWizard installation)
 * Thermo Finnigan .Raw files (requires Xcalibur or MSFileReader)
-  * Download MSFileReader from http://sjsupport.thermofinnigan.com/public/detail.asp?id=703
-  * When the installer offers you the option of the version to install, be sure to install the 32-bit version.
+  * Download MSFileReader v3.x by creating an account at https://thermo.flexnetoperations.com/control/thmo/login 
+    then login and choose "Utility Software". Look for MSFileReader 3.1 SP4 or similar. 
+  * Run the installer and install both the 32-bit and 64-bit versions.
 * Agilent .Wiff files (requires Analyst)
 * Agilent .D folders (requires Chemstation)
 * Micromass files (requires MassLynx)
