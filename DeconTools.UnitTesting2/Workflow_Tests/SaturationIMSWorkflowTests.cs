@@ -21,23 +21,31 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 4,
+                    SignalToNoiseThreshold = 3
+                },
+                ThrashParameters = {MaxFit = 0.6},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 11,
+                    MaxLCScan = 11,
+                    UseMZRange = true,
+                    MinMZ = 710,
+                    MaxMZ = 715,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 1
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.ThrashParameters.MaxFit = 0.6;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 11;
-            parameters.MSGeneratorParameters.MaxLCScan = 11;
-            parameters.MSGeneratorParameters.UseMZRange = true;
-            parameters.MSGeneratorParameters.MinMZ = 710;
-            parameters.MSGeneratorParameters.MaxMZ = 715;
 
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 1;
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
 
@@ -65,11 +73,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -94,11 +100,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
                                  n.IsotopicProfile.ChargeState == chargestate
-                           select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                           select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            mathUtils = new MathUtils();
 
             monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -115,23 +119,31 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 4,
+                    SignalToNoiseThreshold = 3
+                },
+                ThrashParameters = {MaxFit = 0.6},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 11,
+                    MaxLCScan = 11,
+                    UseMZRange = true,
+                    MinMZ = 550,
+                    MaxMZ = 562,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 1
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.ThrashParameters.MaxFit = 0.6;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 11;
-            parameters.MSGeneratorParameters.MaxLCScan = 11;
-            parameters.MSGeneratorParameters.UseMZRange = true;
-            parameters.MSGeneratorParameters.MinMZ = 550;
-            parameters.MSGeneratorParameters.MaxMZ = 562;
 
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 1;
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
 
@@ -159,11 +171,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -188,11 +198,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
                                  n.IsotopicProfile.ChargeState == chargestate
-                           select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                           select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            mathUtils = new MathUtils();
 
             monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -208,23 +216,31 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\DRsample_30ms_16Apr13_0004.UIMF";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 0.0,
+                    SignalToNoiseThreshold = 0.0
+                },
+                ThrashParameters = {MaxFit = 0.6},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 11,
+                    MaxLCScan = 11,
+                    UseMZRange = true,
+                    MinMZ = 430,
+                    MaxMZ = 440,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 7
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 0.0;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 0.0;
-            parameters.ThrashParameters.MaxFit = 0.6;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 11;
-            parameters.MSGeneratorParameters.MaxLCScan = 11;
-            parameters.MSGeneratorParameters.UseMZRange = true;
-            parameters.MSGeneratorParameters.MinMZ = 430;
-            parameters.MSGeneratorParameters.MaxMZ = 440;
 
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 7;
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.ThrashParameters.MinIntensityForScore = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
@@ -253,11 +269,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -282,11 +296,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
                                  n.IsotopicProfile.ChargeState == chargestate
-                           select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                           select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            mathUtils = new MathUtils();
 
             monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -307,23 +319,31 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\BSA_30N2_30ms_gate_10tof_Padjust_0000.UIMF";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 4,
+                    SignalToNoiseThreshold = 3
+                },
+                ThrashParameters = {MaxFit = 0.6},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 2,
+                    MaxLCScan = 2,
+                    UseMZRange = true,
+                    MinMZ = 652,
+                    MaxMZ = 657,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 7
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.ThrashParameters.MaxFit = 0.6;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 2;
-            parameters.MSGeneratorParameters.MaxLCScan = 2;
-            parameters.MSGeneratorParameters.UseMZRange = true;
-            parameters.MSGeneratorParameters.MinMZ = 652;
-            parameters.MSGeneratorParameters.MaxMZ = 657;
 
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 7;
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 6000;
 
@@ -340,25 +360,33 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 2,
+                    SignalToNoiseThreshold = 3,
+                    IsDataThresholded = true
+                },
+                ThrashParameters = {MaxFit = 0.8},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 180,
+                    MaxLCScan = 180,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 7,
+                    UseMZRange = true,
+                    MinMZ = 475,
+                    MaxMZ = 476
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 2;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.PeakDetectorParameters.IsDataThresholded = true;
 
-            parameters.ThrashParameters.MaxFit = 0.8;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 180;
-            parameters.MSGeneratorParameters.MaxLCScan = 180;
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 7;
-            parameters.MSGeneratorParameters.UseMZRange = true;
-            parameters.MSGeneratorParameters.MinMZ = 475;
-            parameters.MSGeneratorParameters.MaxMZ = 476;
 
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.ScanBasedWorkflowParameters.IsRefittingPerformed = false;
 
@@ -374,6 +402,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.Execute();
             return;
 
+#pragma warning disable 162
             sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
@@ -412,17 +441,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
+#pragma warning restore 162
 
         }
 
@@ -432,25 +460,31 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\QC_Shew_13_04_Run-06_12Jul13_Methow_13-05-25.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 2,
+                    SignalToNoiseThreshold = 3,
+                    IsDataThresholded = true
+                },
+                ThrashParameters = {MaxFit = 0.8},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 784,
+                    MaxLCScan = 794,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 7,
+                    UseMZRange = false,
+                    MinMZ = 525.2,
+                    MaxMZ = 525.4
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 2;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.PeakDetectorParameters.IsDataThresholded = true;
-
-            parameters.ThrashParameters.MaxFit = 0.8;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 784;
-            parameters.MSGeneratorParameters.MaxLCScan = 794;
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 7;
-            parameters.MSGeneratorParameters.UseMZRange = false;
-            parameters.MSGeneratorParameters.MinMZ = 525.2;
-            parameters.MSGeneratorParameters.MaxMZ = 525.4;
-
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.ScanBasedWorkflowParameters.IsRefittingPerformed = false;
 
@@ -466,6 +500,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.Execute();
             return;
 
+#pragma warning disable 162
             sw.Stop();
 
             var distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
@@ -504,17 +539,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
+#pragma warning restore 162
 
         }
 
@@ -563,11 +597,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -622,11 +654,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -681,11 +711,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -709,19 +737,27 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
 
-            parameters = new DeconToolsParameters();
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.ThrashParameters.MaxFit = 0.6;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 320;
-            parameters.MSGeneratorParameters.MaxLCScan = 328;
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 3;
-            parameters.MSGeneratorParameters.UseMZRange = false;
-            parameters.MiscMSProcessingParameters.UseZeroFilling = true;
+            parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 4,
+                    SignalToNoiseThreshold = 3
+                },
+                ThrashParameters = {MaxFit = 0.6},
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 320,
+                    MaxLCScan = 328,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 3,
+                    UseMZRange = false
+                },
+                MiscMSProcessingParameters = {UseZeroFilling = true}
+            };
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
 
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
@@ -754,11 +790,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
                        n.IsotopicProfile.ChargeState == chargestate
-                 select n).Select<IsosResult, UIMFIsosResult>(r => (UIMFIsosResult)r).ToList();
+                 select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
-
-            var mathUtils = new MathUtils();
 
             var monoMasses = (from n in featureData select n.IsotopicProfile.MonoIsotopicMass).ToList();
 
@@ -777,18 +811,26 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters
+            {
+                PeakDetectorParameters =
+                {
+                    PeakToBackgroundRatio = 4,
+                    SignalToNoiseThreshold = 3
+                },
+                MSGeneratorParameters =
+                {
+                    UseLCScanRange = true,
+                    MinLCScan = 180,
+                    MaxLCScan = 180,
+                    SumSpectraAcrossLC = true,
+                    SumSpectraAcrossIms = true,
+                    NumLCScansToSum = 1,
+                    NumImsScansToSum = 3
+                }
+            };
 
 
-            parameters.PeakDetectorParameters.PeakToBackgroundRatio = 4;
-            parameters.PeakDetectorParameters.SignalToNoiseThreshold = 3;
-            parameters.MSGeneratorParameters.UseLCScanRange = true;
-            parameters.MSGeneratorParameters.MinLCScan = 180;
-            parameters.MSGeneratorParameters.MaxLCScan = 180;
-            parameters.MSGeneratorParameters.SumSpectraAcrossLC = true;
-            parameters.MSGeneratorParameters.SumSpectraAcrossIms = true;
-            parameters.MSGeneratorParameters.NumLCScansToSum = 1;
-            parameters.MSGeneratorParameters.NumImsScansToSum = 3;
 
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -804,9 +846,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters {
+                ScanBasedWorkflowParameters = {
+                    ScanBasedWorkflowName = "standard"
+                }
+            };
 
-            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "standard";
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             Assert.IsTrue(workflow is IMSScanBasedWorkflow);
 
@@ -826,18 +871,18 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters();
+            var parameters = new DeconToolsParameters {
+                ScanBasedWorkflowParameters = {
+                    ScanBasedWorkflowName = "incorrectTextProblem"
+                }
+            };
 
 
-            parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "incorrectTextProblem";
-            var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            ScanBasedWorkflow.CreateWorkflow(run, parameters);
 
         }
 
-
-
-
-        private static void OutputFeatureIntensityData(List<UIMFIsosResult> featureData, int minFrame, int maxFrame, int maxScan, int minScan)
+        private static void OutputFeatureIntensityData(IReadOnlyCollection<UIMFIsosResult> featureData, int minFrame, int maxFrame, int maxScan, int minScan)
         {
 
 

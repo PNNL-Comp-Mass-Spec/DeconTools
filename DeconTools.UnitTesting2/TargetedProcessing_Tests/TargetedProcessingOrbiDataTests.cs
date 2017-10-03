@@ -1,10 +1,8 @@
 ﻿using System;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Data;
 using DeconTools.Backend.FileIO;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.NETAlignment;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;

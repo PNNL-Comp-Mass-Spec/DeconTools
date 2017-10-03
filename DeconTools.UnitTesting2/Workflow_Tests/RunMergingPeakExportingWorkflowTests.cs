@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Workflows;
 using NUnit.Framework;

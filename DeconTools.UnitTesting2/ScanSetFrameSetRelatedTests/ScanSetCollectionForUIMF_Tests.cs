@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
 

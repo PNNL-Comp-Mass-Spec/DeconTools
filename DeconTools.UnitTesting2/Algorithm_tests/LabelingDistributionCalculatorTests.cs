@@ -54,11 +54,9 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             var obsIntensities = new List<double>(new[] { 118.8932, 73.8074, 34.413, 14.4563, 6.3169 });
 
             var labelDistCalc = new LabelingDistributionCalculator();
-            double[] solvedXVals;
-            double[] solvedYvals;
 
             var intensityThreshold = 0.01;
-            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, intensityThreshold, intensityThreshold, out solvedXVals, out solvedYvals, 
+            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, intensityThreshold, intensityThreshold, out var solvedXVals, out var solvedYvals, 
                                                         truncateTheorBasedOnRelIntensity: false, 
                                                         truncateObservedBasedOnRelIntensity: false, 
                                                         leftPadding: 0, 
@@ -78,10 +76,8 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             Console.WriteLine();
             xydata.Display();
-
-            double fractionUnlabelled, fractionLabelled, averageLabelsIncorporated;
-            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out fractionUnlabelled, out fractionLabelled,
-                                             out averageLabelsIncorporated);
+            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
+                                             out var averageLabelsIncorporated);
 
             Console.WriteLine();
             Console.WriteLine("fractionUnlabelled= " + fractionUnlabelled);
@@ -157,12 +153,10 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
 
             var labelDistCalc = new LabelingDistributionCalculator();
-            double[] solvedXVals;
-            double[] solvedYvals;
 
 
             var d = 0.1;
-            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out solvedXVals, out solvedYvals);
+            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out var solvedXVals, out var solvedYvals);
 
 
             var xydata = new XYData();
@@ -183,11 +177,8 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine();
             Console.WriteLine("Relex-corrected isotopic profile= " + d);
             xydata.Display();
-
-
-            double fractionUnlabelled, fractionLabelled, averageLabelsIncorporated;
-            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out fractionUnlabelled, out fractionLabelled,
-                                             out averageLabelsIncorporated);
+            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
+                                             out var averageLabelsIncorporated);
 
             Console.WriteLine();
             Console.WriteLine("fractionUnlabelled= " + fractionUnlabelled);

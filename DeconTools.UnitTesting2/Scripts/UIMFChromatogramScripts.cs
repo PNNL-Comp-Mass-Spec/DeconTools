@@ -8,7 +8,6 @@ using DeconTools.Backend.DTO;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ZeroFillers;
 using DeconTools.Backend.Runs;
@@ -35,10 +34,12 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakDet = new DeconToolsPeakDetectorV2();
-            peakDet.PeakToBackgroundRatio = 4;
-            peakDet.SignalToNoiseThreshold = 2;
-            peakDet.IsDataThresholded = true;
+            var peakDet = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 4,
+                SignalToNoiseThreshold = 2,
+                IsDataThresholded = true
+            };
 
             var outputFile = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\Saturation_Correction\chromOuput.txt";
 
@@ -75,7 +76,7 @@ namespace DeconTools.UnitTesting2.Scripts
                         catch (Exception ex)
                         {
 
-                            Console.WriteLine("skipping lcscan " + lcscan + " --- it is empty");
+                            Console.WriteLine("skipping lcscan " + lcscan + " --- it is empty (exception " + ex.Message + ")");
 
 
                         }
@@ -125,18 +126,22 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakDet = new DeconToolsPeakDetectorV2();
-            peakDet.PeakToBackgroundRatio = 2;
-            peakDet.SignalToNoiseThreshold = 2;
-            peakDet.IsDataThresholded = true;
+            var peakDet = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 2,
+                SignalToNoiseThreshold = 2,
+                IsDataThresholded = true
+            };
 
 
             var _zeroFiller = new DeconToolsZeroFiller();
 
-            var _deconvolutor = new ThrashDeconvolutorV2();
-            _deconvolutor.UseAutocorrelationChargeDetermination = true;
-            _deconvolutor.Parameters.MaxFit = 0.8;
-            
+            var _deconvolutor = new ThrashDeconvolutorV2
+            {
+                UseAutocorrelationChargeDetermination = true,
+                Parameters = {MaxFit = 0.8}
+            };
+
 
             var saturationWorkflow = new SaturationIMSScanBasedWorkflow(new DeconToolsParameters(), run);
 
@@ -149,17 +154,13 @@ namespace DeconTools.UnitTesting2.Scripts
 
                 var uimfRun = (UIMFRun)run;
 
-
-                var _unsummedMSFeatures = new List<IsosResult>();
-
                 foreach (var lcScanSet in run.ScanSetCollection.ScanSetList)
                 {
                     Console.WriteLine("Scanset= " + lcScanSet);
 
 
                     uimfRun.ResultCollection.MSPeakResultList.Clear();
-                    _unsummedMSFeatures.Clear();
-
+                    var unsummedMSFeatures = new List<IsosResult>();
 
                     var unsummedFrameSet = new ScanSet(lcScanSet.PrimaryScanNumber);
                     //get saturated MSFeatures for unsummed data
@@ -190,12 +191,12 @@ namespace DeconTools.UnitTesting2.Scripts
 
                             _deconvolutor.Deconvolute(uimfRun.ResultCollection); //adds to IsosResultBin
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             errorInFrame = true;
                         }
 
-                        _unsummedMSFeatures.AddRange(run.ResultCollection.IsosResultBin);
+                        unsummedMSFeatures.AddRange(run.ResultCollection.IsosResultBin);
 
 
                         var basePeakIntensity = 0;
@@ -209,7 +210,7 @@ namespace DeconTools.UnitTesting2.Scripts
                                 var theorIso = new IsotopicProfile();
 
                                 saturationWorkflow.RebuildSaturatedIsotopicProfile(run.XYData, isosResult, uimfRun.PeakList, out theorIso);
-                                saturationWorkflow.AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, true, true);
+                                saturationWorkflow.AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso);
 
                             }
 
@@ -303,9 +304,6 @@ namespace DeconTools.UnitTesting2.Scripts
             var imsScanStart = 60;
             var imsScanStop = 250;
 
-
-            var startFrameIndex = 0;
-
             using (var writer = new StreamWriter(outputFile))
             {
                 for (var scan = lcScanStart; scan <= lcScanStop; scan++)
@@ -337,10 +335,10 @@ namespace DeconTools.UnitTesting2.Scripts
                             }
                             else
                             {
-                                basePeakIntensity = (int)imsScanResults.First().IntensityAggregate; 
+                                basePeakIntensity = (int)imsScanResults.First().IntensityAggregate;
                             }
 
-                            
+
                         }
 
                         sb.Append(basePeakIntensity);

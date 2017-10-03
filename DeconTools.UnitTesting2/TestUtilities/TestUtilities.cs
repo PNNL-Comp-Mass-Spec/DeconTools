@@ -10,7 +10,6 @@ using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
 using DeconTools.Workflows.Backend.Core;
-using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2
 {
@@ -442,7 +441,7 @@ namespace DeconTools.UnitTesting2
             var sb = new StringBuilder();
             sb.Append("Process Name =\t" + currentProcess.ProcessName);
             sb.Append(Environment.NewLine);
-            sb.Append("Private bytes =\t" + String.Format("{0:N0}", currentProcess.PrivateMemorySize64));
+            sb.Append("Private bytes =\t" + string.Format("{0:N0}", currentProcess.PrivateMemorySize64));
             sb.Append(Environment.NewLine);
 
             Console.Write(sb.ToString());
@@ -485,7 +484,7 @@ namespace DeconTools.UnitTesting2
         }
 
 
-        public static void DisplayMSPeakResults(List<DeconTools.Backend.DTO.MSPeakResult> list)
+        public static void DisplayMSPeakResults(List<Backend.DTO.MSPeakResult> list)
         {
             var sb = new StringBuilder();
             sb.Append("peakID\tframe\tscan\tChromID\tmz\tintens\tfwhm\n");

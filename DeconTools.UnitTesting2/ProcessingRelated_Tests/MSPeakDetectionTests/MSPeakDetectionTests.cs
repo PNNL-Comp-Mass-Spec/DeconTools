@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
@@ -51,7 +48,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var peakBR = 1.3;
             double sigNoise = 2;
             var isThresholded = true;
-            var peakfitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
+            var peakfitType = Backend.Globals.PeakFitType.QUADRATIC;
 
             var testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
@@ -81,7 +78,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var peakBR = 1.3;
             double sigNoise = 2;
             var isThresholded = true;
-            var peakfitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
+            var peakfitType = Backend.Globals.PeakFitType.QUADRATIC;
 
             var testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 

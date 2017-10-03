@@ -1,11 +1,9 @@
 using System;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
-using ThermoRawFileReader;
 
 namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 {
@@ -89,11 +87,10 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 
             for (var i = startScan; i < stopScan; i++)
             {
-                ThermoRawFileReader.clsScanInfo scanInfo;
-                var success = reader.GetScanInfo(i, out scanInfo);
+                reader.GetScanInfo(i, out ThermoRawFileReader.clsScanInfo scanInfo);
 
                 Console.Write("Working on Scan " + i);
-                Console.WriteLine("; Scan info = " + scanInfo.ToString());
+                Console.WriteLine("; Scan info = " + scanInfo);
 
             }
 

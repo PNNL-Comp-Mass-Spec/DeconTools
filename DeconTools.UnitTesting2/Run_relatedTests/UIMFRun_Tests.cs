@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;

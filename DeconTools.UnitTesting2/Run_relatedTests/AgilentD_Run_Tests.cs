@@ -7,7 +7,6 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 using NUnit.Framework;
-using PNNLOmics.Data;
 using XYData = DeconTools.Backend.XYData;
 
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
 using DeconTools.Backend.Workflows;
 using NUnit.Framework;
@@ -11,12 +10,10 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.UnitTesting2;
 using DeconTools.Backend;
-using DeconTools.Workflows.Backend.Core;
 using System.IO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks.ChargeStateDeciders;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Backend.Data;
@@ -84,10 +81,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             using (var reader = new StreamReader(fileName))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
-                    double currentMz;
-                    double.TryParse(reader.ReadLine(), out currentMz);
+                    double.TryParse(reader.ReadLine(), out var currentMz);
                     mzList.Add(currentMz);
                 }
             }
@@ -103,12 +99,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakBr = 1.3;//0.25;
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakBr = 1.3;   //0.25;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = peakBr,
+                MaxFit = 0.4
+            };
 
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
 
@@ -139,14 +137,17 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakBr =1.3;
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = peakBr,
+                MaxFit = 0.4
+            };
 
-            var deconParams=new DeconToolsParameters();
-            deconParams.ThrashParameters=thrashParameters;
+            var deconParams = new DeconToolsParameters {
+                ThrashParameters = thrashParameters
+            };
 
             var deconvolutor = new HornDeconvolutor(deconParams);
 
@@ -179,11 +180,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakBr = 1.9;//1.3;
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = peakBr,
+                MaxFit = 0.4
+            };
 
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
 
@@ -213,9 +216,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             var numCorrect = comparisions.Values.Count(p => p > 0);
 
-            var numMissing = scottMzVals.Count() - numCorrect;
+            var numMissing = scottMzVals.Length - numCorrect;
 
-            Console.WriteLine("Total annotated= \t" + scottMzVals.Count());
+            Console.WriteLine("Total annotated= \t" + scottMzVals.Length);
             Console.WriteLine("Number correct = \t" + numCorrect);
             Console.WriteLine("Number missing = \t" + numMissing);
 
@@ -228,15 +231,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
         private List<double> GetScottsData()
         {
-            var counter = 0;
             string line;
             var scottsData = new List<double>();
 
-            var file = new System.IO.StreamReader(@"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt");
+            var file = new StreamReader(@"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt");
             while ((line = file.ReadLine()) != null)
             {
-                scottsData.Add(Double.Parse(line));
-                counter++;
+                scottsData.Add(double.Parse(line));
             }
             file.Close();
             return scottsData;
@@ -250,11 +251,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakBr = 0.5;
 
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;//3;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = peakBr,
+                MaxFit = 0.4
+            };
+            //3;
 
             //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
@@ -266,9 +270,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             run.CurrentScanSet = scanset;
 
-            var oldDeconvolutor = new HornDeconvolutor();
-            oldDeconvolutor.MinPeptideBackgroundRatio = peakBr;
-            oldDeconvolutor.MaxFitAllowed = 0.4;
+            var oldDeconvolutor = new HornDeconvolutor
+            {
+                MinPeptideBackgroundRatio = peakBr,
+                MaxFitAllowed = 0.4
+            };
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -324,23 +330,17 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             TestUtilities.DisplayMSFeatures(uniqueToOld);
         }
 
-        private void GetScottComparisons(List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld, double[] scottsDataArray)
+        private void GetScottComparisons(List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld, IReadOnlyList<double> scottsDataArray)
         {
-            var sharedFoundInScotts = 0;
-            var sharedNotFoundInScotts = 0;
-            var uniqueToNewFoundInScotts = 0;
-            var uniqueToNewNotFoundinScotts = 0;
-            var uniqueToOldFoundInScotts = 0;
-            var uniqueToOldNotFoundinScotts = 0;
-            CompareListToScottsData(sharedIsos, scottsDataArray, out sharedFoundInScotts, out sharedNotFoundInScotts);
-            CompareListToScottsData(uniqueToNew, scottsDataArray, out uniqueToNewFoundInScotts, out uniqueToNewNotFoundinScotts);
-            CompareListToScottsData(uniqueToOld, scottsDataArray, out uniqueToOldFoundInScotts, out uniqueToOldNotFoundinScotts);
+            CompareListToScottsData(sharedIsos, scottsDataArray, out var sharedFoundInScotts, out var sharedNotFoundInScotts);
+            CompareListToScottsData(uniqueToNew, scottsDataArray, out var uniqueToNewFoundInScotts, out var uniqueToNewNotFoundinScotts);
+            CompareListToScottsData(uniqueToOld, scottsDataArray, out var uniqueToOldFoundInScotts, out var uniqueToOldNotFoundinScotts);
 
             var totalCorrectFoundByNew = sharedFoundInScotts + uniqueToNewFoundInScotts;
             var totalCorrectFoundByOld = sharedFoundInScotts + uniqueToOldFoundInScotts;
             var totalNOTFOUND_usingOld= sharedNotFoundInScotts+ uniqueToOldNotFoundinScotts;
             var totalNOTFOUND_usingNEW= sharedNotFoundInScotts+ uniqueToNewNotFoundinScotts;
-            var scottsTotal = scottsDataArray.Length;
+            var scottsTotal = scottsDataArray.Count;
             Console.WriteLine("Total correct found new:\t" + totalCorrectFoundByNew);
             Console.WriteLine("Total correct found old:\t" + totalCorrectFoundByOld);
             Console.WriteLine("Total FALSE old:\t" + totalNOTFOUND_usingOld );
@@ -352,10 +352,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Console.WriteLine("False positives unique in new:\t" + uniqueToNewNotFoundinScotts);
             Console.WriteLine("False positives unique in old: \t" + uniqueToOldNotFoundinScotts);
 
-            
+
 
         }
-        private void CompareListToScottsData(List<IsosResult> list, double[] scottsDataArray, out int numFound, out int numNotFound)
+        private void CompareListToScottsData(List<IsosResult> list, IReadOnlyList<double> scottsDataArray, out int numFound, out int numNotFound)
         {
             numFound = 0;
             numNotFound = 0;
@@ -373,12 +373,12 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             }
         }
 
-        private bool IsValueCloseEnoughToOneOfScotts(double mz, double[] scottsDataArray)
+        private bool IsValueCloseEnoughToOneOfScotts(double mz, IReadOnlyList<double> scottsDataArray)
         {
             var aReasonableValue = 0.01;
-            var i = 0;
+            int i;
             var stoppedinArray = false;
-            for (i = 0; i < scottsDataArray.Length; i++)
+            for (i = 0; i < scottsDataArray.Count; i++)
             {
                 if (scottsDataArray[i] > mz)
                 {
@@ -393,8 +393,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 {
                     return true;
                 }
-                else if (i == 0) { return false; }
-                else if (Math.Abs(scottsDataArray[i - 1] - mz) < aReasonableValue)
+
+                if (i == 0) { return false; }
+
+                if (Math.Abs(scottsDataArray[i - 1] - mz) < aReasonableValue)
                 {
                     return true;
                 }
@@ -414,12 +416,15 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+                IsDataThresholded = true
+            };
 
-            var parameters = new ThrashParameters();
-            parameters.MinMSFeatureToBackgroundRatio = 1;
-            parameters.MaxFit = 0.3;
+            var parameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = 1,
+                MaxFit = 0.3
+            };
 
             var deconvolutor = new InformedThrashDeconvolutor(parameters);
             //var deconvolutor2 = new
@@ -451,7 +456,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
             //@"C:\Users\Klin638\Documents\Visual Studio 2010\Backup Files\New folder\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-            //  
+            //
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             //Run run = new RunFactory().CreateRun(fileName);
 
@@ -462,13 +467,15 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
 
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = 3;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = 3,
+                MaxFit = 0.4
+            };
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
             //var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
@@ -480,9 +487,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             run.CurrentScanSet = scanset;
 
-            var oldDeconvolutor = new HornDeconvolutor();
-            oldDeconvolutor.MinPeptideBackgroundRatio = 3;
-            oldDeconvolutor.MaxFitAllowed = 0.4;
+            var oldDeconvolutor = new HornDeconvolutor
+            {
+                MinPeptideBackgroundRatio = 3,
+                MaxFitAllowed = 0.4
+            };
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -541,7 +550,12 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             TestUtilities.DisplayMSFeatures(uniqueToOld);
 
         }
-        private void GetComparisons(List<IsosResult> allNewResults, List<IsosResult> allOldResults, List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld)
+        private void GetComparisons(
+            IReadOnlyCollection<IsosResult> allNewResults,
+            IReadOnlyCollection<IsosResult> allOldResults,
+            ICollection<IsosResult> sharedIsos,
+            ICollection<IsosResult> uniqueToNew,
+            ICollection<IsosResult> uniqueToOld)
         {
 
             var scans = allNewResults.Select(p => p.ScanSet.PrimaryScanNumber).Distinct().OrderBy(p => p).ToList();
@@ -555,10 +569,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 foreach (var newresult in newResults)
                 {
                     var foundMatch = false;
-                    for (var i = 0; i < oldResults.Count; i++)
+                    foreach (var oldResult in oldResults)
                     {
-                        var oldResult = oldResults[i];
-
                         if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
                             newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
                         {
@@ -579,10 +591,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 foreach (var oldResult in oldResults)
                 {
                     var foundMatch = false;
-                    for (var i = 0; i < newResults.Count; i++)
+                    foreach (var newresult in newResults)
                     {
-                        var newresult = newResults[i];
-
                         if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
                             newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
                         {
@@ -614,15 +624,16 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\Vorbi\Yellow_C12_099_18Mar10_Griffin_10-01-13.raw";
 
-            //  
+            //
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             var run = new RunFactory().CreateRun(fileName);
 
 
-            var parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.LCScanMin = 5500;
-            parameters.LCScanMax = 6500;
-
+            var parameters = new PeakDetectAndExportWorkflowParameters
+            {
+                LCScanMin = 5500,
+                LCScanMax = 6500
+            };
 
             var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
@@ -644,8 +655,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                             @"\\Protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             var run = new RunFactory().CreateRun(fileName);
-            List<IsotopicProfile> potentialFeatures;
-            EasyDecisionSetUp(out potentialFeatures);
+            EasyDecisionSetUp(out var potentialFeatures);
             ChargeStateDecider chargestatedecider = new ChromCorrelatingChargeDecider(run);
             var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
 
@@ -654,15 +664,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         private void EasyDecisionSetUp(out List<IsotopicProfile> potentialFeatures)
         {
 
-
-            var peak1_iso1 = MakeMSPeak(0.007932149, 481.27410112055895);
-            var peak2_iso1 = MakeMSPeak(0.007846226, 481.775417927883);
-            var peak3_iso1 = MakeMSPeak(0.00768206455, 482.27682748526291);
+            var peak1_iso1 = MakeMSPeak(0.007932149f, 481.27410112055895);
+            var peak2_iso1 = MakeMSPeak(0.007846226f, 481.775417927883);
+            var peak3_iso1 = MakeMSPeak(0.00768206455f, 482.27682748526291);
             var peaklist1 = MakeMSPeakList(peak1_iso1, peak2_iso1, peak3_iso1);
             var iso1 = MakePotentialFeature(2, 481.27410112055895, 0, peaklist1);
 
-            var peak1_iso2 = MakeMSPeak(0.007932149, 481.27410112055895);
-            var peak2_iso2 = MakeMSPeak(0.00768206455, 482.27682748526291);
+            var peak1_iso2 = MakeMSPeak(0.007932149f, 481.27410112055895);
+            var peak2_iso2 = MakeMSPeak(0.00768206455f, 482.27682748526291);
             var peaklist2 = MakeMSPeakList(peak1_iso2, peak2_iso2);
             var iso2 = MakePotentialFeature(1, 481.27410112055895, 0, peaklist2);
 
@@ -679,8 +688,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var run = new RunFactory().CreateRun(fileName);
             run.CurrentScanSet = new ScanSet(1000);
 
-            List<IsotopicProfile> potentialFeatures;
-            MediumDecisionSetup(out potentialFeatures);
+            MediumDecisionSetup(out var potentialFeatures);
 
             ChargeStateDecider chargestatedecider = new ChromCorrelatingChargeDecider(run);
             var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
@@ -692,19 +700,19 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         {
 
 
-            var peak1_iso1 = MakeMSPeak(0.0151630929, 746.70851219111921);
-            var peak2_iso1 = MakeMSPeak(0.0151641443, 746.87333076347306);
+            var peak1_iso1 = MakeMSPeak(0.0151630929f, 746.70851219111921);
+            var peak2_iso1 = MakeMSPeak(0.0151641443f, 746.87333076347306);
             var peaklist1 = MakeMSPeakList(peak1_iso1, peak2_iso1);
             var iso1 = MakePotentialFeature(6, 746.5392140968064, -1, peaklist1);
 
-            var peak1_iso2 = MakeMSPeak(0.0151641443, 746.87333076347306);
-            var peak2_iso2 = MakeMSPeak(0.01580638, 747.37507455840785);
-            var peak3_iso2 = MakeMSPeak(0.0153686106, 747.87687140741934);
+            var peak1_iso2 = MakeMSPeak(0.0151641443f, 746.87333076347306);
+            var peak2_iso2 = MakeMSPeak(0.01580638f, 747.37507455840785);
+            var peak3_iso2 = MakeMSPeak(0.0153686106f, 747.87687140741934);
             var peaklist2 = MakeMSPeakList(peak1_iso2, peak2_iso2, peak3_iso2);
             var iso2 = MakePotentialFeature(2, 746.87333076347306, 0, peaklist2);
 
-            var peak1_iso3 = MakeMSPeak(0.0151641443, 746.87333076347306);
-            var peak2_iso3 = MakeMSPeak(0.0153686106, 747.87687140741934);
+            var peak1_iso3 = MakeMSPeak(0.0151641443f, 746.87333076347306);
+            var peak2_iso3 = MakeMSPeak(0.0153686106f, 747.87687140741934);
             var peaklist3 = MakeMSPeakList(peak1_iso2, peak2_iso2);
             var iso3 = MakePotentialFeature(1, 746.87333076347306, 0, peaklist3);
 
@@ -724,9 +732,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                  @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             var run = new RunFactory().CreateRun(fileName);
 
-            var parameters = new PeakDetectAndExportWorkflowParameters();
-            parameters.LCScanMin = 5000;
-            parameters.LCScanMax = 7000;
+            var parameters = new PeakDetectAndExportWorkflowParameters
+            {
+                LCScanMin = 5000,
+                LCScanMax = 7000
+            };
 
 
             var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
@@ -756,11 +766,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             //TestUtilities.DisplayIsotopicProfileData(target.TheorIsotopicProfile);
 
-            var chromGen = new PeakChromatogramGenerator();
-            chromGen.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS;
+            var chromGen = new PeakChromatogramGenerator
+            {
+                ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.TOP_N_PEAKS,
+                TopNPeaksLowerCutOff = 0.4,
+                Tolerance = 10
+            };
             //chromGen.ChromatogramGeneratorMode = Globals.ChromatogramGeneratorMode.;
-            chromGen.TopNPeaksLowerCutOff = 0.4;
-            chromGen.Tolerance = 10;
 
 
             //var chromXYData = chromGen.GenerateChromatogram(run, target.TheorIsotopicProfile, target.ElutionTimeTheor);
@@ -838,9 +850,6 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Console.WriteLine("HERE IS THE CORRELATION: " + corr2);
 
 
-
-
-
             //bool alldone = false, done1 = false, done2 = false, done3 = false;
             //int onestarting=0,twostarting=0,threestarting=0;
             //while (!alldone)
@@ -873,13 +882,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
         #region private helper methods
-        private MSPeak MakeMSPeak(double width, double xValue)
+
+        private MSPeak MakeMSPeak(float width, double xValue)
         {
-            var mspeak = new MSPeak();
-            mspeak.Width = (float)width;
-            mspeak.XValue = xValue;
+            var mspeak = new MSPeak(xValue, 0, width);
+
             return mspeak;
         }
+
         private List<MSPeak> MakeMSPeakList(params MSPeak[] msPeaks)
         {
             return msPeaks.ToList();
@@ -894,11 +904,13 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
         private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, List<MSPeak> peakList)
         {
-            var isopo = new IsotopicProfile();
-            isopo.ChargeState = chargeState;
-            isopo.MonoPeakMZ = monoPeakMZ;
-            isopo.MonoIsotopicPeakIndex = monoIsotpoicPeakIndex;
-            isopo.Peaklist = peakList;
+            var isopo = new IsotopicProfile
+            {
+                ChargeState = chargeState,
+                MonoPeakMZ = monoPeakMZ,
+                MonoIsotopicPeakIndex = monoIsotpoicPeakIndex,
+                Peaklist = peakList
+            };
             return isopo;
         }
         #endregion

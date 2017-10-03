@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using NUnit.Framework;
@@ -24,8 +23,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+                IsDataThresholded = true
+            };
 
             run.CurrentScanSet = scan;
 
@@ -47,32 +47,33 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
-            peakDetector.SignalToNoiseThreshold = 2;
-            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = true
+            };
 
             run.CurrentScanSet = scan;
             msgen.Execute(run.ResultCollection);
 
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, 400, 1000);
-            var expectedPeaks = new List<Peak>();
-
-            // 3 most abundant peaks
-            expectedPeaks.Add(new Peak(481.274, 13084440F, 0.0079F));
-            expectedPeaks.Add(new Peak(639.822, 9063344F, 0.0119F));
-            expectedPeaks.Add(new Peak(579.63, 7917913F, 0.0104F));
-
-            // 3 medium abundance peaks
-            expectedPeaks.Add(new Peak(907.961, 416092.1F, 0.0187F));
-            expectedPeaks.Add(new Peak(607.305, 415606.4F, 0.0114F));
-            expectedPeaks.Add(new Peak(515.945, 415311F, 0.0086F));
-
-            // 3 least abundant peaks
-            expectedPeaks.Add(new Peak(861.366, 199058.3F, 0.0192F));
-            expectedPeaks.Add(new Peak(479.754, 198565.2F, 0.0071F));
-            expectedPeaks.Add(new Peak(935.447, 198530.2F, 0.0206F));
+            var expectedPeaks = new List<Peak>
+            {
+                // 3 most abundant peaks
+                new Peak(481.274, 13084440F, 0.0079F),
+                new Peak(639.822, 9063344F, 0.0119F),
+                new Peak(579.63, 7917913F, 0.0104F),
+                // 3 medium abundance peaks
+                new Peak(907.961, 416092.1F, 0.0187F),
+                new Peak(607.305, 415606.4F, 0.0114F),
+                new Peak(515.945, 415311F, 0.0086F),
+                // 3 least abundant peaks
+                new Peak(861.366, 199058.3F, 0.0192F),
+                new Peak(479.754, 198565.2F, 0.0071F),
+                new Peak(935.447, 198530.2F, 0.0206F)
+            };
 
             var sb = new StringBuilder();
 
@@ -87,8 +88,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 {
                     if (Math.Abs(expectedPeak.XValue - peak.XValue) < 0.01)
                     {
-                        var widthIsDifferent = Math.Abs(expectedPeak.Width - peak.Width) > 0.001;
-
                         sb.Append(peak.DataIndex + "\t" + peak.XValue.ToString("0.000").PadRight(8) + "\t" + peak.Height.ToString("0").PadRight(8) + "\t" + peak.Width.ToString("0.0000") + Environment.NewLine);
                         found = true;
                         break;
@@ -109,7 +108,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             // Console.WriteLine("Full peak list");
             // TestUtilities.DisplayPeaks(peaks);
-        
+
         }
 
         [Test]
@@ -120,11 +119,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
-            peakDetector.SignalToNoiseThreshold = 2;
-            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = true
+            };
 
             run.CurrentScanSet = scan;
 
@@ -143,14 +144,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
-            peakDetector.SignalToNoiseThreshold = 2;
-            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = true
+            };
 
 
-            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -170,14 +173,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
-            peakDetector.SignalToNoiseThreshold = 2;
-            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = true
+            };
 
 
-            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -208,14 +213,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
-            peakDetector.SignalToNoiseThreshold = 2;
-            peakDetector.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = true
+            };
 
 
-            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
@@ -246,9 +253,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
-            peakDetector.RawDataType = Globals.RawDataType.Centroided;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true)
+            {
+                RawDataType = Globals.RawDataType.Centroided,
+                IsDataThresholded = true
+            };
 
             run.CurrentScanSet = scan;
 
@@ -275,15 +284,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            
+
             // Note that setting the PeakFitType to Apex will not matter since RawDataType is Centroided
             // It would only matter if the RawDataType was Profile
 
-            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.APEX, true);
-            peakDetector.RawDataType = Globals.RawDataType.Centroided;
-            peakDetector.SignalToNoiseThreshold = 0;
-            peakDetector.PeakToBackgroundRatio = 0;
-            peakDetector.IsDataThresholded = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.APEX, true)
+            {
+                RawDataType = Globals.RawDataType.Centroided,
+                SignalToNoiseThreshold = 0,
+                PeakToBackgroundRatio = 0,
+                IsDataThresholded = true
+            };
 
             run.CurrentScanSet = scan;
 

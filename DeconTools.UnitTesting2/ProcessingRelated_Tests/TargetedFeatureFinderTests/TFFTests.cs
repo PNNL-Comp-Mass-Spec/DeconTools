@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.FileIO;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
@@ -28,10 +26,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             var mt24702_charge3 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 3 select n).First();
             var mt24702_charge4 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
 
-
-
-
-
         }
 
 
@@ -40,17 +34,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
         public void n14N15LabelledData_TFFTest1()
         {
             double featureFinderTol = 15;
-            var featureFinderRequiresMonoPeak = false;
 
             var n14n15Util = new N14N15TestingUtilities();
             //get sample MS from Test Data
-            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
+            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one
             var mt23140708 = n14n15Util.CreateMT23140708_Z3();
 
 
             //get ms peaks
-            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            var msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2);
+            var msPeakList = peakDet.FindPeaks(massSpectrum);
 
             //TestUtilities.DisplayPeaks(msPeakList);
 
@@ -64,9 +57,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
 
             //find features in experimental data, using the theoretical profiles
-            var msfeatureFinder = new BasicTFF();
-            msfeatureFinder.ToleranceInPPM = featureFinderTol;
-            msfeatureFinder.NeedMonoIsotopicPeak = featureFinderRequiresMonoPeak;
+            var msfeatureFinder = new BasicTFF
+            {
+                ToleranceInPPM = featureFinderTol,
+                NeedMonoIsotopicPeak = false
+            };
 
             var n14profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
             var n15profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabelled);
@@ -96,27 +91,29 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
         {
             var n14n15Util = new N14N15TestingUtilities();
             //get sample MS from Test Data
-            
+
             var rf=new RunFactory();
             var run = rf.CreateRun(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
-            
-            
+
+
             run.XYData = N14N15TestingUtilities.GetTestSpectrum(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
 
             var mt23140708 = n14n15Util.CreateMT23085904_Z2();
             run.CurrentMassTag = mt23140708;
             run.ResultCollection.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
-            var theorN14FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            var theorN14FeatureGen = new TomTheorFeatureGenerator(Globals.LabellingType.NONE, 0.005);
             theorN14FeatureGen.GenerateTheorFeature(mt23140708);
 
-            var theorN15FeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var theorN15FeatureGen = new TomTheorFeatureGenerator(Globals.LabellingType.N15, 0.005);
             theorN15FeatureGen.GenerateTheorFeature(mt23140708);
 
 
-            var parameters=new IterativeTFFParameters();
-            parameters.IsotopicProfileType = Globals.IsotopicProfileType.LABELLED;
-            parameters.ToleranceInPPM = 30;
+            var parameters = new IterativeTFFParameters
+            {
+                IsotopicProfileType = Globals.IsotopicProfileType.LABELLED,
+                ToleranceInPPM = 30
+            };
 
 
             var itff = new IterativeTFF(parameters);
@@ -136,7 +133,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
         }
 
-               
+
 
 
     }

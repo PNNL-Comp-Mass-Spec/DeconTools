@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
-using DeconTools.Backend.Core;
+﻿using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTests
 {
@@ -16,7 +11,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         [Test]
         public void test1()
         {
-            //Run run = 
+            //Run run =
 
 
 

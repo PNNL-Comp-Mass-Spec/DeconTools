@@ -1,12 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Parameters;
-using DeconTools.Backend.Runs;
-using NUnit.Framework;
-
-namespace DeconTools.UnitTesting2.Run_relatedTests
+﻿namespace DeconTools.UnitTesting2.Run_relatedTests
 {
 #if !Disable_DeconToolsV2
     [TestFixture]

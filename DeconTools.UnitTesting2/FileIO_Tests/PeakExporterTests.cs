@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NUnit.Framework;
-using DeconTools.Backend.Core;
+﻿using NUnit.Framework;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
 using System.IO;
 

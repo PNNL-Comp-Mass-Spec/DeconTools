@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using DeconTools.Backend;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
@@ -56,11 +54,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             //chromdata2.Display();
 
             ChromatogramCorrelatorBase correlator = new ChromatogramCorrelator(3);
-            double slope=0;
-            double intercept=0;
-            double rsquaredVal=0;
 
-            correlator.GetElutionCorrelationData(chromdata1, chromdata2, out slope, out intercept, out rsquaredVal);
+            correlator.GetElutionCorrelationData(chromdata1, chromdata2, out var slope, out var intercept, out var rsquaredVal);
 
             Console.WriteLine(mt);
 
@@ -160,13 +155,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             //chromdata2.Display();
 
             ChromatogramCorrelatorBase correlator = new ChromatogramCorrelator(3);
-            double slope = 0;
-            double intercept = 0;
-            double rsquaredVal = 0;
 
-            correlator.GetElutionCorrelationData(chromdata1, chromdata2, out slope, out intercept, out rsquaredVal);
+            correlator.GetElutionCorrelationData(chromdata1, chromdata2, out var slope, out var intercept, out var rsquaredVal);
 
-           
+
             Console.WriteLine("slope = \t" + slope);
             Console.WriteLine("intercept = \t" + intercept);
             Console.WriteLine("rsquared = \t" + rsquaredVal);

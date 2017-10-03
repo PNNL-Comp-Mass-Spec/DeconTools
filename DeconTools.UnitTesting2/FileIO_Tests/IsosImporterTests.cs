@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 
@@ -16,8 +13,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000_6050_isos.csv";
             var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.Finnigan);
 
-            var results = new List<IsosResult>();
-            results = importer.Import();
+            var results = importer.Import();
 
             Assert.AreEqual(1340, results.Count);
 
@@ -42,8 +38,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000_Frames800_802_isos.csv";
             var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.PNNL_UIMF);
 
-            var results = new List<IsosResult>();
-            results = importer.Import();
+            var results = importer.Import();
 
             Assert.AreEqual(4709, results.Count);
 
@@ -70,8 +65,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000_Frames800_802_isos.csv";
             var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.PNNL_UIMF, startFrame, stopFrame);
 
-            var results = new List<IsosResult>();
-            results = importer.Import();
+            var results = importer.Import();
 
             Assert.AreEqual(1533, results.Count);
 

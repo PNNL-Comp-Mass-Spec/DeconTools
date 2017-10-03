@@ -9,7 +9,6 @@ using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
-using DeconToolsV2.Peaks;
 using NUnit.Framework;
 
 

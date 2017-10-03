@@ -6,8 +6,6 @@ using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Data;
-using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Runs;
@@ -123,15 +121,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
         {
             var run = RunUtilities.CreateAndLoadPeaks(FileRefs.RawDataMSFiles.OrbitrapStdFile1,
                                                     FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
-
-            var targetMZ = 759.4032;
-            var startScan = 5500;
-            var stopScan = 6500;
-
-            
+         
             double toleranceInPPM = 20;
-
-            var chromGen = new PeakChromatogramGenerator();
 
             var mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;

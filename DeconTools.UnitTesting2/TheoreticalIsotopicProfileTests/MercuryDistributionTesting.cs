@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution;
 using NUnit.Framework;
 using PNNLOmics.Data.Constants;

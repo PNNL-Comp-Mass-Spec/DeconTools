@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using DeconTools.Backend.Data;
 using NUnit.Framework;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Runs;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ResultValidators;
-using System.Diagnostics;
 using System.IO;
 using DeconTools.Backend.FileIO;
 

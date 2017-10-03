@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;

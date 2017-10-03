@@ -531,7 +531,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 sr.ReadLine();
 
 
-                while (sr.Peek() != -1)
+                while (!sr.EndOfStream)
                 {
                     sr.ReadLine();
                     scansFileLineCounter++;

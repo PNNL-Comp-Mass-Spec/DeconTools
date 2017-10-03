@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend;
+﻿using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.UnitTesting2.QuantificationTests;
 using NUnit.Framework;
 
@@ -23,11 +17,10 @@ namespace DeconTools.UnitTesting2.Utilities
         {
 
             double featureFinderTol = 15;
-            var featureFinderRequiresMonoPeak = false;
 
              var n14n15Util = new N14N15TestingUtilities();
             //get MS
-            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one 
+            var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one
 
 
             var mt23140708 = n14n15Util.CreateMT23140708_Z3();
@@ -40,16 +33,15 @@ namespace DeconTools.UnitTesting2.Utilities
 
 
             //get ms peaks
-            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, false);
-            var msPeakList = peakDet.FindPeaks(massSpectrum, 0, 0);
+            var peakDet = new DeconToolsPeakDetectorV2(1.3, 2);
+            var msPeakList = peakDet.FindPeaks(massSpectrum);
 
-            var bff = new BasicTFF(featureFinderTol, featureFinderRequiresMonoPeak);
+            var bff = new BasicTFF(featureFinderTol, requiresMonoPeak: false);
             var n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
 
             var theorXYData=   mt23140708.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(n14Profile.GetFWHM());
 
 
-            var theorMaxY = theorXYData.Yvalues.Max();
             double obsMaxY = n14Profile.getMostIntensePeak().Height;
 
 
@@ -83,8 +75,8 @@ namespace DeconTools.UnitTesting2.Utilities
 
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
-            double offset = 0;
-            if (theorIsotopicProfile == null || theorIsotopicProfile.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
+            double offset;
+            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
 
             var mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
             var indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);

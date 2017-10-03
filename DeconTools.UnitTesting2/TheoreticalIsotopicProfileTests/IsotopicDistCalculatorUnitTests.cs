@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -269,7 +268,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            //using a String Key with a dictionary
+            //using a string Key with a dictionary
             var elementKey = "C";
 
             var elementMass = Constants.Elements[elementKey].MassMonoIsotopic;

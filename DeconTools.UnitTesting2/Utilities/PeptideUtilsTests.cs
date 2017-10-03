@@ -1,7 +1,6 @@
 ﻿using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 using System;
-using ProteinCalc;
 
 namespace DeconTools.UnitTesting2.Utilities
 {

@@ -26,12 +26,8 @@ namespace DeconTools.UnitTesting2.Utilities
             double minMZ = 749;
             double maxMZ = 754;
 
-            int[] scans;
-            float[] intensities;
-            double[] mzBinVals;
 
-
-            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out scans, out mzBinVals, out intensities);
+            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out var scans, out var mzBinVals, out var intensities);
 
             var intensities2D = extractor.GetIntensitiesAs2DArray();
             Console.WriteLine(extractor.OutputElutionProfileAsString());
@@ -61,12 +57,8 @@ namespace DeconTools.UnitTesting2.Utilities
             double minMZ = 749;
             double maxMZ = 754;
 
-            int[] scans;
-            float[] intensities;
-            double[] mzBinVals;
 
-
-            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out scans, out mzBinVals, out intensities);
+            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out var scans, out var mzBinVals, out var intensities);
 
             var intensities2D = extractor.GetIntensitiesAs2DArray();
             extractor.OutputElutionProfileToFile(outputFile);

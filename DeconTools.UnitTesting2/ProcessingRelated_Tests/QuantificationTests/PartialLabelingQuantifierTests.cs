@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
@@ -21,8 +20,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
              var isoCreator = new LabeledIsotopicProfileUtilities();
 
             var elementLabelled = "C";
-            var lightIsotope = 12;
-            var heavyIsotope = 13;
 
             var target = new PeptideTarget();
             target.Code = peptideSeq;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;

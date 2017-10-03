@@ -3,7 +3,6 @@ using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
@@ -82,7 +81,7 @@ namespace DeconTools.UnitTesting2
             Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
-            Task ticExtractor = new DeconTools.Backend.ProcessingTasks.UIMF_TICExtractor();
+            Task ticExtractor = new UIMF_TICExtractor();
             Task driftTimeextractor = new UIMFDriftTimeExtractor();
 
             foreach (var frame in run.ScanSetCollection.ScanSetList)
