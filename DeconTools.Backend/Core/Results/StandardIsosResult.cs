@@ -16,8 +16,8 @@ namespace DeconTools.Backend
         
         public StandardIsosResult(Run run, ScanSet scanset)
         {
-            this.Run = run;
-            this.ScanSet = scanset;
+            Run = run;
+            ScanSet = scanset;
         }
 
 

@@ -25,11 +25,11 @@ namespace DeconTools.Backend.Data
             StreamWriter sw;
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error creating file " + this.fileName + ": " + ex.Message);
+                throw new Exception("Error creating file " + fileName + ": " + ex.Message);
             }
 
             if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4, false, 0.001, false), DblToString(3.14159, 4)))

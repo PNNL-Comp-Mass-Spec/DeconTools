@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Data
 
                 var percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
 
-                if (this.backgroundWorker != null)
+                if (backgroundWorker != null)
                 {
                     peakProgressInfo.ProgressInfoString = "Loading Peaks ";
                     backgroundWorker.ReportProgress(percentProgress);

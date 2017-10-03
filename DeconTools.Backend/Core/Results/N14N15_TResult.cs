@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Core
         public override void DisplayToConsole()
         {
             base.DisplayToConsole();
-            Console.WriteLine("Ratio = \t" + StringUtilities.DblToString(this.RatioN14N15, 2));
+            Console.WriteLine("Ratio = \t" + StringUtilities.DblToString(RatioN14N15, 2));
         }
 
 
@@ -83,44 +83,44 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                this.NumChromPeaksWithinToleranceForN15Profile = numChromPeaksWithinTolerance;
+                NumChromPeaksWithinToleranceForN15Profile = numChromPeaksWithinTolerance;
             }
         }
 
         public int GetScanNumN15()
         {
-            if (this.ScanSetForN15Profile == null) return -1;
+            if (ScanSetForN15Profile == null) return -1;
             else
             {
-                return this.ScanSetForN15Profile.PrimaryScanNumber;
+                return ScanSetForN15Profile.PrimaryScanNumber;
             }
         }
 
 
         public double GetNETN15()
         {
-            if (this.ChromPeakSelectedN15 == null) return -1;
-            return this.ChromPeakSelectedN15.NETValue;
+            if (ChromPeakSelectedN15 == null) return -1;
+            return ChromPeakSelectedN15.NETValue;
 
         }
 
         public MSPeak GetMonoisotopicPeakForLabelledProfile()
         {
-            if (this.Target == null ||
-                this.IsotopicProfile == null ||
-                this.IsotopicProfileLabeled == null)
+            if (Target == null ||
+                IsotopicProfile == null ||
+                IsotopicProfileLabeled == null)
             {
                 return null;
             }
 
-            var numNitrogens = this.Target.GetAtomCountForElement("N");
+            var numNitrogens = Target.GetAtomCountForElement("N");
 
-            var monoPeakForUnlabelled = this.IsotopicProfile.getMonoPeak();
+            var monoPeakForUnlabelled = IsotopicProfile.getMonoPeak();
             if (monoPeakForUnlabelled == null) return null;
 
-            var expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / this.IsotopicProfile.ChargeState;
+            var expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / IsotopicProfile.ChargeState;
 
-            var monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(this.IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
+            var monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
 
             return monoPeakOfLabelled;
 
@@ -139,12 +139,12 @@ namespace DeconTools.Backend.Core
 
         internal override void AddLabelledIso(IsotopicProfile labelledIso)
         {
-            this.IsotopicProfileLabeled = labelledIso;
+            IsotopicProfileLabeled = labelledIso;
         }
 
         internal override void AddTheoreticalLabelledIsotopicProfile(IsotopicProfile theorLabelledIso)
         {
-            this.TheorIsotopicProfileLabeled = theorLabelledIso;
+            TheorIsotopicProfileLabeled = theorLabelledIso;
         }
 
 

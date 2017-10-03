@@ -12,10 +12,10 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public TargetBase()
         {
-            this.ElementLookupTable = new Dictionary<string, int>();
+            ElementLookupTable = new Dictionary<string, int>();
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
             ChargeStateTargets = new List<int>();
-            this.MsLevel = 1; // Default to MS1 Target
+            MsLevel = 1; // Default to MS1 Target
         }
 
         protected TargetBase(TargetBase copiedTarget)

@@ -11,8 +11,9 @@ namespace DeconTools.Backend.Data
 
         public IMFIsosExporter(string fileName)
         {
-            this.delimiter = ',';
-            this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,orig_intensity,TIA_orig_intensity";
+            delimiter = ',';
+            headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,orig_intensity,TIA_orig_intensity";
+
             // Alternate header line if writing out the fit_count_basis
             //this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,orig_intensity,TIA_orig_intensity,fit_basis_count";
             this.fileName = fileName;
@@ -34,12 +35,12 @@ namespace DeconTools.Backend.Data
             StreamWriter sw;
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
 
             }
             catch (Exception)
             {
-                throw new System.IO.IOException("Could not access the output file. Check to see if it is already open.");
+                throw new IOException("Could not access the output file. Check to see if it is already open.");
             }
             sw.WriteLine(headerLine);
 

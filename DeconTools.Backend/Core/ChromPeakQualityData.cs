@@ -16,12 +16,12 @@ namespace DeconTools.Backend.Core
 
         public ChromPeakQualityData(ChromPeak peak)
         {
-            this.InterferenceScore = 1;     // worst possible
-            this.FitScore = 1;   // worst possible
-            this.Abundance = 0;
-            this.Peak = peak;
-            this.IsotopicProfileFound = false;
-            this.IsIsotopicProfileFlagged = false;
+            InterferenceScore = 1;     // worst possible
+            FitScore = 1;   // worst possible
+            Abundance = 0;
+            Peak = peak;
+            IsotopicProfileFound = false;
+            IsIsotopicProfileFlagged = false;
         }
 
         public string Display()

@@ -8,7 +8,7 @@ namespace DeconTools.Backend.Core
     {
         public ScanResultCollection()
         {
-            this.scanResultList = new List<ScanResult>();
+            ScanResultList = new List<ScanResult>();
         }
 
         public List<ScanResult> ScanResultList { get; set; }

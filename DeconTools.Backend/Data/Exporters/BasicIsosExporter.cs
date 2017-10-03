@@ -8,10 +8,12 @@ namespace DeconTools.Backend.Data
     public class BasicIsosExporter : IsosExporter
     {
         private string fileName;
+        /// <param name="fileName"></param>
         public BasicIsosExporter(string fileName)
         {
-            this.delimiter = ',';
-            this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
+            delimiter = ',';
+            headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
+
             // Alternate header line if writing out the fit_count_basis
             //this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,fit_basis_count";
             this.fileName = fileName;
@@ -23,9 +25,10 @@ namespace DeconTools.Backend.Data
         {
             StringBuilder sb;
             StreamWriter sw;
+
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
 
             }
             catch (Exception)

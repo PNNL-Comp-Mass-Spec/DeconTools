@@ -11,14 +11,14 @@ namespace DeconTools.Backend.Core
 
         protected TargetedResultBase()
         {
-            this.ChromPeakQualityList = new List<ChromPeakQualityData>();
+            ChromPeakQualityList = new List<ChromPeakQualityData>();
         }
 
         protected TargetedResultBase(TargetBase target)
         {
-            this.Target = target;
-            this.IsotopicProfile = new IsotopicProfile();
-            this.ChromPeakQualityList = new List<ChromPeakQualityData>();
+            Target = target;
+            IsotopicProfile = new IsotopicProfile();
+            ChromPeakQualityList = new List<ChromPeakQualityData>();
         }
 
         #endregion
@@ -53,7 +53,7 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// Type of failure during targeted processing
         /// </summary>
-        public DeconTools.Backend.Globals.TargetedResultFailureType FailureType { get; set; }
+        public Globals.TargetedResultFailureType FailureType { get; set; }
 
 
         #endregion
@@ -80,11 +80,11 @@ namespace DeconTools.Backend.Core
 
             }
             sb.Append("} \n");
-            if (this.IsotopicProfile != null && this.IsotopicProfile.Peaklist != null && this.IsotopicProfile.Peaklist.Count > 0)
+            if (IsotopicProfile != null && IsotopicProfile.Peaklist != null && IsotopicProfile.Peaklist.Count > 0)
             {
-                sb.Append("Observed MZ and intensity = " + this.IsotopicProfile.getMonoPeak().XValue + "\t" + this.IsotopicProfile.getMonoPeak().Height + "\n");
+                sb.Append("Observed MZ and intensity = " + IsotopicProfile.getMonoPeak().XValue + "\t" + IsotopicProfile.getMonoPeak().Height + "\n");
             }
-            sb.Append("FitScore = " + this.Score.ToString("0.0000") + "\n");
+            sb.Append("FitScore = " + Score.ToString("0.0000") + "\n");
             return sb.ToString();
         }
 
@@ -122,8 +122,8 @@ namespace DeconTools.Backend.Core
        
         public virtual double GetNETAlignmentError()
         {
-            double theorNET = this.Target.NormalizedElutionTime;
-            var obsNET = this.Run.NetAlignmentInfo.GetNETValueForScan(GetScanNum());
+            double theorNET = Target.NormalizedElutionTime;
+            var obsNET = Run.NetAlignmentInfo.GetNETValueForScan(GetScanNum());
 
             var netError = obsNET - theorNET;
             return netError;
@@ -182,13 +182,13 @@ namespace DeconTools.Backend.Core
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()
         {
-            if (this.Target == null || this.Target.IsotopicProfile == null)
+            if (Target == null || Target.IsotopicProfile == null)
             {
                 return 0;
             }
             else
             {
-                return this.Target.IsotopicProfile.getMostIntensePeak().XValue;
+                return Target.IsotopicProfile.getMostIntensePeak().XValue;
             }
 
         }
@@ -196,16 +196,16 @@ namespace DeconTools.Backend.Core
 
         public double GetMZOfObservedPeakClosestToTargetVal(double targetMZ)
         {
-            if (this.IsotopicProfile == null || this.IsotopicProfile.Peaklist == null)
+            if (IsotopicProfile == null || IsotopicProfile.Peaklist == null)
             {
                 return 0;
             }
             else
             {
-                var indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(this.IsotopicProfile.Peaklist, targetMZ, 0, this.IsotopicProfile.Peaklist.Count - 1, 0.1);
+                var indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(IsotopicProfile.Peaklist, targetMZ, 0, IsotopicProfile.Peaklist.Count - 1, 0.1);
                 if (indexOfTargetPeak != -1)
                 {
-                    return this.IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
+                    return IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
                 }
                 else
                 {
@@ -272,27 +272,27 @@ namespace DeconTools.Backend.Core
 
         public virtual void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
         {
-            this.NumChromPeaksWithinTolerance = numChromPeaksWithinTolerance;
+            NumChromPeaksWithinTolerance = numChromPeaksWithinTolerance;
         }
 
 
         public virtual void ResetResult()
         {
-            this.Flags.Clear();
-            this.ErrorDescription = "";
-            this.Score = 1;
-            this.InterferenceScore = 1;
-            this.IsotopicProfile = null;
-            this.ChromPeakSelected = null;
-            this.FailedResult = false;
-            this.FailureType = Globals.TargetedResultFailureType.None;
+            Flags.Clear();
+            ErrorDescription = "";
+            Score = 1;
+            InterferenceScore = 1;
+            IsotopicProfile = null;
+            ChromPeakSelected = null;
+            FailedResult = false;
+            FailureType = Globals.TargetedResultFailureType.None;
         }
 
         public virtual void ResetMassSpectrumRelatedInfo()
         {
-            this.Score = 1;
-            this.InterferenceScore = 1;
-            this.IsotopicProfile = null;
+            Score = 1;
+            InterferenceScore = 1;
+            IsotopicProfile = null;
         }
 
 

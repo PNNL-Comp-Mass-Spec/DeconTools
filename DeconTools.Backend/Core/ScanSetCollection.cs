@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Core
 
         public ScanSetCollection()
         {
-            this.ScanSetList = new List<ScanSet>();
+            ScanSetList = new List<ScanSet>();
         }
 
         public void Create(Run run, int numScansSummed, int scanIncrement, bool processMSMS = true)
@@ -372,15 +372,15 @@ namespace DeconTools.Backend.Core
 
         public ScanSet GetScanSet(int primaryNum)
         {
-            if (this.ScanSetList == null || this.ScanSetList.Count == 0) return null;
+            if (ScanSetList == null || ScanSetList.Count == 0) return null;
 
-            return (this.ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum));
+            return (ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum));
 
         }
 
         public ScanSet GetNextMSScanSet(Run run, int primaryNum, bool ascending)
         {
-            if (this.ScanSetList == null || this.ScanSetList.Count == 0) return null;
+            if (ScanSetList == null || ScanSetList.Count == 0) return null;
 
             var scan = ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum);
 

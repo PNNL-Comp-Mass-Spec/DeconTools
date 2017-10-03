@@ -58,7 +58,7 @@ namespace DeconTools.Backend.Core
 
         public int CompareTo(Peak other)
         {
-            return this.XValue.CompareTo(other.XValue);
+            return XValue.CompareTo(other.XValue);
         }
 
         protected bool Equals(Peak other)
@@ -70,7 +70,7 @@ namespace DeconTools.Backend.Core
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Peak) obj);
         }
 

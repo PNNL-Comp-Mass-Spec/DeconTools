@@ -13,10 +13,10 @@ namespace DeconTools.Backend.Core
         
         public UIMFIsosResult(Run run, ScanSet lcScanset, IMSScanSet scanset)
         {
-            this.Run = run;
-            this.ScanSet = lcScanset;
-            this.IMSScanSet = scanset;
-            
+            Run = run;
+            ScanSet = lcScanset;
+            IMSScanSet = scanset;
+
         }
 
         public IMSScanSet IMSScanSet { get; set; }

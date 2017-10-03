@@ -26,11 +26,11 @@ namespace DeconTools.Backend.Data
 
         public PeakImporterFromSQLite(string sqliteFilename, BackgroundWorker bw)
         {
-            this.backgroundWorker = bw;
+            backgroundWorker = bw;
 
             if (!File.Exists(sqliteFilename))
             {
-                throw new System.IO.IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqliteFilename));
+                throw new IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqliteFilename));
             }
             this.sqliteFilename = sqliteFilename;
         }
@@ -87,7 +87,7 @@ namespace DeconTools.Backend.Data
                         peakresult.MSPeak.Width = (float)(double)reader["fwhm"];
                         peakList.Add(peakresult);
 
-                        if (this.backgroundWorker != null)
+                        if (backgroundWorker != null)
                         {
                             if (backgroundWorker.CancellationPending)
                             {

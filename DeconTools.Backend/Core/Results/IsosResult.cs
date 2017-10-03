@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeconTools.Backend.Core
 {
@@ -48,7 +47,7 @@ namespace DeconTools.Backend.Core
 
         public void Display()
         {
-            Console.WriteLine(this.ToString());
+            Console.WriteLine(ToString());
 
         }
 

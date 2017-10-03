@@ -176,7 +176,7 @@ namespace DeconTools.Backend.Core
             // Look up MSLevel from Raw data
             var mslevel = GetMSLevelFromRawData(scanNum);
 
-            this.MSLevelList.Add(scanNum, (byte)mslevel);
+            MSLevelList.Add(scanNum, (byte)mslevel);
 
             return mslevel;
         }
@@ -343,18 +343,18 @@ namespace DeconTools.Backend.Core
                 case Globals.ScanSelectionMode.CLOSEST:
                     var upperScan = -1;
                     var lowerScan = -1;
-                    if (this.GetMSLevel(inputScan) == 1) return inputScan;
-                    for (var i = inputScan; i <= this.MaxLCScan; i++)
+                    if (GetMSLevel(inputScan) == 1) return inputScan;
+                    for (var i = inputScan; i <= MaxLCScan; i++)
                     {
-                        if (this.GetMSLevel(i) == 1)
+                        if (GetMSLevel(i) == 1)
                         {
                             upperScan = i;
                             break;
                         }
                     }
-                    for (var i = inputScan; i >= this.MinLCScan; i--)
+                    for (var i = inputScan; i >= MinLCScan; i--)
                     {
-                        if (this.GetMSLevel(i) == 1)
+                        if (GetMSLevel(i) == 1)
                         {
                             lowerScan = i;
                             break;
@@ -476,7 +476,7 @@ namespace DeconTools.Backend.Core
 
         public virtual void Dispose()
         {
-            this.Close();
+            Close();
         }
 
         #endregion

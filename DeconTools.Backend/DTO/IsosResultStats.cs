@@ -19,7 +19,7 @@ namespace DeconTools.Backend.DTO
 
         public IsosResultStats(List<IsosResult>isosResults)
         {
-            this.results = isosResults;
+            results = isosResults;
 
         }
 

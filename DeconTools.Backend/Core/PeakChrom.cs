@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                if (this.ChromSourceData == null || this.ChromSourceData.Count == 0)
+                if (ChromSourceData == null || ChromSourceData.Count == 0)
                 {
                     return true;
                 }
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                if (this.PeakList == null || this.PeakList.Count == 0)
+                if (PeakList == null || PeakList.Count == 0)
                 {
                     return true;
                 }
@@ -65,13 +65,13 @@ namespace DeconTools.Backend.Core
             }
 
 
-            var msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
+            var msPeakDataIsEmpty = (ChromSourceData == null || ChromSourceData.Count == 0);
             if (!msPeakDataIsEmpty)
             {
                 //iterate over the peaklist, assign chromID,  and extract intensity values
-                for (var i = 0; i < this.ChromSourceData.Count; i++)
+                for (var i = 0; i < ChromSourceData.Count; i++)
                 {
-                    var p = this.ChromSourceData[i];
+                    var p = ChromSourceData[i];
                     double intensity = p.MSPeak.Height;
 
                     //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
@@ -115,13 +115,13 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public List<MSPeakResult> GetMSPeakMembersForGivenChromPeak(Peak chromPeak, double scanTolerance)
         {
-            var msPeakDataIsEmpty = (this.ChromSourceData == null || this.ChromSourceData.Count == 0);
+            var msPeakDataIsEmpty = (ChromSourceData == null || ChromSourceData.Count == 0);
             if (msPeakDataIsEmpty) return null;
 
             var minScan = (int)Math.Floor(chromPeak.XValue - scanTolerance);
             var maxScan = (int)Math.Ceiling(chromPeak.XValue + scanTolerance);
 
-            var filteredMSPeaks = (from n in this.ChromSourceData where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
+            var filteredMSPeaks = (from n in ChromSourceData where n.Scan_num >= minScan && n.Scan_num <= maxScan select n).ToList();
             return filteredMSPeaks;
         }
 
@@ -147,9 +147,9 @@ namespace DeconTools.Backend.Core
 
         public Peak GetChromPeakForGivenSource(MSPeakResult peakResult)
         {
-            if (this.PeakDataIsNullOrEmpty) return null;
+            if (PeakDataIsNullOrEmpty) return null;
 
-            double averagePeakWidth = this.PeakList.Average(p => p.Width);
+            double averagePeakWidth = PeakList.Average(p => p.Width);
             var peakWidthSigma = averagePeakWidth / 2.35;    //   width@half-height =  2.35σ   (Gaussian peak theory)
 
             var fourSigma = 4 * peakWidthSigma;
@@ -162,10 +162,10 @@ namespace DeconTools.Backend.Core
         public Peak GetChromPeakForGivenSource(MSPeakResult peakResult, double scanTolerance)
         {
 
-            if (this.PeakDataIsNullOrEmpty) return null;
+            if (PeakDataIsNullOrEmpty) return null;
 
       
-            var peakQuery = (from n in this.PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n);
+            var peakQuery = (from n in PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n);
 
             var peaksWithinTol = peakQuery.Count();
             if (peaksWithinTol == 0)

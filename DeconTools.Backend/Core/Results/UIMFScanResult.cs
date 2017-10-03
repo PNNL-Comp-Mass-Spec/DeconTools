@@ -7,15 +7,15 @@ namespace DeconTools.Backend.Core
     {
         public UimfScanResult(ScanSet frameset)
         {
-            this.ScanSet = frameset;
+            ScanSet = frameset;
         }
-        
+
         public int LCScanNum { get; set; }
 
-       public double FramePressureUnsmoothed { get; set; }
+        public double FramePressureUnsmoothed { get; set; }
 
         public double FramePressureSmoothed { get; set; }
 
-      
+
     }
 }

@@ -19,12 +19,12 @@ namespace DeconTools.Backend.Data
 
             try
             {
-                this.reader = new StreamReader(filename);
+                reader = new StreamReader(filename);
             }
             catch (Exception)
             {
 
-                throw new System.IO.IOException("There was a problem reading the UMC data file");
+                throw new IOException("There was a problem reading the UMC data file");
             }
         }
         #endregion

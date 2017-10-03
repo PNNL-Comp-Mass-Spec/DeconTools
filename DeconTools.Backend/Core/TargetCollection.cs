@@ -40,7 +40,7 @@ namespace DeconTools.Backend.Core
 
             var massTagsNonRedundant = new List<TargetBase>();
 
-            foreach (var mtCurrent in this.TargetList)
+            foreach (var mtCurrent in TargetList)
             {
                 var current = mtCurrent;
                 if (massTagsNonRedundant.Where(p => p.ID == current.ID && p.ChargeState == current.ChargeState).Count() == 0)
@@ -60,7 +60,7 @@ namespace DeconTools.Backend.Core
 
             }
 
-            this.TargetList = filteredMassTagList;
+            TargetList = filteredMassTagList;
 
 
 
@@ -69,11 +69,11 @@ namespace DeconTools.Backend.Core
 
         public void FilterOutDuplicates()
         {
-            if (this.TargetList == null || this.TargetList.Count == 0) return;
+            if (TargetList == null || TargetList.Count == 0) return;
 
             var filteredList = new List<TargetBase>();
 
-            foreach (var mt in this.TargetList)
+            foreach (var mt in TargetList)
             {
                 if (massTagListContainsMassTag(filteredList, mt))
                 {
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.Core
 
             }
 
-            this.TargetList = filteredList;
+            TargetList = filteredList;
 
 
 

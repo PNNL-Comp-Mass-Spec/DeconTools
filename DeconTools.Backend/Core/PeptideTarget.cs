@@ -18,9 +18,9 @@ namespace DeconTools.Backend.Core
         public PeptideTarget(PeptideTarget copiedTarget)
             : base(copiedTarget)
         {
-            this.ProteinDescription = copiedTarget.ProteinDescription;
-            this.GeneReference = copiedTarget.GeneReference;
-            this.RefID = copiedTarget.RefID;
+            ProteinDescription = copiedTarget.ProteinDescription;
+            GeneReference = copiedTarget.GeneReference;
+            RefID = copiedTarget.RefID;
         }
 
         #endregion
@@ -58,12 +58,12 @@ namespace DeconTools.Backend.Core
 
         public void CalculateMassesForIsotopicProfile(int chargeState)
         {
-            if (this.IsotopicProfile == null || this.IsotopicProfile.Peaklist == null) return;
+            if (IsotopicProfile == null || IsotopicProfile.Peaklist == null) return;
 
-            for (var i = 0; i < this.IsotopicProfile.Peaklist.Count; i++)
+            for (var i = 0; i < IsotopicProfile.Peaklist.Count; i++)
             {
-                var calcMZ = this.MonoIsotopicMass / chargeState + Globals.PROTON_MASS + i * 1.00235 / chargeState;
-                this.IsotopicProfile.Peaklist[i].XValue = calcMZ;
+                var calcMZ = MonoIsotopicMass / chargeState + Globals.PROTON_MASS + i * 1.00235 / chargeState;
+                IsotopicProfile.Peaklist[i].XValue = calcMZ;
             }
 
         }

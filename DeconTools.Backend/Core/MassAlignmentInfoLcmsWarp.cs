@@ -33,15 +33,15 @@ namespace DeconTools.Backend.Core
             var scanVals = massAlignmentData.Select(p => p.scan).ToArray();
             var scanPPMCorrVals = massAlignmentData.Select(p => p.scanPPMCorrection).ToArray();
 
-            if (this.AlignmentInfo == null) this.AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+            if (AlignmentInfo == null) AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
 
-            this.AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
 
-            this.AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
-            this.AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
+            AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
+            AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
 
         }
 
@@ -67,17 +67,17 @@ namespace DeconTools.Backend.Core
             //    scanPPMCorrVals[index] = (float)viperCalibrationData.MassError;
             //}
 
-            if (this.AlignmentInfo == null)
-                this.AlignmentInfo =
+            if (AlignmentInfo == null)
+                AlignmentInfo =
                     new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB,
                                                                         MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
 
-            this.AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
-            this.AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
+            AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
             //this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
             //this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
 
-            this.AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
+            AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
         }
 
 
@@ -93,8 +93,8 @@ namespace DeconTools.Backend.Core
         {
             if (AlignmentInfo == null) return 0;
 
-            var alignmentInfoContainsScanInfo = (this.AlignmentInfo.marrMassFncTimeInput != null && this.AlignmentInfo.marrMassFncTimeInput.Length > 0);
-            var alignmentInfoContainsMZInfo = (this.AlignmentInfo.marrMassFncMZInput != null && this.AlignmentInfo.marrMassFncMZInput.Length > 0);
+            var alignmentInfoContainsScanInfo = (AlignmentInfo.marrMassFncTimeInput != null && AlignmentInfo.marrMassFncTimeInput.Length > 0);
+            var alignmentInfoContainsMZInfo = (AlignmentInfo.marrMassFncMZInput != null && AlignmentInfo.marrMassFncMZInput.Length > 0);
 
             var canUseScanWhenGettingPPMShift = alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo && scan >= 0;
 
@@ -139,12 +139,12 @@ namespace DeconTools.Backend.Core
                     scanForGettingAlignmentInfo = (float)scan;
                 }
 
-                var ppmShift = this.AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, mzForGettingAlignmentInfo);
+                var ppmShift = AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, mzForGettingAlignmentInfo);
                 return ppmShift;
             }
             else
             {
-                var ppmShift = this.AlignmentInfo.GetPPMShiftFromMZ(mzForGettingAlignmentInfo);
+                var ppmShift = AlignmentInfo.GetPPMShiftFromMZ(mzForGettingAlignmentInfo);
                 return ppmShift;
             }
         }

@@ -75,13 +75,13 @@ namespace DeconTools.Backend.Core
 
         public List<UMC> FilterUMCsByMassTagMatch(List<int> massTagIDList)
         {
-            if (this.UMCList == null || this.UMCList.Count == 0) return this.UMCList;
+            if (UMCList == null || UMCList.Count == 0) return UMCList;
 
             var filteredUMCs = new List<UMC>();
 
             var alreadyAddedMassTags = new List<int>();
 
-            foreach (var umc in this.UMCList)
+            foreach (var umc in UMCList)
             {
                 if (massTagIDList.Contains(umc.MassTagID))
                 {
@@ -105,11 +105,11 @@ namespace DeconTools.Backend.Core
 
         public List<UMC> FilterOutPairedData()
         {
-            if (this.UMCList == null || this.UMCList.Count == 0) return this.UMCList;
+            if (UMCList == null || UMCList.Count == 0) return UMCList;
             var filteredUMCs = new List<UMC>();
 
             var alreadyAddedMassTags = new List<int>();
-            foreach (var umc in this.UMCList)
+            foreach (var umc in UMCList)
             {
                 if (umc.PairIndex != -1)
                 {

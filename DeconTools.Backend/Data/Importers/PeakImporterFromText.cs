@@ -33,9 +33,9 @@ namespace DeconTools.Backend.Data
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
 
             this.filename = filename;
-            this.delimiter = '\t';
-            this.backgroundWorker = bw;
-            this.peakProgressInfo = new PeakProgressInfo();
+            delimiter = '\t';
+            backgroundWorker = bw;
+            peakProgressInfo = new PeakProgressInfo();
         }
 
         #endregion
@@ -102,7 +102,7 @@ namespace DeconTools.Backend.Data
 
                 var percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
 
-                if (this.backgroundWorker != null)
+                if (backgroundWorker != null)
                 {
                     peakProgressInfo.ProgressInfoString = "Loading Peaks ";
                     backgroundWorker.ReportProgress(percentProgress, peakProgressInfo);

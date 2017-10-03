@@ -38,8 +38,8 @@ namespace DeconTools.Backend.Data
         public IsosImporter(string importFilename, DeconTools.Backend.Globals.MSFileType filetype, int minValue, int maxValue)
             : this(importFilename, filetype)
         {
-            this.minVal = minValue;
-            this.maxVal = maxValue;
+            minVal = minValue;
+            maxVal = maxValue;
 
         }
 
@@ -105,7 +105,7 @@ namespace DeconTools.Backend.Data
         private IsosResult convertTextToIsosResult(List<string> processedData, List<string> headers)
         {
             IsosResult result;
-            if (this.fileType == Globals.MSFileType.PNNL_UIMF)
+            if (fileType == Globals.MSFileType.PNNL_UIMF)
             {
                 result = new UIMFIsosResult();
 

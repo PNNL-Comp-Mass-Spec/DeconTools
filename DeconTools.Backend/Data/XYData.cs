@@ -36,67 +36,66 @@ namespace DeconTools.Backend
             //NOTE going from double to single variables could result in a loss of information
 
             {
-                xvals = new float[this.xvalues.Length];
-                yvals = new float[this.yvalues.Length];
+                xvals = new float[xvalues.Length];
+                yvals = new float[yvalues.Length];
 
-                for (var i = 0; i < this.xvalues.Length; i++)
+                for (var i = 0; i < xvalues.Length; i++)
                 {
-                    xvals[i] = (float)this.xvalues[i];
-                    yvals[i] = (float)this.yvalues[i];
+                    xvals[i] = (float)xvalues[i];
+                    yvals[i] = (float)yvalues[i];
                 }
             }
         }
 
         public void GetXYValuesAsDoubles(ref double[] xvals, ref double[] yvals)
         {
-            xvals = this.xvalues;
-            yvals = this.yvalues;
+            xvals = xvalues;
+            yvals = yvalues;
         }
 
         public void SetXYValues(ref float[] xvals, ref float[] yvals)
         {
             if (xvals == null || yvals == null)
             {
-                this.Xvalues = null;
-                this.Yvalues = null;
+                Xvalues = null;
+                Yvalues = null;
 
                 return;
             }
 
 
-
-            this.xvalues = new double[xvals.Length];
-            this.yvalues = new double[yvals.Length];
+            xvalues = new double[xvals.Length];
+            yvalues = new double[yvals.Length];
             for (var i = 0; i < xvals.Length; i++)
             {
-                this.xvalues[i] = xvals[i];
-                this.yvalues[i] = yvals[i];
+                xvalues[i] = xvals[i];
+                yvalues[i] = yvals[i];
             }
 
         }
 
         public void SetXYValues(ref double[] xvals, ref double[] yvals)
         {
-            this.xvalues = xvals;
-            this.yvalues = yvals;
+            xvalues = xvals;
+            yvalues = yvals;
         }
 
         public void SetXYValues(double[] xvals, float[] yvals)
         {
             if (xvals == null || yvals == null)
             {
-                this.Xvalues = null;
-                this.Yvalues = null;
+                Xvalues = null;
+                Yvalues = null;
 
                 return;
             }
 
 
-            this.xvalues = xvals;
-            this.yvalues = new double[yvals.Length];
+            xvalues = xvals;
+            yvalues = new double[yvals.Length];
             for (var i = 0; i < yvals.Length; i++)
             {
-                this.yvalues[i] = yvals[i];
+                yvalues[i] = yvals[i];
             }
         }
 
@@ -136,9 +135,9 @@ namespace DeconTools.Backend
             var indexOfClosest = -1;
             var numWrongDirection = 0;
 
-            for (var i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < xvalues.Length; i++)
             {
-                var currentDiff = Math.Abs(targetXVal - this.xvalues[i]);
+                var currentDiff = Math.Abs(targetXVal - xvalues[i]);
 
 
                 if (currentDiff < minDiff)
@@ -164,11 +163,11 @@ namespace DeconTools.Backend
             var maxY = double.MinValue;
 
 
-            for (var i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < xvalues.Length; i++)
             {
-                if (this.yvalues[i] > maxY)
+                if (yvalues[i] > maxY)
                 {
-                    maxY = this.Yvalues[i];
+                    maxY = Yvalues[i];
                 }
             }
             return maxY;
@@ -180,13 +179,13 @@ namespace DeconTools.Backend
         {
             var maxY = double.MinValue;
 
-            for (var i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < xvalues.Length; i++)
             {
-                if (this.xvalues[i] >= xMin && this.xvalues[i] <= xMax)
+                if (xvalues[i] >= xMin && xvalues[i] <= xMax)
                 {
-                    if (this.yvalues[i] > maxY)
+                    if (yvalues[i] > maxY)
                     {
-                        maxY = this.Yvalues[i];
+                        maxY = Yvalues[i];
                     }
 
                 }
@@ -276,9 +275,9 @@ namespace DeconTools.Backend
 
         public void NormalizeYData()
         {
-            var maxVal = this.getMaxY();
+            var maxVal = getMaxY();
 
-            for (var i = 0; i < this.Yvalues.Length; i++)
+            for (var i = 0; i < Yvalues.Length; i++)
             {
                 yvalues[i] = yvalues[i] / maxVal;
 
@@ -287,9 +286,9 @@ namespace DeconTools.Backend
 
         public void OffSetXValues(double offset)
         {
-            for (var i = 0; i < this.xvalues.Length; i++)
+            for (var i = 0; i < xvalues.Length; i++)
             {
-                this.xvalues[i] = this.xvalues[i] + offset;
+                xvalues[i] = xvalues[i] + offset;
 
             }
         }
@@ -348,11 +347,11 @@ namespace DeconTools.Backend
         {
             var sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
-            for (var i = 0; i < this.Xvalues.Length; i++)
+            for (var i = 0; i < Xvalues.Length; i++)
             {
-                sb.Append(this.Xvalues[i]);
+                sb.Append(Xvalues[i]);
                 sb.Append("\t");
-                sb.Append(this.Yvalues[i]);
+                sb.Append(Yvalues[i]);
                 sb.Append("\n");
             }
             sb.Append("--------------------------- end ---------------------------------------\n");

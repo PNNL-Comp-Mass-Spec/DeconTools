@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Data
         public UIMFSQLiteIsosExporter(string fileName)
         {
             this.fileName = fileName;
-            this.delimiter = ',';
+            delimiter = ',';
         }
 
         protected override string headerLine { get; set; }
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.Data
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("Isos Exporter cannot export; Check if file is already opened.  Details: " + ex.Message);
+                throw new IOException("Isos Exporter cannot export; Check if file is already opened.  Details: " + ex.Message);
             }
 
             ResultCollection results;
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.Data
                 }
                 catch (Exception ex)
                 {
-                    throw new System.IO.IOException("Exporter could not delete binary file. Details: " + ex.Message);
+                    throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
 
                 }
             }

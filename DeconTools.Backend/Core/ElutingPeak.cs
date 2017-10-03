@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
@@ -14,22 +12,22 @@ namespace DeconTools.Backend.Core
         {
             PeakList = new List<MSPeakResult>();
             //IsosResultList = new List<StandardIsosResult>();
-            this.ID = -1;
-            this.ScanStart = -1;
-            this.ScanEnd = -1;
-            this.ScanMaxIntensity = -1;
+            ID = -1;
+            ScanStart = -1;
+            ScanEnd = -1;
+            ScanMaxIntensity = -1;
 
-            this.RetentionTime = 0;
-            this.Intensity = 0;
-            this.SummedIntensity = 0;
-            this.AggregateIntensity = 0;
-            this.Mass = 0;
-            this.ChargeState = 0;
+            RetentionTime = 0;
+            Intensity = 0;
+            SummedIntensity = 0;
+            AggregateIntensity = 0;
+            Mass = 0;
+            ChargeState = 0;
 
-            this.NumberOfPeaks = 0;
-            this.NumberOfPeaksFlag = 0;
-            this.NumberOfPeaksMode = "Current"; //"Current" for current peak or "NewPeak" for possible next peak after this one
-            
+            NumberOfPeaks = 0;
+            NumberOfPeaksFlag = 0;
+            NumberOfPeaksMode = "Current"; //"Current" for current peak or "NewPeak" for possible next peak after this one
+
         }
 
         #endregion
@@ -84,20 +82,19 @@ namespace DeconTools.Backend.Core
 
         public MSPeakResult GetMSPeakResultRepresentative()
         {
-            if (this.PeakList == null || this.PeakList.Count == 0) return null;
-            else
-            {
-                return this.PeakList[0];
-            }
+            if (PeakList == null || PeakList.Count == 0)
+                return null;
+
+            return PeakList[0];
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            this.ChromPeak = null;
-            this.PeakList = null;
-            this.ScanSet = null;
+            ChromPeak = null;
+            PeakList = null;
+            ScanSet = null;
         }
 
         #endregion

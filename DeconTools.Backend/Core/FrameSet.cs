@@ -11,15 +11,15 @@ namespace DeconTools.Backend.Core
 
         public FrameSet()
         {
-            this.FramePressure = Single.NaN;
-            this.AvgTOFLength = Single.NaN;
+            FramePressure = Single.NaN;
+            AvgTOFLength = Single.NaN;
         }
 
         public FrameSet(int primaryFrame, List<int> frameArray)
             : this()
         {
             this.primaryFrame = primaryFrame;
-            this.IndexValues = frameArray;
+            IndexValues = frameArray;
         }
 
 
@@ -28,8 +28,8 @@ namespace DeconTools.Backend.Core
             : this()
         {
             this.primaryFrame = primaryFrame;
-            this.IndexValues = new List<int>();
-            this.indexValues.Add(primaryFrame);
+            IndexValues = new List<int>();
+            indexValues.Add(primaryFrame);
 
         }
 
@@ -37,11 +37,11 @@ namespace DeconTools.Backend.Core
             : this()
         {
             this.primaryFrame = primaryFrame;
-            this.IndexValues = new List<int>();
+            IndexValues = new List<int>();
 
             foreach (var indexItem in indexArray)
             {
-                this.IndexValues.Add(indexItem);
+                IndexValues.Add(indexItem);
             }
 
         }
@@ -51,11 +51,11 @@ namespace DeconTools.Backend.Core
         {
             this.primaryFrame = primaryFrame;
             Check.Require(lowerFrame <= upperFrame, "Lower frame number must be less than or equal to the frame scan number");
-            this.IndexValues = new List<int>();
+            IndexValues = new List<int>();
 
             for (var i = lowerFrame; i <= upperFrame; i++)
             {
-                this.IndexValues.Add(i);
+                IndexValues.Add(i);
             }
 
         }
@@ -127,8 +127,8 @@ namespace DeconTools.Backend.Core
 
         internal int Count()
         {
-            if (this.indexValues == null || this.indexValues.Count == 0) return 0;
-            return this.indexValues.Count;
+            if (indexValues == null || indexValues.Count == 0) return 0;
+            return indexValues.Count;
         }
 
         public override string ToString()

@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Data
             StreamWriter sw;
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
 
             }
             catch (Exception)
@@ -65,12 +65,12 @@ namespace DeconTools.Backend.Data
             StreamWriter sw;
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
 
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("Isos Exporter cannot export; Check if file is already opened.  Details: " + ex.Message);
+                throw new IOException("Isos Exporter cannot export; Check if file is already opened.  Details: " + ex.Message);
             }
 
             sw.WriteLine(headerLine);
@@ -101,7 +101,7 @@ namespace DeconTools.Backend.Data
                 }
                 catch (Exception ex)
                 {
-                    throw new System.IO.IOException("Exporter could not delete binary file. Details: " + ex.Message);
+                    throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
 
                 }
             }

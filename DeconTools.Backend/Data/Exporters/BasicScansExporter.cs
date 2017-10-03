@@ -22,18 +22,18 @@ namespace DeconTools.Backend.Data
         protected override char delimiter { get; set; }
 
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(ResultCollection results)
         {
 
             StreamWriter sw;
             try
             {
-                sw = new StreamWriter(this.fileName);
+                sw = new StreamWriter(fileName);
 
             }
             catch (Exception ex)
             {
-                throw new Exception("Error creating file " + this.fileName + ": " + ex.Message);
+                throw new Exception("Error creating file " + fileName + ": " + ex.Message);
             }
 
             if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4, false, 0.001, false), DblToString(3.14159, 4)))

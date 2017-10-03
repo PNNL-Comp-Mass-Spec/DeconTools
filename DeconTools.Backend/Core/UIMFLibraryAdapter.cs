@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Core
 
         private UIMFLibraryAdapter(string filename)
         {
-            this.fileName = filename;
+            fileName = filename;
             Datareader = new UIMFLibrary.DataReader(fileName);
             ConnectionState = System.Data.ConnectionState.Open;
         }

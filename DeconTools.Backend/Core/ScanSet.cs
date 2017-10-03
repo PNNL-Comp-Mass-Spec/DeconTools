@@ -36,11 +36,11 @@ namespace DeconTools.Backend.Core
             : this()
         {
             Check.Require(lowerScan <= upperScan, "Lower scan number must be less than or equal to the upper scan number");
-            this.PrimaryScanNumber = primaryScanNum;
+            PrimaryScanNumber = primaryScanNum;
 
             for (var i = lowerScan; i <= upperScan; i++)
             {
-                this.IndexValues.Add(i);
+                IndexValues.Add(i);
             }
 
         }
@@ -71,7 +71,7 @@ namespace DeconTools.Backend.Core
 
         public void AddScan(int scanNumber)
         {
-            if (this.indexValues != null)
+            if (indexValues != null)
             {
                 indexValues.Add(scanNumber);
             }
@@ -145,8 +145,8 @@ namespace DeconTools.Backend.Core
 
         internal int GetScanCount()
         {
-            if (this.indexValues == null || this.indexValues.Count == 0) return 0;
-            return this.indexValues.Count;
+            if (indexValues == null || indexValues.Count == 0) return 0;
+            return indexValues.Count;
         }
 
 

@@ -3,12 +3,12 @@ namespace DeconTools.Backend.Core
 {
     public class O16O18IsosResult:IsosResult
     {
-      
+
 
         public O16O18IsosResult(Run run, ScanSet scanSet)
         {
-            this.Run = run;
-            this.ScanSet = scanSet;
+            Run = run;
+            ScanSet = scanSet;
         }
 
         public float MonoPlus4Abundance { get; set; }
