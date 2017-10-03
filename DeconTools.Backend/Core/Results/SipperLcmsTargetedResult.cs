@@ -57,43 +57,40 @@ namespace DeconTools.Backend.Core.Results
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            var target = Target as LcmsFeatureTarget;
 
-            var delim = "; ";
+            var data = new List<string>
+            {
+                Target.ID.ToString(),
+                target?.FeatureToMassTagID.ToString() ?? "null",
+                ScanSet?.PrimaryScanNumber.ToString("0") ?? "null"
+            };
 
-            sb.Append(this.Target.ID);
-            sb.Append(delim);
-            sb.Append(((LcmsFeatureTarget)Target).FeatureToMassTagID);
-            sb.Append(delim);
-            sb.Append(ScanSet == null ? "null" : ScanSet.PrimaryScanNumber.ToString("0"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : IsotopicProfile.MonoIsotopicMass.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : IsotopicProfile.MonoPeakMZ.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : Score.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : FitScoreLabeledProfile.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : NumHighQualityProfilePeaks.ToString("0"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : AreaUnderDifferenceCurve.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : AreaUnderRatioCurveRevised.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : ChromCorrelationMedian.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : NumCarbonsLabelled.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : PercentPeptideLabelled.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(IsotopicProfile == null ? "null" : PercentCarbonsLabelled.ToString("0.000"));
-            sb.Append(delim);
+            if (IsotopicProfile == null)
+            {
+                for (var i = 0; i < 11; i++)
+                {
+                    data.Add("null");
+                }
+                data.Add(ErrorDescription);
+            }
+            else
+            {
+                data.Add(IsotopicProfile.MonoIsotopicMass.ToString("0.000"));
+                data.Add(IsotopicProfile.MonoPeakMZ.ToString("0.000"));
+                data.Add(Score.ToString("0.000"));
+                data.Add(FitScoreLabeledProfile.ToString("0.000"));
+                data.Add(NumHighQualityProfilePeaks.ToString("0"));
+                data.Add(AreaUnderDifferenceCurve.ToString("0.000"));
+                data.Add(AreaUnderRatioCurveRevised.ToString("0.000"));
+                data.Add(ChromCorrelationMedian.ToString("0.000"));
+                data.Add(NumCarbonsLabelled.ToString("0.000"));
+                data.Add(PercentPeptideLabelled.ToString("0.000"));
+                data.Add(PercentCarbonsLabelled.ToString("0.000"));
+                data.Add("");   // ErrorDescription
+            }
 
-
-            sb.Append(IsotopicProfile == null ? ErrorDescription : "");
-
-            return sb.ToString();
+            return string.Join("; ", data);
         }
 
 

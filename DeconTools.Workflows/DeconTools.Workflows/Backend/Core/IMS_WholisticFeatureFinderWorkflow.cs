@@ -277,19 +277,18 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void displayPeakInfoAndFate(MSPeakResult peak, string peakFate)
         {
-            var sb = new StringBuilder();
-            sb.Append(peak.PeakID);
-            sb.Append('\t');
-            sb.Append(peak.Scan_num);
-            sb.Append('\t');
-            sb.Append(peak.MSPeak.XValue);
-            sb.Append('\t');
-            sb.Append(peak.MSPeak.Height);
-            sb.Append('\t');
-            sb.Append(peakFate);
-            sb.Append('\t');
-            sb.Append(peak.ChromID);
-            Console.WriteLine(sb.ToString());
+            var data = new List<string>
+            {
+                peak.PeakID.ToString(),
+                peak.Scan_num.ToString(),
+                peak.MSPeak.XValue.ToString("0.0000"),
+                peak.MSPeak.Height.ToString("0.000"),
+                peakFate,
+                peak.ChromID.ToString()
+            };
+
+
+            Console.WriteLine(string.Join("\t", data));
 
         }
 

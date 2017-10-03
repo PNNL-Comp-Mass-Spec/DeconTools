@@ -14,9 +14,8 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
         private int runCounter;
         private string outputFilename;
         private StreamWriter sw;
-        private char delimiter = ',';
 
-
+        private const char DELIMITER = ',';
 
         public string OutputFilename
         {
@@ -43,26 +42,17 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
         private string buildHeader()
         {
-            var sb = new StringBuilder();
+            var data = new List<string> {
+                "scan_num",
+                "scan_time",
+                "type",
+                "bpi",
+                "bpi_mz",
+                "tic",
+                "num_peaks",
+                "num_deisotoped" };
 
-            sb.Append("scan_num");
-            sb.Append(delimiter);
-            sb.Append("scan_time");
-            sb.Append(delimiter);
-            sb.Append("type");
-            sb.Append(delimiter);
-            sb.Append("bpi");
-            sb.Append(delimiter);
-            sb.Append("bpi_mz");
-            sb.Append(delimiter);
-            sb.Append("tic");
-            sb.Append(delimiter);
-            sb.Append("num_peaks");
-            sb.Append(delimiter);
-            sb.Append("num_deisotoped");
-            sb.Append(Environment.NewLine);
-
-            return sb.ToString();
+            return string.Join(DELIMITER.ToString(), data);
         }
 
         public override void MergeAndExport(DeconTools.Backend.Core.ResultCollection resultList)
@@ -70,28 +60,23 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
             Check.Require(resultList != null, "Scans merger failed. ResultCollection is null");
             Check.Require(resultList.ScanResultList != null && resultList.ScanResultList.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");
 
-            var sb = new StringBuilder();
             var scanresult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
 
-            sb.Append(getScanNumber(scanresult.ScanSet.PrimaryScanNumber));
-            sb.Append(delimiter);
-            sb.Append(DblToString(scanresult.ScanTime, 4));
-            sb.Append(delimiter);
-            sb.Append(scanresult.SpectrumType);
-            sb.Append(delimiter);
-            sb.Append(DblToString(scanresult.BasePeak.Height, 4, true));
-            sb.Append(delimiter);
-            sb.Append(DblToString(scanresult.BasePeak.XValue, 5));
-            sb.Append(delimiter);
-            sb.Append(DblToString(scanresult.ScanSet.TICValue, 4, true));
-            sb.Append(delimiter);
-            sb.Append(scanresult.NumPeaks);
-            sb.Append(delimiter);
-            sb.Append(scanresult.NumIsotopicProfiles);
+            var data = new List<string>
+            {
+                getScanNumber(scanresult.ScanSet.PrimaryScanNumber).ToString(),
+                DblToString(scanresult.ScanTime, 4),
+                scanresult.SpectrumType.ToString(),
+                DblToString(scanresult.BasePeak.Height, 4, true),
+                DblToString(scanresult.BasePeak.XValue, 5),
+                DblToString(scanresult.ScanSet.TICValue, 4, true),
+                scanresult.NumPeaks.ToString(),
+                scanresult.NumIsotopicProfiles.ToString()
+            };
 
-            sw.WriteLine(sb.ToString());
+            sw.WriteLine(string.Join(DELIMITER.ToString(), data));
 
-            resultList.ScanResultList.Clear();          // scanResult List is cleared every time. 
+            resultList.ScanResultList.Clear();          // scanResult List is cleared every time.
             runCounter++;
         }
 

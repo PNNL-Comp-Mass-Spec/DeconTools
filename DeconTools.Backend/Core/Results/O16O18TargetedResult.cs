@@ -26,50 +26,29 @@ namespace DeconTools.Backend.Core.Results
 
         public override string ToStringWithDetailsAsRow()
         {
-            StringBuilder sb = new StringBuilder();
+            var data = new List<string>() {  /// CheckListPopulate
+            this.MassTagID,
+            this.ChargeState,
+            this.ScanLC,
+            this.ScanLCStart,
+            this.ScanLCEnd,
+            this.NET.ToString("0.0000"),
+            this.NumChromPeaksWithinTol,
+            this.MonoMass.ToString("0.00000"),
+            this.MonoMZ.ToString("0.00000"),
+            this.FitScore.ToString("0.0000"),
+            this.IScore.ToString("0.0000"),
+            this.IntensityTheorI0,
+            this.IntensityTheorI2,
+            this.IntensityTheorI4,
+            this.IntensityI0,
+            this.IntensityI2,
+            this.IntensityI4,
+            this.IntensityI4Adjusted,
+            this.Ratio.ToString("0.0000"))
+            };
 
-            string delim = "\t";
-
-            sb.Append(this.MassTagID);
-            sb.Append(delim);
-            sb.Append(this.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.ScanLC);
-            sb.Append(delim);
-            sb.Append(this.ScanLCStart);
-            sb.Append(delim);
-            sb.Append(this.ScanLCEnd);
-            sb.Append(delim);
-            sb.Append(this.NET.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.NumChromPeaksWithinTol);
-            sb.Append(delim);
-            sb.Append(this.MonoMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.MonoMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.FitScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IntensityTheorI0);
-            sb.Append(delim);
-            sb.Append(this.IntensityTheorI2);
-            sb.Append(delim);
-            sb.Append(this.IntensityTheorI4);
-            sb.Append(delim);
-            sb.Append(this.IntensityI0);
-            sb.Append(delim);
-            sb.Append(this.IntensityI2);
-            sb.Append(delim);
-            sb.Append(this.IntensityI4);
-            sb.Append(delim);
-            sb.Append(this.IntensityI4Adjusted);
-            sb.Append(delim);
-            sb.Append(this.Ratio.ToString("0.0000"));
-
-
-            return sb.ToString();
+            return string.Join("\t", data);
 
         }
     }

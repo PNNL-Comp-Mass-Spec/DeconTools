@@ -132,82 +132,87 @@ namespace DeconTools.Backend.Core
 
         public void DisplayBasicInfo()
         {
-            var sb = new StringBuilder();
-
-            sb.Append("umcIndex\tnet\tscan\tumc_mw\tumc_Z\tumc_mz\tumc_Abundance\tumc_Fit\tumc_members\tslic\tdelSlic\tmass_tag_id\n");
-            foreach (var umc in this.UMCList)
+            var data = new List<string>
             {
-                sb.Append(umc.UMCIndex);
-                sb.Append("\t");
-                sb.Append(umc.NETClassRep.ToString("0.000"));
-                sb.Append("\t");
-                sb.Append(umc.ScanClassRep);
-                sb.Append("\t");
-                sb.Append(umc.UMCMonoMW.ToString("0.0000"));
-                sb.Append("\t");
-                sb.Append(umc.ClassStatsChargeBasis);
-                sb.Append("\t");
-                sb.Append((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
-                sb.Append("\t");
-                sb.Append(umc.UMCAbundance.ToString("0"));
-                sb.Append("\t");
-                sb.Append(umc.UMCAverageFit.ToString("0.000"));
-                sb.Append("\t");
-                sb.Append(umc.UMCMemberCount);
-                sb.Append("\t");
-                sb.Append(umc.SLiCScore.ToString("0.0"));
-                sb.Append("\t");
-                sb.Append(umc.DelSLiC.ToString("0.0"));
-                sb.Append("\t");
-                sb.Append(umc.MassTagID);
-                sb.Append("\n"); 
+                "umcIndex",
+                "net",
+                "scan",
+                "umc_mw",
+                "umc_Z",
+                "umc_mz",
+                "umc_Abundance",
+                "umc_Fit",
+                "umc_members",
+                "slic",
+                "delSlic",
+                "mass_tag_id"
+            };
+
+            Console.WriteLine(string.Join("\t", data));
+
+            foreach (var umc in UMCList)
+            {
+                data.Clear();
+                data.Add(umc.UMCIndex.ToString());
+                data.Add(umc.NETClassRep.ToString("0.000"));
+                data.Add(umc.ScanClassRep.ToString());
+                data.Add(umc.UMCMonoMW.ToString("0.0000"));
+                data.Add(umc.ClassStatsChargeBasis.ToString());
+                data.Add((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
+                data.Add(umc.UMCAbundance.ToString("0"));
+                data.Add(umc.UMCAverageFit.ToString("0.000"));
+                data.Add(umc.UMCMemberCount.ToString());
+                data.Add(umc.SLiCScore.ToString("0.0"));
+                data.Add(umc.DelSLiC.ToString("0.0"));
+                data.Add(umc.MassTagID.ToString());
             }
 
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(string.Join("\t", data));
         }
 
 
 
         public void DisplayUMCExpressionInfo()
         {
-            var sb = new StringBuilder();
-
-            sb.Append("umcIndex\tscan\tumc_mw\tumc_Z\tumc_mz\tslic\tdelSlic\tmass_tag_id\tRatio\n");
-            foreach (var umc in this.UMCList)
+            var data = new List<string>
             {
-                sb.Append(umc.UMCIndex);
-                sb.Append("\t");
-                sb.Append(umc.ScanClassRep);
-                sb.Append("\t");
-                sb.Append(umc.UMCMonoMW.ToString("0.0000"));
-                sb.Append("\t");
-                sb.Append(umc.ClassStatsChargeBasis);
-                sb.Append("\t");
-                sb.Append((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
-                sb.Append("\t");
-                sb.Append(umc.SLiCScore.ToString("0.0"));
-                sb.Append("\t");
-                sb.Append(umc.DelSLiC.ToString("0.0"));
-                sb.Append("\t");
-                sb.Append(umc.MassTagID);
-                sb.Append("\t");
+                "umcIndex",
+                "scan",
+                "umc_mw",
+                "umc_Z",
+                "umc_mz",
+                "slic",
+                "delSlic",
+                "mass_tag_id",
+                "Ratio"
+
+            };
+
+            Console.WriteLine(string.Join("\t", data));
+
+            foreach (var umc in UMCList)
+            {
+                data.Clear();
+                data.Add(umc.UMCIndex.ToString());
+                data.Add(umc.ScanClassRep.ToString());
+                data.Add(umc.UMCMonoMW.ToString("0.0000"));
+                data.Add(umc.ClassStatsChargeBasis.ToString());
+                data.Add((umc.UMCMonoMW / umc.ClassStatsChargeBasis + Globals.PROTON_MASS).ToString("0.0000"));
+                data.Add(umc.SLiCScore.ToString("0.0"));
+                data.Add(umc.DelSLiC.ToString("0.0"));
+                data.Add(umc.MassTagID.ToString());
 
                 if (umc.ExpressionRatio < 0)
                 {
-                    sb.Append(-1);
+                    data.Add("-1");
                 }
                 else
                 {
-                    sb.Append(umc.ExpressionRatio.ToString("0.000"));
+                    data.Add(umc.ExpressionRatio.ToString("0.000"));
                 }
 
-                sb.Append("\n");
-
+                Console.WriteLine(string.Join("\t", data));
             }
-
-            Console.WriteLine(sb.ToString());
-
-
 
         }
 

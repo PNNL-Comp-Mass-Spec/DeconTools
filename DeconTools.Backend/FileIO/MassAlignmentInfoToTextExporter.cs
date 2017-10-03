@@ -30,24 +30,17 @@ namespace DeconTools.Backend.FileIO
 
 
 
-                var sb = new StringBuilder();
+                var data = new List<string>();
 
                 for (var i = 0; i < alignmentInfo.marrMassFncMZInput.Length; i++)
                 {
+                    data.Clear();
+                    data.Add(DblToString(alignmentInfo.marrMassFncMZInput[i], 5));
+                    data.Add(DblToString(alignmentInfo.marrMassFncMZPPMOutput[i], 5));
+                    data.Add(DblToString(alignmentInfo.marrMassFncTimeInput[i], 5));
+                    data.Add(DblToString(alignmentInfo.marrMassFncTimePPMOutput[i], 5));
 
-
-
-                    sb = new StringBuilder();
-                    sb.Append(alignmentInfo.marrMassFncMZInput[i]);
-                    sb.Append(Delimiter);
-                    sb.Append(alignmentInfo.marrMassFncMZPPMOutput[i]);
-                    sb.Append(Delimiter);
-                    sb.Append(alignmentInfo.marrMassFncTimeInput[i]);
-                    sb.Append(Delimiter);
-                    sb.Append(alignmentInfo.marrMassFncTimePPMOutput[i]);
-
-                    writer.WriteLine(sb.ToString());
-
+                    writer.WriteLine(string.Join(Delimiter.ToString(), data));
 
                 }
 
@@ -64,7 +57,16 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildHeaderLine()
         {
-            return "mz" + Delimiter + "mzPPMCorrection" + Delimiter + "scan" + Delimiter+ "scanPPMCorrection";
+            var data = new List<string>
+            {
+                "mz",
+                "mzPPMCorrection",
+                "scan",
+                "scanPPMCorrection"
+            };
+
+            return string.Join(Delimiter.ToString(), data);
+
         }
         #region Private Methods
 

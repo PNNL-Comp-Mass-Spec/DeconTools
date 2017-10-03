@@ -126,62 +126,44 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #region Private Methods
         private string buildPeakString(MSPeakResult peak)
         {
-            var sb = new StringBuilder();
+            var data = new List<string> {
+                peak.PeakID.ToString()
+            };
 
-            sb.Append(peak.PeakID);
-            sb.Append(m_delimiter);
-
-            if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
+            if (m_FileType == Globals.MSFileType.PNNL_UIMF)
             {
-                
-                //TODO:  do we want to export 'frame_index' or 'frameNum' ??   arggh   I don't want to look it up everytime I write the peak!
-                sb.Append(peak.FrameNum);
-                sb.Append(m_delimiter);
+                data.Add(peak.FrameNum.ToString());
             }
-            else
-            {
 
-            }
-            sb.Append(peak.Scan_num);
-            sb.Append(m_delimiter);
-            sb.Append(DblToString(peak.MSPeak.XValue, 5));
-            sb.Append(m_delimiter);
-            sb.Append(DblToString(peak.MSPeak.Height, 4, true));
-            sb.Append(m_delimiter);
-            sb.Append(DblToString(peak.MSPeak.Width, 4));
-            sb.Append(m_delimiter);
-            sb.Append(DblToString(peak.MSPeak.SignalToNoise, 2));
-            sb.Append(m_delimiter);
-            sb.Append(peak.MSPeak.MSFeatureID);
-            sb.Append(Environment.NewLine);
+            data.Add(peak.Scan_num.ToString());
+            data.Add(DblToString(peak.MSPeak.XValue, 5));
+            data.Add(DblToString(peak.MSPeak.Height, 4, true));
+            data.Add(DblToString(peak.MSPeak.Width, 4));
+            data.Add(DblToString(peak.MSPeak.SignalToNoise, 2));
+            data.Add(peak.MSPeak.MSFeatureID.ToString());
 
-
-            return sb.ToString();
+            return string.Join(m_delimiter.ToString(), data);
         }
 
         private string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("peak_index");
-            sb.Append(m_delimiter);
-            if (this.m_FileType == Globals.MSFileType.PNNL_UIMF)
+            var data = new List<string> {
+                "peak_index"
+            };
+
+            if (m_FileType == Globals.MSFileType.PNNL_UIMF)
             {
-                sb.Append("frame_num");
-                sb.Append(m_delimiter);
+                data.Add("frame_num");
             }
-            sb.Append("scan_num");
-            sb.Append(m_delimiter);
-            sb.Append("mz");
-            sb.Append(m_delimiter);
-            sb.Append("intensity");
-            sb.Append(m_delimiter);
-            sb.Append("fwhm");
-            sb.Append(m_delimiter);
-            sb.Append("signal_noise");
-            sb.Append(m_delimiter);
-            sb.Append("MSFeatureID");
-            sb.Append(Environment.NewLine);
-            return sb.ToString();
+
+            data.Add("scan_num");
+            data.Add("mz");
+            data.Add("intensity");
+            data.Add("fwhm");
+            data.Add("signal_noise");
+            data.Add("MSFeatureID");
+
+            return string.Join(m_delimiter.ToString(), data);
         }
         protected void initializeAndWriteHeader()
         {

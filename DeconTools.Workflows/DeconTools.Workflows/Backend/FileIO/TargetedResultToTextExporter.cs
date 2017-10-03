@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using DeconTools.Backend.FileIO;
 using DeconTools.Workflows.Backend.Core;
@@ -8,7 +9,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResultDTO>
     {
-
 
         public static TargetedResultToTextExporter CreateExporter(WorkflowParameters workflowParameters, string outputFileName)
         {
@@ -51,19 +51,16 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             return exporter;
 
-
-
         }
 
 
-
-
         #region Constructors
-        public TargetedResultToTextExporter(string filename) : base(filename, '\t') { }
+
+        protected TargetedResultToTextExporter(string filename) : base(filename, '\t') { }
 
         #endregion
 
-   
+
         protected override string buildResultOutput(TargetedResultDTO result)
         {
             var sb = new StringBuilder();
@@ -78,116 +75,72 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected virtual string addAdditionalInfo(TargetedResultDTO result)
         {
-            return String.Empty;
+            return string.Empty;
         }
 
         protected virtual string addBasicTargetedResult(TargetedResultDTO result)
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                result.DatasetName,
+                result.TargetID.ToString(),
+                result.Code,
+                result.EmpiricalFormula,
+                result.ChargeState.ToString(),
+                result.ScanLC.ToString(),
+                result.ScanLCStart.ToString(),
+                result.ScanLCEnd.ToString(),
+                result.NumMSScansSummed.ToString(),
+                result.NET.ToString("0.00000"),
+                result.NETError.ToString("0.000000"),
+                result.NumChromPeaksWithinTol.ToString(),
+                result.NumQualityChromPeaksWithinTol.ToString(),
+                result.MonoMass.ToString("0.00000"),
+                result.MonoMassCalibrated.ToString("0.00000"),
+                result.MassErrorBeforeCalibration.ToString("0.00"),
+                result.MassErrorAfterCalibration.ToString("0.00"),
+                result.MonoMZ.ToString("0.00000"),
+                result.Intensity.ToString("0.000"),
+                result.FitScore.ToString("0.0000"),
+                result.IScore.ToString("0.0000"),
+                result.FailureType,
+                result.ErrorDescription
+            };
 
-            sb.Append(result.DatasetName);
-            sb.Append(Delimiter);
-            sb.Append(result.TargetID);
-            sb.Append(Delimiter);
-            sb.Append(result.Code);
-            sb.Append(Delimiter);
-            sb.Append(result.EmpiricalFormula);
-            sb.Append(Delimiter);
-            sb.Append(result.ChargeState);
-            sb.Append(Delimiter);
-            
-            
-            sb.Append(result.ScanLC);
-            sb.Append(Delimiter);
-            sb.Append(result.ScanLCStart);
-            sb.Append(Delimiter);
-            sb.Append(result.ScanLCEnd);
-            sb.Append(Delimiter);
-            sb.Append(result.NumMSScansSummed);
-            sb.Append(Delimiter);
-            sb.Append(result.NET.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.NETError.ToString("0.000000"));
-            sb.Append(Delimiter);
-            sb.Append(result.NumChromPeaksWithinTol);
-            sb.Append(Delimiter);
-            sb.Append(result.NumQualityChromPeaksWithinTol);
-            sb.Append(Delimiter);
-            sb.Append(result.MonoMass.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.MonoMassCalibrated.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.MassErrorBeforeCalibration.ToString("0.00"));
-            sb.Append(Delimiter);
-            sb.Append(result.MassErrorAfterCalibration.ToString("0.00"));
-            sb.Append(Delimiter);
-          sb.Append(result.MonoMZ.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.Intensity);
-            sb.Append(Delimiter);
-            sb.Append(result.FitScore.ToString("0.0000"));
-            sb.Append(Delimiter);
-            sb.Append(result.IScore.ToString("0.0000"));
-            sb.Append(Delimiter);
-            sb.Append(result.FailureType);
-            sb.Append(Delimiter);
-            sb.Append(result.ErrorDescription);
-
-            
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
 
         }
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("Dataset");
-            sb.Append(Delimiter);
-            sb.Append("TargetID");
-            sb.Append(Delimiter);
-            sb.Append("Code");
-            sb.Append(Delimiter);
-            sb.Append("EmpiricalFormula");
-            sb.Append(Delimiter);
-            sb.Append("ChargeState");
-            sb.Append(Delimiter);
-            sb.Append("Scan");
-            sb.Append(Delimiter);
-            sb.Append("ScanStart");
-            sb.Append(Delimiter);
-            sb.Append("ScanEnd");
-            sb.Append(Delimiter);
-            sb.Append("NumMSSummed");
-            sb.Append(Delimiter);
-            sb.Append("NET");
-            sb.Append(Delimiter);
-            sb.Append("NETError");
-            sb.Append(Delimiter);
-            sb.Append("NumChromPeaksWithinTol");
-            sb.Append(Delimiter);
-            sb.Append("NumQualityChromPeaksWithinTol");
-            sb.Append(Delimiter);
-            sb.Append("MonoisotopicMass");
-            sb.Append(Delimiter);
-            sb.Append("MonoisotopicMassCalibrated");
-            sb.Append(Delimiter);
-            sb.Append("MassErrorBefore");
-            sb.Append(Delimiter);
-            sb.Append("MassErrorAfter");
-            sb.Append(Delimiter);
-            sb.Append("MonoMZ");
-            sb.Append(Delimiter);
-            sb.Append("IntensityRep");
-            sb.Append(Delimiter);
-            sb.Append("FitScore");
-            sb.Append(Delimiter);
-            sb.Append("IScore");
-            sb.Append(Delimiter);
-            sb.Append("FailureType");
-            sb.Append(Delimiter);
-            sb.Append("ErrorDescription");
+            var data = new List<string>
+            {
+                "Dataset",
+                "TargetID",
+                "Code",
+                "EmpiricalFormula",
+                "ChargeState",
+                "Scan",
+                "ScanStart",
+                "ScanEnd",
+                "NumMSSummed",
+                "NET",
+                "NETError",
+                "NumChromPeaksWithinTol",
+                "NumQualityChromPeaksWithinTol",
+                "MonoisotopicMass",
+                "MonoisotopicMassCalibrated",
+                "MassErrorBefore",
+                "MassErrorAfter",
+                "MonoMZ",
+                "IntensityRep",
+                "FitScore",
+                "IScore",
+                "FailureType",
+                "ErrorDescription"
+            };
 
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
     }
 }

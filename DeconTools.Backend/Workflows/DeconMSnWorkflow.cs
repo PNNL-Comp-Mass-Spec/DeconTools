@@ -425,71 +425,77 @@ namespace DeconTools.Backend.Workflows
 
         private string GetParentProfileString(DeconMSnResult result, bool includeHeader)
         {
-            var sb = new StringBuilder();
+            var headers = new List<string> {
+                "MSn_Scan",
+                "Parent_Scan",
+                "AGC_accumulation_time",
+                "TIC" };
+
+            var data = new List<string>
+            {
+                result.ScanNum.ToString(),
+                result.ParentScan.ToString(),
+                result.IonInjectionTime.ToString("0.0000"),
+                result.ParentScanTICIntensity.ToString("0")
+            };
 
             if (includeHeader)
             {
-                sb.Append("MSn_Scan\tParent_Scan\tAGC_accumulation_time\tTIC");
-                sb.Append(Environment.NewLine);
+                return string.Join(_delimiter, headers) + Environment.NewLine + string.Join(_delimiter, data);
             }
 
-            var delimiter = "\t";
-
-            sb.Append(result.ScanNum);
-            sb.Append(delimiter);
-            sb.Append(result.ParentScan);
-            sb.Append(delimiter);
-            sb.Append(result.IonInjectionTime.ToString("0.0000"));
-            sb.Append(delimiter);
-            sb.Append(result.ParentScanTICIntensity.ToString("0"));
-
-            return sb.ToString();
+            return string.Join(_delimiter, data);
         }
-        
-        
+
+
         private string GetSummaryString(DeconMSnResult result, bool includeHeader = false)
         {
-            var sb = new StringBuilder();
+            var headers = new List<string>
+            {
+                "MSn_Scan",
+                "MSn_Level",
+                "Parent_Scan",
+                "Parent_Scan_Level",
+                "Parent_Mz",
+                "Mono_Mz",
+                "Charge_State",
+                "Monoisotopic_Mass",
+                "Isotopic_Fit",
+                "Parent_Intensity",
+                "Mono_Intensity",
+                "Parent_TIC",
+                "Ion_Injection_Time",
+                "OriginalMZ",
+                "ExtraInfo"
+            };
+
+            var data = new List<string>
+            {
+                result.ScanNum.ToString(),
+                "2",
+                result.ParentScan.ToString(),
+                "1",
+                result.ParentMZ.ToString("0.00000"),
+                result.ParentMZ.ToString("0.00000"),
+                result.ParentChargeState.ToString(),
+                result.IsotopicProfile?.MonoIsotopicMass.ToString("0.00000") ?? "-1",
+                result.IsotopicProfile?.Score.ToString("0.0000") ?? "-1",
+                result.ParentIntensity.ToString("0"),
+                result.IntensityAggregate.ToString("0"),
+                result.ParentScanTICIntensity.ToString("0"),
+                result.IonInjectionTime.ToString("0.0000"),
+                result.OriginalMZTarget.ToString("0.0000"),
+                result.ExtraInfo
+            };
 
             if (includeHeader)
             {
-                sb.Append("MSn_Scan\tMSn_Level\tParent_Scan\tParent_Scan_Level\tParent_Mz\tMono_Mz\tCharge_State\tMonoisotopic_Mass\tIsotopic_Fit\tParent_Intensity\tMono_Intensity\tParent_TIC\tIon_Injection_Time\tOriginalMZ\tExtraInfo");
-                sb.Append(Environment.NewLine);
+                return string.Join(_delimiter, headers) + Environment.NewLine + string.Join(_delimiter, data);
             }
 
-            var delimiter = "\t";
-            sb.Append(result.ScanNum);
-            sb.Append(delimiter);
-            sb.Append(2);
-            sb.Append(delimiter);
-            sb.Append(result.ParentScan);
-            sb.Append(delimiter);
-            sb.Append(1);
-            sb.Append(delimiter);
-            sb.Append(result.ParentMZ.ToString("0.00000"));
-            sb.Append(delimiter);
-            sb.Append(result.ParentMZ.ToString("0.00000"));
-            sb.Append(delimiter);
-            sb.Append(result.ParentChargeState);
-            sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile != null ? result.IsotopicProfile.MonoIsotopicMass.ToString("0.00000") : "-1");
-            sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile != null ? result.IsotopicProfile.Score.ToString("0.0000") : "-1");
-            sb.Append(delimiter);
-            sb.Append(result.ParentIntensity.ToString("0"));
-            sb.Append(delimiter);
-            sb.Append(result.IntensityAggregate.ToString("0"));
-            sb.Append(delimiter);
-            sb.Append(result.ParentScanTICIntensity.ToString("0"));
-            sb.Append(delimiter);
-            sb.Append(result.IonInjectionTime.ToString("0.0000"));
-            sb.Append(delimiter);
-            sb.Append(result.OriginalMZTarget);
-            sb.Append(delimiter);
-
-            sb.Append(result.ExtraInfo);
-            return sb.ToString();
+            return string.Join(_delimiter, data);
         }
+
         private string GetMGFOutputString(Run run, int scanNum, DeconMSnResult deconMSnResult, IEnumerable<Peak> ms2Peaks)
         {
             var sb = new StringBuilder();
@@ -516,7 +522,7 @@ namespace DeconTools.Backend.Workflows
             return sb.ToString();
 
         }
-        
+
         protected override void WriteProcessingInfoToLog()
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));

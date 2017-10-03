@@ -45,67 +45,47 @@ namespace DeconTools.Backend.FileIO.TargetedResultFileIO
 
         protected virtual string addBasicTargetedResult(TargetedResult result)
         {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(result.DatasetName);
-            sb.Append(Delimiter);
-            sb.Append(result.MassTagID);
-            sb.Append(Delimiter);
-            sb.Append(result.ChargeState);
-            sb.Append(Delimiter);
-            sb.Append(result.ScanLC);
-            sb.Append(Delimiter);
-            sb.Append(result.ScanLCStart);
-            sb.Append(Delimiter);
-            sb.Append(result.ScanLCEnd);
-            sb.Append(Delimiter);
-            sb.Append(result.NET.ToString("0.0000"));
-            sb.Append(Delimiter);
-            sb.Append(result.NumChromPeaksWithinTol);
-            sb.Append(Delimiter);
-            sb.Append(result.MonoMass.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.MonoMZ.ToString("0.00000"));
-            sb.Append(Delimiter);
-            sb.Append(result.Intensity);
-            sb.Append(Delimiter);
-            sb.Append(result.FitScore.ToString("0.0000"));
-            sb.Append(Delimiter);
-            sb.Append(result.IScore.ToString("0.0000"));
-            return sb.ToString();
+            var data = new List<string>
+            {
+                result.DatasetName,
+                result.MassTagID,
+                result.ChargeState,
+                result.ScanLC,
+                result.ScanLCStart,
+                result.ScanLCEnd,
+                result.NET.ToString("0.0000"),
+                result.NumChromPeaksWithinTol,
+                result.MonoMass.ToString("0.00000"),
+                result.MonoMZ.ToString("0.00000"),
+                result.Intensity,
+                result.FitScore.ToString("0.0000"),
+                result.IScore.ToString("0.0000")
+            };
+            
+            return string.Join(Delimiter.ToString(), data,
 
         }
 
         protected override string buildHeaderLine()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Dataset");
-            sb.Append(Delimiter);
-            sb.Append("MassTagID");
-            sb.Append(Delimiter);
-            sb.Append("ChargeState");
-            sb.Append(Delimiter);
-            sb.Append("Scan");
-            sb.Append(Delimiter);
-            sb.Append("ScanStart");
-            sb.Append(Delimiter);
-            sb.Append("ScanEnd");
-            sb.Append(Delimiter);
-            sb.Append("NET");
-            sb.Append(Delimiter);
-            sb.Append("NumChromPeaksWithinTol");
-            sb.Append(Delimiter);
-            sb.Append("MonoisotopicMass");
-            sb.Append(Delimiter);
-            sb.Append("MonoMZ");
-            sb.Append(Delimiter);
-            sb.Append("IntensityRep");
-            sb.Append(Delimiter);
-            sb.Append("FitScore");
-            sb.Append(Delimiter);
-            sb.Append("IScore");
+            var data = new List<string>
+            {
+                "Dataset",
+                "MassTagID",
+                "ChargeState",
+                "Scan",
+                "ScanStart",
+                "ScanEnd",
+                "NET",
+                "NumChromPeaksWithinTol",
+                "MonoisotopicMass",
+                "MonoMZ",
+                "IntensityRep",
+                "FitScore",
+                "IScore"
+            };
 
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
     }
 }

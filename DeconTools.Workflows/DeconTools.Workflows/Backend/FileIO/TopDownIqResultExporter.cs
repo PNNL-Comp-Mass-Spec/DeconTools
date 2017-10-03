@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core;
@@ -30,8 +29,10 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <param name="results"></param>
         public override void WriteOutResults(string fileName, IEnumerable<IqResult> results)
         {
-            WriteOutTargetResults(fileName, results);
-            WriteOutChargeResults(fileName, results);
+            var iqResults = results.ToList();
+
+            WriteOutTargetResults(fileName, iqResults);
+            WriteOutChargeResults(fileName, iqResults);
         }
 
 
@@ -129,26 +130,19 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetTargetHeader()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                "TargetID",
+                "Proteoform",
+                "EmpiricalFormula",
+                "PrecursorMass",
+                "ChargeStateList",
+                "Abundance",
+                "MedianFitScore",
+                "MedianChargeCorrelation"
+            };
 
-            sb.Append("TargetID");
-            sb.Append(Delimiter);
-            sb.Append("Proteoform");
-            sb.Append(Delimiter);
-            sb.Append("EmpiricalFormula");
-            sb.Append(Delimiter);
-            sb.Append("PrecursorMass");
-            sb.Append(Delimiter);
-            sb.Append("ChargeStateList");
-            sb.Append(Delimiter);
-            sb.Append("Abundance");
-            sb.Append(Delimiter);
-            sb.Append("MedianFitScore");
-            sb.Append(Delimiter);
-            sb.Append("MedianChargeCorrelation");
-
-            var outString = sb.ToString();
-            return outString;
+            return string.Join(Delimiter, data);
 
         }
 
@@ -159,40 +153,26 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetChargeHeader()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                "TargetID",
+                "Proteoform",
+                "EmpiricalFormula",
+                "ChargeState",
+                "TheoreticalMonoisotopicMass",
+                "TheoreticalMZ",
+                "TargetNormalizedElutionTime",
+                "MonoisotopicMassObs",
+                "MZObs",
+                "NormalizedElutionTimeObs",
+                "ChromPeaksWithinTolerance",
+                "ScanObserved",
+                "Abundance",
+                "IsoFitScore",
+                "IsotopeCorrelation"
+            };
 
-            sb.Append("TargetID");
-            sb.Append(Delimiter);
-            sb.Append("Proteoform");
-            sb.Append(Delimiter);
-            sb.Append("EmpiricalFormula");
-            sb.Append(Delimiter);
-            sb.Append("ChargeState");
-            sb.Append(Delimiter);
-            sb.Append("TheoreticalMonoisotopicMass");
-            sb.Append(Delimiter);
-            sb.Append("TheoreticalMZ");
-            sb.Append(Delimiter);
-            sb.Append("TargetNormalizedElutionTime");
-            sb.Append(Delimiter);
-            sb.Append("MonoisotopicMassObs");
-            sb.Append(Delimiter);
-            sb.Append("MZObs");
-            sb.Append(Delimiter);
-            sb.Append("NormalizedElutionTimeObs");
-            sb.Append(Delimiter);
-            sb.Append("ChromPeaksWithinTolerance");
-            sb.Append(Delimiter);
-            sb.Append("ScanObserved");
-            sb.Append(Delimiter);
-            sb.Append("Abundance");
-            sb.Append(Delimiter);
-            sb.Append("IsoFitScore");
-            sb.Append(Delimiter);
-            sb.Append("IsotopeCorrelation");
-
-            var outString = sb.ToString();
-            return outString;
+            return string.Join(Delimiter, data);
 
         }
 
@@ -205,14 +185,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetTargetResultAsString(IEnumerable<IqResult> results, bool includeHeader = false)
         {
-            var sb = new StringBuilder();
-
-            if (includeHeader)
-            {
-                var header = GetHeader();
-                sb.Append(header);
-                sb.Append(Environment.NewLine);
-            }
 
             double abundance = 0, correlationMedian = 0;
             var chargeStateList = "";
@@ -241,8 +213,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
                 //Looks for parent level target for information
-                var parentResult = result as TopDownIqResult;
-                if (parentResult != null)
+                if (result is TopDownIqResult parentResult)
                 {
                     target = parentResult.Target;
                     correlationMedian = parentResult.SelectedCorrelationGroup.ChargeCorrelationMedian();
@@ -255,27 +226,25 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 medianFit = MathUtils.GetMedian(fitScoreList);
             }
-            
-            
 
-            sb.Append(target.ID);
-            sb.Append(Delimiter);
-            sb.Append(target.Code);
-            sb.Append(Delimiter);
-            sb.Append(target.EmpiricalFormula);
-            sb.Append(Delimiter);
-            sb.Append(target.MonoMassTheor);
-            sb.Append(Delimiter);
-            sb.Append(chargeStateList);
-            sb.Append(Delimiter);
-            sb.Append(abundance);
-            sb.Append(Delimiter);
-            sb.Append(medianFit);
-            sb.Append(Delimiter);
-            sb.Append(correlationMedian);
+            var data = new List<string>
+            {
+                target.ID.ToString(),
+                target.Code,
+                target.EmpiricalFormula,
+                target.MonoMassTheor.ToString("0.0000"),
+                chargeStateList,
+                abundance.ToString("0.000"),
+                medianFit.ToString("0.0000"),
+                correlationMedian.ToString("0.000")
+            };
 
-            var outString = sb.ToString();
-            return outString;
+            if (includeHeader)
+            {
+                return GetHeader() + Environment.NewLine + string.Join(Delimiter, data);
+            }
+
+            return string.Join(Delimiter, data);
         }
 
 
@@ -288,53 +257,44 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetChargeResultAsString (IqResult result, bool includeHeader = false)
         {
-            if (!(result.Target.ChargeState == 0 || result.Abundance <= 0))
+            if (result.Target.ChargeState == 0 || result.Abundance <= 0)
+                return null;
+
+            var data = new List<string>
             {
-                var sb = new StringBuilder();
+                result.Target.ID.ToString(),
+                result.Target.Code,
+                result.Target.EmpiricalFormula,
+                result.Target.ChargeState.ToString(),
+                result.Target.MonoMassTheor.ToString("0.000"),
+                result.Target.MZTheor.ToString("0.000"),
+                result.Target.ElutionTimeTheor.ToString("0.000"),
+                result.MonoMassObs.ToString("0.000"),
+                result.MZObs.ToString("0.000"),
+                result.ElutionTimeObs.ToString("0.0000"),
+                result.NumChromPeaksWithinTolerance.ToString(),
+                result.LcScanObs.ToString(),
+                result.Abundance.ToString("0.#"),
+                result.FitScore.ToString("0.000")
+            };
 
-                if (includeHeader)
-                {
-                    var header = GetHeader();
-                    sb.Append(header);
-                    sb.Append(Environment.NewLine);
-                }
-                sb.Append(result.Target.ID);
-                sb.Append(Delimiter);
-                sb.Append(result.Target.Code);
-                sb.Append(Delimiter);
-                sb.Append(result.Target.EmpiricalFormula);
-                sb.Append(Delimiter);
-                sb.Append(result.Target.ChargeState);
-                sb.Append(Delimiter);
-                sb.Append(result.Target.MonoMassTheor.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.Target.MZTheor.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.Target.ElutionTimeTheor.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.MonoMassObs.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.MZObs.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.ElutionTimeObs.ToString("0.0000"));
-                sb.Append(Delimiter);
-                sb.Append(result.NumChromPeaksWithinTolerance);
-                sb.Append(Delimiter);
-                sb.Append(result.LcScanObs);
-                sb.Append(Delimiter);
-                sb.Append(result.Abundance.ToString("0.#"));
-                sb.Append(Delimiter);
-                sb.Append(result.FitScore.ToString("0.000"));
-                sb.Append(Delimiter);
-                sb.Append(result.CorrelationData.RSquaredValsMedian);
-
-                var outString = sb.ToString();
-                return outString;
+            var medianRSquared = result.CorrelationData.RSquaredValsMedian;
+            if (medianRSquared.HasValue)
+            {
+                data.Add(medianRSquared.Value.ToString("0.000"));
             }
             else
             {
-                return null;
+                data.Add(string.Empty);
             }
+
+            if (includeHeader)
+            {
+                return GetHeader() + Environment.NewLine + string.Join(Delimiter, data);
+            }
+
+            return string.Join(Delimiter, data);
+
         }
 
 

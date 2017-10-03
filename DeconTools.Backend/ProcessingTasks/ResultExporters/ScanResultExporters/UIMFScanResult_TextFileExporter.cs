@@ -1,17 +1,14 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public class UIMFScanResult_TextFileExporter : ScanResult_TextFileExporter
     {
-   
+
         #region Constructors
         public UIMFScanResult_TextFileExporter(string fileName) : base(fileName) { }
         #endregion
-
-
-
 
         #region Public Methods
         #endregion
@@ -21,67 +18,48 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         protected override string buildScansResultOutput(ScanResult result)
         {
-            var sb = new StringBuilder();
 
             var uimfScanResult = (UimfScanResult)result;
 
+            var data = new List<string>
+            {
+                //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
+                uimfScanResult.LCScanNum.ToString(),
+                DblToString(uimfScanResult.ScanTime, 3),
+                result.SpectrumType.ToString(),
+                DblToString(uimfScanResult.BasePeak.Height, 4, true),
+                DblToString(uimfScanResult.BasePeak.XValue, 5),
+                DblToString(uimfScanResult.TICValue, 4, true),
+                uimfScanResult.NumPeaks.ToString(),
+                uimfScanResult.NumIsotopicProfiles.ToString(),
+                DblToString(uimfScanResult.FramePressureUnsmoothed, 5),
+                DblToString(uimfScanResult.FramePressureSmoothed, 5)
+            };
 
-            //sb.Append(uimfScanResult.Frameset.PrimaryFrame);
-
-            //we want to report the unique 'FrameNum', not the non-unique 'Frame_index');
-            sb.Append(uimfScanResult.LCScanNum);
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.ScanTime, 3));
-            sb.Append(Delimiter);
-            sb.Append(result.SpectrumType);
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.BasePeak.Height, 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.BasePeak.XValue, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.TICValue, 4, true));
-            sb.Append(Delimiter);
-            sb.Append(uimfScanResult.NumPeaks);
-            sb.Append(Delimiter);
-            sb.Append(uimfScanResult.NumIsotopicProfiles);
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.FramePressureUnsmoothed, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(uimfScanResult.FramePressureSmoothed, 5));
-
-            return sb.ToString();
-
+            return string.Join(Delimiter.ToString(), data);
 
         }
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("frame_num");
-            sb.Append(Delimiter);
-            sb.Append("frame_time");
-            sb.Append(Delimiter);
-            sb.Append("type");
-            sb.Append(Delimiter);
-            sb.Append("bpi");
-            sb.Append(Delimiter);
-            sb.Append("bpi_mz");
-            sb.Append(Delimiter);
-            sb.Append("tic");
-            sb.Append(Delimiter);
-            sb.Append("num_peaks");
-            sb.Append(Delimiter);
-            sb.Append("num_deisotoped");
-            sb.Append(Delimiter);
-            sb.Append("FramePressureUnsmoothed");
-            sb.Append(Delimiter);
-            sb.Append("FramePressureSmoothed");
-           
+            var data = new List<string>
+            {
+                "frame_num",
+                "frame_time",
+                "type",
+                "bpi",
+                "bpi_mz",
+                "tic",
+                "num_peaks",
+                "num_deisotoped",
+                "FramePressureUnsmoothed",
+                "FramePressureSmoothed"
+            };
 
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
 
 
-     
+
     }
 }

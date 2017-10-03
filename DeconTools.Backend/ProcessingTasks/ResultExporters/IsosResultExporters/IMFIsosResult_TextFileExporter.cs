@@ -59,82 +59,60 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
 
-
-        protected override string buildIsosResultOutput(DeconTools.Backend.Core.IsosResult result)
+        protected override string buildIsosResultOutput(Core.IsosResult result)
         {
-            var sb = new StringBuilder();
-            sb.Append(result.ScanSet.PrimaryScanNumber);
-            sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile.ChargeState);
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.Score, 4));						// Fit score
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
-            sb.Append(delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.OriginalIntensity, 4, true));
-            sb.Append(delimiter);
-            sb.Append(result.IsotopicProfile.IsSaturated ? 1 : 0);
-            sb.Append(delimiter);
-            sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
+            var data = new List<string>
+            {
+                result.ScanSet.PrimaryScanNumber.ToString(),
+                result.IsotopicProfile.ChargeState.ToString(),
+                DblToString(result.IsotopicProfile.GetAbundance(), 4, true),        // Fit score
+                DblToString(result.IsotopicProfile.GetMZ(), 5),
+                DblToString(result.IsotopicProfile.Score, 4),
+                DblToString(result.IsotopicProfile.AverageMass, 5),
+                DblToString(result.IsotopicProfile.MonoIsotopicMass, 5),
+                DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5),
+                DblToString(result.IsotopicProfile.GetFWHM(), 4),
+                DblToString(result.IsotopicProfile.GetSignalToNoise(), 2),
+                DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true),
+                DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true),
+                DblToString(result.IsotopicProfile.OriginalIntensity, 4, true),
+                result.IsotopicProfile.IsSaturatedAsNumericText,
+                ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags)
+            };
+
             // Uncomment to write out the fit_count_basis
-            //sb.Append(Delimiter);
-            //sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
-            return sb.ToString();
+            // data.Add(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
+
+            return string.Join(Delimiter.ToString(), data);
+
         }
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("scan_num");
-            sb.Append(Delimiter);
-            sb.Append("charge");
-            sb.Append(Delimiter);
-            sb.Append("abundance");
-            sb.Append(Delimiter);
-            sb.Append("mz");
-            sb.Append(Delimiter);
-            sb.Append("fit");
-            sb.Append(Delimiter);
-            sb.Append("average_mw");
-            sb.Append(Delimiter);
-            sb.Append("monoisotopic_mw");
-            sb.Append(Delimiter);
-            sb.Append("mostabundant_mw");
-            sb.Append(Delimiter);
-            sb.Append("fwhm");
-            sb.Append(Delimiter);
-            sb.Append("signal_noise");
-            sb.Append(Delimiter);
-            sb.Append("mono_abundance");
-            sb.Append(Delimiter);
-            sb.Append("mono_plus2_abundance");
-            sb.Append(Delimiter);
-            sb.Append("orig_intensity");
-            sb.Append(Delimiter);
-            sb.Append("TIA_orig_intensity");
-            sb.Append(delimiter);
-            sb.Append("flag");
+            var data = new List<string>
+            {
+                "scan_num",
+                "charge",
+                "abundance",
+                "mz",
+                "fit",
+                "average_mw",
+                "monoisotopic_mw",
+                "mostabundant_mw",
+                "fwhm",
+                "signal_noise",
+                "mono_abundance",
+                "mono_plus2_abundance",
+                "orig_intensity",
+                "TIA_orig_intensity",
+                "flag"
+            };
+
             // Uncomment to write out the fit_count_basis
-            //sb.Append(Delimiter);
-            //sb.Append("fit_basis_count");
-            sb.Append(Environment.NewLine);
-            return sb.ToString();
+            //            //data.Add("fit_basis_count");
+
+            return string.Join(Delimiter.ToString(), data);
+
 
 
         }

@@ -143,50 +143,36 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private string GetTargetStringForExport(IqTargetDms iqTarget)
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                iqTarget.ID.ToString(),
+                iqTarget.Code,
+                iqTarget.EmpiricalFormula,
+                iqTarget.MonoMassTheor.ToString("0.00000"),
+                iqTarget.ElutionTimeTheor.ToString("0.000"),
+                iqTarget.QualityScore.ToString("0.000"),
+                iqTarget.PmtQualityScore.ToString("0.000")
+            };
 
-            var delim = "\t";
-
-            sb.Append(iqTarget.ID);
-            sb.Append(delim);
-            sb.Append(iqTarget.Code);
-            sb.Append(delim);
-            sb.Append(iqTarget.EmpiricalFormula);
-            sb.Append(delim);
-            sb.Append(iqTarget.MonoMassTheor);
-            sb.Append(delim);
-            sb.Append(iqTarget.ElutionTimeTheor);
-            sb.Append(delim);
-            sb.Append(iqTarget.QualityScore);
-            sb.Append(delim);
-            sb.Append(iqTarget.PmtQualityScore);
-
-            return sb.ToString();
+            return string.Join("\t", data);
 
         }
 
 
         private string GetHeaderLine()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                "TargetID",
+                "Code",
+                "EmpiricalFormula",
+                "MonomassTheor",
+                "ElutionTimeTheor",
+                "QualityScore",
+                "PmtQualityScore"
+            };
 
-            var delim = "\t";
-
-            sb.Append("TargetID");
-            sb.Append(delim);
-            sb.Append("Code");
-            sb.Append(delim);
-            sb.Append("EmpiricalFormula");
-            sb.Append(delim);
-            sb.Append("MonomassTheor");
-            sb.Append(delim);
-            sb.Append("ElutionTimeTheor");
-            sb.Append(delim);
-            sb.Append("QualityScore");
-            sb.Append(delim);
-            sb.Append("PmtQualityScore");
-
-            return sb.ToString();
+            return string.Join("\t", data);
 
         }
 

@@ -34,41 +34,30 @@ namespace DeconTools.Backend.Data
             }
             sw.WriteLine(headerLine);
 
+            var data = new List<string>();
+
             foreach (var isosResult in results.ResultList)
             {
                 var result = (StandardIsosResult)isosResult;
 
-                sb = new StringBuilder();
-                sb.Append(getScanNumber(result.ScanSet.PrimaryScanNumber));       
-                sb.Append(delimiter);
-                sb.Append(result.IsotopicProfile.ChargeState);
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.Score, 4));		// Fit Score
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
-                sb.Append(delimiter);
-                //     this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance";
+                data.Clear();
+                data.Add(getScanNumber(result.ScanSet.PrimaryScanNumber).ToString());
+                data.Add(result.IsotopicProfile.ChargeState.ToString());
+                data.Add(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
+                data.Add(DblToString(result.IsotopicProfile.GetMZ(), 5));
+                data.Add(DblToString(result.IsotopicProfile.Score, 4));       // Fit Score
+                data.Add(DblToString(result.IsotopicProfile.AverageMass, 5));
+                data.Add(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
+                data.Add(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
+                data.Add(DblToString(result.IsotopicProfile.GetFWHM(), 4));
+                data.Add(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
+                data.Add(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
+                data.Add(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
 
-                sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
                 // Uncomment to write out the fit_count_basis
-                //sb.Append(delimiter);
-                //sb.Append(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
+                // data.Add(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
 
-                sw.WriteLine(sb.ToString());
+                sw.WriteLine(string.Join(delimiter.ToString(), data));
             }
 
             sw.Close();

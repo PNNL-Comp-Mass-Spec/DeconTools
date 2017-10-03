@@ -20,37 +20,32 @@ namespace DeconTools.Backend.Core
 
         public double IntensityAggregate { get; set; }
 
-
         public override string ToString()
         {
-            if (this.IsotopicProfile == null) 
+            if (IsotopicProfile == null)
                 return base.ToString();
 
-            var delim = "; ";
+            var data = new List<string>
+            {
+                MSFeatureID.ToString(),
+                ScanSet.PrimaryScanNumber.ToString(),
+                IsotopicProfile.MonoIsotopicMass.ToString("0.00000"),
+                IsotopicProfile.ChargeState.ToString(),
+                IsotopicProfile.MonoPeakMZ.ToString("0.00000"),
+                IntensityAggregate.ToString("0.00"),
+                IsotopicProfile.Score.ToString("0.0000"),
+                InterferenceScore.ToString("0.0000")
+            };
 
-            var sb = new StringBuilder();
-            sb.Append(this.MSFeatureID);
-            sb.Append(delim);
-            sb.Append(this.ScanSet.PrimaryScanNumber);
-            sb.Append(delim);
-            sb.Append(this.IsotopicProfile.MonoIsotopicMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.IsotopicProfile.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.IntensityAggregate);
-            sb.Append(delim);
-            sb.Append(this.IsotopicProfile.Score.ToString("0.0000"));		// Fit Score
-            sb.Append(delim);
-            sb.Append(this.InterferenceScore.ToString("0.0000"));
+            // Fit Score
+
             // Uncomment to write out the fit_count_basis
-            //sb.Append(delim);
-            //sb.Append(this.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
-            
-            return sb.ToString();
+            //
+            //data.Add(this.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
+
+            return string.Join("; ", data);
         }
-        
+
         public void Display()
         {
             Console.WriteLine(this.ToString());

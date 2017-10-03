@@ -23,38 +23,23 @@ namespace DeconTools.Backend.Core.Results
         #region Public Methods
         public virtual string ToStringWithDetailsAsRow()
         {
-            StringBuilder sb = new StringBuilder();
+            var data = new List<string>() {  /// CheckListPopulate
+            this.MassTagID,
+            this.ChargeState,
+            this.ScanLC,
+            this.ScanLCStart,
+            this.ScanLCEnd,
+            this.NET.ToString("0.0000"),
+            this.NumChromPeaksWithinTol,
+            this.MonoMass.ToString("0.00000"),
+            this.MonoMZ.ToString("0.00000"),
+            this.FitScore.ToString("0.0000"),
+            this.IScore.ToString("0.0000"),
+            this.Intensity,
+            this.IntensityI0,
+};
+            return string.Join(delim, data);
 
-            string delim = "\t";
-
-            sb.Append(this.MassTagID);
-            sb.Append(delim);
-            sb.Append(this.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.ScanLC);
-            sb.Append(delim);
-            sb.Append(this.ScanLCStart);
-            sb.Append(delim);
-            sb.Append(this.ScanLCEnd);
-            sb.Append(delim);
-            sb.Append(this.NET.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.NumChromPeaksWithinTol);
-            sb.Append(delim);
-            sb.Append(this.MonoMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.MonoMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.FitScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.Intensity);
-            sb.Append(delim);
-            sb.Append(this.IntensityI0);
-
-
-            return sb.ToString();
         }
 
         #endregion

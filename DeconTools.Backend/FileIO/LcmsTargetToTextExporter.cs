@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 using BrukerDataReader;
 using DeconTools.Backend.Core;
 
@@ -9,7 +9,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Constructors
 
-        public LcmsTargetToTextExporter(string fileName):base(fileName,'\t'){}
+        public LcmsTargetToTextExporter(string fileName) : base(fileName, '\t') { }
 
         public LcmsTargetToTextExporter(string fileName, char delimiter) : base(fileName, delimiter) { }
 
@@ -19,35 +19,26 @@ namespace DeconTools.Backend.FileIO
 
         protected override string buildResultOutput(TargetBase target)
         {
-            var sb = new StringBuilder();
             Check.Require(target is LcmsFeatureTarget, "Exported result is of the wrong type.");
 
             var lcmsFeature = (LcmsFeatureTarget)target;
 
-            sb.Append(lcmsFeature.ID);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.FeatureToMassTagID);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.EmpiricalFormula);
-            sb.Append(Delimiter);
-            sb.Append(target.Code);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.MonoIsotopicMass);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.ChargeState);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.MZ);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.ModCount);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.ModDescription);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.ScanLCTarget);
-            sb.Append(Delimiter);
-            sb.Append(lcmsFeature.NormalizedElutionTime);
-            
+            var data = new List<string>
+            {
+                lcmsFeature.ID.ToString(),
+                lcmsFeature.FeatureToMassTagID.ToString(),
+                lcmsFeature.EmpiricalFormula,
+                target.Code,
+                lcmsFeature.MonoIsotopicMass.ToString("0.00000"),
+                lcmsFeature.ChargeState.ToString(),
+                lcmsFeature.MZ.ToString("0.00000"),
+                lcmsFeature.ModCount.ToString(),
+                lcmsFeature.ModDescription,
+                lcmsFeature.ScanLCTarget.ToString(),
+                lcmsFeature.NormalizedElutionTime.ToString("0.000"),
+            };
 
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
 
         protected override string buildHeaderLine()

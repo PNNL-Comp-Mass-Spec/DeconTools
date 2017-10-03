@@ -37,82 +37,54 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
             var o16o18result = (O16O18IsosResult)result;
 
+            var data = new List<string>
+            {
+                o16o18result.ScanSet.PrimaryScanNumber.ToString(),
+                o16o18result.IsotopicProfile.ChargeState.ToString(),
+                DblToString(o16o18result.IsotopicProfile.GetAbundance(), 4, true),
+                DblToString(o16o18result.IsotopicProfile.GetMZofMostAbundantPeak(), 5),
+                DblToString(o16o18result.IsotopicProfile.Score, 4),
+                DblToString(o16o18result.IsotopicProfile.AverageMass, 5),
+                DblToString(o16o18result.IsotopicProfile.MonoIsotopicMass, 5),
+                DblToString(o16o18result.IsotopicProfile.MostAbundantIsotopeMass, 5),
+                DblToString(o16o18result.IsotopicProfile.GetFWHM(), 4),
+                DblToString(o16o18result.IsotopicProfile.GetSignalToNoise(), 2),
+                DblToString(o16o18result.IsotopicProfile.GetMonoAbundance(), 4, true),
+                DblToString(o16o18result.MonoPlus2Abundance, 4, true),
+                DblToString(o16o18result.MonoPlus4Abundance, 4, true),
+                DblToString(o16o18result.MonoMinus4Abundance, 4, true),
+                ResultValidators.ResultValidationUtils.GetStringFlagCode(o16o18result.Flags),
+                DblToString(o16o18result.InterferenceScore, 5)
+            };
 
-            var sb = new StringBuilder();
+            //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
 
-
-
-            sb.Append(o16o18result.ScanSet.PrimaryScanNumber);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IsotopicProfile.ChargeState);
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.GetAbundance(), 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.GetMZofMostAbundantPeak(), 5));   //traditionally, the m/z of the most abundant peak is reported. If you want the m/z of the mono peak, get the monoIsotopic mass
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.Score, 4));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.AverageMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.MonoIsotopicMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.MostAbundantIsotopeMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.GetFWHM(), 4));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.GetSignalToNoise(), 2));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.IsotopicProfile.GetMonoAbundance(), 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.MonoPlus2Abundance, 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.MonoPlus4Abundance, 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.MonoMinus4Abundance, 4, true));
-            sb.Append(Delimiter);
-
-            sb.Append(ResultValidators.ResultValidationUtils.GetStringFlagCode(o16o18result.Flags));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(o16o18result.InterferenceScore, 5));
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("scan_num");
-            sb.Append(Delimiter);
-            sb.Append("charge");
-            sb.Append(Delimiter);
-            sb.Append("abundance");
-            sb.Append(Delimiter);
-            sb.Append("mz");
-            sb.Append(Delimiter);
-            sb.Append("fit");
-            sb.Append(Delimiter);
-            sb.Append("average_mw");
-            sb.Append(Delimiter);
-            sb.Append("monoisotopic_mw");
-            sb.Append(Delimiter);
-            sb.Append("mostabundant_mw");
-            sb.Append(Delimiter);
-            sb.Append("fwhm");
-            sb.Append(Delimiter);
-            sb.Append("signal_noise");
-            sb.Append(Delimiter);
-            sb.Append("mono_abundance");
-            sb.Append(Delimiter);
-            sb.Append("mono_plus2_abundance");
-            sb.Append(Delimiter);
-            sb.Append("mono_plus4_abundance");
-            sb.Append(Delimiter);
-            sb.Append("mono_minus4_abundance");
-            sb.Append(Delimiter);
-            sb.Append("flag");
-            sb.Append(Delimiter);
-            sb.Append("interference_score");
-            sb.Append(Environment.NewLine);
-            return sb.ToString();
+            var data = new List<string>
+            {
+                "scan_num",
+                "charge",
+                "abundance",
+                "mz",
+                "fit",
+                "average_mw",
+                "monoisotopic_mw",
+                "mostabundant_mw",
+                "fwhm",
+                "signal_noise",
+                "mono_abundance",
+                "mono_plus2_abundance",
+                "mono_plus4_abundance",
+                "mono_minus4_abundance",
+                "flag",
+                "interference_score"
+            };
+
+            return string.Join(Delimiter.ToString(), data);
         }
 
 

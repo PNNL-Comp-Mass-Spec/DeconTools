@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using DeconTools.Workflows.Backend.Results;
 
@@ -24,15 +25,13 @@ namespace DeconTools.Workflows.Backend.FileIO
                     "Top down exporter failed when trying to process a result. The 'PrsmList' object is null.");
             }
 
-
-            var sb = new StringBuilder();
-
             var prsmList = new StringBuilder();
             foreach (var prsm in topDownResult.PrsmList)
             {
                 if (prsmList.Length > 0) prsmList.Append(", ");
                 prsmList.Append(prsm);
             }
+
             var chargeList = new StringBuilder();
             foreach (var charge in topDownResult.ChargeStateList)
             {
@@ -40,55 +39,41 @@ namespace DeconTools.Workflows.Backend.FileIO
                 chargeList.Append(charge);
             }
 
-            sb.Append(topDownResult.MatchedMassTagID);
-            sb.Append(Delimiter);
-            sb.Append(prsmList.ToString());
-            sb.Append(Delimiter);
-            sb.Append(chargeList.ToString());
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.ProteinName);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.ProteinMass);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.PeptideSequence);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.EmpiricalFormula);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.Quantitation);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.MostAbundantChargeState);
-            sb.Append(Delimiter);
-            sb.Append(topDownResult.ScanLC);
-            
-            return sb.ToString();
+            var data = new List<string>
+            {
+            topDownResult.MatchedMassTagID.ToString(),
+            prsmList.ToString(),
+            chargeList.ToString(),
+            topDownResult.ProteinName,
+            topDownResult.ProteinMass.ToString("0.0000"),
+            topDownResult.PeptideSequence,
+            topDownResult.EmpiricalFormula,
+            topDownResult.Quantitation.ToString("0.000"),
+            topDownResult.MostAbundantChargeState.ToString(),
+            topDownResult.ScanLC.ToString(),
+            };
+
+            return string.Join(Delimiter.ToString(), data);
         }
 
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                "Prsm_ID",
+                "Prsm_list",
+                "Charge_list",
+                "Protein_name",
+                "Protein_mass",
+                "Peptide",
+                "Empirical_formula",
+                "Abundance",
+                "Most_abundant_charge",
+                "Most_abundant_charge_apex_scan",
+            };
 
-            sb.Append("Prsm_ID");
-            sb.Append(Delimiter);
-            sb.Append("Prsm_list");
-            sb.Append(Delimiter);
-            sb.Append("Charge_list");
-            sb.Append(Delimiter);
-            sb.Append("Protein_name");
-            sb.Append(Delimiter);
-            sb.Append("Protein_mass");
-            sb.Append(Delimiter);
-            sb.Append("Peptide");
-            sb.Append(Delimiter);
-            sb.Append("Empirical_formula");
-            sb.Append(Delimiter);
-            sb.Append("Abundance");
-            sb.Append(Delimiter);
-            sb.Append("Most_abundant_charge");
-            sb.Append(Delimiter);
-            sb.Append("Most_abundant_charge_apex_scan");
-
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
 
         }
 

@@ -1,11 +1,9 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DeconTools.Workflows.Backend.Results
 {
     public class DeuteratedTargetedResultDTO : UnlabelledTargetedResultDTO
     {
-
-
 
         #region Properties
         //public float IntensityI2 { get; set; }
@@ -18,7 +16,7 @@ namespace DeconTools.Workflows.Backend.Results
         //public float IntensityTheorI2 { get; set; }
         //public float IntensityTheorI4 { get; set; }
 
-        
+
         public double HydrogenI0 { get; set; }
         public double HydrogenI1 { get; set; }
         public double HydrogenI2 { get; set; }
@@ -53,80 +51,45 @@ namespace DeconTools.Workflows.Backend.Results
 
         public override string ToStringWithDetailsAsRow()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                TargetID.ToString(),
+                ChargeState.ToString(),
+                ScanLC.ToString(),
+                ScanLCStart.ToString(),
+                ScanLCEnd.ToString(),
+                NET.ToString("0.0000"),
+                NumChromPeaksWithinTol.ToString(),
+                MonoMass.ToString("0.00000"),
+                MonoMZ.ToString("0.00000"),
+                FitScore.ToString("0.0000"),
+                IScore.ToString("0.0000"),
+                TheoryI0.ToString("0.000"),
+                TheoryI1.ToString("0.000"),
+                TheoryI2.ToString("0.000"),
+                TheoryI3.ToString("0.000"),
+                TheoryI4.ToString("0.000"),
+                HydrogenI0.ToString("0.000"),
+                HydrogenI1.ToString("0.000"),
+                HydrogenI2.ToString("0.000"),
+                HydrogenI3.ToString("0.000"),
+                HydrogenI4.ToString("0.000"),
+                DeuteriumI0.ToString("0.000"),
+                DeuteriumI1.ToString("0.000"),
+                DeuteriumI2.ToString("0.000"),
+                DeuteriumI3.ToString("0.000"),
+                DeuteriumI4.ToString("0.000"),
+                RawI0.ToString("0.000"),
+                RawI1.ToString("0.000"),
+                RawI2.ToString("0.000"),
+                RawI3.ToString("0.000"),
+                RawI4.ToString("0.000"),
+                LabelingEfficiency.ToString("0.000"),
+                RatioDH.ToString("0.0000"),
+                IndegratedLcAbundance.ToString("0.0")
+            };
 
-            var delim = "\t";
-
-            sb.Append(this.TargetID);
-            sb.Append(delim);
-            sb.Append(this.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.ScanLC);
-            sb.Append(delim);
-            sb.Append(this.ScanLCStart);
-            sb.Append(delim);
-            sb.Append(this.ScanLCEnd);
-            sb.Append(delim);
-            sb.Append(this.NET.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.NumChromPeaksWithinTol);
-            sb.Append(delim);
-            sb.Append(this.MonoMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.MonoMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.FitScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.TheoryI0);
-            sb.Append(delim);
-            sb.Append(this.TheoryI1);
-            sb.Append(delim);
-            sb.Append(this.TheoryI2);
-            sb.Append(delim);
-            sb.Append(this.TheoryI3);
-            sb.Append(delim);
-            sb.Append(this.TheoryI4);
-            sb.Append(delim);
-            sb.Append(this.HydrogenI0);
-            sb.Append(delim);
-            sb.Append(this.HydrogenI1);
-            sb.Append(delim);
-            sb.Append(this.HydrogenI2);
-            sb.Append(delim);
-            sb.Append(this.HydrogenI3);
-            sb.Append(delim);
-            sb.Append(this.HydrogenI4);
-            sb.Append(delim);
-            sb.Append(this.DeuteriumI0);
-            sb.Append(delim);
-            sb.Append(this.DeuteriumI1);
-            sb.Append(delim);
-            sb.Append(this.DeuteriumI2);
-            sb.Append(delim);
-            sb.Append(this.DeuteriumI3);
-            sb.Append(delim);
-            sb.Append(this.DeuteriumI4);
-            sb.Append(delim);
-            sb.Append(this.RawI0);
-            sb.Append(delim);
-            sb.Append(this.RawI1);
-            sb.Append(delim);
-            sb.Append(this.RawI2);
-            sb.Append(delim);
-            sb.Append(this.RawI3);
-            sb.Append(delim);
-            sb.Append(this.RawI4);
-            sb.Append(delim);
-            sb.Append(this.LabelingEfficiency);
-            sb.Append(delim);
-            sb.Append(this.RatioDH.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IndegratedLcAbundance.ToString("0.0"));
-
-
-            return sb.ToString();
+            return string.Join("\t", data);
 
         }
     }

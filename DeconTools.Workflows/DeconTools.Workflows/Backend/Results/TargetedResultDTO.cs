@@ -1,8 +1,8 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DeconTools.Workflows.Backend.Results
 {
-    
+
     /// <summary>
     /// Result object for targeted workflows; free of any heavy objects
     /// </summary>
@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.Results
         public float NETError { get; set; }
 
         public int NumMSScansSummed { get; set; }
-     
+
         public int NumChromPeaksWithinTol { get; set; }
         public int NumQualityChromPeaksWithinTol { get; set; }
 
@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.Backend.Results
         public string EmpiricalFormula { get; set; }
 
         /// <summary>
-        /// Target's code. For peptides this is the amino acid sequence. 
+        /// Target's code. For peptides this is the amino acid sequence.
         /// </summary>
         public string Code { get; set; }
 
@@ -43,38 +43,24 @@ namespace DeconTools.Workflows.Backend.Results
         #region Public Methods
         public virtual string ToStringWithDetailsAsRow()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                TargetID.ToString(),
+                ChargeState.ToString(),
+                ScanLC.ToString(),
+                ScanLCStart.ToString(),
+                ScanLCEnd.ToString(),
+                NET.ToString("0.0000"),
+                NumChromPeaksWithinTol.ToString(),
+                MonoMass.ToString("0.00000"),
+                MonoMZ.ToString("0.00000"),
+                FitScore.ToString("0.0000"),
+                IScore.ToString("0.0000"),
+                Intensity.ToString("0.0000"),
+                IntensityI0.ToString("0.0000")
+            };
 
-            var delim = "\t";
-
-            sb.Append(this.TargetID);
-            sb.Append(delim);
-            sb.Append(this.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.ScanLC);
-            sb.Append(delim);
-            sb.Append(this.ScanLCStart);
-            sb.Append(delim);
-            sb.Append(this.ScanLCEnd);
-            sb.Append(delim);
-            sb.Append(this.NET.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.NumChromPeaksWithinTol);
-            sb.Append(delim);
-            sb.Append(this.MonoMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.MonoMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.FitScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.IScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.Intensity);
-            sb.Append(delim);
-            sb.Append(this.IntensityI0);
-
-
-            return sb.ToString();
+            return string.Join("\t", data);
         }
 
         #endregion

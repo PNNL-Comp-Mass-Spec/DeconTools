@@ -12,8 +12,8 @@ namespace DeconTools.Backend.Data
 
         public UIMFScansExporter(string fileName)
         {
-            this.headerLine = "frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_unsmoothed,frame_pressure_unsmoothed";
-            this.delimiter = ',';
+            headerLine = "frame_num,frame_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped,frame_pressure_unsmoothed,frame_pressure_unsmoothed";
+            delimiter = ',';
             this.fileName = fileName;
         }
 
@@ -38,33 +38,26 @@ namespace DeconTools.Backend.Data
             }
 
             sw.WriteLine(headerLine);
+            var data = new List<string>();
 
             foreach (var result in results.ScanResultList)
             {
                 Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
                 var uimfResult = (UimfScanResult)result;
-                var sb = new StringBuilder();
-                sb.Append(uimfResult.ScanSet.PrimaryScanNumber);
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.ScanTime, 3));
-                sb.Append(delimiter);
-                sb.Append(result.SpectrumType);
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.BasePeak.Height, 4, true));
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.BasePeak.XValue, 5));
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.TICValue, 4, true));
-                sb.Append(delimiter);
-                sb.Append(uimfResult.NumPeaks);
-                sb.Append(delimiter);
-                sb.Append(uimfResult.NumIsotopicProfiles);
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.FramePressureUnsmoothed, 4));
-                sb.Append(delimiter);
-                sb.Append(DblToString(uimfResult.FramePressureSmoothed, 4));
+                data.Clear();
 
-                sw.WriteLine(sb.ToString());
+                data.Add(uimfResult.ScanSet.PrimaryScanNumber.ToString());
+                data.Add(DblToString(uimfResult.ScanTime, 3));
+                data.Add(result.SpectrumType.ToString());
+                data.Add(DblToString(uimfResult.BasePeak.Height, 4, true));
+                data.Add(DblToString(uimfResult.BasePeak.XValue, 5));
+                data.Add(DblToString(uimfResult.TICValue, 4, true));
+                data.Add(uimfResult.NumPeaks.ToString());
+                data.Add(uimfResult.NumIsotopicProfiles.ToString());
+                data.Add(DblToString(uimfResult.FramePressureUnsmoothed, 4));
+                data.Add(DblToString(uimfResult.FramePressureSmoothed, 4));
+
+                sw.WriteLine(string.Join(delimiter.ToString(), data));
             }
             sw.Close();
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
@@ -19,69 +16,48 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected override string buildResultOutput(IsosResult result)
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                result.ScanSet.PrimaryScanNumber.ToString(),
+                result.IsotopicProfile.ChargeState.ToString(),
+                DblToString(result.IsotopicProfile.GetAbundance(), 4, true),
+                DblToString(result.IsotopicProfile.GetMZ(), 5),
+                DblToString(result.IsotopicProfile.Score, 4),
+                DblToString(result.IsotopicProfile.AverageMass, 5),
+                DblToString(result.IsotopicProfile.MonoIsotopicMass, 5),
+                DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5),
+                DblToString(result.IsotopicProfile.GetFWHM(), 4),
+                DblToString(result.IsotopicProfile.GetSignalToNoise(), 2),
+                DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true),
+                DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true),
+                ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags),
+                DblToString(result.InterferenceScore, 5)
+            };
 
-            sb.Append(result.ScanSet.PrimaryScanNumber);
-            sb.Append(Delimiter);
-            sb.Append(result.IsotopicProfile.ChargeState);
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetAbundance(), 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMZ(), 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.Score, 4));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.AverageMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.MonoIsotopicMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.MostAbundantIsotopeMass, 5));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetFWHM(), 4));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetSignalToNoise(), 2));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMonoAbundance(), 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.IsotopicProfile.GetMonoPlusTwoAbundance(), 4, true));
-            sb.Append(Delimiter);
-            sb.Append(DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags));
-            sb.Append(Delimiter);
-            sb.Append(DblToString(result.InterferenceScore, 5));
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
         }
 
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
-            sb.Append("scan_num");
-            sb.Append(Delimiter);
-            sb.Append("charge");
-            sb.Append(Delimiter);
-            sb.Append("abundance");
-            sb.Append(Delimiter);
-            sb.Append("mz");
-            sb.Append(Delimiter);
-            sb.Append("fit");
-            sb.Append(Delimiter);
-            sb.Append("average_mw");
-            sb.Append(Delimiter);
-            sb.Append("monoisotopic_mw");
-            sb.Append(Delimiter);
-            sb.Append("mostabundant_mw");
-            sb.Append(Delimiter);
-            sb.Append("fwhm");
-            sb.Append(Delimiter);
-            sb.Append("signal_noise");
-            sb.Append(Delimiter);
-            sb.Append("mono_abundance");
-            sb.Append(Delimiter);
-            sb.Append("mono_plus2_abundance");
-            sb.Append(Delimiter);
-            sb.Append("flag");
-            sb.Append(Delimiter);
-            sb.Append("interference_score");
-            return sb.ToString();
+            var data = new List<string>
+            {
+                "scan_num",
+                "charge",
+                "abundance",
+                "mz",
+                "fit",
+                "average_mw",
+                "monoisotopic_mw",
+                "mostabundant_mw",
+                "fwhm",
+                "signal_noise",
+                "mono_abundance",
+                "mono_plus2_abundance",
+                "flag",
+                "interference_score"
+            };
+
+            return string.Join(Delimiter.ToString(), data);
         }
         #endregion
 

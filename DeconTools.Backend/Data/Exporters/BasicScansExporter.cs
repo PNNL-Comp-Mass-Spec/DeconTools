@@ -12,8 +12,8 @@ namespace DeconTools.Backend.Data
 
         public BasicScansExporter(string fileName)
         {
-            this.delimiter = ',';
-            this.headerLine = "scan_num,scan_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped";
+            delimiter = ',';
+            headerLine = "scan_num,scan_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped";
             this.fileName = fileName;
 
         }
@@ -42,27 +42,21 @@ namespace DeconTools.Backend.Data
             }
 
             sw.WriteLine(headerLine);
+            var data = new List<string>();
 
             foreach (var result in results.ScanResultList)
             {
-                var sb = new StringBuilder();
-                sb.Append(result.ScanSet.PrimaryScanNumber);   
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.ScanTime, 4));
-                sb.Append(delimiter);
-                sb.Append(result.SpectrumType);
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.BasePeak.Height, 4, true));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.BasePeak.XValue, 5));
-                sb.Append(delimiter);
-                sb.Append(DblToString(result.ScanSet.TICValue, 4, true));
-                sb.Append(delimiter);
-                sb.Append(result.NumPeaks);
-                sb.Append(delimiter);
-                sb.Append(result.NumIsotopicProfiles);
+                data.Clear();
+                data.Add(result.ScanSet.PrimaryScanNumber.ToString());
+                data.Add(DblToString(result.ScanTime, 4));
+                data.Add(result.SpectrumType.ToString());
+                data.Add(DblToString(result.BasePeak.Height, 4, true));
+                data.Add(DblToString(result.BasePeak.XValue, 5));
+                data.Add(DblToString(result.ScanSet.TICValue, 4, true));
+                data.Add(result.NumPeaks.ToString());
+                data.Add(result.NumIsotopicProfiles.ToString());
 
-                sw.WriteLine(sb.ToString());
+                sw.WriteLine(string.Join(delimiter.ToString(), data));
             }
             sw.Close();
         }

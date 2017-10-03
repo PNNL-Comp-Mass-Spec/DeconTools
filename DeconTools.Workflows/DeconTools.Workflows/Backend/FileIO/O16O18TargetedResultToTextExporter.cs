@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.FileIO
@@ -12,7 +12,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         }
 
-
         #region Private Methods
 
         protected override string addAdditionalInfo(TargetedResultDTO result)
@@ -20,64 +19,44 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             var o16o18result = (O16O18TargetedResultDTO)result;
 
-            var sb = new StringBuilder();
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityTheorI0);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityTheorI2);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityTheorI4);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityI0);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityI2);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityI4);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.IntensityI4Adjusted);
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.ChromCorrO16O18SingleLabel.ToString("0.000"));
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.ChromCorrO16O18DoubleLabel.ToString("0.000"));
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.Ratio.ToString("0.0000"));
-            sb.Append(Delimiter);
-            sb.Append(o16o18result.RatioFromChromCorr.ToString("0.0000"));
-            return sb.ToString();
+            var data = new List<string>
+            {
+                o16o18result.IntensityTheorI0.ToString("0.000"),
+                o16o18result.IntensityTheorI2.ToString("0.000"),
+                o16o18result.IntensityTheorI4.ToString("0.000"),
+                o16o18result.IntensityI0.ToString("0.000"),
+                o16o18result.IntensityI2.ToString("0.000"),
+                o16o18result.IntensityI4.ToString("0.000"),
+                o16o18result.IntensityI4Adjusted.ToString("0.000"),
+                o16o18result.ChromCorrO16O18SingleLabel.ToString("0.000"),
+                o16o18result.ChromCorrO16O18DoubleLabel.ToString("0.000"),
+                o16o18result.Ratio.ToString("0.0000"),
+                o16o18result.RatioFromChromCorr.ToString("0.0000")
+            };
+
+            return string.Join(Delimiter.ToString(), data);
 
         }
 
-
         protected override string buildHeaderLine()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                base.buildHeaderLine(),
+                "IntensityTheorI0",
+                "IntensityTheorI2",
+                "IntensityTheorI4",
+                "IntensityI0",
+                "IntensityI2",
+                "IntensityI4",
+                "IntensityI4Adjusted",
+                "ChromCorrO16O18SingleLabel",
+                "ChromCorrO16O18DoubleLabel",
+                "Ratio",
+                "RatioFromChromCorr"
+            };
 
-            sb.Append(base.buildHeaderLine());
-
-            sb.Append(Delimiter);
-            sb.Append("IntensityTheorI0");
-            sb.Append(Delimiter);
-            sb.Append("IntensityTheorI2");
-            sb.Append(Delimiter);
-            sb.Append("IntensityTheorI4");
-            sb.Append(Delimiter);
-
-            sb.Append("IntensityI0");
-            sb.Append(Delimiter);
-            sb.Append("IntensityI2");
-            sb.Append(Delimiter);
-            sb.Append("IntensityI4");
-            sb.Append(Delimiter);
-            sb.Append("IntensityI4Adjusted");
-            sb.Append(Delimiter);
-            sb.Append("ChromCorrO16O18SingleLabel");
-            sb.Append(Delimiter);
-            sb.Append("ChromCorrO16O18DoubleLabel");
-            sb.Append(Delimiter);
-            sb.Append("Ratio");
-            sb.Append(Delimiter);
-            sb.Append("RatioFromChromCorr");
-            return sb.ToString();
+            return string.Join(Delimiter.ToString(), data);
 
         }
 

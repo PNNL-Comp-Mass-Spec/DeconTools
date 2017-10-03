@@ -70,24 +70,18 @@ namespace DeconTools.Backend.Core
 
 
 
-
-
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append(ID);
-            sb.Append("; ");
-            sb.Append(MonoIsotopicMass.ToString("0.0000"));
-            sb.Append("; ");
-            sb.Append(MZ.ToString("0.0000"));
-            sb.Append("; ");
-            sb.Append(ChargeState);
-            sb.Append("; ");
-            sb.Append(NormalizedElutionTime);
-            sb.Append("; ");
-            sb.Append(Code);
+            var data = new List<string> {
+                ID.ToString(),
+                MonoIsotopicMass.ToString("0.0000"),
+                MZ.ToString("0.0000"),
+                ChargeState.ToString(),
+                NormalizedElutionTime.ToString("0.000"),
+                Code
+            };
 
-            return sb.ToString();
+            return string.Join("; ", data);
         }
     }
 }

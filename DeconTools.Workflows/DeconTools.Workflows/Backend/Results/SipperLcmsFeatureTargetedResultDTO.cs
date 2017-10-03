@@ -1,5 +1,4 @@
-﻿
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DeconTools.Workflows.Backend.Results
 {
@@ -14,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Results
         public double AreaUnderRatioCurve { get; set; }
 
         public double AreaUnderDifferenceCurve { get; set; }
-        
+
         public double ChromCorrelationMin { get; set; }
 
         public double ChromCorrelationMax { get; set; }
@@ -53,49 +52,32 @@ namespace DeconTools.Workflows.Backend.Results
 
         public override string ToStringWithDetailsAsRow()
         {
-            var sb = new StringBuilder();
+            var data = new List<string>
+            {
+                TargetID.ToString(),
+                ChargeState.ToString(),
+                ScanLC.ToString(),
+                ScanLCStart.ToString(),
+                ScanLCEnd.ToString(),
+                NET.ToString("0.0000"),
+                NumChromPeaksWithinTol.ToString(),
+                MonoMass.ToString("0.00000"),
+                MonoMZ.ToString("0.00000"),
+                FitScore.ToString("0.0000"),
+                FitScoreLabeledProfile.ToString("0.0000"),
+                ChromCorrelationMedian.ToString("0.000"),
+                IScore.ToString("0.0000"),
+                Intensity.ToString("0.0000"),
+                IntensityI0.ToString("0.0000"),
+                PercentCarbonsLabelled.ToString("0.000"),
+                PercentPeptideLabelled.ToString("0.000"),
+                ContiguousnessScore.ToString()
+            };
 
-            var delim = "\t";
 
-            sb.Append(this.TargetID);
-            sb.Append(delim);
-            sb.Append(this.ChargeState);
-            sb.Append(delim);
-            sb.Append(this.ScanLC);
-            sb.Append(delim);
-            sb.Append(this.ScanLCStart);
-            sb.Append(delim);
-            sb.Append(this.ScanLCEnd);
-            sb.Append(delim);
-            sb.Append(this.NET.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.NumChromPeaksWithinTol);
-            sb.Append(delim);
-            sb.Append(this.MonoMass.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.MonoMZ.ToString("0.00000"));
-            sb.Append(delim);
-            sb.Append(this.FitScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(FitScoreLabeledProfile.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(ChromCorrelationMedian.ToString("0.000"));
-            sb.Append(delim);
-            sb.Append(this.IScore.ToString("0.0000"));
-            sb.Append(delim);
-            sb.Append(this.Intensity);
-            sb.Append(delim);
-            sb.Append(this.IntensityI0);
-            sb.Append(delim);
-            sb.Append(PercentCarbonsLabelled);
-            sb.Append(delim);
-            sb.Append(PercentPeptideLabelled);
-            sb.Append(delim);
-            sb.Append(ContiguousnessScore);
-
-            return sb.ToString();
+            return string.Join("\t", data);
         }
-         
+
 
     }
 }
