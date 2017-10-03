@@ -66,7 +66,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             using (var reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numLogs++;
