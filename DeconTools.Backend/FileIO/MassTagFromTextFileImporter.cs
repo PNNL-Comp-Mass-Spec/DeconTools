@@ -58,7 +58,7 @@ namespace DeconTools.Backend.FileIO
                 _headers = processLine(headerLine);
 
                 var lineCounter = 1;
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     lineCounter++;

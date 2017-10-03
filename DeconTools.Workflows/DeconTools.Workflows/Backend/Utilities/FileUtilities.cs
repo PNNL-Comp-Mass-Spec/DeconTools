@@ -13,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Utilities
             using (var reader = new StreamReader(filename))
             {
                 var counter = 0;
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     if (containsHeader)
                     {

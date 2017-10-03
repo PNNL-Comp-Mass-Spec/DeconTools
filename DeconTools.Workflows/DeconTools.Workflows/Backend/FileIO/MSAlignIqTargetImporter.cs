@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             using (var sr = reader)
             {
-                if (sr.Peek() == -1)
+                if (sr.EndOfStream)
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in the file we are trying to read.");
@@ -79,13 +79,12 @@ namespace DeconTools.Workflows.Backend.FileIO
                 var headerLine = sr.ReadLine();
                 CreateHeaderLookupTable(headerLine);
 
-                string line;
                 var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
-                while (sr.Peek() > -1)
+                while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
+                    var line = sr.ReadLine();
                     var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line

@@ -46,7 +46,7 @@ namespace DeconTools.Backend.FileIO
 
                 Check.Require(headerLine == "MassErrorPPM\tCount\tSmoothed_Count\tComment","Error reading Viper's mass calibration data. Header line is weird. Header= " + headerLine);
 
-                while (reader.Peek()!=-1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     if (string.IsNullOrEmpty(line))

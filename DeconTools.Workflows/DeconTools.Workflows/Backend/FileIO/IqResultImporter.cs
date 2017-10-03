@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             using (var sr = reader)
             {
-                if (sr.Peek() == -1)
+                if (sr.EndOfStream)
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in the file we are trying to read.");
@@ -91,7 +91,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 var lineCounter = 1;   //used for tracking which line is being processed. 
 
                 //read and process each line of the file
-                while (sr.Peek() > -1)
+                while (!sr.EndOfStream)
                 {
                     var line = sr.ReadLine();
                     var processedData = ProcessLine(line);
@@ -160,7 +160,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             var fileName = Path.GetFileName(Filename);
             if (fileName != null)
             {
-                var datasetName = fileName.Replace("_iqResults.txt", String.Empty);
+                var datasetName = fileName.Replace("_iqResults.txt", string.Empty);
 
                 return datasetName;
             }
