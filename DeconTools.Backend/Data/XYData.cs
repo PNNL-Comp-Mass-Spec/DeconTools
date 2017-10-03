@@ -31,7 +31,7 @@ namespace DeconTools.Backend
         }
 
 
-        public void GetXYValuesAsSingles(ref float[] xvals, ref float[] yvals)
+        public void GetXYValuesAsSingles(out float[] xvals, out float[] yvals)
         {
             //NOTE going from double to single variables could result in a loss of information
 
@@ -47,13 +47,13 @@ namespace DeconTools.Backend
             }
         }
 
-        public void GetXYValuesAsDoubles(ref double[] xvals, ref double[] yvals)
+        public void GetXYValuesAsDoubles(out double[] xvals, out double[] yvals)
         {
             xvals = xvalues;
             yvals = yvalues;
         }
 
-        public void SetXYValues(ref float[] xvals, ref float[] yvals)
+        public void SetXYValues(float[] xvals, float[] yvals)
         {
             if (xvals == null || yvals == null)
             {
@@ -62,7 +62,6 @@ namespace DeconTools.Backend
 
                 return;
             }
-
 
             xvalues = new double[xvals.Length];
             yvalues = new double[yvals.Length];
@@ -74,7 +73,7 @@ namespace DeconTools.Backend
 
         }
 
-        public void SetXYValues(ref double[] xvals, ref double[] yvals)
+        public void SetXYValues(double[] xvals, double[] yvals)
         {
             xvalues = xvals;
             yvalues = yvals;
@@ -107,7 +106,7 @@ namespace DeconTools.Backend
 
             for (var i = 0; i < inputVals.Length; i++)
             {
-                outputVals[i] = (double)inputVals[i];
+                outputVals[i] = inputVals[i];
 
             }
             return outputVals;
@@ -121,7 +120,7 @@ namespace DeconTools.Backend
 
             for (var i = 0; i < inputVals.Length; i++)
             {
-                outputVals[i] = (double)inputVals[i];
+                outputVals[i] = inputVals[i];
 
             }
             return outputVals;
@@ -196,14 +195,16 @@ namespace DeconTools.Backend
 
         public static XYData ConvertDrawingPoints(System.Drawing.PointF[] points)
         {
-            var xydata = new XYData();
-            xydata.Xvalues = new double[points.Length];
-            xydata.Yvalues = new double[points.Length];
+            var xydata = new XYData
+            {
+                Xvalues = new double[points.Length],
+                Yvalues = new double[points.Length]
+            };
 
             for (var i = 0; i < points.Length; i++)
             {
-                xydata.Xvalues[i] = (double)points[i].X;
-                xydata.Yvalues[i] = (double)points[i].Y;
+                xydata.Xvalues[i] = points[i].X;
+                xydata.Yvalues[i] = points[i].Y;
             }
 
             return xydata;
@@ -212,7 +213,6 @@ namespace DeconTools.Backend
         public XYData TrimData(double xmin, double xmax, double tolerance = 0.1)
         {
 
-        
             if (xvalues == null || yvalues == null || xvalues.Length == 0 || yvalues.Length == 0) return this;
 
             var currentMinXValue = xvalues[0];
@@ -296,7 +296,7 @@ namespace DeconTools.Backend
 
         public static XYData GetFilteredXYValues(XYData data, double minX, double maxX, int startingIndex)
         {
-            //this assumes XY pairs with ordered x-values. 
+            //this assumes XY pairs with ordered x-values.
 
             if (data == null || startingIndex > data.Xvalues.Length - 1) return null;
 
@@ -318,21 +318,16 @@ namespace DeconTools.Backend
                     {
                         break;
                     }
-
-
                 }
-                else
-                {
-
-                }
-
             }
 
             if (xvals.Count == 0) return null;
 
-            var returnedData = new XYData();
-            returnedData.Xvalues = xvals.ToArray();
-            returnedData.Yvalues = yvals.ToArray();
+            var returnedData = new XYData
+            {
+                Xvalues = xvals.ToArray(),
+                Yvalues = yvals.ToArray()
+            };
 
             return returnedData;
 
