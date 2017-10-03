@@ -77,15 +77,15 @@ namespace DeconTools.Backend.Core
 
         public int PrimaryFrame
         {
-            get { return primaryFrame; }
-            set { primaryFrame = value; }
+            get => primaryFrame;
+            set => primaryFrame = value;
         }
         private bool isContiguous = true;
 
         public bool IsContiguous
         {
-            get { return isContiguous; }
-            set { isContiguous = value; }
+            get => isContiguous;
+            set => isContiguous = value;
         }
 
 
@@ -96,8 +96,8 @@ namespace DeconTools.Backend.Core
 
         public virtual List<int> IndexValues
         {
-            get { return indexValues; }
-            set { indexValues = value; }
+            get => indexValues;
+            set => indexValues = value;
         }
 
 

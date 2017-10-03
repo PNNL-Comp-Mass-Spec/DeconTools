@@ -14,12 +14,8 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        private List<TargetBase> _targetList;
-        public List<TargetBase> TargetList
-        {
-            get { return _targetList; }
-            set { _targetList = value; }
-        }
+
+        public List<TargetBase> TargetList { get; set; }
 
         public List<long> TargetIDList;
 

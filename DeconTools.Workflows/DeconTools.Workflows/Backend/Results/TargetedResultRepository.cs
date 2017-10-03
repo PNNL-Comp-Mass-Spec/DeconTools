@@ -49,10 +49,6 @@ namespace DeconTools.Workflows.Backend.Results
 
 
 
-        public bool HasResults
-        {
-            get
-            { return (this.Results != null && this.Results.Count > 0); }
-        }
+        public bool HasResults => (Results != null && Results.Count > 0);
     }
 }

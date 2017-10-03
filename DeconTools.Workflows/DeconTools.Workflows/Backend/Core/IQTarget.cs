@@ -139,13 +139,7 @@ namespace DeconTools.Workflows.Backend.Core
             return _childTargets.Any();
         }
 
-        public bool HasParent
-        {
-            get
-            {
-                return ParentTarget != null;
-            }
-        }
+        public bool HasParent => ParentTarget != null;
 
         /// <summary>
         /// Indicates the quality of the target. E.g. the MSGF probability score for the target

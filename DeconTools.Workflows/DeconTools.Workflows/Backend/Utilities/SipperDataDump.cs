@@ -14,12 +14,7 @@ namespace DeconTools.Workflows.Backend.Utilities
     /// </summary>
     public static class SipperDataDump
     {
-        private static bool outputResults = false;
-        public static bool OutputResults
-        {
-            get { return outputResults; }
-            set { outputResults = value; }
-        }
+        public static bool OutputResults { get; set; }
 
         public static string Outfile { get; set; }
 

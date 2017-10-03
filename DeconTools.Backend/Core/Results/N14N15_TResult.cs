@@ -17,13 +17,7 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-
-        private IsotopicProfile m_IsotopicProfileLabeled;
-        public IsotopicProfile IsotopicProfileLabeled
-        {
-            get { return m_IsotopicProfileLabeled; }
-            set { m_IsotopicProfileLabeled = value; }
-        }
+        public IsotopicProfile IsotopicProfileLabeled { get; set; }
 
 
         public IsotopicProfile TheorIsotopicProfileLabeled { get; set; }

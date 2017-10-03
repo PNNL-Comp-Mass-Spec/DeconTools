@@ -27,27 +27,21 @@ namespace DeconTools.Backend.DTO
             this.FrameNum = frameNum;
         }
 
-        public override float Width
+        public new float Width
         {
-            get
-            {
-                return this.MSPeak.Width;
-            }
-            set
-            {
-                this.MSPeak.Width = value;                     
-            }
+            get => MSPeak.Width;
+            set => MSPeak.Width = value;
         }
-        public override double XValue
+        public new double XValue
         {
-            get { return this.MSPeak.XValue; }
-            set { this.MSPeak.XValue = value; }
+            get => MSPeak.XValue;
+            set => MSPeak.XValue = value;
         }
-        
-        public override float Height
+
+        public new float Height
         {
-            get { return this.MSPeak.Height; }
-            set { this.MSPeak.Height = value; }
+            get => MSPeak.Height;
+            set => MSPeak.Height = value;
         }
 
         public int PeakID { get; set; }
@@ -80,7 +74,7 @@ namespace DeconTools.Backend.DTO
             }
             else
             {
-                
+
                 //TODO:: two peaks are the same if they are within a tolerance of each other in
                 //terms of mz, scan and lc frame. in this case we're only implementing mz values
                 //

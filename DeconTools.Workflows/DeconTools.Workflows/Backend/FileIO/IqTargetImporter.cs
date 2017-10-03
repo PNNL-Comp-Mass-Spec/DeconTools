@@ -77,13 +77,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public string[] ChargeStateHeaders { get; set; }
 
-        public Dictionary<HeaderSection, bool> HeaderSectionsFound
-        {
-            get
-            {
-                return _HeaderSections;
-            }
-        }
+        public Dictionary<HeaderSection, bool> HeaderSectionsFound { get; }
 
         // Full path to the file to import
         protected string Filename { get; set; }

@@ -16,9 +16,6 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.O16O18Targeted1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.O16O18Targeted1;
     }
 }

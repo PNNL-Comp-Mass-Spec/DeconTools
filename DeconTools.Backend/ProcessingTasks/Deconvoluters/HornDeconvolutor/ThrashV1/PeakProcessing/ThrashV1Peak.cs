@@ -20,11 +20,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         public double FWHM
         {
-            get { return _fwhm; }
+            get => _fwhm;
             set
             {
                 _fwhm = value;
-                Width = (float) value;
+                Width = (float)value;
             }
         }
 
@@ -33,7 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         public double Intensity
         {
-            get { return _intensity; }
+            get => _intensity;
             set
             {
                 _intensity = value;
@@ -46,8 +46,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         public double Mz
         {
-            get { return XValue; }
-            set { XValue = value; }
+            get => XValue;
+            set => XValue = value;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         public double SignalToNoiseDbl
         {
-            get { return _signalToNoise; }
+            get => _signalToNoise;
             set
             {
                 _signalToNoise = value;

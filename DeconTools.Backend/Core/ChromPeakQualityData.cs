@@ -5,7 +5,7 @@ namespace DeconTools.Backend.Core
     [Obsolete]
     public class ChromPeakQualityData
     {
-        public ChromPeak Peak { get; private set; }
+        public ChromPeak Peak { get; }
         public int ScanLc { get; set; }
         public bool IsotopicProfileFound { get; set; }
         public bool IsIsotopicProfileFlagged { get; set; }

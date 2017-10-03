@@ -10,12 +10,6 @@
         public bool SaveChromatogramData { get; set; }
 
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get
-            {
-                return Globals.TargetedWorkflowTypes.TopDownTargeted1;
-            }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.TopDownTargeted1;
     }
 }

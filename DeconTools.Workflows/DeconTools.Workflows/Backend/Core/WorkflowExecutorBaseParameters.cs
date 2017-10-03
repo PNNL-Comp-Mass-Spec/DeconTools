@@ -50,10 +50,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 return mOutputFolderBase;
             }
-            set
-            {
-                mOutputFolderBase = value;
-            }
+            set => mOutputFolderBase = value;
         }
         public string ReferenceTargetsFilePath { get; set; }
         public string TargetsFilePath { get; set; }

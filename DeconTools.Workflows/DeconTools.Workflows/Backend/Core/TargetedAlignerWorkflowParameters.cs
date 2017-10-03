@@ -59,10 +59,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string ImportedFeaturesFilename { get; set; }
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return  Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.TargetedAlignerWorkflow1;
 
         /// <summary>
         /// In first pass of Targeted Aligner we use a very wide mass tolerance and 

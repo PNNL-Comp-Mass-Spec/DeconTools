@@ -29,9 +29,6 @@
 
         #endregion
 
-        public override Backend.Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1;
     }
 }

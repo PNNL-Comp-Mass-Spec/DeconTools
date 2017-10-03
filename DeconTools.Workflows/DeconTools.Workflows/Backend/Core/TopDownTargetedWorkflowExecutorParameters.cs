@@ -8,9 +8,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public bool ExportChromatogramData { get; set; }
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.TopDownTargetedWorkflowExecutor1;
     }
 }

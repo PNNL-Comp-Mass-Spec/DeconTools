@@ -10,12 +10,7 @@ namespace DeconTools.Backend.Core
         {
             this.scanResultList = new List<ScanResult>();
         }
-        private List<ScanResult> scanResultList;
 
-        public List<ScanResult> ScanResultList
-        {
-            get { return scanResultList; }
-            set { scanResultList = value; }
-        }
+        public List<ScanResult> ScanResultList { get; set; }
     }
 }

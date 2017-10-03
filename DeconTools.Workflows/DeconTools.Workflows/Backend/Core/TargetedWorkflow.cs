@@ -492,14 +492,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public WorkflowParameters WorkflowParameters
         {
-            get
-            {
-                return _workflowParameters;
-            }
-            set
-            {
-                _workflowParameters = value as TargetedWorkflowParameters;
-            }
+            get => _workflowParameters;
+            set => _workflowParameters = value as TargetedWorkflowParameters;
         }
     }
 }

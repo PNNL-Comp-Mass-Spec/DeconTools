@@ -6,9 +6,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string MassTagsForReference { get; set; }
        
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.LcmsFeatureTargetedWorkflowExecutor1;
     }
 }

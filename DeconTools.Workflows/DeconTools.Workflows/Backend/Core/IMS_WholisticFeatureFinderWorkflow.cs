@@ -328,14 +328,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         public WorkflowParameters WorkflowParameters
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
     }
 #endif

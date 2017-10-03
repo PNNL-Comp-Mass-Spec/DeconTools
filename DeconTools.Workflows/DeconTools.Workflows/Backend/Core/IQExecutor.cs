@@ -62,7 +62,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private Run _run;
         protected Run Run { 
-            get { return _run; }
+            get => _run;
             set 
             { 
                 _run = value;
@@ -75,7 +75,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected WorkflowExecutorBaseParameters Parameters 
         { 
-            get { return _parameters; }
+            get => _parameters;
             set
             {
                 _parameters = value;
@@ -118,12 +118,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        protected bool RunIsInitialized
-        {
-            get { throw new NotImplementedException(); }
-        }
+        protected bool RunIsInitialized => throw new NotImplementedException();
 
-    
         #endregion
 
         #region Public Methods

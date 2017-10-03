@@ -36,7 +36,7 @@ namespace DeconTools.Backend.Core
         private List<MSPeakResult> mSPeakResultList;
         public List<MSPeakResult> MSPeakResultList
         {
-            get { return mSPeakResultList; }
+            get => mSPeakResultList;
             set
             {
                 mSPeakResultList = value;
@@ -47,16 +47,16 @@ namespace DeconTools.Backend.Core
         private IList<IsosResult> m_IsosResultBin;
         public IList<IsosResult> IsosResultBin
         {
-            get { return m_IsosResultBin; }
-            set { m_IsosResultBin = value; }
+            get => m_IsosResultBin;
+            set => m_IsosResultBin = value;
         }
 
 
         private List<ScanResult> scanResultList;
         public List<ScanResult> ScanResultList
         {
-            get { return scanResultList; }
-            set { scanResultList = value; }
+            get => scanResultList;
+            set => scanResultList = value;
         }
 
         public List<IsosResult> ResultList { get; set; }
@@ -65,22 +65,22 @@ namespace DeconTools.Backend.Core
         private Run run;
         public Run Run
         {
-            get { return run; }
-            set { run = value; }
+            get => run;
+            set => run = value;
         }
 
         private List<string> logMessageList;
         public List<string> LogMessageList
         {
-            get { return logMessageList; }
-            set { logMessageList = value; }
+            get => logMessageList;
+            set => logMessageList = value;
         }
 
         private List<ElutingPeak> m_ElutingPeakCollection;
         public List<ElutingPeak> ElutingPeakCollection
         {
-            get { return m_ElutingPeakCollection; }
-            set { m_ElutingPeakCollection = value; }
+            get => m_ElutingPeakCollection;
+            set => m_ElutingPeakCollection = value;
         }
 
         public int MSFeatureCounter { get; set; }

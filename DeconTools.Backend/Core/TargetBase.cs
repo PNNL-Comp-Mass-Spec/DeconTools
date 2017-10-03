@@ -53,10 +53,7 @@ namespace DeconTools.Backend.Core
         /// <summary>
         /// Indicates if target contains modifications
         /// </summary>
-        public bool ContainsMods
-        {
-            get { return ModCount > 0; }
-        }
+        public bool ContainsMods => ModCount > 0;
 
         /// <summary>
         /// Number of modifications on target
@@ -71,10 +68,7 @@ namespace DeconTools.Backend.Core
         private string _empiricalFormula;
         public string EmpiricalFormula
         {
-            get
-            {
-                return _empiricalFormula;
-            }
+            get => _empiricalFormula;
             set
             {
                 _empiricalFormula = value;

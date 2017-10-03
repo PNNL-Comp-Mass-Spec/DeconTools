@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         private double _chromTolerance;
         public double ChromTolerance
         {
-            get { return _chromTolerance; }
+            get => _chromTolerance;
             set
             {
                 _chromTolerance = value;
@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         private int _numPointsInSmoother;
         public int NumPointsInSmoother
         {
-            get { return _numPointsInSmoother; }
+            get => _numPointsInSmoother;
             set
             {
                 if (_numPointsInSmoother != value)
@@ -91,7 +91,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         private int _savitzkyGolaySmoothingOrder;
         public int SavitzkyGolaySmoothingOrder
         {
-            get { return _savitzkyGolaySmoothingOrder; }
+            get => _savitzkyGolaySmoothingOrder;
             set
             {
                 if (_savitzkyGolaySmoothingOrder != value)

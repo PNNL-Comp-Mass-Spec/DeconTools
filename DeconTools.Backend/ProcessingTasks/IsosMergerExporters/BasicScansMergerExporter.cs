@@ -19,16 +19,16 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
         public string OutputFilename
         {
-            get { return outputFilename; }
-            set { outputFilename = value; }
+            get => outputFilename;
+            set => outputFilename = value;
         }
 
         public BasicScansMergerExporter(string outputFileName)
         {
-            this.outputFilename = outputFileName;
+            outputFilename = outputFileName;
             try
             {
-                sw = new StreamWriter(this.outputFilename);
+                sw = new StreamWriter(outputFilename);
             }
             catch (Exception ex)
             {

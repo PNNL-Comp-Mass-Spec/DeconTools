@@ -16,8 +16,8 @@ namespace DeconTools.Backend.Core
         private List<MSPeak> _peaklist;
         public List<MSPeak> Peaklist
         {
-            get { return _peaklist; }
-            set { _peaklist = value; }
+            get => _peaklist;
+            set => _peaklist = value;
         }
 
         /// <summary>
@@ -25,15 +25,18 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public int MonoIsotopicPeakIndex { get; set; }
 
-
         public bool IsSaturated { get; set; }
 
+        /// <summary>
+        /// Return "1" if IsSaturated is true, otherwise return "0"
+        /// </summary>
+        public string IsSaturatedAsNumericText => IsSaturated ? "1" : "0";
 
         private int _chargeState;
         public int ChargeState
         {
-            get { return _chargeState; }
-            set { _chargeState = value; }
+            get => _chargeState;
+            set => _chargeState = value;
         }
 
         /// <summary>
@@ -41,53 +44,53 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public double IntensityAggregateAdjusted { get; set; }
 
-        private double _originalIntensity;   // the unsummed intensity;  
+        private double _originalIntensity;   // the unsummed intensity;
         public double OriginalIntensity
         {
-            get { return _originalIntensity; }
-            set { _originalIntensity = value; }
+            get => _originalIntensity;
+            set => _originalIntensity = value;
         }
 
         private double _score;
         public double Score
         {
-            get { return _score; }
-            set { _score = value; }
+            get => _score;
+            set => _score = value;
         }
 
         private int _scoreCountBasis;
         public int ScoreCountBasis
         {
-            get { return _scoreCountBasis; }
-            set { _scoreCountBasis = value; }
+            get => _scoreCountBasis;
+            set => _scoreCountBasis = value;
         }
 
         private double _monoIsotopicMass;
         public double MonoIsotopicMass
         {
-            get { return _monoIsotopicMass; }
-            set { _monoIsotopicMass = value; }
+            get => _monoIsotopicMass;
+            set => _monoIsotopicMass = value;
         }
 
         private double _mostAbundantIsotopeMass;
         public double MostAbundantIsotopeMass
         {
-            get { return _mostAbundantIsotopeMass; }
-            set { _mostAbundantIsotopeMass = value; }
+            get => _mostAbundantIsotopeMass;
+            set => _mostAbundantIsotopeMass = value;
         }
 
         private float _monoPlusTwoAbundance;
         public float MonoPlusTwoAbundance
         {
-            get { return _monoPlusTwoAbundance; }
-            set { _monoPlusTwoAbundance = value; }
+            get => _monoPlusTwoAbundance;
+            set => _monoPlusTwoAbundance = value;
         }
 
         private double _averageMass;
         public double AverageMass
         {
-            get { return _averageMass; }
-            set { _averageMass = value; }
+            get => _averageMass;
+            set => _averageMass = value;
         }
 
         public double MonoPeakMZ { get; set; }

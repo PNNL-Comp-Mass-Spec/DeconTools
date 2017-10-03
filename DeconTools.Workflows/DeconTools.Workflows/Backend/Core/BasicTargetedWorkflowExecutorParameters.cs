@@ -8,9 +8,6 @@ namespace DeconTools.Workflows.Backend.Core
     {
 
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1;
     }
 }

@@ -5,15 +5,9 @@ namespace DeconTools.Workflows.Backend.Core
         public UIMFTargetedMSMSWorkflowCollapseIMSParameters()
         {
 
-            this.ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
+            ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
         }
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get
-            {
-                return Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS;
-            }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS;
     }
 }

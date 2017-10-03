@@ -16,13 +16,9 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Properties
-        private List<UMC> uMCList;
 
-        public List<UMC> UMCList
-        {
-            get { return uMCList; }
-            set { uMCList = value; }
-        }
+        public List<UMC> UMCList { get; set; }
+
         #endregion
 
         #region Public Methods

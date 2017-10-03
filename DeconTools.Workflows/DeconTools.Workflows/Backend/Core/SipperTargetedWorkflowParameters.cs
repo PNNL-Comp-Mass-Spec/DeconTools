@@ -13,9 +13,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return Globals.TargetedWorkflowTypes.SipperTargeted1; }
-        }
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.SipperTargeted1;
     }
 }

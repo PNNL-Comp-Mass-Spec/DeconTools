@@ -18,9 +18,6 @@ namespace DeconTools.Backend.Core
         #region Private Methods
         #endregion
 
-        public override string Description
-        {
-            get { return "PeakToTheLeftFlag"; }
-        }
+        public override string Description => "PeakToTheLeftFlag";
     }
 }

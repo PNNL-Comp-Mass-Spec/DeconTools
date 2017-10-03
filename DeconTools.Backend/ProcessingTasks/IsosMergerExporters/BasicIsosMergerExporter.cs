@@ -13,22 +13,17 @@ namespace DeconTools.Backend.ProcessingTasks
         private int runCounter;
         const char DELIMITER = ',';
 
-        private string outputFilename;
 
-        public string OutputFilename
-        {
-            get { return outputFilename; }
-            set { outputFilename = value; }
-        }
+        public string OutputFilename { get; set; }
 
         private readonly StreamWriter sw;
 
         public BasicIsosMergerExporter(string outputFileName)
         {
-            this.outputFilename = outputFileName;
+            OutputFilename = outputFileName;
             try
             {
-                sw = new StreamWriter(this.outputFilename);
+                sw = new StreamWriter(OutputFilename);
             }
             catch (Exception ex)
             {

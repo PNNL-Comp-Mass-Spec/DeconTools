@@ -21,18 +21,12 @@ namespace DeconTools.Backend.Core
         private UIMFLibraryAdapter(string filename)
         {
             this.fileName = filename;
-            datareader = new UIMFLibrary.DataReader(fileName);
+            Datareader = new UIMFLibrary.DataReader(fileName);
             ConnectionState = System.Data.ConnectionState.Open;
         }
 
 
-        UIMFLibrary.DataReader datareader;
-
-        public UIMFLibrary.DataReader Datareader
-        {
-            get { return datareader; }
-            set { datareader = value; }
-        }
+        public UIMFLibrary.DataReader Datareader { get; set; }
 
 
         public static UIMFLibraryAdapter getInstance(string filename)
@@ -74,7 +68,7 @@ namespace DeconTools.Backend.Core
         {
             if (instance != null)
             {
-                datareader.Dispose();
+                Datareader.Dispose();
 
                 ConnectionState = System.Data.ConnectionState.Closed;
             }

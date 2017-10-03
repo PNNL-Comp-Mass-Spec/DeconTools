@@ -174,13 +174,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        public bool HasParent
-        {
-            get
-            {
-                return ParentResult != null;
-            }
-        }
+        public bool HasParent => ParentResult != null;
 
         /// <summary>
         /// This property allows assigning one of the child results as being the best or favored one.

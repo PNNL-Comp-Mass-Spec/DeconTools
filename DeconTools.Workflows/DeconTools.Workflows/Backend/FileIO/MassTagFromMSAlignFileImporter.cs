@@ -56,23 +56,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private readonly PeptideUtils _peptideUtils = new PeptideUtils();
 
-        private int _dataRowsProcessed;
-        private int _dataRowsSkippedUnknownMods;
-
         public MassTagFromMSAlignFileImporter(string filename)
         {
             _filename = filename;
         }
 
-        public int DataRowsProcessed
-        {
-            get { return _dataRowsProcessed; }
-        }
+        public int DataRowsProcessed { get; private set; }
 
-        public int DataRowsSkippedUnknownMods
-        {
-            get { return _dataRowsSkippedUnknownMods; }
-        }
+        public int DataRowsSkippedUnknownMods { get; private set; }
 
         public TargetCollection Import()
         {

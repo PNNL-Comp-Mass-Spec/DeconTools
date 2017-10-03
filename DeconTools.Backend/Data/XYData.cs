@@ -10,27 +10,25 @@ namespace DeconTools.Backend
 
         public XYData()
         {
-            this.xvalues = new double[1];
-            this.yvalues = new double[1];
+            xvalues = new double[1];
+            yvalues = new double[1];
         }
 
         private double[] xvalues;
 
         public double[] Xvalues
         {
-            get { return xvalues; }
-            set { xvalues = value; }
+            get => xvalues;
+            set => xvalues = value;
         }
 
         private double[] yvalues;
 
         public double[] Yvalues
         {
-            get { return yvalues; }
-            set { yvalues = value; }
+            get => yvalues;
+            set => yvalues = value;
         }
-
-
 
 
         public void GetXYValuesAsSingles(ref float[] xvals, ref float[] yvals)

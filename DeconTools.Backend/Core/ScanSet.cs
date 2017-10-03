@@ -60,10 +60,10 @@ namespace DeconTools.Backend.Core
 
         private List<int> indexValues;
 
-        public virtual List<int> IndexValues
+        public List<int> IndexValues
         {
-            get { return indexValues; }
-            set { indexValues = value; }
+            get => indexValues;
+            set => indexValues = value;
         }
 
         public int PrimaryScanNumber { get; set; }

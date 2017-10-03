@@ -28,8 +28,8 @@ namespace DeconTools.Backend.Core
         private ThrashV1Peak[] _deconToolsPeakList;
         public ThrashV1Peak[] DeconToolsPeakList        //I need to change this later; don't want anything connected to DeconEngine in this class
         {
-            get { return _deconToolsPeakList; }
-            set { _deconToolsPeakList = value; }
+            get => _deconToolsPeakList;
+            set => _deconToolsPeakList = value;
         }
 
         public string Filename { get; set; }
@@ -44,10 +44,7 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo
         {
-            get
-            {
-                return _alignmentInfo;
-            }
+            get => _alignmentInfo;
             set
             {
                 _alignmentInfo = value;
@@ -68,26 +65,16 @@ namespace DeconTools.Backend.Core
         private NetAlignmentInfo _netAlignmentInfo;
         public NetAlignmentInfo NetAlignmentInfo
         {
-            get
-            {
-                if (_netAlignmentInfo==null)
-                {
-                    _netAlignmentInfo = new NetAlignmentInfoBasic(MinLCScan, MaxLCScan);
-                }
-                return _netAlignmentInfo;
-            }
-            set
-            {
-                _netAlignmentInfo = value;
-            }
+            get => _netAlignmentInfo ?? (_netAlignmentInfo = new NetAlignmentInfoBasic(MinLCScan, MaxLCScan));
+            set => _netAlignmentInfo = value;
         }
 
 
         private Globals.MSFileType mSFileType;
         public Globals.MSFileType MSFileType
         {
-            get { return mSFileType; }
-            set { mSFileType = value; }
+            get => mSFileType;
+            set => mSFileType = value;
         }
 
         public int MinLCScan { get; set; }
@@ -96,16 +83,16 @@ namespace DeconTools.Backend.Core
         private bool areRunResultsSerialized;   //this is a flag to indicate whether or not Run's results were written to disk
         public bool AreRunResultsSerialized
         {
-            get { return areRunResultsSerialized; }
-            set { areRunResultsSerialized = value; }
+            get => areRunResultsSerialized;
+            set => areRunResultsSerialized = value;
         }
 
         [field: NonSerialized]
         private List<Peak> peakList;
         public List<Peak> PeakList
         {
-            get { return peakList; }
-            set { peakList = value; }
+            get => peakList;
+            set => peakList = value;
         }
 
         public ScanSetCollection ScanSetCollection { get; set; }
@@ -113,26 +100,26 @@ namespace DeconTools.Backend.Core
         private ResultCollection resultCollection;
         public ResultCollection ResultCollection
         {
-            get { return resultCollection; }
-            set { resultCollection = value; }
+            get => resultCollection;
+            set => resultCollection = value;
         }
 
         private ScanSet currentScanSet;
         public virtual ScanSet CurrentScanSet
         {
-            get { return currentScanSet; }
-            set { currentScanSet = value; }
+            get => currentScanSet;
+            set => currentScanSet = value;
         }
 
         private bool isDataThresholded;
         public bool IsDataThresholded          //not crazy about having this here; may want to change later
         {
-            get { return isDataThresholded; }
-            set { isDataThresholded = value; }
+            get => isDataThresholded;
+            set => isDataThresholded = value;
         }
 
         private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
-       
+
         public virtual bool ContainsMSMSData { get; set; }
 
         private List<int> msLevelScanIndexList { get; set; }
@@ -141,21 +128,9 @@ namespace DeconTools.Backend.Core
 
         public List<int> PrimaryLcScanNumbers { get; set; }
 
-        public bool MassIsAligned
-        {
-            get
-            {
-                return MassAlignmentInfo != null;
-            }
-        }
+        public bool MassIsAligned => MassAlignmentInfo != null;
 
-        public bool NETIsAligned
-        {
-            get
-            {
-                return NetAlignmentInfo != null;
-            }
-        }
+        public bool NETIsAligned => NetAlignmentInfo != null;
 
         public double CurrentBackgroundIntensity { get; set; }
 

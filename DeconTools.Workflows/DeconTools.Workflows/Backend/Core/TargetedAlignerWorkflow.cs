@@ -19,10 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
     /// </summary>
     public class TargetedAlignerWorkflow : TargetedWorkflow
     {
-        private TargetedAlignerWorkflowParameters AlignerParameters
-        {
-            get { return WorkflowParameters as TargetedAlignerWorkflowParameters; }
-        }
+        private TargetedAlignerWorkflowParameters AlignerParameters => WorkflowParameters as TargetedAlignerWorkflowParameters;
 
         private List<NETGrouping> _netGroupings;
         private BasicTargetedWorkflow _workflow;

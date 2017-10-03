@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Linq;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Utilities;
-
-namespace DeconTools.Workflows.Backend.Core
+﻿namespace DeconTools.Workflows.Backend.Core
 {
     public class N14N15Workflow2Parameters : TargetedWorkflowParameters
     {
@@ -87,13 +80,6 @@ namespace DeconTools.Workflows.Backend.Core
         //        Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
         //}
 
-        public override Globals.TargetedWorkflowTypes WorkflowType
-        {
-            get { return  Globals.TargetedWorkflowTypes.N14N15Targeted1; }
-        }
-
-
-
-        
+        public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.N14N15Targeted1;
     }
 }

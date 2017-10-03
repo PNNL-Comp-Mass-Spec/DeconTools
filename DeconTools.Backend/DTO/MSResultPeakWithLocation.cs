@@ -62,29 +62,6 @@ namespace DeconTools.Backend.DTO
             this.frameScansRange = framesAndScans;
         }*/
 
-        private double mz;
-
-        public override double XValue
-        {
-            get { return mz; }
-            set { mz = value; }
-        }
-
-        private float intensity;
-        public override float Height
-        {
-            get { return intensity; }
-            set { intensity = value; }
-        }
-
-        private float fwhm;
-        public override float Width
-        {
-            get { return fwhm; }
-            set { fwhm = value; }
-        }
-
-
         //public override int CompareTo(object obj)
         //{
         //    IPeak secondPeak = obj as IPeak;

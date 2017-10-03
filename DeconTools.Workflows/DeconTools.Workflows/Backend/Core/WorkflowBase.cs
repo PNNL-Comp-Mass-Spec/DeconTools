@@ -34,10 +34,7 @@ namespace DeconTools.Workflows.Backend.Core
         private Run _run;
         public Run Run
         {
-            get
-            {
-                return _run;
-            }
+            get => _run;
             set
             {
                 if (_run == value)

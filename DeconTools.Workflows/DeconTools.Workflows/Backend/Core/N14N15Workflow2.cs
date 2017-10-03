@@ -39,10 +39,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private LabelledIsotopicProfileScorer resultValidatorN15;
 
-        private N14N15Workflow2Parameters _n14N15Workflow2Parameters
-        {
-            get { return WorkflowParameters as N14N15Workflow2Parameters; }
-        }
+        private N14N15Workflow2Parameters _n14N15Workflow2Parameters => WorkflowParameters as N14N15Workflow2Parameters;
 
         #region Constructors
 

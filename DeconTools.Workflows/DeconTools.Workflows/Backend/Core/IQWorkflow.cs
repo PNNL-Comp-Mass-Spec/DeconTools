@@ -75,10 +75,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public Run Run
         {
-            get
-            {
-                return _run;
-            }
+            get => _run;
             set
             {
                 if (_run != value)
@@ -104,10 +101,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string WorkflowStatusMessage { get; set; }
 
-        public string Name
-        {
-            get { return ToString(); }
-        }
+        public string Name => ToString();
 
         /// <summary>
         /// For trimming the final mass spectrum. A value of '2' means 
