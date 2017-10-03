@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Run != null)
             {
-                MSGenerator = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
+                MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
                 MSGenerator.IsTICRequested = false;
             }
         }
@@ -257,7 +257,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void Execute(IqResult result)
         {
-            Check.Require(this.Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
+            Check.Require(Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
 
 
             if (!IsWorkflowInitialized)

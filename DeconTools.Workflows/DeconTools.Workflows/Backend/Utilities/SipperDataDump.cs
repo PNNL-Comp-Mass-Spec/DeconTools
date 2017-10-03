@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Workflows.Backend.Core;
 
@@ -42,18 +38,24 @@ namespace DeconTools.Workflows.Backend.Utilities
         /// Will be removed when GUI is developed
         /// </summary>
         /// <param name="input"></param>
-        public static void DataDump(IqTarget input, Run Run)
+        /// <param name="run"></param>
+        public static void DataDump(IqTarget input, Run run)
         {
             //Temporary Data Dumping Point
             //Data Dump also in TopDownIqTesting and ChromCorrelationData
-            var target = input as ChromPeakIqTarget;
+            if (!(input is ChromPeakIqTarget target))
+                return;
+
             var status = "UNK";
             var result = target.GetResult();
-            var parent = result.Target.ParentTarget as IqChargeStateTarget;
+
+            if (!(result.Target.ParentTarget is IqChargeStateTarget parent))
+                return;
+
             if (parent.ObservedScan != -1)
             {
-                if (((target.ChromPeak.XValue - target.ChromPeak.Width / 2) <= parent.ObservedScan) &&
-                    ((target.ChromPeak.XValue + target.ChromPeak.Width / 2) >= parent.ObservedScan))
+                if (target.ChromPeak.XValue - target.ChromPeak.Width / 2 <= parent.ObservedScan &&
+                    target.ChromPeak.XValue + target.ChromPeak.Width / 2 >= parent.ObservedScan)
                 {
                     status = "T-POS";
                 }
@@ -68,7 +70,7 @@ namespace DeconTools.Workflows.Backend.Utilities
             {
                 sipper.WriteLine(target.ID + "\t" + parent.AlternateID + "\t" + target.ChargeState + "\t" + target.Code + "\t" + target.EmpiricalFormula + "\t" +
                                  target.MZTheor.ToString("0.0000") + "\t" + target.MonoMassTheor + "\t" +
-                                 Run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor) +
+                                 run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor) +
                                  "\t" + parent.ObservedScan + "\t" + target.ChromPeak.XValue.ToString("0.00") + "\t" +
                                  result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
                                  result.FitScore.ToString("0.0000") + "\t" + result.CorrelationData.RSquaredValsMedian + "\t" +

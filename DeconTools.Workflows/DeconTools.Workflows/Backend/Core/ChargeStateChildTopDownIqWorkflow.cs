@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
@@ -9,7 +6,7 @@ using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 namespace DeconTools.Workflows.Backend.Core
 {
     /// <summary>
-    ///Checks the sequences integrity when dealing with top down data that could contain extremely large PTMS 
+    ///Checks the sequences integrity when dealing with top down data that could contain extremely large PTMS
     /// </summary>
     public class ChargeStateChildTopDownIqWorkflow : ChargeStateChildIqWorkflow
     {
@@ -81,11 +78,12 @@ namespace DeconTools.Workflows.Backend.Core
                               ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count);
 
             //Creates a ChromPeakIqTarget for each peak found
-            foreach (ChromPeak peak in result.ChromPeakList)
+            foreach (var peak in result.ChromPeakList)
             {
+                var chromPeak = (ChromPeak)peak;
                 var target = new ChromPeakIqTarget(new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters));
                 TargetUtilities.CopyTargetProperties(result.Target, target, false);
-                target.ChromPeak = peak;
+                target.ChromPeak = chromPeak;
                 result.Target.AddTarget(target);
             }
 
@@ -116,7 +114,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             profile.MonoIsotopicMass = monoMass;
             profile.MonoPeakMZ = monoMZ;
-            
+
             foreach (var peak in profile.Peaklist)
             {
                 peak.XValue = peak.XValue - mzDifference;

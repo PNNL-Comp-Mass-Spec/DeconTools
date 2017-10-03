@@ -142,7 +142,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            var t = this.GetType();
+            var t = GetType();
             foreach (var mi in t.GetMembers().OrderBy(p => p.Name))
             {
                 if (mi.MemberType != MemberTypes.Property)
@@ -225,7 +225,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var parameterValues = new Dictionary<string, object>();
 
-            var t = this.GetType();
+            var t = GetType();
 
             foreach (var mi in t.GetMembers().OrderBy(p => p.Name))
             {

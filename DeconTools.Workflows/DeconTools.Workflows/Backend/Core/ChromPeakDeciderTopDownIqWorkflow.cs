@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
 
@@ -38,7 +36,7 @@ namespace DeconTools.Workflows.Backend.Core
             return new TopDownIqResult(target);
         }
 
-        public override FileIO.IqResultExporter CreateExporter()
+        public override IqResultExporter CreateExporter()
         {
             return new TopDownIqResultExporter();
         }

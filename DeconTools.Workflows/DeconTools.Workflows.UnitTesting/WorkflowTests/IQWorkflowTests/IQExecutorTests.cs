@@ -47,8 +47,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-            
-            
+
+
             //create no more than two charge state targets per peptide
             executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
 
@@ -69,13 +69,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 Console.WriteLine(iqTarget + "\t" + numChildTargets);
             }
 
-          
+
         }
 
 
         //"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_singleTest1.txt"
 
-    
+
 
         [Category("MustPass")]
         [Test]
@@ -93,8 +93,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
-                                                          "IqResults", 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+                                                          "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
@@ -128,7 +128,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             using (var reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numResultsInResultsFile++;
@@ -145,7 +145,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //the Result Tree is flattened out in the results file.
             Assert.IsTrue(numResultsInResultsFile == 11);
 
-            //the results in the Executor are in the a Result tree. So there should be just 10. 
+            //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
 
         }
@@ -169,18 +169,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
-                                                          "IqResults", 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+                                                          "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-            
+
             var run = new RunFactory().CreateRun(testFile);
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
             executor.LoadAndInitializeTargets(targetsFile);
             executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.305 && n.ElutionTimeTheor < 0.325 select n).Take(10).ToList();
-            
+
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.01;
 
@@ -192,8 +192,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
-            
-            
+
+
             executor.SetupMassAndNetAlignment();
             executor.DoAlignment();
 
@@ -208,7 +208,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             using (var reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numResultsInResultsFile++;
@@ -225,7 +225,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //the Result Tree is flattened out in the results file.
             Assert.IsTrue(numResultsInResultsFile == 11);
 
-            //the results in the Executor are in the a Result tree. So there should be just 10. 
+            //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
 
         }
@@ -248,7 +248,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
@@ -286,7 +286,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             using (var reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numResultsInResultsFile++;
@@ -300,7 +300,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //Assert.IsTrue(numResultsInResultsFile > 1, "No results in output file");
 
-            //the results in the Executor are in the a Result tree. So there should be just 10. 
+            //the results in the Executor are in the a Result tree. So there should be just 10.
             //Assert.AreEqual(10, executor.Results.Count);
         }
 
@@ -363,7 +363,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             using (var reader = new StreamReader(expectedResultsFilename))
             {
-                while (reader.Peek() != -1)
+                while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numResultsInResultsFile++;
@@ -377,7 +377,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Assert.IsTrue(numResultsInResultsFile > 1, "No results in output file");
 
-            //the results in the Executor are in the a Result tree. So there should be just 10. 
+            //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
         }
 

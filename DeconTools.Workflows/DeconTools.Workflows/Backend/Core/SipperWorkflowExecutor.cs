@@ -58,9 +58,9 @@ namespace DeconTools.Workflows.Backend.Core
             _loggingFileName = Path.Combine(ExecutorParameters.OutputFolderBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
 
 
-            TargetsAreFromPeakMatchingDataBase = (!String.IsNullOrEmpty(db) && !String.IsNullOrEmpty(server));
+            TargetsAreFromPeakMatchingDataBase = (!string.IsNullOrEmpty(db) && !string.IsNullOrEmpty(server));
 
-            var targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
 
             if (TargetsAreFromPeakMatchingDataBase)
@@ -73,7 +73,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     var currentTargetsFilePath = TryFindTargetsForCurrentDataset();     //check for a _targets file specifically associated with dataset
 
-                    if (String.IsNullOrEmpty(currentTargetsFilePath))
+                    if (string.IsNullOrEmpty(currentTargetsFilePath))
                     {
                         Targets = null;
                     }
@@ -154,17 +154,16 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var masstagList = new List<int>();
 
-            var fileRefIsOk = !String.IsNullOrEmpty(fileRefForMassTagsToFilterOn) &&
+            var fileRefIsOk = !string.IsNullOrEmpty(fileRefForMassTagsToFilterOn) &&
                                File.Exists(fileRefForMassTagsToFilterOn);
             if (fileRefIsOk)
             {
                 using (var reader = new StreamReader(fileRefForMassTagsToFilterOn))
                 {
-                    while (reader.Peek() != -1)
+                    while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        var mtid = -1;
-                        var parsedOK = Int32.TryParse(line, out mtid);
+                        var parsedOK = Int32.TryParse(line, out var mtid);
 
                         if (parsedOK)
                         {

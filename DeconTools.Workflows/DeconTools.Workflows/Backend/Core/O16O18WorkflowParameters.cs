@@ -1,6 +1,4 @@
-﻿using DeconTools.Backend.ProcessingTasks;
-
-namespace DeconTools.Workflows.Backend.Core
+﻿namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18WorkflowParameters : TargetedWorkflowParameters
     {

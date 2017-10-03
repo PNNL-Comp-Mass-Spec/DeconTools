@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -21,7 +14,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
 
-            var targetsFilePathIsEmpty = (String.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
 
             var currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
 
@@ -81,7 +74,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void ExecutePreProcessingHook()
         {
-            var uimfTargetedMsmsWorkflowCollapseIMS = this.TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
+            var uimfTargetedMsmsWorkflowCollapseIMS = TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
             if (uimfTargetedMsmsWorkflowCollapseIMS != null)
             {
                 if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)

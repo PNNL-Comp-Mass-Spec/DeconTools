@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {

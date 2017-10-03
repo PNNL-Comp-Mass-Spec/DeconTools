@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 using DeconTools.Workflows.Backend.FileIO;
 
@@ -15,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Core
         public O16O18IqWorkflow(Run run, TargetedWorkflowParameters parameters)
             : base(run, parameters)
         {
-            this.ChromatogramCorrelator = new O16O18ChromCorrelator(parameters.ChromSmootherNumPointsInSmooth, 0.01,
+            ChromatogramCorrelator = new O16O18ChromCorrelator(parameters.ChromSmootherNumPointsInSmooth, 0.01,
                                                                     parameters.ChromGenTolerance,
                                                                     parameters.ChromGenToleranceUnit);
 
@@ -32,7 +30,7 @@ namespace DeconTools.Workflows.Backend.Core
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
         public override IqResultExporter CreateExporter()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override void ExecuteWorkflow(IqResult result)

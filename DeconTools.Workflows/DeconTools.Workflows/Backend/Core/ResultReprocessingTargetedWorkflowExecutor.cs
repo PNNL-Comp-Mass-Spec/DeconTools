@@ -95,8 +95,8 @@ namespace DeconTools.Workflows.Backend.Core
 
                 try
                 {
-                    this.TargetedWorkflow.Execute();
-                    ResultRepository.AddResult(this.TargetedWorkflow.Result);
+                    TargetedWorkflow.Execute();
+                    ResultRepository.AddResult(TargetedWorkflow.Result);
 
                 }
                 catch (Exception ex)

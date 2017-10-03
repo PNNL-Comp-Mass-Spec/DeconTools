@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
 
             //TEMPORARY HANDLING OF BAD TARGETS WITH PTM > SEQUENCE
             //CHECK THE UPDATEMISSINGTARGETINFO IN IQTARGETUTILITES WHEN CHANGING
-            if (String.IsNullOrEmpty(empiricalFormula))
+            if (string.IsNullOrEmpty(empiricalFormula))
             {
                 empiricalFormula = "C0H0N0O0S0";
             }

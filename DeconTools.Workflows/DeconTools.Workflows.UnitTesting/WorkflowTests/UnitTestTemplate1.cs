@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class UnitTestTemplate1
     {
-        
+
         [Test]
         public void createPeaksTest1()
         {
@@ -40,8 +40,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var peakCreator = new PeakDetectAndExportWorkflow(run, parameters);
             peakCreator.Execute();
         }
-        
-        
+
+
         [Test]
         public void Test1()
         {
@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var chromGeneratorMode = Globals.ChromatogramGeneratorMode.MZ_BASED;
 
             var chromGen = new PeakChromatogramGenerator(chromPeakGeneratorTolInPPM, chromGeneratorMode);
-            // If we want to use the Execute Command 
+            // If we want to use the Execute Command
             //BLL .1 and .5 NET windows work.   .02 NET window does not BR and SN was set to 1 however)
             chromGen.ChromWindowWidthForNonAlignedData = .02F;
 
@@ -78,24 +78,26 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var pointsToSmooth = 5;
             var chromSmoother = new SavitzkyGolaySmoother(pointsToSmooth, 2);
 
-            //BLL We also tried to set the BR and SIG NOISE to 0.  This did not work 
+            //BLL We also tried to set the BR and SIG NOISE to 0.  This did not work
             var chromPeakDetectorPeakBR = 0.5;
             var chromPeakDetectorSigNoise = 0.5;
             var chromPeakDetector = new ChromPeakDetector(chromPeakDetectorPeakBR, chromPeakDetectorSigNoise);
 
 
-            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
-            chromPeakSelectorParameters.PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters {
+                PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget
+            };
+
             var chromPeakSelector = new BasicChromPeakSelector(chromPeakSelectorParameters);
 
             var smartChromPeakParameters = new SmartChromPeakSelectorParameters();
-            
+
 
             var smartChromPeakSelector = new SmartChromPeakSelector(smartChromPeakParameters);
 
 
             //this generates an extracted ion chromatogram
-            // Since we are not using the built in generator, 
+            // Since we are not using the built in generator,
             chromGen.Execute(run.ResultCollection);
 
             //this smooths the data - very important step!
@@ -119,7 +121,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //TestUtilities.DisplayXYValues(run.XYData);
             TestUtilities.DisplayPeaks(run.PeakList);
 
-            
+
 
 
             Console.WriteLine("Number of peaks detected = " + run.PeakList.Count);

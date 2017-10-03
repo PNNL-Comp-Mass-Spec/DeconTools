@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         public N14N15TargetedResultFromTextImporter(string filename) : base(filename) { }
         #endregion
 
-        protected override Results.TargetedResultDTO ConvertTextToDataObject(System.Collections.Generic.List<string> processedData)
+        protected override TargetedResultDTO ConvertTextToDataObject(System.Collections.Generic.List<string> processedData)
         {
             TargetedResultDTO result = new N14N15TargetedResultDTO();
 

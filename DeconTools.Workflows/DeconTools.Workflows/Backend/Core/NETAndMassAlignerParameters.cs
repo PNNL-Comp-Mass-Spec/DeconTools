@@ -22,11 +22,11 @@ namespace DeconTools.Workflows.Backend.Core
             MassToleranceForNETAlignment = 6;
             MaxPromiscuity = 2;
             MaxTimeJump = 10;
-            this.NETBinSize = 0.001;
-            this.NETTolerance = 0.02;
-            this.NumTimeSections = 100;
-            this.SplitAlignmentInMZ = false;
-            this.UsePromiscuousPoints = false;
+            NETBinSize = 0.001;
+            NETTolerance = 0.02;
+            NumTimeSections = 100;
+            SplitAlignmentInMZ = false;
+            UsePromiscuousPoints = false;
         
                 
         }

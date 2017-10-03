@@ -27,7 +27,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                         }
 
 
-                        while (reader.Peek() != -1)
+                        while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
                             writer.WriteLine(line);

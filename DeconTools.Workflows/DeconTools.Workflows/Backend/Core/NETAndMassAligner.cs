@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using DeconTools.Workflows.Backend.Results;
@@ -21,14 +20,14 @@ namespace DeconTools.Workflows.Backend.Core
         {
             _massTagList = new List<TargetBase>();
             _featuresToBeAligned = new TargetedResultRepository();
-            this.Result = new AlignmentResult();
-            this.AlignerParameters = new NETAndMassAlignerParameters();
+            Result = new AlignmentResult();
+            AlignerParameters = new NETAndMassAlignerParameters();
         }
 
         public NETAndMassAligner(NETAndMassAlignerParameters alignerParameters)
             : this()
         {
-            this.AlignerParameters = alignerParameters;
+            AlignerParameters = alignerParameters;
 
         }
 
@@ -65,25 +64,25 @@ namespace DeconTools.Workflows.Backend.Core
 
             //TODO: I might be able to dynamically update these values. Take my foundFeatures and calculate their avg PPMDiff. Then use that info here. 
             var alignmentOptions = new clsAlignmentOptions();
-             alignmentOptions.MassCalibrationWindow = this.AlignerParameters.MassCalibrationWindow;  //note -  it seems that 50 ppm is used as a default setting in VIPER. 
-            alignmentOptions.ContractionFactor = this.AlignerParameters.ContractionFactor;
-            alignmentOptions.IsAlignmentBaselineAMasstagDB = this.AlignerParameters.IsAlignmentBaselineAMassTagDB;
-            alignmentOptions.MassBinSize = this.AlignerParameters.MassBinSize;
-            alignmentOptions.MassCalibrationLSQNumKnots = this.AlignerParameters.MassCalibrationLSQNumKnots;
-            alignmentOptions.MassCalibrationLSQZScore = this.AlignerParameters.MassCalibrationLSQZScore;
-            alignmentOptions.MassCalibrationMaxJump = this.AlignerParameters.MassCalibrationMaxJump;
-            alignmentOptions.MassCalibrationMaxZScore = this.AlignerParameters.MassCalibrationMaxZScore;
-            alignmentOptions.MassCalibrationNumMassDeltaBins = this.AlignerParameters.MassCalibrationNumMassDeltaBins;
-            alignmentOptions.MassCalibrationNumXSlices = this.AlignerParameters.MassCalibrationNumXSlices;
-            alignmentOptions.MassCalibrationUseLSQ = this.AlignerParameters.MassCalibrationUseLSQ;
-            alignmentOptions.MassCalibrationWindow = this.AlignerParameters.MassCalibrationWindow;
-            alignmentOptions.MassTolerance = this.AlignerParameters.MassToleranceForNETAlignment;
-            alignmentOptions.MaxPromiscuity = this.AlignerParameters.MaxPromiscuity;
-            alignmentOptions.MaxTimeJump = this.AlignerParameters.MaxTimeJump;
-            alignmentOptions.NETBinSize = this.AlignerParameters.NETBinSize;
-            alignmentOptions.NETTolerance = this.AlignerParameters.NETTolerance;
-            alignmentOptions.NumTimeSections = this.AlignerParameters.NumTimeSections;
-            alignmentOptions.UsePromiscuousPoints = this.AlignerParameters.UsePromiscuousPoints;
+             alignmentOptions.MassCalibrationWindow = AlignerParameters.MassCalibrationWindow;  //note -  it seems that 50 ppm is used as a default setting in VIPER. 
+            alignmentOptions.ContractionFactor = AlignerParameters.ContractionFactor;
+            alignmentOptions.IsAlignmentBaselineAMasstagDB = AlignerParameters.IsAlignmentBaselineAMassTagDB;
+            alignmentOptions.MassBinSize = AlignerParameters.MassBinSize;
+            alignmentOptions.MassCalibrationLSQNumKnots = AlignerParameters.MassCalibrationLSQNumKnots;
+            alignmentOptions.MassCalibrationLSQZScore = AlignerParameters.MassCalibrationLSQZScore;
+            alignmentOptions.MassCalibrationMaxJump = AlignerParameters.MassCalibrationMaxJump;
+            alignmentOptions.MassCalibrationMaxZScore = AlignerParameters.MassCalibrationMaxZScore;
+            alignmentOptions.MassCalibrationNumMassDeltaBins = AlignerParameters.MassCalibrationNumMassDeltaBins;
+            alignmentOptions.MassCalibrationNumXSlices = AlignerParameters.MassCalibrationNumXSlices;
+            alignmentOptions.MassCalibrationUseLSQ = AlignerParameters.MassCalibrationUseLSQ;
+            alignmentOptions.MassCalibrationWindow = AlignerParameters.MassCalibrationWindow;
+            alignmentOptions.MassTolerance = AlignerParameters.MassToleranceForNETAlignment;
+            alignmentOptions.MaxPromiscuity = AlignerParameters.MaxPromiscuity;
+            alignmentOptions.MaxTimeJump = AlignerParameters.MaxTimeJump;
+            alignmentOptions.NETBinSize = AlignerParameters.NETBinSize;
+            alignmentOptions.NETTolerance = AlignerParameters.NETTolerance;
+            alignmentOptions.NumTimeSections = AlignerParameters.NumTimeSections;
+            alignmentOptions.UsePromiscuousPoints = AlignerParameters.UsePromiscuousPoints;
        
             var processor = new clsAlignmentProcessor();
             processor.AlignmentOptions = alignmentOptions;
@@ -99,7 +98,7 @@ namespace DeconTools.Workflows.Backend.Core
             processor.SetAligneeDatasetFeatures(multialignUMCs, alignmentOptions.MZBoundaries[0]);
             processor.PerformAlignmentToMSFeatures();
 
-            this.Result = getResultsForAlignment(processor);
+            Result = getResultsForAlignment(processor);
 
 
             return processor.GetAlignmentFunction();
@@ -265,14 +264,14 @@ namespace DeconTools.Workflows.Backend.Core
             multialignMassTag.HighPeptideProphetProbability = 0;
             multialignMassTag.Mass = mt.MonoIsotopicMass;
             multialignMassTag.ModCount = -1;
-            multialignMassTag.Modifications = String.Empty;
+            multialignMassTag.Modifications = string.Empty;
             multialignMassTag.MSGFSpecProbMax = 0;
             multialignMassTag.MSMSObserved = mt.ObsCount;
             multialignMassTag.NetAverage = mt.NormalizedElutionTime;
             multialignMassTag.NetPredicted = -1;
             multialignMassTag.NetStandardDeviation = 0;
             multialignMassTag.Peptide = mt.Code;
-            multialignMassTag.PeptideEx = String.Empty;
+            multialignMassTag.PeptideEx = string.Empty;
             multialignMassTag.XCorr = -1;
 
             return multialignMassTag;

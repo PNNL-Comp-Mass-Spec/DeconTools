@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
@@ -29,7 +28,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             base.DoPostInitialization();
             var minRelIntensityForCorr = 0.025;
-            this.ChromatogramCorrelator = new O16O18ChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, minRelIntensityForCorr,
+            ChromatogramCorrelator = new O16O18ChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, minRelIntensityForCorr,
                                                                     WorkflowParameters.ChromGenTolerance,
                                                                     WorkflowParameters.ChromGenToleranceUnit);
         }

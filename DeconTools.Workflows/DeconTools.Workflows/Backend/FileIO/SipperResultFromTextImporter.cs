@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
 
-        protected override Results.TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
+        protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
             var result = new SipperLcmsFeatureTargetedResultDTO();
             result.DatasetName = LookupData(processedData, datasetHeaders);

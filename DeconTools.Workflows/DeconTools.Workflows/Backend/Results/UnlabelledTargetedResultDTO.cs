@@ -1,7 +1,4 @@
-﻿using System;
-using DeconTools.Backend.Core;
-
-namespace DeconTools.Workflows.Backend.Results
+﻿namespace DeconTools.Workflows.Backend.Results
 {
     public class UnlabelledTargetedResultDTO : TargetedResultDTO
     {
@@ -9,11 +6,11 @@ namespace DeconTools.Workflows.Backend.Results
         #region Constructors
         public UnlabelledTargetedResultDTO()
         {
-            this.ScanLCStart = 0;
-            this.ScanLCEnd = 0;
-            this.TargetID = 0;
-            this.NET = 0;
-            this.NumChromPeaksWithinTol = 0;
+            ScanLCStart = 0;
+            ScanLCEnd = 0;
+            TargetID = 0;
+            NET = 0;
+            NumChromPeaksWithinTol = 0;
 
         }
         #endregion
@@ -48,7 +45,7 @@ namespace DeconTools.Workflows.Backend.Results
 
 
         #region Properties
-      
+
 
 
         #endregion
@@ -62,6 +59,6 @@ namespace DeconTools.Workflows.Backend.Results
         #endregion
 
 
-        
+
     }
 }

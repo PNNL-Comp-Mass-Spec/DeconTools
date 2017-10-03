@@ -10,16 +10,12 @@ using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Data;
 using DeconTools.Workflows.Backend.FileIO;
 using DeconTools.Workflows.Backend.Results;
-using GWSGraphLibrary.GraphGenerator;
-using NUnit.Framework;
 
 namespace DeconTools.Workflows.Backend.Core
 {
     public class TopDownTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
         private Dictionary<int, PrsmData> _prsmData;
-
-        private TargetedWorkflowExecutorProgressInfo _progressInfo = new TargetedWorkflowExecutorProgressInfo();
 
         #region Constructors
         public TopDownTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
@@ -31,36 +27,32 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-    
+
         #endregion
-        
-        
+
+
         #region Public Methods
 
         protected override void ExecutePreProcessingHook()
         {
-            if (ExecutorParameters is TopDownTargetedWorkflowExecutorParameters)
+            if (!(ExecutorParameters is TopDownTargetedWorkflowExecutorParameters executor)) return;
+
+            //If user wants to save to Excel, we need to make sure that the underlying parameters supports saving chromatogram data
+            if (!executor.ExportChromatogramData) return;
+
+            if (TargetedWorkflow is TopDownTargetedWorkflow workflow &&
+                workflow.WorkflowParameters is TopDownTargetedWorkflowParameters workflowParams)
             {
-                //If user wants to save to Excel, we need to make sure that the underlying parameters supports saving chromatogram data
-                if (((TopDownTargetedWorkflowExecutorParameters)ExecutorParameters).ExportChromatogramData)
-                {
-                     if (TargetedWorkflow is TopDownTargetedWorkflow && TargetedWorkflow.WorkflowParameters is TopDownTargetedWorkflowParameters)
-                     {
-                         ((TopDownTargetedWorkflowParameters)TargetedWorkflow.WorkflowParameters).SaveChromatogramData=true;
-                     }
-                }
+                workflowParams.SaveChromatogramData = true;
             }
         }
 
 
         protected override void ExecutePostProcessingHook()
         {
-
-
-            var topDownTargetedWorkflowExecutorParameters = ExecutorParameters as TopDownTargetedWorkflowExecutorParameters;
-            if (topDownTargetedWorkflowExecutorParameters != null)
+            if (ExecutorParameters is TopDownTargetedWorkflowExecutorParameters executor)
             {
-                if ((topDownTargetedWorkflowExecutorParameters).ExportChromatogramData)
+                if (executor.ExportChromatogramData)
                 {
                     ExportChromatogramDataForEachProtein();
                 }
@@ -68,13 +60,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            
+
             // Collapse + process results
             PostProcessResults(ResultRepository.Results);
 
-          
 
-            
+
+
 
 
         }
@@ -93,9 +85,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var resultsForProtein = allResults.Where(p => p.Target.Code == proteoform).ToList();
 
-                
-
-
                 var sb = new StringBuilder();
                 var delimiter = '\t';
 
@@ -109,16 +98,16 @@ namespace DeconTools.Workflows.Backend.Core
                 sb.Append(tableHeader);
                 sb.Append(Environment.NewLine);
 
-                foreach (TopDownTargetedResult result in resultsForProtein)
+                foreach (var targetedResultBase in resultsForProtein)
                 {
-                    
+                    var result = (TopDownTargetedResult)targetedResultBase;
 
                     sb.Append(result.Target.ChargeState);
                     sb.Append(delimiter);
                     sb.Append(result.Target.MZ);
                     sb.Append(delimiter);
-                    
-                    sb.Append(result.ChromPeakSelected == null ? 0 : result.ChromPeakSelected.XValue);
+
+                    sb.Append(result.ChromPeakSelected?.XValue ?? 0);
                     sb.Append(delimiter);
                     sb.Append(result.Score);
                     sb.Append(delimiter);
@@ -132,15 +121,16 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 var topdownChromData = new TopdownChromData();
-                
 
-                foreach (TopDownTargetedResult result in resultsForProtein)
+
+                foreach (var targetedResultBase in resultsForProtein)
                 {
-                    if (result.ChromValues!=null)
+                    var result = (TopDownTargetedResult)targetedResultBase;
+
+                    if (result.ChromValues != null)
                     {
                         topdownChromData.AddChromDataItem(result.ChromValues);
                     }
-                    
                 }
 
                 var allChromVals = topdownChromData.GetChromData();
@@ -152,7 +142,7 @@ namespace DeconTools.Workflows.Backend.Core
                 //add headers
                 for (var i = 0; i < resultsForProtein.Count; i++)
                 {
-                    if (i==0)
+                    if (i == 0)
                     {
                         sb.Append("Scan");
                         sb.Append(delimiter);
@@ -209,7 +199,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-            
+
 
 
 
@@ -232,7 +222,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 resultsFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "IqResults");
             }
-            
+
             if (!Directory.Exists(resultsFolder)) Directory.CreateDirectory(resultsFolder);
 
             return Path.Combine(resultsFolder, Run.DatasetName + "_quant.txt");
@@ -281,11 +271,11 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        private void PostProcessResults(List<TargetedResultDTO> results)
+        private void PostProcessResults(IList<TargetedResultDTO> results)
         {
             for (var i = 0; i < results.Count; i++)
             {
-                var result = (TopDownTargetedResultDTO) results[i];
+                var result = (TopDownTargetedResultDTO)results[i];
                 result.PrsmList = new HashSet<int>();
                 if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
 
@@ -303,7 +293,7 @@ namespace DeconTools.Workflows.Backend.Core
                 // Find other results with same target code
                 for (var j = i + 1; j < results.Count; j++)
                 {
-                    var otherResult = (TopDownTargetedResultDTO) results[j];
+                    var otherResult = (TopDownTargetedResultDTO)results[j];
 
                     if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
                     {
@@ -348,9 +338,9 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
         }
-        
-        
-        
+
+
+
         #endregion
 
     }

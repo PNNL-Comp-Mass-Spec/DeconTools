@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -14,7 +12,7 @@ using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 namespace DeconTools.Workflows.Backend.Core
 {
     /// <summary>
-    /// ChromPeakAnalyzerIqWorkflow calculates metrics based on a single peak passed in VIA ChromPeakIqTarget. 
+    /// ChromPeakAnalyzerIqWorkflow calculates metrics based on a single peak passed in VIA ChromPeakIqTarget.
     /// MUST BE USED WITH ChromPeakIqTarget
     /// </summary>
     public class ChromPeakAnalyzerIqWorkflow : BasicIqWorkflow
@@ -64,8 +62,7 @@ namespace DeconTools.Workflows.Backend.Core
                 MSGenerator.IsTICRequested = false;
             }
 
-            var target = result.Target as ChromPeakIqTarget;
-            if (target == null)
+            if (!(result.Target is ChromPeakIqTarget target))
             {
                 throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
             }
@@ -83,8 +80,7 @@ namespace DeconTools.Workflows.Backend.Core
             //massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
 
             //Find isotopic profile
-            List<Peak> mspeakList;
-            result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
+            result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out var mspeakList);
 
 
             //Get NET Error
@@ -144,8 +140,7 @@ namespace DeconTools.Workflows.Backend.Core
         //Writes IqResult Data to Console
         private void Display(IqResult result)
         {
-            var target = result.Target as ChromPeakIqTarget;
-            if (target == null)
+            if (!(result.Target is ChromPeakIqTarget target))
             {
                 throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget. "
                     + "Due to an inherent shortcoming of the design pattern we used, we were unable to make this a compile time error instead of a runtime error. "
@@ -158,8 +153,8 @@ namespace DeconTools.Workflows.Backend.Core
                 IqLogger.Log.Debug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
             }
 
-            IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" + 
-                result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));		
+            IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
+                result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));
         }
 
     }

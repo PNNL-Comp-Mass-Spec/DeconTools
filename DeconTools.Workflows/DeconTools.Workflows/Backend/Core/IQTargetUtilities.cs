@@ -273,9 +273,9 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var isMissingMonoMass = target.MonoMassTheor <= 0;
 
-            if (String.IsNullOrEmpty(target.EmpiricalFormula))
+            if (string.IsNullOrEmpty(target.EmpiricalFormula))
             {
-                if (!String.IsNullOrEmpty(target.Code))
+                if (!string.IsNullOrEmpty(target.Code))
                 {
                     //Create empirical formula based on code. Assume it is an unmodified peptide
                     //target.EmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(target.Code);

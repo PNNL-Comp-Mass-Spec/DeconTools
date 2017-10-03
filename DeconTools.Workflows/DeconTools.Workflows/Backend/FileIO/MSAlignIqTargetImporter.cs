@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.FileIO;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities.IqCodeParser;
 
@@ -57,7 +54,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             try
             {
-                reader = new StreamReader(this.Filename);
+                reader = new StreamReader(Filename);
             }
             catch (Exception)
             {
@@ -125,11 +122,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected override IqTarget ConvertTextToIqTarget(List<string> processedRowOfText)
         {
-            var child = new IqChargeStateTarget();
-            child.ChargeState = ParseIntField(processedRowOfText, ChargeHeader);
-            child.ObservedScan = ParseIntField(processedRowOfText, ScansHeader);
-            child.AlternateID = ParseIntField(processedRowOfText, PRSMIdHeader);
-            child.DatabaseReference = ParseStringField(processedRowOfText, ProteinNameHeader);
+            var child = new IqChargeStateTarget
+            {
+                ChargeState = ParseIntField(processedRowOfText, ChargeHeader),
+                ObservedScan = ParseIntField(processedRowOfText, ScansHeader),
+                AlternateID = ParseIntField(processedRowOfText, PRSMIdHeader),
+                DatabaseReference = ParseStringField(processedRowOfText, ProteinNameHeader)
+            };
             return child;
         }
 

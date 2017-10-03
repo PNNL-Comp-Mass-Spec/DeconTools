@@ -65,10 +65,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string WorkflowStatusMessage { get; set; }
 
-        public string Name
-        {
-            get { return ToString(); }
-        }
+        public string Name => ToString();
 
         /// <summary>
         /// For trimming the final mass spectrum. A value of '2' means 
@@ -91,7 +88,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             foreach (ChromPeak chrompeak in list)
             {
-                this.ChromPeaksDetected.Add(chrompeak);
+                ChromPeaksDetected.Add(chrompeak);
 
             }
 
@@ -118,8 +115,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                this.ChromatogramXYData.Xvalues = xydata.Xvalues;
-                this.ChromatogramXYData.Yvalues = xydata.Yvalues;
+                ChromatogramXYData.Xvalues = xydata.Xvalues;
+                ChromatogramXYData.Yvalues = xydata.Yvalues;
             }
 
         }
@@ -141,8 +138,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                this.MassSpectrumXYData.Xvalues = xydata.Xvalues;
-                this.MassSpectrumXYData.Yvalues = xydata.Yvalues;
+                MassSpectrumXYData.Xvalues = xydata.Xvalues;
+                MassSpectrumXYData.Yvalues = xydata.Yvalues;
             }
         }
 
@@ -273,7 +270,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void Execute()
         {
-            Check.Require(this.Run != null, "Error in TargetedWorkflow.Execute: Run has not been defined.");
+            Check.Require(Run != null, "Error in TargetedWorkflow.Execute: Run has not been defined.");
 
 
             if (!IsWorkflowInitialized)
@@ -347,14 +344,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void ResetStoredData()
         {
-            this.ResetStoredXYData(this.ChromatogramXYData);
-            this.ResetStoredXYData(this.MassSpectrumXYData);
+            ResetStoredXYData(ChromatogramXYData);
+            ResetStoredXYData(MassSpectrumXYData);
 
-            this.Run.XYData = null;
-            this.Run.PeakList = new List<Peak>();
+            Run.XYData = null;
+            Run.PeakList = new List<Peak>();
 
-            this.ChromPeaksDetected.Clear();
-            this.ChromPeakSelected = null;
+            ChromPeaksDetected.Clear();
+            ChromPeakSelected = null;
         }
 
         public void ResetStoredXYData(XYData xydata)
@@ -370,9 +367,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             base.InitializeRunRelatedTasks();
 
-            if (this.WorkflowParameters is TargetedWorkflowParameters)
+            if (WorkflowParameters is TargetedWorkflowParameters)
             {
-                this.Run.ResultCollection.ResultType = ((TargetedWorkflowParameters)this.WorkflowParameters).ResultType;
+                Run.ResultCollection.ResultType = ((TargetedWorkflowParameters)WorkflowParameters).ResultType;
             }
         }
 
@@ -410,9 +407,9 @@ namespace DeconTools.Workflows.Backend.Core
                     wf = new TopDownTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
                 case Globals.TargetedWorkflowTypes.PeakDetectAndExportWorkflow1:
-                    throw new System.NotImplementedException("Cannot create this workflow type here.");
+                    throw new NotImplementedException("Cannot create this workflow type here.");
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
-                    throw new System.NotImplementedException("Cannot create this workflow type here.");
+                    throw new NotImplementedException("Cannot create this workflow type here.");
                 case Globals.TargetedWorkflowTypes.UIMFTargetedMSMSWorkflowCollapseIMS:
                     wf = new UIMFTargetedMSMSWorkflowCollapseIMS(workflowParameters as TargetedWorkflowParameters);
                     break;

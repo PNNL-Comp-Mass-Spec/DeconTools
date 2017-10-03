@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Result != null && !Result.FailedResult)
             {
-                task.Execute(this.Run.ResultCollection);
+                task.Execute(Run.ResultCollection);
             }
         }
 
@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Run != null)
             {
-                MSGenerator = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
+                MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
 
             }
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -59,7 +58,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 GetBaseScanRange(referenceTarget.ChromPeak, out startScan, out stopScan);
 
                 //Generates an array of XICs for the reference peak
-                var referenceMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
+                var referenceMZList = IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
                 var referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
 
                 //Iterates through the rest of the available targets
@@ -73,7 +72,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     {
                         //Generates an XIC array for the peak being correlated. 
                         var correlationMZList =
-                            DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(
+                            IsotopicProfileUtilities.GetTopNMZValues(
                                 correlatingTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
                         var correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
 
@@ -131,13 +130,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             GetBaseScanRange(referenceTarget.ChromPeak, out startScan, out stopScan);
 
             //Generates an array of XICs for the reference peak
-            var referenceMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
+            var referenceMZList = IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
             var referenceXIC = GetCorrelationXICs(peaksToCorrelate, referenceMZList, run, startScan, stopScan);
 
             if (compTarget.ChromPeak.XValue > startScan && compTarget.ChromPeak.XValue < stopScan)
             {
                 //Generates an XIC array for the peak being correlated. 
-                var correlationMZList = DeconTools.Backend.Utilities.IsotopicProfileUtilities.GetTopNMZValues(compTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
+                var correlationMZList = IsotopicProfileUtilities.GetTopNMZValues(compTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
                 var correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
 
                 //Generates new correlation data item for current correlation

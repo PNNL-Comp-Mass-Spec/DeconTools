@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
@@ -14,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
     {
 
         protected MSGenerator MSGenerator;
-        protected DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidatorTask ResultValidator;
+        protected ResultValidatorTask ResultValidator;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected InterferenceScorer InterferenceScorer;
         protected DeconToolsPeakDetectorV2 MSPeakDetector;

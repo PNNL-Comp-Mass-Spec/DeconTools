@@ -9,7 +9,7 @@ namespace DeconTools.Workflows.Backend.Results
         #region Constructors
         public TargetedResultRepository()
         {
-            this.Results = new List<TargetedResultDTO>();
+            Results = new List<TargetedResultDTO>();
         }
         #endregion
 
@@ -22,14 +22,14 @@ namespace DeconTools.Workflows.Backend.Results
         public void AddResult(TargetedResultBase resultToConvert)
         {
             var result = ResultDTOFactory.CreateTargetedResult(resultToConvert);
-            this.Results.Add(result);
+            Results.Add(result);
         }
 
 
 
         public void AddResults(List<TargetedResultDTO> featuresToAlign)
         {
-            this.Results.AddRange(featuresToAlign);
+            Results.AddRange(featuresToAlign);
         }
 
         public void AddResults(List<TargetedResultBase> resultsToConvert)
@@ -37,14 +37,14 @@ namespace DeconTools.Workflows.Backend.Results
             foreach (var item in resultsToConvert)
             {
                 var result = ResultDTOFactory.CreateTargetedResult(item);
-                this.Results.Add(result);
+                Results.Add(result);
             }
         }
 
 
         public void Clear()
         {
-            this.Results.Clear();
+            Results.Clear();
         }
 
 

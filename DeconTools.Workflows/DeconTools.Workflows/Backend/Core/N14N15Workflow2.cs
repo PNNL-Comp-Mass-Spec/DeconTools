@@ -2,7 +2,6 @@
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.Quantifiers;
@@ -69,24 +68,24 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void DoWorkflow()
         {
-            this.Result = this.Run.ResultCollection.GetTargetedResult(this.Run.CurrentMassTag);
-            this.Result.ResetResult();
+            Result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
+            Result.ResetResult();
 
             ExecuteTask(theorFeatureGen);
             ExecuteTask(theorN15FeatureGen);
             ExecuteTask(chromGenN14);
             ExecuteTask(chromSmoother);
-            updateChromDataXYValues(this.Run.XYData);
+            updateChromDataXYValues(Run.XYData);
 
             ExecuteTask(chromPeakDetector);
-            UpdateChromDetectedPeaks(this.Run.PeakList);
+            UpdateChromDetectedPeaks(Run.PeakList);
 
             ExecuteTask(chromPeakSelectorN14);
-            this.ChromPeakSelected = this.Result.ChromPeakSelected;
-            chromPeakSelectorN15.ReferenceNETValueForReferenceMode = this.Result.GetNET();    //so that the NET value of the N14 result can be used to help find the N15 chrom peak
+            ChromPeakSelected = Result.ChromPeakSelected;
+            chromPeakSelectorN15.ReferenceNETValueForReferenceMode = Result.GetNET();    //so that the NET value of the N14 result can be used to help find the N15 chrom peak
 
             ExecuteTask(MSGenerator);
-            updateMassSpectrumXYValues(this.Run.XYData);
+            updateMassSpectrumXYValues(Run.XYData);
 
             ExecuteTask(msPeakDetector);
             ExecuteTask(unlabelledProfilefinder);
@@ -95,7 +94,7 @@ namespace DeconTools.Workflows.Backend.Core
             ExecuteTask(resultValidatorN14);
 
             //a bit of a hack... but we need to declare that the Result isn't failed so that the following tasks will be performed
-            this.Result.FailedResult = false;
+            Result.FailedResult = false;
 
             //now process the N15 profile
 
@@ -108,29 +107,29 @@ namespace DeconTools.Workflows.Backend.Core
             ExecuteTask(chromPeakSelectorN15);
 
             //even if we don't find anything, we want to create a mass spectrum and pull out values of N15 data
-            var n14n15result = (N14N15_TResult)this.Result;
+            var n14n15result = (N14N15_TResult)Result;
             if (n14n15result.ChromPeakSelectedN15 == null)
             {
-                n14n15result.ScanSetForN15Profile = this.Result.ScanSet;
-                this.Run.CurrentScanSet = n14n15result.ScanSetForN15Profile;
+                n14n15result.ScanSetForN15Profile = Result.ScanSet;
+                Run.CurrentScanSet = n14n15result.ScanSetForN15Profile;
 
                 if (n14n15result.ScanSetForN15Profile == null)
                 {
-                    this.Result.FailedResult = true;
-                    this.Result.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+                    Result.FailedResult = true;
+                    Result.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
                 }
             }
 
 
             ExecuteTask(MSGenerator);
-            updateMassSpectrumXYValues(this.Run.XYData);
+            updateMassSpectrumXYValues(Run.XYData);
 
             //TrimData(Run.XYData, Run.CurrentMassTag.MZ, MsLeftTrimAmount, MsRightTrimAmount);
 
             ExecuteTask(msPeakDetector);
             ExecuteTask(labelledProfileFinder);
 
-            resultValidatorN15.CurrentResult = this.Result;
+            resultValidatorN15.CurrentResult = Result;
 
             ExecuteTask(resultValidatorN15);
             ExecuteTask(quantifier);

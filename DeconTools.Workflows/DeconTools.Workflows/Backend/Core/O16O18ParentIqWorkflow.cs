@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
@@ -21,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected PeakLeastSquaresFitter PeakFitter;
 
-        private readonly DeconTools.Backend.ProcessingTasks.PeakDetectors.DeconToolsPeakDetectorV2 _mspeakDetector;
+        private readonly DeconToolsPeakDetectorV2 _mspeakDetector;
         private bool _headerLogged;
         private BasicGraphControl _graphGenerator;
 

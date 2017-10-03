@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
-using DeconTools.Utilities;
 
 namespace DeconTools.Workflows.Backend.Core
 {
@@ -15,7 +11,7 @@ namespace DeconTools.Workflows.Backend.Core
         public UIMFTargetedMSMSWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters):base(run,parameters)
         {
             
-            this.ChromPeakToXYDataMap = new Dictionary<ChromPeak, XYData>();
+            ChromPeakToXYDataMap = new Dictionary<ChromPeak, XYData>();
 
             
         }
@@ -89,7 +85,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var maxScan = apex + halfFourSigma;
 
                 var filteredXYData = Run.XYData.TrimData(minScan, maxScan);
-                this.ChromPeakToXYDataMap.Add(peak, filteredXYData);
+                ChromPeakToXYDataMap.Add(peak, filteredXYData);
             }
         }
     }

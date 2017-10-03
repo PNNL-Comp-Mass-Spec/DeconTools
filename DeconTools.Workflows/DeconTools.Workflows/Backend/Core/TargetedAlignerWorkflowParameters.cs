@@ -7,34 +7,34 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public TargetedAlignerWorkflowParameters()
         {
-            this.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
-            this.ChromNETTolerance = 0.2;    //wide NET tolerance
-            this.ChromPeakDetectorPeakBR = 2;
-            this.ChromPeakDetectorSigNoise = 2;
-            this.ChromSmootherNumPointsInSmooth = 9;
-            this.ChromGenTolerance = 25;
-            this.MSPeakDetectorPeakBR = 2;
-            this.MSPeakDetectorSigNoise = 2;
-            this.MSToleranceInPPM = 25;
-            this.NumMSScansToSum = 1;
+            ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
+            ChromNETTolerance = 0.2;    //wide NET tolerance
+            ChromPeakDetectorPeakBR = 2;
+            ChromPeakDetectorSigNoise = 2;
+            ChromSmootherNumPointsInSmooth = 9;
+            ChromGenTolerance = 25;
+            MSPeakDetectorPeakBR = 2;
+            MSPeakDetectorSigNoise = 2;
+            MSToleranceInPPM = 25;
+            NumMSScansToSum = 1;
 
 
-            this.ChromGenSourceDataPeakBR = 2;
-            this.ChromGenSourceDataSigNoise = 3;
+            ChromGenSourceDataPeakBR = 2;
+            ChromGenSourceDataSigNoise = 3;
 
 
 
-            this.NumDesiredMassTagsPerNETGrouping = 25;
-            this.NumMaxAttemptsPerNETGrouping = 200;
-            this.NumMaxAttemptsDuringFirstPassMassAnalysis = 2000;
+            NumDesiredMassTagsPerNETGrouping = 25;
+            NumMaxAttemptsPerNETGrouping = 200;
+            NumMaxAttemptsDuringFirstPassMassAnalysis = 2000;
 
-            this.NumChromPeaksAllowedDuringSelection = 1;
+            NumChromPeaksAllowedDuringSelection = 1;
 
             
-            this.UpperFitScoreAllowedCriteria = 0.1;
-            this.MinimumChromPeakIntensityCriteria = 2.5e5f;
-            this.IScoreAllowedCriteria = 0.15;
-            this.MultipleHighQualityMatchesAreAllowed = false;
+            UpperFitScoreAllowedCriteria = 0.1;
+            MinimumChromPeakIntensityCriteria = 2.5e5f;
+            IScoreAllowedCriteria = 0.15;
+            MultipleHighQualityMatchesAreAllowed = false;
 
             
 

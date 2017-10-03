@@ -425,13 +425,13 @@ namespace DeconTools.Workflows.Backend.Core
             parameters.SigNoiseThreshold = Parameters.ChromGenSourceDataSigNoise;
             parameters.ProcessMSMS = Parameters.ChromGenSourceDataProcessMsMs;
             parameters.IsDataThresholded = Parameters.ChromGenSourceDataIsThresholded;
-            parameters.LCScanMin = this.Run.GetMinPossibleLCScanNum();
-            parameters.LCScanMax = this.Run.GetMaxPossibleLCScanNum();
+            parameters.LCScanMin = Run.GetMinPossibleLCScanNum();
+            parameters.LCScanMax = Run.GetMaxPossibleLCScanNum();
 
-            var peakCreator = new PeakDetectAndExportWorkflow(this.Run, parameters, _backgroundWorker);
+            var peakCreator = new PeakDetectAndExportWorkflow(Run, parameters, _backgroundWorker);
             peakCreator.Execute();
 
-            var peaksFilename = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName + "_peaks.txt");
+            var peaksFilename = Path.Combine(Run.DataSetPath, Run.DatasetName + "_peaks.txt");
             return peaksFilename;
 
         }
@@ -440,7 +440,7 @@ namespace DeconTools.Workflows.Backend.Core
         private string GetPossiblePeaksFile()
         {
             string baseFileName;
-            baseFileName = Path.Combine(this.Run.DataSetPath, this.Run.DatasetName);
+            baseFileName = Path.Combine(Run.DataSetPath, Run.DatasetName);
 
             var possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -465,7 +465,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
-                Console.WriteLine("Creating _Peaks.txt file for " + this.Run.DatasetName + " at " + this.Run.DataSetPath);
+                Console.WriteLine("Creating _Peaks.txt file for " + Run.DatasetName + " at " + Run.DataSetPath);
                 IqLogger.Log.Info("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }
@@ -477,7 +477,7 @@ namespace DeconTools.Workflows.Backend.Core
             IqLogger.Log.Info("Peak Loading Started...");
 
             var peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
-            peakImporter.ImportPeaks(this.Run.ResultCollection.MSPeakResultList);
+            peakImporter.ImportPeaks(Run.ResultCollection.MSPeakResultList);
 
             IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
         }

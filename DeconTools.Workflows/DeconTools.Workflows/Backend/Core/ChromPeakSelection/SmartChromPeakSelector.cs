@@ -1,6 +1,4 @@
 ﻿using System;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.ProcessingTasks.ChromatogramProcessing;
 using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
@@ -14,7 +12,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         #region Constructors
         public SmartChromPeakSelector(SmartChromPeakSelectorParameters parameters)
         {
-            this.Parameters = parameters;
+            Parameters = parameters;
 
             MSPeakDetector = new DeconToolsPeakDetectorV2(parameters.MSPeakDetectorPeakBR, parameters.MSPeakDetectorSigNoiseThresh, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 

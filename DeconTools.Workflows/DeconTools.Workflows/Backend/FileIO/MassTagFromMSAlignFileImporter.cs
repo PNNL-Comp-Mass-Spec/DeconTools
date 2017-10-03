@@ -67,8 +67,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public TargetCollection Import()
         {
-            Dictionary<int, PrsmData> garbage;
-            return Import(out garbage);
+            return Import(out var garbage);
         }
 
         public TargetCollection Import(out Dictionary<int, PrsmData> prsmData)
@@ -112,7 +111,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 while (!sr.EndOfStream)
                 {
                     ++lineCounter;
-                    _dataRowsProcessed = lineCounter;
+                    DataRowsProcessed = lineCounter;
 
                     var processedData = sr.ReadLine().Split('\t').ToList();
 
@@ -124,22 +123,19 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     // Get Prsm_ID
-                    int prsmId;
-                    if (!int.TryParse(processedData[columnMapping[PRSM_ID_HEADER]], out prsmId))
+                    if (!int.TryParse(processedData[columnMapping[PRSM_ID_HEADER]], out var prsmId))
                     {
                         throw new InvalidDataException("Could not parse Prsm ID.");
                     }
 
                     // Get scan
-                    int scanLcTarget;
-                    if (!int.TryParse(processedData[columnMapping[SCAN_HEADER]], out scanLcTarget))
+                    if (!int.TryParse(processedData[columnMapping[SCAN_HEADER]], out var scanLcTarget))
                     {
                         throw new InvalidDataException("Could not parse scan number.");
                     }
 
                     // Get charge state
-                    short chargeState;
-                    if (!short.TryParse(processedData[columnMapping[CHARGE_HEADER]], out chargeState))
+                    if (!short.TryParse(processedData[columnMapping[CHARGE_HEADER]], out var chargeState))
                     {
                         throw new InvalidDataException("Could not parse charge.");
                     }
@@ -153,9 +149,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                     {
                         empiricalFormula = GetEmpiricalFormulaForSequenceWithMods(code);
                         // Unknown modification in sequence, skip
-                        if (String.IsNullOrEmpty(empiricalFormula))
+                        if (string.IsNullOrEmpty(empiricalFormula))
                         {
-                            ++_dataRowsSkippedUnknownMods;
+                            ++DataRowsSkippedUnknownMods;
                             continue;
                         }
                     }
@@ -168,8 +164,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     var monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 
                     // Get Protein_mass
-                    double proteinMass;
-                    if (!double.TryParse(processedData[columnMapping[PROTEIN_MASS_HEADER]], out proteinMass))
+                    if (!double.TryParse(processedData[columnMapping[PROTEIN_MASS_HEADER]], out var proteinMass))
                     {
                         throw new InvalidDataException("Could not parse protein mass.");
                     }
@@ -178,8 +173,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     var proteinName = processedData[columnMapping[PROTEIN_NAME_HEADER]];
 
                     // Get score
-                    double eValueDbl;
-                    if (!double.TryParse(processedData[columnMapping[E_VALUE_HEADER]], out eValueDbl))
+                    if (!double.TryParse(processedData[columnMapping[E_VALUE_HEADER]], out var eValueDbl))
                     {
                         if (processedData[columnMapping[E_VALUE_HEADER]].ToLower() == "Infinity")
                         {
@@ -366,7 +360,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             // If the peptide sequence still has modifications, we can't get the empirical formula
             if (code.Contains("("))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             // Get the empirical formula as if the peptide sequence was unmodified
@@ -388,10 +382,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             return empiricalFormula;
         }
 
-        private Dictionary<string, int> GetColumnMapping(List<string> columnHeaders)
+        private Dictionary<string, int> GetColumnMapping(IReadOnlyList<string> columnHeaders)
         {
             var columnMapping = new Dictionary<string, int>();
-            for (var i = 0; i < columnHeaders.Count(); i++)
+            for (var i = 0; i < columnHeaders.Count; i++)
             {
                 var header = columnHeaders[i];
                 if (!columnMapping.ContainsKey(header))

@@ -19,24 +19,21 @@ namespace DeconTools.Workflows.Backend.Core
 #if !Disable_DeconToolsV2
     public class WholisticChromBasedLCMSFeatureFinderWorkflow : WorkflowBase
     {
-        string m_peakOutputFileName;
-        string m_isosResultFileName;
-        string m_logFileName;
+        readonly string m_peakOutputFileName;
+        readonly string m_logFileName;
 
-        string m_baseOutputPath;
         int m_msFeatureCounter;
 
         #region Constructors
 
         public WholisticChromBasedLCMSFeatureFinderWorkflow(Run run)
         {
-            this.Run = run;
-            this.Name = this.ToString();
+            Run = run;
+            Name = this.ToString();
 
-            this.m_baseOutputPath = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\2011_02_10_SmartAveraging_OrbitrapData";
-            this.m_isosResultFileName = Path.Combine(m_baseOutputPath, "MSFeaturesOutput.csv");
-            this.m_peakOutputFileName = Path.Combine(m_baseOutputPath, "peakOutput.txt");
-            this.m_logFileName = Path.Combine(m_baseOutputPath, "log.txt");
+            var baseOutputPath = @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2011\2011_02_10_SmartAveraging_OrbitrapData";
+            m_peakOutputFileName = Path.Combine(baseOutputPath, "peakOutput.txt");
+            m_logFileName = Path.Combine(baseOutputPath, "log.txt");
 
             InitializeWorkflow();
 
@@ -46,7 +43,6 @@ namespace DeconTools.Workflows.Backend.Core
             : this(run)
         {
             m_peakOutputFileName = outputPeakFilename;
-            m_isosResultFileName = outputIsosResultFileName;
         }
 
 
@@ -100,15 +96,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void InitializeWorkflow()
         {
-            this.ChromGenToleranceInPPM = 20;
+            ChromGenToleranceInPPM = 20;
 
-            this.ChromGenerator = new ChromatogramGenerator();
+            ChromGenerator = new ChromatogramGenerator();
 
-            this.ChromSmoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
+            ChromSmoother = new DeconTools.Backend.ProcessingTasks.Smoothers.SavitzkyGolaySmoother(23, 2);
 
-            this.ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
+            ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
 
-            this.MSPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
+            MSPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
             // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
             // Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
@@ -127,16 +123,16 @@ namespace DeconTools.Workflows.Backend.Core
             const double scanTolerance = 100;
 
 
-            Check.Require(this.Run != null, String.Format("{0} failed. Run not defined.", this.Name));
-            Check.Require(this.Run.ResultCollection != null && this.Run.ResultCollection.MSPeakResultList != null && this.Run.ResultCollection.MSPeakResultList.Count > 0,
-                String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
+            Check.Require(Run != null, string.Format("{0} failed. Run not defined.", Name));
+            Check.Require(Run.ResultCollection != null && Run.ResultCollection.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0,
+                string.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", Name));
 
-            var sortedMSPeakResultList = this.Run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
+            var sortedMSPeakResultList = Run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
-            var msGeneratorNeedsInitializing = (this.MSgen == null);
+            var msGeneratorNeedsInitializing = (MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
-                this.MSgen = MSGeneratorFactory.CreateMSGenerator(this.Run.MSFileType);
+                MSgen = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             }
 
 
@@ -195,7 +191,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (!peakResultAlreadyIncludedInChromatogram)
                 {
-                    var peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(this.Run.ResultCollection.ResultList, peakResult, scanTolerance);
+                    var peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(Run.ResultCollection.ResultList, peakResult, scanTolerance);
                     if (peakResultAlreadyFoundInAnMSFeature)
                     {
                         peakFate = "MSFeature_Already";
@@ -213,22 +209,22 @@ namespace DeconTools.Workflows.Backend.Core
                     if (peakFate == "CHROM")
                     {
                         //generate chromatogram & tag MSPeakResults
-                        var chromatogram = this.ChromGenerator.GenerateChromatogram(this.Run.ResultCollection.MSPeakResultList, this.Run.MinLCScan, this.Run.MaxLCScan, peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM, peakResult.PeakID);
+                        var chromatogram = ChromGenerator.GenerateChromatogram(Run.ResultCollection.MSPeakResultList, Run.MinLCScan, Run.MaxLCScan, peakResult.MSPeak.XValue, ChromGenToleranceInPPM, peakResult.PeakID);
 
                         if (chromatogram == null) continue;
 
 
                         //remove points from chromatogram due to MS/MS level data
-                        if (this.Run.ContainsMSMSData)
+                        if (Run.ContainsMSMSData)
                         {
-                            chromatogram = filterOutMSMSRelatedPoints(this.Run, chromatogram);
+                            chromatogram = filterOutMSMSRelatedPoints(Run, chromatogram);
                         }
 
                         //smooth the chromatogram
-                        chromatogram = this.ChromSmoother.Smooth(chromatogram);
+                        chromatogram = ChromSmoother.Smooth(chromatogram);
 
                         //detect peaks in chromatogram
-                        var chromPeakList = this.ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
+                        var chromPeakList = ChromPeakDetector.FindPeaks(chromatogram, 0, 0);
 
                         //sort chrompeak list so it is decending.
                         chromPeakList = chromPeakList.OrderByDescending(p => p.Height).ToList();
@@ -249,23 +245,23 @@ namespace DeconTools.Workflows.Backend.Core
                             try
                             {
 
-                                this.Run.CurrentScanSet = createScanSetFromChromatogramPeak(this.Run, chromPeak);
+                                Run.CurrentScanSet = createScanSetFromChromatogramPeak(Run, chromPeak);
 
-                                MSgen.Execute(this.Run.ResultCollection);
+                                MSgen.Execute(Run.ResultCollection);
 
                                 //trim the XYData to help the peak detector and Deconvolutor work faster
-                                this.Run.XYData = this.Run.XYData.TrimData(peakResult.MSPeak.XValue - 2, peakResult.MSPeak.XValue + 2);
+                                Run.XYData = Run.XYData.TrimData(peakResult.MSPeak.XValue - 2, peakResult.MSPeak.XValue + 2);
 
-                                this.MSPeakDetector.Execute(this.Run.ResultCollection);
+                                MSPeakDetector.Execute(Run.ResultCollection);
 
                                 //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
-                                this.Run.ResultCollection.IsosResultBin.Clear();
-                                this.Deconvolutor.Deconvolute(this.Run.ResultCollection);
+                                Run.ResultCollection.IsosResultBin.Clear();
+                                Deconvolutor.Deconvolute(Run.ResultCollection);
 
-                                this.Validator.Execute(this.Run.ResultCollection);
+                                Validator.Execute(Run.ResultCollection);
 
                                 //Need to find the target peak within the MSFeature.  Then mark other peaks of the MSFeature as being found, so that we don't bother generating a MS and deisotoping
-                                findTargetPeakAddResultsToCollectionAndMarkAssociatedPeaks(tempChromPeakMSFeatures, peakResult, this.Run, scanTolerance);
+                                findTargetPeakAddResultsToCollectionAndMarkAssociatedPeaks(tempChromPeakMSFeatures, peakResult, Run, scanTolerance);
                             }
                             catch (Exception ex)
                             {
@@ -284,16 +280,16 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                 var triggerToExport = 10;
-                if (this.Run.ResultCollection.ResultList.Count > triggerToExport || peakResult == lastPeakResult)
+                if (Run.ResultCollection.ResultList.Count > triggerToExport || peakResult == lastPeakResult)
                 {
 
 
-                    isosExporter.ExportResults(this.Run.ResultCollection.ResultList);
-                    this.Run.ResultCollection.ResultList.Clear();
+                    isosExporter.ExportResults(Run.ResultCollection.ResultList);
+                    Run.ResultCollection.ResultList.Clear();
 
 
 
-                    exportPeakData(this.Run, m_peakOutputFileName, whatPeakWentWhere);
+                    exportPeakData(Run, m_peakOutputFileName, whatPeakWentWhere);
                     whatPeakWentWhere.Clear();
 
                 }
@@ -325,21 +321,21 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        public void ExecuteWorkflow2(DeconTools.Backend.Core.Run run)
+        public void ExecuteWorkflow2(Run run)
         {
             double scanTolerance = 100;
 
 
-            Check.Require(run != null, String.Format("{0} failed. Run not defined.", this.Name));
+            Check.Require(run != null, string.Format("{0} failed. Run not defined.", Name));
             Check.Require(run.ResultCollection != null && run.ResultCollection.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
-                String.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", this.Name));
+                string.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", Name));
 
             var sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
-            var msGeneratorNeedsInitializing = (this.MSgen == null);
+            var msGeneratorNeedsInitializing = (MSgen == null);
             if (msGeneratorNeedsInitializing)
             {
-                this.MSgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+                MSgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             }
 
 
@@ -431,8 +427,8 @@ namespace DeconTools.Workflows.Backend.Core
                         }
 
                         PeakChrom chrom = new BasicPeakChrom();
-                        chrom.ChromSourceData = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
-                            peakResult.MSPeak.XValue, this.ChromGenToleranceInPPM);
+                        chrom.ChromSourceData = ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                            peakResult.MSPeak.XValue, ChromGenToleranceInPPM);
 
                         if (chrom.IsNullOrEmpty) continue;
 
@@ -447,10 +443,10 @@ namespace DeconTools.Workflows.Backend.Core
                         }
 
                         //smooth the chromatogram
-                        chrom.XYData = this.ChromSmoother.Smooth(chrom.XYData);
+                        chrom.XYData = ChromSmoother.Smooth(chrom.XYData);
 
                         //detect peaks in chromatogram
-                        chrom.PeakList = this.ChromPeakDetector.FindPeaks(chrom.XYData, 0, 0);
+                        chrom.PeakList = ChromPeakDetector.FindPeaks(chrom.XYData, 0, 0);
 
                         //Console.WriteLine("source peak -> scan= " + peakResult.Scan_num + "; m/z= " + peakResult.MSPeak.XValue);
                         //chrom.XYData.Display();
@@ -490,13 +486,13 @@ namespace DeconTools.Workflows.Backend.Core
                                 continue;
                             }
 
-                            this.MSPeakDetector.Execute(run.ResultCollection);
+                            MSPeakDetector.Execute(run.ResultCollection);
 
                             //HACK:  calling 'deconvolute' will write results to 'isosResultBin' but not to 'ResultList';  I will manually add what I want to the official 'ResultList'
                             run.ResultCollection.IsosResultBin.Clear();
-                            this.Deconvolutor.Deconvolute(run.ResultCollection);
+                            Deconvolutor.Deconvolute(run.ResultCollection);
 
-                            this.Validator.Execute(run.ResultCollection);
+                            Validator.Execute(run.ResultCollection);
 
                             //now, look in the isosResultBin and see what IsosResult (if any) the source peak is a member of
                             var msfeature = getMSFeatureForCurrentSourcePeak(peakResult, run);
@@ -528,8 +524,8 @@ namespace DeconTools.Workflows.Backend.Core
                                     {
                                         PeakChrom isoPeakChrom = new BasicPeakChrom();
 
-                                        isoPeakChrom.ChromSourceData = this.ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
-                                            isoPeak.XValue, this.ChromGenToleranceInPPM);
+                                        isoPeakChrom.ChromSourceData = ChromGenerator.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, minScanForChrom, maxScanForChrom,
+                                            isoPeak.XValue, ChromGenToleranceInPPM);
                                         if (!isoPeakChrom.IsNullOrEmpty)
                                         {
                                             isoPeakChrom.GetMSPeakMembersForGivenChromPeakAndAssignChromID(chromPeak, peakWidthSigma * 4, peakResult.PeakID);
@@ -680,7 +676,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var peaksb = new StringBuilder();
 
-            using (var outputStream = new StreamWriter(new System.IO.FileStream(outputFilename, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var outputStream = new StreamWriter(new FileStream(outputFilename, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
                 foreach (var item in whatPeakWentWhere)
                 {
@@ -754,7 +750,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var msfeature = msFeatureList[i];
                 if (msfeature.IsotopicProfile == null || msfeature.IsotopicProfile.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
 
-                var peaksWithinTol = DeconTools.Backend.Utilities.PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
+                var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
 
                 if (peaksWithinTol.Count == 0)
                 {

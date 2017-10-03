@@ -41,7 +41,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         #region Constructors
         public TargetedResultFromTextImporter(string filename)
         {
-            this._filename = filename;
+            _filename = filename;
 
         }
 
@@ -55,21 +55,21 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             if (!File.Exists(_filename))
             {
-                throw new System.IO.IOException("Cannot import. File does not exist. Input file path= "+ _filename);
+                throw new IOException("Cannot import. File does not exist. Input file path= "+ _filename);
             }
 
             try
             {
-                reader = new StreamReader(this._filename);
+                reader = new StreamReader(_filename);
             }
             catch (Exception)
             {
-                throw new System.IO.IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from the file.");
             }
 
             using (var sr = reader)
             {
-                if (sr.Peek() == -1)
+                if (sr.EndOfStream)
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in the file we are trying to read.");
@@ -87,13 +87,12 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
 
-                string line;
-                var lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed.
 
                 //read and process each line of the file
-                while (sr.Peek() > -1)
+                while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
+                    var line = sr.ReadLine();
                     var processedData = ProcessLine(line);
 
                     //ensure that processed line is the same size as the header line
@@ -149,14 +148,14 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ErrorDescription = LookupData(rowData, failureTypeHeaders);
             result.EmpiricalFormula = LookupData(rowData, empiricalFormulaHeaders);
             result.Code = LookupData(rowData, codeHeaders);
-            
+
 
 
             var validationCode = LookupData(rowData, validationCodeHeaders);
-            if (String.IsNullOrEmpty(validationCode))
+            if (string.IsNullOrEmpty(validationCode))
             {
                 result.ValidationCode = ValidationCode.None;
-                
+
             }
             else
             {
@@ -171,16 +170,16 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
             }
 
-            
+
         }
 
 
         protected string TryGetDatasetNameFromFileName()
         {
-            var datasetName = Path.GetFileName(_filename).Replace("_UMCs.txt", String.Empty);
+            var datasetName = Path.GetFileName(_filename).Replace("_UMCs.txt", string.Empty);
 
-            datasetName = datasetName.Replace("_LCMSFeatures.txt", String.Empty);
-            datasetName = datasetName.Replace("_TargetedFeatures.txt", String.Empty);
+            datasetName = datasetName.Replace("_LCMSFeatures.txt", string.Empty);
+            datasetName = datasetName.Replace("_TargetedFeatures.txt", string.Empty);
 
 
             return datasetName;

@@ -15,9 +15,7 @@ namespace DeconTools.Workflows.Backend.FileIO
     {
         private List<Tuple<int, string, int, string>> _massTagModData;
 
-        private List<int> _targetsContainingMods;
-
-       
+        private readonly List<int> _targetsContainingMods;
 
 
         #region Constructors
@@ -64,12 +62,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #region Public Methods
 
-
-
-
         public List<IqTarget> Import()
         {
-            var targets= GetMassTagDataFromDb();
+            var targets = GetMassTagDataFromDb();
 
             if (IsEmpiricalFormulaExtracted)
             {
@@ -77,8 +72,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 var peptideUtils = new PeptideUtils();
 
-                foreach (IqTargetDms iqTarget in targets)
+                foreach (var iqTarget1 in targets)
                 {
+                    var iqTarget = (IqTargetDms)iqTarget1;
                     var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(iqTarget.Code);
                     if (!string.IsNullOrEmpty(iqTarget.ModDescription))
                     {
@@ -98,40 +94,38 @@ namespace DeconTools.Workflows.Backend.FileIO
                                 IqLogger.Log.Debug("Failed to calculate empirical formula for the Target " + target.ID + " (" + ex.Message + ")" +
                                                   "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
 
-                                
+
                             }
                         }
                     }
 
                     iqTarget.EmpiricalFormula = baseEmpiricalFormula;
-                    
+
                     if (IsMonoMassCalculatedFromEmpiricalFormula)
                     {
-                        iqTarget.MonoMassTheor = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(iqTarget.EmpiricalFormula);    
+                        iqTarget.MonoMassTheor = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(iqTarget.EmpiricalFormula);
                     }
-                    
+
                 }
             }
 
             return targets;
 
 
-
-
-
         }
 
 
 
-        public void SaveIqTargetsToFile(string fileName, List<IqTarget>targets  )
+        public void SaveIqTargetsToFile(string fileName, List<IqTarget> targets)
         {
-            using (var writer=new StreamWriter(fileName))
+            using (var writer = new StreamWriter(fileName))
             {
                 var header = GetHeaderLine();
                 writer.WriteLine(header);
 
-                foreach (IqTargetDms iqTarget in targets)
+                foreach (var iqTarget1 in targets)
                 {
+                    var iqTarget = (IqTargetDms)iqTarget1;
                     var targetString = GetTargetStringForExport(iqTarget);
                     writer.WriteLine(targetString);
                 }
@@ -177,12 +171,10 @@ namespace DeconTools.Workflows.Backend.FileIO
         }
 
 
-        public List<IqTarget> Import(List<int>massTagIDsToImport )
+        public List<IqTarget> Import(List<int> massTagIDsToImport)
         {
             return GetMassTagDataFromDb(massTagIDsToImport);
         }
-
-
 
 
         #endregion
@@ -199,6 +191,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             using (var cnn = fact.CreateConnection())
             {
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetMassTagDataFromDb");
+
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
@@ -265,20 +260,19 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             return iqTargetList;
 
-
-
-
-
         }
 
 
-        private void GetModDataFromDb(List<int> massTagsToBeRetrivedList)
+        private void GetModDataFromDb(IEnumerable<int> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             _massTagModData = new List<Tuple<int, string, int, string>>();
 
             using (var cnn = fact.CreateConnection())
             {
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetModDataFromDb");
+
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
@@ -311,7 +305,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                         if (rowData.Item2.Contains("O18"))
                         {
                             IqLogger.Log.Debug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
-                            //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled 
+                            //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled
                         }
                         else if (rowData.Item2.Contains("N15"))
                         {
@@ -343,7 +337,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 @"SELECT MTMI.Mass_Tag_ID,MTMI.Mod_Name,MTMI.Mod_Position,MCF.Empirical_Formula
                     FROM T_Mass_Tag_Mod_Info MTMI INNER JOIN MT_Main.dbo.V_DMS_Mass_Correction_Factors MCF
                     ON MTMI.Mod_Name = MCF.Mass_Correction_Tag INNER JOIN T_Mass_Tags MT
-                    ON MTMI.Mass_Tag_ID = MT.Mass_Tag_ID 
+                    ON MTMI.Mass_Tag_ID = MT.Mass_Tag_ID
                     WHERE MT.Mass_Tag_ID in (");
 
             foreach (var massTagID in massTagIDs)
@@ -360,26 +354,26 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string CreateQueryString(int minPmtQualityScore)
         {
             var sb = new StringBuilder();
-            sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID, 
-                           dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass, 
-                           dbo.t_mass_tags_net.avg_ganet					AS NET, 
+            sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID,
+                           dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass,
+                           dbo.t_mass_tags_net.avg_ganet					AS NET,
                            dbo.T_Mass_Tags_NET.StD_GANET					as NETStDev,
-                           dbo.t_mass_tags.peptide_obs_count_passing_filter AS Obs, 
-                           dbo.T_Mass_Tags.Min_MSGF_SpecProb				as minMSGF, 
-                           dbo.t_mass_tags.mod_description, 
-                           dbo.t_mass_tags.pmt_quality_score, 
-                           dbo.t_mass_tags.peptide 
-                        FROM   dbo.t_mass_tags 
-                           INNER JOIN dbo.t_mass_tags_net 
-                             ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id 
-                        WHERE dbo.t_mass_tags.pmt_quality_score >= " + minPmtQualityScore + 
+                           dbo.t_mass_tags.peptide_obs_count_passing_filter AS Obs,
+                           dbo.T_Mass_Tags.Min_MSGF_SpecProb				as minMSGF,
+                           dbo.t_mass_tags.mod_description,
+                           dbo.t_mass_tags.pmt_quality_score,
+                           dbo.t_mass_tags.peptide
+                        FROM   dbo.t_mass_tags
+                           INNER JOIN dbo.t_mass_tags_net
+                             ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id
+                        WHERE dbo.t_mass_tags.pmt_quality_score >= " + minPmtQualityScore +
                         " Order by MassTagID");
 
             return sb.ToString();
         }
 
 
-        private List<IqTarget> GetMassTagDataFromDb(List<int> massTagsToBeRetrivedList)
+        private List<IqTarget> GetMassTagDataFromDb(IReadOnlyCollection<int> massTagsToBeRetrivedList)
         {
 
             var iqTargetList = new List<IqTarget>();
@@ -389,6 +383,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             using (var cnn = fact.CreateConnection())
             {
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetMassTagDataFromDb");
+
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
 
@@ -461,37 +458,40 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string BuildConnectionString()
         {
             var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
-                              {
-                                  UserID = DbUsername,
-                                  DataSource = DbServerName,
-                                  Password = DbUserPassWord,
-                                  InitialCatalog = DbName,
-                                  ConnectTimeout = 5
-                              };
+            {
+                UserID = DbUsername,
+                DataSource = DbServerName,
+                Password = DbUserPassWord,
+                InitialCatalog = DbName,
+                ConnectTimeout = 5
+            };
 
             return builder.ConnectionString;
         }
 
-        private string CreateQueryString(List<int> massTagsToBeRetrieved)
+        private string CreateQueryString(IReadOnlyList<int> massTagsToBeRetrieved)
         {
             var sb = new StringBuilder();
-            sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID, 
-                           dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass, 
-                           dbo.t_mass_tags_net.avg_ganet					AS NET, 
+            sb.Append(@"SELECT dbo.t_mass_tags.mass_tag_id as MassTagID,
+                           dbo.t_mass_tags.monoisotopic_mass as MonoisotopicMass,
+                           dbo.t_mass_tags_net.avg_ganet					AS NET,
                            dbo.T_Mass_Tags_NET.StD_GANET					as NETStDev,
-                           dbo.t_mass_tags.peptide_obs_count_passing_filter AS Obs, 
-                           dbo.T_Mass_Tags.Min_MSGF_SpecProb				as minMSGF, 
-                           dbo.t_mass_tags.mod_description, 
-                           dbo.t_mass_tags.pmt_quality_score, 
-                           dbo.t_mass_tags.peptide 
-                        FROM   dbo.t_mass_tags 
-                           INNER JOIN dbo.t_mass_tags_net 
-                             ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id 
+                           dbo.t_mass_tags.peptide_obs_count_passing_filter AS Obs,
+                           dbo.T_Mass_Tags.Min_MSGF_SpecProb				as minMSGF,
+                           dbo.t_mass_tags.mod_description,
+                           dbo.t_mass_tags.pmt_quality_score,
+                           dbo.t_mass_tags.peptide
+                        FROM   dbo.t_mass_tags
+                           INNER JOIN dbo.t_mass_tags_net
+                             ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id
                         Order by MassTagID ");
 
 
             Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
             sb.Append("Mass_Tag_ID in (");
+
+            if (massTagsToBeRetrieved == null)
+                return sb.ToString();
 
             for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
             {

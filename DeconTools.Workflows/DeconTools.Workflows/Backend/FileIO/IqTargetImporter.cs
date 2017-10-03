@@ -28,7 +28,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         // This dictionary keeps track of which header sections are defined in the import file
         // That allows for calling functions to confirm that required sections are present
-        private Dictionary<HeaderSection, bool> _HeaderSections;
 
         #region Constructors
 
@@ -47,7 +46,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             QualityScoreHeaders = new[] { "QValue", "QualityScore", "EValue" };
             ChargeStateHeaders = new[] { "ChargeState", "Z", "Charge" };
 
-            _HeaderSections = new Dictionary<HeaderSection, bool>();
+            HeaderSectionsFound = new Dictionary<HeaderSection, bool>();
         }
 
 
@@ -94,16 +93,16 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             if (!File.Exists(Filename))
             {
-                throw new System.IO.IOException("Cannot import. File does not exist.");
+                throw new IOException("Cannot import. File does not exist.");
             }
 
             try
             {
-                reader = new StreamReader(new FileStream(this.Filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                reader = new StreamReader(new FileStream(Filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("There was a problem importing from the file: " + ex.Message);
+                throw new IOException("There was a problem importing from the file: " + ex.Message);
             }
 
             using (var sr = reader)
@@ -186,15 +185,15 @@ namespace DeconTools.Workflows.Backend.FileIO
                 dummyData.Add("Defined");
             }
 
-            _HeaderSections.Clear();
+            HeaderSectionsFound.Clear();
             foreach (var item in sectionsToCheck)
             {
                 var value = LookupData(dummyData, item.Value, "Missing");
 
                 if (value == "Defined")
-                    _HeaderSections.Add(item.Key, true);
+                    HeaderSectionsFound.Add(item.Key, true);
                 else
-                    _HeaderSections.Add(item.Key, false);
+                    HeaderSectionsFound.Add(item.Key, false);
             }
 
         }
@@ -204,20 +203,20 @@ namespace DeconTools.Workflows.Backend.FileIO
             EnumerateSections();
 
             // Assure the necessary column headers are present
-            if (!(_HeaderSections[HeaderSection.EmpiricalFormula] ||
-                  _HeaderSections[HeaderSection.PeptideSequence]))
+            if (!(HeaderSectionsFound[HeaderSection.EmpiricalFormula] ||
+                  HeaderSectionsFound[HeaderSection.PeptideSequence]))
             {
-                if (_HeaderSections[HeaderSection.MonoMass])
+                if (HeaderSectionsFound[HeaderSection.MonoMass])
                 {
                     Console.WriteLine("Warning: empirical formula or peptide sequence is not defined, but monomass is defined; IQ may not work properly");
                 }
-                else if (_HeaderSections[HeaderSection.MZ])
+                else if (HeaderSectionsFound[HeaderSection.MZ])
                 {
                     Console.WriteLine("Warning: empirical formula or peptide sequence is not defined, but m/z is defined; IQ may not work properly");
                 }
                 else
                 {
-                    throw new System.IO.IOException("Cannot import: must either have an empirical formula column or a peptide sequence column. " +
+                    throw new IOException("Cannot import: must either have an empirical formula column or a peptide sequence column. " +
                         "Acceptable column names: " + string.Join(", ", EmpiricalFormulaHeaders) + ", " + string.Join(", ", CodeHeaders));
                 }
 

@@ -155,13 +155,13 @@ namespace DeconTools.Workflows.Backend.Core
                     var stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
 
                     var tolerance = Math.Abs(avgPPMError) + 2 * stdev;
-                    this.AlignerParameters.ChromGenTolerance = (int)Math.Ceiling(tolerance);
-                    this.AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
+                    AlignerParameters.ChromGenTolerance = (int)Math.Ceiling(tolerance);
+                    AlignerParameters.MSToleranceInPPM = (int)Math.Ceiling(tolerance);
 
                     progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     ReportProgress(0, progressString);
 
-                    progressString = "NOTE: using the new PPMTolerance=  " + this.AlignerParameters.ChromGenTolerance;
+                    progressString = "NOTE: using the new PPMTolerance=  " + AlignerParameters.ChromGenTolerance;
                     ReportProgress(0, progressString);
 
                     _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
@@ -243,7 +243,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<TargetedResultBase> FindTargetsThatPassSpecifiedMassTolerance(double netGrouping, double chromTolerance)
         {
-            Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
+            Check.Require(MassTagList != null && MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
             var workflowParameters = _workflow.WorkflowParameters as TargetedWorkflowParameters;
@@ -255,7 +255,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
 
-            var filteredMasstags = (from n in this.MassTagList
+            var filteredMasstags = (from n in MassTagList
                                     where n.NormalizedElutionTime >= netgrouping1.Lower && n.NormalizedElutionTime < netgrouping1.Upper
                                     orderby n.ObsCount descending
                                     select n);
@@ -316,7 +316,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<TargetedResultBase> FindTargetsThatPassCriteria()
         {
-            Check.Require(this.MassTagList != null && this.MassTagList.Count > 0, "MassTags have not been defined.");
+            Check.Require(MassTagList != null && MassTagList.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
             var resultsPassingCriteria = new List<TargetedResultBase>();
@@ -333,7 +333,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-                var filteredMasstags = (from n in this.MassTagList
+                var filteredMasstags = (from n in MassTagList
                                         where n.NormalizedElutionTime >= netGrouping.Lower && n.NormalizedElutionTime < netGrouping.Upper
                                         orderby n.ObsCount descending
                                         select n);
@@ -444,8 +444,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Aligner = new NETAndMassAligner();
             Aligner.SetFeaturesToBeAligned(_targetedResultRepository.Results);
-            Aligner.SetReferenceMassTags(this.MassTagList);
-            Aligner.Execute(this.Run);
+            Aligner.SetReferenceMassTags(MassTagList);
+            Aligner.Execute(Run);
         }
 
         private List<NETGrouping> createNETGroupings()
@@ -540,16 +540,16 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string GetAlignmentReport1()
         {
-            if (_netGroupings == null || _netGroupings.Count == 0) return String.Empty;
+            if (_netGroupings == null || _netGroupings.Count == 0) return string.Empty;
 
-            if (this.NumFailuresPerNETGrouping.Count != _netGroupings.Count) return String.Empty;
-            if (this.NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return String.Empty;
+            if (NumFailuresPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
+            if (NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
 
 
             var sb = new StringBuilder();
             sb.Append("NETGrouping\tSuccesses\tFailures\n");
 
-            for (var i = 0; i < this._netGroupings.Count; i++)
+            for (var i = 0; i < _netGroupings.Count; i++)
             {
                 sb.Append(_netGroupings[i].Lower + "-" + _netGroupings[i].Upper);
                 sb.Append("\t");

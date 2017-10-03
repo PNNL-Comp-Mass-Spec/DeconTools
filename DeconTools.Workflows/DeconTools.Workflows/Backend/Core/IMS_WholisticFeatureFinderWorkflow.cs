@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Algorithms;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
@@ -22,7 +21,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Constructors
         public IMS_WholisticFeatureFinderWorkflow(Run run)
         {
-            this.Run = run;
+            Run = run;
             InitializeWorkflow();
         }
         #endregion
@@ -80,24 +79,26 @@ namespace DeconTools.Workflows.Backend.Core
 
             NumMSScansToSumWhenBuildingMasterPeakList = 3;
 
-            MasterPeakListPeakDetector = new DeconToolsPeakDetectorV2();
-            MasterPeakListPeakDetector.PeakToBackgroundRatio = 4;
-            MasterPeakListPeakDetector.SignalToNoiseThreshold = 3;
-            MasterPeakListPeakDetector.IsDataThresholded = false;
-            MasterPeakListPeakDetector.PeaksAreStored = true;
+            MasterPeakListPeakDetector = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = 4,
+                SignalToNoiseThreshold = 3,
+                IsDataThresholded = false,
+                PeaksAreStored = true
+            };
 
-            
+
             msgen = MSGeneratorFactory.CreateMSGenerator(DeconTools.Backend.Globals.MSFileType.PNNL_UIMF);
 
 
 
-            this.DriftTimeProfileExtractionPPMTolerance = 15;
+            DriftTimeProfileExtractionPPMTolerance = 15;
 
-            this.ChromSmoother = new SavitzkyGolaySmoother(23,2);
-            this.ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
+            ChromSmoother = new SavitzkyGolaySmoother(23,2);
+            ChromPeakDetector = new ChromPeakDetector(0.5, 0.5);
 
 
-            this.ChromGenerator = new ChromatogramGenerator();
+            ChromGenerator = new ChromatogramGenerator();
 
             processedMSPeaks = new List<MSPeakResult>();
         }
@@ -105,7 +106,7 @@ namespace DeconTools.Workflows.Backend.Core
         public override void Execute()
         {
 
-            var uimfRun = (UIMFRun)this.Run;
+            var uimfRun = (UIMFRun)Run;
 
             //for each frame
 
@@ -135,7 +136,7 @@ namespace DeconTools.Workflows.Backend.Core
                     if (peak.MSPeak.Height < 1000) break;
 
 
-                    var peakFate = "Undefined";
+                    string peakFate;
 
                     var peakResultAlreadyIncludedInChromatogram = (peak.ChromID != -1);
                     if (peakResultAlreadyIncludedInChromatogram)
@@ -144,33 +145,27 @@ namespace DeconTools.Workflows.Backend.Core
 
                         displayPeakInfoAndFate(peak, peakFate);
 
-
                         continue;
                     }
-                    else
-                    {
-                        peakFate = "CHROM";
 
-                        //bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
-                        //if (peakResultAlreadyFoundInAnMSFeature)
-                        //{
-                        //    peakFate = "MSFeature_Already";
-                        //}
-                        //else
-                        //{
-                        //    peakFate = "CHROM";
-                        //}
+                    peakFate = "CHROM";
 
-
-
-                    }
+                    //bool peakResultAlreadyFoundInAnMSFeature = findPeakWithinMSFeatureResults(run.ResultCollection.ResultList, peakResult, scanTolerance);
+                    //if (peakResultAlreadyFoundInAnMSFeature)
+                    //{
+                    //    peakFate = "MSFeature_Already";
+                    //}
+                    //else
+                    //{
+                    //    peakFate = "CHROM";
+                    //}
 
                     peaksThatGenerateAChromatogram++;
                     PeakChrom chrom = new BasicPeakChrom();
 
                     // create drift profile from raw data
-                    var driftTimeProfileMZTolerance = this.DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
-                    
+                    var driftTimeProfileMZTolerance = DriftTimeProfileExtractionPPMTolerance * peak.MSPeak.XValue / 1e6;
+
                     //TODO: Fix this: update to use UIMF library and not DeconTools
                     //uimfRun.GetDriftTimeProfile  (frame.PrimaryFrame, this.Run.MinScan, this.Run.MaxScan, peak.MSPeak.XValue, driftTimeProfileMZTolerance);
 
@@ -191,7 +186,7 @@ namespace DeconTools.Workflows.Backend.Core
                     chrom.XYData = ChromSmoother.Smooth(uimfRun.XYData);
 
                     // detect peaks in chromatogram
-                    chrom.PeakList = this.ChromPeakDetector.FindPeaks(chrom.XYData, 0, 0);
+                    chrom.PeakList = ChromPeakDetector.FindPeaks(chrom.XYData);
 
                     if (chrom.PeakDataIsNullOrEmpty)
                     {
@@ -215,7 +210,7 @@ namespace DeconTools.Workflows.Backend.Core
                         continue;
                     }
 
-                 
+
                     // find other peaks in the master peaklist that are members of the found drift profile peak
                     // tag these peaks with the source peak's ID
                     var peakWidthSigma = chromPeak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
@@ -227,12 +222,12 @@ namespace DeconTools.Workflows.Backend.Core
                     var minMZForChromFilter = peak.MSPeak.XValue - peakToleranceInMZ;
                     var maxMZForChromFilter = peak.MSPeak.XValue + peakToleranceInMZ;
 
-                    
+
                     chrom.ChromSourceData = (from n in masterPeakList
                                   where n.Scan_num >= minScanForChrom && n.Scan_num <= maxScanForChrom &&
                                       n.MSPeak.XValue >= minMZForChromFilter && n.MSPeak.XValue < maxMZForChromFilter
                                   select n).ToList();
-                    
+
                     foreach (var item in chrom.ChromSourceData)
                     {
                         item.ChromID = peak.PeakID;
@@ -265,12 +260,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             // find MS peaks within range
 
-            // find MS Features. 
+            // find MS Features.
 
-            // find MS Feature for which the source peak is a member of.  
+            // find MS Feature for which the source peak is a member of.
 
 
-            // if found, add it. 
+            // if found, add it.
             // And, for each MS peaks of the found MS Feature,  mark all peaks of the masterpeak list that correspond to the found drift time peak and m/z
 
         }
@@ -295,18 +290,15 @@ namespace DeconTools.Workflows.Backend.Core
         private void addPeakToProcessedPeakList(MSPeakResult peak)
         {
             peak.ChromID = peak.PeakID;
-            this.processedMSPeaks.Add(peak);
+            processedMSPeaks.Add(peak);
         }
 
-        private List<MSPeakResult> getAllPeaksInFrame(UIMFRun uimfRun, int numIMSScansToSum)
+        private List<MSPeakResult> getAllPeaksInFrame(Run uimfRun, int numIMSScansToSum)
         {
-            if (uimfRun.ResultCollection.MSPeakResultList != null)
-            {
-                uimfRun.ResultCollection.MSPeakResultList.Clear();
-            }
+            uimfRun.ResultCollection.MSPeakResultList?.Clear();
 
             uimfRun.ScanSetCollection.Create(uimfRun, numIMSScansToSum, 1);
-            
+
             foreach (var scan in uimfRun.ScanSetCollection.ScanSetList)
             {
                 uimfRun.CurrentScanSet = scan;

@@ -213,12 +213,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
-            parameters.TargetsToFilterOn = String.Empty;
+            parameters.TargetsToFilterOn = string.Empty;
 
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_select_unidentified_LCMSFeatures.txt";
 
-            parameters.ReferenceDataForTargets = String.Empty;
+            parameters.ReferenceDataForTargets = string.Empty;
 
             var testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -241,12 +241,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
-            parameters.TargetsToFilterOn = String.Empty;
+            parameters.TargetsToFilterOn = string.Empty;
 
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_select_unidentified_LCMSFeatures.txt";
 
-            parameters.ReferenceDataForTargets = String.Empty;
+            parameters.ReferenceDataForTargets = string.Empty;
 
             var testDataset =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -367,7 +367,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             foreach (LcmsFeatureTarget target in features.TargetList)
             {
-                if (String.IsNullOrEmpty(target.EmpiricalFormula))
+                if (string.IsNullOrEmpty(target.EmpiricalFormula))
                 {
                     if (massTagIDList.Contains(target.FeatureToMassTagID))
                     {
@@ -447,9 +447,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-            parameters.DbName = String.Empty;
-            parameters.DbServer = String.Empty;
-            parameters.DbTableName = String.Empty;
+            parameters.DbName = string.Empty;
+            parameters.DbServer = string.Empty;
+            parameters.DbTableName = string.Empty;
 
             parameters.CopyRawFileLocal = false;
 
@@ -484,9 +484,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-            parameters.DbName = String.Empty;
-            parameters.DbServer = String.Empty;
-            parameters.DbTableName = String.Empty;
+            parameters.DbName = string.Empty;
+            parameters.DbServer = string.Empty;
+            parameters.DbTableName = string.Empty;
 
             parameters.CopyRawFileLocal = false;
 
@@ -511,9 +511,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-            parameters.DbName = String.Empty;
-            parameters.DbServer = String.Empty;
-            parameters.DbTableName = String.Empty;
+            parameters.DbName = string.Empty;
+            parameters.DbServer = string.Empty;
+            parameters.DbTableName = string.Empty;
 
             parameters.CopyRawFileLocal = false;
 

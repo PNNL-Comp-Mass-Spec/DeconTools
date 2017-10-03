@@ -32,7 +32,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed. MassTag was not defined.");
+            Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed. MassTag was not defined.");
 
             var currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
@@ -138,7 +138,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         }
 
-        protected virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
+        protected new virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
         {
             var filteredList1 = (from n in peakQualityList
                                  where n.IsotopicProfileFound == true &&
