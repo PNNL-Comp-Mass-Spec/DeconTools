@@ -23,7 +23,6 @@ namespace DeconToolsAutoProcessV1
         bool _isRunMergingModeUsed;
 
         DeconToolsParameters _parameters;
-        private string _currentFile;
 
         public Form1()
         {
@@ -32,9 +31,14 @@ namespace DeconToolsAutoProcessV1
             GetSettings();
             progressBar2.Maximum = 10;
 
-            this.Text = "DeconTools AutoProcessor_" + AssemblyInfoRetriever.GetVersion(typeof(Task), false);
+            Text = "DeconTools AutoProcessor_" + AssemblyInfoRetriever.GetVersion(typeof(Task), false);
         }
 
+        public sealed override string Text
+        {
+            get => base.Text;
+            set => base.Text = value;
+        }
 
 
         private void GetSettings()
@@ -49,7 +53,7 @@ namespace DeconToolsAutoProcessV1
                 _startingFolderPath = "";
             }
 
-            this._isRunMergingModeUsed = Properties.Settings.Default.MergeRuns;
+            _isRunMergingModeUsed = Properties.Settings.Default.MergeRuns;
 
 
         }
@@ -60,7 +64,6 @@ namespace DeconToolsAutoProcessV1
             if (_inputFileList == null) return;
 
             _parameterFileName = getParameterFileName();
-            if (_parameterFileName == null) return;
         }
 
         //private Globals.MSFileType getMSFileType()
@@ -89,40 +92,39 @@ namespace DeconToolsAutoProcessV1
 
         private string getParameterFileName()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Multiselect = false;
-            ofd.Title = "Step 2:  Select Parameter File";
+            var ofd = new OpenFileDialog
+            {
+                Multiselect = false,
+                Title = "Step 2:  Select Parameter File",
+                Filter = "xml files (*.*)|*.xml"
+            };
 
-
-
-            ofd.Filter = "xml files (*.*)|*.xml";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 return ofd.FileName;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         private string[] getInputFilenames()
         {
-            var frm = new MultiFileSelectionForm(this._startingFolderPath, "*.*");
-            frm.Text = "Select files for processing...";
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.Location = this.Location;
+            var frm = new MultiFileSelectionForm(_startingFolderPath, "*.*")
+            {
+                Text = "Select files for processing...",
+                StartPosition = FormStartPosition.Manual,
+                Location = Location
+            };
+
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                this._startingFolderPath = frm.StartingFolderPath;
-                if (this._startingFolderPath != null) Properties.Settings.Default.startingFolder = this._startingFolderPath;
+                _startingFolderPath = frm.StartingFolderPath;
+                if (_startingFolderPath != null) Properties.Settings.Default.startingFolder = _startingFolderPath;
 
                 return frm.SelectedFileList.ToArray();
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -146,7 +148,7 @@ namespace DeconToolsAutoProcessV1
                 return;
             }
 
-            if (this._inputFileList == null || this._parameterFileName == null)
+            if (_inputFileList == null || _parameterFileName == null)
             {
                 MessageBox.Show("Please run the Setup Wizard first");
                 return;
@@ -180,12 +182,13 @@ namespace DeconToolsAutoProcessV1
 
 
 
-            this.txtProcessingStatus.Text = "Working...";
+            txtProcessingStatus.Text = "Working...";
 
-            _bw = new BackgroundWorker();
-
-            _bw.WorkerReportsProgress = true;
-            _bw.WorkerSupportsCancellation = true;
+            _bw = new BackgroundWorker
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = true
+            };
 
             _bw.DoWork += bw_DoWork;
             _bw.ProgressChanged += bw_ProgressChanged;
@@ -213,45 +216,45 @@ namespace DeconToolsAutoProcessV1
         {
             if (e.Cancelled)
             {
-                this.txtProcessingStatus.Text = "Cancelled";
+                txtProcessingStatus.Text = "Cancelled";
             }
             else if (e.Error != null)
             {
-                this.txtProcessingStatus.Text = "Error";
+                txtProcessingStatus.Text = "Error";
             }
             else
             {
-                this.txtProcessingStatus.Text = "COMPLETE";
-                this.progressBar1.Value = 100;
+                txtProcessingStatus.Text = "COMPLETE";
+                progressBar1.Value = 100;
             }
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.progressBar1.Value = e.ProgressPercentage;
+            progressBar1.Value = e.ProgressPercentage;
 
 
             var currentState = (ScanBasedProgressInfo)(e.UserState);
 
-            this.txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
+            txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
 
             var numIsotopicProfilesFoundInScan = currentState.CurrentRun.ResultCollection.IsosResultBin.Count;
-            this.progressBar2.Value = setProgress2Value(numIsotopicProfilesFoundInScan);
+            progressBar2.Value = setProgress2Value(numIsotopicProfilesFoundInScan);
 
 
-            this.lblNumIsotopicProfiles.Text = this.progressBar2.Maximum.ToString();
-            this.txtScanCompleted.Text = currentState.CurrentScanSet.PrimaryScanNumber.ToString();
+            lblNumIsotopicProfiles.Text = progressBar2.Maximum.ToString();
+            txtScanCompleted.Text = currentState.CurrentScanSet.PrimaryScanNumber.ToString();
 
-            if (currentState.CurrentRun.ResultCollection != null && currentState.CurrentRun.ResultCollection.ScanResultList != null)
+            if (currentState.CurrentRun.ResultCollection?.ScanResultList != null)
             {
                 try
                 {
                     var query = (int?)(from n in currentState.CurrentRun.ResultCollection.ScanResultList
-                                       select n.NumIsotopicProfiles).Sum() ?? 0;
+                                       select n.NumIsotopicProfiles).Sum();
 
 
 
-                    this.txtTotalFeatures.Text = query.ToString();
+                    txtTotalFeatures.Text = query.ToString();
 
                 }
                 catch (Exception)
@@ -262,12 +265,10 @@ namespace DeconToolsAutoProcessV1
             }
             if (currentState.CurrentRun is UIMFRun)
             {
-                this.txtFrame.Text = currentState.CurrentScanSet.PrimaryScanNumber.ToString();
+                txtFrame.Text = currentState.CurrentScanSet.PrimaryScanNumber.ToString();
 
             }
-            else
-            {
-            }
+
         }
 
         private int setProgress2Value(int p)
@@ -285,7 +286,7 @@ namespace DeconToolsAutoProcessV1
             {
 
 
-                //This mode was requested by Julia Laskin. 
+                //This mode was requested by Julia Laskin.
                 //This mode detects peaks in each dataset and merges the output
                 if (_parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower() == "run_merging_with_peak_export")
                 {
@@ -296,9 +297,8 @@ namespace DeconToolsAutoProcessV1
                 {
                     foreach (var file in _inputFileList)
                     {
-                        _currentFile = file;
                         var workflow = ScanBasedWorkflow.CreateWorkflow(file, _parameterFileName, _outputPath, bw);
-                        
+
                         workflow.Execute();
                     }
                 }
@@ -339,15 +339,12 @@ namespace DeconToolsAutoProcessV1
 
         private void Cancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnAbort_Click(object sender, EventArgs e)
         {
-            if (this._bw != null)
-            {
-                _bw.CancelAsync();
-            }
+            _bw?.CancelAsync();
 
             resetStatus();
 
@@ -355,7 +352,7 @@ namespace DeconToolsAutoProcessV1
 
         private void resetStatus()
         {
-            this.progressBar1.Value = 0;
+            progressBar1.Value = 0;
 
         }
 
@@ -367,25 +364,10 @@ namespace DeconToolsAutoProcessV1
         private void saveSettings()
         {
 
-            if (this._startingFolderPath != null) Properties.Settings.Default.startingFolder = this._startingFolderPath;
+            if (_startingFolderPath != null) Properties.Settings.Default.startingFolder = _startingFolderPath;
             Properties.Settings.Default.MergeRuns = _isRunMergingModeUsed;
 
             Properties.Settings.Default.Save();
-
-        }
-
-        private void btnShowOptionsForm_Click(object sender, EventArgs e)
-        {
-            //OptionsForm frm = new OptionsForm(this.m_projectControllerType);
-            //var frm = new OptionsForm(_isRunMergingModeUsed);
-            //frm.Location = new Point(this.Location.X+ this.btnShowOptionsForm.Location.X, this.Location.Y + this.btnShowOptionsForm.Location.Y + this.btnShowOptionsForm.Height);
-            //if (frm.ShowDialog() == DialogResult.OK)
-            //{
-            //    _isRunMergingModeUsed = frm.IsResultMergingModeUsed;
-
-            //}
-
-
 
         }
 
@@ -394,14 +376,14 @@ namespace DeconToolsAutoProcessV1
             var fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                this.txtOutputPath.Text = fbd.SelectedPath;
+                txtOutputPath.Text = fbd.SelectedPath;
             }
 
         }
 
         private void basic_dragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, false))
             {
                 e.Effect = DragDropEffects.All;
             }
@@ -455,7 +437,7 @@ namespace DeconToolsAutoProcessV1
 
         private void TrySetOutputFolder()
         {
-            if (String.IsNullOrEmpty(txtOutputPath.Text))
+            if (string.IsNullOrEmpty(txtOutputPath.Text))
             {
                 _outputPath = null;
                 return;
@@ -477,7 +459,6 @@ namespace DeconToolsAutoProcessV1
 
             _outputPath = txtOutputPath.Text;
 
-            return;
         }
 
 
