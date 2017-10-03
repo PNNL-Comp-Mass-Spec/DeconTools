@@ -6,7 +6,7 @@ namespace DeconTools.Workflows.Backend.Utilities
     public class FileUtilities
     {
 
-        public static List<string> LoadStringsFromFile(string filename, bool containsHeader=false)
+        public static List<string> LoadStringsFromFile(string filename, bool containsHeader = false)
         {
             var list = new List<string>();
 
@@ -19,6 +19,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                     {
                         //skip the header
                         reader.ReadLine();
+                        containsHeader = false;
                     }
 
                     counter++;
