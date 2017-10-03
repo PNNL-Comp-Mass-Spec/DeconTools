@@ -1,11 +1,11 @@
 // Written by Kyle Littlefield for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2006, Battelle Memorial Institute
-// E-mail: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov
+// E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov
 // Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;

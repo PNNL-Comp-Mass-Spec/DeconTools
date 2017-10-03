@@ -1,6 +1,6 @@
 ﻿// Written by Kevin Crowell, Spencer Prost and Gordon Slysz for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2012, Battelle Memorial Institute
-// E-mail: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov
+// E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov
 // Website: http://panomics.pnnl.gov/software/
 // -------------------------------------------------------------------------------
 // 

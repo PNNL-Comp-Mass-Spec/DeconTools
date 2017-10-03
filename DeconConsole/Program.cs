@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "July 5, 2017";
+        public const string PROGRAM_DATE = "October 2, 2017";
 
         static int Main(string[] args)
         {
@@ -157,7 +157,7 @@ namespace DeconConsole
             Console.WriteLine("Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)");
             Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
             Console.WriteLine("Version: " + GetAppVersion());
-            Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or samuel.payne@pnnl.gov");
+            Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or proteomics@pnnl.gov");
             Console.WriteLine("Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov");
             Console.WriteLine();
 
