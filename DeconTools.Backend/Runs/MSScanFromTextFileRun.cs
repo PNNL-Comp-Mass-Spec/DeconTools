@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Runs
 
             var foundStartOfXYData = false;
 
-            while (sr.Peek() != -1)
+            while (!sr.EndOfStream)
             {
                 var line = sr.ReadLine();
 
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.Runs
 
                 var delimiterCount = new Dictionary<char, int>();
 
-                while (sr.Peek() != -1 && counter < 100)
+                while (!sr.EndOfStream && counter < 100)
                 {
                     var line = sr.ReadLine();
                     counter++;

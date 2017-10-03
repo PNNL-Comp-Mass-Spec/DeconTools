@@ -409,7 +409,7 @@ namespace DeconTools.Backend.Workflows
                 var peaksFile =
                     new StreamReader(new FileStream(expectedPeaksFile, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
-                while (peaksFile.Peek() > -1 && rowCount < 2)
+                while (!peaksFile.EndOfStream && rowCount < 2)
                 {
                     var line = peaksFile.ReadLine();
                     if (!string.IsNullOrWhiteSpace(line))

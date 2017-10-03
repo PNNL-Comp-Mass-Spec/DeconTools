@@ -10,8 +10,6 @@ namespace DeconTools.Backend.Utilities
     public class Logger_Importer
     {
 
-
-
         public static void displayLogFile(string logtestfile)
         {
             if (!File.Exists(logtestfile))
@@ -24,11 +22,13 @@ namespace DeconTools.Backend.Utilities
 
             var sb = new StringBuilder();
 
-            while (sr.Peek()!=-1)
+            while (!sr.EndOfStream)
             {
                 var currentLine = sr.ReadLine();
+                if (string.IsNullOrWhiteSpace(currentLine))
+                    continue;
 
-                var match= Regex.Match(currentLine, @"(?<date>.+)\tProcessed scan/frame\s+(?<scan>\d+),\s+(?<percentcomplete>[0-9.]+)%\s+complete,\s+(?<features>\d+)");
+                var match = Regex.Match(currentLine, @"(?<date>.+)\tProcessed scan/frame\s+(?<scan>\d+),\s+(?<percentcomplete>[0-9.]+)%\s+complete,\s+(?<features>\d+)");
                 if (match.Success)
                 {
                     sb.Append(match.Groups["date"].Value);
@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Utilities
             Console.Write(sb.ToString());
 
             sr.Close();
-            
+
         }
     }
 }
