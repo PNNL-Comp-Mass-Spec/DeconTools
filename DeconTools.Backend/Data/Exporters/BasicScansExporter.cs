@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using DeconTools.Backend.Core;
 
@@ -8,7 +7,7 @@ namespace DeconTools.Backend.Data
 {
     public class BasicScansExporter : ScansExporter
     {
-        private string fileName;
+        private readonly string fileName;
 
         public BasicScansExporter(string fileName)
         {
@@ -18,8 +17,8 @@ namespace DeconTools.Backend.Data
 
         }
 
-        protected override string headerLine { get; set; }
-        protected override char delimiter { get; set; }
+        protected sealed override string headerLine { get; set; }
+        protected sealed override char delimiter { get; set; }
 
 
         public override void Export(ResultCollection results)

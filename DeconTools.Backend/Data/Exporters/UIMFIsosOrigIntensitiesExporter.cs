@@ -9,7 +9,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Data
 {
-    public class UIMFIsosOrigIntensitiesExporter : IsosExporter
+    public sealed class UIMFIsosOrigIntensitiesExporter : IsosExporter
     {
         private string fileName;
 

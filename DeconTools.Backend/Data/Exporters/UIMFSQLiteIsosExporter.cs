@@ -9,8 +9,9 @@ namespace DeconTools.Backend.Data
 {
     public class UIMFSQLiteIsosExporter : IsosExporter
     {
-        private string fileName;
-        private DBWriter sqliteWriter = new DBWriter();
+        private readonly string fileName;
+        private readonly DBWriter sqliteWriter = new DBWriter();
+
         public UIMFSQLiteIsosExporter(string fileName)
         {
             this.fileName = fileName;
@@ -18,7 +19,7 @@ namespace DeconTools.Backend.Data
         }
 
         protected override string headerLine { get; set; }
-        protected override char delimiter { get; set; }
+        protected sealed override char delimiter { get; set; }
 
         public override void Export(ResultCollection results)
         {

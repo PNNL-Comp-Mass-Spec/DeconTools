@@ -7,7 +7,8 @@ namespace DeconTools.Backend.Data
 {
     public class BasicIsosExporter : IsosExporter
     {
-        private string fileName;
+        private readonly string fileName;
+
         /// <param name="fileName"></param>
         public BasicIsosExporter(string fileName)
         {
@@ -18,8 +19,8 @@ namespace DeconTools.Backend.Data
             //this.headerLine = "scan_num,charge,abundance,mz,fit,average_mw,monoisotopic_mw,mostabundant_mw,fwhm,signal_noise,mono_abundance,mono_plus2_abundance,fit_basis_count";
             this.fileName = fileName;
         }
-        protected override string headerLine { get; set; }
-        protected override char delimiter { get; set; }
+        protected sealed override string headerLine { get; set; }
+        protected sealed override char delimiter { get; set; }
 
         public override void Export(DeconTools.Backend.Core.ResultCollection results)
         {

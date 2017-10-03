@@ -7,7 +7,7 @@ namespace DeconTools.Backend.Data
 {
     public class IMFIsosExporter : IsosExporter
     {
-        private string fileName;
+        private readonly string fileName;
 
         public IMFIsosExporter(string fileName)
         {
@@ -25,8 +25,8 @@ namespace DeconTools.Backend.Data
             throw new NotImplementedException();
         }
 
-        protected override string headerLine { get; set; }
-        protected override char delimiter { get; set; }
+        protected sealed override string headerLine { get; set; }
+        protected sealed override char delimiter { get; set; }
 
 
         public override void Export(DeconTools.Backend.Core.ResultCollection results)

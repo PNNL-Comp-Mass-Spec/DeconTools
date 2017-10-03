@@ -6,9 +6,9 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Data
 {
-    public class UIMFIsosExporter : IsosExporter
+    public sealed class UIMFIsosExporter : IsosExporter
     {
-        private string fileName;
+        private readonly string fileName;
 
         public UIMFIsosExporter(string fileName)
         {
