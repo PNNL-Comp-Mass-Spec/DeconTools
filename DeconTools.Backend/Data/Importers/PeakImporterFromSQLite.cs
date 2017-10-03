@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Data.Common;
-using DeconTools.Backend.Utilities;
-using System.Data.SqlClient;
-using DeconTools.Backend.DTO;
-using DeconTools.Backend.Core;
 using System.ComponentModel;
+using System.Data.Common;
+using System.IO;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.DTO;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Data
 {
     public class PeakImporterFromSQLite : IPeakImporter
     {
-        private string sqliteFilename;
-
+        private readonly string sqliteFilename;
 
         #region Constructors
         public PeakImporterFromSQLite(string sqliteFilename)
@@ -48,7 +44,11 @@ namespace DeconTools.Backend.Data
 
             using (var cnn = fact.CreateConnection())
             {
-                cnn.ConnectionString = "Data Source=" + this.sqliteFilename;
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection instance in ImportPeaks");
+
+                cnn.ConnectionString = "Data Source=" + sqliteFilename;
+
                 try
                 {
                     cnn.Open();
@@ -70,21 +70,20 @@ namespace DeconTools.Backend.Data
                     var reader = command.ExecuteReader();
 
 
-                    MSPeakResult peakresult;
-
                     var progressCounter = 0;
                     while (reader.Read())
                     {
-                        peakresult = new MSPeakResult();
+                        var peakresult = new MSPeakResult
+                        {
+                            PeakID = (int)(long)reader["peak_id"],
+                            Scan_num = (int)(long)reader["scan_num"]
+                        };
 
-                        var test = (long)reader["peak_id"];
+                        var mz = (double)reader["mz"];
+                        var intensity = (float)(double)reader["intensity"];
+                        var fwhm = (float)(double)reader["fwhm"];
 
-                        peakresult.PeakID = (int)(long)reader["peak_id"];
-                        peakresult.Scan_num = (int)(long)reader["scan_num"];
-                        peakresult.MSPeak = new MSPeak();
-                        peakresult.MSPeak.XValue = (double)reader["mz"];
-                        peakresult.MSPeak.Height = (float)(double)reader["intensity"];
-                        peakresult.MSPeak.Width = (float)(double)reader["fwhm"];
+                        peakresult.MSPeak = new MSPeak(mz, intensity, fwhm);
                         peakList.Add(peakresult);
 
                         if (backgroundWorker != null)
@@ -103,13 +102,13 @@ namespace DeconTools.Backend.Data
             }
         }
 
- 
+
 
 
         #endregion
 
         #region Private Methods
-    
+
 
         #endregion
 

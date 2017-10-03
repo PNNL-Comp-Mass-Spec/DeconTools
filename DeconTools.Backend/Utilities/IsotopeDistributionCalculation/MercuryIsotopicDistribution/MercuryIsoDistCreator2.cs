@@ -201,7 +201,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("apodizationType");
+                    throw new ArgumentOutOfRangeException(nameof(apodizationType));
             }
 
 

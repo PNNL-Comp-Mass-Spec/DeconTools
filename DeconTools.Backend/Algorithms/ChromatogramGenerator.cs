@@ -126,7 +126,7 @@ namespace DeconTools.Backend.Algorithms
                                                               " unit isn't supported");
                     }
 
-                    var lowMsPeak = new MSPeak {XValue = lowerMZ};
+                    var lowMsPeak = new MSPeak(lowerMZ);
                     var lowMsPeakResult = new MSPeakResult {MSPeak = lowMsPeak};
 
                     var binarySearchResult = msPeakResultList.BinarySearch(lowMsPeakResult, comparer);

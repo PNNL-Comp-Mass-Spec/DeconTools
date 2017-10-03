@@ -7,7 +7,6 @@ using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
-using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
@@ -30,12 +29,8 @@ namespace DeconTools.Backend.Workflows
 //#endif
         private readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private readonly BasicTFF _basicFeatureFinder = new BasicTFF();
-        private DeconToolsFitScoreCalculator _fitScoreCalculator = new DeconToolsFitScoreCalculator();
 
         private readonly DeconToolsZeroFiller _zeroFiller;
-
-        private bool _output3DBasePeakChrom = true;
-
 
         #region Constructors
 
@@ -47,7 +42,7 @@ namespace DeconTools.Backend.Workflows
             PeakBRSaturatedPeakDetector = parameters.PeakDetectorParameters.PeakToBackgroundRatio * 0.75;
 
             _msGenerator = new UIMF_MSGenerator();
-            _peakDetector = new DeconToolsPeakDetectorV2(5, 3, Globals.PeakFitType.QUADRATIC, false);
+            _peakDetector = new DeconToolsPeakDetectorV2(5, 3);
             _zeroFiller = new DeconToolsZeroFiller();
 
 //#if Disable_DeconToolsV2
@@ -190,9 +185,6 @@ namespace DeconTools.Backend.Workflows
                         var msFeatureXYData = Run.XYData.TrimData(isosResult.IsotopicProfile.MonoPeakMZ - 10,
                                                                   isosResult.IsotopicProfile.MonoPeakMZ + 10);
 
-                        var tempMZ = isosResult.IsotopicProfile.MonoPeakMZ;
-                        var currentScan = scanset.PrimaryScanNumber;
-
                         var isPossiblySaturated = isosResult.IntensityAggregate >
                                                   NewDeconToolsParameters.MiscMSProcessingParameters.SaturationThreshold;
 
@@ -206,9 +198,9 @@ namespace DeconTools.Backend.Workflows
                         // }
 
                         if (isPossiblySaturated)
-                        {                           
+                        {
                             RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, uimfRun.PeakList, out var theorIso);
-                            AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, true);
+                            AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses);
                         }
 
 
@@ -302,14 +294,7 @@ namespace DeconTools.Backend.Workflows
                                 RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out var theorIso);
                                 AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
 
-                                var currentScan = scanset.PrimaryScanNumber;
-                                var currentMZ = isosResult.IsotopicProfile.MonoPeakMZ;
-
                                 UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, scanset);
-                            }
-                            else
-                            {
-
                             }
 
                             if (isosResult.IsotopicProfile.IsSaturated)

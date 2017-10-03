@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Utilities
 
         const double FREEACID_MONOISOTOPIC_MASS = HYDROGEN_MASS + OXYGEN16_MASS;
 
-        string aminoAcidSingleLetterCodes = "ARNDCEQGHILKMFPSTWYV";
+        const string AMINO_ACID_SINGLE_LETTER_CODES = "ARNDCEQGHILKMFPSTWYV";
         private List<Tuple<char, string, double>> _aminoAcidList;
 
         #region Constructors
@@ -26,30 +26,31 @@ namespace DeconTools.Backend.Utilities
 
         private void createAminoAcidDataTable()
         {
-            _aminoAcidList = new List<Tuple<char, string, double>>();
+            _aminoAcidList = new List<Tuple<char, string, double>>
+            {
+                Tuple.Create('A', "C3H5NO", 71.037114d),
+                Tuple.Create('R', "C6H12N4O", 156.10111d),
+                Tuple.Create('N', "C4H6N2O2", 114.04293d),
+                Tuple.Create('D', "C4H5NO3", 115.02694d),
+                Tuple.Create('C', "C3H5NOS", 103.00919d),
+                Tuple.Create('E', "C5H7NO3", 129.04259d),
+                Tuple.Create('Q', "C5H8N2O2", 128.05858d),
+                Tuple.Create('G', "C2H3NO", 57.021464d),
+                Tuple.Create('H', "C6H7N3O", 137.05891d),
+                Tuple.Create('I', "C6H11NO", 113.08406d),
+                Tuple.Create('L', "C6H11NO", 113.08406d),
+                Tuple.Create('K', "C6H12N2O", 128.09496d),
+                Tuple.Create('M', "C5H9NOS", 131.04048d),
+                Tuple.Create('F', "C9H9NO", 147.06841d),
+                Tuple.Create('P', "C5H7NO", 97.052764d),
+                Tuple.Create('S', "C3H5NO2", 87.032029d),
+                Tuple.Create('T', "C4H7NO2", 101.04768d),
+                Tuple.Create('W', "C11H10N2O", 186.07931d),
+                Tuple.Create('Y', "C9H9NO2", 163.06333d),
+                Tuple.Create('V', "C5H9NO", 99.068414d)
+            };
 
-            _aminoAcidList.Add(Tuple.Create('A', "C3H5NO", 71.037114d));
-            _aminoAcidList.Add(Tuple.Create('R', "C6H12N4O", 156.10111d));
-            _aminoAcidList.Add(Tuple.Create('N', "C4H6N2O2", 114.04293d));
-            _aminoAcidList.Add(Tuple.Create('D', "C4H5NO3", 115.02694d));
-            _aminoAcidList.Add(Tuple.Create('C', "C3H5NOS", 103.00919d));
-            _aminoAcidList.Add(Tuple.Create('E', "C5H7NO3", 129.04259d));
-            _aminoAcidList.Add(Tuple.Create('Q', "C5H8N2O2", 128.05858d));
-            _aminoAcidList.Add(Tuple.Create('G', "C2H3NO", 57.021464d));
-            _aminoAcidList.Add(Tuple.Create('H', "C6H7N3O", 137.05891d));
-            _aminoAcidList.Add(Tuple.Create('I', "C6H11NO", 113.08406d));
-            _aminoAcidList.Add(Tuple.Create('L', "C6H11NO", 113.08406d));
-            _aminoAcidList.Add(Tuple.Create('K', "C6H12N2O", 128.09496d));
-            _aminoAcidList.Add(Tuple.Create('M', "C5H9NOS", 131.04048d));
-            _aminoAcidList.Add(Tuple.Create('F', "C9H9NO", 147.06841d));
-            _aminoAcidList.Add(Tuple.Create('P', "C5H7NO", 97.052764d));
-            _aminoAcidList.Add(Tuple.Create('S', "C3H5NO2", 87.032029d));
-            _aminoAcidList.Add(Tuple.Create('T', "C4H7NO2", 101.04768d));
-            _aminoAcidList.Add(Tuple.Create('W', "C11H10N2O", 186.07931d));
-            _aminoAcidList.Add(Tuple.Create('Y', "C9H9NO2", 163.06333d));
-            _aminoAcidList.Add(Tuple.Create('V', "C5H9NO", 99.068414d));
         }
-
 
         #endregion
 
@@ -142,7 +143,8 @@ namespace DeconTools.Backend.Utilities
                     throw new FormatException("There is a problem with peptide sequence " + peptideSequence +
                                               ";  it contains only one '.'. It should contain two.");
                 }
-                else if (numberDotChars == 2)
+
+                if (numberDotChars == 2)
                 {
                     var indexFirstDot = peptideSequence.IndexOf('.');
                     var indexSecondDot = peptideSequence.LastIndexOf('.');
@@ -158,7 +160,7 @@ namespace DeconTools.Backend.Utilities
 
             if (peptideSequence.Contains('*'))
             {
-                peptideSequence = peptideSequence.Replace("*", String.Empty);
+                peptideSequence = peptideSequence.Replace("*", string.Empty);
             }
             return peptideSequence;
         }
@@ -167,8 +169,7 @@ namespace DeconTools.Backend.Utilities
         private double GetMonoisotopicMassForAminoAcidResidue(char aminoAcidCode)
         {
 
-
-            if (!aminoAcidSingleLetterCodes.Contains(aminoAcidCode))
+            if (!AMINO_ACID_SINGLE_LETTER_CODES.Contains(aminoAcidCode))
             {
                 throw new ArgumentException("Amino acid code is invalid. Inputted code= " + aminoAcidCode);
             }
@@ -181,7 +182,7 @@ namespace DeconTools.Backend.Utilities
 
         public string GetEmpiricalFormulaForAminoAcidResidue(char aminoAcidCode)
         {
-            if (!aminoAcidSingleLetterCodes.Contains(aminoAcidCode))
+            if (!AMINO_ACID_SINGLE_LETTER_CODES.Contains(aminoAcidCode))
             {
                 throw new ArgumentException("Inputted amino acid code is not a proper single letter code. Inputted code = " + aminoAcidCode);
             }
@@ -190,13 +191,7 @@ namespace DeconTools.Backend.Utilities
 
             return aminoAcid.Item2;
 
-
-
-
         }
-
-
-        
 
         public int GetNumAtomsForElement(string element, string empiricalFormula)
         {
@@ -206,12 +201,8 @@ namespace DeconTools.Backend.Utilities
             {
                 return parsedFormula[element];
             }
-            else
-            {
-                return 0;
-            }
 
-
+            return 0;
         }
 
 
@@ -231,7 +222,7 @@ namespace DeconTools.Backend.Utilities
 
             foreach (var aminoAcid in peptideSequence)
             {
-                if (!aminoAcidSingleLetterCodes.Contains(aminoAcid))
+                if (!AMINO_ACID_SINGLE_LETTER_CODES.Contains(aminoAcid))
                 {
                     return false;
                 }

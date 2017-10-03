@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
@@ -20,22 +18,22 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public List<Peak> ChromPeakSelectedLabeled { get; set; }
 
 
-        public N14N15ResultObject(String datasetName, PeptideTarget mt)
+        public N14N15ResultObject(string datasetName, PeptideTarget mt)
         {
-            this.DatasetName = datasetName;
-            this.MassTag = mt;
+            DatasetName = datasetName;
+            MassTag = mt;
 
-            this.ChromListLabeled = new List<XYData>();
-            this.ChromListUnlabeled = new List<XYData>();
-            this.ChromPeakSelectedLabeled = new List<Peak>();
-            this.ChromPeakSelectedUnlabeled = new List<Peak>();
+            ChromListLabeled = new List<XYData>();
+            ChromListUnlabeled = new List<XYData>();
+            ChromPeakSelectedLabeled = new List<Peak>();
+            ChromPeakSelectedUnlabeled = new List<Peak>();
 
         }
 
 
         internal void DisplaySelectedChromPeaks(List<Peak> chromPeakList)
         {
-            
+
             foreach (var item in chromPeakList)
             {
                 if (item != null)

@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Core
 {
     public class IMSScanSetCollection : ScanSetCollection
     {
-        
 
         protected override int GetMinScan(Run run)
         {
@@ -63,11 +62,11 @@ namespace DeconTools.Backend.Core
                        upperScan++;
                    }
 
-                   var scanSet =new IMSScanSet(currentScan, scansToSum.ToArray());
+                   var scanSet = new IMSScanSet(currentScan, scansToSum.ToArray());
                    ScanSetList.Add(scanSet);
                }
 
-               
+
 
         }
 

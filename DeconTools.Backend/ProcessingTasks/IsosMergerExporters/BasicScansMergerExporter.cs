@@ -13,8 +13,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
         private int runCounter;
         private string outputFilename;
-        private StreamWriter sw;
-
+        private readonly StreamWriter sw;
         private const char DELIMITER = ',';
 
         public string OutputFilename
@@ -37,7 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 
             runCounter = 1;
 
-            sw.Write(buildHeader());
+            sw.WriteLine(buildHeader());
         }
 
         private string buildHeader()
@@ -55,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
             return string.Join(DELIMITER.ToString(), data);
         }
 
-        public override void MergeAndExport(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void MergeAndExport(ResultCollection resultList)
         {
             Check.Require(resultList != null, "Scans merger failed. ResultCollection is null");
             Check.Require(resultList.ScanResultList != null && resultList.ScanResultList.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");

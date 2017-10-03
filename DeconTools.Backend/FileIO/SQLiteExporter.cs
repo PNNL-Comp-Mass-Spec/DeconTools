@@ -45,9 +45,9 @@ namespace DeconTools.Backend.FileIO
         #region Public Methods
         public override void ExportResults(IEnumerable<T> resultList)
         {
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            Check.Assert(m_dbConnection != null, String.Format("{0} failed. No connection was made to a database", this.Name));
-            Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, String.Format("{0} failed. Connection to database is not open", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
+            Check.Assert(m_dbConnection != null, string.Format("{0} failed. No connection was made to a database", Name));
+            Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, string.Format("{0} failed. Connection to database is not open", Name));
 
 
             using (var myTransaction = m_dbConnection.BeginTransaction())
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.FileIO
             if (File.Exists(FileName)) File.Delete(FileName);
 
             DbProviderFactory fact = new SQLiteFactory();
-            this.m_dbConnection = fact.CreateConnection();
+            m_dbConnection = fact.CreateConnection();
             m_dbConnection.ConnectionString = "Data Source=" + FileName;
 
             try
@@ -110,7 +110,7 @@ namespace DeconTools.Backend.FileIO
 
             var sb = new StringBuilder();
             sb.Append("INSERT INTO ");
-            sb.Append(this.TableName);
+            sb.Append(TableName);
             sb.Append(" (");
 
             foreach (var fieldItem in FieldList)
@@ -147,12 +147,12 @@ namespace DeconTools.Backend.FileIO
 
         protected virtual string buildCreateTableSQLiteCommandString()
         {
-            Check.Assert(!string.IsNullOrEmpty(this.TableName), String.Format("SQLite TableName has not been declared within {0}.", this.Name));
-            Check.Assert(this.FieldList != null && this.FieldList.Count > 0, String.Format("SQLite Table fields have not been declared within {0}.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(TableName), string.Format("SQLite TableName has not been declared within {0}.", Name));
+            Check.Assert(FieldList != null && FieldList.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
 
             var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
-            sb.Append(this.TableName);
+            sb.Append(TableName);
             sb.Append(" (");
 
             foreach (var fieldItem in FieldList)

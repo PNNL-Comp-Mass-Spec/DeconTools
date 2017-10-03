@@ -23,8 +23,7 @@ namespace DeconTools.Backend.Data
             var result = false;
             if (bool.TryParse(inputstring, out result))
                 return result;
-            else return false;     //TODO:  need to figure out the default value
-
+            return false;     //TODO:  need to figure out the default value
         }
 
         protected short parseShortField(string inputstring)
@@ -32,7 +31,7 @@ namespace DeconTools.Backend.Data
             short result = 0;
             if (Int16.TryParse(inputstring, out result))
                 return result;
-            else return 0;
+            return 0;
         }
 
         protected double parseDoubleField(string inputstring)
@@ -41,13 +40,7 @@ namespace DeconTools.Backend.Data
             double result = 0;
             if (double.TryParse(inputstring, out result))
                 return result;
-            else
-            {
-                return double.NaN;
-
-            }
-
-             
+            return double.NaN;
         }
 
         protected float parseFloatField(string inputstring)
@@ -55,35 +48,24 @@ namespace DeconTools.Backend.Data
             float result = 0;
             if (float.TryParse(inputstring, out result))
                 return result;
-            else return float.NaN;
-
+            return float.NaN;
         }
 
 
         protected int parseIntField(string inputstring)
         {
 
-            if (String.IsNullOrEmpty(inputstring)) return -1;
+            if (string.IsNullOrEmpty(inputstring)) return -1;
 
             var result = 0;
             if (Int32.TryParse(inputstring, out result))
                 return result;
-            else
+            var secondAttempt = parseDoubleField(inputstring);
+            if (secondAttempt != double.NaN)
             {
-                var secondAttempt = parseDoubleField(inputstring);
-                if (secondAttempt != double.NaN)
-                {
-                    return Convert.ToInt32(secondAttempt);
-                }
-                else
-                {
-                    return -1;
-                }
-
+                return Convert.ToInt32(secondAttempt);
             }
-                
-                
-
+            return -1;
         }
 
         protected List<string> processLine(string inputLine)

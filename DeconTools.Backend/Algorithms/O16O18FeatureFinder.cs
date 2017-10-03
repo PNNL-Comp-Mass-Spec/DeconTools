@@ -43,13 +43,14 @@ namespace DeconTools.Backend.Algorithms
             //}
 
 
-            var foundO16O18Profile = new IsotopicProfile();
-            foundO16O18Profile.ChargeState = theorFeature.ChargeState;
+            var foundO16O18Profile = new IsotopicProfile {
+                ChargeState = theorFeature.ChargeState
+            };
 
             addIsotopePeaks(foundO16O18Profile, o16profile, 2);
             addIsotopePeaks(foundO16O18Profile, o18SingleLabelProfile, 2);
             addIsotopePeaks(foundO16O18Profile, o18DoubleLabelprofile, 100);    // add as many peaks as possible
-            
+
 
 
             lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, theorFeature);
@@ -61,11 +62,11 @@ namespace DeconTools.Backend.Algorithms
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
-            if (profileToAdd == null || profileToAdd.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
+            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
 
             for (var i = 0; i < numIsotopePeaksToAdd; i++)
             {
-                if (i < profileToAdd.Peaklist.Count - 1)   
+                if (i < profileToAdd.Peaklist.Count - 1)
                 {
                     foundO16O18Profile.Peaklist.Add(profileToAdd.Peaklist[i]);
                 }
@@ -85,13 +86,11 @@ namespace DeconTools.Backend.Algorithms
 
             var monoMZ = theorFeature.getMonoPeak().XValue;
 
-            var indexOfLastPeak = o16o18Profile.Peaklist.Count - 1;
-
             var toleranceInDa = 0.1;
 
 
-            //this will iterate over the first five expected m/z values of a theoretical profile 
-            //and loosely try to the corresponding peak within the observed profile. 
+            //this will iterate over the first five expected m/z values of a theoretical profile
+            //and loosely try to the corresponding peak within the observed profile.
             //If missing, will add one at the expected m/z.  This ensures no missing peaks within the O16O18 profile
             //so that looking up the first peak will always give you the intensity of the O16 peak (even if
             //it never existed in the real data - in this case the intensity is 0);
@@ -100,9 +99,9 @@ namespace DeconTools.Backend.Algorithms
                 var currentMZ = monoMZ + mzDistanceBetweenIsotopes * i;
 
                 var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(o16o18Profile.Peaklist, currentMZ, toleranceInDa);
-                if (peaksWithinTol.Count == 0)   // 
+                if (peaksWithinTol.Count == 0)
                 {
-                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ, 0, 0, 0));
+                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ, 0));
                 }
             }
 
@@ -111,10 +110,12 @@ namespace DeconTools.Backend.Algorithms
 
         private IsotopicProfile convertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
         {
-            var o18Iso = new IsotopicProfile();
-            o18Iso.ChargeState = theorFeature.ChargeState;
+            var o18Iso = new IsotopicProfile
+            {
+                ChargeState = theorFeature.ChargeState,
+                Peaklist = new List<MSPeak>()
+            };
 
-            o18Iso.Peaklist = new List<MSPeak>();
 
 
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;

@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Algorithms;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Backend.Algorithms.Quantifiers;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class O16O18TffTask:TFFBase
+    public sealed class O16O18TffTask : TFFBase
     {
-        O16O18FeatureFinder m_featureFinder = new O16O18FeatureFinder();
-        BasicO16O18Quantifier m_quantifier = new BasicO16O18Quantifier();
+        readonly BasicO16O18Quantifier m_quantifier = new BasicO16O18Quantifier();
 
         #region Constructors
         public O16O18TffTask(double toleranceInPPM)
         {
-            this.ToleranceInPPM = toleranceInPPM;
+            ToleranceInPPM = toleranceInPPM;
 
         }
         #endregion
@@ -27,8 +21,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #region Public Methods
         //public override void FindFeature(DeconTools.Backend.Core.ResultCollection resultColl)
         //{
-            
-            
+
+
         //    resultColl.ResultType = Globals.ResultType.O16O18_MASSTAG_RESULT;
 
         //    MassTagResultBase result = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
@@ -46,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         //    result.IsotopicProfile = m_featureFinder.FindFeature(resultColl.Run.PeakList, this.TheorFeature, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
         //    addInfoToResult(result);
 
-            
+
         //}
 
         private void addInfoToResult(TargetedResultBase result)
@@ -55,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 result.IsotopicProfile.ChargeState = result.Target.ChargeState;
                 result.IsotopicProfile.MonoIsotopicMass = (result.IsotopicProfile.GetMZ() - Globals.PROTON_MASS) * result.Target.ChargeState;
-                result.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
+                result.IntensityAggregate = result.IsotopicProfile.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks.
             }
 
             ((O16O18TargetedResultObject)result).RatioO16O18 = m_quantifier.GetAdjusted_I0_I4_YeoRatio(result.IsotopicProfile, result.Target.IsotopicProfile);
@@ -63,9 +57,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //((O16O18_TResult)result).RatioO16O18 =  m_quantifier.Get_I0_I4_ratio(result.IsotopicProfile);
         }
 
-       
 
-        
+
+
 
         #endregion
 

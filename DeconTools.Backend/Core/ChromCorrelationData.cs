@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Core
         }
         #endregion
 
-    
+
 
         #region Properties
 
@@ -30,12 +30,12 @@ namespace DeconTools.Backend.Core
 
                 if (validItems.Any())
                 {
-                    return MathUtils.GetMedian(validItems.Select(r=>r.GetValueOrDefault()).ToList());  
+                    return MathUtils.GetMedian(validItems.Select(r=>r.GetValueOrDefault()).ToList());
                 }
                 return null;
             }
         }
-        
+
         public double? RSquaredValsAverage
         {
             get
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Core
 
                 if (validItems.Any())
                 {
-                    return validItems.Average(p=>p.Value);  
+                    return validItems.Average(p=>p.Value);
                 }
                 return null;
             }
@@ -58,7 +58,7 @@ namespace DeconTools.Backend.Core
 
                 if (validItems.Count > 2)
                 {
-                    return MathUtils.GetStDev(validItems.Select(p=>p.GetValueOrDefault()).ToList()); 
+                    return MathUtils.GetStDev(validItems.Select(p=>p.GetValueOrDefault()).ToList());
                 }
                 return null;
             }
@@ -67,7 +67,7 @@ namespace DeconTools.Backend.Core
         #endregion
 
         #region Public Methods
-        
+
         public void AddCorrelationData(double correlationSlope, double correlationIntercept, double correlationRSquaredVal)
         {
             var data = new ChromCorrelationDataItem(correlationSlope,correlationIntercept,correlationRSquaredVal);

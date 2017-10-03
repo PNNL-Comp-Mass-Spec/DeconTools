@@ -2,26 +2,26 @@
 
 namespace DeconTools.Backend.Workflows
 {
-    public class PeakDetectAndExportWorkflowParameters 
+    public class PeakDetectAndExportWorkflowParameters
     {
 
         #region Constructors
         public PeakDetectAndExportWorkflowParameters()
         {
-            this.PeakBR = 2;
-            this.SigNoiseThreshold = 2;
-            this.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
-            this.IsDataThresholded = false;
+            PeakBR = 2;
+            SigNoiseThreshold = 2;
+            PeakFitType = Globals.PeakFitType.QUADRATIC;
+            IsDataThresholded = false;
 
             //and empty OutputFolder
-            this.OutputFolder = String.Empty;
+            OutputFolder = string.Empty;
 
-            this.IMSScanMax = -1;
-            this.IMSScanMin = -1;
-            this.LCScanMin = -1;
-            this.LCScanMax = -1;
+            IMSScanMax = -1;
+            IMSScanMin = -1;
+            LCScanMin = -1;
+            LCScanMax = -1;
 
-            this.Num_LC_TimePointsSummed = 1;
+            Num_LC_TimePointsSummed = 1;
             NumIMSScansSummed = -1;
 
             MS2PeakDetectorPeakBR = PeakBR;
@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Workflows
 
         public double SigNoiseThreshold { get; set; }
 
-        
+
         /// <summary>
         /// For MS2 peak detection for data in profile mode. Otherwise, this does not need to be defined.
         /// </summary>
@@ -55,7 +55,7 @@ namespace DeconTools.Backend.Workflows
         public bool MS2PeakDetectorDataIsThresholded { get; set; }
 
 
-        public DeconTools.Backend.Globals.PeakFitType PeakFitType { get; set; }
+        public Globals.PeakFitType PeakFitType { get; set; }
 
         public bool IsDataThresholded { get; set; }
 
@@ -98,7 +98,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
-      
+
 
     }
 }

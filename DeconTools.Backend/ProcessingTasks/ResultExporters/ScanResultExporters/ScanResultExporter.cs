@@ -8,6 +8,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #endregion
 
         #region Public Methods
+
         public abstract void ExportScanResults(ResultCollection resultList);
         public abstract void ExportScanResult(ScanResult scanResult);
 
@@ -17,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             if (resultList.ScanResultList == null || resultList.ScanResultList.Count == 0) return;
 
             var currentScanResultIndex = resultList.ScanResultList.Count - 1;
-            
+
             var resultNotWritten = (currentScanResultIndex != _indexOfLastScanResultWritten);
             if (resultNotWritten)
             {
@@ -27,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
 
 
-            //// check if results exceed Trigger value or is the last Scan 
+            //// check if results exceed Trigger value or is the last Scan
             //bool isLastScan;
             //if (resultList.Run is UIMFRun)
             //{
@@ -55,11 +56,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         protected virtual void CloseOutputFile()
         {
-            //do nothing here. 
+            //do nothing here.
         }
 
         #endregion
 
-    
+
     }
 }

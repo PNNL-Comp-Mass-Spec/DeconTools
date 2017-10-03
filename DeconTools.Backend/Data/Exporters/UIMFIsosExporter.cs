@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -9,6 +9,9 @@ namespace DeconTools.Backend.Data
     public sealed class UIMFIsosExporter : IsosExporter
     {
         private readonly string fileName;
+
+        protected override string headerLine { get; set; }
+        protected override char delimiter { get; set; }
 
         public UIMFIsosExporter(string fileName)
         {
@@ -39,7 +42,7 @@ namespace DeconTools.Backend.Data
 
         }
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(ResultCollection results)
         {
             StreamWriter sw;
             try
@@ -111,7 +114,7 @@ namespace DeconTools.Backend.Data
         }
 
 
-        private void writeUIMFIsosResults(StreamWriter sw, ResultCollection results)
+        private void writeUIMFIsosResults(TextWriter sw, ResultCollection results)
         {
             if (results == null) return;
 
@@ -143,8 +146,6 @@ namespace DeconTools.Backend.Data
                 sw.WriteLine(string.Join(delimiter.ToString(), data));
             }
         }
-
-
 
         protected override int getScanNumber(int scan_num)
         {

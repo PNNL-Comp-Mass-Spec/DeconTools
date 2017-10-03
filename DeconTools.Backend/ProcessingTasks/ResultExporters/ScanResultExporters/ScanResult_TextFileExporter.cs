@@ -30,6 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
             Delimiter = ',';
 
+            // ReSharper disable once VirtualMemberCallInConstructor
             var header = buildHeaderLine();
 
             using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append,
@@ -43,9 +44,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #endregion
 
         #region Properties
-        public virtual char Delimiter { get; set; }
-        #endregion
 
+        public char Delimiter { get; set; }
+
+        #endregion
 
         #region Public Methods
         #endregion
@@ -53,8 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #region Private Methods
         #endregion
 
-
-        public override void ExportScanResults(DeconTools.Backend.Core.ResultCollection resultList)
+        public override void ExportScanResults(ResultCollection resultList)
         {
             using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append,
                         FileAccess.Write, FileShare.Read)))
@@ -80,7 +81,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
                 var output = buildScansResultOutput(scanResult);
                 sw.WriteLine(output);
-                
+
             }
         }
 

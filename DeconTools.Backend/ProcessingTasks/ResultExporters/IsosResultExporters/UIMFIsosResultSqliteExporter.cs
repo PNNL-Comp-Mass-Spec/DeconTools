@@ -9,7 +9,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class UIMFIsosResultSqliteExporter : IsosResultSqliteExporter
+    public sealed class UIMFIsosResultSqliteExporter : IsosResultSqliteExporter
     {
 
 
@@ -22,14 +22,20 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public UIMFIsosResultSqliteExporter(string fileName, int triggerValue)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+
             if (File.Exists(fileName)) File.Delete(fileName);
 
-
-            this.TriggerToExport = triggerValue;
+            TriggerToExport = triggerValue;
 
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            this.cnn = fact.CreateConnection();
+            cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection object in UIMFIsosResultSqliteExporter");
+
             cnn.ConnectionString = "Data Source=" + fileName;
 
             try

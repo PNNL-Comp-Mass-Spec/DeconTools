@@ -250,8 +250,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
             var result = resultList.CurrentTargetedResult;
 
@@ -259,7 +259,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             resultList.IsosResultBin.Clear();
 
-            this.RunIsAligned = resultList.Run.MassIsAligned;
+            RunIsAligned = resultList.Run.MassIsAligned;
 
             var targetedIso = CreateTargetIso(resultList.Run);
             iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
@@ -283,7 +283,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (isoIsGood)
             {
                 //GORD: check this later
-                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);             
+                result.IntensityAggregate = sumPeaks(iso, NumPeaksUsedInAbundance, 0);             
             }
             else
             {
@@ -302,7 +302,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
            
 
 
-            switch (this.IsotopicProfileType)
+            switch (IsotopicProfileType)
             {
                 case Globals.IsotopicProfileType.UNLABELLED:
                     Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");

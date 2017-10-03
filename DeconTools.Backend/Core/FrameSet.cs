@@ -137,8 +137,7 @@ namespace DeconTools.Backend.Core
             foreach (var item in IndexValues)
             {
                 sb.Append(item);
-                sb.Append(",");
-                
+                sb.Append(",");                
             }
 
             return sb.ToString().TrimEnd(',');

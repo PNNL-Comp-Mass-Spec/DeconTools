@@ -122,7 +122,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // the peak back into our peak vector.
             var peakIndex = pk.PeakIndex;
             var mz = pk.Mz;
-            var intensity = (int) pk.Intensity;
+            var intensity = (int)pk.Intensity;
             PeakTops[peakIndex] = new ThrashV1Peak(pk);
             _peakMzToIndexDict.Add(mz, peakIndex);
             AddIntensityToPeakMapping(intensity, peakIndex);
@@ -150,7 +150,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = 0; i < PeakTops.Count; i++)
             {
                 var mz = PeakTops[i].Mz;
-                var intensity = (int) PeakTops[i].Intensity;
+                var intensity = (int)PeakTops[i].Intensity;
                 PeakTops[i].PeakIndex = i;
                 // some peaks might not need to be added to the list because they were already removed.
                 // check the intensity to see if this might be the case
@@ -212,9 +212,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </remarks>
         public bool GetNextPeak(double startMz, double stopMz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
-            peak.Mz = -1;
-            peak.Intensity = -1;
+            peak = new ThrashV1Peak(-1, -1);
 
             var found = false;
             foreach (var indexList in _peakIntensityToIndexDict)
@@ -256,13 +254,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 return;
             }
             var found = false;
-            if (_peakIntensityToIndexDict.ContainsKey((int) peak.Intensity))
+            if (_peakIntensityToIndexDict.ContainsKey((int)peak.Intensity))
             {
-                var indexList = _peakIntensityToIndexDict[(int) peak.Intensity];
+                var indexList = _peakIntensityToIndexDict[(int)peak.Intensity];
                 found = indexList.Remove(peak.PeakIndex);
                 if (indexList.Count == 0)
                 {
-                    _peakIntensityToIndexDict.Remove((int) peak.Intensity);
+                    _peakIntensityToIndexDict.Remove((int)peak.Intensity);
                 }
             }
             if (!found)
@@ -350,20 +348,22 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the peak in <see cref="PeakTops" /> whose m/z is exactly equal to mz.
+        /// Gets the peak in <see cref="PeakTops" /> whose m/z is exactly equal to mz.
         /// </summary>
         /// <param name="mz">m/z of the peak we are looking for.</param>
         /// <param name="peak">the peak whose m/z equals input parameter.</param>
         /// <returns>true is the peak was found; false otherwise</returns>
         public bool GetPeak(double mz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
+
             if (_peakMzToIndexDict.ContainsKey(mz))
             {
                 var peakIndex = _peakMzToIndexDict[mz];
                 peak = new ThrashV1Peak(PeakTops[peakIndex]);
                 return true;
             }
+
+            peak = new ThrashV1Peak(0);
             return false;
         }
 
@@ -376,8 +376,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <returns>returns true if a peak was found and false if none was found.</returns>
         public bool GetPeak(double startMz, double stopMz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
-            peak.Intensity = -10;
+            peak = new ThrashV1Peak(0)
+            {
+                Intensity = -10
+            };
+
             var found = false;
 
             foreach (var item in _peakMzToIndexDict.Where(x => x.Key >= startMz))
@@ -405,8 +408,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The returned peak can have an intensity of 0 because it was already processed and removed.</remarks>
         public bool GetPeakFromAll(double startMz, double stopMz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
-            peak.Intensity = -10;
+            peak = new ThrashV1Peak(0)
+            {
+                Intensity = -10
+            };
+
             var found = false;
 
             foreach (var item in _allPeakMzToIndexDict.Where(x => x.Key >= startMz))
@@ -436,8 +442,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The returned peak can have an intensity of 0 because it was already processed and removed.</remarks>
         public bool GetPeakFromAll(double startMz, double stopMz, out ThrashV1Peak peak, double excludeMass)
         {
-            peak = new ThrashV1Peak();
-            peak.Intensity = -10;
+            peak = new ThrashV1Peak(0)
+            {
+                Intensity = -10
+            };
+
             var found = false;
 
             foreach (var item in _allPeakMzToIndexDict.Where(x => x.Key >= startMz))
@@ -470,8 +479,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The returned peak has the intensity in the original raw data in <see cref="IntensityList" /></remarks>
         public bool GetPeakFromAllOriginalIntensity(double startMz, double stopMz, out ThrashV1Peak peak, double excludeMass)
         {
-            peak = new ThrashV1Peak();
-            peak.Intensity = -10;
+            peak = new ThrashV1Peak(0)
+            {
+                Intensity = -10
+            };
+
             var found = false;
 
             foreach (var item in _allPeakMzToIndexDict.Where(x => x.Key >= startMz))
@@ -504,8 +516,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The returned peak has the intensity in the original raw data in <see cref="IntensityList" />.</remarks>
         public bool GetPeakFromAllOriginalIntensity(double startMz, double stopMz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
-            peak.Intensity = -10;
+            peak = new ThrashV1Peak(0)
+            {
+                Intensity = -10
+            };
+
             var found = false;
 
             foreach (var item in _allPeakMzToIndexDict.Where(x => x.Key <= stopMz).Reverse())
@@ -534,7 +549,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <returns>returns true if a peak was found in the window (mz - width to mz + width) and false if not found.</returns>
         public bool GetClosestPeak(double mz, double width, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
+            peak = new ThrashV1Peak(0);
             var found = false;
 
             var startMz = mz - width;
@@ -566,7 +581,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The returned peak can have an intensity of 0 because it was already processed and removed.</remarks>
         public bool GetClosestPeakFromAll(double mz, double width, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
+            peak = new ThrashV1Peak(0);
             var found = false;
 
             var startMz = mz - width;
@@ -680,9 +695,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             // Anoop : modified from original FindPEak so as to return peaks only
             // and not shoulders, eliminates all the +ve Da DelM regions
-            peak = new ThrashV1Peak();
-            peak.Mz = -1;
-            peak.Intensity = 0;
+            peak = new ThrashV1Peak(-1);
+            
             var width = (stopMz - startMz) / 2;
             var foundExistingPeak = GetClosestPeak(startMz + width, width, out peak);
             if (foundExistingPeak)
@@ -738,8 +752,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>The function only sets the mz, intensity of the peak, not the other members (SN, FWHM etc).</remarks>
         public void FindPeak(double startMz, double stopMz, out ThrashV1Peak peak)
         {
-            peak = new ThrashV1Peak();
-            peak.Mz = -1;
+            peak = new ThrashV1Peak(-1);
+            
             var width = (stopMz - startMz) / 2;
             var foundExistingPeak = GetClosestPeak(startMz + width, width, out peak);
             if (foundExistingPeak)

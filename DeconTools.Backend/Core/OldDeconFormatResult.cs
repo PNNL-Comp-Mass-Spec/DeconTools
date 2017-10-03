@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend.Core
 {
-    
+
     //this class was created for the purpose of interacting with older Decon2LS and it's clsProcRunner.cls
     //We needed a way of getting RAPID deconvoluted results into the clsProcRunner.  So this class was created
-    //And the Rapiddeconvolutor has a method that returns an array of this class. 
+    //And the Rapiddeconvolutor has a method that returns an array of this class.
     //This class mimics the IsofitRecord class of the DeconEngine...
     public class OldDeconFormatResult
     {

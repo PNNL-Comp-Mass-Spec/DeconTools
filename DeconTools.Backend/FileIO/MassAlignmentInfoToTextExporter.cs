@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MultiAlignEngine.Alignment;
 using DeconTools.Utilities;
 using System.IO;
@@ -15,20 +13,22 @@ namespace DeconTools.Backend.FileIO
         public MassAlignmentInfoToTextExporter(string exportFilename) : base(exportFilename) { }
         #endregion
 
-      
         public void ExportAlignmentInfo(clsAlignmentFunction alignmentInfo)
         {
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
+            Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
 
             Check.Require(alignmentInfo != null, "Alignment object is empty");
+
+            if (alignmentInfo == null)
+                return;
+
             Check.Require(alignmentInfo.marrMassFncMZInput != null && alignmentInfo.marrMassFncMZInput.Length > 0, "Mass alignment data is empty.");
 
+            if (alignmentInfo.marrMassFncMZInput == null)
+                return;
 
-
-            using (var writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(FileName))
             {
-
-
 
                 var data = new List<string>();
 

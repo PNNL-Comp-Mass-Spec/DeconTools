@@ -8,34 +8,32 @@ namespace DeconTools.Backend.Data
 {
     public class IsosImporter : Importer<List<IsosResult>>
     {
-        private TextReader reader;
+        private readonly StreamReader reader;
 
-        private int minVal;
-        private int maxVal;
+        private readonly int minVal;
+        private readonly int maxVal;
 
-        private string importFilename;
-        private DeconTools.Backend.Globals.MSFileType fileType;
+        private readonly Globals.MSFileType fileType;
 
-        public IsosImporter(string importFilename, DeconTools.Backend.Globals.MSFileType filetype)
+        public IsosImporter(string importFilename, Globals.MSFileType filetype)
         {
-            this.importFilename = importFilename;
-            this.delimiter = ',';
-            this.fileType = filetype;
-            this.minVal = int.MinValue;
-            this.maxVal = int.MaxValue;
+            delimiter = ',';
+            fileType = filetype;
+            minVal = int.MinValue;
+            maxVal = int.MaxValue;
 
             try
             {
-                this.reader = new StreamReader(importFilename);
+                reader = new StreamReader(importFilename);
             }
             catch (Exception)
             {
 
-                throw new System.IO.IOException("There was a problem reading the _isos data file\n");
+                throw new IOException("There was a problem reading the _isos data file\n");
             }
         }
 
-        public IsosImporter(string importFilename, DeconTools.Backend.Globals.MSFileType filetype, int minValue, int maxValue)
+        public IsosImporter(string importFilename, Globals.MSFileType filetype, int minValue, int maxValue)
             : this(importFilename, filetype)
         {
             minVal = minValue;
@@ -50,7 +48,7 @@ namespace DeconTools.Backend.Data
             var results = new List<IsosResult>();
 
 
-            if (reader.Peek() == -1)
+            if (reader.EndOfStream)
             {
                 reader.Close();
                 throw new InvalidDataException("There is no data in the file reader object");
@@ -60,15 +58,14 @@ namespace DeconTools.Backend.Data
             var headerLine = reader.ReadLine();
             var headers = processLine(headerLine);
 
-            string line;
             var counter = 1;
-            while (reader.Peek() > -1)
+            while (!reader.EndOfStream)
             {
-                line = reader.ReadLine();
+                var line = reader.ReadLine();
                 var processedData = processLine(line);
                 if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                 {
-                    throw new InvalidDataException("Data in row #" + counter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
+                    throw new InvalidDataException("Data in row #" + counter + "is invalid - \nThe number of columns does not match that of the header line");
                 }
 
                 var result = convertTextToIsosResult(processedData, headers);
@@ -119,8 +116,7 @@ namespace DeconTools.Backend.Data
             //result.Run = getRunFromIsosFilename(this.importFilename, this.fileType); AM commenting this out since this gives me an error
 
             //get scanset number from file
-            var scan_num = 0;
-            if (this.fileType == Globals.MSFileType.PNNL_UIMF)
+            if (fileType == Globals.MSFileType.PNNL_UIMF)
             {
                 var imsScanNum = parseIntField(lookup(processedData, headers, "ims_scan_num"));
                 var frame_num = parseIntField(lookup(processedData, headers, "frame_num"));
@@ -130,10 +126,10 @@ namespace DeconTools.Backend.Data
             }
             else
             {
-                scan_num = parseIntField(lookup(processedData, headers, "scan_num"));
+                var scan_num = parseIntField(lookup(processedData, headers, "scan_num"));
                 result.ScanSet = new ScanSet(scan_num);
             }
-            
+
 
             result.IsotopicProfile.ChargeState = parseIntField(lookup(processedData, headers, "charge"));
             result.IsotopicProfile.MonoIsotopicMass = parseDoubleField(lookup(processedData, headers, "monoisotopic_mw"));
@@ -141,32 +137,36 @@ namespace DeconTools.Backend.Data
             result.IntensityAggregate = parseFloatField(lookup(processedData, headers, "abundance"));
 
             //result.IsotopicProfile.IntensityMostAbundant = parseFloatField(lookup(processedData, headers, "abundance"));
-            
+
 
 
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
             result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
             result.IsotopicProfile.OriginalIntensity = parseDoubleField(lookup(processedData, headers, "unsummed_intensity"));
-            
+
             var saturationFlagString = lookup(processedData, headers, "saturation_flag");
             result.IsotopicProfile.IsSaturated = saturationFlagString == "1";
-            
 
-            var peak = new MSPeak();
-            peak.Height = parseIntField(lookup(processedData, headers, "mono_abundance"));
-            peak.Width = parseFloatField(lookup(processedData, headers, "fwhm"));
-            peak.XValue = parseFloatField(lookup(processedData, headers, "mz"));    //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
-            peak.SignalToNoise = parseFloatField(lookup(processedData, headers, "signal_noise"));
+
+            var mz = parseFloatField(lookup(processedData, headers, "mz"));
+            var intensity = parseIntField(lookup(processedData, headers, "mono_abundance"));
+
+            var peak = new MSPeak(mz, intensity)
+            {
+                Width = parseFloatField(lookup(processedData, headers, "fwhm")),
+                SignalToNoise = parseFloatField(lookup(processedData, headers, "signal_noise"))
+            };
+            //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
 
             var flagString= lookup(processedData, headers, "flag");
 
-            if (flagString == null || flagString == string.Empty)
+            if (string.IsNullOrEmpty(flagString))
             {
             }
             else
             {
                 var flagNum = parseIntField(flagString);
-                if (flagNum == 1) result.Flags.Add(new DeconTools.Backend.Core.PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
+                if (flagNum == 1) result.Flags.Add(new PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
             }
 
 
@@ -177,7 +177,7 @@ namespace DeconTools.Backend.Data
 
         }
 
-        private Run getRunFromIsosFilename(string p, DeconTools.Backend.Globals.MSFileType filetype)
+        private Run getRunFromIsosFilename(string p, Globals.MSFileType filetype)
         {
             var runFilename = p.Replace("_isos", "");
             var replacementExtension = "";

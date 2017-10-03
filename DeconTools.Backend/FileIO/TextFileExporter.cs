@@ -14,25 +14,22 @@ namespace DeconTools.Backend.FileIO
             : this(filename, '\t')
         {
 
-
         }
 
         protected TextFileExporter(string filename, char delimiter)
         {
-            this.FileName = filename;
-            this.Delimiter = delimiter;
+            FileName = filename;
+            Delimiter = delimiter;
 
             initializeAndWriteHeader();
         }
-
-
 
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Name of the Exporter - e.g. 'ScanResultExporter'; to be used in error reporting, etc. 
+        /// Name of the Exporter - e.g. 'ScanResultExporter'; to be used in error reporting, etc.
         /// </summary>
         public string Name { get; set; }
 
@@ -54,26 +51,26 @@ namespace DeconTools.Backend.FileIO
         protected void initializeAndWriteHeader()
         {
 
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
             {
-                if (File.Exists(this.FileName))
+                if (File.Exists(FileName))
                 {
-                    File.Delete(this.FileName);
+                    File.Delete(FileName);
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + 
-                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), this.Name), Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(string.Format("{0} failed. Details: " + ex.Message +
+                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), Logger.Instance.OutputFilename);
                 throw;
             }
 
-            PossiblyCreateFolder(this.FileName);
+            PossiblyCreateFolder(FileName);
 
-            using (var writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(FileName))
             {
                 var headerLine = buildHeaderLine();
                 writer.WriteLine(headerLine);
@@ -82,11 +79,11 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-     
+
         public override void ExportResults(IEnumerable<T> resultList)
         {
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (var writer = File.AppendText(this.FileName))
+            Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
+            using (var writer = File.AppendText(FileName))
             {
                 foreach (var result in resultList)
                 {
@@ -102,8 +99,6 @@ namespace DeconTools.Backend.FileIO
 
         protected abstract string buildResultOutput(T result);
         protected abstract string buildHeaderLine();
-
-
 
 
         #endregion
@@ -122,7 +117,7 @@ namespace DeconTools.Backend.FileIO
             }
 
         }
-        
+
 
         #endregion
     }

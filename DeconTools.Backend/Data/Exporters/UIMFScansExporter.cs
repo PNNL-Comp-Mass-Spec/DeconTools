@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Data
         protected sealed override string headerLine { get; set; }
         protected sealed override char delimiter { get; set; }
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(ResultCollection results)
         {
             StreamWriter sw;
             try

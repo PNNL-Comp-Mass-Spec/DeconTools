@@ -34,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             if (currentResult.IsotopicProfile == null) return;
 
-            Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
+            Check.Require(currentResult != null, string.Format("{0} failed. CurrentResult has not been defined.", this.Name));
             if(resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0)
             {
                 currentResult.InterferenceScore = -1;

@@ -10,7 +10,7 @@ using DeconTools.Backend.Runs;
 
 namespace DeconTools.Backend.Workflows
 {
-    public class PeakDetectAndExportWorkflow 
+    public class PeakDetectAndExportWorkflow
     {
 
         DeconToolsPeakDetectorV2 _ms1PeakDetector;
@@ -18,8 +18,8 @@ namespace DeconTools.Backend.Workflows
         DeconToolsPeakDetectorV2 _ms2PeakDetectorForProfileData;
 
         PeakDetectAndExportWorkflowParameters _workflowParameters;
-        private BackgroundWorker backgroundWorker;
-        private PeakProgressInfo peakProgressInfo;
+        private readonly BackgroundWorker backgroundWorker;
+        private readonly PeakProgressInfo peakProgressInfo;
 
         PeakListTextExporter peakExporter;
 
@@ -33,10 +33,10 @@ namespace DeconTools.Backend.Workflows
 
         public PeakDetectAndExportWorkflow(Run run, PeakDetectAndExportWorkflowParameters parameters)
         {
-            this.WorkflowParameters = parameters;
-            this.Run = run;
+            WorkflowParameters = parameters;
+            Run = run;
 
-            if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+            if (Run.MSFileType == Globals.MSFileType.PNNL_UIMF)
             {
                 throw new NotSupportedException("PeakDetectAndExportWorkflow does not currently support UIMF files. NOTE to developer: need to add code for defining LC scans and IMS scans to iterate over.");
 
@@ -45,12 +45,12 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        
+
 
         public PeakDetectAndExportWorkflow(Run run, PeakDetectAndExportWorkflowParameters parameters, BackgroundWorker bw)
             : this(run, parameters)
         {
-            this.backgroundWorker = bw;
+            backgroundWorker = bw;
             peakProgressInfo = new PeakProgressInfo();
         }
 
@@ -66,18 +66,21 @@ namespace DeconTools.Backend.Workflows
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
 
-            _ms1PeakDetector = new DeconToolsPeakDetectorV2(this._workflowParameters.PeakBR, this._workflowParameters.SigNoiseThreshold,
-                this._workflowParameters.PeakFitType, this._workflowParameters.IsDataThresholded);
+            _ms1PeakDetector = new DeconToolsPeakDetectorV2(_workflowParameters.PeakBR, _workflowParameters.SigNoiseThreshold,
+                _workflowParameters.PeakFitType, _workflowParameters.IsDataThresholded);
 
 
             _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(_workflowParameters.MS2PeakDetectorPeakBR,
                                                                           _workflowParameters.MS2PeakDetectorSigNoiseThreshold,
                                                                           _workflowParameters.PeakFitType,
                                                                           _workflowParameters.MS2PeakDetectorDataIsThresholded);
-            
 
-            _ms2PeakDetectorForCentroidedData = new DeconToolsPeakDetectorV2(0, 0, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-            _ms2PeakDetectorForCentroidedData.RawDataType=DeconTools.Backend.Globals.RawDataType.Centroided;
+
+            _ms2PeakDetectorForCentroidedData =
+                new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true)
+                {
+                    RawDataType = Globals.RawDataType.Centroided
+                };
 
             _ms2PeakDetectorForProfileData.PeaksAreStored = true;
             _ms2PeakDetectorForCentroidedData.PeaksAreStored = true;
@@ -91,7 +94,7 @@ namespace DeconTools.Backend.Workflows
 
             InitializeWorkflow();
 
-            if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+            if (Run.MSFileType == Globals.MSFileType.PNNL_UIMF)
             {
                 IMSScanSetCollection = CreateIMSScanSetCollection();
             }
@@ -112,27 +115,25 @@ namespace DeconTools.Backend.Workflows
             {
 
 
-                if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+                if (Run.MSFileType == Globals.MSFileType.PNNL_UIMF && Run is UIMFRun uimfRun)
                 {
-                    var uimfrun = Run as UIMFRun;
-
                     var numTotalFrames = LcScanSetCollection.ScanSetList.Count;
                     var frameCounter = 0;
 
                     foreach (var frameSet in LcScanSetCollection.ScanSetList)
                     {
                         frameCounter++;
-                        uimfrun.CurrentScanSet = frameSet;
-                        uimfrun.ResultCollection.MSPeakResultList.Clear();
+                        uimfRun.CurrentScanSet = frameSet;
+                        uimfRun.ResultCollection.MSPeakResultList.Clear();
 
                         foreach (var scanSet in IMSScanSetCollection.ScanSetList)
                         {
-                            uimfrun.CurrentIMSScanSet = (IMSScanSet)scanSet;
-                            MSGenerator.Execute(uimfrun.ResultCollection);
-                            this._ms1PeakDetector.Execute(uimfrun.ResultCollection);
+                            uimfRun.CurrentIMSScanSet = (IMSScanSet)scanSet;
+                            MSGenerator.Execute(uimfRun.ResultCollection);
+                            _ms1PeakDetector.Execute(uimfRun.ResultCollection);
 
                         }
-                        peakExporter.WriteOutPeaks(sw, uimfrun.ResultCollection.MSPeakResultList);
+                        peakExporter.WriteOutPeaks(sw, uimfRun.ResultCollection.MSPeakResultList);
 
                         if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
                         {
@@ -156,7 +157,7 @@ namespace DeconTools.Backend.Workflows
                         MSGenerator.Execute(Run.ResultCollection);
                         if (Run.GetMSLevel(scan.PrimaryScanNumber) == 1)
                         {
-                            this._ms1PeakDetector.Execute(Run.ResultCollection);
+                            _ms1PeakDetector.Execute(Run.ResultCollection);
                         }
                         else
                         {
@@ -267,12 +268,12 @@ namespace DeconTools.Backend.Workflows
                 int minLCScan;
                 int maxLCScan;
 
-                if (this._workflowParameters.LCScanMax == -1 || this._workflowParameters.LCScanMin == -1)
+                if (_workflowParameters.LCScanMax == -1 || _workflowParameters.LCScanMin == -1)
                 {
-                    if (Run is UIMFRun)
+                    if (Run is UIMFRun thisUimfRun)
                     {
-                        minLCScan = ((UIMFRun)Run).MinLCScan;
-                        maxLCScan = ((UIMFRun)Run).MaxLCScan;
+                        minLCScan = thisUimfRun.MinLCScan;
+                        maxLCScan = thisUimfRun.MaxLCScan;
                     }
                     else
                     {
@@ -285,21 +286,20 @@ namespace DeconTools.Backend.Workflows
                 }
                 else
                 {
-                    minLCScan = this._workflowParameters.LCScanMin;
-                    maxLCScan = this._workflowParameters.LCScanMax;
+                    minLCScan = _workflowParameters.LCScanMin;
+                    maxLCScan = _workflowParameters.LCScanMax;
                 }
 
-                if (Run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
+                if (Run.MSFileType == Globals.MSFileType.PNNL_UIMF && Run is UIMFRun uimfRun)
                 {
-                    var uimfRun = Run as UIMFRun;
 
-                    uimfRun.ScanSetCollection .Create(uimfRun, minLCScan, maxLCScan,
+                    uimfRun.ScanSetCollection.Create(uimfRun, minLCScan, maxLCScan,
                                                                        _workflowParameters.Num_LC_TimePointsSummed, 1,
                                                                        _workflowParameters.ProcessMSMS);
 
 
-                    var sumAllIMSScans = (_workflowParameters.NumIMSScansSummed == -1 ||
-                                        _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan);
+                    var sumAllIMSScans = _workflowParameters.NumIMSScansSummed == -1 ||
+                                         _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan;
 
                     if (sumAllIMSScans)
                     {
@@ -311,7 +311,7 @@ namespace DeconTools.Backend.Workflows
                     }
                     else
                     {
-                        uimfRun.IMSScanSetCollection .Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
+                        uimfRun.IMSScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
                                                                          _workflowParameters.NumIMSScansSummed, 1);
                     }
 
@@ -320,8 +320,8 @@ namespace DeconTools.Backend.Workflows
                 }
                 else
                 {
-                    Run.ScanSetCollection .Create(Run, minLCScan, maxLCScan,
-                   this._workflowParameters.Num_LC_TimePointsSummed, 1, this._workflowParameters.ProcessMSMS);
+                    Run.ScanSetCollection.Create(Run, minLCScan, maxLCScan,
+                   _workflowParameters.Num_LC_TimePointsSummed, 1, _workflowParameters.ProcessMSMS);
 
                 }
 
@@ -330,20 +330,14 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        public  PeakDetectAndExportWorkflowParameters WorkflowParameters
+        public PeakDetectAndExportWorkflowParameters WorkflowParameters
         {
-            get
-            {
-                return _workflowParameters;
-            }
-            set
-            {
-                _workflowParameters = value;
-            }
+            get => _workflowParameters;
+            set => _workflowParameters = value;
         }
 
 
-        
+
 
     }
 }

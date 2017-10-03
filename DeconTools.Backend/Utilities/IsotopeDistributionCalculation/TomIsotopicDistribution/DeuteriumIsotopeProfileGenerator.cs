@@ -114,24 +114,24 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             {
                 var peakH = hydrogenTheoreticalProfile.Peaklist[i];
                 MSPeak peakD;
-                if(i==0)//initial peak where there is no D contribution
+                if (i == 0) //initial peak where there is no D contribution
                 {
-                    peakD = new MSPeak();
+                    peakD = new MSPeak(0);
                 }
                 else
                 {
-                    peakD = deuteriumTheoreticalProfile.Peaklist[i-1];
+                    peakD = deuteriumTheoreticalProfile.Peaklist[i - 1];
                 }
 
                 var contributionH = peakH.Height * HLabellingAmountMix;
                 var contributionD = (1 - labelingAmountfraction) * peakD.Height * DLabellingAmountMix + labelingAmountfraction * peakD.Height * DLabellingAmountMix;
 
                 peakH.Height = contributionH + contributionD;
-                
+
                 //peakH.Height = peakH.Height + (1-Convert.ToSingle(fractionLabeling)) * peakD.Height +Convert.ToSingle(fractionLabeling) * peakD.Height;
 
                 //find true hightes peak in combined distribusion
-                if(peakH.Height>maxHeightForNormalization)
+                if (peakH.Height > maxHeightForNormalization)
                 {
                     maxHeightForNormalization = peakH.Height;
                 }

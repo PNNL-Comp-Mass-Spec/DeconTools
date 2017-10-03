@@ -9,7 +9,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public abstract class IsosResultTextFileExporter : IsosResultExporter
     {
-       
 
         #region Properties
         public virtual char Delimiter { get; set; }
@@ -18,26 +17,24 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public override int TriggerToExport {get;set;}
 
-       
-
         #endregion
 
         #region Public Methods
         public override void ExportIsosResults(List<IsosResult> isosResultList)
         {
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (var writer = File.AppendText(this.FileName))
+            Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
+            using (var writer = File.AppendText(FileName))
             {
                 foreach (var result in isosResultList)
                 {
                     var isosResultOutput = buildIsosResultOutput(result);
-                    
+
                     if (!string.IsNullOrEmpty(isosResultOutput))
                     {
-                        writer.WriteLine(isosResultOutput);   
+                        writer.WriteLine(isosResultOutput);
                     }
 
-                    
+
                 }
 
                 writer.Flush();
@@ -48,28 +45,28 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         protected virtual void initializeAndWriteHeader()
         {
 
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
             {
-                if (File.Exists(this.FileName))
+                if (File.Exists(FileName))
                 {
-                    File.Delete(this.FileName);
+                    File.Delete(FileName);
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + 
-                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), this.Name), Logger.Instance.OutputFilename);
-                throw ex;
+                Logger.Instance.AddEntry(string.Format("{0} failed. Details: " + ex.Message +
+                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), Logger.Instance.OutputFilename);
+                throw;
             }
 
 
-            using (var writer = File.AppendText(this.FileName))
+            using (var writer = File.AppendText(FileName))
             {
                 var headerLine = buildHeaderLine();
-                writer.Write(headerLine);
+                writer.WriteLine(headerLine);
                 writer.Flush();
                 writer.Close();
             }

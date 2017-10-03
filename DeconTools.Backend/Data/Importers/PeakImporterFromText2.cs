@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using DeconTools.Utilities;
-using DeconTools.Backend.DTO;
-using DeconTools.Backend.Core;
-
-namespace DeconTools.Backend.Data.Importers
+﻿namespace DeconTools.Backend.Data.Importers
 {
     //this will replace PeakImporterFromText
     //public class PeakImporterFromText2 : PNNLOmics.Utilities.Importers.ImporterBase<List<DeconTools.Backend.DTO.MSPeakResult>>
@@ -18,7 +9,7 @@ namespace DeconTools.Backend.Data.Importers
     //    public PeakImporterFromText2(string sourceFileName)
     //    {
     //        bool fileExists = File.Exists(sourceFileName);
-    //        Check.Require(fileExists, String.Format("{0} failed. File does not exist.", this.Name));
+    //        Check.Require(fileExists, string.Format("{0} failed. File does not exist.", this.Name));
 
 
     //        this.FileName = sourceFileName;
@@ -33,9 +24,9 @@ namespace DeconTools.Backend.Data.Importers
 
     //        using (StreamReader sr = new StreamReader(this.FileName))
     //        {
-    //            if (sr.Peek() == -1)
+    //            if (sr.EndOfStream)
     //            {
-    //                throw new IOException(String.Format("{0} failed. File contains no data", this.Name));
+    //                throw new IOException(string.Format("{0} failed. File contains no data", this.Name));
     //            }
 
     //            string headerline = sr.ReadLine();
@@ -49,10 +40,10 @@ namespace DeconTools.Backend.Data.Importers
     //            }
 
     //            string line;
-    //            int lineCounter = 1;   //used for tracking which line is being processed. 
+    //            int lineCounter = 1;   //used for tracking which line is being processed.
 
     //            //read and process each line of the file
-    //            while (sr.Peek() > -1)
+    //            while (!sr.EndOfStream)
     //            {
     //                line = sr.ReadLine();
     //                List<string> processedData = ProcessLine(line);
@@ -66,7 +57,7 @@ namespace DeconTools.Backend.Data.Importers
     //                MSPeakResult peakresult = convertTextToPeakData(processedData);
     //                peakList.Add(peakresult);
 
-    //                //increase counter that keeps track of what line we are on... for use in error reporting. 
+    //                //increase counter that keeps track of what line we are on... for use in error reporting.
     //                lineCounter++;
 
     //            }
@@ -81,9 +72,9 @@ namespace DeconTools.Backend.Data.Importers
     //    {
     //        MSPeakResult peakResult = new MSPeakResult();
 
-    //        MSPeak msPeak = new MSPeak();
-    //        msPeak.XValue = ParseDoubleField(LookupData(processedData, "mz"));
-            
+    //        var mz = ParseDoubleField(LookupData(processedData, "mz"));
+    //        MSPeak msPeak = new MSPeak(mz);
+
 
     //    }
 

@@ -15,10 +15,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private int[] m_msLevelsToExport;
         private int m_triggerValue;
 
-       
+
         #region Constructors
         public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
-            : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1  
+            : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1
         {
         }
 
@@ -26,10 +26,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         public PeakListTextExporter(Globals.MSFileType fileType, int triggerValue, string outputFileName)
         {
 
-            this.FileName = outputFileName;
-            this.TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
-            this.m_delimiter = '\t';
-            this.m_FileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
+            FileName = outputFileName;
+            TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
+            m_delimiter = '\t';
+            m_FileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
 
 
             bool fileExists;
@@ -52,9 +52,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
                 catch (Exception ex)
                 {
-                Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
- 
+                    Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                    throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
+
                 }
             }
 
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         /// <param name="peakList">Peak list to write</param>
         public override void WriteOutPeaks(List<MSPeakResult> peakList)
         {
-            using (var sw = new StreamWriter(new FileStream(this.FileName, FileMode.Append, FileAccess.Write, FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(FileName, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
                 WriteOutPeaks(sw, peakList);
                 sw.Close();
@@ -105,22 +105,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         /// <param name="peakList">Peak list to write</param>
         public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
         {
-            
+
             foreach (var peak in peakList)
-            {                    
+            {
                 var lineOfPeakData = buildPeakString(peak);
-                sw.Write(lineOfPeakData);
+                sw.WriteLine(lineOfPeakData);
             }
             sw.Flush();
-            
+
         }
 
-        public override void Cleanup()
-        {
-            base.Cleanup();
-        }
-
-    
         # endregion
 
         #region Private Methods
@@ -168,28 +162,28 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         protected void initializeAndWriteHeader()
         {
 
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), String.Format("{0} failed. Export file's FileName wasn't declared.", this.Name));
+            Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
             {
-                if (File.Exists(this.FileName))
+                if (File.Exists(FileName))
                 {
-                    File.Delete(this.FileName);
+                    File.Delete(FileName);
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry(String.Format("{0} failed. Details: " + ex.Message + 
-                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), this.Name), Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(string.Format("{0} failed. Details: " + ex.Message +
+                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), Logger.Instance.OutputFilename);
                 throw;
             }
 
 
-            using (var writer = new StreamWriter(new FileStream(this.FileName, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            using (var writer = new StreamWriter(new FileStream(FileName, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
                 var headerLine = buildHeaderLine();
-                writer.Write(headerLine);
+                writer.WriteLine(headerLine);
                 writer.Flush();
                 writer.Close();
             }
@@ -197,6 +191,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         #endregion
 
-  
+
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities.SqliteUtils;
@@ -11,7 +9,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class BasicIsosResultSqliteExporter : IsosResultSqliteExporter
+    public sealed class BasicIsosResultSqliteExporter : IsosResultSqliteExporter
     {
         #region Constructors
         public BasicIsosResultSqliteExporter(string fileName)
@@ -24,12 +22,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         {
             if (File.Exists(fileName)) File.Delete(fileName);
 
-            
-            this.TriggerToExport = triggerValue;
-
+            TriggerToExport = triggerValue;
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            this.cnn = fact.CreateConnection();
+            cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicIsosResultSqliteExporter constructor");
+
             cnn.ConnectionString = "Data Source=" + fileName;
 
             try
@@ -46,6 +46,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         }
 
+        public sealed override int TriggerToExport
+        {
+            get => base.TriggerToExport;
+            set => base.TriggerToExport = value;
+        }
+
         #endregion
 
         #region Properties
@@ -56,6 +62,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Private Methods
         #endregion
+
         protected override void buildTables()
         {
             Table isosResultTable = new BasicIsosResult_SqliteTable("T_MSFeatures");

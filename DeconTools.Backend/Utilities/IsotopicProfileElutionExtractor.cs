@@ -28,15 +28,8 @@ namespace DeconTools.Backend.Utilities
         private float[,] _intensities2D;
         public float[,] Intensities2D
         {
-            get
-            {
-                if (_intensities2D == null)
-                {
-                    _intensities2D = GetIntensitiesAs2DArray();
-                }
-                return _intensities2D;
-            }
-            set { _intensities2D = value; }
+            get => _intensities2D ?? (_intensities2D = GetIntensitiesAs2DArray());
+            set => _intensities2D = value;
         }
 
         #endregion
@@ -78,7 +71,7 @@ namespace DeconTools.Backend.Utilities
 
             scans = scanSetCollection.ScanSetList.Select(p => p.PrimaryScanNumber).ToArray();
 
-            //gather relevant peaks. 
+            //gather relevant peaks.
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
             minScan = scans.First();
@@ -199,7 +192,7 @@ namespace DeconTools.Backend.Utilities
                             }
                             else
                             {
-                                sb.Append(0); //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value. 
+                                sb.Append(0); //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value.
                             }
 
 
@@ -207,8 +200,7 @@ namespace DeconTools.Backend.Utilities
 
                         if (j != mzBinLength - 1) // if not the last value, add delimiter
                         {
-                            sb.Append(delimiter);
-                        }
+                                                    }
                     }
 
                     writer.WriteLine(sb.ToString());
@@ -261,7 +253,7 @@ namespace DeconTools.Backend.Utilities
                         }
                         else
                         {
-                            sb.Append(0);    //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value. 
+                            sb.Append(0);    //value is infinity. This happens with a log of '0'.  So will output 0, the lowest log value.
                         }
 
 
@@ -271,8 +263,7 @@ namespace DeconTools.Backend.Utilities
 
                     if (j != mzBinLength - 1)    // if not the last value, add delimiter
                     {
-                        sb.Append(delimiter);
-                    }
+                                            }
 
                 }
 
@@ -289,7 +280,7 @@ namespace DeconTools.Backend.Utilities
         #endregion
 
 
-        private int getIndexOfClosestScanValue(List<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
+        private int getIndexOfClosestScanValue(IReadOnlyList<MSPeakResult> peakList, int targetScan, int leftIndex, int rightIndex, int scanTolerance)
         {
             if (leftIndex < rightIndex)
             {
@@ -299,23 +290,19 @@ namespace DeconTools.Backend.Utilities
                 {
                     return middle;
                 }
-                else if (targetScan < peakList[middle].Scan_num)
+                if (targetScan < peakList[middle].Scan_num)
                 {
                     return getIndexOfClosestScanValue(peakList, targetScan, leftIndex, middle - 1, scanTolerance);
                 }
-                else
-                {
-                    return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
-                }
+
+                return getIndexOfClosestScanValue(peakList, targetScan, middle + 1, rightIndex, scanTolerance);
             }
-            else if (leftIndex == rightIndex)
+
+            if (leftIndex == rightIndex)
             {
-
-                {
-                    return leftIndex;
-
-                }
+                return leftIndex;
             }
+
             return leftIndex;    // if fails to find...  will return the inputted left-most scan
         }
 

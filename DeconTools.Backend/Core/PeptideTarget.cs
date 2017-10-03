@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
 
 
 namespace DeconTools.Backend.Core
@@ -9,7 +9,6 @@ namespace DeconTools.Backend.Core
     {
         #region Constructors
         public PeptideTarget()
-            : base()
         {
 
         }
@@ -40,8 +39,8 @@ namespace DeconTools.Backend.Core
         public string GeneReference { get; set; }
 
         /// <summary>
-        /// Number of multiple proteins matching peptide. '0' means it is a unique peptide matching only one protein. 
-        /// This is awkward, but designed to match how this is done in the DMS database. 
+        /// Number of multiple proteins matching peptide. '0' means it is a unique peptide matching only one protein.
+        /// This is awkward, but designed to match how this is done in the DMS database.
         /// </summary>
         public int MultipleProteinCount { get; set; }
 
@@ -55,7 +54,6 @@ namespace DeconTools.Backend.Core
         }
 
 
-
         public void CalculateMassesForIsotopicProfile(int chargeState)
         {
             if (IsotopicProfile == null || IsotopicProfile.Peaklist == null) return;
@@ -67,8 +65,6 @@ namespace DeconTools.Backend.Core
             }
 
         }
-
-
 
         public override string ToString()
         {

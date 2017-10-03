@@ -8,7 +8,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public class UIMFScanResult_SqliteExporter:ScanResult_SqliteExporter
+    public sealed class UIMFScanResult_SqliteExporter : ScanResult_SqliteExporter
     {
         #region Constructors
         public UIMFScanResult_SqliteExporter(string fileName)
@@ -16,7 +16,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             if (File.Exists(fileName)) File.Delete(fileName);
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            this.cnn = fact.CreateConnection();
+            cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection instance in UIMFScanResult_SqliteExporter constructor");
+
             cnn.ConnectionString = "Data Source=" + fileName;
 
             try
@@ -82,21 +86,20 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(framePressureUnsmoothed);
                     mycommand.Parameters.Add(framePressureSmoothed);
 
-
-                    for (var n = 0; n < rc.ScanResultList.Count; n++)
+                    foreach (var scanResult in rc.ScanResultList)
                     {
-                        var r = (UimfScanResult)rc.ScanResultList[n];
+                        var uimfResult = (UimfScanResult)scanResult;
 
-                        frameNumParam.Value = r.LCScanNum;
-                        frameTimeParam.Value = r.ScanTime;
-                        typeParam.Value = r.SpectrumType;
-                        bpiParam.Value = r.BasePeak.Height;
-                        bpiMZParam.Value = r.BasePeak.XValue;
-                        ticParam.Value = r.TICValue;
-                        num_peaksParam.Value = r.NumPeaks;
-                        num_deisotopedParam.Value = r.NumIsotopicProfiles;
-                        framePressureUnsmoothed.Value = r.FramePressureUnsmoothed;
-                        framePressureSmoothed.Value = r.FramePressureSmoothed;
+                        frameNumParam.Value = uimfResult.LCScanNum;
+                        frameTimeParam.Value = uimfResult.ScanTime;
+                        typeParam.Value = uimfResult.SpectrumType;
+                        bpiParam.Value = uimfResult.BasePeak.Height;
+                        bpiMZParam.Value = uimfResult.BasePeak.XValue;
+                        ticParam.Value = uimfResult.TICValue;
+                        num_peaksParam.Value = uimfResult.NumPeaks;
+                        num_deisotopedParam.Value = uimfResult.NumIsotopicProfiles;
+                        framePressureUnsmoothed.Value = uimfResult.FramePressureUnsmoothed;
+                        framePressureSmoothed.Value = uimfResult.FramePressureSmoothed;
 
                         mycommand.ExecuteNonQuery();
                     }

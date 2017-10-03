@@ -31,16 +31,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             MinRelIntensityForPeakInclusion = parameters.MinimumRelIntensityForForPeakInclusion;
 
 
-            this.NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;
-            this.ToleranceInPPM = parameters.ToleranceInPPM;
+            NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;
+            ToleranceInPPM = parameters.ToleranceInPPM;
 
-            this.NumPeaksUsedInAbundance = parameters.NumPeaksUsedInAbundance;
-            this.IsotopicProfileType = parameters.IsotopicProfileType;
-
-
+            NumPeaksUsedInAbundance = parameters.NumPeaksUsedInAbundance;
+            IsotopicProfileType = parameters.IsotopicProfileType;
 
 
-            this.MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
+
+
+            MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
                  _peakDetectorPeakFitType, _peakDetectorIsDataThresholded);
 
             //this.MSPeakDetector = new DeconToolsPeakDetectorV2();
@@ -74,11 +74,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Public Methods
-        public override void Execute(Core.ResultCollection resultList)
+        public override void Execute(ResultCollection resultList)
         {
 
-            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
@@ -99,7 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (isoIsGood)
             {
                 //GORD: check here if there is an error in IQ intensities
-                result.IntensityAggregate = sumPeaks(iso, this.NumPeaksUsedInAbundance, 0);
+                result.IntensityAggregate = sumPeaks(iso, NumPeaksUsedInAbundance, 0);
             }
             else
             {
@@ -162,8 +162,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile iso = null;
 
-            this.MSPeakDetector.MinX = theorIso.MonoPeakMZ - 10;
-            this.MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
+            MSPeakDetector.MinX = theorIso.MonoPeakMZ - 10;
+            MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
 
 
             //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
@@ -171,7 +171,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             
             for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
-                this.MSPeakDetector.PeakToBackgroundRatio = d;
+                MSPeakDetector.PeakToBackgroundRatio = d;
 
                 peakList=  MSPeakDetector.FindPeaks(massSpecXyData.Xvalues, massSpecXyData.Yvalues);
                 iso = FindMSFeature(peakList, theorIso);
@@ -220,7 +220,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             //TODO:   the IsotopicProfileType is wrong...
 
-            switch (this.IsotopicProfileType)
+            switch (IsotopicProfileType)
             {
                 case Globals.IsotopicProfileType.UNLABELLED:
                     result.IsotopicProfile = iso;

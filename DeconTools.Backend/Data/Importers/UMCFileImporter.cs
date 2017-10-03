@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
 using System.IO;
+using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Data
 {
@@ -59,7 +57,7 @@ namespace DeconTools.Backend.Data
 
             using (var sr = reader)
             {
-                if (sr.Peek() == -1)
+                if (sr.EndOfStream)
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in the UMC data object");
@@ -75,15 +73,14 @@ namespace DeconTools.Backend.Data
                 }
 
 
-                string line;
                 var counter = 1;
-                while (sr.Peek() > -1)
+                while (!sr.EndOfStream)
                 {
-                    line = sr.ReadLine();
+                    var line = sr.ReadLine();
                     var processedData = processLine(line);
                     if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                     {
-                        throw new InvalidDataException("Data in UMC row #" + counter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("Data in UMC row #" + counter + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
                     var row = convertTextToUMCData(processedData, headers);

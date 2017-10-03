@@ -16,10 +16,12 @@ namespace DeconTools.Backend.Utilities
 
         public static bool UpdateUIMFFileWithTOFCorrectionTime(string filePath, float tofCorrectionTime)
         {
-
-            DbConnection cnn;
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            cnn = fact.CreateConnection();
+            var cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection object in UpdateUIMFFileWithTOFCorrectionTime");
+
             cnn.ConnectionString = "Data Source=" + filePath;
 
             try
@@ -76,10 +78,12 @@ namespace DeconTools.Backend.Utilities
 
         public static bool UpdateUIMFFileWithCalibrationConstants(string filePath, double calSlope, double calIntercept, double a2, double b2, double c2, double d2, double e2, double f2)
         {
-
-            DbConnection cnn;
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            cnn = fact.CreateConnection();
+            var cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection object in UpdateUIMFFileWithCalibrationConstants");
+
             cnn.ConnectionString = "Data Source=" + filePath;
 
             try

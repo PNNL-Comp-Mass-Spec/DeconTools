@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MultiAlignEngine.Alignment;
-using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 using System.IO;
 
@@ -12,7 +9,7 @@ namespace DeconTools.Backend.FileIO
     public class NETAlignmentInfoToTextExporter : TextFileExporter<KeyValuePair<int, float>>
     {
 
-        
+
         #region Constructors
         public NETAlignmentInfoToTextExporter(string exportFilename) : base(exportFilename) { }
 
@@ -23,30 +20,16 @@ namespace DeconTools.Backend.FileIO
             throw new NotImplementedException("Note to developer. Use the alternate Export.");
         }
 
-
         public void ExportAlignmentInfo(clsAlignmentFunction alignmentInfo)
         {
-            Check.Assert(!string.IsNullOrEmpty(this.FileName), this.Name + " failed. Illegal filename.");
-            using (var writer = File.AppendText(this.FileName))
+            Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
+            using (var writer = File.AppendText(FileName))
             {
-
-
-
-                //StringBuilder sb = new StringBuilder();
 
                 for (var i = 0; i < alignmentInfo.marrNETFncTimeInput.Length; i++)
                 {
 
-                    writer.WriteLine(alignmentInfo.marrNETFncTimeInput[i] + "\t" + alignmentInfo.marrNETFncNETOutput[i]);
-
-                    //    sb = new StringBuilder();
-                    //    sb.Append(alignmentInfo.marrNETFncTimeInput[i]);
-                    //    sb.Append(Delimiter);
-                    //    sb.Append(alignmentInfo.marrNETFncNETOutput[i]);
-
-                    //    writer.WriteLine(sb.ToString());
-
-
+                    writer.WriteLine(alignmentInfo.marrNETFncTimeInput[i] + Delimiter + alignmentInfo.marrNETFncNETOutput[i]);
                 }
 
                 writer.Flush();
@@ -54,15 +37,9 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-
         protected override string buildResultOutput(KeyValuePair<int, float> scanNetPair)
         {
-            var sb = new StringBuilder();
-            sb.Append(scanNetPair.Key);
-            sb.Append(Delimiter);
-            sb.Append(scanNetPair.Value);
-
-            return sb.ToString();
+            return scanNetPair.Key.ToString() + Delimiter + DblToString(scanNetPair.Value, 5);
         }
 
         protected override string buildHeaderLine()

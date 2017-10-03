@@ -68,10 +68,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
         }
 
-        public ThrashV1Peak()
+        public ThrashV1Peak(double mz, float intensity = 0) : base(mz, intensity)
         {
-            Mz = 0;
-            Intensity = 0;
+            Mz = mz;
+            Intensity = intensity;
             SignalToNoiseDbl = 0;
             PeakIndex = -1;
             DataIndex = -1;
@@ -79,12 +79,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Copy constructor
+        /// Copy constructor
         /// </summary>
         /// <param name="pk"></param>
-        public ThrashV1Peak(ThrashV1Peak pk)
+        public ThrashV1Peak(ThrashV1Peak pk) : base(pk.Mz, (float)pk.Intensity)
         {
-            Mz = pk.Mz;
             FWHM = pk.FWHM;
             Intensity = pk.Intensity;
             SignalToNoiseDbl = pk.SignalToNoiseDbl;
@@ -96,9 +95,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     Copy constructor
         /// </summary>
         /// <param name="pk"></param>
-        public ThrashV1Peak(MSPeak pk)
+        public ThrashV1Peak(MSPeak pk) : base(pk.XValue, pk.Height)
         {
-            Mz = pk.XValue;
             FWHM = pk.Width;
             Intensity = pk.Height;
             SignalToNoiseDbl = pk.SignalToNoise;
@@ -124,9 +122,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     full width half max of the peak. For details about how this is calculated look at
         ///     PeakProcessor.PeakStatistician.FindFWHM.
         /// </param>
-        public ThrashV1Peak(double mz, double intensity, double signalToNoise, int peakIndex, int dataIndex, double fwhm)
+        public ThrashV1Peak(double mz, double intensity, double signalToNoise, int peakIndex, int dataIndex, double fwhm) : base(mz, (float)intensity)
         {
-            Mz = mz;
             Intensity = intensity;
             SignalToNoiseDbl = signalToNoise;
             PeakIndex = peakIndex;
@@ -146,8 +143,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </remarks>
         public int CompareTo(object obj)
         {
-            var other = obj as ThrashV1Peak;
-            if (other == null)
+            if (!(obj is ThrashV1Peak other))
             {
                 throw new NotImplementedException();
             }

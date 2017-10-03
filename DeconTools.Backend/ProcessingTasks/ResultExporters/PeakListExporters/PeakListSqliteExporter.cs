@@ -16,10 +16,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
     public class PeakListSQLiteExporter : IPeakListExporter, IDisposable
     {
 
-
-        private DbConnection cnn;
-        private bool createIndexOnMZ;
-
+        private readonly DbConnection cnn;
+        private readonly bool createIndexOnMZ;
 
         #region Constructors
         public PeakListSQLiteExporter(string sqliteFilename)
@@ -34,6 +32,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
 
             cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection instance in PeakListSQLiteExporter constructor");
+
             cnn.ConnectionString = "Data Source=" + sqliteFilename;
 
             createIndexOnMZ = false;

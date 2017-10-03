@@ -2,29 +2,29 @@
 
 namespace DeconTools.Backend.DTO
 {
-    public class MSPeakResult:Peak
+    public class MSPeakResult : Peak
     {
         public MSPeakResult()
         {
-            this.ChromID = -1;
-            this.PeakID = -1;
-            this.Scan_num = -1;
-            this.FrameNum = -1;
-            this.MSPeak = null;
+            ChromID = -1;
+            PeakID = -1;
+            Scan_num = -1;
+            FrameNum = -1;
+            MSPeak = null;
 
         }
         public MSPeakResult(int peakID, int scanNum, MSPeak peak):this()
         {
-            this.PeakID = peakID;
-            this.Scan_num = scanNum;
-            this.MSPeak = peak;
+            PeakID = peakID;
+            Scan_num = scanNum;
+            MSPeak = peak;
 
         }
 
         public MSPeakResult(int peakID, int frameNum, int scanNum, MSPeak peak)
             : this(peakID, scanNum, peak)
         {
-            this.FrameNum = frameNum;
+            FrameNum = frameNum;
         }
 
         public new float Width

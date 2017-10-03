@@ -18,8 +18,8 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MSFeatureToSQLiteExporterBasic(string fileName)
         {
-            this.Name = this.ToString();
-            this.FileName = fileName;
+            Name = ToString();
+            FileName = fileName;
 
 
             InitializeAndBuildTable();
@@ -36,7 +36,7 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-        public override List<DeconTools.Utilities.SqliteUtils.Field> FieldList
+        public override List<Field> FieldList
         {
             get
             {
@@ -68,7 +68,7 @@ namespace DeconTools.Backend.FileIO
             dbParameters[10].Value = result.IsotopicProfile.GetSignalToNoise();
             dbParameters[11].Value = result.IsotopicProfile.GetMonoAbundance();
             dbParameters[12].Value = result.IsotopicProfile.GetMonoPlusTwoAbundance();
-            dbParameters[13].Value = DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
+            dbParameters[13].Value = ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
         }
         
         

@@ -29,12 +29,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
         {
             if (File.Exists(fileName)) File.Delete(fileName);
 
-
-            this.TriggerToExport = triggerValue;
-
+            TriggerToExport = triggerValue;
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            this.cnn = fact.CreateConnection();
+            cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicMTResultSQLiteExporter");
+
             cnn.ConnectionString = "Data Source=" + fileName;
 
             try
@@ -73,7 +75,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
         #endregion
 
         #region Private Methods
-        protected override void addResults(DeconTools.Backend.Core.ResultCollection rc)
+        protected override void addResults(Core.ResultCollection rc)
         {
             var myconnection = (SQLiteConnection)cnn;
 
@@ -101,7 +103,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                     var massTagNETParam = new SQLiteParameter();
                     var massTagSequenceParam = new SQLiteParameter();
 
-                    
+
                     mycommand.CommandText = @"INSERT INTO T_MassTagResults ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],
 [net],[mass_tag_id],[mass_tag_mz],[mass_tag_NET],[mass_tag_sequence],
 [average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -160,8 +162,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                         }
                         mycommand.ExecuteNonQuery();
                     }
-                    
- 
+
+
                 }
                 mytransaction.Commit();
 
@@ -171,13 +173,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
 
 
         #endregion
-        public override void ExportMassTagResults(DeconTools.Backend.Core.ResultCollection resultColl)
+        public override void ExportMassTagResults(Core.ResultCollection resultColl)
         {
             addResults(resultColl);
             resultColl.MassTagResultList.Clear();
         }
 
-        public override int TriggerToExport
+        public sealed override int TriggerToExport
         {
             get
             {
@@ -202,14 +204,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                             tempConn.Close();
                         }
 
-                          
+
 
                     }
-                    
+
                 }
                 catch (Exception)
                 {
-                    
+
                 }
             }
 

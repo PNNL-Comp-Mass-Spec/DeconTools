@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
@@ -11,7 +9,10 @@ namespace DeconTools.Backend.Data
 {
     public sealed class UIMFIsosOrigIntensitiesExporter : IsosExporter
     {
-        private string fileName;
+        private readonly string fileName;
+
+        protected override string headerLine { get; set; }
+        protected override char delimiter { get; set; }
 
         public UIMFIsosOrigIntensitiesExporter(string fileName)
         {
@@ -67,7 +68,7 @@ namespace DeconTools.Backend.Data
             {
                 results = deserializer.GetNextSetOfResults();
 
-                
+
                 //OriginalIntensitiesExtractor origIntensExtractor = new OriginalIntensitiesExtractor(results);
                 //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensExtractor.ExtractOriginalIntensities();
                 //writeUIMFIsosResults(sw, results, origIntensitiesCollection);
@@ -98,11 +99,10 @@ namespace DeconTools.Backend.Data
 
         }
 
-        private void writeUIMFIsosResults(StreamWriter sw, ResultCollection results, List<OriginalIntensitiesDTO> origIntensitiesCollection)
+        private void writeUIMFIsosResults(TextWriter sw, ResultCollection results, IReadOnlyList<OriginalIntensitiesDTO> origIntensitiesCollection)
         {
             Check.Require(results.ResultList.Count == origIntensitiesCollection.Count, "OriginalIntensities Data Transfer Object should have the same number of results as in the IsosResult object");
- 
-            
+
             if (results == null) return;
 
             var data = new List<string>();
@@ -142,7 +142,7 @@ namespace DeconTools.Backend.Data
             }
         }
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(ResultCollection results)
         {
             StreamWriter sw;
             try
@@ -162,12 +162,6 @@ namespace DeconTools.Backend.Data
 
             sw.Close();
         }
-
-
-       
-        protected override string headerLine { get; set; }
-        protected override char delimiter { get; set; }
-
 
     }
 }

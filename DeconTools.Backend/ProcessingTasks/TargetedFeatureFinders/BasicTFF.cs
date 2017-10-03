@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Utilities;
-using DeconTools.Backend.Core;
-
+﻿
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class BasicTFF : TFFBase
+    public sealed class BasicTFF : TFFBase
     {
         #region Constructors
         public BasicTFF()
@@ -29,10 +23,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public BasicTFF(double toleranceInPPM, bool requiresMonoPeak, Globals.IsotopicProfileType isotopicProfileTarget)
         {
-            this.ToleranceInPPM = toleranceInPPM;
-            this.NeedMonoIsotopicPeak = requiresMonoPeak;
-            this.IsotopicProfileType = isotopicProfileTarget;
-            this.NumPeaksUsedInAbundance = 1;
+            ToleranceInPPM = toleranceInPPM;
+            NeedMonoIsotopicPeak = requiresMonoPeak;
+            IsotopicProfileType = isotopicProfileTarget;
+            NumPeaksUsedInAbundance = 1;
 
         }
 

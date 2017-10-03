@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using DeconTools.Backend.Core;
 
@@ -10,9 +8,9 @@ namespace DeconTools.Backend.ProcessingTasks
     public class BasicIsosMergerExporter : IIsosMergerExporter
     {
 
-        private int runCounter;
         const char DELIMITER = ',';
 
+        private int runCounter;
 
         public string OutputFilename { get; set; }
 
@@ -32,7 +30,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             runCounter = 1;
 
-            sw.Write(buildHeader());
+            sw.WriteLine(buildHeader());
         }
 
         public override void MergeAndExport(ResultCollection results)
@@ -60,9 +58,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 sw.WriteLine(string.Join(DELIMITER.ToString(), data));
             }
-            
+
             results.ResultList.Clear();        //since we are writing the results to a stream as we go, it's important to clear the list each time
-            runCounter++;                      
+            runCounter++;
         }
 
         protected int getScanNumber(int scan_num)
@@ -72,16 +70,14 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Cleanup()
         {
-            if (sw != null)
+            if (sw == null) return;
+            try
             {
-                try
-                {
-                    sw.Close();
-                }
-                catch (Exception)
-                {
-                   
-                }
+                sw.Close();
+            }
+            catch (Exception)
+            {
+                // Ignore errors
             }
         }
 

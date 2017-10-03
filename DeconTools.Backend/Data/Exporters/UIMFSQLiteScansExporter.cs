@@ -19,7 +19,7 @@ namespace DeconTools.Backend.Data
         protected override string headerLine { get; set; }
         protected override char delimiter { get; set; }
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(ResultCollection results)
         {
             try
             {

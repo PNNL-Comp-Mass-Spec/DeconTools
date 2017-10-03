@@ -98,7 +98,7 @@ namespace DeconTools.Backend.Core
 
         public bool IsFlagged { get; set; }
 
-       
+
         /// <summary>
         /// Intensity of the most abundant peak of the isotopic profile
         /// </summary>
@@ -156,7 +156,8 @@ namespace DeconTools.Backend.Core
         {
             if (_peaklist == null || _peaklist.Count == 0) return null;
 
-            var maxPeak = new MSPeak();
+            var maxPeak = new MSPeak(0);
+
             foreach (var peak in _peaklist)
             {
                 if (peak.Height >= maxPeak.Height)
@@ -215,10 +216,8 @@ namespace DeconTools.Backend.Core
             {
                 return _peaklist[0];
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public double GetSummedIntensity()
@@ -227,7 +226,7 @@ namespace DeconTools.Backend.Core
             double summedIntensity = 0;
             foreach (var peak in _peaklist)
             {
-                summedIntensity += (double)peak.Height;
+                summedIntensity += peak.Height;
 
             }
             return summedIntensity;
@@ -236,19 +235,21 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile CloneIsotopicProfile()
         {
-            var iso = new IsotopicProfile();
-            iso.AverageMass = AverageMass;
-            iso.ChargeState = ChargeState;
-            iso.IntensityMostAbundant = IntensityMostAbundant;
-            iso.IntensityMostAbundantTheor = IntensityMostAbundantTheor;
-            iso.MonoIsotopicMass = MonoIsotopicMass;
-            iso.MonoIsotopicPeakIndex = MonoIsotopicPeakIndex;
-            iso.MonoPeakMZ = MonoPeakMZ;
-            iso.MonoPlusTwoAbundance = MonoPlusTwoAbundance;
-            iso.MostAbundantIsotopeMass = MostAbundantIsotopeMass;
-            iso.IsSaturated = IsSaturated;
-            iso.OriginalIntensity = OriginalIntensity;
-            iso.Peaklist = new List<MSPeak>();
+            var iso = new IsotopicProfile
+            {
+                AverageMass = AverageMass,
+                ChargeState = ChargeState,
+                IntensityMostAbundant = IntensityMostAbundant,
+                IntensityMostAbundantTheor = IntensityMostAbundantTheor,
+                MonoIsotopicMass = MonoIsotopicMass,
+                MonoIsotopicPeakIndex = MonoIsotopicPeakIndex,
+                MonoPeakMZ = MonoPeakMZ,
+                MonoPlusTwoAbundance = MonoPlusTwoAbundance,
+                MostAbundantIsotopeMass = MostAbundantIsotopeMass,
+                IsSaturated = IsSaturated,
+                OriginalIntensity = OriginalIntensity,
+                Peaklist = new List<MSPeak>()
+            };
 
             foreach (var mspeak in Peaklist)
             {
@@ -266,24 +267,25 @@ namespace DeconTools.Backend.Core
 
         public XYData GetTheoreticalIsotopicProfileXYData(double fwhm)
         {
-            Check.Require(this != null && Peaklist != null &&
+            Check.Require(Peaklist != null &&
                           Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
 
             var xydata = new XYData();
             var xvals = new List<double>();
             var yvals = new List<double>();
 
-            for (var i = 0; i < Peaklist.Count; i++)
+            if (Peaklist != null)
             {
-                var tempXYData = Peaklist[i].GetTheorPeakData(fwhm);
-                xvals.AddRange(tempXYData.Xvalues);
-                yvals.AddRange(tempXYData.Yvalues);
-
+                foreach (var item in Peaklist)
+                {
+                    var tempXYData = item.GetTheorPeakData(fwhm);
+                    xvals.AddRange(tempXYData.Xvalues);
+                    yvals.AddRange(tempXYData.Yvalues);
+                }
             }
+
             xydata.Xvalues = xvals.ToArray();
             xydata.Yvalues = yvals.ToArray();
-
-
 
             return xydata;
         }

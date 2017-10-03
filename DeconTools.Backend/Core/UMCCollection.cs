@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Core
@@ -33,14 +32,14 @@ namespace DeconTools.Backend.Core
 
             foreach (var umc in tempUMCs)
             {
-                var scannetpair = new ScanNETPair((float)umc.ScanClassRep, (float)umc.NETClassRep);
+                var scannetpair = new ScanNETPair(umc.ScanClassRep, (float)umc.NETClassRep);
 
                 lookupTable.Add(scannetpair);
             }
             return lookupTable;
         }
 
-       
+
 
         public double GetNETValueForScan(int scanNum)
         {
@@ -59,15 +58,11 @@ namespace DeconTools.Backend.Core
             {
                 return umcWithSameScanNum.NETClassRep;
             }
-            else
+
+            tempUMCs.Sort(delegate (UMC umc1, UMC umc2)
             {
-                tempUMCs.Sort(delegate(UMC umc1, UMC umc2)
-                {
-                    return umc1.ScanClassRep.CompareTo(umc2.ScanClassRep);
-                });
-
-            }
-
+                return umc1.ScanClassRep.CompareTo(umc2.ScanClassRep);
+            });
 
             return netVal;
 
@@ -211,9 +206,6 @@ namespace DeconTools.Backend.Core
             }
 
         }
-
-
-
 
         #endregion
 

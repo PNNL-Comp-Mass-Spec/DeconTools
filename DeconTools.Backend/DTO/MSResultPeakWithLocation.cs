@@ -8,19 +8,21 @@ namespace DeconTools.Backend.DTO
     public class MSResultPeakWithLocation : Peak
     {
 
-        private ushort frameNumber;
-        private ushort scanNumber;
-        private Dictionary<ushort, List<ushort>> frameAndScansRange;
+        private readonly ushort frameNumber;
+        private readonly ushort scanNumber;
+        private readonly Dictionary<ushort, List<ushort>> frameAndScansRange;
 
         public MSResultPeakWithLocation(MSPeakResult peak)
         {
-            this.XValue = peak.MSPeak.XValue;
-            this.frameNumber = (ushort) peak.FrameNum;
-            this.scanNumber = (ushort) peak.Scan_num;
+            XValue = peak.MSPeak.XValue;
+            frameNumber = (ushort)peak.FrameNum;
+            scanNumber = (ushort)peak.Scan_num;
             frameAndScansRange = new Dictionary<ushort, List<ushort>>();
-            var numbers = new List<ushort>();
-            numbers.Add(this.scanNumber);
-            frameAndScansRange.Add(this.frameNumber, numbers);
+            var numbers = new List<ushort> {
+                scanNumber
+            };
+
+            frameAndScansRange.Add(frameNumber, numbers);
         }
 
         /*
@@ -35,22 +37,22 @@ namespace DeconTools.Backend.DTO
 
 
         /**
-         * constructor 
+         * constructor
          * Creates a peak result with a sorted list of framenumbers and scannumbers within those frame numbers
-         * 
+         *
          * To improve efficiency these arrays should be passed in sorted order. We might be able to do that by
-         * using insertion sort during the creation of these arrays. 
-         * 
+         * using insertion sort during the creation of these arrays.
+         *
          * An nlogn sort here might be an overkill.
-         * 
+         *
          * */
 
-        public MSResultPeakWithLocation(MSPeak peak, Dictionary<ushort, List<ushort>> frameAndScansRange, int frameNum, int scanNum)
+        public MSResultPeakWithLocation(Peak peak, Dictionary<ushort, List<ushort>> frameAndScansRange, int frameNum, int scanNum)
         {
-            this.XValue = peak.XValue;
+            XValue = peak.XValue;
             this.frameAndScansRange = frameAndScansRange;
-            this.frameNumber = (ushort)frameNum;
-            this.scanNumber = (ushort) scanNum;
+            frameNumber = (ushort)frameNum;
+            scanNumber = (ushort)scanNum;
         }
 
         /**
@@ -97,7 +99,7 @@ namespace DeconTools.Backend.DTO
 
         }
         */
-        private List<ushort> mergeSortUnique(List<ushort> list1, List<ushort> list2)
+        private List<ushort> mergeSortUnique(IReadOnlyList<ushort> list1, IReadOnlyList<ushort> list2)
         {
             var valueMap = new Dictionary<ushort, ushort>();
             var end1 = list1.Count;
@@ -110,7 +112,8 @@ namespace DeconTools.Backend.DTO
 
                 if (list1[index1] < list2[index2])
                 {
-                    if (!valueMap.ContainsKey(list1[index1])){
+                    if (!valueMap.ContainsKey(list1[index1]))
+                    {
                         valueMap.Add(list1[index1], 1);
                         mergedArray.Add(list1[index1]);
                     }
@@ -122,7 +125,7 @@ namespace DeconTools.Backend.DTO
                     {
                         valueMap.Add(list2[index2], 1);
                         mergedArray.Add(list2[index2]);
-                        
+
                     }
                     index2++;
                 }
@@ -155,10 +158,10 @@ namespace DeconTools.Backend.DTO
             return mergedArray;
         }
 
-        public void updateFrameScansRange( Dictionary<ushort, List<ushort>> newRangeValues)
+        public void updateFrameScansRange(Dictionary<ushort, List<ushort>> newRangeValues)
         {
 
-            foreach (var key in newRangeValues.Keys.ToList<ushort>())
+            foreach (var key in newRangeValues.Keys.ToList())
             {
                 if (frameAndScansRange.ContainsKey(key))
                 {
@@ -183,77 +186,69 @@ namespace DeconTools.Backend.DTO
         //checks if the given mass is within a tolerance of this feature
         public bool containsMass(double massValue, int toleranceInPPM)
         {
-                var differenceInPPM = Math.Abs(1000000 * (this.XValue - massValue) / this.XValue);
+            var differenceInPPM = Math.Abs(1000000 * (XValue - massValue) / XValue);
 
-                if (differenceInPPM <= toleranceInPPM)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            
+            if (differenceInPPM <= toleranceInPPM)
+            {
+                return true;
+            }
+
+            return false;
         }
 
 
-        public int containsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange )
+        public int containsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange)
         {
             if (peak == null)
             {
                 return -1;
             }
-            else
+
+            //TODO:: two peaks are the same if they are within a tolerance of each other in
+            //terms of mz, scan and lc frame. in this case we're only implementing mz values
+            //
+            var differenceInPPM = Math.Abs(1000000 * (peak.XValue - XValue) / XValue);
+
+            if (differenceInPPM <= toleranceInPPM)
             {
-
-                //TODO:: two peaks are the same if they are within a tolerance of each other in
-                //terms of mz, scan and lc frame. in this case we're only implementing mz values
-                //
-                var differenceInPPM = Math.Abs(1000000 * (peak.XValue- this.XValue) / this.XValue);
-
-                if (differenceInPPM <= toleranceInPPM)
+                //it's within the mass tolerance of our peak
+                //now check for net tolerance
+                //check if the frameScansRange bit is set for the frame number and a few other scans within tolerance
+                for (var i = (ushort)(frameNum - netRange); i < frameNum + netRange; i++)
                 {
-                    //it's within the mass tolerance of our peak
-                    //now check for net tolerance
-                    //check if the frameScansRange bit is set for the frame number and a few other scans within tolerance
-                    for (var i = (ushort)(frameNum - netRange); i < frameNum + netRange; i++)
+                    if (frameAndScansRange.ContainsKey(i))
                     {
-                        if (frameAndScansRange.ContainsKey(i))
+                        //then we have to check for the scans in that list and look for our scan values in that list
+                        //we have to keep that list sorted for fast searching
+                        var scanList = frameAndScansRange[i];
+                        for (var j = (ushort)(scanNum - driftRange); j < scanNum + driftRange; j++)
                         {
-                            //then we have to check for the scans in that list and look for our scan values in that list
-                            //we have to keep that list sorted for fast searching
-                            var scanList = frameAndScansRange[i];
-                            for (var j = (ushort)(scanNum - driftRange); j < scanNum + driftRange; j++)
+                            if (scanList.BinarySearch(j) >= 0)
                             {
-                                if (scanList.BinarySearch(j) >= 0)
-                                {
-                                    //this means that the scan number is present in this list. 
-                                    //we're done here
-                                    return 0;
-                                }
+                                //this means that the scan number is present in this list.
+                                //we're done here
+                                return 0;
                             }
-                            
-                            //else we've searched through the entire scan list and didn't find 
-                            //the scan we're interested in.
-                            
                         }
-                      
+
+                        //else we've searched through the entire scan list and didn't find
+                        //the scan we're interested in.
+
                     }
 
-                    var netDiff = this.frameNumber.CompareTo(frameNum);
-                    if ( netDiff  == 0 ){
-                        //now compare on scan range
-                        return this.scanNumber.CompareTo( scanNumber );
-                    }
-                    else{
-                        return netDiff;
-                    }
                 }
-                else
+
+                var netDiff = frameNumber.CompareTo(frameNum);
+                if (netDiff == 0)
                 {
-                    return peak.XValue.CompareTo(this.XValue);
+                    //now compare on scan range
+                    return scanNumber.CompareTo(scanNumber);
                 }
+
+                return netDiff;
             }
-           }
+
+            return peak.XValue.CompareTo(XValue);
+        }
     }
 }

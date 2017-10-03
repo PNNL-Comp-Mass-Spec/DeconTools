@@ -56,27 +56,19 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                 for (var i = 0; i < iso.Peaklist.Count; i++)
                 {
                     var currentPeak = iso.Peaklist[i];
-                    bool mixedIsoContainsMZ;
-                    var indexOfPeak = GetIndexOfTargetPeak(mixedIso, currentPeak.XValue, out mixedIsoContainsMZ);
+                    var indexOfPeak = GetIndexOfTargetPeak(mixedIso, currentPeak.XValue, out var mixedIsoContainsMZ);
 
                     if (mixedIsoContainsMZ)
                     {
-                        mixedIso.Peaklist[indexOfPeak].Height += (float)(currentPeak.Height);
+                        mixedIso.Peaklist[indexOfPeak].Height += currentPeak.Height;
                     }
                     else
                     {
-                        var addedPeak = new MSPeak
+                        var addedPeak = new MSPeak(currentPeak.XValue, currentPeak.Height, currentPeak.Width, currentPeak.SignalToNoise)
                         {
-                            Height = currentPeak.Height,
-                            XValue = currentPeak.XValue,
-                            Width = currentPeak.Width,
                             MSFeatureID = currentPeak.MSFeatureID,
-                            DataIndex = currentPeak.DataIndex,
-                            SignalToNoise = currentPeak.SignalToNoise
+                            DataIndex = currentPeak.DataIndex
                         };
-
-                        addedPeak.Height = (float)(currentPeak.Height);
-
 
                         var insertionIndex = indexOfPeak - 1;    //the above method returns the m/z of the next highest peak
 
@@ -118,9 +110,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
         public IsotopicProfile CreateIsotopicProfileFromEmpiricalFormula(string baseEmpiricalFormula, string elementLabelled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
-            
 
-            var isUnlabelled = elementLabelled == "" || percentHeavyLabel == 0;
+
+            var isUnlabelled = elementLabelled == "" || Math.Abs(percentHeavyLabel) < float.Epsilon;
 
             IsotopicProfile iso;
             if (isUnlabelled)
@@ -141,13 +133,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             }
 
 
-            var monoisotopicMass =EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
+            var monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
             iso.MonoIsotopicMass = monoisotopicMass;
             CalculateMZValuesForLabeledProfile(iso, baseEmpiricalFormula, elementLabelled, chargeState,
                                                lightIsotope, heavyIsotope);
 
             iso.ChargeState = chargeState;
-            
+
 
             return iso;
         }

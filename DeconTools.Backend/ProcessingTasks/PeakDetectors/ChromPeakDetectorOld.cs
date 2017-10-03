@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #region Public Methods
 
         //TODO: remove code duplication (see DeconToolsPeakDetector)
-        public override List<Peak> FindPeaks(XYData xydata, double xMin, double xMax)
+        public override List<Peak> FindPeaks(XYData xydata, double xMin = 0, double xMax = 0)
         {
             var peakList = new List<Peak>();
 

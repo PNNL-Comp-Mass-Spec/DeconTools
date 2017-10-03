@@ -22,8 +22,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public LabeledMultiPeakChromGeneratorTask(int numPeakForGeneratingChrom, double toleranceInPPM)
         {
-            this.NumPeaksForGeneratingChrom = numPeakForGeneratingChrom;
-            this.ToleranceInPPM = toleranceInPPM;
+            NumPeaksForGeneratingChrom = numPeakForGeneratingChrom;
+            ToleranceInPPM = toleranceInPPM;
 
         }
         #endregion
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. Mass tags haven't been defined.", this.Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. Mass tags haven't been defined.", Name));
 
             resultList.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
@@ -60,7 +60,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
             else
             {
-                throw new InvalidOperationException(String.Format("{0} failed. There was a problem with the Result type.", this.Name));
+                throw new InvalidOperationException(string.Format("{0} failed. There was a problem with the Result type.", Name));
             }
 
             n14n15result.UnlabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultList.MSPeakResultList, resultList.Run.CurrentMassTag.IsotopicProfile);

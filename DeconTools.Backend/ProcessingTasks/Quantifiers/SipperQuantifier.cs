@@ -36,12 +36,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                      (int) ChromToleranceInPPM);
 
             _labelingDistributionCalculator = new LabelingDistributionCalculator();
-            _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
-            _partialLabelingQuantifier.MaxLabelAmount = 15;
-            _partialLabelingQuantifier.StepAmountForIterator = 0.25;
-            _partialLabelingQuantifier.NumLeftZeroPads = 1;
-            _partialLabelingQuantifier.NumRightZeroPads = 1;
-            _partialLabelingQuantifier.IsTheoreticalTrimmedDownToObserved = true;
+            _partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13)
+            {
+                MaxLabelAmount = 15,
+                StepAmountForIterator = 0.25,
+                NumLeftZeroPads = 1,
+                NumRightZeroPads = 1,
+                IsTheoreticalTrimmedDownToObserved = true
+            };
 
 
             IsChromatogramCorrelationPerformed = true;
@@ -72,7 +74,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private double _chromToleranceInPPM;
         protected double ChromToleranceInPPM
         {
-            get { return _chromToleranceInPPM; }
+            get => _chromToleranceInPPM;
             set
             {
                 _chromToleranceInPPM = value;
@@ -83,7 +85,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private double _minimumRelativeIntensityForChromCorr;
         public double MinimumRelativeIntensityForChromCorr
         {
-            get { return _minimumRelativeIntensityForChromCorr; }
+            get => _minimumRelativeIntensityForChromCorr;
             set
             {
                 _minimumRelativeIntensityForChromCorr = value;
@@ -96,11 +98,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         private int _numPointsInSmoother;
         public int NumPointsInSmoother
         {
-            get { return _numPointsInSmoother; }
+            get => _numPointsInSmoother;
             set
             {
                 _numPointsInSmoother = value;
-                if (_chromatogramCorrelatorTask != null) 
+                if (_chromatogramCorrelatorTask != null)
                     _chromatogramCorrelatorTask.NumPointsInSmoother = _numPointsInSmoother;
             }
         }
@@ -135,8 +137,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.CurrentTargetedResult is SipperLcmsTargetedResult, "Sipper Quantifier only works on Sipper-type result objects");
-            Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
-            Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
+            Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed; CurrentMassTag is empty");
+            Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
 
             ResetQuantifierData();
 
@@ -144,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             var result = (SipperLcmsTargetedResult)resultList.CurrentTargetedResult;
             result.AreaUnderDifferenceCurve = -9999;
             result.AreaUnderRatioCurve = -9999;
-            
+
             RatioVals.Xvalues = new double[] { 1, 2, 3, 4, 5, 6, 7 };
             RatioVals.Yvalues = new double[] { 0, 0, 0, 0, 0, 0, 0 };
 
@@ -154,12 +156,16 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             Check.Require(result != null, "No MassTagResult has been generated for CurrentMassTag");
 
-            if (result.IsotopicProfile == null || result.IsotopicProfile.Peaklist == null || result.IsotopicProfile.Peaklist.Count < 2)
+            if (result.IsotopicProfile?.Peaklist == null || result.IsotopicProfile.Peaklist.Count < 2)
             {
 
                 return;
             }
 
+            if (resultList.Run.CurrentMassTag.IsotopicProfile == null)
+            {
+                return;
+            }
 
             var theorUnlabelledIso = resultList.Run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
             IsotopicProfileUtilities.NormalizeIsotopicProfile(theorUnlabelledIso);
@@ -170,8 +176,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     theorUnlabelledIso.getMostIntensePeak().XValue, 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 
             NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
-            
-            
+
+
             if (indexOfCorrespondingObservedPeak>=0)
             {
                 IsotopicProfileUtilities.NormalizeIsotopicProfileToSpecificPeak(NormalizedIso, indexOfCorrespondingObservedPeak);
@@ -183,9 +189,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
             //insert zero intensity peaks into observed
-            
-            
-            
+
+
+
 
             //            return;
 
@@ -246,7 +252,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 //trim off zeros from ratio data
                 for (var i = ratioData.Peaklist.Count - 1; i >= 0; i--)
                 {
-                    if (ratioData.Peaklist[i].Height == 0)
+                    if (Math.Abs(ratioData.Peaklist[i].Height) < float.Epsilon)
                     {
                         ratioData.Peaklist.RemoveAt(i);
                     }
@@ -264,7 +270,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 RatioVals.Yvalues = yvals.ToArray();
 
 
-                //NOTE:  Sept 23, 2013 - the 'R is no longer used. 
+                //NOTE:  Sept 23, 2013 - the 'R is no longer used.
                 result.RSquaredValForRatioCurve=   GetLinearRegressionData(result, xvals, yvals);
 
 
@@ -293,13 +299,13 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 result.AreaUnderDifferenceCurve = subtractedIsoData.Peaklist.Select(p => p.Height).Sum();
 
 
-                
+
 
                 //----------- get data for the subtracted, labeled isotopic profile------------------------
 
                 var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
 
-          
+
                // var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
                 //FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
@@ -341,7 +347,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
                 FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
-                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
+                result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile?.Score ?? 1.00d;
                 result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
 
                 var numCarbons = result.Target.GetAtomCountForElement("C");
@@ -350,9 +356,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
                 //-------------- calculate Label Distribution ------------------------------------------------
-                // see Chik et al:  http://pubs.acs.org/doi/abs/10.1021/ac050988l ; Also see Sipper paper. 
-                double[] numLabelVals;
-                double[] labelDistributionVals;
+                // see Chik et al:  http://pubs.acs.org/doi/abs/10.1021/ac050988l ; Also see Sipper paper.
 
                 var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double)p.Height).ToList();
 
@@ -364,18 +368,17 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     _labelingDistributionCalculator.CalculateLabelingDistribution(theorIntensityVals, normalizedCorrectedIntensityVals,
                                                                                   LabeldistCalcIntensityThreshold,
                                                                                   LabeldistCalcIntensityThreshold,
-                                                                                  out numLabelVals,
-                                                                                  out labelDistributionVals, true, true, 0, numRightPads, 0, 0);
+                                                                                  out _,
+                                                                                  out var labelDistributionVals, true, true, 0, numRightPads, 0, 0);
 
 
-                    //negative distribution values are zeroed out. And, then the remaining values are adjusted such that they add up to 1. 
+                    //negative distribution values are zeroed out. And, then the remaining values are adjusted such that they add up to 1.
                     result.LabelDistributionVals = AdjustLabelDistributionVals(labelDistributionVals);
 
 
-                    double distFractionUnlabelled, distFractionLabelled, distAverageLabelsIncorporated;
-                    _labelingDistributionCalculator.OutputLabelingInfo(result.LabelDistributionVals, out distFractionUnlabelled,
-                                                                       out distFractionLabelled,
-                                                                       out distAverageLabelsIncorporated);
+                    _labelingDistributionCalculator.OutputLabelingInfo(result.LabelDistributionVals, out _,
+                                                                       out var distFractionLabelled,
+                                                                       out _);
 
                     result.PercentPeptideLabelled = distFractionLabelled * 100;
                 }
@@ -404,10 +407,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.AreaUnderRatioCurveRevised = 0;
                 }
 
-                result.NumHighQualityProfilePeaks = highQualityRatioProfileData.Peaklist != null
-                                                      ? highQualityRatioProfileData.Peaklist.Count
-                                                      : 0;
-                
+                result.NumHighQualityProfilePeaks = highQualityRatioProfileData.Peaklist?.Count ?? 0;
+
             }
             else
             {
@@ -423,15 +424,15 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public void ResetQuantifierData()
         {
-            this.AmountC13Labelling = 0;
-            this.ChromatogramRSquaredVals = new List<double>();
-            this.FitScoreData = new Dictionary<decimal, double>();
-            this.FractionLabelled = 0;
-            this.HighQualitySubtractedProfile = new IsotopicProfile();
-            this.NormalizedAdjustedIso = new IsotopicProfile();
-            this.NormalizedIso = new IsotopicProfile();
-            this.RatioVals = new XYData();
-            
+            AmountC13Labelling = 0;
+            ChromatogramRSquaredVals = new List<double>();
+            FitScoreData = new Dictionary<decimal, double>();
+            FractionLabelled = 0;
+            HighQualitySubtractedProfile = new IsotopicProfile();
+            NormalizedAdjustedIso = new IsotopicProfile();
+            NormalizedIso = new IsotopicProfile();
+            RatioVals = new XYData();
+
         }
 
 
@@ -449,7 +450,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 if (peak.Height>0)
                 {
                         contiguousScore++;
-                    
+
                         lastPeakWasAboveZero = true;
                 }
                 else
@@ -460,42 +461,29 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     }
                     lastPeakWasAboveZero = false;
                 }
-                
+
             }
 
             return contiguousScore;
         }
 
 
-        private double GetLinearRegressionData(SipperLcmsTargetedResult result, List<double> xvals, List<double> yvals)
+        private double GetLinearRegressionData(TargetedResultBase result, IReadOnlyList<double> xvals, IReadOnlyList<double> yvals)
         {
             var logRatioXVals = new List<double>();
             var logRatioYVals = new List<double>();
 
-            var foundYvalAboveZero = false;
             for (var i = 0; i < xvals.Count; i++)
             {
 
                 if (yvals[i] > 0)
                 {
-                    foundYvalAboveZero = true;
                     logRatioXVals.Add(xvals[i]);
                     logRatioYVals.Add(Math.Log(yvals[i]));
                 }
-                else
-                {
-                    //if we have already found a yval above 0, and then we found one below 0, this
-                    //indicates a problem which we will penalize. 
-                    //if (foundYvalAboveZero)
-                    //{
-                    //    logRatioXVals.Add(xvals[i]);
-                    //    logRatioYVals.Add(0);
-                    //}
-                }
+
             }
 
-            double slope = -9999;
-            double intercept = -9999;
             double rsquaredVal = -1;
 
 
@@ -503,8 +491,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             {
                 try
                 {
-                    MathUtils.GetLinearRegression(logRatioXVals.ToArray(), logRatioYVals.ToArray(), out slope, out intercept,
-                                                  out rsquaredVal);
+                    MathUtils.GetLinearRegression(
+                        logRatioXVals.ToArray(), logRatioYVals.ToArray(),
+                        out _, out _, out rsquaredVal);
                 }
                 catch (Exception)
                 {
@@ -537,7 +526,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             if (result.ChromCorrelationData.CorrelationDataItems.Count>0)
             {
                 ChromatogramRSquaredVals.AddRange(result.ChromCorrelationData.CorrelationDataItems.Select(p => p.CorrelationRSquaredVal.GetValueOrDefault(-1)).ToList());
-    
+
             }
 
 
@@ -549,7 +538,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             //    Console.WriteLine(item.CorrelationRSquaredVal);
             //}
 
-            
+
             //trim off zeros
             for (var i = ChromatogramRSquaredVals.Count - 1; i >= 1; i--)
             {
@@ -623,12 +612,12 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         }
 
 
-        private List<double> AdjustLabelDistributionVals(double[] labelDistributionVals)
+        private List<double> AdjustLabelDistributionVals(IList<double> labelDistributionVals)
         {
-            if (labelDistributionVals == null || labelDistributionVals.Length == 0) return new List<double>();
+            if (labelDistributionVals == null || labelDistributionVals.Count == 0) return new List<double>();
 
             //first, will set the negative values to zero. (cannot have a negative label distribution)
-            for (var i = 0; i < labelDistributionVals.Length; i++)
+            for (var i = 0; i < labelDistributionVals.Count; i++)
             {
                 if (labelDistributionVals[i] < 0)
                 {
@@ -642,8 +631,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             var sumVals = labelDistributionVals.Sum();
 
-            //re-normalize.  
-            for (var i = 0; i < labelDistributionVals.Length; i++)
+            //re-normalize.
+            for (var i = 0; i < labelDistributionVals.Count; i++)
             {
                 labelDistributionVals[i] = labelDistributionVals[i] / sumVals;
             }
@@ -698,9 +687,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             double averageMZ = 0;
 
-            for (var i = 0; i < isotopicProfile.Peaklist.Count; i++)
+            foreach (var item in isotopicProfile.Peaklist)
             {
-                averageMZ += isotopicProfile.Peaklist[i].XValue * isotopicProfile.Peaklist[i].Height / sumIntensities;
+                averageMZ += item.XValue * item.Height / sumIntensities;
             }
 
 

@@ -10,11 +10,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public abstract class PeakDetector:Task
     {
-        private PeakUtilities _peakUtilities = new PeakUtilities();
-     
-        public abstract List<Peak> FindPeaks(XYData xydata, double minX=0, double maxX=0);
+        private readonly PeakUtilities _peakUtilities = new PeakUtilities();
 
-        
+        public abstract List<Peak> FindPeaks(XYData xydata, double minX = 0, double maxX = 0);
+
         public double MinX { get; set; }
 
         public double MaxX { get; set; }
@@ -27,8 +26,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.Run.XYData == null ||
-                resultList.Run.XYData.Xvalues == null ||
+            if (resultList.Run.XYData?.Xvalues == null ||
                 resultList.Run.XYData.Yvalues == null ||
                 resultList.Run.XYData.Xvalues.Length == 0 ||
                 resultList.Run.XYData.Yvalues.Length == 0)
@@ -36,14 +34,14 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 resultList.Run.PeakList = new List<Peak>();
                 return;
             }
-           
+
             var isSuccess = false;
 
             var counter = 1;
 
 
             //[gord] I'm adding a loop here, because we are experiencing an infrequent and seemingly random failure with the peak detector on data from UIMF files
-            //looping it may force it to process the current ims scan. 
+            //looping it may force it to process the current ims scan.
             while (!isSuccess && counter<=4)
             {
                 try
@@ -52,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     isSuccess = true;
 
 
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +77,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     {
                         Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
                     }
-                    
+
 
                 }
 
@@ -87,7 +85,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 counter++;
 
             }
-            
+
         }
 
         protected virtual void ExecutePostProcessingHook(Run run)
@@ -101,9 +99,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             ScanSet currentScanset;
 
-            if (run is UIMFRun)
+            if (run is UIMFRun uimfRun)
             {
-                currentScanset = ((UIMFRun)run).CurrentIMSScanSet;
+                currentScanset = uimfRun.CurrentIMSScanSet;
             }
             else
             {
@@ -112,14 +110,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
 
-            currentScanset.BackgroundIntensity = BackgroundIntensity;
-            currentScanset.NumPeaks = run.PeakList.Count;    //used in ScanResult
-            currentScanset.BasePeak = _peakUtilities.GetBasePeak(run.PeakList);     //Used in ScanResult
+            if (currentScanset == null) return;
 
+            currentScanset.BackgroundIntensity = BackgroundIntensity;
+            currentScanset.NumPeaks = run.PeakList.Count; //used in ScanResult
+            currentScanset.BasePeak = _peakUtilities.GetBasePeak(run.PeakList); //Used in ScanResult
         }
 
 
-        
+
         protected abstract double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null);
     }
 }

@@ -49,8 +49,8 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         #endregion
         public override XYData GenerateMS(DeconTools.Backend.Core.Run run, ScanSet lcScanset, ScanSet imsScanset=null)
         {
-            Check.Require(run != null, String.Format("{0} failed. Run has not been defined.", this.Name));
-            Check.Require(run.PeakList != null && run.PeakList.Count > 0, String.Format("{0} failed. Run has not been defined.", this.Name));
+            Check.Require(run != null, string.Format("{0} failed. Run has not been defined.", this.Name));
+            Check.Require(run.PeakList != null && run.PeakList.Count > 0, string.Format("{0} failed. Run has not been defined.", this.Name));
 
             var syntheticMSData = new XYData();
             var xvals = new List<double>();

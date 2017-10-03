@@ -2,7 +2,6 @@
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities.SqliteUtils;
 
@@ -17,7 +16,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             if (File.Exists(fileName)) File.Delete(fileName);
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
-            this.cnn = fact.CreateConnection();
+            cnn = fact.CreateConnection();
+
+            if (cnn == null)
+                throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicScanResult_SqliteExporter");
+
             cnn.ConnectionString = "Data Source=" + fileName;
 
             try
@@ -51,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             command.ExecuteNonQuery();
         }
 
-        protected override void addScanResults(DeconTools.Backend.Core.ResultCollection rc)
+        protected override void addScanResults(Core.ResultCollection rc)
         {
             var myconnection = (SQLiteConnection)cnn;
 
@@ -78,7 +81,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(num_peaksParam);
                     mycommand.Parameters.Add(num_deisotopedParam);
 
-                    
+
                     for (var n = 0; n < rc.ScanResultList.Count; n++)
                     {
                         var item = rc.ScanResultList[n];
@@ -91,7 +94,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                         ticParam.Value = item.TICValue;
                         num_peaksParam.Value = item.NumPeaks;
                         num_deisotopedParam.Value = item.NumIsotopicProfiles;
-            
+
                         mycommand.ExecuteNonQuery();
                     }
                 }
@@ -103,6 +106,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
 
 
-      
+
     }
 }

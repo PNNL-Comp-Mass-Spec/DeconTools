@@ -73,11 +73,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             var backgroundIntensity = resultList.Run.CurrentBackgroundIntensity;
 
-            //Key step 
+            //Key step
             var msFeatures = PerformThrash(resultList.Run.XYData, resultList.Run.PeakList,
                                            backgroundIntensity, Parameters.MinMSFeatureToBackgroundRatio);
 
-            //Create DeconTools-type results. Get the representative abundance. 
+            //Create DeconTools-type results. Get the representative abundance.
             foreach (var isotopicProfile in msFeatures)
             {
                 var result = resultList.CreateIsosResult();
@@ -173,7 +173,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 }
 
 
-                //get potential charge states 
+                //get potential charge states
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
@@ -198,7 +198,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 foreach (var charge in potentialChargeStates)
                 {
                     reportString201+=charge + "\t";
-                    
+
                 }
                 IqLogger.Log.Debug(reportString201 + "\n");
 
@@ -280,8 +280,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     else
                     {
                         #region Paul addition
-                        //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
-                        //We need some test cases to capture this problem.                         
+                        //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better.
+                        //We need some test cases to capture this problem.
    var stopwatch = new Stopwatch();
 
                         if (doPaulMethod)
@@ -338,7 +338,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-                    
+
                 }
 
                 if (msfeature != null)
@@ -392,15 +392,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         private void LoadPeaks(Run run)
         {
             var sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
-            
+
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
-            //create / load 
-            //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them. 
+            //create / load
+            //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them.
         }
 
         /// <summary>
-        /// Returns list of potential charge states for a given peak; Use indexOfCurrentPeak to indicate the peak. 
+        /// Returns list of potential charge states for a given peak; Use indexOfCurrentPeak to indicate the peak.
         /// </summary>
         /// <param name="indexOfCurrentPeak"></param>
         /// <param name="mspeakList"></param>
@@ -550,7 +550,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             _targetedFeatureFinder.ToleranceInPPM = ppmTolerance;
             _targetedFeatureFinder.NeedMonoIsotopicPeak = false;
 
-            //TODO: there could be a problem here with there being too many theorIso peaks and thus, too many observed iso peaks are being pulled out. 
+            //TODO: there could be a problem here with there being too many theorIso peaks and thus, too many observed iso peaks are being pulled out.
             var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso);
             return msFeature;
         }
@@ -720,9 +720,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             var mspeaks = new List<MSPeak>(iso.Peaklist);
 
-            var zeroIntensityPeakToTheLeft = new MSPeak();
-            zeroIntensityPeakToTheLeft.XValue = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
-            zeroIntensityPeakToTheLeft.Height = 0;
+            var mz = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
+            var intensity = 0;
+
+            var zeroIntensityPeakToTheLeft = new MSPeak(mz, intensity);
 
             mspeaks.Insert(0, zeroIntensityPeakToTheLeft);
 

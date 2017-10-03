@@ -13,8 +13,8 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MSFeatureToSQLiteExporterUIMF(string fileName)
         {
-            this.FileName = fileName;
-            this.Name = this.ToString();
+            FileName = fileName;
+            Name = ToString();
 
             InitializeAndBuildTable();
         }
@@ -26,7 +26,7 @@ namespace DeconTools.Backend.FileIO
             get { return m_TABLENAME; }
         }
 
-        public override List<DeconTools.Utilities.SqliteUtils.Field> FieldList
+        public override List<Field> FieldList
         {
             get
             {
@@ -66,11 +66,11 @@ namespace DeconTools.Backend.FileIO
             dbParameters[14].Value = ((UIMFIsosResult)result).DriftTime;
             dbParameters[15].Value = result.IsotopicProfile.OriginalIntensity;
             dbParameters[16].Value = result.IsotopicProfile.IsSaturated ? 1 : 0;
-            dbParameters[17].Value = DeconTools.Backend.ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
+            dbParameters[17].Value = ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
             dbParameters[18].Value = result.InterferenceScore;
         }
 
-        protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
+        protected override List<Field> CreateFieldList()
         {
             var fieldList = new List<Field>();
 

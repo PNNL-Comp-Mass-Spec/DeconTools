@@ -1,13 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class O16O18IsosResultTextFileExporter : IsosResultTextFileExporter
+    public sealed class O16O18IsosResultTextFileExporter : IsosResultTextFileExporter
     {
-
 
         #region Constructors
         public O16O18IsosResultTextFileExporter(string fileName)
@@ -18,10 +16,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public O16O18IsosResultTextFileExporter(string fileName, int triggerValueToExport)
         {
-            this.TriggerToExport = triggerValueToExport;
-            this.Delimiter = ',';
-            this.Name = "O16O18 IsosResult TextFile Exporter";
-            this.FileName = fileName;
+            TriggerToExport = triggerValueToExport;
+            Delimiter = ',';
+            Name = "O16O18 IsosResult TextFile Exporter";
+            FileName = fileName;
 
             initializeAndWriteHeader();
 
@@ -29,9 +27,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #endregion
 
-   
-
-        protected override string buildIsosResultOutput(Core.IsosResult result)
+        protected override string buildIsosResultOutput(IsosResult result)
         {
             Check.Require(result is O16O18IsosResult, "Cannot use this O16O18ResultExporter with this type of result: " + result);
 

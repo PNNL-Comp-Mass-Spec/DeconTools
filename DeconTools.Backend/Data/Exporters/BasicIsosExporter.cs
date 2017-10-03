@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace DeconTools.Backend.Data
@@ -9,6 +8,9 @@ namespace DeconTools.Backend.Data
     {
         private readonly string fileName;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="fileName"></param>
         public BasicIsosExporter(string fileName)
         {
@@ -22,9 +24,8 @@ namespace DeconTools.Backend.Data
         protected sealed override string headerLine { get; set; }
         protected sealed override char delimiter { get; set; }
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(Core.ResultCollection results)
         {
-            StringBuilder sb;
             StreamWriter sw;
 
             try
@@ -34,7 +35,7 @@ namespace DeconTools.Backend.Data
             }
             catch (Exception)
             {
-                throw new System.IO.IOException("Could not access the output file. Check to see if it is already open.");
+                throw new IOException("Could not access the output file. Check to see if it is already open.");
             }
             sw.WriteLine(headerLine);
 
@@ -70,7 +71,7 @@ namespace DeconTools.Backend.Data
 
         protected override int getScanNumber(int scan_num)
         {
-            return scan_num;         //
+            return scan_num;
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)

@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Data
             try
             {
                 sqliteWriter.CreateNewDB(fileName);
-                
+
             }
             catch (Exception)
             {
@@ -101,23 +101,27 @@ namespace DeconTools.Backend.Data
             {
                 Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
                 var uimfResult = (UIMFIsosResult)result;
-                var fp = new MS_Features();
-                fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
-                fp.ims_scan_num = (ushort)uimfResult.IMSScanSet.PrimaryScanNumber;
-                fp.charge = (byte)uimfResult.IsotopicProfile.ChargeState;
-                fp.abundance = (uint)uimfResult.IsotopicProfile.GetAbundance();
-                fp.mz = uimfResult.IsotopicProfile.GetMZ();
-                fp.fit = (float)uimfResult.IsotopicProfile.GetScore();
-                fp.average_mw = uimfResult.IsotopicProfile.AverageMass;
-                fp.monoisotopic_mw = uimfResult.IsotopicProfile.MonoIsotopicMass;
-                fp.mostabundance_mw = uimfResult.IsotopicProfile.MostAbundantIsotopeMass;
-                fp.fwhm = (float)uimfResult.IsotopicProfile.GetFWHM();
-                fp.signal_noise = uimfResult.IsotopicProfile.GetSignalToNoise();
-                fp.mono_abundance = (uint)uimfResult.IsotopicProfile.GetMonoAbundance();
-                fp.mono_plus2_abundance = (uint)uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance();
-                fp.orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity;
+
+                var fp = new MS_Features
+                {
+                    frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber,
+                    ims_scan_num = (ushort)uimfResult.IMSScanSet.PrimaryScanNumber,
+                    charge = (byte)uimfResult.IsotopicProfile.ChargeState,
+                    abundance = (uint)uimfResult.IsotopicProfile.GetAbundance(),
+                    mz = uimfResult.IsotopicProfile.GetMZ(),
+                    fit = (float)uimfResult.IsotopicProfile.GetScore(),
+                    average_mw = uimfResult.IsotopicProfile.AverageMass,
+                    monoisotopic_mw = uimfResult.IsotopicProfile.MonoIsotopicMass,
+                    mostabundance_mw = uimfResult.IsotopicProfile.MostAbundantIsotopeMass,
+                    fwhm = (float)uimfResult.IsotopicProfile.GetFWHM(),
+                    signal_noise = uimfResult.IsotopicProfile.GetSignalToNoise(),
+                    mono_abundance = (uint)uimfResult.IsotopicProfile.GetMonoAbundance(),
+                    mono_plus2_abundance = (uint)uimfResult.IsotopicProfile.GetMonoPlusTwoAbundance(),
+                    orig_intensity = (float)uimfResult.IsotopicProfile.OriginalIntensity,
+                    ims_drift_time = (float)uimfResult.IMSScanSet.DriftTime
+                };
+
                 //fp.TIA_orig_intensity = (float)uimfResult.IsotopicProfile.OriginalTotalIsotopicAbundance;
-                fp.ims_drift_time = (float)uimfResult.IMSScanSet.DriftTime;
                 records.Add(fp);
                 count++;
                 if (count == 500)

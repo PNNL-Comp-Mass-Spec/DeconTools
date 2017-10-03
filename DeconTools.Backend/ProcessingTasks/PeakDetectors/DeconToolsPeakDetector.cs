@@ -89,13 +89,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
             foreach (var p in peakList)
             {
-                var peak = new MSPeak();
-                peak.XValue = p.Mz;
-                peak.Height = (int)p.Intensity;
-                peak.SignalToNoise = (float)p.SignalToNoise;
-                peak.Width = (float)p.FWHM;
-
-                peak.DataIndex = p.DataIndex;      // this points to the index value of the raw xy values - I think
+                var peak = new MSPeak(p.Mz, (int)p.Intensity, (float)p.FWHM, p.SignalToNoise) {
+                    DataIndex = p.DataIndex         // this points to the index value of the raw xy values - I think
+                };
 
                 returnedList.Add(peak);
             }
@@ -113,9 +109,9 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns></returns>
-        public override List<Peak> FindPeaks(XYData xydata, double minX, double maxX)
+        public override List<Peak> FindPeaks(XYData xydata, double minX = 0, double maxX = 0)
         {
-            if (xydata == null || xydata.Xvalues == null || xydata.Xvalues.Length == 0) return null;
+            if (xydata?.Xvalues == null || xydata.Xvalues.Length == 0) return null;
 
             var xvals = xydata.Xvalues.ToList();
             var yvals = xydata.Yvalues.ToList();

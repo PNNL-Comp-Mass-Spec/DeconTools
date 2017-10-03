@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace DeconTools.Backend.Core
 {
-    public class LCScanSetIMS:ScanSet
+    public class LCScanSetIMS : ScanSet
     {
 
-        #region Constructors
-
-          public LCScanSetIMS(int primaryScanNum)
-            : base(primaryScanNum)
+        public LCScanSetIMS(int primaryScanNum)
+          : base(primaryScanNum)
         {
 
         }
@@ -26,25 +24,11 @@ namespace DeconTools.Backend.Core
 
         }
 
+        public double FramePressureSmoothed { get; set; }
 
-        #endregion
-
-        #region Properties
-
-        public  double FramePressureSmoothed { get; set; }
         public double FramePressureUnsmoothed { get; set; }
 
         public double AvgTOFLength { get; set; }
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
 
     }
 }

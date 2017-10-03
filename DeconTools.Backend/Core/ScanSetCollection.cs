@@ -243,9 +243,8 @@ namespace DeconTools.Backend.Core
                 else
                 {
                     //NOTE: we wish to sum non-adjacent UIMF MS/MS frames. I.e. Frame 2 and 7 were both fully fragmented using the same voltage. We wish to sum these together
-                    //NOTE: we may want to abstract this section out somehow. 
-                    var uimfRun = run as UIMFRun;
-                    if (uimfRun != null)
+                    //NOTE: we may want to abstract this section out somehow.
+                    if (run is UIMFRun uimfRun)
                     {
                         // TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
                         if (sumConsecutiveMsMs)
@@ -315,7 +314,7 @@ namespace DeconTools.Backend.Core
                     }
                     else
                     {
-                        scanSet = ScanSetFactory.CreateScanSet(run, i, 1);    
+                        scanSet = ScanSetFactory.CreateScanSet(run, i, 1);
                     }
                 }
 
@@ -388,16 +387,14 @@ namespace DeconTools.Backend.Core
             {
                 return scan;
             }
+
+            if (ascending)
+            {
+                scan = GetNextMSScanSet(run, ++primaryNum, true);
+            }
             else
             {
-                if (ascending)
-                {
-                    scan = GetNextMSScanSet(run, ++primaryNum, true);
-                }
-                else
-                {
-                    scan = GetNextMSScanSet(run, --primaryNum, false);
-                }
+                scan = GetNextMSScanSet(run, --primaryNum, false);
             }
 
             return scan;
@@ -406,7 +403,7 @@ namespace DeconTools.Backend.Core
         public int GetLastScanSet()
         {
             if (ScanSetList == null || ScanSetList.Count == 0) return -1;
-            return (ScanSetList[ScanSetList.Count - 1].PrimaryScanNumber);
+            return ScanSetList[ScanSetList.Count - 1].PrimaryScanNumber;
         }
     }
 }

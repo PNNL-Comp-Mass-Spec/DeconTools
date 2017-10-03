@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         protected bool UseThrash;
 
         // default constructor.
-        public IsotopicProfileFitScorer()
+        protected IsotopicProfileFitScorer()
         {
             ChargeCarrierMass = 1.00727638;
             UseThrash = false;
@@ -83,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             AveragineObj.SetElementalIsotopeComposition(IsotopeDistribution.ElementalIsotopeComposition);
         }
 
-        public IsotopicProfileFitScorer(IsotopicProfileFitScorer fit)
+        protected IsotopicProfileFitScorer(IsotopicProfileFitScorer fit)
         {
             // only copies settings not variables.
             CompleteFitThrash = fit.CompleteFitThrash;
@@ -101,7 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         public ElementIsotopes ElementalIsotopeComposition
         {
-            get { return IsotopeDistribution.ElementalIsotopeComposition; }
+            get => IsotopeDistribution.ElementalIsotopeComposition;
             set
             {
                 IsotopeDistribution.SetElementalIsotopeComposition(value);
@@ -380,7 +380,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             return false;
         }
 
-        /*[gord]  the following is currently unused. The idea was to give weighting to the algorithm so that 
+        /*[gord]  the following is currently unused. The idea was to give weighting to the algorithm so that
           the user could favor certain fitting parameters (i.e. space between isotopomers) over others
         public double FindIsotopicDist(PeakProcessing.PeakData peakData, int cs, PeakProcessing.Peak peak,
             IsotopeFitRecord isoRecord, double deleteIntensityThreshold, double spacingWeight, double spacingVar,
@@ -455,8 +455,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             for (var i = 0; i < numpeaks; i++)
             {
-                ThrashV1Peak peak;
-                processor.PeakData.GetPeak(i, out peak);
+                processor.PeakData.GetPeak(i, out var peak);
                 peakList.AddPeak(peak);
             }
 
@@ -518,8 +517,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 Console.WriteLine("Theoretical peak\t" + "Index\t" + "MZ\t" + "Intensity\t" + "FWHM\t" + "SigNoise");
                 for (var i = 0; i < numpeaks; i++)
                 {
-                    ThrashV1Peak theorpeak;
-                    theorPeakData.GetPeak(i, out theorpeak);
+                    theorPeakData.GetPeak(i, out var theorpeak);
                     Console.WriteLine("Theoretical peak\t" + i + "\t" + theorpeak.Mz + "\t" +
                                       theorpeak.Intensity + "\t" + theorpeak.FWHM + "\t" + theorpeak.SignalToNoiseDbl);
                 }
@@ -558,7 +556,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             double p1Fit = -1, m1Fit = -1; // [gord]: this seems unused
             var mPeak = IsotopeDistribution.MaxPeakMz;
-            var nextPeak = new ThrashV1Peak();
+            var nextPeak = new ThrashV1Peak(0);
 
             var bestFit = fit;
             var bestFitCountBasis = pointsUsed;
@@ -570,12 +568,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             //------------- Slide to the LEFT --------------------------------------------------
             for (var dd = 1.003 / chargeState; dd <= 10.03 / chargeState; dd += 1.003 / chargeState)
             {
-                double mzLeft;
-                double intensityLeft;
-
                 //check for theoretical peak to the right of TheoreticalMaxPeak; store mz and intensity
-                var foundPeak = FindPeak(mPeak + dd - 0.2 / chargeState, mPeak + dd + 0.2 / chargeState, out mzLeft,
-                    out intensityLeft,
+                var foundPeak = FindPeak(mPeak + dd - 0.2 / chargeState, mPeak + dd + 0.2 / chargeState, out var mzLeft,
+                    out _,
                     debug);
 
                 // if the above theoretical peak was found,  look one peak to the LEFT in the Experimental peaklist
@@ -590,8 +585,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 {
                     delta = peak.Mz - mzLeft;
                     // essentially, this shifts the theoretical over to the left and gets the delta; then check the fit
-                    var currentPeakCopy = new ThrashV1Peak(peak); // in c++ this copy is created by value;
-                    currentPeakCopy.Intensity = nextPeak.Intensity;
+                    var currentPeakCopy = new ThrashV1Peak(peak) {
+                        Intensity = nextPeak.Intensity      // in c++ this copy is created by value;
+                    };
+
                     fit = FitScore(peakData, chargeState, currentPeakCopy, delta, minTheoreticalIntensityForScore,
                         out fitCountBasis, debug);
                     if (debug)
@@ -610,7 +607,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     fit = bestFit + 1000; // make the fit terrible
                 }
                 // TODO: Currently, if fit score is less than best_fit, iteration stops.  Future versions should continue attempted fitting if fit was within a specified range of the best fit
-                // 26th February 2007 Deep Jaitly 
+                // 26th February 2007 Deep Jaitly
                 /*if (fit <= bestFit)
                 {
                     if (nextPeak.mdbl_intensity > peak.mdbl_intensity)
@@ -642,11 +639,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             //      System.Console.WriteLine("\n---------------- Sliding to the RIGHT -------------------------";
             for (var dd = 1.003 / chargeState; dd <= 10.03 / chargeState; dd += 1.003 / chargeState)
             {
-                double mzRight;
-                double intensityRight;
                 ////check for theoretical peak to the LEFT of TheoreticalMaxPeak; store mz and intensity
-                var foundPeak = FindPeak(mPeak - dd - 0.2 / chargeState, mPeak - dd + 0.2 / chargeState, out mzRight,
-                    out intensityRight,
+                var foundPeak = FindPeak(mPeak - dd - 0.2 / chargeState, mPeak - dd + 0.2 / chargeState, out var mzRight,
+                    out _,
                     debug);
 
                 // if the above theoretical peak was found,  look one peak to the RIGHT in the Experimental peaklist
@@ -659,8 +654,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (mzRight > 0 && nextPeak.Mz > 0)
                 {
                     delta = peak.Mz - mzRight;
-                    var currentPeakCopy = new ThrashV1Peak(peak);
-                    currentPeakCopy.Intensity = nextPeak.Intensity;
+                    var currentPeakCopy = new ThrashV1Peak(peak) {
+                        Intensity = nextPeak.Intensity
+                    };
+
                     fit = FitScore(peakData, chargeState, currentPeakCopy, delta, minTheoreticalIntensityForScore,
                         out fitCountBasis, debug);
                     //fit = FitScore(pk_data, cs, nxt_peak.mdbl_intensity, delta);
@@ -773,9 +770,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (debug)
                 Console.WriteLine("Going for first fit");
 
-            int pointsUsed;
-            return FitScore(peakData, chargeState, peak, delta, minTheoreticalIntensityForScore, out pointsUsed,
-                debug);
+            return FitScore(peakData, chargeState, peak, delta, minTheoreticalIntensityForScore, out _, debug);
         }
 
         /// <summary>
@@ -940,8 +935,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var numFilteredTheorPeaks = 0;
             for (var i = 0; i < numTheorPeaks; i++)
             {
-                ThrashV1Peak peak;
-                theorPeakData.GetPeak(i, out peak);
+                theorPeakData.GetPeak(i, out var peak);
 
                 if (peak.Intensity >= theorIntensityCutOff)
                 {
@@ -961,14 +955,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             for (var i = 0; i < numFilteredTheorPeaks; i++)
             {
-                ThrashV1Peak theorPeak;
-                filteredTheorPeakData.GetPeak(i, out theorPeak);
+                filteredTheorPeakData.GetPeak(i, out var theorPeak);
 
                 var targetMzLower = theorPeak.Mz + startingDelta - peakWidth;
                 var targetMzUpper = theorPeak.Mz + startingDelta + peakWidth;
 
-                ThrashV1Peak foundPeak;
-                obsPeakData.FindPeak(targetMzLower, targetMzUpper, out foundPeak);
+                obsPeakData.FindPeak(targetMzLower, targetMzUpper, out var foundPeak);
 
                 if (foundPeak.Mz > 0)
                 {

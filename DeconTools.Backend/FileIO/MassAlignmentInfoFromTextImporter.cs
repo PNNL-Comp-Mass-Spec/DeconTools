@@ -49,11 +49,11 @@ namespace DeconTools.Backend.FileIO
 
             try
             {
-                reader = new StreamReader(this._filename);
+                reader = new StreamReader(_filename);
             }
             catch (Exception)
             {
-                throw new System.IO.IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from the file.");
             }
 
             using (var sr = reader)

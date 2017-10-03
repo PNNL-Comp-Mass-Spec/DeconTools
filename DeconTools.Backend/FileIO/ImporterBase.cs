@@ -22,7 +22,7 @@ namespace DeconTools.Backend.FileIO
         /// </summary>
         public virtual string Name
         {
-            get { return this.ToString(); }
+            get { return ToString(); }
             set { ;}
         }
 
@@ -102,16 +102,16 @@ namespace DeconTools.Backend.FileIO
         {
             m_columnHeaders = ProcessLine(headerLine);
 
-            this.columnIndexTable = new Dictionary<string, int>();
+            columnIndexTable = new Dictionary<string, int>();
 
 
             for (var i = 0; i < m_columnHeaders.Count; i++)
             {
                 var header = m_columnHeaders[i].ToLower();
 
-                if (!this.columnIndexTable.ContainsKey(header))
+                if (!columnIndexTable.ContainsKey(header))
                 {
-                    this.columnIndexTable.Add(header, i);
+                    columnIndexTable.Add(header, i);
                 }
 
             }
@@ -358,9 +358,9 @@ namespace DeconTools.Backend.FileIO
             var t = target.ToLower();
 
 
-            if (this.columnIndexTable.ContainsKey(t))
+            if (columnIndexTable.ContainsKey(t))
             {
-                return this.columnIndexTable[t];
+                return columnIndexTable[t];
             }
             else
             {

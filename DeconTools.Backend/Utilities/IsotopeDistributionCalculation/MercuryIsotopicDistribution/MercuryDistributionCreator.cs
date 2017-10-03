@@ -10,10 +10,9 @@ namespace DeconTools.Backend.Utilities
 {
     public class MercuryDistributionCreator
     {
-        private Averagine averagineFormulaCreator;
+        private readonly Averagine averagineFormulaCreator;
         private ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury.MercuryIsotopeDistribution decon2LSMercuryDistribution;
-        private DeconToolsPeakDetector peakDetector;
-        private System.Collections.Hashtable elementTable;
+        private readonly DeconToolsPeakDetector peakDetector;
 
         public MolecularFormula MolecularFormula { get; set; }
 
@@ -34,9 +33,9 @@ namespace DeconTools.Backend.Utilities
 
         public void getIsotopicProfile()
         {
-            Check.Require(this.Data != null, "Data has not been loaded. 'CalculateDistribution' should first be executed");
+            Check.Require(Data != null, "Data has not been loaded. 'CalculateDistribution' should first be executed");
 
-            Run run = new ConcreteXYDataRun(this.Data.Xvalues, this.Data.Yvalues);
+            Run run = new ConcreteXYDataRun(Data.Xvalues, Data.Yvalues);
             run.CurrentScanSet = new ScanSet(0);
 
             var tempResults = new ResultCollection(run);
@@ -46,18 +45,20 @@ namespace DeconTools.Backend.Utilities
             peakDetector.IsDataThresholded = true;
             peakDetector.Execute(run.ResultCollection);
 
-            this.IsotopicProfile = new IsotopicProfile();
-            this.IsotopicProfile.ChargeState = this.ChargeState;
-            this.IsotopicProfile.Peaklist = Utilities.Converters.PeakTypeConverter.ConvertToMSPeaks(run.PeakList);
+            IsotopicProfile = new IsotopicProfile
+            {
+                ChargeState = ChargeState,
+                Peaklist = Converters.PeakTypeConverter.ConvertToMSPeaks(run.PeakList)
+            };
         }
 
-        private MSPeak findClosestPeak(List<MSPeak> list, double targetMZ)
+        private MSPeak findClosestPeak(IReadOnlyCollection<MSPeak> list, double targetMZ)
         {
             if (list == null) return null;
             if (list.Count == 0) return null;
 
             var diff = double.MaxValue;
-            var closestPeak = new MSPeak();
+            var closestPeak = new MSPeak(0);
 
             foreach (var peak in list)
             {
@@ -83,25 +84,24 @@ namespace DeconTools.Backend.Utilities
         {
             Check.Require(molecularFormula != null, "Molecular formula has not been defined.");
 
-            this.MolecularFormula=molecularFormula;
-            this.Data = new XYData();    //clears any old data
+            MolecularFormula = molecularFormula;
+            Data = new XYData();    //clears any old data
 
             var deconToolsMolFormula = ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ElementalFormulas.MolecularFormula.ConvertFromString(molecularFormula.ToFormulaString());
-            this.decon2LSMercuryDistribution = new ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury.MercuryIsotopeDistribution();
+            decon2LSMercuryDistribution = new ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.Mercury.MercuryIsotopeDistribution();
 
-            List<double> x, y, xIsotope, yIsotope;
-            this.decon2LSMercuryDistribution.CalculateDistribution(this.ChargeState, this.Resolution, deconToolsMolFormula, out x, out y, 0, out xIsotope, out yIsotope, false);
+            decon2LSMercuryDistribution.CalculateDistribution(ChargeState, Resolution, deconToolsMolFormula, out var x, out var y, 0, out _, out _);
 
-            this.Data = new XYData() { Xvalues = x.ToArray(), Yvalues = y.ToArray() };
+            Data = new XYData() { Xvalues = x.ToArray(), Yvalues = y.ToArray() };
         }
 
         public void CreateDistribution(double mass, int chargeState, double resolution)
         {
             var empiricalFormula = averagineFormulaCreator.GenerateAveragineFormula(mass);
-            this.MolecularFormula = MolecularFormula.Parse(empiricalFormula);
-            this.Resolution = resolution;
-            this.ChargeState = chargeState;
-            CreateDistribution(this.MolecularFormula);
+            MolecularFormula = MolecularFormula.Parse(empiricalFormula);
+            Resolution = resolution;
+            ChargeState = chargeState;
+            CreateDistribution(MolecularFormula);
         }
 
         //public void CreateDistribution(double mz, int chargeState, double fwhm)
@@ -117,7 +117,7 @@ namespace DeconTools.Backend.Utilities
 
         private double calculateOffset(double targetMZ)
         {
-            var closestPeak = findClosestPeak(this.IsotopicProfile.Peaklist, targetMZ);
+            var closestPeak = findClosestPeak(IsotopicProfile.Peaklist, targetMZ);
             return (targetMZ - closestPeak.XValue);
 
         }
@@ -133,13 +133,13 @@ namespace DeconTools.Backend.Utilities
         /// <param name="targetIsotopicProfile"></param>
         public void OffsetDistribution(IsotopicProfile targetIsotopicProfile)
         {
-            double offset = 0;
+            double offset;
 
             getIsotopicProfile();    //this generates the peakList from the theor dist
-            if (this.IsotopicProfile == null || this.IsotopicProfile.Peaklist == null || this.IsotopicProfile.Peaklist.Count == 0) return;
+            if (IsotopicProfile?.Peaklist == null || IsotopicProfile.Peaklist.Count == 0) return;
 
-            var mostIntensePeak = this.IsotopicProfile.getMostIntensePeak();
-            var indexOfMostIntensePeak = this.IsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
+            var mostIntensePeak = IsotopicProfile.getMostIntensePeak();
+            var indexOfMostIntensePeak = IsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
 
             if (targetIsotopicProfile.Peaklist == null || targetIsotopicProfile.Peaklist.Count == 0) return;
 
@@ -149,16 +149,16 @@ namespace DeconTools.Backend.Utilities
             {
                 var targetPeak = targetIsotopicProfile.Peaklist[indexOfMostIntensePeak];
                 //offset = targetPeak.MZ - mostIntensePeak.MZ;
-                offset = targetIsotopicProfile.Peaklist[0].XValue - this.IsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
+                offset = targetIsotopicProfile.Peaklist[0].XValue - IsotopicProfile.Peaklist[0].XValue;   //want to test to see if Thrash is same as rapid
             }
             else
             {
-                offset = targetIsotopicProfile.Peaklist[0].XValue - this.IsotopicProfile.Peaklist[0].XValue;
+                offset = targetIsotopicProfile.Peaklist[0].XValue - IsotopicProfile.Peaklist[0].XValue;
             }
 
-            for (var i = 0; i < this.Data.Xvalues.Length; i++)
+            for (var i = 0; i < Data.Xvalues.Length; i++)
             {
-                this.Data.Xvalues[i] = this.Data.Xvalues[i] + offset;
+                Data.Xvalues[i] = Data.Xvalues[i] + offset;
             }
         }
     }

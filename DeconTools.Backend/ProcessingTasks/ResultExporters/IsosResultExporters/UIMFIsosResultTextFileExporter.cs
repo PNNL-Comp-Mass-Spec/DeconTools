@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class UIMFIsosResultTextFileExporter:IsosResultTextFileExporter
+    public sealed class UIMFIsosResultTextFileExporter : IsosResultTextFileExporter
     {
-        private int triggerVal;
         private char delimiter;
-
- 
-
-
 
         #region Constructors
         public UIMFIsosResultTextFileExporter(string fileName)
@@ -23,10 +18,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public UIMFIsosResultTextFileExporter(string fileName, int triggerValueToExport)
         {
-            this.TriggerToExport = triggerValueToExport;
-            this.delimiter = ',';
-            this.Name = "UIMF IsosResult TextFile Exporter";
-            this.FileName = fileName;
+            TriggerToExport = triggerValueToExport;
+            delimiter = ',';
+            Name = "UIMF IsosResult TextFile Exporter";
+            FileName = fileName;
 
             initializeAndWriteHeader();
 
@@ -34,36 +29,17 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
         #region Properties
+
         public override char Delimiter
         {
-            get
-            {
-                return delimiter;
-            }
-            set
-            {
-                delimiter = value;
-            }
+            get => delimiter;
+            set => delimiter = value;
         }
-        public override int TriggerToExport
-        {
-            get
-            {
-                return triggerVal;
-            }
-            set
-            {
-                triggerVal = value;
-            }
-        }
+        public override int TriggerToExport { get; set; }
 
         #endregion
 
-
-
-
-
-        protected override string buildIsosResultOutput(DeconTools.Backend.Core.IsosResult result)
+        protected override string buildIsosResultOutput(IsosResult result)
         {
             Check.Require(result is UIMFIsosResult, "UIMF Isos Exporter is only used with UIMF results");
             var uimfResult = (UIMFIsosResult)result;

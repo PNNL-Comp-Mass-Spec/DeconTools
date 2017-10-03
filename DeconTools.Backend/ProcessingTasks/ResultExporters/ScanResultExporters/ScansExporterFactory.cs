@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Data
                             scansExporter = new BasicScanResult_TextFileExporter(outputFileName);
                             break;
                     }
-                    
+
                     break;
             }
             return scansExporter;

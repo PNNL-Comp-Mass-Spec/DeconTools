@@ -41,12 +41,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         {
             if (resultList.ResultList == null || resultList.ResultList.Count == 0) return;
 
-            // check if results exceed Trigger value or is the last Scan 
+            // check if results exceed Trigger value or is the last Scan
             bool isLastScan;
-            if (resultList.Run is UIMFRun)
+            if (resultList.Run is UIMFRun uimfRun)
             {
-                var uimfRun = (UIMFRun) resultList.Run;
-
                 var lcScanSet = resultList.Run.ScanSetCollection.ScanSetList;
 
                 var lastFrameNum = lcScanSet[lcScanSet.Count - 1].PrimaryScanNumber;
@@ -62,8 +60,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             }
 
 
-            if (resultList.ResultList.Count >= TriggerToExport || 
-                DateTime.UtcNow.Subtract(LastExportTime).TotalSeconds >= MAX_SECONDS_BETWEEN_EXPORT || 
+            if (resultList.ResultList.Count >= TriggerToExport ||
+                DateTime.UtcNow.Subtract(LastExportTime).TotalSeconds >= MAX_SECONDS_BETWEEN_EXPORT ||
                 isLastScan)
             {
                 ExportIsosResults(resultList.ResultList);

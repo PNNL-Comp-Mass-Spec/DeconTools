@@ -12,7 +12,7 @@ namespace DeconTools.Backend.FileIO
     public class MassTagFromSqlDbImporter : IMassTagImporter
     {
         private List<Tuple<int, string, int, string>> _massTagModData;
-        public List<long> MassTagsToBeRetrieved { get; private set; }
+        public List<long> MassTagsToBeRetrieved { get; }
 
         #region Constructors
         public MassTagFromSqlDbImporter()
@@ -34,9 +34,9 @@ namespace DeconTools.Backend.FileIO
         public MassTagFromSqlDbImporter(string dbName, string serverName, List<long> massTagsToBeRetrieved)
             : this()
         {
-            this.DbName = dbName;
-            this.DbServerName = serverName;
-            this.MassTagsToBeRetrieved = massTagsToBeRetrieved;
+            DbName = dbName;
+            DbServerName = serverName;
+            MassTagsToBeRetrieved = massTagsToBeRetrieved;
         }
 
         #endregion
@@ -57,10 +57,10 @@ namespace DeconTools.Backend.FileIO
         public bool ChargeStateRangeBasedOnDatabase { get; set; }
 
 
-        public DeconTools.Backend.Globals.MassTagDBImporterMode ImporterMode { get; set; }
+        public Globals.MassTagDBImporterMode ImporterMode { get; set; }
 
         /// <summary>
-        /// A value between 0 and 1.  A value of 0 means 
+        /// A value between 0 and 1.  A value of 0 means
         /// </summary>
         public double ChargeStateFilterThreshold { get; set; }
 
@@ -74,17 +74,19 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         private string buildConnectionString()
         {
-            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder.UserID = DbUsername;
-            builder.DataSource = DbServerName;
-            builder.Password = DbUserPassWord;
-            builder.InitialCatalog = DbName;
-            builder.ConnectTimeout = 5;
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
+            {
+                UserID = DbUsername,
+                DataSource = DbServerName,
+                Password = DbUserPassWord,
+                InitialCatalog = DbName,
+                ConnectTimeout = 5
+            };
 
             return builder.ConnectionString;
         }
         #endregion
-        public override DeconTools.Backend.Core.TargetCollection Import()
+        public override TargetCollection Import()
         {
 
             var targetCollection = new TargetCollection();
@@ -99,8 +101,9 @@ namespace DeconTools.Backend.FileIO
             var troubleSomePeptides = new List<TargetBase>();
 
 
-            foreach (PeptideTarget peptide in targetCollection.TargetList)
+            foreach (var targetBase in targetCollection.TargetList)
             {
+                var peptide = (PeptideTarget)targetBase;
                 var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
 
                 if (peptide.ContainsMods)
@@ -123,7 +126,7 @@ namespace DeconTools.Backend.FileIO
 
                             troubleSomePeptides.Add(peptide);
                         }
-                        
+
                     }
                 }
 
@@ -139,7 +142,7 @@ namespace DeconTools.Backend.FileIO
                     troubleSomePeptides.Add(peptide);
                 }
 
-                
+
             }
 
             var cleanTargetList = new List<TargetBase>();
@@ -159,7 +162,7 @@ namespace DeconTools.Backend.FileIO
 
             if (ChargeStateRangeBasedOnDatabase)
             {
-                targetCollection.ApplyChargeStateFilter(this.ChargeStateFilterThreshold);  
+                targetCollection.ApplyChargeStateFilter(ChargeStateFilterThreshold);
             }
             else
             {
@@ -172,7 +175,7 @@ namespace DeconTools.Backend.FileIO
 
                     for (var charge = minCharge; charge <= maxCharge; charge++)
                     {
-                        var mz = targetBase.MonoIsotopicMass / charge + DeconTools.Backend.Globals.PROTON_MASS;
+                        var mz = targetBase.MonoIsotopicMass / charge + Globals.PROTON_MASS;
 
                         if (mz < MaxMZForChargeStateRange)
                         {
@@ -198,7 +201,7 @@ namespace DeconTools.Backend.FileIO
 
 
             }
-            
+
 
             return targetCollection;
 
@@ -209,8 +212,9 @@ namespace DeconTools.Backend.FileIO
         private void CalculateEmpiricalFormulas(TargetCollection data)
         {
             var peptideUtils = new PeptideUtils();
-            foreach (PeptideTarget peptide in data.TargetList)
+            foreach (var targetBase in data.TargetList)
             {
+                var peptide = (PeptideTarget)targetBase;
                 var baseEmpiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptide.Code);
 
                 if (peptide.ContainsMods)
@@ -229,10 +233,10 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-        private void GetModDataFromDB(TargetCollection data, List<long> massTagsToBeRetrivedList)
+        private void GetModDataFromDB(TargetCollection data, IReadOnlyList<long> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            var queryString = createQueryString(this.ImporterMode, massTagsToBeRetrivedList);
+            var queryString = createQueryString(ImporterMode, massTagsToBeRetrivedList);
             //Console.WriteLine(queryString);
 
             var modContainingPeptides = (from n in data.TargetList where n.ModCount > 0 select n).ToList();
@@ -243,6 +247,9 @@ namespace DeconTools.Backend.FileIO
 
             using (var cnn = fact.CreateConnection())
             {
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetModDataFromDB");
+
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -270,47 +277,44 @@ namespace DeconTools.Backend.FileIO
 
                         var rowData = Tuple.Create(mtid, modName, modPosition, empiricalFormula);
 
-                        
+
 
                         if (rowData.Item2.Contains("O18"))
                         {
                             Console.WriteLine("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
-                            //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled 
+                            //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled
                         }
                         else if (rowData.Item2.Contains("N15"))
                         {
                             //ignore N15 modifications for now
                             Console.WriteLine("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
-                            
+
                         }
                         else
                         {
-                            _massTagModData.Add(rowData); 
+                            _massTagModData.Add(rowData);
                         }
 
-                        
+
                     }
                 }
             }
 
-
-
-
-
         }
 
-
-
-        private void GetMassTagDataFromDB(TargetCollection data, List<long> massTagsToBeRetrivedList)
+        private void GetMassTagDataFromDB(TargetCollection data, IReadOnlyCollection<long> massTagsToBeRetrivedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
 
             var currentListPos = 0;
-            
+
 
             using (var cnn = fact.CreateConnection())
             {
+                if (cnn == null)
+                    throw new Exception("Factory.CreateConnection returned a null DbConnection object in GetMassTagDataFromDB");
+
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -320,17 +324,17 @@ namespace DeconTools.Backend.FileIO
                     var nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
                     currentListPos += (ChunkSize-1);
 
-                    var queryString = createQueryString(this.ImporterMode,nextGroupOfMassTagIDs);
+                    var queryString = createQueryString(ImporterMode,nextGroupOfMassTagIDs);
                     //Console.WriteLine(queryString);
 
-                    
+
                     using (var command = cnn.CreateCommand())
                     {
                         command.CommandText = queryString;
                         command.CommandTimeout = 120;
                         var reader = command.ExecuteReader();
 
-                        
+
                         while (reader.Read())
                         {
                             var massTag = new PeptideTarget();
@@ -382,7 +386,7 @@ namespace DeconTools.Backend.FileIO
 
 
 
-            
+
         }
 
 
@@ -407,7 +411,7 @@ namespace DeconTools.Backend.FileIO
 
         }
 
-        private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode, List<long> massTagsToBeRetrieved)
+        private string createQueryString(Globals.MassTagDBImporterMode massTagDBImporterMode, IReadOnlyList<long> massTagsToBeRetrieved)
         {
             var sb = new StringBuilder();
             sb.Append(@"SELECT * FROM ( SELECT Mass_Tag_ID,
@@ -419,12 +423,12 @@ namespace DeconTools.Backend.FileIO
               Charge_State,
               ObsCount,
               Monoisotopic_Mass/Charge_State+1.00727649 as mz,
-              Avg_GANET,                            
+              Avg_GANET,
               Ref_ID,
               Reference,
               Description,
               Row_Number() OVER ( PARTITION BY mass_tag_id ORDER BY ObsCount DESC ) AS ObsRank
-              
+
        FROM ( SELECT T_Mass_Tags.Mass_Tag_ID,
                      T_Mass_Tags.Monoisotopic_Mass,
                      T_Mass_Tags.Peptide,
@@ -434,7 +438,7 @@ namespace DeconTools.Backend.FileIO
                      T_Peptides.Charge_State,
                      T_Mass_Tags_NET.Avg_GANET,
                      T_Mass_Tag_to_Protein_Map.Ref_ID,
-                     T_Proteins.Reference,   
+                     T_Proteins.Reference,
                      T_Proteins.Description,
                      COUNT(*) AS ObsCount
               FROM T_Mass_Tags
@@ -449,7 +453,7 @@ namespace DeconTools.Backend.FileIO
               GROUP BY T_Mass_Tags.Mass_Tag_ID,T_Mass_Tags.Monoisotopic_Mass, T_Mass_Tags.Peptide, T_Mass_Tags.PeptideEx,
               T_Mass_Tags.Mod_Count,T_Mass_Tags.Mod_Description,T_Peptides.Charge_State,T_Mass_Tags_NET.Avg_GANET, T_Mass_Tag_to_Protein_Map.Ref_ID,
               T_Proteins.Reference, T_Proteins.Description
-             ) LookupQ 
+             ) LookupQ
       ) OuterQ ");
 
 
@@ -460,6 +464,9 @@ namespace DeconTools.Backend.FileIO
                 case Globals.MassTagDBImporterMode.List_of_MT_IDs_Mode:
                     Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
+
+                    if (massTagsToBeRetrieved == null)
+                        break;
 
                     for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
                     {
@@ -480,10 +487,6 @@ namespace DeconTools.Backend.FileIO
                     }
 
                     break;
-                default:
-                    break;
-
-
             }
             return sb.ToString();
         }

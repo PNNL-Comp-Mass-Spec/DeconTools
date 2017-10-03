@@ -37,8 +37,10 @@ namespace DeconTools.Backend.Workflows
         private string _outputSummaryFilename;
         private string _outputParentProfileDataFilename;
 
-        private double _currentMS1TICIntensity=0;
+        private double _currentMS1TICIntensity;
         private const int NumScansBetweenProgress = 500;
+
+        private string _delimiter = "\t";
 
         #region Constructors
 
@@ -105,7 +107,7 @@ namespace DeconTools.Backend.Workflows
         /// The tolerance used in comparing the inaccurate precursor m/z to the accurate m/z values from the MS1
         /// </summary>
         public double ToleranceInPPM { get; set; }
-      
+
         public List<DeconMSnResult> DeconMSnResults { get; set; }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace DeconTools.Backend.Workflows
         public int NumMaxAttemptsAtLowIntensitySpecies { get; set; }
 
         /// <summary>
-        /// Create a _profile.txt file. This supports DTARefinery which looks for this file. 
+        /// Create a _profile.txt file. This supports DTARefinery which looks for this file.
         /// Otherwise, the same data can be found in the _DeconMSn_log.txt file
         /// </summary>
         public bool IsParentProfileDataExported { get; set; }
@@ -150,7 +152,7 @@ namespace DeconTools.Backend.Workflows
 
                 if (currentMSLevel == 1)
                 {
-                    
+
                     _currentMSFeatures.Clear();
                     Run.ResultCollection.IsosResultBin.Clear();
 
@@ -226,7 +228,7 @@ namespace DeconTools.Backend.Workflows
                             MSGenerator.Execute(Run.ResultCollection);
 
                             //run MS1 peak detector, with greater sensitivity
-                            var isLastAttempt = attemptNum >= NumMaxAttemptsAtLowIntensitySpecies - 2;    //need to do -2 because of the way the loop advances the counter. 
+                            var isLastAttempt = attemptNum >= NumMaxAttemptsAtLowIntensitySpecies - 2;    //need to do -2 because of the way the loop advances the counter.
 
                             if (isLastAttempt)
                             {
@@ -328,15 +330,13 @@ namespace DeconTools.Backend.Workflows
                         }
                     }
 
-                    //Build export data. 
+                    //Build export data.
                     var outputString = GetMGFOutputString(Run, scanSet.PrimaryScanNumber, deconMSnResult, ms2Peaks);
 
                     var includeHeader = resultCounter == 1;
                     var summaryString = GetSummaryString(deconMSnResult, includeHeader);
 
                     var parentProfileString = GetParentProfileString(deconMSnResult, includeHeader);
-
-
 
                     if (ExportData)
                     {
@@ -346,9 +346,9 @@ namespace DeconTools.Backend.Workflows
 
                         if (IsParentProfileDataExported)
                         {
-                            WriteOutParentProfileInfoString(parentProfileString);  
+                            WriteOutParentProfileInfoString(parentProfileString);
                         }
-                        
+
 
                     }
 
@@ -360,7 +360,7 @@ namespace DeconTools.Backend.Workflows
                 }
                 else
                 {
-                    throw new System.ApplicationException(
+                    throw new ApplicationException(
                         "DeconMSn only works on MS1 and MS2 data; You are attempting MS3");
                 }
 
@@ -532,36 +532,29 @@ namespace DeconTools.Backend.Workflows
 
         private void WriteOutMainData(string outputString)
         {
-            using (var sw = new StreamWriter(new System.IO.FileStream(_outputFileName, System.IO.FileMode.Append,
-                      System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(_outputFileName, FileMode.Append,
+                      FileAccess.Write, FileShare.Read)))
             {
-                sw.AutoFlush = true;
                 sw.Write(outputString);
-                sw.Flush();
-
                 sw.Close();
             }
         }
 
         private void WriteOutDeconMSnSummary(string deconResultsStringOutput)
         {
-            using (var sw = new StreamWriter(new System.IO.FileStream(_outputSummaryFilename, System.IO.FileMode.Append,
-                      System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(_outputSummaryFilename, FileMode.Append,
+                      FileAccess.Write, FileShare.Read)))
             {
-                sw.AutoFlush = true;
                 sw.WriteLine(deconResultsStringOutput);
-
             }
         }
 
         private void WriteOutParentProfileInfoString(string outputString)
         {
-            using (var sw = new StreamWriter(new System.IO.FileStream(_outputParentProfileDataFilename, System.IO.FileMode.Append,
-                    System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(_outputParentProfileDataFilename, FileMode.Append,
+                    FileAccess.Write, FileShare.Read)))
             {
-                sw.AutoFlush = true;
                 sw.WriteLine(outputString);
-
             }
         }
 
@@ -602,6 +595,6 @@ namespace DeconTools.Backend.Workflows
             return candidateMS1Features;
         }
 
-        
+
     }
 }

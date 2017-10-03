@@ -10,7 +10,7 @@ namespace DeconTools.Backend.FileIO
 {
     public class MassTagFromTextFileImporter : IMassTagImporter
     {
-        
+
 
         #region Constructors
 
@@ -19,10 +19,10 @@ namespace DeconTools.Backend.FileIO
 
         public MassTagFromTextFileImporter(string filename)
         {
-            if (!File.Exists(filename)) throw new System.IO.IOException("MassTagImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
-            this.m_filename = filename;
-            this.delimiter = '\t';
-            
+            if (!File.Exists(filename)) throw new IOException("MassTagImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
+            m_filename = filename;
+            delimiter = '\t';
+
         }
 
 
@@ -53,7 +53,7 @@ namespace DeconTools.Backend.FileIO
 
             using (var reader = new StreamReader(m_filename))
             {
-                var headerLine = reader.ReadLine();    //first line is the header line.   
+                var headerLine = reader.ReadLine();    //first line is the header line.
 
                 _headers = processLine(headerLine);
 
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.FileIO
                     }
 
 
-                    if (!massTag.ContainsMods && String.IsNullOrEmpty(massTag.EmpiricalFormula))
+                    if (!massTag.ContainsMods && string.IsNullOrEmpty(massTag.EmpiricalFormula))
                     {
                         massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
                     }
@@ -102,7 +102,7 @@ namespace DeconTools.Backend.FileIO
                     var chargeStateInfoIsAvailable = massTag.ChargeState != 0;
                     if (massTagMassInfoMissing)
                     {
-                        if (!String.IsNullOrEmpty(massTag.EmpiricalFormula))
+                        if (!string.IsNullOrEmpty(massTag.EmpiricalFormula))
                         {
                             massTag.MonoIsotopicMass =
                                 EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.FileIO
                             var calcMZ = massTag.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
                             if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)
                             {
-                                var copiedMassTag = new PeptideTarget(massTag);    //we need to create multiple mass tags 
+                                var copiedMassTag = new PeptideTarget(massTag);    //we need to create multiple mass tags
                                 copiedMassTag.ChargeState = (short)chargeState;
                                 copiedMassTag.MZ = calcMZ;
 
@@ -161,7 +161,7 @@ namespace DeconTools.Backend.FileIO
                 //if (noNormalizedElutionTimeInfoAvailable)
                 //{
                 //    peptideTarget.NormalizedElutionTime = 0.5f;
-                //}   
+                //}
             }
 
 
@@ -186,9 +186,9 @@ namespace DeconTools.Backend.FileIO
             if (neitherScanOrNETIsProvided)
             {
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
-                mt.NormalizedElutionTime = 0.5f;  // set the NET mid-way between 0 and 1. 
+                mt.NormalizedElutionTime = 0.5f;  // set the NET mid-way between 0 and 1.
             }
-            
+
             var useScanNum = ((int)mt.NormalizedElutionTime == -1 && scanNum != -1);
             if (useScanNum)
             {

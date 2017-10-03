@@ -195,7 +195,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             var empiricalFormula = GetAverageFormulaForMass(averageMass);
-            // Convert to String.
+            // Convert to string.
             //string empiricalFormulaStr = "";
             var formulaBuilder = new StringBuilder();
             var numElements = empiricalFormula.ElementalComposition.Count;

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace DeconTools.Backend.Data
 {
@@ -29,9 +28,8 @@ namespace DeconTools.Backend.Data
         protected sealed override char delimiter { get; set; }
 
 
-        public override void Export(DeconTools.Backend.Core.ResultCollection results)
+        public override void Export(Core.ResultCollection results)
         {
-            StringBuilder sb;
             StreamWriter sw;
             try
             {

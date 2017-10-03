@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Utilities.Converters
 {
 
-    //TODO: REVISIT 
-    public class IntensityToImageConverter //should implement TASK so that we can run execute on this, we might not expose any of the methods in that case. 
+    //TODO: REVISIT
+    public class IntensityToImageConverter //should implement TASK so that we can run execute on this, we might not expose any of the methods in that case.
     {
         private ColorBlend color_blend;
         private float[] color_positions;
 
-        private float[] COLOR_POS = new float[] { 0.0f, 0.4F, .75f, .86f, .91f, .975f, .995F, 1.0f };
+        private readonly float[] COLOR_POS = { 0.0f, 0.4F, .75f, .86f, .91f, .975f, .995F, 1.0f };
 
         public IntensityToImageConverter()
         {
@@ -24,10 +22,11 @@ namespace DeconTools.Backend.Utilities.Converters
         }
 
 
-        public void initializeColorMap(){
+        public void initializeColorMap()
+        {
             color_blend = new ColorBlend();
-            color_positions = new float[] { COLOR_POS[0], COLOR_POS[1], COLOR_POS[2], COLOR_POS[3], COLOR_POS[4], COLOR_POS[5], COLOR_POS[6], COLOR_POS[7]};
-            color_blend.Colors = new Color[] { Color.Purple, Color.Red, Color.Yellow, Color.GreenYellow, Color.Lime, Color.SkyBlue, Color.Blue, Color.DarkBlue};
+            color_positions = new[] { COLOR_POS[0], COLOR_POS[1], COLOR_POS[2], COLOR_POS[3], COLOR_POS[4], COLOR_POS[5], COLOR_POS[6], COLOR_POS[7] };
+            color_blend.Colors = new[] { Color.Purple, Color.Red, Color.Yellow, Color.GreenYellow, Color.Lime, Color.SkyBlue, Color.Blue, Color.DarkBlue };
             color_blend.Positions = new float[color_positions.Length];
             for (var i = 0; i < color_positions.Length; i++)
             {
@@ -56,174 +55,174 @@ namespace DeconTools.Backend.Utilities.Converters
             var peaksForCurveFitting = new List<MSPeakResult>(3000);
             var peakId = 0;
             var frameIndex = startFrameInMap;
-            var scanIndex = startScanInMap;
-            var scanNumber = startScan;
+            ushort scanIndex;
+            ushort scanNumber;
             var frameNumber = startFrame;
             totalSummed = 0;
+
             //multiply the threshold by max intensity for now
-             threshold *= maxIntensity;
+            threshold *= maxIntensity;
 
-             //start at the center of the map
-             minimumScanNumber = ushort.MaxValue;
-             maximumScanNumber = ushort.MinValue;
+            //start at the center of the map
+            minimumScanNumber = ushort.MaxValue;
+            maximumScanNumber = ushort.MinValue;
 
-                //go up from the start frame value
-                while (frameIndex > 0 && intensityMap[frameIndex][startScanInMap] >= threshold )
-                {
-                    var scanNumberList = new List<ushort>(200);
-                    var end = intensityMap[frameIndex].Length;
-                    scanIndex = startScanInMap;
-                    scanNumber = startScan;
-                    //go left to determine the first value taht's below the threshold
-                    while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold)
-                    {
-                        var peak = new MSPeak();
-                        peak.Height = intensityMap[frameIndex][scanIndex];
-                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
-                        peaksForCurveFitting.Add(msPeak);
-
-                        if (scanNumber < minimumScanNumber)
-                        {
-                            minimumScanNumber = scanNumber;
-                        }
-                        else if (scanNumber > maximumScanNumber)
-                        {
-                            maximumScanNumber = scanNumber;
-                        }
-
-                        scanNumberList.Add(scanNumber--);
-
-                        scanIndex--;
-
-                    }
-                    
-
-                    //start the search for the right value from the next scan
-                    scanIndex = (ushort) (startScanInMap + 1);
-                    scanNumber = (ushort) (startScan + 1);
-                    //go right to determine the next value that's below the threshold
-                    while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold )
-                    {
-                        var peak = new MSPeak();
-                        peak.Height = intensityMap[frameIndex][scanIndex];
-                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
-                        peaksForCurveFitting.Add(msPeak);
-                        if (scanNumber < minimumScanNumber)
-                        {
-                            minimumScanNumber = scanNumber;
-                        }
-                        else if (scanNumber > maximumScanNumber)
-                        {
-                            maximumScanNumber = scanNumber;
-                        }
-
-                        scanNumberList.Add(scanNumber++);
-                        scanIndex++;
-                    }
-                    
-                    frameIndex--;
-
-                    //this means we've finished adding scan numbers to the list for current frame
-                    //now check if that is more than 3
-                    if (scanNumberList.Count < 3)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        scanNumberList.Sort();
-                        frameAndScanNumbers.Add(frameNumber, scanNumberList);
-                        totalSummed += (ushort) scanNumberList.Count;
-                    }
-
-                    frameNumber--;
-                }
-
-                //go down
-                frameIndex = (ushort)(startFrameInMap + 1);
+            //go up from the start frame value
+            while (frameIndex > 0 && intensityMap[frameIndex][startScanInMap] >= threshold)
+            {
+                var scanNumberList = new List<ushort>(200);
+                var end = intensityMap[frameIndex].Length;
                 scanIndex = startScanInMap;
                 scanNumber = startScan;
-                frameNumber = (ushort)(startFrame + 1);
-
-                while (frameIndex < intensityMap.Length - 1 && intensityMap[frameIndex][startScanInMap] >= threshold )
+                //go left to determine the first value taht's below the threshold
+                while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold)
                 {
-                    //processing frame
-                    // Console.WriteLine("processing frame " + frameIndex);
-                    var scanNumberList = new List<ushort>(200);
-                    
+                    const double mz = 0;
+                    var intensity = intensityMap[frameIndex][scanIndex];
+                    var peak = new MSPeak(mz, intensity);
 
-                    var end = intensityMap[frameIndex].Length;
-                    scanIndex = startScanInMap;
-                    scanNumber = startScan;
-                    //go left to determine the first value taht's below the threshold
-                    while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold )
+                    var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                    peaksForCurveFitting.Add(msPeak);
+
+                    if (scanNumber < minimumScanNumber)
                     {
-                        var peak = new MSPeak();
-                        peak.Height = intensityMap[frameIndex][scanIndex];
-                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
-                        peaksForCurveFitting.Add(msPeak);
-                        if (scanNumber < minimumScanNumber)
-                        {
-                            minimumScanNumber = scanNumber;
-                        }
-                        else if (scanNumber > maximumScanNumber)
-                        {
-                            maximumScanNumber = scanNumber;
-                        }
-
-                        scanNumberList.Add(scanNumber--);
-                        scanIndex--;
-
+                        minimumScanNumber = scanNumber;
+                    }
+                    else if (scanNumber > maximumScanNumber)
+                    {
+                        maximumScanNumber = scanNumber;
                     }
 
-                    //start the search for the right value from the next scan
-                    scanIndex = (ushort) (startScanInMap+1);
-                    scanNumber = (ushort) (startScan+1);
-                    //go right to determine the next value that's below the threshold
-                    while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold )
-                    {
-                        var peak = new MSPeak();
-                        peak.Height = intensityMap[frameIndex][scanIndex];
-                        var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
-                        peaksForCurveFitting.Add(msPeak);
-                        if (scanNumber < minimumScanNumber)
-                        {
-                            minimumScanNumber = scanNumber;
-                        }
-                        else if (scanNumber > maximumScanNumber)
-                        {
-                            maximumScanNumber = scanNumber;
-                        }
+                    scanNumberList.Add(scanNumber--);
 
-                        scanNumberList.Add(scanNumber++);
-                        scanIndex++;
-                    }
-                    
+                    scanIndex--;
 
-                    frameIndex++;
-
-                    //this means we've finished adding scan numbers to the list for current frame
-                    //now check if that is more than 3
-                    if (scanNumberList.Count< 3)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        scanNumberList.Sort();
-                        frameAndScanNumbers.Add(frameNumber, scanNumberList);
-                        totalSummed += (ushort)scanNumberList.Count;
-                    }
-                    frameNumber++;
                 }
 
-            
+
+                //start the search for the right value from the next scan
+                scanIndex = (ushort)(startScanInMap + 1);
+                scanNumber = (ushort)(startScan + 1);
+                //go right to determine the next value that's below the threshold
+                while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold)
+                {
+                    const double mz = 0;
+                    var intensity = intensityMap[frameIndex][scanIndex];
+                    var peak = new MSPeak(mz, intensity);
+
+                    var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                    peaksForCurveFitting.Add(msPeak);
+                    if (scanNumber < minimumScanNumber)
+                    {
+                        minimumScanNumber = scanNumber;
+                    }
+                    else if (scanNumber > maximumScanNumber)
+                    {
+                        maximumScanNumber = scanNumber;
+                    }
+
+                    scanNumberList.Add(scanNumber++);
+                    scanIndex++;
+                }
+
+                frameIndex--;
+
+                //this means we've finished adding scan numbers to the list for current frame
+                //now check if that is more than 3
+                if (scanNumberList.Count < 3)
+                {
+                    break;
+                }
+                scanNumberList.Sort();
+                frameAndScanNumbers.Add(frameNumber, scanNumberList);
+                totalSummed += (ushort)scanNumberList.Count;
+
+                frameNumber--;
+            }
+
+            //go down
+            frameIndex = (ushort)(startFrameInMap + 1);
+            frameNumber = (ushort)(startFrame + 1);
+
+            while (frameIndex < intensityMap.Length - 1 && intensityMap[frameIndex][startScanInMap] >= threshold)
+            {
+                //processing frame
+                // Console.WriteLine("processing frame " + frameIndex);
+                var scanNumberList = new List<ushort>(200);
+
+
+                var end = intensityMap[frameIndex].Length;
+                scanIndex = startScanInMap;
+                scanNumber = startScan;
+                //go left to determine the first value taht's below the threshold
+                while (scanIndex > 0 && intensityMap[frameIndex][scanIndex] > threshold)
+                {
+                    const double mz = 0;
+                    var intensity = intensityMap[frameIndex][scanIndex];
+                    var peak = new MSPeak(mz, intensity);
+
+                    var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                    peaksForCurveFitting.Add(msPeak);
+                    if (scanNumber < minimumScanNumber)
+                    {
+                        minimumScanNumber = scanNumber;
+                    }
+                    else if (scanNumber > maximumScanNumber)
+                    {
+                        maximumScanNumber = scanNumber;
+                    }
+
+                    scanNumberList.Add(scanNumber--);
+                    scanIndex--;
+
+                }
+
+                //start the search for the right value from the next scan
+                scanIndex = (ushort)(startScanInMap + 1);
+                scanNumber = (ushort)(startScan + 1);
+                //go right to determine the next value that's below the threshold
+                while (scanIndex < end && intensityMap[frameIndex][scanIndex] > threshold)
+                {
+                    const double mz = 0;
+                    var intensity = intensityMap[frameIndex][scanIndex];
+                    var peak = new MSPeak(mz, intensity);
+
+                    var msPeak = new MSPeakResult(peakId++, frameNumber, scanNumber, peak);
+                    peaksForCurveFitting.Add(msPeak);
+                    if (scanNumber < minimumScanNumber)
+                    {
+                        minimumScanNumber = scanNumber;
+                    }
+                    else if (scanNumber > maximumScanNumber)
+                    {
+                        maximumScanNumber = scanNumber;
+                    }
+
+                    scanNumberList.Add(scanNumber++);
+                    scanIndex++;
+                }
+
+
+                frameIndex++;
+
+                //this means we've finished adding scan numbers to the list for current frame
+                //now check if that is more than 3
+                if (scanNumberList.Count < 3)
+                {
+                    break;
+                }
+
+                scanNumberList.Sort();
+                frameAndScanNumbers.Add(frameNumber, scanNumberList);
+                totalSummed += (ushort)scanNumberList.Count;
+                frameNumber++;
+            }
 
             return peaksForCurveFitting;
 
         }
 
-         public Bitmap getBitMapFromIntensityMap(int [][] intensities, int maxIntensity, int frames, int scans, float threshold)
+        public Bitmap getBitMapFromIntensityMap(int[][] intensities, int maxIntensity, int frames, int scans, float threshold)
         {
 
             //the x dimension for intensities here is SCANS and the y dimension is FRAMES
@@ -262,34 +261,34 @@ namespace DeconTools.Backend.Utilities.Converters
 
         }
 
-        public Color getColorFroomIntensity (int colorAsInt) {
-            var red = (int)((colorAsInt >> 0x18) & 0xff);
+        public Color getColorFromIntensity(int colorAsInt)
+        {
+            var red = (colorAsInt >> 0x18) & 0xff;
             Console.WriteLine(red);
-            var green = (int)((colorAsInt >> 0x10) & 0xff);
+            var green = (colorAsInt >> 0x10) & 0xff;
             Console.WriteLine(green);
-            var blue = (int)(colorAsInt & 0xff);
+            var blue = colorAsInt & 0xff;
             Console.WriteLine(blue);
-            return Color.FromArgb((byte)((colorAsInt >> 0x18) & 0xff), 
-                          (byte)((colorAsInt >> 0x10) & 0xff), 
-                          (byte)((colorAsInt >> 8) & 0xff), 
+            return Color.FromArgb((byte)((colorAsInt >> 0x18) & 0xff),
+                          (byte)((colorAsInt >> 0x10) & 0xff),
+                          (byte)((colorAsInt >> 8) & 0xff),
                           (byte)(colorAsInt & 0xff));
         }
 
 
         public Color getRGB(float intensity)
         {
-            float interp;
-            int red=0, green=0, blue=0;
+            int red = 0, green = 0, blue = 0;
 
-            for (var i = 1; i < this.color_blend.Positions.Length; i++)
+            for (var i = 1; i < color_blend.Positions.Length; i++)
             {
-                if (((float)1.0 - intensity) <= this.color_blend.Positions[i])
+                if (((float)1.0 - intensity) <= color_blend.Positions[i])
                 {
-                    interp = (((float)1.0 - intensity) - this.color_blend.Positions[i - 1]) / (this.color_blend.Positions[i] - this.color_blend.Positions[i - 1]);
+                    var interp = (((float)1.0 - intensity) - color_blend.Positions[i - 1]) / (color_blend.Positions[i] - color_blend.Positions[i - 1]);
 
-                    red = (int)(((float)(this.color_blend.Colors[i].R - this.color_blend.Colors[i - 1].R)) * interp) + this.color_blend.Colors[i - 1].R;
-                    green = (int)(((float)(this.color_blend.Colors[i].G - this.color_blend.Colors[i - 1].G) * interp)) + this.color_blend.Colors[i - 1].G;
-                    blue = (int)(((float)(this.color_blend.Colors[i].B - this.color_blend.Colors[i - 1].B) * interp)) + this.color_blend.Colors[i - 1].B;
+                    red = (int)((color_blend.Colors[i].R - color_blend.Colors[i - 1].R) * interp) + color_blend.Colors[i - 1].R;
+                    green = (int)(((color_blend.Colors[i].G - color_blend.Colors[i - 1].G) * interp)) + color_blend.Colors[i - 1].G;
+                    blue = (int)(((color_blend.Colors[i].B - color_blend.Colors[i - 1].B) * interp)) + color_blend.Colors[i - 1].B;
                     break;
                 }
             }
@@ -300,13 +299,13 @@ namespace DeconTools.Backend.Utilities.Converters
             {
                 c = Color.FromArgb(red, green, blue);
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 c = Color.Blue;
             }
 
             return c;
-            
+
 
         }
 

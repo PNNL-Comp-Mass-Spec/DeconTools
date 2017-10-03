@@ -445,7 +445,7 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                nameValue = String.Empty;
+                nameValue = string.Empty;
             }
 
             return nameValue;
@@ -471,7 +471,7 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                valueString = String.Empty;
+                valueString = string.Empty;
             }
 
             return valueString;

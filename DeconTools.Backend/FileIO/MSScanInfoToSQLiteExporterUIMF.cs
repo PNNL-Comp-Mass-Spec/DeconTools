@@ -12,8 +12,8 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MSScanInfoToSQLiteExporterUIMF(string fileName)
         {
-            this.FileName = fileName;
-            this.Name = this.ToString();
+            FileName = fileName;
+            Name = ToString();
 
             InitializeAndBuildTable();
         }
@@ -25,7 +25,7 @@ namespace DeconTools.Backend.FileIO
             get { return m_TABLENAME; }
         }
 
-        public override List<DeconTools.Utilities.SqliteUtils.Field> FieldList
+        public override List<Field> FieldList
         {
             get
             {
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Private Methods
-        protected override List<DeconTools.Utilities.SqliteUtils.Field> CreateFieldList()
+        protected override List<Field> CreateFieldList()
         {
             var fieldList = new List<Field>();
 

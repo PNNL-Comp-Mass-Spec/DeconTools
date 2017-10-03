@@ -326,9 +326,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run.XYData == null)
                 return;
 
-            var xvals = new float[1];
-            var yvals = new float[1];
-            resultList.Run.XYData.GetXYValuesAsSingles(ref xvals, ref yvals);
+            resultList.Run.XYData.GetXYValuesAsSingles(out var xvals, out var yvals);
 
             mSpeakList = resultList.Run.DeconToolsPeakList;
             mTransformResults = new HornTransformResults[0];

@@ -4,9 +4,6 @@ namespace DeconTools.Backend.Core
     public class IMSScanSet : ScanSet
     {
 
-        #region Constructors
-
-
         public IMSScanSet(int primaryScanNum)
             : base(primaryScanNum)
         {
@@ -25,22 +22,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-        #endregion
-
-        #region Properties
-
-
         public double DriftTime { get; set; }
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
-
-        #endregion
 
     }
 }

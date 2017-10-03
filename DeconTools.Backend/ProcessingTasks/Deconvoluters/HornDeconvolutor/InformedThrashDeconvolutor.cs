@@ -76,11 +76,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             var backgroundIntensity = resultList.Run.CurrentBackgroundIntensity;
 
-            //Key step 
+            //Key step
             var msFeatures = PerformThrash(resultList.Run.XYData, resultList.Run.PeakList,
                                            backgroundIntensity, Parameters.MinMSFeatureToBackgroundRatio);
 
-            //Create DeconTools-type results. Get the representative abundance. 
+            //Create DeconTools-type results. Get the representative abundance.
             foreach (var isotopicProfile in msFeatures)
             {
                 var result = resultList.CreateIsosResult();
@@ -130,18 +130,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             var minMSFeatureIntensity = backgroundIntensity * minMSFeatureToBackgroundRatio;
 
 
-            var xyData = new XYData();
-            xyData.Xvalues = originalXYData.Xvalues;
-            xyData.Yvalues = originalXYData.Yvalues;
-
-
-            var peaksThatWereProcessedInfo = new Dictionary<Peak, bool>();
+            var xyData = new XYData
+            {
+                Xvalues = originalXYData.Xvalues,
+                Yvalues = originalXYData.Yvalues
+            };
 
             var sortedPeaklist = new List<Peak>(mspeakList).OrderByDescending(p => p.Height).ToList();
             var peaksAlreadyProcessed = new HashSet<Peak>();
 
 
-            var stringBuilder = new StringBuilder();
+            var sb = new StringBuilder();
 
             var listOfMonoMZs = new SortedDictionary<int, double>();
             var currentUniqueMSFeatureIDNum = 0;
@@ -176,7 +175,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 }
 
 
-                //get potential charge states 
+                //get potential charge states
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
@@ -211,10 +210,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 {
                     var bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
 
-                    IsotopicProfile theorIso;
-
                     //TODO: there could be a problem here
-                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out theorIso);
+                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out var theorIso);
 
                     if (msFeature != null)
                     {
@@ -250,32 +247,32 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
                 }
 
-                IsotopicProfile msfeature = null;//Paul Addition "=null"
+                IsotopicProfile msfeature;
                 if (potentialMSFeaturesForGivenChargeState.Count == 0)
                 {
-                    stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\tNo profile found.\n");
+                    sb.Append(msPeak.XValue.ToString("0.00000") + "\tNo profile found.\n");
                     msfeature = null;
                 }
                 else if (potentialMSFeaturesForGivenChargeState.Count == 1)
                 {
                     msfeature = potentialMSFeaturesForGivenChargeState[0];
 
-                    stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\t" +
+                    sb.Append(msPeak.XValue.ToString("0.00000") + "\t" +
                                      msfeature.MonoPeakMZ.ToString("0.0000") + "\t" +
                                      msfeature.ChargeState + "\t" + msfeature.Score + "\t" + ppmTolerance + "\n");
 
                 }
                 else
                 {
-                    stringBuilder.Append("Multiple candidates found...." + "\n");
+                    sb.Append("Multiple candidates found...." + "\n");
 
                     foreach (var isotopicProfile in potentialMSFeaturesForGivenChargeState)
                     {
-                        stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\t" +
+                        sb.Append(msPeak.XValue.ToString("0.00000") + "\t" +
                                     isotopicProfile.MonoPeakMZ.ToString("0.0000") + "\t" +
                                     isotopicProfile.ChargeState + "\t" + isotopicProfile.Score + "\t" + ppmTolerance + "\n");
                     }
-                    stringBuilder.Append(Environment.NewLine);
+                    sb.Append(Environment.NewLine);
 
 
                     if (Parameters.CheckAllPatternsAgainstChargeState1)
@@ -285,8 +282,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     else
                     {
                         #region Paul addition
-                        //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better. 
-                        //We need some test cases to capture this problem.                         
+                        //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better.
+                        //We need some test cases to capture this problem.
                         var stopwatch = new Stopwatch();
 
                         if (doPaulMethod)
@@ -316,13 +313,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                                          where n.Score < 0.15
                                          orderby n.ChargeState descending
                                          select n).FirstOrDefault();
+
                             if (msfeature == null)
                             {
                                 msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                              orderby n.Score
                                              select n).First();
                             }
-
 
                             #region Paul Addition
                         }
@@ -376,7 +373,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             }//end of foreach peak loop
 
-            //Console.WriteLine(stringBuilder.ToString());
+            //Console.WriteLine(sb.ToString());
 
             var uniqueIsotopicProfiles = removeDuplicatesFromFoundMSFeatures(isotopicProfiles);
             #region Paul Addition
@@ -405,12 +402,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
-            //create / load 
-            //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them. 
+            //create / load
+            //TODO: adjust the RunUtilities class so that it can simply take a run and create the _peaks and load them.
         }
 
         /// <summary>
-        /// Returns list of potential charge states for a given peak; Use indexOfCurrentPeak to indicate the peak. 
+        /// Returns list of potential charge states for a given peak; Use indexOfCurrentPeak to indicate the peak.
         /// </summary>
         /// <param name="indexOfCurrentPeak"></param>
         /// <param name="mspeakList"></param>
@@ -560,7 +557,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             _targetedFeatureFinder.ToleranceInPPM = ppmTolerance;
             _targetedFeatureFinder.NeedMonoIsotopicPeak = false;
 
-            //TODO: there could be a problem here with there being too many theorIso peaks and thus, too many observed iso peaks are being pulled out. 
+            //TODO: there could be a problem here with there being too many theorIso peaks and thus, too many observed iso peaks are being pulled out.
             var msFeature = _targetedFeatureFinder.FindMSFeature(mspeakList, theorIso);
             return msFeature;
         }
@@ -677,7 +674,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso)
         {
-            if (iso == null || iso.Peaklist == null) return;
+            if (iso?.Peaklist == null) return;
 
             //start with most abundant peak.
 
@@ -727,9 +724,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             var mspeaks = new List<MSPeak>(iso.Peaklist);
 
-            var zeroIntensityPeakToTheLeft = new MSPeak();
-            zeroIntensityPeakToTheLeft.XValue = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
-            zeroIntensityPeakToTheLeft.Height = 0;
+            var mz = iso.Peaklist[0].XValue - 1 * 1.00235 / iso.ChargeState;
+
+            var zeroIntensityPeakToTheLeft = new MSPeak(mz);
 
             mspeaks.Insert(0, zeroIntensityPeakToTheLeft);
 

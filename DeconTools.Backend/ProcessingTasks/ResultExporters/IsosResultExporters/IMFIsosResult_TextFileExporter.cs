@@ -1,13 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class IMFIsosResult_TextFileExporter : IsosResultExporters.IsosResultTextFileExporter
+    public sealed class IMFIsosResult_TextFileExporter : IsosResultTextFileExporter
     {
-        private int triggerVal;
-        private char delimiter;
         #region Constructors
+
         public IMFIsosResult_TextFileExporter(string fileName)
             : this(fileName, 1000000)
         {
@@ -16,40 +14,21 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public IMFIsosResult_TextFileExporter(string fileName, int triggerValueToExport)
         {
-            this.TriggerToExport = triggerValueToExport;
-            this.delimiter = ',';
-            this.Name = "IMF IsosResult TextFile Exporter";
-            this.FileName = fileName;
+            TriggerToExport = triggerValueToExport;
+            Delimiter = ',';
+            Name = "IMF IsosResult TextFile Exporter";
+            FileName = fileName;
 
             initializeAndWriteHeader();
-          
+
         }
 
         #endregion
 
         #region Properties
-        public override char Delimiter
-        {
-            get
-            {
-                return delimiter;
-            }
-            set
-            {
-                delimiter = value;
-            }
-        }
-        public override int TriggerToExport
-        {
-            get
-            {
-                return triggerVal;
-            }
-            set
-            {
-                triggerVal = value;
-            }
-        }
+
+        public override int TriggerToExport { get; set; }
+
         #endregion
 
         #region Public Methods

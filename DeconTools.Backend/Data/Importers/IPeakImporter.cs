@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
-using System.ComponentModel;
 
 namespace DeconTools.Backend.Data
 {
@@ -32,7 +30,7 @@ namespace DeconTools.Backend.Data
             if (progressCounter % 10000 == 0)
             {
 
-                var percentProgress = (int)((double)progressCounter / (double)numRecords * 100);
+                var percentProgress = (int)(progressCounter / (double)numRecords * 100);
 
                 if (backgroundWorker != null)
                 {
@@ -44,8 +42,6 @@ namespace DeconTools.Backend.Data
                     if (progressCounter % 50000 == 0) Console.WriteLine("Peak importer progress (%) = " + percentProgress);
 
                 }
-
-                return;
             }
         }
 

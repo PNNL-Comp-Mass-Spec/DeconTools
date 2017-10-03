@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Algorithms;
-using DeconTools.Utilities;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class N14N15TFFTask : TFFBase
+    public sealed class N14N15TFFTask : TFFBase
     {
         #region Constructors
         public N14N15TFFTask()
@@ -22,11 +14,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// <summary>
         /// Finds both N14 and N15 features using a PPM tolerance (default 0.02)
         /// </summary>
-        /// <param name="toleranceInMZ">Tolerance in PPM</param>
+        /// <param name="toleranceInPPM">Tolerance in PPM</param>
         public N14N15TFFTask(double toleranceInPPM)
         {
-            this.ToleranceInPPM = toleranceInPPM;
-            this.Name = "N14N15FeatureFinder";
+            ToleranceInPPM = toleranceInPPM;
+            Name = "N14N15FeatureFinder";
 
         }
 
@@ -40,8 +32,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #region Public Methods
         //public override void FindFeature(DeconTools.Backend.Core.ResultCollection resultColl)
         //{
-        //    Check.Require(resultColl.Run.CurrentMassTag != null, String.Format("{0} failed. MassTag has not been defined.", this.Name));
-        //    Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfileLabelled != null, String.Format("{0} failed. Labelled Theoretical profile not defined. Make sure to run a TheoreticalIsotopicProfile generator", this.Name));
+        //    Check.Require(resultColl.Run.CurrentMassTag != null, string.Format("{0} failed. MassTag has not been defined.", this.Name));
+        //    Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfileLabelled != null, string.Format("{0} failed. Labelled Theoretical profile not defined. Make sure to run a TheoreticalIsotopicProfile generator", this.Name));
 
         //    MassTagResultBase massTagresult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
@@ -51,7 +43,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         //    if (labelledIso == null)
         //    {
-        //        massTagresult.Flags.Add(new LabeledProfileMissingResultFlag()); 
+        //        massTagresult.Flags.Add(new LabeledProfileMissingResultFlag());
         //    }
 
         //    massTagresult.AddLabelledIso(labelledIso);

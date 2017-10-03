@@ -44,7 +44,7 @@ namespace DeconTools.Backend.FileIO
             }
             catch (Exception)
             {
-                throw new System.IO.IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from the file.");
             }
 
             using (var sr = reader)
@@ -130,8 +130,8 @@ namespace DeconTools.Backend.FileIO
             target.MZ = target.MonoIsotopicMass/target.ChargeState + Globals.PROTON_MASS;
 
             target.FeatureToMassTagID = ParseIntField(LookupData(processedData, featureToMassTagIDHeaders));
-            target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders,String.Empty);
-            target.Code = LookupData(processedData, peptideSequenceHeaders,String.Empty);
+            target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders,string.Empty);
+            target.Code = LookupData(processedData, peptideSequenceHeaders,string.Empty);
             
             //UMCIndex	ScanStart	ScanEnd	ScanClassRep	
             //NETClassRep	UMCMonoMW	UMCMWStDev	UMCMWMin	

@@ -16,11 +16,14 @@ namespace DeconTools.Backend.Core
         public Peak(double xvalue, float yvalue, float width)
             : this()
         {
+            // ReSharper disable once VirtualMemberCallInConstructor
             XValue = xvalue;
+
+            // ReSharper disable once VirtualMemberCallInConstructor
             Height = yvalue;
+
+            // ReSharper disable once VirtualMemberCallInConstructor
             Width = width;
-
-
         }
 
         #endregion
@@ -33,16 +36,17 @@ namespace DeconTools.Backend.Core
         public virtual float Width { get; set; }
 
         /// <summary>
-        /// The index of the raw xy data from which the peak originates. 
+        /// The index of the raw xy data from which the peak originates.
         /// </summary>
         public int DataIndex { get; set; }
+
         #endregion
 
         #region Public Methods
 
         public override string ToString()
         {
-            return (this.XValue.ToString("0.00000") + ";" + this.Height);
+            return (XValue.ToString("0.00000") + ";" + Height);
         }
         #endregion
 
@@ -61,7 +65,7 @@ namespace DeconTools.Backend.Core
             return XValue.CompareTo(other.XValue);
         }
 
-        protected bool Equals(Peak other)
+        private bool Equals(Peak other)
         {
             return XValue.Equals(other.XValue);
         }
@@ -76,6 +80,7 @@ namespace DeconTools.Backend.Core
 
         public override int GetHashCode()
         {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return XValue.GetHashCode();
         }
     }

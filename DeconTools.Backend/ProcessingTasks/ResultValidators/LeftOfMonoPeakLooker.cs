@@ -31,7 +31,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #region Public Methods
         public override void ValidateResult(DeconTools.Backend.Core.ResultCollection resultColl, IsosResult currentResult)
         {
-            Check.Require(currentResult != null, String.Format("{0} failed. CurrentResult has not been defined.", this.Name));
+            Check.Require(currentResult != null, string.Format("{0} failed. CurrentResult has not been defined.", this.Name));
 
             if (currentResult.IsotopicProfile == null) return;
             var monoPeak = currentResult.IsotopicProfile.getMonoPeak();

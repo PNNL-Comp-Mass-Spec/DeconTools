@@ -274,7 +274,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             apVal = Math.Exp(-(i - 1) * (i - 1) / expDenom);
                         else
                             apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expDenom);
-                        
+
                         _frequencyData[i - 1] *= apVal;
                     }
                     break;
@@ -308,10 +308,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public void OutputData(int numPoints, int charge, out List<double> x, out List<double> y, double threshold,
             out List<double> isotopeMzs, out List<double> isotopeIntensities)
         {
-            double maxInt = 0;
-
             /* Normalize intensity to 0%-100% scale */
-            maxInt = _frequencyData.Max(h => h.Real);
+            var maxInt = _frequencyData.Max(h => h.Real);
             for (var i = 0; i < _frequencyData.Length; i++)
             {
                 _frequencyData[i] /= maxInt / 100;

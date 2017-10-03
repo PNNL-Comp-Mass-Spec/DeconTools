@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public ScanSet()
         {
-            BasePeak = new MSPeak();
+            BasePeak = new MSPeak(0);
             IndexValues = new List<int>();
         }
         public ScanSet(int primaryScanNum)
@@ -77,8 +77,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                indexValues = new List<int>();
-                indexValues.Add(scanNumber);
+                indexValues = new List<int> {scanNumber};
             }
         }
 
@@ -93,7 +92,7 @@ namespace DeconTools.Backend.Core
         //    set { m_MSPeakResultPeakListIndex = value; }
         //}
 
-        internal virtual int getLowestScanNumber()
+        internal int getLowestScanNumber()
         {
             var lowVal = int.MaxValue;
 

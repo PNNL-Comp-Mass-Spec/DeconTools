@@ -23,8 +23,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList != null && resultList.Run != null, String.Format("{0} failed. Run is empty.", this.Name));
-            Check.Require(resultList.Run.CurrentMassTag != null, String.Format("{0} failed. CurrentMassTag hasn't been defined.", this.Name));
+            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
             var result = resultList.CurrentTargetedResult;
 
 
@@ -154,7 +154,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 if (i < profileToAdd.Peaklist.Count)
                 {
                     var peakmz = profileToAdd.Peaklist[i].XValue;
-                    var toleranceInMZ = this.ToleranceInPPM / 1e6 * peakmz;
+                    var toleranceInMZ = ToleranceInPPM / 1e6 * peakmz;
 
                     var peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakmz, toleranceInMZ);
 

@@ -10,7 +10,8 @@ namespace DeconTools.Backend.Core
         protected PeptideUtils PeptideUtils = new PeptideUtils();
 
         #region Constructors
-        public TargetBase()
+
+        protected TargetBase()
         {
             ElementLookupTable = new Dictionary<string, int>();
             ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
@@ -25,12 +26,8 @@ namespace DeconTools.Backend.Core
             ElutionTimeUnit = copiedTarget.ElutionTimeUnit;
             EmpiricalFormula = copiedTarget.EmpiricalFormula;
             ID = copiedTarget.ID;
-            IsotopicProfile = copiedTarget.IsotopicProfile == null
-                                  ? null
-                                  : copiedTarget.IsotopicProfile.CloneIsotopicProfile();
-            IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled == null
-                                          ? null
-                                          : copiedTarget.IsotopicProfileLabelled.CloneIsotopicProfile();
+            IsotopicProfile = copiedTarget.IsotopicProfile?.CloneIsotopicProfile();
+            IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled?.CloneIsotopicProfile();
             MZ = copiedTarget.MZ;
             ModCount = copiedTarget.ModCount;
             ModDescription = copiedTarget.ModDescription;
@@ -110,22 +107,15 @@ namespace DeconTools.Backend.Core
 
         public int GetAtomCountForElement(string elementSymbol)
         {
-            if (EmpiricalFormula == null || EmpiricalFormula.Length == 0) return 0;
+            if (string.IsNullOrEmpty(EmpiricalFormula)) return 0;
 
-            if (this.ElementLookupTable.ContainsKey(elementSymbol))
+            if (ElementLookupTable.ContainsKey(elementSymbol))
             {
-                return this.ElementLookupTable[elementSymbol];
-            }
-            else
-            {
-                return 0;
+                return ElementLookupTable[elementSymbol];
             }
 
-
+            return 0;
         }
-
-
-        
 
         public override string ToString()
         {
@@ -139,7 +129,7 @@ namespace DeconTools.Backend.Core
 
         private void updateElementLookupTable()
         {
-            this.ElementLookupTable = this.PeptideUtils.ParseEmpiricalFormulaString(this.EmpiricalFormula);
+            ElementLookupTable = PeptideUtils.ParseEmpiricalFormulaString(EmpiricalFormula);
         }
 
 
